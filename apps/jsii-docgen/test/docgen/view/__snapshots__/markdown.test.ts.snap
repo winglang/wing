@@ -1,1168 +1,455 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`complex link formatter wing snapshot 1`] = `
-"# Amazon ECR Construct Library
-<!--BEGIN STABILITY BANNER-->
+"# construct-library
 
----
-
-![cfn-resources: Stable](https://img.shields.io/badge/cfn--resources-stable-success.svg?style=for-the-badge)
-
-![cdk-constructs: Stable](https://img.shields.io/badge/cdk--constructs-stable-success.svg?style=for-the-badge)
-
----
-
-<!--END STABILITY BANNER-->
-
-This package contains constructs for working with Amazon Elastic Container Registry.
-
-## Repositories
-
-Define a repository by creating a new instance of \`Repository\`. A repository
-holds multiple verions of a single container image.
-
-\`\`\`ts
-const repository = new ecr.Repository(this, 'Repository');
-\`\`\`
-
-## Image scanning
-
-Amazon ECR image scanning helps in identifying software vulnerabilities in your container images. You can manually scan container images stored in Amazon ECR, or you can configure your repositories to scan images when you push them to a repository. To create a new repository to scan on push, simply enable \`imageScanOnPush\` in the properties
-
-\`\`\`ts
-const repository = new ecr.Repository(stack, 'Repo', {
-  imageScanOnPush: true
-});
-\`\`\`
-
-To create an \`onImageScanCompleted\` event rule and trigger the event target
-
-\`\`\`ts
-repository.onImageScanCompleted('ImageScanComplete')
-  .addTarget(...)
-\`\`\`
-
-### Authorization Token
-
-Besides the Amazon ECR APIs, ECR also allows the Docker CLI or a language-specific Docker library to push and pull
-images from an ECR repository. However, the Docker CLI does not support native IAM authentication methods and
-additional steps must be taken so that Amazon ECR can authenticate and authorize Docker push and pull requests.
-More information can be found at at [Registry Authentication](https://docs.aws.amazon.com/AmazonECR/latest/userguide/Registries.html#registry_auth).
-
-A Docker authorization token can be obtained using the \`GetAuthorizationToken\` ECR API. The following code snippets
-grants an IAM user access to call this API.
-
-\`\`\`ts
-import * as iam from '@aws-cdk/aws-iam';
-import * as ecr from '@aws-cdk/aws-ecr';
-
-const user = new iam.User(this, 'User', { ... });
-ecr.AuthorizationToken.grantRead(user);
-\`\`\`
-
-If you access images in the [Public ECR Gallery](https://gallery.ecr.aws/) as well, it is recommended you authenticate to the registry to benefit from
-higher rate and bandwidth limits.
-
-> See \`Pricing\` in https://aws.amazon.com/blogs/aws/amazon-ecr-public-a-new-public-container-registry/ and [Service quotas](https://docs.aws.amazon.com/AmazonECR/latest/public/public-service-quotas.html).
-
-The following code snippet grants an IAM user access to retrieve an authorization token for the public gallery.
-
-\`\`\`ts
-import * as iam from '@aws-cdk/aws-iam';
-import * as ecr from '@aws-cdk/aws-ecr';
-
-const user = new iam.User(this, 'User', { ... });
-ecr.PublicGalleryAuthorizationToken.grantRead(user);
-\`\`\`
-
-This user can then proceed to login to the registry using one of the [authentication methods](https://docs.aws.amazon.com/AmazonECR/latest/public/public-registries.html#public-registry-auth).
-
-### Image tag immutability
-
-You can set tag immutability on images in our repository using the \`imageTagMutability\` construct prop.
-
-\`\`\`ts
-new ecr.Repository(stack, 'Repo', { imageTagMutability: ecr.TagMutability.IMMUTABLE });
-\`\`\`
-
-## Automatically clean up repositories
-
-You can set life cycle rules to automatically clean up old images from your
-repository. The first life cycle rule that matches an image will be applied
-against that image. For example, the following deletes images older than
-30 days, while keeping all images tagged with prod (note that the order
-is important here):
-
-\`\`\`ts
-repository.addLifecycleRule({ tagPrefixList: ['prod'], maxImageCount: 9999 });
-repository.addLifecycleRule({ maxImageAge: cdk.Duration.days(30) });
-\`\`\`
-
+This is a test project to make sure the \`jsii-docgen\` cli property renders API documentation
+for construct libraries.
 # API Reference <a name=\\"API Reference\\" id=\\"api-reference\\"></a>
 
+## Constructs <a name=\\"Constructs\\" id=\\"Constructs\\"></a>
 
-## Structs <a name=\\"Structs\\" id=\\"Structs\\"></a>
+### GreeterBucket <a name=\\"GreeterBucket\\" id=\\"GreeterBucket\\"></a>
 
-### CfnPublicRepositoryProps <a name=\\"CfnPublicRepositoryProps\\" id=\\"CfnPublicRepositoryProps\\"></a>
-
-Properties for defining a \`AWS::ECR::PublicRepository\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html)
-
-#### Initializer <a name=\\"Initializer\\" id=\\"CfnPublicRepositoryProps.Initializer\\"></a>
+#### Initializers <a name=\\"Initializers\\" id=\\"GreeterBucket.Initializer\\"></a>
 
 \`\`\`wing
-bring { CfnPublicRepositoryProps } from \\"@aws-cdk/aws-ecr\\"
+bring { GreeterBucket } from \\"construct-library\\"
 
-let cfn_public_repository_props = CfnPublicRepositoryProps{ ... }
+new GreeterBucket(props?: BucketProps)
 \`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/CfnPublicRepositoryProps.property.repositoryCatalogData?lang=python\\">repository_catalog_data</a></code> | <code>any</code> | \`AWS::ECR::PublicRepository.RepositoryCatalogData\`. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/CfnPublicRepositoryProps.property.repositoryName?lang=python\\">repository_name</a></code> | <code>str</code> | \`AWS::ECR::PublicRepository.RepositoryName\`. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/CfnPublicRepositoryProps.property.repositoryPolicyText?lang=python\\">repository_policy_text</a></code> | <code>any</code> | \`AWS::ECR::PublicRepository.RepositoryPolicyText\`. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/CfnPublicRepositoryProps.property.tags?lang=python\\">tags</a></code> | <code>MutArray&lt;<a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/CfnTag?lang=python\\">CfnTag</a>&gt;</code> | \`AWS::ECR::PublicRepository.Tags\`. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.Initializer.parameter.props?lang=python\\">props</a></code> | <code><a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/BucketProps?lang=python\\">BucketProps</a></code> | *No description.* |
 
 ---
 
-##### \`repository_catalog_data\`<sup>Optional</sup> <a name=\\"repository_catalog_data\\" id=\\"CfnPublicRepositoryProps.property.repositoryCatalogData\\"></a>
+##### \`props\`<sup>Optional</sup> <a name=\\"props\\" id=\\"GreeterBucket.Initializer.parameter.props\\"></a>
 
-\`\`\`wing
-repository_catalog_data: any;
-\`\`\`
-
-- *Type:* any
-
-\`AWS::ECR::PublicRepository.RepositoryCatalogData\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html#cfn-ecr-publicrepository-repositorycatalogdata](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html#cfn-ecr-publicrepository-repositorycatalogdata)
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/BucketProps?lang=python\\">BucketProps</a>
 
 ---
-
-##### \`repository_name\`<sup>Optional</sup> <a name=\\"repository_name\\" id=\\"CfnPublicRepositoryProps.property.repositoryName\\"></a>
-
-\`\`\`wing
-repository_name: str;
-\`\`\`
-
-- *Type:* str
-
-\`AWS::ECR::PublicRepository.RepositoryName\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html#cfn-ecr-publicrepository-repositoryname](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html#cfn-ecr-publicrepository-repositoryname)
-
----
-
-##### \`repository_policy_text\`<sup>Optional</sup> <a name=\\"repository_policy_text\\" id=\\"CfnPublicRepositoryProps.property.repositoryPolicyText\\"></a>
-
-\`\`\`wing
-repository_policy_text: any;
-\`\`\`
-
-- *Type:* any
-
-\`AWS::ECR::PublicRepository.RepositoryPolicyText\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html#cfn-ecr-publicrepository-repositorypolicytext](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html#cfn-ecr-publicrepository-repositorypolicytext)
-
----
-
-##### \`tags\`<sup>Optional</sup> <a name=\\"tags\\" id=\\"CfnPublicRepositoryProps.property.tags\\"></a>
-
-\`\`\`wing
-tags: MutArray<CfnTag>;
-\`\`\`
-
-- *Type:* MutArray&lt;<a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/CfnTag?lang=python\\">CfnTag</a>&gt;
-
-\`AWS::ECR::PublicRepository.Tags\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html#cfn-ecr-publicrepository-tags](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html#cfn-ecr-publicrepository-tags)
-
----
-
-### CfnRegistryPolicyProps <a name=\\"CfnRegistryPolicyProps\\" id=\\"CfnRegistryPolicyProps\\"></a>
-
-Properties for defining a \`AWS::ECR::RegistryPolicy\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-registrypolicy.html](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-registrypolicy.html)
-
-#### Initializer <a name=\\"Initializer\\" id=\\"CfnRegistryPolicyProps.Initializer\\"></a>
-
-\`\`\`wing
-bring { CfnRegistryPolicyProps } from \\"@aws-cdk/aws-ecr\\"
-
-let cfn_registry_policy_props = CfnRegistryPolicyProps{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/CfnRegistryPolicyProps.property.policyText?lang=python\\">policy_text</a></code> | <code>any</code> | \`AWS::ECR::RegistryPolicy.PolicyText\`. |
-
----
-
-##### \`policy_text\`<sup>Required</sup> <a name=\\"policy_text\\" id=\\"CfnRegistryPolicyProps.property.policyText\\"></a>
-
-\`\`\`wing
-policy_text: any;
-\`\`\`
-
-- *Type:* any
-
-\`AWS::ECR::RegistryPolicy.PolicyText\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-registrypolicy.html#cfn-ecr-registrypolicy-policytext](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-registrypolicy.html#cfn-ecr-registrypolicy-policytext)
-
----
-
-### CfnReplicationConfigurationProps <a name=\\"CfnReplicationConfigurationProps\\" id=\\"CfnReplicationConfigurationProps\\"></a>
-
-Properties for defining a \`AWS::ECR::ReplicationConfiguration\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-replicationconfiguration.html](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-replicationconfiguration.html)
-
-#### Initializer <a name=\\"Initializer\\" id=\\"CfnReplicationConfigurationProps.Initializer\\"></a>
-
-\`\`\`wing
-bring { CfnReplicationConfigurationProps } from \\"@aws-cdk/aws-ecr\\"
-
-let cfn_replication_configuration_props = CfnReplicationConfigurationProps{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/CfnReplicationConfigurationProps.property.replicationConfiguration?lang=python\\">replication_configuration</a></code> | <code>any</code> | \`AWS::ECR::ReplicationConfiguration.ReplicationConfiguration\`. |
-
----
-
-##### \`replication_configuration\`<sup>Required</sup> <a name=\\"replication_configuration\\" id=\\"CfnReplicationConfigurationProps.property.replicationConfiguration\\"></a>
-
-\`\`\`wing
-replication_configuration: any;
-\`\`\`
-
-- *Type:* any
-
-\`AWS::ECR::ReplicationConfiguration.ReplicationConfiguration\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-replicationconfiguration.html#cfn-ecr-replicationconfiguration-replicationconfiguration](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-replicationconfiguration.html#cfn-ecr-replicationconfiguration-replicationconfiguration)
-
----
-
-### CfnRepositoryProps <a name=\\"CfnRepositoryProps\\" id=\\"CfnRepositoryProps\\"></a>
-
-Properties for defining a \`AWS::ECR::Repository\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html)
-
-#### Initializer <a name=\\"Initializer\\" id=\\"CfnRepositoryProps.Initializer\\"></a>
-
-\`\`\`wing
-bring { CfnRepositoryProps } from \\"@aws-cdk/aws-ecr\\"
-
-let cfn_repository_props = CfnRepositoryProps{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/CfnRepositoryProps.property.encryptionConfiguration?lang=python\\">encryption_configuration</a></code> | <code>any</code> | \`AWS::ECR::Repository.EncryptionConfiguration\`. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/CfnRepositoryProps.property.imageScanningConfiguration?lang=python\\">image_scanning_configuration</a></code> | <code>any</code> | \`AWS::ECR::Repository.ImageScanningConfiguration\`. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/CfnRepositoryProps.property.imageTagMutability?lang=python\\">image_tag_mutability</a></code> | <code>str</code> | \`AWS::ECR::Repository.ImageTagMutability\`. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/CfnRepositoryProps.property.lifecyclePolicy?lang=python\\">lifecycle_policy</a></code> | <code>any</code> | \`AWS::ECR::Repository.LifecyclePolicy\`. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/CfnRepositoryProps.property.repositoryName?lang=python\\">repository_name</a></code> | <code>str</code> | \`AWS::ECR::Repository.RepositoryName\`. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/CfnRepositoryProps.property.repositoryPolicyText?lang=python\\">repository_policy_text</a></code> | <code>any</code> | \`AWS::ECR::Repository.RepositoryPolicyText\`. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/CfnRepositoryProps.property.tags?lang=python\\">tags</a></code> | <code>MutArray&lt;<a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/CfnTag?lang=python\\">CfnTag</a>&gt;</code> | \`AWS::ECR::Repository.Tags\`. |
-
----
-
-##### \`encryption_configuration\`<sup>Optional</sup> <a name=\\"encryption_configuration\\" id=\\"CfnRepositoryProps.property.encryptionConfiguration\\"></a>
-
-\`\`\`wing
-encryption_configuration: any;
-\`\`\`
-
-- *Type:* any
-
-\`AWS::ECR::Repository.EncryptionConfiguration\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-encryptionconfiguration](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-encryptionconfiguration)
-
----
-
-##### \`image_scanning_configuration\`<sup>Optional</sup> <a name=\\"image_scanning_configuration\\" id=\\"CfnRepositoryProps.property.imageScanningConfiguration\\"></a>
-
-\`\`\`wing
-image_scanning_configuration: any;
-\`\`\`
-
-- *Type:* any
-
-\`AWS::ECR::Repository.ImageScanningConfiguration\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-imagescanningconfiguration](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-imagescanningconfiguration)
-
----
-
-##### \`image_tag_mutability\`<sup>Optional</sup> <a name=\\"image_tag_mutability\\" id=\\"CfnRepositoryProps.property.imageTagMutability\\"></a>
-
-\`\`\`wing
-image_tag_mutability: str;
-\`\`\`
-
-- *Type:* str
-
-\`AWS::ECR::Repository.ImageTagMutability\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-imagetagmutability](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-imagetagmutability)
-
----
-
-##### \`lifecycle_policy\`<sup>Optional</sup> <a name=\\"lifecycle_policy\\" id=\\"CfnRepositoryProps.property.lifecyclePolicy\\"></a>
-
-\`\`\`wing
-lifecycle_policy: any;
-\`\`\`
-
-- *Type:* any
-
-\`AWS::ECR::Repository.LifecyclePolicy\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-lifecyclepolicy](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-lifecyclepolicy)
-
----
-
-##### \`repository_name\`<sup>Optional</sup> <a name=\\"repository_name\\" id=\\"CfnRepositoryProps.property.repositoryName\\"></a>
-
-\`\`\`wing
-repository_name: str;
-\`\`\`
-
-- *Type:* str
-
-\`AWS::ECR::Repository.RepositoryName\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-repositoryname](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-repositoryname)
-
----
-
-##### \`repository_policy_text\`<sup>Optional</sup> <a name=\\"repository_policy_text\\" id=\\"CfnRepositoryProps.property.repositoryPolicyText\\"></a>
-
-\`\`\`wing
-repository_policy_text: any;
-\`\`\`
-
-- *Type:* any
-
-\`AWS::ECR::Repository.RepositoryPolicyText\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-repositorypolicytext](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-repositorypolicytext)
-
----
-
-##### \`tags\`<sup>Optional</sup> <a name=\\"tags\\" id=\\"CfnRepositoryProps.property.tags\\"></a>
-
-\`\`\`wing
-tags: MutArray<CfnTag>;
-\`\`\`
-
-- *Type:* MutArray&lt;<a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/CfnTag?lang=python\\">CfnTag</a>&gt;
-
-\`AWS::ECR::Repository.Tags\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-tags](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-tags)
-
----
-
-### LifecyclePolicyProperty <a name=\\"LifecyclePolicyProperty\\" id=\\"CfnRepository.LifecyclePolicyProperty\\"></a>
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-repository-lifecyclepolicy.html](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-repository-lifecyclepolicy.html)
-
-#### Initializer <a name=\\"Initializer\\" id=\\"CfnRepository.LifecyclePolicyProperty.Initializer\\"></a>
-
-\`\`\`wing
-bring { LifecyclePolicyProperty } from \\"@aws-cdk/aws-ecr\\"
-
-let lifecycle_policy_property = LifecyclePolicyProperty{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/CfnRepository.LifecyclePolicyProperty.property.lifecyclePolicyText?lang=python\\">lifecycle_policy_text</a></code> | <code>str</code> | \`CfnRepository.LifecyclePolicyProperty.LifecyclePolicyText\`. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/CfnRepository.LifecyclePolicyProperty.property.registryId?lang=python\\">registry_id</a></code> | <code>str</code> | \`CfnRepository.LifecyclePolicyProperty.RegistryId\`. |
-
----
-
-##### \`lifecycle_policy_text\`<sup>Optional</sup> <a name=\\"lifecycle_policy_text\\" id=\\"CfnRepository.LifecyclePolicyProperty.property.lifecyclePolicyText\\"></a>
-
-\`\`\`wing
-lifecycle_policy_text: str;
-\`\`\`
-
-- *Type:* str
-
-\`CfnRepository.LifecyclePolicyProperty.LifecyclePolicyText\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-repository-lifecyclepolicy.html#cfn-ecr-repository-lifecyclepolicy-lifecyclepolicytext](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-repository-lifecyclepolicy.html#cfn-ecr-repository-lifecyclepolicy-lifecyclepolicytext)
-
----
-
-##### \`registry_id\`<sup>Optional</sup> <a name=\\"registry_id\\" id=\\"CfnRepository.LifecyclePolicyProperty.property.registryId\\"></a>
-
-\`\`\`wing
-registry_id: str;
-\`\`\`
-
-- *Type:* str
-
-\`CfnRepository.LifecyclePolicyProperty.RegistryId\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-repository-lifecyclepolicy.html#cfn-ecr-repository-lifecyclepolicy-registryid](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-repository-lifecyclepolicy.html#cfn-ecr-repository-lifecyclepolicy-registryid)
-
----
-
-### LifecycleRule <a name=\\"LifecycleRule\\" id=\\"LifecycleRule\\"></a>
-
-An ECR life cycle rule.
-
-#### Initializer <a name=\\"Initializer\\" id=\\"LifecycleRule.Initializer\\"></a>
-
-\`\`\`wing
-bring { LifecycleRule } from \\"@aws-cdk/aws-ecr\\"
-
-let lifecycle_rule = LifecycleRule{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/LifecycleRule.property.description?lang=python\\">description</a></code> | <code>str</code> | Describes the purpose of the rule. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/LifecycleRule.property.maxImageAge?lang=python\\">max_image_age</a></code> | <code><a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/Duration?lang=python\\">Duration</a></code> | The maximum age of images to retain. The value must represent a number of days. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/LifecycleRule.property.maxImageCount?lang=python\\">max_image_count</a></code> | <code>num</code> | The maximum number of images to retain. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/LifecycleRule.property.rulePriority?lang=python\\">rule_priority</a></code> | <code>num</code> | Controls the order in which rules are evaluated (low to high). |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/LifecycleRule.property.tagPrefixList?lang=python\\">tag_prefix_list</a></code> | <code>MutArray&lt;str&gt;</code> | Select images that have ALL the given prefixes in their tag. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/LifecycleRule.property.tagStatus?lang=python\\">tag_status</a></code> | <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/99.99.99/api/TagStatus?lang=python\\">TagStatus</a></code> | Select images based on tags. |
-
----
-
-##### \`description\`<sup>Optional</sup> <a name=\\"description\\" id=\\"LifecycleRule.property.description\\"></a>
-
-\`\`\`wing
-description: str;
-\`\`\`
-
-- *Type:* str
-- *Default:* No description
-
-Describes the purpose of the rule.
-
----
-
-##### \`max_image_age\`<sup>Optional</sup> <a name=\\"max_image_age\\" id=\\"LifecycleRule.property.maxImageAge\\"></a>
-
-\`\`\`wing
-max_image_age: Duration;
-\`\`\`
-
-- *Type:* <a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/Duration?lang=python\\">Duration</a>
-
-The maximum age of images to retain. The value must represent a number of days.
-
-Specify exactly one of maxImageCount and maxImageAge.
-
----
-
-##### \`max_image_count\`<sup>Optional</sup> <a name=\\"max_image_count\\" id=\\"LifecycleRule.property.maxImageCount\\"></a>
-
-\`\`\`wing
-max_image_count: num;
-\`\`\`
-
-- *Type:* num
-
-The maximum number of images to retain.
-
-Specify exactly one of maxImageCount and maxImageAge.
-
----
-
-##### \`rule_priority\`<sup>Optional</sup> <a name=\\"rule_priority\\" id=\\"LifecycleRule.property.rulePriority\\"></a>
-
-\`\`\`wing
-rule_priority: num;
-\`\`\`
-
-- *Type:* num
-- *Default:* Automatically assigned
-
-Controls the order in which rules are evaluated (low to high).
-
-All rules must have a unique priority, where lower numbers have
-higher precedence. The first rule that matches is applied to an image.
-
-There can only be one rule with a tagStatus of Any, and it must have
-the highest rulePriority.
-
-All rules without a specified priority will have incrementing priorities
-automatically assigned to them, higher than any rules that DO have priorities.
-
----
-
-##### \`tag_prefix_list\`<sup>Optional</sup> <a name=\\"tag_prefix_list\\" id=\\"LifecycleRule.property.tagPrefixList\\"></a>
-
-\`\`\`wing
-tag_prefix_list: MutArray<str>;
-\`\`\`
-
-- *Type:* MutArray&lt;str&gt;
-
-Select images that have ALL the given prefixes in their tag.
-
-Only if tagStatus == TagStatus.Tagged
-
----
-
-##### \`tag_status\`<sup>Optional</sup> <a name=\\"tag_status\\" id=\\"LifecycleRule.property.tagStatus\\"></a>
-
-\`\`\`wing
-tag_status: TagStatus;
-\`\`\`
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-ecr/v/99.99.99/api/TagStatus?lang=python\\">TagStatus</a>
-- *Default:* TagStatus.Tagged if tagPrefixList is given, TagStatus.Any otherwise
-
-Select images based on tags.
-
-Only one rule is allowed to select untagged images, and it must
-have the highest rulePriority.
-
----
-
-### OnCloudTrailImagePushedOptions <a name=\\"OnCloudTrailImagePushedOptions\\" id=\\"OnCloudTrailImagePushedOptions\\"></a>
-
-Options for the onCloudTrailImagePushed method.
-
-#### Initializer <a name=\\"Initializer\\" id=\\"OnCloudTrailImagePushedOptions.Initializer\\"></a>
-
-\`\`\`wing
-bring { OnCloudTrailImagePushedOptions } from \\"@aws-cdk/aws-ecr\\"
-
-let on_cloud_trail_image_pushed_options = OnCloudTrailImagePushedOptions{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/OnCloudTrailImagePushedOptions.property.description?lang=python\\">description</a></code> | <code>str</code> | A description of the rule's purpose. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/OnCloudTrailImagePushedOptions.property.eventPattern?lang=python\\">event_pattern</a></code> | <code><a href=\\"/packages/@aws-cdk/aws-events/v/99.99.99/api/EventPattern?lang=python\\">EventPattern</a></code> | Additional restrictions for the event to route to the specified target. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/OnCloudTrailImagePushedOptions.property.ruleName?lang=python\\">rule_name</a></code> | <code>str</code> | A name for the rule. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/OnCloudTrailImagePushedOptions.property.target?lang=python\\">target</a></code> | <code><a href=\\"/packages/@aws-cdk/aws-events/v/99.99.99/api/IRuleTarget?lang=python\\">IRuleTarget</a></code> | The target to register for the event. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/OnCloudTrailImagePushedOptions.property.imageTag?lang=python\\">image_tag</a></code> | <code>str</code> | Only watch changes to this image tag. |
-
----
-
-##### \`description\`<sup>Optional</sup> <a name=\\"description\\" id=\\"OnCloudTrailImagePushedOptions.property.description\\"></a>
-
-\`\`\`wing
-description: str;
-\`\`\`
-
-- *Type:* str
-- *Default:* No description
-
-A description of the rule's purpose.
-
----
-
-##### \`event_pattern\`<sup>Optional</sup> <a name=\\"event_pattern\\" id=\\"OnCloudTrailImagePushedOptions.property.eventPattern\\"></a>
-
-\`\`\`wing
-event_pattern: EventPattern;
-\`\`\`
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-events/v/99.99.99/api/EventPattern?lang=python\\">EventPattern</a>
-- *Default:* No additional filtering based on an event pattern.
-
-Additional restrictions for the event to route to the specified target.
-
-The method that generates the rule probably imposes some type of event
-filtering. The filtering implied by what you pass here is added
-on top of that filtering.
-
-> [https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html](https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html)
-
----
-
-##### \`rule_name\`<sup>Optional</sup> <a name=\\"rule_name\\" id=\\"OnCloudTrailImagePushedOptions.property.ruleName\\"></a>
-
-\`\`\`wing
-rule_name: str;
-\`\`\`
-
-- *Type:* str
-- *Default:* AWS CloudFormation generates a unique physical ID.
-
-A name for the rule.
-
----
-
-##### \`target\`<sup>Optional</sup> <a name=\\"target\\" id=\\"OnCloudTrailImagePushedOptions.property.target\\"></a>
-
-\`\`\`wing
-target: IRuleTarget;
-\`\`\`
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-events/v/99.99.99/api/IRuleTarget?lang=python\\">IRuleTarget</a>
-- *Default:* No target is added to the rule. Use \`addTarget()\` to add a target.
-
-The target to register for the event.
-
----
-
-##### \`image_tag\`<sup>Optional</sup> <a name=\\"image_tag\\" id=\\"OnCloudTrailImagePushedOptions.property.imageTag\\"></a>
-
-\`\`\`wing
-image_tag: str;
-\`\`\`
-
-- *Type:* str
-- *Default:* Watch changes to all tags
-
-Only watch changes to this image tag.
-
----
-
-### OnImageScanCompletedOptions <a name=\\"OnImageScanCompletedOptions\\" id=\\"OnImageScanCompletedOptions\\"></a>
-
-Options for the OnImageScanCompleted method.
-
-#### Initializer <a name=\\"Initializer\\" id=\\"OnImageScanCompletedOptions.Initializer\\"></a>
-
-\`\`\`wing
-bring { OnImageScanCompletedOptions } from \\"@aws-cdk/aws-ecr\\"
-
-let on_image_scan_completed_options = OnImageScanCompletedOptions{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/OnImageScanCompletedOptions.property.description?lang=python\\">description</a></code> | <code>str</code> | A description of the rule's purpose. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/OnImageScanCompletedOptions.property.eventPattern?lang=python\\">event_pattern</a></code> | <code><a href=\\"/packages/@aws-cdk/aws-events/v/99.99.99/api/EventPattern?lang=python\\">EventPattern</a></code> | Additional restrictions for the event to route to the specified target. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/OnImageScanCompletedOptions.property.ruleName?lang=python\\">rule_name</a></code> | <code>str</code> | A name for the rule. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/OnImageScanCompletedOptions.property.target?lang=python\\">target</a></code> | <code><a href=\\"/packages/@aws-cdk/aws-events/v/99.99.99/api/IRuleTarget?lang=python\\">IRuleTarget</a></code> | The target to register for the event. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/OnImageScanCompletedOptions.property.imageTags?lang=python\\">image_tags</a></code> | <code>MutArray&lt;str&gt;</code> | Only watch changes to the image tags spedified. |
-
----
-
-##### \`description\`<sup>Optional</sup> <a name=\\"description\\" id=\\"OnImageScanCompletedOptions.property.description\\"></a>
-
-\`\`\`wing
-description: str;
-\`\`\`
-
-- *Type:* str
-- *Default:* No description
-
-A description of the rule's purpose.
-
----
-
-##### \`event_pattern\`<sup>Optional</sup> <a name=\\"event_pattern\\" id=\\"OnImageScanCompletedOptions.property.eventPattern\\"></a>
-
-\`\`\`wing
-event_pattern: EventPattern;
-\`\`\`
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-events/v/99.99.99/api/EventPattern?lang=python\\">EventPattern</a>
-- *Default:* No additional filtering based on an event pattern.
-
-Additional restrictions for the event to route to the specified target.
-
-The method that generates the rule probably imposes some type of event
-filtering. The filtering implied by what you pass here is added
-on top of that filtering.
-
-> [https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html](https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html)
-
----
-
-##### \`rule_name\`<sup>Optional</sup> <a name=\\"rule_name\\" id=\\"OnImageScanCompletedOptions.property.ruleName\\"></a>
-
-\`\`\`wing
-rule_name: str;
-\`\`\`
-
-- *Type:* str
-- *Default:* AWS CloudFormation generates a unique physical ID.
-
-A name for the rule.
-
----
-
-##### \`target\`<sup>Optional</sup> <a name=\\"target\\" id=\\"OnImageScanCompletedOptions.property.target\\"></a>
-
-\`\`\`wing
-target: IRuleTarget;
-\`\`\`
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-events/v/99.99.99/api/IRuleTarget?lang=python\\">IRuleTarget</a>
-- *Default:* No target is added to the rule. Use \`addTarget()\` to add a target.
-
-The target to register for the event.
-
----
-
-##### \`image_tags\`<sup>Optional</sup> <a name=\\"image_tags\\" id=\\"OnImageScanCompletedOptions.property.imageTags\\"></a>
-
-\`\`\`wing
-image_tags: MutArray<str>;
-\`\`\`
-
-- *Type:* MutArray&lt;str&gt;
-- *Default:* Watch the changes to the repository with all image tags
-
-Only watch changes to the image tags spedified.
-
-Leave it undefined to watch the full repository.
-
----
-
-### ReplicationConfigurationProperty <a name=\\"ReplicationConfigurationProperty\\" id=\\"CfnReplicationConfiguration.ReplicationConfigurationProperty\\"></a>
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationconfiguration.html](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationconfiguration.html)
-
-#### Initializer <a name=\\"Initializer\\" id=\\"CfnReplicationConfiguration.ReplicationConfigurationProperty.Initializer\\"></a>
-
-\`\`\`wing
-bring { ReplicationConfigurationProperty } from \\"@aws-cdk/aws-ecr\\"
-
-let replication_configuration_property = ReplicationConfigurationProperty{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/CfnReplicationConfiguration.ReplicationConfigurationProperty.property.rules?lang=python\\">rules</a></code> | <code>any</code> | \`CfnReplicationConfiguration.ReplicationConfigurationProperty.Rules\`. |
-
----
-
-##### \`rules\`<sup>Required</sup> <a name=\\"rules\\" id=\\"CfnReplicationConfiguration.ReplicationConfigurationProperty.property.rules\\"></a>
-
-\`\`\`wing
-rules: any;
-\`\`\`
-
-- *Type:* any
-
-\`CfnReplicationConfiguration.ReplicationConfigurationProperty.Rules\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationconfiguration.html#cfn-ecr-replicationconfiguration-replicationconfiguration-rules](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationconfiguration.html#cfn-ecr-replicationconfiguration-replicationconfiguration-rules)
-
----
-
-### ReplicationDestinationProperty <a name=\\"ReplicationDestinationProperty\\" id=\\"CfnReplicationConfiguration.ReplicationDestinationProperty\\"></a>
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationdestination.html](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationdestination.html)
-
-#### Initializer <a name=\\"Initializer\\" id=\\"CfnReplicationConfiguration.ReplicationDestinationProperty.Initializer\\"></a>
-
-\`\`\`wing
-bring { ReplicationDestinationProperty } from \\"@aws-cdk/aws-ecr\\"
-
-let replication_destination_property = ReplicationDestinationProperty{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/CfnReplicationConfiguration.ReplicationDestinationProperty.property.region?lang=python\\">region</a></code> | <code>str</code> | \`CfnReplicationConfiguration.ReplicationDestinationProperty.Region\`. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/CfnReplicationConfiguration.ReplicationDestinationProperty.property.registryId?lang=python\\">registry_id</a></code> | <code>str</code> | \`CfnReplicationConfiguration.ReplicationDestinationProperty.RegistryId\`. |
-
----
-
-##### \`region\`<sup>Required</sup> <a name=\\"region\\" id=\\"CfnReplicationConfiguration.ReplicationDestinationProperty.property.region\\"></a>
-
-\`\`\`wing
-region: str;
-\`\`\`
-
-- *Type:* str
-
-\`CfnReplicationConfiguration.ReplicationDestinationProperty.Region\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationdestination.html#cfn-ecr-replicationconfiguration-replicationdestination-region](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationdestination.html#cfn-ecr-replicationconfiguration-replicationdestination-region)
-
----
-
-##### \`registry_id\`<sup>Required</sup> <a name=\\"registry_id\\" id=\\"CfnReplicationConfiguration.ReplicationDestinationProperty.property.registryId\\"></a>
-
-\`\`\`wing
-registry_id: str;
-\`\`\`
-
-- *Type:* str
-
-\`CfnReplicationConfiguration.ReplicationDestinationProperty.RegistryId\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationdestination.html#cfn-ecr-replicationconfiguration-replicationdestination-registryid](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationdestination.html#cfn-ecr-replicationconfiguration-replicationdestination-registryid)
-
----
-
-### ReplicationRuleProperty <a name=\\"ReplicationRuleProperty\\" id=\\"CfnReplicationConfiguration.ReplicationRuleProperty\\"></a>
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationrule.html](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationrule.html)
-
-#### Initializer <a name=\\"Initializer\\" id=\\"CfnReplicationConfiguration.ReplicationRuleProperty.Initializer\\"></a>
-
-\`\`\`wing
-bring { ReplicationRuleProperty } from \\"@aws-cdk/aws-ecr\\"
-
-let replication_rule_property = ReplicationRuleProperty{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/CfnReplicationConfiguration.ReplicationRuleProperty.property.destinations?lang=python\\">destinations</a></code> | <code>any</code> | \`CfnReplicationConfiguration.ReplicationRuleProperty.Destinations\`. |
-
----
-
-##### \`destinations\`<sup>Required</sup> <a name=\\"destinations\\" id=\\"CfnReplicationConfiguration.ReplicationRuleProperty.property.destinations\\"></a>
-
-\`\`\`wing
-destinations: any;
-\`\`\`
-
-- *Type:* any
-
-\`CfnReplicationConfiguration.ReplicationRuleProperty.Destinations\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationrule.html#cfn-ecr-replicationconfiguration-replicationrule-destinations](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationrule.html#cfn-ecr-replicationconfiguration-replicationrule-destinations)
-
----
-
-### RepositoryAttributes <a name=\\"RepositoryAttributes\\" id=\\"RepositoryAttributes\\"></a>
-
-#### Initializer <a name=\\"Initializer\\" id=\\"RepositoryAttributes.Initializer\\"></a>
-
-\`\`\`wing
-bring { RepositoryAttributes } from \\"@aws-cdk/aws-ecr\\"
-
-let repository_attributes = RepositoryAttributes{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/RepositoryAttributes.property.repositoryArn?lang=python\\">repository_arn</a></code> | <code>str</code> | *No description.* |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/RepositoryAttributes.property.repositoryName?lang=python\\">repository_name</a></code> | <code>str</code> | *No description.* |
-
----
-
-##### \`repository_arn\`<sup>Required</sup> <a name=\\"repository_arn\\" id=\\"RepositoryAttributes.property.repositoryArn\\"></a>
-
-\`\`\`wing
-repository_arn: str;
-\`\`\`
-
-- *Type:* str
-
----
-
-##### \`repository_name\`<sup>Required</sup> <a name=\\"repository_name\\" id=\\"RepositoryAttributes.property.repositoryName\\"></a>
-
-\`\`\`wing
-repository_name: str;
-\`\`\`
-
-- *Type:* str
-
----
-
-### RepositoryProps <a name=\\"RepositoryProps\\" id=\\"RepositoryProps\\"></a>
-
-#### Initializer <a name=\\"Initializer\\" id=\\"RepositoryProps.Initializer\\"></a>
-
-\`\`\`wing
-bring { RepositoryProps } from \\"@aws-cdk/aws-ecr\\"
-
-let repository_props = RepositoryProps{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/RepositoryProps.property.imageScanOnPush?lang=python\\">image_scan_on_push</a></code> | <code>bool</code> | Enable the scan on push when creating the repository. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/RepositoryProps.property.imageTagMutability?lang=python\\">image_tag_mutability</a></code> | <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/99.99.99/api/TagMutability?lang=python\\">TagMutability</a></code> | The tag mutability setting for the repository. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/RepositoryProps.property.lifecycleRegistryId?lang=python\\">lifecycle_registry_id</a></code> | <code>str</code> | The AWS account ID associated with the registry that contains the repository. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/RepositoryProps.property.lifecycleRules?lang=python\\">lifecycle_rules</a></code> | <code>MutArray&lt;<a href=\\"/packages/@aws-cdk/aws-ecr/v/99.99.99/api/LifecycleRule?lang=python\\">LifecycleRule</a>&gt;</code> | Life cycle rules to apply to this registry. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/RepositoryProps.property.removalPolicy?lang=python\\">removal_policy</a></code> | <code><a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/RemovalPolicy?lang=python\\">RemovalPolicy</a></code> | Determine what happens to the repository when the resource/stack is deleted. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/RepositoryProps.property.repositoryName?lang=python\\">repository_name</a></code> | <code>str</code> | Name for this repository. |
-
----
-
-##### \`image_scan_on_push\`<sup>Optional</sup> <a name=\\"image_scan_on_push\\" id=\\"RepositoryProps.property.imageScanOnPush\\"></a>
-
-\`\`\`wing
-image_scan_on_push: bool;
-\`\`\`
-
-- *Type:* bool
-- *Default:* false
-
-Enable the scan on push when creating the repository.
-
----
-
-##### \`image_tag_mutability\`<sup>Optional</sup> <a name=\\"image_tag_mutability\\" id=\\"RepositoryProps.property.imageTagMutability\\"></a>
-
-\`\`\`wing
-image_tag_mutability: TagMutability;
-\`\`\`
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-ecr/v/99.99.99/api/TagMutability?lang=python\\">TagMutability</a>
-- *Default:* TagMutability.MUTABLE
-
-The tag mutability setting for the repository.
-
-If this parameter is omitted, the default setting of MUTABLE will be used which will allow image tags to be overwritten.
-
----
-
-##### \`lifecycle_registry_id\`<sup>Optional</sup> <a name=\\"lifecycle_registry_id\\" id=\\"RepositoryProps.property.lifecycleRegistryId\\"></a>
-
-\`\`\`wing
-lifecycle_registry_id: str;
-\`\`\`
-
-- *Type:* str
-- *Default:* The default registry is assumed.
-
-The AWS account ID associated with the registry that contains the repository.
-
-> [https://docs.aws.amazon.com/AmazonECR/latest/APIReference/API_PutLifecyclePolicy.html](https://docs.aws.amazon.com/AmazonECR/latest/APIReference/API_PutLifecyclePolicy.html)
-
----
-
-##### \`lifecycle_rules\`<sup>Optional</sup> <a name=\\"lifecycle_rules\\" id=\\"RepositoryProps.property.lifecycleRules\\"></a>
-
-\`\`\`wing
-lifecycle_rules: MutArray<LifecycleRule>;
-\`\`\`
-
-- *Type:* MutArray&lt;<a href=\\"/packages/@aws-cdk/aws-ecr/v/99.99.99/api/LifecycleRule?lang=python\\">LifecycleRule</a>&gt;
-- *Default:* No life cycle rules
-
-Life cycle rules to apply to this registry.
-
----
-
-##### \`removal_policy\`<sup>Optional</sup> <a name=\\"removal_policy\\" id=\\"RepositoryProps.property.removalPolicy\\"></a>
-
-\`\`\`wing
-removal_policy: RemovalPolicy;
-\`\`\`
-
-- *Type:* <a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/RemovalPolicy?lang=python\\">RemovalPolicy</a>
-- *Default:* RemovalPolicy.Retain
-
-Determine what happens to the repository when the resource/stack is deleted.
-
----
-
-##### \`repository_name\`<sup>Optional</sup> <a name=\\"repository_name\\" id=\\"RepositoryProps.property.repositoryName\\"></a>
-
-\`\`\`wing
-repository_name: str;
-\`\`\`
-
-- *Type:* str
-- *Default:* Automatically generated name.
-
-Name for this repository.
-
----
-
-## Classes <a name=\\"Classes\\" id=\\"Classes\\"></a>
-
-### AuthorizationToken <a name=\\"AuthorizationToken\\" id=\\"AuthorizationToken\\"></a>
-
-Authorization token to access private ECR repositories in the current environment via Docker CLI.
-
-> [https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html)
-
-
-#### Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/AuthorizationToken.grantRead?lang=python\\">grant_read</a></code> | Grant access to retrieve an authorization token. |
-
----
-
-##### \`grant_read\` <a name=\\"grant_read\\" id=\\"AuthorizationToken.grantRead\\"></a>
-
-\`\`\`wing
-bring { AuthorizationToken } from \\"@aws-cdk/aws-ecr\\"
-
-AuthorizationToken.grant_read(grantee: IGrantable)
-\`\`\`
-
-Grant access to retrieve an authorization token.
-
-###### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"AuthorizationToken.grantRead.parameter.grantee\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-iam/v/99.99.99/api/IGrantable?lang=python\\">IGrantable</a>
-
----
-
-
-
-### PublicGalleryAuthorizationToken <a name=\\"PublicGalleryAuthorizationToken\\" id=\\"PublicGalleryAuthorizationToken\\"></a>
-
-Authorization token to access the global public ECR Gallery via Docker CLI.
-
-> [https://docs.aws.amazon.com/AmazonECR/latest/public/public-registries.html#public-registry-auth](https://docs.aws.amazon.com/AmazonECR/latest/public/public-registries.html#public-registry-auth)
-
-
-#### Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/PublicGalleryAuthorizationToken.grantRead?lang=python\\">grant_read</a></code> | Grant access to retrieve an authorization token. |
-
----
-
-##### \`grant_read\` <a name=\\"grant_read\\" id=\\"PublicGalleryAuthorizationToken.grantRead\\"></a>
-
-\`\`\`wing
-bring { PublicGalleryAuthorizationToken } from \\"@aws-cdk/aws-ecr\\"
-
-PublicGalleryAuthorizationToken.grant_read(grantee: IGrantable)
-\`\`\`
-
-Grant access to retrieve an authorization token.
-
-###### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"PublicGalleryAuthorizationToken.grantRead.parameter.grantee\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-iam/v/99.99.99/api/IGrantable?lang=python\\">IGrantable</a>
-
----
-
-
-
-## Protocols <a name=\\"Protocols\\" id=\\"Protocols\\"></a>
-
-### IRepository <a name=\\"IRepository\\" id=\\"IRepository\\"></a>
-
-- *Extends:* <a href=\\"/packages/@aws-cdk/core/v/1.106.0/api/IResource?lang=python\\">IResource</a>
-
-- *Implemented By:* <a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/Repository?lang=python\\">Repository</a>, <a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/RepositoryBase?lang=python\\">RepositoryBase</a>, <a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/IRepository?lang=python\\">IRepository</a>
-
-Represents an ECR repository.
 
 #### Methods <a name=\\"Methods\\" id=\\"Methods\\"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/IRepository.addToResourcePolicy?lang=python\\">add_to_resource_policy</a></code> | Add a policy statement to the repository's resource policy. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/IRepository.grant?lang=python\\">grant</a></code> | Grant the given principal identity permissions to perform the actions on this repository. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/IRepository.grantPull?lang=python\\">grant_pull</a></code> | Grant the given identity permissions to pull images in this repository. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/IRepository.grantPullPush?lang=python\\">grant_pull_push</a></code> | Grant the given identity permissions to pull and push images to this repository. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/IRepository.onCloudTrailEvent?lang=python\\">on_cloud_trail_event</a></code> | Define a CloudWatch event that triggers when something happens to this repository. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/IRepository.onCloudTrailImagePushed?lang=python\\">on_cloud_trail_image_pushed</a></code> | Defines an AWS CloudWatch event rule that can trigger a target when an image is pushed to this repository. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/IRepository.onEvent?lang=python\\">on_event</a></code> | Defines a CloudWatch event rule which triggers for repository events. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/IRepository.onImageScanCompleted?lang=python\\">on_image_scan_completed</a></code> | Defines an AWS CloudWatch event rule that can trigger a target when the image scan is completed. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/IRepository.repositoryUriForDigest?lang=python\\">repository_uri_for_digest</a></code> | Returns the URI of the repository for a certain tag. Can be used in \`docker push/pull\`. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/IRepository.repositoryUriForTag?lang=python\\">repository_uri_for_tag</a></code> | Returns the URI of the repository for a certain tag. Can be used in \`docker push/pull\`. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.toString?lang=python\\">to_string</a></code> | Returns a string representation of this construct. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.applyRemovalPolicy?lang=python\\">apply_removal_policy</a></code> | Apply the given removal policy to this resource. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.addEventNotification?lang=python\\">add_event_notification</a></code> | Adds a bucket notification event destination. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.addObjectCreatedNotification?lang=python\\">add_object_created_notification</a></code> | Subscribes a destination to receive notifications when an object is created in the bucket. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.addObjectRemovedNotification?lang=python\\">add_object_removed_notification</a></code> | Subscribes a destination to receive notifications when an object is removed from the bucket. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.addToResourcePolicy?lang=python\\">add_to_resource_policy</a></code> | Adds a statement to the resource policy for a principal (i.e. account/role/service) to perform actions on this bucket and/or its contents. Use \`bucketArn\` and \`arnForObjects(keys)\` to obtain ARNs for this bucket or objects. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.arnForObjects?lang=python\\">arn_for_objects</a></code> | Returns an ARN that represents all objects within the bucket that match the key pattern specified. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.grantDelete?lang=python\\">grant_delete</a></code> | Grants s3:DeleteObject* permission to an IAM principal for objects in this bucket. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.grantPublicAccess?lang=python\\">grant_public_access</a></code> | Allows unrestricted access to objects from this bucket. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.grantPut?lang=python\\">grant_put</a></code> | Grants s3:PutObject* and s3:Abort* permissions for this bucket to an IAM principal. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.grantPutAcl?lang=python\\">grant_put_acl</a></code> | Grant the given IAM identity permissions to modify the ACLs of objects in the given Bucket. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.grantRead?lang=python\\">grant_read</a></code> | Grant read permissions for this bucket and it's contents to an IAM principal (Role/Group/User). |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.grantReadWrite?lang=python\\">grant_read_write</a></code> | Grants read/write permissions for this bucket and it's contents to an IAM principal (Role/Group/User). |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.grantWrite?lang=python\\">grant_write</a></code> | Grant write permissions to this bucket to an IAM principal. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.onCloudTrailEvent?lang=python\\">on_cloud_trail_event</a></code> | Define a CloudWatch event that triggers when something happens to this repository. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.onCloudTrailPutObject?lang=python\\">on_cloud_trail_put_object</a></code> | Defines an AWS CloudWatch event that triggers when an object is uploaded to the specified paths (keys) in this bucket using the PutObject API call. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.onCloudTrailWriteObject?lang=python\\">on_cloud_trail_write_object</a></code> | Defines an AWS CloudWatch event that triggers when an object at the specified paths (keys) in this bucket are written to. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.s3UrlForObject?lang=python\\">s3_url_for_object</a></code> | The S3 URL of an S3 object. For example:. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.transferAccelerationUrlForObject?lang=python\\">transfer_acceleration_url_for_object</a></code> | The https Transfer Acceleration URL of an S3 object. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.urlForObject?lang=python\\">url_for_object</a></code> | The https URL of an S3 object. Specify \`regional: false\` at the options for non-regional URLs. For example:. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.virtualHostedUrlForObject?lang=python\\">virtual_hosted_url_for_object</a></code> | The virtual hosted-style URL of an S3 object. Specify \`regional: false\` at the options for non-regional URL. For example:. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.addCorsRule?lang=python\\">add_cors_rule</a></code> | Adds a cross-origin access configuration for objects in an Amazon S3 bucket. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.addInventory?lang=python\\">add_inventory</a></code> | Add an inventory configuration. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.addLifecycleRule?lang=python\\">add_lifecycle_rule</a></code> | Add a lifecycle rule to the bucket. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.addMetric?lang=python\\">add_metric</a></code> | Adds a metrics configuration for the CloudWatch request metrics from the bucket. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.greet?lang=python\\">greet</a></code> | *No description.* |
 
 ---
 
-##### \`add_to_resource_policy\` <a name=\\"add_to_resource_policy\\" id=\\"IRepository.addToResourcePolicy\\"></a>
+##### \`to_string\` <a name=\\"to_string\\" id=\\"GreeterBucket.toString\\"></a>
 
 \`\`\`wing
-add_to_resource_policy(statement: PolicyStatement): AddToResourcePolicyResult
+to_string(): str
 \`\`\`
 
-Add a policy statement to the repository's resource policy.
+Returns a string representation of this construct.
 
-###### \`statement\`<sup>Required</sup> <a name=\\"statement\\" id=\\"IRepository.addToResourcePolicy.parameter.statement\\"></a>
+##### \`apply_removal_policy\` <a name=\\"apply_removal_policy\\" id=\\"GreeterBucket.applyRemovalPolicy\\"></a>
+
+\`\`\`wing
+apply_removal_policy(policy: RemovalPolicy): void
+\`\`\`
+
+Apply the given removal policy to this resource.
+
+The Removal Policy controls what happens to this resource when it stops
+being managed by CloudFormation, either because you've removed it from the
+CDK application or because you've made a change that requires the resource
+to be replaced.
+
+The resource can be deleted (\`RemovalPolicy.DESTROY\`), or left in your AWS
+account for data recovery and cleanup later (\`RemovalPolicy.RETAIN\`).
+
+###### \`policy\`<sup>Required</sup> <a name=\\"policy\\" id=\\"GreeterBucket.applyRemovalPolicy.parameter.policy\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/RemovalPolicy?lang=python\\">RemovalPolicy</a>
+
+---
+
+##### \`add_event_notification\` <a name=\\"add_event_notification\\" id=\\"GreeterBucket.addEventNotification\\"></a>
+
+\`\`\`wing
+add_event_notification(event: EventType, dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+\`\`\`
+
+Adds a bucket notification event destination.
+
+> [https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html](https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html)
+
+*Example*
+
+\`\`\`wing
+   declare const myLambda: lambda.Function;
+   const bucket = new s3.Bucket(this, 'MyBucket');
+   bucket.addEventNotification(s3.EventType.OBJECT_CREATED, new s3n.LambdaDestination(myLambda), {prefix: 'home/myusername/*'});
+\`\`\`
+
+
+###### \`event\`<sup>Required</sup> <a name=\\"event\\" id=\\"GreeterBucket.addEventNotification.parameter.event\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/EventType?lang=python\\">EventType</a>
+
+The event to trigger the notification.
+
+---
+
+###### \`dest\`<sup>Required</sup> <a name=\\"dest\\" id=\\"GreeterBucket.addEventNotification.parameter.dest\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/IBucketNotificationDestination?lang=python\\">IBucketNotificationDestination</a>
+
+The notification destination (Lambda, SNS Topic or SQS Queue).
+
+---
+
+###### \`filters\`<sup>Required</sup> <a name=\\"filters\\" id=\\"GreeterBucket.addEventNotification.parameter.filters\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/NotificationKeyFilter?lang=python\\">NotificationKeyFilter</a>
+
+S3 object key filter rules to determine which objects trigger this event.
+
+Each filter must include a \`prefix\` and/or \`suffix\`
+that will be matched against the s3 object key. Refer to the S3 Developer Guide
+for details about allowed filter rules.
+
+---
+
+##### \`add_object_created_notification\` <a name=\\"add_object_created_notification\\" id=\\"GreeterBucket.addObjectCreatedNotification\\"></a>
+
+\`\`\`wing
+add_object_created_notification(dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+\`\`\`
+
+Subscribes a destination to receive notifications when an object is created in the bucket.
+
+This is identical to calling
+\`onEvent(EventType.OBJECT_CREATED)\`.
+
+###### \`dest\`<sup>Required</sup> <a name=\\"dest\\" id=\\"GreeterBucket.addObjectCreatedNotification.parameter.dest\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/IBucketNotificationDestination?lang=python\\">IBucketNotificationDestination</a>
+
+The notification destination (see onEvent).
+
+---
+
+###### \`filters\`<sup>Required</sup> <a name=\\"filters\\" id=\\"GreeterBucket.addObjectCreatedNotification.parameter.filters\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/NotificationKeyFilter?lang=python\\">NotificationKeyFilter</a>
+
+Filters (see onEvent).
+
+---
+
+##### \`add_object_removed_notification\` <a name=\\"add_object_removed_notification\\" id=\\"GreeterBucket.addObjectRemovedNotification\\"></a>
+
+\`\`\`wing
+add_object_removed_notification(dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+\`\`\`
+
+Subscribes a destination to receive notifications when an object is removed from the bucket.
+
+This is identical to calling
+\`onEvent(EventType.OBJECT_REMOVED)\`.
+
+###### \`dest\`<sup>Required</sup> <a name=\\"dest\\" id=\\"GreeterBucket.addObjectRemovedNotification.parameter.dest\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/IBucketNotificationDestination?lang=python\\">IBucketNotificationDestination</a>
+
+The notification destination (see onEvent).
+
+---
+
+###### \`filters\`<sup>Required</sup> <a name=\\"filters\\" id=\\"GreeterBucket.addObjectRemovedNotification.parameter.filters\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/NotificationKeyFilter?lang=python\\">NotificationKeyFilter</a>
+
+Filters (see onEvent).
+
+---
+
+##### \`add_to_resource_policy\` <a name=\\"add_to_resource_policy\\" id=\\"GreeterBucket.addToResourcePolicy\\"></a>
+
+\`\`\`wing
+add_to_resource_policy(permission: PolicyStatement): AddToResourcePolicyResult
+\`\`\`
+
+Adds a statement to the resource policy for a principal (i.e. account/role/service) to perform actions on this bucket and/or its contents. Use \`bucketArn\` and \`arnForObjects(keys)\` to obtain ARNs for this bucket or objects.
+
+Note that the policy statement may or may not be added to the policy.
+For example, when an \`IBucket\` is created from an existing bucket,
+it's not possible to tell whether the bucket already has a policy
+attached, let alone to re-use that policy to add more statements to it.
+So it's safest to do nothing in these cases.
+
+###### \`permission\`<sup>Required</sup> <a name=\\"permission\\" id=\\"GreeterBucket.addToResourcePolicy.parameter.permission\\"></a>
 
 - *Type:* <a href=\\"/packages/@aws-cdk/aws-iam/v/99.99.99/api/PolicyStatement?lang=python\\">PolicyStatement</a>
 
+the policy statement to be added to the bucket's policy.
+
 ---
 
-##### \`grant\` <a name=\\"grant\\" id=\\"IRepository.grant\\"></a>
+##### \`arn_for_objects\` <a name=\\"arn_for_objects\\" id=\\"GreeterBucket.arnForObjects\\"></a>
 
 \`\`\`wing
-grant(grantee: IGrantable, actions: str): Grant
+arn_for_objects(key_pattern: str): str
 \`\`\`
 
-Grant the given principal identity permissions to perform the actions on this repository.
+Returns an ARN that represents all objects within the bucket that match the key pattern specified.
 
-###### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"IRepository.grant.parameter.grantee\\"></a>
+To represent all keys, specify \`\`\\"*\\"\`\`.
 
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-iam/v/99.99.99/api/IGrantable?lang=python\\">IGrantable</a>
+If you need to specify a keyPattern with multiple components, concatenate them into a single string, e.g.:
 
----
+   arnForObjects(\`home/\${team}/\${user}/*\`)
 
-###### \`actions\`<sup>Required</sup> <a name=\\"actions\\" id=\\"IRepository.grant.parameter.actions\\"></a>
+###### \`key_pattern\`<sup>Required</sup> <a name=\\"key_pattern\\" id=\\"GreeterBucket.arnForObjects.parameter.keyPattern\\"></a>
 
 - *Type:* str
 
 ---
 
-##### \`grant_pull\` <a name=\\"grant_pull\\" id=\\"IRepository.grantPull\\"></a>
+##### \`grant_delete\` <a name=\\"grant_delete\\" id=\\"GreeterBucket.grantDelete\\"></a>
 
 \`\`\`wing
-grant_pull(grantee: IGrantable): Grant
+grant_delete(identity: IGrantable, objects_key_pattern?: any): Grant
 \`\`\`
 
-Grant the given identity permissions to pull images in this repository.
+Grants s3:DeleteObject* permission to an IAM principal for objects in this bucket.
 
-###### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"IRepository.grantPull.parameter.grantee\\"></a>
+###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"GreeterBucket.grantDelete.parameter.identity\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-iam/v/99.99.99/api/IGrantable?lang=python\\">IGrantable</a>
+
+The principal.
+
+---
+
+###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"GreeterBucket.grantDelete.parameter.objectsKeyPattern\\"></a>
+
+- *Type:* any
+
+Restrict the permission to a certain key pattern (default '*').
+
+---
+
+##### \`grant_public_access\` <a name=\\"grant_public_access\\" id=\\"GreeterBucket.grantPublicAccess\\"></a>
+
+\`\`\`wing
+grant_public_access(allowed_actions: str, key_prefix?: str): Grant
+\`\`\`
+
+Allows unrestricted access to objects from this bucket.
+
+IMPORTANT: This permission allows anyone to perform actions on S3 objects
+in this bucket, which is useful for when you configure your bucket as a
+website and want everyone to be able to read objects in the bucket without
+needing to authenticate.
+
+Without arguments, this method will grant read (\\"s3:GetObject\\") access to
+all objects (\\"*\\") in the bucket.
+
+The method returns the \`iam.Grant\` object, which can then be modified
+as needed. For example, you can add a condition that will restrict access only
+to an IPv4 range like this:
+
+     const grant = bucket.grantPublicAccess();
+     grant.resourceStatement!.addCondition(‘IpAddress’, { “aws:SourceIp”: “54.240.143.0/24” });
+
+Note that if this \`IBucket\` refers to an existing bucket, possibly not
+managed by CloudFormation, this method will have no effect, since it's
+impossible to modify the policy of an existing bucket.
+
+###### \`allowed_actions\`<sup>Required</sup> <a name=\\"allowed_actions\\" id=\\"GreeterBucket.grantPublicAccess.parameter.allowedActions\\"></a>
+
+- *Type:* str
+
+the set of S3 actions to allow.
+
+Default is \\"s3:GetObject\\".
+
+---
+
+###### \`key_prefix\`<sup>Optional</sup> <a name=\\"key_prefix\\" id=\\"GreeterBucket.grantPublicAccess.parameter.keyPrefix\\"></a>
+
+- *Type:* str
+
+the prefix of S3 object keys (e.g. \`home/*\`). Default is \\"*\\".
+
+---
+
+##### \`grant_put\` <a name=\\"grant_put\\" id=\\"GreeterBucket.grantPut\\"></a>
+
+\`\`\`wing
+grant_put(identity: IGrantable, objects_key_pattern?: any): Grant
+\`\`\`
+
+Grants s3:PutObject* and s3:Abort* permissions for this bucket to an IAM principal.
+
+If encryption is used, permission to use the key to encrypt the contents
+of written files will also be granted to the same principal.
+
+###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"GreeterBucket.grantPut.parameter.identity\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-iam/v/99.99.99/api/IGrantable?lang=python\\">IGrantable</a>
+
+The principal.
+
+---
+
+###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"GreeterBucket.grantPut.parameter.objectsKeyPattern\\"></a>
+
+- *Type:* any
+
+Restrict the permission to a certain key pattern (default '*').
+
+---
+
+##### \`grant_put_acl\` <a name=\\"grant_put_acl\\" id=\\"GreeterBucket.grantPutAcl\\"></a>
+
+\`\`\`wing
+grant_put_acl(identity: IGrantable, objects_key_pattern?: str): Grant
+\`\`\`
+
+Grant the given IAM identity permissions to modify the ACLs of objects in the given Bucket.
+
+If your application has the '@aws-cdk/aws-s3:grantWriteWithoutAcl' feature flag set,
+calling {@link grantWrite} or {@link grantReadWrite} no longer grants permissions to modify the ACLs of the objects;
+in this case, if you need to modify object ACLs, call this method explicitly.
+
+###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"GreeterBucket.grantPutAcl.parameter.identity\\"></a>
 
 - *Type:* <a href=\\"/packages/@aws-cdk/aws-iam/v/99.99.99/api/IGrantable?lang=python\\">IGrantable</a>
 
 ---
 
-##### \`grant_pull_push\` <a name=\\"grant_pull_push\\" id=\\"IRepository.grantPullPush\\"></a>
+###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"GreeterBucket.grantPutAcl.parameter.objectsKeyPattern\\"></a>
+
+- *Type:* str
+
+---
+
+##### \`grant_read\` <a name=\\"grant_read\\" id=\\"GreeterBucket.grantRead\\"></a>
 
 \`\`\`wing
-grant_pull_push(grantee: IGrantable): Grant
+grant_read(identity: IGrantable, objects_key_pattern?: any): Grant
 \`\`\`
 
-Grant the given identity permissions to pull and push images to this repository.
+Grant read permissions for this bucket and it's contents to an IAM principal (Role/Group/User).
 
-###### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"IRepository.grantPullPush.parameter.grantee\\"></a>
+If encryption is used, permission to use the key to decrypt the contents
+of the bucket will also be granted to the same principal.
+
+###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"GreeterBucket.grantRead.parameter.identity\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-iam/v/99.99.99/api/IGrantable?lang=python\\">IGrantable</a>
+
+The principal.
+
+---
+
+###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"GreeterBucket.grantRead.parameter.objectsKeyPattern\\"></a>
+
+- *Type:* any
+
+Restrict the permission to a certain key pattern (default '*').
+
+---
+
+##### \`grant_read_write\` <a name=\\"grant_read_write\\" id=\\"GreeterBucket.grantReadWrite\\"></a>
+
+\`\`\`wing
+grant_read_write(identity: IGrantable, objects_key_pattern?: any): Grant
+\`\`\`
+
+Grants read/write permissions for this bucket and it's contents to an IAM principal (Role/Group/User).
+
+If an encryption key is used, permission to use the key for
+encrypt/decrypt will also be granted.
+
+Before CDK version 1.85.0, this method granted the \`s3:PutObject*\` permission that included \`s3:PutObjectAcl\`,
+which could be used to grant read/write object access to IAM principals in other accounts.
+If you want to get rid of that behavior, update your CDK version to 1.85.0 or later,
+and make sure the \`@aws-cdk/aws-s3:grantWriteWithoutAcl\` feature flag is set to \`true\`
+in the \`context\` key of your cdk.json file.
+If you've already updated, but still need the principal to have permissions to modify the ACLs,
+use the {@link grantPutAcl} method.
+
+###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"GreeterBucket.grantReadWrite.parameter.identity\\"></a>
 
 - *Type:* <a href=\\"/packages/@aws-cdk/aws-iam/v/99.99.99/api/IGrantable?lang=python\\">IGrantable</a>
 
 ---
 
-##### \`on_cloud_trail_event\` <a name=\\"on_cloud_trail_event\\" id=\\"IRepository.onCloudTrailEvent\\"></a>
+###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"GreeterBucket.grantReadWrite.parameter.objectsKeyPattern\\"></a>
+
+- *Type:* any
+
+---
+
+##### \`grant_write\` <a name=\\"grant_write\\" id=\\"GreeterBucket.grantWrite\\"></a>
 
 \`\`\`wing
-on_cloud_trail_event(options?: OnEventOptions): Rule
+grant_write(identity: IGrantable, objects_key_pattern?: any): Grant
+\`\`\`
+
+Grant write permissions to this bucket to an IAM principal.
+
+If encryption is used, permission to use the key to encrypt the contents
+of written files will also be granted to the same principal.
+
+Before CDK version 1.85.0, this method granted the \`s3:PutObject*\` permission that included \`s3:PutObjectAcl\`,
+which could be used to grant read/write object access to IAM principals in other accounts.
+If you want to get rid of that behavior, update your CDK version to 1.85.0 or later,
+and make sure the \`@aws-cdk/aws-s3:grantWriteWithoutAcl\` feature flag is set to \`true\`
+in the \`context\` key of your cdk.json file.
+If you've already updated, but still need the principal to have permissions to modify the ACLs,
+use the {@link grantPutAcl} method.
+
+###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"GreeterBucket.grantWrite.parameter.identity\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-iam/v/99.99.99/api/IGrantable?lang=python\\">IGrantable</a>
+
+---
+
+###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"GreeterBucket.grantWrite.parameter.objectsKeyPattern\\"></a>
+
+- *Type:* any
+
+---
+
+##### \`on_cloud_trail_event\` <a name=\\"on_cloud_trail_event\\" id=\\"GreeterBucket.onCloudTrailEvent\\"></a>
+
+\`\`\`wing
+on_cloud_trail_event(options?: OnCloudTrailBucketEventOptions): Rule
 \`\`\`
 
 Define a CloudWatch event that triggers when something happens to this repository.
@@ -1170,99 +457,352 @@ Define a CloudWatch event that triggers when something happens to this repositor
 Requires that there exists at least one CloudTrail Trail in your account
 that captures the event. This method will not create the Trail.
 
-###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"IRepository.onCloudTrailEvent.parameter.options\\"></a>
+###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"GreeterBucket.onCloudTrailEvent.parameter.options\\"></a>
 
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-events/v/99.99.99/api/OnEventOptions?lang=python\\">OnEventOptions</a>
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/OnCloudTrailBucketEventOptions?lang=python\\">OnCloudTrailBucketEventOptions</a>
 
 Options for adding the rule.
 
 ---
 
-##### \`on_cloud_trail_image_pushed\` <a name=\\"on_cloud_trail_image_pushed\\" id=\\"IRepository.onCloudTrailImagePushed\\"></a>
+##### \`on_cloud_trail_put_object\` <a name=\\"on_cloud_trail_put_object\\" id=\\"GreeterBucket.onCloudTrailPutObject\\"></a>
 
 \`\`\`wing
-on_cloud_trail_image_pushed(options?: OnCloudTrailImagePushedOptions): Rule
+on_cloud_trail_put_object(options?: OnCloudTrailBucketEventOptions): Rule
 \`\`\`
 
-Defines an AWS CloudWatch event rule that can trigger a target when an image is pushed to this repository.
+Defines an AWS CloudWatch event that triggers when an object is uploaded to the specified paths (keys) in this bucket using the PutObject API call.
+
+Note that some tools like \`aws s3 cp\` will automatically use either
+PutObject or the multipart upload API depending on the file size,
+so using \`onCloudTrailWriteObject\` may be preferable.
 
 Requires that there exists at least one CloudTrail Trail in your account
 that captures the event. This method will not create the Trail.
 
-###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"IRepository.onCloudTrailImagePushed.parameter.options\\"></a>
+###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"GreeterBucket.onCloudTrailPutObject.parameter.options\\"></a>
 
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-ecr/v/99.99.99/api/OnCloudTrailImagePushedOptions?lang=python\\">OnCloudTrailImagePushedOptions</a>
-
-Options for adding the rule.
-
----
-
-##### \`on_event\` <a name=\\"on_event\\" id=\\"IRepository.onEvent\\"></a>
-
-\`\`\`wing
-on_event(options?: OnEventOptions): Rule
-\`\`\`
-
-Defines a CloudWatch event rule which triggers for repository events.
-
-Use
-\`rule.addEventPattern(pattern)\` to specify a filter.
-
-###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"IRepository.onEvent.parameter.options\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-events/v/99.99.99/api/OnEventOptions?lang=python\\">OnEventOptions</a>
-
----
-
-##### \`on_image_scan_completed\` <a name=\\"on_image_scan_completed\\" id=\\"IRepository.onImageScanCompleted\\"></a>
-
-\`\`\`wing
-on_image_scan_completed(options?: OnImageScanCompletedOptions): Rule
-\`\`\`
-
-Defines an AWS CloudWatch event rule that can trigger a target when the image scan is completed.
-
-###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"IRepository.onImageScanCompleted.parameter.options\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-ecr/v/99.99.99/api/OnImageScanCompletedOptions?lang=python\\">OnImageScanCompletedOptions</a>
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/OnCloudTrailBucketEventOptions?lang=python\\">OnCloudTrailBucketEventOptions</a>
 
 Options for adding the rule.
 
 ---
 
-##### \`repository_uri_for_digest\` <a name=\\"repository_uri_for_digest\\" id=\\"IRepository.repositoryUriForDigest\\"></a>
+##### \`on_cloud_trail_write_object\` <a name=\\"on_cloud_trail_write_object\\" id=\\"GreeterBucket.onCloudTrailWriteObject\\"></a>
 
 \`\`\`wing
-repository_uri_for_digest(digest?: str): str
+on_cloud_trail_write_object(options?: OnCloudTrailBucketEventOptions): Rule
 \`\`\`
 
-Returns the URI of the repository for a certain tag. Can be used in \`docker push/pull\`.
+Defines an AWS CloudWatch event that triggers when an object at the specified paths (keys) in this bucket are written to.
 
-ACCOUNT.dkr.ecr.REGION.amazonaws.com/REPOSITORY[@DIGEST]
+This includes
+the events PutObject, CopyObject, and CompleteMultipartUpload.
 
-###### \`digest\`<sup>Optional</sup> <a name=\\"digest\\" id=\\"IRepository.repositoryUriForDigest.parameter.digest\\"></a>
+Note that some tools like \`aws s3 cp\` will automatically use either
+PutObject or the multipart upload API depending on the file size,
+so using this method may be preferable to \`onCloudTrailPutObject\`.
 
-- *Type:* str
+Requires that there exists at least one CloudTrail Trail in your account
+that captures the event. This method will not create the Trail.
 
-Image digest to use (tools usually default to the image with the \\"latest\\" tag if omitted).
+###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"GreeterBucket.onCloudTrailWriteObject.parameter.options\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/OnCloudTrailBucketEventOptions?lang=python\\">OnCloudTrailBucketEventOptions</a>
+
+Options for adding the rule.
 
 ---
 
-##### \`repository_uri_for_tag\` <a name=\\"repository_uri_for_tag\\" id=\\"IRepository.repositoryUriForTag\\"></a>
+##### \`s3_url_for_object\` <a name=\\"s3_url_for_object\\" id=\\"GreeterBucket.s3UrlForObject\\"></a>
 
 \`\`\`wing
-repository_uri_for_tag(tag?: str): str
+s3_url_for_object(key?: str): str
 \`\`\`
 
-Returns the URI of the repository for a certain tag. Can be used in \`docker push/pull\`.
+The S3 URL of an S3 object. For example:.
 
-ACCOUNT.dkr.ecr.REGION.amazonaws.com/REPOSITORY[:TAG]
+\`s3://onlybucket\`
+- \`s3://bucket/key\`
 
-###### \`tag\`<sup>Optional</sup> <a name=\\"tag\\" id=\\"IRepository.repositoryUriForTag.parameter.tag\\"></a>
+###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"GreeterBucket.s3UrlForObject.parameter.key\\"></a>
 
 - *Type:* str
 
-Image tag to use (tools usually default to \\"latest\\" if omitted).
+The S3 key of the object.
+
+If not specified, the S3 URL of the
+bucket is returned.
+
+---
+
+##### \`transfer_acceleration_url_for_object\` <a name=\\"transfer_acceleration_url_for_object\\" id=\\"GreeterBucket.transferAccelerationUrlForObject\\"></a>
+
+\`\`\`wing
+transfer_acceleration_url_for_object(key?: str, options?: TransferAccelerationUrlOptions): str
+\`\`\`
+
+The https Transfer Acceleration URL of an S3 object.
+
+Specify \`dualStack: true\` at the options
+for dual-stack endpoint (connect to the bucket over IPv6). For example:
+
+- \`https://bucket.s3-accelerate.amazonaws.com\`
+- \`https://bucket.s3-accelerate.amazonaws.com/key\`
+
+###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"GreeterBucket.transferAccelerationUrlForObject.parameter.key\\"></a>
+
+- *Type:* str
+
+The S3 key of the object.
+
+If not specified, the URL of the
+bucket is returned.
+
+---
+
+###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"GreeterBucket.transferAccelerationUrlForObject.parameter.options\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/TransferAccelerationUrlOptions?lang=python\\">TransferAccelerationUrlOptions</a>
+
+Options for generating URL.
+
+---
+
+##### \`url_for_object\` <a name=\\"url_for_object\\" id=\\"GreeterBucket.urlForObject\\"></a>
+
+\`\`\`wing
+url_for_object(key?: str): str
+\`\`\`
+
+The https URL of an S3 object. Specify \`regional: false\` at the options for non-regional URLs. For example:.
+
+\`https://s3.us-west-1.amazonaws.com/onlybucket\`
+- \`https://s3.us-west-1.amazonaws.com/bucket/key\`
+- \`https://s3.cn-north-1.amazonaws.com.cn/china-bucket/mykey\`
+
+###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"GreeterBucket.urlForObject.parameter.key\\"></a>
+
+- *Type:* str
+
+The S3 key of the object.
+
+If not specified, the URL of the
+bucket is returned.
+
+---
+
+##### \`virtual_hosted_url_for_object\` <a name=\\"virtual_hosted_url_for_object\\" id=\\"GreeterBucket.virtualHostedUrlForObject\\"></a>
+
+\`\`\`wing
+virtual_hosted_url_for_object(key?: str, options?: VirtualHostedStyleUrlOptions): str
+\`\`\`
+
+The virtual hosted-style URL of an S3 object. Specify \`regional: false\` at the options for non-regional URL. For example:.
+
+\`https://only-bucket.s3.us-west-1.amazonaws.com\`
+- \`https://bucket.s3.us-west-1.amazonaws.com/key\`
+- \`https://bucket.s3.amazonaws.com/key\`
+- \`https://china-bucket.s3.cn-north-1.amazonaws.com.cn/mykey\`
+
+###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"GreeterBucket.virtualHostedUrlForObject.parameter.key\\"></a>
+
+- *Type:* str
+
+The S3 key of the object.
+
+If not specified, the URL of the
+bucket is returned.
+
+---
+
+###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"GreeterBucket.virtualHostedUrlForObject.parameter.options\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/VirtualHostedStyleUrlOptions?lang=python\\">VirtualHostedStyleUrlOptions</a>
+
+Options for generating URL.
+
+---
+
+##### \`add_cors_rule\` <a name=\\"add_cors_rule\\" id=\\"GreeterBucket.addCorsRule\\"></a>
+
+\`\`\`wing
+add_cors_rule(rule: CorsRule): void
+\`\`\`
+
+Adds a cross-origin access configuration for objects in an Amazon S3 bucket.
+
+###### \`rule\`<sup>Required</sup> <a name=\\"rule\\" id=\\"GreeterBucket.addCorsRule.parameter.rule\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/CorsRule?lang=python\\">CorsRule</a>
+
+The CORS configuration rule to add.
+
+---
+
+##### \`add_inventory\` <a name=\\"add_inventory\\" id=\\"GreeterBucket.addInventory\\"></a>
+
+\`\`\`wing
+add_inventory(inventory: Inventory): void
+\`\`\`
+
+Add an inventory configuration.
+
+###### \`inventory\`<sup>Required</sup> <a name=\\"inventory\\" id=\\"GreeterBucket.addInventory.parameter.inventory\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/Inventory?lang=python\\">Inventory</a>
+
+configuration to add.
+
+---
+
+##### \`add_lifecycle_rule\` <a name=\\"add_lifecycle_rule\\" id=\\"GreeterBucket.addLifecycleRule\\"></a>
+
+\`\`\`wing
+add_lifecycle_rule(rule: LifecycleRule): void
+\`\`\`
+
+Add a lifecycle rule to the bucket.
+
+###### \`rule\`<sup>Required</sup> <a name=\\"rule\\" id=\\"GreeterBucket.addLifecycleRule.parameter.rule\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/LifecycleRule?lang=python\\">LifecycleRule</a>
+
+The rule to add.
+
+---
+
+##### \`add_metric\` <a name=\\"add_metric\\" id=\\"GreeterBucket.addMetric\\"></a>
+
+\`\`\`wing
+add_metric(metric: BucketMetrics): void
+\`\`\`
+
+Adds a metrics configuration for the CloudWatch request metrics from the bucket.
+
+###### \`metric\`<sup>Required</sup> <a name=\\"metric\\" id=\\"GreeterBucket.addMetric.parameter.metric\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/BucketMetrics?lang=python\\">BucketMetrics</a>
+
+The metric configuration to add.
+
+---
+
+##### \`greet\` <a name=\\"greet\\" id=\\"GreeterBucket.greet\\"></a>
+
+\`\`\`wing
+greet(): void
+\`\`\`
+
+#### Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.isConstruct?lang=python\\">is_construct</a></code> | Return whether the given object is a Construct. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.isResource?lang=python\\">is_resource</a></code> | Check whether the given construct is a Resource. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.fromBucketArn?lang=python\\">from_bucket_arn</a></code> | *No description.* |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.fromBucketAttributes?lang=python\\">from_bucket_attributes</a></code> | Creates a Bucket construct that represents an external bucket. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.fromBucketName?lang=python\\">from_bucket_name</a></code> | *No description.* |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.validateBucketName?lang=python\\">validate_bucket_name</a></code> | Thrown an exception if the given bucket name is not valid. |
+
+---
+
+##### \`is_construct\` <a name=\\"is_construct\\" id=\\"GreeterBucket.isConstruct\\"></a>
+
+\`\`\`wing
+bring { GreeterBucket } from \\"construct-library\\"
+
+GreeterBucket.is_construct(x: any)
+\`\`\`
+
+Return whether the given object is a Construct.
+
+###### \`x\`<sup>Required</sup> <a name=\\"x\\" id=\\"GreeterBucket.isConstruct.parameter.x\\"></a>
+
+- *Type:* any
+
+---
+
+##### \`is_resource\` <a name=\\"is_resource\\" id=\\"GreeterBucket.isResource\\"></a>
+
+\`\`\`wing
+bring { GreeterBucket } from \\"construct-library\\"
+
+GreeterBucket.is_resource(construct: IConstruct)
+\`\`\`
+
+Check whether the given construct is a Resource.
+
+###### \`construct\`<sup>Required</sup> <a name=\\"construct\\" id=\\"GreeterBucket.isResource.parameter.construct\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/IConstruct?lang=python\\">IConstruct</a>
+
+---
+
+##### \`from_bucket_arn\` <a name=\\"from_bucket_arn\\" id=\\"GreeterBucket.fromBucketArn\\"></a>
+
+\`\`\`wing
+bring { GreeterBucket } from \\"construct-library\\"
+
+GreeterBucket.from_bucket_arn(bucket_arn: str)
+\`\`\`
+
+###### \`bucket_arn\`<sup>Required</sup> <a name=\\"bucket_arn\\" id=\\"GreeterBucket.fromBucketArn.parameter.bucketArn\\"></a>
+
+- *Type:* str
+
+---
+
+##### \`from_bucket_attributes\` <a name=\\"from_bucket_attributes\\" id=\\"GreeterBucket.fromBucketAttributes\\"></a>
+
+\`\`\`wing
+bring { GreeterBucket } from \\"construct-library\\"
+
+GreeterBucket.from_bucket_attributes(attrs: BucketAttributes)
+\`\`\`
+
+Creates a Bucket construct that represents an external bucket.
+
+###### \`attrs\`<sup>Required</sup> <a name=\\"attrs\\" id=\\"GreeterBucket.fromBucketAttributes.parameter.attrs\\"></a>
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/BucketAttributes?lang=python\\">BucketAttributes</a>
+
+A \`BucketAttributes\` object.
+
+Can be obtained from a call to
+\`bucket.export()\` or manually created.
+
+---
+
+##### \`from_bucket_name\` <a name=\\"from_bucket_name\\" id=\\"GreeterBucket.fromBucketName\\"></a>
+
+\`\`\`wing
+bring { GreeterBucket } from \\"construct-library\\"
+
+GreeterBucket.from_bucket_name(bucket_name: str)
+\`\`\`
+
+###### \`bucket_name\`<sup>Required</sup> <a name=\\"bucket_name\\" id=\\"GreeterBucket.fromBucketName.parameter.bucketName\\"></a>
+
+- *Type:* str
+
+---
+
+##### \`validate_bucket_name\` <a name=\\"validate_bucket_name\\" id=\\"GreeterBucket.validateBucketName\\"></a>
+
+\`\`\`wing
+bring { GreeterBucket } from \\"construct-library\\"
+
+GreeterBucket.validate_bucket_name(physical_name: str)
+\`\`\`
+
+Thrown an exception if the given bucket name is not valid.
+
+###### \`physical_name\`<sup>Required</sup> <a name=\\"physical_name\\" id=\\"GreeterBucket.validateBucketName.parameter.physicalName\\"></a>
+
+- *Type:* str
+
+name of the bucket.
 
 ---
 
@@ -1270,16 +810,23 @@ Image tag to use (tools usually default to \\"latest\\" if omitted).
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/IRepository.property.node?lang=python\\">node</a></code> | <code><a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/ConstructNode?lang=python\\">ConstructNode</a></code> | The construct tree node for this construct. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/IRepository.property.env?lang=python\\">env</a></code> | <code><a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/ResourceEnvironment?lang=python\\">ResourceEnvironment</a></code> | The environment this resource belongs to. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/IRepository.property.stack?lang=python\\">stack</a></code> | <code><a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/Stack?lang=python\\">Stack</a></code> | The stack in which this resource is defined. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/IRepository.property.repositoryArn?lang=python\\">repository_arn</a></code> | <code>str</code> | The ARN of the repository. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/IRepository.property.repositoryName?lang=python\\">repository_name</a></code> | <code>str</code> | The name of the repository. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/IRepository.property.repositoryUri?lang=python\\">repository_uri</a></code> | <code>str</code> | The URI of this repository (represents the latest image):. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.node?lang=python\\">node</a></code> | <code><a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/ConstructNode?lang=python\\">ConstructNode</a></code> | The construct tree node associated with this construct. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.env?lang=python\\">env</a></code> | <code><a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/ResourceEnvironment?lang=python\\">ResourceEnvironment</a></code> | The environment this resource belongs to. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.stack?lang=python\\">stack</a></code> | <code><a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/Stack?lang=python\\">Stack</a></code> | The stack in which this resource is defined. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.bucketArn?lang=python\\">bucket_arn</a></code> | <code>str</code> | The ARN of the bucket. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.bucketDomainName?lang=python\\">bucket_domain_name</a></code> | <code>str</code> | The IPv4 DNS name of the specified bucket. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.bucketDualStackDomainName?lang=python\\">bucket_dual_stack_domain_name</a></code> | <code>str</code> | The IPv6 DNS name of the specified bucket. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.bucketName?lang=python\\">bucket_name</a></code> | <code>str</code> | The name of the bucket. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.bucketRegionalDomainName?lang=python\\">bucket_regional_domain_name</a></code> | <code>str</code> | The regional domain name of the specified bucket. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.bucketWebsiteDomainName?lang=python\\">bucket_website_domain_name</a></code> | <code>str</code> | The Domain name of the static website. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.bucketWebsiteUrl?lang=python\\">bucket_website_url</a></code> | <code>str</code> | The URL of the static website. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.encryptionKey?lang=python\\">encryption_key</a></code> | <code><a href=\\"/packages/@aws-cdk/aws-kms/v/99.99.99/api/IKey?lang=python\\">IKey</a></code> | Optional KMS encryption key associated with this bucket. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.isWebsite?lang=python\\">is_website</a></code> | <code>bool</code> | If this bucket has been configured for static website hosting. |
+| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.policy?lang=python\\">policy</a></code> | <code><a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/BucketPolicy?lang=python\\">BucketPolicy</a></code> | The resource policy associated with this bucket. |
 
 ---
 
-##### \`node\`<sup>Required</sup> <a name=\\"node\\" id=\\"IRepository.property.node\\"></a>
+##### \`node\`<sup>Required</sup> <a name=\\"node\\" id=\\"GreeterBucket.property.node\\"></a>
 
 \`\`\`wing
 node: ConstructNode;
@@ -1287,11 +834,11 @@ node: ConstructNode;
 
 - *Type:* <a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/ConstructNode?lang=python\\">ConstructNode</a>
 
-The construct tree node for this construct.
+The construct tree node associated with this construct.
 
 ---
 
-##### \`env\`<sup>Required</sup> <a name=\\"env\\" id=\\"IRepository.property.env\\"></a>
+##### \`env\`<sup>Required</sup> <a name=\\"env\\" id=\\"GreeterBucket.property.env\\"></a>
 
 \`\`\`wing
 env: ResourceEnvironment;
@@ -1310,7 +857,7 @@ that might be different than the stack they were imported into.
 
 ---
 
-##### \`stack\`<sup>Required</sup> <a name=\\"stack\\" id=\\"IRepository.property.stack\\"></a>
+##### \`stack\`<sup>Required</sup> <a name=\\"stack\\" id=\\"GreeterBucket.property.stack\\"></a>
 
 \`\`\`wing
 stack: Stack;
@@ -1322,1273 +869,586 @@ The stack in which this resource is defined.
 
 ---
 
-##### \`repository_arn\`<sup>Required</sup> <a name=\\"repository_arn\\" id=\\"IRepository.property.repositoryArn\\"></a>
+##### \`bucket_arn\`<sup>Required</sup> <a name=\\"bucket_arn\\" id=\\"GreeterBucket.property.bucketArn\\"></a>
 
 \`\`\`wing
-repository_arn: str;
+bucket_arn: str;
 \`\`\`
 
 - *Type:* str
 
-The ARN of the repository.
+The ARN of the bucket.
 
 ---
 
-##### \`repository_name\`<sup>Required</sup> <a name=\\"repository_name\\" id=\\"IRepository.property.repositoryName\\"></a>
+##### \`bucket_domain_name\`<sup>Required</sup> <a name=\\"bucket_domain_name\\" id=\\"GreeterBucket.property.bucketDomainName\\"></a>
 
 \`\`\`wing
-repository_name: str;
+bucket_domain_name: str;
 \`\`\`
 
 - *Type:* str
 
-The name of the repository.
+The IPv4 DNS name of the specified bucket.
 
 ---
 
-##### \`repository_uri\`<sup>Required</sup> <a name=\\"repository_uri\\" id=\\"IRepository.property.repositoryUri\\"></a>
+##### \`bucket_dual_stack_domain_name\`<sup>Required</sup> <a name=\\"bucket_dual_stack_domain_name\\" id=\\"GreeterBucket.property.bucketDualStackDomainName\\"></a>
 
 \`\`\`wing
-repository_uri: str;
+bucket_dual_stack_domain_name: str;
 \`\`\`
 
 - *Type:* str
 
-The URI of this repository (represents the latest image):.
-
-ACCOUNT.dkr.ecr.REGION.amazonaws.com/REPOSITORY
+The IPv6 DNS name of the specified bucket.
 
 ---
 
-## Enums <a name=\\"Enums\\" id=\\"Enums\\"></a>
+##### \`bucket_name\`<sup>Required</sup> <a name=\\"bucket_name\\" id=\\"GreeterBucket.property.bucketName\\"></a>
 
-### TagMutability <a name=\\"TagMutability\\" id=\\"TagMutability\\"></a>
+\`\`\`wing
+bucket_name: str;
+\`\`\`
 
-The tag mutability setting for your repository.
+- *Type:* str
 
-#### Members <a name=\\"Members\\" id=\\"Members\\"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/TagMutability.MUTABLE?lang=python\\">MUTABLE</a></code> | allow image tags to be overwritten. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/TagMutability.IMMUTABLE?lang=python\\">IMMUTABLE</a></code> | all image tags within the repository will be immutable which will prevent them from being overwritten. |
+The name of the bucket.
 
 ---
 
-##### \`MUTABLE\` <a name=\\"MUTABLE\\" id=\\"TagMutability.MUTABLE\\"></a>
+##### \`bucket_regional_domain_name\`<sup>Required</sup> <a name=\\"bucket_regional_domain_name\\" id=\\"GreeterBucket.property.bucketRegionalDomainName\\"></a>
 
-allow image tags to be overwritten.
+\`\`\`wing
+bucket_regional_domain_name: str;
+\`\`\`
+
+- *Type:* str
+
+The regional domain name of the specified bucket.
+
+---
+
+##### \`bucket_website_domain_name\`<sup>Required</sup> <a name=\\"bucket_website_domain_name\\" id=\\"GreeterBucket.property.bucketWebsiteDomainName\\"></a>
+
+\`\`\`wing
+bucket_website_domain_name: str;
+\`\`\`
+
+- *Type:* str
+
+The Domain name of the static website.
+
+---
+
+##### \`bucket_website_url\`<sup>Required</sup> <a name=\\"bucket_website_url\\" id=\\"GreeterBucket.property.bucketWebsiteUrl\\"></a>
+
+\`\`\`wing
+bucket_website_url: str;
+\`\`\`
+
+- *Type:* str
+
+The URL of the static website.
+
+---
+
+##### \`encryption_key\`<sup>Optional</sup> <a name=\\"encryption_key\\" id=\\"GreeterBucket.property.encryptionKey\\"></a>
+
+\`\`\`wing
+encryption_key: IKey;
+\`\`\`
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-kms/v/99.99.99/api/IKey?lang=python\\">IKey</a>
+
+Optional KMS encryption key associated with this bucket.
+
+---
+
+##### \`is_website\`<sup>Optional</sup> <a name=\\"is_website\\" id=\\"GreeterBucket.property.isWebsite\\"></a>
+
+\`\`\`wing
+is_website: bool;
+\`\`\`
+
+- *Type:* bool
+
+If this bucket has been configured for static website hosting.
+
+---
+
+##### \`policy\`<sup>Optional</sup> <a name=\\"policy\\" id=\\"GreeterBucket.property.policy\\"></a>
+
+\`\`\`wing
+policy: BucketPolicy;
+\`\`\`
+
+- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/BucketPolicy?lang=python\\">BucketPolicy</a>
+
+The resource policy associated with this bucket.
+
+If \`autoCreatePolicy\` is true, a \`BucketPolicy\` will be created upon the
+first call to addToResourcePolicy(s).
 
 ---
 
 
-##### \`IMMUTABLE\` <a name=\\"IMMUTABLE\\" id=\\"TagMutability.IMMUTABLE\\"></a>
-
-all image tags within the repository will be immutable which will prevent them from being overwritten.
-
----
 
 
-### TagStatus <a name=\\"TagStatus\\" id=\\"TagStatus\\"></a>
-
-Select images based on tags.
-
-#### Members <a name=\\"Members\\" id=\\"Members\\"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/TagStatus.ANY?lang=python\\">ANY</a></code> | Rule applies to all images. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/TagStatus.TAGGED?lang=python\\">TAGGED</a></code> | Rule applies to tagged images. |
-| <code><a href=\\"/packages/@aws-cdk/aws-ecr/v/1.106.0/api/TagStatus.UNTAGGED?lang=python\\">UNTAGGED</a></code> | Rule applies to untagged images. |
-
----
-
-##### \`ANY\` <a name=\\"ANY\\" id=\\"TagStatus.ANY\\"></a>
-
-Rule applies to all images.
-
----
-
-
-##### \`TAGGED\` <a name=\\"TAGGED\\" id=\\"TagStatus.TAGGED\\"></a>
-
-Rule applies to tagged images.
-
----
-
-
-##### \`UNTAGGED\` <a name=\\"UNTAGGED\\" id=\\"TagStatus.UNTAGGED\\"></a>
-
-Rule applies to untagged images.
-
----
 
 "
 `;
 
 exports[`simple link formatter wing snapshot 1`] = `
-"# Amazon ECR Construct Library
-<!--BEGIN STABILITY BANNER-->
+"# construct-library
 
----
-
-![cfn-resources: Stable](https://img.shields.io/badge/cfn--resources-stable-success.svg?style=for-the-badge)
-
-![cdk-constructs: Stable](https://img.shields.io/badge/cdk--constructs-stable-success.svg?style=for-the-badge)
-
----
-
-<!--END STABILITY BANNER-->
-
-This package contains constructs for working with Amazon Elastic Container Registry.
-
-## Repositories
-
-Define a repository by creating a new instance of \`Repository\`. A repository
-holds multiple verions of a single container image.
-
-\`\`\`ts
-const repository = new ecr.Repository(this, 'Repository');
-\`\`\`
-
-## Image scanning
-
-Amazon ECR image scanning helps in identifying software vulnerabilities in your container images. You can manually scan container images stored in Amazon ECR, or you can configure your repositories to scan images when you push them to a repository. To create a new repository to scan on push, simply enable \`imageScanOnPush\` in the properties
-
-\`\`\`ts
-const repository = new ecr.Repository(stack, 'Repo', {
-  imageScanOnPush: true
-});
-\`\`\`
-
-To create an \`onImageScanCompleted\` event rule and trigger the event target
-
-\`\`\`ts
-repository.onImageScanCompleted('ImageScanComplete')
-  .addTarget(...)
-\`\`\`
-
-### Authorization Token
-
-Besides the Amazon ECR APIs, ECR also allows the Docker CLI or a language-specific Docker library to push and pull
-images from an ECR repository. However, the Docker CLI does not support native IAM authentication methods and
-additional steps must be taken so that Amazon ECR can authenticate and authorize Docker push and pull requests.
-More information can be found at at [Registry Authentication](https://docs.aws.amazon.com/AmazonECR/latest/userguide/Registries.html#registry_auth).
-
-A Docker authorization token can be obtained using the \`GetAuthorizationToken\` ECR API. The following code snippets
-grants an IAM user access to call this API.
-
-\`\`\`ts
-import * as iam from '@aws-cdk/aws-iam';
-import * as ecr from '@aws-cdk/aws-ecr';
-
-const user = new iam.User(this, 'User', { ... });
-ecr.AuthorizationToken.grantRead(user);
-\`\`\`
-
-If you access images in the [Public ECR Gallery](https://gallery.ecr.aws/) as well, it is recommended you authenticate to the registry to benefit from
-higher rate and bandwidth limits.
-
-> See \`Pricing\` in https://aws.amazon.com/blogs/aws/amazon-ecr-public-a-new-public-container-registry/ and [Service quotas](https://docs.aws.amazon.com/AmazonECR/latest/public/public-service-quotas.html).
-
-The following code snippet grants an IAM user access to retrieve an authorization token for the public gallery.
-
-\`\`\`ts
-import * as iam from '@aws-cdk/aws-iam';
-import * as ecr from '@aws-cdk/aws-ecr';
-
-const user = new iam.User(this, 'User', { ... });
-ecr.PublicGalleryAuthorizationToken.grantRead(user);
-\`\`\`
-
-This user can then proceed to login to the registry using one of the [authentication methods](https://docs.aws.amazon.com/AmazonECR/latest/public/public-registries.html#public-registry-auth).
-
-### Image tag immutability
-
-You can set tag immutability on images in our repository using the \`imageTagMutability\` construct prop.
-
-\`\`\`ts
-new ecr.Repository(stack, 'Repo', { imageTagMutability: ecr.TagMutability.IMMUTABLE });
-\`\`\`
-
-## Automatically clean up repositories
-
-You can set life cycle rules to automatically clean up old images from your
-repository. The first life cycle rule that matches an image will be applied
-against that image. For example, the following deletes images older than
-30 days, while keeping all images tagged with prod (note that the order
-is important here):
-
-\`\`\`ts
-repository.addLifecycleRule({ tagPrefixList: ['prod'], maxImageCount: 9999 });
-repository.addLifecycleRule({ maxImageAge: cdk.Duration.days(30) });
-\`\`\`
-
+This is a test project to make sure the \`jsii-docgen\` cli property renders API documentation
+for construct libraries.
 # API Reference <a name=\\"API Reference\\" id=\\"api-reference\\"></a>
 
+## Constructs <a name=\\"Constructs\\" id=\\"Constructs\\"></a>
 
-## Structs <a name=\\"Structs\\" id=\\"Structs\\"></a>
+### GreeterBucket <a name=\\"GreeterBucket\\" id=\\"construct-library.GreeterBucket\\"></a>
 
-### CfnPublicRepositoryProps <a name=\\"CfnPublicRepositoryProps\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps\\"></a>
-
-Properties for defining a \`AWS::ECR::PublicRepository\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html)
-
-#### Initializer <a name=\\"Initializer\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.Initializer\\"></a>
+#### Initializers <a name=\\"Initializers\\" id=\\"construct-library.GreeterBucket.Initializer\\"></a>
 
 \`\`\`wing
-bring { CfnPublicRepositoryProps } from \\"@aws-cdk/aws-ecr\\"
+bring { GreeterBucket } from \\"construct-library\\"
 
-let cfn_public_repository_props = CfnPublicRepositoryProps{ ... }
+new GreeterBucket(props?: BucketProps)
 \`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\">repository_catalog_data</a></code> | <code>any</code> | \`AWS::ECR::PublicRepository.RepositoryCatalogData\`. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryName\\">repository_name</a></code> | <code>str</code> | \`AWS::ECR::PublicRepository.RepositoryName\`. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryPolicyText\\">repository_policy_text</a></code> | <code>any</code> | \`AWS::ECR::PublicRepository.RepositoryPolicyText\`. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.tags\\">tags</a></code> | <code>MutArray&lt;<a href=\\"#custom-@aws-cdk/core.CfnTag\\">CfnTag</a>&gt;</code> | \`AWS::ECR::PublicRepository.Tags\`. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.Initializer.parameter.props\\">props</a></code> | <code><a href=\\"#custom-@aws-cdk/aws-s3.BucketProps\\">BucketProps</a></code> | *No description.* |
 
 ---
 
-##### \`repository_catalog_data\`<sup>Optional</sup> <a name=\\"repository_catalog_data\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\"></a>
+##### \`props\`<sup>Optional</sup> <a name=\\"props\\" id=\\"construct-library.GreeterBucket.Initializer.parameter.props\\"></a>
 
-\`\`\`wing
-repository_catalog_data: any;
-\`\`\`
-
-- *Type:* any
-
-\`AWS::ECR::PublicRepository.RepositoryCatalogData\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html#cfn-ecr-publicrepository-repositorycatalogdata](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html#cfn-ecr-publicrepository-repositorycatalogdata)
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.BucketProps\\">BucketProps</a>
 
 ---
-
-##### \`repository_name\`<sup>Optional</sup> <a name=\\"repository_name\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryName\\"></a>
-
-\`\`\`wing
-repository_name: str;
-\`\`\`
-
-- *Type:* str
-
-\`AWS::ECR::PublicRepository.RepositoryName\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html#cfn-ecr-publicrepository-repositoryname](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html#cfn-ecr-publicrepository-repositoryname)
-
----
-
-##### \`repository_policy_text\`<sup>Optional</sup> <a name=\\"repository_policy_text\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryPolicyText\\"></a>
-
-\`\`\`wing
-repository_policy_text: any;
-\`\`\`
-
-- *Type:* any
-
-\`AWS::ECR::PublicRepository.RepositoryPolicyText\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html#cfn-ecr-publicrepository-repositorypolicytext](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html#cfn-ecr-publicrepository-repositorypolicytext)
-
----
-
-##### \`tags\`<sup>Optional</sup> <a name=\\"tags\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.tags\\"></a>
-
-\`\`\`wing
-tags: MutArray<CfnTag>;
-\`\`\`
-
-- *Type:* MutArray&lt;<a href=\\"#custom-@aws-cdk/core.CfnTag\\">CfnTag</a>&gt;
-
-\`AWS::ECR::PublicRepository.Tags\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html#cfn-ecr-publicrepository-tags](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-publicrepository.html#cfn-ecr-publicrepository-tags)
-
----
-
-### CfnRegistryPolicyProps <a name=\\"CfnRegistryPolicyProps\\" id=\\"@aws-cdk/aws-ecr.CfnRegistryPolicyProps\\"></a>
-
-Properties for defining a \`AWS::ECR::RegistryPolicy\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-registrypolicy.html](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-registrypolicy.html)
-
-#### Initializer <a name=\\"Initializer\\" id=\\"@aws-cdk/aws-ecr.CfnRegistryPolicyProps.Initializer\\"></a>
-
-\`\`\`wing
-bring { CfnRegistryPolicyProps } from \\"@aws-cdk/aws-ecr\\"
-
-let cfn_registry_policy_props = CfnRegistryPolicyProps{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.CfnRegistryPolicyProps.property.policyText\\">policy_text</a></code> | <code>any</code> | \`AWS::ECR::RegistryPolicy.PolicyText\`. |
-
----
-
-##### \`policy_text\`<sup>Required</sup> <a name=\\"policy_text\\" id=\\"@aws-cdk/aws-ecr.CfnRegistryPolicyProps.property.policyText\\"></a>
-
-\`\`\`wing
-policy_text: any;
-\`\`\`
-
-- *Type:* any
-
-\`AWS::ECR::RegistryPolicy.PolicyText\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-registrypolicy.html#cfn-ecr-registrypolicy-policytext](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-registrypolicy.html#cfn-ecr-registrypolicy-policytext)
-
----
-
-### CfnReplicationConfigurationProps <a name=\\"CfnReplicationConfigurationProps\\" id=\\"@aws-cdk/aws-ecr.CfnReplicationConfigurationProps\\"></a>
-
-Properties for defining a \`AWS::ECR::ReplicationConfiguration\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-replicationconfiguration.html](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-replicationconfiguration.html)
-
-#### Initializer <a name=\\"Initializer\\" id=\\"@aws-cdk/aws-ecr.CfnReplicationConfigurationProps.Initializer\\"></a>
-
-\`\`\`wing
-bring { CfnReplicationConfigurationProps } from \\"@aws-cdk/aws-ecr\\"
-
-let cfn_replication_configuration_props = CfnReplicationConfigurationProps{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.CfnReplicationConfigurationProps.property.replicationConfiguration\\">replication_configuration</a></code> | <code>any</code> | \`AWS::ECR::ReplicationConfiguration.ReplicationConfiguration\`. |
-
----
-
-##### \`replication_configuration\`<sup>Required</sup> <a name=\\"replication_configuration\\" id=\\"@aws-cdk/aws-ecr.CfnReplicationConfigurationProps.property.replicationConfiguration\\"></a>
-
-\`\`\`wing
-replication_configuration: any;
-\`\`\`
-
-- *Type:* any
-
-\`AWS::ECR::ReplicationConfiguration.ReplicationConfiguration\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-replicationconfiguration.html#cfn-ecr-replicationconfiguration-replicationconfiguration](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-replicationconfiguration.html#cfn-ecr-replicationconfiguration-replicationconfiguration)
-
----
-
-### CfnRepositoryProps <a name=\\"CfnRepositoryProps\\" id=\\"@aws-cdk/aws-ecr.CfnRepositoryProps\\"></a>
-
-Properties for defining a \`AWS::ECR::Repository\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html)
-
-#### Initializer <a name=\\"Initializer\\" id=\\"@aws-cdk/aws-ecr.CfnRepositoryProps.Initializer\\"></a>
-
-\`\`\`wing
-bring { CfnRepositoryProps } from \\"@aws-cdk/aws-ecr\\"
-
-let cfn_repository_props = CfnRepositoryProps{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.CfnRepositoryProps.property.encryptionConfiguration\\">encryption_configuration</a></code> | <code>any</code> | \`AWS::ECR::Repository.EncryptionConfiguration\`. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.CfnRepositoryProps.property.imageScanningConfiguration\\">image_scanning_configuration</a></code> | <code>any</code> | \`AWS::ECR::Repository.ImageScanningConfiguration\`. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.CfnRepositoryProps.property.imageTagMutability\\">image_tag_mutability</a></code> | <code>str</code> | \`AWS::ECR::Repository.ImageTagMutability\`. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.CfnRepositoryProps.property.lifecyclePolicy\\">lifecycle_policy</a></code> | <code>any</code> | \`AWS::ECR::Repository.LifecyclePolicy\`. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.CfnRepositoryProps.property.repositoryName\\">repository_name</a></code> | <code>str</code> | \`AWS::ECR::Repository.RepositoryName\`. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.CfnRepositoryProps.property.repositoryPolicyText\\">repository_policy_text</a></code> | <code>any</code> | \`AWS::ECR::Repository.RepositoryPolicyText\`. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.CfnRepositoryProps.property.tags\\">tags</a></code> | <code>MutArray&lt;<a href=\\"#custom-@aws-cdk/core.CfnTag\\">CfnTag</a>&gt;</code> | \`AWS::ECR::Repository.Tags\`. |
-
----
-
-##### \`encryption_configuration\`<sup>Optional</sup> <a name=\\"encryption_configuration\\" id=\\"@aws-cdk/aws-ecr.CfnRepositoryProps.property.encryptionConfiguration\\"></a>
-
-\`\`\`wing
-encryption_configuration: any;
-\`\`\`
-
-- *Type:* any
-
-\`AWS::ECR::Repository.EncryptionConfiguration\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-encryptionconfiguration](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-encryptionconfiguration)
-
----
-
-##### \`image_scanning_configuration\`<sup>Optional</sup> <a name=\\"image_scanning_configuration\\" id=\\"@aws-cdk/aws-ecr.CfnRepositoryProps.property.imageScanningConfiguration\\"></a>
-
-\`\`\`wing
-image_scanning_configuration: any;
-\`\`\`
-
-- *Type:* any
-
-\`AWS::ECR::Repository.ImageScanningConfiguration\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-imagescanningconfiguration](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-imagescanningconfiguration)
-
----
-
-##### \`image_tag_mutability\`<sup>Optional</sup> <a name=\\"image_tag_mutability\\" id=\\"@aws-cdk/aws-ecr.CfnRepositoryProps.property.imageTagMutability\\"></a>
-
-\`\`\`wing
-image_tag_mutability: str;
-\`\`\`
-
-- *Type:* str
-
-\`AWS::ECR::Repository.ImageTagMutability\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-imagetagmutability](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-imagetagmutability)
-
----
-
-##### \`lifecycle_policy\`<sup>Optional</sup> <a name=\\"lifecycle_policy\\" id=\\"@aws-cdk/aws-ecr.CfnRepositoryProps.property.lifecyclePolicy\\"></a>
-
-\`\`\`wing
-lifecycle_policy: any;
-\`\`\`
-
-- *Type:* any
-
-\`AWS::ECR::Repository.LifecyclePolicy\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-lifecyclepolicy](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-lifecyclepolicy)
-
----
-
-##### \`repository_name\`<sup>Optional</sup> <a name=\\"repository_name\\" id=\\"@aws-cdk/aws-ecr.CfnRepositoryProps.property.repositoryName\\"></a>
-
-\`\`\`wing
-repository_name: str;
-\`\`\`
-
-- *Type:* str
-
-\`AWS::ECR::Repository.RepositoryName\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-repositoryname](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-repositoryname)
-
----
-
-##### \`repository_policy_text\`<sup>Optional</sup> <a name=\\"repository_policy_text\\" id=\\"@aws-cdk/aws-ecr.CfnRepositoryProps.property.repositoryPolicyText\\"></a>
-
-\`\`\`wing
-repository_policy_text: any;
-\`\`\`
-
-- *Type:* any
-
-\`AWS::ECR::Repository.RepositoryPolicyText\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-repositorypolicytext](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-repositorypolicytext)
-
----
-
-##### \`tags\`<sup>Optional</sup> <a name=\\"tags\\" id=\\"@aws-cdk/aws-ecr.CfnRepositoryProps.property.tags\\"></a>
-
-\`\`\`wing
-tags: MutArray<CfnTag>;
-\`\`\`
-
-- *Type:* MutArray&lt;<a href=\\"#custom-@aws-cdk/core.CfnTag\\">CfnTag</a>&gt;
-
-\`AWS::ECR::Repository.Tags\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-tags](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-repository.html#cfn-ecr-repository-tags)
-
----
-
-### LifecyclePolicyProperty <a name=\\"LifecyclePolicyProperty\\" id=\\"@aws-cdk/aws-ecr.CfnRepository.LifecyclePolicyProperty\\"></a>
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-repository-lifecyclepolicy.html](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-repository-lifecyclepolicy.html)
-
-#### Initializer <a name=\\"Initializer\\" id=\\"@aws-cdk/aws-ecr.CfnRepository.LifecyclePolicyProperty.Initializer\\"></a>
-
-\`\`\`wing
-bring { LifecyclePolicyProperty } from \\"@aws-cdk/aws-ecr\\"
-
-let lifecycle_policy_property = LifecyclePolicyProperty{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.CfnRepository.LifecyclePolicyProperty.property.lifecyclePolicyText\\">lifecycle_policy_text</a></code> | <code>str</code> | \`CfnRepository.LifecyclePolicyProperty.LifecyclePolicyText\`. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.CfnRepository.LifecyclePolicyProperty.property.registryId\\">registry_id</a></code> | <code>str</code> | \`CfnRepository.LifecyclePolicyProperty.RegistryId\`. |
-
----
-
-##### \`lifecycle_policy_text\`<sup>Optional</sup> <a name=\\"lifecycle_policy_text\\" id=\\"@aws-cdk/aws-ecr.CfnRepository.LifecyclePolicyProperty.property.lifecyclePolicyText\\"></a>
-
-\`\`\`wing
-lifecycle_policy_text: str;
-\`\`\`
-
-- *Type:* str
-
-\`CfnRepository.LifecyclePolicyProperty.LifecyclePolicyText\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-repository-lifecyclepolicy.html#cfn-ecr-repository-lifecyclepolicy-lifecyclepolicytext](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-repository-lifecyclepolicy.html#cfn-ecr-repository-lifecyclepolicy-lifecyclepolicytext)
-
----
-
-##### \`registry_id\`<sup>Optional</sup> <a name=\\"registry_id\\" id=\\"@aws-cdk/aws-ecr.CfnRepository.LifecyclePolicyProperty.property.registryId\\"></a>
-
-\`\`\`wing
-registry_id: str;
-\`\`\`
-
-- *Type:* str
-
-\`CfnRepository.LifecyclePolicyProperty.RegistryId\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-repository-lifecyclepolicy.html#cfn-ecr-repository-lifecyclepolicy-registryid](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-repository-lifecyclepolicy.html#cfn-ecr-repository-lifecyclepolicy-registryid)
-
----
-
-### LifecycleRule <a name=\\"LifecycleRule\\" id=\\"@aws-cdk/aws-ecr.LifecycleRule\\"></a>
-
-An ECR life cycle rule.
-
-#### Initializer <a name=\\"Initializer\\" id=\\"@aws-cdk/aws-ecr.LifecycleRule.Initializer\\"></a>
-
-\`\`\`wing
-bring { LifecycleRule } from \\"@aws-cdk/aws-ecr\\"
-
-let lifecycle_rule = LifecycleRule{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.LifecycleRule.property.description\\">description</a></code> | <code>str</code> | Describes the purpose of the rule. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.LifecycleRule.property.maxImageAge\\">max_image_age</a></code> | <code><a href=\\"#custom-@aws-cdk/core.Duration\\">Duration</a></code> | The maximum age of images to retain. The value must represent a number of days. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.LifecycleRule.property.maxImageCount\\">max_image_count</a></code> | <code>num</code> | The maximum number of images to retain. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.LifecycleRule.property.rulePriority\\">rule_priority</a></code> | <code>num</code> | Controls the order in which rules are evaluated (low to high). |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.LifecycleRule.property.tagPrefixList\\">tag_prefix_list</a></code> | <code>MutArray&lt;str&gt;</code> | Select images that have ALL the given prefixes in their tag. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.LifecycleRule.property.tagStatus\\">tag_status</a></code> | <code><a href=\\"#custom-@aws-cdk/aws-ecr.TagStatus\\">TagStatus</a></code> | Select images based on tags. |
-
----
-
-##### \`description\`<sup>Optional</sup> <a name=\\"description\\" id=\\"@aws-cdk/aws-ecr.LifecycleRule.property.description\\"></a>
-
-\`\`\`wing
-description: str;
-\`\`\`
-
-- *Type:* str
-- *Default:* No description
-
-Describes the purpose of the rule.
-
----
-
-##### \`max_image_age\`<sup>Optional</sup> <a name=\\"max_image_age\\" id=\\"@aws-cdk/aws-ecr.LifecycleRule.property.maxImageAge\\"></a>
-
-\`\`\`wing
-max_image_age: Duration;
-\`\`\`
-
-- *Type:* <a href=\\"#custom-@aws-cdk/core.Duration\\">Duration</a>
-
-The maximum age of images to retain. The value must represent a number of days.
-
-Specify exactly one of maxImageCount and maxImageAge.
-
----
-
-##### \`max_image_count\`<sup>Optional</sup> <a name=\\"max_image_count\\" id=\\"@aws-cdk/aws-ecr.LifecycleRule.property.maxImageCount\\"></a>
-
-\`\`\`wing
-max_image_count: num;
-\`\`\`
-
-- *Type:* num
-
-The maximum number of images to retain.
-
-Specify exactly one of maxImageCount and maxImageAge.
-
----
-
-##### \`rule_priority\`<sup>Optional</sup> <a name=\\"rule_priority\\" id=\\"@aws-cdk/aws-ecr.LifecycleRule.property.rulePriority\\"></a>
-
-\`\`\`wing
-rule_priority: num;
-\`\`\`
-
-- *Type:* num
-- *Default:* Automatically assigned
-
-Controls the order in which rules are evaluated (low to high).
-
-All rules must have a unique priority, where lower numbers have
-higher precedence. The first rule that matches is applied to an image.
-
-There can only be one rule with a tagStatus of Any, and it must have
-the highest rulePriority.
-
-All rules without a specified priority will have incrementing priorities
-automatically assigned to them, higher than any rules that DO have priorities.
-
----
-
-##### \`tag_prefix_list\`<sup>Optional</sup> <a name=\\"tag_prefix_list\\" id=\\"@aws-cdk/aws-ecr.LifecycleRule.property.tagPrefixList\\"></a>
-
-\`\`\`wing
-tag_prefix_list: MutArray<str>;
-\`\`\`
-
-- *Type:* MutArray&lt;str&gt;
-
-Select images that have ALL the given prefixes in their tag.
-
-Only if tagStatus == TagStatus.Tagged
-
----
-
-##### \`tag_status\`<sup>Optional</sup> <a name=\\"tag_status\\" id=\\"@aws-cdk/aws-ecr.LifecycleRule.property.tagStatus\\"></a>
-
-\`\`\`wing
-tag_status: TagStatus;
-\`\`\`
-
-- *Type:* <a href=\\"#custom-@aws-cdk/aws-ecr.TagStatus\\">TagStatus</a>
-- *Default:* TagStatus.Tagged if tagPrefixList is given, TagStatus.Any otherwise
-
-Select images based on tags.
-
-Only one rule is allowed to select untagged images, and it must
-have the highest rulePriority.
-
----
-
-### OnCloudTrailImagePushedOptions <a name=\\"OnCloudTrailImagePushedOptions\\" id=\\"@aws-cdk/aws-ecr.OnCloudTrailImagePushedOptions\\"></a>
-
-Options for the onCloudTrailImagePushed method.
-
-#### Initializer <a name=\\"Initializer\\" id=\\"@aws-cdk/aws-ecr.OnCloudTrailImagePushedOptions.Initializer\\"></a>
-
-\`\`\`wing
-bring { OnCloudTrailImagePushedOptions } from \\"@aws-cdk/aws-ecr\\"
-
-let on_cloud_trail_image_pushed_options = OnCloudTrailImagePushedOptions{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.OnCloudTrailImagePushedOptions.property.description\\">description</a></code> | <code>str</code> | A description of the rule's purpose. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.OnCloudTrailImagePushedOptions.property.eventPattern\\">event_pattern</a></code> | <code><a href=\\"#custom-@aws-cdk/aws-events.EventPattern\\">EventPattern</a></code> | Additional restrictions for the event to route to the specified target. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.OnCloudTrailImagePushedOptions.property.ruleName\\">rule_name</a></code> | <code>str</code> | A name for the rule. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.OnCloudTrailImagePushedOptions.property.target\\">target</a></code> | <code><a href=\\"#custom-@aws-cdk/aws-events.IRuleTarget\\">IRuleTarget</a></code> | The target to register for the event. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.OnCloudTrailImagePushedOptions.property.imageTag\\">image_tag</a></code> | <code>str</code> | Only watch changes to this image tag. |
-
----
-
-##### \`description\`<sup>Optional</sup> <a name=\\"description\\" id=\\"@aws-cdk/aws-ecr.OnCloudTrailImagePushedOptions.property.description\\"></a>
-
-\`\`\`wing
-description: str;
-\`\`\`
-
-- *Type:* str
-- *Default:* No description
-
-A description of the rule's purpose.
-
----
-
-##### \`event_pattern\`<sup>Optional</sup> <a name=\\"event_pattern\\" id=\\"@aws-cdk/aws-ecr.OnCloudTrailImagePushedOptions.property.eventPattern\\"></a>
-
-\`\`\`wing
-event_pattern: EventPattern;
-\`\`\`
-
-- *Type:* <a href=\\"#custom-@aws-cdk/aws-events.EventPattern\\">EventPattern</a>
-- *Default:* No additional filtering based on an event pattern.
-
-Additional restrictions for the event to route to the specified target.
-
-The method that generates the rule probably imposes some type of event
-filtering. The filtering implied by what you pass here is added
-on top of that filtering.
-
-> [https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html](https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html)
-
----
-
-##### \`rule_name\`<sup>Optional</sup> <a name=\\"rule_name\\" id=\\"@aws-cdk/aws-ecr.OnCloudTrailImagePushedOptions.property.ruleName\\"></a>
-
-\`\`\`wing
-rule_name: str;
-\`\`\`
-
-- *Type:* str
-- *Default:* AWS CloudFormation generates a unique physical ID.
-
-A name for the rule.
-
----
-
-##### \`target\`<sup>Optional</sup> <a name=\\"target\\" id=\\"@aws-cdk/aws-ecr.OnCloudTrailImagePushedOptions.property.target\\"></a>
-
-\`\`\`wing
-target: IRuleTarget;
-\`\`\`
-
-- *Type:* <a href=\\"#custom-@aws-cdk/aws-events.IRuleTarget\\">IRuleTarget</a>
-- *Default:* No target is added to the rule. Use \`addTarget()\` to add a target.
-
-The target to register for the event.
-
----
-
-##### \`image_tag\`<sup>Optional</sup> <a name=\\"image_tag\\" id=\\"@aws-cdk/aws-ecr.OnCloudTrailImagePushedOptions.property.imageTag\\"></a>
-
-\`\`\`wing
-image_tag: str;
-\`\`\`
-
-- *Type:* str
-- *Default:* Watch changes to all tags
-
-Only watch changes to this image tag.
-
----
-
-### OnImageScanCompletedOptions <a name=\\"OnImageScanCompletedOptions\\" id=\\"@aws-cdk/aws-ecr.OnImageScanCompletedOptions\\"></a>
-
-Options for the OnImageScanCompleted method.
-
-#### Initializer <a name=\\"Initializer\\" id=\\"@aws-cdk/aws-ecr.OnImageScanCompletedOptions.Initializer\\"></a>
-
-\`\`\`wing
-bring { OnImageScanCompletedOptions } from \\"@aws-cdk/aws-ecr\\"
-
-let on_image_scan_completed_options = OnImageScanCompletedOptions{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.OnImageScanCompletedOptions.property.description\\">description</a></code> | <code>str</code> | A description of the rule's purpose. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.OnImageScanCompletedOptions.property.eventPattern\\">event_pattern</a></code> | <code><a href=\\"#custom-@aws-cdk/aws-events.EventPattern\\">EventPattern</a></code> | Additional restrictions for the event to route to the specified target. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.OnImageScanCompletedOptions.property.ruleName\\">rule_name</a></code> | <code>str</code> | A name for the rule. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.OnImageScanCompletedOptions.property.target\\">target</a></code> | <code><a href=\\"#custom-@aws-cdk/aws-events.IRuleTarget\\">IRuleTarget</a></code> | The target to register for the event. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.OnImageScanCompletedOptions.property.imageTags\\">image_tags</a></code> | <code>MutArray&lt;str&gt;</code> | Only watch changes to the image tags spedified. |
-
----
-
-##### \`description\`<sup>Optional</sup> <a name=\\"description\\" id=\\"@aws-cdk/aws-ecr.OnImageScanCompletedOptions.property.description\\"></a>
-
-\`\`\`wing
-description: str;
-\`\`\`
-
-- *Type:* str
-- *Default:* No description
-
-A description of the rule's purpose.
-
----
-
-##### \`event_pattern\`<sup>Optional</sup> <a name=\\"event_pattern\\" id=\\"@aws-cdk/aws-ecr.OnImageScanCompletedOptions.property.eventPattern\\"></a>
-
-\`\`\`wing
-event_pattern: EventPattern;
-\`\`\`
-
-- *Type:* <a href=\\"#custom-@aws-cdk/aws-events.EventPattern\\">EventPattern</a>
-- *Default:* No additional filtering based on an event pattern.
-
-Additional restrictions for the event to route to the specified target.
-
-The method that generates the rule probably imposes some type of event
-filtering. The filtering implied by what you pass here is added
-on top of that filtering.
-
-> [https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html](https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html)
-
----
-
-##### \`rule_name\`<sup>Optional</sup> <a name=\\"rule_name\\" id=\\"@aws-cdk/aws-ecr.OnImageScanCompletedOptions.property.ruleName\\"></a>
-
-\`\`\`wing
-rule_name: str;
-\`\`\`
-
-- *Type:* str
-- *Default:* AWS CloudFormation generates a unique physical ID.
-
-A name for the rule.
-
----
-
-##### \`target\`<sup>Optional</sup> <a name=\\"target\\" id=\\"@aws-cdk/aws-ecr.OnImageScanCompletedOptions.property.target\\"></a>
-
-\`\`\`wing
-target: IRuleTarget;
-\`\`\`
-
-- *Type:* <a href=\\"#custom-@aws-cdk/aws-events.IRuleTarget\\">IRuleTarget</a>
-- *Default:* No target is added to the rule. Use \`addTarget()\` to add a target.
-
-The target to register for the event.
-
----
-
-##### \`image_tags\`<sup>Optional</sup> <a name=\\"image_tags\\" id=\\"@aws-cdk/aws-ecr.OnImageScanCompletedOptions.property.imageTags\\"></a>
-
-\`\`\`wing
-image_tags: MutArray<str>;
-\`\`\`
-
-- *Type:* MutArray&lt;str&gt;
-- *Default:* Watch the changes to the repository with all image tags
-
-Only watch changes to the image tags spedified.
-
-Leave it undefined to watch the full repository.
-
----
-
-### ReplicationConfigurationProperty <a name=\\"ReplicationConfigurationProperty\\" id=\\"@aws-cdk/aws-ecr.CfnReplicationConfiguration.ReplicationConfigurationProperty\\"></a>
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationconfiguration.html](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationconfiguration.html)
-
-#### Initializer <a name=\\"Initializer\\" id=\\"@aws-cdk/aws-ecr.CfnReplicationConfiguration.ReplicationConfigurationProperty.Initializer\\"></a>
-
-\`\`\`wing
-bring { ReplicationConfigurationProperty } from \\"@aws-cdk/aws-ecr\\"
-
-let replication_configuration_property = ReplicationConfigurationProperty{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.CfnReplicationConfiguration.ReplicationConfigurationProperty.property.rules\\">rules</a></code> | <code>any</code> | \`CfnReplicationConfiguration.ReplicationConfigurationProperty.Rules\`. |
-
----
-
-##### \`rules\`<sup>Required</sup> <a name=\\"rules\\" id=\\"@aws-cdk/aws-ecr.CfnReplicationConfiguration.ReplicationConfigurationProperty.property.rules\\"></a>
-
-\`\`\`wing
-rules: any;
-\`\`\`
-
-- *Type:* any
-
-\`CfnReplicationConfiguration.ReplicationConfigurationProperty.Rules\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationconfiguration.html#cfn-ecr-replicationconfiguration-replicationconfiguration-rules](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationconfiguration.html#cfn-ecr-replicationconfiguration-replicationconfiguration-rules)
-
----
-
-### ReplicationDestinationProperty <a name=\\"ReplicationDestinationProperty\\" id=\\"@aws-cdk/aws-ecr.CfnReplicationConfiguration.ReplicationDestinationProperty\\"></a>
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationdestination.html](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationdestination.html)
-
-#### Initializer <a name=\\"Initializer\\" id=\\"@aws-cdk/aws-ecr.CfnReplicationConfiguration.ReplicationDestinationProperty.Initializer\\"></a>
-
-\`\`\`wing
-bring { ReplicationDestinationProperty } from \\"@aws-cdk/aws-ecr\\"
-
-let replication_destination_property = ReplicationDestinationProperty{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.CfnReplicationConfiguration.ReplicationDestinationProperty.property.region\\">region</a></code> | <code>str</code> | \`CfnReplicationConfiguration.ReplicationDestinationProperty.Region\`. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.CfnReplicationConfiguration.ReplicationDestinationProperty.property.registryId\\">registry_id</a></code> | <code>str</code> | \`CfnReplicationConfiguration.ReplicationDestinationProperty.RegistryId\`. |
-
----
-
-##### \`region\`<sup>Required</sup> <a name=\\"region\\" id=\\"@aws-cdk/aws-ecr.CfnReplicationConfiguration.ReplicationDestinationProperty.property.region\\"></a>
-
-\`\`\`wing
-region: str;
-\`\`\`
-
-- *Type:* str
-
-\`CfnReplicationConfiguration.ReplicationDestinationProperty.Region\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationdestination.html#cfn-ecr-replicationconfiguration-replicationdestination-region](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationdestination.html#cfn-ecr-replicationconfiguration-replicationdestination-region)
-
----
-
-##### \`registry_id\`<sup>Required</sup> <a name=\\"registry_id\\" id=\\"@aws-cdk/aws-ecr.CfnReplicationConfiguration.ReplicationDestinationProperty.property.registryId\\"></a>
-
-\`\`\`wing
-registry_id: str;
-\`\`\`
-
-- *Type:* str
-
-\`CfnReplicationConfiguration.ReplicationDestinationProperty.RegistryId\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationdestination.html#cfn-ecr-replicationconfiguration-replicationdestination-registryid](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationdestination.html#cfn-ecr-replicationconfiguration-replicationdestination-registryid)
-
----
-
-### ReplicationRuleProperty <a name=\\"ReplicationRuleProperty\\" id=\\"@aws-cdk/aws-ecr.CfnReplicationConfiguration.ReplicationRuleProperty\\"></a>
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationrule.html](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationrule.html)
-
-#### Initializer <a name=\\"Initializer\\" id=\\"@aws-cdk/aws-ecr.CfnReplicationConfiguration.ReplicationRuleProperty.Initializer\\"></a>
-
-\`\`\`wing
-bring { ReplicationRuleProperty } from \\"@aws-cdk/aws-ecr\\"
-
-let replication_rule_property = ReplicationRuleProperty{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.CfnReplicationConfiguration.ReplicationRuleProperty.property.destinations\\">destinations</a></code> | <code>any</code> | \`CfnReplicationConfiguration.ReplicationRuleProperty.Destinations\`. |
-
----
-
-##### \`destinations\`<sup>Required</sup> <a name=\\"destinations\\" id=\\"@aws-cdk/aws-ecr.CfnReplicationConfiguration.ReplicationRuleProperty.property.destinations\\"></a>
-
-\`\`\`wing
-destinations: any;
-\`\`\`
-
-- *Type:* any
-
-\`CfnReplicationConfiguration.ReplicationRuleProperty.Destinations\`.
-
-> [http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationrule.html#cfn-ecr-replicationconfiguration-replicationrule-destinations](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-replicationconfiguration-replicationrule.html#cfn-ecr-replicationconfiguration-replicationrule-destinations)
-
----
-
-### RepositoryAttributes <a name=\\"RepositoryAttributes\\" id=\\"@aws-cdk/aws-ecr.RepositoryAttributes\\"></a>
-
-#### Initializer <a name=\\"Initializer\\" id=\\"@aws-cdk/aws-ecr.RepositoryAttributes.Initializer\\"></a>
-
-\`\`\`wing
-bring { RepositoryAttributes } from \\"@aws-cdk/aws-ecr\\"
-
-let repository_attributes = RepositoryAttributes{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.RepositoryAttributes.property.repositoryArn\\">repository_arn</a></code> | <code>str</code> | *No description.* |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.RepositoryAttributes.property.repositoryName\\">repository_name</a></code> | <code>str</code> | *No description.* |
-
----
-
-##### \`repository_arn\`<sup>Required</sup> <a name=\\"repository_arn\\" id=\\"@aws-cdk/aws-ecr.RepositoryAttributes.property.repositoryArn\\"></a>
-
-\`\`\`wing
-repository_arn: str;
-\`\`\`
-
-- *Type:* str
-
----
-
-##### \`repository_name\`<sup>Required</sup> <a name=\\"repository_name\\" id=\\"@aws-cdk/aws-ecr.RepositoryAttributes.property.repositoryName\\"></a>
-
-\`\`\`wing
-repository_name: str;
-\`\`\`
-
-- *Type:* str
-
----
-
-### RepositoryProps <a name=\\"RepositoryProps\\" id=\\"@aws-cdk/aws-ecr.RepositoryProps\\"></a>
-
-#### Initializer <a name=\\"Initializer\\" id=\\"@aws-cdk/aws-ecr.RepositoryProps.Initializer\\"></a>
-
-\`\`\`wing
-bring { RepositoryProps } from \\"@aws-cdk/aws-ecr\\"
-
-let repository_props = RepositoryProps{ ... }
-\`\`\`
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.RepositoryProps.property.imageScanOnPush\\">image_scan_on_push</a></code> | <code>bool</code> | Enable the scan on push when creating the repository. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.RepositoryProps.property.imageTagMutability\\">image_tag_mutability</a></code> | <code><a href=\\"#custom-@aws-cdk/aws-ecr.TagMutability\\">TagMutability</a></code> | The tag mutability setting for the repository. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.RepositoryProps.property.lifecycleRegistryId\\">lifecycle_registry_id</a></code> | <code>str</code> | The AWS account ID associated with the registry that contains the repository. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.RepositoryProps.property.lifecycleRules\\">lifecycle_rules</a></code> | <code>MutArray&lt;<a href=\\"#custom-@aws-cdk/aws-ecr.LifecycleRule\\">LifecycleRule</a>&gt;</code> | Life cycle rules to apply to this registry. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.RepositoryProps.property.removalPolicy\\">removal_policy</a></code> | <code><a href=\\"#custom-@aws-cdk/core.RemovalPolicy\\">RemovalPolicy</a></code> | Determine what happens to the repository when the resource/stack is deleted. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.RepositoryProps.property.repositoryName\\">repository_name</a></code> | <code>str</code> | Name for this repository. |
-
----
-
-##### \`image_scan_on_push\`<sup>Optional</sup> <a name=\\"image_scan_on_push\\" id=\\"@aws-cdk/aws-ecr.RepositoryProps.property.imageScanOnPush\\"></a>
-
-\`\`\`wing
-image_scan_on_push: bool;
-\`\`\`
-
-- *Type:* bool
-- *Default:* false
-
-Enable the scan on push when creating the repository.
-
----
-
-##### \`image_tag_mutability\`<sup>Optional</sup> <a name=\\"image_tag_mutability\\" id=\\"@aws-cdk/aws-ecr.RepositoryProps.property.imageTagMutability\\"></a>
-
-\`\`\`wing
-image_tag_mutability: TagMutability;
-\`\`\`
-
-- *Type:* <a href=\\"#custom-@aws-cdk/aws-ecr.TagMutability\\">TagMutability</a>
-- *Default:* TagMutability.MUTABLE
-
-The tag mutability setting for the repository.
-
-If this parameter is omitted, the default setting of MUTABLE will be used which will allow image tags to be overwritten.
-
----
-
-##### \`lifecycle_registry_id\`<sup>Optional</sup> <a name=\\"lifecycle_registry_id\\" id=\\"@aws-cdk/aws-ecr.RepositoryProps.property.lifecycleRegistryId\\"></a>
-
-\`\`\`wing
-lifecycle_registry_id: str;
-\`\`\`
-
-- *Type:* str
-- *Default:* The default registry is assumed.
-
-The AWS account ID associated with the registry that contains the repository.
-
-> [https://docs.aws.amazon.com/AmazonECR/latest/APIReference/API_PutLifecyclePolicy.html](https://docs.aws.amazon.com/AmazonECR/latest/APIReference/API_PutLifecyclePolicy.html)
-
----
-
-##### \`lifecycle_rules\`<sup>Optional</sup> <a name=\\"lifecycle_rules\\" id=\\"@aws-cdk/aws-ecr.RepositoryProps.property.lifecycleRules\\"></a>
-
-\`\`\`wing
-lifecycle_rules: MutArray<LifecycleRule>;
-\`\`\`
-
-- *Type:* MutArray&lt;<a href=\\"#custom-@aws-cdk/aws-ecr.LifecycleRule\\">LifecycleRule</a>&gt;
-- *Default:* No life cycle rules
-
-Life cycle rules to apply to this registry.
-
----
-
-##### \`removal_policy\`<sup>Optional</sup> <a name=\\"removal_policy\\" id=\\"@aws-cdk/aws-ecr.RepositoryProps.property.removalPolicy\\"></a>
-
-\`\`\`wing
-removal_policy: RemovalPolicy;
-\`\`\`
-
-- *Type:* <a href=\\"#custom-@aws-cdk/core.RemovalPolicy\\">RemovalPolicy</a>
-- *Default:* RemovalPolicy.Retain
-
-Determine what happens to the repository when the resource/stack is deleted.
-
----
-
-##### \`repository_name\`<sup>Optional</sup> <a name=\\"repository_name\\" id=\\"@aws-cdk/aws-ecr.RepositoryProps.property.repositoryName\\"></a>
-
-\`\`\`wing
-repository_name: str;
-\`\`\`
-
-- *Type:* str
-- *Default:* Automatically generated name.
-
-Name for this repository.
-
----
-
-## Classes <a name=\\"Classes\\" id=\\"Classes\\"></a>
-
-### AuthorizationToken <a name=\\"AuthorizationToken\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken\\"></a>
-
-Authorization token to access private ECR repositories in the current environment via Docker CLI.
-
-> [https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html)
-
-
-#### Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\">grant_read</a></code> | Grant access to retrieve an authorization token. |
-
----
-
-##### \`grant_read\` <a name=\\"grant_read\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
-
-\`\`\`wing
-bring { AuthorizationToken } from \\"@aws-cdk/aws-ecr\\"
-
-AuthorizationToken.grant_read(grantee: IGrantable)
-\`\`\`
-
-Grant access to retrieve an authorization token.
-
-###### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
-
-- *Type:* <a href=\\"#custom-@aws-cdk/aws-iam.IGrantable\\">IGrantable</a>
-
----
-
-
-
-### PublicGalleryAuthorizationToken <a name=\\"PublicGalleryAuthorizationToken\\" id=\\"@aws-cdk/aws-ecr.PublicGalleryAuthorizationToken\\"></a>
-
-Authorization token to access the global public ECR Gallery via Docker CLI.
-
-> [https://docs.aws.amazon.com/AmazonECR/latest/public/public-registries.html#public-registry-auth](https://docs.aws.amazon.com/AmazonECR/latest/public/public-registries.html#public-registry-auth)
-
-
-#### Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.PublicGalleryAuthorizationToken.grantRead\\">grant_read</a></code> | Grant access to retrieve an authorization token. |
-
----
-
-##### \`grant_read\` <a name=\\"grant_read\\" id=\\"@aws-cdk/aws-ecr.PublicGalleryAuthorizationToken.grantRead\\"></a>
-
-\`\`\`wing
-bring { PublicGalleryAuthorizationToken } from \\"@aws-cdk/aws-ecr\\"
-
-PublicGalleryAuthorizationToken.grant_read(grantee: IGrantable)
-\`\`\`
-
-Grant access to retrieve an authorization token.
-
-###### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.PublicGalleryAuthorizationToken.grantRead.parameter.grantee\\"></a>
-
-- *Type:* <a href=\\"#custom-@aws-cdk/aws-iam.IGrantable\\">IGrantable</a>
-
----
-
-
-
-## Protocols <a name=\\"Protocols\\" id=\\"Protocols\\"></a>
-
-### IRepository <a name=\\"IRepository\\" id=\\"@aws-cdk/aws-ecr.IRepository\\"></a>
-
-- *Extends:* <a href=\\"#custom-@aws-cdk/core.IResource\\">IResource</a>
-
-- *Implemented By:* <a href=\\"#custom-@aws-cdk/aws-ecr.Repository\\">Repository</a>, <a href=\\"#custom-@aws-cdk/aws-ecr.RepositoryBase\\">RepositoryBase</a>, <a href=\\"#custom-@aws-cdk/aws-ecr.IRepository\\">IRepository</a>
-
-Represents an ECR repository.
 
 #### Methods <a name=\\"Methods\\" id=\\"Methods\\"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.IRepository.addToResourcePolicy\\">add_to_resource_policy</a></code> | Add a policy statement to the repository's resource policy. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.IRepository.grant\\">grant</a></code> | Grant the given principal identity permissions to perform the actions on this repository. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.IRepository.grantPull\\">grant_pull</a></code> | Grant the given identity permissions to pull images in this repository. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.IRepository.grantPullPush\\">grant_pull_push</a></code> | Grant the given identity permissions to pull and push images to this repository. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.IRepository.onCloudTrailEvent\\">on_cloud_trail_event</a></code> | Define a CloudWatch event that triggers when something happens to this repository. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.IRepository.onCloudTrailImagePushed\\">on_cloud_trail_image_pushed</a></code> | Defines an AWS CloudWatch event rule that can trigger a target when an image is pushed to this repository. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.IRepository.onEvent\\">on_event</a></code> | Defines a CloudWatch event rule which triggers for repository events. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.IRepository.onImageScanCompleted\\">on_image_scan_completed</a></code> | Defines an AWS CloudWatch event rule that can trigger a target when the image scan is completed. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.IRepository.repositoryUriForDigest\\">repository_uri_for_digest</a></code> | Returns the URI of the repository for a certain tag. Can be used in \`docker push/pull\`. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.IRepository.repositoryUriForTag\\">repository_uri_for_tag</a></code> | Returns the URI of the repository for a certain tag. Can be used in \`docker push/pull\`. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.toString\\">to_string</a></code> | Returns a string representation of this construct. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.applyRemovalPolicy\\">apply_removal_policy</a></code> | Apply the given removal policy to this resource. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.addEventNotification\\">add_event_notification</a></code> | Adds a bucket notification event destination. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.addObjectCreatedNotification\\">add_object_created_notification</a></code> | Subscribes a destination to receive notifications when an object is created in the bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.addObjectRemovedNotification\\">add_object_removed_notification</a></code> | Subscribes a destination to receive notifications when an object is removed from the bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.addToResourcePolicy\\">add_to_resource_policy</a></code> | Adds a statement to the resource policy for a principal (i.e. account/role/service) to perform actions on this bucket and/or its contents. Use \`bucketArn\` and \`arnForObjects(keys)\` to obtain ARNs for this bucket or objects. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.arnForObjects\\">arn_for_objects</a></code> | Returns an ARN that represents all objects within the bucket that match the key pattern specified. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.grantDelete\\">grant_delete</a></code> | Grants s3:DeleteObject* permission to an IAM principal for objects in this bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.grantPublicAccess\\">grant_public_access</a></code> | Allows unrestricted access to objects from this bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.grantPut\\">grant_put</a></code> | Grants s3:PutObject* and s3:Abort* permissions for this bucket to an IAM principal. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.grantPutAcl\\">grant_put_acl</a></code> | Grant the given IAM identity permissions to modify the ACLs of objects in the given Bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.grantRead\\">grant_read</a></code> | Grant read permissions for this bucket and it's contents to an IAM principal (Role/Group/User). |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.grantReadWrite\\">grant_read_write</a></code> | Grants read/write permissions for this bucket and it's contents to an IAM principal (Role/Group/User). |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.grantWrite\\">grant_write</a></code> | Grant write permissions to this bucket to an IAM principal. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.onCloudTrailEvent\\">on_cloud_trail_event</a></code> | Define a CloudWatch event that triggers when something happens to this repository. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.onCloudTrailPutObject\\">on_cloud_trail_put_object</a></code> | Defines an AWS CloudWatch event that triggers when an object is uploaded to the specified paths (keys) in this bucket using the PutObject API call. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.onCloudTrailWriteObject\\">on_cloud_trail_write_object</a></code> | Defines an AWS CloudWatch event that triggers when an object at the specified paths (keys) in this bucket are written to. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.s3UrlForObject\\">s3_url_for_object</a></code> | The S3 URL of an S3 object. For example:. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.transferAccelerationUrlForObject\\">transfer_acceleration_url_for_object</a></code> | The https Transfer Acceleration URL of an S3 object. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.urlForObject\\">url_for_object</a></code> | The https URL of an S3 object. Specify \`regional: false\` at the options for non-regional URLs. For example:. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.virtualHostedUrlForObject\\">virtual_hosted_url_for_object</a></code> | The virtual hosted-style URL of an S3 object. Specify \`regional: false\` at the options for non-regional URL. For example:. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.addCorsRule\\">add_cors_rule</a></code> | Adds a cross-origin access configuration for objects in an Amazon S3 bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.addInventory\\">add_inventory</a></code> | Add an inventory configuration. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.addLifecycleRule\\">add_lifecycle_rule</a></code> | Add a lifecycle rule to the bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.addMetric\\">add_metric</a></code> | Adds a metrics configuration for the CloudWatch request metrics from the bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.greet\\">greet</a></code> | *No description.* |
 
 ---
 
-##### \`add_to_resource_policy\` <a name=\\"add_to_resource_policy\\" id=\\"@aws-cdk/aws-ecr.IRepository.addToResourcePolicy\\"></a>
+##### \`to_string\` <a name=\\"to_string\\" id=\\"construct-library.GreeterBucket.toString\\"></a>
 
 \`\`\`wing
-add_to_resource_policy(statement: PolicyStatement): AddToResourcePolicyResult
+to_string(): str
 \`\`\`
 
-Add a policy statement to the repository's resource policy.
+Returns a string representation of this construct.
 
-###### \`statement\`<sup>Required</sup> <a name=\\"statement\\" id=\\"@aws-cdk/aws-ecr.IRepository.addToResourcePolicy.parameter.statement\\"></a>
+##### \`apply_removal_policy\` <a name=\\"apply_removal_policy\\" id=\\"construct-library.GreeterBucket.applyRemovalPolicy\\"></a>
+
+\`\`\`wing
+apply_removal_policy(policy: RemovalPolicy): void
+\`\`\`
+
+Apply the given removal policy to this resource.
+
+The Removal Policy controls what happens to this resource when it stops
+being managed by CloudFormation, either because you've removed it from the
+CDK application or because you've made a change that requires the resource
+to be replaced.
+
+The resource can be deleted (\`RemovalPolicy.DESTROY\`), or left in your AWS
+account for data recovery and cleanup later (\`RemovalPolicy.RETAIN\`).
+
+###### \`policy\`<sup>Required</sup> <a name=\\"policy\\" id=\\"construct-library.GreeterBucket.applyRemovalPolicy.parameter.policy\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/core.RemovalPolicy\\">RemovalPolicy</a>
+
+---
+
+##### \`add_event_notification\` <a name=\\"add_event_notification\\" id=\\"construct-library.GreeterBucket.addEventNotification\\"></a>
+
+\`\`\`wing
+add_event_notification(event: EventType, dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+\`\`\`
+
+Adds a bucket notification event destination.
+
+> [https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html](https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html)
+
+*Example*
+
+\`\`\`wing
+   declare const myLambda: lambda.Function;
+   const bucket = new s3.Bucket(this, 'MyBucket');
+   bucket.addEventNotification(s3.EventType.OBJECT_CREATED, new s3n.LambdaDestination(myLambda), {prefix: 'home/myusername/*'});
+\`\`\`
+
+
+###### \`event\`<sup>Required</sup> <a name=\\"event\\" id=\\"construct-library.GreeterBucket.addEventNotification.parameter.event\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.EventType\\">EventType</a>
+
+The event to trigger the notification.
+
+---
+
+###### \`dest\`<sup>Required</sup> <a name=\\"dest\\" id=\\"construct-library.GreeterBucket.addEventNotification.parameter.dest\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.IBucketNotificationDestination\\">IBucketNotificationDestination</a>
+
+The notification destination (Lambda, SNS Topic or SQS Queue).
+
+---
+
+###### \`filters\`<sup>Required</sup> <a name=\\"filters\\" id=\\"construct-library.GreeterBucket.addEventNotification.parameter.filters\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.NotificationKeyFilter\\">NotificationKeyFilter</a>
+
+S3 object key filter rules to determine which objects trigger this event.
+
+Each filter must include a \`prefix\` and/or \`suffix\`
+that will be matched against the s3 object key. Refer to the S3 Developer Guide
+for details about allowed filter rules.
+
+---
+
+##### \`add_object_created_notification\` <a name=\\"add_object_created_notification\\" id=\\"construct-library.GreeterBucket.addObjectCreatedNotification\\"></a>
+
+\`\`\`wing
+add_object_created_notification(dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+\`\`\`
+
+Subscribes a destination to receive notifications when an object is created in the bucket.
+
+This is identical to calling
+\`onEvent(EventType.OBJECT_CREATED)\`.
+
+###### \`dest\`<sup>Required</sup> <a name=\\"dest\\" id=\\"construct-library.GreeterBucket.addObjectCreatedNotification.parameter.dest\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.IBucketNotificationDestination\\">IBucketNotificationDestination</a>
+
+The notification destination (see onEvent).
+
+---
+
+###### \`filters\`<sup>Required</sup> <a name=\\"filters\\" id=\\"construct-library.GreeterBucket.addObjectCreatedNotification.parameter.filters\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.NotificationKeyFilter\\">NotificationKeyFilter</a>
+
+Filters (see onEvent).
+
+---
+
+##### \`add_object_removed_notification\` <a name=\\"add_object_removed_notification\\" id=\\"construct-library.GreeterBucket.addObjectRemovedNotification\\"></a>
+
+\`\`\`wing
+add_object_removed_notification(dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+\`\`\`
+
+Subscribes a destination to receive notifications when an object is removed from the bucket.
+
+This is identical to calling
+\`onEvent(EventType.OBJECT_REMOVED)\`.
+
+###### \`dest\`<sup>Required</sup> <a name=\\"dest\\" id=\\"construct-library.GreeterBucket.addObjectRemovedNotification.parameter.dest\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.IBucketNotificationDestination\\">IBucketNotificationDestination</a>
+
+The notification destination (see onEvent).
+
+---
+
+###### \`filters\`<sup>Required</sup> <a name=\\"filters\\" id=\\"construct-library.GreeterBucket.addObjectRemovedNotification.parameter.filters\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.NotificationKeyFilter\\">NotificationKeyFilter</a>
+
+Filters (see onEvent).
+
+---
+
+##### \`add_to_resource_policy\` <a name=\\"add_to_resource_policy\\" id=\\"construct-library.GreeterBucket.addToResourcePolicy\\"></a>
+
+\`\`\`wing
+add_to_resource_policy(permission: PolicyStatement): AddToResourcePolicyResult
+\`\`\`
+
+Adds a statement to the resource policy for a principal (i.e. account/role/service) to perform actions on this bucket and/or its contents. Use \`bucketArn\` and \`arnForObjects(keys)\` to obtain ARNs for this bucket or objects.
+
+Note that the policy statement may or may not be added to the policy.
+For example, when an \`IBucket\` is created from an existing bucket,
+it's not possible to tell whether the bucket already has a policy
+attached, let alone to re-use that policy to add more statements to it.
+So it's safest to do nothing in these cases.
+
+###### \`permission\`<sup>Required</sup> <a name=\\"permission\\" id=\\"construct-library.GreeterBucket.addToResourcePolicy.parameter.permission\\"></a>
 
 - *Type:* <a href=\\"#custom-@aws-cdk/aws-iam.PolicyStatement\\">PolicyStatement</a>
 
+the policy statement to be added to the bucket's policy.
+
 ---
 
-##### \`grant\` <a name=\\"grant\\" id=\\"@aws-cdk/aws-ecr.IRepository.grant\\"></a>
+##### \`arn_for_objects\` <a name=\\"arn_for_objects\\" id=\\"construct-library.GreeterBucket.arnForObjects\\"></a>
 
 \`\`\`wing
-grant(grantee: IGrantable, actions: str): Grant
+arn_for_objects(key_pattern: str): str
 \`\`\`
 
-Grant the given principal identity permissions to perform the actions on this repository.
+Returns an ARN that represents all objects within the bucket that match the key pattern specified.
 
-###### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.IRepository.grant.parameter.grantee\\"></a>
+To represent all keys, specify \`\`\\"*\\"\`\`.
 
-- *Type:* <a href=\\"#custom-@aws-cdk/aws-iam.IGrantable\\">IGrantable</a>
+If you need to specify a keyPattern with multiple components, concatenate them into a single string, e.g.:
 
----
+   arnForObjects(\`home/\${team}/\${user}/*\`)
 
-###### \`actions\`<sup>Required</sup> <a name=\\"actions\\" id=\\"@aws-cdk/aws-ecr.IRepository.grant.parameter.actions\\"></a>
+###### \`key_pattern\`<sup>Required</sup> <a name=\\"key_pattern\\" id=\\"construct-library.GreeterBucket.arnForObjects.parameter.keyPattern\\"></a>
 
 - *Type:* str
 
 ---
 
-##### \`grant_pull\` <a name=\\"grant_pull\\" id=\\"@aws-cdk/aws-ecr.IRepository.grantPull\\"></a>
+##### \`grant_delete\` <a name=\\"grant_delete\\" id=\\"construct-library.GreeterBucket.grantDelete\\"></a>
 
 \`\`\`wing
-grant_pull(grantee: IGrantable): Grant
+grant_delete(identity: IGrantable, objects_key_pattern?: any): Grant
 \`\`\`
 
-Grant the given identity permissions to pull images in this repository.
+Grants s3:DeleteObject* permission to an IAM principal for objects in this bucket.
 
-###### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.IRepository.grantPull.parameter.grantee\\"></a>
+###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"construct-library.GreeterBucket.grantDelete.parameter.identity\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-iam.IGrantable\\">IGrantable</a>
+
+The principal.
+
+---
+
+###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"construct-library.GreeterBucket.grantDelete.parameter.objectsKeyPattern\\"></a>
+
+- *Type:* any
+
+Restrict the permission to a certain key pattern (default '*').
+
+---
+
+##### \`grant_public_access\` <a name=\\"grant_public_access\\" id=\\"construct-library.GreeterBucket.grantPublicAccess\\"></a>
+
+\`\`\`wing
+grant_public_access(allowed_actions: str, key_prefix?: str): Grant
+\`\`\`
+
+Allows unrestricted access to objects from this bucket.
+
+IMPORTANT: This permission allows anyone to perform actions on S3 objects
+in this bucket, which is useful for when you configure your bucket as a
+website and want everyone to be able to read objects in the bucket without
+needing to authenticate.
+
+Without arguments, this method will grant read (\\"s3:GetObject\\") access to
+all objects (\\"*\\") in the bucket.
+
+The method returns the \`iam.Grant\` object, which can then be modified
+as needed. For example, you can add a condition that will restrict access only
+to an IPv4 range like this:
+
+     const grant = bucket.grantPublicAccess();
+     grant.resourceStatement!.addCondition(‘IpAddress’, { “aws:SourceIp”: “54.240.143.0/24” });
+
+Note that if this \`IBucket\` refers to an existing bucket, possibly not
+managed by CloudFormation, this method will have no effect, since it's
+impossible to modify the policy of an existing bucket.
+
+###### \`allowed_actions\`<sup>Required</sup> <a name=\\"allowed_actions\\" id=\\"construct-library.GreeterBucket.grantPublicAccess.parameter.allowedActions\\"></a>
+
+- *Type:* str
+
+the set of S3 actions to allow.
+
+Default is \\"s3:GetObject\\".
+
+---
+
+###### \`key_prefix\`<sup>Optional</sup> <a name=\\"key_prefix\\" id=\\"construct-library.GreeterBucket.grantPublicAccess.parameter.keyPrefix\\"></a>
+
+- *Type:* str
+
+the prefix of S3 object keys (e.g. \`home/*\`). Default is \\"*\\".
+
+---
+
+##### \`grant_put\` <a name=\\"grant_put\\" id=\\"construct-library.GreeterBucket.grantPut\\"></a>
+
+\`\`\`wing
+grant_put(identity: IGrantable, objects_key_pattern?: any): Grant
+\`\`\`
+
+Grants s3:PutObject* and s3:Abort* permissions for this bucket to an IAM principal.
+
+If encryption is used, permission to use the key to encrypt the contents
+of written files will also be granted to the same principal.
+
+###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"construct-library.GreeterBucket.grantPut.parameter.identity\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-iam.IGrantable\\">IGrantable</a>
+
+The principal.
+
+---
+
+###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"construct-library.GreeterBucket.grantPut.parameter.objectsKeyPattern\\"></a>
+
+- *Type:* any
+
+Restrict the permission to a certain key pattern (default '*').
+
+---
+
+##### \`grant_put_acl\` <a name=\\"grant_put_acl\\" id=\\"construct-library.GreeterBucket.grantPutAcl\\"></a>
+
+\`\`\`wing
+grant_put_acl(identity: IGrantable, objects_key_pattern?: str): Grant
+\`\`\`
+
+Grant the given IAM identity permissions to modify the ACLs of objects in the given Bucket.
+
+If your application has the '@aws-cdk/aws-s3:grantWriteWithoutAcl' feature flag set,
+calling {@link grantWrite} or {@link grantReadWrite} no longer grants permissions to modify the ACLs of the objects;
+in this case, if you need to modify object ACLs, call this method explicitly.
+
+###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"construct-library.GreeterBucket.grantPutAcl.parameter.identity\\"></a>
 
 - *Type:* <a href=\\"#custom-@aws-cdk/aws-iam.IGrantable\\">IGrantable</a>
 
 ---
 
-##### \`grant_pull_push\` <a name=\\"grant_pull_push\\" id=\\"@aws-cdk/aws-ecr.IRepository.grantPullPush\\"></a>
+###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"construct-library.GreeterBucket.grantPutAcl.parameter.objectsKeyPattern\\"></a>
+
+- *Type:* str
+
+---
+
+##### \`grant_read\` <a name=\\"grant_read\\" id=\\"construct-library.GreeterBucket.grantRead\\"></a>
 
 \`\`\`wing
-grant_pull_push(grantee: IGrantable): Grant
+grant_read(identity: IGrantable, objects_key_pattern?: any): Grant
 \`\`\`
 
-Grant the given identity permissions to pull and push images to this repository.
+Grant read permissions for this bucket and it's contents to an IAM principal (Role/Group/User).
 
-###### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.IRepository.grantPullPush.parameter.grantee\\"></a>
+If encryption is used, permission to use the key to decrypt the contents
+of the bucket will also be granted to the same principal.
+
+###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"construct-library.GreeterBucket.grantRead.parameter.identity\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-iam.IGrantable\\">IGrantable</a>
+
+The principal.
+
+---
+
+###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"construct-library.GreeterBucket.grantRead.parameter.objectsKeyPattern\\"></a>
+
+- *Type:* any
+
+Restrict the permission to a certain key pattern (default '*').
+
+---
+
+##### \`grant_read_write\` <a name=\\"grant_read_write\\" id=\\"construct-library.GreeterBucket.grantReadWrite\\"></a>
+
+\`\`\`wing
+grant_read_write(identity: IGrantable, objects_key_pattern?: any): Grant
+\`\`\`
+
+Grants read/write permissions for this bucket and it's contents to an IAM principal (Role/Group/User).
+
+If an encryption key is used, permission to use the key for
+encrypt/decrypt will also be granted.
+
+Before CDK version 1.85.0, this method granted the \`s3:PutObject*\` permission that included \`s3:PutObjectAcl\`,
+which could be used to grant read/write object access to IAM principals in other accounts.
+If you want to get rid of that behavior, update your CDK version to 1.85.0 or later,
+and make sure the \`@aws-cdk/aws-s3:grantWriteWithoutAcl\` feature flag is set to \`true\`
+in the \`context\` key of your cdk.json file.
+If you've already updated, but still need the principal to have permissions to modify the ACLs,
+use the {@link grantPutAcl} method.
+
+###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"construct-library.GreeterBucket.grantReadWrite.parameter.identity\\"></a>
 
 - *Type:* <a href=\\"#custom-@aws-cdk/aws-iam.IGrantable\\">IGrantable</a>
 
 ---
 
-##### \`on_cloud_trail_event\` <a name=\\"on_cloud_trail_event\\" id=\\"@aws-cdk/aws-ecr.IRepository.onCloudTrailEvent\\"></a>
+###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"construct-library.GreeterBucket.grantReadWrite.parameter.objectsKeyPattern\\"></a>
+
+- *Type:* any
+
+---
+
+##### \`grant_write\` <a name=\\"grant_write\\" id=\\"construct-library.GreeterBucket.grantWrite\\"></a>
 
 \`\`\`wing
-on_cloud_trail_event(options?: OnEventOptions): Rule
+grant_write(identity: IGrantable, objects_key_pattern?: any): Grant
+\`\`\`
+
+Grant write permissions to this bucket to an IAM principal.
+
+If encryption is used, permission to use the key to encrypt the contents
+of written files will also be granted to the same principal.
+
+Before CDK version 1.85.0, this method granted the \`s3:PutObject*\` permission that included \`s3:PutObjectAcl\`,
+which could be used to grant read/write object access to IAM principals in other accounts.
+If you want to get rid of that behavior, update your CDK version to 1.85.0 or later,
+and make sure the \`@aws-cdk/aws-s3:grantWriteWithoutAcl\` feature flag is set to \`true\`
+in the \`context\` key of your cdk.json file.
+If you've already updated, but still need the principal to have permissions to modify the ACLs,
+use the {@link grantPutAcl} method.
+
+###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"construct-library.GreeterBucket.grantWrite.parameter.identity\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-iam.IGrantable\\">IGrantable</a>
+
+---
+
+###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"construct-library.GreeterBucket.grantWrite.parameter.objectsKeyPattern\\"></a>
+
+- *Type:* any
+
+---
+
+##### \`on_cloud_trail_event\` <a name=\\"on_cloud_trail_event\\" id=\\"construct-library.GreeterBucket.onCloudTrailEvent\\"></a>
+
+\`\`\`wing
+on_cloud_trail_event(options?: OnCloudTrailBucketEventOptions): Rule
 \`\`\`
 
 Define a CloudWatch event that triggers when something happens to this repository.
@@ -2596,99 +1456,352 @@ Define a CloudWatch event that triggers when something happens to this repositor
 Requires that there exists at least one CloudTrail Trail in your account
 that captures the event. This method will not create the Trail.
 
-###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"@aws-cdk/aws-ecr.IRepository.onCloudTrailEvent.parameter.options\\"></a>
+###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"construct-library.GreeterBucket.onCloudTrailEvent.parameter.options\\"></a>
 
-- *Type:* <a href=\\"#custom-@aws-cdk/aws-events.OnEventOptions\\">OnEventOptions</a>
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.OnCloudTrailBucketEventOptions\\">OnCloudTrailBucketEventOptions</a>
 
 Options for adding the rule.
 
 ---
 
-##### \`on_cloud_trail_image_pushed\` <a name=\\"on_cloud_trail_image_pushed\\" id=\\"@aws-cdk/aws-ecr.IRepository.onCloudTrailImagePushed\\"></a>
+##### \`on_cloud_trail_put_object\` <a name=\\"on_cloud_trail_put_object\\" id=\\"construct-library.GreeterBucket.onCloudTrailPutObject\\"></a>
 
 \`\`\`wing
-on_cloud_trail_image_pushed(options?: OnCloudTrailImagePushedOptions): Rule
+on_cloud_trail_put_object(options?: OnCloudTrailBucketEventOptions): Rule
 \`\`\`
 
-Defines an AWS CloudWatch event rule that can trigger a target when an image is pushed to this repository.
+Defines an AWS CloudWatch event that triggers when an object is uploaded to the specified paths (keys) in this bucket using the PutObject API call.
+
+Note that some tools like \`aws s3 cp\` will automatically use either
+PutObject or the multipart upload API depending on the file size,
+so using \`onCloudTrailWriteObject\` may be preferable.
 
 Requires that there exists at least one CloudTrail Trail in your account
 that captures the event. This method will not create the Trail.
 
-###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"@aws-cdk/aws-ecr.IRepository.onCloudTrailImagePushed.parameter.options\\"></a>
+###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"construct-library.GreeterBucket.onCloudTrailPutObject.parameter.options\\"></a>
 
-- *Type:* <a href=\\"#custom-@aws-cdk/aws-ecr.OnCloudTrailImagePushedOptions\\">OnCloudTrailImagePushedOptions</a>
-
-Options for adding the rule.
-
----
-
-##### \`on_event\` <a name=\\"on_event\\" id=\\"@aws-cdk/aws-ecr.IRepository.onEvent\\"></a>
-
-\`\`\`wing
-on_event(options?: OnEventOptions): Rule
-\`\`\`
-
-Defines a CloudWatch event rule which triggers for repository events.
-
-Use
-\`rule.addEventPattern(pattern)\` to specify a filter.
-
-###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"@aws-cdk/aws-ecr.IRepository.onEvent.parameter.options\\"></a>
-
-- *Type:* <a href=\\"#custom-@aws-cdk/aws-events.OnEventOptions\\">OnEventOptions</a>
-
----
-
-##### \`on_image_scan_completed\` <a name=\\"on_image_scan_completed\\" id=\\"@aws-cdk/aws-ecr.IRepository.onImageScanCompleted\\"></a>
-
-\`\`\`wing
-on_image_scan_completed(options?: OnImageScanCompletedOptions): Rule
-\`\`\`
-
-Defines an AWS CloudWatch event rule that can trigger a target when the image scan is completed.
-
-###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"@aws-cdk/aws-ecr.IRepository.onImageScanCompleted.parameter.options\\"></a>
-
-- *Type:* <a href=\\"#custom-@aws-cdk/aws-ecr.OnImageScanCompletedOptions\\">OnImageScanCompletedOptions</a>
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.OnCloudTrailBucketEventOptions\\">OnCloudTrailBucketEventOptions</a>
 
 Options for adding the rule.
 
 ---
 
-##### \`repository_uri_for_digest\` <a name=\\"repository_uri_for_digest\\" id=\\"@aws-cdk/aws-ecr.IRepository.repositoryUriForDigest\\"></a>
+##### \`on_cloud_trail_write_object\` <a name=\\"on_cloud_trail_write_object\\" id=\\"construct-library.GreeterBucket.onCloudTrailWriteObject\\"></a>
 
 \`\`\`wing
-repository_uri_for_digest(digest?: str): str
+on_cloud_trail_write_object(options?: OnCloudTrailBucketEventOptions): Rule
 \`\`\`
 
-Returns the URI of the repository for a certain tag. Can be used in \`docker push/pull\`.
+Defines an AWS CloudWatch event that triggers when an object at the specified paths (keys) in this bucket are written to.
 
-ACCOUNT.dkr.ecr.REGION.amazonaws.com/REPOSITORY[@DIGEST]
+This includes
+the events PutObject, CopyObject, and CompleteMultipartUpload.
 
-###### \`digest\`<sup>Optional</sup> <a name=\\"digest\\" id=\\"@aws-cdk/aws-ecr.IRepository.repositoryUriForDigest.parameter.digest\\"></a>
+Note that some tools like \`aws s3 cp\` will automatically use either
+PutObject or the multipart upload API depending on the file size,
+so using this method may be preferable to \`onCloudTrailPutObject\`.
 
-- *Type:* str
+Requires that there exists at least one CloudTrail Trail in your account
+that captures the event. This method will not create the Trail.
 
-Image digest to use (tools usually default to the image with the \\"latest\\" tag if omitted).
+###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"construct-library.GreeterBucket.onCloudTrailWriteObject.parameter.options\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.OnCloudTrailBucketEventOptions\\">OnCloudTrailBucketEventOptions</a>
+
+Options for adding the rule.
 
 ---
 
-##### \`repository_uri_for_tag\` <a name=\\"repository_uri_for_tag\\" id=\\"@aws-cdk/aws-ecr.IRepository.repositoryUriForTag\\"></a>
+##### \`s3_url_for_object\` <a name=\\"s3_url_for_object\\" id=\\"construct-library.GreeterBucket.s3UrlForObject\\"></a>
 
 \`\`\`wing
-repository_uri_for_tag(tag?: str): str
+s3_url_for_object(key?: str): str
 \`\`\`
 
-Returns the URI of the repository for a certain tag. Can be used in \`docker push/pull\`.
+The S3 URL of an S3 object. For example:.
 
-ACCOUNT.dkr.ecr.REGION.amazonaws.com/REPOSITORY[:TAG]
+\`s3://onlybucket\`
+- \`s3://bucket/key\`
 
-###### \`tag\`<sup>Optional</sup> <a name=\\"tag\\" id=\\"@aws-cdk/aws-ecr.IRepository.repositoryUriForTag.parameter.tag\\"></a>
+###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"construct-library.GreeterBucket.s3UrlForObject.parameter.key\\"></a>
 
 - *Type:* str
 
-Image tag to use (tools usually default to \\"latest\\" if omitted).
+The S3 key of the object.
+
+If not specified, the S3 URL of the
+bucket is returned.
+
+---
+
+##### \`transfer_acceleration_url_for_object\` <a name=\\"transfer_acceleration_url_for_object\\" id=\\"construct-library.GreeterBucket.transferAccelerationUrlForObject\\"></a>
+
+\`\`\`wing
+transfer_acceleration_url_for_object(key?: str, options?: TransferAccelerationUrlOptions): str
+\`\`\`
+
+The https Transfer Acceleration URL of an S3 object.
+
+Specify \`dualStack: true\` at the options
+for dual-stack endpoint (connect to the bucket over IPv6). For example:
+
+- \`https://bucket.s3-accelerate.amazonaws.com\`
+- \`https://bucket.s3-accelerate.amazonaws.com/key\`
+
+###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"construct-library.GreeterBucket.transferAccelerationUrlForObject.parameter.key\\"></a>
+
+- *Type:* str
+
+The S3 key of the object.
+
+If not specified, the URL of the
+bucket is returned.
+
+---
+
+###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"construct-library.GreeterBucket.transferAccelerationUrlForObject.parameter.options\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.TransferAccelerationUrlOptions\\">TransferAccelerationUrlOptions</a>
+
+Options for generating URL.
+
+---
+
+##### \`url_for_object\` <a name=\\"url_for_object\\" id=\\"construct-library.GreeterBucket.urlForObject\\"></a>
+
+\`\`\`wing
+url_for_object(key?: str): str
+\`\`\`
+
+The https URL of an S3 object. Specify \`regional: false\` at the options for non-regional URLs. For example:.
+
+\`https://s3.us-west-1.amazonaws.com/onlybucket\`
+- \`https://s3.us-west-1.amazonaws.com/bucket/key\`
+- \`https://s3.cn-north-1.amazonaws.com.cn/china-bucket/mykey\`
+
+###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"construct-library.GreeterBucket.urlForObject.parameter.key\\"></a>
+
+- *Type:* str
+
+The S3 key of the object.
+
+If not specified, the URL of the
+bucket is returned.
+
+---
+
+##### \`virtual_hosted_url_for_object\` <a name=\\"virtual_hosted_url_for_object\\" id=\\"construct-library.GreeterBucket.virtualHostedUrlForObject\\"></a>
+
+\`\`\`wing
+virtual_hosted_url_for_object(key?: str, options?: VirtualHostedStyleUrlOptions): str
+\`\`\`
+
+The virtual hosted-style URL of an S3 object. Specify \`regional: false\` at the options for non-regional URL. For example:.
+
+\`https://only-bucket.s3.us-west-1.amazonaws.com\`
+- \`https://bucket.s3.us-west-1.amazonaws.com/key\`
+- \`https://bucket.s3.amazonaws.com/key\`
+- \`https://china-bucket.s3.cn-north-1.amazonaws.com.cn/mykey\`
+
+###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"construct-library.GreeterBucket.virtualHostedUrlForObject.parameter.key\\"></a>
+
+- *Type:* str
+
+The S3 key of the object.
+
+If not specified, the URL of the
+bucket is returned.
+
+---
+
+###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"construct-library.GreeterBucket.virtualHostedUrlForObject.parameter.options\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.VirtualHostedStyleUrlOptions\\">VirtualHostedStyleUrlOptions</a>
+
+Options for generating URL.
+
+---
+
+##### \`add_cors_rule\` <a name=\\"add_cors_rule\\" id=\\"construct-library.GreeterBucket.addCorsRule\\"></a>
+
+\`\`\`wing
+add_cors_rule(rule: CorsRule): void
+\`\`\`
+
+Adds a cross-origin access configuration for objects in an Amazon S3 bucket.
+
+###### \`rule\`<sup>Required</sup> <a name=\\"rule\\" id=\\"construct-library.GreeterBucket.addCorsRule.parameter.rule\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.CorsRule\\">CorsRule</a>
+
+The CORS configuration rule to add.
+
+---
+
+##### \`add_inventory\` <a name=\\"add_inventory\\" id=\\"construct-library.GreeterBucket.addInventory\\"></a>
+
+\`\`\`wing
+add_inventory(inventory: Inventory): void
+\`\`\`
+
+Add an inventory configuration.
+
+###### \`inventory\`<sup>Required</sup> <a name=\\"inventory\\" id=\\"construct-library.GreeterBucket.addInventory.parameter.inventory\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.Inventory\\">Inventory</a>
+
+configuration to add.
+
+---
+
+##### \`add_lifecycle_rule\` <a name=\\"add_lifecycle_rule\\" id=\\"construct-library.GreeterBucket.addLifecycleRule\\"></a>
+
+\`\`\`wing
+add_lifecycle_rule(rule: LifecycleRule): void
+\`\`\`
+
+Add a lifecycle rule to the bucket.
+
+###### \`rule\`<sup>Required</sup> <a name=\\"rule\\" id=\\"construct-library.GreeterBucket.addLifecycleRule.parameter.rule\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.LifecycleRule\\">LifecycleRule</a>
+
+The rule to add.
+
+---
+
+##### \`add_metric\` <a name=\\"add_metric\\" id=\\"construct-library.GreeterBucket.addMetric\\"></a>
+
+\`\`\`wing
+add_metric(metric: BucketMetrics): void
+\`\`\`
+
+Adds a metrics configuration for the CloudWatch request metrics from the bucket.
+
+###### \`metric\`<sup>Required</sup> <a name=\\"metric\\" id=\\"construct-library.GreeterBucket.addMetric.parameter.metric\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.BucketMetrics\\">BucketMetrics</a>
+
+The metric configuration to add.
+
+---
+
+##### \`greet\` <a name=\\"greet\\" id=\\"construct-library.GreeterBucket.greet\\"></a>
+
+\`\`\`wing
+greet(): void
+\`\`\`
+
+#### Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.isConstruct\\">is_construct</a></code> | Return whether the given object is a Construct. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.isResource\\">is_resource</a></code> | Check whether the given construct is a Resource. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.fromBucketArn\\">from_bucket_arn</a></code> | *No description.* |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.fromBucketAttributes\\">from_bucket_attributes</a></code> | Creates a Bucket construct that represents an external bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.fromBucketName\\">from_bucket_name</a></code> | *No description.* |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.validateBucketName\\">validate_bucket_name</a></code> | Thrown an exception if the given bucket name is not valid. |
+
+---
+
+##### \`is_construct\` <a name=\\"is_construct\\" id=\\"construct-library.GreeterBucket.isConstruct\\"></a>
+
+\`\`\`wing
+bring { GreeterBucket } from \\"construct-library\\"
+
+GreeterBucket.is_construct(x: any)
+\`\`\`
+
+Return whether the given object is a Construct.
+
+###### \`x\`<sup>Required</sup> <a name=\\"x\\" id=\\"construct-library.GreeterBucket.isConstruct.parameter.x\\"></a>
+
+- *Type:* any
+
+---
+
+##### \`is_resource\` <a name=\\"is_resource\\" id=\\"construct-library.GreeterBucket.isResource\\"></a>
+
+\`\`\`wing
+bring { GreeterBucket } from \\"construct-library\\"
+
+GreeterBucket.is_resource(construct: IConstruct)
+\`\`\`
+
+Check whether the given construct is a Resource.
+
+###### \`construct\`<sup>Required</sup> <a name=\\"construct\\" id=\\"construct-library.GreeterBucket.isResource.parameter.construct\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/core.IConstruct\\">IConstruct</a>
+
+---
+
+##### \`from_bucket_arn\` <a name=\\"from_bucket_arn\\" id=\\"construct-library.GreeterBucket.fromBucketArn\\"></a>
+
+\`\`\`wing
+bring { GreeterBucket } from \\"construct-library\\"
+
+GreeterBucket.from_bucket_arn(bucket_arn: str)
+\`\`\`
+
+###### \`bucket_arn\`<sup>Required</sup> <a name=\\"bucket_arn\\" id=\\"construct-library.GreeterBucket.fromBucketArn.parameter.bucketArn\\"></a>
+
+- *Type:* str
+
+---
+
+##### \`from_bucket_attributes\` <a name=\\"from_bucket_attributes\\" id=\\"construct-library.GreeterBucket.fromBucketAttributes\\"></a>
+
+\`\`\`wing
+bring { GreeterBucket } from \\"construct-library\\"
+
+GreeterBucket.from_bucket_attributes(attrs: BucketAttributes)
+\`\`\`
+
+Creates a Bucket construct that represents an external bucket.
+
+###### \`attrs\`<sup>Required</sup> <a name=\\"attrs\\" id=\\"construct-library.GreeterBucket.fromBucketAttributes.parameter.attrs\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.BucketAttributes\\">BucketAttributes</a>
+
+A \`BucketAttributes\` object.
+
+Can be obtained from a call to
+\`bucket.export()\` or manually created.
+
+---
+
+##### \`from_bucket_name\` <a name=\\"from_bucket_name\\" id=\\"construct-library.GreeterBucket.fromBucketName\\"></a>
+
+\`\`\`wing
+bring { GreeterBucket } from \\"construct-library\\"
+
+GreeterBucket.from_bucket_name(bucket_name: str)
+\`\`\`
+
+###### \`bucket_name\`<sup>Required</sup> <a name=\\"bucket_name\\" id=\\"construct-library.GreeterBucket.fromBucketName.parameter.bucketName\\"></a>
+
+- *Type:* str
+
+---
+
+##### \`validate_bucket_name\` <a name=\\"validate_bucket_name\\" id=\\"construct-library.GreeterBucket.validateBucketName\\"></a>
+
+\`\`\`wing
+bring { GreeterBucket } from \\"construct-library\\"
+
+GreeterBucket.validate_bucket_name(physical_name: str)
+\`\`\`
+
+Thrown an exception if the given bucket name is not valid.
+
+###### \`physical_name\`<sup>Required</sup> <a name=\\"physical_name\\" id=\\"construct-library.GreeterBucket.validateBucketName.parameter.physicalName\\"></a>
+
+- *Type:* str
+
+name of the bucket.
 
 ---
 
@@ -2696,16 +1809,23 @@ Image tag to use (tools usually default to \\"latest\\" if omitted).
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.IRepository.property.node\\">node</a></code> | <code><a href=\\"#custom-@aws-cdk/core.ConstructNode\\">ConstructNode</a></code> | The construct tree node for this construct. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.IRepository.property.env\\">env</a></code> | <code><a href=\\"#custom-@aws-cdk/core.ResourceEnvironment\\">ResourceEnvironment</a></code> | The environment this resource belongs to. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.IRepository.property.stack\\">stack</a></code> | <code><a href=\\"#custom-@aws-cdk/core.Stack\\">Stack</a></code> | The stack in which this resource is defined. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.IRepository.property.repositoryArn\\">repository_arn</a></code> | <code>str</code> | The ARN of the repository. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.IRepository.property.repositoryName\\">repository_name</a></code> | <code>str</code> | The name of the repository. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.IRepository.property.repositoryUri\\">repository_uri</a></code> | <code>str</code> | The URI of this repository (represents the latest image):. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.node\\">node</a></code> | <code><a href=\\"#custom-@aws-cdk/core.ConstructNode\\">ConstructNode</a></code> | The construct tree node associated with this construct. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.env\\">env</a></code> | <code><a href=\\"#custom-@aws-cdk/core.ResourceEnvironment\\">ResourceEnvironment</a></code> | The environment this resource belongs to. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.stack\\">stack</a></code> | <code><a href=\\"#custom-@aws-cdk/core.Stack\\">Stack</a></code> | The stack in which this resource is defined. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.bucketArn\\">bucket_arn</a></code> | <code>str</code> | The ARN of the bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.bucketDomainName\\">bucket_domain_name</a></code> | <code>str</code> | The IPv4 DNS name of the specified bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.bucketDualStackDomainName\\">bucket_dual_stack_domain_name</a></code> | <code>str</code> | The IPv6 DNS name of the specified bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.bucketName\\">bucket_name</a></code> | <code>str</code> | The name of the bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.bucketRegionalDomainName\\">bucket_regional_domain_name</a></code> | <code>str</code> | The regional domain name of the specified bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.bucketWebsiteDomainName\\">bucket_website_domain_name</a></code> | <code>str</code> | The Domain name of the static website. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.bucketWebsiteUrl\\">bucket_website_url</a></code> | <code>str</code> | The URL of the static website. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.encryptionKey\\">encryption_key</a></code> | <code><a href=\\"#custom-@aws-cdk/aws-kms.IKey\\">IKey</a></code> | Optional KMS encryption key associated with this bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.isWebsite\\">is_website</a></code> | <code>bool</code> | If this bucket has been configured for static website hosting. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.policy\\">policy</a></code> | <code><a href=\\"#custom-@aws-cdk/aws-s3.BucketPolicy\\">BucketPolicy</a></code> | The resource policy associated with this bucket. |
 
 ---
 
-##### \`node\`<sup>Required</sup> <a name=\\"node\\" id=\\"@aws-cdk/aws-ecr.IRepository.property.node\\"></a>
+##### \`node\`<sup>Required</sup> <a name=\\"node\\" id=\\"construct-library.GreeterBucket.property.node\\"></a>
 
 \`\`\`wing
 node: ConstructNode;
@@ -2713,11 +1833,11 @@ node: ConstructNode;
 
 - *Type:* <a href=\\"#custom-@aws-cdk/core.ConstructNode\\">ConstructNode</a>
 
-The construct tree node for this construct.
+The construct tree node associated with this construct.
 
 ---
 
-##### \`env\`<sup>Required</sup> <a name=\\"env\\" id=\\"@aws-cdk/aws-ecr.IRepository.property.env\\"></a>
+##### \`env\`<sup>Required</sup> <a name=\\"env\\" id=\\"construct-library.GreeterBucket.property.env\\"></a>
 
 \`\`\`wing
 env: ResourceEnvironment;
@@ -2736,7 +1856,7 @@ that might be different than the stack they were imported into.
 
 ---
 
-##### \`stack\`<sup>Required</sup> <a name=\\"stack\\" id=\\"@aws-cdk/aws-ecr.IRepository.property.stack\\"></a>
+##### \`stack\`<sup>Required</sup> <a name=\\"stack\\" id=\\"construct-library.GreeterBucket.property.stack\\"></a>
 
 \`\`\`wing
 stack: Stack;
@@ -2748,106 +1868,132 @@ The stack in which this resource is defined.
 
 ---
 
-##### \`repository_arn\`<sup>Required</sup> <a name=\\"repository_arn\\" id=\\"@aws-cdk/aws-ecr.IRepository.property.repositoryArn\\"></a>
+##### \`bucket_arn\`<sup>Required</sup> <a name=\\"bucket_arn\\" id=\\"construct-library.GreeterBucket.property.bucketArn\\"></a>
 
 \`\`\`wing
-repository_arn: str;
+bucket_arn: str;
 \`\`\`
 
 - *Type:* str
 
-The ARN of the repository.
+The ARN of the bucket.
 
 ---
 
-##### \`repository_name\`<sup>Required</sup> <a name=\\"repository_name\\" id=\\"@aws-cdk/aws-ecr.IRepository.property.repositoryName\\"></a>
+##### \`bucket_domain_name\`<sup>Required</sup> <a name=\\"bucket_domain_name\\" id=\\"construct-library.GreeterBucket.property.bucketDomainName\\"></a>
 
 \`\`\`wing
-repository_name: str;
+bucket_domain_name: str;
 \`\`\`
 
 - *Type:* str
 
-The name of the repository.
+The IPv4 DNS name of the specified bucket.
 
 ---
 
-##### \`repository_uri\`<sup>Required</sup> <a name=\\"repository_uri\\" id=\\"@aws-cdk/aws-ecr.IRepository.property.repositoryUri\\"></a>
+##### \`bucket_dual_stack_domain_name\`<sup>Required</sup> <a name=\\"bucket_dual_stack_domain_name\\" id=\\"construct-library.GreeterBucket.property.bucketDualStackDomainName\\"></a>
 
 \`\`\`wing
-repository_uri: str;
+bucket_dual_stack_domain_name: str;
 \`\`\`
 
 - *Type:* str
 
-The URI of this repository (represents the latest image):.
-
-ACCOUNT.dkr.ecr.REGION.amazonaws.com/REPOSITORY
+The IPv6 DNS name of the specified bucket.
 
 ---
 
-## Enums <a name=\\"Enums\\" id=\\"Enums\\"></a>
+##### \`bucket_name\`<sup>Required</sup> <a name=\\"bucket_name\\" id=\\"construct-library.GreeterBucket.property.bucketName\\"></a>
 
-### TagMutability <a name=\\"TagMutability\\" id=\\"@aws-cdk/aws-ecr.TagMutability\\"></a>
+\`\`\`wing
+bucket_name: str;
+\`\`\`
 
-The tag mutability setting for your repository.
+- *Type:* str
 
-#### Members <a name=\\"Members\\" id=\\"Members\\"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.TagMutability.MUTABLE\\">MUTABLE</a></code> | allow image tags to be overwritten. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.TagMutability.IMMUTABLE\\">IMMUTABLE</a></code> | all image tags within the repository will be immutable which will prevent them from being overwritten. |
+The name of the bucket.
 
 ---
 
-##### \`MUTABLE\` <a name=\\"MUTABLE\\" id=\\"@aws-cdk/aws-ecr.TagMutability.MUTABLE\\"></a>
+##### \`bucket_regional_domain_name\`<sup>Required</sup> <a name=\\"bucket_regional_domain_name\\" id=\\"construct-library.GreeterBucket.property.bucketRegionalDomainName\\"></a>
 
-allow image tags to be overwritten.
+\`\`\`wing
+bucket_regional_domain_name: str;
+\`\`\`
+
+- *Type:* str
+
+The regional domain name of the specified bucket.
+
+---
+
+##### \`bucket_website_domain_name\`<sup>Required</sup> <a name=\\"bucket_website_domain_name\\" id=\\"construct-library.GreeterBucket.property.bucketWebsiteDomainName\\"></a>
+
+\`\`\`wing
+bucket_website_domain_name: str;
+\`\`\`
+
+- *Type:* str
+
+The Domain name of the static website.
+
+---
+
+##### \`bucket_website_url\`<sup>Required</sup> <a name=\\"bucket_website_url\\" id=\\"construct-library.GreeterBucket.property.bucketWebsiteUrl\\"></a>
+
+\`\`\`wing
+bucket_website_url: str;
+\`\`\`
+
+- *Type:* str
+
+The URL of the static website.
+
+---
+
+##### \`encryption_key\`<sup>Optional</sup> <a name=\\"encryption_key\\" id=\\"construct-library.GreeterBucket.property.encryptionKey\\"></a>
+
+\`\`\`wing
+encryption_key: IKey;
+\`\`\`
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-kms.IKey\\">IKey</a>
+
+Optional KMS encryption key associated with this bucket.
+
+---
+
+##### \`is_website\`<sup>Optional</sup> <a name=\\"is_website\\" id=\\"construct-library.GreeterBucket.property.isWebsite\\"></a>
+
+\`\`\`wing
+is_website: bool;
+\`\`\`
+
+- *Type:* bool
+
+If this bucket has been configured for static website hosting.
+
+---
+
+##### \`policy\`<sup>Optional</sup> <a name=\\"policy\\" id=\\"construct-library.GreeterBucket.property.policy\\"></a>
+
+\`\`\`wing
+policy: BucketPolicy;
+\`\`\`
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.BucketPolicy\\">BucketPolicy</a>
+
+The resource policy associated with this bucket.
+
+If \`autoCreatePolicy\` is true, a \`BucketPolicy\` will be created upon the
+first call to addToResourcePolicy(s).
 
 ---
 
 
-##### \`IMMUTABLE\` <a name=\\"IMMUTABLE\\" id=\\"@aws-cdk/aws-ecr.TagMutability.IMMUTABLE\\"></a>
-
-all image tags within the repository will be immutable which will prevent them from being overwritten.
-
----
 
 
-### TagStatus <a name=\\"TagStatus\\" id=\\"@aws-cdk/aws-ecr.TagStatus\\"></a>
-
-Select images based on tags.
-
-#### Members <a name=\\"Members\\" id=\\"Members\\"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.TagStatus.ANY\\">ANY</a></code> | Rule applies to all images. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.TagStatus.TAGGED\\">TAGGED</a></code> | Rule applies to tagged images. |
-| <code><a href=\\"#custom-@aws-cdk/aws-ecr.TagStatus.UNTAGGED\\">UNTAGGED</a></code> | Rule applies to untagged images. |
-
----
-
-##### \`ANY\` <a name=\\"ANY\\" id=\\"@aws-cdk/aws-ecr.TagStatus.ANY\\"></a>
-
-Rule applies to all images.
-
----
-
-
-##### \`TAGGED\` <a name=\\"TAGGED\\" id=\\"@aws-cdk/aws-ecr.TagStatus.TAGGED\\"></a>
-
-Rule applies to tagged images.
-
----
-
-
-##### \`UNTAGGED\` <a name=\\"UNTAGGED\\" id=\\"@aws-cdk/aws-ecr.TagStatus.UNTAGGED\\"></a>
-
-Rule applies to untagged images.
-
----
 
 "
 `;

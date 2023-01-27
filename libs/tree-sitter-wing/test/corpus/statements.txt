@@ -58,6 +58,64 @@ if false {}
     )
 )
 
+
+====================
+If Else
+====================
+
+if false {} else {}
+
+---
+
+(source
+    (if_statement
+        condition: (bool)
+        block: (block)
+        else_block: (block)
+    )
+)
+
+====================
+If Elif Else
+====================
+
+if false {} elif false {} else {}
+
+---
+
+(source
+    (if_statement
+        condition: (bool)
+        block: (block)
+        elif_block: (elif_block
+            condition: (bool)
+            block: (block))
+        else_block: (block)
+    )
+)
+
+====================
+If More Than One Elif Else
+====================
+
+if false {} elif false {} elif true {} else {}
+
+---
+
+(source
+    (if_statement
+        condition: (bool)
+        block: (block)
+        elif_block: (elif_block
+            condition: (bool)
+            block: (block))
+        elif_block: (elif_block
+            condition: (bool)
+            block: (block))
+        else_block: (block)
+    )
+)
+
 ====================
 Return
 ====================

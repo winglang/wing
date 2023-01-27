@@ -1,5 +1,6 @@
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
+import { Duration } from "../../src/std";
 import { SimApp, Testing } from "../../src/testing";
 
 const INFLIGHT_CODE = `
@@ -20,6 +21,12 @@ async handle(event) {
 const INFLIGHT_PANIC = `
 async handle() {
   process.exit(1);
+}`;
+
+const INFLIGHT_TIMEOUT = `
+async handle() {
+  while (true) {
+  };
 }`;
 
 test("create a function", async () => {
@@ -46,6 +53,7 @@ test("create a function", async () => {
         ENV_VAR1: "true",
         LOGGER_HANDLE_76f7e65b: "${root/WingLogger#attrs.handle}",
       },
+      timeout: 60000,
     },
     type: "wingsdk.cloud.Function",
   });
@@ -192,6 +200,29 @@ test("invoke function with process.exit(1)", async () => {
   expect(listMessages(s)).toMatchSnapshot();
   expect(s.listTraces()[2].data.error).toMatchObject({
     message: "process.exit() was called with exit code 1",
+  });
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("invoke function exceeds timeout", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_TIMEOUT);
+  new cloud.Function(app, "my_function", handler, {
+    timeout: Duration.fromSeconds(1),
+  });
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_function") as cloud.IFunctionClient;
+  // WHEN
+  const PAYLOAD = {};
+  await expect(client.invoke(JSON.stringify(PAYLOAD))).rejects.toThrow(
+    "Script execution timed out after 1000ms"
+  );
+  // THEN
+  await s.stop();
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(s.listTraces()[2].data.error).toMatchObject({
+    message: "Script execution timed out after 1000ms",
   });
   expect(app.snapshot()).toMatchSnapshot();
 });

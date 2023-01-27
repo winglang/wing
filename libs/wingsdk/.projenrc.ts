@@ -212,7 +212,7 @@ project.tasks
 project.preCompileTask.exec("patch-package");
 
 const docsFrontMatter = `---
-title: SDK
+title: API Reference
 id: sdk
 description: Wing SDK API Reference
 keywords: [Wing sdk, sdk, Wing API Reference]
@@ -230,5 +230,6 @@ docgen.exec(`cat API.md >> ${docsPath}`);
 project.testTask.reset(
   "jest --passWithNoTests --all --updateSnapshot --coverageProvider=v8 --testTimeout=30000"
 );
+project.testTask.spawn(project.eslint?.eslintTask!);
 
 project.synth();

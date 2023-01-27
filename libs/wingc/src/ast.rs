@@ -179,6 +179,12 @@ impl Display for UtilityFunctions {
 }
 
 #[derive(Debug)]
+pub struct ElifBlock {
+	pub condition: Expr,
+	pub statements: Scope,
+}
+
+#[derive(Debug)]
 pub enum StmtKind {
 	Use {
 		module_name: Symbol, // Reference?
@@ -202,6 +208,7 @@ pub enum StmtKind {
 	If {
 		condition: Expr,
 		statements: Scope,
+		elif_statements: Vec<ElifBlock>,
 		else_statements: Option<Scope>,
 	},
 	Expression(Expr),
@@ -354,7 +361,6 @@ impl Scope {
 
 #[derive(Debug)]
 pub enum UnaryOperator {
-	Plus,
 	Minus,
 	Not,
 }

@@ -1,12 +1,15 @@
 import { Documentation, Language } from "../../../src";
 import { JsiiEntity } from "../../../src/docgen/schema";
+import * as path from "path";
 
 jest.setTimeout(60 * 1000);
 
 let docs: Documentation;
 
 beforeAll(async () => {
-  docs = await Documentation.forPackage("@aws-cdk/aws-ecr@1.106.0");
+  docs = await Documentation.forProject(
+    path.join(__dirname, "../../__fixtures__/libraries/construct-library")
+  );
 });
 
 afterAll(async () => {

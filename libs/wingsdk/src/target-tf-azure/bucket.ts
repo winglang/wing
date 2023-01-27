@@ -1,5 +1,6 @@
 import { ResourceGroup } from "@cdktf/provider-azurerm/lib/resource-group";
 import { StorageAccount } from "@cdktf/provider-azurerm/lib/storage-account";
+import { StorageBlob } from "@cdktf/provider-azurerm/lib/storage-blob";
 import { StorageContainer } from "@cdktf/provider-azurerm/lib/storage-container";
 import { Construct } from "constructs";
 import { App } from "./app";
@@ -92,8 +93,23 @@ export class Bucket extends cloud.BucketBase {
       storageAccountName: this.storageAccount.name,
       containerAccessType: this.public ? "public" : "private",
     });
+  }
 
-    this.storageContainer;
+  public addObject(key: string, body: string): void {
+    // Blob naming conventions:
+    // https://learn.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata#blob-names
+    const blobName = key
+      .split("/")
+      .map((s) => encodeURIComponent(s))
+      .join("/");
+
+    new StorageBlob(this, `Blob-${key}`, {
+      name: blobName,
+      storageAccountName: this.storageAccount.name,
+      storageContainerName: this.storageContainer.name,
+      type: "Block",
+      sourceContent: body,
+    });
   }
 
   /** @internal */

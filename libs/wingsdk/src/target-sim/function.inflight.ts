@@ -15,6 +15,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly filename: string;
   private readonly env: Record<string, string>;
   private readonly context: ISimulatorContext;
+  private readonly timeout: number;
 
   constructor(props: FunctionSchema["props"], context: ISimulatorContext) {
     if (props.sourceCodeLanguage !== "javascript") {
@@ -23,6 +24,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     this.filename = path_.resolve(context.assetsDir, props.sourceCodeFile);
     this.env = props.environmentVariables ?? {};
     this.context = context;
+    this.timeout = props.timeout;
   }
 
   public async init(): Promise<void> {
@@ -75,7 +77,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Invoke (payload="${JSON.stringify(payload)}").`,
       activity: async () => {
-        return vm.runInContext(wrapper, context);
+        return vm.runInContext(wrapper, context, { timeout: this.timeout });
       },
     });
   }

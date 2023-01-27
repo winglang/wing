@@ -5,6 +5,7 @@ import * as esbuild from "esbuild-wasm";
 import { Polycons } from "polycons";
 import { Logger } from "./logger";
 import { Code, IInflightHost, IResource, Inflight, Resource } from "../core";
+import { Duration } from "../std";
 import { mkdtemp } from "../util";
 
 /**
@@ -23,6 +24,12 @@ export interface FunctionProps {
    * @default - No environment variables.
    */
   readonly env?: { [key: string]: string };
+
+  /**
+   * The maximum amount of time the function can run.
+   * @default 1m
+   */
+  readonly timeout?: Duration;
 }
 
 /**

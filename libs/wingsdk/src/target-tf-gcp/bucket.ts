@@ -30,6 +30,12 @@ export class Bucket extends cloud.BucketBase {
     }
   }
 
+  public addObject(key: string, body: string): void {
+    key;
+    body;
+    throw new Error("Method not implemented.");
+  }
+
   /** @internal */
   public _bind(_inflightHost: core.IInflightHost, _ops: string[]): void {
     // TODO: support functions once tfgcp functions are implemented

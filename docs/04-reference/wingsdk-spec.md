@@ -1,4 +1,14 @@
-# Wing SDK
+---
+title: SDK Spec
+description: Specification for the Wing SDK
+---
+
+:::caution Not fully implemented yet
+
+This document is a *specification* of the Wing SDK, and many features
+are still not implemented (see [project board](https://github.com/orgs/winglang/projects/3)).
+ 
+:::
 
 ## Overview
 

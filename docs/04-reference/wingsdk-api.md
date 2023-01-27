@@ -1,5 +1,5 @@
 ---
-title: SDK
+title: API Reference
 id: sdk
 description: Wing SDK API Reference
 keywords: [Wing sdk, sdk, Wing API Reference]
@@ -40,6 +40,7 @@ new cloud.Bucket(props?: BucketProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Bucket.toString">to_string</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/sdk.cloud.Bucket.addObject">add_object</a></code> | Add a file to the bucket that is uploaded when the app is deployed. |
 
 ---
 
@@ -50,6 +51,29 @@ to_string(): str
 ```
 
 Returns a string representation of this construct.
+
+##### `add_object` <a name="add_object" id="@winglang/sdk.cloud.Bucket.addObject"></a>
+
+```wing
+add_object(key: str, body: str): void
+```
+
+Add a file to the bucket that is uploaded when the app is deployed.
+
+TODO: In the future this will support uploading any `Blob` type or
+referencing a file from the local filesystem.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.Bucket.addObject.parameter.key"></a>
+
+- *Type:* str
+
+---
+
+###### `body`<sup>Required</sup> <a name="body" id="@winglang/sdk.cloud.Bucket.addObject.parameter.body"></a>
+
+- *Type:* str
+
+---
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -1749,6 +1773,7 @@ let function_props = cloud.FunctionProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code>std.Duration</code> | The maximum amount of time the function can run. |
 
 ---
 
@@ -1762,6 +1787,19 @@ env: MutMap<str>;
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.FunctionProps.property.timeout"></a>
+
+```wing
+timeout: Duration;
+```
+
+- *Type:* std.Duration
+- *Default:* 1m
+
+The maximum amount of time the function can run.
 
 ---
 
@@ -1977,6 +2015,7 @@ let queue_on_message_props = cloud.QueueOnMessageProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.timeout">timeout</a></code> | <code>std.Duration</code> | The maximum amount of time the function can run. |
 | <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.batchSize">batch_size</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
 
 ---
@@ -1991,6 +2030,19 @@ env: MutMap<str>;
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueOnMessageProps.property.timeout"></a>
+
+```wing
+timeout: Duration;
+```
+
+- *Type:* std.Duration
+- *Default:* 1m
+
+The maximum amount of time the function can run.
 
 ---
 
