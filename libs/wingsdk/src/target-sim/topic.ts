@@ -1,12 +1,12 @@
 import { join } from "path";
 import { Construct } from "constructs";
-import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../convert";
-import * as core from "../core";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { TopicSchema, TopicSubscriber } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import * as cloud from "../cloud";
+import { convertBetweenHandlers } from "../convert";
+import * as core from "../core";
 
 /**
  * Simulator implementation of `cloud.Topic`

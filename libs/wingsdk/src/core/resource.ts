@@ -1,12 +1,12 @@
 import { Construct, IConstruct } from "constructs";
-import { Duration } from "../std";
-import { log } from "../util";
 import {
   WING_ATTRIBUTE_RESOURCE_CONNECTIONS,
   WING_ATTRIBUTE_RESOURCE_STATEFUL,
 } from "./attributes";
 import { Code } from "./inflight";
 import { IInspectable, TreeInspector } from "./tree";
+import { Duration } from "../std";
+import { log } from "../util";
 
 /**
  * A resource that can run inflight code.

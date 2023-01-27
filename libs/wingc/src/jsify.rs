@@ -23,8 +23,10 @@ function __app(target) {
 		case "tfaws":
 		case "tf-aws":
 			return $stdlib.tfaws.App;
-    case "tf-azure":
-      return $stdlib.tfazure.App;
+		case "tf-gcp":
+			return $stdlib.tfgcp.App;
+		case "tf-azure":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(`Unknown WING_TARGET value: "${process.env.WING_TARGET ?? ""}"`);
 	}

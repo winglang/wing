@@ -1,8 +1,8 @@
 import { basename } from "path";
+import { simulatorJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import * as sim from "../../src/target-sim";
 import { mkdtemp } from "../../src/util";
-import { simulatorJsonOf } from "./util";
 
 test("app name can be customized", async () => {
   // GIVEN

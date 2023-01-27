@@ -45,8 +45,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -91,7 +93,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
       "root_func_IamRole_EE572BCE": {
         "//": {
           "metadata": {
-            "path": "root/func/IamRole",
+            "path": "root/Default/func/IamRole",
             "uniqueId": "root_func_IamRole_EE572BCE",
           },
         },
@@ -100,7 +102,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
       "root_strtostr_IamRole_305ACAF8": {
         "//": {
           "metadata": {
-            "path": "root/str_to_str/IamRole",
+            "path": "root/Default/str_to_str/IamRole",
             "uniqueId": "root_strtostr_IamRole_305ACAF8",
           },
         },
@@ -111,7 +113,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
       "root_func_IamRolePolicy_3AC5101F": {
         "//": {
           "metadata": {
-            "path": "root/func/IamRolePolicy",
+            "path": "root/Default/func/IamRolePolicy",
             "uniqueId": "root_func_IamRolePolicy_3AC5101F",
           },
         },
@@ -121,7 +123,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
       "root_strtostr_IamRolePolicy_B80B33C4": {
         "//": {
           "metadata": {
-            "path": "root/str_to_str/IamRolePolicy",
+            "path": "root/Default/str_to_str/IamRolePolicy",
             "uniqueId": "root_strtostr_IamRolePolicy_B80B33C4",
           },
         },
@@ -133,7 +135,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
       "root_func_IamRolePolicyAttachment_AD2DD410": {
         "//": {
           "metadata": {
-            "path": "root/func/IamRolePolicyAttachment",
+            "path": "root/Default/func/IamRolePolicyAttachment",
             "uniqueId": "root_func_IamRolePolicyAttachment_AD2DD410",
           },
         },
@@ -143,7 +145,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
       "root_strtostr_IamRolePolicyAttachment_C5B57BBD": {
         "//": {
           "metadata": {
-            "path": "root/str_to_str/IamRolePolicyAttachment",
+            "path": "root/Default/str_to_str/IamRolePolicyAttachment",
             "uniqueId": "root_strtostr_IamRolePolicyAttachment_C5B57BBD",
           },
         },
@@ -155,7 +157,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
       "root_func_0444AFD0": {
         "//": {
           "metadata": {
-            "path": "root/func/Default",
+            "path": "root/Default/func/Default",
             "uniqueId": "root_func_0444AFD0",
           },
         },
@@ -176,7 +178,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
       "root_strtostr_05420EE8": {
         "//": {
           "metadata": {
-            "path": "root/str_to_str/Default",
+            "path": "root/Default/str_to_str/Default",
             "uniqueId": "root_strtostr_05420EE8",
           },
         },
@@ -198,7 +200,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
       "root_func_Code_58BA0E0E": {
         "//": {
           "metadata": {
-            "path": "root/func/Code",
+            "path": "root/Default/func/Code",
             "uniqueId": "root_func_Code_58BA0E0E",
           },
         },
@@ -207,7 +209,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
       "root_strtostr_Code_5BA38746": {
         "//": {
           "metadata": {
-            "path": "root/str_to_str/Code",
+            "path": "root/Default/str_to_str/Code",
             "uniqueId": "root_strtostr_Code_5BA38746",
           },
         },
@@ -218,7 +220,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
       "root_func_S3Object_F6163647": {
         "//": {
           "metadata": {
-            "path": "root/func/S3Object",
+            "path": "root/Default/func/S3Object",
             "uniqueId": "root_func_S3Object_F6163647",
           },
         },
@@ -269,8 +271,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -327,7 +331,7 @@ exports[`wing compile --target tf-aws capture_containers.w > cdk.tf.json 1`] = `
       "root_test_IamRole_6CDC2D16": {
         "//": {
           "metadata": {
-            "path": "root/test/IamRole",
+            "path": "root/Default/test/IamRole",
             "uniqueId": "root_test_IamRole_6CDC2D16",
           },
         },
@@ -338,7 +342,7 @@ exports[`wing compile --target tf-aws capture_containers.w > cdk.tf.json 1`] = `
       "root_test_IamRolePolicy_474A6820": {
         "//": {
           "metadata": {
-            "path": "root/test/IamRolePolicy",
+            "path": "root/Default/test/IamRolePolicy",
             "uniqueId": "root_test_IamRolePolicy_474A6820",
           },
         },
@@ -350,7 +354,7 @@ exports[`wing compile --target tf-aws capture_containers.w > cdk.tf.json 1`] = `
       "root_test_IamRolePolicyAttachment_1102A28A": {
         "//": {
           "metadata": {
-            "path": "root/test/IamRolePolicyAttachment",
+            "path": "root/Default/test/IamRolePolicyAttachment",
             "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
           },
         },
@@ -362,7 +366,7 @@ exports[`wing compile --target tf-aws capture_containers.w > cdk.tf.json 1`] = `
       "root_test_AAE85061": {
         "//": {
           "metadata": {
-            "path": "root/test/Default",
+            "path": "root/Default/test/Default",
             "uniqueId": "root_test_AAE85061",
           },
         },
@@ -384,7 +388,7 @@ exports[`wing compile --target tf-aws capture_containers.w > cdk.tf.json 1`] = `
       "root_test_Code_2D131EC2": {
         "//": {
           "metadata": {
-            "path": "root/test/Code",
+            "path": "root/Default/test/Code",
             "uniqueId": "root_test_Code_2D131EC2",
           },
         },
@@ -395,7 +399,7 @@ exports[`wing compile --target tf-aws capture_containers.w > cdk.tf.json 1`] = `
       "root_test_S3Object_A16CD789": {
         "//": {
           "metadata": {
-            "path": "root/test/S3Object",
+            "path": "root/Default/test/S3Object",
             "uniqueId": "root_test_S3Object_A16CD789",
           },
         },
@@ -447,8 +451,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -502,7 +508,7 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > cdk.tf
       "root_test_IamRole_6CDC2D16": {
         "//": {
           "metadata": {
-            "path": "root/test/IamRole",
+            "path": "root/Default/test/IamRole",
             "uniqueId": "root_test_IamRole_6CDC2D16",
           },
         },
@@ -513,7 +519,7 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > cdk.tf
       "root_test_IamRolePolicy_474A6820": {
         "//": {
           "metadata": {
-            "path": "root/test/IamRolePolicy",
+            "path": "root/Default/test/IamRolePolicy",
             "uniqueId": "root_test_IamRolePolicy_474A6820",
           },
         },
@@ -525,7 +531,7 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > cdk.tf
       "root_test_IamRolePolicyAttachment_1102A28A": {
         "//": {
           "metadata": {
-            "path": "root/test/IamRolePolicyAttachment",
+            "path": "root/Default/test/IamRolePolicyAttachment",
             "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
           },
         },
@@ -537,7 +543,7 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > cdk.tf
       "root_test_AAE85061": {
         "//": {
           "metadata": {
-            "path": "root/test/Default",
+            "path": "root/Default/test/Default",
             "uniqueId": "root_test_AAE85061",
           },
         },
@@ -562,7 +568,7 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > cdk.tf
       "root_b1_A5C8D4B7": {
         "//": {
           "metadata": {
-            "path": "root/b1/Default",
+            "path": "root/Default/b1/Default",
             "uniqueId": "root_b1_A5C8D4B7",
           },
         },
@@ -571,7 +577,7 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > cdk.tf
       "root_b2_26383A0E": {
         "//": {
           "metadata": {
-            "path": "root/b2/Default",
+            "path": "root/Default/b2/Default",
             "uniqueId": "root_b2_26383A0E",
           },
         },
@@ -580,7 +586,7 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > cdk.tf
       "root_test_Code_2D131EC2": {
         "//": {
           "metadata": {
-            "path": "root/test/Code",
+            "path": "root/Default/test/Code",
             "uniqueId": "root_test_Code_2D131EC2",
           },
         },
@@ -591,7 +597,7 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > cdk.tf
       "root_b1_PublicAccessBlock_8B468FE2": {
         "//": {
           "metadata": {
-            "path": "root/b1/PublicAccessBlock",
+            "path": "root/Default/b1/PublicAccessBlock",
             "uniqueId": "root_b1_PublicAccessBlock_8B468FE2",
           },
         },
@@ -604,7 +610,7 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > cdk.tf
       "root_b2_PublicAccessBlock_665E72FF": {
         "//": {
           "metadata": {
-            "path": "root/b2/PublicAccessBlock",
+            "path": "root/Default/b2/PublicAccessBlock",
             "uniqueId": "root_b2_PublicAccessBlock_665E72FF",
           },
         },
@@ -619,7 +625,7 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > cdk.tf
       "root_b1_Encryption_98BA3084": {
         "//": {
           "metadata": {
-            "path": "root/b1/Encryption",
+            "path": "root/Default/b1/Encryption",
             "uniqueId": "root_b1_Encryption_98BA3084",
           },
         },
@@ -635,7 +641,7 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > cdk.tf
       "root_b2_Encryption_096FF85A": {
         "//": {
           "metadata": {
-            "path": "root/b2/Encryption",
+            "path": "root/Default/b2/Encryption",
             "uniqueId": "root_b2_Encryption_096FF85A",
           },
         },
@@ -653,7 +659,7 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > cdk.tf
       "root_test_S3Object_A16CD789": {
         "//": {
           "metadata": {
-            "path": "root/test/S3Object",
+            "path": "root/Default/test/S3Object",
             "uniqueId": "root_test_S3Object_A16CD789",
           },
         },
@@ -706,8 +712,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -758,7 +766,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > cdk.tf.json 1`] = `
       "root_test_IamRole_6CDC2D16": {
         "//": {
           "metadata": {
-            "path": "root/test/IamRole",
+            "path": "root/Default/test/IamRole",
             "uniqueId": "root_test_IamRole_6CDC2D16",
           },
         },
@@ -769,7 +777,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > cdk.tf.json 1`] = `
       "root_test_IamRolePolicy_474A6820": {
         "//": {
           "metadata": {
-            "path": "root/test/IamRolePolicy",
+            "path": "root/Default/test/IamRolePolicy",
             "uniqueId": "root_test_IamRolePolicy_474A6820",
           },
         },
@@ -781,7 +789,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > cdk.tf.json 1`] = `
       "root_test_IamRolePolicyAttachment_1102A28A": {
         "//": {
           "metadata": {
-            "path": "root/test/IamRolePolicyAttachment",
+            "path": "root/Default/test/IamRolePolicyAttachment",
             "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
           },
         },
@@ -793,7 +801,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > cdk.tf.json 1`] = `
       "root_test_AAE85061": {
         "//": {
           "metadata": {
-            "path": "root/test/Default",
+            "path": "root/Default/test/Default",
             "uniqueId": "root_test_AAE85061",
           },
         },
@@ -816,7 +824,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > cdk.tf.json 1`] = `
       "root_cloudBucket_4F3C4F53": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/Default",
+            "path": "root/Default/cloud.Bucket/Default",
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
@@ -825,7 +833,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > cdk.tf.json 1`] = `
       "root_test_Code_2D131EC2": {
         "//": {
           "metadata": {
-            "path": "root/test/Code",
+            "path": "root/Default/test/Code",
             "uniqueId": "root_test_Code_2D131EC2",
           },
         },
@@ -836,7 +844,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > cdk.tf.json 1`] = `
       "root_cloudBucket_PublicAccessBlock_319C1C2E": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/PublicAccessBlock",
+            "path": "root/Default/cloud.Bucket/PublicAccessBlock",
             "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
           },
         },
@@ -851,7 +859,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > cdk.tf.json 1`] = `
       "root_cloudBucket_Encryption_8ED0CD9C": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/Encryption",
+            "path": "root/Default/cloud.Bucket/Encryption",
             "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
           },
         },
@@ -869,7 +877,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > cdk.tf.json 1`] = `
       "root_test_S3Object_A16CD789": {
         "//": {
           "metadata": {
-            "path": "root/test/S3Object",
+            "path": "root/Default/test/S3Object",
             "uniqueId": "root_test_S3Object_A16CD789",
           },
         },
@@ -916,8 +924,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -971,7 +981,7 @@ exports[`wing compile --target tf-aws capture_primitives.w > cdk.tf.json 1`] = `
       "root_cloudFunction_IamRole_DAEC3578": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/IamRole",
+            "path": "root/Default/cloud.Function/IamRole",
             "uniqueId": "root_cloudFunction_IamRole_DAEC3578",
           },
         },
@@ -982,7 +992,7 @@ exports[`wing compile --target tf-aws capture_primitives.w > cdk.tf.json 1`] = `
       "root_cloudFunction_IamRolePolicy_AAE6C0C0": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/IamRolePolicy",
+            "path": "root/Default/cloud.Function/IamRolePolicy",
             "uniqueId": "root_cloudFunction_IamRolePolicy_AAE6C0C0",
           },
         },
@@ -994,7 +1004,7 @@ exports[`wing compile --target tf-aws capture_primitives.w > cdk.tf.json 1`] = `
       "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/IamRolePolicyAttachment",
+            "path": "root/Default/cloud.Function/IamRolePolicyAttachment",
             "uniqueId": "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C",
           },
         },
@@ -1006,7 +1016,7 @@ exports[`wing compile --target tf-aws capture_primitives.w > cdk.tf.json 1`] = `
       "root_cloudFunction_6A57BA0A": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/Default",
+            "path": "root/Default/cloud.Function/Default",
             "uniqueId": "root_cloudFunction_6A57BA0A",
           },
         },
@@ -1028,7 +1038,7 @@ exports[`wing compile --target tf-aws capture_primitives.w > cdk.tf.json 1`] = `
       "root_cloudFunction_Code_2F6A7948": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/Code",
+            "path": "root/Default/cloud.Function/Code",
             "uniqueId": "root_cloudFunction_Code_2F6A7948",
           },
         },
@@ -1039,7 +1049,7 @@ exports[`wing compile --target tf-aws capture_primitives.w > cdk.tf.json 1`] = `
       "root_cloudFunction_S3Object_C8435368": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/S3Object",
+            "path": "root/Default/cloud.Function/S3Object",
             "uniqueId": "root_cloudFunction_S3Object_C8435368",
           },
         },
@@ -1097,8 +1107,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -1154,7 +1166,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > cdk.tf.json 
       "root_test_IamRole_6CDC2D16": {
         "//": {
           "metadata": {
-            "path": "root/test/IamRole",
+            "path": "root/Default/test/IamRole",
             "uniqueId": "root_test_IamRole_6CDC2D16",
           },
         },
@@ -1165,7 +1177,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > cdk.tf.json 
       "root_test_IamRolePolicy_474A6820": {
         "//": {
           "metadata": {
-            "path": "root/test/IamRolePolicy",
+            "path": "root/Default/test/IamRolePolicy",
             "uniqueId": "root_test_IamRolePolicy_474A6820",
           },
         },
@@ -1177,7 +1189,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > cdk.tf.json 
       "root_test_IamRolePolicyAttachment_1102A28A": {
         "//": {
           "metadata": {
-            "path": "root/test/IamRolePolicyAttachment",
+            "path": "root/Default/test/IamRolePolicyAttachment",
             "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
           },
         },
@@ -1189,7 +1201,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > cdk.tf.json 
       "root_test_AAE85061": {
         "//": {
           "metadata": {
-            "path": "root/test/Default",
+            "path": "root/Default/test/Default",
             "uniqueId": "root_test_AAE85061",
           },
         },
@@ -1213,7 +1225,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > cdk.tf.json 
       "root_cloudBucket_4F3C4F53": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/Default",
+            "path": "root/Default/cloud.Bucket/Default",
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
@@ -1222,7 +1234,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > cdk.tf.json 
       "root_test_Code_2D131EC2": {
         "//": {
           "metadata": {
-            "path": "root/test/Code",
+            "path": "root/Default/test/Code",
             "uniqueId": "root_test_Code_2D131EC2",
           },
         },
@@ -1233,7 +1245,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > cdk.tf.json 
       "root_cloudBucket_PublicAccessBlock_319C1C2E": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/PublicAccessBlock",
+            "path": "root/Default/cloud.Bucket/PublicAccessBlock",
             "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
           },
         },
@@ -1248,7 +1260,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > cdk.tf.json 
       "root_cloudBucket_Encryption_8ED0CD9C": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/Encryption",
+            "path": "root/Default/cloud.Bucket/Encryption",
             "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
           },
         },
@@ -1266,7 +1278,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > cdk.tf.json 
       "root_test_S3Object_A16CD789": {
         "//": {
           "metadata": {
-            "path": "root/test/S3Object",
+            "path": "root/Default/test/S3Object",
             "uniqueId": "root_test_S3Object_A16CD789",
           },
         },
@@ -1314,8 +1326,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -1374,7 +1388,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_AnotherFunction_IamRole_09A4D8EF": {
         "//": {
           "metadata": {
-            "path": "root/AnotherFunction/IamRole",
+            "path": "root/Default/AnotherFunction/IamRole",
             "uniqueId": "root_AnotherFunction_IamRole_09A4D8EF",
           },
         },
@@ -1383,7 +1397,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_cloudFunction_IamRole_DAEC3578": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/IamRole",
+            "path": "root/Default/cloud.Function/IamRole",
             "uniqueId": "root_cloudFunction_IamRole_DAEC3578",
           },
         },
@@ -1392,7 +1406,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_IamRole_D8F85094": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/IamRole",
+            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/IamRole",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_IamRole_D8F85094",
           },
         },
@@ -1403,7 +1417,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_AnotherFunction_IamRolePolicy_5B37F663": {
         "//": {
           "metadata": {
-            "path": "root/AnotherFunction/IamRolePolicy",
+            "path": "root/Default/AnotherFunction/IamRolePolicy",
             "uniqueId": "root_AnotherFunction_IamRolePolicy_5B37F663",
           },
         },
@@ -1413,7 +1427,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_cloudFunction_IamRolePolicy_AAE6C0C0": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/IamRolePolicy",
+            "path": "root/Default/cloud.Function/IamRolePolicy",
             "uniqueId": "root_cloudFunction_IamRolePolicy_AAE6C0C0",
           },
         },
@@ -1423,7 +1437,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_IamRolePolicy_99F6B872": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/IamRolePolicy",
+            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/IamRolePolicy",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_IamRolePolicy_99F6B872",
           },
         },
@@ -1435,7 +1449,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_AnotherFunction_IamRolePolicyAttachment_8AF040CB": {
         "//": {
           "metadata": {
-            "path": "root/AnotherFunction/IamRolePolicyAttachment",
+            "path": "root/Default/AnotherFunction/IamRolePolicyAttachment",
             "uniqueId": "root_AnotherFunction_IamRolePolicyAttachment_8AF040CB",
           },
         },
@@ -1445,7 +1459,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/IamRolePolicyAttachment",
+            "path": "root/Default/cloud.Function/IamRolePolicyAttachment",
             "uniqueId": "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C",
           },
         },
@@ -1455,7 +1469,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_IamRolePolicyAttachment_D3D5C118": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/IamRolePolicyAttachment",
+            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/IamRolePolicyAttachment",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_IamRolePolicyAttachment_D3D5C118",
           },
         },
@@ -1467,7 +1481,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_cloudQueue_EventSourceMapping_A2041279": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue/EventSourceMapping",
+            "path": "root/Default/cloud.Queue/EventSourceMapping",
             "uniqueId": "root_cloudQueue_EventSourceMapping_A2041279",
           },
         },
@@ -1480,7 +1494,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_AnotherFunction_1D5A4455": {
         "//": {
           "metadata": {
-            "path": "root/AnotherFunction/Default",
+            "path": "root/Default/AnotherFunction/Default",
             "uniqueId": "root_AnotherFunction_1D5A4455",
           },
         },
@@ -1503,7 +1517,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_cloudFunction_6A57BA0A": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/Default",
+            "path": "root/Default/cloud.Function/Default",
             "uniqueId": "root_cloudFunction_6A57BA0A",
           },
         },
@@ -1526,7 +1540,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_C394DE2A": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/Default",
+            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/Default",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_C394DE2A",
           },
         },
@@ -1551,7 +1565,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_AnotherFunction_Code_B0183137": {
         "//": {
           "metadata": {
-            "path": "root/AnotherFunction/Code",
+            "path": "root/Default/AnotherFunction/Code",
             "uniqueId": "root_AnotherFunction_Code_B0183137",
           },
         },
@@ -1560,7 +1574,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_PrivateBucket_82B4DCC5": {
         "//": {
           "metadata": {
-            "path": "root/PrivateBucket/Default",
+            "path": "root/Default/PrivateBucket/Default",
             "uniqueId": "root_PrivateBucket_82B4DCC5",
           },
         },
@@ -1569,7 +1583,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_PublicBucket_73AE6C59": {
         "//": {
           "metadata": {
-            "path": "root/PublicBucket/Default",
+            "path": "root/Default/PublicBucket/Default",
             "uniqueId": "root_PublicBucket_73AE6C59",
           },
         },
@@ -1578,7 +1592,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_cloudBucket_4F3C4F53": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/Default",
+            "path": "root/Default/cloud.Bucket/Default",
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
@@ -1587,7 +1601,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_cloudFunction_Code_2F6A7948": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/Code",
+            "path": "root/Default/cloud.Function/Code",
             "uniqueId": "root_cloudFunction_Code_2F6A7948",
           },
         },
@@ -1596,7 +1610,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/Code",
+            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/Code",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0",
           },
         },
@@ -1607,7 +1621,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_PublicBucket_PublicPolicy_98DDAE96": {
         "//": {
           "metadata": {
-            "path": "root/PublicBucket/PublicPolicy",
+            "path": "root/Default/PublicBucket/PublicPolicy",
             "uniqueId": "root_PublicBucket_PublicPolicy_98DDAE96",
           },
         },
@@ -1619,7 +1633,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_PrivateBucket_PublicAccessBlock_DB813250": {
         "//": {
           "metadata": {
-            "path": "root/PrivateBucket/PublicAccessBlock",
+            "path": "root/Default/PrivateBucket/PublicAccessBlock",
             "uniqueId": "root_PrivateBucket_PublicAccessBlock_DB813250",
           },
         },
@@ -1632,7 +1646,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_cloudBucket_PublicAccessBlock_319C1C2E": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/PublicAccessBlock",
+            "path": "root/Default/cloud.Bucket/PublicAccessBlock",
             "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
           },
         },
@@ -1647,7 +1661,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_PrivateBucket_Encryption_F9F2144A": {
         "//": {
           "metadata": {
-            "path": "root/PrivateBucket/Encryption",
+            "path": "root/Default/PrivateBucket/Encryption",
             "uniqueId": "root_PrivateBucket_Encryption_F9F2144A",
           },
         },
@@ -1663,7 +1677,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_PublicBucket_Encryption_FB9A8400": {
         "//": {
           "metadata": {
-            "path": "root/PublicBucket/Encryption",
+            "path": "root/Default/PublicBucket/Encryption",
             "uniqueId": "root_PublicBucket_Encryption_FB9A8400",
           },
         },
@@ -1679,7 +1693,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_cloudBucket_Encryption_8ED0CD9C": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/Encryption",
+            "path": "root/Default/cloud.Bucket/Encryption",
             "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
           },
         },
@@ -1697,7 +1711,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
       "root_AnotherFunction_S3Object_5AD7E879": {
         "//": {
           "metadata": {
-            "path": "root/AnotherFunction/S3Object",
+            "path": "root/Default/AnotherFunction/S3Object",
             "uniqueId": "root_AnotherFunction_S3Object_5AD7E879",
           },
         },
@@ -1745,8 +1759,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -1813,7 +1829,7 @@ exports[`wing compile --target tf-aws container_types.w > cdk.tf.json 1`] = `
       "root_bucket1_3A77B9B4": {
         "//": {
           "metadata": {
-            "path": "root/bucket1/Default",
+            "path": "root/Default/bucket1/Default",
             "uniqueId": "root_bucket1_3A77B9B4",
           },
         },
@@ -1822,7 +1838,7 @@ exports[`wing compile --target tf-aws container_types.w > cdk.tf.json 1`] = `
       "root_bucket2_E39F70EE": {
         "//": {
           "metadata": {
-            "path": "root/bucket2/Default",
+            "path": "root/Default/bucket2/Default",
             "uniqueId": "root_bucket2_E39F70EE",
           },
         },
@@ -1831,7 +1847,7 @@ exports[`wing compile --target tf-aws container_types.w > cdk.tf.json 1`] = `
       "root_bucket3_A0C568EA": {
         "//": {
           "metadata": {
-            "path": "root/bucket3/Default",
+            "path": "root/Default/bucket3/Default",
             "uniqueId": "root_bucket3_A0C568EA",
           },
         },
@@ -1842,7 +1858,7 @@ exports[`wing compile --target tf-aws container_types.w > cdk.tf.json 1`] = `
       "root_bucket1_PublicAccessBlock_6C5071C0": {
         "//": {
           "metadata": {
-            "path": "root/bucket1/PublicAccessBlock",
+            "path": "root/Default/bucket1/PublicAccessBlock",
             "uniqueId": "root_bucket1_PublicAccessBlock_6C5071C0",
           },
         },
@@ -1855,7 +1871,7 @@ exports[`wing compile --target tf-aws container_types.w > cdk.tf.json 1`] = `
       "root_bucket2_PublicAccessBlock_BC328E84": {
         "//": {
           "metadata": {
-            "path": "root/bucket2/PublicAccessBlock",
+            "path": "root/Default/bucket2/PublicAccessBlock",
             "uniqueId": "root_bucket2_PublicAccessBlock_BC328E84",
           },
         },
@@ -1868,7 +1884,7 @@ exports[`wing compile --target tf-aws container_types.w > cdk.tf.json 1`] = `
       "root_bucket3_PublicAccessBlock_CF2593D4": {
         "//": {
           "metadata": {
-            "path": "root/bucket3/PublicAccessBlock",
+            "path": "root/Default/bucket3/PublicAccessBlock",
             "uniqueId": "root_bucket3_PublicAccessBlock_CF2593D4",
           },
         },
@@ -1883,7 +1899,7 @@ exports[`wing compile --target tf-aws container_types.w > cdk.tf.json 1`] = `
       "root_bucket1_Encryption_33CABC1A": {
         "//": {
           "metadata": {
-            "path": "root/bucket1/Encryption",
+            "path": "root/Default/bucket1/Encryption",
             "uniqueId": "root_bucket1_Encryption_33CABC1A",
           },
         },
@@ -1899,7 +1915,7 @@ exports[`wing compile --target tf-aws container_types.w > cdk.tf.json 1`] = `
       "root_bucket2_Encryption_A83E82F9": {
         "//": {
           "metadata": {
-            "path": "root/bucket2/Encryption",
+            "path": "root/Default/bucket2/Encryption",
             "uniqueId": "root_bucket2_Encryption_A83E82F9",
           },
         },
@@ -1915,7 +1931,7 @@ exports[`wing compile --target tf-aws container_types.w > cdk.tf.json 1`] = `
       "root_bucket3_Encryption_A2A51E22": {
         "//": {
           "metadata": {
-            "path": "root/bucket3/Encryption",
+            "path": "root/Default/bucket3/Encryption",
             "uniqueId": "root_bucket3_Encryption_A2A51E22",
           },
         },
@@ -1960,8 +1976,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -2097,8 +2115,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -2167,8 +2187,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -2236,8 +2258,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -2280,7 +2304,7 @@ exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
       "root_cloudCounter_E0AC1263": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Counter/Default",
+            "path": "root/Default/cloud.Counter/Default",
             "uniqueId": "root_cloudCounter_E0AC1263",
           },
         },
@@ -2299,7 +2323,7 @@ exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_IamRole_D8F85094": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/IamRole",
+            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/IamRole",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_IamRole_D8F85094",
           },
         },
@@ -2310,7 +2334,7 @@ exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_IamRolePolicy_99F6B872": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/IamRolePolicy",
+            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/IamRolePolicy",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_IamRolePolicy_99F6B872",
           },
         },
@@ -2322,7 +2346,7 @@ exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_IamRolePolicyAttachment_D3D5C118": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/IamRolePolicyAttachment",
+            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/IamRolePolicyAttachment",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_IamRolePolicyAttachment_D3D5C118",
           },
         },
@@ -2334,7 +2358,7 @@ exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
       "root_cloudQueue_EventSourceMapping_A2041279": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue/EventSourceMapping",
+            "path": "root/Default/cloud.Queue/EventSourceMapping",
             "uniqueId": "root_cloudQueue_EventSourceMapping_A2041279",
           },
         },
@@ -2347,7 +2371,7 @@ exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_C394DE2A": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/Default",
+            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/Default",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_C394DE2A",
           },
         },
@@ -2371,7 +2395,7 @@ exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
       "root_cloudBucket_4F3C4F53": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/Default",
+            "path": "root/Default/cloud.Bucket/Default",
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
@@ -2380,7 +2404,7 @@ exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/Code",
+            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/Code",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0",
           },
         },
@@ -2391,7 +2415,7 @@ exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
       "root_cloudBucket_PublicAccessBlock_319C1C2E": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/PublicAccessBlock",
+            "path": "root/Default/cloud.Bucket/PublicAccessBlock",
             "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
           },
         },
@@ -2406,7 +2430,7 @@ exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
       "root_cloudBucket_Encryption_8ED0CD9C": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/Encryption",
+            "path": "root/Default/cloud.Bucket/Encryption",
             "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
           },
         },
@@ -2424,7 +2448,7 @@ exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/S3Object",
+            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/S3Object",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B",
           },
         },
@@ -2471,8 +2495,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -2554,8 +2580,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -2609,7 +2637,7 @@ exports[`wing compile --target tf-aws hello.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_IamRole_D8F85094": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/IamRole",
+            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/IamRole",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_IamRole_D8F85094",
           },
         },
@@ -2620,7 +2648,7 @@ exports[`wing compile --target tf-aws hello.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_IamRolePolicy_99F6B872": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/IamRolePolicy",
+            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/IamRolePolicy",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_IamRolePolicy_99F6B872",
           },
         },
@@ -2632,7 +2660,7 @@ exports[`wing compile --target tf-aws hello.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_IamRolePolicyAttachment_D3D5C118": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/IamRolePolicyAttachment",
+            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/IamRolePolicyAttachment",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_IamRolePolicyAttachment_D3D5C118",
           },
         },
@@ -2644,7 +2672,7 @@ exports[`wing compile --target tf-aws hello.w > cdk.tf.json 1`] = `
       "root_cloudQueue_EventSourceMapping_A2041279": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue/EventSourceMapping",
+            "path": "root/Default/cloud.Queue/EventSourceMapping",
             "uniqueId": "root_cloudQueue_EventSourceMapping_A2041279",
           },
         },
@@ -2657,7 +2685,7 @@ exports[`wing compile --target tf-aws hello.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_C394DE2A": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/Default",
+            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/Default",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_C394DE2A",
           },
         },
@@ -2680,7 +2708,7 @@ exports[`wing compile --target tf-aws hello.w > cdk.tf.json 1`] = `
       "root_cloudBucket_4F3C4F53": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/Default",
+            "path": "root/Default/cloud.Bucket/Default",
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
@@ -2689,7 +2717,7 @@ exports[`wing compile --target tf-aws hello.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/Code",
+            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/Code",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0",
           },
         },
@@ -2700,7 +2728,7 @@ exports[`wing compile --target tf-aws hello.w > cdk.tf.json 1`] = `
       "root_cloudBucket_PublicAccessBlock_319C1C2E": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/PublicAccessBlock",
+            "path": "root/Default/cloud.Bucket/PublicAccessBlock",
             "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
           },
         },
@@ -2715,7 +2743,7 @@ exports[`wing compile --target tf-aws hello.w > cdk.tf.json 1`] = `
       "root_cloudBucket_Encryption_8ED0CD9C": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/Encryption",
+            "path": "root/Default/cloud.Bucket/Encryption",
             "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
           },
         },
@@ -2733,7 +2761,7 @@ exports[`wing compile --target tf-aws hello.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/S3Object",
+            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/S3Object",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B",
           },
         },
@@ -2779,8 +2807,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -2862,8 +2892,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -2913,7 +2945,7 @@ exports[`wing compile --target tf-aws mut_container_types.w > cdk.tf.json 1`] = 
       "root_bucket1_3A77B9B4": {
         "//": {
           "metadata": {
-            "path": "root/bucket1/Default",
+            "path": "root/Default/bucket1/Default",
             "uniqueId": "root_bucket1_3A77B9B4",
           },
         },
@@ -2922,7 +2954,7 @@ exports[`wing compile --target tf-aws mut_container_types.w > cdk.tf.json 1`] = 
       "root_bucket2_E39F70EE": {
         "//": {
           "metadata": {
-            "path": "root/bucket2/Default",
+            "path": "root/Default/bucket2/Default",
             "uniqueId": "root_bucket2_E39F70EE",
           },
         },
@@ -2931,7 +2963,7 @@ exports[`wing compile --target tf-aws mut_container_types.w > cdk.tf.json 1`] = 
       "root_bucket3_A0C568EA": {
         "//": {
           "metadata": {
-            "path": "root/bucket3/Default",
+            "path": "root/Default/bucket3/Default",
             "uniqueId": "root_bucket3_A0C568EA",
           },
         },
@@ -2942,7 +2974,7 @@ exports[`wing compile --target tf-aws mut_container_types.w > cdk.tf.json 1`] = 
       "root_bucket1_PublicAccessBlock_6C5071C0": {
         "//": {
           "metadata": {
-            "path": "root/bucket1/PublicAccessBlock",
+            "path": "root/Default/bucket1/PublicAccessBlock",
             "uniqueId": "root_bucket1_PublicAccessBlock_6C5071C0",
           },
         },
@@ -2955,7 +2987,7 @@ exports[`wing compile --target tf-aws mut_container_types.w > cdk.tf.json 1`] = 
       "root_bucket2_PublicAccessBlock_BC328E84": {
         "//": {
           "metadata": {
-            "path": "root/bucket2/PublicAccessBlock",
+            "path": "root/Default/bucket2/PublicAccessBlock",
             "uniqueId": "root_bucket2_PublicAccessBlock_BC328E84",
           },
         },
@@ -2968,7 +3000,7 @@ exports[`wing compile --target tf-aws mut_container_types.w > cdk.tf.json 1`] = 
       "root_bucket3_PublicAccessBlock_CF2593D4": {
         "//": {
           "metadata": {
-            "path": "root/bucket3/PublicAccessBlock",
+            "path": "root/Default/bucket3/PublicAccessBlock",
             "uniqueId": "root_bucket3_PublicAccessBlock_CF2593D4",
           },
         },
@@ -2983,7 +3015,7 @@ exports[`wing compile --target tf-aws mut_container_types.w > cdk.tf.json 1`] = 
       "root_bucket1_Encryption_33CABC1A": {
         "//": {
           "metadata": {
-            "path": "root/bucket1/Encryption",
+            "path": "root/Default/bucket1/Encryption",
             "uniqueId": "root_bucket1_Encryption_33CABC1A",
           },
         },
@@ -2999,7 +3031,7 @@ exports[`wing compile --target tf-aws mut_container_types.w > cdk.tf.json 1`] = 
       "root_bucket2_Encryption_A83E82F9": {
         "//": {
           "metadata": {
-            "path": "root/bucket2/Encryption",
+            "path": "root/Default/bucket2/Encryption",
             "uniqueId": "root_bucket2_Encryption_A83E82F9",
           },
         },
@@ -3015,7 +3047,7 @@ exports[`wing compile --target tf-aws mut_container_types.w > cdk.tf.json 1`] = 
       "root_bucket3_Encryption_A2A51E22": {
         "//": {
           "metadata": {
-            "path": "root/bucket3/Encryption",
+            "path": "root/Default/bucket3/Encryption",
             "uniqueId": "root_bucket3_Encryption_A2A51E22",
           },
         },
@@ -3060,8 +3092,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -3153,8 +3187,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -3196,7 +3232,7 @@ exports[`wing compile --target tf-aws print.w > cdk.tf.json 1`] = `
       "root_cloudFunction_IamRole_DAEC3578": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/IamRole",
+            "path": "root/Default/cloud.Function/IamRole",
             "uniqueId": "root_cloudFunction_IamRole_DAEC3578",
           },
         },
@@ -3207,7 +3243,7 @@ exports[`wing compile --target tf-aws print.w > cdk.tf.json 1`] = `
       "root_cloudFunction_IamRolePolicy_AAE6C0C0": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/IamRolePolicy",
+            "path": "root/Default/cloud.Function/IamRolePolicy",
             "uniqueId": "root_cloudFunction_IamRolePolicy_AAE6C0C0",
           },
         },
@@ -3219,7 +3255,7 @@ exports[`wing compile --target tf-aws print.w > cdk.tf.json 1`] = `
       "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/IamRolePolicyAttachment",
+            "path": "root/Default/cloud.Function/IamRolePolicyAttachment",
             "uniqueId": "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C",
           },
         },
@@ -3231,7 +3267,7 @@ exports[`wing compile --target tf-aws print.w > cdk.tf.json 1`] = `
       "root_cloudFunction_6A57BA0A": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/Default",
+            "path": "root/Default/cloud.Function/Default",
             "uniqueId": "root_cloudFunction_6A57BA0A",
           },
         },
@@ -3253,7 +3289,7 @@ exports[`wing compile --target tf-aws print.w > cdk.tf.json 1`] = `
       "root_cloudBucket_4F3C4F53": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/Default",
+            "path": "root/Default/cloud.Bucket/Default",
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
@@ -3262,7 +3298,7 @@ exports[`wing compile --target tf-aws print.w > cdk.tf.json 1`] = `
       "root_cloudFunction_Code_2F6A7948": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/Code",
+            "path": "root/Default/cloud.Function/Code",
             "uniqueId": "root_cloudFunction_Code_2F6A7948",
           },
         },
@@ -3273,7 +3309,7 @@ exports[`wing compile --target tf-aws print.w > cdk.tf.json 1`] = `
       "root_cloudBucket_PublicAccessBlock_319C1C2E": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/PublicAccessBlock",
+            "path": "root/Default/cloud.Bucket/PublicAccessBlock",
             "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
           },
         },
@@ -3288,7 +3324,7 @@ exports[`wing compile --target tf-aws print.w > cdk.tf.json 1`] = `
       "root_cloudBucket_Encryption_8ED0CD9C": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/Encryption",
+            "path": "root/Default/cloud.Bucket/Encryption",
             "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
           },
         },
@@ -3306,7 +3342,7 @@ exports[`wing compile --target tf-aws print.w > cdk.tf.json 1`] = `
       "root_cloudFunction_S3Object_C8435368": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/S3Object",
+            "path": "root/Default/cloud.Function/S3Object",
             "uniqueId": "root_cloudFunction_S3Object_C8435368",
           },
         },
@@ -3351,8 +3387,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -3423,8 +3461,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -3513,8 +3553,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -3560,7 +3602,7 @@ exports[`wing compile --target tf-aws statements_if.w > cdk.tf.json 1`] = `
       "root_test_IamRole_6CDC2D16": {
         "//": {
           "metadata": {
-            "path": "root/test/IamRole",
+            "path": "root/Default/test/IamRole",
             "uniqueId": "root_test_IamRole_6CDC2D16",
           },
         },
@@ -3571,7 +3613,7 @@ exports[`wing compile --target tf-aws statements_if.w > cdk.tf.json 1`] = `
       "root_test_IamRolePolicy_474A6820": {
         "//": {
           "metadata": {
-            "path": "root/test/IamRolePolicy",
+            "path": "root/Default/test/IamRolePolicy",
             "uniqueId": "root_test_IamRolePolicy_474A6820",
           },
         },
@@ -3583,7 +3625,7 @@ exports[`wing compile --target tf-aws statements_if.w > cdk.tf.json 1`] = `
       "root_test_IamRolePolicyAttachment_1102A28A": {
         "//": {
           "metadata": {
-            "path": "root/test/IamRolePolicyAttachment",
+            "path": "root/Default/test/IamRolePolicyAttachment",
             "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
           },
         },
@@ -3595,7 +3637,7 @@ exports[`wing compile --target tf-aws statements_if.w > cdk.tf.json 1`] = `
       "root_test_AAE85061": {
         "//": {
           "metadata": {
-            "path": "root/test/Default",
+            "path": "root/Default/test/Default",
             "uniqueId": "root_test_AAE85061",
           },
         },
@@ -3617,7 +3659,7 @@ exports[`wing compile --target tf-aws statements_if.w > cdk.tf.json 1`] = `
       "root_test_Code_2D131EC2": {
         "//": {
           "metadata": {
-            "path": "root/test/Code",
+            "path": "root/Default/test/Code",
             "uniqueId": "root_test_Code_2D131EC2",
           },
         },
@@ -3628,7 +3670,7 @@ exports[`wing compile --target tf-aws statements_if.w > cdk.tf.json 1`] = `
       "root_test_S3Object_A16CD789": {
         "//": {
           "metadata": {
-            "path": "root/test/S3Object",
+            "path": "root/Default/test/S3Object",
             "uniqueId": "root_test_S3Object_A16CD789",
           },
         },
@@ -3688,8 +3730,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -3777,8 +3821,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -3848,8 +3894,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -3896,7 +3944,7 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
       "root_testget_IamRole_DD77F38A": {
         "//": {
           "metadata": {
-            "path": "root/test:get/IamRole",
+            "path": "root/Default/test:get/IamRole",
             "uniqueId": "root_testget_IamRole_DD77F38A",
           },
         },
@@ -3905,7 +3953,7 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
       "root_testput_IamRole_1BBF32A6": {
         "//": {
           "metadata": {
-            "path": "root/test:put/IamRole",
+            "path": "root/Default/test:put/IamRole",
             "uniqueId": "root_testput_IamRole_1BBF32A6",
           },
         },
@@ -3916,7 +3964,7 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
       "root_testget_IamRolePolicy_2CFB696B": {
         "//": {
           "metadata": {
-            "path": "root/test:get/IamRolePolicy",
+            "path": "root/Default/test:get/IamRolePolicy",
             "uniqueId": "root_testget_IamRolePolicy_2CFB696B",
           },
         },
@@ -3926,7 +3974,7 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
       "root_testput_IamRolePolicy_98659F09": {
         "//": {
           "metadata": {
-            "path": "root/test:put/IamRolePolicy",
+            "path": "root/Default/test:put/IamRolePolicy",
             "uniqueId": "root_testput_IamRolePolicy_98659F09",
           },
         },
@@ -3938,7 +3986,7 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
       "root_testget_IamRolePolicyAttachment_1BD905A8": {
         "//": {
           "metadata": {
-            "path": "root/test:get/IamRolePolicyAttachment",
+            "path": "root/Default/test:get/IamRolePolicyAttachment",
             "uniqueId": "root_testget_IamRolePolicyAttachment_1BD905A8",
           },
         },
@@ -3948,7 +3996,7 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
       "root_testput_IamRolePolicyAttachment_E73FB6BB": {
         "//": {
           "metadata": {
-            "path": "root/test:put/IamRolePolicyAttachment",
+            "path": "root/Default/test:put/IamRolePolicyAttachment",
             "uniqueId": "root_testput_IamRolePolicyAttachment_E73FB6BB",
           },
         },
@@ -3960,7 +4008,7 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
       "root_testget_D2443E25": {
         "//": {
           "metadata": {
-            "path": "root/test:get/Default",
+            "path": "root/Default/test:get/Default",
             "uniqueId": "root_testget_D2443E25",
           },
         },
@@ -3981,7 +4029,7 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
       "root_testput_449428F9": {
         "//": {
           "metadata": {
-            "path": "root/test:put/Default",
+            "path": "root/Default/test:put/Default",
             "uniqueId": "root_testput_449428F9",
           },
         },
@@ -4004,7 +4052,7 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
       "root_cloudBucket_4F3C4F53": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/Default",
+            "path": "root/Default/cloud.Bucket/Default",
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
@@ -4013,7 +4061,7 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
       "root_testget_Code_EC989716": {
         "//": {
           "metadata": {
-            "path": "root/test:get/Code",
+            "path": "root/Default/test:get/Code",
             "uniqueId": "root_testget_Code_EC989716",
           },
         },
@@ -4022,7 +4070,7 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
       "root_testput_Code_DE7653AD": {
         "//": {
           "metadata": {
-            "path": "root/test:put/Code",
+            "path": "root/Default/test:put/Code",
             "uniqueId": "root_testput_Code_DE7653AD",
           },
         },
@@ -4033,7 +4081,7 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
       "root_cloudBucket_PublicAccessBlock_319C1C2E": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/PublicAccessBlock",
+            "path": "root/Default/cloud.Bucket/PublicAccessBlock",
             "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
           },
         },
@@ -4048,7 +4096,7 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
       "root_cloudBucket_Encryption_8ED0CD9C": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Bucket/Encryption",
+            "path": "root/Default/cloud.Bucket/Encryption",
             "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
           },
         },
@@ -4066,7 +4114,7 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
       "root_testget_S3Object_071392B9": {
         "//": {
           "metadata": {
-            "path": "root/test:get/S3Object",
+            "path": "root/Default/test:get/S3Object",
             "uniqueId": "root_testget_S3Object_071392B9",
           },
         },
@@ -4120,8 +4168,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -4208,8 +4258,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -4252,7 +4304,7 @@ exports[`wing compile --target tf-aws while_loop_await.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessageb3f3d188_IamRole_2EDE9980": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-b3f3d188/IamRole",
+            "path": "root/Default/cloud.Queue-OnMessage-b3f3d188/IamRole",
             "uniqueId": "root_cloudQueueOnMessageb3f3d188_IamRole_2EDE9980",
           },
         },
@@ -4263,7 +4315,7 @@ exports[`wing compile --target tf-aws while_loop_await.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessageb3f3d188_IamRolePolicy_F06A54DE": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-b3f3d188/IamRolePolicy",
+            "path": "root/Default/cloud.Queue-OnMessage-b3f3d188/IamRolePolicy",
             "uniqueId": "root_cloudQueueOnMessageb3f3d188_IamRolePolicy_F06A54DE",
           },
         },
@@ -4275,7 +4327,7 @@ exports[`wing compile --target tf-aws while_loop_await.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessageb3f3d188_IamRolePolicyAttachment_6D0B5E93": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-b3f3d188/IamRolePolicyAttachment",
+            "path": "root/Default/cloud.Queue-OnMessage-b3f3d188/IamRolePolicyAttachment",
             "uniqueId": "root_cloudQueueOnMessageb3f3d188_IamRolePolicyAttachment_6D0B5E93",
           },
         },
@@ -4287,7 +4339,7 @@ exports[`wing compile --target tf-aws while_loop_await.w > cdk.tf.json 1`] = `
       "root_cloudQueue_EventSourceMapping_A2041279": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue/EventSourceMapping",
+            "path": "root/Default/cloud.Queue/EventSourceMapping",
             "uniqueId": "root_cloudQueue_EventSourceMapping_A2041279",
           },
         },
@@ -4300,7 +4352,7 @@ exports[`wing compile --target tf-aws while_loop_await.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessageb3f3d188_29346340": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-b3f3d188/Default",
+            "path": "root/Default/cloud.Queue-OnMessage-b3f3d188/Default",
             "uniqueId": "root_cloudQueueOnMessageb3f3d188_29346340",
           },
         },
@@ -4322,7 +4374,7 @@ exports[`wing compile --target tf-aws while_loop_await.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessageb3f3d188_Code_4D451A84": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-b3f3d188/Code",
+            "path": "root/Default/cloud.Queue-OnMessage-b3f3d188/Code",
             "uniqueId": "root_cloudQueueOnMessageb3f3d188_Code_4D451A84",
           },
         },
@@ -4333,7 +4385,7 @@ exports[`wing compile --target tf-aws while_loop_await.w > cdk.tf.json 1`] = `
       "root_cloudQueueOnMessageb3f3d188_S3Object_18BDF7F0": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-b3f3d188/S3Object",
+            "path": "root/Default/cloud.Queue-OnMessage-b3f3d188/S3Object",
             "uniqueId": "root_cloudQueueOnMessageb3f3d188_S3Object_18BDF7F0",
           },
         },
@@ -4387,8 +4439,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}

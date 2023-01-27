@@ -6,7 +6,9 @@ test("throw error when no location provided", () => {
   const props = { outdir: mkdtemp(), location: undefined as any };
 
   // THEN
-  expect(() => new tfazure.App(props)).toThrow(Error);
+  expect(() => new tfazure.App(props)).toThrow(
+    /Location must be specified in the AZURE_LOCATION environment variable/
+  );
 });
 
 test("can read location from environment variable", () => {
@@ -17,6 +19,6 @@ test("can read location from environment variable", () => {
   let app: tfazure.App;
 
   // THEN
-  expect(() => (app = new tfazure.App(props))).not.toThrow(Error);
+  expect(() => (app = new tfazure.App(props))).not.toThrow();
   expect(app!.location).toEqual(expectedLocation);
 });

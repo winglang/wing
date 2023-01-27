@@ -1,5 +1,3 @@
-import * as cloud from "../cloud";
-import { ISimulatorFactory, ISimulatorContext } from "../testing/simulator";
 import { Bucket } from "./bucket.inflight";
 import { Counter } from "./counter.inflight";
 import { Function } from "./function.inflight";
@@ -7,6 +5,8 @@ import { Logger } from "./logger.inflight";
 import { Queue } from "./queue.inflight";
 import { ISimulatorResourceInstance } from "./resource";
 import { Topic } from "./topic.inflight";
+import * as cloud from "../cloud";
+import { ISimulatorFactory, ISimulatorContext } from "../testing/simulator";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
   public resolve(
