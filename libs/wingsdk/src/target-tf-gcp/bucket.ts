@@ -5,13 +5,17 @@ import { App } from "./app";
 import * as cloud from "../cloud";
 import * as core from "../core";
 
+/**
+ * GCP implementation of `cloud.Bucket`.
+ *
+ * @inflight `@winglang/sdk.cloud.IBucketClient`
+ */
 export class Bucket extends cloud.BucketBase {
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
 
-    // TODO: generate random string with terraform?
     const bucket = new StorageBucket(this, "Default", {
-      name: this.node.addr,
+      name: this.node.addr, // TODO
       location: App.of(this).region,
       publicAccessPrevention: props.public ? "enforced" : undefined,
     });

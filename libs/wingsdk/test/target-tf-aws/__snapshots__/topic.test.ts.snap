@@ -4,8 +4,8 @@ exports[`default topic behavior 1`] = `
 "{
   \\"resource\\": {
     \\"aws_sns_topic\\": {
-      \\"cdktfstack_wingapp_Topic_789A241A\\": {
-        \\"name\\": \\"Topic-c807d5c1\\"
+      \\"root_wingapp_Topic_8EC50AAA\\": {
+        \\"name\\": \\"Topic-c81a9fca\\"
       }
     }
   }
@@ -16,7 +16,7 @@ exports[`default topic behavior 2`] = `
 Object {
   "tree": Object {
     "children": Object {
-      "cdktf-stack": Object {
+      "root": Object {
         "children": Object {
           "backend": Object {
             "constructInfo": Object {
@@ -24,7 +24,7 @@ Object {
               "version": "0.15.1",
             },
             "id": "backend",
-            "path": "cdktf-stack/backend",
+            "path": "root/backend",
           },
           "wing-app": Object {
             "children": Object {
@@ -40,7 +40,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Default",
-                    "path": "cdktf-stack/wing-app/Topic/Default",
+                    "path": "root/wing-app/Topic/Default",
                   },
                 },
                 "constructInfo": Object {
@@ -52,7 +52,7 @@ Object {
                   "title": "Topic",
                 },
                 "id": "Topic",
-                "path": "cdktf-stack/wing-app/Topic",
+                "path": "root/wing-app/Topic",
               },
               "WingLogger": Object {
                 "attributes": Object {
@@ -69,7 +69,7 @@ Object {
                   "title": "Logger",
                 },
                 "id": "WingLogger",
-                "path": "cdktf-stack/wing-app/WingLogger",
+                "path": "root/wing-app/WingLogger",
               },
               "aws": Object {
                 "constructInfo": Object {
@@ -77,7 +77,7 @@ Object {
                   "version": "12.0.1",
                 },
                 "id": "aws",
-                "path": "cdktf-stack/wing-app/aws",
+                "path": "root/wing-app/aws",
               },
             },
             "constructInfo": Object {
@@ -85,15 +85,15 @@ Object {
               "version": "10.1.228",
             },
             "id": "wing-app",
-            "path": "cdktf-stack/wing-app",
+            "path": "root/wing-app",
           },
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
           "version": "0.15.1",
         },
-        "id": "cdktf-stack",
-        "path": "cdktf-stack",
+        "id": "root",
+        "path": "root",
       },
     },
     "constructInfo": Object {
@@ -111,8 +111,8 @@ exports[`replace invalid character from queue name 1`] = `
 "{
   \\"resource\\": {
     \\"aws_sns_topic\\": {
-      \\"cdktfstack_wingapp_TheSpectacularTopic_27718CB0\\": {
-        \\"name\\": \\"The-Spectacular-Topic-c8e7cc84\\"
+      \\"root_wingapp_TheSpectacularTopic_BD6C778C\\": {
+        \\"name\\": \\"The-Spectacular-Topic-c838837c\\"
       }
     }
   }
@@ -123,7 +123,7 @@ exports[`replace invalid character from queue name 2`] = `
 Object {
   "tree": Object {
     "children": Object {
-      "cdktf-stack": Object {
+      "root": Object {
         "children": Object {
           "backend": Object {
             "constructInfo": Object {
@@ -131,7 +131,7 @@ Object {
               "version": "0.15.1",
             },
             "id": "backend",
-            "path": "cdktf-stack/backend",
+            "path": "root/backend",
           },
           "wing-app": Object {
             "children": Object {
@@ -147,7 +147,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Default",
-                    "path": "cdktf-stack/wing-app/The%Spectacular@Topic/Default",
+                    "path": "root/wing-app/The%Spectacular@Topic/Default",
                   },
                 },
                 "constructInfo": Object {
@@ -159,7 +159,7 @@ Object {
                   "title": "Topic",
                 },
                 "id": "The%Spectacular@Topic",
-                "path": "cdktf-stack/wing-app/The%Spectacular@Topic",
+                "path": "root/wing-app/The%Spectacular@Topic",
               },
               "WingLogger": Object {
                 "attributes": Object {
@@ -176,7 +176,7 @@ Object {
                   "title": "Logger",
                 },
                 "id": "WingLogger",
-                "path": "cdktf-stack/wing-app/WingLogger",
+                "path": "root/wing-app/WingLogger",
               },
               "aws": Object {
                 "constructInfo": Object {
@@ -184,7 +184,7 @@ Object {
                   "version": "12.0.1",
                 },
                 "id": "aws",
-                "path": "cdktf-stack/wing-app/aws",
+                "path": "root/wing-app/aws",
               },
             },
             "constructInfo": Object {
@@ -192,15 +192,15 @@ Object {
               "version": "10.1.228",
             },
             "id": "wing-app",
-            "path": "cdktf-stack/wing-app",
+            "path": "root/wing-app",
           },
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
           "version": "0.15.1",
         },
-        "id": "cdktf-stack",
-        "path": "cdktf-stack",
+        "id": "root",
+        "path": "root",
       },
     },
     "constructInfo": Object {
@@ -218,8 +218,8 @@ exports[`topic name valid 1`] = `
 "{
   \\"resource\\": {
     \\"aws_sns_topic\\": {
-      \\"cdktfstack_wingapp_TheSpectacularTopic01_16C7F4E5\\": {
-        \\"name\\": \\"The-Spectacular_Topic-01-c8f8b85f\\"
+      \\"root_wingapp_TheSpectacularTopic01_CD8347C5\\": {
+        \\"name\\": \\"The-Spectacular_Topic-01-c8a66d45\\"
       }
     }
   }
@@ -230,7 +230,7 @@ exports[`topic name valid 2`] = `
 Object {
   "tree": Object {
     "children": Object {
-      "cdktf-stack": Object {
+      "root": Object {
         "children": Object {
           "backend": Object {
             "constructInfo": Object {
@@ -238,7 +238,7 @@ Object {
               "version": "0.15.1",
             },
             "id": "backend",
-            "path": "cdktf-stack/backend",
+            "path": "root/backend",
           },
           "wing-app": Object {
             "children": Object {
@@ -254,7 +254,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Default",
-                    "path": "cdktf-stack/wing-app/The-Spectacular_Topic-01/Default",
+                    "path": "root/wing-app/The-Spectacular_Topic-01/Default",
                   },
                 },
                 "constructInfo": Object {
@@ -266,7 +266,7 @@ Object {
                   "title": "Topic",
                 },
                 "id": "The-Spectacular_Topic-01",
-                "path": "cdktf-stack/wing-app/The-Spectacular_Topic-01",
+                "path": "root/wing-app/The-Spectacular_Topic-01",
               },
               "WingLogger": Object {
                 "attributes": Object {
@@ -283,7 +283,7 @@ Object {
                   "title": "Logger",
                 },
                 "id": "WingLogger",
-                "path": "cdktf-stack/wing-app/WingLogger",
+                "path": "root/wing-app/WingLogger",
               },
               "aws": Object {
                 "constructInfo": Object {
@@ -291,7 +291,7 @@ Object {
                   "version": "12.0.1",
                 },
                 "id": "aws",
-                "path": "cdktf-stack/wing-app/aws",
+                "path": "root/wing-app/aws",
               },
             },
             "constructInfo": Object {
@@ -299,15 +299,15 @@ Object {
               "version": "10.1.228",
             },
             "id": "wing-app",
-            "path": "cdktf-stack/wing-app",
+            "path": "root/wing-app",
           },
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
           "version": "0.15.1",
         },
-        "id": "cdktf-stack",
-        "path": "cdktf-stack",
+        "id": "root",
+        "path": "root",
       },
     },
     "constructInfo": Object {
@@ -340,67 +340,67 @@ exports[`topic with subscriber function 2`] = `
 "{
   \\"resource\\": {
     \\"aws_iam_role\\": {
-      \\"cdktfstack_wingapp_TopicOnMessage8621be90_IamRole_C701490B\\": {
+      \\"root_wingapp_TopicOnMessage8f4ea749_IamRole_7331E1EA\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"cdktfstack_wingapp_TopicOnMessage8621be90_IamRolePolicy_6A18152F\\": {
+      \\"root_wingapp_TopicOnMessage8f4ea749_IamRolePolicy_D704ADDD\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.cdktfstack_wingapp_TopicOnMessage8621be90_IamRole_C701490B.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_wingapp_TopicOnMessage8f4ea749_IamRole_7331E1EA.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"cdktfstack_wingapp_TopicOnMessage8621be90_IamRolePolicyAttachment_F3CEB772\\": {
+      \\"root_wingapp_TopicOnMessage8f4ea749_IamRolePolicyAttachment_1EBAA620\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.cdktfstack_wingapp_TopicOnMessage8621be90_IamRole_C701490B.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_wingapp_TopicOnMessage8f4ea749_IamRole_7331E1EA.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"cdktfstack_wingapp_TopicOnMessage8621be90_10C8BC2A\\": {
+      \\"root_wingapp_TopicOnMessage8f4ea749_4D25B8CA\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Topic-OnMessage-8621be90-c864c801\\"
+            \\"WING_FUNCTION_NAME\\": \\"Topic-OnMessage-8f4ea749-c81a0233\\"
           }
         },
-        \\"function_name\\": \\"Topic-OnMessage-8621be90-c864c801\\",
+        \\"function_name\\": \\"Topic-OnMessage-8f4ea749-c81a0233\\",
         \\"handler\\": \\"index.handler\\",
-        \\"role\\": \\"\${aws_iam_role.cdktfstack_wingapp_TopicOnMessage8621be90_IamRole_C701490B.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.root_wingapp_TopicOnMessage8f4ea749_IamRole_7331E1EA.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.cdktfstack_wingapp_TopicOnMessage8621be90_Code_F72E7EBD.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.cdktfstack_wingapp_TopicOnMessage8621be90_S3Object_2150CC2F.key}\\"
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_wingapp_TopicOnMessage8f4ea749_Code_941F5B40.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_wingapp_TopicOnMessage8f4ea749_S3Object_3FC00DD9.key}\\"
       }
     },
     \\"aws_lambda_permission\\": {
-      \\"cdktfstack_wingapp_Topic_TopicTopicInvokePermission8621be90_91CE319F\\": {
+      \\"root_wingapp_Topic_TopicTopicInvokePermission8f4ea749_DB8523D8\\": {
         \\"action\\": \\"lambda:InvokeFunction\\",
-        \\"function_name\\": \\"\${aws_lambda_function.cdktfstack_wingapp_TopicOnMessage8621be90_10C8BC2A.function_name}\\",
+        \\"function_name\\": \\"\${aws_lambda_function.root_wingapp_TopicOnMessage8f4ea749_4D25B8CA.function_name}\\",
         \\"principal\\": \\"sns.amazonaws.com\\",
-        \\"source_arn\\": \\"\${aws_sns_topic.cdktfstack_wingapp_Topic_789A241A.arn}\\"
+        \\"source_arn\\": \\"\${aws_sns_topic.root_wingapp_Topic_8EC50AAA.arn}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"cdktfstack_wingapp_TopicOnMessage8621be90_Code_F72E7EBD\\": {
-        \\"bucket_prefix\\": \\"code-c8719a88-\\"
+      \\"root_wingapp_TopicOnMessage8f4ea749_Code_941F5B40\\": {
+        \\"bucket_prefix\\": \\"code-c89a17ed-\\"
       }
     },
     \\"aws_s3_object\\": {
-      \\"cdktfstack_wingapp_TopicOnMessage8621be90_S3Object_2150CC2F\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.cdktfstack_wingapp_TopicOnMessage8621be90_Code_F72E7EBD.bucket}\\",
+      \\"root_wingapp_TopicOnMessage8f4ea749_S3Object_3FC00DD9\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_wingapp_TopicOnMessage8f4ea749_Code_941F5B40.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
     },
     \\"aws_sns_topic\\": {
-      \\"cdktfstack_wingapp_Topic_789A241A\\": {
-        \\"name\\": \\"Topic-c807d5c1\\"
+      \\"root_wingapp_Topic_8EC50AAA\\": {
+        \\"name\\": \\"Topic-c81a9fca\\"
       }
     },
     \\"aws_sns_topic_subscription\\": {
-      \\"cdktfstack_wingapp_Topic_TopicTopicSubscription8621be90_B613CBD7\\": {
-        \\"endpoint\\": \\"\${aws_lambda_function.cdktfstack_wingapp_TopicOnMessage8621be90_10C8BC2A.arn}\\",
+      \\"root_wingapp_Topic_TopicTopicSubscription8f4ea749_6445C614\\": {
+        \\"endpoint\\": \\"\${aws_lambda_function.root_wingapp_TopicOnMessage8f4ea749_4D25B8CA.arn}\\",
         \\"protocol\\": \\"lambda\\",
-        \\"topic_arn\\": \\"\${aws_sns_topic.cdktfstack_wingapp_Topic_789A241A.arn}\\"
+        \\"topic_arn\\": \\"\${aws_sns_topic.root_wingapp_Topic_8EC50AAA.arn}\\"
       }
     }
   }
@@ -411,7 +411,7 @@ exports[`topic with subscriber function 3`] = `
 Object {
   "tree": Object {
     "children": Object {
-      "cdktf-stack": Object {
+      "root": Object {
         "children": Object {
           "backend": Object {
             "constructInfo": Object {
@@ -419,7 +419,7 @@ Object {
               "version": "0.15.1",
             },
             "id": "backend",
-            "path": "cdktf-stack/backend",
+            "path": "root/backend",
           },
           "wing-app": Object {
             "children": Object {
@@ -430,7 +430,7 @@ Object {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
-                      "resource": "cdktf-stack/wing-app/Topic-OnMessage-8621be90",
+                      "resource": "root/wing-app/Topic-OnMessage-8f4ea749",
                     },
                   ],
                   "wing:resource:stateful": false,
@@ -445,7 +445,7 @@ Object {
                   "title": "Inflight",
                 },
                 "id": "Handler",
-                "path": "cdktf-stack/wing-app/Handler",
+                "path": "root/wing-app/Handler",
               },
               "Topic": Object {
                 "attributes": Object {
@@ -454,7 +454,7 @@ Object {
                       "direction": "outbound",
                       "implicit": false,
                       "relationship": "on_message",
-                      "resource": "cdktf-stack/wing-app/Topic-OnMessage-8621be90",
+                      "resource": "root/wing-app/Topic-OnMessage-8f4ea749",
                     },
                   ],
                   "wing:resource:stateful": true,
@@ -466,23 +466,23 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Default",
-                    "path": "cdktf-stack/wing-app/Topic/Default",
+                    "path": "root/wing-app/Topic/Default",
                   },
-                  "Topic-TopicInvokePermission-8621be90": Object {
+                  "Topic-TopicInvokePermission-8f4ea749": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
                       "version": "12.0.1",
                     },
-                    "id": "Topic-TopicInvokePermission-8621be90",
-                    "path": "cdktf-stack/wing-app/Topic/Topic-TopicInvokePermission-8621be90",
+                    "id": "Topic-TopicInvokePermission-8f4ea749",
+                    "path": "root/wing-app/Topic/Topic-TopicInvokePermission-8f4ea749",
                   },
-                  "Topic-TopicSubscription-8621be90": Object {
+                  "Topic-TopicSubscription-8f4ea749": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
                       "version": "12.0.1",
                     },
-                    "id": "Topic-TopicSubscription-8621be90",
-                    "path": "cdktf-stack/wing-app/Topic/Topic-TopicSubscription-8621be90",
+                    "id": "Topic-TopicSubscription-8f4ea749",
+                    "path": "root/wing-app/Topic/Topic-TopicSubscription-8f4ea749",
                   },
                 },
                 "constructInfo": Object {
@@ -494,28 +494,28 @@ Object {
                   "title": "Topic",
                 },
                 "id": "Topic",
-                "path": "cdktf-stack/wing-app/Topic",
+                "path": "root/wing-app/Topic",
               },
-              "Topic-OnMessage-8621be90": Object {
+              "Topic-OnMessage-8f4ea749": Object {
                 "attributes": Object {
                   "wing:resource:connections": Array [
                     Object {
                       "direction": "outbound",
                       "implicit": false,
                       "relationship": "handle",
-                      "resource": "cdktf-stack/wing-app/Handler",
+                      "resource": "root/wing-app/Handler",
                     },
                     Object {
                       "direction": "outbound",
                       "implicit": true,
                       "relationship": "print",
-                      "resource": "cdktf-stack/wing-app/WingLogger",
+                      "resource": "root/wing-app/WingLogger",
                     },
                     Object {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "on_message",
-                      "resource": "cdktf-stack/wing-app/Topic",
+                      "resource": "root/wing-app/Topic",
                     },
                   ],
                   "wing:resource:stateful": false,
@@ -527,7 +527,7 @@ Object {
                       "version": "0.15.1",
                     },
                     "id": "Asset",
-                    "path": "cdktf-stack/wing-app/Topic-OnMessage-8621be90/Asset",
+                    "path": "root/wing-app/Topic-OnMessage-8f4ea749/Asset",
                   },
                   "Code": Object {
                     "constructInfo": Object {
@@ -535,7 +535,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Code",
-                    "path": "cdktf-stack/wing-app/Topic-OnMessage-8621be90/Code",
+                    "path": "root/wing-app/Topic-OnMessage-8f4ea749/Code",
                   },
                   "Default": Object {
                     "constructInfo": Object {
@@ -543,7 +543,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Default",
-                    "path": "cdktf-stack/wing-app/Topic-OnMessage-8621be90/Default",
+                    "path": "root/wing-app/Topic-OnMessage-8f4ea749/Default",
                   },
                   "IamRole": Object {
                     "constructInfo": Object {
@@ -551,7 +551,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "IamRole",
-                    "path": "cdktf-stack/wing-app/Topic-OnMessage-8621be90/IamRole",
+                    "path": "root/wing-app/Topic-OnMessage-8f4ea749/IamRole",
                   },
                   "IamRolePolicy": Object {
                     "constructInfo": Object {
@@ -559,7 +559,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "IamRolePolicy",
-                    "path": "cdktf-stack/wing-app/Topic-OnMessage-8621be90/IamRolePolicy",
+                    "path": "root/wing-app/Topic-OnMessage-8f4ea749/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": Object {
                     "constructInfo": Object {
@@ -567,7 +567,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "IamRolePolicyAttachment",
-                    "path": "cdktf-stack/wing-app/Topic-OnMessage-8621be90/IamRolePolicyAttachment",
+                    "path": "root/wing-app/Topic-OnMessage-8f4ea749/IamRolePolicyAttachment",
                   },
                   "S3Object": Object {
                     "constructInfo": Object {
@@ -575,7 +575,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "S3Object",
-                    "path": "cdktf-stack/wing-app/Topic-OnMessage-8621be90/S3Object",
+                    "path": "root/wing-app/Topic-OnMessage-8f4ea749/S3Object",
                   },
                 },
                 "constructInfo": Object {
@@ -586,10 +586,10 @@ Object {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
                 },
-                "id": "Topic-OnMessage-8621be90",
-                "path": "cdktf-stack/wing-app/Topic-OnMessage-8621be90",
+                "id": "Topic-OnMessage-8f4ea749",
+                "path": "root/wing-app/Topic-OnMessage-8f4ea749",
               },
-              "Topic-OnMessageHandler-8621be90": Object {
+              "Topic-OnMessageHandler-8f4ea749": Object {
                 "attributes": Object {
                   "wing:resource:connections": Array [],
                   "wing:resource:stateful": false,
@@ -598,8 +598,8 @@ Object {
                   "fqn": "constructs.Construct",
                   "version": "10.1.228",
                 },
-                "id": "Topic-OnMessageHandler-8621be90",
-                "path": "cdktf-stack/wing-app/Topic-OnMessageHandler-8621be90",
+                "id": "Topic-OnMessageHandler-8f4ea749",
+                "path": "root/wing-app/Topic-OnMessageHandler-8f4ea749",
               },
               "WingLogger": Object {
                 "attributes": Object {
@@ -608,7 +608,7 @@ Object {
                       "direction": "inbound",
                       "implicit": true,
                       "relationship": "print",
-                      "resource": "cdktf-stack/wing-app/Topic-OnMessage-8621be90",
+                      "resource": "root/wing-app/Topic-OnMessage-8f4ea749",
                     },
                   ],
                   "wing:resource:stateful": true,
@@ -623,7 +623,7 @@ Object {
                   "title": "Logger",
                 },
                 "id": "WingLogger",
-                "path": "cdktf-stack/wing-app/WingLogger",
+                "path": "root/wing-app/WingLogger",
               },
               "aws": Object {
                 "constructInfo": Object {
@@ -631,7 +631,7 @@ Object {
                   "version": "12.0.1",
                 },
                 "id": "aws",
-                "path": "cdktf-stack/wing-app/aws",
+                "path": "root/wing-app/aws",
               },
             },
             "constructInfo": Object {
@@ -639,15 +639,15 @@ Object {
               "version": "10.1.228",
             },
             "id": "wing-app",
-            "path": "cdktf-stack/wing-app",
+            "path": "root/wing-app",
           },
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
           "version": "0.15.1",
         },
-        "id": "cdktf-stack",
-        "path": "cdktf-stack",
+        "id": "root",
+        "path": "root",
       },
     },
     "constructInfo": Object {

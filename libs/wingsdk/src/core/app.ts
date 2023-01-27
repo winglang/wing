@@ -68,7 +68,7 @@ export class CdktfApp extends Construct implements IApp {
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
     const cdktfApp = new cdktf.App({ outdir: join(outdir, "cdktf.out") });
-    const cdktfStack = new cdktf.TerraformStack(cdktfApp, "cdktf-stack");
+    const cdktfStack = new cdktf.TerraformStack(cdktfApp, "root");
 
     if (!props.customFactory) {
       throw new Error(
