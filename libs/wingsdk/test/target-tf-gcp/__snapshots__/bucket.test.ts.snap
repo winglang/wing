@@ -1,0 +1,611 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`bucket is public 1`] = `
+"{
+  \\"resource\\": {
+    \\"google_storage_bucket\\": {
+      \\"root_mybucket_E5DAA363\\": {
+        \\"location\\": \\"US\\",
+        \\"name\\": \\"my_bucket-\${random_id.root_mybucket_Id_7C344B74.hex}\\",
+        \\"public_access_prevention\\": \\"inherited\\",
+        \\"uniform_bucket_level_access\\": true
+      }
+    },
+    \\"google_storage_bucket_iam_member\\": {
+      \\"root_mybucket_PublicAccessIamMember_53C8A9DA\\": {
+        \\"bucket\\": \\"\${google_storage_bucket.root_mybucket_E5DAA363.name}\\",
+        \\"member\\": \\"allUsers\\",
+        \\"role\\": \\"roles/storage.objectViewer\\"
+      }
+    },
+    \\"random_id\\": {
+      \\"root_mybucket_Id_7C344B74\\": {
+        \\"byte_length\\": 4
+      }
+    }
+  }
+}"
+`;
+
+exports[`bucket is public 2`] = `
+Object {
+  "tree": Object {
+    "children": Object {
+      "root": Object {
+        "children": Object {
+          "Default": Object {
+            "children": Object {
+              "WingLogger": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud logging facility",
+                  "hidden": true,
+                  "title": "Logger",
+                },
+                "id": "WingLogger",
+                "path": "root/Default/WingLogger",
+              },
+              "google": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-google.provider.GoogleProvider",
+                  "version": "5.0.2",
+                },
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "my_bucket": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
+                },
+                "children": Object {
+                  "Default": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-google.storageBucket.StorageBucket",
+                      "version": "5.0.2",
+                    },
+                    "id": "Default",
+                    "path": "root/Default/my_bucket/Default",
+                  },
+                  "Id": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-random.id.Id",
+                      "version": "5.0.0",
+                    },
+                    "id": "Id",
+                    "path": "root/Default/my_bucket/Id",
+                  },
+                  "PublicAccessIamMember": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-google.storageBucketIamMember.StorageBucketIamMember",
+                      "version": "5.0.2",
+                    },
+                    "id": "PublicAccessIamMember",
+                    "path": "root/Default/my_bucket/PublicAccessIamMember",
+                  },
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "my_bucket",
+                "path": "root/Default/my_bucket",
+              },
+              "random": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-random.provider.RandomProvider",
+                  "version": "5.0.0",
+                },
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.2",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": Object {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.2",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": Object {
+      "fqn": "cdktf.App",
+      "version": "0.15.2",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`bucket with two preflight objects 1`] = `
+"{
+  \\"resource\\": {
+    \\"google_storage_bucket\\": {
+      \\"root_mybucket_E5DAA363\\": {
+        \\"location\\": \\"US\\",
+        \\"name\\": \\"my_bucket-\${random_id.root_mybucket_Id_7C344B74.hex}\\",
+        \\"public_access_prevention\\": \\"enforced\\",
+        \\"uniform_bucket_level_access\\": true
+      }
+    },
+    \\"google_storage_bucket_object\\": {
+      \\"root_mybucket_Objectfile1txt_0E67FB99\\": {
+        \\"bucket\\": \\"\${google_storage_bucket.root_mybucket_E5DAA363.id}\\",
+        \\"content\\": \\"hello world\\",
+        \\"name\\": \\"file1.txt\\"
+      },
+      \\"root_mybucket_Objectfile2txt_52FE0302\\": {
+        \\"bucket\\": \\"\${google_storage_bucket.root_mybucket_E5DAA363.id}\\",
+        \\"content\\": \\"boom bam\\",
+        \\"name\\": \\"file2.txt\\"
+      }
+    },
+    \\"random_id\\": {
+      \\"root_mybucket_Id_7C344B74\\": {
+        \\"byte_length\\": 4
+      }
+    }
+  }
+}"
+`;
+
+exports[`bucket with two preflight objects 2`] = `
+Object {
+  "tree": Object {
+    "children": Object {
+      "root": Object {
+        "children": Object {
+          "Default": Object {
+            "children": Object {
+              "WingLogger": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud logging facility",
+                  "hidden": true,
+                  "title": "Logger",
+                },
+                "id": "WingLogger",
+                "path": "root/Default/WingLogger",
+              },
+              "google": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-google.provider.GoogleProvider",
+                  "version": "5.0.2",
+                },
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "my_bucket": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
+                },
+                "children": Object {
+                  "Default": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-google.storageBucket.StorageBucket",
+                      "version": "5.0.2",
+                    },
+                    "id": "Default",
+                    "path": "root/Default/my_bucket/Default",
+                  },
+                  "Id": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-random.id.Id",
+                      "version": "5.0.0",
+                    },
+                    "id": "Id",
+                    "path": "root/Default/my_bucket/Id",
+                  },
+                  "Object-file1.txt": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-google.storageBucketObject.StorageBucketObject",
+                      "version": "5.0.2",
+                    },
+                    "id": "Object-file1.txt",
+                    "path": "root/Default/my_bucket/Object-file1.txt",
+                  },
+                  "Object-file2.txt": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-google.storageBucketObject.StorageBucketObject",
+                      "version": "5.0.2",
+                    },
+                    "id": "Object-file2.txt",
+                    "path": "root/Default/my_bucket/Object-file2.txt",
+                  },
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "my_bucket",
+                "path": "root/Default/my_bucket",
+              },
+              "random": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-random.provider.RandomProvider",
+                  "version": "5.0.0",
+                },
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.2",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": Object {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.2",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": Object {
+      "fqn": "cdktf.App",
+      "version": "0.15.2",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`create a bucket 1`] = `
+"{
+  \\"resource\\": {
+    \\"google_storage_bucket\\": {
+      \\"root_mybucket_E5DAA363\\": {
+        \\"location\\": \\"US\\",
+        \\"name\\": \\"my_bucket-\${random_id.root_mybucket_Id_7C344B74.hex}\\",
+        \\"public_access_prevention\\": \\"enforced\\",
+        \\"uniform_bucket_level_access\\": true
+      }
+    },
+    \\"random_id\\": {
+      \\"root_mybucket_Id_7C344B74\\": {
+        \\"byte_length\\": 4
+      }
+    }
+  }
+}"
+`;
+
+exports[`create a bucket 2`] = `
+Object {
+  "tree": Object {
+    "children": Object {
+      "root": Object {
+        "children": Object {
+          "Default": Object {
+            "children": Object {
+              "WingLogger": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud logging facility",
+                  "hidden": true,
+                  "title": "Logger",
+                },
+                "id": "WingLogger",
+                "path": "root/Default/WingLogger",
+              },
+              "google": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-google.provider.GoogleProvider",
+                  "version": "5.0.2",
+                },
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "my_bucket": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
+                },
+                "children": Object {
+                  "Default": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-google.storageBucket.StorageBucket",
+                      "version": "5.0.2",
+                    },
+                    "id": "Default",
+                    "path": "root/Default/my_bucket/Default",
+                  },
+                  "Id": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-random.id.Id",
+                      "version": "5.0.0",
+                    },
+                    "id": "Id",
+                    "path": "root/Default/my_bucket/Id",
+                  },
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "my_bucket",
+                "path": "root/Default/my_bucket",
+              },
+              "random": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-random.provider.RandomProvider",
+                  "version": "5.0.0",
+                },
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.2",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": Object {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.2",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": Object {
+      "fqn": "cdktf.App",
+      "version": "0.15.2",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`two buckets 1`] = `
+"{
+  \\"resource\\": {
+    \\"google_storage_bucket\\": {
+      \\"root_mybucket1_3E79F0B7\\": {
+        \\"location\\": \\"US\\",
+        \\"name\\": \\"my_bucket1-\${random_id.root_mybucket1_Id_B01C2071.hex}\\",
+        \\"public_access_prevention\\": \\"enforced\\",
+        \\"uniform_bucket_level_access\\": true
+      },
+      \\"root_mybucket2_CD3A8629\\": {
+        \\"location\\": \\"US\\",
+        \\"name\\": \\"my_bucket2-\${random_id.root_mybucket2_Id_E69E8F7F.hex}\\",
+        \\"public_access_prevention\\": \\"enforced\\",
+        \\"uniform_bucket_level_access\\": true
+      }
+    },
+    \\"random_id\\": {
+      \\"root_mybucket1_Id_B01C2071\\": {
+        \\"byte_length\\": 4
+      },
+      \\"root_mybucket2_Id_E69E8F7F\\": {
+        \\"byte_length\\": 4
+      }
+    }
+  }
+}"
+`;
+
+exports[`two buckets 2`] = `
+Object {
+  "tree": Object {
+    "children": Object {
+      "root": Object {
+        "children": Object {
+          "Default": Object {
+            "children": Object {
+              "WingLogger": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud logging facility",
+                  "hidden": true,
+                  "title": "Logger",
+                },
+                "id": "WingLogger",
+                "path": "root/Default/WingLogger",
+              },
+              "google": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-google.provider.GoogleProvider",
+                  "version": "5.0.2",
+                },
+                "id": "google",
+                "path": "root/Default/google",
+              },
+              "my_bucket1": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
+                },
+                "children": Object {
+                  "Default": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-google.storageBucket.StorageBucket",
+                      "version": "5.0.2",
+                    },
+                    "id": "Default",
+                    "path": "root/Default/my_bucket1/Default",
+                  },
+                  "Id": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-random.id.Id",
+                      "version": "5.0.0",
+                    },
+                    "id": "Id",
+                    "path": "root/Default/my_bucket1/Id",
+                  },
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "my_bucket1",
+                "path": "root/Default/my_bucket1",
+              },
+              "my_bucket2": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
+                },
+                "children": Object {
+                  "Default": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-google.storageBucket.StorageBucket",
+                      "version": "5.0.2",
+                    },
+                    "id": "Default",
+                    "path": "root/Default/my_bucket2/Default",
+                  },
+                  "Id": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-random.id.Id",
+                      "version": "5.0.0",
+                    },
+                    "id": "Id",
+                    "path": "root/Default/my_bucket2/Id",
+                  },
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "my_bucket2",
+                "path": "root/Default/my_bucket2",
+              },
+              "random": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-random.provider.RandomProvider",
+                  "version": "5.0.0",
+                },
+                "id": "random",
+                "path": "root/Default/random",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.2",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": Object {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.2",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": Object {
+      "fqn": "cdktf.App",
+      "version": "0.15.2",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;

@@ -4,8 +4,10 @@ const JSII_DEPS = [
   "constructs@~10.1.228",
   "polycons",
   "cdktf@0.15.2",
+  "@cdktf/provider-random@^5.0.0",
   "@cdktf/provider-aws@^12.0.1",
   "@cdktf/provider-azurerm@^5.0.1",
+  "@cdktf/provider-google@^5.0.2",
 ];
 
 const project = new cdk.JsiiProject({
@@ -211,7 +213,7 @@ project.tasks
 project.preCompileTask.exec("patch-package");
 
 const docsFrontMatter = `---
-title: SDK
+title: API Reference
 id: sdk
 description: Wing SDK API Reference
 keywords: [Wing sdk, sdk, Wing API Reference]
@@ -229,5 +231,6 @@ docgen.exec(`cat API.md >> ${docsPath}`);
 project.testTask.reset(
   "jest --passWithNoTests --all --updateSnapshot --coverageProvider=v8 --testTimeout=30000"
 );
+project.testTask.spawn(project.eslint?.eslintTask!);
 
 project.synth();

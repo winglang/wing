@@ -2721,7 +2721,7 @@ Represents the bag of attributes as key-value pairs.
 
 - *Extends:* constructs.IConstruct
 
-- *Implemented By:* core.CdktfApp, sim.App, testing.SimApp, tfaws.App, tfazure.App, core.IApp
+- *Implemented By:* core.CdktfApp, sim.App, testing.SimApp, tfaws.App, tfazure.App, tfgcp.App, core.IApp
 
 A Wing application.
 
@@ -3077,7 +3077,7 @@ Information on how to display a resource in the UI.
 
 ### IInspectable <a name="IInspectable" id="@winglang/sdk.core.IInspectable"></a>
 
-- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfazure.Bucket, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IInspectable, core.IResource
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfazure.Bucket, tfgcp.Bucket, tfgcp.Logger, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IInspectable, core.IResource
 
 Interface for examining a construct and exposing metadata.
 
@@ -3252,7 +3252,7 @@ Function that will be called when a message is received from the queue.
 
 - *Extends:* core.IInspectable, constructs.IConstruct
 
-- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfazure.Bucket, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IResource
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfazure.Bucket, tfgcp.Bucket, tfgcp.Logger, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IResource
 
 Abstract interface for `Resource`.
 
