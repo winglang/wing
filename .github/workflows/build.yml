@@ -41,7 +41,8 @@ jobs:
         if: github.event_name == 'push' && github.repository == 'winglang/wing'
         run: |
           git fetch --unshallow --tags
-          echo "last-version=${$(git describe --tags `git rev-list --tags --max-count=1`):1}" >> $GITHUB_OUTPUT
+          LAST_VERSION="$(git describe --tags `git rev-list --tags --max-count=1`)"
+          echo "last-version=${LAST_VERSION:1}" >> $GITHUB_OUTPUT
 
       - name: Install Dependencies
         if: github.event_name == 'push' && github.repository == 'winglang/wing'
