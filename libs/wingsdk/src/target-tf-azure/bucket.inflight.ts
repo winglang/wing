@@ -33,7 +33,9 @@ export class BucketClient implements IBucketClient {
    * @param body string contents of the object
    */
   public async put(key: string, body: string): Promise<void> {
-    await this.containerClient.getBlockBlobClient(key).upload(body, body.length);
+    await this.containerClient
+      .getBlockBlobClient(key)
+      .upload(body, body.length);
   }
 
   /**

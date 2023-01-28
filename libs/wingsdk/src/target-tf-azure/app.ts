@@ -1,8 +1,15 @@
 import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
+import { ResourceGroup } from "@cdktf/provider-azurerm/lib/resource-group";
+import { StorageAccount } from "@cdktf/provider-azurerm/lib/storage-account";
 import { IConstruct } from "constructs";
 import { PolyconFactory } from "./factory";
 import { APP_AZURE_TF_SYMBOL } from "./internal";
 import { IApp, CdktfApp, AppProps } from "../core";
+import {
+  CaseConventions,
+  NameOptions,
+  ResourceNames,
+} from "../utils/resource-names";
 
 /**
  * Azure app props
@@ -49,9 +56,7 @@ export class App extends CdktfApp implements IApp {
       throw new Error("Unable to find app in scope");
     }
 
-    return (construct as any)[APP_AZURE_TF_SYMBOL]
-      ? (construct as App)
-      : App.of(construct.node.scope);
+    return construct instanceof App ? construct : App.of(construct.node.scope);
   }
 
   /**
@@ -59,8 +64,8 @@ export class App extends CdktfApp implements IApp {
    * @link https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group#location
    * */
   public readonly location: string;
-  private _resourceGroup: ResourceGroup;
-  private _storageAccount: StorageAccount;
+  private _resourceGroup?: ResourceGroup;
+  private _storageAccount?: StorageAccount;
 
   constructor(props: AzureAppProps) {
     super({
@@ -83,49 +88,34 @@ export class App extends CdktfApp implements IApp {
       enumerable: false,
       writable: false,
     });
-
-    // At runtime the resolved app class is an instance of InnerApp which means that all the methods
-    // declared in this class are tossed out. This is a workaround to attach the getters to InnerApp class
-    // at runtime.
-    this._resourceGroup = undefined as any;
-    Object.defineProperty(this, "resourceGroup", {
-      // lazy initialization
-      get() {
-        if (this._resourceGroup === undefined) {
-          this._resourceGroup = new ResourceGroup(this, "ResourceGroup", {
-            location: this.location,
-            name: ResourceNames.generateName(this, RESOURCEGROUP_NAME_OPTS),
-          });
-        }
-        return this._resourceGroup;
-      }
-    });
-
-    this._storageAccount = undefined as any;
-    Object.defineProperty(this, "storageAccount", {
-      // lazy initialization
-      get() {
-        if (this._storageAccount === undefined) {
-          this._storageAccount = new StorageAccount(this, "StorageAccount", {
-            name: ResourceNames.generateName(this, STORAGEACCOUNT_NAME_OPTS),
-            resourceGroupName: this.resourceGroup.name,
-            location: this.resourceGroup.location,
-            accountTier: "Standard",
-            accountReplicationType: "LRS",
-          });
-        }
-        return this._storageAccount;
-      }
-    });
   }
 
   /**
-   * This is a stub getter that is tossed out during runtime
+   * Get resource group using lazy initialization
    */
-  public get storageAccount() { return this._storageAccount; };
+  public get resourceGroup() {
+    if (!this._resourceGroup) {
+      this._resourceGroup = new ResourceGroup(this, "ResourceGroup", {
+        location: this.location,
+        name: ResourceNames.generateName(this, RESOURCEGROUP_NAME_OPTS),
+      });
+    }
+    return this._resourceGroup;
+  }
 
   /**
-   * This is a stub getter that is tossed out during runtime
+   * Get storage account using lazy initialization
    */
-  public get resourceGroup() { return this._resourceGroup; };
+  public get storageAccount() {
+    if (!this._storageAccount) {
+      this._storageAccount = new StorageAccount(this, "StorageAccount", {
+        name: ResourceNames.generateName(this, STORAGEACCOUNT_NAME_OPTS),
+        resourceGroupName: this.resourceGroup.name,
+        location: this.resourceGroup.location,
+        accountTier: "Standard",
+        accountReplicationType: "LRS",
+      });
+    }
+    return this._storageAccount;
+  }
 }

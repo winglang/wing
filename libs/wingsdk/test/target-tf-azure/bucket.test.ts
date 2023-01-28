@@ -92,7 +92,7 @@ test("bucket name valid", () => {
       output,
       "azurerm_resource_group",
       {
-        name: `root-${app.node.addr.substring(0, 8)}`,
+        name: `Default-${app.node.addr.substring(0, 8)}`,
       }
     )
   ).toEqual(true);
@@ -102,7 +102,7 @@ test("bucket name valid", () => {
       output,
       "azurerm_storage_account",
       {
-        name: `root${app.node.addr.substring(0, 8)}`,
+        name: `default${app.node.addr.substring(0, 8)}`,
       }
     )
   ).toEqual(true);

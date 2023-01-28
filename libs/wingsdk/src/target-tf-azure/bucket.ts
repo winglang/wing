@@ -1,5 +1,3 @@
-import { ResourceGroup } from "@cdktf/provider-azurerm/lib/resource-group";
-import { StorageAccount } from "@cdktf/provider-azurerm/lib/storage-account";
 import { StorageBlob } from "@cdktf/provider-azurerm/lib/storage-blob";
 import { StorageContainer } from "@cdktf/provider-azurerm/lib/storage-container";
 import { Construct } from "constructs";
@@ -32,13 +30,14 @@ const BUCKET_NAME_OPTS: NameOptions = {
 export class Bucket extends cloud.BucketBase {
   private readonly storageContainer: StorageContainer;
   private readonly public: boolean;
+  private app: App;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps) {
     super(scope, id, props);
 
     this.public = props.public ?? false;
 
-    const app = App.of(this);
+    this.app = App.of(this);
 
     const storageContainerName = ResourceNames.generateName(
       this,
@@ -52,10 +51,9 @@ export class Bucket extends cloud.BucketBase {
       );
     }
 
-
     this.storageContainer = new StorageContainer(this, "Bucket", {
       name: storageContainerName,
-      storageAccountName: app.storageAccount.name,
+      storageAccountName: this.app.storageAccount.name,
       containerAccessType: this.public ? "public" : "private",
     });
   }
@@ -70,7 +68,7 @@ export class Bucket extends cloud.BucketBase {
 
     new StorageBlob(this, `Blob-${key}`, {
       name: blobName,
-      storageAccountName: this.storageAccount.name,
+      storageAccountName: this.app.storageAccount.name,
       storageContainerName: this.storageContainer.name,
       type: "Block",
       sourceContent: body,
