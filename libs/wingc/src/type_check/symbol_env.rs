@@ -214,7 +214,7 @@ impl SymbolEnv {
 	pub fn lookup_nested_str(
 		&self,
 		nested_str: &str,
-		ignore_hidden: bool,
+		include_hidden: bool,
 		statement_idx: Option<usize>,
 	) -> Result<&SymbolKind, TypeError> {
 		let nested_vec = nested_str
@@ -226,7 +226,7 @@ impl SymbolEnv {
 			.collect::<Vec<Symbol>>();
 		self.lookup_nested(
 			&nested_vec.iter().collect::<Vec<&Symbol>>(),
-			ignore_hidden,
+			include_hidden,
 			statement_idx,
 		)
 	}
@@ -234,7 +234,7 @@ impl SymbolEnv {
 	pub fn lookup_nested_mut_str(
 		&mut self,
 		nested_str: &str,
-		ignore_hidden: bool,
+		include_hidden: bool,
 		statement_idx: Option<usize>,
 	) -> Result<&mut SymbolKind, TypeError> {
 		let nested_vec = nested_str
@@ -246,16 +246,16 @@ impl SymbolEnv {
 			.collect::<Vec<Symbol>>();
 		self.lookup_nested_mut(
 			&nested_vec.iter().collect::<Vec<&Symbol>>(),
-			ignore_hidden,
+			include_hidden,
 			statement_idx,
 		)
 	}
 
-	/// Pass `ignore_hidden: true` if it's OK to return types that have only been imported implicitly (such as through an inheritance chain), and false otherwise
+	/// Pass `include_hidden: true` if it's OK to return types that have only been imported implicitly (such as through an inheritance chain), and false otherwise
 	pub fn lookup_nested(
 		&self,
 		nested_vec: &[&Symbol],
-		ignore_hidden: bool,
+		include_hidden: bool,
 		statement_idx: Option<usize>,
 	) -> Result<&SymbolKind, TypeError> {
 		let mut it = nested_vec.iter();
@@ -281,7 +281,7 @@ impl SymbolEnv {
 				}
 			}
 			let ns = if let Some(ns) = t.as_namespace() {
-				if ns.hidden && !ignore_hidden {
+				if ns.hidden && !include_hidden {
 					return Err(TypeError {
 						message: format!("\"{}\" was not brought", symb.name),
 						span: symb.span.clone(),
@@ -311,11 +311,11 @@ impl SymbolEnv {
 		Ok(t)
 	}
 
-	/// Pass `ignore_hidden: true` if it's OK to return types that have only been imported implicitly (such as through an inheritance chain), and false otherwise
+	/// Pass `include_hidden: true` if it's OK to return types that have only been imported implicitly (such as through an inheritance chain), and false otherwise
 	fn lookup_nested_mut(
 		&mut self,
 		nested_vec: &[&Symbol],
-		ignore_hidden: bool,
+		include_hidden: bool,
 		statement_idx: Option<usize>,
 	) -> Result<&mut SymbolKind, TypeError> {
 		let mut it = nested_vec.iter();
@@ -342,7 +342,7 @@ impl SymbolEnv {
 			}
 
 			let ns = if let Some(ns) = t.as_mut_namespace() {
-				if ns.hidden && !ignore_hidden {
+				if ns.hidden && !include_hidden {
 					return Err(TypeError {
 						message: format!("\"{}\" was not brought", symb.name),
 						span: symb.span.clone(),

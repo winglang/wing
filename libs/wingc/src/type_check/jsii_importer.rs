@@ -155,27 +155,26 @@ impl<'a> JsiiImporter<'a> {
 		);
 		assert!(type_fqn.assembly() == self.assembly_name);
 
-		// TODO: support nested namespaces
-		let namespace_name = type_fqn.namespaces().next().unwrap();
-
-		self.create_minimum_namespaces_for(&type_fqn);
+		self.setup_namespaces_for(&type_fqn);
 
 		// Check if this is a JSII interface and import it if it is
 		let jsii_interface = self.jsii_types.find_interface(type_fqn.as_str());
 		if let Some(jsii_interface) = jsii_interface {
-			self.import_interface(jsii_interface, namespace_name);
+			self.import_interface(jsii_interface);
 		} else {
 			// Check if this is a JSII class and import it if it is
 			let jsii_class = self.jsii_types.find_class(type_fqn.as_str());
 			if let Some(jsii_class) = jsii_class {
-				self.import_class(jsii_class, namespace_name);
+				self.import_class(jsii_class);
 			} else {
 				debug!("Type {} is unsupported, skipping", type_fqn);
 			}
 		}
 	}
 
-	fn create_minimum_namespaces_for(&mut self, type_name: &FQN) {
+	fn setup_namespaces_for(&mut self, type_name: &FQN) {
+		debug!("Setting up namespaces for {}", type_name);
+
 		// First, ensure there is a namespace for the assembly
 		// If we are importing a type from the root of the assembly, then we need to make sure the assembly namespace is visible
 		// (Note that we never want to hide a namespace that has already been made visible)
@@ -194,11 +193,11 @@ impl<'a> JsiiImporter<'a> {
 				)
 			}
 		} else {
-			let ns = Namespace {
+			let ns = self.wing_types.add_namespace(Namespace {
 				name: self.assembly_name.to_string(),
 				hidden: !assembly_should_be_visible,
 				env: SymbolEnv::new(None, self.wing_types.void(), false, false, self.env.flight, 0),
-			};
+			});
 			self
 				.env
 				.define(
@@ -242,7 +241,7 @@ impl<'a> JsiiImporter<'a> {
 					)
 				}
 			} else {
-				let ns = Namespace {
+				let ns = self.wing_types.add_namespace(Namespace {
 					name: namespace_name.to_string(),
 					hidden: !namespace_should_be_visible,
 					env: SymbolEnv::new(
@@ -253,7 +252,7 @@ impl<'a> JsiiImporter<'a> {
 						flight,
 						0,
 					),
-				};
+				});
 				parent_ns
 					.env
 					.define(
@@ -269,7 +268,7 @@ impl<'a> JsiiImporter<'a> {
 		}
 	}
 
-	fn import_interface(&mut self, jsii_interface: wingii::jsii::InterfaceType, namespace_name: &str) {
+	fn import_interface(&mut self, jsii_interface: wingii::jsii::InterfaceType) {
 		let jsii_interface_fqn = FQN::from(&jsii_interface.fqn);
 		let type_name = jsii_interface_fqn.type_name();
 		match jsii_interface.datatype {
@@ -333,7 +332,7 @@ impl<'a> JsiiImporter<'a> {
 		// TODO: don't we need to add this to the namespace earlier in case there's a self reference in the struct?
 		let ns = self
 			.env
-			.try_lookup_mut(namespace_name, None)
+			.lookup_nested_mut_str(jsii_interface_fqn.as_str_without_type_name(), true, None)
 			.unwrap()
 			.as_mut_namespace()
 			.unwrap();
@@ -454,7 +453,7 @@ impl<'a> JsiiImporter<'a> {
 		}
 	}
 
-	fn import_class(&mut self, jsii_class: wingii::jsii::ClassType, namespace_name: &str) {
+	fn import_class(&mut self, jsii_class: wingii::jsii::ClassType) {
 		let mut is_resource = false;
 		let jsii_class_fqn = FQN::from(&jsii_class.fqn);
 		let type_name = jsii_class_fqn.type_name();
@@ -531,7 +530,11 @@ impl<'a> JsiiImporter<'a> {
 						args
 							.iter()
 							.map(|a| {
-								self.lookup_or_create_type(&FQN::from(&format!("{}.{}.{}", self.assembly_name, namespace_name, a)))
+								self.lookup_or_create_type(&FQN::from(&format!(
+									"{}.{}",
+									jsii_class_fqn.as_str_without_type_name(),
+									a
+								)))
 							})
 							.collect::<Vec<_>>(),
 					)
@@ -552,7 +555,7 @@ impl<'a> JsiiImporter<'a> {
 		});
 		let ns = self
 			.env
-			.try_lookup_mut(self.identifier, None)
+			.lookup_nested_mut_str(jsii_class_fqn.as_str_without_type_name(), true, None)
 			.unwrap()
 			.as_mut_namespace()
 			.unwrap();
@@ -659,6 +662,7 @@ impl<'a> JsiiImporter<'a> {
 
 	pub fn import_to_env(&mut self) {
 		let assembly = self.jsii_types.find_assembly(self.assembly_name).unwrap();
+
 		for type_fqn in assembly.types.as_ref().unwrap().keys() {
 			let type_fqn = FQN::from(type_fqn);
 

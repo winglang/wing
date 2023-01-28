@@ -57,7 +57,7 @@ pub type TypeRef = UnsafeRef<Type>;
 pub enum SymbolKind {
 	Type(TypeRef),
 	Variable(VariableInfo),
-	Namespace(Namespace),
+	Namespace(NamespaceRef),
 }
 
 #[derive(Debug, Clone)]
@@ -143,6 +143,14 @@ pub struct Namespace {
 
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
+}
+
+pub type NamespaceRef = UnsafeRef<Namespace>;
+
+impl Debug for NamespaceRef {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		write!(f, "{:?}", &**self)
+	}
 }
 
 // TODO See TypeRef for why this is necessary
@@ -504,9 +512,10 @@ impl Debug for TypeRef {
 }
 
 pub struct Types {
-	// TODO: Remove the box and change TypeRef to just be an index into the types array
+	// TODO: Remove the box and change TypeRef and NamespaceRef to just be indices into the types array and namespaces array respectively
 	// Note: we need the box so reallocations of the vec while growing won't change the addresses of the types since they are referenced from the TypeRef struct
 	types: Vec<Box<Type>>,
+	namespaces: Vec<Box<Namespace>>,
 	numeric_idx: usize,
 	string_idx: usize,
 	bool_idx: usize,
@@ -531,7 +540,10 @@ impl Types {
 		types.push(Box::new(Type::Void));
 		let void_idx = types.len() - 1;
 
+		let namespaces = vec![];
+
 		Self {
+			namespaces,
 			types,
 			numeric_idx,
 			string_idx,
@@ -543,32 +555,37 @@ impl Types {
 	}
 
 	pub fn number(&self) -> TypeRef {
-		self.get_typeref(self.numeric_idx)
+		self.get_type_ref(self.numeric_idx)
 	}
 
 	pub fn string(&self) -> TypeRef {
-		self.get_typeref(self.string_idx)
+		self.get_type_ref(self.string_idx)
 	}
 
 	pub fn bool(&self) -> TypeRef {
-		self.get_typeref(self.bool_idx)
+		self.get_type_ref(self.bool_idx)
 	}
 
 	pub fn duration(&self) -> TypeRef {
-		self.get_typeref(self.duration_idx)
+		self.get_type_ref(self.duration_idx)
 	}
 
 	pub fn anything(&self) -> TypeRef {
-		self.get_typeref(self.anything_idx)
+		self.get_type_ref(self.anything_idx)
 	}
 
 	pub fn void(&self) -> TypeRef {
-		self.get_typeref(self.void_idx)
+		self.get_type_ref(self.void_idx)
 	}
 
 	pub fn add_type(&mut self, t: Type) -> TypeRef {
 		self.types.push(Box::new(t));
-		self.get_typeref(self.types.len() - 1)
+		self.get_type_ref(self.types.len() - 1)
+	}
+
+	fn get_type_ref(&self, idx: usize) -> TypeRef {
+		let t = &self.types[idx];
+		UnsafeRef::<Type>(&**t as *const Type)
 	}
 
 	pub fn stringables(&self) -> Vec<TypeRef> {
@@ -577,9 +594,14 @@ impl Types {
 		vec![self.string(), self.number()]
 	}
 
-	fn get_typeref(&self, idx: usize) -> TypeRef {
-		let t = &self.types[idx];
-		UnsafeRef::<Type>(&**t as *const Type)
+	pub fn add_namespace(&mut self, n: Namespace) -> NamespaceRef {
+		self.namespaces.push(Box::new(n));
+		self.get_namespace_ref(self.namespaces.len() - 1)
+	}
+
+	fn get_namespace_ref(&self, idx: usize) -> NamespaceRef {
+		let t = &self.namespaces[idx];
+		UnsafeRef::<Namespace>(&**t as *const Namespace)
 	}
 }
 
