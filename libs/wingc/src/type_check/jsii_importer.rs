@@ -52,7 +52,7 @@ pub struct JsiiImporter<'a> {
 	/// if they are referenced from a type in the specified `module_name`.
 	namespace_filter: &'a [String],
 	/// The name to assign to the module in the Wing type system.
-	identifier: &'a str,
+	identifier: &'a Symbol,
 	/// The wing type system: all imported types are added to `wing_types`.
 	wing_types: &'a mut Types,
 	/// The index of the import statement that triggered this import. This is required so we'll know
@@ -70,7 +70,7 @@ impl<'a> JsiiImporter<'a> {
 		jsii_types: &'a wingii::type_system::TypeSystem,
 		assembly_name: &'a str,
 		namespace_filter: &'a [String],
-		identifier: &'a str,
+		identifier: &'a Symbol,
 		wing_types: &'a mut Types,
 		import_statement_idx: usize,
 		env: &'a mut SymbolEnv,
@@ -126,17 +126,16 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	fn lookup_or_create_type(&mut self, type_fqn: &FQN) -> TypeRef {
-		let type_name = type_fqn.as_str_without_assembly();
-		// Check if this type is already define in this module's namespace
-		if let Ok(t) = self.env.lookup_nested_str(&type_name, true, None) {
-			return t.as_type().expect(&format!("Expected {} to be a type", type_name));
+		// Check if this type is already defined in this module's namespace
+		if let Ok(t) = self.env.lookup_nested_str(type_fqn.as_str(), true, None) {
+			return t.as_type().expect(&format!("Expected {} to be a type", type_fqn));
 		}
 		// Define new type and return it
 		self.import_type(type_fqn);
 		self
 			.env
-			.lookup_nested_str(&type_name, true, None)
-			.expect(&format!("Expected {} to be defined", type_name))
+			.lookup_nested_str(type_fqn.as_str(), true, None)
+			.expect(&format!("Expected {} to be defined", type_fqn))
 			.as_type()
 			.unwrap()
 	}
@@ -219,11 +218,11 @@ impl<'a> JsiiImporter<'a> {
 			lookup_str.extend(type_name.namespaces().take(ns_idx));
 			let lookup_str = lookup_str.join(".");
 
-			let parent_ns = self
+			let mut parent_ns = self
 				.env
 				.lookup_nested_mut_str(&lookup_str, false, None)
 				.unwrap()
-				.as_mut_namespace()
+				.as_namespace_ref()
 				.unwrap();
 
 			let namespace_should_be_visible = ns_idx + 1 == type_name.namespaces().count();
@@ -270,6 +269,7 @@ impl<'a> JsiiImporter<'a> {
 
 	fn import_interface(&mut self, jsii_interface: wingii::jsii::InterfaceType) {
 		let jsii_interface_fqn = FQN::from(&jsii_interface.fqn);
+		debug!("Importing interface {}", jsii_interface_fqn.as_str().green());
 		let type_name = jsii_interface_fqn.type_name();
 		match jsii_interface.datatype {
 			Some(true) => {
@@ -330,11 +330,11 @@ impl<'a> JsiiImporter<'a> {
 		};
 
 		// TODO: don't we need to add this to the namespace earlier in case there's a self reference in the struct?
-		let ns = self
+		let mut ns = self
 			.env
 			.lookup_nested_mut_str(jsii_interface_fqn.as_str_without_type_name(), true, None)
 			.unwrap()
-			.as_mut_namespace()
+			.as_namespace_ref()
 			.unwrap();
 		ns.env
 			.define(&new_type_symbol, SymbolKind::Type(wing_type), StatementIdx::Top)
@@ -456,6 +456,7 @@ impl<'a> JsiiImporter<'a> {
 	fn import_class(&mut self, jsii_class: wingii::jsii::ClassType) {
 		let mut is_resource = false;
 		let jsii_class_fqn = FQN::from(&jsii_class.fqn);
+		debug!("Importing class {}", jsii_class_fqn.as_str().green());
 		let type_name = jsii_class_fqn.type_name();
 
 		// Get the base class of the JSII class, define it via recursive call if it's not define yet
@@ -466,24 +467,25 @@ impl<'a> JsiiImporter<'a> {
 				is_resource = true;
 				None
 			} else {
-				let base_class_name = base_class_fqn.as_str_without_assembly();
-				let base_class_type = if let Ok(base_class_type) = self.env.lookup_nested_str(&base_class_name, true, None) {
-					base_class_type
-						.as_type()
-						.expect("Base class name found but it's not a type")
-				} else {
-					// If the base class isn't defined yet then define it first (recursive call)
-					self.import_type(&base_class_fqn);
-					self
-						.env
-						.lookup_nested_str(&base_class_name, true, None)
-						.expect(&format!(
-							"Failed to define base class {} of {}",
-							base_class_name, type_name
-						))
-						.as_type()
-						.unwrap()
-				};
+				let base_class_name = base_class_fqn.type_name();
+				let base_class_type =
+					if let Ok(base_class_type) = self.env.lookup_nested_str(base_class_fqn.as_str(), true, None) {
+						base_class_type
+							.as_type()
+							.expect("Base class name found but it's not a type")
+					} else {
+						// If the base class isn't defined yet then define it first (recursive call)
+						self.import_type(&base_class_fqn);
+						self
+							.env
+							.lookup_nested_str(&base_class_fqn.as_str(), true, None)
+							.expect(&format!(
+								"Failed to define base class {} of {}",
+								base_class_name, type_name
+							))
+							.as_type()
+							.unwrap()
+					};
 
 				// Validate the base class is either a class or a resource
 				if base_class_type.as_resource().is_none() && base_class_type.as_class().is_none() {
@@ -553,11 +555,11 @@ impl<'a> JsiiImporter<'a> {
 		} else {
 			Type::Class(class_spec)
 		});
-		let ns = self
+		let mut ns = self
 			.env
 			.lookup_nested_mut_str(jsii_class_fqn.as_str_without_type_name(), true, None)
 			.unwrap()
-			.as_mut_namespace()
+			.as_namespace_ref()
 			.unwrap();
 		ns.env
 			.define(&new_type_symbol, SymbolKind::Type(new_type), StatementIdx::Top)
@@ -668,21 +670,45 @@ impl<'a> JsiiImporter<'a> {
 
 			// Skip types outside the imported namespace
 			if !type_fqn.is_in_namespace(self.namespace_filter) {
+				debug!(
+					"Skipped importing {} (outside of namespace filter).",
+					type_fqn.as_str().blue()
+				);
 				continue;
 			}
 
 			// Lookup type before we attempt to import it, this is required because `import_jsii_type` is recursive
 			// and might have already defined the current type internally
-			if self
-				.env
-				.lookup_nested_str(type_fqn.as_str_without_assembly(), true, None)
-				.is_ok()
-			{
+			if self.env.lookup_nested_str(type_fqn.as_str(), true, None).is_ok() {
+				debug!("Already imported {}.", type_fqn.as_str().blue());
 				continue;
 			}
+
+			debug!("Importing {}...", type_fqn.as_str().blue());
 
 			// Import type
 			self.import_type(&type_fqn);
 		}
+
+		// Create a symbol in the environment for the imported assembly or namespace
+
+		// First, concatenate the namespace filter with the assembly name
+		let mut lookup_str = self.assembly_name.to_string();
+		lookup_str.push('.');
+		lookup_str.push_str(&self.namespace_filter.concat());
+		let ns = self
+			.env
+			.lookup_nested_mut_str(&lookup_str, true, None)
+			.unwrap()
+			.as_namespace_ref()
+			.unwrap();
+		self
+			.env
+			.define(
+				self.identifier,
+				SymbolKind::Namespace(ns),
+				StatementIdx::Index(self.import_statement_idx),
+			)
+			.unwrap();
 	}
 }

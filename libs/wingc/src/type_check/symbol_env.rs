@@ -4,16 +4,24 @@ use crate::{
 	type_check::{SymbolKind, Type, TypeRef},
 };
 use std::collections::{hash_map, HashMap, HashSet};
+use std::fmt::Debug;
 
 use super::{UnsafeRef, VariableInfo};
 
 pub type SymbolEnvRef = UnsafeRef<SymbolEnv>;
 
+impl Debug for SymbolEnvRef {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		write!(f, "{:?}", &**self)
+	}
+}
+
+#[derive(Debug)]
 pub struct SymbolEnv {
 	pub(crate) ident_map: HashMap<String, (StatementIdx, SymbolKind)>,
 	parent: Option<SymbolEnvRef>,
 
-	// TODO: This doesn't make much sense in the context of the "envrioment" but I needed a way to propagate the return type of a function
+	// TODO: This doesn't make much sense in the context of the "environment" but I needed a way to propagate the return type of a function
 	// down the scopes. Think of a nicer way to do this.
 	pub return_type: TypeRef,
 
@@ -341,7 +349,7 @@ impl SymbolEnv {
 				}
 			}
 
-			let ns = if let Some(ns) = t.as_mut_namespace() {
+			let ns = if let Some(ns) = t.as_mut_namespace_ref() {
 				if ns.hidden && !include_hidden {
 					return Err(TypeError {
 						message: format!("\"{}\" was not brought", symb.name),

@@ -24,11 +24,6 @@ impl<'a> FQN<'a> {
 		self.0
 	}
 
-	pub fn as_str_without_assembly(&self) -> &str {
-		let index = self.0.find('.').unwrap();
-		&self.0[(index + 1)..]
-	}
-
 	pub fn as_str_without_type_name(&self) -> &str {
 		let index = self.0.rfind('.').unwrap();
 		&self.0[..index]
@@ -100,12 +95,6 @@ mod tests {
 		assert_eq!(fqn.assembly(), "my_lib");
 		assert_eq!(fqn.namespaces().collect::<Vec<_>>(), vec!["ns1", "ns2"]);
 		assert_eq!(fqn.type_name(), "MyResource");
-	}
-
-	#[test]
-	fn test_fqn_as_str_without_assembly() {
-		let fqn = FQN("my_lib.ns1.ns2.MyResource");
-		assert_eq!(fqn.as_str_without_assembly(), "ns1.ns2.MyResource");
 	}
 
 	#[test]

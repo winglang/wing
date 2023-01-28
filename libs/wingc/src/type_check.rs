@@ -85,6 +85,13 @@ impl SymbolKind {
 		}
 	}
 
+	fn as_namespace_ref(&self) -> Option<NamespaceRef> {
+		match self {
+			SymbolKind::Namespace(ns) => Some(ns.clone()),
+			_ => None,
+		}
+	}
+
 	fn as_namespace(&self) -> Option<&Namespace> {
 		match self {
 			SymbolKind::Namespace(ns) => Some(ns),
@@ -92,7 +99,7 @@ impl SymbolKind {
 		}
 	}
 
-	fn as_mut_namespace(&mut self) -> Option<&mut Namespace> {
+	fn as_mut_namespace_ref(&mut self) -> Option<&mut Namespace> {
 		match self {
 			SymbolKind::Namespace(ref mut ns) => Some(ns),
 			_ => None,
@@ -595,6 +602,7 @@ impl Types {
 	}
 
 	pub fn add_namespace(&mut self, n: Namespace) -> NamespaceRef {
+		debug!("Created namespace {}", n.name);
 		self.namespaces.push(Box::new(n));
 		self.get_namespace_ref(self.namespaces.len() - 1)
 	}
@@ -642,7 +650,10 @@ impl<'a> TypeChecker<'a> {
 			scope.env.borrow_mut().as_mut().unwrap(),
 			String::from("@winglang/sdk"),
 			vec![WINGSDK_STD_MODULE.to_string()],
-			WINGSDK_STD_MODULE.to_string(),
+			&Symbol {
+				name: WINGSDK_STD_MODULE.to_string(),
+				span: WingSpan::global(),
+			},
 			0,
 		);
 	}
@@ -1435,7 +1446,7 @@ impl<'a> TypeChecker<'a> {
 				// namespace_filter is the path to the namespace we are importing from the library, if any
 				let namespace_filter: Vec<String>;
 				// alias is the name we are giving to the imported library or namespace
-				let alias: String;
+				let alias: &Symbol;
 
 				if module_name.name.starts_with('"') && module_name.name.ends_with('"') {
 					// case 1: bring "library_name" as identifier;
@@ -1450,7 +1461,7 @@ impl<'a> TypeChecker<'a> {
 					// namespace filter (we only support importing the root library at the moment)
 					library_name = module_name.name[1..module_name.name.len() - 1].to_string();
 					namespace_filter = vec![];
-					alias = identifier.as_ref().unwrap().name.clone();
+					alias = identifier.as_ref().unwrap();
 				} else {
 					// case 2: bring module_name;
 					// case 3: bring module_name as identifier;
@@ -1463,7 +1474,7 @@ impl<'a> TypeChecker<'a> {
 						WINGSDK_CLOUD_MODULE | WINGSDK_FS_MODULE => {
 							library_name = WINGSDK_ASSEMBLY_NAME.to_string();
 							namespace_filter = vec![module_name.name.clone()];
-							alias = identifier.as_ref().unwrap_or(&module_name.clone()).name.clone();
+							alias = identifier.as_ref().unwrap_or(&module_name);
 						}
 						WINGSDK_STD_MODULE => {
 							self.stmt_error(stmt, format!("Redundant import of \"{}\"", WINGSDK_STD_MODULE));
@@ -1476,7 +1487,7 @@ impl<'a> TypeChecker<'a> {
 					}
 				};
 
-				self.add_module_to_env(env, library_name, namespace_filter, alias, stmt.idx);
+				self.add_module_to_env(env, library_name, namespace_filter, &alias, stmt.idx);
 			}
 			StmtKind::Scope(scope) => {
 				scope.set_env(SymbolEnv::new(
@@ -1795,7 +1806,7 @@ impl<'a> TypeChecker<'a> {
 		env: &mut SymbolEnv,
 		library_name: String,
 		namespace_filter: Vec<String>,
-		identifier: String,
+		identifier: &Symbol,
 		statement_idx: usize,
 	) {
 		let jsii_manifest_path = if library_name == WINGSDK_ASSEMBLY_NAME {
