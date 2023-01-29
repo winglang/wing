@@ -15,8 +15,8 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
     this.context = context;
   }
 
-  public async init(): Promise<void> { }
-  public async cleanup(): Promise<void> { }
+  public async init(): Promise<void> {}
+  public async cleanup(): Promise<void> {}
 
   public async inc(amount: number = 1): Promise<number> {
     return this.context.withTrace({

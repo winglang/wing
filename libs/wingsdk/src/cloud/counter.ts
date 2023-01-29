@@ -73,7 +73,6 @@ export interface ICounterClient {
    */
   inc(amount?: number): Promise<number>;
 
-
   /**
    * Decrement the counter, returning the previous value.
    * @param amount amount to decrement (default is 1).

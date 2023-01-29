@@ -16,7 +16,7 @@ export class CounterClient implements ICounterClient {
     private readonly tableName: string,
     private readonly initial: number = 0,
     private readonly client = new DynamoDBClient({})
-  ) { }
+  ) {}
 
   public async inc(amount = 1): Promise<number> {
     const command = new UpdateItemCommand({
