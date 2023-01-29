@@ -1,12 +1,12 @@
 import { readFileSync } from "fs";
 import { Construct } from "constructs";
-import * as cloud from "../cloud";
-import * as core from "../core";
-import { TextFile } from "../fs";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { FunctionSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import * as cloud from "../cloud";
+import * as core from "../core";
+import { TextFile } from "../fs";
 import { Duration } from "../std/duration";
 
 export const ENV_WING_SIM_INFLIGHT_RESOURCE_PATH =

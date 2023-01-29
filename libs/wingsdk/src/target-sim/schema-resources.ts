@@ -1,3 +1,4 @@
+import { BaseResourceSchema } from "./schema";
 import {
   BUCKET_TYPE,
   COUNTER_TYPE,
@@ -6,7 +7,6 @@ import {
   QUEUE_TYPE,
   TOPIC_TYPE,
 } from "../cloud";
-import { BaseResourceSchema } from "./schema";
 
 export type FunctionHandle = string;
 

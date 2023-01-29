@@ -1,9 +1,9 @@
 import { DynamodbTable } from "@cdktf/provider-aws/lib/dynamodb-table";
 import { Construct } from "constructs";
+import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
-import { Function } from "./function";
 
 export const HASH_KEY = "id";
 

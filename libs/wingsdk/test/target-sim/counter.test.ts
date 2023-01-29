@@ -1,7 +1,7 @@
+import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { ICounterClient } from "../../src/cloud";
 import { SimApp } from "../../src/testing";
-import { listMessages, treeJsonOf } from "./util";
 
 test("create a counter", async () => {
   // GIVEN

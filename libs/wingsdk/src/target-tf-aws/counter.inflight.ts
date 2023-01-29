@@ -3,8 +3,8 @@ import {
   GetItemCommand,
   DynamoDBClient,
 } from "@aws-sdk/client-dynamodb";
-import { ICounterClient } from "../cloud";
 import { HASH_KEY } from "./counter";
+import { ICounterClient } from "../cloud";
 
 const AMOUNT_TOKEN = "amount";
 const INITIAL_VALUE_TOKEN = "initial";

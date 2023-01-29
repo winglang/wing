@@ -1,9 +1,8 @@
 import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
 import { IConstruct } from "constructs";
-// import { Polycons } from "polycons";
-import { IApp, CdktfApp, AppProps } from "../core";
 import { PolyconFactory } from "./factory";
 import { APP_AZURE_TF_SYMBOL } from "./internal";
+import { IApp, CdktfApp, AppProps } from "../core";
 
 /**
  * Azure app props

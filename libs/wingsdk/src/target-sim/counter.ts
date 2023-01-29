@@ -1,10 +1,10 @@
 import { Construct } from "constructs";
-import * as cloud from "../cloud";
-import * as core from "../core";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { CounterSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import * as cloud from "../cloud";
+import * as core from "../core";
 
 /**
  * Simulator implementation of `cloud.Counter`.

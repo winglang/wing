@@ -2,11 +2,11 @@ import { join } from "path";
 import { LambdaEventSourceMapping } from "@cdktf/provider-aws/lib/lambda-event-source-mapping";
 import { SqsQueue } from "@cdktf/provider-aws/lib/sqs-queue";
 import { Construct } from "constructs";
+import { Function } from "./function";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
-import { Function } from "./function";
 
 /**
  * Queue names are limited to 80 characters.
