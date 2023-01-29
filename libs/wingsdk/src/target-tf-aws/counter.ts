@@ -42,7 +42,10 @@ export class Counter extends cloud.CounterBase {
       throw new Error("counters can only be bound by tfaws.Function for now");
     }
 
-    if (ops.includes(cloud.CounterInflightMethods.INC) || ops.includes(cloud.CounterInflightMethods.DEC)) {
+    if (
+      ops.includes(cloud.CounterInflightMethods.INC) ||
+      ops.includes(cloud.CounterInflightMethods.DEC)
+    ) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["dynamodb:UpdateItem"],
