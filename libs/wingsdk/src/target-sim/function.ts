@@ -1,12 +1,13 @@
 import { readFileSync } from "fs";
 import { Construct } from "constructs";
-import * as cloud from "../cloud";
-import * as core from "../core";
-import { TextFile } from "../fs";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { FunctionSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import * as cloud from "../cloud";
+import * as core from "../core";
+import { TextFile } from "../fs";
+import { Duration } from "../std/duration";
 
 export const ENV_WING_SIM_INFLIGHT_RESOURCE_PATH =
   "WING_SIM_INFLIGHT_RESOURCE_PATH";
@@ -20,7 +21,7 @@ export const ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE =
  */
 export class Function extends cloud.FunctionBase implements ISimulatorResource {
   private readonly code: core.Code;
-
+  private readonly timeout: Duration;
   constructor(
     scope: Construct,
     id: string,
@@ -29,6 +30,7 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
   ) {
     super(scope, id, inflight, props);
 
+    this.timeout = props.timeout ?? Duration.fromMinutes(1);
     const assetPath = `assets/${this.node.id}/index.js`;
     new TextFile(this, "Code", assetPath, {
       lines: [readFileSync(this.assetPath, "utf-8")],
@@ -44,6 +46,7 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
         sourceCodeFile: this.code.path,
         sourceCodeLanguage: "javascript",
         environmentVariables: this.env,
+        timeout: this.timeout.seconds * 1000,
       },
       attrs: {} as any,
     };

@@ -1,8 +1,8 @@
 ====================
-Unary expression
+Unary minus expression
 ====================
 
-+1;
+-1;
 
 ---
 
@@ -10,6 +10,22 @@ Unary expression
     (expression_statement
         (unary_expression
             arg: (number)
+        )
+    )
+)
+
+====================
+Unary not expression
+====================
+
+!false;
+
+---
+
+(source
+    (expression_statement
+        (unary_expression
+            arg: (bool)
         )
     )
 )

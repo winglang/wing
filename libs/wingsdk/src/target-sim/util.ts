@@ -1,8 +1,8 @@
 import { access, constants } from "fs";
 import { promisify } from "util";
 import { IConstruct } from "constructs";
-import { IInflightHost, NodeJsCode, Resource } from "../core";
 import { Function } from "./function";
+import { IInflightHost, NodeJsCode, Resource } from "../core";
 
 /**
  * Check if a file exists for an specific path

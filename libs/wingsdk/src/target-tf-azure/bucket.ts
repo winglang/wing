@@ -1,7 +1,7 @@
-import { ResourceGroup } from "@cdktf/provider-azurerm/lib/resource-group";
-import { StorageAccount } from "@cdktf/provider-azurerm/lib/storage-account";
+import { StorageBlob } from "@cdktf/provider-azurerm/lib/storage-blob";
 import { StorageContainer } from "@cdktf/provider-azurerm/lib/storage-container";
 import { Construct } from "constructs";
+import { App } from "./app";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import {
@@ -9,28 +9,6 @@ import {
   NameOptions,
   ResourceNames,
 } from "../utils/resource-names";
-import { App } from "./app";
-
-/**
- * ResourceGroup names are limited to 90 characters.
- * You can use alphanumeric characters, hyphens, and underscores,
- * parentheses and periods.
- */
-const RESOURCEGROUP_NAME_OPTS: NameOptions = {
-  maxLen: 90,
-  disallowedRegex: /([^a-zA-Z0-9\-\_\(\)\.]+)/g,
-};
-
-/**
- * StorageAccount names are limited to 24 characters.
- * You can only use alphanumeric characters.
- */
-const STORAGEACCOUNT_NAME_OPTS: NameOptions = {
-  maxLen: 24,
-  case: CaseConventions.LOWERCASE,
-  disallowedRegex: /([^a-z0-9]+)/g,
-  sep: "",
-};
 
 /**
  * Bucket names must be between 3 and 63 characters.
@@ -51,29 +29,15 @@ const BUCKET_NAME_OPTS: NameOptions = {
  */
 export class Bucket extends cloud.BucketBase {
   private readonly storageContainer: StorageContainer;
-  private readonly storageAccount: StorageAccount;
-  private readonly resourceGroup: ResourceGroup;
   private readonly public: boolean;
+  private app: App;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps) {
     super(scope, id, props);
 
     this.public = props.public ?? false;
 
-    const app = App.of(this);
-
-    this.resourceGroup = new ResourceGroup(this, "ResourceGroup", {
-      location: app.location,
-      name: ResourceNames.generateName(this, RESOURCEGROUP_NAME_OPTS),
-    });
-
-    this.storageAccount = new StorageAccount(this, "StorageAccount", {
-      name: ResourceNames.generateName(this, STORAGEACCOUNT_NAME_OPTS),
-      resourceGroupName: this.resourceGroup.name,
-      location: this.resourceGroup.location,
-      accountTier: "Standard",
-      accountReplicationType: "LRS",
-    });
+    this.app = App.of(this);
 
     const storageContainerName = ResourceNames.generateName(
       this,
@@ -89,11 +53,26 @@ export class Bucket extends cloud.BucketBase {
 
     this.storageContainer = new StorageContainer(this, "Bucket", {
       name: storageContainerName,
-      storageAccountName: this.storageAccount.name,
+      storageAccountName: this.app.storageAccount.name,
       containerAccessType: this.public ? "public" : "private",
     });
+  }
 
-    this.storageContainer;
+  public addObject(key: string, body: string): void {
+    // Blob naming conventions:
+    // https://learn.microsoft.com/en-us/rest/api/storageservices/naming-and-referencing-containers--blobs--and-metadata#blob-names
+    const blobName = key
+      .split("/")
+      .map((s) => encodeURIComponent(s))
+      .join("/");
+
+    new StorageBlob(this, `Blob-${key}`, {
+      name: blobName,
+      storageAccountName: this.app.storageAccount.name,
+      storageContainerName: this.storageContainer.name,
+      type: "Block",
+      sourceContent: body,
+    });
   }
 
   /** @internal */

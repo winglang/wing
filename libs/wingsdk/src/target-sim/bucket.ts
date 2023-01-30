@@ -1,10 +1,10 @@
 import { Construct } from "constructs";
-import * as cloud from "../cloud";
-import * as core from "../core";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { BucketSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import * as cloud from "../cloud";
+import * as core from "../core";
 
 /**
  * Simulator implementation of `cloud.Bucket`.
@@ -13,10 +13,15 @@ import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
  */
 export class Bucket extends cloud.BucketBase implements ISimulatorResource {
   private readonly public: boolean;
+  private readonly initialObjects: Record<string, string> = {};
   constructor(scope: Construct, id: string, props: cloud.BucketProps) {
     super(scope, id, props);
 
     this.public = props.public ?? false;
+  }
+
+  public addObject(key: string, body: string): void {
+    this.initialObjects[key] = body;
   }
 
   public toSimulator(): BaseResourceSchema {
@@ -25,6 +30,7 @@ export class Bucket extends cloud.BucketBase implements ISimulatorResource {
       path: this.node.path,
       props: {
         public: this.public,
+        initialObjects: this.initialObjects,
       },
       attrs: {} as any,
     };

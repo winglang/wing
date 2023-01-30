@@ -1,11 +1,13 @@
 ---
 id: welcome
 title: Welcome!
+description: Wing is a cloud-oriented programming language. Most programming languages think about computers as individual machines. In Wing, the cloud is the computer.
+image: https://assets.website-files.com/63720940a94e098b4e2a542b/637e2d5495f59f7654160773_Social%20thumbnail.png
 slug: /
 hide_title: true
 ---
 
-# Howdy, and welcome! :wave: 
+# Welcome Wingnuts! :wave: 
 
 :::caution This is Alpha
 

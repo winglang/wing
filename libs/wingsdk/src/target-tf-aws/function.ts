@@ -9,10 +9,11 @@ import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
+import { BUCKET_PREFIX_OPTS } from "./bucket";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Duration } from "../std/duration";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
-import { BUCKET_PREFIX_OPTS } from "./bucket";
 
 /**
  * Function names are limited to 64 characters.
@@ -140,6 +141,9 @@ export class Function extends cloud.FunctionBase {
       environment: {
         variables: Lazy.anyValue({ produce: () => this.env }) as any,
       },
+      timeout: props.timeout
+        ? props.timeout.seconds
+        : Duration.fromMinutes(1).seconds,
     });
 
     this.arn = this.function.arn;

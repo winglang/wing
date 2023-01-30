@@ -3,20 +3,22 @@ import {
   GetItemCommand,
   DynamoDBClient,
 } from "@aws-sdk/client-dynamodb";
-import { ICounterClient } from "../cloud";
 import { HASH_KEY } from "./counter";
+import { CounterClientBase } from "../cloud";
 
 const AMOUNT_TOKEN = "amount";
 const INITIAL_VALUE_TOKEN = "initial";
 const COUNTER_ID = "counter";
 const VALUE_ATTRIBUTE = "counter_value";
 
-export class CounterClient implements ICounterClient {
+export class CounterClient extends CounterClientBase {
   constructor(
     private readonly tableName: string,
     private readonly initial: number = 0,
     private readonly client = new DynamoDBClient({})
-  ) {}
+  ) {
+    super();
+  }
 
   public async inc(amount = 1): Promise<number> {
     const command = new UpdateItemCommand({

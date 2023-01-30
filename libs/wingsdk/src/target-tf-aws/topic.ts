@@ -3,11 +3,11 @@ import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
 import { SnsTopic } from "@cdktf/provider-aws/lib/sns-topic";
 import { SnsTopicSubscription } from "@cdktf/provider-aws/lib/sns-topic-subscription";
 import { Construct } from "constructs";
+import { Function } from "./function";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
-import { Function } from "./function";
 
 /**
  * Topic names are limited to 256 characters.

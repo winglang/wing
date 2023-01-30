@@ -1,6 +1,6 @@
 import * as reflect from "jsii-reflect";
 import { ApiReferenceSchema } from "../schema";
-import { Language, Transpile } from "../transpile/transpile";
+import { Transpile } from "../transpile/transpile";
 import { Classes } from "./classes";
 import { Constructs } from "./constructs";
 import { Enums } from "./enums";
@@ -28,14 +28,13 @@ export class ApiReference {
 
     let submodules = assembly.submodules;
 
-    // TODO WING HACK
-    const wingHacks = transpile.language === Language.WING;
-    if (wingHacks) {
+    // TODO WING SDK HACK
+    const wingSdkHacks = assembly.name === "@winglang/sdk";
+    if (wingSdkHacks) {
       submodules = submodules.filter(
         (s) => s.name === "cloud" || s.name === "core" || s.name === "fs"
       );
     }
-
     if (allSubmodules ?? false) {
       classes = this.sortByName([
         ...assembly.classes,
@@ -60,9 +59,9 @@ export class ApiReference {
     }
 
     // TODO WING HACK
-    // ignore certain concrete classes from wingsdk
+    // ignore certain abstract classes from wingsdk
     let constructClasses = classes;
-    if (wingHacks) {
+    if (wingSdkHacks) {
       classes = classes.filter((c) => !c.abstract);
       constructClasses = classes.filter(
         (c) => !c.abstract && c.docs.customTag("inflight")

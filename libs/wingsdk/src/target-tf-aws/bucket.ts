@@ -2,7 +2,9 @@ import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { S3BucketPolicy } from "@cdktf/provider-aws/lib/s3-bucket-policy";
 import { S3BucketPublicAccessBlock } from "@cdktf/provider-aws/lib/s3-bucket-public-access-block";
 import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/lib/s3-bucket-server-side-encryption-configuration";
+import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { Construct } from "constructs";
+import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import {
@@ -10,7 +12,6 @@ import {
   NameOptions,
   ResourceNames,
 } from "../utils/resource-names";
-import { Function } from "./function";
 
 /**
  * Bucket prefix provided to Terraform must be between 3 and 37 characters.
@@ -101,6 +102,14 @@ export class Bucket extends cloud.BucketBase {
         restrictPublicBuckets: true,
       });
     }
+  }
+
+  public addObject(key: string, body: string): void {
+    new S3Object(this, `S3Object-${key}`, {
+      bucket: this.bucket.bucket,
+      key,
+      content: body,
+    });
   }
 
   /** @internal */

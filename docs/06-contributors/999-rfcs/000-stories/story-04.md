@@ -42,7 +42,7 @@ using the Wing Console.
 *This README is for *users* of the language. It contains information about how
 to install the toolchain, and how to build Wing applications. If you wish to
 *contribute* to the project, please jump over to our [contribution
-guide](./CONTRIBUTING.md).*
+guide](https://github.com/winglang/wing/blob/main/CONTRIBUTING.md).*
 
 ## Getting Started
 
@@ -177,8 +177,8 @@ the log message `Hello, cloud!`.
 Now that you've written your first Wing program, what's next? Here are some
 resources to help you get started:
 
-- [Wing Language Specification](./docs/winglang-spec.md)
-- [Wing SDK Reference](./docs/wingsdk-api.md)
+- [Wing Language Specification](/reference/spec)
+- [Wing SDK Reference](/reference/wingsdk-spec)
 
 ## Staying up to date
 
@@ -197,14 +197,14 @@ Our VSCode extension has automatic updates, as well as the Wing Console.
 ## Contributing
 
 We welcome and celebrate contributions from the community! Please see our
-[contribution guide](./CONTRIBUTING.md) for more information about setting up a
-development envinronment, what we are working on, where we need help and other
+[contribution guide](https://github.com/winglang/wing/blob/main/CONTRIBUTING.md) for more information about setting up a
+development environment, what we are working on, where we need help and other
 guidelines for contributing to the project.
 
 ## Community
 
-We all hang out at the [Wing Discord](https://discord.gg/w7Rs94cbdd) server.
-Come as you are, say hi, ask questions, help friends, geek out!
+We all hang out at the [Wing Slack](https://t.winglang.io/slack). Come as you are, say hi, ask
+questions, help friends, geek out!
 
 ## License
 

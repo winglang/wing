@@ -1,30 +1,36 @@
 import * as fs from "fs";
 import * as os from "os";
 import { join } from "path";
-import { BucketDeleteOptions, IBucketClient } from "../cloud";
-import { ISimulatorContext } from "../testing/simulator";
 import { ISimulatorResourceInstance } from "./resource";
 import { BucketSchema } from "./schema-resources";
 import { exists } from "./util";
+import { BucketDeleteOptions, IBucketClient } from "../cloud";
+import { ISimulatorContext } from "../testing/simulator";
 
 export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private readonly fileDir: string;
   private readonly context: ISimulatorContext;
-  public constructor(
-    _props: BucketSchema["props"],
-    context: ISimulatorContext
-  ) {
+  private readonly initialObjects: Record<string, string>;
+  public constructor(props: BucketSchema["props"], context: ISimulatorContext) {
     this.fileDir = fs.mkdtempSync(join(os.tmpdir(), "wing-sim-"));
     this.context = context;
+    this.initialObjects = props.initialObjects ?? {};
   }
 
   public async init(): Promise<void> {
-    return;
+    for (const [key, value] of Object.entries(this.initialObjects)) {
+      await this.context.withTrace({
+        message: `Adding object from preflight (key=${key}).`,
+        activity: async () => {
+          const filename = join(this.fileDir, key);
+          await fs.promises.writeFile(filename, value);
+        },
+      });
+    }
   }
 
   public async cleanup(): Promise<void> {
-    // TODO: clean up file dir?
-    return;
+    await fs.promises.rm(this.fileDir, { recursive: true, force: true });
   }
 
   public async put(key: string, value: string): Promise<void> {

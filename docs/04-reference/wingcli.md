@@ -1,5 +1,5 @@
 ---
-title: CLI
+title: CLI Reference
 id: cli
 description: Wing CLI Reference
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language, cli]
@@ -109,7 +109,29 @@ The output includes both a Terraform configuration file (under `target/cdktf.out
 JavaScript bundles that include inflight code that executes on compute platform such as Azure
 Functions.
 
-You can deploy your stack to AWS using Terraform ([example](/getting-started/aws)).
+You can deploy your stack to Azure using Terraform ([example](/getting-started/aws)).
+
+### `tf-gcp` Target
+
+Compiles your program for Terraform and run on Google Cloud Platform.
+
+For example:
+
+```sh
+$ export GOOGLE_PROJECT_ID="my-project"
+$ export GOOGLE_STORAGE_LOCATION="US"
+$ wing compile --target tf-gcp hello.w
+```
+
+The variable `GOOGLE_STORAGE_LOCATION` is required and indicates the [deployment
+location](https://cloud.google.com/storage/docs/locations) of all storage
+resources (such as buckets and queues). The variable `GOOGLE_PROJECT_ID` is required and indicates
+the project ID of your stack.
+
+The output includes both a Terraform configuration file (under `target/cdktf.out/stacks/root`) and
+JavaScript bundles that include inflight code that executes on compute platform such as Google Cloud Functions.
+
+You can deploy your stack to GCP using Terraform ([example](/getting-started/aws)).
 
 ## Test: `wing test`
 

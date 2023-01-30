@@ -62,7 +62,7 @@ export class Counter extends CounterBase {
 }
 
 /**
- * Inflight interface for `Queue`.
+ * Inflight interface for `Counter`.
  */
 export interface ICounterClient {
   /**
@@ -72,6 +72,14 @@ export interface ICounterClient {
    * @inflight
    */
   inc(amount?: number): Promise<number>;
+
+  /**
+   * Decrement the counter, returning the previous value.
+   * @param amount amount to decrement (default is 1).
+   * @returns the previous value of the counter.
+   * @inflight
+   */
+  dec(amount?: number): Promise<number>;
 
   /**
    * Get the current value of the counter.
@@ -84,12 +92,30 @@ export interface ICounterClient {
 }
 
 /**
+ * Functionality shared between all `CounterClient` implementations regardless of the target.
+ */
+export abstract class CounterClientBase implements ICounterClient {
+  inc(amount?: number): Promise<number> {
+    amount;
+    throw new Error("Method not implemented.");
+  }
+  dec(amount?: number): Promise<number> {
+    return this.inc(-1 * (amount ?? 1));
+  }
+  peek(): Promise<number> {
+    throw new Error("Method not implemented.");
+  }
+}
+
+/**
  * List of inflight operations available for `Counter`.
  * @internal
  */
 export enum CounterInflightMethods {
   /** `Counter.inc` */
   INC = "inc",
+  /** `Counter.dec` */
+  DEC = "dec",
   /** `Counter.peek` */
   PEEK = "peek",
 }

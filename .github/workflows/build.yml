@@ -19,12 +19,14 @@ env:
   # Testing runs out of memory without this
   NODE_OPTIONS: "--max-old-space-size=4096"
   PROJEN_BUMP_VERSION: "0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}"
+  RUST_VERSION: "1.66.0"
 
 jobs:
   prepare:
     name: "Prepare"
     runs-on: ubuntu-latest
     outputs:
+      last-version: ${{ steps.tags.outputs.last-version || steps.pr_info.outputs.version }}
       version: ${{ steps.info.outputs.version || steps.pr_info.outputs.version }}
     steps:
       - name: Checkout
@@ -35,8 +37,12 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Get tags
+        id: tags
         if: github.event_name == 'push' && github.repository == 'winglang/wing'
-        run: git fetch --unshallow --tags
+        run: |
+          git fetch --unshallow --tags
+          LAST_VERSION="$(git describe --tags `git rev-list --tags --max-count=1`)"
+          echo "last-version=${LAST_VERSION#?}" >> $GITHUB_OUTPUT
 
       - name: Install Dependencies
         if: github.event_name == 'push' && github.repository == 'winglang/wing'
@@ -64,6 +70,7 @@ jobs:
         id: pr_info
         if: github.event_name != 'push' || github.repository != 'winglang/wing'
         run: |
+          echo "last-version=0.0.0" >> $GITHUB_OUTPUT
           echo "version=0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}" >> $GITHUB_OUTPUT
           echo "Pull Request" > CHANGELOG.md
           cat CHANGELOG.md >> $GITHUB_STEP_SUMMARY
@@ -87,7 +94,7 @@ jobs:
 
   build-wasm:
     name: "Non-Native Build"
-    timeout-minutes: 15
+    timeout-minutes: 20
     runs-on: ubuntu-latest
     needs: prepare
     env:
@@ -107,7 +114,8 @@ jobs:
       - name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable
+          toolchain: ${{ env.RUST_VERSION }}
+          components: rustfmt
           override: true
 
       - name: Setup Cargo Cache
@@ -127,15 +135,16 @@ jobs:
         with:
           targets: "build"
           all: true
+          # Exclude native-dependent projects
           args: "--exclude=wing-language-server,vscode-wing --configuration=release --output-style=stream --verbose"
 
-      # wingc require wingsdk to be built first in order to run
       - name: Test
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "test"
           all: true
-          args: "--exclude=hangar --configuration=release --output-style=stream --verbose"
+          # Exclude E2E testing and native-dependent projects
+          args: "--exclude=hangar,wing-language-server,vscode-wing --configuration=release --output-style=stream --verbose"
 
       - name: Create NPM packages
         uses: MansaGroup/nrwl-nx-action@v2
@@ -208,7 +217,8 @@ jobs:
       - name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable
+          toolchain: ${{ env.RUST_VERSION }}
+          components: rustfmt
           override: true
 
       - name: Setup Cargo Cache
@@ -361,7 +371,19 @@ jobs:
         with:
           node-version: ${{ env.NODEJS_VERSION }}
 
+      - name: Tag commit
+        uses: tvdias/github-tagger@v0.0.1
+        if: ${{ needs.prepare.outputs.last-version != needs.prepare.outputs.version }}
+        with:
+          repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
+          tag: "v${{ needs.prepare.outputs.version }}"
+
+      - name: Check published VSCode Version
+        id: vscode-version
+        run: echo "version=$(npx -y vsce show Monada.vscode-wing --json | jq '.versions[0].version' -r)" >> $GITHUB_OUTPUT
+
       - name: Publish Extension to Visual Studio Marketplace
+        if: ${{ steps.vscode-version.outputs.version != needs.prepare.outputs.version }}
         uses: "HaaLeo/publish-vscode-extension@v1"
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
@@ -371,11 +393,21 @@ jobs:
       - name: Login to Private NPM registry
         run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
 
+      - name: Check published Wing version
+        id: wing-version
+        run: echo "version=$(npm view winglang version)" >> $GITHUB_OUTPUT
+
       - name: Publish Wing
+        if: ${{ steps.wing-version.outputs.version != needs.prepare.outputs.version }}
         working-directory: wing
         run: npm publish *.tgz --access public
 
+      - name: Check published WingSDK version
+        id: wingsdk-version
+        run: echo "version=$(npm view @winglang/sdk version)" >> $GITHUB_OUTPUT
+
       - name: Publish Wing SDK
+        if: ${{ steps.wingsdk-version.outputs.version != needs.prepare.outputs.version }}
         working-directory: wingsdk
         run: npm publish *.tgz --access public
 
@@ -396,12 +428,6 @@ jobs:
           sha1sum --binary * >> ../CHANGELOG.md
           echo '```' >> ../CHANGELOG.md
           cat ../CHANGELOG.md
-
-      - name: Tag commit
-        uses: tvdias/github-tagger@v0.0.1
-        with:
-          repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
-          tag: "v${{ needs.prepare.outputs.version }}"
 
       - name: Cut Development Release
         uses: softprops/action-gh-release@v1

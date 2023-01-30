@@ -1,7 +1,7 @@
+import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { ICounterClient } from "../../src/cloud";
 import { SimApp } from "../../src/testing";
-import { listMessages, treeJsonOf } from "./util";
 
 test("create a counter", async () => {
   // GIVEN
@@ -59,6 +59,43 @@ test("inc", async () => {
     "Inc (amount=1).",
     "Inc (amount=10).",
     "Inc (amount=10).",
+    "wingsdk.cloud.Counter deleted.",
+    "wingsdk.cloud.Logger deleted.",
+  ]);
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("dec", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Counter(app, "my_counter", {
+    initial: 123,
+  });
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_counter") as ICounterClient;
+
+  const value0 = await client.dec();
+  expect(value0).toEqual(123); // always returns the value before inc (like "i--");
+
+  const value1 = await client.dec();
+  expect(value1).toEqual(123 - 1);
+
+  const value2 = await client.dec(10);
+  expect(value2).toEqual(123 - 1 - 1);
+
+  const value3 = await client.dec(10);
+  expect(value3).toEqual(123 - 1 - 1 - 10);
+  await s.stop();
+
+  expect(listMessages(s)).toEqual([
+    "wingsdk.cloud.Logger created.",
+    "wingsdk.cloud.Counter created.",
+    "Dec (amount=1).",
+    "Dec (amount=1).",
+    "Dec (amount=10).",
+    "Dec (amount=10).",
     "wingsdk.cloud.Counter deleted.",
     "wingsdk.cloud.Logger deleted.",
   ]);
