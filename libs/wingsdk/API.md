@@ -11,7 +11,7 @@ Represents a cloud object store.
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Bucket.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 new cloud.Bucket(props?: BucketProps)
 ```
@@ -24,7 +24,7 @@ new cloud.Bucket(props?: BucketProps)
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Bucket.Initializer.parameter.props"></a>
 
-- *Type:* @winglang/wingsdk.cloud.BucketProps
+- *Type:* cloud.BucketProps
 
 ---
 
@@ -80,7 +80,7 @@ referencing a file from the local filesystem.
 ##### `is_construct` <a name="is_construct" id="@winglang/sdk.cloud.Bucket.isConstruct"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 cloud.Bucket.is_construct(x: any)
 ```
@@ -112,7 +112,7 @@ Any object.
 ##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Bucket.addConnection"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 cloud.Bucket.add_connection(props: AddConnectionProps)
 ```
@@ -125,7 +125,7 @@ metadata is recorded in the tree.json file.
 
 ###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Bucket.addConnection.parameter.props"></a>
 
-- *Type:* @winglang/wingsdk.core.AddConnectionProps
+- *Type:* core.AddConnectionProps
 
 ---
 
@@ -189,7 +189,7 @@ Represents a distributed atomic counter.
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Counter.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 new cloud.Counter(props?: CounterProps)
 ```
@@ -202,7 +202,7 @@ new cloud.Counter(props?: CounterProps)
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Counter.Initializer.parameter.props"></a>
 
-- *Type:* @winglang/wingsdk.cloud.CounterProps
+- *Type:* cloud.CounterProps
 
 ---
 
@@ -234,7 +234,7 @@ Returns a string representation of this construct.
 ##### `is_construct` <a name="is_construct" id="@winglang/sdk.cloud.Counter.isConstruct"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 cloud.Counter.is_construct(x: any)
 ```
@@ -266,7 +266,7 @@ Any object.
 ##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Counter.addConnection"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 cloud.Counter.add_connection(props: AddConnectionProps)
 ```
@@ -279,7 +279,7 @@ metadata is recorded in the tree.json file.
 
 ###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Counter.addConnection.parameter.props"></a>
 
-- *Type:* @winglang/wingsdk.core.AddConnectionProps
+- *Type:* core.AddConnectionProps
 
 ---
 
@@ -356,7 +356,7 @@ Represents a function.
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Function.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 new cloud.Function(inflight: ~Inflight, props?: FunctionProps)
 ```
@@ -370,13 +370,13 @@ new cloud.Function(inflight: ~Inflight, props?: FunctionProps)
 
 ##### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Function.Initializer.parameter.inflight"></a>
 
-- *Type:* @winglang/wingsdk.core.Inflight
+- *Type:* core.Inflight
 
 ---
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Function.Initializer.parameter.props"></a>
 
-- *Type:* @winglang/wingsdk.cloud.FunctionProps
+- *Type:* cloud.FunctionProps
 
 ---
 
@@ -429,7 +429,7 @@ Add an environment variable to the function.
 ##### `is_construct` <a name="is_construct" id="@winglang/sdk.cloud.Function.isConstruct"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 cloud.Function.is_construct(x: any)
 ```
@@ -461,7 +461,7 @@ Any object.
 ##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Function.addConnection"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 cloud.Function.add_connection(props: AddConnectionProps)
 ```
@@ -474,7 +474,7 @@ metadata is recorded in the tree.json file.
 
 ###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Function.addConnection.parameter.props"></a>
 
-- *Type:* @winglang/wingsdk.core.AddConnectionProps
+- *Type:* core.AddConnectionProps
 
 ---
 
@@ -595,7 +595,7 @@ The message to log.
 ##### `is_construct` <a name="is_construct" id="@winglang/sdk.cloud.Logger.isConstruct"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 cloud.Logger.is_construct(x: any)
 ```
@@ -627,7 +627,7 @@ Any object.
 ##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Logger.addConnection"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 cloud.Logger.add_connection(props: AddConnectionProps)
 ```
@@ -640,14 +640,14 @@ metadata is recorded in the tree.json file.
 
 ###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Logger.addConnection.parameter.props"></a>
 
-- *Type:* @winglang/wingsdk.core.AddConnectionProps
+- *Type:* core.AddConnectionProps
 
 ---
 
 ##### `of` <a name="of" id="@winglang/sdk.cloud.Logger.of"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 cloud.Logger.of()
 ```
@@ -657,7 +657,7 @@ Returns the logger registered to the given scope, throwing an error if there is 
 ##### `register` <a name="register" id="@winglang/sdk.cloud.Logger.register"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 cloud.Logger.register()
 ```
@@ -724,7 +724,7 @@ Represents a queue.
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Queue.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 new cloud.Queue(props?: QueueProps)
 ```
@@ -737,7 +737,7 @@ new cloud.Queue(props?: QueueProps)
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.Initializer.parameter.props"></a>
 
-- *Type:* @winglang/wingsdk.cloud.QueueProps
+- *Type:* cloud.QueueProps
 
 ---
 
@@ -768,13 +768,13 @@ Create a function to consume messages from this queue.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Queue.onMessage.parameter.inflight"></a>
 
-- *Type:* @winglang/wingsdk.core.Inflight
+- *Type:* core.Inflight
 
 ---
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.onMessage.parameter.props"></a>
 
-- *Type:* @winglang/wingsdk.cloud.QueueOnMessageProps
+- *Type:* cloud.QueueOnMessageProps
 
 ---
 
@@ -790,7 +790,7 @@ Create a function to consume messages from this queue.
 ##### `is_construct` <a name="is_construct" id="@winglang/sdk.cloud.Queue.isConstruct"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 cloud.Queue.is_construct(x: any)
 ```
@@ -822,7 +822,7 @@ Any object.
 ##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Queue.addConnection"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 cloud.Queue.add_connection(props: AddConnectionProps)
 ```
@@ -835,7 +835,7 @@ metadata is recorded in the tree.json file.
 
 ###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Queue.addConnection.parameter.props"></a>
 
-- *Type:* @winglang/wingsdk.core.AddConnectionProps
+- *Type:* core.AddConnectionProps
 
 ---
 
@@ -899,7 +899,7 @@ Represents a topic.
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Topic.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 new cloud.Topic(props?: TopicProps)
 ```
@@ -912,7 +912,7 @@ new cloud.Topic(props?: TopicProps)
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Topic.Initializer.parameter.props"></a>
 
-- *Type:* @winglang/wingsdk.cloud.TopicProps
+- *Type:* cloud.TopicProps
 
 ---
 
@@ -943,13 +943,13 @@ Creates function to send messages when published.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Topic.onMessage.parameter.inflight"></a>
 
-- *Type:* @winglang/wingsdk.core.Inflight
+- *Type:* core.Inflight
 
 ---
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Topic.onMessage.parameter.props"></a>
 
-- *Type:* @winglang/wingsdk.cloud.TopicOnMessageProps
+- *Type:* cloud.TopicOnMessageProps
 
 ---
 
@@ -965,7 +965,7 @@ Creates function to send messages when published.
 ##### `is_construct` <a name="is_construct" id="@winglang/sdk.cloud.Topic.isConstruct"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 cloud.Topic.is_construct(x: any)
 ```
@@ -997,7 +997,7 @@ Any object.
 ##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Topic.addConnection"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 cloud.Topic.add_connection(props: AddConnectionProps)
 ```
@@ -1010,7 +1010,7 @@ metadata is recorded in the tree.json file.
 
 ###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Topic.addConnection.parameter.props"></a>
 
-- *Type:* @winglang/wingsdk.core.AddConnectionProps
+- *Type:* core.AddConnectionProps
 
 ---
 
@@ -1074,7 +1074,7 @@ Props for `Resource.addConnection`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.AddConnectionProps.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/wingsdk"
+bring core;
 
 let add_connection_props = core.AddConnectionProps{ ... }
 ```
@@ -1096,7 +1096,7 @@ let add_connection_props = core.AddConnectionProps{ ... }
 from: IResource;
 ```
 
-- *Type:* @winglang/wingsdk.core.IResource
+- *Type:* core.IResource
 
 The resource creating the connection to `to`.
 
@@ -1120,7 +1120,7 @@ The type of relationship between the resources.
 to: IResource;
 ```
 
-- *Type:* @winglang/wingsdk.core.IResource
+- *Type:* core.IResource
 
 The resource `from` is connecting to.
 
@@ -1146,7 +1146,7 @@ Props for all `App` classes.
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.AppProps.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/wingsdk"
+bring core;
 
 let app_props = core.AppProps{ ... }
 ```
@@ -1224,7 +1224,7 @@ Interface for delete method inside `Bucket`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketDeleteOptions.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 let bucket_delete_options = cloud.BucketDeleteOptions{ ... }
 ```
@@ -1257,7 +1257,7 @@ Properties for `Bucket`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketProps.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 let bucket_props = cloud.BucketProps{ ... }
 ```
@@ -1290,7 +1290,7 @@ A connection between two resources.
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.Connection.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/wingsdk"
+bring core;
 
 let connection = core.Connection{ ... }
 ```
@@ -1312,7 +1312,7 @@ let connection = core.Connection{ ... }
 direction: Direction;
 ```
 
-- *Type:* @winglang/wingsdk.core.Direction
+- *Type:* core.Direction
 
 The direction of the connection.
 
@@ -1348,7 +1348,7 @@ The type of relationship with the resource.
 resource: IResource;
 ```
 
-- *Type:* @winglang/wingsdk.core.IResource
+- *Type:* core.IResource
 
 The resource this connection is to.
 
@@ -1361,7 +1361,7 @@ Source information on a construct (class fqn and version).
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.ConstructInfo.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/wingsdk"
+bring core;
 
 let construct_info = core.ConstructInfo{ ... }
 ```
@@ -1406,7 +1406,7 @@ The construct tree.
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.ConstructTree.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/wingsdk"
+bring core;
 
 let construct_tree = core.ConstructTree{ ... }
 ```
@@ -1426,7 +1426,7 @@ let construct_tree = core.ConstructTree{ ... }
 tree: ConstructTreeNode;
 ```
 
-- *Type:* @winglang/wingsdk.core.ConstructTreeNode
+- *Type:* core.ConstructTreeNode
 
 The root node.
 
@@ -1451,7 +1451,7 @@ A node in the construct tree.
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.ConstructTreeNode.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/wingsdk"
+bring core;
 
 let construct_tree_node = core.ConstructTreeNode{ ... }
 ```
@@ -1513,7 +1513,7 @@ The node attributes.
 children: MutMap<ConstructTreeNode>;
 ```
 
-- *Type:* MutMap&lt;@winglang/wingsdk.core.ConstructTreeNode&gt;
+- *Type:* MutMap&lt;core.ConstructTreeNode&gt;
 
 The child nodes.
 
@@ -1525,7 +1525,7 @@ The child nodes.
 construct_info: ConstructInfo;
 ```
 
-- *Type:* @winglang/wingsdk.core.ConstructInfo
+- *Type:* core.ConstructInfo
 
 Information on the construct class that led to this node, if available.
 
@@ -1550,7 +1550,7 @@ Properties for `Counter`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.CounterProps.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 let counter_props = cloud.CounterProps{ ... }
 ```
@@ -1705,7 +1705,7 @@ Props for `Files`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.FilesProps.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/wingsdk"
+bring core;
 
 let files_props = core.FilesProps{ ... }
 ```
@@ -1725,7 +1725,7 @@ let files_props = core.FilesProps{ ... }
 app: IApp;
 ```
 
-- *Type:* @winglang/wingsdk.core.IApp
+- *Type:* core.IApp
 
 The app with files to synthesize.
 
@@ -1756,7 +1756,7 @@ This is the type users see when constructing a cloud.Function instance.
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.FunctionProps.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 let function_props = cloud.FunctionProps{ ... }
 ```
@@ -1803,7 +1803,7 @@ Inflight bindings.
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.InflightBindings.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/wingsdk"
+bring core;
 
 let inflight_bindings = core.InflightBindings{ ... }
 ```
@@ -1848,7 +1848,7 @@ Props for `Inflight`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.InflightProps.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/wingsdk"
+bring core;
 
 let inflight_props = core.InflightProps{ ... }
 ```
@@ -1868,7 +1868,7 @@ let inflight_props = core.InflightProps{ ... }
 code: Code;
 ```
 
-- *Type:* @winglang/wingsdk.core.Code
+- *Type:* core.Code
 
 Reference to the inflight code. Only JavaScript code is currently supported.
 
@@ -1942,7 +1942,7 @@ Props for `JsonFile`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.fs.JsonFileProps.Initializer"></a>
 
 ```wing
-bring { fs } from "@winglang/wingsdk"
+bring fs;
 
 let json_file_props = fs.JsonFileProps{ ... }
 ```
@@ -1985,7 +1985,7 @@ at "this.inner", or it may call "get" on a resource passed as an argument named
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.OperationAnnotation.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/wingsdk"
+bring core;
 
 let operation_annotation = core.OperationAnnotation{ ... }
 ```
@@ -1998,7 +1998,7 @@ Options for Queue.onMessage.
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.QueueOnMessageProps.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 let queue_on_message_props = cloud.QueueOnMessageProps{ ... }
 ```
@@ -2059,7 +2059,7 @@ Properties for `Queue`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.QueueProps.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 let queue_props = cloud.QueueProps{ ... }
 ```
@@ -2092,7 +2092,7 @@ Initialize the queue with a set of messages.
 timeout: Duration;
 ```
 
-- *Type:* @winglang/wingsdk.std.Duration
+- *Type:* std.Duration
 - *Default:* Duration.fromSeconds(10)
 
 How long a queue's consumers have to process a message.
@@ -2106,7 +2106,7 @@ Props for `TextFile`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.fs.TextFileProps.Initializer"></a>
 
 ```wing
-bring { fs } from "@winglang/wingsdk"
+bring fs;
 
 let text_file_props = fs.TextFileProps{ ... }
 ```
@@ -2141,7 +2141,7 @@ Options for Topic.onMessage.
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.TopicOnMessageProps.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 let topic_on_message_props = cloud.TopicOnMessageProps{ ... }
 ```
@@ -2154,7 +2154,7 @@ Properties for `Topic`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.TopicProps.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/wingsdk"
+bring cloud;
 
 let topic_props = cloud.TopicProps{ ... }
 ```
@@ -2178,7 +2178,7 @@ from a different scope, that relationship is not represented in this graph.
 #### Initializers <a name="Initializers" id="@winglang/sdk.core.DependencyGraph.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/wingsdk"
+bring core;
 
 new core.DependencyGraph(node: Node)
 ```
@@ -2226,7 +2226,7 @@ Returns a topologically sorted array of the constructs in the sub-graph.
 root: DependencyVertex;
 ```
 
-- *Type:* @winglang/wingsdk.core.DependencyVertex
+- *Type:* core.DependencyVertex
 
 Returns the root of the graph.
 
@@ -2245,7 +2245,7 @@ The value of each vertex is an `IConstruct` that is accessible via the `.value` 
 #### Initializers <a name="Initializers" id="@winglang/sdk.core.DependencyVertex.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/wingsdk"
+bring core;
 
 new core.DependencyVertex(value?: IConstruct)
 ```
@@ -2285,7 +2285,7 @@ This operation will fail in case it creates a cycle in the graph.
 
 ###### `dep`<sup>Required</sup> <a name="dep" id="@winglang/sdk.core.DependencyVertex.addChild.parameter.dep"></a>
 
-- *Type:* @winglang/wingsdk.core.DependencyVertex
+- *Type:* core.DependencyVertex
 
 The dependency.
 
@@ -2316,7 +2316,7 @@ Returns a topologically sorted array of the constructs in the sub-graph.
 inbound: MutArray<DependencyVertex>;
 ```
 
-- *Type:* MutArray&lt;@winglang/wingsdk.core.DependencyVertex&gt;
+- *Type:* MutArray&lt;core.DependencyVertex&gt;
 
 Returns the parents of the vertex (i.e dependants).
 
@@ -2328,7 +2328,7 @@ Returns the parents of the vertex (i.e dependants).
 outbound: MutArray<DependencyVertex>;
 ```
 
-- *Type:* MutArray&lt;@winglang/wingsdk.core.DependencyVertex&gt;
+- *Type:* MutArray&lt;core.DependencyVertex&gt;
 
 Returns the children of the vertex (i.e dependencies).
 
@@ -2429,7 +2429,7 @@ Handles the synthesis of files.
 #### Initializers <a name="Initializers" id="@winglang/sdk.core.Files.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/wingsdk"
+bring core;
 
 new core.Files(props: FilesProps)
 ```
@@ -2442,7 +2442,7 @@ new core.Files(props: FilesProps)
 
 ##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.core.Files.Initializer.parameter.props"></a>
 
-- *Type:* @winglang/wingsdk.core.FilesProps
+- *Type:* core.FilesProps
 
 ---
 
@@ -2511,7 +2511,7 @@ Utility class with functions about inflight clients.
 ##### `for` <a name="for" id="@winglang/sdk.core.InflightClient.for"></a>
 
 ```wing
-bring { core } from "@winglang/wingsdk"
+bring core;
 
 core.InflightClient.for(filename: str, client_class: str, args: MutArray<str>)
 ```
@@ -2555,7 +2555,7 @@ Reference to a piece of Node.js code.
 ##### `from_file` <a name="from_file" id="@winglang/sdk.core.NodeJsCode.fromFile"></a>
 
 ```wing
-bring { core } from "@winglang/wingsdk"
+bring core;
 
 core.NodeJsCode.from_file(path: str)
 ```
@@ -2571,7 +2571,7 @@ Reference code from a file path.
 ##### `from_inline` <a name="from_inline" id="@winglang/sdk.core.NodeJsCode.fromInline"></a>
 
 ```wing
-bring { core } from "@winglang/wingsdk"
+bring core;
 
 core.NodeJsCode.from_inline(text: str)
 ```
@@ -2613,7 +2613,7 @@ Generate a hash of the code contents.
 language: Language;
 ```
 
-- *Type:* @winglang/wingsdk.core.Language
+- *Type:* core.Language
 
 The language of the code.
 
@@ -2651,7 +2651,7 @@ Inspector that maintains an attribute bag.
 #### Initializers <a name="Initializers" id="@winglang/sdk.core.TreeInspector.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/wingsdk"
+bring core;
 
 new core.TreeInspector()
 ```
@@ -2776,7 +2776,7 @@ Directory where artifacts are synthesized to.
 
 ### IBucketClient <a name="IBucketClient" id="@winglang/sdk.cloud.IBucketClient"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.IBucketClient
+- *Implemented By:* cloud.IBucketClient
 
 Inflight interface for `Bucket`.
 
@@ -2811,7 +2811,7 @@ Key of the object.
 
 ###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.IBucketClient.delete.parameter.opts"></a>
 
-- *Type:* @winglang/wingsdk.cloud.BucketDeleteOptions
+- *Type:* cloud.BucketDeleteOptions
 
 Options available for delete an item from a bucket.
 
@@ -2882,7 +2882,7 @@ Content of the object we want to store into the bucket.
 
 ### ICounterClient <a name="ICounterClient" id="@winglang/sdk.cloud.ICounterClient"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.ICounterClient
+- *Implemented By:* cloud.ICounterClient
 
 Inflight interface for `Queue`.
 
@@ -2929,7 +2929,7 @@ the time it is read and the time it is used in your code.
 
 ### IFunctionClient <a name="IFunctionClient" id="@winglang/sdk.cloud.IFunctionClient"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.IFunctionClient
+- *Implemented By:* cloud.IFunctionClient
 
 Inflight interface for `Function`.
 
@@ -2960,9 +2960,9 @@ Invoke the function asynchronously with a given payload.
 
 ### IFunctionHandler <a name="IFunctionHandler" id="@winglang/sdk.cloud.IFunctionHandler"></a>
 
-- *Extends:* @winglang/wingsdk.core.IResource
+- *Extends:* core.IResource
 
-- *Implemented By:* @winglang/wingsdk.cloud.IFunctionHandler
+- *Implemented By:* cloud.IFunctionHandler
 
 **Inflight client:** [wingsdk.cloud.IFunctionHandlerClient](#wingsdk.cloud.IFunctionHandlerClient)
 
@@ -3004,7 +3004,7 @@ Information on how to display a resource in the UI.
 
 ### IFunctionHandlerClient <a name="IFunctionHandlerClient" id="@winglang/sdk.cloud.IFunctionHandlerClient"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.IFunctionHandlerClient
+- *Implemented By:* cloud.IFunctionHandlerClient
 
 Inflight client for `IFunctionHandler`.
 
@@ -3035,9 +3035,9 @@ Entrypoint function that will be called when the cloud function is invoked.
 
 ### IInflightHost <a name="IInflightHost" id="@winglang/sdk.core.IInflightHost"></a>
 
-- *Extends:* @winglang/wingsdk.core.IResource
+- *Extends:* core.IResource
 
-- *Implemented By:* @winglang/wingsdk.cloud.Function, @winglang/wingsdk.cloud.FunctionBase, @winglang/wingsdk.sim.Function, @winglang/wingsdk.tfaws.Function, @winglang/wingsdk.core.IInflightHost
+- *Implemented By:* cloud.Function, cloud.FunctionBase, sim.Function, tfaws.Function, core.IInflightHost
 
 A resource that can run inflight code.
 
@@ -3085,7 +3085,7 @@ Interface for examining a construct and exposing metadata.
 
 ### ILoggerClient <a name="ILoggerClient" id="@winglang/sdk.cloud.ILoggerClient"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.ILoggerClient
+- *Implemented By:* cloud.ILoggerClient
 
 Inflight interface for `Logger`.
 
@@ -3120,7 +3120,7 @@ The message to print.
 
 ### IQueueClient <a name="IQueueClient" id="@winglang/sdk.cloud.IQueueClient"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.IQueueClient
+- *Implemented By:* cloud.IQueueClient
 
 Inflight interface for `Queue`.
 
@@ -3175,9 +3175,9 @@ Payload to send to the queue.
 
 ### IQueueOnMessageHandler <a name="IQueueOnMessageHandler" id="@winglang/sdk.cloud.IQueueOnMessageHandler"></a>
 
-- *Extends:* @winglang/wingsdk.core.IResource
+- *Extends:* core.IResource
 
-- *Implemented By:* @winglang/wingsdk.cloud.IQueueOnMessageHandler
+- *Implemented By:* cloud.IQueueOnMessageHandler
 
 **Inflight client:** [wingsdk.cloud.IQueueOnMessageHandlerClient](#wingsdk.cloud.IQueueOnMessageHandlerClient)
 
@@ -3219,7 +3219,7 @@ Information on how to display a resource in the UI.
 
 ### IQueueOnMessageHandlerClient <a name="IQueueOnMessageHandlerClient" id="@winglang/sdk.cloud.IQueueOnMessageHandlerClient"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.IQueueOnMessageHandlerClient
+- *Implemented By:* cloud.IQueueOnMessageHandlerClient
 
 Inflight client for `IQueueOnMessageHandler`.
 
@@ -3250,7 +3250,7 @@ Function that will be called when a message is received from the queue.
 
 ### IResource <a name="IResource" id="@winglang/sdk.core.IResource"></a>
 
-- *Extends:* @winglang/wingsdk.core.IInspectable, constructs.IConstruct
+- *Extends:* core.IInspectable, constructs.IConstruct
 
 - *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfazure.Bucket, tfgcp.Bucket, tfgcp.Logger, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IResource
 
@@ -3292,7 +3292,7 @@ Information on how to display a resource in the UI.
 
 ### ITopicClient <a name="ITopicClient" id="@winglang/sdk.cloud.ITopicClient"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.ITopicClient
+- *Implemented By:* cloud.ITopicClient
 
 Inflight interface for `Topic`.
 
@@ -3325,9 +3325,9 @@ Payload to publish to Topic.
 
 ### ITopicOnMessageHandler <a name="ITopicOnMessageHandler" id="@winglang/sdk.cloud.ITopicOnMessageHandler"></a>
 
-- *Extends:* @winglang/wingsdk.core.IResource
+- *Extends:* core.IResource
 
-- *Implemented By:* @winglang/wingsdk.cloud.ITopicOnMessageHandler
+- *Implemented By:* cloud.ITopicOnMessageHandler
 
 **Inflight client:** [wingsdk.cloud.ITopicOnMessageHandlerClient](#wingsdk.cloud.ITopicOnMessageHandlerClient)
 
@@ -3369,7 +3369,7 @@ Information on how to display a resource in the UI.
 
 ### ITopicOnMessageHandlerClient <a name="ITopicOnMessageHandlerClient" id="@winglang/sdk.cloud.ITopicOnMessageHandlerClient"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.ITopicOnMessageHandlerClient
+- *Implemented By:* cloud.ITopicOnMessageHandlerClient
 
 Inflight client for `ITopicOnMessageHandler`.
 

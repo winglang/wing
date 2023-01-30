@@ -1,7 +1,6 @@
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { NodeJsCode } from "../core";
 
 /**
  * Azure implementation of `cloud.Logger`
@@ -17,13 +16,12 @@ export class Logger extends cloud.LoggerBase {
   public _bind(host: core.IInflightHost, ops: string[]): void {
     host;
     ops;
-    // throw new Error("logger not yet bindable to any resource");
+    super._bind(host, ops);
   }
 
   /** @internal */
   public _toInflight(): core.Code {
-    return NodeJsCode.fromInline(`console.log("no logger yet")`);
-    // return core.InflightClient.for(__filename, "LoggerClient", []);
+    return core.InflightClient.for(__filename, "LoggerClient", []);
   }
 }
 

@@ -7,7 +7,7 @@ export class BucketClient implements IBucketClient {
   private readonly blobServiceClient: BlobServiceClient;
   private readonly containerClient: ContainerClient;
   private readonly defaultAzureCredential: DefaultAzureCredential =
-    process.env["MANAGED_IDENTITY_CLIENT_ID"] ? new DefaultAzureCredential({managedIdentityClientId: process.env["MANAGED_IDENTITY_CLIENT_ID"]}) : new DefaultAzureCredential();
+    new DefaultAzureCredential();
 
   constructor(
     bucketName: string,

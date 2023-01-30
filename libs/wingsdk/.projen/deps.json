@@ -9,10 +9,6 @@
       "type": "build"
     },
     {
-      "name": "@types/file-saver",
-      "type": "build"
-    },
-    {
       "name": "@types/fs-extra",
       "type": "build"
     },
@@ -221,14 +217,6 @@
     },
     {
       "name": "esbuild-wasm",
-      "type": "bundled"
-    },
-    {
-      "name": "file-saver",
-      "type": "bundled"
-    },
-    {
-      "name": "jszip",
       "type": "bundled"
     },
     {

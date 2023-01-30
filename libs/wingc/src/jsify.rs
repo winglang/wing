@@ -19,7 +19,7 @@ const TARGET_CODE: &str = r#"
 function __app(target) {
 	switch (target) {
 		case "sim":
-			return {app: $stdlib.sim.App, props: {}};
+			return $stdlib.sim.App;
 		case "tfaws":
 		case "tf-aws":
 			return $stdlib.tfaws.App;
@@ -33,8 +33,7 @@ function __app(target) {
 }
 const $App = __app(process.env.WING_TARGET);
 "#;
-const TARGET_APP: &str = "$App.app";
-const TARGET_PROPS: &str = "$App.props";
+const TARGET_APP: &str = "$App";
 
 const INFLIGHT_OBJ_PREFIX: &str = "$Inflight";
 
@@ -110,14 +109,8 @@ impl JSifier {
 		if self.shim {
 			js.insert(
 				0,
-				format!("super({{ outdir: $outdir, name: \"{}\", ...{} }});\n", self.app_name, TARGET_PROPS),
+				format!("super({{ outdir: $outdir, name: \"{}\" }});\n", self.app_name),
 			);
-      js.insert(
-        1,
-        format!("{}", "console.log('===================================================================')"),
-      );
-      // js.insert(2, format!("{}", "throw new Error('hahahahahaa')"));
-
 			output.push(format!(
 				"class MyApp extends {} {{\nconstructor() {}\n}}",
 				TARGET_APP,

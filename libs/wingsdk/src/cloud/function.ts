@@ -79,7 +79,7 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
     // create a logger inflight client and attach it to `console.log`.
     // TODO: attach console.error, console.warn, once our logger supports log levels.
     lines.push(`const $logger = ${loggerClientCode.text};`);
-    // lines.push(`console.log = (...args) => $logger.print(...args);`); TODO: bring this line back
+    lines.push(`console.log = (...args) => $logger.print(...args);`);
 
     lines.push("exports.handler = async function(event) {");
     lines.push(`  return await ${inflightClient.text}.handle(event);`);
