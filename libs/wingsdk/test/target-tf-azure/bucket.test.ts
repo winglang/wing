@@ -26,6 +26,24 @@ test("create a bucket", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
+test("create multiple buckets", () => {
+  // GIVEN
+  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
+  new cloud.Bucket(app, "my_bucket");
+  new cloud.Bucket(app, "my_bucket2");
+  const output = app.synth();
+
+  // THEN
+  expect(tfResourcesOf(output)).toEqual([
+    "azurerm_resource_group",
+    "azurerm_storage_account",
+    "azurerm_storage_container",
+  ]);
+  expect(tfResourcesOfCount(output, "azurerm_storage_container")).toEqual(2);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
 test("bucket is public", () => {
   // GIVEN
   const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
@@ -74,7 +92,7 @@ test("bucket name valid", () => {
       output,
       "azurerm_resource_group",
       {
-        name: `The-Uncanny-Bucket-${bucket.node.addr.substring(0, 8)}`,
+        name: `Default-${app.node.addr.substring(0, 8)}`,
       }
     )
   ).toEqual(true);
@@ -84,7 +102,7 @@ test("bucket name valid", () => {
       output,
       "azurerm_storage_account",
       {
-        name: `theuncannybucket${bucket.node.addr.substring(0, 8)}`,
+        name: `default${app.node.addr.substring(0, 8)}`,
       }
     )
   ).toEqual(true);
