@@ -91,6 +91,9 @@ export interface ICounterClient {
   peek(): Promise<number>;
 }
 
+/**
+ * Functionality shared between all `CounterClient` implementations regardless of the target.
+ */
 export abstract class CounterClientBase implements ICounterClient {
   inc(amount?: number): Promise<number> {
     amount;
