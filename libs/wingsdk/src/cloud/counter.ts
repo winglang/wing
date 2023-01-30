@@ -62,7 +62,7 @@ export class Counter extends CounterBase {
 }
 
 /**
- * Inflight interface for `Queue`.
+ * Inflight interface for `Counter`.
  */
 export interface ICounterClient {
   /**
@@ -89,6 +89,19 @@ export interface ICounterClient {
    * @inflight
    */
   peek(): Promise<number>;
+}
+
+export abstract class CounterClientBase implements ICounterClient {
+  inc(amount?: number): Promise<number> {
+    amount;
+    throw new Error("Method not implemented.");
+  }
+  dec(amount?: number): Promise<number> {
+    return this.inc(-1 * (amount ?? 1));
+  }
+  peek(): Promise<number> {
+    throw new Error("Method not implemented.");
+  }
 }
 
 /**
