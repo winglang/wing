@@ -2882,9 +2882,9 @@ Content of the object we want to store into the bucket.
 
 ### ICounterClient <a name="ICounterClient" id="@winglang/sdk.cloud.ICounterClient"></a>
 
-- *Implemented By:* cloud.ICounterClient
+- *Implemented By:* cloud.CounterClientBase, cloud.ICounterClient
 
-Inflight interface for `Queue`.
+Inflight interface for `Counter`.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
