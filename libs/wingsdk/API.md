@@ -2882,16 +2882,35 @@ Content of the object we want to store into the bucket.
 
 ### ICounterClient <a name="ICounterClient" id="@winglang/sdk.cloud.ICounterClient"></a>
 
-- *Implemented By:* cloud.ICounterClient
+- *Implemented By:* cloud.CounterClientBase, cloud.ICounterClient
 
-Inflight interface for `Queue`.
+Inflight interface for `Counter`.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ICounterClient.dec">dec</a></code> | Decrement the counter, returning the previous value. |
 | <code><a href="#@winglang/sdk.cloud.ICounterClient.inc">inc</a></code> | Increments the counter atomically by a certain amount and returns the previous value. |
 | <code><a href="#@winglang/sdk.cloud.ICounterClient.peek">peek</a></code> | Get the current value of the counter. |
+
+---
+
+##### `dec` <a name="dec" id="@winglang/sdk.cloud.ICounterClient.dec"></a>
+
+```wing
+dec(amount?: num): num
+```
+
+**Inflight client:** [true](#true)
+
+Decrement the counter, returning the previous value.
+
+###### `amount`<sup>Optional</sup> <a name="amount" id="@winglang/sdk.cloud.ICounterClient.dec.parameter.amount"></a>
+
+- *Type:* num
+
+amount to decrement (default is 1).
 
 ---
 
