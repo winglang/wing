@@ -1,6 +1,6 @@
 # User Story 12a - Task List Resource
 
-> **Status**: Work in Progress (Expecting to be released on 2/2)
+> **Status**: Expected released on 2023/02/02
 
 It is an early morning in the heart of Tel Aviv, a CEO wakes up and heads out to WayCup, his favorite coffee shop.
 
