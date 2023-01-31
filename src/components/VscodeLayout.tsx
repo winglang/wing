@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { LogLevel } from "../../electron/main/consoleLogger.js";
+import { LogEntry, LogLevel } from "../../electron/main/consoleLogger.js";
 import { ExplorerItem } from "../../electron/main/router/app.js";
+import { BlueScreenOfDeath } from "../design-system/BlueScreenOfDeath.js";
 import { Breadcrumbs } from "../design-system/Breadcrumbs.js";
 import { Button } from "../design-system/Button.js";
-import { Error } from "../design-system/Error.js";
 import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
 import { Loader } from "../design-system/Loader.js";
 import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
@@ -120,10 +120,17 @@ export const VscodeLayout = ({
     },
   });
   const logsRef = useRef<HTMLDivElement>(null);
+  const [lastErrorMessage, setLastErrorMessage] = useState<string>("");
   useEffect(() => {
     const div = logsRef.current;
     if (div) {
       div.scrollTo({ top: div.scrollHeight });
+    }
+    const lastError = logs.data
+      ?.reverse()
+      .find((log: LogEntry) => log.level === "error");
+    if (lastError) {
+      setLastErrorMessage(lastError.message);
     }
   }, [logs.data]);
 
@@ -167,7 +174,13 @@ export const VscodeLayout = ({
 
       <div className="flex-1 flex relative">
         {isLoading && !isError && <Loader text={"Compiling..."} />}
-        {isError && <Error text={"Oooops :( Compiler error..."} />}
+
+        <BlueScreenOfDeath
+          hidden={!isError}
+          title={"An error has occurred:"}
+          error={lastErrorMessage}
+        />
+
         <RightResizableWidget className="h-full flex flex-col w-80 min-w-[10rem] min-h-[15rem] border-r border-slate-200">
           <TreeMenu
             title="Explorer"
@@ -299,28 +312,29 @@ export const VscodeLayout = ({
           </div>
         </div>
       </div>
+      {!isError && (
+        <TopResizableWidget className="border-t bg-white min-h-[5rem] h-[12rem] pt-1.5">
+          <div className="relative h-full flex flex-col gap-2">
+            <div className="flex px-4 space-x-2">
+              <LogsFilters
+                selected={selectedLogTypeFilters}
+                onChange={(types) => setSelectedLogTypeFilters(types)}
+              />
+              <Button
+                className="mt-1"
+                label="Clear"
+                onClick={() => clearLogs()}
+              />
+            </div>
 
-      <TopResizableWidget className="border-t bg-white min-h-[5rem] h-[12rem] pt-1.5">
-        <div className="relative h-full flex flex-col gap-2">
-          <div className="flex px-4 space-x-2">
-            <LogsFilters
-              selected={selectedLogTypeFilters}
-              onChange={(types) => setSelectedLogTypeFilters(types)}
-            />
-            <Button
-              className="mt-1"
-              label="Clear"
-              onClick={() => clearLogs()}
-            />
+            <div className="relative h-full">
+              <ScrollableArea ref={logsRef} overflowY className="px-4 pb-1.5">
+                <ConsoleLogs logs={logs.data ?? []} />
+              </ScrollableArea>
+            </div>
           </div>
-
-          <div className="relative h-full">
-            <ScrollableArea ref={logsRef} overflowY className="px-4 pb-1.5">
-              <ConsoleLogs logs={logs.data ?? []} />
-            </ScrollableArea>
-          </div>
-        </div>
-      </TopResizableWidget>
+        </TopResizableWidget>
+      )}
     </div>
   );
 };

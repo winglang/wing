@@ -13,6 +13,7 @@ module.exports = {
       ...defaultTheme.fontFamily,
       sans: ["Roboto", ...defaultTheme.fontFamily.sans],
       mono: ["Roboto Mono", ...defaultTheme.fontFamily.mono],
+      "share-tech": ["Share Tech Mono", ...defaultTheme.fontFamily.mono],
     },
 
     extend: {

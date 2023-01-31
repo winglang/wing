@@ -18,6 +18,21 @@ interface LogEntryProps {
   isSelected: boolean;
 }
 
+export const parseLogMessage = (
+  error: string,
+  className: string,
+  expanded: boolean = false,
+) => {
+  return error
+    .replace(
+      /((?:[a-z]:)?[/\\]\S+):(\d+):(\d+)/gi,
+      (match, path, line, column) => {
+        return `<a class="${className}" onclick="event.stopPropagation()" href="vscode://file/${path}:${line}:${column}">${match}</a>`;
+      },
+    )
+    .replace(/(\r\n|\n|\r)/gm, expanded ? "<br />" : "\n");
+};
+
 const LogEntryRow = ({
   log,
   isSelected,
@@ -54,14 +69,11 @@ const LogEntryRow = ({
     if (expandableRef.current === null) {
       return;
     }
-    const html = log.message
-      .replace(
-        /((?:[a-z]:)?[/\\]\S+):(\d+):(\d+)/gi,
-        (match, path, line, column) => {
-          return `<a class="text-sky-500 underline hover:text-sky-800" onclick="event.stopPropagation()" href="vscode://file/${path}:${line}:${column}">${match}</a>`;
-        },
-      )
-      .replace(/(\r\n|\n|\r)/gm, expanded ? "<br />" : "\n");
+    const html = parseLogMessage(
+      log.message,
+      "text-sky-500 underline hover:text-sky-800",
+      expanded,
+    );
     expandableRef.current.innerHTML = html;
   }, [log.message, expanded]);
 

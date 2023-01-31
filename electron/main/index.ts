@@ -129,8 +129,7 @@ function createWindowManager() {
           this.messages.push({
             timestamp: Date.now(),
             level: "error",
-            message:
-              error instanceof Error ? error.message : JSON.stringify(error),
+            message: error instanceof Error ? error.message : `${error}`,
             source: source ?? "console",
           });
           // TODO: Use TRPC websockets.
