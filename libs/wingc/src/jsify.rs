@@ -456,8 +456,8 @@ impl<'a> JSifier<'a> {
 					} else {
 						module_name
 					}),
-					if module_name.name.starts_with("\"./") {
-						// TODO so many assumptions here, would only wort with a JS file
+					if module_name.name.starts_with("\"") {
+						// TODO so many assumptions here, would only work with a JS file
 						format!("require({})", module_name.name)
 					} else {
 						format!("require('{}').{}", STDLIB_MODULE, module_name.name)

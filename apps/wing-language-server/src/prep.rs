@@ -1,4 +1,4 @@
-use std::{cell::RefCell, collections::HashSet};
+use std::{cell::RefCell, collections::HashSet, path::Path};
 
 use tree_sitter::Tree;
 use wingc::{diagnostic::Diagnostics, parser::Parser, type_check};
@@ -31,7 +31,7 @@ pub fn parse_text(source_file: &str, text: &[u8]) -> ParseResult {
 	let mut scope = wing_parser.wingit(&tree.root_node());
 
 	let mut types = type_check::Types::new();
-	let type_diag = type_check(&mut scope, &mut types);
+	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file));
 	let parse_diag = wing_parser.diagnostics.into_inner();
 
 	let diagnostics = vec![parse_diag, type_diag].concat();

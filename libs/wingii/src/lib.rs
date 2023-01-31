@@ -176,6 +176,19 @@ pub mod type_system {
 			self.add_assembly(assembly, is_root.unwrap_or(false))
 		}
 
+		pub fn load_dep(&mut self, dep: &str, search_start: &str, opts: &AssemblyLoadOptions) -> Result<AssemblyName> {
+			let is_root = opts.root;
+			let module_dir = package_json::find_dependency_directory(dep, search_start)
+				.expect(format!("could not find module {} in {}", dep, search_start).as_str());
+			self.load_module(
+				&module_dir,
+				&AssemblyLoadOptions {
+					root: is_root,
+					deps: opts.deps,
+				},
+			)
+		}
+
 		fn load_module(&mut self, module_directory: &str, opts: &AssemblyLoadOptions) -> Result<AssemblyName> {
 			let is_root = opts.root;
 			let file_path = std::path::Path::new(module_directory).join("package.json");
