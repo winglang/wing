@@ -138,6 +138,7 @@ export class Function extends cloud.FunctionBase {
       handler: "index.handler",
       runtime: "nodejs16.x",
       role: this.role.arn,
+      publish: true,
       environment: {
         variables: Lazy.anyValue({ produce: () => this.env }) as any,
       },
