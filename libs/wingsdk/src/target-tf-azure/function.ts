@@ -168,11 +168,33 @@ export class Function extends cloud.FunctionBase {
     }
   }
 
-  // Adds role to function for given azure scope
+  /**
+   *  Adds role to function for given azure scope
+   *
+   * @param scope - The azure permission scope of the role assignment to create.
+   * @param roleDefinitionName - The name of the role definition to use in the role assignment.
+   */
   public addPermission(scope: string, roleDefinitionName: string) {
     if (!this.permissions) {
       this.permissions = new Map();
     }
+
+    // If the function has already been initialized attach the role assignment directly
+    if (this.function) {
+      if (
+        this.permissions.has(scope) &&
+        this.permissions.get(scope)?.has(roleDefinitionName)
+      ) {
+        return; // already exists
+      }
+
+      new RoleAssignment(this, `RoleAssignment${roleDefinitionName}`, {
+        scope,
+        roleDefinitionName,
+        principalId: this.function.identity.principalId,
+      });
+    }
+
     const roleDefinitions = this.permissions.get(scope) ?? new Set();
     roleDefinitions.add(roleDefinitionName);
     this.permissions.set(scope, roleDefinitions);

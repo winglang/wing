@@ -61,27 +61,26 @@ test("basic function with environment variables", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
-test("function name valid", () => {
+test("permissions resources are added to function after constructor has been initialized", () => {
   // GIVEN
   const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const func = new tfazure.Function(app, "Function", inflight, {});
 
   // WHEN
-  const func = new cloud.Function(app, "somefunction01", inflight);
+  func.addPermission("some/scope", "some_role");
   const output = app.synth();
 
   // THEN
   expect(
     cdktf.Testing.toHaveResourceWithProperties(
       output,
-      "azurerm_linux_function_app",
+      "azurerm_role_assignment",
       {
-        name: `somefunction01-${func.node.addr.substring(0, 8)}`,
+        role_definition_name: "some_role",
       }
     )
   ).toEqual(true);
-  expect(tfSanitize(output)).toMatchSnapshot();
-  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
 test("replace invalid character from function name", () => {
