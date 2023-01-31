@@ -9,10 +9,14 @@ import { StorageBlob } from "@cdktf/provider-azurerm/lib/storage-blob";
 import { AssetType, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
-import { Bucket } from "./bucket";
+import { Bucket, StorageAccountPermissions } from "./bucket";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { NameOptions, ResourceNames } from "../utils/resource-names";
+import {
+  CaseConventions,
+  NameOptions,
+  ResourceNames,
+} from "../utils/resource-names";
 
 /**
  * Function names are limited to 32 characters.
@@ -22,6 +26,7 @@ import { NameOptions, ResourceNames } from "../utils/resource-names";
 const FUNCTION_NAME_OPTS: NameOptions = {
   maxLen: 32,
   disallowedRegex: /[^a-z0-9]+/g,
+  case: CaseConventions.LOWERCASE,
 };
 
 /**
@@ -31,11 +36,10 @@ const FUNCTION_NAME_OPTS: NameOptions = {
  */
 export class Function extends cloud.FunctionBase {
   private readonly function: LinuxFunctionApp;
-  private readonly app: App;
   private readonly servicePlan: ServicePlan;
   private readonly storageAccount: StorageAccount;
   private readonly resourceGroup: ResourceGroup;
-  private permissions?: Map<string, string[]>;
+  private permissions?: Map<string, Set<string>>;
 
   constructor(
     scope: Construct,
@@ -45,23 +49,18 @@ export class Function extends cloud.FunctionBase {
   ) {
     super(scope, id, inflight, props);
 
-    this.app = App.of(this);
-    this.storageAccount = this.app.storageAccount;
-    this.resourceGroup = this.app.resourceGroup;
+    const app = App.of(this);
+    this.storageAccount = app.storageAccount;
+    this.resourceGroup = app.resourceGroup;
+    this.servicePlan = app.servicePlan;
 
     const functionName = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
-
-    // Create service plan for function using dynamic sku
-    // https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/service_plan#sku_name
-    this.servicePlan = new ServicePlan(this, "ServicePlan", {
-      name: `serviceplan${functionName}`,
-      resourceGroupName: this.resourceGroup.name,
-      location: this.resourceGroup.location,
-      osType: "Linux",
-      skuName: "Y1",
-    });
+    const functionIdentityType = "SystemAssigned";
+    const functionRuntime = "node";
+    const functionNodeVersion = "16";
 
     // Create Bucket to store function code
+    // TODO: can we share a bucket for all functions?  https://github.com/winglang/wing/issues/178
     const functionCodeBucket = new Bucket(this, "FunctionBucket");
 
     // Package up code in azure expected format
@@ -83,7 +82,7 @@ export class Function extends cloud.FunctionBase {
       JSON.stringify({
         bindings: [
           {
-            authLevel: "anonymous",
+            authLevel: "anonymous", // TODO: this auth level will be changed with https://github.com/winglang/wing/issues/1371
             type: "httpTrigger",
             direction: "in",
             name: "req",
@@ -97,6 +96,18 @@ export class Function extends cloud.FunctionBase {
         ],
       })
     );
+
+    if (props.timeout) {
+      // Write host.json file to set function timeout (must be set in root of function app)
+      // https://learn.microsoft.com/en-us/azure/azure-functions/functions-host-json
+      // this means that timeout is set for all functions in the function app
+      fs.writeFileSync(
+        `${codeDir}/host.json`,
+        JSON.stringify({
+          functionTimeout: `${props.timeout.hours}:${props.timeout.minutes}:${props.timeout.seconds}`,
+        })
+      );
+    }
 
     // Create zip asset from function code
     const asset = new TerraformAsset(this, "Asset", {
@@ -121,27 +132,26 @@ export class Function extends cloud.FunctionBase {
       servicePlanId: this.servicePlan.id,
       storageAccountName: this.storageAccount.name,
       identity: {
-        type: "SystemAssigned",
+        type: functionIdentityType,
       },
       storageAccountAccessKey: this.storageAccount.primaryAccessKey,
       siteConfig: {
         applicationStack: {
-          nodeVersion: "16",
+          nodeVersion: functionNodeVersion,
         },
       },
       httpsOnly: true,
       appSettings: {
         ...this.env,
-        FUNCTION_APP_EDIT_MODE: "readonly",
         WEBSITE_RUN_FROM_PACKAGE: `https://${this.storageAccount.name}.blob.core.windows.net/${functionCodeBucket.storageContainer.name}/${functionCodeBlob.name}`,
-        FUNCTIONS_WORKER_RUNTIME: "node",
+        FUNCTIONS_WORKER_RUNTIME: functionRuntime,
       },
     });
 
     // Add permissions to read function code
     new RoleAssignment(this, `ReadLambdaCodeAssignment`, {
       principalId: this.function.identity.principalId,
-      roleDefinitionName: "Storage Blob Data Reader",
+      roleDefinitionName: StorageAccountPermissions.READ,
       scope: this.storageAccount.id,
     });
 
@@ -163,8 +173,9 @@ export class Function extends cloud.FunctionBase {
     if (!this.permissions) {
       this.permissions = new Map();
     }
-    const existingPermissions = this.permissions.get(scope) ?? [];
-    this.permissions.set(scope, [...existingPermissions, roleDefinitionName]);
+    const roleDefinitions = this.permissions.get(scope) ?? new Set();
+    roleDefinitions.add(roleDefinitionName);
+    this.permissions.set(scope, roleDefinitions);
   }
 
   /** @internal */

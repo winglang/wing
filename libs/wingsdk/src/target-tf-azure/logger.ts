@@ -14,8 +14,6 @@ export class Logger extends cloud.LoggerBase {
 
   /** @internal */
   public _bind(host: core.IInflightHost, ops: string[]): void {
-    host;
-    ops;
     super._bind(host, ops);
   }
 

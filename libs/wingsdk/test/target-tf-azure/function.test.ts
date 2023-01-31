@@ -99,7 +99,7 @@ test("replace invalid character from function name", () => {
       output,
       "azurerm_linux_function_app",
       {
-        name: `some-unction01-${func.node.addr.substring(0, 8)}`,
+        name: `somefunction01-${func.node.addr.substring(0, 8)}`,
       }
     )
   ).toEqual(true);

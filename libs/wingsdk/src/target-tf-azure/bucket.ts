@@ -25,6 +25,16 @@ const BUCKET_NAME_OPTS: NameOptions = {
 };
 
 /**
+ * Azure bult-in storage account permissions.
+ */
+export enum StorageAccountPermissions {
+  /** Read only permission */
+  READ = "Storage Blob Data Reader",
+  /** Read write permission */
+  READ_WRITE = "Storage Blob Data Contributor",
+}
+
+/**
  * Azure implementation of `cloud.Bucket`.
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
@@ -34,15 +44,14 @@ export class Bucket extends cloud.BucketBase {
   public readonly storageContainer: StorageContainer;
   private readonly public: boolean;
   private readonly storageAccount: StorageAccount;
-  private app: App;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
 
     this.public = props.public ?? false;
 
-    this.app = App.of(this);
-    this.storageAccount = this.app.storageAccount;
+    const app = App.of(this);
+    this.storageAccount = app.storageAccount;
 
     const storageContainerName = ResourceNames.generateName(
       this,
@@ -93,19 +102,17 @@ export class Bucket extends cloud.BucketBase {
       ops.includes(cloud.BucketInflightMethods.DELETE) ||
       ops.includes(cloud.BucketInflightMethods.PUT)
     ) {
-      // "Storage Blob Data Contributor" Allows for read, write and delete access to Azure Storage blob containers and data
       host.addPermission(
         `${this.storageAccount.id}`,
-        "Storage Blob Data Contributor"
+        StorageAccountPermissions.READ_WRITE
       );
     } else if (
       ops.includes(cloud.BucketInflightMethods.GET) ||
       ops.includes(cloud.BucketInflightMethods.LIST)
     ) {
-      // "Storage Blob Data Reader" Allows for read access to Azure Storage blob containers and data
       host.addPermission(
         `${this.storageAccount.id}`,
-        "Storage Blob Data Reader"
+        StorageAccountPermissions.READ
       );
     }
 
@@ -122,11 +129,11 @@ export class Bucket extends cloud.BucketBase {
   }
 
   private envName(): string {
-    return `BUCKET_NAME`;
+    return `BUCKET_NAME_${this.storageContainer.node.addr.slice(-8)}`;
   }
 
   private envStorageAccountName(): string {
-    return `STORAGE_ACCOUNT`;
+    return `STORAGE_ACCOUNT_${this.storageContainer.node.addr.slice(-8)}`;
   }
 }
 

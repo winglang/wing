@@ -7,7 +7,6 @@ exports[`basic function 1`] = `
       \\"root_Function_9E43762E\\": {
         \\"app_settings\\": {
           \\"FUNCTIONS_WORKER_RUNTIME\\": \\"node\\",
-          \\"FUNCTION_APP_EDIT_MODE\\": \\"readonly\\",
           \\"WEBSITE_RUN_FROM_PACKAGE\\": \\"https://\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}.blob.core.windows.net/\${azurerm_storage_container.root_Function_FunctionBucket_B5F263FB.name}/\${azurerm_storage_blob.root_Function_CodeBlob_5AAEAFFA.name}\\"
         },
         \\"https_only\\": true,
@@ -15,9 +14,9 @@ exports[`basic function 1`] = `
           \\"type\\": \\"SystemAssigned\\"
         },
         \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
-        \\"name\\": \\"-unction-c852aba6\\",
+        \\"name\\": \\"function-c852aba6\\",
         \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
-        \\"service_plan_id\\": \\"\${azurerm_service_plan.root_Function_ServicePlan_B239C6B2.id}\\",
+        \\"service_plan_id\\": \\"\${azurerm_service_plan.root_ServicePlan_14459C66.id}\\",
         \\"site_config\\": {
           \\"application_stack\\": {
             \\"node_version\\": \\"16\\"
@@ -41,9 +40,9 @@ exports[`basic function 1`] = `
       }
     },
     \\"azurerm_service_plan\\": {
-      \\"root_Function_ServicePlan_B239C6B2\\": {
+      \\"root_ServicePlan_14459C66\\": {
         \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
-        \\"name\\": \\"serviceplan-unction-c852aba6\\",
+        \\"name\\": \\"Default-c82bf964\\",
         \\"os_type\\": \\"Linux\\",
         \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
         \\"sku_name\\": \\"Y1\\"
@@ -60,7 +59,7 @@ exports[`basic function 1`] = `
     },
     \\"azurerm_storage_blob\\": {
       \\"root_Function_CodeBlob_5AAEAFFA\\": {
-        \\"name\\": \\"-unction-c852aba6.zip\\",
+        \\"name\\": \\"function-c852aba6.zip\\",
         \\"source\\": \\"<source>\\",
         \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\",
         \\"storage_container_name\\": \\"\${azurerm_storage_container.root_Function_FunctionBucket_B5F263FB.name}\\",
@@ -157,14 +156,6 @@ Object {
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/Function/ReadLambdaCodeAssignment",
                   },
-                  "ServicePlan": Object {
-                    "constructInfo": Object {
-                      "fqn": "@cdktf/provider-azurerm.servicePlan.ServicePlan",
-                      "version": "5.0.1",
-                    },
-                    "id": "ServicePlan",
-                    "path": "root/Default/Function/ServicePlan",
-                  },
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
@@ -201,6 +192,14 @@ Object {
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
+              },
+              "ServicePlan": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-azurerm.servicePlan.ServicePlan",
+                  "version": "5.0.1",
+                },
+                "id": "ServicePlan",
+                "path": "root/Default/ServicePlan",
               },
               "StorageAccount": Object {
                 "constructInfo": Object {
@@ -287,7 +286,6 @@ exports[`basic function with environment variables 1`] = `
           \\"BOOM\\": \\"BAM\\",
           \\"FOO\\": \\"BAR\\",
           \\"FUNCTIONS_WORKER_RUNTIME\\": \\"node\\",
-          \\"FUNCTION_APP_EDIT_MODE\\": \\"readonly\\",
           \\"WEBSITE_RUN_FROM_PACKAGE\\": \\"https://\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}.blob.core.windows.net/\${azurerm_storage_container.root_Function_FunctionBucket_B5F263FB.name}/\${azurerm_storage_blob.root_Function_CodeBlob_5AAEAFFA.name}\\"
         },
         \\"https_only\\": true,
@@ -295,9 +293,9 @@ exports[`basic function with environment variables 1`] = `
           \\"type\\": \\"SystemAssigned\\"
         },
         \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
-        \\"name\\": \\"-unction-c852aba6\\",
+        \\"name\\": \\"function-c852aba6\\",
         \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
-        \\"service_plan_id\\": \\"\${azurerm_service_plan.root_Function_ServicePlan_B239C6B2.id}\\",
+        \\"service_plan_id\\": \\"\${azurerm_service_plan.root_ServicePlan_14459C66.id}\\",
         \\"site_config\\": {
           \\"application_stack\\": {
             \\"node_version\\": \\"16\\"
@@ -321,9 +319,9 @@ exports[`basic function with environment variables 1`] = `
       }
     },
     \\"azurerm_service_plan\\": {
-      \\"root_Function_ServicePlan_B239C6B2\\": {
+      \\"root_ServicePlan_14459C66\\": {
         \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
-        \\"name\\": \\"serviceplan-unction-c852aba6\\",
+        \\"name\\": \\"Default-c82bf964\\",
         \\"os_type\\": \\"Linux\\",
         \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
         \\"sku_name\\": \\"Y1\\"
@@ -340,7 +338,7 @@ exports[`basic function with environment variables 1`] = `
     },
     \\"azurerm_storage_blob\\": {
       \\"root_Function_CodeBlob_5AAEAFFA\\": {
-        \\"name\\": \\"-unction-c852aba6.zip\\",
+        \\"name\\": \\"function-c852aba6.zip\\",
         \\"source\\": \\"<source>\\",
         \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\",
         \\"storage_container_name\\": \\"\${azurerm_storage_container.root_Function_FunctionBucket_B5F263FB.name}\\",
@@ -437,14 +435,6 @@ Object {
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/Function/ReadLambdaCodeAssignment",
                   },
-                  "ServicePlan": Object {
-                    "constructInfo": Object {
-                      "fqn": "@cdktf/provider-azurerm.servicePlan.ServicePlan",
-                      "version": "5.0.1",
-                    },
-                    "id": "ServicePlan",
-                    "path": "root/Default/Function/ServicePlan",
-                  },
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
@@ -481,6 +471,14 @@ Object {
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
+              },
+              "ServicePlan": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-azurerm.servicePlan.ServicePlan",
+                  "version": "5.0.1",
+                },
+                "id": "ServicePlan",
+                "path": "root/Default/ServicePlan",
               },
               "StorageAccount": Object {
                 "constructInfo": Object {
@@ -565,7 +563,6 @@ exports[`function name valid 1`] = `
       \\"root_somefunction01_Function_D112CCD4\\": {
         \\"app_settings\\": {
           \\"FUNCTIONS_WORKER_RUNTIME\\": \\"node\\",
-          \\"FUNCTION_APP_EDIT_MODE\\": \\"readonly\\",
           \\"WEBSITE_RUN_FROM_PACKAGE\\": \\"https://\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}.blob.core.windows.net/\${azurerm_storage_container.root_somefunction01_FunctionBucket_6CED415C.name}/\${azurerm_storage_blob.root_somefunction01_CodeBlob_851F3F97.name}\\"
         },
         \\"https_only\\": true,
@@ -575,7 +572,7 @@ exports[`function name valid 1`] = `
         \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
         \\"name\\": \\"somefunction01-c8352353\\",
         \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
-        \\"service_plan_id\\": \\"\${azurerm_service_plan.root_somefunction01_ServicePlan_B945411C.id}\\",
+        \\"service_plan_id\\": \\"\${azurerm_service_plan.root_ServicePlan_14459C66.id}\\",
         \\"site_config\\": {
           \\"application_stack\\": {
             \\"node_version\\": \\"16\\"
@@ -599,9 +596,9 @@ exports[`function name valid 1`] = `
       }
     },
     \\"azurerm_service_plan\\": {
-      \\"root_somefunction01_ServicePlan_B945411C\\": {
+      \\"root_ServicePlan_14459C66\\": {
         \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
-        \\"name\\": \\"serviceplansomefunction01-c8352353\\",
+        \\"name\\": \\"Default-c82bf964\\",
         \\"os_type\\": \\"Linux\\",
         \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
         \\"sku_name\\": \\"Y1\\"
@@ -668,6 +665,14 @@ Object {
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
+              },
+              "ServicePlan": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-azurerm.servicePlan.ServicePlan",
+                  "version": "5.0.1",
+                },
+                "id": "ServicePlan",
+                "path": "root/Default/ServicePlan",
               },
               "StorageAccount": Object {
                 "constructInfo": Object {
@@ -780,14 +785,6 @@ Object {
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/somefunction01/ReadLambdaCodeAssignment",
                   },
-                  "ServicePlan": Object {
-                    "constructInfo": Object {
-                      "fqn": "@cdktf/provider-azurerm.servicePlan.ServicePlan",
-                      "version": "5.0.1",
-                    },
-                    "id": "ServicePlan",
-                    "path": "root/Default/somefunction01/ServicePlan",
-                  },
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
@@ -843,7 +840,6 @@ exports[`replace invalid character from function name 1`] = `
       \\"root_someFunction01_Function_2D89D048\\": {
         \\"app_settings\\": {
           \\"FUNCTIONS_WORKER_RUNTIME\\": \\"node\\",
-          \\"FUNCTION_APP_EDIT_MODE\\": \\"readonly\\",
           \\"WEBSITE_RUN_FROM_PACKAGE\\": \\"https://\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}.blob.core.windows.net/\${azurerm_storage_container.root_someFunction01_FunctionBucket_E40551AF.name}/\${azurerm_storage_blob.root_someFunction01_CodeBlob_971120BF.name}\\"
         },
         \\"https_only\\": true,
@@ -851,9 +847,9 @@ exports[`replace invalid character from function name 1`] = `
           \\"type\\": \\"SystemAssigned\\"
         },
         \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
-        \\"name\\": \\"some-unction01-c8eb4882\\",
+        \\"name\\": \\"somefunction01-c8eb4882\\",
         \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
-        \\"service_plan_id\\": \\"\${azurerm_service_plan.root_someFunction01_ServicePlan_B95760F3.id}\\",
+        \\"service_plan_id\\": \\"\${azurerm_service_plan.root_ServicePlan_14459C66.id}\\",
         \\"site_config\\": {
           \\"application_stack\\": {
             \\"node_version\\": \\"16\\"
@@ -877,9 +873,9 @@ exports[`replace invalid character from function name 1`] = `
       }
     },
     \\"azurerm_service_plan\\": {
-      \\"root_someFunction01_ServicePlan_B95760F3\\": {
+      \\"root_ServicePlan_14459C66\\": {
         \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
-        \\"name\\": \\"serviceplansome-unction01-c8eb4882\\",
+        \\"name\\": \\"Default-c82bf964\\",
         \\"os_type\\": \\"Linux\\",
         \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
         \\"sku_name\\": \\"Y1\\"
@@ -896,7 +892,7 @@ exports[`replace invalid character from function name 1`] = `
     },
     \\"azurerm_storage_blob\\": {
       \\"root_someFunction01_CodeBlob_971120BF\\": {
-        \\"name\\": \\"some-unction01-c8eb4882.zip\\",
+        \\"name\\": \\"somefunction01-c8eb4882.zip\\",
         \\"source\\": \\"<source>\\",
         \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\",
         \\"storage_container_name\\": \\"\${azurerm_storage_container.root_someFunction01_FunctionBucket_E40551AF.name}\\",
@@ -946,6 +942,14 @@ Object {
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
+              },
+              "ServicePlan": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-azurerm.servicePlan.ServicePlan",
+                  "version": "5.0.1",
+                },
+                "id": "ServicePlan",
+                "path": "root/Default/ServicePlan",
               },
               "StorageAccount": Object {
                 "constructInfo": Object {
@@ -1057,14 +1061,6 @@ Object {
                     },
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/someFunction01/ReadLambdaCodeAssignment",
-                  },
-                  "ServicePlan": Object {
-                    "constructInfo": Object {
-                      "fqn": "@cdktf/provider-azurerm.servicePlan.ServicePlan",
-                      "version": "5.0.1",
-                    },
-                    "id": "ServicePlan",
-                    "path": "root/Default/someFunction01/ServicePlan",
                   },
                 },
                 "constructInfo": Object {
