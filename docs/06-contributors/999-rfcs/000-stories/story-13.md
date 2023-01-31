@@ -11,7 +11,7 @@ This version of it includes the following functional changes:
 Also, it includes some non-functional requirements: 
 - The Bucket should be replicated across different regions 
   - +100 if we are able to do the same for azure as well
-- Least privileged permissions are granted, to resources 
+- Least privileged permissions are granted
 - The code should work on sim, aws, azure
 - VScode should be able to autocomplete 
 - Console should be able to show all resources, and interact with them
@@ -161,9 +161,9 @@ new Test("effort_estimation", inflight (t: Test) => {
   let id = t.tasks.add_task("clean the dishes");
   let var j = t.tasks.get_task(id);
   assert(!j.get("effort_estimation")); //  make sure effort estimation default nil
-  task.add_estimation(id, 2h);
+  task.add_estimation(id, 4h);
   j = t.tasks.get_task(id);
-  assert(2h == j.get("effort_estimation"));
+  assert(4h == j.get("effort_estimation"));
 }) as "a3";
 
 ```
