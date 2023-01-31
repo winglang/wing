@@ -68,7 +68,10 @@ test("permissions resources are added to function after constructor has been ini
   const func = new tfazure.Function(app, "Function", inflight, {});
 
   // WHEN
-  func.addPermission("some/scope", "some_role");
+  func.addPermission(func, {
+    scope: "some/scope",
+    roleDefinitionName: "some_role",
+  });
   const output = app.synth();
 
   // THEN

@@ -12,6 +12,7 @@ import { App } from "./app";
 import { Bucket, StorageAccountPermissions } from "./bucket";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { IResource } from "../core";
 import {
   CaseConventions,
   NameOptions,
@@ -30,6 +31,16 @@ const FUNCTION_NAME_OPTS: NameOptions = {
 };
 
 /**
+ * Azure scoped role assignment.
+ */
+export interface ScopedRoleAssignment {
+  /** The azure scope ie. /subscription/xxxxx/yyyyy/zzz */
+  readonly scope: string;
+  /** Role definition to assign */
+  readonly roleDefinitionName: string;
+}
+
+/**
  * Azure implementation of `cloud.Function`.
  *
  * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
@@ -39,7 +50,7 @@ export class Function extends cloud.FunctionBase {
   private readonly servicePlan: ServicePlan;
   private readonly storageAccount: StorageAccount;
   private readonly resourceGroup: ResourceGroup;
-  private permissions?: Map<string, Set<string>>;
+  private permissions?: Map<string, Set<ScopedRoleAssignment>>;
 
   constructor(
     scope: Construct,
@@ -156,14 +167,17 @@ export class Function extends cloud.FunctionBase {
     });
 
     // Apply permissions from bound resources
-    for (const permissionScope of this.permissions?.keys() || []) {
-      for (const roleDefinitionName of this.permissions?.get(permissionScope) ??
-        []) {
-        new RoleAssignment(this, `RoleAssignment${roleDefinitionName}`, {
-          scope: permissionScope,
-          roleDefinitionName,
-          principalId: this.function.identity.principalId,
-        });
+    for (const key of this.permissions?.keys() || []) {
+      for (const scopedRoleAssignment of this.permissions?.get(key) ?? []) {
+        new RoleAssignment(
+          this,
+          `RoleAssignment${key}${scopedRoleAssignment.roleDefinitionName}`,
+          {
+            scope: scopedRoleAssignment.scope,
+            roleDefinitionName: scopedRoleAssignment.roleDefinitionName,
+            principalId: this.function.identity.principalId,
+          }
+        );
       }
     }
   }
@@ -171,37 +185,46 @@ export class Function extends cloud.FunctionBase {
   /**
    *  Adds role to function for given azure scope
    *
-   * @param scope - The azure permission scope of the role assignment to create.
-   * @param roleDefinitionName - The name of the role definition to use in the role assignment.
+   * @param scopedResource - The resource to which the role assignment will be scoped.
+   * @param scopedRoleAssignment - The mapping of azure scope to role definition name.
    */
-  public addPermission(scope: string, roleDefinitionName: string) {
+  public addPermission(
+    scopedResource: IResource,
+    scopedRoleAssignment: ScopedRoleAssignment
+  ) {
     if (!this.permissions) {
       this.permissions = new Map();
     }
-
+    const uniqueId = scopedResource.node.addr.substring(-8);
     // If the function has already been initialized attach the role assignment directly
     if (this.function) {
       if (
-        this.permissions.has(scope) &&
-        this.permissions.get(scope)?.has(roleDefinitionName)
+        this.permissions.has(uniqueId) &&
+        this.permissions.get(uniqueId)?.has(scopedRoleAssignment)
       ) {
         return; // already exists
       }
 
-      new RoleAssignment(this, `RoleAssignment${roleDefinitionName}`, {
-        scope,
-        roleDefinitionName,
-        principalId: this.function.identity.principalId,
-      });
+      new RoleAssignment(
+        this,
+        `RoleAssignment${uniqueId}${scopedRoleAssignment.roleDefinitionName}`,
+        {
+          scope: scopedRoleAssignment.scope,
+          roleDefinitionName: scopedRoleAssignment.roleDefinitionName,
+          principalId: this.function.identity.principalId,
+        }
+      );
     }
-
-    const roleDefinitions = this.permissions.get(scope) ?? new Set();
-    roleDefinitions.add(roleDefinitionName);
-    this.permissions.set(scope, roleDefinitions);
+    const roleDefinitions = this.permissions.get(uniqueId) ?? new Set();
+    roleDefinitions.add(scopedRoleAssignment);
+    this.permissions.set(uniqueId, roleDefinitions);
   }
 
   /** @internal */
   public _toInflight(): core.Code {
-    throw new Error("Method not implemented.");
+    // TODO: support inflight https://github.com/winglang/wing/issues/1371
+    throw new Error(
+      "cloud.Function cannot be used as an Inflight resource on Azure yet"
+    );
   }
 }

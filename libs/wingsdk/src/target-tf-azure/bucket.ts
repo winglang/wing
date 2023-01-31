@@ -102,18 +102,18 @@ export class Bucket extends cloud.BucketBase {
       ops.includes(cloud.BucketInflightMethods.DELETE) ||
       ops.includes(cloud.BucketInflightMethods.PUT)
     ) {
-      host.addPermission(
-        `${this.storageAccount.id}`,
-        StorageAccountPermissions.READ_WRITE
-      );
+      host.addPermission(this, {
+        scope: `${this.storageAccount.id}`,
+        roleDefinitionName: StorageAccountPermissions.READ_WRITE,
+      });
     } else if (
       ops.includes(cloud.BucketInflightMethods.GET) ||
       ops.includes(cloud.BucketInflightMethods.LIST)
     ) {
-      host.addPermission(
-        `${this.storageAccount.id}`,
-        StorageAccountPermissions.READ
-      );
+      host.addPermission(this, {
+        scope: `${this.storageAccount.id}`,
+        roleDefinitionName: StorageAccountPermissions.READ,
+      });
     }
 
     host.addEnvironment(this.envName(), this.storageContainer.name);
