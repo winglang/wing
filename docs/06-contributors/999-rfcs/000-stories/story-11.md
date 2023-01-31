@@ -1,4 +1,4 @@
-# User Story 11 - Task List Resource
+# User Story 12a - Task List Resource
 
 > **Status**: Work in Progress (Expecting to be released on 2/2)
 
@@ -103,38 +103,41 @@ resource TaskList {
 // --------------------------------------------
 // testing
 // --------------------------------------------
+resource Test {
+  tasks: TaskList; 
+  _test: inflight (Test): void;
 
-let tasks = new TaskList();
-
-let clear_tasks = new cloud.Function(inflight (s: str): str => {
-  for id in tasks.list_task_ids() {
-    tasks.remove_tasks(id);
+  inflight before() {
+    for id in this.tasks.list_task_ids() {
+      this.tasks.remove_tasks(id);
+    }
   }
-}) as "utility:clear tasks";
 
-let add_tasks = new cloud.Function(inflight (s: str): str => {
-  tasks.add_task("clean the dishes");
-  tasks.add_task("buy dishwasher soap");
-  tasks.add_task("organize the dishes");
-  tasks.add_task("clean the toilet");
-  tasks.add_task("clean the kitchen");
-}) as "utility:add tasks";
+  init(name: str, test: inflight (Test): void) {
+    this.tasks = new TaskList();
+    this._test = test;
+    new cloud.Funciton({
+      this.before();
+      this._test(this);
+    }) as "test:${name}";
+  }
+}
 
-new cloud.Function(inflight (s: str): str => {
-  clear_tasks.invoke("");
-  tasks.add_task("clean the dishes");
-  let result = tasks.find_tasks_with("clean the dishes");
+new Test("get and find task", inflight (t: Test) => {
+  t.tasks.add_task("clean the dishes");
+  let result = t.tasks.find_tasks_with("clean the dishes");
   assert(result.len == 1);
-  assert("clean the dishes" == tasks.get_task(result.at(0)));
-}) as "test:get and find task";
+  assert("clean the dishes" == t.tasks.get_task(result.at(0)));
+}) as "a1";
 
-new cloud.Function(inflight (s: str): str => {
-  clear_tasks.invoke("");
-  add_tasks.invoke("");
-  tasks.remove_tasks(tasks.find_tasks_with("clean the dish").at(0));
-  let result = tasks.find_tasks_with("clean the dish");
+
+new Test("get, remove and find task", inflight (t: Test) => {
+  t.tasks.add_task("clean the dishes");
+  t.tasks.add_task("buy dishwasher soap");
+  t.tasks.remove_tasks(tasks.find_tasks_with("clean the").at(0));
+  let result = t.tasks.find_tasks_with("clean the dish");
   assert(result.len == 0);
-}) as "test:get, remove and find task";
+}) as "a2";
 ```
 
 ## Wing Console
