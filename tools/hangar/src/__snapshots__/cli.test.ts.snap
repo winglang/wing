@@ -2523,7 +2523,7 @@ constructor() {
         },
         counter: {
           resource: counter,
-          ops: [\\"inc\\",\\"peek\\"]
+          ops: [\\"dec\\",\\"inc\\",\\"peek\\"]
         },
       },
       
