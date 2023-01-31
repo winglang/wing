@@ -104,21 +104,11 @@ resource TaskList {
 // testing
 // --------------------------------------------
 resource Test {
-  tasks: TaskList; 
-  _test: inflight (Test): void;
-
-  inflight before() {
-    for id in this.tasks.list_task_ids() {
-      this.tasks.remove_tasks(id);
-    }
-  }
-
-  init(name: str, test: inflight (Test): void) {
+  tasks: TaskList;
+  init(name: str, test: inflight (Test)) {
     this.tasks = new TaskList();
-    this._test = test;
-    new cloud.Funciton({
-      this.before();
-      this._test(this);
+    new cloud.Function(inflight (s: str): str => {
+      test(this);
     }) as "test:${name}";
   }
 }
