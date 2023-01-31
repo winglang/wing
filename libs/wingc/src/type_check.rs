@@ -1809,23 +1809,27 @@ impl<'a> TypeChecker<'a> {
 		identifier: &Symbol,
 		statement_idx: usize,
 	) {
+		println!(
+			"add_module_to_env: {} {:?} {}",
+			library_name, namespace_filter, identifier.name
+		);
 		let jsii_manifest_path = if library_name == WINGSDK_ASSEMBLY_NAME {
 			// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
 			std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string())
-		} else if library_name.starts_with('"') && library_name.ends_with('"') {
+		} else {
 			let mut path = PathBuf::new();
 			path.push(self.source_path.parent().unwrap().to_str().unwrap());
 			path.push("node_modules");
 			path.push(&library_name);
 			path.to_str().unwrap().to_string()
-		} else {
-			return;
 		};
+
+		let load_transitive_deps = library_name != WINGSDK_ASSEMBLY_NAME;
 
 		let mut wingii_types = wingii::type_system::TypeSystem::new();
 		let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
 			root: true,
-			deps: false,
+			deps: load_transitive_deps,
 		};
 		let assembly_name = wingii_types
 			.load(jsii_manifest_path.as_str(), Some(wingii_loader_options))

@@ -1,6 +1,6 @@
 use std::fmt::{Display, Formatter};
 
-use crate::{CONSTRUCT_BASE, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE};
+use crate::{CONSTRUCT_BASE, TERRAFORM_RESOURCE_BASE, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE};
 
 /// Represents a fully-qualified name (FQN) of a type in a JSII library.
 /// For example, `@aws-cdk/aws-ec2.Vpc` is a FQN.
@@ -50,7 +50,9 @@ impl<'a> FQN<'a> {
 		// But since we don't support interfaces yet we can't import `core.Resource` so we just treat it as a base class.
 		// I'm also not sure we should ever import `core.Resource` because we might want to keep its internals hidden to the user:
 		// after all it's an abstract class representing our `resource` primitive. See https://github.com/winglang/wing/issues/261.
-		self.0 == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE) || self.0 == CONSTRUCT_BASE
+		self.0 == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE)
+			|| self.0 == CONSTRUCT_BASE
+			|| self.0 == TERRAFORM_RESOURCE_BASE
 	}
 
 	pub fn is_in_namespace<T: AsRef<str>>(&self, namespace_filter: &[T]) -> bool {
