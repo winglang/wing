@@ -4,14 +4,12 @@ use crate::{
 	diagnostic::{CharacterLocation, WingSpan},
 	type_check::{self, symbol_env::SymbolEnv},
 	type_check::{
-		symbol_env::StatementIdx, Class, Enum, FunctionSignature, Struct, SymbolKind, Type, TypeRef, Types,
-		WING_CONSTRUCTOR_NAME,
+		symbol_env::StatementIdx, Class, FunctionSignature, Struct, SymbolKind, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME,
 	},
 	utilities::camel_case_to_snake_case,
 	WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT,
 };
 use colored::Colorize;
-use indexmap::IndexSet;
 use serde_json::Value;
 use wingii::jsii;
 
@@ -48,7 +46,7 @@ pub struct JsiiImporter<'a> {
 	/// This is a namespace filter on the imported JSII assembly.
 	/// For example:
 	/// - ["cloud"] will only (publicly) import types prefixed with `cloud.` from the assembly
-	/// - ["ns1", "ns2"] will only import types prefixed with `ns1.ns2` from the assembly
+	/// - ["ns1", "ns2"] will only import types prefixed with `ns1.ns2.` from the assembly
 	/// - [] will import all types from the assembly
 	/// Note that other types might be implicitly imported into hidden namespaces
 	/// if they are referenced from a type in the specified `module_name`.
@@ -170,13 +168,6 @@ impl<'a> JsiiImporter<'a> {
 			return;
 		}
 
-		// Check if this is a JSII enum and import it if it is
-		let jsii_enum = self.jsii_types.find_enum(type_fqn.as_str());
-		if let Some(jsii_enum) = jsii_enum {
-			self.import_enum(jsii_enum);
-			return;
-		}
-
 		debug!(
 			"Type {} is unsupported or not found in the type system, skipping",
 			type_fqn
@@ -277,43 +268,6 @@ impl<'a> JsiiImporter<'a> {
 					.unwrap();
 			}
 		}
-	}
-
-	/// Import a JSII enum into the Wing type system
-	fn import_enum(&mut self, jsii_enum: wingii::jsii::EnumType) {
-		let jsii_enum_fqn = FQN::from(&jsii_enum.fqn);
-		debug!("Importing enum {}", jsii_enum_fqn.as_str().green());
-		let type_name = jsii_enum_fqn.type_name();
-
-		let name = Self::jsii_name_to_symbol(type_name, &jsii_enum.location_in_module);
-
-		let values: IndexSet<Symbol> = jsii_enum
-			.members
-			.iter()
-			.map(|m| Symbol {
-				name: m.name.to_string(),
-				span: WingSpan::global(),
-			})
-			.collect();
-
-		let wing_type = self.wing_types.add_type(Type::Enum(Enum { name, values }));
-
-		let mut ns = self
-			.env
-			.lookup_nested_mut_str(jsii_enum_fqn.as_str_without_type_name(), true, None)
-			.unwrap()
-			.as_namespace_ref()
-			.unwrap();
-		ns.env
-			.define(
-				&Symbol {
-					name: type_name.to_string(),
-					span: WingSpan::global(),
-				},
-				SymbolKind::Type(wing_type),
-				StatementIdx::Top,
-			)
-			.unwrap();
 	}
 
 	/// Import a JSII interface into the Wing type system.
