@@ -400,7 +400,7 @@ exports[`topic with subscriber function 2`] = `
     },
     \\"aws_sns_topic_subscription\\": {
       \\"root_Topic_TopicTopicSubscriptionc5395e41_281A7990\\": {
-        \\"endpoint\\": \\"\${aws_lambda_function.root_TopicOnMessagec5395e41_379EBC3E.arn}\\",
+        \\"endpoint\\": \\"\${aws_lambda_function.root_TopicOnMessagec5395e41_379EBC3E.qualified_arn}\\",
         \\"protocol\\": \\"lambda\\",
         \\"topic_arn\\": \\"\${aws_sns_topic.root_Topic_18CB51FA.arn}\\"
       }
