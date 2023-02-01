@@ -2,7 +2,7 @@ extern crate serde;
 extern crate serde_json;
 
 pub mod package_json {
-	use node_resolve::resolve_from;
+	use node_resolve::Resolver;
 	use std::{fs, path::PathBuf};
 
 	pub fn dependencies_of(package_json: &serde_json::Value) -> Vec<String> {
@@ -61,7 +61,7 @@ pub mod package_json {
 			if package_json.exists() {
 				let package_json = fs::read_to_string(&package_json).unwrap();
 				let package_json: serde_json::Value = serde_json::from_str(&package_json).unwrap();
-				package_json.get("name").unwrap().as_str().unwrap() == package_name
+				package_json.get("name").map(|x| x.as_str()).flatten() == Some(package_name)
 			} else {
 				false
 			}
@@ -69,7 +69,14 @@ pub mod package_json {
 	}
 
 	pub fn find_dependency_directory(dependency_name: &str, search_start: &str) -> Option<String> {
-		let entrypoint = resolve_from(dependency_name, PathBuf::from(search_start));
+		// WASI has a limitation where it doesn't support Rust's std::fs::canonicalize().
+		// The resolver dependency we use here uses canonicalize() by default, but if we set
+		// preserve_symlinks to true, it will use the original path instead.
+		let entrypoint = Resolver::default()
+			.preserve_symlinks(true)
+			.with_basedir(PathBuf::from(search_start))
+			.resolve(dependency_name);
+
 		let entrypoint = entrypoint.ok()?;
 		let dep_pkg_json_path = find_package_json_up(dependency_name, entrypoint);
 		let dep_pkg_json_path = dep_pkg_json_path?;
