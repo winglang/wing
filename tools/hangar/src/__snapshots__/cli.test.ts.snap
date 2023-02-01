@@ -6,7 +6,7 @@ exports[`wing compile --target tf-aws anon_function.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -30,7 +30,7 @@ exports[`wing compile --target tf-aws anon_function.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -77,7 +77,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -254,7 +254,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -307,13 +307,176 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`wing compile --target tf-aws bring_jsii.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_testsayhello_IamRole_CD3CFB9C": {
+        "//": {
+          "metadata": {
+            "path": "root/test:say_hello/IamRole",
+            "uniqueId": "root_testsayhello_IamRole_CD3CFB9C",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_testsayhello_IamRolePolicy_265A46FB": {
+        "//": {
+          "metadata": {
+            "path": "root/test:say_hello/IamRolePolicy",
+            "uniqueId": "root_testsayhello_IamRolePolicy_265A46FB",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_testsayhello_IamRole_CD3CFB9C.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_testsayhello_IamRolePolicyAttachment_1B179C34": {
+        "//": {
+          "metadata": {
+            "path": "root/test:say_hello/IamRolePolicyAttachment",
+            "uniqueId": "root_testsayhello_IamRolePolicyAttachment_1B179C34",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_testsayhello_IamRole_CD3CFB9C.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_testsayhello_8E3F8CF7": {
+        "//": {
+          "metadata": {
+            "path": "root/test:say_hello/Default",
+            "uniqueId": "root_testsayhello_8E3F8CF7",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "test-say_hello-c867d9d9",
+          },
+        },
+        "function_name": "test-say_hello-c867d9d9",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_testsayhello_IamRole_CD3CFB9C.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_testsayhello_Code_D4453363.bucket}",
+        "s3_key": "\${aws_s3_object.root_testsayhello_S3Object_A9281CAB.key}",
+        "timeout": 60,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_testsayhello_Code_D4453363": {
+        "//": {
+          "metadata": {
+            "path": "root/test:say_hello/Code",
+            "uniqueId": "root_testsayhello_Code_D4453363",
+          },
+        },
+        "bucket_prefix": "code-c89e1bce-",
+      },
+    },
+    "aws_s3_object": {
+      "root_testsayhello_S3Object_A9281CAB": {
+        "//": {
+          "metadata": {
+            "path": "root/test:say_hello/S3Object",
+            "uniqueId": "root_testsayhello_S3Object_A9281CAB",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_testsayhello_Code_D4453363.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`wing compile --target tf-aws bring_jsii.w > index.js 1`] = `
+"async handle(m) { const { greeting } = this; {
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(greeting === \\"Hello, wingnuts\\")'\`)})((greeting === \\"Hello, wingnuts\\"))};
+} };"
+`;
+
+exports[`wing compile --target tf-aws bring_jsii.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.15.2",
+}
+`;
+
+exports[`wing compile --target tf-aws bring_jsii.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+    case \\"tf-azure\\":
+      return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+const stuff = require(\\"jsii-code-samples\\");
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"bring_jsii\\" });
+  
+  const hello = new stuff.HelloWorld();
+  const greeting = (hello.sayHello(\\"wingnuts\\"));
+  new cloud.Function(this,\\"test:say_hello\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5d209e0c3acca40c825662cab73c204803d9dd9f7903de90d0da6dc99ea7fa35/index.js\\")),
+    bindings: {
+      
+      data: {
+        greeting: greeting,
+      },
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
 exports[`wing compile --target tf-aws capture_containers.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -432,7 +595,7 @@ exports[`wing compile --target tf-aws capture_containers.w > manifest.json 1`] =
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -488,7 +651,7 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > cdk.tf
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -691,7 +854,7 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > manife
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -744,7 +907,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -901,7 +1064,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > manifest.json 1`] = 
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -957,7 +1120,7 @@ exports[`wing compile --target tf-aws capture_primitives.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -1082,7 +1245,7 @@ exports[`wing compile --target tf-aws capture_primitives.w > manifest.json 1`] =
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -1140,7 +1303,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > cdk.tf.json 
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -1299,7 +1462,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > manifest.jso
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -1360,7 +1523,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -1730,7 +1893,7 @@ exports[`wing compile --target tf-aws captures.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -1799,7 +1962,7 @@ exports[`wing compile --target tf-aws container_types.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -1945,7 +2108,7 @@ exports[`wing compile --target tf-aws container_types.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -2058,7 +2221,7 @@ exports[`wing compile --target tf-aws enums.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -2082,7 +2245,7 @@ exports[`wing compile --target tf-aws enums.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -2128,7 +2291,7 @@ exports[`wing compile --target tf-aws expressions_binary_operators.w > cdk.tf.js
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -2152,7 +2315,7 @@ exports[`wing compile --target tf-aws expressions_binary_operators.w > manifest.
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -2197,7 +2360,7 @@ exports[`wing compile --target tf-aws expressions_string_interpolation.w > cdk.t
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -2221,7 +2384,7 @@ exports[`wing compile --target tf-aws expressions_string_interpolation.w > manif
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -2266,7 +2429,7 @@ exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -2456,7 +2619,7 @@ exports[`wing compile --target tf-aws file_counter.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -2515,7 +2678,7 @@ exports[`wing compile --target tf-aws forward_decl.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -2539,7 +2702,7 @@ exports[`wing compile --target tf-aws forward_decl.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -2595,7 +2758,7 @@ exports[`wing compile --target tf-aws hello.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -2764,7 +2927,7 @@ exports[`wing compile --target tf-aws hello.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -2818,7 +2981,7 @@ exports[`wing compile --target tf-aws identical_inflights.w > cdk.tf.json 1`] = 
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -2847,7 +3010,7 @@ exports[`wing compile --target tf-aws identical_inflights.w > manifest.json 1`] 
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -2899,7 +3062,7 @@ exports[`wing compile --target tf-aws mut_container_types.w > cdk.tf.json 1`] = 
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -3045,7 +3208,7 @@ exports[`wing compile --target tf-aws mut_container_types.w > manifest.json 1`] 
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -3114,7 +3277,7 @@ exports[`wing compile --target tf-aws primitive_methods.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -3138,7 +3301,7 @@ exports[`wing compile --target tf-aws primitive_methods.w > manifest.json 1`] = 
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -3182,7 +3345,7 @@ exports[`wing compile --target tf-aws print.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -3336,7 +3499,7 @@ exports[`wing compile --target tf-aws print.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -3384,7 +3547,7 @@ exports[`wing compile --target tf-aws reassignment.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -3408,7 +3571,7 @@ exports[`wing compile --target tf-aws reassignment.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -3474,7 +3637,7 @@ exports[`wing compile --target tf-aws resource.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -3498,7 +3661,7 @@ exports[`wing compile --target tf-aws resource.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -3546,7 +3709,7 @@ exports[`wing compile --target tf-aws statements_if.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -3673,7 +3836,7 @@ exports[`wing compile --target tf-aws statements_if.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -3738,7 +3901,7 @@ exports[`wing compile --target tf-aws statements_variable_declarations.w > cdk.t
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -3762,7 +3925,7 @@ exports[`wing compile --target tf-aws statements_variable_declarations.w > manif
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -3802,7 +3965,7 @@ exports[`wing compile --target tf-aws std_containers.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -3833,7 +3996,7 @@ exports[`wing compile --target tf-aws std_containers.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -3882,7 +4045,7 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -4105,7 +4268,7 @@ exports[`wing compile --target tf-aws test_bucket.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -4169,7 +4332,7 @@ exports[`wing compile --target tf-aws while.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -4193,7 +4356,7 @@ exports[`wing compile --target tf-aws while.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
@@ -4238,7 +4401,7 @@ exports[`wing compile --target tf-aws while_loop_await.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.1",
+      "version": "0.15.2",
     },
     "outputs": {},
   },
@@ -4372,7 +4535,7 @@ exports[`wing compile --target tf-aws while_loop_await.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.1",
+  "version": "0.15.2",
 }
 `;
 
