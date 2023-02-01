@@ -184,7 +184,7 @@ resource CounterWithThreshold extends cloud.Counter {
 
   // or: on_threshold(handler: EventHandler<ThresholdReachedEvent>)
   on_threshold(handler: inflight (event: ThresholdReachedEvent) => void) {
-    return this._topic.on_event(handler);
+    return this._topic.on_message(handler);
   }
 }
 
@@ -640,22 +640,17 @@ resource Topic {
   init(props: TopicProps = {});
 
   /**
-   * Run an inflight whenever an event is published to the topic.
+   * Run an inflight whenever an message is published to the topic.
    */
-  on_event(fn: inflight (event: Json) => void, opts: TopicOnPublishProps?): void;
+  on_message(fn: inflight (message: Json) => void, opts: TopicOnPublishProps?): void;
 
   /**
-   * Alias for `Topic.on_event`.
+   * Publish an message to the topic.
    */
-  subscribe(fn: inflight (event: Json) => void, opts: TopicOnPublishProps?): void;
-
-  /**
-   * Publish an event to the topic.
-   */
-  inflight publish(event: Json): void;
+  inflight publish(message: Json): void;
 }
 
-struct TopicOnPublishProps { /* elided */ }
+struct TopicOnMessageProps { /* elided */ }
 ```
 
 ## Schedule
