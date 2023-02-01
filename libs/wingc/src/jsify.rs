@@ -1,13 +1,13 @@
 use itertools::Itertools;
-use std::{cell::RefCell, cmp::Ordering, fs, path::PathBuf};
+use std::{cell::RefCell, cmp::Ordering, fs, path::PathBuf, vec};
 
 use sha2::{Digest, Sha256};
 
 use crate::{
 	ast::{
-		ArgList, BinaryOperator, Class as AstClass, ClassMember, Constructor, CustomType, Expr, ExprKind,
-		FunctionDefinition, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type,
-		UnaryOperator, UtilityFunctions,
+		ArgList, BinaryOperator, Class as AstClass, ClassMember, Constructor, Expr, ExprKind, FunctionDefinition,
+		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
+		UtilityFunctions,
 	},
 	capture::CaptureKind,
 	type_check::{symbol_env::SymbolEnv, Class, TypeRef},
@@ -101,6 +101,7 @@ impl JSifier {
 
 		if self.shim {
 			output.push(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
+			output.push(format!("const core = $stdlib.core;"));
 			output.push(format!("const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \".\";"));
 			output.push(TARGET_CODE.to_owned());
 		}
@@ -464,7 +465,7 @@ impl JSifier {
 						module_name
 					}),
 					if module_name.name.starts_with("\"./") {
-						// TODO so many assumptions here, would only wort with a JS file
+						// TODO so many assumptions here, would only work with a JS file
 						format!("require({})", module_name.name)
 					} else {
 						format!("require('{}').{}", STDLIB_MODULE, module_name.name)
@@ -721,17 +722,6 @@ impl JSifier {
 	) -> String {
 		assert!(phase == Phase::Preflight);
 
-		// If have no parent then we simply extent the wingsdk's resource base
-		let actual_parent = if parent.is_none() {
-			let mut parts = WINGSDK_RESOURCE.split('.');
-			Some(Type::CustomType(CustomType {
-				root: Symbol::global(parts.next().unwrap()),
-				fields: parts.map(|f| Symbol::global(f)).collect(),
-			}))
-		} else {
-			parent.clone()
-		};
-
 		// Lookup the resource type
 		let resource_type = env.lookup(name, None).unwrap().as_type().unwrap();
 
@@ -765,20 +755,70 @@ impl JSifier {
 			.collect::<Vec<_>>();
 
 		// Jsify class
-		let resource_class = self.jsify_class(
-			env,
-			name,
-			false,
-			phase,
-			&actual_parent,
-			constructor,
-			&preflight_members,
-			&preflight_methods,
+		let resource_class = format!(
+			"class {}{}\n{{\n{}\n{}\n{}\n}}",
+			self.jsify_symbol(name),
+			if let Some(parent) = parent {
+				format!(" extends {}", self.jsify_type(parent))
+			} else {
+				format!(" extends {}", WINGSDK_RESOURCE)
+			},
+			self.jsify_resource_constructor(constructor, parent.is_none()),
+			preflight_members
+				.iter()
+				.map(|m| self.jsify_class_member(m))
+				.collect::<Vec<String>>()
+				.join("\n"),
+			preflight_methods
+				.iter()
+				.map(|(n, m)| format!(
+					"{} = {}",
+					n.name,
+					self.jsify_function(None, &m.parameters, &m.statements, phase)
+				))
+				.collect::<Vec<String>>()
+				.join("\n")
 		);
 
 		let bind_method = self.jsify_bind_method(name, &captured_fields);
 
 		return format!("{}\n{}.prototype._bind = {}", resource_class, name.name, bind_method);
+	}
+
+	fn jsify_resource_constructor(&self, constructor: &Constructor, no_parent: bool) -> String {
+		let mut lines = vec![];
+		lines.push("{".to_string());
+
+		// If there's no parent then this resource id derived from the base resource class (core.Resource) and we need
+		// to manually call its super
+		if no_parent {
+			lines.push("	super(scope, id);".to_string());
+		}
+
+		for statement in constructor.statements.statements.iter() {
+			let statement_str = self.jsify_statement(
+				constructor.statements.env.borrow().as_ref().unwrap(),
+				statement,
+				Phase::Preflight,
+			);
+			let result = statement_str.split("\n");
+			for l in result {
+				lines.push(format!("  {}", l));
+			}
+		}
+
+		lines.push("}".to_string());
+
+		format!(
+			"constructor(scope, id, {}) {{\n{}\n}}",
+			constructor
+				.parameters
+				.iter()
+				.map(|(name, _)| name.name.clone())
+				.collect::<Vec<_>>()
+				.join(", "),
+			lines.join("\n")
+		)
 	}
 
 	fn jsify_bind_method(&self, resource_name: &Symbol, captured_fields: &[(Symbol, TypeRef, Vec<String>)]) -> String {
