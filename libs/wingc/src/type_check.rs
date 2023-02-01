@@ -1313,7 +1313,7 @@ impl<'a> TypeChecker<'a> {
 					Type::MutArray(t) => *t,
 					Type::MutSet(t) => *t,
 
-					// TODO: Handle maps and other iterables
+					// TODO: Handle non-builtin iterables
 					t => {
 						self.type_error(&TypeError {
 							message: format!("Unable to iterate over \"{}\"", t),
