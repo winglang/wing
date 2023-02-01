@@ -55,7 +55,7 @@ resource TaskList {
    */
   inflight get_task(id: str): Json {
     let blob = this._bucket.get(id);
-    return Json.parse(blob)
+    return Json.parse(blob);
   }
 
   /** 
