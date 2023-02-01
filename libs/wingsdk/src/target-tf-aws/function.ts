@@ -147,7 +147,7 @@ export class Function extends cloud.FunctionBase {
         : Duration.fromMinutes(1).seconds,
     });
 
-    this.arn = this.function.arn;
+    this.arn = this.function.qualifiedArn;
 
     // terraform rejects templates with zero environment variables
     this.addEnvironment("WING_FUNCTION_NAME", name);
