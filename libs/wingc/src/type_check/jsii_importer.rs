@@ -104,9 +104,38 @@ impl<'a> JsiiImporter<'a> {
 				} else {
 					self.lookup_or_create_type(type_fqn)
 				}
-			} else if let Some(Value::Object(_)) = obj.get("collection") {
-				// TODO: handle JSII to Wing collection type conversion, for now return any
-				self.wing_types.anything()
+			} else if let Some(Value::Object(d)) = obj.get("collection") {
+				let collection_kind = d
+					.get("kind")
+					.expect("'kind' is required for collection types")
+					.as_str()
+					.expect("'kind' must be a string");
+
+				let element_type = d
+					.get("elementtype")
+					.expect("'elementtype' is required for collection types")
+					.as_object()
+					.expect("'elementtype' must be an object");
+
+				// TODO: Handle non-primitive collections
+				let primitive_type = element_type
+					.get("primitive")
+					.expect("non-primitive collection types are not yet supported")
+					.as_str()
+					.expect("'primitive' must be a string");
+
+				let wing_type = match primitive_type {
+					"string" => self.wing_types.string(),
+					"number" => self.wing_types.number(),
+					"boolean" => self.wing_types.bool(),
+					"any" => self.wing_types.anything(),
+					_ => panic!("Unsupported primitive type '{}'", primitive_type),
+				};
+				match collection_kind {
+					"array" => self.wing_types.add_type(Type::Array(wing_type)),
+					"map" => self.wing_types.add_type(Type::Map(wing_type)),
+					_ => panic!("Unsupported collection kind '{}'", collection_kind),
+				}
 			} else {
 				panic!(
 					"Expected JSII type reference {:?} to be a collection, fqn or primitive",

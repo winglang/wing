@@ -1729,6 +1729,9 @@ exports[`wing compile --target tf-aws captures.w > index.js 1`] = `
   (await bucket2.get(\\"file.txt\\"));
   (await bucket2.get(\\"file2.txt\\"));
   (await bucket3.get(\\"file3.txt\\"));
+  for (const stuff of (await bucket1.list())) {
+    {console.log(stuff)};
+  }
 } };"
 `;
 
@@ -1781,7 +1784,7 @@ constructor() {
   const bucket3 = new cloud.Bucket(this,\\"PrivateBucket\\",{ public: false });
   const queue = new cloud.Queue(this,\\"cloud.Queue\\");
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.4e89828b4cf7eebd9aec10c177257042cdbb4196e6dd8c26e054bddf3c32ee41/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5f0e4e25898a72c973f063e92444f7572d58a18cdd38b3fb3a575af6adf7440f/index.js\\")),
     bindings: {
       resources: {
         bucket1: {
