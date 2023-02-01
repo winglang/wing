@@ -13,6 +13,7 @@ import { IPolyconFactory, Polycons } from "polycons";
 import stringify from "safe-stable-stringify";
 import { synthesizeTree } from "./tree";
 import { Logger } from "../cloud/logger";
+import { PluginManager } from "./plugin-manager";
 
 const TERRAFORM_STACK_NAME = "root";
 
@@ -58,6 +59,12 @@ export interface AppProps {
    * @default - use the default polycon factory included in the Wing SDK
    */
   readonly customFactory?: IPolyconFactory;
+
+  /**
+   * Plugins to apply on app.
+   * @default - no plugins
+   */
+  readonly plugins?: string[];
 }
 
 /**
@@ -72,7 +79,8 @@ export class CdktfApp extends Construct implements IApp {
 
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
-
+  private readonly pluginManager: PluginManager;
+  
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
     const cdktfOutdir = join(outdir, ".tmp.cdktf.out");
@@ -91,6 +99,8 @@ export class CdktfApp extends Construct implements IApp {
 
     super(cdktfStack, "Default");
 
+    this.pluginManager = new PluginManager(props.plugins ?? []);
+    
     this.outdir = outdir;
     this.cdktfApp = cdktfApp;
     this.cdktfStack = cdktfStack;
@@ -107,6 +117,7 @@ export class CdktfApp extends Construct implements IApp {
    */
   public synth(): string {
     // synthesize Terraform files in `outdir/.tmp.cdktf.out/stacks/root`
+    this.pluginManager.preSynth(this);
     this.cdktfApp.synth();
 
     // move Terraform files from `outdir/.tmp.cdktf.out/stacks/root` to `outdir`
@@ -127,6 +138,10 @@ export class CdktfApp extends Construct implements IApp {
     // return a cleaned snapshot of the resulting Terraform manifest for unit testing
     const tfConfig = this.cdktfStack.toTerraform();
     const cleaned = cleanTerraformConfig(tfConfig);
+  
+    const synthesizedStackPath = `${this.cdktfApp.outdir}/${this.cdktfApp.manifest.stacks.root.synthesizedStackPath}`;
+    this.pluginManager.postSynth(tfConfig, synthesizedStackPath);
+    this.pluginManager.validate(tfConfig);
     return stringify(cleaned, null, 2) ?? "";
   }
 

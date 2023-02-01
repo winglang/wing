@@ -38,8 +38,10 @@ function __app(target) {
 	}
 }
 const $App = __app(process.env.WING_TARGET);
+const $Plugins = plugins;
 "#;
 const TARGET_APP: &str = "$App";
+const TARGET_PLUGINS: &str = "$Plugins";
 
 const INFLIGHT_OBJ_PREFIX: &str = "$Inflight";
 
@@ -119,7 +121,7 @@ impl JSifier {
 		if self.shim {
 			js.insert(
 				0,
-				format!("super({{ outdir: $outdir, name: \"{}\" }});\n", self.app_name),
+				format!("super({{ outdir: $outdir, name: \"{}\", plugins: {} }});\n", self.app_name, TARGET_PLUGINS),
 			);
 			output.push(format!(
 				"class MyApp extends {} {{\nconstructor() {}\n}}",
