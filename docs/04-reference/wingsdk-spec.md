@@ -640,7 +640,7 @@ resource Topic {
   init(props: TopicProps = {});
 
   /**
-   * Run an inflight whenever an message is published to the topic.
+   * Run an inflight whenever a message is published to the topic.
    */
   on_message(fn: inflight (message: Json) => void, opts: TopicOnPublishProps?): void;
 
