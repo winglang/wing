@@ -5,8 +5,9 @@ use sha2::{Digest, Sha256};
 
 use crate::{
 	ast::{
-		ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart,
-		Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator, UtilityFunctions,
+		ArgList, BinaryOperator, Class as AstClass, ClassMember, Constructor, CustomType, Expr, ExprKind,
+		FunctionDefinition, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type,
+		UnaryOperator, UtilityFunctions,
 	},
 	capture::CaptureKind,
 	type_check::{symbol_env::SymbolEnv, Class, TypeRef},
@@ -76,9 +77,9 @@ impl JSifier {
 
 		for statement in scope.statements.iter().sorted_by(|a, b| match (&a.kind, &b.kind) {
 			// Put type definitions first so JS won't complain of unknown types
-			(StmtKind::Class { .. }, StmtKind::Class { .. }) => Ordering::Equal,
-			(StmtKind::Class { .. }, _) => Ordering::Less,
-			(_, StmtKind::Class { .. }) => Ordering::Greater,
+			(StmtKind::Class(AstClass { .. }), StmtKind::Class(AstClass { .. })) => Ordering::Equal,
+			(StmtKind::Class(AstClass { .. }), _) => Ordering::Less,
+			(_, StmtKind::Class(AstClass { .. })) => Ordering::Greater,
 			_ => Ordering::Equal,
 		}) {
 			let line = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, Phase::Preflight); // top level statements are always preflight
@@ -245,14 +246,15 @@ impl JSifier {
 
 	fn jsify_type(&self, typ: &Type) -> String {
 		match typ {
-			Type::CustomType { root, fields } => {
-				if fields.is_empty() {
-					return self.jsify_symbol(root);
+			Type::CustomType(custom_type) => {
+				if custom_type.fields.is_empty() {
+					return self.jsify_symbol(&custom_type.root);
 				} else {
 					format!(
 						"{}.{}",
-						self.jsify_symbol(root),
-						fields
+						self.jsify_symbol(&custom_type.root),
+						custom_type
+							.fields
 							.iter()
 							.map(|f| self.jsify_symbol(f))
 							.collect::<Vec<String>>()
@@ -543,17 +545,17 @@ impl JSifier {
 					"return;".into()
 				}
 			}
-			StmtKind::Class {
+			StmtKind::Class(AstClass {
 				name,
 				members,
 				methods,
 				parent,
 				constructor,
 				is_resource,
-			} => self.jsify_class(
+			}) => self.jsify_class(
 				env,
 				name,
-				is_resource,
+				*is_resource,
 				phase,
 				parent,
 				constructor,
@@ -720,12 +722,12 @@ impl JSifier {
 		assert!(phase == Phase::Preflight);
 
 		// If have no parent then we simply extent the wingsdk's resource base
-		let parent = if parent.is_none() {
+		let actual_parent = if parent.is_none() {
 			let mut parts = WINGSDK_RESOURCE.split('.');
-			Some(Type::CustomType {
+			Some(Type::CustomType(CustomType {
 				root: Symbol::global(parts.next().unwrap()),
 				fields: parts.map(|f| Symbol::global(f)).collect(),
-			})
+			}))
 		} else {
 			parent.clone()
 		};
@@ -752,7 +754,7 @@ impl JSifier {
 				.filter(|(_, m)| m.signature.flight == Phase::Inflight)
 				.map(|t| *t)
 				.collect::<Vec<_>>(),
-			parent.as_ref().unwrap(),
+			parent,
 		);
 
 		// Get all preflight methods to be jsified to the preflight class
@@ -766,9 +768,9 @@ impl JSifier {
 		let resource_class = self.jsify_class(
 			env,
 			name,
-			&false,
+			false,
 			phase,
-			&parent,
+			&actual_parent,
 			constructor,
 			&preflight_members,
 			&preflight_methods,
@@ -814,7 +816,7 @@ impl JSifier {
 		name: &Symbol,
 		captured_fields: &[(Symbol, TypeRef, Vec<String>)],
 		inflight_methods: &[&(Symbol, FunctionDefinition)],
-		parent: &Type,
+		parent: &Option<Type>,
 	) {
 		// TODO handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
 		// TDOD jsify inflight fields
@@ -844,9 +846,13 @@ impl JSifier {
 			.collect_vec();
 
 		let client_source = format!(
-			"class {}_inflight extends {}_inflight {{\n{}\n{}}}",
+			"class {}_inflight {} {{\n{}\n{}}}",
 			name.name,
-			self.jsify_type(parent),
+			if let Some(parent) = parent {
+				format!("extends {}_inflight", self.jsify_type(parent))
+			} else {
+				"".to_string()
+			},
 			client_constructor,
 			client_methods.join("\n")
 		);
@@ -862,14 +868,14 @@ impl JSifier {
 		&self,
 		env: &SymbolEnv,
 		name: &Symbol,
-		is_resource: &bool,
+		is_resource: bool,
 		phase: Phase,
 		parent: &Option<Type>,
 		constructor: &Constructor,
 		members: &[&ClassMember],
 		methods: &[&(Symbol, FunctionDefinition)],
 	) -> String {
-		if *is_resource {
+		if is_resource {
 			return self.jsify_resource(env, name, phase, parent, constructor, members, methods);
 		}
 
@@ -904,7 +910,7 @@ impl JSifier {
 		)
 	}
 
-	// Get the list type and capture info for members that are captured in the client of a the given resource
+	// Get the type and capture info for members that are captured in the client of a the given resource
 	fn get_captures(
 		&self,
 		preflight_members: &[&ClassMember],
@@ -917,7 +923,7 @@ impl JSifier {
 				if let Some(resource_type) = member_type._type.as_resource() {
 					// TODO: currently we collect all inflight methods as being required for this resource (this should be mapped per inflight method and analyzed during the capture phase)
 					let used_methods = resource_type
-						.methods()
+						.methods(true)
 						.filter_map(|(name, sig)| {
 							if sig.as_function_sig().unwrap().flight == Phase::Inflight {
 								return Some(name);

@@ -1,5 +1,5 @@
 use crate::{
-	ast::{ArgList, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, StmtKind, Symbol},
+	ast::{ArgList, Class, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, StmtKind, Symbol},
 	debug,
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
 	type_check::symbol_env::SymbolEnv,
@@ -63,14 +63,14 @@ pub fn scan_for_inflights_in_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 				}
 			}
 			StmtKind::Scope(s) => scan_for_inflights_in_scope(s, diagnostics),
-			StmtKind::Class {
+			StmtKind::Class(Class {
 				name: _,
 				members: _,
 				methods,
 				constructor,
 				parent: _,
 				is_resource,
-			} => {
+			}) => {
 				// If this is a resource then we need to capture all its members
 				if *is_resource {
 					// TODO: what do I do with these?
@@ -289,7 +289,7 @@ fn scan_captures_in_expression(
 								//   2. analyzing inflight code and figuring out what methods are being used on the object
 								res.extend(
 									resource
-										.methods()
+										.methods(true)
 										.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Phase::Inflight))
 										.map(|(name, _)| Capture {
 											object: symbol.clone(),
@@ -458,14 +458,14 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 				}
 			}
 			StmtKind::Scope(s) => res.extend(scan_captures_in_inflight_scope(s, diagnostics)),
-			StmtKind::Class {
+			StmtKind::Class(Class {
 				name: _,
 				members: _,
 				methods,
 				constructor,
 				parent: _,
 				is_resource: _,
-			} => {
+			}) => {
 				res.extend(scan_captures_in_inflight_scope(&constructor.statements, diagnostics));
 				for (_, m) in methods.iter() {
 					res.extend(scan_captures_in_inflight_scope(&m.statements, diagnostics))

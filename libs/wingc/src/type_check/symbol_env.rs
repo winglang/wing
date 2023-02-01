@@ -10,7 +10,7 @@ use super::{UnsafeRef, VariableInfo};
 pub type SymbolEnvRef = UnsafeRef<SymbolEnv>;
 
 pub struct SymbolEnv {
-	pub(crate) ident_map: HashMap<String, (StatementIdx, SymbolKind)>,
+	pub(crate) symbol_map: HashMap<String, (StatementIdx, SymbolKind)>,
 	parent: Option<SymbolEnvRef>,
 
 	// TODO: This doesn't make much sense in the context of the "envrioment" but I needed a way to propagate the return type of a function
@@ -76,7 +76,7 @@ impl SymbolEnv {
 		assert!(matches!(*return_type, Type::Void) || parent.is_some());
 
 		Self {
-			ident_map: HashMap::new(),
+			symbol_map: HashMap::new(),
 			parent,
 			return_type,
 			is_class,
@@ -97,7 +97,7 @@ impl SymbolEnv {
 	}
 
 	pub fn define(&mut self, symbol: &Symbol, kind: SymbolKind, pos: StatementIdx) -> Result<(), TypeError> {
-		if self.ident_map.contains_key(&symbol.name) {
+		if self.symbol_map.contains_key(&symbol.name) {
 			return Err(TypeError {
 				span: symbol.span.clone(),
 				message: format!("Symbol \"{}\" already defined in this scope", symbol.name),
@@ -126,7 +126,7 @@ impl SymbolEnv {
 				}
 			}
 		}
-		self.ident_map.insert(symbol.name.clone(), (pos, kind));
+		self.symbol_map.insert(symbol.name.clone(), (pos, kind));
 
 		Ok(())
 	}
@@ -146,7 +146,7 @@ impl SymbolEnv {
 	}
 
 	fn try_lookup_ext(&self, symbol_name: &str, not_after_stmt_idx: Option<usize>) -> LookupResult {
-		if let Some((definition_idx, kind)) = self.ident_map.get(symbol_name) {
+		if let Some((definition_idx, kind)) = self.symbol_map.get(symbol_name) {
 			if let Some(not_after_stmt_idx) = not_after_stmt_idx {
 				if let StatementIdx::Index(definition_idx) = definition_idx {
 					if *definition_idx > not_after_stmt_idx {
@@ -170,7 +170,7 @@ impl SymbolEnv {
 
 	// Baahh. Find a nice way to reuse the non-mut code and remove LookupMutResult
 	fn try_lookup_mut_ext(&mut self, symbol_name: &str, not_after_stmt_idx: Option<usize>) -> LookupMutResult {
-		if let Some((definition_idx, kind)) = self.ident_map.get_mut(symbol_name) {
+		if let Some((definition_idx, kind)) = self.symbol_map.get_mut(symbol_name) {
 			if let Some(not_after_stmt_idx) = not_after_stmt_idx {
 				if let StatementIdx::Index(definition_idx) = definition_idx {
 					if *definition_idx > not_after_stmt_idx {
@@ -287,28 +287,30 @@ impl SymbolEnv {
 		Ok(t)
 	}
 
-	pub fn iter(&self) -> TypeEnvIter {
-		TypeEnvIter::new(self)
+	pub fn iter(&self, with_ancestry: bool) -> SymbolEnvIter {
+		SymbolEnvIter::new(self, with_ancestry)
 	}
 }
 
-pub struct TypeEnvIter<'a> {
+pub struct SymbolEnvIter<'a> {
 	seen_keys: HashSet<String>,
 	curr_env: &'a SymbolEnv,
 	curr_pos: hash_map::Iter<'a, String, (StatementIdx, SymbolKind)>,
+	with_ancestry: bool,
 }
 
-impl<'a> TypeEnvIter<'a> {
-	fn new(env: &'a SymbolEnv) -> Self {
-		TypeEnvIter {
+impl<'a> SymbolEnvIter<'a> {
+	fn new(env: &'a SymbolEnv, with_ancestry: bool) -> Self {
+		SymbolEnvIter {
 			seen_keys: HashSet::new(),
 			curr_env: env,
-			curr_pos: env.ident_map.iter(),
+			curr_pos: env.symbol_map.iter(),
+			with_ancestry,
 		}
 	}
 }
 
-impl<'a> Iterator for TypeEnvIter<'a> {
+impl<'a> Iterator for SymbolEnvIter<'a> {
 	type Item = (String, &'a SymbolKind, SymbolLookupInfo);
 
 	fn next(&mut self) -> Option<Self::Item> {
@@ -326,10 +328,14 @@ impl<'a> Iterator for TypeEnvIter<'a> {
 					},
 				))
 			}
-		} else if let Some(ref parent_env) = self.curr_env.parent {
-			self.curr_env = parent_env;
-			self.curr_pos = self.curr_env.ident_map.iter();
-			self.next()
+		} else if self.with_ancestry {
+			if let Some(ref parent_env) = self.curr_env.parent {
+				self.curr_env = parent_env;
+				self.curr_pos = self.curr_env.symbol_map.iter();
+				self.next()
+			} else {
+				None
+			}
 		} else {
 			None
 		}

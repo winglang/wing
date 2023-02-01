@@ -92,7 +92,23 @@ pub enum Type {
 	Set(Box<Type>),
 	MutSet(Box<Type>),
 	FunctionSignature(FunctionSignature),
-	CustomType { root: Symbol, fields: Vec<Symbol> },
+	CustomType(CustomType),
+}
+
+// In the future this may be an enum for type-alias, class, etc. For now its just a nested name.
+// Also this root,fields thing isn't really useful, should just turn in to a Vec<Symbol>.
+#[derive(Debug, Clone)]
+pub struct CustomType {
+	pub root: Symbol,
+	pub fields: Vec<Symbol>,
+}
+
+impl CustomType {
+	pub fn get_fqn(&self) -> String {
+		let mut parts = vec![self.root.name.clone()];
+		parts.extend(self.fields.iter().map(|f| f.name.clone()));
+		parts.join(".")
+	}
 }
 
 impl Display for Type {
@@ -126,8 +142,8 @@ impl Display for Type {
 					}
 				)
 			}
-			Type::CustomType { root, fields: _ } => {
-				write!(f, "{}", root)
+			Type::CustomType(custom_type) => {
+				write!(f, "{}", custom_type.root)
 			}
 		}
 	}
@@ -194,6 +210,16 @@ pub struct ElifBlock {
 }
 
 #[derive(Debug)]
+pub struct Class {
+	pub name: Symbol,
+	pub members: Vec<ClassMember>,
+	pub methods: Vec<(Symbol, FunctionDefinition)>,
+	pub constructor: Constructor,
+	pub parent: Option<Type>,
+	pub is_resource: bool,
+}
+
+#[derive(Debug)]
 pub enum StmtKind {
 	Use {
 		module_name: Symbol, // Reference?
@@ -227,14 +253,7 @@ pub enum StmtKind {
 	},
 	Return(Option<Expr>),
 	Scope(Scope),
-	Class {
-		name: Symbol,
-		members: Vec<ClassMember>,
-		methods: Vec<(Symbol, FunctionDefinition)>,
-		constructor: Constructor,
-		parent: Option<Type>,
-		is_resource: bool,
-	},
+	Class(Class),
 	Struct {
 		name: Symbol,
 		extends: Vec<Symbol>,

@@ -7,9 +7,9 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Constructor, ElifBlock, Expr, ExprKind, FunctionDefinition, FunctionSignature,
-	InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type,
-	UnaryOperator,
+	ArgList, BinaryOperator, Class, ClassMember, Constructor, CustomType, ElifBlock, Expr, ExprKind, FunctionDefinition,
+	FunctionSignature, InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind,
+	Symbol, Type, UnaryOperator,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 
@@ -348,10 +348,10 @@ impl Parser<'_> {
 						statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
 						signature: FunctionSignature {
 							parameters: parameters.iter().map(|p| p.1.clone()).collect(),
-							return_type: Some(Box::new(Type::CustomType {
+							return_type: Some(Box::new(Type::CustomType(CustomType {
 								root: name.clone(),
 								fields: vec![],
-							})),
+							}))),
 							flight: if is_resource { Phase::Preflight } else { Phase::Inflight }, // TODO: for now classes can only be constructed inflight
 						},
 					})
@@ -387,14 +387,14 @@ impl Parser<'_> {
 		} else {
 			None
 		};
-		Ok(StmtKind::Class {
+		Ok(StmtKind::Class(Class {
 			name,
 			members,
 			methods,
 			parent,
 			constructor: constructor.unwrap(),
 			is_resource,
-		})
+		}))
 	}
 
 	fn build_anonymous_closure(&self, anon_closure_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
@@ -508,13 +508,13 @@ impl Parser<'_> {
 
 	fn build_custom_type(&self, nested_node: &Node) -> DiagnosticResult<Type> {
 		let mut cursor = nested_node.walk();
-		Ok(Type::CustomType {
+		Ok(Type::CustomType(CustomType {
 			root: self.node_symbol(&nested_node.child_by_field_name("object").unwrap())?,
 			fields: nested_node
 				.children_by_field_name("fields", &mut cursor)
 				.map(|n| self.node_symbol(&n).unwrap())
 				.collect(),
-		})
+		}))
 	}
 
 	fn build_reference(&self, reference_node: &Node) -> DiagnosticResult<Reference> {
