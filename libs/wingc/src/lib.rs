@@ -45,7 +45,6 @@ const WINGSDK_RESOURCE: &'static str = "core.Resource";
 const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
 
 const CONSTRUCT_BASE: &'static str = "constructs.Construct";
-const TERRAFORM_RESOURCE_BASE: &'static str = "cdktf.TerraformResource";
 
 pub struct CompilerOutput {
 	pub preflight: String,
