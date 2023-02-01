@@ -600,7 +600,6 @@ impl Types {
 	}
 
 	pub fn add_namespace(&mut self, n: Namespace) -> NamespaceRef {
-		debug!("Created namespace {}", n.name);
 		self.namespaces.push(Box::new(n));
 		self.get_namespace_ref(self.namespaces.len() - 1)
 	}
@@ -1441,9 +1440,11 @@ impl<'a> TypeChecker<'a> {
 			} => {
 				// library_name is the name of the library we are importing from the JSII world
 				let library_name: String;
-				// namespace_filter is the path to the namespace we are importing from the library, if any
+				// namespace_filter describes what types we are importing from the library
+				// e.g. [] means we are importing everything from `mylib`
+				// e.g. ["ns1", "ns2"] means we are importing everything from `mylib.ns1.ns2`
 				let namespace_filter: Vec<String>;
-				// alias is the name we are giving to the imported library or namespace
+				// alias is the symbol we are giving to the imported library or namespace
 				let alias: &Symbol;
 
 				if module_name.name.starts_with('"') && module_name.name.ends_with('"') {
@@ -1455,8 +1456,8 @@ impl<'a> TypeChecker<'a> {
 						);
 						return;
 					}
-					// We assume we have a jsii library and we use the `module_name` as the library name, and set no
-					// namespace filter (we only support importing the root library at the moment)
+					// We assume we have a jsii library and we use `module_name` as the library name, and set no
+					// namespace filter (we only support importing a full library at the moment)
 					library_name = module_name.name[1..module_name.name.len() - 1].to_string();
 					namespace_filter = vec![];
 					alias = identifier.as_ref().unwrap();

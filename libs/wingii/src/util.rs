@@ -71,7 +71,7 @@ pub mod package_json {
 	pub fn find_dependency_directory(dependency_name: &str, search_start: &str) -> Option<String> {
 		// WASI has a limitation where it doesn't support Rust's std::fs::canonicalize().
 		// The resolver dependency we use here uses canonicalize() by default, but if we set
-		// preserve_symlinks to true, it will use the original path instead.
+		// preserve_symlinks to true, it will use the original path instead. ¯\_(ツ)_/¯
 		let entrypoint = Resolver::default()
 			.preserve_symlinks(true)
 			.with_basedir(PathBuf::from(search_start))
