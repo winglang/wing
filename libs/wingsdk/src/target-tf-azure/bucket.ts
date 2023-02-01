@@ -1,7 +1,9 @@
+import { StorageAccount } from "@cdktf/provider-azurerm/lib/storage-account";
 import { StorageBlob } from "@cdktf/provider-azurerm/lib/storage-blob";
 import { StorageContainer } from "@cdktf/provider-azurerm/lib/storage-container";
 import { Construct } from "constructs";
 import { App } from "./app";
+import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import {
@@ -23,21 +25,33 @@ const BUCKET_NAME_OPTS: NameOptions = {
 };
 
 /**
+ * Azure bult-in storage account permissions.
+ */
+export enum StorageAccountPermissions {
+  /** Read only permission */
+  READ = "Storage Blob Data Reader",
+  /** Read write permission */
+  READ_WRITE = "Storage Blob Data Contributor",
+}
+
+/**
  * Azure implementation of `cloud.Bucket`.
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.BucketBase {
-  private readonly storageContainer: StorageContainer;
+  /** Storage container */
+  public readonly storageContainer: StorageContainer;
   private readonly public: boolean;
-  private app: App;
+  private readonly storageAccount: StorageAccount;
 
-  constructor(scope: Construct, id: string, props: cloud.BucketProps) {
+  constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
 
     this.public = props.public ?? false;
 
-    this.app = App.of(this);
+    const app = App.of(this);
+    this.storageAccount = app.storageAccount;
 
     const storageContainerName = ResourceNames.generateName(
       this,
@@ -53,7 +67,7 @@ export class Bucket extends cloud.BucketBase {
 
     this.storageContainer = new StorageContainer(this, "Bucket", {
       name: storageContainerName,
-      storageAccountName: this.app.storageAccount.name,
+      storageAccountName: this.storageAccount.name,
       containerAccessType: this.public ? "public" : "private",
     });
   }
@@ -68,7 +82,7 @@ export class Bucket extends cloud.BucketBase {
 
     new StorageBlob(this, `Blob-${key}`, {
       name: blobName,
-      storageAccountName: this.app.storageAccount.name,
+      storageAccountName: this.storageAccount.name,
       storageContainerName: this.storageContainer.name,
       type: "Block",
       sourceContent: body,
@@ -79,13 +93,47 @@ export class Bucket extends cloud.BucketBase {
   public _bind(host: core.IInflightHost, ops: string[]): void {
     host;
     ops;
-    // TODO: support functions once tfazure functions are implemented
-    throw new Error("Azure buckets have can not be bound by anything for now");
+    if (!(host instanceof Function)) {
+      throw new Error("buckets can only be bound by tfazure.Function for now");
+    }
+
+    // TODO: investigate customized roles over builtin for finer grained access control
+    if (
+      ops.includes(cloud.BucketInflightMethods.DELETE) ||
+      ops.includes(cloud.BucketInflightMethods.PUT)
+    ) {
+      host.addPermission(this, {
+        scope: `${this.storageAccount.id}`,
+        roleDefinitionName: StorageAccountPermissions.READ_WRITE,
+      });
+    } else if (
+      ops.includes(cloud.BucketInflightMethods.GET) ||
+      ops.includes(cloud.BucketInflightMethods.LIST)
+    ) {
+      host.addPermission(this, {
+        scope: `${this.storageAccount.id}`,
+        roleDefinitionName: StorageAccountPermissions.READ,
+      });
+    }
+
+    host.addEnvironment(this.envName(), this.storageContainer.name);
+    host.addEnvironment(this.envStorageAccountName(), this.storageAccount.name);
   }
 
   /** @internal */
   public _toInflight(): core.Code {
-    throw new Error("Method not implemented.");
+    return core.InflightClient.for(__filename, "BucketClient", [
+      `process.env["${this.envName()}"]`,
+      `process.env["${this.envStorageAccountName()}"]`,
+    ]);
+  }
+
+  private envName(): string {
+    return `BUCKET_NAME_${this.storageContainer.node.addr.slice(-8)}`;
+  }
+
+  private envStorageAccountName(): string {
+    return `STORAGE_ACCOUNT_${this.storageContainer.node.addr.slice(-8)}`;
   }
 }
 
