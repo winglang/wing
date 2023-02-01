@@ -1,9 +1,9 @@
 import { DynamodbTable } from "@cdktf/provider-aws/lib/dynamodb-table";
 import { Construct } from "constructs";
+import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
-import { Function } from "./function";
 
 export const HASH_KEY = "id";
 
@@ -42,7 +42,10 @@ export class Counter extends cloud.CounterBase {
       throw new Error("counters can only be bound by tfaws.Function for now");
     }
 
-    if (ops.includes(cloud.CounterInflightMethods.INC)) {
+    if (
+      ops.includes(cloud.CounterInflightMethods.INC) ||
+      ops.includes(cloud.CounterInflightMethods.DEC)
+    ) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["dynamodb:UpdateItem"],
@@ -77,4 +80,5 @@ export class Counter extends cloud.CounterBase {
 }
 
 Counter._annotateInflight("inc", {});
+Counter._annotateInflight("dec", {});
 Counter._annotateInflight("peek", {});

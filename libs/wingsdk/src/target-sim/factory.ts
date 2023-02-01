@@ -1,12 +1,12 @@
 import { IConstruct } from "constructs";
 import { IPolyconFactory } from "polycons";
-import * as cloud from "../cloud";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Function } from "./function";
 import { Logger } from "./logger";
 import { Queue } from "./queue";
 import { Topic } from "./topic";
+import * as cloud from "../cloud";
 
 /**
  * Polycon factory which resolves polycons in `cloud` into preflight resources

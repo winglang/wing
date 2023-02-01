@@ -43,7 +43,7 @@ async function main() {
     )
     .option(
       "-t, --target <target>",
-      "Target platform (options: 'tf-aws', 'tf-azure', 'sim')",
+      "Target platform (options: 'tf-aws', 'tf-azure', 'tf-gcp', 'sim')",
       "tf-aws"
     )
     .action(compile);
@@ -54,15 +54,10 @@ async function main() {
     .argument("<entrypoint...>", "all entrypoints to test")
     .action(test);
 
-program
+  program
     .command("docs")
     .description("Open the Wing documentation")
     .action(docs);
-
-  program
-    .command("upgrade")
-    .description("Upgrades the Wing toolchain to the latest version")
-    .action(() => upgrade({ force: true }));
 
   program.parse();
 }

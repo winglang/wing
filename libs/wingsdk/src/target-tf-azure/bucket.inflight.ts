@@ -1,10 +1,11 @@
 import { DefaultAzureCredential } from "@azure/identity";
-import { BlobServiceClient } from "@azure/storage-blob";
+import { BlobServiceClient, ContainerClient } from "@azure/storage-blob";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
 
 export class BucketClient implements IBucketClient {
   private readonly bucketName: string;
   private readonly blobServiceClient: BlobServiceClient;
+  private readonly containerClient: ContainerClient;
   private readonly defaultAzureCredential: DefaultAzureCredential =
     new DefaultAzureCredential();
 
@@ -20,6 +21,9 @@ export class BucketClient implements IBucketClient {
         `https://${storageAccount}.blob.core.windows.net`,
         this.defaultAzureCredential
       );
+    this.containerClient = this.blobServiceClient.getContainerClient(
+      this.bucketName
+    );
   }
 
   /**
@@ -29,10 +33,9 @@ export class BucketClient implements IBucketClient {
    * @param body string contents of the object
    */
   public async put(key: string, body: string): Promise<void> {
-    const containerClient = this.blobServiceClient.getContainerClient(
-      this.bucketName
-    );
-    await containerClient.getBlockBlobClient(key).upload(body, body.length);
+    await this.containerClient
+      .getBlockBlobClient(key)
+      .upload(body, body.length);
   }
 
   /**
@@ -42,10 +45,7 @@ export class BucketClient implements IBucketClient {
    * @returns string content of the object as string
    */
   public async get(key: string): Promise<string> {
-    const containerClient = this.blobServiceClient.getContainerClient(
-      this.bucketName
-    );
-    const blobClient = containerClient.getBlobClient(key);
+    const blobClient = this.containerClient.getBlobClient(key);
 
     const downloadResponse = await blobClient.download();
     if (downloadResponse.readableStreamBody === undefined) {
@@ -68,11 +68,7 @@ export class BucketClient implements IBucketClient {
   public async list(prefix?: string): Promise<string[]> {
     const list: string[] = [];
 
-    const containerClient = this.blobServiceClient.getContainerClient(
-      this.bucketName
-    );
-
-    for await (const blob of containerClient.listBlobsFlat({ prefix })) {
+    for await (const blob of this.containerClient.listBlobsFlat({ prefix })) {
       list.push(blob.name);
     }
 
@@ -91,10 +87,7 @@ export class BucketClient implements IBucketClient {
   ): Promise<void> {
     const mustExist = opts.mustExist ?? false;
 
-    const containerClient = this.blobServiceClient.getContainerClient(
-      this.bucketName
-    );
-    const blockBlobClient = containerClient.getBlockBlobClient(key);
+    const blockBlobClient = this.containerClient.getBlockBlobClient(key);
 
     try {
       await blockBlobClient.delete();

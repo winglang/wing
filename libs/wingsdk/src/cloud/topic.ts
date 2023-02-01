@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, IResource, Inflight, Resource } from "../core";
 import { Function } from "./function";
+import { Code, IResource, Inflight, Resource } from "../core";
 
 export const TOPIC_TYPE = "wingsdk.cloud.Topic";
 

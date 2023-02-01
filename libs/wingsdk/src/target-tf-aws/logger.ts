@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
+import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Function } from "./function";
 
 /**
  * AWS implementation of `cloud.Logger`.

@@ -45,6 +45,17 @@ export interface NameOptions {
    * @default - no suffix
    */
   readonly suffix?: string;
+
+  /**
+   * Include a hash of the resource's address in the generated name.
+   *
+   * This should only be disabled if the resource's name is guaranteed to be
+   * app-unique, or if some other source of randomness will be appended to the
+   * name.
+   *
+   * @default true
+   */
+  readonly includeHash?: boolean;
 }
 
 export class ResourceNames {
@@ -64,20 +75,21 @@ export class ResourceNames {
       name = `${props.prefix}${name}`;
     }
 
-    let hash = resource.node.addr.substring(0, 8);
+    let includeHash = props.includeHash ?? true;
+    let hash = includeHash ? sep + resource.node.addr.substring(0, 8) : "";
     let suffix = props.suffix ?? "";
+
+    name = name.replace(props.disallowedRegex, sep);
 
     // TODO: allow customizing where we "trim" the name, e.g.
     // 1. trim from the end
     // 2. trim from the beginning
     // 3. trim from the middle
     if (maxLen) {
-      name = name
-        .replace(props.disallowedRegex, sep)
-        .substring(0, maxLen - hash.length - sep.length - suffix.length);
+      name = name.substring(0, maxLen - hash.length - suffix.length);
     }
 
-    name = `${name}${sep}${hash}${suffix}`;
+    name = `${name}${hash}${suffix}`;
 
     // apply case conversion again in case the prefix, suffix, or hash is not
     // case-conformant

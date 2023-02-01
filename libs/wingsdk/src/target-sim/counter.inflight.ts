@@ -1,7 +1,7 @@
-import { ICounterClient } from "../cloud";
-import { ISimulatorContext } from "../testing/simulator";
 import { ISimulatorResourceInstance } from "./resource";
 import { CounterSchema } from "./schema-resources";
+import { ICounterClient } from "../cloud";
+import { ISimulatorContext } from "../testing/simulator";
 
 export class Counter implements ICounterClient, ISimulatorResourceInstance {
   private value: number;
@@ -24,6 +24,17 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
       activity: async () => {
         const prev = this.value;
         this.value += amount;
+        return prev;
+      },
+    });
+  }
+
+  public async dec(amount: number = 1): Promise<number> {
+    return this.context.withTrace({
+      message: `Dec (amount=${amount}).`,
+      activity: async () => {
+        const prev = this.value;
+        this.value -= amount;
         return prev;
       },
     });

@@ -70,6 +70,76 @@ Object {
 }
 `;
 
+exports[`dec 1`] = `
+Object {
+  "app.wsim/simulator.json": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/my_counter",
+        "props": Object {
+          "initial": 123,
+        },
+        "type": "wingsdk.cloud.Counter",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+        "my_counter": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A distributed atomic counter",
+            "title": "Counter",
+          },
+          "id": "my_counter",
+          "path": "root/my_counter",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.1.228",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
 exports[`inc 1`] = `
 Object {
   "app.wsim/simulator.json": Object {

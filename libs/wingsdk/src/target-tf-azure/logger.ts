@@ -14,9 +14,7 @@ export class Logger extends cloud.LoggerBase {
 
   /** @internal */
   public _bind(host: core.IInflightHost, ops: string[]): void {
-    host;
-    ops;
-    throw new Error("logger not yet bindable to any resource");
+    super._bind(host, ops);
   }
 
   /** @internal */
