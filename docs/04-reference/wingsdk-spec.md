@@ -645,7 +645,7 @@ resource Topic {
   on_message(fn: inflight (message: Json) => void, opts: TopicOnPublishProps?): void;
 
   /**
-   * Publish an message to the topic.
+   * Publish a message to the topic.
    */
   inflight publish(message: Json): void;
 }
