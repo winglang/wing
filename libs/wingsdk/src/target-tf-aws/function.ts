@@ -35,6 +35,7 @@ export class Function extends cloud.FunctionBase {
   private policyStatements?: any[];
   /** Function ARN */
   public readonly arn: string;
+  /** Function Qualified ARN */
   public readonly qualifiedArn: string;
 
   constructor(
