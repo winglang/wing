@@ -203,11 +203,12 @@ struct ThresholdReachedEvent {
 * Logger (P1) - a log aggregator
 * Counter (P1) - an atomic counter
 * Schedule (P1) - a cron job / scheduled task trigger
-* Website (P1) - a CDN-backed static website
 * Api (P1) - a REST API
-* Metric (P1) - a metric for monitoring system performance
-* Alarm (P1) - an alarm that triggers when a metric crosses a threshold
 * Service (P1) - a long-running service, similar to AWS ECS, Azure Container Instances, GCP Cloud Run
+* SqlDatabase (P1) - a relational database that lets you execute arbitrary SQL queries, similar to AWS RDS, Azure SQL Database, GCP Cloud SQL
+* Website (P2) - a CDN-backed static website
+* Metric (P2) - a metric for monitoring system performance
+* Alarm (P2) - an alarm that triggers when a metric crosses a threshold
 * Table (P2) - a NoSQL database table
 * Key-value store (P2) - a lightweight key-value store, similar to Redis or Memcached
 * Job (P2) - a long-running compute workload that can be run on demand
@@ -216,12 +217,11 @@ struct ThresholdReachedEvent {
 * Stream (P2) - a stream of events, similar to AWS Kinesis, Azure Event Hubs, GCP Pub/Sub and Dataflow
 * OnDeploy (P2) - a variation of Function that runs every time the app is deployed
 * GraphQLApi (P2) - a GraphQL API, similar to AWS AppSync
-* SqlDatabase (P2) - a relational database that lets you execute arbitrary SQL queries, similar to AWS RDS, Azure SQL Database, GCP Cloud SQL
 
 ### Resources planned as third party libraries
 
+* Redis (P1)
 * DynamoDBTable
-* Redis
 * MongoDB
 * GithubRepo
 * Authorization/authentication related resources

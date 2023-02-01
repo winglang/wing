@@ -1,5 +1,6 @@
 import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
 import { ResourceGroup } from "@cdktf/provider-azurerm/lib/resource-group";
+import { ServicePlan } from "@cdktf/provider-azurerm/lib/service-plan";
 import { StorageAccount } from "@cdktf/provider-azurerm/lib/storage-account";
 import { IConstruct } from "constructs";
 import { PolyconFactory } from "./factory";
@@ -40,6 +41,11 @@ const STORAGEACCOUNT_NAME_OPTS: NameOptions = {
   sep: "",
 };
 
+const SERVICEPLAN_NAME_OPTS: NameOptions = {
+  maxLen: 50,
+  disallowedRegex: /([^a-zA-Z0-9\-]+)/g,
+};
+
 /**
  * An app that knows how to synthesize constructs into a Terraform configuration
  * for Azure resources.
@@ -66,6 +72,7 @@ export class App extends CdktfApp implements IApp {
   public readonly location: string;
   private _resourceGroup?: ResourceGroup;
   private _storageAccount?: StorageAccount;
+  private _servicePlan?: ServicePlan;
 
   constructor(props: AzureAppProps) {
     super({
@@ -117,5 +124,23 @@ export class App extends CdktfApp implements IApp {
       });
     }
     return this._storageAccount;
+  }
+
+  /**
+   * Get service plan using lazy initialization
+   */
+  public get servicePlan() {
+    if (!this._servicePlan) {
+      this._servicePlan = new ServicePlan(this, "ServicePlan", {
+        name: ResourceNames.generateName(this, SERVICEPLAN_NAME_OPTS),
+        resourceGroupName: this.resourceGroup.name,
+        location: this.resourceGroup.location,
+        osType: "Linux",
+        // Dynamic Stock Keeping Unit (SKU)
+        // https://learn.microsoft.com/en-us/partner-center/developer/product-resources#sku
+        skuName: "Y1",
+      });
+    }
+    return this._servicePlan;
   }
 }
