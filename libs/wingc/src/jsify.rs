@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use std::{cell::RefCell, cmp::Ordering, fs, path::PathBuf, vec};
+use std::{cell::RefCell, cmp::Ordering, fmt::format, fs, path::PathBuf, vec};
 
 use sha2::{Digest, Sha256};
 
@@ -10,7 +10,7 @@ use crate::{
 		UtilityFunctions,
 	},
 	capture::CaptureKind,
-	type_check::{symbol_env::SymbolEnv, Class, TypeRef},
+	type_check::{resolve_custom_type, resolve_custom_type_by_fqn, symbol_env::SymbolEnv, Class, TypeRef},
 	utilities::snake_case_to_camel_case,
 	WINGSDK_RESOURCE,
 };
@@ -732,20 +732,32 @@ impl JSifier {
 			.map(|m| *m)
 			.collect::<Vec<_>>();
 
+		// let captured_fields2 = resolve_custom_type_by_fqn(env, name.name, 0)
+		// 	.unwrap()
+		// 	.as_resource()
+		// 	.unwrap()
+		// 	.env
+		// 	.iter(false)
+		// 	.filter(|(name, kind, info)| {
+		// 		let var = kind.as_variable().unwrap();
+		// 		if var.flight == Phase::Inflight || var.reassignable || var._type.as_resource().is_none() {
+		// 			return false;
+		// 		}
+		// 		true
+		// 	})
+		// 	.map(|m| m.clone())
+		// 	.collect::<Vec<_>>();
+
 		// Get fields to be captured by resource's client
 		let captured_fields = self.get_captures(&preflight_members, resource_type.as_resource().unwrap());
 
 		// Jsify inflight client
-		self.jsify_resource_client(
-			name,
-			&captured_fields,
-			&methods
-				.iter()
-				.filter(|(_, m)| m.signature.flight == Phase::Inflight)
-				.map(|t| *t)
-				.collect::<Vec<_>>(),
-			parent,
-		);
+		let inflight_methods = methods
+			.iter()
+			.filter(|(_, m)| m.signature.flight == Phase::Inflight)
+			.map(|t| *t)
+			.collect::<Vec<_>>();
+		self.jsify_resource_client(name, &captured_fields, &inflight_methods, parent);
 
 		// Get all preflight methods to be jsified to the preflight class
 		let preflight_methods = methods
@@ -780,9 +792,40 @@ impl JSifier {
 				.join("\n")
 		);
 
-		let bind_method = self.jsify_bind_method(name, &captured_fields);
+		let bind_method = self.jsify_toinflight_method(name, &captured_fields);
 
-		return format!("{}\n{}.prototype._bind = {}", resource_class, name.name, bind_method);
+		// For each inflight methods generate an annotation which includes a list of all the captured
+		// fields and all the ops they provide.
+		// TODO: in the future we should only pass the relevant captured fields and ops to each method.
+		let default_annotation = captured_fields
+			.iter()
+			.map(|(name, _, ops)| {
+				format!(
+					"\"this.{}\": {{ ops: [{}]}}",
+					name.name,
+					ops.iter().map(|op| format!("\"{}\"", op)).collect_vec().join(", ")
+				)
+			})
+			.collect_vec()
+			.join(", ");
+		let inflight_annotations = inflight_methods
+			.iter()
+			.map(|(method_name, ..)| {
+				format!(
+					"{}._annotateInflight(\"{}\", {{{}}});",
+					name.name, method_name.name, default_annotation
+				)
+			})
+			.collect_vec();
+
+		// Return the preflight resource class
+		return format!(
+			"{}\n{}.prototype._toInflight = {}\n{}",
+			resource_class,
+			name.name,
+			bind_method,
+			inflight_annotations.join("\n")
+		);
 	}
 
 	fn jsify_resource_constructor(&self, constructor: &Constructor, no_parent: bool) -> String {
@@ -821,19 +864,17 @@ impl JSifier {
 		)
 	}
 
-	fn jsify_bind_method(&self, resource_name: &Symbol, captured_fields: &[(Symbol, TypeRef, Vec<String>)]) -> String {
+	fn jsify_toinflight_method(
+		&self,
+		resource_name: &Symbol,
+		captured_fields: &[(Symbol, TypeRef, Vec<String>)],
+	) -> String {
 		let inner_clients = captured_fields
 			.iter()
 			.map(|(inner_member_name, _, used_methods)| {
 				format!(
-					"const {}_client = this.{}._bind(host, [{}]);",
-					inner_member_name.name,
-					inner_member_name.name,
-					used_methods
-						.iter()
-						.map(|s| format!("\"{}\"", s))
-						.collect_vec()
-						.join(", ")
+					"const {}_client = this.{}._toInflight();",
+					inner_member_name.name, inner_member_name.name,
 				)
 			})
 			.collect::<Vec<_>>();
@@ -845,7 +886,10 @@ impl JSifier {
 			resource_name.name,
 			captured_fields
 				.iter()
-				.map(|(inner_member_name, _, _)| format!("{}: {}_client", inner_member_name.name, inner_member_name.name))
+				.map(|(inner_member_name, _, _)| format!(
+					"{}: ${{{}_client.text}}",
+					inner_member_name.name, inner_member_name.name
+				))
 				.join(", ")
 		)
 	}

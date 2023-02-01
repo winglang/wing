@@ -2170,3 +2170,14 @@ pub fn resolve_custom_type(
 		Err(type_error) => Err(type_error),
 	}
 }
+
+pub fn resolve_custom_type_by_fqn(
+	custom_type: &str,
+	env: &SymbolEnv,
+	statement_idx: usize,
+) -> Result<TypeRef, TypeError> {
+	let mut fields = custom_type.split('.').map(|s| Symbol::global(s)).collect_vec();
+	let root = fields.remove(0);
+	let custom_type = CustomType { root, fields };
+	resolve_custom_type(&custom_type, env, statement_idx)
+}
