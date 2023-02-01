@@ -129,7 +129,7 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	fn lookup_or_create_type(&mut self, type_fqn: &FQN) -> TypeRef {
-		// Check if this type is already defined in this module's namespace
+		// Check if this type is already imported
 		if let Ok(t) = self.env.lookup_nested_str(type_fqn.as_str(), true, None) {
 			return t.as_type().expect(&format!("Expected {} to be a type", type_fqn));
 		}
@@ -148,9 +148,6 @@ impl<'a> JsiiImporter<'a> {
 		if type_fqn.is_construct_base() {
 			return;
 		}
-
-		// TODO: why do we need this?
-		// assert!(type_fqn.assembly() == self.assembly_name);
 
 		self.setup_namespaces_for(&type_fqn);
 
@@ -175,11 +172,9 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	fn setup_namespaces_for(&mut self, type_name: &FQN) {
-		debug!("Setting up namespaces for {}", type_name);
-
-		// First, ensure there is a namespace in the Wing type system corresponding to the JSII assembly we are importing from.
-		// If we are importing a type from the root of the assembly, then we need to make sure the assembly namespace is visible
-		// (Note that we never want to hide a namespace that has already been made visible)
+		// First, create a namespace in the Wing type system (if there isn't one already) corresponding to the JSII assembly
+		// the type belongs to. If we are importing a type from the root of the assembly, then we need to make sure
+		// the assembly namespace is visible. (Note that we never need to hide a namespace that has already been made visible).
 		let assembly_should_be_visible = type_name.namespaces().count() == 0;
 		if let Some(symb) = self.env.try_lookup_mut(self.assembly_name, None) {
 			if let SymbolKind::Namespace(ns) = symb {
