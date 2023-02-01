@@ -74,10 +74,10 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) {
 	let args = ptr_to_string(ptr, len);
 
 	let split = args.split(";").collect::<Vec<&str>>();
-	let source_file = PathBuf::from(split[0]);
+	let source_file = Path::new(split[0]);
 	let output_dir = split.get(1).map(|s| Path::new(s));
 
-	let results = compile(&source_file, output_dir);
+	let results = compile(source_file, output_dir);
 	if let Err(mut err) = results {
 		// Sort error messages by line number (ascending)
 		err.sort_by(|a, b| a.cmp(&b));

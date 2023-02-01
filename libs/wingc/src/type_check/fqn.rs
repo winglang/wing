@@ -29,6 +29,7 @@ impl<'a> FQN<'a> {
 		&self.0[..index]
 	}
 
+	#[allow(dead_code)]
 	pub fn assembly(&self) -> &str {
 		self.0.split('.').next().unwrap()
 	}
