@@ -95,6 +95,7 @@ impl<'a> JsiiImporter<'a> {
 						args: vec![self.wing_types.anything()],
 						return_type: self.wing_types.anything(),
 						flight: Phase::Inflight,
+						js_override: None,
 					}))
 				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION) {
 					self.wing_types.duration()
@@ -332,6 +333,12 @@ impl<'a> JsiiImporter<'a> {
 					args: arg_types,
 					return_type,
 					flight,
+					js_override: m
+						.docs
+						.as_ref()
+						.map(|d| d.custom.as_ref().map(|c| c.get("macro").map(|j| j.clone())))
+						.flatten()
+						.flatten(),
 				}));
 				let name = camel_case_to_snake_case(&m.name);
 				class_env
@@ -538,6 +545,7 @@ impl<'a> JsiiImporter<'a> {
 				args: arg_types,
 				return_type: new_type,
 				flight: phase,
+				js_override: None,
 			}));
 			if let Err(e) = class_env.define(
 				&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &initializer.location_in_module),

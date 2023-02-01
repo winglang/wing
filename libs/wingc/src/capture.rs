@@ -131,9 +131,7 @@ pub fn scan_for_inflights_in_expression(expr: &Expr, diagnostics: &mut Diagnosti
 			scan_for_inflights_in_expression(object, diagnostics);
 		}
 		ExprKind::Call { function, args } => {
-			if let Reference::NestedIdentifier { object, property: _ } = function {
-				scan_for_inflights_in_expression(object, diagnostics);
-			}
+			scan_for_inflights_in_expression(function, diagnostics);
 			scan_for_inflights_in_arglist(args, diagnostics);
 		}
 		ExprKind::Unary { op: _, exp } => {
@@ -178,40 +176,15 @@ fn scan_for_inflights_in_arglist(args: &ArgList, diagnostics: &mut Diagnostics) 
 }
 
 fn scan_captures_in_call(
-	reference: &Reference,
+	callee: &Expr,
 	args: &ArgList,
 	env: &SymbolEnv,
 	statement_idx: usize,
 	diagnostics: &mut Diagnostics,
 ) -> Vec<Capture> {
 	let mut res = vec![];
-	if let Reference::NestedIdentifier { object, property } = reference {
-		res.extend(scan_captures_in_expression(&object, env, statement_idx, diagnostics));
-
-		// If the expression evaluates to a resource we should check what method of the resource we're accessing
-		if let Type::Resource(ref resource) = **object.evaluated_type.borrow().as_ref().unwrap() {
-			let (prop_type, _flight) = match resource.env.lookup_ext(property, None) {
-				Ok((prop_type, phase)) => (
-					prop_type
-						.as_variable()
-						.expect("Expected resource property to be a variable")
-						._type,
-					phase,
-				),
-				Err(type_error) => {
-					panic!("{}", type_error);
-				}
-			};
-
-			let func = prop_type.as_function_sig().unwrap();
-			if matches!(func.flight, Phase::Preflight) {
-				panic!("Can't access preflight method {} inflight", property);
-			}
-			debug!(
-				"We seem to be accessing the preflight method {}.{} {} inflight!",
-				resource.name.name, property.name, property.span
-			);
-		}
+	if !matches!(callee.kind, ExprKind::Reference(Reference::Identifier(_))) {
+		res.extend(scan_captures_in_expression(callee, env, statement_idx, diagnostics));
 	}
 
 	for arg in args.pos_args.iter() {
@@ -312,22 +285,33 @@ fn scan_captures_in_expression(
 					}
 				}
 			}
-			Reference::NestedIdentifier { object, property: _ } => {
+			Reference::NestedIdentifier { object, property } => {
 				res.extend(scan_captures_in_expression(object, env, statement_idx, diagnostics));
 
-				// If the expression evaluates to a resource we should check if we need to capture the property as well
-				// TODO: do we really need this? I think we capture `object` above recursively and therefore don't need special handling of `property`.
-				// if let &Type::ResourceObject(resource) = object.evaluated_type.borrow().unwrap().into() {
-				// 	let resource = resource.as_resource().unwrap();
-				// 	let (prop_type, flight) = resource.env.lookup_ext(property);
-				// 	if prop_type.as_resource_object().is_some() && matches!(flight, Flight::Pre) {
-				// 		debug!(
-				// 			"We seem to be accessing the preflight resource {} {} inflight!",
-				// 			r, property.span
-				// 		);
-				// 		res.push(r);
-				// 	}
-				// }
+				// If the expression evaluates to a resource we should check what method of the resource we're accessing
+				if let Type::Resource(ref resource) = **object.evaluated_type.borrow().as_ref().unwrap() {
+					let (prop_type, _flight) = match resource.env.lookup_ext(property, None) {
+						Ok((prop_type, phase)) => (
+							prop_type
+								.as_variable()
+								.expect("Expected resource property to be a variable")
+								._type,
+							phase,
+						),
+						Err(type_error) => {
+							panic!("{}", type_error);
+						}
+					};
+
+					let func = prop_type.as_function_sig().unwrap();
+					if matches!(func.flight, Phase::Preflight) {
+						panic!("Can't access preflight method {} inflight", property);
+					}
+					debug!(
+						"We seem to be accessing the preflight method {}.{} {} inflight!",
+						resource.name.name, property.name, property.span
+					);
+				}
 			}
 		},
 		ExprKind::Call { function, args } => {
