@@ -547,11 +547,9 @@ impl Types {
 		types.push(Box::new(Type::Void));
 		let void_idx = types.len() - 1;
 
-		let namespaces = vec![];
-
 		Self {
-			namespaces,
 			types,
+			namespaces: Vec::new(),
 			numeric_idx,
 			string_idx,
 			bool_idx,
