@@ -2535,6 +2535,78 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`wing compile --target tf-aws for_loop.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+}
+`;
+
+exports[`wing compile --target tf-aws for_loop.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.15.2",
+}
+`;
+
+exports[`wing compile --target tf-aws for_loop.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"for_loop\\" });
+  
+  const words = Object.freeze([\\"wing\\", \\"lang\\", \\"dang\\"]);
+  const unique_numbers = Object.freeze(new Set([1, 2, 3]));
+  for (const word of words) {
+    for (const number of unique_numbers) {
+      {((cond) => {if (!cond) throw new Error(\`assertion failed: '(number > 0)'\`)})((number > 0))};
+      {console.log(\`\${word}: \${number}\`)};
+    }
+  }
+}
+}
+new MyApp().synth();"
+`;
+
 exports[`wing compile --target tf-aws forward_decl.w > cdk.tf.json 1`] = `
 {
   "//": {
