@@ -331,7 +331,7 @@ exports[`wing compile --target tf-aws bring_jsii.w > cdk.tf.json 1`] = `
       "root_testsayhello_IamRole_CD3CFB9C": {
         "//": {
           "metadata": {
-            "path": "root/test:say_hello/IamRole",
+            "path": "root/Default/test:say_hello/IamRole",
             "uniqueId": "root_testsayhello_IamRole_CD3CFB9C",
           },
         },
@@ -342,7 +342,7 @@ exports[`wing compile --target tf-aws bring_jsii.w > cdk.tf.json 1`] = `
       "root_testsayhello_IamRolePolicy_265A46FB": {
         "//": {
           "metadata": {
-            "path": "root/test:say_hello/IamRolePolicy",
+            "path": "root/Default/test:say_hello/IamRolePolicy",
             "uniqueId": "root_testsayhello_IamRolePolicy_265A46FB",
           },
         },
@@ -354,7 +354,7 @@ exports[`wing compile --target tf-aws bring_jsii.w > cdk.tf.json 1`] = `
       "root_testsayhello_IamRolePolicyAttachment_1B179C34": {
         "//": {
           "metadata": {
-            "path": "root/test:say_hello/IamRolePolicyAttachment",
+            "path": "root/Default/test:say_hello/IamRolePolicyAttachment",
             "uniqueId": "root_testsayhello_IamRolePolicyAttachment_1B179C34",
           },
         },
@@ -366,7 +366,7 @@ exports[`wing compile --target tf-aws bring_jsii.w > cdk.tf.json 1`] = `
       "root_testsayhello_8E3F8CF7": {
         "//": {
           "metadata": {
-            "path": "root/test:say_hello/Default",
+            "path": "root/Default/test:say_hello/Default",
             "uniqueId": "root_testsayhello_8E3F8CF7",
           },
         },
@@ -388,7 +388,7 @@ exports[`wing compile --target tf-aws bring_jsii.w > cdk.tf.json 1`] = `
       "root_testsayhello_Code_D4453363": {
         "//": {
           "metadata": {
-            "path": "root/test:say_hello/Code",
+            "path": "root/Default/test:say_hello/Code",
             "uniqueId": "root_testsayhello_Code_D4453363",
           },
         },
@@ -399,7 +399,7 @@ exports[`wing compile --target tf-aws bring_jsii.w > cdk.tf.json 1`] = `
       "root_testsayhello_S3Object_A9281CAB": {
         "//": {
           "metadata": {
-            "path": "root/test:say_hello/S3Object",
+            "path": "root/Default/test:say_hello/S3Object",
             "uniqueId": "root_testsayhello_S3Object_A9281CAB",
           },
         },
@@ -444,8 +444,10 @@ function __app(target) {
 		case \\"tfaws\\":
 		case \\"tf-aws\\":
 			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
