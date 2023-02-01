@@ -120,7 +120,7 @@ impl<'a> JsiiImporter<'a> {
 				// TODO: Handle non-primitive collections
 				let primitive_type = element_type
 					.get("primitive")
-					.expect("'primitive' is required for collection element types")
+					.expect("non-primitive collection types are not yet supported")
 					.as_str()
 					.expect("'primitive' must be a string");
 
@@ -129,12 +129,12 @@ impl<'a> JsiiImporter<'a> {
 					"number" => self.wing_types.number(),
 					"boolean" => self.wing_types.bool(),
 					"any" => self.wing_types.anything(),
-					_ => panic!("Unexpected primitive type {}", primitive_type),
+					_ => panic!("Unsupported primitive type '{}'", primitive_type),
 				};
 				match collection_kind {
 					"array" => self.wing_types.add_type(Type::Array(wing_type)),
 					"map" => self.wing_types.add_type(Type::Map(wing_type)),
-					_ => panic!("Unexpected collection kind {}", collection_kind),
+					_ => panic!("Unsupported collection kind '{}'", collection_kind),
 				}
 			} else {
 				panic!(
