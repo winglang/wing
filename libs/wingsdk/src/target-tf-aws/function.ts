@@ -205,6 +205,11 @@ export class Function extends cloud.FunctionBase {
     return this.function.functionName;
   }
 
+  /** @internal */
+  public get _arn(): string {
+    return this.function.arn;
+  }
+
   private envName(): string {
     return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }
