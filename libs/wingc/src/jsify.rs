@@ -860,7 +860,7 @@ impl JSifier {
 
 		let client_relative_path = format!("clients/{}.inflight.js", resource_name.name);
 		format!(
-			"_toInflight() {{\n{}\nconst self_client_path = {};\nreturn core.NodeJsCode.fromInline(`(new (require(\"${{self_client_path}}\"))).{}_inflight({{{}}})`);\n}}",
+			"_toInflight() {{\n{}\nconst self_client_path = {};\nreturn core.NodeJsCode.fromInline(`(new (require(\"${{self_client_path}}\")).{}_inflight({{{}}}))`);\n}}",
 			inner_clients.join("\n"),
 			Self::js_resolve_file(&client_relative_path),
 			resource_name.name,
@@ -934,7 +934,7 @@ impl JSifier {
 			.collect_vec();
 
 		let client_source = format!(
-			"class {}_inflight {} {{\n{}\n{}}}",
+			"export class {}_inflight {} {{\n{}\n{}}}",
 			name.name,
 			if let Some(parent) = parent {
 				format!("extends {}_inflight", self.jsify_type(parent))
