@@ -29,24 +29,24 @@ export class ImmutableArray {
   }
 
   /**
-   * Create a mutable clone of this array
+   * Create a mutable shallow copy of this array
    *
    * @macro [...($self$)]
    *
    * @returns a MutableArray with the same values as this array
    */
-  public mutClone(): MutableArray {
+  public copyMut(): MutableArray {
     throw new Error("Abstract");
   }
 
   /**
-   * Create an immutable clone of this array
+   * Create an immutable shallow copy of this array
    *
    * @macro Object.freeze([...($self$)])
    *
    * @returns an ImmutableArray with the same values as this array
    */
-  public clone(): ImmutableArray {
+  public copy(): ImmutableArray {
     throw new Error("Abstract");
   }
 }

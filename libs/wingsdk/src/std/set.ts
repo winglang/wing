@@ -29,24 +29,24 @@ export class ImmutableSet {
   }
 
   /**
-   * Create a mutable clone of this set
+   * Create a mutable shallow copy of this set
    *
    * @macro new Set($self$)
    *
    * @returns a MutableSet with the same values as this set
    */
-  public mutClone(): MutableSet {
+  public copyMut(): MutableSet {
     throw new Error("Abstract");
   }
 
   /**
-   * Create an immutable clone of this set
+   * Create an immutable shallow copy of this set
    *
    * @macro Object.freeze(new Set($self$))
    *
    * @returns an ImmutableSet with the same values as this set
    */
-  public clone(): ImmutableSet {
+  public copy(): ImmutableSet {
     throw new Error("Abstract");
   }
 }

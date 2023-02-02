@@ -42,24 +42,24 @@ export class ImmutableMap {
   }
 
   /**
-   * Create a mutable clone of this map
+   * Create a mutable shallow copy of this map
    *
    * @macro new Map($self$)
    *
    * @returns a MutableMap with the same values as this map
    */
-  public mutClone(): MutableMap {
+  public copyMut(): MutableMap {
     throw new Error("Abstract");
   }
 
   /**
-   * Create an immutable clone of this map
+   * Create an immutable shallow copy of this map
    *
    * @macro Object.freeze(new Map($self$))
    *
    * @returns an ImmutableMap with the same values as this map
    */
-  public clone(): ImmutableMap {
+  public copy(): ImmutableMap {
     throw new Error("Abstract");
   }
 }
