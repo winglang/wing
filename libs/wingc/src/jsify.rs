@@ -333,6 +333,8 @@ impl JSifier {
 							return ac.replace_all(js_override, replace_with);
 						}
 					} else {
+						// The type is not a function signature so we should not call it.
+						// If it's `anything`, we will still allow it.
 						if !function_type.is_anything() {
 							panic!("Expressions at {} is not callable", function.span);
 						}
