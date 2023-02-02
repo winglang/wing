@@ -1872,8 +1872,8 @@ impl<'a> TypeChecker<'a> {
 							let new_sig = FunctionSignature {
 								args: new_args,
 								return_type: new_return_type,
-								flight: Phase::Independent,
-								js_override: None,
+								flight: sig.flight.clone(),
+								js_override: sig.js_override.clone(),
 							};
 
 							match new_type_class.env.define(
