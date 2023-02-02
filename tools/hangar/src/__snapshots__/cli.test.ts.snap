@@ -3939,9 +3939,11 @@ exports[`wing compile --target tf-aws std_containers.w > cdk.tf.json 1`] = `
 `;
 
 exports[`wing compile --target tf-aws std_containers.w > index.js 1`] = `
-"async handle(body) { const { s_array } = this; {
+"async handle(body) { const { immut_array, s_array } = this; {
   const ss = (await s_array.at(1));
-  {console.log(\`\${s_array.length}\`)};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(ss === \\"two\\")'\`)})((ss === \\"two\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_array.length === 4)'\`)})((s_array.length === 4))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_array.length === 5)'\`)})((immut_array.length === 5))};
 } };"
 `;
 
@@ -3987,12 +3989,16 @@ constructor() {
   super({ outdir: $outdir, name: \\"std_containers\\" });
   
   const s_array = Object.freeze([\\"one\\", \\"two\\", \\"three\\", \\"four\\"]);
+  const mut_array = [...(s_array)];
+  (mut_array.push(\\"five\\"));
+  const immut_array = Object.freeze([...(mut_array)]);
   const s = (s_array.at(2));
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.31322868ffd7254f5a6339da1c6b1905571a70379d564da2abf4c176f3c444b6/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.85a61d13096973de4a69a197a45d1b1b29652c0b143642b0bb5dc073c48e7b8f/index.js\\")),
     bindings: {
       
       data: {
+        immut_array: immut_array,
         s_array: s_array,
       },
     }

@@ -30,9 +30,9 @@ export class ImmutableSet {
 
   /**
    * Create a mutable clone of this set
-   * 
+   *
    * @macro new Set($self$)
-   * 
+   *
    * @returns a MutableSet with the same values as this set
    */
   public mutClone(): MutableSet {
@@ -41,9 +41,9 @@ export class ImmutableSet {
 
   /**
    * Create an immutable clone of this set
-   * 
+   *
    * @macro Object.freeze(new Set($self$))
-   * 
+   *
    * @returns an ImmutableSet with the same values as this set
    */
   public clone(): ImmutableSet {

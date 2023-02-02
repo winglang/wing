@@ -43,9 +43,9 @@ export class ImmutableMap {
 
   /**
    * Create a mutable clone of this map
-   * 
+   *
    * @macro new Map($self$)
-   * 
+   *
    * @returns a MutableMap with the same values as this map
    */
   public mutClone(): MutableMap {
@@ -54,9 +54,9 @@ export class ImmutableMap {
 
   /**
    * Create an immutable clone of this map
-   * 
+   *
    * @macro Object.freeze(new Map($self$))
-   * 
+   *
    * @returns an ImmutableMap with the same values as this map
    */
   public clone(): ImmutableMap {
