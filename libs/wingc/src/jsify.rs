@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use std::{cell::RefCell, cmp::Ordering, fmt::format, fs, path::PathBuf, vec};
+use std::{cell::RefCell, cmp::Ordering, fs, path::PathBuf, vec};
 
 use sha2::{Digest, Sha256};
 
@@ -10,7 +10,7 @@ use crate::{
 		UtilityFunctions,
 	},
 	capture::CaptureKind,
-	type_check::{resolve_custom_type, resolve_custom_type_by_fqn, symbol_env::SymbolEnv, Class, TypeRef},
+	type_check::{resolve_custom_type, symbol_env::SymbolEnv, TypeRef},
 	utilities::snake_case_to_camel_case,
 	WINGSDK_RESOURCE,
 };
@@ -732,24 +732,8 @@ impl JSifier {
 			.map(|m| *m)
 			.collect::<Vec<_>>();
 
-		// let captured_fields2 = resolve_custom_type_by_fqn(env, name.name, 0)
-		// 	.unwrap()
-		// 	.as_resource()
-		// 	.unwrap()
-		// 	.env
-		// 	.iter(false)
-		// 	.filter(|(name, kind, info)| {
-		// 		let var = kind.as_variable().unwrap();
-		// 		if var.flight == Phase::Inflight || var.reassignable || var._type.as_resource().is_none() {
-		// 			return false;
-		// 		}
-		// 		true
-		// 	})
-		// 	.map(|m| m.clone())
-		// 	.collect::<Vec<_>>();
-
 		// Get fields to be captured by resource's client
-		let captured_fields = self.get_captures(&preflight_members, resource_type.as_resource().unwrap());
+		let captured_fields = self.get_captures(resource_type);
 
 		// Jsify inflight client
 		let inflight_methods = methods
@@ -757,7 +741,7 @@ impl JSifier {
 			.filter(|(_, m)| m.signature.flight == Phase::Inflight)
 			.map(|t| *t)
 			.collect::<Vec<_>>();
-		self.jsify_resource_client(name, &captured_fields, &inflight_methods, parent);
+		self.jsify_resource_client(env, name, &captured_fields, &inflight_methods, parent);
 
 		// Get all preflight methods to be jsified to the preflight class
 		let preflight_methods = methods
@@ -802,7 +786,7 @@ impl JSifier {
 			.map(|(name, _, ops)| {
 				format!(
 					"\"this.{}\": {{ ops: [{}]}}",
-					name.name,
+					name,
 					ops.iter().map(|op| format!("\"{}\"", op)).collect_vec().join(", ")
 				)
 			})
@@ -867,14 +851,14 @@ impl JSifier {
 	fn jsify_toinflight_method(
 		&self,
 		resource_name: &Symbol,
-		captured_fields: &[(Symbol, TypeRef, Vec<String>)],
+		captured_fields: &[(String, TypeRef, Vec<String>)],
 	) -> String {
 		let inner_clients = captured_fields
 			.iter()
-			.map(|(inner_member_name, _, used_methods)| {
+			.map(|(inner_member_name, _, _)| {
 				format!(
 					"const {}_client = this.{}._toInflight();",
-					inner_member_name.name, inner_member_name.name,
+					inner_member_name, inner_member_name,
 				)
 			})
 			.collect::<Vec<_>>();
@@ -886,10 +870,7 @@ impl JSifier {
 			resource_name.name,
 			captured_fields
 				.iter()
-				.map(|(inner_member_name, _, _)| format!(
-					"{}: ${{{}_client.text}}",
-					inner_member_name.name, inner_member_name.name
-				))
+				.map(|(inner_member_name, _, _)| format!("{}: ${{{}_client.text}}", inner_member_name, inner_member_name))
 				.join(", ")
 		)
 	}
@@ -897,24 +878,51 @@ impl JSifier {
 	// Write a client class for a file for the given resource
 	fn jsify_resource_client(
 		&self,
+		env: &SymbolEnv,
 		name: &Symbol,
-		captured_fields: &[(Symbol, TypeRef, Vec<String>)],
+		captured_fields: &[(String, TypeRef, Vec<String>)],
 		inflight_methods: &[&(Symbol, FunctionDefinition)],
 		parent: &Option<Type>,
 	) {
-		// TODO handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
+		// Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
+		let mut parent_captures = vec![];
+		if let Some(Type::CustomType(parent)) = parent {
+			let parent_type = resolve_custom_type(parent, env, 0).unwrap();
+			parent_captures.extend(self.get_captures(parent_type));
+		}
+
+		// Get the fields that are captured by this resource but not by its parent, they will be initialized in the generated constructor
+		let my_captures = captured_fields
+			.iter()
+			.filter(|(name, _, _)| !parent_captures.iter().any(|(n, _, _)| n == name))
+			.collect_vec();
+
+		let super_call = if my_captures.len() > 0 {
+			format!(
+				"  super({});",
+				parent_captures
+					.iter()
+					.map(|(name, _, _)| name.clone())
+					.collect_vec()
+					.join(", ")
+			)
+		} else {
+			"".to_string()
+		};
+
 		// TDOD jsify inflight fields
 
 		let client_constructor = format!(
-			"constructor({{ {} }}) {{\n{}\n}}",
+			"constructor({{ {} }}) {{\n{}\n{}\n}}",
 			captured_fields
 				.iter()
-				.map(|(name, _, _)| { name.name.clone() })
+				.map(|(name, _, _)| { name.clone() })
 				.collect_vec()
 				.join(", "),
-			captured_fields
+			super_call,
+			my_captures
 				.iter()
-				.map(|(name, _, _)| { format!("this.{} = {};", name.name, name.name) })
+				.map(|(name, _, _)| { format!("  this.{} = {};", name, name) })
 				.collect_vec()
 				.join("\n")
 		);
@@ -995,32 +1003,37 @@ impl JSifier {
 	}
 
 	// Get the type and capture info for members that are captured in the client of a the given resource
-	fn get_captures(
-		&self,
-		preflight_members: &[&ClassMember],
-		resource_type: &Class,
-	) -> Vec<(Symbol, TypeRef, Vec<String>)> {
-		let preflight_members = preflight_members.iter().filter_map(|m| {
-			let member_type = resource_type.env.lookup(&m.name, None).unwrap().as_variable().unwrap();
-			if !member_type.reassignable {
-				// TODO: currently we only collect resources need to also handle immutable variables
-				if let Some(resource_type) = member_type._type.as_resource() {
-					// TODO: currently we collect all inflight methods as being required for this resource (this should be mapped per inflight method and analyzed during the capture phase)
-					let used_methods = resource_type
-						.methods(true)
-						.filter_map(|(name, sig)| {
-							if sig.as_function_sig().unwrap().flight == Phase::Inflight {
-								return Some(name);
-							}
+	fn get_captures(&self, resource_type: TypeRef) -> Vec<(String, TypeRef, Vec<String>)> {
+		resource_type
+			.as_resource()
+			.unwrap()
+			.env
+			.iter(true)
+			.filter(|(_, kind, _)| {
+				let var = kind.as_variable().unwrap();
+				// We capture preflight non-reassignable fields, we currently only support capturing resources
+				// need to add immutable primitives in the future
+				var.flight != Phase::Inflight && !var.reassignable && var._type.as_resource().is_some()
+			})
+			.map(|(name, kind, _)| {
+				let _type = kind.as_variable().unwrap()._type;
+				// TODO: For now we collect all the inflight methods in the resource (in the future we
+				// we'll need to analyze each inflight method to see what it does with the captured resource)
+				let methods = _type
+					.as_resource()
+					.unwrap()
+					.methods(true)
+					.filter_map(|(name, sig)| {
+						if sig.as_function_sig().unwrap().flight == Phase::Inflight {
+							Some(name)
+						} else {
 							None
-						})
-						.collect::<Vec<_>>();
-					return Some((m.name.clone(), member_type._type, used_methods));
-				}
-			}
-			None
-		});
-		preflight_members.collect_vec()
+						}
+					})
+					.collect_vec();
+				(name, _type, methods)
+			})
+			.collect_vec()
 	}
 }
 
