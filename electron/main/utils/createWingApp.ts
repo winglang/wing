@@ -28,6 +28,9 @@ export const createWingApp = async ({
             if (status === "loading") {
               onSimulatorStatusChange("loading");
             }
+            if (status === "error") {
+              onSimulatorStatusChange("error");
+            }
             if (status === "success") {
               if (simulator) {
                 return;

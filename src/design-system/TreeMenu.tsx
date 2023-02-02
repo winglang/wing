@@ -22,6 +22,7 @@ export interface TreeMenuProps {
   onItemToggle?: (item: TreeMenuItem) => void;
   onExpandAll?: () => void;
   onCollapseAll?: () => void;
+  disabled?: boolean;
 }
 
 export const TreeMenu = ({
@@ -33,6 +34,7 @@ export const TreeMenu = ({
   onItemToggle,
   onExpandAll,
   onCollapseAll,
+  disabled = false,
 }: TreeMenuProps) => {
   return (
     <>
@@ -48,6 +50,7 @@ export const TreeMenu = ({
             className="p-0.5 hover:bg-slate-200 rounded group"
             onClick={onExpandAll}
             title="Expand All"
+            disabled={disabled}
           >
             <Square2StackPlusIcon
               className="w-4 h-4 text-slate-600 group-hover:text-slate-700 rotate-90"
@@ -59,6 +62,7 @@ export const TreeMenu = ({
             className="p-0.5 hover:bg-slate-200 rounded group"
             onClick={onCollapseAll}
             title="Collapse All"
+            disabled={disabled}
           >
             <Square2StackMinusIcon
               className="w-4 h-4 text-slate-600 group-hover:text-slate-700 rotate-90"

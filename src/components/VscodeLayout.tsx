@@ -6,9 +6,9 @@ import { BlueScreenOfDeath } from "../design-system/BlueScreenOfDeath.js";
 import { Breadcrumbs } from "../design-system/Breadcrumbs.js";
 import { Button } from "../design-system/Button.js";
 import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
-import { Loader } from "../design-system/Loader.js";
 import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
+import { SpinnerLoader } from "../design-system/SpinnerLoader.js";
 import { TopResizableWidget } from "../design-system/TopResizableWidget.js";
 import {
   SELECTED_TREE_ITEM_CSS_ID,
@@ -26,10 +26,12 @@ import LogsFilters from "./LogsFilters.js";
 import { MetadataPanel } from "./MetadataPanel.js";
 import { EmptyConstructView } from "./resource-views/EmptyConstructView.jsx";
 import { ResourceView } from "./resource-views/ResourceView.js";
+import { StatusBar } from "./StatusBar.js";
 
 export interface VscodeLayoutProps {
   simulatorStatus: "loading" | "error" | "success" | "idle";
   compilerStatus: "loading" | "error" | "success" | "idle";
+  wingVersion: string | undefined;
 }
 
 const NewIssueUrl = "https://github.com/winglang/wing/issues/new/choose";
@@ -37,6 +39,7 @@ const NewIssueUrl = "https://github.com/winglang/wing/issues/new/choose";
 export const VscodeLayout = ({
   simulatorStatus,
   compilerStatus,
+  wingVersion,
 }: VscodeLayoutProps) => {
   const [showBanner, setShowBanner] = useState(true);
   const treeMenu = useTreeMenuItems();
@@ -146,19 +149,22 @@ export const VscodeLayout = ({
     },
   );
 
-  const isLoading = useMemo(() => {
-    return (
-      simulatorStatus === "loading" ||
-      compilerStatus === "loading" ||
-      explorerTree.isLoading
-    );
-  }, [simulatorStatus, compilerStatus, explorerTree]);
-
   const isError = useMemo(() => {
     return (
       simulatorStatus === "error" ||
       compilerStatus === "error" ||
       explorerTree.isError
+    );
+  }, [simulatorStatus, compilerStatus, explorerTree]);
+
+  const isLoading = useMemo(() => {
+    if (isError) {
+      return false;
+    }
+    return (
+      simulatorStatus === "loading" ||
+      compilerStatus === "loading" ||
+      explorerTree.isLoading
     );
   }, [simulatorStatus, compilerStatus, explorerTree]);
 
@@ -174,9 +180,14 @@ export const VscodeLayout = ({
           onClose={() => setShowBanner(false)}
         />
       )}
-
       <div className="flex-1 flex relative">
-        {isLoading && !isError && <Loader text={"Compiling..."} />}
+        {isLoading && (
+          <div className="absolute bg-white bg-opacity-70 h-full w-full z-50">
+            <div className=" absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <SpinnerLoader />
+            </div>
+          </div>
+        )}
 
         <BlueScreenOfDeath
           hidden={!isError}
@@ -198,6 +209,7 @@ export const VscodeLayout = ({
             }}
             onExpandAll={() => treeMenu.expandAll()}
             onCollapseAll={() => treeMenu.collapseAll()}
+            disabled={isLoading}
           />
         </RightResizableWidget>
 
@@ -318,10 +330,14 @@ export const VscodeLayout = ({
       {!isError && (
         <TopResizableWidget className="border-t bg-white min-h-[5rem] h-[12rem] pt-1.5">
           <div className="relative h-full flex flex-col gap-2">
+            {isLoading && (
+              <div className="absolute bg-white bg-opacity-70 h-full w-full z-50" />
+            )}
             <div className="flex px-4 space-x-2">
               <LogsFilters
                 selected={selectedLogTypeFilters}
                 onChange={(types) => setSelectedLogTypeFilters(types)}
+                disabled={isLoading}
               />
               <Button
                 className="mt-1"
@@ -338,6 +354,13 @@ export const VscodeLayout = ({
           </div>
         </TopResizableWidget>
       )}
+
+      <StatusBar
+        wingVersion={wingVersion}
+        simulatorStatus={simulatorStatus}
+        compilerStatus={compilerStatus}
+        isError={isError}
+      />
     </div>
   );
 };

@@ -8,15 +8,18 @@ import { useIpcEventListener } from "./utils/useIpcEventListener.js";
 
 export interface AppProps {}
 
+let initialized = false;
+
 export const App = ({}: AppProps) => {
   const [simulatorStatus, setSimulatorStatus] = useState<
     "loading" | "error" | "success" | "idle"
-  >("idle");
+  >("loading");
   const [compilerStatus, setCompilerStatus] = useState<
     "loading" | "error" | "success" | "idle"
-  >("idle");
+  >("loading");
   const trpcContext = trpc.useContext();
 
+  const [wingVersion, setWingVersion] = useState<string>();
   trpc["app.invalidateQueries"].useSubscription(undefined, {
     async onData() {
       await trpcContext.invalidate();
@@ -24,11 +27,18 @@ export const App = ({}: AppProps) => {
   });
 
   useEffect(() => {
+    // DEV NOTICE: spacial use case, avoid double invocation of this useEffect function when running in dev mode (react 18.x.x new strictMode)
+    if (initialized) {
+      return;
+    }
+
+    initialized = true;
     trpcContext.client["app.status"]
       .query()
       .then((data) => {
         setSimulatorStatus(data.simulatorStatus);
         setCompilerStatus(data.compilerStatus);
+        setWingVersion(data.wingVersion);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -70,6 +80,7 @@ export const App = ({}: AppProps) => {
       <VscodeLayout
         simulatorStatus={simulatorStatus}
         compilerStatus={compilerStatus}
+        wingVersion={wingVersion}
       />
     </NotificationsProvider>
   );

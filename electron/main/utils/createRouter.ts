@@ -10,10 +10,11 @@ export interface RouterContext {
   simulator: () => Promise<Simulator>;
   tree: () => Promise<ConstructTree>;
   logs: () => LogEntry[];
-  appStatus: () => {
+  appStatus: () => Promise<{
     simulatorStatus: Status;
     compilerStatus: Status;
-  };
+    wingVersion: string | undefined;
+  }>;
 }
 
 const t = initTRPC.context<RouterContext>().create({});

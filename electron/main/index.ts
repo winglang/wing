@@ -17,6 +17,7 @@ import { mergeAppRouters } from "./router/index.js";
 import { SegmentAnalytics } from "./segmentAnalytics.js";
 import { Status } from "./types.js";
 import { createWingApp } from "./utils/createWingApp.js";
+import { getWingVersion } from "./utils/getWingVersion.js";
 import { watchSimulatorFile } from "./utils/watchSimulatorFile.js";
 
 config();
@@ -189,10 +190,11 @@ function createWindowManager() {
             logs() {
               return consoleLogger.messages;
             },
-            appStatus() {
+            async appStatus() {
               return {
                 simulatorStatus,
                 compilerStatus,
+                wingVersion: await getWingVersion(),
               };
             },
           };

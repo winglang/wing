@@ -1,6 +1,6 @@
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { usePopper } from "react-popper";
 
@@ -18,9 +18,14 @@ const logLevelNames: Record<(typeof logLevels)[number], string> = {
 export interface LogsFiltersProps {
   selected: LogLevel[];
   onChange?: (selected: LogLevel[]) => void;
+  disabled?: boolean;
 }
 
-export default function LogsFilters({ selected, onChange }: LogsFiltersProps) {
+export default function LogsFilters({
+  selected,
+  onChange,
+  disabled = false,
+}: LogsFiltersProps) {
   const [combinationName, setCombinationName] = useState<string>();
   useEffect(() => {
     if (selected.length === 4) {
@@ -61,7 +66,11 @@ export default function LogsFilters({ selected, onChange }: LogsFiltersProps) {
     <Listbox value={selected} onChange={(types) => onChange?.(types)} multiple>
       <div className="relative mt-1 inline-block">
         <div ref={setReferenceElement}>
-          <Listbox.Button as={Button} className="relative pr-8">
+          <Listbox.Button
+            as={Button}
+            className="relative pr-8"
+            disabled={disabled}
+          >
             <span className="block truncate">{combinationName}</span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1.5">
               <ChevronUpDownIcon

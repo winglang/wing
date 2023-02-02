@@ -150,7 +150,7 @@ const LogEntryRow = ({
           className={classNames({
             truncate: !expanded,
           })}
-        ></span>
+        />
       </button>
     </Fragment>
   );
