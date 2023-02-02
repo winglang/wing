@@ -57,6 +57,9 @@ export const VscodeLayout = ({
 
   const openExternalUrl = (url: string) => {
     // TODO: Use TRPC directly.
+    if (window.electronTRPC) {
+      window.electronTRPC.ipcRenderer.send("open-external-url", url);
+    }
   };
 
   const childRelationships = trpc["app.childRelationships"].useQuery(
