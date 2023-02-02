@@ -1,7 +1,12 @@
 let s_array = ["one", "two", "three", "four"];
+let mut_array = s_array.mut_clone();
+mut_array.push("five");
+let immut_array = mut_array.clone();
 
 let s: str = s_array.at(2);
 let handler = inflight (body: str): str => {
   let ss = s_array.at(1);
-  print("${s_array.length}");
+  assert(ss == "two");
+  assert(s_array.length == 4);
+  assert(immut_array.length == 5);
 };
