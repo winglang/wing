@@ -55,6 +55,10 @@ impl JSifier {
 		}
 	}
 
+	fn js_resolve_file(file_name: &str) -> String {
+		format!("require('path').resolve(__dirname, \"{}\")", file_name)
+	}
+
 	fn render_block(statements: impl IntoIterator<Item = impl core::fmt::Display>) -> String {
 		let mut lines = vec![];
 		lines.push("{".to_string());
@@ -658,8 +662,9 @@ impl JSifier {
 		fs::write(&file_path, proc_source.join("\n")).expect("Writing inflight proc source");
 		let props_block = Self::render_block([
 			format!(
-				"code: {}.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \"{}\")),",
-				STDLIB, &relative_file_path
+				"code: {}.core.NodeJsCode.fromFile({}),",
+				STDLIB,
+				Self::js_resolve_file(&relative_file_path)
 			),
 			format!(
 				"bindings: {}",
@@ -750,9 +755,11 @@ impl JSifier {
 			.map(|t| *t)
 			.collect::<Vec<_>>();
 
+		let toinflight_method = self.jsify_toinflight_method(name, &captured_fields);
+
 		// Jsify class
 		let resource_class = format!(
-			"class {}{}\n{{\n{}\n{}\n{}\n}}",
+			"class {}{} {{\n{}\n{}\n{}\n}}",
 			self.jsify_symbol(name),
 			if let Some(parent) = parent {
 				format!(" extends {}", self.jsify_type(parent))
@@ -760,11 +767,6 @@ impl JSifier {
 				format!(" extends {}", WINGSDK_RESOURCE)
 			},
 			self.jsify_resource_constructor(constructor, parent.is_none()),
-			preflight_members
-				.iter()
-				.map(|m| self.jsify_class_member(m))
-				.collect::<Vec<String>>()
-				.join("\n"),
 			preflight_methods
 				.iter()
 				.map(|(n, m)| format!(
@@ -773,10 +775,9 @@ impl JSifier {
 					self.jsify_function(None, &m.parameters, &m.statements, phase)
 				))
 				.collect::<Vec<String>>()
-				.join("\n")
+				.join("\n"),
+			toinflight_method
 		);
-
-		let bind_method = self.jsify_toinflight_method(name, &captured_fields);
 
 		// For each inflight methods generate an annotation which includes a list of all the captured
 		// fields and all the ops they provide.
@@ -803,13 +804,7 @@ impl JSifier {
 			.collect_vec();
 
 		// Return the preflight resource class
-		return format!(
-			"{}\n{}.prototype._toInflight = {}\n{}",
-			resource_class,
-			name.name,
-			bind_method,
-			inflight_annotations.join("\n")
-		);
+		return format!("{}\n{}", resource_class, inflight_annotations.join("\n"));
 	}
 
 	fn jsify_resource_constructor(&self, constructor: &Constructor, no_parent: bool) -> String {
@@ -863,10 +858,11 @@ impl JSifier {
 			})
 			.collect::<Vec<_>>();
 
+		let client_relative_path = format!("clients/{}.inflight.js", resource_name.name);
 		format!(
-			"function(host, ops) {{\n{}\nreturn `(new require('./{}.inflight.js')).{}_inflight({{{}}})`;\n}}",
+			"_toInflight() {{\n{}\nconst self_client_path = {};\nreturn core.NodeJsCode.fromInline(`(new (require(\"${{self_client_path}}\"))).{}_inflight({{{}}})`);\n}}",
 			inner_clients.join("\n"),
-			resource_name.name,
+			Self::js_resolve_file(&client_relative_path),
 			resource_name.name,
 			captured_fields
 				.iter()
@@ -897,7 +893,7 @@ impl JSifier {
 			.filter(|(name, _, _)| !parent_captures.iter().any(|(n, _, _)| n == name))
 			.collect_vec();
 
-		let super_call = if my_captures.len() > 0 {
+		let super_call = if parent.is_some() {
 			format!(
 				"  super({});",
 				parent_captures
