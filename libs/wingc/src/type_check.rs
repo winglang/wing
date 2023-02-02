@@ -1866,7 +1866,7 @@ impl<'a> TypeChecker<'a> {
 											WINGSDK_MUT_MAP => self.types.add_type(Type::MutMap(new_type_arg)),
 											WINGSDK_SET => self.types.add_type(Type::Set(new_type_arg)),
 											WINGSDK_MUT_SET => self.types.add_type(Type::MutSet(new_type_arg)),
-											_ => self.general_type_error(format!("\"{}\" is not a supported generic type", fqn)),
+											_ => self.general_type_error(format!("\"{}\" is not a supported generic return type", fqn)),
 										}
 									} else {
 										sig.return_type
