@@ -333,7 +333,9 @@ impl JSifier {
 							return ac.replace_all(js_override, replace_with);
 						}
 					} else {
-						panic!("Expressions at {} is not callable", function.span);
+						if !function_type.is_anything() {
+							panic!("Expressions at {} is not callable", function.span);
+						}
 					}
 
 					format!("({}{}({}))", auto_await, expr_string, arg_string)
