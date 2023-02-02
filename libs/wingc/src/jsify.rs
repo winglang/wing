@@ -319,7 +319,7 @@ impl JSifier {
 					if let Some(function_sig) = function_type.as_function_sig() {
 						if let Some(js_override) = &function_sig.js_override {
 							let self_string = &match &function.kind {
-								//
+								// for "loose" macros, e.g. `print()`, $self$ is the global object
 								ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
 								ExprKind::Reference(Reference::NestedIdentifier { object, .. }) => {
 									self.jsify_expression(object, phase).clone()
@@ -332,14 +332,13 @@ impl JSifier {
 							let ac = AhoCorasick::new(patterns);
 							return ac.replace_all(js_override, replace_with);
 						}
+					} else {
+						panic!("Expressions at {} is not callable", function.span);
 					}
 
 					format!("({}{}({}))", auto_await, expr_string, arg_string)
 				} else {
-					panic!(
-						"Unable to call expressions, missing type information: {}",
-						function.span
-					);
+					panic!("Expressions at {} does not have type information", function.span);
 				}
 			}
 			ExprKind::Unary { op, exp } => {

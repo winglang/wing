@@ -136,7 +136,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 	let env = SymbolEnv::new(None, types.void(), false, false, Phase::Preflight, 0);
 	scope.set_env(env);
 
-	// note: Globals are emitted here and wrapped in "{{ ... }}" blocks. Wrapping makes these emissions, actual
+	// note: Globals are emitted here and wrapped in "{ ... }" blocks. Wrapping makes these emissions, actual
 	// statements and not expressions. this makes the runtime panic if these are used in place of expressions.
 	add_builtin(
 		UtilityFunctions::Print.to_string().as_str(),
