@@ -303,14 +303,16 @@ fn scan_captures_in_expression(
 						}
 					};
 
-					let func = prop_type.as_function_sig().unwrap();
-					if matches!(func.flight, Phase::Preflight) {
-						panic!("Can't access preflight method {} inflight", property);
+					// TODO: handle accessing things other than function_sigs while recursively accessing Reference?
+					if let Some(func) = prop_type.as_function_sig() {
+						if matches!(func.flight, Phase::Preflight) {
+							panic!("Can't access preflight method {} inflight", property);
+						}
+						debug!(
+							"We seem to be accessing the preflight method {}.{} {} inflight!",
+							resource.name.name, property.name, property.span
+						);
 					}
-					debug!(
-						"We seem to be accessing the preflight method {}.{} {} inflight!",
-						resource.name.name, property.name, property.span
-					);
 				}
 			}
 		},
