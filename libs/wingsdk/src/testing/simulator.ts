@@ -10,6 +10,8 @@ import { Function } from "../target-sim/function.inflight";
 import { BaseResourceSchema, WingSimulatorSchema } from "../target-sim/schema";
 import { mkdtemp, readJsonSync } from "../util";
 
+const symbol = Symbol("@wing/sdk/simulator.config");
+
 /**
  * Props for `Simulator`.
  */
@@ -63,8 +65,12 @@ export interface IWithTraceProps {
 }
 
 /**
- * Represents an trace emitted during simulation.
+ * Resource configuration
  */
+export interface ResourceMetadata {
+  readonly tracing: object;
+}
+
 export interface Trace {
   /**
    * A JSON blob with structured data.
@@ -91,6 +97,11 @@ export interface Trace {
    * @example 2020-01-01T00:00:00.000Z
    */
   readonly timestamp: string;
+  
+  /**
+   * Tracing metadata.
+   */
+  readonly metadata?: object;
 }
 
 /**
@@ -238,6 +249,7 @@ export class Simulator {
         },
         withTrace: async (props: IWithTraceProps) => {
           // TODO: log start time and end time of activity?
+          const metadata = (this.tryGetResource(resourceConfig.path))[symbol];
           try {
             let result = await props.activity();
             this._addTrace({
@@ -250,6 +262,7 @@ export class Simulator {
               sourcePath: resourceConfig.path,
               sourceType: resourceConfig.type,
               timestamp: new Date().toISOString(),
+              metadata: metadata?.tracing,
             });
             return result;
           } catch (err) {
@@ -259,6 +272,7 @@ export class Simulator {
               sourcePath: resourceConfig.path,
               sourceType: resourceConfig.type,
               timestamp: new Date().toISOString(),
+              metadata: metadata?.tracing,
             });
             throw err;
           }
@@ -357,18 +371,20 @@ export class Simulator {
   /**
    * Get a simulated resource instance.
    * @returns the resource
-   */
-  public getResource(path: string): any {
+   */  
+  public getResource(path: string, config?: ResourceMetadata): any {
     const handle = this.tryGetResource(path);
     if (!handle) {
       throw new Error(`Resource "${path}" not found.`);
     }
+
+    Object.assign(handle, {[symbol]: config});
     return handle;
   }
 
   /**
    * Get a simulated resource instance.
-   * @returns The resource of undefined if not found
+   * @returns The resource or undefined if not found
    */
   public tryGetResource(path: string): any | undefined {
     const handle = this.tryGetResourceConfig(path)?.attrs.handle;
