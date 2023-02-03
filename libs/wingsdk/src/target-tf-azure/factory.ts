@@ -1,8 +1,9 @@
 import { IConstruct } from "constructs";
 import { IPolyconFactory } from "polycons";
-import { BUCKET_TYPE, LOGGER_TYPE } from "../cloud";
 import { Bucket } from "./bucket";
+import { Function } from "./function";
 import { Logger } from "./logger";
+import { BUCKET_TYPE, FUNCTION_TYPE, LOGGER_TYPE } from "../cloud";
 
 /**
  * Polycon factory which resolves polycons in `cloud` into preflight resources
@@ -20,8 +21,10 @@ export class PolyconFactory implements IPolyconFactory {
         return new Bucket(scope, id, args[0]);
       case LOGGER_TYPE:
         return new Logger(scope, id);
+      case FUNCTION_TYPE:
+        return new Function(scope, id, args[0], args[1]);
       default:
-        throw new Error(`Type ${type} not implemented.`);
+        throw new Error(`Type ${type} not implemented for tf-azure target.`);
     }
   }
 }

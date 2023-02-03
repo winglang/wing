@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, IResource, Inflight, Resource } from "../core";
 import { Function } from "./function";
+import { Code, IResource, Inflight, Resource } from "../core";
 
 export const TOPIC_TYPE = "wingsdk.cloud.Topic";
 
@@ -29,7 +29,7 @@ export abstract class TopicBase extends Resource {
   }
 
   /**
-   * Creates function to send messages when published
+   * Run an inflight whenever an message is published to the topic.
    */
   public abstract onMessage(
     inflight: Inflight,
@@ -38,7 +38,7 @@ export abstract class TopicBase extends Resource {
 }
 
 /**
- * Options for Topic.onMessage
+ * Options for `Topic.onMessage`.
  */
 export interface TopicOnMessageProps {}
 

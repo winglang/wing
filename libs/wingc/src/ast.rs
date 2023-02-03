@@ -284,7 +284,7 @@ pub enum ExprKind {
 	Literal(Literal),
 	Reference(Reference),
 	Call {
-		function: Reference,
+		function: Box<Expr>,
 		args: ArgList,
 	},
 	Unary {

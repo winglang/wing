@@ -3,13 +3,13 @@ import * as path from "path";
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
 import * as tar from "tar";
+import { PolyconFactory } from "./factory";
+import { isSimulatorResource } from "./resource";
+import { WingSimulatorSchema } from "./schema";
 import { Logger } from "../cloud";
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { mkdtemp, SIMULATOR_FILE_PATH } from "../util";
-import { PolyconFactory } from "./factory";
-import { isSimulatorResource } from "./resource";
-import { WingSimulatorSchema } from "./schema";
 
 /**
  * A construct that knows how to synthesize simulator resources into a

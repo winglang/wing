@@ -5,7 +5,7 @@ import { compile, docs, test, upgrade, run } from "./commands";
 import { join } from "path";
 import { satisfies } from 'compare-versions';
 
-import { Command } from "commander";
+import { Command, Option } from "commander";
 import debug from "debug";
 
 const PACKAGE_VERSION = require("../package.json").version as string;
@@ -41,10 +41,13 @@ async function main() {
       "Output directory",
       join(process.cwd(), "target")
     )
-    .option(
-      "-t, --target <target>",
-      "Target platform (options: 'tf-aws', 'tf-azure', 'sim')",
-      "tf-aws"
+    .addOption(
+      new Option(
+        "-t, --target <target>",
+        "Target platform"
+      )
+      .choices(["tf-aws", "tf-azure", "tf-gcp", "sim"])
+      .makeOptionMandatory()
     )
     .action(compile);
 
@@ -54,15 +57,10 @@ async function main() {
     .argument("<entrypoint...>", "all entrypoints to test")
     .action(test);
 
-program
+  program
     .command("docs")
     .description("Open the Wing documentation")
     .action(docs);
-
-  program
-    .command("upgrade")
-    .description("Upgrades the Wing toolchain to the latest version")
-    .action(() => upgrade({ force: true }));
 
   program.parse();
 }

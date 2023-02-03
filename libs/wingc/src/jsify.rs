@@ -1,3 +1,4 @@
+use aho_corasick::AhoCorasick;
 use itertools::Itertools;
 use std::{cell::RefCell, cmp::Ordering, fs, path::PathBuf, vec};
 
@@ -7,12 +8,11 @@ use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, ClassMember, Constructor, Expr, ExprKind, FunctionDefinition,
 		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
-		UtilityFunctions,
 	},
 	capture::CaptureKind,
 	type_check::{resolve_custom_type, symbol_env::SymbolEnv, TypeRef},
 	utilities::snake_case_to_camel_case,
-	WINGSDK_RESOURCE,
+	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_RESOURCE,
 };
 
 const STDLIB: &str = "$stdlib";
@@ -26,8 +26,10 @@ function __app(target) {
 		case "tfaws":
 		case "tf-aws":
 			return $stdlib.tfaws.App;
-    case "tf-azure":
-      return $stdlib.tfazure.App;
+		case "tf-gcp":
+			return $stdlib.tfgcp.App;
+		case "tf-azure":
+			return $stdlib.tfazure.App;
 		default:
 			throw new Error(`Unknown WING_TARGET value: "${process.env.WING_TARGET ?? ""}"`);
 	}
@@ -158,36 +160,6 @@ impl JSifier {
 			Reference::Identifier(identifier) => symbolize(self, identifier),
 			Reference::NestedIdentifier { object, property } => {
 				self.jsify_expression(object, phase) + "." + &symbolize(self, property)
-			}
-		}
-	}
-	// note: Globals are emitted here and wrapped in "{{ ... }}" blocks. Wrapping makes these emissions, actual
-	// statements and not expressions. this makes the runtime panic if these are used in place of expressions.
-	fn jsify_global_utility_function(&self, args: &ArgList, function_type: UtilityFunctions, phase: Phase) -> String {
-		match function_type {
-			UtilityFunctions::Assert => {
-				return format!(
-					"{{((cond) => {{if (!cond) throw new Error(`assertion failed: '{0}'`)}})({0})}}",
-					self.jsify_arg_list(args, None, None, false, phase)
-				);
-			}
-			UtilityFunctions::Print => {
-				return format!(
-					"{{console.log({})}}",
-					self.jsify_arg_list(args, None, None, false, phase)
-				);
-			}
-			UtilityFunctions::Throw => {
-				return format!(
-					"{{((msg) => {{throw new Error(msg)}})({})}}",
-					self.jsify_arg_list(args, None, None, false, phase)
-				);
-			}
-			UtilityFunctions::Panic => {
-				return format!(
-					"{{((msg) => {{console.error(msg, (new Error()).stack);process.exit(1)}})({})}}",
-					self.jsify_arg_list(args, None, None, false, phase)
-				);
 			}
 		}
 	}
@@ -337,23 +309,8 @@ impl JSifier {
 			},
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None, phase),
 			ExprKind::Call { function, args } => {
-				let mut needs_case_conversion = false;
-				if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Print.to_string().as_str())
-				{
-					return self.jsify_global_utility_function(&args, UtilityFunctions::Print, phase);
-				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Assert.to_string().as_str())
-				{
-					return self.jsify_global_utility_function(&args, UtilityFunctions::Assert, phase);
-				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Panic.to_string().as_str())
-				{
-					return self.jsify_global_utility_function(&args, UtilityFunctions::Panic, phase);
-				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Throw.to_string().as_str())
-				{
-					return self.jsify_global_utility_function(&args, UtilityFunctions::Throw, phase);
-				} else if let Reference::NestedIdentifier { object, .. } = function {
-					let object_type = object.evaluated_type.borrow().unwrap();
-
-					needs_case_conversion = if let Some(obj) = object_type.as_class_or_resource() {
+				if let Some(function_type) = *function.evaluated_type.borrow() {
+					let needs_case_conversion = if let Some(obj) = function_type.as_class_or_resource() {
 						obj.should_case_convert_jsii
 					} else {
 						// There are two reasons this could happen:
@@ -362,13 +319,37 @@ impl JSifier {
 						// In either case, it's probably safe to assume that case conversion is required.
 						true
 					};
+
+					let arg_string = self.jsify_arg_list(&args, None, None, needs_case_conversion, phase);
+					let expr_string = match &function.kind {
+						ExprKind::Reference(reference) => self.jsify_reference(reference, Some(needs_case_conversion), phase),
+						_ => format!("({})", self.jsify_expression(function, phase)),
+					};
+
+					if let Some(function_sig) = function_type.as_function_sig() {
+						if let Some(js_override) = &function_sig.js_override {
+							let self_string = &match &function.kind {
+								// for "loose" macros, e.g. `print()`, $self$ is the global object
+								ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
+								ExprKind::Reference(Reference::NestedIdentifier { object, .. }) => {
+									self.jsify_expression(object, phase).clone()
+								}
+
+								_ => expr_string,
+							};
+							let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS];
+							let replace_with = &[self_string, &arg_string];
+							let ac = AhoCorasick::new(patterns);
+							return ac.replace_all(js_override, replace_with);
+						}
+					} else {
+						panic!("Expressions at {} is not callable", function.span);
+					}
+
+					format!("({}{}({}))", auto_await, expr_string, arg_string)
+				} else {
+					panic!("Expressions at {} does not have type information", function.span);
 				}
-				format!(
-					"({}{}({}))",
-					auto_await,
-					self.jsify_reference(&function, Some(needs_case_conversion), phase),
-					self.jsify_arg_list(&args, None, None, needs_case_conversion, phase)
-				)
 			}
 			ExprKind::Unary { op, exp } => {
 				let op = match op {
@@ -722,20 +703,12 @@ impl JSifier {
 		phase: Phase,
 		parent: &Option<Type>,
 		constructor: &Constructor,
-		members: &[&ClassMember],
 		methods: &[&(Symbol, FunctionDefinition)],
 	) -> String {
 		assert!(phase == Phase::Preflight);
 
 		// Lookup the resource type
 		let resource_type = env.lookup(name, None).unwrap().as_type().unwrap();
-
-		// Get all preflight members (which are potentially captured)
-		let preflight_members = members
-			.iter()
-			.filter(|m| m.flight != Phase::Inflight)
-			.map(|m| *m)
-			.collect::<Vec<_>>();
 
 		// Get fields to be captured by resource's client
 		let captured_fields = self.get_captures(resource_type);
@@ -964,7 +937,7 @@ impl JSifier {
 		methods: &[&(Symbol, FunctionDefinition)],
 	) -> String {
 		if is_resource {
-			return self.jsify_resource(env, name, phase, parent, constructor, members, methods);
+			return self.jsify_resource(env, name, phase, parent, constructor, methods);
 		}
 
 		format!(

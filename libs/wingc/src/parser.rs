@@ -718,7 +718,7 @@ impl Parser<'_> {
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"call" => Ok(Expr::new(
 				ExprKind::Call {
-					function: self.build_reference(&expression_node.child_by_field_name("caller").unwrap())?,
+					function: Box::new(self.build_expression(&expression_node.child_by_field_name("caller").unwrap())?),
 					args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
 				},
 				expression_span,

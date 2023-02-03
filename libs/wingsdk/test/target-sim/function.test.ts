@@ -1,7 +1,7 @@
+import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { Duration } from "../../src/std";
 import { SimApp, Testing } from "../../src/testing";
-import { listMessages, treeJsonOf } from "./util";
 
 const INFLIGHT_CODE = `
 async handle(event) {
@@ -53,7 +53,7 @@ test("create a function", async () => {
         ENV_VAR1: "true",
         LOGGER_HANDLE_76f7e65b: "${root/WingLogger#attrs.handle}",
       },
-      timeout: 60000
+      timeout: 60000,
     },
     type: "wingsdk.cloud.Function",
   });

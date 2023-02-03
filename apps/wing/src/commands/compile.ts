@@ -28,6 +28,7 @@ const WINGC_PREFLIGHT = "preflight.js";
 export enum Target {
   TF_AWS = "tf-aws",
   TF_AZURE = "tf-azure",
+  TF_GCP = "tf-gcp",
   SIM = "sim",
 }
 
@@ -103,7 +104,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     process: {
       env: {
         WINGSDK_SYNTH_DIR: outDir,
-        WING_TARGET: options.target,
+        WING_TARGET: options.target
       },
     },
     __dirname: workDir,

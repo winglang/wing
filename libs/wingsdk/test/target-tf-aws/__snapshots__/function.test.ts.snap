@@ -58,140 +58,150 @@ Object {
     "children": Object {
       "root": Object {
         "children": Object {
-          "Function": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [
-                Object {
-                  "direction": "outbound",
-                  "implicit": true,
-                  "relationship": "print",
-                  "resource": "root/WingLogger",
-                },
-              ],
-              "wing:resource:stateful": false,
-            },
+          "Default": Object {
             "children": Object {
-              "Asset": Object {
-                "constructInfo": Object {
-                  "fqn": "cdktf.TerraformAsset",
-                  "version": "0.15.0",
+              "Function": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [
+                    Object {
+                      "direction": "outbound",
+                      "implicit": true,
+                      "relationship": "print",
+                      "resource": "root/Default/WingLogger",
+                    },
+                  ],
+                  "wing:resource:stateful": false,
                 },
-                "id": "Asset",
-                "path": "root/Function/Asset",
-              },
-              "Code": Object {
+                "children": Object {
+                  "Asset": Object {
+                    "constructInfo": Object {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.15.2",
+                    },
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "Code": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                      "version": "12.0.1",
+                    },
+                    "id": "Code",
+                    "path": "root/Default/Function/Code",
+                  },
+                  "Default": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                      "version": "12.0.1",
+                    },
+                    "id": "Default",
+                    "path": "root/Default/Function/Default",
+                  },
+                  "IamRole": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                      "version": "12.0.1",
+                    },
+                    "id": "IamRole",
+                    "path": "root/Default/Function/IamRole",
+                  },
+                  "IamRolePolicy": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                      "version": "12.0.1",
+                    },
+                    "id": "IamRolePolicy",
+                    "path": "root/Default/Function/IamRolePolicy",
+                  },
+                  "IamRolePolicyAttachment": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                      "version": "12.0.1",
+                    },
+                    "id": "IamRolePolicyAttachment",
+                    "path": "root/Default/Function/IamRolePolicyAttachment",
+                  },
+                  "S3Object": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                      "version": "12.0.1",
+                    },
+                    "id": "S3Object",
+                    "path": "root/Default/Function/S3Object",
+                  },
+                },
                 "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "Handler": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": false,
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "An inflight resource",
+                  "hidden": true,
+                  "title": "Inflight",
+                },
+                "id": "Handler",
+                "path": "root/Default/Handler",
+              },
+              "WingLogger": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [
+                    Object {
+                      "direction": "inbound",
+                      "implicit": true,
+                      "relationship": "print",
+                      "resource": "root/Default/Function",
+                    },
+                  ],
+                  "wing:resource:stateful": true,
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud logging facility",
+                  "hidden": true,
+                  "title": "Logger",
+                },
+                "id": "WingLogger",
+                "path": "root/Default/WingLogger",
+              },
+              "aws": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
                   "version": "12.0.1",
                 },
-                "id": "Code",
-                "path": "root/Function/Code",
-              },
-              "Default": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                  "version": "12.0.1",
-                },
-                "id": "Default",
-                "path": "root/Function/Default",
-              },
-              "IamRole": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                  "version": "12.0.1",
-                },
-                "id": "IamRole",
-                "path": "root/Function/IamRole",
-              },
-              "IamRolePolicy": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                  "version": "12.0.1",
-                },
-                "id": "IamRolePolicy",
-                "path": "root/Function/IamRolePolicy",
-              },
-              "IamRolePolicyAttachment": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                  "version": "12.0.1",
-                },
-                "id": "IamRolePolicyAttachment",
-                "path": "root/Function/IamRolePolicyAttachment",
-              },
-              "S3Object": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                  "version": "12.0.1",
-                },
-                "id": "S3Object",
-                "path": "root/Function/S3Object",
+                "id": "aws",
+                "path": "root/Default/aws",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.1.228",
             },
-            "display": Object {
-              "description": "A cloud function (FaaS)",
-              "title": "Function",
-            },
-            "id": "Function",
-            "path": "root/Function",
-          },
-          "Handler": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": false,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.1.228",
-            },
-            "display": Object {
-              "description": "An inflight resource",
-              "hidden": true,
-              "title": "Inflight",
-            },
-            "id": "Handler",
-            "path": "root/Handler",
-          },
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [
-                Object {
-                  "direction": "inbound",
-                  "implicit": true,
-                  "relationship": "print",
-                  "resource": "root/Function",
-                },
-              ],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.1.228",
-            },
-            "display": Object {
-              "description": "A cloud logging facility",
-              "hidden": true,
-              "title": "Logger",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
-          },
-          "aws": Object {
-            "constructInfo": Object {
-              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "12.0.1",
-            },
-            "id": "aws",
-            "path": "root/aws",
+            "id": "Default",
+            "path": "root/Default",
           },
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.0",
+              "version": "0.15.2",
             },
             "id": "backend",
             "path": "root/backend",
@@ -199,7 +209,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.0",
+          "version": "0.15.2",
         },
         "id": "root",
         "path": "root",
@@ -207,7 +217,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.15.0",
+      "version": "0.15.2",
     },
     "id": "App",
     "path": "",
@@ -276,140 +286,150 @@ Object {
     "children": Object {
       "root": Object {
         "children": Object {
-          "Function": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [
-                Object {
-                  "direction": "outbound",
-                  "implicit": true,
-                  "relationship": "print",
-                  "resource": "root/WingLogger",
-                },
-              ],
-              "wing:resource:stateful": false,
-            },
+          "Default": Object {
             "children": Object {
-              "Asset": Object {
-                "constructInfo": Object {
-                  "fqn": "cdktf.TerraformAsset",
-                  "version": "0.15.0",
+              "Function": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [
+                    Object {
+                      "direction": "outbound",
+                      "implicit": true,
+                      "relationship": "print",
+                      "resource": "root/Default/WingLogger",
+                    },
+                  ],
+                  "wing:resource:stateful": false,
                 },
-                "id": "Asset",
-                "path": "root/Function/Asset",
-              },
-              "Code": Object {
+                "children": Object {
+                  "Asset": Object {
+                    "constructInfo": Object {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.15.2",
+                    },
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "Code": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                      "version": "12.0.1",
+                    },
+                    "id": "Code",
+                    "path": "root/Default/Function/Code",
+                  },
+                  "Default": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                      "version": "12.0.1",
+                    },
+                    "id": "Default",
+                    "path": "root/Default/Function/Default",
+                  },
+                  "IamRole": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                      "version": "12.0.1",
+                    },
+                    "id": "IamRole",
+                    "path": "root/Default/Function/IamRole",
+                  },
+                  "IamRolePolicy": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                      "version": "12.0.1",
+                    },
+                    "id": "IamRolePolicy",
+                    "path": "root/Default/Function/IamRolePolicy",
+                  },
+                  "IamRolePolicyAttachment": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                      "version": "12.0.1",
+                    },
+                    "id": "IamRolePolicyAttachment",
+                    "path": "root/Default/Function/IamRolePolicyAttachment",
+                  },
+                  "S3Object": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                      "version": "12.0.1",
+                    },
+                    "id": "S3Object",
+                    "path": "root/Default/Function/S3Object",
+                  },
+                },
                 "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "Handler": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": false,
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "An inflight resource",
+                  "hidden": true,
+                  "title": "Inflight",
+                },
+                "id": "Handler",
+                "path": "root/Default/Handler",
+              },
+              "WingLogger": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [
+                    Object {
+                      "direction": "inbound",
+                      "implicit": true,
+                      "relationship": "print",
+                      "resource": "root/Default/Function",
+                    },
+                  ],
+                  "wing:resource:stateful": true,
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud logging facility",
+                  "hidden": true,
+                  "title": "Logger",
+                },
+                "id": "WingLogger",
+                "path": "root/Default/WingLogger",
+              },
+              "aws": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
                   "version": "12.0.1",
                 },
-                "id": "Code",
-                "path": "root/Function/Code",
-              },
-              "Default": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                  "version": "12.0.1",
-                },
-                "id": "Default",
-                "path": "root/Function/Default",
-              },
-              "IamRole": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                  "version": "12.0.1",
-                },
-                "id": "IamRole",
-                "path": "root/Function/IamRole",
-              },
-              "IamRolePolicy": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                  "version": "12.0.1",
-                },
-                "id": "IamRolePolicy",
-                "path": "root/Function/IamRolePolicy",
-              },
-              "IamRolePolicyAttachment": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                  "version": "12.0.1",
-                },
-                "id": "IamRolePolicyAttachment",
-                "path": "root/Function/IamRolePolicyAttachment",
-              },
-              "S3Object": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                  "version": "12.0.1",
-                },
-                "id": "S3Object",
-                "path": "root/Function/S3Object",
+                "id": "aws",
+                "path": "root/Default/aws",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.1.228",
             },
-            "display": Object {
-              "description": "A cloud function (FaaS)",
-              "title": "Function",
-            },
-            "id": "Function",
-            "path": "root/Function",
-          },
-          "Handler": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": false,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.1.228",
-            },
-            "display": Object {
-              "description": "An inflight resource",
-              "hidden": true,
-              "title": "Inflight",
-            },
-            "id": "Handler",
-            "path": "root/Handler",
-          },
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [
-                Object {
-                  "direction": "inbound",
-                  "implicit": true,
-                  "relationship": "print",
-                  "resource": "root/Function",
-                },
-              ],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.1.228",
-            },
-            "display": Object {
-              "description": "A cloud logging facility",
-              "hidden": true,
-              "title": "Logger",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
-          },
-          "aws": Object {
-            "constructInfo": Object {
-              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "12.0.1",
-            },
-            "id": "aws",
-            "path": "root/aws",
+            "id": "Default",
+            "path": "root/Default",
           },
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.0",
+              "version": "0.15.2",
             },
             "id": "backend",
             "path": "root/backend",
@@ -417,7 +437,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.0",
+          "version": "0.15.2",
         },
         "id": "root",
         "path": "root",
@@ -425,7 +445,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.15.0",
+      "version": "0.15.2",
     },
     "id": "App",
     "path": "",
@@ -492,140 +512,150 @@ Object {
     "children": Object {
       "root": Object {
         "children": Object {
-          "Function": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [
-                Object {
-                  "direction": "outbound",
-                  "implicit": true,
-                  "relationship": "print",
-                  "resource": "root/WingLogger",
-                },
-              ],
-              "wing:resource:stateful": false,
-            },
+          "Default": Object {
             "children": Object {
-              "Asset": Object {
-                "constructInfo": Object {
-                  "fqn": "cdktf.TerraformAsset",
-                  "version": "0.15.0",
+              "Function": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [
+                    Object {
+                      "direction": "outbound",
+                      "implicit": true,
+                      "relationship": "print",
+                      "resource": "root/Default/WingLogger",
+                    },
+                  ],
+                  "wing:resource:stateful": false,
                 },
-                "id": "Asset",
-                "path": "root/Function/Asset",
-              },
-              "Code": Object {
+                "children": Object {
+                  "Asset": Object {
+                    "constructInfo": Object {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.15.2",
+                    },
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "Code": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                      "version": "12.0.1",
+                    },
+                    "id": "Code",
+                    "path": "root/Default/Function/Code",
+                  },
+                  "Default": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                      "version": "12.0.1",
+                    },
+                    "id": "Default",
+                    "path": "root/Default/Function/Default",
+                  },
+                  "IamRole": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                      "version": "12.0.1",
+                    },
+                    "id": "IamRole",
+                    "path": "root/Default/Function/IamRole",
+                  },
+                  "IamRolePolicy": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                      "version": "12.0.1",
+                    },
+                    "id": "IamRolePolicy",
+                    "path": "root/Default/Function/IamRolePolicy",
+                  },
+                  "IamRolePolicyAttachment": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                      "version": "12.0.1",
+                    },
+                    "id": "IamRolePolicyAttachment",
+                    "path": "root/Default/Function/IamRolePolicyAttachment",
+                  },
+                  "S3Object": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                      "version": "12.0.1",
+                    },
+                    "id": "S3Object",
+                    "path": "root/Default/Function/S3Object",
+                  },
+                },
                 "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "Handler": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": false,
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "An inflight resource",
+                  "hidden": true,
+                  "title": "Inflight",
+                },
+                "id": "Handler",
+                "path": "root/Default/Handler",
+              },
+              "WingLogger": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [
+                    Object {
+                      "direction": "inbound",
+                      "implicit": true,
+                      "relationship": "print",
+                      "resource": "root/Default/Function",
+                    },
+                  ],
+                  "wing:resource:stateful": true,
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud logging facility",
+                  "hidden": true,
+                  "title": "Logger",
+                },
+                "id": "WingLogger",
+                "path": "root/Default/WingLogger",
+              },
+              "aws": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
                   "version": "12.0.1",
                 },
-                "id": "Code",
-                "path": "root/Function/Code",
-              },
-              "Default": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                  "version": "12.0.1",
-                },
-                "id": "Default",
-                "path": "root/Function/Default",
-              },
-              "IamRole": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                  "version": "12.0.1",
-                },
-                "id": "IamRole",
-                "path": "root/Function/IamRole",
-              },
-              "IamRolePolicy": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                  "version": "12.0.1",
-                },
-                "id": "IamRolePolicy",
-                "path": "root/Function/IamRolePolicy",
-              },
-              "IamRolePolicyAttachment": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                  "version": "12.0.1",
-                },
-                "id": "IamRolePolicyAttachment",
-                "path": "root/Function/IamRolePolicyAttachment",
-              },
-              "S3Object": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                  "version": "12.0.1",
-                },
-                "id": "S3Object",
-                "path": "root/Function/S3Object",
+                "id": "aws",
+                "path": "root/Default/aws",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.1.228",
             },
-            "display": Object {
-              "description": "A cloud function (FaaS)",
-              "title": "Function",
-            },
-            "id": "Function",
-            "path": "root/Function",
-          },
-          "Handler": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": false,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.1.228",
-            },
-            "display": Object {
-              "description": "An inflight resource",
-              "hidden": true,
-              "title": "Inflight",
-            },
-            "id": "Handler",
-            "path": "root/Handler",
-          },
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [
-                Object {
-                  "direction": "inbound",
-                  "implicit": true,
-                  "relationship": "print",
-                  "resource": "root/Function",
-                },
-              ],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.1.228",
-            },
-            "display": Object {
-              "description": "A cloud logging facility",
-              "hidden": true,
-              "title": "Logger",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
-          },
-          "aws": Object {
-            "constructInfo": Object {
-              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "12.0.1",
-            },
-            "id": "aws",
-            "path": "root/aws",
+            "id": "Default",
+            "path": "root/Default",
           },
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.0",
+              "version": "0.15.2",
             },
             "id": "backend",
             "path": "root/backend",
@@ -633,7 +663,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.0",
+          "version": "0.15.2",
         },
         "id": "root",
         "path": "root",
@@ -641,7 +671,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.15.0",
+      "version": "0.15.2",
     },
     "id": "App",
     "path": "",
@@ -708,140 +738,150 @@ Object {
     "children": Object {
       "root": Object {
         "children": Object {
-          "Handler": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": false,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.1.228",
-            },
-            "display": Object {
-              "description": "An inflight resource",
-              "hidden": true,
-              "title": "Inflight",
-            },
-            "id": "Handler",
-            "path": "root/Handler",
-          },
-          "The-Mighty_Function-01": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [
-                Object {
-                  "direction": "outbound",
-                  "implicit": true,
-                  "relationship": "print",
-                  "resource": "root/WingLogger",
-                },
-              ],
-              "wing:resource:stateful": false,
-            },
+          "Default": Object {
             "children": Object {
-              "Asset": Object {
-                "constructInfo": Object {
-                  "fqn": "cdktf.TerraformAsset",
-                  "version": "0.15.0",
+              "Handler": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": false,
                 },
-                "id": "Asset",
-                "path": "root/The-Mighty_Function-01/Asset",
-              },
-              "Code": Object {
                 "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "An inflight resource",
+                  "hidden": true,
+                  "title": "Inflight",
+                },
+                "id": "Handler",
+                "path": "root/Default/Handler",
+              },
+              "The-Mighty_Function-01": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [
+                    Object {
+                      "direction": "outbound",
+                      "implicit": true,
+                      "relationship": "print",
+                      "resource": "root/Default/WingLogger",
+                    },
+                  ],
+                  "wing:resource:stateful": false,
+                },
+                "children": Object {
+                  "Asset": Object {
+                    "constructInfo": Object {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.15.2",
+                    },
+                    "id": "Asset",
+                    "path": "root/Default/The-Mighty_Function-01/Asset",
+                  },
+                  "Code": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                      "version": "12.0.1",
+                    },
+                    "id": "Code",
+                    "path": "root/Default/The-Mighty_Function-01/Code",
+                  },
+                  "Default": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                      "version": "12.0.1",
+                    },
+                    "id": "Default",
+                    "path": "root/Default/The-Mighty_Function-01/Default",
+                  },
+                  "IamRole": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                      "version": "12.0.1",
+                    },
+                    "id": "IamRole",
+                    "path": "root/Default/The-Mighty_Function-01/IamRole",
+                  },
+                  "IamRolePolicy": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                      "version": "12.0.1",
+                    },
+                    "id": "IamRolePolicy",
+                    "path": "root/Default/The-Mighty_Function-01/IamRolePolicy",
+                  },
+                  "IamRolePolicyAttachment": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                      "version": "12.0.1",
+                    },
+                    "id": "IamRolePolicyAttachment",
+                    "path": "root/Default/The-Mighty_Function-01/IamRolePolicyAttachment",
+                  },
+                  "S3Object": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                      "version": "12.0.1",
+                    },
+                    "id": "S3Object",
+                    "path": "root/Default/The-Mighty_Function-01/S3Object",
+                  },
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "The-Mighty_Function-01",
+                "path": "root/Default/The-Mighty_Function-01",
+              },
+              "WingLogger": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [
+                    Object {
+                      "direction": "inbound",
+                      "implicit": true,
+                      "relationship": "print",
+                      "resource": "root/Default/The-Mighty_Function-01",
+                    },
+                  ],
+                  "wing:resource:stateful": true,
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud logging facility",
+                  "hidden": true,
+                  "title": "Logger",
+                },
+                "id": "WingLogger",
+                "path": "root/Default/WingLogger",
+              },
+              "aws": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
                   "version": "12.0.1",
                 },
-                "id": "Code",
-                "path": "root/The-Mighty_Function-01/Code",
-              },
-              "Default": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                  "version": "12.0.1",
-                },
-                "id": "Default",
-                "path": "root/The-Mighty_Function-01/Default",
-              },
-              "IamRole": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                  "version": "12.0.1",
-                },
-                "id": "IamRole",
-                "path": "root/The-Mighty_Function-01/IamRole",
-              },
-              "IamRolePolicy": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                  "version": "12.0.1",
-                },
-                "id": "IamRolePolicy",
-                "path": "root/The-Mighty_Function-01/IamRolePolicy",
-              },
-              "IamRolePolicyAttachment": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                  "version": "12.0.1",
-                },
-                "id": "IamRolePolicyAttachment",
-                "path": "root/The-Mighty_Function-01/IamRolePolicyAttachment",
-              },
-              "S3Object": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                  "version": "12.0.1",
-                },
-                "id": "S3Object",
-                "path": "root/The-Mighty_Function-01/S3Object",
+                "id": "aws",
+                "path": "root/Default/aws",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.1.228",
             },
-            "display": Object {
-              "description": "A cloud function (FaaS)",
-              "title": "Function",
-            },
-            "id": "The-Mighty_Function-01",
-            "path": "root/The-Mighty_Function-01",
-          },
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [
-                Object {
-                  "direction": "inbound",
-                  "implicit": true,
-                  "relationship": "print",
-                  "resource": "root/The-Mighty_Function-01",
-                },
-              ],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.1.228",
-            },
-            "display": Object {
-              "description": "A cloud logging facility",
-              "hidden": true,
-              "title": "Logger",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
-          },
-          "aws": Object {
-            "constructInfo": Object {
-              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "12.0.1",
-            },
-            "id": "aws",
-            "path": "root/aws",
+            "id": "Default",
+            "path": "root/Default",
           },
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.0",
+              "version": "0.15.2",
             },
             "id": "backend",
             "path": "root/backend",
@@ -849,7 +889,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.0",
+          "version": "0.15.2",
         },
         "id": "root",
         "path": "root",
@@ -857,7 +897,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.15.0",
+      "version": "0.15.2",
     },
     "id": "App",
     "path": "",
@@ -924,140 +964,150 @@ Object {
     "children": Object {
       "root": Object {
         "children": Object {
-          "Handler": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": false,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.1.228",
-            },
-            "display": Object {
-              "description": "An inflight resource",
-              "hidden": true,
-              "title": "Inflight",
-            },
-            "id": "Handler",
-            "path": "root/Handler",
-          },
-          "The%Mighty$Function": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [
-                Object {
-                  "direction": "outbound",
-                  "implicit": true,
-                  "relationship": "print",
-                  "resource": "root/WingLogger",
-                },
-              ],
-              "wing:resource:stateful": false,
-            },
+          "Default": Object {
             "children": Object {
-              "Asset": Object {
-                "constructInfo": Object {
-                  "fqn": "cdktf.TerraformAsset",
-                  "version": "0.15.0",
+              "Handler": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": false,
                 },
-                "id": "Asset",
-                "path": "root/The%Mighty$Function/Asset",
-              },
-              "Code": Object {
                 "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "An inflight resource",
+                  "hidden": true,
+                  "title": "Inflight",
+                },
+                "id": "Handler",
+                "path": "root/Default/Handler",
+              },
+              "The%Mighty$Function": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [
+                    Object {
+                      "direction": "outbound",
+                      "implicit": true,
+                      "relationship": "print",
+                      "resource": "root/Default/WingLogger",
+                    },
+                  ],
+                  "wing:resource:stateful": false,
+                },
+                "children": Object {
+                  "Asset": Object {
+                    "constructInfo": Object {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.15.2",
+                    },
+                    "id": "Asset",
+                    "path": "root/Default/The%Mighty$Function/Asset",
+                  },
+                  "Code": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                      "version": "12.0.1",
+                    },
+                    "id": "Code",
+                    "path": "root/Default/The%Mighty$Function/Code",
+                  },
+                  "Default": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                      "version": "12.0.1",
+                    },
+                    "id": "Default",
+                    "path": "root/Default/The%Mighty$Function/Default",
+                  },
+                  "IamRole": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                      "version": "12.0.1",
+                    },
+                    "id": "IamRole",
+                    "path": "root/Default/The%Mighty$Function/IamRole",
+                  },
+                  "IamRolePolicy": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                      "version": "12.0.1",
+                    },
+                    "id": "IamRolePolicy",
+                    "path": "root/Default/The%Mighty$Function/IamRolePolicy",
+                  },
+                  "IamRolePolicyAttachment": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                      "version": "12.0.1",
+                    },
+                    "id": "IamRolePolicyAttachment",
+                    "path": "root/Default/The%Mighty$Function/IamRolePolicyAttachment",
+                  },
+                  "S3Object": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                      "version": "12.0.1",
+                    },
+                    "id": "S3Object",
+                    "path": "root/Default/The%Mighty$Function/S3Object",
+                  },
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "The%Mighty$Function",
+                "path": "root/Default/The%Mighty$Function",
+              },
+              "WingLogger": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [
+                    Object {
+                      "direction": "inbound",
+                      "implicit": true,
+                      "relationship": "print",
+                      "resource": "root/Default/The%Mighty$Function",
+                    },
+                  ],
+                  "wing:resource:stateful": true,
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud logging facility",
+                  "hidden": true,
+                  "title": "Logger",
+                },
+                "id": "WingLogger",
+                "path": "root/Default/WingLogger",
+              },
+              "aws": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
                   "version": "12.0.1",
                 },
-                "id": "Code",
-                "path": "root/The%Mighty$Function/Code",
-              },
-              "Default": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                  "version": "12.0.1",
-                },
-                "id": "Default",
-                "path": "root/The%Mighty$Function/Default",
-              },
-              "IamRole": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                  "version": "12.0.1",
-                },
-                "id": "IamRole",
-                "path": "root/The%Mighty$Function/IamRole",
-              },
-              "IamRolePolicy": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                  "version": "12.0.1",
-                },
-                "id": "IamRolePolicy",
-                "path": "root/The%Mighty$Function/IamRolePolicy",
-              },
-              "IamRolePolicyAttachment": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                  "version": "12.0.1",
-                },
-                "id": "IamRolePolicyAttachment",
-                "path": "root/The%Mighty$Function/IamRolePolicyAttachment",
-              },
-              "S3Object": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                  "version": "12.0.1",
-                },
-                "id": "S3Object",
-                "path": "root/The%Mighty$Function/S3Object",
+                "id": "aws",
+                "path": "root/Default/aws",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.1.228",
             },
-            "display": Object {
-              "description": "A cloud function (FaaS)",
-              "title": "Function",
-            },
-            "id": "The%Mighty$Function",
-            "path": "root/The%Mighty$Function",
-          },
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [
-                Object {
-                  "direction": "inbound",
-                  "implicit": true,
-                  "relationship": "print",
-                  "resource": "root/The%Mighty$Function",
-                },
-              ],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.1.228",
-            },
-            "display": Object {
-              "description": "A cloud logging facility",
-              "hidden": true,
-              "title": "Logger",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
-          },
-          "aws": Object {
-            "constructInfo": Object {
-              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "12.0.1",
-            },
-            "id": "aws",
-            "path": "root/aws",
+            "id": "Default",
+            "path": "root/Default",
           },
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.0",
+              "version": "0.15.2",
             },
             "id": "backend",
             "path": "root/backend",
@@ -1065,7 +1115,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.0",
+          "version": "0.15.2",
         },
         "id": "root",
         "path": "root",
@@ -1073,7 +1123,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.15.0",
+      "version": "0.15.2",
     },
     "id": "App",
     "path": "",
