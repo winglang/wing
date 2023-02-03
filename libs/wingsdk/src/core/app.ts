@@ -114,7 +114,7 @@ export class CdktfApp extends Construct implements IApp {
     // delete `outdir/.tmp.cdktf.out`
     rmSync(this.cdktfApp.outdir, { recursive: true });
 
-    // write outdir/tree.json
+    // write `outdir/tree.json`
     synthesizeTree(this, this.outdir);
 
     // return a cleaned snapshot of the resulting Terraform manifest for unit testing
