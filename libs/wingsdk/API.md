@@ -1158,6 +1158,7 @@ let app_props = core.AppProps{ ... }
 | <code><a href="#@winglang/sdk.core.AppProps.property.customFactory">custom_factory</a></code> | <code>polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
 | <code><a href="#@winglang/sdk.core.AppProps.property.name">name</a></code> | <code>str</code> | The name of the app. |
 | <code><a href="#@winglang/sdk.core.AppProps.property.outdir">outdir</a></code> | <code>str</code> | Directory where artifacts are synthesized to. |
+| <code><a href="#@winglang/sdk.core.AppProps.property.plugins">plugins</a></code> | <code>MutArray&lt;str&gt;</code> | Plugins to apply on app. |
 | <code><a href="#@winglang/sdk.core.AppProps.property.stateFile">state_file</a></code> | <code>str</code> | The path to a state file which will track all synthesized files. |
 
 ---
@@ -1198,6 +1199,19 @@ outdir: str;
 - *Default:* current working directory
 
 Directory where artifacts are synthesized to.
+
+---
+
+##### `plugins`<sup>Optional</sup> <a name="plugins" id="@winglang/sdk.core.AppProps.property.plugins"></a>
+
+```wing
+plugins: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+- *Default:* no plugins
+
+Plugins to apply on app.
 
 ---
 

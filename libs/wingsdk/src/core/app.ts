@@ -100,7 +100,7 @@ export class CdktfApp extends Construct implements IApp {
     super(cdktfStack, "Default");
 
     this.pluginManager = new PluginManager(props.plugins ?? []);
-    
+
     this.outdir = outdir;
     this.cdktfApp = cdktfApp;
     this.cdktfStack = cdktfStack;
@@ -138,7 +138,7 @@ export class CdktfApp extends Construct implements IApp {
     // return a cleaned snapshot of the resulting Terraform manifest for unit testing
     const tfConfig = this.cdktfStack.toTerraform();
     const cleaned = cleanTerraformConfig(tfConfig);
-  
+
     const synthesizedStackPath = `${this.cdktfApp.outdir}/${this.cdktfApp.manifest.stacks.root.synthesizedStackPath}`;
     this.pluginManager.postSynth(tfConfig, synthesizedStackPath);
     this.pluginManager.validate(tfConfig);
