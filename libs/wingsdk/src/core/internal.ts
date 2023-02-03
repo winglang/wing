@@ -15,7 +15,9 @@ export function makeHandler(
   for (const [k, v] of Object.entries(bindings.resources ?? {})) {
     const clientCode = v.resource._toInflight().text;
     if (!clientCode) {
-      throw new Error(`Didn't find any client code for resource ${k} - are you sure it's returning a core.Code?`);
+      throw new Error(
+        `Didn't find any client code for resource ${k} - are you sure it's returning a core.Code?`
+      );
     }
     clients[k] = v.resource._toInflight().text;
   }
