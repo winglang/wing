@@ -15,14 +15,13 @@ class HelloWorld extends Construct {
 
     const bucket = new cloud.Bucket(this, "Bucket", { public: false });
     bucket.addObject("test.txt", "yoyoyo");
-
-    const handler = testing.Testing.makeHandler(this, "Handler", "code");
-    new cloud.Function(this, "Function", handler);
   }
 }
 
-const app = new tfaws.App({
-  outdir: join(__dirname, "target"),
+const app = new tfgcp.App({
+  outdir: __dirname,
+  projectId: "my-project",
+  storageLocation: "US",
 });
 new HelloWorld(app, "HelloWorld");
 app.synth();
