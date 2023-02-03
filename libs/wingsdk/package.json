@@ -52,7 +52,6 @@
     "@winglang/wing-api-checker": "file:../../apps/wing-api-checker",
     "aws-sdk-client-mock": "^2.0.1",
     "aws-sdk-client-mock-jest": "^2.0.1",
-    "cdktf-cli": "^0.15.0",
     "eslint": "^8",
     "eslint-config-prettier": "^8.6.0",
     "eslint-import-resolver-node": "^0.3.7",
