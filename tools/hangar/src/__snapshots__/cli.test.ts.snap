@@ -68,6 +68,9 @@ constructor() {
     (myfunc(x));
   };
   (myfunc(1));
+  (((x) => {
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === 1)'\`)})((x === 1))};
+  })(1));
 }
 }
 new MyApp().synth();"
@@ -1894,6 +1897,9 @@ exports[`wing compile --target tf-aws captures.w > index.js 1`] = `
   (await bucket2.get(\\"file.txt\\"));
   (await bucket2.get(\\"file2.txt\\"));
   (await bucket3.get(\\"file3.txt\\"));
+  for (const stuff of (await bucket1.list())) {
+    {console.log(stuff)};
+  }
 } };"
 `;
 
@@ -1946,7 +1952,7 @@ constructor() {
   const bucket3 = new cloud.Bucket(this,\\"PrivateBucket\\",{ public: false });
   const queue = new cloud.Queue(this,\\"cloud.Queue\\");
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.4e89828b4cf7eebd9aec10c177257042cdbb4196e6dd8c26e054bddf3c32ee41/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5f0e4e25898a72c973f063e92444f7572d58a18cdd38b3fb3a575af6adf7440f/index.js\\")),
     bindings: {
       resources: {
         bucket1: {
@@ -2700,6 +2706,78 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`wing compile --target tf-aws for_loop.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+}
+`;
+
+exports[`wing compile --target tf-aws for_loop.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.15.2",
+}
+`;
+
+exports[`wing compile --target tf-aws for_loop.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"for_loop\\" });
+  
+  const words = Object.freeze([\\"wing\\", \\"lang\\", \\"dang\\"]);
+  const unique_numbers = Object.freeze(new Set([1, 2, 3]));
+  for (const word of words) {
+    for (const number of unique_numbers) {
+      {((cond) => {if (!cond) throw new Error(\`assertion failed: '(number > 0)'\`)})((number > 0))};
+      {console.log(\`\${word}: \${number}\`)};
+    }
+  }
+}
+}
+new MyApp().synth();"
+`;
+
 exports[`wing compile --target tf-aws forward_decl.w > cdk.tf.json 1`] = `
 {
   "//": {
@@ -3369,7 +3447,7 @@ constructor() {
   const dur = $stdlib.std.Duration.fromSeconds(60);
   const stringy = \`\${dur.minutes}:\${dur.seconds}\`;
   {console.log(stringy)};
-  if (((stringy.includes(\\"60\\")) && (((stringy.split(\\":\\")).at(0)) === \\"60\\"))) {
+  if ((stringy.includes(\\"60\\") && (((stringy.split(\\":\\")).at(0)) === \\"60\\"))) {
     {console.log(\`\${stringy.length}!\`)};
   }
 }

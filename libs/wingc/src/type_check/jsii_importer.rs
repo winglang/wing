@@ -102,6 +102,7 @@ impl<'a> JsiiImporter<'a> {
 						args: vec![self.wing_types.anything()],
 						return_type: self.wing_types.anything(),
 						flight: Phase::Inflight,
+						js_override: None,
 					}))
 				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION) {
 					self.wing_types.duration()
@@ -111,11 +112,41 @@ impl<'a> JsiiImporter<'a> {
 				} else {
 					self.lookup_or_create_type(&FQN::from(type_fqn))
 				}
-			} else if let Some(Value::Object(_)) = obj.get("collection") {
-				// TODO: handle JSII to Wing collection type conversion, for now return any
-				self.wing_types.anything()
+			} else if let Some(Value::Object(d)) = obj.get("collection") {
+				let collection_kind = d
+					.get("kind")
+					.expect("'kind' is required for collection types")
+					.as_str()
+					.expect("'kind' must be a string");
+
+				let element_type = d
+					.get("elementtype")
+					.expect("'elementtype' is required for collection types")
+					.as_object()
+					.expect("'elementtype' must be an object");
+
+				// TODO: Handle non-primitive collections
+				let primitive_type = element_type
+					.get("primitive")
+					.expect("non-primitive collection types are not yet supported")
+					.as_str()
+					.expect("'primitive' must be a string");
+
+				let wing_type = match primitive_type {
+					"string" => self.wing_types.string(),
+					"number" => self.wing_types.number(),
+					"boolean" => self.wing_types.bool(),
+					"any" => self.wing_types.anything(),
+					_ => panic!("Unsupported primitive type '{}'", primitive_type),
+				};
+				match collection_kind {
+					"array" => self.wing_types.add_type(Type::Array(wing_type)),
+					"map" => self.wing_types.add_type(Type::Map(wing_type)),
+					_ => panic!("Unsupported collection kind '{}'", collection_kind),
+				}
 			} else if let Some(Value::Object(_)) = obj.get("union") {
-				// Wing does not support union types, so we'll just return any
+				// Wing does not support union types, so we'll model it the same way as if
+				// we saw an "any" in a JSII library
 				self.wing_types.anything()
 			} else {
 				panic!(
@@ -393,6 +424,12 @@ impl<'a> JsiiImporter<'a> {
 					args: arg_types,
 					return_type,
 					flight,
+					js_override: m
+						.docs
+						.as_ref()
+						.map(|d| d.custom.as_ref().map(|c| c.get("macro").map(|j| j.clone())))
+						.flatten()
+						.flatten(),
 				}));
 				let name = camel_case_to_snake_case(&m.name);
 				class_env
@@ -601,6 +638,7 @@ impl<'a> JsiiImporter<'a> {
 				args: arg_types,
 				return_type: new_type,
 				flight: phase,
+				js_override: None,
 			}));
 			if let Err(e) = class_env.define(
 				&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &initializer.location_in_module),
