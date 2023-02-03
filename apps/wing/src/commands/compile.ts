@@ -49,11 +49,11 @@ export interface ICompileOptions {
 }
 
 /**
- * Determines the artifact directory for a given target. This is the directory
- * within the output directory that contains the compiled artifacts for the
- * given target.
+ * Determines the synth directory for a given target. This is the directory
+ * within the output directory where the SDK app will synthesize its artifacts
+ * for the given target.
  */
-function resolveArtifactDir(outDir: string, entrypoint: string, target: Target) {
+function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
   const targetDirSuffix = DEFAULT_ARTIFACT_DIR_SUFFIX[target];
   if (targetDirSuffix === undefined) {
     // this target produces a single artifact, so we don't need a subdirectory
@@ -73,14 +73,14 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   log("wing file: %s", wingFile);
   const wingDir = dirname(wingFile);
   log("wing dir: %s", wingDir);
-  const artifactDir = resolveArtifactDir(options.outDir, entrypoint, options.target);
-  log("artifact dir: %s", artifactDir);
-  const workDir = resolve(artifactDir, ".wing");
+  const synthDir = resolveSynthDir(options.outDir, entrypoint, options.target);
+  log("synth dir: %s", synthDir);
+  const workDir = resolve(synthDir, ".wing");
   log("work dir: %s", workDir);
 
   await Promise.all([
     mkdir(workDir, { recursive: true }),
-    mkdir(artifactDir, { recursive: true }),
+    mkdir(synthDir, { recursive: true }),
   ]);
 
   const wasi = new WASI({
@@ -88,14 +88,14 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
       ...process.env,
       RUST_BACKTRACE: "full",
       WINGSDK_MANIFEST_ROOT,
-      WINGSDK_SYNTH_DIR: artifactDir,
+      WINGSDK_SYNTH_DIR: synthDir,
       WINGC_PREFLIGHT,
     },
     preopens: {
       [wingDir]: wingDir, // for Rust's access to the source file
       [workDir]: workDir, // for Rust's access to the work directory
       [WINGSDK_MANIFEST_ROOT]: WINGSDK_MANIFEST_ROOT, // .jsii access
-      [artifactDir]: artifactDir, // for Rust's access to the artifact directory
+      [synthDir]: synthDir, // for Rust's access to the synth directory
     },
   });
 
@@ -125,7 +125,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     require,
     process: {
       env: {
-        WINGSDK_SYNTH_DIR: artifactDir,
+        WINGSDK_SYNTH_DIR: synthDir,
         WING_TARGET: options.target
       },
     },
