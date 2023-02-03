@@ -4,7 +4,6 @@ import * as cdktf from "cdktf";
 import { Construct, IConstruct } from "constructs";
 import { IPolyconFactory, Polycons } from "polycons";
 import stringify from "safe-stable-stringify";
-// import { Files } from "./files";
 import { synthesizeTree } from "./tree";
 import { Logger } from "../cloud/logger";
 
@@ -66,7 +65,6 @@ export class CdktfApp extends Construct implements IApp {
 
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
-  // private readonly files: Files;
 
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
@@ -90,11 +88,6 @@ export class CdktfApp extends Construct implements IApp {
     this.cdktfApp = cdktfApp;
     this.cdktfStack = cdktfStack;
 
-    // this.files = new Files({
-    //   app: this,
-    //   stateFile: props.stateFile,
-    // });
-
     // register a logger for this app.
     Logger.register(this);
   }
@@ -109,10 +102,6 @@ export class CdktfApp extends Construct implements IApp {
     // synthesize Terraform files in `outdir/.tmp.cdktf.out/stacks/root`
     this.cdktfApp.synth();
 
-    // // clean up `main.tf.json` and `assets` from `outdir` if they exist from a previous run
-    // rmSync(join(this.outdir, "main.tf.json"));
-    // rmSync(join(this.outdir, "assets"), { recursive: true });
-
     // move Terraform files from `outdir/.tmp.cdktf.out/stacks/root` to `outdir`
     this.moveCdktfArtifactsToOutdir();
 
@@ -122,11 +111,8 @@ export class CdktfApp extends Construct implements IApp {
       join(this.outdir, `main.tf.json`)
     );
 
-    // remove `outdir/.tmp.cdktf.out`
+    // delete `outdir/.tmp.cdktf.out`
     rmSync(this.cdktfApp.outdir, { recursive: true });
-
-    // // synthesize any other files?
-    // this.files.synth();
 
     // write outdir/tree.json
     synthesizeTree(this);
@@ -134,7 +120,6 @@ export class CdktfApp extends Construct implements IApp {
     // return a cleaned snapshot of the resulting Terraform manifest for unit testing
     const tfConfig = this.cdktfStack.toTerraform();
     const cleaned = cleanTerraformConfig(tfConfig);
-
     return stringify(cleaned, null, 2) ?? "";
   }
 
