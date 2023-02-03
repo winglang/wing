@@ -1,15 +1,17 @@
-import { ISimulatorResourceInstance } from "./resource";
-import { QueueSchema, QueueSubscriber } from "./schema-resources";
 import { IFunctionClient, IQueueClient, QUEUE_TYPE } from "../cloud";
 import { ISimulatorContext, TraceType } from "../testing/simulator";
+import { BaseResource } from "./base-resource.inflight";
+import { ISimulatorResourceInstance } from "./resource";
+import { QueueSchema, QueueSubscriber } from "./schema-resources";
 
-export class Queue implements IQueueClient, ISimulatorResourceInstance {
+export class Queue extends BaseResource implements IQueueClient, ISimulatorResourceInstance {
   private readonly messages = new Array<string>();
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly intervalId: NodeJS.Timeout;
   private readonly context: ISimulatorContext;
 
   constructor(props: QueueSchema["props"], context: ISimulatorContext) {
+    super();
     for (const sub of props.subscribers ?? []) {
       this.subscribers.push({ ...sub });
     }
@@ -20,10 +22,6 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
 
     this.intervalId = setInterval(() => this.processMessages(), 100); // every 0.1 seconds
     this.context = context;
-  }
-
-  public async init(): Promise<void> {
-    return;
   }
 
   public async cleanup(): Promise<void> {
@@ -37,6 +35,7 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
       activity: async () => {
         this.messages.push(message);
       },
+      metadata: this.metadata?.tracing
     });
   }
 
@@ -46,6 +45,7 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
       activity: async () => {
         this.messages.length = 0;
       },
+      metadata: this.metadata?.tracing
     });
   }
 
@@ -55,6 +55,7 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
       activity: async () => {
         return this.messages.length;
       },
+      metadata: this.metadata?.tracing
     });
   }
 
@@ -85,6 +86,7 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
           sourcePath: this.context.resourcePath,
           sourceType: QUEUE_TYPE,
           timestamp: new Date().toISOString(),
+          metadata: this.metadata?.tracing,
         });
         void fnClient.invoke(JSON.stringify({ messages })).catch((_err) => {
           // If the function returns an error, put the message back on the queue
@@ -96,6 +98,7 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
             sourceType: QUEUE_TYPE,
             type: TraceType.RESOURCE,
             timestamp: new Date().toISOString(),
+            metadata: this.metadata?.tracing
           });
           this.messages.push(...messages);
         });

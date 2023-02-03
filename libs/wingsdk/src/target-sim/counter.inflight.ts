@@ -1,22 +1,20 @@
-import { ISimulatorResourceInstance } from "./resource";
-import { CounterSchema } from "./schema-resources";
 import { ICounterClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
+import { BaseResource } from "./base-resource.inflight";
+import { ISimulatorResourceInstance } from "./resource";
+import { CounterSchema } from "./schema-resources";
 
-export class Counter implements ICounterClient, ISimulatorResourceInstance {
+export class Counter extends BaseResource implements ICounterClient, ISimulatorResourceInstance {
   private value: number;
   private readonly context: ISimulatorContext;
-
   public constructor(
     props: CounterSchema["props"],
     context: ISimulatorContext
   ) {
+    super();
     this.value = props.initial;
     this.context = context;
   }
-
-  public async init(): Promise<void> {}
-  public async cleanup(): Promise<void> {}
 
   public async inc(amount: number = 1): Promise<number> {
     return this.context.withTrace({
@@ -26,6 +24,7 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
         this.value += amount;
         return prev;
       },
+      metadata: this.metadata?.tracing
     });
   }
 
@@ -37,6 +36,7 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
         this.value -= amount;
         return prev;
       },
+      metadata: this.metadata?.tracing
     });
   }
 
@@ -46,6 +46,7 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
       activity: async () => {
         return this.value;
       },
+      metadata: this.metadata?.tracing
     });
   }
 }

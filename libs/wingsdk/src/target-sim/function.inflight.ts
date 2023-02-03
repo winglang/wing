@@ -2,22 +2,24 @@ import * as fs from "fs";
 import * as path_ from "path";
 import * as process from "process";
 import * as vm from "vm";
+import { FUNCTION_TYPE, IFunctionClient } from "../cloud";
+import { ISimulatorContext } from "../testing/simulator";
+import { BaseResource } from "./base-resource.inflight";
 import {
   ENV_WING_SIM_INFLIGHT_RESOURCE_PATH,
   ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE,
 } from "./function";
 import { ISimulatorResourceInstance } from "./resource";
 import { FunctionSchema } from "./schema-resources";
-import { FUNCTION_TYPE, IFunctionClient } from "../cloud";
-import { ISimulatorContext } from "../testing/simulator";
 
-export class Function implements IFunctionClient, ISimulatorResourceInstance {
+export class Function extends BaseResource implements IFunctionClient, ISimulatorResourceInstance {
   private readonly filename: string;
   private readonly env: Record<string, string>;
   private readonly context: ISimulatorContext;
   private readonly timeout: number;
 
   constructor(props: FunctionSchema["props"], context: ISimulatorContext) {
+    super();
     if (props.sourceCodeLanguage !== "javascript") {
       throw new Error("Only JavaScript is supported");
     }
@@ -25,14 +27,6 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     this.env = props.environmentVariables ?? {};
     this.context = context;
     this.timeout = props.timeout;
-  }
-
-  public async init(): Promise<void> {
-    return;
-  }
-
-  public async cleanup(): Promise<void> {
-    return;
   }
 
   public async invoke(payload: string): Promise<string> {
@@ -79,6 +73,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       activity: async () => {
         return vm.runInContext(wrapper, context, { timeout: this.timeout });
       },
+      metadata: this.metadata?.tracing,
     });
   }
 }

@@ -2,15 +2,14 @@ import { existsSync } from "fs";
 import { join } from "path";
 import * as tar from "tar";
 import { SDK_VERSION } from "../constants";
-import { ISimulatorResourceInstance } from "../target-sim";
+import { ISimulatorResourceInstance, ResourceMetadata } from "../target-sim";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
 // eslint-disable-next-line import/no-restricted-paths
+import { BaseResource } from "../target-sim/base-resource.inflight";
 import { Function } from "../target-sim/function.inflight";
 import { BaseResourceSchema, WingSimulatorSchema } from "../target-sim/schema";
 import { mkdtemp, readJsonSync } from "../util";
-
-const symbol = Symbol("@wing/sdk/simulator.config");
 
 /**
  * Props for `Simulator`.
@@ -62,13 +61,8 @@ export interface IWithTraceProps {
    * A function to run as part of the trace.
    */
   activity(): Promise<any>;
-}
 
-/**
- * Resource configuration
- */
-export interface ResourceMetadata {
-  readonly tracing: object;
+  readonly metadata?: object;
 }
 
 export interface Trace {
@@ -249,7 +243,6 @@ export class Simulator {
         },
         withTrace: async (props: IWithTraceProps) => {
           // TODO: log start time and end time of activity?
-          const metadata = (this.tryGetResource(resourceConfig.path))[symbol];
           try {
             let result = await props.activity();
             this._addTrace({
@@ -262,7 +255,7 @@ export class Simulator {
               sourcePath: resourceConfig.path,
               sourceType: resourceConfig.type,
               timestamp: new Date().toISOString(),
-              metadata: metadata?.tracing,
+              metadata: props.metadata,
             });
             return result;
           } catch (err) {
@@ -272,7 +265,7 @@ export class Simulator {
               sourcePath: resourceConfig.path,
               sourceType: resourceConfig.type,
               timestamp: new Date().toISOString(),
-              metadata: metadata?.tracing,
+              metadata: props.metadata,
             });
             throw err;
           }
@@ -368,6 +361,10 @@ export class Simulator {
     return [...this._traces];
   }
 
+  private isResource(handle: any): handle is BaseResource {
+    return handle  instanceof BaseResource;
+  }
+
   /**
    * Get a simulated resource instance.
    * @returns the resource
@@ -378,7 +375,9 @@ export class Simulator {
       throw new Error(`Resource "${path}" not found.`);
     }
 
-    Object.assign(handle, {[symbol]: config});
+    if(this.isResource(handle)) {
+      handle.addMetadata(config);
+    }
     return handle;
   }
 

@@ -1,33 +1,26 @@
 import * as fs from "fs";
 import * as os from "os";
 import { join } from "path";
+import { ILoggerClient } from "../cloud";
+import { ISimulatorContext, TraceType } from "../testing";
+import { BaseResource } from "./base-resource.inflight";
 import {
   ENV_WING_SIM_INFLIGHT_RESOURCE_PATH,
   ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE,
 } from "./function";
 import { ISimulatorResourceInstance } from "./resource";
 import { LoggerSchema } from "./schema-resources";
-import { ILoggerClient } from "../cloud";
-import { ISimulatorContext, TraceType } from "../testing";
 
-export class Logger implements ILoggerClient, ISimulatorResourceInstance {
+export class Logger extends BaseResource implements ILoggerClient, ISimulatorResourceInstance {
   private readonly logsDir: string;
   private readonly context: ISimulatorContext;
   public constructor(
     _props: LoggerSchema["props"],
     context: ISimulatorContext
   ) {
+    super();
     this.logsDir = fs.mkdtempSync(join(os.tmpdir(), "wing-sim-"));
     this.context = context;
-  }
-
-  public async init(): Promise<void> {
-    return;
-  }
-
-  public async cleanup(): Promise<void> {
-    // TODO: clean up logs dir?
-    return;
   }
 
   public async print(message: string): Promise<void> {
@@ -45,6 +38,7 @@ export class Logger implements ILoggerClient, ISimulatorResourceInstance {
       sourcePath: resourcePath,
       sourceType: resourceType,
       timestamp: new Date().toISOString(),
+      metadata: this.metadata?.tracing,
     });
   }
 }

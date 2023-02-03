@@ -20,6 +20,13 @@ export function isSimulatorResource(obj: any): obj is ISimulatorResource {
 }
 
 /**
+ * Resource configuration
+ */
+export interface ResourceMetadata {
+  readonly tracing: object;
+}
+
+/**
  * Shared interface for resource simulations.
  */
 export interface ISimulatorResourceInstance {
@@ -33,4 +40,10 @@ export interface ISimulatorResourceInstance {
    * (files, ports, etc).
    */
   cleanup(): Promise<void>;
+
+   /**
+    * Set the metadata for this resource.
+    * @param metadata
+    */
+   addMetadata(metadata: ResourceMetadata): void;
 }
