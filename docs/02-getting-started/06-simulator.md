@@ -59,7 +59,7 @@ Now, we import the Wing SDK library:
 
 ```js
 const sdk = require("@winglang/sdk"); // import the wing sdk library
-const simulator = new sdk.testing.Simulator({ simfile : "./target/hello.sim/hello.wsim"}); // create an instance of the Simulator
+const simulator = new sdk.testing.Simulator({ simfile : "./target/hello.wsim"}); // create an instance of the Simulator
 await simulator.start(); // start the simulator 
 ```
 
