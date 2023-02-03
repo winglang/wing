@@ -25,7 +25,7 @@ wing compile -t sim hello.w
 
 ## Compilation output
 
-This would create a new file called `target/hello.wsim` which is the simulated
+This would create a new file at `target/hello.sim/hello.wsim` which is the simulated
 version of your entire cloud application.
 
 Now that we have an `hello.wsim` file, we can either interact with through the Wing
@@ -59,7 +59,7 @@ Now, we import the Wing SDK library:
 
 ```js
 const sdk = require("@winglang/sdk"); // import the wing sdk library
-const simulator = new sdk.testing.Simulator({ simfile : "./target/hello.wsim"}); // create an instance of the Simulator
+const simulator = new sdk.testing.Simulator({ simfile : "./target/hello.sim/hello.wsim"}); // create an instance of the Simulator
 await simulator.start(); // start the simulator 
 ```
 
@@ -83,6 +83,7 @@ await bucket.get("wing.txt") // will show the file content
 ```
 
 The result of the last two function calls will be
+
 ```
 [ 'wing.txt' ]
 'Hello, Wing'
