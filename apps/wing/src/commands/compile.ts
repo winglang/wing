@@ -32,11 +32,11 @@ export enum Target {
   SIM = "sim",
 }
 
-const DEFAULT_ARTIFACT_DIR_SUFFIX: Record<Target, string> = {
+const DEFAULT_ARTIFACT_DIR_SUFFIX: Record<Target, string | undefined> = {
   [Target.TF_AWS]: "tfaws",
   [Target.TF_AZURE]: "tfazure",
   [Target.TF_GCP]: "tfgcp",
-  [Target.SIM]: "sim",
+  [Target.SIM]: undefined,
 }
 
 /**
@@ -55,6 +55,10 @@ export interface ICompileOptions {
  */
 function resolveArtifactDir(outDir: string, entrypoint: string, target: Target) {
   const targetDirSuffix = DEFAULT_ARTIFACT_DIR_SUFFIX[target];
+  if (targetDirSuffix === undefined) {
+    // this target produces a single artifact, so we don't need a subdirectory
+    return outDir;
+  }
   const entrypointName = basename(entrypoint, ".w");
   return join(outDir, `${entrypointName}.${targetDirSuffix}`);
 }

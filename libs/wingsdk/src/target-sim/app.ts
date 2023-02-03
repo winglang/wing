@@ -45,6 +45,9 @@ export class App extends Construct implements core.IApp {
     // write simulator.json file into workdir
     this.synthSimulatorFile(workdir);
 
+    // write tree.json file into workdir
+    core.synthesizeTree(this, workdir);
+
     // tar + gzip the workdir, and write it as a .wsim file to the outdir
     const filename = `${this.name}.wsim`;
     const simfile = path.join(this.outdir, filename);
@@ -57,9 +60,6 @@ export class App extends Construct implements core.IApp {
       },
       ["./"]
     );
-
-    // write tree.json file to the outdir
-    core.synthesizeTree(this);
 
     return simfile;
   }

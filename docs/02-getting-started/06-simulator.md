@@ -25,7 +25,7 @@ wing compile -t sim hello.w
 
 ## Compilation output
 
-This would create a new file at `target/hello.sim/hello.wsim` which is the simulated
+This would create a new file at `target/hello.wsim` which is the simulated
 version of your entire cloud application.
 
 Now that we have an `hello.wsim` file, we can either interact with through the Wing
