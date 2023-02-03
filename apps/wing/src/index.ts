@@ -38,7 +38,7 @@ async function main() {
     .argument("<entrypoint>", "program .w entrypoint")
     .option(
       "-o, --out-dir <out-dir>",
-      "Output directory",
+      "Output directory - where to place all generated artifacts",
       join(process.cwd(), "target")
     )
     .addOption(
