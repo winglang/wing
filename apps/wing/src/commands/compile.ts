@@ -32,7 +32,7 @@ export enum Target {
   SIM = "sim",
 }
 
-const DEFAULT_ARTIFACT_DIR_SUFFIX: Record<Target, string | undefined> = {
+const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
   [Target.TF_AWS]: "tfaws",
   [Target.TF_AZURE]: "tfazure",
   [Target.TF_GCP]: "tfgcp",
@@ -54,7 +54,7 @@ export interface ICompileOptions {
  * for the given target.
  */
 function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
-  const targetDirSuffix = DEFAULT_ARTIFACT_DIR_SUFFIX[target];
+  const targetDirSuffix = DEFAULT_SYNTH_DIR_SUFFIX[target];
   if (targetDirSuffix === undefined) {
     // this target produces a single artifact, so we don't need a subdirectory
     return outDir;
