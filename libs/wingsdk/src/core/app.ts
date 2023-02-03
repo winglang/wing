@@ -128,7 +128,10 @@ export class CdktfApp extends Construct implements IApp {
    */
   private moveCdktfArtifactsToOutdir(): void {
     const cdktfOutdir = this.cdktfApp.outdir;
-    const cdktfStackDir = join(cdktfOutdir, "stacks", TERRAFORM_STACK_NAME);
+    const cdktfStackDir = join(
+      cdktfOutdir,
+      this.cdktfApp.manifest.stacks[TERRAFORM_STACK_NAME].workingDirectory
+    );
 
     const files = readdirSync(cdktfStackDir, { withFileTypes: true });
     for (const file of files) {
