@@ -12,6 +12,7 @@ const PREC = {
   UNARY: 11,
   NIL_COALESCING: 12,
   MEMBER: 13,
+  CALL: 14,
 };
 
 module.exports = grammar({
@@ -285,7 +286,7 @@ module.exports = grammar({
       ),
 
     call: ($) =>
-      seq(field("caller", $.reference), field("args", $.argument_list)),
+      prec.left(PREC.CALL, seq(field("caller", $.expression), field("args", $.argument_list))),
 
     argument_list: ($) =>
       seq(

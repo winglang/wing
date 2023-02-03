@@ -11,3 +11,8 @@ let myfunc = (var x: num) => {
 };
 
 myfunc(1);
+
+// Immediately invoked function expression
+((var x: num) => {
+  assert(x == 1);
+})(1);

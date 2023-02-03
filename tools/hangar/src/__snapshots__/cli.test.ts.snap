@@ -68,6 +68,9 @@ constructor() {
     (myfunc(x));
   };
   (myfunc(1));
+  (((x) => {
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === 1)'\`)})((x === 1))};
+  })(1));
 }
 }
 new MyApp().synth();"
@@ -3279,7 +3282,7 @@ constructor() {
   const dur = $stdlib.std.Duration.fromSeconds(60);
   const stringy = \`\${dur.minutes}:\${dur.seconds}\`;
   {console.log(stringy)};
-  if (((stringy.includes(\\"60\\")) && (((stringy.split(\\":\\")).at(0)) === \\"60\\"))) {
+  if ((stringy.includes(\\"60\\") && (((stringy.split(\\":\\")).at(0)) === \\"60\\"))) {
     {console.log(\`\${stringy.length}!\`)};
   }
 }
