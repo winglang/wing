@@ -1,5 +1,5 @@
 import { test, expect, beforeAll, afterAll, vitest } from "vitest";
-import { posix as path } from "path";
+import { posix as path, basename } from "path";
 import { runServer } from "verdaccio";
 import * as walk from "walkdir";
 import "zx/globals";
@@ -137,18 +137,15 @@ test.each(validWingFiles)(
     await within(async () => {
       const command = ["compile", "--target", "tf-aws"];
       const test_dir = path.join(tmpDir, `${wingFile}_cdktf`);
-      const targetDir = path.join(test_dir, "target");
-      const tf_manifest = path.join(targetDir, "cdktf.out/manifest.json");
-      const tf_json = path.join(targetDir, "cdktf.out/stacks/root/cdk.tf.json");
+      const targetDir = path.join(test_dir, "target", `${basename(wingFile, ".w")}.tfaws`);
+      const tf_json = path.join(targetDir, "main.tf.json");
 
       await enterTestDir(test_dir);
 
       await runWingCommand(InvocationType.NPX, command, path.join(validTestDir, wingFile));
-      const npx_tfManifest = sanitize_json_paths(tf_manifest);
       const npx_tfJson = sanitize_json_paths(tf_json);
 
-      expect(npx_tfManifest).toMatchSnapshot("manifest.json");
-      expect(npx_tfJson).toMatchSnapshot("cdk.tf.json");
+      expect(npx_tfJson).toMatchSnapshot("main.tf.json");
 
       // get all files in .wing dir
       const dotWingFiles = await walk.sync(path.join(targetDir, ".wing"), {
@@ -164,7 +161,6 @@ test.each(validWingFiles)(
 
       await runWingCommand(InvocationType.Direct, command, path.join(validTestDir, wingFile));
 
-      expect(sanitize_json_paths(tf_manifest)).toStrictEqual(npx_tfManifest);
       expect(sanitize_json_paths(tf_json)).toStrictEqual(npx_tfJson);
     });
   },

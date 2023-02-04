@@ -12,6 +12,10 @@ let handler = inflight (event: str): str => {
   bucket2.get("file.txt");
   bucket2.get("file2.txt");
   bucket3.get("file3.txt");
+
+  for stuff in bucket1.list() {
+    print(stuff);
+  }
 };
 
 queue.on_message(handler, batch_size: 5);

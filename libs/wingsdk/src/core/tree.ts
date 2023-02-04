@@ -116,7 +116,7 @@ function constructInfoFromConstruct(
   return undefined;
 }
 
-export function synthesizeTree(app: IApp) {
+export function synthesizeTree(app: IApp, outdir: string) {
   const visit = (construct: IConstruct): ConstructTreeNode => {
     const children = construct.node.children.map((c) => visit(c));
     const childrenMap = children
@@ -141,7 +141,7 @@ export function synthesizeTree(app: IApp) {
   };
 
   fs.writeFileSync(
-    path.join(app.outdir, TREE_FILE_PATH),
+    path.join(outdir, TREE_FILE_PATH),
     JSON.stringify(tree, undefined, 2),
     { encoding: "utf8" }
   );
