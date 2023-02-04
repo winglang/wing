@@ -144,6 +144,7 @@ export class Function extends cloud.FunctionBase {
       timeout: props.timeout
         ? props.timeout.seconds
         : Duration.fromMinutes(1).seconds,
+      memorySize: props.memory ? props.memory : undefined,
     });
 
     this.arn = this.function.arn;
