@@ -35,6 +35,8 @@ export class Function extends cloud.FunctionBase {
   private policyStatements?: any[];
   /** Function ARN */
   public readonly arn: string;
+  /** Unqualified ARN */
+  public readonly unqualifiedArn: string;
 
   constructor(
     scope: Construct,
@@ -148,6 +150,7 @@ export class Function extends cloud.FunctionBase {
     });
 
     this.arn = this.function.qualifiedArn;
+    this.unqualifiedArn = this.function.arn;
 
     // terraform rejects templates with zero environment variables
     this.addEnvironment("WING_FUNCTION_NAME", name);
