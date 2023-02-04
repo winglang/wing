@@ -64,12 +64,9 @@ pub fn scan_for_inflights_in_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 			}
 			StmtKind::Scope(s) => scan_for_inflights_in_scope(s, diagnostics),
 			StmtKind::Class(Class {
-				name: _,
-				members: _,
-				methods,
 				constructor,
-				parent: _,
 				is_resource,
+				..
 			}) => {
 				// If this is a resource then we need to capture all its members
 				if *is_resource {
@@ -445,12 +442,7 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 			}
 			StmtKind::Scope(s) => res.extend(scan_captures_in_inflight_scope(s, diagnostics)),
 			StmtKind::Class(Class {
-				name: _,
-				members: _,
-				methods,
-				constructor,
-				parent: _,
-				is_resource: _,
+				methods, constructor, ..
 			}) => {
 				res.extend(scan_captures_in_inflight_scope(&constructor.statements, diagnostics));
 				for (_, m) in methods.iter() {

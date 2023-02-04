@@ -6,7 +6,7 @@ use sha2::{Digest, Sha256};
 
 use crate::{
 	ast::{
-		ArgList, BinaryOperator, Class as AstClass, ClassMember, Constructor, Expr, ExprKind, FunctionDefinition,
+		ArgList, BinaryOperator, Class as AstClass, ClassField, Constructor, Expr, ExprKind, FunctionDefinition,
 		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
 	},
 	capture::CaptureKind,
@@ -533,7 +533,7 @@ impl JSifier {
 			}
 			StmtKind::Class(AstClass {
 				name,
-				members,
+				fields,
 				methods,
 				parent,
 				constructor,
@@ -545,7 +545,7 @@ impl JSifier {
 				phase,
 				parent,
 				constructor,
-				&members.iter().collect::<Vec<_>>(),
+				&fields.iter().collect::<Vec<_>>(),
 				&methods.iter().collect::<Vec<_>>(),
 			),
 			StmtKind::Struct { name, extends, members } => {
@@ -692,7 +692,7 @@ impl JSifier {
 		)
 	}
 
-	fn jsify_class_member(&self, member: &ClassMember) -> String {
+	fn jsify_class_member(&self, member: &ClassField) -> String {
 		format!("{};", self.jsify_symbol(&member.name))
 	}
 
@@ -933,7 +933,7 @@ impl JSifier {
 		phase: Phase,
 		parent: &Option<Type>,
 		constructor: &Constructor,
-		members: &[&ClassMember],
+		fields: &[&ClassField],
 		methods: &[&(Symbol, FunctionDefinition)],
 	) -> String {
 		if is_resource {
@@ -954,7 +954,7 @@ impl JSifier {
 				&constructor.statements,
 				phase
 			),
-			members
+			fields
 				.iter()
 				.map(|m| self.jsify_class_member(m))
 				.collect::<Vec<String>>()
@@ -971,7 +971,7 @@ impl JSifier {
 		)
 	}
 
-	// Get the type and capture info for members that are captured in the client of a the given resource
+	// Get the type and capture info for fields that are captured in the client of a the given resource
 	fn get_captures(&self, resource_type: TypeRef) -> Vec<(String, TypeRef, Vec<String>)> {
 		resource_type
 			.as_resource()

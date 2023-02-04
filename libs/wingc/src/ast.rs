@@ -212,7 +212,7 @@ pub struct ElifBlock {
 #[derive(Debug)]
 pub struct Class {
 	pub name: Symbol,
-	pub members: Vec<ClassMember>,
+	pub fields: Vec<ClassField>,
 	pub methods: Vec<(Symbol, FunctionDefinition)>,
 	pub constructor: Constructor,
 	pub parent: Option<Type>,
@@ -257,7 +257,7 @@ pub enum StmtKind {
 	Struct {
 		name: Symbol,
 		extends: Vec<Symbol>,
-		members: Vec<ClassMember>,
+		members: Vec<ClassField>,
 	},
 	Enum {
 		name: Symbol,
@@ -266,7 +266,7 @@ pub enum StmtKind {
 }
 
 #[derive(Debug)]
-pub struct ClassMember {
+pub struct ClassField {
 	pub name: Symbol,
 	pub member_type: Type,
 	pub reassignable: bool,

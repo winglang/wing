@@ -1458,7 +1458,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			StmtKind::Class(AstClass {
 				name,
-				members,
+				fields,
 				methods,
 				parent,
 				constructor,
@@ -1519,11 +1519,11 @@ impl<'a> TypeChecker<'a> {
 				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), true, false, env.flight, stmt.idx);
 
 				// Add members to the class env
-				for member in members.iter() {
-					let member_type = self.resolve_type(&member.member_type, env, stmt.idx);
+				for field in fields.iter() {
+					let field_type = self.resolve_type(&field.member_type, env, stmt.idx);
 					match class_env.define(
-						&member.name,
-						SymbolKind::make_variable(member_type, member.reassignable, member.flight),
+						&field.name,
+						SymbolKind::make_variable(field_type, field.reassignable, field.flight),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -1665,11 +1665,11 @@ impl<'a> TypeChecker<'a> {
 				let mut struct_env = SymbolEnv::new(None, self.types.void(), true, false, env.flight, stmt.idx);
 
 				// Add members to the struct env
-				for member in members.iter() {
-					let member_type = self.resolve_type(&member.member_type, env, stmt.idx);
+				for field in members.iter() {
+					let field_type = self.resolve_type(&field.member_type, env, stmt.idx);
 					match struct_env.define(
-						&member.name,
-						SymbolKind::make_variable(member_type, false, member.flight),
+						&field.name,
+						SymbolKind::make_variable(field_type, false, field.flight),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
