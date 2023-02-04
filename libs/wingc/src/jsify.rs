@@ -58,7 +58,7 @@ impl JSifier {
 		}
 	}
 
-	fn js_resolve_file(file_name: &str) -> String {
+	fn js_resolve_path(file_name: &str) -> String {
 		format!("require('path').resolve(__dirname, \"{}\")", file_name)
 	}
 
@@ -648,7 +648,7 @@ impl JSifier {
 			format!(
 				"code: {}.core.NodeJsCode.fromFile({}),",
 				STDLIB,
-				Self::js_resolve_file(&relative_file_path)
+				Self::js_resolve_path(&relative_file_path)
 			),
 			format!(
 				"bindings: {}",
@@ -838,7 +838,7 @@ impl JSifier {
 		format!(
 			"_toInflight() {{\n{}\nconst self_client_path = {};\nreturn core.NodeJsCode.fromInline(`(new (require(\"${{self_client_path}}\")).{}_inflight({{{}}}))`);\n}}",
 			inner_clients.join("\n"),
-			Self::js_resolve_file(&client_relative_path),
+			Self::js_resolve_path(&client_relative_path),
 			resource_name.name,
 			captured_fields
 				.iter()
