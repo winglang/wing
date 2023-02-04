@@ -55,10 +55,6 @@
       "type": "build"
     },
     {
-      "name": "cdktf-cli",
-      "type": "build"
-    },
-    {
       "name": "eslint-config-prettier",
       "type": "build"
     },

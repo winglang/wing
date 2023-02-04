@@ -31,6 +31,16 @@
         "script": "build"
       }
     },
+    "test": {
+      "executor": "nx:run-script",
+      "dependsOn": [
+        "build",
+        "copy"
+      ],
+      "options": {
+        "script": "test"
+      }
+    },
     "package": {
       "executor": "nx:run-commands",
       "dependsOn": [

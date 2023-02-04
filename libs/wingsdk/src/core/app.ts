@@ -1,11 +1,13 @@
+import { mkdirSync, readdirSync, renameSync, rmSync } from "fs";
 import { join } from "path";
 import * as cdktf from "cdktf";
 import { Construct, IConstruct } from "constructs";
 import { IPolyconFactory, Polycons } from "polycons";
 import stringify from "safe-stable-stringify";
-import { Files } from "./files";
 import { synthesizeTree } from "./tree";
 import { Logger } from "../cloud/logger";
+
+const TERRAFORM_STACK_NAME = "root";
 
 /**
  * A Wing application.
@@ -63,12 +65,15 @@ export class CdktfApp extends Construct implements IApp {
 
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
-  private readonly files: Files;
 
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
-    const cdktfApp = new cdktf.App({ outdir: join(outdir, "cdktf.out") });
-    const cdktfStack = new cdktf.TerraformStack(cdktfApp, "root");
+    const cdktfOutdir = join(outdir, ".tmp.cdktf.out");
+
+    mkdirSync(cdktfOutdir, { recursive: true });
+
+    const cdktfApp = new cdktf.App({ outdir: cdktfOutdir });
+    const cdktfStack = new cdktf.TerraformStack(cdktfApp, TERRAFORM_STACK_NAME);
 
     if (!props.customFactory) {
       throw new Error(
@@ -83,11 +88,6 @@ export class CdktfApp extends Construct implements IApp {
     this.cdktfApp = cdktfApp;
     this.cdktfStack = cdktfStack;
 
-    this.files = new Files({
-      app: this,
-      stateFile: props.stateFile,
-    });
-
     // register a logger for this app.
     Logger.register(this);
   }
@@ -99,16 +99,48 @@ export class CdktfApp extends Construct implements IApp {
    * for unit testing.
    */
   public synth(): string {
+    // synthesize Terraform files in `outdir/.tmp.cdktf.out/stacks/root`
     this.cdktfApp.synth();
-    this.files.synth();
 
-    // write tree.json file to the outdir
-    synthesizeTree(this);
+    // move Terraform files from `outdir/.tmp.cdktf.out/stacks/root` to `outdir`
+    this.moveCdktfArtifactsToOutdir();
 
+    // rename `outdir/cdk.tf.json` to `outdir/main.tf.json`
+    renameSync(
+      join(this.outdir, "cdk.tf.json"),
+      join(this.outdir, `main.tf.json`)
+    );
+
+    // delete `outdir/.tmp.cdktf.out`
+    rmSync(this.cdktfApp.outdir, { recursive: true });
+
+    // write `outdir/tree.json`
+    synthesizeTree(this, this.outdir);
+
+    // return a cleaned snapshot of the resulting Terraform manifest for unit testing
     const tfConfig = this.cdktfStack.toTerraform();
     const cleaned = cleanTerraformConfig(tfConfig);
-
     return stringify(cleaned, null, 2) ?? "";
+  }
+
+  /**
+   * Move files from `outdir/cdktf.out/stacks/root` to `outdir`.
+   */
+  private moveCdktfArtifactsToOutdir(): void {
+    const cdktfOutdir = this.cdktfApp.outdir;
+    const cdktfStackDir = join(
+      cdktfOutdir,
+      this.cdktfApp.manifest.stacks[TERRAFORM_STACK_NAME].workingDirectory
+    );
+
+    const files = readdirSync(cdktfStackDir, { withFileTypes: true });
+    for (const file of files) {
+      if (file.isFile()) {
+        const source = join(cdktfStackDir, file.name);
+        const destination = join(this.outdir, file.name);
+        renameSync(source, destination);
+      }
+    }
   }
 }
 
