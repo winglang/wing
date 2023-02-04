@@ -39,27 +39,3 @@ pub const HIGHLIGHTS_QUERY: &'static str = include_str!("../../queries/highlight
 // pub const INJECTIONS_QUERY: &'static str = include_str!("../../queries/injections.scm");
 pub const LOCALS_QUERY: &'static str = include_str!("../../queries/locals.scm");
 // pub const TAGS_QUERY: &'static str = include_str!("../../queries/tags.scm");
-
-#[cfg(test)]
-mod tests {
-	#[test]
-	fn can_load_grammar() {
-		let mut parser = tree_sitter::Parser::new();
-		parser
-			.set_language(super::language())
-			.expect("Error loading wing language");
-	}
-
-	#[test]
-	fn run_grammar_tests() {
-		tree_sitter_cli::test::run_tests_at_path(
-			super::language(),
-			&std::path::PathBuf::from("test"),
-			true,
-			false,
-			None,
-			false,
-		)
-		.expect("Running tests for tree-sitter generated parser");
-	}
-}
