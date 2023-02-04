@@ -163,7 +163,6 @@ pub fn scan_for_inflights_in_expression(expr: &Expr, diagnostics: &mut Diagnosti
 					&func_def.statements,
 					diagnostics,
 				)));
-				println!("Collected captures: {:?}", func_captures);
 			}
 		}
 		_ => (),
