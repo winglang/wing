@@ -26,6 +26,7 @@ pub mod jsify;
 pub mod parser;
 pub mod type_check;
 pub mod utilities;
+pub mod wls;
 
 const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
 const WINGSDK_STD_MODULE: &'static str = "std";
@@ -54,6 +55,11 @@ pub struct CompilerOutput {
 unsafe fn ptr_to_string(ptr: u32, len: u32) -> String {
 	let slice = std::slice::from_raw_parts(ptr as *const u8, len as usize);
 	String::from_utf8_unchecked(slice.to_vec())
+}
+
+/// uses bitshift to combine pointer and length into a single value
+fn combine_ptr_and_length(ptr: u32, len: u32) -> u64 {
+	return ((ptr as u64) << (32 as u64)) | (len as u64);
 }
 
 #[no_mangle]
@@ -85,6 +91,41 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) {
 			err.len(),
 			err.iter().map(|d| format!("{}", d)).collect::<Vec<_>>().join("\n")
 		);
+	}
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
+	let parse_string = ptr_to_string(ptr, len);
+	if let Ok(parsed) = serde_json::from_str(&parse_string) {
+		let result = wls::on_completion(parsed);
+		let result = serde_json::to_string(&result).unwrap();
+
+		// return result as u64 with ptr and len
+		let leaked = result.into_bytes().leak();
+		combine_ptr_and_length(leaked.as_ptr() as u32, leaked.len() as u32)
+	} else {
+		panic!("Failed to parse 'completion': {}", parse_string);
+	}
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn wingc_on_did_change_text_document(ptr: u32, len: u32) {
+	let parse_string = ptr_to_string(ptr, len);
+	if let Ok(parsed) = serde_json::from_str(&parse_string) {
+		wls::on_document_did_change(parsed);
+	} else {
+		eprintln!("Failed to parse 'did change' text document: {}", parse_string);
+	}
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn wingc_on_did_open_text_document(ptr: u32, len: u32) {
+	let parse_string = ptr_to_string(ptr, len);
+	if let Ok(parsed) = serde_json::from_str(&parse_string) {
+		wls::on_document_did_open(parsed);
+	} else {
+		eprintln!("Failed to parse 'did open' text document: {}", parse_string);
 	}
 }
 

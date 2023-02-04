@@ -2,25 +2,21 @@
   "name": "wingii",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "targets": {
-    "build-native": {
+    "test": {
       "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/rust-native"],
       "options": {
-        "commands": ["cargo build", "cargo fmt -- --check"],
+        "command": "cargo test",
         "cwd": "libs/wingii"
       },
       "configurations": {
         "release": {
-          "commands": ["cargo build --release", "cargo fmt -- --check"]
+          "command": "cargo wasi test --release"
         }
       }
     },
-    "test": {
-      "executor": "@nxrs/cargo:test"
-    },
-    "build-wasm": {
+    "build": {
       "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/rust-wasm"],
+      "outputs": ["rust"],
       "options": {
         "command": "cargo wasi build",
         "cwd": "libs/wingii"

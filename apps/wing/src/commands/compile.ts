@@ -6,19 +6,14 @@ import * as vm from "vm";
 import { basename, dirname, join, resolve } from "path";
 import { mkdir, readFile } from "fs/promises";
 
-import { WASI } from "wasi";
 import debug from "debug";
 import * as chalk from "chalk";
+import { loadWingc, wingcInvoke } from "../wingc";
 
 const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
 
-const WINGC_WASM_PATH = resolve(__dirname, "../../wingc.wasm");
-log("wasm path: %s", WINGC_WASM_PATH);
-const WINGSDK_RESOLVED_PATH = require.resolve("@winglang/sdk");
-log("wingsdk module path: %s", WINGSDK_RESOLVED_PATH);
-const WINGSDK_MANIFEST_ROOT = resolve(WINGSDK_RESOLVED_PATH, "../..");
-log("wingsdk manifest path: %s", WINGSDK_MANIFEST_ROOT);
+
 const WINGC_PREFLIGHT = "preflight.js";
 
 /**
@@ -83,33 +78,28 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     mkdir(synthDir, { recursive: true }),
   ]);
 
-  const wasi = new WASI({
+  const wingc = await loadWingc({
     env: {
-      ...process.env,
       RUST_BACKTRACE: "full",
-      WINGSDK_MANIFEST_ROOT,
       WINGSDK_SYNTH_DIR: synthDir,
       WINGC_PREFLIGHT,
     },
     preopens: {
       [wingDir]: wingDir, // for Rust's access to the source file
       [workDir]: workDir, // for Rust's access to the work directory
-      [WINGSDK_MANIFEST_ROOT]: WINGSDK_MANIFEST_ROOT, // .jsii access
       [synthDir]: synthDir, // for Rust's access to the synth directory
     },
+    imports: {
+      env: {
+        send_log: () => {},
+        send_diagnostics: () => {},
+      }
+    }
   });
-
-  const importObject = { wasi_snapshot_preview1: wasi.wasiImport };
-  log("compiling wingc WASM module");
-  const wasm = await WebAssembly.compile(await readFile(WINGC_WASM_PATH));
-  log("instantiating wingc WASM module");
-  const instance = await WebAssembly.instantiate(wasm, importObject);
-  log("invoking wingc with importObject: %o", importObject);
-  wasi.initialize(instance);
 
   const arg = `${wingFile};${workDir}`;
   log(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
-  await wingcInvoke(instance, WINGC_COMPILE, arg);
+  await wingcInvoke(wingc, WINGC_COMPILE, arg);
 
   const artifactPath = resolve(workDir, WINGC_PREFLIGHT);
   log("reading artifact from %s", artifactPath);
@@ -176,36 +166,5 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     } else {
       console.log("  " + chalk.bold.white("note:") + " " + chalk.white("run with `NODE_STACKTRACE=1` environment variable to display a stack trace"));
     }
-  }
-}
-
-/**
- * Assumptions:
- * 1. The called WASM function is expecting a pointer and a length representing a string
- * 2. The string will be UTF-8 encoded
- * 3. The string will be less than 2^32 bytes long  (4GB)
- * 4. the WASI instance has already been started
- */
-async function wingcInvoke(
-  instance: WebAssembly.Instance,
-  func: string,
-  arg: string
-) {
-  const exports = instance.exports as any;
-
-  const bytes = new TextEncoder().encode(arg);
-  const argPointer = exports.wingc_malloc(bytes.byteLength);
-
-  try {
-    const argMemoryBuffer = new Uint8Array(
-      exports.memory.buffer,
-      argPointer,
-      bytes.byteLength
-    );
-    argMemoryBuffer.set(bytes);
-  
-    exports[func](argPointer, bytes.byteLength);
-  } finally {
-    exports.wingc_free(argPointer, bytes.byteLength);
   }
 }

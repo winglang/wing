@@ -41,12 +41,7 @@ const project = new TypeScriptAppProject({
   },
 
   deps: [`@types/vscode@^${VSCODE_BASE_VERSION}`, "vscode-languageclient"],
-  devDeps: [
-    "@types/node",
-    "esbuild",
-    "@vscode/vsce",
-    "@winglang/sdk@file:../../libs/wingsdk",
-  ],
+  devDeps: ["@types/node", "esbuild", "@vscode/vsce"],
 });
 
 project.addGitIgnore("*.vsix");
@@ -65,8 +60,6 @@ vscodeIgnore.addPatterns(
   "!language-configuration.json",
   "!LICENSE"
 );
-project.addGitIgnore("resources/wingsdk/");
-project.addGitIgnore("resources/native/");
 
 const contributes: VSCodeExtensionContributions = {
   languages: [
@@ -114,7 +107,7 @@ project.addFields({
 });
 
 const esbuildComment =
-  "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --external:@winglang/sdk --format=cjs --platform=node --bundle";
+  "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --external:winglang --format=cjs --platform=node --bundle";
 project.compileTask.reset();
 project.compileTask.exec(esbuildComment);
 project.watchTask.reset(`${esbuildComment} --watch`);

@@ -23,7 +23,12 @@ let wasi = new WASI({
   },
 });
 
-const instance = await wasi.instantiate(wasm, {});
+const instance = wasi.instantiate(wasm, {
+  env: {
+    send_log: () => {},
+    send_diagnostics: () => {},
+  }
+});
 
 const defaultFilePerms = { read: true, write: true, create: true };
 wasi.fs.createDir("/wingsdk");

@@ -38,13 +38,9 @@
       "{projectRoot}/.projenrc.js",
       "{projectRoot}/.projen/*"
     ],
-    "rust-wasm": [
+    "rust": [
       "{workspaceRoot}/target/wasm32-wasi/debug/*.wasm",
       "{workspaceRoot}/target/wasm32-wasi/release/*.wasm"
-    ],
-    "rust-native": [
-      "{workspaceRoot}/target/debug/*",
-      "{workspaceRoot}/target/release/*"
     ],
     "dist": [
       "{projectRoot}/dist/**/*"
@@ -56,8 +52,6 @@
       "options": {
         "cacheableOperations": [
           "build",
-          "build-native",
-          "build-wasm",
           "copy",
           "lint",
           "test",
@@ -78,32 +72,6 @@
       ],
       "dependsOn": [
         "^build"
-      ]
-    },
-    "build-native": {
-      "inputs": [
-        "project-files",
-        "workspace-files",
-        "src"
-      ],
-      "outputs": [
-        "{workspaceRoot}/rust-native"
-      ],
-      "dependsOn": [
-        "^build-native"
-      ]
-    },
-    "build-wasm": {
-      "inputs": [
-        "project-files",
-        "workspace-files",
-        "src"
-      ],
-      "outputs": [
-        "{workspaceRoot}/rust-wasm"
-      ],
-      "dependsOn": [
-        "^build-wasm"
       ]
     },
     "test": {

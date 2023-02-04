@@ -1,35 +1,21 @@
 {
   "name": "wingc",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "implicitDependencies": ["sdk"],
+  "implicitDependencies": ["sdk", "wingii", "tree-sitter-wing"],
   "targets": {
-    "build-native": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": ["cargo build", "cargo fmt -- --check"],
-        "cwd": "libs/wingc"
-      },
-      "configurations": {
-        "release": {
-          "commands": ["cargo build --release", "cargo fmt -- --check"]
-        }
-      }
-    },
     "test": {
       "executor": "nx:run-commands",
-      "dependsOn": ["^build"],
-      "inputs": ["src", "examples-tests"],
       "options": {
         "command": "cargo test",
         "cwd": "libs/wingc"
       },
       "configurations": {
         "release": {
-          "command": "cargo test --release"
+          "command": "cargo wasi test --release"
         }
       }
     },
-    "build-wasm": {
+    "build": {
       "executor": "nx:run-commands",
       "options": {
         "command": "cargo wasi build",
@@ -42,7 +28,7 @@
       }
     },
     "dev": {
-      "dependsOn": ["^build", "build-native"],
+      "dependsOn": ["^build", "build"],
       "executor": "nx:run-commands",
       "options": {
         "command": "cargo run --example compile",

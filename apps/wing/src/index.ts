@@ -7,6 +7,7 @@ import { satisfies } from 'compare-versions';
 
 import { Command, Option } from "commander";
 import debug from "debug";
+import { run_server } from "./commands/lsp";
 
 const PACKAGE_VERSION = require("../package.json").version as string;
 const SUPPORTED_NODE_VERSION = require("../package.json").engines.node as string;
@@ -31,6 +32,11 @@ async function main() {
     .description("Runs a Wing simulator file in the Wing Console")
     .argument("[simfile]", ".wsim simulator file")
     .action(run);
+
+    program
+    .command("lsp")
+    .description("Run wing language server")
+    .action(run_server);
 
   program
     .command("compile")
