@@ -14,15 +14,15 @@ describe("compile command tests", () => {
   );
 
   it("should be able to compile the SDK capture test to tf-aws", async () => {
-    const tmpdir = mkdtemp();
+    const outDir = mkdtemp();
     await compile(exampleWingFile, {
-      outDir: tmpdir,
+      outDir,
       target: Target.TF_AWS,
     });
 
-    const artifactDir = join(tmpdir, "captures.tfaws");
-
     // expect files to be generated in outDir/captures.tfaws
+    const artifactDir = join(outDir, "captures.tfaws");
+
     const stats = await stat(artifactDir);
     expect(stats.isDirectory()).toBeTruthy();
     const files = await readdir(artifactDir);
@@ -32,15 +32,15 @@ describe("compile command tests", () => {
   });
 
   it("should be able to compile the SDK capture test to sim", async () => {
-    const tmpdir = mkdtemp();
+    const outDir = mkdtemp();
     await compile(exampleWingFile, {
-      outDir: tmpdir,
+      outDir: outDir,
       target: Target.SIM,
     });
 
-    const artifactDir = join(tmpdir, "captures.sim");
+    // expect files to be generated in outDir
+    const artifactDir = outDir;
 
-    // expect files to be generated in outDir/captures.sim
     const stats = await stat(artifactDir);
     expect(stats.isDirectory()).toBeTruthy();
     const files = await readdir(artifactDir);
