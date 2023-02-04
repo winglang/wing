@@ -27,10 +27,12 @@ export class String {
   /**
    * Check if string includes substring
    *
+   * @macro $self$.includes($args$)
+   *
    * @param searchString substring to search for
    * @returns true if string includes substring
    */
-  public includes(searchString: string): boolean {
+  public contains(searchString: string): boolean {
     searchString;
     throw new Error("Abstract");
   }

@@ -1827,6 +1827,7 @@ dependencies = [
 name = "wingc"
 version = "0.1.0"
 dependencies = [
+ "aho-corasick",
  "base16ct",
  "colored",
  "derivative",
