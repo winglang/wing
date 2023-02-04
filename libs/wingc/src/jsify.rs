@@ -10,7 +10,7 @@ use crate::{
 		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
 	},
 	capture::CaptureKind,
-	type_check::{resolve_custom_type, symbol_env::SymbolEnv, TypeRef},
+	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, TypeRef},
 	utilities::snake_case_to_camel_case,
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_RESOURCE,
 };
@@ -223,14 +223,14 @@ impl JSifier {
 
 	fn jsify_type(&self, typ: &Type) -> String {
 		match typ {
-			Type::CustomType(custom_type) => {
-				if custom_type.fields.is_empty() {
-					return self.jsify_symbol(&custom_type.root);
+			Type::UserDefined(user_defined_type) => {
+				if user_defined_type.fields.is_empty() {
+					return self.jsify_symbol(&user_defined_type.root);
 				} else {
 					format!(
 						"{}.{}",
-						self.jsify_symbol(&custom_type.root),
-						custom_type
+						self.jsify_symbol(&user_defined_type.root),
+						user_defined_type
 							.fields
 							.iter()
 							.map(|f| self.jsify_symbol(f))
@@ -855,8 +855,8 @@ impl JSifier {
 	) {
 		// Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
 		let mut parent_captures = vec![];
-		if let Some(Type::CustomType(parent)) = parent {
-			let parent_type = resolve_custom_type(parent, env, 0).unwrap();
+		if let Some(Type::UserDefined(parent)) = parent {
+			let parent_type = resolve_user_defined_type(parent, env, 0).unwrap();
 			parent_captures.extend(self.get_captures(parent_type));
 		}
 

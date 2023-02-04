@@ -1,8 +1,8 @@
 mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{
-	Class as AstClass, CustomType, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt,
-	StmtKind, Symbol, Type as AstType, UnaryOperator,
+	Class as AstClass, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
+	Type as AstType, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
 use crate::{
@@ -1220,8 +1220,8 @@ impl<'a> TypeChecker<'a> {
 				// TODO: avoid creating a new type for each function_sig resolution
 				self.types.add_type(Type::Function(sig))
 			}
-			AstType::CustomType(custom_type) => {
-				resolve_custom_type(custom_type, env, statement_idx).unwrap_or_else(|e| self.type_error(&e))
+			AstType::UserDefined(user_defined_type) => {
+				resolve_user_defined_type(user_defined_type, env, statement_idx).unwrap_or_else(|e| self.type_error(&e))
 			}
 			AstType::Array(v) => {
 				let value_type = self.resolve_type(v, env, statement_idx);
@@ -1539,7 +1539,7 @@ impl<'a> TypeChecker<'a> {
 					// Add myself as first parameter to all class methods (self)
 					sig.parameters.insert(
 						0,
-						AstType::CustomType(CustomType {
+						AstType::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
 						}),
@@ -2166,14 +2166,14 @@ fn add_parent_members_to_struct_env(
 	Ok(())
 }
 
-pub fn resolve_custom_type(
-	custom_type: &CustomType,
+pub fn resolve_user_defined_type(
+	user_defined_type: &UserDefinedType,
 	env: &SymbolEnv,
 	statement_idx: usize,
 ) -> Result<TypeRef, TypeError> {
 	// Resolve all types down the fields list and return the last one (which is likely to be a real type and not a namespace)
-	let mut nested_name = vec![&custom_type.root];
-	nested_name.extend(custom_type.fields.iter().collect_vec());
+	let mut nested_name = vec![&user_defined_type.root];
+	nested_name.extend(user_defined_type.fields.iter().collect_vec());
 
 	match env.lookup_nested(&nested_name, false, Some(statement_idx)) {
 		Ok(_type) => {
@@ -2191,13 +2191,16 @@ pub fn resolve_custom_type(
 	}
 }
 
-pub fn resolve_custom_type_by_fqn(
-	custom_type: &str,
+pub fn resolve_user_defined_type_by_fqn(
+	user_defined_type_name: &str,
 	env: &SymbolEnv,
 	statement_idx: usize,
 ) -> Result<TypeRef, TypeError> {
-	let mut fields = custom_type.split('.').map(|s| Symbol::global(s)).collect_vec();
+	let mut fields = user_defined_type_name
+		.split('.')
+		.map(|s| Symbol::global(s))
+		.collect_vec();
 	let root = fields.remove(0);
-	let custom_type = CustomType { root, fields };
-	resolve_custom_type(&custom_type, env, statement_idx)
+	let user_defined_type = UserDefinedType { root, fields };
+	resolve_user_defined_type(&user_defined_type, env, statement_idx)
 }

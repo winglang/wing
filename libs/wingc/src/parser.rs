@@ -7,9 +7,9 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, Class, ClassMember, Constructor, CustomType, ElifBlock, Expr, ExprKind, FunctionDefinition,
+	ArgList, BinaryOperator, Class, ClassMember, Constructor, ElifBlock, Expr, ExprKind, FunctionDefinition,
 	FunctionSignature, InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind,
-	Symbol, Type, UnaryOperator,
+	Symbol, Type, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 
@@ -348,7 +348,7 @@ impl Parser<'_> {
 						statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
 						signature: FunctionSignature {
 							parameters: parameters.iter().map(|p| p.1.clone()).collect(),
-							return_type: Some(Box::new(Type::CustomType(CustomType {
+							return_type: Some(Box::new(Type::UserDefined(UserDefinedType {
 								root: name.clone(),
 								fields: vec![],
 							}))),
@@ -508,7 +508,7 @@ impl Parser<'_> {
 
 	fn build_custom_type(&self, nested_node: &Node) -> DiagnosticResult<Type> {
 		let mut cursor = nested_node.walk();
-		Ok(Type::CustomType(CustomType {
+		Ok(Type::UserDefined(UserDefinedType {
 			root: self.node_symbol(&nested_node.child_by_field_name("object").unwrap())?,
 			fields: nested_node
 				.children_by_field_name("fields", &mut cursor)
