@@ -66,6 +66,7 @@ pub fn scan_for_inflights_in_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 			StmtKind::Class(Class {
 				constructor,
 				is_resource,
+				methods,
 				..
 			}) => {
 				// If this is a resource then we need to capture all its members

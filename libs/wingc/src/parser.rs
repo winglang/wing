@@ -383,7 +383,17 @@ impl Parser<'_> {
 		}
 
 		let parent = if let Some(parent_node) = statement_node.child_by_field_name("parent") {
-			Some(self.build_type(&parent_node)?)
+			let parent_type = self.build_type(&parent_node)?;
+			match parent_type {
+				Type::UserDefined(parent_type) => Some(parent_type),
+				_ => {
+					self.add_error::<Node>(
+						format!("Parent type must be a user defined type, found {}", parent_type),
+						&parent_node,
+					)?;
+					None
+				}
+			}
 		} else {
 			None
 		};

@@ -8,6 +8,7 @@ use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, ClassField, Constructor, Expr, ExprKind, FunctionDefinition,
 		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
+		UserDefinedType,
 	},
 	capture::CaptureKind,
 	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, TypeRef},
@@ -223,23 +224,25 @@ impl JSifier {
 
 	fn jsify_type(&self, typ: &Type) -> String {
 		match typ {
-			Type::UserDefined(user_defined_type) => {
-				if user_defined_type.fields.is_empty() {
-					return self.jsify_symbol(&user_defined_type.root);
-				} else {
-					format!(
-						"{}.{}",
-						self.jsify_symbol(&user_defined_type.root),
-						user_defined_type
-							.fields
-							.iter()
-							.map(|f| self.jsify_symbol(f))
-							.collect::<Vec<String>>()
-							.join(".")
-					)
-				}
-			}
+			Type::UserDefined(user_defined_type) => self.jsify_user_defined_type(user_defined_type),
 			_ => todo!(),
+		}
+	}
+
+	fn jsify_user_defined_type(&self, user_defined_type: &UserDefinedType) -> String {
+		if user_defined_type.fields.is_empty() {
+			return self.jsify_symbol(&user_defined_type.root);
+		} else {
+			format!(
+				"{}.{}",
+				self.jsify_symbol(&user_defined_type.root),
+				user_defined_type
+					.fields
+					.iter()
+					.map(|f| self.jsify_symbol(f))
+					.collect::<Vec<String>>()
+					.join(".")
+			)
 		}
 	}
 
@@ -701,7 +704,7 @@ impl JSifier {
 		env: &SymbolEnv,
 		name: &Symbol,
 		phase: Phase,
-		parent: &Option<Type>,
+		parent: &Option<UserDefinedType>,
 		constructor: &Constructor,
 		methods: &[&(Symbol, FunctionDefinition)],
 	) -> String {
@@ -735,7 +738,7 @@ impl JSifier {
 			"class {}{} {{\n{}\n{}\n{}\n}}",
 			self.jsify_symbol(name),
 			if let Some(parent) = parent {
-				format!(" extends {}", self.jsify_type(parent))
+				format!(" extends {}", self.jsify_user_defined_type(parent))
 			} else {
 				format!(" extends {}", WINGSDK_RESOURCE)
 			},
@@ -851,11 +854,11 @@ impl JSifier {
 		name: &Symbol,
 		captured_fields: &[(String, TypeRef, Vec<String>)],
 		inflight_methods: &[&(Symbol, FunctionDefinition)],
-		parent: &Option<Type>,
+		parent: &Option<UserDefinedType>,
 	) {
 		// Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
 		let mut parent_captures = vec![];
-		if let Some(Type::UserDefined(parent)) = parent {
+		if let Some(parent) = parent {
 			let parent_type = resolve_user_defined_type(parent, env, 0).unwrap();
 			parent_captures.extend(self.get_captures(parent_type));
 		}
@@ -910,7 +913,7 @@ impl JSifier {
 			"export class {}_inflight {} {{\n{}\n{}}}",
 			name.name,
 			if let Some(parent) = parent {
-				format!("extends {}_inflight", self.jsify_type(parent))
+				format!("extends {}_inflight", self.jsify_user_defined_type(parent))
 			} else {
 				"".to_string()
 			},
@@ -931,7 +934,7 @@ impl JSifier {
 		name: &Symbol,
 		is_resource: bool,
 		phase: Phase,
-		parent: &Option<Type>,
+		parent: &Option<UserDefinedType>,
 		constructor: &Constructor,
 		fields: &[&ClassField],
 		methods: &[&(Symbol, FunctionDefinition)],
@@ -944,7 +947,7 @@ impl JSifier {
 			"class {}{}\n{{\n{}\n{}\n{}\n}}",
 			self.jsify_symbol(name),
 			if let Some(parent) = parent {
-				format!(" extends {}", self.jsify_type(parent))
+				format!(" extends {}", self.jsify_user_defined_type(parent))
 			} else {
 				"".to_string()
 			},

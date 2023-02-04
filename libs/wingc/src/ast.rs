@@ -215,7 +215,7 @@ pub struct Class {
 	pub fields: Vec<ClassField>,
 	pub methods: Vec<(Symbol, FunctionDefinition)>,
 	pub constructor: Constructor,
-	pub parent: Option<Type>,
+	pub parent: Option<UserDefinedType>,
 	pub is_resource: bool,
 }
 
