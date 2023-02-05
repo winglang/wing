@@ -13,7 +13,18 @@ export const SCHEDULE_TYPE = "wingsdk.cloud.Schedule";
  * Properties for `Schedule`.
  */
 export interface ScheduleProps {
+  /**
+   * Trigger events at a periodic rate.
+   * @example 1m
+   * @default undefined
+   */
   readonly rate?: Duration;
+
+  /**
+   * Trigger events according to a cron schedule.
+   * @example "0/1 * ? * * *"
+   * @default undefined
+   */
   readonly cron?: string;
 }
 
