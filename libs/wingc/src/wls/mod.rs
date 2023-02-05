@@ -30,12 +30,12 @@ extern "C" {
 
 #[cfg(not(target_arch = "wasm32"))]
 pub unsafe fn send_log(_notification: *const u8, _len: u32) {
-	panic!("send_log called on non-wasm32 target");
+	panic!("send_log called");
 }
 
 #[cfg(not(target_arch = "wasm32"))]
 pub unsafe fn send_diagnostics(_diagnostics: *const u8, _len: u32) {
-	panic!("send_diagnostics called on non-wasm32 target");
+	panic!("send_diagnostics called");
 }
 
 pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse {

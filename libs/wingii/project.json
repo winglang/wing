@@ -7,11 +7,6 @@
       "options": {
         "command": "cargo test",
         "cwd": "libs/wingii"
-      },
-      "configurations": {
-        "release": {
-          "command": "cargo wasi test --release"
-        }
       }
     },
     "build": {

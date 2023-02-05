@@ -8,11 +8,6 @@
       "options": {
         "command": "cargo test",
         "cwd": "libs/wingc"
-      },
-      "configurations": {
-        "release": {
-          "command": "cargo wasi test --release"
-        }
       }
     },
     "build": {

@@ -124,11 +124,6 @@ jobs:
       - name: Install wasi-sdk
         run: scripts/setup_wasi.sh
 
-      - name: Setup wasmtime
-        uses: mwilliamson/setup-wasmtime-action@v2
-        with:
-          wasmtime-version: "5.0.0"
-
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
 
