@@ -23,6 +23,52 @@ Object {
     ],
     "sdkVersion": "0.0.0",
   },
+  "app.wsim/tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+        "my_queue": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A distributed message queue",
+            "title": "Queue",
+          },
+          "id": "my_queue",
+          "path": "root/my_queue",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.1.228",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
   "tree.json": Object {
     "tree": Object {
       "children": Object {
@@ -130,6 +176,147 @@ Object {
       },
     ],
     "sdkVersion": "0.0.0",
+  },
+  "app.wsim/tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "Handler": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/my_queue-OnMessage-e645076f",
+              },
+            ],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/my_queue-OnMessage-e645076f",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+        "my_queue": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "on_message",
+                "resource": "root/my_queue-OnMessage-e645076f",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A distributed message queue",
+            "title": "Queue",
+          },
+          "id": "my_queue",
+          "path": "root/my_queue",
+        },
+        "my_queue-OnMessage-e645076f": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/Handler",
+              },
+              Object {
+                "direction": "outbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/WingLogger",
+              },
+              Object {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "on_message",
+                "resource": "root/my_queue",
+              },
+            ],
+            "wing:resource:stateful": false,
+          },
+          "children": Object {
+            "Code": Object {
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.1.228",
+              },
+              "id": "Code",
+              "path": "root/my_queue-OnMessage-e645076f/Code",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "my_queue-OnMessage-e645076f",
+          "path": "root/my_queue-OnMessage-e645076f",
+        },
+        "my_queue-OnMessageHandler-e645076f": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "id": "my_queue-OnMessageHandler-e645076f",
+          "path": "root/my_queue-OnMessageHandler-e645076f",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.1.228",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
   },
   "assets/my_queue-OnMessage-e645076f/index.js": "var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -382,6 +569,52 @@ Object {
     ],
     "sdkVersion": "0.0.0",
   },
+  "app.wsim/tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+        "my_queue": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A distributed message queue",
+            "title": "Queue",
+          },
+          "id": "my_queue",
+          "path": "root/my_queue",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.1.228",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
   "tree.json": Object {
     "tree": Object {
       "children": Object {
@@ -493,6 +726,147 @@ Object {
       },
     ],
     "sdkVersion": "0.0.0",
+  },
+  "app.wsim/tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "Handler": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/my_queue-OnMessage-e645076f",
+              },
+            ],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/my_queue-OnMessage-e645076f",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+        "my_queue": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "on_message",
+                "resource": "root/my_queue-OnMessage-e645076f",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A distributed message queue",
+            "title": "Queue",
+          },
+          "id": "my_queue",
+          "path": "root/my_queue",
+        },
+        "my_queue-OnMessage-e645076f": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/Handler",
+              },
+              Object {
+                "direction": "outbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/WingLogger",
+              },
+              Object {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "on_message",
+                "resource": "root/my_queue",
+              },
+            ],
+            "wing:resource:stateful": false,
+          },
+          "children": Object {
+            "Code": Object {
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.1.228",
+              },
+              "id": "Code",
+              "path": "root/my_queue-OnMessage-e645076f/Code",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "my_queue-OnMessage-e645076f",
+          "path": "root/my_queue-OnMessage-e645076f",
+        },
+        "my_queue-OnMessageHandler-e645076f": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "id": "my_queue-OnMessageHandler-e645076f",
+          "path": "root/my_queue-OnMessageHandler-e645076f",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.1.228",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
   },
   "assets/my_queue-OnMessage-e645076f/index.js": "var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -765,6 +1139,147 @@ Object {
       },
     ],
     "sdkVersion": "0.0.0",
+  },
+  "app.wsim/tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "Handler": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/my_queue-OnMessage-e645076f",
+              },
+            ],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/my_queue-OnMessage-e645076f",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+        "my_queue": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "on_message",
+                "resource": "root/my_queue-OnMessage-e645076f",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A distributed message queue",
+            "title": "Queue",
+          },
+          "id": "my_queue",
+          "path": "root/my_queue",
+        },
+        "my_queue-OnMessage-e645076f": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/Handler",
+              },
+              Object {
+                "direction": "outbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/WingLogger",
+              },
+              Object {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "on_message",
+                "resource": "root/my_queue",
+              },
+            ],
+            "wing:resource:stateful": false,
+          },
+          "children": Object {
+            "Code": Object {
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.1.228",
+              },
+              "id": "Code",
+              "path": "root/my_queue-OnMessage-e645076f/Code",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "my_queue-OnMessage-e645076f",
+          "path": "root/my_queue-OnMessage-e645076f",
+        },
+        "my_queue-OnMessageHandler-e645076f": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "id": "my_queue-OnMessageHandler-e645076f",
+          "path": "root/my_queue-OnMessageHandler-e645076f",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.1.228",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
   },
   "assets/my_queue-OnMessage-e645076f/index.js": "var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;

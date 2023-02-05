@@ -72,8 +72,8 @@ wing --version
 
 ## Wing IDE Extension
 
-This extension adds support for the Wing language to [VSCode]. You don't *have*
-to use it, but it's great. It's available on the [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=Monada.vscode-wing)
+This extension adds syntax highlighting and other conveniences for the Wing language in [VSCode]. You don't *have*
+to use it, but it's great. It's available through the [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=Monada.vscode-wing).
 
 ## Wing Console
 
