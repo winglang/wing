@@ -1,8 +1,8 @@
+import { existsSync, readdirSync } from "fs";
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
-import { existsSync, readdirSync } from "fs";
 
 test("artifacts are located in app root level outdir", () => {
   // GIVEN
@@ -36,4 +36,4 @@ test("no assets folder exists if app does synthesize asset producing resources",
   // THEN
   expect(existsSync(expectedCdktfJson)).toBe(true);
   expect(existsSync(expectedAssetsDir)).toBe(false);
-})
+});
