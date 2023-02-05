@@ -199,6 +199,9 @@ jobs:
           - ubuntu-latest
         node: [18, 19]
     runs-on: ${{ matrix.runner }}
+    env:
+      HANGAR_WING_TGZ: ${{ github.workspace }}/wing/winglang-${{ needs.prepare.outputs.version }}.tgz
+      HANGAR_WINGSDK_TGZ: ${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.prepare.outputs.version }}.tgz
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -219,6 +222,13 @@ jobs:
         with:
           working-directory: tools/hangar
           install-command: npm ci --ignore-scripts
+
+      - name: Run E2E Tests
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: test
+          projects: hangar
+          args: "--configuration=release --output-style=stream --verbose"
 
       - name: Run E2E Tests
         env:
