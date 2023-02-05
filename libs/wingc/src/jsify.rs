@@ -108,7 +108,6 @@ impl JSifier {
 
 		if self.shim {
 			output.push(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
-			output.push(format!("const core = $stdlib.core;"));
 			output.push(format!("const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \".\";"));
 			output.push(TARGET_CODE.to_owned());
 		}
@@ -740,7 +739,7 @@ impl JSifier {
 			if let Some(parent) = parent {
 				format!(" extends {}", self.jsify_user_defined_type(parent))
 			} else {
-				format!(" extends {}", WINGSDK_RESOURCE)
+				format!(" extends {}.{}", STDLIB, WINGSDK_RESOURCE)
 			},
 			self.jsify_resource_constructor(constructor, parent.is_none()),
 			preflight_methods
@@ -836,9 +835,10 @@ impl JSifier {
 
 		let client_relative_path = format!("clients/{}.inflight.js", resource_name.name);
 		format!(
-			"_toInflight() {{\n{}\nconst self_client_path = {};\nreturn core.NodeJsCode.fromInline(`(new (require(\"${{self_client_path}}\")).{}_inflight({{{}}}))`);\n}}",
+			"_toInflight() {{\n{}\nconst self_client_path = {};\nreturn {}.core.NodeJsCode.fromInline(`(new (require(\"${{self_client_path}}\")).{}_inflight({{{}}}))`);\n}}",
 			inner_clients.join("\n"),
 			Self::js_resolve_path(&client_relative_path),
+			STDLIB,
 			resource_name.name,
 			captured_fields
 				.iter()
