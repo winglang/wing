@@ -58,7 +58,7 @@ export abstract class ScheduleBase extends Resource {
 /**
  * Options for Schedule.onTick.
  */
-export interface ScheduleOnTickProps extends FunctionProps { }
+export interface ScheduleOnTickProps extends FunctionProps {}
 
 /**
  * Represents a schedule.
@@ -71,10 +71,7 @@ export class Schedule extends ScheduleBase {
     return Polycons.newInstance(SCHEDULE_TYPE, scope, id, props) as Schedule;
   }
 
-  public onTick(
-    inflight: Inflight,
-    props: ScheduleOnTickProps = {}
-  ): Function {
+  public onTick(inflight: Inflight, props: ScheduleOnTickProps = {}): Function {
     inflight;
     props;
     throw new Error("Method not implemented.");
@@ -92,7 +89,7 @@ export class Schedule extends ScheduleBase {
  *
  * @inflight `wingsdk.cloud.IScheduleOnTickHandlerClient`
  */
-export interface IScheduleOnTickHandler extends IResource { }
+export interface IScheduleOnTickHandler extends IResource {}
 
 /**
  * Inflight client for `IScheduleOnTickHandler`.

@@ -61,7 +61,6 @@ test("schedule behavior with cron", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
-
 test("schedule without rate or cron", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
@@ -77,9 +76,10 @@ test("schedule with rate less than 1 minute", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
 
   // THEN
-  expect(() => new cloud.Schedule(app, "Schedule", {
-    rate: std.Duration.fromSeconds(30),
-  })).toThrow(
-    /rate can not be set to less than 1 minute./
-  );
+  expect(
+    () =>
+      new cloud.Schedule(app, "Schedule", {
+        rate: std.Duration.fromSeconds(30),
+      })
+  ).toThrow(/rate can not be set to less than 1 minute./);
 });

@@ -3,5 +3,5 @@ export * from "./counter";
 export * from "./function";
 export * from "./logger";
 export * from "./queue";
-export * from "./topic";
 export * from "./schedule";
+export * from "./topic";

@@ -1,12 +1,12 @@
 import { join } from "path";
-import { SchedulerSchedule } from '@cdktf/provider-aws/lib/scheduler-schedule';
+import { IamRole } from "@cdktf/provider-aws/lib/iam-role";
+import { IamRolePolicy } from "@cdktf/provider-aws/lib/iam-role-policy";
+import { SchedulerSchedule } from "@cdktf/provider-aws/lib/scheduler-schedule";
 import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
-import { IamRole } from "@cdktf/provider-aws/lib/iam-role";
-import { IamRolePolicy } from "@cdktf/provider-aws/lib/iam-role-policy";
 
 /**
  * AWS implementation of `cloud.Schedule`.
@@ -28,7 +28,9 @@ export class Schedule extends cloud.ScheduleBase {
       throw new Error("rate can not be set to less than 1 minute.");
     }
 
-    this.scheduleExpression = rate ? `rate(${rate!.minutes} minutes)` : `cron(${cron!})`;
+    this.scheduleExpression = rate
+      ? `rate(${rate!.minutes} minutes)`
+      : `cron(${cron!})`;
   }
 
   public onTick(
@@ -53,7 +55,9 @@ export class Schedule extends cloud.ScheduleBase {
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
     if (!(fn instanceof Function)) {
-      throw new Error("Schedule only supports creating tfaws.Function right now");
+      throw new Error(
+        "Schedule only supports creating tfaws.Function right now"
+      );
     }
 
     core.Resource.addConnection({
@@ -62,7 +66,7 @@ export class Schedule extends cloud.ScheduleBase {
       relationship: "on_tick",
     });
 
-    const role = new IamRole(this, 'IamRole', {
+    const role = new IamRole(this, "IamRole", {
       assumeRolePolicy: JSON.stringify({
         Version: "2012-10-17",
         Statement: [
@@ -71,9 +75,9 @@ export class Schedule extends cloud.ScheduleBase {
             Action: ["sts:AssumeRole"],
             Principal: {
               Service: "scheduler.amazonaws.com",
-            }
-          }
-        ]
+            },
+          },
+        ],
       }),
     });
     new IamRolePolicy(this, "IamRolePolicy", {
@@ -85,7 +89,7 @@ export class Schedule extends cloud.ScheduleBase {
             Effect: "Allow",
             Action: "lambda:InvokeFunction",
             Resource: fn._arn,
-          }
+          },
         ],
       }),
     });
@@ -96,7 +100,7 @@ export class Schedule extends cloud.ScheduleBase {
       target: {
         arn: fn._arn,
         roleArn: role.arn,
-      }
+      },
     });
 
     return fn;
