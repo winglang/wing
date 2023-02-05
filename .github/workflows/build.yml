@@ -130,17 +130,10 @@ jobs:
       - name: Lint Nx
         run: npx nx workspace-lint
 
-      - name: Build
+      - name: Build and Unit Test
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "build"
-          all: true
-          args: "--configuration=release --output-style=stream --verbose"
-
-      - name: Test
-        uses: MansaGroup/nrwl-nx-action@v2
-        with:
-          targets: "test"
           all: true
           # Exclude E2E testing
           args: "--exclude=hangar --configuration=release --output-style=stream --verbose"
@@ -229,12 +222,6 @@ jobs:
           targets: test
           projects: hangar
           args: "--configuration=release --output-style=stream --verbose"
-
-      - name: Run E2E Tests
-        env:
-          HANGAR_WING_TGZ: ${{ github.workspace }}/wing/winglang-${{ needs.prepare.outputs.version }}.tgz
-          HANGAR_WINGSDK_TGZ: ${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.prepare.outputs.version }}.tgz
-        run: npm run test
 
   build:
     needs:
