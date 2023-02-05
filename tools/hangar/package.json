@@ -12,13 +12,9 @@
   "author": "Monada",
   "license": "Apache-2.0",
   "devDependencies": {
-    "dotenv": "^16.0.3",
     "npm": "^8.19.3",
-    "verdaccio": "^5.19.1",
-    "verdaccio-memory": "^10.3.0",
-    "vitest": "^0.28.1",
+    "vitest": "^0.28.4",
     "walkdir": "^0.4.1",
-    "yarn": "^1.22.19",
     "zx": "^7.1.1"
   }
 }
