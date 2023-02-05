@@ -94,6 +94,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) {
 	}
 }
 
+// lsp stuff
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
 	let parse_string = ptr_to_string(ptr, len);
