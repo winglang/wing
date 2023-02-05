@@ -20,7 +20,6 @@
     "postinstall": "run-p install:*",
     "docs": "./scripts/docsite.sh",
     "install:wasi": "if [ \"$CI\" != \"true\" ]; then bash scripts/setup_wasi.sh; fi",
-    "install:tree-sitter-wing": "npm --prefix libs/tree-sitter-wing install",
     "install:vscode-wing": "npm --prefix apps/vscode-wing install",
     "install:wing-api-checker": "npm --prefix apps/wing-api-checker install",
     "install:jsii-docgen": "npm --prefix apps/jsii-docgen install",
