@@ -21,8 +21,11 @@ export class Schedule extends cloud.ScheduleBase {
 
     const { rate, cron } = props;
 
-    if ((!rate && !cron) || rate!.seconds < 60) {
-      throw new Error("rate or cron need to be filled and rate can not be set to less than 1 minute.");
+    if (!rate && !cron) {
+      throw new Error("rate or cron need to be filled.");
+    }
+    if (rate && rate.seconds < 60) {
+      throw new Error("rate can not be set to less than 1 minute.");
     }
 
     this.scheduleExpression = rate ? `rate(${rate!.minutes} minutes)` : `cron(${cron!})`;

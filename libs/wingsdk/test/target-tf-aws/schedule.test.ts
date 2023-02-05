@@ -5,7 +5,7 @@ import { Testing } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
-test("default schedule behavior with rate", () => {
+test("schedule behavior with rate", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const fn = Testing.makeHandler(
@@ -33,7 +33,7 @@ test("default schedule behavior with rate", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
-test("default schedule behavior with cron", () => {
+test("schedule behavior with cron", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const fn = Testing.makeHandler(
@@ -62,17 +62,17 @@ test("default schedule behavior with cron", () => {
 });
 
 
-test("default schedule without rate or cron", () => {
+test("schedule without rate or cron", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
 
   // THEN
   expect(() => new cloud.Schedule(app, "Schedule")).toThrow(
-    /rate or cron need to be filled and rate can not be set to less than 1 minute./
+    /rate or cron need to be filled./
   );
 });
 
-test("default schedule with rate less than 1 minute", () => {
+test("schedule with rate less than 1 minute", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
 
@@ -80,6 +80,6 @@ test("default schedule with rate less than 1 minute", () => {
   expect(() => new cloud.Schedule(app, "Schedule", {
     rate: std.Duration.fromSeconds(30),
   })).toThrow(
-    /rate or cron need to be filled and rate can not be set to less than 1 minute./
+    /rate can not be set to less than 1 minute./
   );
 });
