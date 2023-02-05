@@ -123,6 +123,7 @@ impl JSifier {
 				0,
 				format!("super({{ outdir: $outdir, name: \"{}\", plugins: {} }});\n", self.app_name, TARGET_PLUGINS),
 			);
+      js.insert(1, format!("process.env.FOO='BAAAAR';"));
 			output.push(format!(
 				"class MyApp extends {} {{\nconstructor() {}\n}}",
 				TARGET_APP,

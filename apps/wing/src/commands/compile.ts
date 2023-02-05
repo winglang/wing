@@ -13,6 +13,7 @@ const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
 const WINGC_PREFLIGHT = "preflight.js";
 
+process.env.WHATUP = "its me!";
 /**
  * Available targets for compilation.
  * This is passed from Commander to the `compile` function.
@@ -139,8 +140,16 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   });
   log("evaluating artifact in context: %o", context);
 
+  const artifactWrapper = [
+    `process.env.WING_TARGET = "${options.target}";`,
+    `process.env.WINGSDK_SYNTH_DIR = "${outDir}";`,
+    artifact
+  ].join("\n")
+
+  console.log("ARTIFACT WRAPPER:", artifactWrapper);
+
   try {
-    vm.runInContext(artifact, context);
+    vm.runInContext(artifactWrapper, context);
   } catch (e) {
     console.error(
       chalk.bold.red("preflight error:") + " " + (e as any).message

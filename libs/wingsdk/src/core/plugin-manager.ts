@@ -55,7 +55,7 @@ export class PluginManager {
    *
    * @param filePath path to the plugin file
    */
-  public addPluginFromFilePath(filePath: string) {
+  private addPluginFromFilePath(filePath: string) {
     const hooks: IHook = {} as any;
     const context =
       this.context ??
@@ -63,6 +63,8 @@ export class PluginManager {
     const pluginCode = fs.readFileSync(resolve(filePath), "utf8");
     const script = new vm.Script(pluginCode);
     script.runInNewContext(context);
+    console.log("Hook", hooks);
+    console.log("Process", process.env);
     this.hooks.push(hooks);
   }
 
