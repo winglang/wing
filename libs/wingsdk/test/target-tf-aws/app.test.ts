@@ -21,4 +21,19 @@ test("artifacts are located in app root level outdir", () => {
   expect(existsSync(expectedCdktfJson)).toBe(true);
   expect(existsSync(expectedAssetsDir)).toBe(true);
   expect(readdirSync(expectedAssetsDir).length).toBe(expectedAssetCount);
+});
+
+test("no assets folder exists if app does synthesize asset producing resources", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  new tfaws.Bucket(app, "Bucket", {});
+  const expectedCdktfJson = `${app.outdir}/main.tf.json`;
+  const expectedAssetsDir = `${app.outdir}/assets`;
+
+  // WHEN
+  app.synth();
+
+  // THEN
+  expect(existsSync(expectedCdktfJson)).toBe(true);
+  expect(existsSync(expectedAssetsDir)).toBe(false);
 })
