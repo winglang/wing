@@ -164,7 +164,7 @@ jobs:
           name: wingsdk
           path: libs/wingsdk/*.tgz
 
-      - name: Upload WingC Binary
+      - name: Upload WingC WASM
         uses: actions/upload-artifact@v2
         with:
           name: wingc
@@ -197,7 +197,6 @@ jobs:
       matrix:
         runner:
           - ubuntu-latest
-          # - macos-latest
         node: [18, 19]
     runs-on: ${{ matrix.runner }}
     steps:
@@ -223,12 +222,9 @@ jobs:
 
       - name: Run E2E Tests
         env:
-          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          export HANGAR_WING_TGZ="$(pwd)/$(find wing/*.tgz)"
-          export HANGAR_WINGSDK_TGZ="$(pwd)/$(find wingsdk/*.tgz)"
-          cd tools/hangar
-          HANGAR_WING_TGZ=$HANGAR_WING_TGZ HANGAR_WINGSDK_TGZ=$HANGAR_WINGSDK_TGZ npm run test
+          HANGAR_WING_TGZ: ${{ github.workspace }}/wing/winglang-${{ needs.prepare.outputs.version }}.tgz
+          HANGAR_WINGSDK_TGZ: ${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.prepare.outputs.version }}.tgz
+        run: npm run test
 
   build:
     needs:

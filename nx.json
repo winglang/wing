@@ -22,25 +22,11 @@
     "test": [
       "{projectRoot}/test/**/*"
     ],
-    "examples": [
-      "{workspaceRoot}/examples/**/*.w"
-    ],
     "examples-tests": [
       "{workspaceRoot}/examples/tests/**/*.w"
     ],
-    "rust-conf": [
-      "{projectRoot}/Cargo.toml",
-      "{workspaceRoot}/Cargo.toml",
-      "{workspaceRoot}/Cargo.lock"
-    ],
-    "projen": [
-      "{projectRoot}/.projenrc.ts",
-      "{projectRoot}/.projenrc.js",
-      "{projectRoot}/.projen/*"
-    ],
-    "rust": [
-      "{workspaceRoot}/target/wasm32-wasi/debug/*.wasm",
-      "{workspaceRoot}/target/wasm32-wasi/release/*.wasm"
+    "rust-target": [
+      "{workspaceRoot}/target/**"
     ],
     "dist": [
       "{projectRoot}/dist/**/*"
@@ -79,7 +65,8 @@
         "project-files",
         "workspace-files",
         "src",
-        "test"
+        "test",
+        "examples-tests"
       ]
     }
   }

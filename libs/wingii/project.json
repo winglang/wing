@@ -11,7 +11,7 @@
     },
     "build": {
       "executor": "nx:run-commands",
-      "outputs": ["rust"],
+      "outputs": ["rust-target"],
       "options": {
         "command": "cargo wasi build",
         "cwd": "libs/wingii"
