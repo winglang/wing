@@ -11,10 +11,9 @@ export async function run_server() {
   const wingc = await loadWingc({
     imports: {
       env: {
-        send_log: send_log_notification,
-        send_diagnostics: send_diagnostics_notification,
-      }
-    }
+        send_notification,
+      },
+    },
   });
 
   // Create a connection for the server, using stdio as a transport.
@@ -46,20 +45,35 @@ export async function run_server() {
     await wingcInvoke(wingc, "wingc_on_did_change_text_document", string);
   });
   connection.onCompletion(async (params) => {
-    const result = await wingcInvoke(wingc, "wingc_on_completion", JSON.stringify(params));
+    const result = await wingcInvoke(
+      wingc,
+      "wingc_on_completion",
+      JSON.stringify(params)
+    );
     return JSON.parse(result) as any;
   });
 
-  function send_log_notification(ptr: number, len: number) {
-    const buf = Buffer.from((wingc.exports.memory as WebAssembly.Memory).buffer, ptr, len);
-    const str = new TextDecoder().decode(buf);
-    connection.sendNotification("window/logMessage", JSON.parse(str));
-  };
+  function send_notification(
+    type_ptr: number,
+    type_len: number,
+    data_ptr: number,
+    data_len: number
+  ) {
+    const type_buf = Buffer.from(
+      (wingc.exports.memory as WebAssembly.Memory).buffer,
+      type_ptr,
+      type_len
+    );
+    const type_str = new TextDecoder().decode(type_buf);
 
-  function send_diagnostics_notification(ptr: number, len: number) {
-    const buf = Buffer.from((wingc.exports.memory as WebAssembly.Memory).buffer, ptr, len);
-    const str = new TextDecoder().decode(buf);
-    connection.sendNotification("textDocument/publishDiagnostics", JSON.parse(str));
+    const data_buf = Buffer.from(
+      (wingc.exports.memory as WebAssembly.Memory).buffer,
+      data_ptr,
+      data_len
+    );
+    const data_str = new TextDecoder().decode(data_buf);
+
+    connection.sendNotification(type_str, JSON.parse(data_str));
   }
 
   // Listen on the connection

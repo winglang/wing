@@ -25,8 +25,7 @@ let wasi = new WASI({
 
 const instance = wasi.instantiate(wasm, {
   env: {
-    send_log: () => {},
-    send_diagnostics: () => {},
+    send_notification: () => {},
   }
 });
 

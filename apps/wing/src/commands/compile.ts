@@ -91,8 +91,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     },
     imports: {
       env: {
-        send_log: () => {},
-        send_diagnostics: () => {},
+        send_notification: () => {},
       }
     }
   });

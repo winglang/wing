@@ -1,4 +1,10 @@
-use crate::{diagnostic::DiagnosticLevel, parser::Parser, type_check, Diagnostics};
+use crate::{
+	diagnostic::DiagnosticLevel,
+	parser::Parser,
+	type_check,
+	wasm_util::{combine_ptr_and_length, ptr_to_string},
+	Diagnostics,
+};
 use itertools::Itertools;
 use lsp_types::{CompletionItem, CompletionResponse, Position, Range, Url};
 use std::{
@@ -18,26 +24,58 @@ pub struct FileData {
 }
 
 thread_local! {
-	// TODO probably need Arc here
+	/// Under normal cases, wingc is not in full control of the process in which it is running.
+	/// This means that it cannot reliably control stateful data like this between function calls.
+	/// Here we will assume the process is single threaded, and use thread_local to store this data.
 	pub static FILES: RefCell<HashMap<String, FileData>> = RefCell::new(HashMap::new());
 }
 
 #[cfg(target_arch = "wasm32")]
 extern "C" {
-	pub fn send_log(notification: *const u8, len: u32);
-	pub fn send_diagnostics(diagnostics: *const u8, len: u32);
+	pub fn send_notification(
+		notification_type: *const u8,
+		notification_type_length: u32,
+		data: *const u8,
+		data_length: u32,
+	);
 }
 
+/// Sends a notification to the client, not part of the typical request/response cycle.
+/// On wasm32, this is expected to be implemented whatever is consuming wingc.
+/// On other targets, this panics.
 #[cfg(not(target_arch = "wasm32"))]
-pub unsafe fn send_log(_notification: *const u8, _len: u32) {
-	panic!("send_log called");
+pub unsafe fn send_notification(
+	notification_type: *const u8,
+	notification_type_length: u32,
+	data: *const u8,
+	data_length: u32,
+) {
+	let notification_type = std::str::from_utf8(std::slice::from_raw_parts(
+		notification_type,
+		notification_type_length as usize,
+	))
+	.unwrap();
+	let data = std::str::from_utf8(std::slice::from_raw_parts(data, data_length as usize)).unwrap();
+	panic!(
+		"send_notification called on non-wasm32 target: {} {}",
+		notification_type, data
+	);
 }
 
-#[cfg(not(target_arch = "wasm32"))]
-pub unsafe fn send_diagnostics(_diagnostics: *const u8, _len: u32) {
-	panic!("send_diagnostics called");
-}
+#[no_mangle]
+pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
+	let parse_string = ptr_to_string(ptr, len);
+	if let Ok(parsed) = serde_json::from_str(&parse_string) {
+		let result = on_completion(parsed);
+		let result = serde_json::to_string(&result).unwrap();
 
+		// return result as u64 with ptr and len
+		let leaked = result.into_bytes().leak();
+		combine_ptr_and_length(leaked.as_ptr() as u32, leaked.len() as u32)
+	} else {
+		panic!("Failed to parse 'completion': {}", parse_string);
+	}
+}
 pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse {
 	FILES.with(|files| {
 		let files = files.borrow();
@@ -48,7 +86,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 		let position = params.text_document_position.position;
 		let completions = completions_from_ast(&result.contents.as_str(), &result.tree, position);
-		send_log_notification("did complete");
+		send_log("did complete");
 
 		CompletionResponse::Array(
 			completions
@@ -68,6 +106,15 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 	})
 }
 
+#[no_mangle]
+pub unsafe extern "C" fn wingc_on_did_open_text_document(ptr: u32, len: u32) {
+	let parse_string = ptr_to_string(ptr, len);
+	if let Ok(parsed) = serde_json::from_str(&parse_string) {
+		on_document_did_open(parsed);
+	} else {
+		eprintln!("Failed to parse 'did open' text document: {}", parse_string);
+	}
+}
 pub fn on_document_did_open(params: lsp_types::DidOpenTextDocumentParams) {
 	FILES.with(|files| {
 		let mut files = files.borrow_mut();
@@ -77,24 +124,30 @@ pub fn on_document_did_open(params: lsp_types::DidOpenTextDocumentParams) {
 		let result = parse_text(path, params.text_document.text.as_bytes());
 		let diagnostics = result.diagnostics.clone();
 		files.insert(path.to_string(), result);
-		send_diagnostics_notification(uri, &diagnostics);
-		send_log_notification("did open");
+		send_diagnostics(uri, &diagnostics);
+		send_log("did open");
 	});
 }
 
-fn send_log_notification(message: &str) {
+fn send_log(message: &str) {
 	let notification = serde_json::json!({
 		"type": lsp_types::MessageType::INFO,
 		"message": message.to_string(),
 	});
 
-	let json = serde_json::to_string(&notification).unwrap();
 	unsafe {
-		send_log(json.as_ptr(), json.len() as u32);
+		let json = serde_json::to_string(&notification).unwrap();
+		let notif_type = "window/logMessage".to_string().into_bytes().leak();
+		send_notification(
+			notif_type.as_ptr(),
+			notif_type.len() as u32,
+			json.as_ptr(),
+			json.len() as u32,
+		);
 	}
 }
 
-fn send_diagnostics_notification(uri: Url, diagnostics: &Diagnostics) {
+fn send_diagnostics(uri: Url, diagnostics: &Diagnostics) {
 	let final_diags = diagnostics
 		.iter()
 		.filter(|item| matches!(item.level, DiagnosticLevel::Error) && item.span.is_some())
@@ -117,12 +170,27 @@ fn send_diagnostics_notification(uri: Url, diagnostics: &Diagnostics) {
 		"diagnostics": final_diags,
 	});
 
-	let json = serde_json::to_string(&notification).unwrap();
 	unsafe {
-		send_diagnostics(json.as_ptr(), json.len() as u32);
+		let json = serde_json::to_string(&notification).unwrap();
+		let notif_type = "textDocument/publishDiagnostics".to_string().into_bytes().leak();
+		send_notification(
+			notif_type.as_ptr(),
+			notif_type.len() as u32,
+			json.as_ptr(),
+			json.len() as u32,
+		);
 	}
 }
 
+#[no_mangle]
+pub unsafe extern "C" fn wingc_on_did_change_text_document(ptr: u32, len: u32) {
+	let parse_string = ptr_to_string(ptr, len);
+	if let Ok(parsed) = serde_json::from_str(&parse_string) {
+		on_document_did_change(parsed);
+	} else {
+		eprintln!("Failed to parse 'did change' text document: {}", parse_string);
+	}
+}
 pub fn on_document_did_change(params: lsp_types::DidChangeTextDocumentParams) {
 	FILES.with(|files| {
 		let mut files = files.borrow_mut();
@@ -133,9 +201,9 @@ pub fn on_document_did_change(params: lsp_types::DidChangeTextDocumentParams) {
 		let result = parse_text(path, params.content_changes[0].text.as_bytes());
 		let diagnostics = result.diagnostics.clone();
 		files.insert(path.to_string(), result);
-		send_diagnostics_notification(uri, &diagnostics);
+		send_diagnostics(uri, &diagnostics);
 	});
-	send_log_notification("did change");
+	send_log("did change");
 }
 
 pub fn parse_text(source_file: &str, text: &[u8]) -> FileData {
