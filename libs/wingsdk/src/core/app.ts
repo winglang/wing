@@ -1,4 +1,4 @@
-import { mkdirSync, readdirSync, renameSync, rmSync } from "fs";
+import { mkdirSync, readdirSync, renameSync, rmSync, rmdirSync, existsSync } from "fs";
 import { join } from "path";
 import * as cdktf from "cdktf";
 import { Construct, IConstruct } from "constructs";
@@ -127,6 +127,7 @@ export class CdktfApp extends Construct implements IApp {
    * Move files from `outdir/cdktf.out/stacks/root` to `outdir`.
    */
   private moveCdktfArtifactsToOutdir(): void {
+    const directoriesToMove = ["assets"];
     const cdktfOutdir = this.cdktfApp.outdir;
     const cdktfStackDir = join(
       cdktfOutdir,
@@ -134,10 +135,18 @@ export class CdktfApp extends Construct implements IApp {
     );
 
     const files = readdirSync(cdktfStackDir, { withFileTypes: true });
+
     for (const file of files) {
-      if (file.isFile()) {
+      if (file.isFile() || directoriesToMove.includes(file.name)) {
         const source = join(cdktfStackDir, file.name);
         const destination = join(this.outdir, file.name);
+
+        // If the file is a directory we need to delete contents of previous synthesis
+        // or rename will fail
+        if (existsSync(destination)) {
+          rmdirSync(destination, { recursive: true });
+        }
+
         renameSync(source, destination);
       }
     }
