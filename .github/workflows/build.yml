@@ -121,9 +121,6 @@ jobs:
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
 
-      - name: Install wasi-sdk
-        run: scripts/setup_wasi.sh
-
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
 
@@ -185,6 +182,7 @@ jobs:
     name: "E2E Testing"
     needs:
       - build-wasm
+      - prepare
     strategy:
       fail-fast: true
       matrix:

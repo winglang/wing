@@ -19,7 +19,7 @@
     "contributors:check": "all-contributors check",
     "postinstall": "run-p install:*",
     "docs": "./scripts/docsite.sh",
-    "install:wasi": "if [ \"$CI\" != \"true\" ]; then bash scripts/setup_wasi.sh; fi",
+    "install:wasi": "bash scripts/setup_wasi.sh",
     "install:vscode-wing": "npm --prefix apps/vscode-wing install",
     "install:wing-api-checker": "npm --prefix apps/wing-api-checker install",
     "install:jsii-docgen": "npm --prefix apps/jsii-docgen install",
