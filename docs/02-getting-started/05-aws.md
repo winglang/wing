@@ -16,9 +16,14 @@ SQS](https://aws.amazon.com/sqs/) by [Azure Queue
 Storage](https://azure.microsoft.com/en-us/products/storage/queues/) or by
 [RabbitMQ by CloudAMQP](https://www.cloudamqp.com/).
 
+A target represents both the cloud provider and the provisioning engine. For
+example, the `tf-aws` target will compile your program to a set of AWS
+resources, using Terraform as the provisioning engine.
+
+
 :::info Under Construction
 
-:construction: We plan to support AWS, Azure and Google Cloud as targets out of
+:construction: We plan to support [AWS](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:aws), [Azure](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:azure) and [Google Cloud](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:gcp) as targets out of
 the box. In addition, we are planning support for other provisioning engines
 such as AWS CloudFormation and Kubernetes.
 
@@ -57,7 +62,7 @@ Let's change the working directory to where our Terraform configuration is and
 initialize the state file:
 
 ```sh
-cd ./target/cdktf.out/stacks/root
+cd ./target/hello.tfaws
 export AWS_REGION=us-east-1 # or any other region
 terraform init
 ```

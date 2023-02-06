@@ -1,6 +1,6 @@
 // Vitest Snapshot v1
 
-exports[`wing compile --target tf-aws anon_function.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws anon_function.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -15,22 +15,6 @@ exports[`wing compile --target tf-aws anon_function.w > cdk.tf.json 1`] = `
       {},
     ],
   },
-}
-`;
-
-exports[`wing compile --target tf-aws anon_function.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
 }
 `;
 
@@ -76,7 +60,19 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_functions.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_functions.w > index.js 1`] = `
+"async handle(s) { const { str_to_str } = this; {
+  (await str_to_str.invoke(\\"one\\"));
+  {console.log((await str_to_str.invoke(\\"two\\")))};
+} };"
+`;
+
+exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_functions.w > index.js 2`] = `
+"async handle(s) { const {  } = this; {
+} };"
+`;
+
+exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_functions.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -235,34 +231,6 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
 }
 `;
 
-exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_functions.w > index.js 1`] = `
-"async handle(s) { const { str_to_str } = this; {
-  (await str_to_str.invoke(\\"one\\"));
-  {console.log((await str_to_str.invoke(\\"two\\")))};
-} };"
-`;
-
-exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_functions.w > index.js 2`] = `
-"async handle(s) { const {  } = this; {
-} };"
-`;
-
-exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_functions.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
-}
-`;
-
 exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_functions.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
@@ -314,7 +282,13 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws bring_jsii.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws bring_jsii.w > index.js 1`] = `
+"async handle(m) { const { greeting } = this; {
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(greeting === \\"Hello, wingnuts\\")'\`)})((greeting === \\"Hello, wingnuts\\"))};
+} };"
+`;
+
+exports[`wing compile --target tf-aws bring_jsii.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -414,28 +388,6 @@ exports[`wing compile --target tf-aws bring_jsii.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws bring_jsii.w > index.js 1`] = `
-"async handle(m) { const { greeting } = this; {
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(greeting === \\"Hello, wingnuts\\")'\`)})((greeting === \\"Hello, wingnuts\\"))};
-} };"
-`;
-
-exports[`wing compile --target tf-aws bring_jsii.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
-}
-`;
-
 exports[`wing compile --target tf-aws bring_jsii.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
@@ -479,7 +431,20 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws capture_containers.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws capture_containers.w > index.js 1`] = `
+"async handle(s) { const { arr, arr_of_map, my_map, my_set } = this; {
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(0)) === \\"hello\\")'\`)})(((await arr.at(0)) === \\"hello\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(1)) === \\"world\\")'\`)})(((await arr.at(1)) === \\"world\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr.length === 2)'\`)})((arr.length === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await my_set.has(\\"my\\"))'\`)})((await my_set.has(\\"my\\")))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(my_set.size === 2)'\`)})((my_set.size === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await my_map.has(\\"world\\"))'\`)})((await my_map.has(\\"world\\")))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(my_map.size === 2)'\`)})((my_map.size === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await (await arr_of_map.at(0)).has(\\"bang\\"))'\`)})((await (await arr_of_map.at(0)).has(\\"bang\\")))};
+} };"
+`;
+
+exports[`wing compile --target tf-aws capture_containers.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -579,35 +544,6 @@ exports[`wing compile --target tf-aws capture_containers.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws capture_containers.w > index.js 1`] = `
-"async handle(s) { const { arr, arr_of_map, my_map, my_set } = this; {
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(0)) === \\"hello\\")'\`)})(((await arr.at(0)) === \\"hello\\"))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(1)) === \\"world\\")'\`)})(((await arr.at(1)) === \\"world\\"))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr.length === 2)'\`)})((arr.length === 2))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await my_set.has(\\"my\\"))'\`)})((await my_set.has(\\"my\\")))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(my_set.size === 2)'\`)})((my_set.size === 2))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await my_map.has(\\"world\\"))'\`)})((await my_map.has(\\"world\\")))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(my_map.size === 2)'\`)})((my_map.size === 2))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await (await arr_of_map.at(0)).has(\\"bang\\"))'\`)})((await (await arr_of_map.at(0)).has(\\"bang\\")))};
-} };"
-`;
-
-exports[`wing compile --target tf-aws capture_containers.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
-}
-`;
-
 exports[`wing compile --target tf-aws capture_containers.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
@@ -656,7 +592,21 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws capture_containers_of_resources.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws capture_containers_of_resources.w > index.js 1`] = `
+"async handle(s) { const { arr, map, set } = this; {
+  const b1 = (await arr.at(0));
+  const b2 = (await arr.at(1));
+  const q = (await map.get(\\"my_queue\\"));
+  (await b1.put(\\"file1.txt\\",\\"boom\\"));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b2.list()).length === 0)'\`)})(((await b2.list()).length === 0))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b1.get(\\"file1.txt\\")) === \\"boom\\")'\`)})(((await b1.get(\\"file1.txt\\")) === \\"boom\\"))};
+  (await q.push(\\"hello\\"));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await set.has(\\"foo\\"))'\`)})((await set.has(\\"foo\\")))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(set.size === 2)'\`)})((set.size === 2))};
+} };"
+`;
+
+exports[`wing compile --target tf-aws capture_containers_of_resources.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -839,36 +789,6 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > cdk.tf
 }
 `;
 
-exports[`wing compile --target tf-aws capture_containers_of_resources.w > index.js 1`] = `
-"async handle(s) { const { arr, map, set } = this; {
-  const b1 = (await arr.at(0));
-  const b2 = (await arr.at(1));
-  const q = (await map.get(\\"my_queue\\"));
-  (await b1.put(\\"file1.txt\\",\\"boom\\"));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b2.list()).length === 0)'\`)})(((await b2.list()).length === 0))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b1.get(\\"file1.txt\\")) === \\"boom\\")'\`)})(((await b1.get(\\"file1.txt\\")) === \\"boom\\"))};
-  (await q.push(\\"hello\\"));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await set.has(\\"foo\\"))'\`)})((await set.has(\\"foo\\")))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(set.size === 2)'\`)})((set.size === 2))};
-} };"
-`;
-
-exports[`wing compile --target tf-aws capture_containers_of_resources.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
-}
-`;
-
 exports[`wing compile --target tf-aws capture_containers_of_resources.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
@@ -914,7 +834,15 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws capture_in_binary.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws capture_in_binary.w > index.js 1`] = `
+"async handle(e) { const { b, x } = this; {
+  (await b.put(\\"file\\",\\"foo\\"));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b.get(\\"file\\")) === \\"foo\\")'\`)})(((await b.get(\\"file\\")) === \\"foo\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(12 === x)'\`)})((12 === x))};
+} };"
+`;
+
+exports[`wing compile --target tf-aws capture_in_binary.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -1057,30 +985,6 @@ exports[`wing compile --target tf-aws capture_in_binary.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws capture_in_binary.w > index.js 1`] = `
-"async handle(e) { const { b, x } = this; {
-  (await b.put(\\"file\\",\\"foo\\"));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b.get(\\"file\\")) === \\"foo\\")'\`)})(((await b.get(\\"file\\")) === \\"foo\\"))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(12 === x)'\`)})((12 === x))};
-} };"
-`;
-
-exports[`wing compile --target tf-aws capture_in_binary.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
-}
-`;
-
 exports[`wing compile --target tf-aws capture_in_binary.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
@@ -1129,7 +1033,26 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws capture_primitives.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws capture_primitives.w > index.js 1`] = `
+"async handle(s) { const { my_bool, my_dur, my_num, my_second_bool, my_str } = this; {
+  {console.log(my_str)};
+  const n = my_num;
+  {console.log(\`\${n}\`)};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(my_second_bool === false)'\`)})((my_second_bool === false))};
+  if (my_bool) {
+    {console.log(\\"bool=true\\")};
+  } else {
+    {console.log(\\"bool=false\\")};
+  }
+  const min = my_dur.minutes;
+  const sec = my_dur.seconds;
+  const hr = my_dur.hours;
+  const split = (await \`min=\${min} sec=\${sec} hr=\${hr}\`.split(\\" \\"));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(split.length === 3)'\`)})((split.length === 3))};
+} };"
+`;
+
+exports[`wing compile --target tf-aws capture_primitives.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -1229,41 +1152,6 @@ exports[`wing compile --target tf-aws capture_primitives.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws capture_primitives.w > index.js 1`] = `
-"async handle(s) { const { my_bool, my_dur, my_num, my_second_bool, my_str } = this; {
-  {console.log(my_str)};
-  const n = my_num;
-  {console.log(\`\${n}\`)};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(my_second_bool === false)'\`)})((my_second_bool === false))};
-  if (my_bool) {
-    {console.log(\\"bool=true\\")};
-  } else {
-    {console.log(\\"bool=false\\")};
-  }
-  const min = my_dur.minutes;
-  const sec = my_dur.seconds;
-  const hr = my_dur.hours;
-  const split = (await \`min=\${min} sec=\${sec} hr=\${hr}\`.split(\\" \\"));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(split.length === 3)'\`)})((split.length === 3))};
-} };"
-`;
-
-exports[`wing compile --target tf-aws capture_primitives.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
-}
-`;
-
 exports[`wing compile --target tf-aws capture_primitives.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
@@ -1314,7 +1202,16 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws capture_resource_and_data.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws capture_resource_and_data.w > index.js 1`] = `
+"async handle(e) { const { data, queue, res } = this; {
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(data.size === 3)'\`)})((data.size === 3))};
+  (await res.put(\\"file.txt\\",\\"world\\"));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await res.get(\\"file.txt\\")) === \\"world\\")'\`)})(((await res.get(\\"file.txt\\")) === \\"world\\"))};
+  (await queue.push(\\"spirulina\\"));
+} };"
+`;
+
+exports[`wing compile --target tf-aws capture_resource_and_data.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -1458,31 +1355,6 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > cdk.tf.json 
 }
 `;
 
-exports[`wing compile --target tf-aws capture_resource_and_data.w > index.js 1`] = `
-"async handle(e) { const { data, queue, res } = this; {
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(data.size === 3)'\`)})((data.size === 3))};
-  (await res.put(\\"file.txt\\",\\"world\\"));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await res.get(\\"file.txt\\")) === \\"world\\")'\`)})(((await res.get(\\"file.txt\\")) === \\"world\\"))};
-  (await queue.push(\\"spirulina\\"));
-} };"
-`;
-
-exports[`wing compile --target tf-aws capture_resource_and_data.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
-}
-`;
-
 exports[`wing compile --target tf-aws capture_resource_and_data.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
@@ -1536,7 +1408,19 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws captures.w > index.js 1`] = `
+"async handle(event) { const { bucket1, bucket2, bucket3 } = this; {
+  (await bucket1.put(\\"file.txt\\",\\"data\\"));
+  (await bucket2.get(\\"file.txt\\"));
+  (await bucket2.get(\\"file2.txt\\"));
+  (await bucket3.get(\\"file3.txt\\"));
+  for (const stuff of (await bucket1.list())) {
+    {console.log(stuff)};
+  }
+} };"
+`;
+
+exports[`wing compile --target tf-aws captures.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -1891,34 +1775,6 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws captures.w > index.js 1`] = `
-"async handle(event) { const { bucket1, bucket2, bucket3 } = this; {
-  (await bucket1.put(\\"file.txt\\",\\"data\\"));
-  (await bucket2.get(\\"file.txt\\"));
-  (await bucket2.get(\\"file2.txt\\"));
-  (await bucket3.get(\\"file3.txt\\"));
-  for (const stuff of (await bucket1.list())) {
-    {console.log(stuff)};
-  }
-} };"
-`;
-
-exports[`wing compile --target tf-aws captures.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
-}
-`;
-
 exports[`wing compile --target tf-aws captures.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
@@ -1980,7 +1836,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws container_types.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws container_types.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2120,22 +1976,6 @@ exports[`wing compile --target tf-aws container_types.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws container_types.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
-}
-`;
-
 exports[`wing compile --target tf-aws container_types.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
@@ -2241,7 +2081,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws enums.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws enums.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2256,22 +2096,6 @@ exports[`wing compile --target tf-aws enums.w > cdk.tf.json 1`] = `
       {},
     ],
   },
-}
-`;
-
-exports[`wing compile --target tf-aws enums.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
 }
 `;
 
@@ -2313,7 +2137,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws expressions_binary_operators.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws expressions_binary_operators.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2328,22 +2152,6 @@ exports[`wing compile --target tf-aws expressions_binary_operators.w > cdk.tf.js
       {},
     ],
   },
-}
-`;
-
-exports[`wing compile --target tf-aws expressions_binary_operators.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
 }
 `;
 
@@ -2384,7 +2192,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws expressions_string_interpolation.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws expressions_string_interpolation.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2399,22 +2207,6 @@ exports[`wing compile --target tf-aws expressions_string_interpolation.w > cdk.t
       {},
     ],
   },
-}
-`;
-
-exports[`wing compile --target tf-aws expressions_string_interpolation.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
 }
 `;
 
@@ -2455,7 +2247,15 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws file_counter.w > index.js 1`] = `
+"async handle(body) { const { bucket, counter } = this; {
+  const next = (await counter.inc());
+  const key = \`myfile-\${\\"hi\\"}.txt\`;
+  (await bucket.put(key,body));
+} };"
+`;
+
+exports[`wing compile --target tf-aws file_counter.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2631,30 +2431,6 @@ exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws file_counter.w > index.js 1`] = `
-"async handle(body) { const { bucket, counter } = this; {
-  const next = (await counter.inc());
-  const key = \`myfile-\${\\"hi\\"}.txt\`;
-  (await bucket.put(key,body));
-} };"
-`;
-
-exports[`wing compile --target tf-aws file_counter.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
-}
-`;
-
 exports[`wing compile --target tf-aws file_counter.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
@@ -2706,7 +2482,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws for_loop.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws for_loop.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2721,22 +2497,6 @@ exports[`wing compile --target tf-aws for_loop.w > cdk.tf.json 1`] = `
       {},
     ],
   },
-}
-`;
-
-exports[`wing compile --target tf-aws for_loop.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
 }
 `;
 
@@ -2778,7 +2538,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws forward_decl.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws forward_decl.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2793,22 +2553,6 @@ exports[`wing compile --target tf-aws forward_decl.w > cdk.tf.json 1`] = `
       {},
     ],
   },
-}
-`;
-
-exports[`wing compile --target tf-aws forward_decl.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
 }
 `;
 
@@ -2860,7 +2604,14 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws hello.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws hello.w > index.js 1`] = `
+"async handle(message) { const { bucket } = this; {
+  (await bucket.put(\\"hello.txt\\",\`Hello, \${message}!\`));
+  return message;
+} };"
+`;
+
+exports[`wing compile --target tf-aws hello.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3016,29 +2767,6 @@ exports[`wing compile --target tf-aws hello.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws hello.w > index.js 1`] = `
-"async handle(message) { const { bucket } = this; {
-  (await bucket.put(\\"hello.txt\\",\`Hello, \${message}!\`));
-  return message;
-} };"
-`;
-
-exports[`wing compile --target tf-aws hello.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
-}
-`;
-
 exports[`wing compile --target tf-aws hello.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
@@ -3085,7 +2813,12 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws identical_inflights.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws identical_inflights.w > index.js 1`] = `
+"async handle() { const {  } = this; {
+} };"
+`;
+
+exports[`wing compile --target tf-aws identical_inflights.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3100,27 +2833,6 @@ exports[`wing compile --target tf-aws identical_inflights.w > cdk.tf.json 1`] = 
       {},
     ],
   },
-}
-`;
-
-exports[`wing compile --target tf-aws identical_inflights.w > index.js 1`] = `
-"async handle() { const {  } = this; {
-} };"
-`;
-
-exports[`wing compile --target tf-aws identical_inflights.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
 }
 `;
 
@@ -3168,7 +2880,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws mut_container_types.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws mut_container_types.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3308,22 +3020,6 @@ exports[`wing compile --target tf-aws mut_container_types.w > cdk.tf.json 1`] = 
 }
 `;
 
-exports[`wing compile --target tf-aws mut_container_types.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
-}
-`;
-
 exports[`wing compile --target tf-aws mut_container_types.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
@@ -3385,7 +3081,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws primitive_methods.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws primitive_methods.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3400,22 +3096,6 @@ exports[`wing compile --target tf-aws primitive_methods.w > cdk.tf.json 1`] = `
       {},
     ],
   },
-}
-`;
-
-exports[`wing compile --target tf-aws primitive_methods.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
 }
 `;
 
@@ -3455,7 +3135,13 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws print.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws print.w > index.js 1`] = `
+"async handle(event) { const {  } = this; {
+  {console.log(event)};
+} };"
+`;
+
+exports[`wing compile --target tf-aws print.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3597,28 +3283,6 @@ exports[`wing compile --target tf-aws print.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws print.w > index.js 1`] = `
-"async handle(event) { const {  } = this; {
-  {console.log(event)};
-} };"
-`;
-
-exports[`wing compile --target tf-aws print.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
-}
-`;
-
 exports[`wing compile --target tf-aws print.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
@@ -3659,7 +3323,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws reassignment.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws reassignment.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3674,22 +3338,6 @@ exports[`wing compile --target tf-aws reassignment.w > cdk.tf.json 1`] = `
       {},
     ],
   },
-}
-`;
-
-exports[`wing compile --target tf-aws reassignment.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
 }
 `;
 
@@ -3751,7 +3399,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws resource.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws resource.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3766,22 +3414,6 @@ exports[`wing compile --target tf-aws resource.w > cdk.tf.json 1`] = `
       {},
     ],
   },
-}
-`;
-
-exports[`wing compile --target tf-aws resource.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
 }
 `;
 
@@ -3825,7 +3457,28 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws statements_if.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws statements_if.w > index.js 1`] = `
+"async handle(s) { const {  } = this; {
+  if (true) {
+    const x = 2;
+    if ((true && ((x + 2) === 4))) {
+      if ((true && ((x + 3) === 4))) {
+        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
+      } else if ((true && ((x + 3) === 6))) {
+        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
+      } else if ((false || ((x + 3) === 5))) {
+        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'true'\`)})(true)};
+      } else {
+        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
+      }
+    } else {
+      {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
+    }
+  }
+} };"
+`;
+
+exports[`wing compile --target tf-aws statements_if.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3925,43 +3578,6 @@ exports[`wing compile --target tf-aws statements_if.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws statements_if.w > index.js 1`] = `
-"async handle(s) { const {  } = this; {
-  if (true) {
-    const x = 2;
-    if ((true && ((x + 2) === 4))) {
-      if ((true && ((x + 3) === 4))) {
-        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
-      } else if ((true && ((x + 3) === 6))) {
-        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
-      } else if ((false || ((x + 3) === 5))) {
-        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'true'\`)})(true)};
-      } else {
-        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
-      }
-    } else {
-      {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
-    }
-  }
-} };"
-`;
-
-exports[`wing compile --target tf-aws statements_if.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
-}
-`;
-
 exports[`wing compile --target tf-aws statements_if.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
@@ -4019,7 +3635,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws statements_variable_declarations.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws statements_variable_declarations.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -4034,22 +3650,6 @@ exports[`wing compile --target tf-aws statements_variable_declarations.w > cdk.t
       {},
     ],
   },
-}
-`;
-
-exports[`wing compile --target tf-aws statements_variable_declarations.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
 }
 `;
 
@@ -4085,7 +3685,22 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws std_containers.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws std_containers.w > index.js 1`] = `
+"async handle(body) { const { immut_array, immut_map, immut_set, s, s_array, s_map, s_set } = this; {
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s === \\"two\\")'\`)})((s === \\"two\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await s_array.at(1)) === \\"two\\")'\`)})(((await s_array.at(1)) === \\"two\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_array.length === 2)'\`)})((s_array.length === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_array.length === 3)'\`)})((immut_array.length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await s_set.has(\\"one\\"))'\`)})((await s_set.has(\\"one\\")))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_set.size === 2)'\`)})((s_set.size === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_set.size === 3)'\`)})((immut_set.size === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await s_map.get(\\"one\\")) === 1)'\`)})(((await s_map.get(\\"one\\")) === 1))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_map.size === 2)'\`)})((s_map.size === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_map.size === 3)'\`)})((immut_map.size === 3))};
+} };"
+`;
+
+exports[`wing compile --target tf-aws std_containers.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -4100,29 +3715,6 @@ exports[`wing compile --target tf-aws std_containers.w > cdk.tf.json 1`] = `
       {},
     ],
   },
-}
-`;
-
-exports[`wing compile --target tf-aws std_containers.w > index.js 1`] = `
-"async handle(body) { const { s_array } = this; {
-  const ss = (await s_array.at(1));
-  {console.log(\`\${s_array.length}\`)};
-} };"
-`;
-
-exports[`wing compile --target tf-aws std_containers.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
 }
 `;
 
@@ -4151,14 +3743,31 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"std_containers\\" });
   
-  const s_array = Object.freeze([\\"one\\", \\"two\\", \\"three\\", \\"four\\"]);
-  const s = (s_array.at(2));
+  const s_array = Object.freeze([\\"one\\", \\"two\\"]);
+  const mut_array = [...(s_array)];
+  (mut_array.push(\\"three\\"));
+  const immut_array = Object.freeze([...(mut_array)]);
+  const s_set = Object.freeze(new Set([\\"one\\", \\"two\\"]));
+  const mut_set = new Set(s_set);
+  (mut_set.add(\\"three\\"));
+  const immut_set = Object.freeze(new Set(mut_set));
+  const s_map = Object.freeze(new Map([[ \\"one\\", 1 ], [ \\"two\\", 2 ]]));
+  const mut_map = new Map(s_map);
+  (mut_map.set(\\"five\\",5));
+  const immut_map = Object.freeze(new Map(mut_map));
+  const s = (s_array.at(1));
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.31322868ffd7254f5a6339da1c6b1905571a70379d564da2abf4c176f3c444b6/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2bccfc7c5a6cf0ff8a0697876fd0e9b788b71a4288792fab940ebf8241e8689b/index.js\\")),
     bindings: {
       
       data: {
+        immut_array: immut_array,
+        immut_map: immut_map,
+        immut_set: immut_set,
+        s: s,
         s_array: s_array,
+        s_map: s_map,
+        s_set: s_set,
       },
     }
   });
@@ -4167,7 +3776,22 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws test_bucket.w > index.js 1`] = `
+"async handle(_) { const { b } = this; {
+  (await b.put(\\"hello.txt\\",\\"world\\"));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b.get(\\"hello.txt\\")) === \\"world\\")'\`)})(((await b.get(\\"hello.txt\\")) === \\"world\\"))};
+} };"
+`;
+
+exports[`wing compile --target tf-aws test_bucket.w > index.js 2`] = `
+"async handle(_) { const { b } = this; {
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b.list()).length === 0)'\`)})(((await b.list()).length === 0))};
+  (await b.put(\\"hello.txt\\",\\"world\\"));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b.list()).length === 1)'\`)})(((await b.list()).length === 1))};
+} };"
+`;
+
+exports[`wing compile --target tf-aws test_bucket.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -4369,37 +3993,6 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws test_bucket.w > index.js 1`] = `
-"async handle(_) { const { b } = this; {
-  (await b.put(\\"hello.txt\\",\\"world\\"));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b.get(\\"hello.txt\\")) === \\"world\\")'\`)})(((await b.get(\\"hello.txt\\")) === \\"world\\"))};
-} };"
-`;
-
-exports[`wing compile --target tf-aws test_bucket.w > index.js 2`] = `
-"async handle(_) { const { b } = this; {
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b.list()).length === 0)'\`)})(((await b.list()).length === 0))};
-  (await b.put(\\"hello.txt\\",\\"world\\"));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b.list()).length === 1)'\`)})(((await b.list()).length === 1))};
-} };"
-`;
-
-exports[`wing compile --target tf-aws test_bucket.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
-}
-`;
-
 exports[`wing compile --target tf-aws test_bucket.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
@@ -4456,7 +4049,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws while.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws while.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -4471,22 +4064,6 @@ exports[`wing compile --target tf-aws while.w > cdk.tf.json 1`] = `
       {},
     ],
   },
-}
-`;
-
-exports[`wing compile --target tf-aws while.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
 }
 `;
 
@@ -4527,7 +4104,22 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws while_loop_await.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws while_loop_await.w > index.js 1`] = `
+"async handle(j) { const {  } = this; {
+  return (j + 1);
+} };"
+`;
+
+exports[`wing compile --target tf-aws while_loop_await.w > index.js 2`] = `
+"async handle(body) { const {  } = this; {
+  const i = 0;
+  while (((await iterator(i)) < 3)) {
+    {console.log(\`\${i}\`)};
+  }
+} };"
+`;
+
+exports[`wing compile --target tf-aws while_loop_await.w > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -4637,37 +4229,6 @@ exports[`wing compile --target tf-aws while_loop_await.w > cdk.tf.json 1`] = `
       },
     },
   },
-}
-`;
-
-exports[`wing compile --target tf-aws while_loop_await.w > index.js 1`] = `
-"async handle(j) { const {  } = this; {
-  return (j + 1);
-} };"
-`;
-
-exports[`wing compile --target tf-aws while_loop_await.w > index.js 2`] = `
-"async handle(body) { const {  } = this; {
-  const i = 0;
-  while (((await iterator(i)) < 3)) {
-    {console.log(\`\${i}\`)};
-  }
-} };"
-`;
-
-exports[`wing compile --target tf-aws while_loop_await.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.15.2",
 }
 `;
 
