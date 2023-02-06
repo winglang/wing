@@ -22,7 +22,7 @@ Also, it includes some non-functional requirements:
 
 ```ts (wing)
 bring cloud;
-// need to run: npm install uuid --save
+// need to run: npm install @winglibs/uuid --save
 bring uuid;
 
 /**
