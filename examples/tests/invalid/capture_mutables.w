@@ -2,7 +2,7 @@ let a = MutArray<str>["hello"];
 let s = MutSet<num>{12};
 let m = MutMap<bool>{"hello": true};
 
-let a_cloned = (Array<str>["hello"]).mut_clone();
+let a_cloned = (Array<str>["hello"]).copy_mut();
 
 let i = inflight () => {
   assert(a.length == 1);
