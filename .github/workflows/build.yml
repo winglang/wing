@@ -32,9 +32,6 @@ jobs:
       - name: Checkout
         if: github.event_name == 'push' && github.repository == 'winglang/wing'
         uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref || github.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Get tags
         id: tags
@@ -102,9 +99,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref || github.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -205,9 +199,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref || github.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -268,9 +259,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref || github.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
@@ -307,9 +295,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref || github.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
