@@ -47,3 +47,19 @@ export interface ISimulatorResourceInstance {
     */
    addMetadata(metadata: ResourceMetadata): void;
 }
+
+export abstract class SimulatorResource implements ISimulatorResourceInstance {
+  protected metadata: ResourceMetadata | undefined;
+  
+  public async init(): Promise<void> {
+    return;
+  }
+
+  public async cleanup(): Promise<void> {
+    return;
+  }
+
+  public addMetadata(metadata: ResourceMetadata | undefined): void {
+    this.metadata = metadata;
+  }
+}

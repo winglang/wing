@@ -1,10 +1,9 @@
 import { IFunctionClient, IQueueClient, QUEUE_TYPE } from "../cloud";
 import { ISimulatorContext, TraceType } from "../testing/simulator";
-import { BaseResource } from "./base-resource.inflight";
-import { ISimulatorResourceInstance } from "./resource";
+import { ISimulatorResourceInstance, SimulatorResource } from "./resource";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
 
-export class Queue extends BaseResource implements IQueueClient, ISimulatorResourceInstance {
+export class Queue extends SimulatorResource implements IQueueClient {
   private readonly messages = new Array<string>();
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly intervalId: NodeJS.Timeout;

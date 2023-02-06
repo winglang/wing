@@ -2,11 +2,10 @@ import { existsSync } from "fs";
 import { join } from "path";
 import * as tar from "tar";
 import { SDK_VERSION } from "../constants";
-import { ISimulatorResourceInstance, ResourceMetadata } from "../target-sim";
+import { ISimulatorResourceInstance, ResourceMetadata, SimulatorResource } from "../target-sim";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
 // eslint-disable-next-line import/no-restricted-paths
-import { BaseResource } from "../target-sim/base-resource.inflight";
 import { Function } from "../target-sim/function.inflight";
 import { BaseResourceSchema, WingSimulatorSchema } from "../target-sim/schema";
 import { mkdtemp, readJsonSync } from "../util";
@@ -361,8 +360,8 @@ export class Simulator {
     return [...this._traces];
   }
 
-  private isResource(handle: any): handle is BaseResource {
-    return handle instanceof BaseResource;
+  private isSimulatorResource(handle: any): handle is SimulatorResource {
+    return handle instanceof SimulatorResource;
   }
 
   /**
@@ -375,7 +374,7 @@ export class Simulator {
       throw new Error(`Resource "${path}" not found.`);
     }
 
-    if(this.isResource(handle)) {
+    if(this.isSimulatorResource(handle)) {
       handle.addMetadata(config);
     }
     return handle;

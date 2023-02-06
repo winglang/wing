@@ -3,12 +3,11 @@ import * as os from "os";
 import { join } from "path";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
-import { BaseResource } from "./base-resource.inflight";
-import { ISimulatorResourceInstance } from "./resource";
+import { SimulatorResource } from "./resource";
 import { BucketSchema } from "./schema-resources";
 import { exists } from "./util";
 
-export class Bucket extends BaseResource implements IBucketClient, ISimulatorResourceInstance {
+export class Bucket extends SimulatorResource implements IBucketClient {
   private readonly fileDir: string;
   private readonly context: ISimulatorContext;
   private readonly initialObjects: Record<string, string>;

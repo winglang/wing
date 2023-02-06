@@ -4,15 +4,14 @@ import * as process from "process";
 import * as vm from "vm";
 import { FUNCTION_TYPE, IFunctionClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
-import { BaseResource } from "./base-resource.inflight";
 import {
   ENV_WING_SIM_INFLIGHT_RESOURCE_PATH,
   ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE,
 } from "./function";
-import { ISimulatorResourceInstance } from "./resource";
+import { SimulatorResource } from "./resource";
 import { FunctionSchema } from "./schema-resources";
 
-export class Function extends BaseResource implements IFunctionClient, ISimulatorResourceInstance {
+export class Function extends SimulatorResource implements IFunctionClient {
   private readonly filename: string;
   private readonly env: Record<string, string>;
   private readonly context: ISimulatorContext;

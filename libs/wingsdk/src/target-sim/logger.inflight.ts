@@ -3,15 +3,14 @@ import * as os from "os";
 import { join } from "path";
 import { ILoggerClient } from "../cloud";
 import { ISimulatorContext, TraceType } from "../testing";
-import { BaseResource } from "./base-resource.inflight";
 import {
   ENV_WING_SIM_INFLIGHT_RESOURCE_PATH,
   ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE,
 } from "./function";
-import { ISimulatorResourceInstance } from "./resource";
+import { SimulatorResource } from "./resource";
 import { LoggerSchema } from "./schema-resources";
 
-export class Logger extends BaseResource implements ILoggerClient, ISimulatorResourceInstance {
+export class Logger extends SimulatorResource implements ILoggerClient {
   private readonly logsDir: string;
   private readonly context: ISimulatorContext;
   public constructor(

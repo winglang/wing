@@ -1,10 +1,9 @@
 import { ICounterClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
-import { BaseResource } from "./base-resource.inflight";
-import { ISimulatorResourceInstance } from "./resource";
+import { SimulatorResource } from "./resource";
 import { CounterSchema } from "./schema-resources";
 
-export class Counter extends BaseResource implements ICounterClient, ISimulatorResourceInstance {
+export class Counter extends SimulatorResource implements ICounterClient {
   private value: number;
   private readonly context: ISimulatorContext;
   public constructor(
