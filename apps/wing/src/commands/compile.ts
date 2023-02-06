@@ -13,7 +13,6 @@ const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
 const WINGC_PREFLIGHT = "preflight.js";
 
-process.env.WHATUP = "its me!";
 /**
  * Available targets for compilation.
  * This is passed from Commander to the `compile` function.
@@ -124,7 +123,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     },
     __dirname: workDir,
     __filename: artifactPath,
-    plugins: resolvePluginAbsolutePaths(options.plugins ?? []),
+    $plugins: resolvePluginAbsolutePaths(options.plugins ?? []),
     // since the SDK is loaded in the outer VM, we need these to be the same class instance,
     // otherwise "instanceof" won't work between preflight code and the SDK. this is needed e.g. in
     // `serializeImmutableData` which has special cases for serializing these types.
@@ -197,11 +196,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
 function resolvePluginAbsolutePaths(plugins: string[]): string[] {
   const resolvedPluginPaths: string[] = [];
   for (const plugin of plugins) {
-    if (isAbsolute(plugin)) {
-      resolvedPluginPaths.push(plugin);
-    } else {
-      resolvedPluginPaths.push(resolve(process.cwd(), plugin));
-    }
+    resolvedPluginPaths.push(isAbsolute(plugin) ? plugin : resolve(process.cwd(), plugin));
   }
   return resolvedPluginPaths;
 }

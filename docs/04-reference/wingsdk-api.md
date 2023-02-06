@@ -1216,18 +1216,11 @@ plugins: MutArray<str>;
 ```
 
 - *Type:* MutArray&lt;str&gt;
-- *Default:* no plugins
+- *Default:* [] no plugins
 
 Absolute paths to plugin javascript files.
 
 ---
-
-*Example*
-
-```wing
-["/path/to/plugin.js", "/path/to/another/plugin.js"]
-```
-
 
 ##### `state_file`<sup>Optional</sup> <a name="state_file" id="@winglang/sdk.core.AppProps.property.stateFile"></a>
 

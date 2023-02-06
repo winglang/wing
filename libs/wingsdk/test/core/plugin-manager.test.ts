@@ -14,9 +14,6 @@ exports.preSynth = function(app) {
 };
 
 exports.postSynth = function(config) {
-  //TODO: Not sure why I needed to do a JSON.parse here
-  config = JSON.parse(config)
-  
   const buckets = Object.keys(config.resource.aws_s3_bucket);
   for (const bucket of buckets) {
     config.resource.aws_s3_bucket[bucket].tags = { "plugin-tag": "plugin-value" };
@@ -46,6 +43,12 @@ const DELETE_S3_BUCKET_PLUGIN_CODE = `
 exports.postSynth = function(config) {
   config.resource.aws_s3_bucket = {};
   return config;
+};
+`;
+
+const RETURN_NULL_CONFIG = `
+exports.postSynth = function(config) {
+  // no return
 };
 `;
 
@@ -84,7 +87,7 @@ test("postSynth can modify terraform config", () => {
   const synthOutput = app.synth();
   const synthesizedStackPath = `${app.outdir}/main.tf.json`;
   // apply postSynth plugins
-  pm.postSynth(synthOutput, synthesizedStackPath);
+  pm.postSynth(JSON.parse(synthOutput), synthesizedStackPath);
   const postSynthOutput = fs.readFileSync(synthesizedStackPath, "utf-8");
 
   // THEN
@@ -107,6 +110,27 @@ test("postSynth can modify terraform config", () => {
       }
     )
   ).toEqual(true); // postSynth output should have tags
+});
+
+test("postSynth return is ignored if undefined", () => {
+  // GIVEN
+  const tmpDir = mkdtemp();
+  const pluginFile = join(tmpDir, "plugin.js");
+  fs.writeFileSync(pluginFile, RETURN_NULL_CONFIG);
+
+  // WHEN
+  const app = new tfaws.App({ outdir: tmpDir }); // exclude plugins from constructor for control
+  const pm = new PluginManager([pluginFile]);
+  new tfaws.Bucket(app, "Bucket", {});
+
+  const synthOutput = app.synth();
+  const synthesizedStackPath = `${app.outdir}/main.tf.json`;
+
+  pm.postSynth(JSON.parse(synthOutput), synthesizedStackPath);
+  const postSynthOutput = fs.readFileSync(synthesizedStackPath, "utf-8");
+
+  // THEN
+  expect(synthOutput).toEqual(postSynthOutput); // nothing should have changed
 });
 
 test("validate can throw an error", () => {

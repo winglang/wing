@@ -62,8 +62,7 @@ export interface AppProps {
 
   /**
    * Absolute paths to plugin javascript files.
-   * @example ["/path/to/plugin.js", "/path/to/another/plugin.js"]
-   * @default - no plugins
+   * @default - [] no plugins
    */
   readonly plugins?: string[];
 }
