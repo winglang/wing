@@ -1,6 +1,6 @@
-import fs from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { resolve } from "path";
-import vm from "vm";
+import * as vm from "vm";
 import { IConstruct } from "constructs";
 
 /**
@@ -91,7 +91,7 @@ export class PluginManager {
         __dirname: pluginDir,
       });
 
-    const pluginCode = fs.readFileSync(resolve(filePath), "utf8");
+    const pluginCode = readFileSync(resolve(filePath), "utf8");
     const script = new vm.Script(pluginCode);
     script.runInNewContext(context);
 
@@ -157,7 +157,7 @@ export class PluginManager {
       }
     }
     // Overwrite the config with the modified one
-    fs.writeFileSync(
+    writeFileSync(
       resolve(synthesizedStackPath),
       JSON.stringify(config, null, 2)
     );
