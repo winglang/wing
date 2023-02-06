@@ -23,7 +23,12 @@ let wasi = new WASI({
   },
 });
 
-const instance = await wasi.instantiate(wasm, {});
+const instance = wasi.instantiate(wasm, {
+  env: {
+    // This function is used by the language server, which is not used in the playground
+    send_notification: () => {},
+  }
+});
 
 const defaultFilePerms = { read: true, write: true, create: true };
 wasi.fs.createDir("/wingsdk");
