@@ -1,7 +1,7 @@
 import * as vm from "vm";
 
 import { mkdir, readFile } from "fs/promises";
-import { basename, dirname, join, resolve } from "path";
+import { basename, dirname, join, resolve, isAbsolute } from "path";
 
 import * as chalk from "chalk";
 import debug from "debug";
@@ -124,7 +124,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     },
     __dirname: workDir,
     __filename: artifactPath,
-    plugins: options.plugins,
+    plugins: resolvePluginAbsolutePaths(options.plugins ?? []),
     // since the SDK is loaded in the outer VM, we need these to be the same class instance,
     // otherwise "instanceof" won't work between preflight code and the SDK. this is needed e.g. in
     // `serializeImmutableData` which has special cases for serializing these types.
@@ -140,16 +140,8 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   });
   log("evaluating artifact in context: %o", context);
 
-  const artifactWrapper = [
-    `process.env.WING_TARGET = "${options.target}";`,
-    `process.env.WINGSDK_SYNTH_DIR = "${outDir}";`,
-    artifact
-  ].join("\n")
-
-  console.log("ARTIFACT WRAPPER:", artifactWrapper);
-
   try {
-    vm.runInContext(artifactWrapper, context);
+    vm.runInContext(artifact, context);
   } catch (e) {
     console.error(
       chalk.bold.red("preflight error:") + " " + (e as any).message
@@ -199,5 +191,48 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
           )
       );
     }
+  }
+}
+
+function resolvePluginAbsolutePaths(plugins: string[]): string[] {
+  const resolvedPluginPaths: string[] = [];
+  for (const plugin of plugins) {
+    if (isAbsolute(plugin)) {
+      resolvedPluginPaths.push(plugin);
+    } else {
+      resolvedPluginPaths.push(resolve(process.cwd(), plugin));
+    }
+  }
+  return resolvedPluginPaths;
+}
+
+/**
+ * Assumptions:
+ * 1. The called WASM function is expecting a pointer and a length representing a string
+ * 2. The string will be UTF-8 encoded
+ * 3. The string will be less than 2^32 bytes long  (4GB)
+ * 4. the WASI instance has already been started
+ */
+async function wingcInvoke(
+  instance: WebAssembly.Instance,
+  func: string,
+  arg: string
+) {
+  const exports = instance.exports as any;
+
+  const bytes = new TextEncoder().encode(arg);
+  const argPointer = exports.wingc_malloc(bytes.byteLength);
+
+  try {
+    const argMemoryBuffer = new Uint8Array(
+      exports.memory.buffer,
+      argPointer,
+      bytes.byteLength
+    );
+    argMemoryBuffer.set(bytes);
+  
+    exports[func](argPointer, bytes.byteLength);
+  } finally {
+    exports.wingc_free(argPointer, bytes.byteLength);
   }
 }

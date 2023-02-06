@@ -1,19 +1,37 @@
+import { IConstruct } from "constructs";
 import fs from "fs";
 import { resolve } from "path";
 import vm from "vm";
-import * as cdktf from "cdktf";
-import { IApp } from "./app";
 
 /**
  * Behavioral interface of a plugin hook.
  */
-export interface IHook {
+export interface IPluginHooks {
+  /** name of plugin */
+  name: string;
+  /** targets that hook is compatible with */
+  compatibleTargets?: string[];
   /** preSynth phase */
-  preSynth(app: IApp): void;
+  preSynth?(app: IConstruct): void;
   /** postSynth phase */
-  postSynth(config: any): any;
+  postSynth?(config: any): any;
   /** validate phase */
-  validate(config: any): void;
+  validate?(config: any): void;
+}
+
+enum PluginPhases {
+  PRE_SYNTH = "preSynth",
+  POST_SYNTH = "postSynth",
+  VALIDATE = "validate",
+}
+
+export interface PluginManagerProps {
+  /**
+   * vm context to load plugins in with
+   * 
+   * @default - create a new context with (require, console, exports, process, __dirname)
+   */
+  context?: vm.Context;
 }
 
 /**
@@ -21,12 +39,12 @@ export interface IHook {
  * managing their executions during the various phases of the plugin lifecycle.
  */
 export class PluginManager {
-  private hooks: IHook[];
+  private hooks: IPluginHooks[];
   private context?: vm.Context;
 
-  constructor(plugins: string[], context?: vm.Context) {
+  constructor(plugins: string[], props: PluginManagerProps = {}) {
     this.hooks = [];
-    this.context = context;
+    this.context = props.context;
 
     for (const plugin of plugins) {
       this.add(plugin);
@@ -40,32 +58,62 @@ export class PluginManager {
    */
   public add(plugin: string) {
     // maybe we support other plugin types in the future (e.g. npm modules)
-    if (plugin.endsWith(".js")) {
-      this.addPluginFromFilePath(plugin);
-    } else {
+    if (!plugin.endsWith(".js")) {
       throw new Error(
         `Currently only javascript files are supported as plugins. Got: ${plugin}`
       );
+      
     }
+    this.addPluginFromFilePath(plugin);
   }
 
   /**
    * Loads hooks from a plugin file and adds them to the list of hooks
    * that will later be run in the various plugin phases.
    *
-   * @param filePath path to the plugin file
+   * @param filePath absolute file path to the plugin
    */
   private addPluginFromFilePath(filePath: string) {
-    const hooks: IHook = {} as any;
+    const pluginHooks: IPluginHooks = {
+      name: filePath,
+    };
+    
+    const pluginDir = resolve(filePath).split("/").slice(0, -1).join("/");
+
     const context =
       this.context ??
-      vm.createContext({ require, console, exports: hooks, cdktf, process });
+      vm.createContext({
+        require, 
+        console, 
+        exports: pluginHooks, 
+        process, 
+        __dirname: pluginDir 
+      });
+    
     const pluginCode = fs.readFileSync(resolve(filePath), "utf8");
     const script = new vm.Script(pluginCode);
     script.runInNewContext(context);
-    console.log("Hook", hooks);
-    console.log("Process", process.env);
-    this.hooks.push(hooks);
+
+    if (this.isHookCompatible(pluginHooks)) {
+      this.hooks.push(pluginHooks);
+    } else {
+      console.log(
+        `Skipping plugin ${filePath} as is not compatible with target ${process.env.WING_TARGET}`
+      );
+    }
+
+  }
+
+  private isHookCompatible(hook: IPluginHooks): boolean {
+    if (hook.compatibleTargets) {
+      return hook.compatibleTargets.includes(process.env.WING_TARGET!);
+    }
+    // if no explicit compatible targets defined assume it's compatible
+    return true;
+  }
+
+  private throwHookInvocationError(stage: string, name: string, err: any) {
+    throw new Error(`Plugin: "${name}" failed, during stage: "${stage}". cause: ${err.message}`);
   }
 
   /**
@@ -76,10 +124,14 @@ export class PluginManager {
    *
    * @param app app construct to be passed to the preSynth hooks
    */
-  public preSynth(app: IApp) {
+  public preSynth(app: IConstruct) {
     for (const hook of this.hooks) {
       if (hook.preSynth) {
-        hook.preSynth(app);
+        try {
+          hook.preSynth(app);
+        } catch (err) {
+          this.throwHookInvocationError(PluginPhases.PRE_SYNTH, hook.name, err)
+        }
       }
     }
   }
@@ -97,7 +149,11 @@ export class PluginManager {
   public postSynth(config: any, synthesizedStackPath: string): any {
     for (const hook of this.hooks) {
       if (hook.postSynth) {
-        config = hook.postSynth(config);
+        try {
+          config = hook.postSynth(config) ?? config;
+        } catch (err) {
+          this.throwHookInvocationError(PluginPhases.POST_SYNTH, hook.name, err);
+        }
       }
     }
     // Overwrite the config with the modified one
@@ -119,7 +175,11 @@ export class PluginManager {
   public validate(config: any) {
     for (const hook of this.hooks) {
       if (hook.validate) {
-        hook.validate(config);
+        try {
+          hook.validate(config);
+        } catch (err) {
+          this.throwHookInvocationError(PluginPhases.VALIDATE, hook.name, err);
+        }
       }
     }
   }

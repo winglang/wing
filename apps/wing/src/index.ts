@@ -57,7 +57,7 @@ async function main() {
     )
     .option(
       "-p, --plugins [plugin...]",
-      "JS plugin to use for compilation"
+      "Compiler plugins"
     )
     .action(compile);
 

@@ -61,7 +61,8 @@ export interface AppProps {
   readonly customFactory?: IPolyconFactory;
 
   /**
-   * Plugins to apply on app.
+   * Absolute paths to plugin javascript files.
+   * @example ["/path/to/plugin.js", "/path/to/another/plugin.js"]
    * @default - no plugins
    */
   readonly plugins?: string[];
@@ -139,8 +140,7 @@ export class CdktfApp extends Construct implements IApp {
     const tfConfig = this.cdktfStack.toTerraform();
     const cleaned = cleanTerraformConfig(tfConfig);
 
-    const synthesizedStackPath = `${this.cdktfApp.outdir}/${this.cdktfApp.manifest.stacks.root.synthesizedStackPath}`;
-    this.pluginManager.postSynth(tfConfig, synthesizedStackPath);
+    this.pluginManager.postSynth(tfConfig, `${this.outdir}/main.tf.json`);
     this.pluginManager.validate(tfConfig);
     return stringify(cleaned, null, 2) ?? "";
   }
@@ -155,6 +155,9 @@ export class CdktfApp extends Construct implements IApp {
       cdktfOutdir,
       this.cdktfApp.manifest.stacks[TERRAFORM_STACK_NAME].workingDirectory
     );
+    
+    console.log("STACK: ",cdktfStackDir);
+    console.log("OUT: ",cdktfOutdir);
 
     const files = readdirSync(cdktfStackDir, { withFileTypes: true });
 
