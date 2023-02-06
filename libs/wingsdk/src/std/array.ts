@@ -36,7 +36,7 @@ export class ImmutableArray {
    * @returns a MutableArray with the same values as this array
    */
   public copyMut(): MutableArray {
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
@@ -47,7 +47,7 @@ export class ImmutableArray {
    * @returns an ImmutableArray with the same values as this array
    */
   public copy(): ImmutableArray {
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 }
 

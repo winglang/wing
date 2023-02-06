@@ -36,7 +36,7 @@ export class ImmutableSet {
    * @returns a MutableSet with the same values as this set
    */
   public copyMut(): MutableSet {
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
@@ -47,7 +47,7 @@ export class ImmutableSet {
    * @returns an ImmutableSet with the same values as this set
    */
   public copy(): ImmutableSet {
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 }
 

@@ -49,7 +49,7 @@ export class ImmutableMap {
    * @returns a MutableMap with the same values as this map
    */
   public copyMut(): MutableMap {
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
@@ -60,7 +60,7 @@ export class ImmutableMap {
    * @returns an ImmutableMap with the same values as this map
    */
   public copy(): ImmutableMap {
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 }
 
