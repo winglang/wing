@@ -153,7 +153,7 @@ Object {
           "environmentVariables": Object {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_queue-OnMessage-e645076f/index.js",
+          "sourceCodeFile": "assets/my_queue-onmessage-e645076f_c89a8f49/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -318,7 +318,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/my_queue-OnMessage-e645076f/index.js": "var __defProp = Object.defineProperty;
+  "assets/my_queue-onmessage-e645076f_c89a8f49/index.js": "var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
@@ -696,7 +696,7 @@ Object {
           "environmentVariables": Object {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_queue-OnMessage-e645076f/index.js",
+          "sourceCodeFile": "assets/my_queue-onmessage-e645076f_c89a8f49/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -868,7 +868,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/my_queue-OnMessage-e645076f/index.js": "var __defProp = Object.defineProperty;
+  "assets/my_queue-onmessage-e645076f_c89a8f49/index.js": "var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
@@ -1116,7 +1116,7 @@ Object {
           "environmentVariables": Object {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_queue-OnMessage-e645076f/index.js",
+          "sourceCodeFile": "assets/my_queue-onmessage-e645076f_c89a8f49/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1281,7 +1281,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/my_queue-OnMessage-e645076f/index.js": "var __defProp = Object.defineProperty;
+  "assets/my_queue-onmessage-e645076f_c89a8f49/index.js": "var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
