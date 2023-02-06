@@ -23,13 +23,9 @@ export async function activate(context: ExtensionContext) {
 async function startLanguageServer(context: ExtensionContext) {
   // Allow the user to override the path, otherwise just use npx
   const wingBin = env.WING_BIN ?? "npx";
-  const args = env.WING_BIN ? [] : [
-    "-y",
-    "-q",
-    `winglang@${context.extension.packageJSON.version}`
-  ];
-  
-  args.push("lsp");
+  const args = env.WING_BIN
+    ? ["lsp"]
+    : ["-y", "-q", `winglang@${context.extension.packageJSON.version}`, "lsp"];
 
   const run: Executable = {
     command: wingBin,

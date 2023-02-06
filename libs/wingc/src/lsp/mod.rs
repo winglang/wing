@@ -20,10 +20,19 @@ use self::{completions::completions_from_ast, semantic_token::semantic_token_fro
 mod completions;
 mod semantic_token;
 
+/// The result of running wingc on a file
 pub struct FileData {
+	/// Text data contained in the file (utf8)
 	pub contents: String,
+	/// tree-sitter tree
 	pub tree: Tree,
+	/// The diagnostics returned by wingc
 	pub diagnostics: Diagnostics,
+}
+
+lazy_static! {
+	static ref NOTIFICATION_TYPE_LOG: Vec<u8> = "window/logMessage".to_string().into_bytes();
+	static ref NOTIFICATION_TYPE_DIAGNOSTIC: Vec<u8> = "textDocument/publishDiagnostics".to_string().into_bytes();
 }
 
 thread_local! {
@@ -200,25 +209,6 @@ pub fn on_semantic_tokens(params: lsp_types::SemanticTokensParams) -> Option<Sem
 	})
 }
 
-#[allow(dead_code)]
-fn send_log(message: &str) {
-	let notification = serde_json::json!({
-		"type": lsp_types::MessageType::INFO,
-		"message": message.to_string(),
-	});
-
-	unsafe {
-		let json = serde_json::to_string(&notification).unwrap();
-		let notif_type = "window/logMessage".to_string().into_bytes().leak();
-		send_notification(
-			notif_type.as_ptr(),
-			notif_type.len() as u32,
-			json.as_ptr(),
-			json.len() as u32,
-		);
-	}
-}
-
 fn send_diagnostics(uri: &Url, diagnostics: &Diagnostics) {
 	let final_diags = diagnostics
 		.iter()
@@ -244,7 +234,7 @@ fn send_diagnostics(uri: &Url, diagnostics: &Diagnostics) {
 
 	unsafe {
 		let json = serde_json::to_string(&notification).unwrap();
-		let notif_type = "textDocument/publishDiagnostics".to_string().into_bytes().leak();
+		let notif_type = NOTIFICATION_TYPE_DIAGNOSTIC.clone().leak();
 		send_notification(
 			notif_type.as_ptr(),
 			notif_type.len() as u32,

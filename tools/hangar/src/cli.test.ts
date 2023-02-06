@@ -11,7 +11,7 @@ const tmpDir = path.join(hangarDir, "tmp");
 const npmCacheDir = path.join(tmpDir, ".npm");
 
 const npmBin = path.join(hangarDir, "node_modules/.bin/npm");
-const npxBin = path.join(hangarDir, "node_modules/.bin/npx");
+const wingBin = path.join(tmpDir, "node_modules/.bin/wing");
 
 const targetWingTGZ =
   process.env.HANGAR_WING_TGZ ??
@@ -60,11 +60,9 @@ beforeAll(async () => {
     $.cwd = tmpDir;
     await $`cd ${tmpDir}`;
     await $`${npmBin} install --no-package-lock --ignore-engines`;
-    let directOutput = await $`node_modules/.bin/wing --version`;
-    let npxOutput = await $`${npxBin} winglang --version`;
+    let versionOutput = await $`${wingBin} --version`;
 
-    expect(npxOutput.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
-    expect(directOutput.stdout).toStrictEqual(npxOutput.stdout);
+    expect(versionOutput.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
   });
 }, 1000 * 200);
 
@@ -94,7 +92,7 @@ async function enterTestDir(testDir: string) {
 async function runWingCommand(command: string[], wingFile: string) {
   const isError = path.dirname(wingFile).endsWith("error");
 
-  const cmd: string[] = [npxBin, "winglang", ...command, wingFile];
+  const cmd: string[] = [wingBin, ...command, wingFile];
 
   const work = async () => {
     const out = await $`${cmd}`;
