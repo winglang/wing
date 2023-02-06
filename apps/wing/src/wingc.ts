@@ -8,7 +8,7 @@ const log = debug("wing:compile");
 
 const WINGSDK_RESOLVED_PATH = normalPath(require.resolve("@winglang/sdk"));
 const WINGSDK_MANIFEST_ROOT = resolve(WINGSDK_RESOLVED_PATH, "../..");
-const WINGC_WASM_PATH = normalPath(resolve(__dirname, "../wingc.wasm"));
+const WINGC_WASM_PATH = resolve(normalPath(__dirname), "../wingc.wasm");
 
 export type WingCompilerFunction =
   | "wingc_compile"
