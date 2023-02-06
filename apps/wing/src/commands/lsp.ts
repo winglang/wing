@@ -6,10 +6,10 @@ import {
   CompletionItem,
 } from "vscode-languageserver/node";
 
-import { loadWingc, wingcInvoke } from "../wingc";
+import * as wingCompiler from "../wingc";
 
 export async function run_server() {
-  const wingc = await loadWingc({
+  const wingc = await wingCompiler.load({
     imports: {
       env: {
         send_notification,
@@ -33,14 +33,14 @@ export async function run_server() {
 
   connection.onDidOpenTextDocument(async (params) => {
     const string = JSON.stringify(params);
-    wingcInvoke(wingc, "wingc_on_did_open_text_document", string);
+    wingCompiler.invoke(wingc, "wingc_on_did_open_text_document", string);
   });
   connection.onDidChangeTextDocument(async (params) => {
     const string = JSON.stringify(params);
-    wingcInvoke(wingc, "wingc_on_did_change_text_document", string);
+    wingCompiler.invoke(wingc, "wingc_on_did_change_text_document", string);
   });
   connection.onCompletion(async (params) => {
-    const result = wingcInvoke(
+    const result = wingCompiler.invoke(
       wingc,
       "wingc_on_completion",
       JSON.stringify(params)
@@ -48,7 +48,7 @@ export async function run_server() {
     return JSON.parse(result) as CompletionItem[];
   });
   connection.languages.semanticTokens.on(async (params) => {
-    const result = wingcInvoke(
+    const result = wingCompiler.invoke(
       wingc,
       "wingc_on_semantic_tokens",
       JSON.stringify(params)

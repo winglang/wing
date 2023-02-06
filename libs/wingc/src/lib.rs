@@ -24,11 +24,11 @@ pub mod capture;
 pub mod debug;
 pub mod diagnostic;
 pub mod jsify;
+pub mod lsp;
 pub mod parser;
 pub mod type_check;
 pub mod utilities;
 mod wasm_util;
-pub mod wls;
 
 const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
 const WINGSDK_STD_MODULE: &'static str = "std";

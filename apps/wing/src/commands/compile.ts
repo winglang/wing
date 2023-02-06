@@ -5,7 +5,7 @@ import { mkdir, readFile } from "fs/promises";
 
 import debug from "debug";
 import * as chalk from "chalk";
-import { loadWingc, wingcInvoke } from "../wingc";
+import * as wingCompiler from "../wingc";
 
 const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
@@ -73,7 +73,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     mkdir(synthDir, { recursive: true }),
   ]);
 
-  const wingc = await loadWingc({
+  const wingc = await wingCompiler.load({
     env: {
       RUST_BACKTRACE: "full",
       WINGSDK_SYNTH_DIR: synthDir,
@@ -94,7 +94,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
 
   const arg = `${wingFile};${workDir}`;
   log(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
-  await wingcInvoke(wingc, WINGC_COMPILE, arg);
+  wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
 
   const artifactPath = resolve(workDir, WINGC_PREFLIGHT);
   log("reading artifact from %s", artifactPath);

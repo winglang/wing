@@ -34,7 +34,7 @@ async function main() {
     .action(run);
 
   program
-    .command("wls")
+    .command("lsp")
     .description("Run the Wing language server on stdio")
     .action(run_server);
 

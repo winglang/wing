@@ -9,27 +9,20 @@ const WINGSDK_RESOLVED_PATH = require.resolve("@winglang/sdk");
 const WINGSDK_MANIFEST_ROOT = resolve(WINGSDK_RESOLVED_PATH, "../..");
 const WINGC_WASM_PATH = resolve(__dirname, "../wingc.wasm");
 
-export type WingCFunction =
+export type WingCompilerFunction =
   | "wingc_compile"
   | "wingc_on_did_open_text_document"
   | "wingc_on_did_change_text_document"
   | "wingc_on_completion"
   | "wingc_on_semantic_tokens";
 
-// When WASM stuff returns a value, we need both a pointer and a length,
-// We are using 32 bits for each, so we can combine them into a single 64 bit value.
-// This is a bit mask to extract the low order 32 bits.
-// https://stackoverflow.com/questions/5971645/extracting-high-and-low-order-bytes-of-a-64-bit-integer
-const LOW_MASK = 2n ** 32n - 1n;
-const HIGH_MASK = BigInt(32);
-
-export interface WingCLoadOptions {
+export interface WingCompilerLoadOptions {
   imports?: Record<string, any>;
   preopens?: Record<string, string>;
   env?: Record<string, string>;
 }
 
-export async function loadWingc(options: WingCLoadOptions) {
+export async function load(options: WingCompilerLoadOptions) {
   const wasi = new WASI({
     env: {
       ...process.env,
@@ -63,16 +56,25 @@ export async function loadWingc(options: WingCLoadOptions) {
   return instance;
 }
 
+// When WASM stuff returns a value, we need both a pointer and a length,
+// We are using 32 bits for each, so we can combine them into a single 64 bit value.
+// This is a bit mask to extract the low order 32 bits.
+// https://stackoverflow.com/questions/5971645/extracting-high-and-low-order-bytes-of-a-64-bit-integer
+const LOW_MASK = 2n ** 32n - 1n;
+const HIGH_MASK = BigInt(32);
+
 /**
+ * 
+ * 
  * Assumptions:
  * 1. The called WASM function is expecting a pointer and a length representing a string
  * 2. The string will be UTF-8 encoded
  * 3. The string will be less than 2^32 bytes long  (4GB)
- * 4. the WASI instance has already been started
+ * 4. The WASI instance has already been initialized
  */
-export function wingcInvoke(
+export function invoke(
   instance: WebAssembly.Instance,
-  func: WingCFunction,
+  func: WingCompilerFunction,
   arg: string
 ): number | string {
   const exports = instance.exports as any;
