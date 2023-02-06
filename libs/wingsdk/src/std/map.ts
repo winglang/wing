@@ -40,6 +40,28 @@ export class ImmutableMap {
     key;
     throw new Error("Abstract");
   }
+
+  /**
+   * Create a mutable shallow copy of this map
+   *
+   * @macro new Map($self$)
+   *
+   * @returns a MutableMap with the same values as this map
+   */
+  public copyMut(): MutableMap {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Create an immutable shallow copy of this map
+   *
+   * @macro Object.freeze(new Map($self$))
+   *
+   * @returns an ImmutableMap with the same values as this map
+   */
+  public copy(): ImmutableMap {
+    throw new Error("Macro");
+  }
 }
 
 /**
