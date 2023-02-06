@@ -36,8 +36,8 @@ lazy_static! {
 }
 
 thread_local! {
-	/// Under normal cases, wingc is not in full control of the process in which it is running.
-	/// This means that it cannot reliably control stateful data like this between function calls.
+	/// When consumed as a WASM library, wingc is not in control of the process/memory in which it is running.
+	/// This means that it cannot reliably manage stateful data like this between function calls.
 	/// Here we will assume the process is single threaded, and use thread_local to store this data.
 	pub static FILES: RefCell<HashMap<Url, FileData>> = RefCell::new(HashMap::new());
 }
