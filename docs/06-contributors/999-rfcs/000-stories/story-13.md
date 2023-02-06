@@ -11,7 +11,9 @@ This version of it includes the following functional changes:
 Also, it includes some non-functional requirements: 
 - The Bucket should be replicated across different regions 
   - +100 if we are able to do the same for azure as well
-- Least privileged permissions are granted
+- Least privileged permissions are granted:
+  - Give all permissions unless stated otherwise
+  - If the developer explicitly set permissions, give only the stated permissions 
 - The code should work on sim, aws, azure
 - VScode should be able to autocomplete 
 - Console should be able to show all resources, and interact with them
@@ -121,49 +123,28 @@ resource TaskList {
 // testing
 // --------------------------------------------
 
-resource Test {
-  tasks: TaskList; 
-  _test: inflight (Test): void;
-
-  inflight before() {
-    for id in this.tasks.list_task_ids() {
-      this.tasks.remove_tasks(id);
-    }
-  }
-
-  init(name: str, test: inflight (Test): void) {
-    this.tasks = new TaskList();
-    this._test = test;
-    new cloud.Function({
-      this.before();
-      this._test(this);
-    }) as "test:${name}";
-  }
-}
-
-new Test("get and find task", inflight (t: Test) => {
+new cloud.Function(inflight (s: str): str => {
   t.tasks.add_task("clean the dishes");
   let result = t.tasks.find_tasks_with("clean the dishes");
   assert(result.len == 1);
   let t = t.tasks.get_task(result.at(0));
   assert("clean the dishes" == Str.from_json(t.get("title")));
-}) as "a1";
+}) as "test:get and find task";
 
-new Test("get, remove and find task", inflight (t: Test) => {
+new cloud.Function(inflight (s: str): str => {
   t.tasks.add_task("clean the dishes");
   t.tasks.add_task("buy dishwasher soap");
   t.tasks.remove_tasks(tasks.find_tasks_with("clean the").at(0));
   let result = t.tasks.find_tasks_with("clean the dish");
   assert(result.len == 0);
-}) as "a2";
+}) as "test:get, remove and find task";
 
-new Test("effort_estimation", inflight (t: Test) => {
+new cloud.Function(inflight (s: str): str => {
   let id = t.tasks.add_task("clean the dishes");
   let var j = t.tasks.get_task(id);
   assert(!j.get("effort_estimation")); //  make sure effort estimation default nil
   task.add_estimation(id, 4h);
   j = t.tasks.get_task(id);
   assert(4h == j.get("effort_estimation"));
-}) as "a3";
-
+}) as "test: effort estimation";
 ```
