@@ -2,7 +2,11 @@ import { existsSync } from "fs";
 import { join } from "path";
 import * as tar from "tar";
 import { SDK_VERSION } from "../constants";
-import { ISimulatorResourceInstance, ResourceMetadata, SimulatorResource } from "../target-sim";
+import {
+  ISimulatorResourceInstance,
+  ResourceMetadata,
+  SimulatorResource,
+} from "../target-sim";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
 // eslint-disable-next-line import/no-restricted-paths
@@ -61,9 +65,16 @@ export interface IWithTraceProps {
    */
   activity(): Promise<any>;
 
+  /**
+   * Tracing metadata.
+   * @default - no metadata
+   */
   readonly metadata?: object;
 }
 
+/**
+ * Represents a trace emitted during simulation.
+ */
 export interface Trace {
   /**
    * A JSON blob with structured data.
@@ -90,7 +101,7 @@ export interface Trace {
    * @example 2020-01-01T00:00:00.000Z
    */
   readonly timestamp: string;
-  
+
   /**
    * Tracing metadata.
    */
@@ -367,14 +378,14 @@ export class Simulator {
   /**
    * Get a simulated resource instance.
    * @returns the resource
-   */  
+   */
   public getResource(path: string, config?: ResourceMetadata): any {
     const handle = this.tryGetResource(path);
     if (!handle) {
       throw new Error(`Resource "${path}" not found.`);
     }
 
-    if(this.isSimulatorResource(handle)) {
+    if (this.isSimulatorResource(handle) && config) {
       handle.addMetadata(config);
     }
     return handle;

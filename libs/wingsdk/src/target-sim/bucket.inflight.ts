@@ -1,11 +1,11 @@
 import * as fs from "fs";
 import * as os from "os";
 import { join } from "path";
-import { BucketDeleteOptions, IBucketClient } from "../cloud";
-import { ISimulatorContext } from "../testing/simulator";
 import { SimulatorResource } from "./resource";
 import { BucketSchema } from "./schema-resources";
 import { exists } from "./util";
+import { BucketDeleteOptions, IBucketClient } from "../cloud";
+import { ISimulatorContext } from "../testing/simulator";
 
 export class Bucket extends SimulatorResource implements IBucketClient {
   private readonly fileDir: string;

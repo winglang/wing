@@ -1,7 +1,7 @@
-import { ICounterClient } from "../cloud";
-import { ISimulatorContext } from "../testing/simulator";
 import { SimulatorResource } from "./resource";
 import { CounterSchema } from "./schema-resources";
+import { ICounterClient } from "../cloud";
+import { ISimulatorContext } from "../testing/simulator";
 
 export class Counter extends SimulatorResource implements ICounterClient {
   private value: number;
@@ -23,7 +23,7 @@ export class Counter extends SimulatorResource implements ICounterClient {
         this.value += amount;
         return prev;
       },
-      metadata: this.metadata?.tracing
+      metadata: this.metadata?.tracing,
     });
   }
 
@@ -35,7 +35,7 @@ export class Counter extends SimulatorResource implements ICounterClient {
         this.value -= amount;
         return prev;
       },
-      metadata: this.metadata?.tracing
+      metadata: this.metadata?.tracing,
     });
   }
 
@@ -45,7 +45,7 @@ export class Counter extends SimulatorResource implements ICounterClient {
       activity: async () => {
         return this.value;
       },
-      metadata: this.metadata?.tracing
+      metadata: this.metadata?.tracing,
     });
   }
 }

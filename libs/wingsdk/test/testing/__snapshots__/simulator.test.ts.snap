@@ -29,6 +29,7 @@ Array [
         "data": Object {
           "message": "hi",
         },
+        "metadata": undefined,
         "sourcePath": "root/test",
         "sourceType": "wingsdk.cloud.Function",
         "timestamp": "<TIMESTAMP>",
@@ -40,6 +41,7 @@ Array [
           "result": undefined,
           "status": "success",
         },
+        "metadata": undefined,
         "sourcePath": "root/test",
         "sourceType": "wingsdk.cloud.Function",
         "timestamp": "<TIMESTAMP>",
@@ -96,6 +98,7 @@ Object {
       "data": Object {
         "message": "hi",
       },
+      "metadata": undefined,
       "sourcePath": "root/test",
       "sourceType": "wingsdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",
@@ -107,6 +110,7 @@ Object {
         "result": undefined,
         "status": "success",
       },
+      "metadata": undefined,
       "sourcePath": "root/test",
       "sourceType": "wingsdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",
@@ -171,6 +175,7 @@ Object {
       "data": Object {
         "message": "I am about to fail",
       },
+      "metadata": undefined,
       "sourcePath": "root/test",
       "sourceType": "wingsdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",
@@ -182,6 +187,7 @@ Object {
         "message": "Invoke (payload=\\"\\"\\"\\").",
         "status": "failure",
       },
+      "metadata": undefined,
       "sourcePath": "root/test",
       "sourceType": "wingsdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",

@@ -23,6 +23,9 @@ export function isSimulatorResource(obj: any): obj is ISimulatorResource {
  * Resource configuration
  */
 export interface ResourceMetadata {
+  /**
+   * Tracing metadata for the resource.
+   */
   readonly tracing: object;
 }
 
@@ -40,17 +43,17 @@ export interface ISimulatorResourceInstance {
    * (files, ports, etc).
    */
   cleanup(): Promise<void>;
-
-   /**
-    * Set the metadata for this resource.
-    * @param metadata
-    */
-   addMetadata(metadata: ResourceMetadata): void;
 }
 
+/**
+ * Base class for simulator resources.
+ */
 export abstract class SimulatorResource implements ISimulatorResourceInstance {
+  /**
+   * Metadata for the resource.
+   */
   protected metadata: ResourceMetadata | undefined;
-  
+
   public async init(): Promise<void> {
     return;
   }
@@ -59,7 +62,11 @@ export abstract class SimulatorResource implements ISimulatorResourceInstance {
     return;
   }
 
-  public addMetadata(metadata: ResourceMetadata | undefined): void {
+  /**
+   * Add metadata to the resource.
+   * @param metadata
+   */
+  public addMetadata(metadata: ResourceMetadata): void {
     this.metadata = metadata;
   }
 }

@@ -1,7 +1,7 @@
-import { IFunctionClient, ITopicClient, TOPIC_TYPE } from "../cloud";
-import { ISimulatorContext, TraceType } from "../testing/simulator";
 import { ISimulatorResourceInstance, SimulatorResource } from "./resource";
 import { TopicSchema, TopicSubscriber } from "./schema-resources";
+import { IFunctionClient, ITopicClient, TOPIC_TYPE } from "../cloud";
+import { ISimulatorContext, TraceType } from "../testing/simulator";
 
 export class Topic extends SimulatorResource implements ITopicClient {
   private readonly subscribers = new Array<TopicSubscriber>();

@@ -11,20 +11,20 @@ Represents a cloud object store.
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Bucket.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 new cloud.Bucket(props?: BucketProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Bucket.Initializer.parameter.props">props</a></code> | <code>@winglang/sdk.cloud.BucketProps</code> | *No description.* |
+| <code><a href="#@winglang/sdk.cloud.Bucket.Initializer.parameter.props">props</a></code> | <code>cloud.BucketProps</code> | *No description.* |
 
 ---
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Bucket.Initializer.parameter.props"></a>
 
-- *Type:* @winglang/sdk.cloud.BucketProps
+- *Type:* cloud.BucketProps
 
 ---
 
@@ -80,7 +80,7 @@ referencing a file from the local filesystem.
 ##### `is_construct` <a name="is_construct" id="@winglang/sdk.cloud.Bucket.isConstruct"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 cloud.Bucket.is_construct(x: any)
 ```
@@ -112,7 +112,7 @@ Any object.
 ##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Bucket.addConnection"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 cloud.Bucket.add_connection(props: AddConnectionProps)
 ```
@@ -125,7 +125,7 @@ metadata is recorded in the tree.json file.
 
 ###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Bucket.addConnection.parameter.props"></a>
 
-- *Type:* @winglang/sdk.core.AddConnectionProps
+- *Type:* core.AddConnectionProps
 
 ---
 
@@ -134,7 +134,7 @@ metadata is recorded in the tree.json file.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Bucket.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Bucket.property.display">display</a></code> | <code>@winglang/sdk.core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Bucket.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Bucket.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -157,7 +157,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* @winglang/sdk.core.Display
+- *Type:* core.Display
 
 Information on how to display a resource in the UI.
 
@@ -189,20 +189,20 @@ Represents a distributed atomic counter.
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Counter.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 new cloud.Counter(props?: CounterProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Counter.Initializer.parameter.props">props</a></code> | <code>@winglang/sdk.cloud.CounterProps</code> | *No description.* |
+| <code><a href="#@winglang/sdk.cloud.Counter.Initializer.parameter.props">props</a></code> | <code>cloud.CounterProps</code> | *No description.* |
 
 ---
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Counter.Initializer.parameter.props"></a>
 
-- *Type:* @winglang/sdk.cloud.CounterProps
+- *Type:* cloud.CounterProps
 
 ---
 
@@ -234,7 +234,7 @@ Returns a string representation of this construct.
 ##### `is_construct` <a name="is_construct" id="@winglang/sdk.cloud.Counter.isConstruct"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 cloud.Counter.is_construct(x: any)
 ```
@@ -266,7 +266,7 @@ Any object.
 ##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Counter.addConnection"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 cloud.Counter.add_connection(props: AddConnectionProps)
 ```
@@ -279,7 +279,7 @@ metadata is recorded in the tree.json file.
 
 ###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Counter.addConnection.parameter.props"></a>
 
-- *Type:* @winglang/sdk.core.AddConnectionProps
+- *Type:* core.AddConnectionProps
 
 ---
 
@@ -288,7 +288,7 @@ metadata is recorded in the tree.json file.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Counter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Counter.property.display">display</a></code> | <code>@winglang/sdk.core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Counter.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Counter.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 | <code><a href="#@winglang/sdk.cloud.Counter.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
 
@@ -312,7 +312,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* @winglang/sdk.core.Display
+- *Type:* core.Display
 
 Information on how to display a resource in the UI.
 
@@ -356,27 +356,27 @@ Represents a function.
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Function.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 new cloud.Function(inflight: ~Inflight, props?: FunctionProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Function.Initializer.parameter.inflight">inflight</a></code> | <code>@winglang/sdk.core.Inflight</code> | *No description.* |
-| <code><a href="#@winglang/sdk.cloud.Function.Initializer.parameter.props">props</a></code> | <code>@winglang/sdk.cloud.FunctionProps</code> | *No description.* |
+| <code><a href="#@winglang/sdk.cloud.Function.Initializer.parameter.inflight">inflight</a></code> | <code>core.Inflight</code> | *No description.* |
+| <code><a href="#@winglang/sdk.cloud.Function.Initializer.parameter.props">props</a></code> | <code>cloud.FunctionProps</code> | *No description.* |
 
 ---
 
 ##### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Function.Initializer.parameter.inflight"></a>
 
-- *Type:* @winglang/sdk.core.Inflight
+- *Type:* core.Inflight
 
 ---
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Function.Initializer.parameter.props"></a>
 
-- *Type:* @winglang/sdk.cloud.FunctionProps
+- *Type:* cloud.FunctionProps
 
 ---
 
@@ -429,7 +429,7 @@ Add an environment variable to the function.
 ##### `is_construct` <a name="is_construct" id="@winglang/sdk.cloud.Function.isConstruct"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 cloud.Function.is_construct(x: any)
 ```
@@ -461,7 +461,7 @@ Any object.
 ##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Function.addConnection"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 cloud.Function.add_connection(props: AddConnectionProps)
 ```
@@ -474,7 +474,7 @@ metadata is recorded in the tree.json file.
 
 ###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Function.addConnection.parameter.props"></a>
 
-- *Type:* @winglang/sdk.core.AddConnectionProps
+- *Type:* core.AddConnectionProps
 
 ---
 
@@ -483,7 +483,7 @@ metadata is recorded in the tree.json file.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Function.property.display">display</a></code> | <code>@winglang/sdk.core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Function.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Function.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 | <code><a href="#@winglang/sdk.cloud.Function.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Returns the set of environment variables for this function. |
 
@@ -507,7 +507,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* @winglang/sdk.core.Display
+- *Type:* core.Display
 
 Information on how to display a resource in the UI.
 
@@ -595,7 +595,7 @@ The message to log.
 ##### `is_construct` <a name="is_construct" id="@winglang/sdk.cloud.Logger.isConstruct"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 cloud.Logger.is_construct(x: any)
 ```
@@ -627,7 +627,7 @@ Any object.
 ##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Logger.addConnection"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 cloud.Logger.add_connection(props: AddConnectionProps)
 ```
@@ -640,14 +640,14 @@ metadata is recorded in the tree.json file.
 
 ###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Logger.addConnection.parameter.props"></a>
 
-- *Type:* @winglang/sdk.core.AddConnectionProps
+- *Type:* core.AddConnectionProps
 
 ---
 
 ##### `of` <a name="of" id="@winglang/sdk.cloud.Logger.of"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 cloud.Logger.of()
 ```
@@ -657,7 +657,7 @@ Returns the logger registered to the given scope, throwing an error if there is 
 ##### `register` <a name="register" id="@winglang/sdk.cloud.Logger.register"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 cloud.Logger.register()
 ```
@@ -669,7 +669,7 @@ Create a logger and register it to the given scope.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Logger.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Logger.property.display">display</a></code> | <code>@winglang/sdk.core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Logger.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Logger.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -692,7 +692,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* @winglang/sdk.core.Display
+- *Type:* core.Display
 
 Information on how to display a resource in the UI.
 
@@ -724,20 +724,20 @@ Represents a queue.
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Queue.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 new cloud.Queue(props?: QueueProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Queue.Initializer.parameter.props">props</a></code> | <code>@winglang/sdk.cloud.QueueProps</code> | *No description.* |
+| <code><a href="#@winglang/sdk.cloud.Queue.Initializer.parameter.props">props</a></code> | <code>cloud.QueueProps</code> | *No description.* |
 
 ---
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.Initializer.parameter.props"></a>
 
-- *Type:* @winglang/sdk.cloud.QueueProps
+- *Type:* cloud.QueueProps
 
 ---
 
@@ -768,13 +768,13 @@ Create a function to consume messages from this queue.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Queue.onMessage.parameter.inflight"></a>
 
-- *Type:* @winglang/sdk.core.Inflight
+- *Type:* core.Inflight
 
 ---
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.onMessage.parameter.props"></a>
 
-- *Type:* @winglang/sdk.cloud.QueueOnMessageProps
+- *Type:* cloud.QueueOnMessageProps
 
 ---
 
@@ -790,7 +790,7 @@ Create a function to consume messages from this queue.
 ##### `is_construct` <a name="is_construct" id="@winglang/sdk.cloud.Queue.isConstruct"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 cloud.Queue.is_construct(x: any)
 ```
@@ -822,7 +822,7 @@ Any object.
 ##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Queue.addConnection"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 cloud.Queue.add_connection(props: AddConnectionProps)
 ```
@@ -835,7 +835,7 @@ metadata is recorded in the tree.json file.
 
 ###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Queue.addConnection.parameter.props"></a>
 
-- *Type:* @winglang/sdk.core.AddConnectionProps
+- *Type:* core.AddConnectionProps
 
 ---
 
@@ -844,7 +844,7 @@ metadata is recorded in the tree.json file.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Queue.property.display">display</a></code> | <code>@winglang/sdk.core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Queue.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Queue.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -867,7 +867,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* @winglang/sdk.core.Display
+- *Type:* core.Display
 
 Information on how to display a resource in the UI.
 
@@ -899,20 +899,20 @@ Represents a topic.
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Topic.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 new cloud.Topic(props?: TopicProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Topic.Initializer.parameter.props">props</a></code> | <code>@winglang/sdk.cloud.TopicProps</code> | *No description.* |
+| <code><a href="#@winglang/sdk.cloud.Topic.Initializer.parameter.props">props</a></code> | <code>cloud.TopicProps</code> | *No description.* |
 
 ---
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Topic.Initializer.parameter.props"></a>
 
-- *Type:* @winglang/sdk.cloud.TopicProps
+- *Type:* cloud.TopicProps
 
 ---
 
@@ -943,13 +943,13 @@ Creates function to send messages when published.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Topic.onMessage.parameter.inflight"></a>
 
-- *Type:* @winglang/sdk.core.Inflight
+- *Type:* core.Inflight
 
 ---
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Topic.onMessage.parameter.props"></a>
 
-- *Type:* @winglang/sdk.cloud.TopicOnMessageProps
+- *Type:* cloud.TopicOnMessageProps
 
 ---
 
@@ -965,7 +965,7 @@ Creates function to send messages when published.
 ##### `is_construct` <a name="is_construct" id="@winglang/sdk.cloud.Topic.isConstruct"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 cloud.Topic.is_construct(x: any)
 ```
@@ -997,7 +997,7 @@ Any object.
 ##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Topic.addConnection"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 cloud.Topic.add_connection(props: AddConnectionProps)
 ```
@@ -1010,7 +1010,7 @@ metadata is recorded in the tree.json file.
 
 ###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Topic.addConnection.parameter.props"></a>
 
-- *Type:* @winglang/sdk.core.AddConnectionProps
+- *Type:* core.AddConnectionProps
 
 ---
 
@@ -1019,7 +1019,7 @@ metadata is recorded in the tree.json file.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Topic.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Topic.property.display">display</a></code> | <code>@winglang/sdk.core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Topic.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Topic.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -1042,7 +1042,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* @winglang/sdk.core.Display
+- *Type:* core.Display
 
 Information on how to display a resource in the UI.
 
@@ -1074,7 +1074,7 @@ Props for `Resource.addConnection`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.AddConnectionProps.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 let add_connection_props = core.AddConnectionProps{ ... }
 ```
@@ -1083,9 +1083,9 @@ let add_connection_props = core.AddConnectionProps{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.core.AddConnectionProps.property.from">from</a></code> | <code>@winglang/sdk.core.IResource</code> | The resource creating the connection to `to`. |
+| <code><a href="#@winglang/sdk.core.AddConnectionProps.property.from">from</a></code> | <code>core.IResource</code> | The resource creating the connection to `to`. |
 | <code><a href="#@winglang/sdk.core.AddConnectionProps.property.relationship">relationship</a></code> | <code>str</code> | The type of relationship between the resources. |
-| <code><a href="#@winglang/sdk.core.AddConnectionProps.property.to">to</a></code> | <code>@winglang/sdk.core.IResource</code> | The resource `from` is connecting to. |
+| <code><a href="#@winglang/sdk.core.AddConnectionProps.property.to">to</a></code> | <code>core.IResource</code> | The resource `from` is connecting to. |
 | <code><a href="#@winglang/sdk.core.AddConnectionProps.property.implicit">implicit</a></code> | <code>bool</code> | Whether the relationship is implicit, i.e. it is not explicitly defined by the user. |
 
 ---
@@ -1096,7 +1096,7 @@ let add_connection_props = core.AddConnectionProps{ ... }
 from: IResource;
 ```
 
-- *Type:* @winglang/sdk.core.IResource
+- *Type:* core.IResource
 
 The resource creating the connection to `to`.
 
@@ -1120,7 +1120,7 @@ The type of relationship between the resources.
 to: IResource;
 ```
 
-- *Type:* @winglang/sdk.core.IResource
+- *Type:* core.IResource
 
 The resource `from` is connecting to.
 
@@ -1146,7 +1146,7 @@ Props for all `App` classes.
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.AppProps.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 let app_props = core.AppProps{ ... }
 ```
@@ -1224,7 +1224,7 @@ Interface for delete method inside `Bucket`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketDeleteOptions.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 let bucket_delete_options = cloud.BucketDeleteOptions{ ... }
 ```
@@ -1257,7 +1257,7 @@ Properties for `Bucket`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketProps.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 let bucket_props = cloud.BucketProps{ ... }
 ```
@@ -1290,7 +1290,7 @@ A connection between two resources.
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.Connection.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 let connection = core.Connection{ ... }
 ```
@@ -1299,10 +1299,10 @@ let connection = core.Connection{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.core.Connection.property.direction">direction</a></code> | <code>@winglang/sdk.core.Direction</code> | The direction of the connection. |
+| <code><a href="#@winglang/sdk.core.Connection.property.direction">direction</a></code> | <code>core.Direction</code> | The direction of the connection. |
 | <code><a href="#@winglang/sdk.core.Connection.property.implicit">implicit</a></code> | <code>bool</code> | Whether the relationship is implicit, i.e. it is not explicitly defined by the user. |
 | <code><a href="#@winglang/sdk.core.Connection.property.relationship">relationship</a></code> | <code>str</code> | The type of relationship with the resource. |
-| <code><a href="#@winglang/sdk.core.Connection.property.resource">resource</a></code> | <code>@winglang/sdk.core.IResource</code> | The resource this connection is to. |
+| <code><a href="#@winglang/sdk.core.Connection.property.resource">resource</a></code> | <code>core.IResource</code> | The resource this connection is to. |
 
 ---
 
@@ -1312,7 +1312,7 @@ let connection = core.Connection{ ... }
 direction: Direction;
 ```
 
-- *Type:* @winglang/sdk.core.Direction
+- *Type:* core.Direction
 
 The direction of the connection.
 
@@ -1348,7 +1348,7 @@ The type of relationship with the resource.
 resource: IResource;
 ```
 
-- *Type:* @winglang/sdk.core.IResource
+- *Type:* core.IResource
 
 The resource this connection is to.
 
@@ -1361,7 +1361,7 @@ Source information on a construct (class fqn and version).
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.ConstructInfo.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 let construct_info = core.ConstructInfo{ ... }
 ```
@@ -1406,7 +1406,7 @@ The construct tree.
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.ConstructTree.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 let construct_tree = core.ConstructTree{ ... }
 ```
@@ -1415,7 +1415,7 @@ let construct_tree = core.ConstructTree{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.core.ConstructTree.property.tree">tree</a></code> | <code>@winglang/sdk.core.ConstructTreeNode</code> | The root node. |
+| <code><a href="#@winglang/sdk.core.ConstructTree.property.tree">tree</a></code> | <code>core.ConstructTreeNode</code> | The root node. |
 | <code><a href="#@winglang/sdk.core.ConstructTree.property.version">version</a></code> | <code>str</code> | The construct tree version. |
 
 ---
@@ -1426,7 +1426,7 @@ let construct_tree = core.ConstructTree{ ... }
 tree: ConstructTreeNode;
 ```
 
-- *Type:* @winglang/sdk.core.ConstructTreeNode
+- *Type:* core.ConstructTreeNode
 
 The root node.
 
@@ -1451,7 +1451,7 @@ A node in the construct tree.
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.ConstructTreeNode.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 let construct_tree_node = core.ConstructTreeNode{ ... }
 ```
@@ -1463,9 +1463,9 @@ let construct_tree_node = core.ConstructTreeNode{ ... }
 | <code><a href="#@winglang/sdk.core.ConstructTreeNode.property.id">id</a></code> | <code>str</code> | The ID of the node. |
 | <code><a href="#@winglang/sdk.core.ConstructTreeNode.property.path">path</a></code> | <code>str</code> | The path of the node. |
 | <code><a href="#@winglang/sdk.core.ConstructTreeNode.property.attributes">attributes</a></code> | <code>MutMap&lt;any&gt;</code> | The node attributes. |
-| <code><a href="#@winglang/sdk.core.ConstructTreeNode.property.children">children</a></code> | <code>MutMap&lt;@winglang/sdk.core.ConstructTreeNode&gt;</code> | The child nodes. |
-| <code><a href="#@winglang/sdk.core.ConstructTreeNode.property.constructInfo">construct_info</a></code> | <code>@winglang/sdk.core.ConstructInfo</code> | Information on the construct class that led to this node, if available. |
-| <code><a href="#@winglang/sdk.core.ConstructTreeNode.property.display">display</a></code> | <code>@winglang/sdk.core.DisplayInfo</code> | Information on how to display this node in the UI. |
+| <code><a href="#@winglang/sdk.core.ConstructTreeNode.property.children">children</a></code> | <code>MutMap&lt;core.ConstructTreeNode&gt;</code> | The child nodes. |
+| <code><a href="#@winglang/sdk.core.ConstructTreeNode.property.constructInfo">construct_info</a></code> | <code>core.ConstructInfo</code> | Information on the construct class that led to this node, if available. |
+| <code><a href="#@winglang/sdk.core.ConstructTreeNode.property.display">display</a></code> | <code>core.DisplayInfo</code> | Information on how to display this node in the UI. |
 
 ---
 
@@ -1513,7 +1513,7 @@ The node attributes.
 children: MutMap<ConstructTreeNode>;
 ```
 
-- *Type:* MutMap&lt;@winglang/sdk.core.ConstructTreeNode&gt;
+- *Type:* MutMap&lt;core.ConstructTreeNode&gt;
 
 The child nodes.
 
@@ -1525,7 +1525,7 @@ The child nodes.
 construct_info: ConstructInfo;
 ```
 
-- *Type:* @winglang/sdk.core.ConstructInfo
+- *Type:* core.ConstructInfo
 
 Information on the construct class that led to this node, if available.
 
@@ -1537,7 +1537,7 @@ Information on the construct class that led to this node, if available.
 display: DisplayInfo;
 ```
 
-- *Type:* @winglang/sdk.core.DisplayInfo
+- *Type:* core.DisplayInfo
 
 Information on how to display this node in the UI.
 
@@ -1550,7 +1550,7 @@ Properties for `Counter`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.CounterProps.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 let counter_props = cloud.CounterProps{ ... }
 ```
@@ -1583,7 +1583,7 @@ Information on how to display a construct in the UI.
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.DisplayInfo.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 let display_info = core.DisplayInfo{ ... }
 ```
@@ -1644,7 +1644,7 @@ Properties for the Display class.
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.DisplayProps.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 let display_props = core.DisplayProps{ ... }
 ```
@@ -1705,7 +1705,7 @@ Props for `Files`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.FilesProps.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 let files_props = core.FilesProps{ ... }
 ```
@@ -1714,7 +1714,7 @@ let files_props = core.FilesProps{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.core.FilesProps.property.app">app</a></code> | <code>@winglang/sdk.core.IApp</code> | The app with files to synthesize. |
+| <code><a href="#@winglang/sdk.core.FilesProps.property.app">app</a></code> | <code>core.IApp</code> | The app with files to synthesize. |
 | <code><a href="#@winglang/sdk.core.FilesProps.property.stateFile">state_file</a></code> | <code>str</code> | The path to a state file which will track all synthesized files. |
 
 ---
@@ -1725,7 +1725,7 @@ let files_props = core.FilesProps{ ... }
 app: IApp;
 ```
 
-- *Type:* @winglang/sdk.core.IApp
+- *Type:* core.IApp
 
 The app with files to synthesize.
 
@@ -1756,7 +1756,7 @@ This is the type users see when constructing a cloud.Function instance.
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.FunctionProps.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 let function_props = cloud.FunctionProps{ ... }
 ```
@@ -1766,7 +1766,7 @@ let function_props = cloud.FunctionProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
-| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code>@winglang/sdk.std.Duration</code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code>std.Duration</code> | The maximum amount of time the function can run. |
 
 ---
 
@@ -1789,7 +1789,7 @@ Environment variables to pass to the function.
 timeout: Duration;
 ```
 
-- *Type:* @winglang/sdk.std.Duration
+- *Type:* std.Duration
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -1803,7 +1803,7 @@ Inflight bindings.
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.InflightBindings.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 let inflight_bindings = core.InflightBindings{ ... }
 ```
@@ -1813,7 +1813,7 @@ let inflight_bindings = core.InflightBindings{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.core.InflightBindings.property.data">data</a></code> | <code>MutMap&lt;any&gt;</code> | Immutable data being referenced by the inflight (key is the symbol); |
-| <code><a href="#@winglang/sdk.core.InflightBindings.property.resources">resources</a></code> | <code>MutMap&lt;@winglang/sdk.core.InflightResourceBinding&gt;</code> | Resources being referenced by the inflight (key is the symbol). |
+| <code><a href="#@winglang/sdk.core.InflightBindings.property.resources">resources</a></code> | <code>MutMap&lt;core.InflightResourceBinding&gt;</code> | Resources being referenced by the inflight (key is the symbol). |
 
 ---
 
@@ -1835,7 +1835,7 @@ Immutable data being referenced by the inflight (key is the symbol);
 resources: MutMap<InflightResourceBinding>;
 ```
 
-- *Type:* MutMap&lt;@winglang/sdk.core.InflightResourceBinding&gt;
+- *Type:* MutMap&lt;core.InflightResourceBinding&gt;
 
 Resources being referenced by the inflight (key is the symbol).
 
@@ -1848,7 +1848,7 @@ Props for `Inflight`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.InflightProps.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 let inflight_props = core.InflightProps{ ... }
 ```
@@ -1857,8 +1857,8 @@ let inflight_props = core.InflightProps{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.core.InflightProps.property.code">code</a></code> | <code>@winglang/sdk.core.Code</code> | Reference to the inflight code. Only JavaScript code is currently supported. |
-| <code><a href="#@winglang/sdk.core.InflightProps.property.bindings">bindings</a></code> | <code>@winglang/sdk.core.InflightBindings</code> | Data and resource binding information. |
+| <code><a href="#@winglang/sdk.core.InflightProps.property.code">code</a></code> | <code>core.Code</code> | Reference to the inflight code. Only JavaScript code is currently supported. |
+| <code><a href="#@winglang/sdk.core.InflightProps.property.bindings">bindings</a></code> | <code>core.InflightBindings</code> | Data and resource binding information. |
 
 ---
 
@@ -1868,7 +1868,7 @@ let inflight_props = core.InflightProps{ ... }
 code: Code;
 ```
 
-- *Type:* @winglang/sdk.core.Code
+- *Type:* core.Code
 
 Reference to the inflight code. Only JavaScript code is currently supported.
 
@@ -1883,7 +1883,7 @@ all references to resources must be made through `this.<resource>`.
 bindings: InflightBindings;
 ```
 
-- *Type:* @winglang/sdk.core.InflightBindings
+- *Type:* core.InflightBindings
 - *Default:* no bindings
 
 Data and resource binding information.
@@ -1897,7 +1897,7 @@ A resource binding.
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.InflightResourceBinding.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 let inflight_resource_binding = core.InflightResourceBinding{ ... }
 ```
@@ -1907,7 +1907,7 @@ let inflight_resource_binding = core.InflightResourceBinding{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.core.InflightResourceBinding.property.ops">ops</a></code> | <code>MutArray&lt;str&gt;</code> | The list of operations used on the resource. |
-| <code><a href="#@winglang/sdk.core.InflightResourceBinding.property.resource">resource</a></code> | <code>@winglang/sdk.core.IResource</code> | The resource. |
+| <code><a href="#@winglang/sdk.core.InflightResourceBinding.property.resource">resource</a></code> | <code>core.IResource</code> | The resource. |
 
 ---
 
@@ -1929,7 +1929,7 @@ The list of operations used on the resource.
 resource: IResource;
 ```
 
-- *Type:* @winglang/sdk.core.IResource
+- *Type:* core.IResource
 
 The resource.
 
@@ -1942,7 +1942,7 @@ Props for `JsonFile`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.fs.JsonFileProps.Initializer"></a>
 
 ```wing
-bring { fs } from "@winglang/sdk"
+bring fs;
 
 let json_file_props = fs.JsonFileProps{ ... }
 ```
@@ -1985,7 +1985,7 @@ at "this.inner", or it may call "get" on a resource passed as an argument named
 #### Initializer <a name="Initializer" id="@winglang/sdk.core.OperationAnnotation.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 let operation_annotation = core.OperationAnnotation{ ... }
 ```
@@ -1998,7 +1998,7 @@ Options for Queue.onMessage.
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.QueueOnMessageProps.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 let queue_on_message_props = cloud.QueueOnMessageProps{ ... }
 ```
@@ -2008,7 +2008,7 @@ let queue_on_message_props = cloud.QueueOnMessageProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
-| <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.timeout">timeout</a></code> | <code>@winglang/sdk.std.Duration</code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.timeout">timeout</a></code> | <code>std.Duration</code> | The maximum amount of time the function can run. |
 | <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.batchSize">batch_size</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
 
 ---
@@ -2032,7 +2032,7 @@ Environment variables to pass to the function.
 timeout: Duration;
 ```
 
-- *Type:* @winglang/sdk.std.Duration
+- *Type:* std.Duration
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -2059,7 +2059,7 @@ Properties for `Queue`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.QueueProps.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 let queue_props = cloud.QueueProps{ ... }
 ```
@@ -2069,7 +2069,7 @@ let queue_props = cloud.QueueProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.QueueProps.property.initialMessages">initial_messages</a></code> | <code>MutArray&lt;str&gt;</code> | Initialize the queue with a set of messages. |
-| <code><a href="#@winglang/sdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code>@winglang/sdk.std.Duration</code> | How long a queue's consumers have to process a message. |
+| <code><a href="#@winglang/sdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code>std.Duration</code> | How long a queue's consumers have to process a message. |
 
 ---
 
@@ -2092,7 +2092,7 @@ Initialize the queue with a set of messages.
 timeout: Duration;
 ```
 
-- *Type:* @winglang/sdk.std.Duration
+- *Type:* std.Duration
 - *Default:* Duration.fromSeconds(10)
 
 How long a queue's consumers have to process a message.
@@ -2106,7 +2106,7 @@ Props for `TextFile`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.fs.TextFileProps.Initializer"></a>
 
 ```wing
-bring { fs } from "@winglang/sdk"
+bring fs;
 
 let text_file_props = fs.TextFileProps{ ... }
 ```
@@ -2141,7 +2141,7 @@ Options for Topic.onMessage.
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.TopicOnMessageProps.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 let topic_on_message_props = cloud.TopicOnMessageProps{ ... }
 ```
@@ -2154,7 +2154,7 @@ Properties for `Topic`.
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.TopicProps.Initializer"></a>
 
 ```wing
-bring { cloud } from "@winglang/sdk"
+bring cloud;
 
 let topic_props = cloud.TopicProps{ ... }
 ```
@@ -2178,7 +2178,7 @@ from a different scope, that relationship is not represented in this graph.
 #### Initializers <a name="Initializers" id="@winglang/sdk.core.DependencyGraph.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 new core.DependencyGraph(node: Node)
 ```
@@ -2216,7 +2216,7 @@ Returns a topologically sorted array of the constructs in the sub-graph.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.core.DependencyGraph.property.root">root</a></code> | <code>@winglang/sdk.core.DependencyVertex</code> | Returns the root of the graph. |
+| <code><a href="#@winglang/sdk.core.DependencyGraph.property.root">root</a></code> | <code>core.DependencyVertex</code> | Returns the root of the graph. |
 
 ---
 
@@ -2226,7 +2226,7 @@ Returns a topologically sorted array of the constructs in the sub-graph.
 root: DependencyVertex;
 ```
 
-- *Type:* @winglang/sdk.core.DependencyVertex
+- *Type:* core.DependencyVertex
 
 Returns the root of the graph.
 
@@ -2245,7 +2245,7 @@ The value of each vertex is an `IConstruct` that is accessible via the `.value` 
 #### Initializers <a name="Initializers" id="@winglang/sdk.core.DependencyVertex.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 new core.DependencyVertex(value?: IConstruct)
 ```
@@ -2285,7 +2285,7 @@ This operation will fail in case it creates a cycle in the graph.
 
 ###### `dep`<sup>Required</sup> <a name="dep" id="@winglang/sdk.core.DependencyVertex.addChild.parameter.dep"></a>
 
-- *Type:* @winglang/sdk.core.DependencyVertex
+- *Type:* core.DependencyVertex
 
 The dependency.
 
@@ -2304,8 +2304,8 @@ Returns a topologically sorted array of the constructs in the sub-graph.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.core.DependencyVertex.property.inbound">inbound</a></code> | <code>MutArray&lt;@winglang/sdk.core.DependencyVertex&gt;</code> | Returns the parents of the vertex (i.e dependants). |
-| <code><a href="#@winglang/sdk.core.DependencyVertex.property.outbound">outbound</a></code> | <code>MutArray&lt;@winglang/sdk.core.DependencyVertex&gt;</code> | Returns the children of the vertex (i.e dependencies). |
+| <code><a href="#@winglang/sdk.core.DependencyVertex.property.inbound">inbound</a></code> | <code>MutArray&lt;core.DependencyVertex&gt;</code> | Returns the parents of the vertex (i.e dependants). |
+| <code><a href="#@winglang/sdk.core.DependencyVertex.property.outbound">outbound</a></code> | <code>MutArray&lt;core.DependencyVertex&gt;</code> | Returns the children of the vertex (i.e dependencies). |
 | <code><a href="#@winglang/sdk.core.DependencyVertex.property.value">value</a></code> | <code>constructs.IConstruct</code> | Returns the IConstruct this graph vertex represents. |
 
 ---
@@ -2316,7 +2316,7 @@ Returns a topologically sorted array of the constructs in the sub-graph.
 inbound: MutArray<DependencyVertex>;
 ```
 
-- *Type:* MutArray&lt;@winglang/sdk.core.DependencyVertex&gt;
+- *Type:* MutArray&lt;core.DependencyVertex&gt;
 
 Returns the parents of the vertex (i.e dependants).
 
@@ -2328,7 +2328,7 @@ Returns the parents of the vertex (i.e dependants).
 outbound: MutArray<DependencyVertex>;
 ```
 
-- *Type:* MutArray&lt;@winglang/sdk.core.DependencyVertex&gt;
+- *Type:* MutArray&lt;core.DependencyVertex&gt;
 
 Returns the children of the vertex (i.e dependencies).
 
@@ -2356,20 +2356,20 @@ Information on how to display a resource in the UI.
 #### Initializers <a name="Initializers" id="@winglang/sdk.core.Display.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 new core.Display(props?: DisplayProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.core.Display.Initializer.parameter.props">props</a></code> | <code>@winglang/sdk.core.DisplayProps</code> | *No description.* |
+| <code><a href="#@winglang/sdk.core.Display.Initializer.parameter.props">props</a></code> | <code>core.DisplayProps</code> | *No description.* |
 
 ---
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.core.Display.Initializer.parameter.props"></a>
 
-- *Type:* @winglang/sdk.core.DisplayProps
+- *Type:* core.DisplayProps
 
 ---
 
@@ -2429,20 +2429,20 @@ Handles the synthesis of files.
 #### Initializers <a name="Initializers" id="@winglang/sdk.core.Files.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 new core.Files(props: FilesProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.core.Files.Initializer.parameter.props">props</a></code> | <code>@winglang/sdk.core.FilesProps</code> | *No description.* |
+| <code><a href="#@winglang/sdk.core.Files.Initializer.parameter.props">props</a></code> | <code>core.FilesProps</code> | *No description.* |
 
 ---
 
 ##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.core.Files.Initializer.parameter.props"></a>
 
-- *Type:* @winglang/sdk.core.FilesProps
+- *Type:* core.FilesProps
 
 ---
 
@@ -2511,7 +2511,7 @@ Utility class with functions about inflight clients.
 ##### `for` <a name="for" id="@winglang/sdk.core.InflightClient.for"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 core.InflightClient.for(filename: str, client_class: str, args: MutArray<str>)
 ```
@@ -2555,7 +2555,7 @@ Reference to a piece of Node.js code.
 ##### `from_file` <a name="from_file" id="@winglang/sdk.core.NodeJsCode.fromFile"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 core.NodeJsCode.from_file(path: str)
 ```
@@ -2571,7 +2571,7 @@ Reference code from a file path.
 ##### `from_inline` <a name="from_inline" id="@winglang/sdk.core.NodeJsCode.fromInline"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 core.NodeJsCode.from_inline(text: str)
 ```
@@ -2589,7 +2589,7 @@ Reference code directly from a string.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.core.NodeJsCode.property.hash">hash</a></code> | <code>str</code> | Generate a hash of the code contents. |
-| <code><a href="#@winglang/sdk.core.NodeJsCode.property.language">language</a></code> | <code>@winglang/sdk.core.Language</code> | The language of the code. |
+| <code><a href="#@winglang/sdk.core.NodeJsCode.property.language">language</a></code> | <code>core.Language</code> | The language of the code. |
 | <code><a href="#@winglang/sdk.core.NodeJsCode.property.path">path</a></code> | <code>str</code> | A path to the code in the user's file system that can be referenced for bundling purposes. |
 | <code><a href="#@winglang/sdk.core.NodeJsCode.property.text">text</a></code> | <code>str</code> | The code contents. |
 
@@ -2613,7 +2613,7 @@ Generate a hash of the code contents.
 language: Language;
 ```
 
-- *Type:* @winglang/sdk.core.Language
+- *Type:* core.Language
 
 The language of the code.
 
@@ -2651,7 +2651,7 @@ Inspector that maintains an attribute bag.
 #### Initializers <a name="Initializers" id="@winglang/sdk.core.TreeInspector.Initializer"></a>
 
 ```wing
-bring { core } from "@winglang/sdk"
+bring core;
 
 new core.TreeInspector()
 ```
@@ -2721,7 +2721,7 @@ Represents the bag of attributes as key-value pairs.
 
 - *Extends:* constructs.IConstruct
 
-- *Implemented By:* @winglang/sdk.core.CdktfApp, @winglang/sdk.sim.App, @winglang/sdk.testing.SimApp, @winglang/sdk.tfaws.App, @winglang/sdk.tfazure.App, @winglang/sdk.tfgcp.App, @winglang/sdk.core.IApp
+- *Implemented By:* core.CdktfApp, sim.App, testing.SimApp, tfaws.App, tfazure.App, tfgcp.App, core.IApp
 
 A Wing application.
 
@@ -2776,7 +2776,7 @@ Directory where artifacts are synthesized to.
 
 ### IBucketClient <a name="IBucketClient" id="@winglang/sdk.cloud.IBucketClient"></a>
 
-- *Implemented By:* @winglang/sdk.cloud.IBucketClient
+- *Implemented By:* cloud.IBucketClient
 
 Inflight interface for `Bucket`.
 
@@ -2811,7 +2811,7 @@ Key of the object.
 
 ###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.IBucketClient.delete.parameter.opts"></a>
 
-- *Type:* @winglang/sdk.cloud.BucketDeleteOptions
+- *Type:* cloud.BucketDeleteOptions
 
 Options available for delete an item from a bucket.
 
@@ -2882,7 +2882,7 @@ Content of the object we want to store into the bucket.
 
 ### ICounterClient <a name="ICounterClient" id="@winglang/sdk.cloud.ICounterClient"></a>
 
-- *Implemented By:* @winglang/sdk.cloud.CounterClientBase, @winglang/sdk.cloud.ICounterClient
+- *Implemented By:* cloud.CounterClientBase, cloud.ICounterClient
 
 Inflight interface for `Counter`.
 
@@ -2948,7 +2948,7 @@ the time it is read and the time it is used in your code.
 
 ### IFunctionClient <a name="IFunctionClient" id="@winglang/sdk.cloud.IFunctionClient"></a>
 
-- *Implemented By:* @winglang/sdk.cloud.IFunctionClient
+- *Implemented By:* cloud.IFunctionClient
 
 Inflight interface for `Function`.
 
@@ -2979,9 +2979,9 @@ Invoke the function asynchronously with a given payload.
 
 ### IFunctionHandler <a name="IFunctionHandler" id="@winglang/sdk.cloud.IFunctionHandler"></a>
 
-- *Extends:* @winglang/sdk.core.IResource
+- *Extends:* core.IResource
 
-- *Implemented By:* @winglang/sdk.cloud.IFunctionHandler
+- *Implemented By:* cloud.IFunctionHandler
 
 **Inflight client:** [wingsdk.cloud.IFunctionHandlerClient](#wingsdk.cloud.IFunctionHandlerClient)
 
@@ -2993,7 +2993,7 @@ Represents a resource with an inflight "handle" method that can be used to creat
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IFunctionHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.IFunctionHandler.property.display">display</a></code> | <code>@winglang/sdk.core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.IFunctionHandler.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -3015,7 +3015,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* @winglang/sdk.core.Display
+- *Type:* core.Display
 
 Information on how to display a resource in the UI.
 
@@ -3023,7 +3023,7 @@ Information on how to display a resource in the UI.
 
 ### IFunctionHandlerClient <a name="IFunctionHandlerClient" id="@winglang/sdk.cloud.IFunctionHandlerClient"></a>
 
-- *Implemented By:* @winglang/sdk.cloud.IFunctionHandlerClient
+- *Implemented By:* cloud.IFunctionHandlerClient
 
 Inflight client for `IFunctionHandler`.
 
@@ -3054,9 +3054,9 @@ Entrypoint function that will be called when the cloud function is invoked.
 
 ### IInflightHost <a name="IInflightHost" id="@winglang/sdk.core.IInflightHost"></a>
 
-- *Extends:* @winglang/sdk.core.IResource
+- *Extends:* core.IResource
 
-- *Implemented By:* @winglang/sdk.cloud.Function, @winglang/sdk.cloud.FunctionBase, @winglang/sdk.sim.Function, @winglang/sdk.tfaws.Function, @winglang/sdk.tfazure.Function, @winglang/sdk.core.IInflightHost
+- *Implemented By:* cloud.Function, cloud.FunctionBase, sim.Function, tfaws.Function, tfazure.Function, core.IInflightHost
 
 A resource that can run inflight code.
 
@@ -3066,7 +3066,7 @@ A resource that can run inflight code.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.core.IInflightHost.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.core.IInflightHost.property.display">display</a></code> | <code>@winglang/sdk.core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.core.IInflightHost.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -3088,7 +3088,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* @winglang/sdk.core.Display
+- *Type:* core.Display
 
 Information on how to display a resource in the UI.
 
@@ -3096,7 +3096,7 @@ Information on how to display a resource in the UI.
 
 ### IInspectable <a name="IInspectable" id="@winglang/sdk.core.IInspectable"></a>
 
-- *Implemented By:* @winglang/sdk.cloud.Bucket, @winglang/sdk.cloud.BucketBase, @winglang/sdk.cloud.Counter, @winglang/sdk.cloud.CounterBase, @winglang/sdk.cloud.Function, @winglang/sdk.cloud.FunctionBase, @winglang/sdk.cloud.Logger, @winglang/sdk.cloud.LoggerBase, @winglang/sdk.cloud.Queue, @winglang/sdk.cloud.QueueBase, @winglang/sdk.cloud.Topic, @winglang/sdk.cloud.TopicBase, @winglang/sdk.core.Inflight, @winglang/sdk.core.Resource, @winglang/sdk.sim.Bucket, @winglang/sdk.sim.Counter, @winglang/sdk.sim.Function, @winglang/sdk.sim.Logger, @winglang/sdk.sim.Queue, @winglang/sdk.sim.Topic, @winglang/sdk.tfaws.Bucket, @winglang/sdk.tfaws.Counter, @winglang/sdk.tfaws.Function, @winglang/sdk.tfaws.Queue, @winglang/sdk.tfazure.Bucket, @winglang/sdk.tfazure.Function, @winglang/sdk.tfgcp.Bucket, @winglang/sdk.tfgcp.Logger, @winglang/sdk.cloud.IFunctionHandler, @winglang/sdk.cloud.IQueueOnMessageHandler, @winglang/sdk.cloud.ITopicOnMessageHandler, @winglang/sdk.core.IInflightHost, @winglang/sdk.core.IInspectable, @winglang/sdk.core.IResource
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfazure.Bucket, tfazure.Function, tfgcp.Bucket, tfgcp.Logger, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IInspectable, core.IResource
 
 Interface for examining a construct and exposing metadata.
 
@@ -3104,7 +3104,7 @@ Interface for examining a construct and exposing metadata.
 
 ### ILoggerClient <a name="ILoggerClient" id="@winglang/sdk.cloud.ILoggerClient"></a>
 
-- *Implemented By:* @winglang/sdk.cloud.ILoggerClient
+- *Implemented By:* cloud.ILoggerClient
 
 Inflight interface for `Logger`.
 
@@ -3139,7 +3139,7 @@ The message to print.
 
 ### IQueueClient <a name="IQueueClient" id="@winglang/sdk.cloud.IQueueClient"></a>
 
-- *Implemented By:* @winglang/sdk.cloud.IQueueClient
+- *Implemented By:* cloud.IQueueClient
 
 Inflight interface for `Queue`.
 
@@ -3194,9 +3194,9 @@ Payload to send to the queue.
 
 ### IQueueOnMessageHandler <a name="IQueueOnMessageHandler" id="@winglang/sdk.cloud.IQueueOnMessageHandler"></a>
 
-- *Extends:* @winglang/sdk.core.IResource
+- *Extends:* core.IResource
 
-- *Implemented By:* @winglang/sdk.cloud.IQueueOnMessageHandler
+- *Implemented By:* cloud.IQueueOnMessageHandler
 
 **Inflight client:** [wingsdk.cloud.IQueueOnMessageHandlerClient](#wingsdk.cloud.IQueueOnMessageHandlerClient)
 
@@ -3208,7 +3208,7 @@ Represents a resource with an inflight "handle" method that can be passed to `Qu
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IQueueOnMessageHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.IQueueOnMessageHandler.property.display">display</a></code> | <code>@winglang/sdk.core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.IQueueOnMessageHandler.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -3230,7 +3230,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* @winglang/sdk.core.Display
+- *Type:* core.Display
 
 Information on how to display a resource in the UI.
 
@@ -3238,7 +3238,7 @@ Information on how to display a resource in the UI.
 
 ### IQueueOnMessageHandlerClient <a name="IQueueOnMessageHandlerClient" id="@winglang/sdk.cloud.IQueueOnMessageHandlerClient"></a>
 
-- *Implemented By:* @winglang/sdk.cloud.IQueueOnMessageHandlerClient
+- *Implemented By:* cloud.IQueueOnMessageHandlerClient
 
 Inflight client for `IQueueOnMessageHandler`.
 
@@ -3269,9 +3269,9 @@ Function that will be called when a message is received from the queue.
 
 ### IResource <a name="IResource" id="@winglang/sdk.core.IResource"></a>
 
-- *Extends:* @winglang/sdk.core.IInspectable, constructs.IConstruct
+- *Extends:* core.IInspectable, constructs.IConstruct
 
-- *Implemented By:* @winglang/sdk.cloud.Bucket, @winglang/sdk.cloud.BucketBase, @winglang/sdk.cloud.Counter, @winglang/sdk.cloud.CounterBase, @winglang/sdk.cloud.Function, @winglang/sdk.cloud.FunctionBase, @winglang/sdk.cloud.Logger, @winglang/sdk.cloud.LoggerBase, @winglang/sdk.cloud.Queue, @winglang/sdk.cloud.QueueBase, @winglang/sdk.cloud.Topic, @winglang/sdk.cloud.TopicBase, @winglang/sdk.core.Inflight, @winglang/sdk.core.Resource, @winglang/sdk.sim.Bucket, @winglang/sdk.sim.Counter, @winglang/sdk.sim.Function, @winglang/sdk.sim.Logger, @winglang/sdk.sim.Queue, @winglang/sdk.sim.Topic, @winglang/sdk.tfaws.Bucket, @winglang/sdk.tfaws.Counter, @winglang/sdk.tfaws.Function, @winglang/sdk.tfaws.Queue, @winglang/sdk.tfazure.Bucket, @winglang/sdk.tfazure.Function, @winglang/sdk.tfgcp.Bucket, @winglang/sdk.tfgcp.Logger, @winglang/sdk.cloud.IFunctionHandler, @winglang/sdk.cloud.IQueueOnMessageHandler, @winglang/sdk.cloud.ITopicOnMessageHandler, @winglang/sdk.core.IInflightHost, @winglang/sdk.core.IResource
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfazure.Bucket, tfazure.Function, tfgcp.Bucket, tfgcp.Logger, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IResource
 
 Abstract interface for `Resource`.
 
@@ -3281,7 +3281,7 @@ Abstract interface for `Resource`.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.core.IResource.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.core.IResource.property.display">display</a></code> | <code>@winglang/sdk.core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.core.IResource.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -3303,7 +3303,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* @winglang/sdk.core.Display
+- *Type:* core.Display
 
 Information on how to display a resource in the UI.
 
@@ -3311,7 +3311,7 @@ Information on how to display a resource in the UI.
 
 ### ITopicClient <a name="ITopicClient" id="@winglang/sdk.cloud.ITopicClient"></a>
 
-- *Implemented By:* @winglang/sdk.cloud.ITopicClient
+- *Implemented By:* cloud.ITopicClient
 
 Inflight interface for `Topic`.
 
@@ -3344,9 +3344,9 @@ Payload to publish to Topic.
 
 ### ITopicOnMessageHandler <a name="ITopicOnMessageHandler" id="@winglang/sdk.cloud.ITopicOnMessageHandler"></a>
 
-- *Extends:* @winglang/sdk.core.IResource
+- *Extends:* core.IResource
 
-- *Implemented By:* @winglang/sdk.cloud.ITopicOnMessageHandler
+- *Implemented By:* cloud.ITopicOnMessageHandler
 
 **Inflight client:** [wingsdk.cloud.ITopicOnMessageHandlerClient](#wingsdk.cloud.ITopicOnMessageHandlerClient)
 
@@ -3358,7 +3358,7 @@ Represents a resource with an inflight "handle" method that can be passed to `To
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ITopicOnMessageHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.ITopicOnMessageHandler.property.display">display</a></code> | <code>@winglang/sdk.core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.ITopicOnMessageHandler.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -3380,7 +3380,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* @winglang/sdk.core.Display
+- *Type:* core.Display
 
 Information on how to display a resource in the UI.
 
@@ -3388,7 +3388,7 @@ Information on how to display a resource in the UI.
 
 ### ITopicOnMessageHandlerClient <a name="ITopicOnMessageHandlerClient" id="@winglang/sdk.cloud.ITopicOnMessageHandlerClient"></a>
 
-- *Implemented By:* @winglang/sdk.cloud.ITopicOnMessageHandlerClient
+- *Implemented By:* cloud.ITopicOnMessageHandlerClient
 
 Inflight client for `ITopicOnMessageHandler`.
 

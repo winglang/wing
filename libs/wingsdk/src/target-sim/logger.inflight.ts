@@ -1,14 +1,14 @@
 import * as fs from "fs";
 import * as os from "os";
 import { join } from "path";
-import { ILoggerClient } from "../cloud";
-import { ISimulatorContext, TraceType } from "../testing";
 import {
   ENV_WING_SIM_INFLIGHT_RESOURCE_PATH,
   ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE,
 } from "./function";
 import { SimulatorResource } from "./resource";
 import { LoggerSchema } from "./schema-resources";
+import { ILoggerClient } from "../cloud";
+import { ISimulatorContext, TraceType } from "../testing";
 
 export class Logger extends SimulatorResource implements ILoggerClient {
   private readonly logsDir: string;

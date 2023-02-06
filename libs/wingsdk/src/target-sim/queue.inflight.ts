@@ -1,7 +1,7 @@
-import { IFunctionClient, IQueueClient, QUEUE_TYPE } from "../cloud";
-import { ISimulatorContext, TraceType } from "../testing/simulator";
 import { ISimulatorResourceInstance, SimulatorResource } from "./resource";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
+import { IFunctionClient, IQueueClient, QUEUE_TYPE } from "../cloud";
+import { ISimulatorContext, TraceType } from "../testing/simulator";
 
 export class Queue extends SimulatorResource implements IQueueClient {
   private readonly messages = new Array<string>();
@@ -34,7 +34,7 @@ export class Queue extends SimulatorResource implements IQueueClient {
       activity: async () => {
         this.messages.push(message);
       },
-      metadata: this.metadata?.tracing
+      metadata: this.metadata?.tracing,
     });
   }
 
@@ -44,7 +44,7 @@ export class Queue extends SimulatorResource implements IQueueClient {
       activity: async () => {
         this.messages.length = 0;
       },
-      metadata: this.metadata?.tracing
+      metadata: this.metadata?.tracing,
     });
   }
 
@@ -54,7 +54,7 @@ export class Queue extends SimulatorResource implements IQueueClient {
       activity: async () => {
         return this.messages.length;
       },
-      metadata: this.metadata?.tracing
+      metadata: this.metadata?.tracing,
     });
   }
 
@@ -97,7 +97,7 @@ export class Queue extends SimulatorResource implements IQueueClient {
             sourceType: QUEUE_TYPE,
             type: TraceType.RESOURCE,
             timestamp: new Date().toISOString(),
-            metadata: this.metadata?.tracing
+            metadata: this.metadata?.tracing,
           });
           this.messages.push(...messages);
         });
