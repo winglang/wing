@@ -44,7 +44,7 @@ resource TaskList {
       title: title, 
     };
     print("adding task ${id} with data: ${j}"); //j should be printed out nicely 
-    this._bucket.put(id, j.to_str());
+    this._bucket.put_json(id, j);
     return id;
   }
 
