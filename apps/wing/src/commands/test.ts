@@ -4,7 +4,7 @@ import { basename, extname, join } from "path/posix";
 import { compile, Target } from "./compile";
 import * as chalk from "chalk";
 import * as sdk from "@winglang/sdk";
-import { normalPath } from "src/util";
+import { normalPath } from "../util";
 
 export async function test(entrypoints: string[]) {
   for (const entrypoint of entrypoints) {

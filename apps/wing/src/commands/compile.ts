@@ -9,7 +9,7 @@ import { mkdir, readFile } from "fs/promises";
 import { WASI } from "wasi";
 import debug from "debug";
 import * as chalk from "chalk";
-import { normalPath } from "src/util";
+import { normalPath } from "../util";
 
 const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";

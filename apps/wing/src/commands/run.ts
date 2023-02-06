@@ -2,7 +2,7 @@ import { readdirSync  } from "fs";
 import { debug } from "debug";
 import { resolve } from "path";
 import open = require("open");
-import { normalPath } from "src/util";
+import { normalPath } from "../util";
 
 export async function run(simfile?: string) {
     const wingFiles = readdirSync('.').filter(item => item.endsWith('.w'));
