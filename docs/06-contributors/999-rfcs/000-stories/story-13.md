@@ -39,7 +39,7 @@ resource TaskList {
    * @returns The ID of the new task.
    */
   inflight add_task(title: str): str {
-    let id = uuid.v4();
+    let id = uuid.Uuid.v4();
     let j = Json { 
       title: title, 
     };
