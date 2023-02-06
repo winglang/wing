@@ -362,7 +362,7 @@ export class Simulator {
   }
 
   private isResource(handle: any): handle is BaseResource {
-    return handle  instanceof BaseResource;
+    return handle instanceof BaseResource;
   }
 
   /**
