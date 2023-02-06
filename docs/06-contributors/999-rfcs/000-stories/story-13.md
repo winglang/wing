@@ -67,7 +67,7 @@ resource TaskList {
   inflight add_estimation(id: str, effort_estimation: duration): str {
     let j = this.get_task(id).to_mut();
     j.set("effort_estimation", effort_estimation);
-    this._bucket.put(id, j.to_str());
+    this._bucket.put_json(id, j);
     return id;
   }
 
