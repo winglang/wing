@@ -113,7 +113,7 @@ resource TaskList {
     }
     
     print("found ${output.len} tasks which match term '${term}'");
-    return output.to_immut();
+    return output.copy();
   }
 }
 
