@@ -1,6 +1,6 @@
 import { mkdtemp, readdir } from "fs/promises";
 import { tmpdir } from "os";
-import { basename, extname, join } from "path";
+import { basename, extname, join } from "path/posix";
 import { compile, Target } from "./compile";
 import * as chalk from "chalk";
 import * as sdk from "@winglang/sdk";
@@ -12,7 +12,7 @@ export async function test(entrypoints: string[]) {
 }
 
 async function testOne(entrypoint: string) {
-  const workdir = await mkdtemp(join(tmpdir(), "wing-test-"));
+  const workdir = (await mkdtemp(join(tmpdir(), "wing-test-"))).replace(/\\/g, "/");
   await compile(entrypoint, { outDir: workdir, target: Target.SIM });
   const wsim = (await readdir(workdir)).find(f => extname(f) === ".wsim");
   if (!wsim) {

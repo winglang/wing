@@ -3,7 +3,7 @@
 
 import * as vm from "vm";
 
-import { basename, dirname, join, resolve } from "path";
+import { basename, dirname, join, resolve } from "path/posix";
 import { mkdir, readFile } from "fs/promises";
 
 import { WASI } from "wasi";
@@ -13,9 +13,9 @@ import * as chalk from "chalk";
 const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
 
-const WINGC_WASM_PATH = resolve(__dirname, "../../wingc.wasm");
+const WINGC_WASM_PATH = normalPath(resolve(__dirname, "../../wingc.wasm"));
 log("wasm path: %s", WINGC_WASM_PATH);
-const WINGSDK_RESOLVED_PATH = require.resolve("@winglang/sdk");
+const WINGSDK_RESOLVED_PATH = normalPath(require.resolve("@winglang/sdk"));
 log("wingsdk module path: %s", WINGSDK_RESOLVED_PATH);
 const WINGSDK_MANIFEST_ROOT = resolve(WINGSDK_RESOLVED_PATH, "../..");
 log("wingsdk manifest path: %s", WINGSDK_MANIFEST_ROOT);
@@ -49,6 +49,13 @@ export interface ICompileOptions {
 }
 
 /**
+ * Normalizes paths from windows to posix.
+ */
+function normalPath(path: string) {
+  return path.replace(/\\/g, "/");
+}
+
+/**
  * Determines the synth directory for a given target. This is the directory
  * within the output directory where the SDK app will synthesize its artifacts
  * for the given target.
@@ -69,11 +76,11 @@ function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
  * @param options Compile options.
  */
 export async function compile(entrypoint: string, options: ICompileOptions) {
-  const wingFile = entrypoint;
+  const wingFile = normalPath(entrypoint);
   log("wing file: %s", wingFile);
   const wingDir = dirname(wingFile);
   log("wing dir: %s", wingDir);
-  const synthDir = resolveSynthDir(options.outDir, entrypoint, options.target);
+  const synthDir = resolveSynthDir(options.outDir, wingFile, options.target);
   log("synth dir: %s", synthDir);
   const workDir = resolve(synthDir, ".wing");
   log("work dir: %s", workDir);

@@ -14,7 +14,7 @@ export async function run(simfile?: string) {
         throw new Error(simfile + " doesn't exist");
     }
 
-    simfile = resolve(simfile);
+    simfile = resolve(simfile).replace(/\\/g, "/");
     debug("calling wing console protocol with:" + simfile);
     open("wing-console://" + simfile);
 }
