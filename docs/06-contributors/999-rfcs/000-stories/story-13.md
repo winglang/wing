@@ -65,7 +65,7 @@ resource TaskList {
    * @returns The ID of the existing task.
    */
   inflight add_estimation(id: str, effort_estimation: duration): str {
-    let j = this.get_task(id).to_mut();
+    let j = this.get_task(id).copy_mut();
     j.set("effort_estimation", effort_estimation);
     this._bucket.put_json(id, j);
     return id;
