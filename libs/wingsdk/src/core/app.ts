@@ -76,6 +76,10 @@ export class CdktfApp extends Construct implements IApp {
    * Directory where artifacts are synthesized to.
    */
   public readonly outdir: string;
+  /**
+   * Path to the Terraform manifest file.
+   */
+  public readonly terraformManifestPath: string;
 
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
@@ -104,6 +108,7 @@ export class CdktfApp extends Construct implements IApp {
     this.outdir = outdir;
     this.cdktfApp = cdktfApp;
     this.cdktfStack = cdktfStack;
+    this.terraformManifestPath = join(this.outdir, "main.tf.json");
 
     // register a logger for this app.
     Logger.register(this);

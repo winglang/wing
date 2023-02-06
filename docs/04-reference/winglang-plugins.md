@@ -21,9 +21,9 @@ Each compilation stage is meant to serve a specific purpose. The following is a 
 
 ### `preSynth` stage
 
-This stage is called before the Wing begins to synthesize. In the context of a cdktf target, this stage will have access to the root node of the construct tree. Allowing for the plugin to add or manipulate constructs before the synthesis process begins.
+This stage is called before the Wing begins to synthesize. In the context of a terraform-based target like `tf-aws`, this stage will have access to the root node of the construct tree. This allows the plugin to add or change [CDK for Terraform](https://github.com/hashicorp/terraform-cdk) constructs before the tree is synthesized.
 
-The following example adds bucket to root node, note this plugin is intended to be used with the `tf-aws` target.
+The following example adds a bucket to the root node (note this plugin is intended to be used with the `tf-aws` target).
 ```js
 const s3_bucket = require("@cdktf/provider-aws/lib/s3-bucket");
 
@@ -38,11 +38,11 @@ exports.preSynth = function(app) {
 
 ### `postSynth` stage
 
-This stage is called after the Wing has finished synthesizing. In the context of a cdktf target, this stage will have access to the raw terraform JSON configuration. Allowing for manipulation of the JSON that is written to the compiled output directory.
+This stage runs after the Wing has finished synthesizing artifacts. When compiling to a terraform-based target like `tf-aws`, the hook will have access to the raw terraform JSON configuration, allowing for manipulation of the JSON that is written to the compiled output directory.
 
 This stage is useful for adding customizations that can not be applied in the context of the preSynth phase. Its worth noting that this is not meant as a validation phase since this stage is mutable by subsequent plugins.
 
-The following example manipulates the terraform configuration to use a s3 backend. For brevity, the example uses hard coded values. In practice these would be configurable.
+The following example manipulates the terraform configuration to use a S3 backend. For brevity, the example uses hard coded values. In practice these could be configured through environment variables, class constructors, configuration files, etc.
 ```js
 // exports the postSynth function
 exports.postSynth = function(config) {
@@ -59,7 +59,7 @@ exports.postSynth = function(config) {
 
 ### `validate` stage
 
-This stage is called right after the `postSynth` stage and provided the same context object. In the context of a cdktf target, this is the same terraform JSON configuration. However, this stage is immutable which allows for validation of the configuration without worrying about another plugin mutating after the fact.
+This stage is called right after the `postSynth` stage and provided the same context object. In the context of a terraform-based target like `tf-aws`, this is the same Terraform JSON configuration. However, does not allow configuration to be mutated, which allows plugins to validate the configuration without worrying about another plugin mutating after the fact.
 
 The following example validates that buckets all have versioning enabled if they don't it will throw an error during compilation.
 ```js

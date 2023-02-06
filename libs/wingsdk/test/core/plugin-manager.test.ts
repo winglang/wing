@@ -85,7 +85,7 @@ test("postSynth can modify terraform config", () => {
   new tfaws.Bucket(app, "Bucket", {});
 
   const synthOutput = app.synth();
-  const synthesizedStackPath = `${app.outdir}/main.tf.json`;
+  const synthesizedStackPath = `${app.terraformManifestPath}`;
   // apply postSynth plugins
   pm.postSynth(JSON.parse(synthOutput), synthesizedStackPath);
   const postSynthOutput = fs.readFileSync(synthesizedStackPath, "utf-8");
@@ -124,7 +124,7 @@ test("postSynth return is ignored if undefined", () => {
   new tfaws.Bucket(app, "Bucket", {});
 
   const synthOutput = app.synth();
-  const synthesizedStackPath = `${app.outdir}/main.tf.json`;
+  const synthesizedStackPath = `${app.terraformManifestPath}`;
 
   pm.postSynth(JSON.parse(synthOutput), synthesizedStackPath);
   const postSynthOutput = fs.readFileSync(synthesizedStackPath, "utf-8");
@@ -163,7 +163,7 @@ test("plugins are run in order they are passed in", () => {
   new tfaws.Bucket(app, "Bucket", {});
   app.synth();
 
-  const synthesizedStackPath = `${app.outdir}/main.tf.json`;
+  const synthesizedStackPath = `${app.terraformManifestPath}`;
   const postSynthOutput = fs.readFileSync(synthesizedStackPath, "utf-8");
 
   // THEN
