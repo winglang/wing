@@ -5,7 +5,7 @@ import { compile, docs, test, upgrade, run } from "./commands";
 import { join } from "path";
 import { satisfies } from 'compare-versions';
 
-import { Command } from "commander";
+import { Command, Option } from "commander";
 import debug from "debug";
 
 const PACKAGE_VERSION = require("../package.json").version as string;
@@ -38,13 +38,16 @@ async function main() {
     .argument("<entrypoint>", "program .w entrypoint")
     .option(
       "-o, --out-dir <out-dir>",
-      "Output directory",
+      "Output directory - where to place all generated artifacts",
       join(process.cwd(), "target")
     )
-    .option(
-      "-t, --target <target>",
-      "Target platform (options: 'tf-aws', 'tf-azure', 'tf-gcp', 'sim')",
-      "tf-aws"
+    .addOption(
+      new Option(
+        "-t, --target <target>",
+        "Target platform"
+      )
+      .choices(["tf-aws", "tf-azure", "tf-gcp", "sim"])
+      .makeOptionMandatory()
     )
     .action(compile);
 
