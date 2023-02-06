@@ -53,7 +53,7 @@ extern "C" {
 }
 
 /// Sends a notification to the client, not part of the typical request/response cycle.
-/// On wasm32, this is expected to be implemented whatever is consuming wingc.
+/// On wasm32, this is expected to be implemented by whatever is consuming wingc.
 /// On other targets, this panics.
 #[cfg(not(target_arch = "wasm32"))]
 pub unsafe fn send_notification(
