@@ -172,45 +172,287 @@ inflight (arg1: <type1>, arg2: <type2>, ...) => <type>
 
 ---
 
-#### 1.1.4 Struct type
+#### 1.1.4 Json type
 
-A special data type is available in Wing called `Struct`. Not to be confused
-with definable structs which are outlined in their own section below. This type
-represents an arbitrary JSON value. This type can currently by assigned to and
-from `any`. During the assignment, the compiler internally knows about the
-length of this type and attempts to read it as either a JSON string or buffer.
+Wing has a data type called `Json`. This type represents an immutable arbitrary [JSON
+value](https://www.json.org/json-en.html) (primitives, arrays and objects).
 
-Since casting is not allowed in Wing, `Struct` data type is `any`'s interface
-with the outside world. `Struct` can be casted back to `any` at any time.  
-All structs can be casted to `Struct` and back to `any` at any time as well.  
-`Struct` cannot be casted to any other type.
+##### 1.1.4.1 Definition
 
-"Struct" is immutable by design. Meaning that once parsed from its `any` buffer,
-it cannot be modified anymore.
+Literals can be defined using the `Json` type initializers:
 
-> ```TS
-> // assuming fetch_some_data_with_jsii() returns "any":
-> let data: Struct = await fetch_some_data_with_jsii();
-> print(data[0]["prop-1"].id);
-> print(data.name);
-> ```
-  
-<details><summary>Equivalent TypeScript Code</summary>
+```js
+let json_string  = Json "hello";
+let json_number  = Json 123;
+let json_bool    = Json true;
+let json_array   = Json [ 1, 2, 3 ];
+let json_obj     = Json { boom: 123 };
+let json_mut_obj = MutJson {
+  hello: 123, 
+  world: [ 1, "cat", 3 ], // <-- heterogenous array
+  boom: { hello: 1233 }
+};
+```
 
-> ```TS
-> const data: any = Object.freeze(await (async () => {
->   try {
->     // deep copy all enumerable properties of the host object
->     return JSON.parse(JSON.stringify(await fetch_some_data_with_jsii()));
->   } catch(err) {
->     throw new Error(`Failed to parse JSON from any: ${err.message}`);
->   }
-> })());
-> console.log(data[0]["prop-1"].id);
-> console.log(data.name);
-> ```
+The type of elements within objects and arrays is still `Json`.
 
-</details>
+To access a field within an object, use the `.` notation:
+
+```js
+let boom: Json = json_obj.boom;
+```
+
+Trying to access a non-existent field will fail at runtime. For example:
+
+```js
+print(json_obj.boom.dude.world);
+// RUNTIME ERROR: Uncaught TypeError: Cannot read properties of undefined (reading 'world')
+```
+
+To access an array element, use the `[]` notation:
+
+```js
+let item2: Json = json_array[2];
+```
+
+It is also possible to assign the native `str`, `num`, `bool` and `Array<T>` values and they will
+implicitly be casted to `Json`:
+
+```js
+let my_str: str = "hello";
+let my_num: num = 183;
+let my_bool: bool = true;
+let my_arr: Array<num> = [1,2,3];
+
+let json_string = Json { 
+  a: my_string,
+  b: my_num,
+  c: my_bool,
+  d: my_arr
+};
+```
+
+##### 1.1.4.2. Parsing
+
+To convert a `Json` to a strong-type, use the `parse_json()` static method on the relevant target
+type:
+
+```js
+let my_str = str.parse_json(json_string);
+let my_number = num.parse_json(json_number);
+let my_arr = Array<num>.parse_json(json_array);
+```
+
+>
+> **A NOTE ABOUT NAMING**
+>
+> `parse_json` is very long and pretty ugly. We should think of alternatives.
+> One option is to put all these methods under `Json.as_xxx()`,
+> so `Json.as_num(Json 1234) == 1234`. But this won't work very well for user-defined
+> structs...
+>
+> ALSO: We should rename `str`/`num`/`bool` to `Str`/`Num`/`Bool`. Thoughts?
+>
+
+All `parse_json()` methods will validate that the runtime type is compatible with the target type in
+order to ensure type safety (at a runtime cost):
+
+```js
+str.parse_json(json_number);      // RUNTIME ERROR: unable to parse number `123` as a string.
+num.parse_json(Json "\"hello\""); // RUNTIME ERROR: unable to parse string "hello" as a number
+
+let my_array = Json [1,2,3,"hello"];
+Array<num>.parse_json(my_array); // RUNTIME ERROR: unable to parse `[1,2,3,"hello"]` as an array of `num`.
+```
+
+Use `unsafe: true` to disable this check at your own risk:
+
+```js
+let x = num.parse_json(Json [1,2,3], unsafe: true);
+print(x + 5); // OUTPUT: 1,2,35
+```
+
+For each `parse_json()`, there is a `try_parse_json()` method which returns an optional `T?` which
+indicates if parsing was successful or not:
+
+```js
+let s = str.try_parse_json(my_json) ?? "invalid string";
+```
+
+##### 1.1.4.2. Structs and Schemas
+
+All [structs](#31-structs) also have a `parse()` method that can be used to parse `Json` into a
+struct:
+
+```js
+struct Contact {
+  first: str;
+  last: str;
+  phone: str?;
+}
+
+let j = Json { first: "Wing", last: "Lyly" };
+let my_contact = Contact.parse(j);
+assert(my_contact.first == "Wing");
+```
+
+When a `Json` is parsed into a struct, the schema will be validated to ensure the result is
+type-safe:
+
+```js
+let p = Json { first: "Wing", phone: 1234 };
+Contact.parse(p);
+// RUNTIME ERROR: unable to parse Contact:
+// - field "last" is required and missing
+// - field "phone" is expected to be a string, got number.
+```
+
+Same as with primitives and containers, it is possible to opt-out of validation using `unsafe:
+true`:
+
+```js
+let p = Json { first: "Wing", phone: 1234 };
+let x = Contact.parse(p, unsafe: true);
+assert(x.last.len > 0);
+// RUNTIME ERROR: Cannot read properties of undefined (reading 'length')
+```
+
+Struct parsing is *partial* by default. This means that parsing is successful even if the `Json`
+includes extraneous fields:
+
+```js
+let p = Json { first: "hello", last: "world", another_field: "ignored" };
+let c = Contact.parse(p);
+assert(c.first == "hello");
+assert(c.last == "world");
+// `c.another_field` is not a thing
+```
+
+This can be disabled using `partial: false` (P2):
+
+```js
+Contact.parse(Json { first: "hello", last: "world", another_field: "ignored" }, partial: false);
+// RUNTIME ERROR: cannot parse Contact due to extraneous field "another_field"
+```
+
+Structs have a `schema` static method which returns a `JsonSchema` object (P2):
+
+```js
+let schema = Contact.schema();
+schema.validate(j);
+```
+
+##### 1.1.4.3. MutJson
+
+To define a mutable JSON container, use the `MutJson` type:
+
+```js
+let my_obj = MutJson { hello: "dear" };
+```
+
+Now you can mutate the contents by assigning values:
+
+```js
+let foo_num = 123;
+my_obj.world = "world";
+my_obj.dang = [1,2,3,4];
+my_obj.sub_object = {};
+my_obj.sub_object.arr = [1,"hello","world"];
+my_obj.foo = foo_num;
+```
+
+To delete a key from an object, use the `Json.delete()` method:
+
+```js
+let my_obj = MutJson { hello: 123, world: 555 };
+Json.delete(my_obj, "world");
+
+let immut_obj = Json { hello: 123 };
+Json.delete(immut_obj, "hello");
+//          ^^^^^^^^^ expected `JsonMut`
+```
+
+To modify a Json array, you will need to parse it into a native `MutArray` and then modify it. This
+implies that at the moment, it is not possible to mutate heterogenous JSON arrays:
+
+```js
+let j1 = MutJson { hello: [1,2,3,4] };
+let a1 = MutArray<num>.parse_json(j1);
+a1.push(5);
+
+j1.hello = a1;
+```
+
+> We will need to revisit this as we progress if this is a major use case.
+
+##### 1.1.4.4 Formatting
+
+The `Json.format(j: Json): str` static method can be used to serialize a `Json` as a string:
+
+```js
+assert(Json.format(json_string) == "\"hello\"");
+assert(Json.format(json_obj) == "{\"boom\":123}");
+assert(Json.format(json_mut_obj, indent: 2) == "{\n\"hello\": 123,\n"  \"world\": [\n    1,\n    2,\n    3\n  ],\n  \"boom\": {\n    \"hello\": 1233\n  }\n}");
+```
+
+##### 1.1.4.5 Equality, diff and patch
+
+The `Json.equals(lhs: Json, rhs: Json): bool` static method can be used to determine if two
+values are equal (recursively comparing arrays and objects):
+
+```js
+assert(Json.equals(json_string, Json "hello"));
+assert(Json.equals(json_obj, { boom: [ 1, 2, 3 ] }));
+assert(!Json.equals(Json { hello: [ 1, 2, 3 ] }, Json { hello: [ 1, 2 ] }));
+```
+
+The `Json.diff(lhs: Json, rhs: Json): JsonPatch` static method can be used to calculate the deep
+difference between two JSON values. It returns a list of differences in
+[json-patch](https://jsonpatch.com/) format.
+
+```js
+let j1 = Json {
+  baz: "qux",
+  foo: "bar"
+};
+
+let j2 = Json {
+  baz: "boo",
+  hello: ["world"]
+};
+
+assert(Json.diff(j1, j2) = [
+  { op: JsonPatch.REPLACE, path: "/baz", value: "boo" },
+  { op: JsonPatch.ADD, path: "/hello", value: ["world"] },
+  { op: JsonPatch.REMOVE, path: "/foo" }
+]);
+```
+
+The `Json.patch(j: Json, patch: JsonPatch): Json` static method applies a `JsonPatch` to a `Json` object.
+
+##### 1.1.4.6. Printing
+
+A `Json` value can be printed using `print()`, in which case it will be pretty-formatted:
+
+```js
+print("my object is: ${json_obj}");
+// is equivalent to
+print("my object is: ${Json.format(json_obj, indent: 2)}");
+```
+
+This will output:
+
+```js
+my object is: {
+  boom: 123
+}
+```
+
+It is also legal to just print a json object:
+
+```js
+print(json_mut_obj);
+```
 
 [`▲ top`][top]
 
@@ -1959,15 +2201,15 @@ queue.add_consumer(filter);
 
 ### 6.6 Credits
 
-* **Current Owner:** Sepehr L. ([@3p3r](https://github.com/3p3r))
 * **Contributors (A-Z):**
-  *  Chris R. ([@Chriscbr](https://github.com/Chriscbr))
-  *  Elad B. ([@eladb](https://github.com/eladb))
-  *  Eyal K. ([@ekeren](https://github.com/ekeren))
-  *  Mark MC. ([@MarkMcCulloh](https://github.com/MarkMcCulloh))
-  *  Shai B. ([@ShaiBer](https://github.com/ShaiBer))
-  *  Uri B. ([@staycoolcall911](https://github.com/staycoolcall911))
-  *  Yoav S. ([@yoav-steinberg](https://github.com/yoav-steinberg))  
+  * Chris R. ([@Chriscbr](https://github.com/Chriscbr))
+  * Elad B. ([@eladb](https://github.com/eladb))
+  * Eyal K. ([@ekeren](https://github.com/ekeren))
+  * Mark MC. ([@MarkMcCulloh](https://github.com/MarkMcCulloh))
+  * Sepehr L. ([@3p3r](https://github.com/3p3r))  
+  * Shai B. ([@ShaiBer](https://github.com/ShaiBer))
+  * Uri B. ([@staycoolcall911](https://github.com/staycoolcall911))
+  * Yoav S. ([@yoav-steinberg](https://github.com/yoav-steinberg))  
 
 Inspiration:
   
