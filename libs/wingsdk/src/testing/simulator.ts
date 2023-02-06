@@ -61,15 +61,15 @@ export interface IWithTraceProps {
   readonly message: any;
 
   /**
-   * A function to run as part of the trace.
-   */
-  activity(): Promise<any>;
-
-  /**
    * Tracing metadata.
    * @default - no metadata
    */
   readonly metadata?: object;
+
+  /**
+   * A function to run as part of the trace.
+   */
+  activity(): Promise<any>;
 }
 
 /**
