@@ -9,6 +9,7 @@ import { mkdir, readFile } from "fs/promises";
 import { WASI } from "wasi";
 import debug from "debug";
 import * as chalk from "chalk";
+import { normalPath } from "src/util";
 
 const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
@@ -46,13 +47,6 @@ const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
 export interface ICompileOptions {
   readonly outDir: string;
   readonly target: Target;
-}
-
-/**
- * Normalizes paths from windows to posix.
- */
-function normalPath(path: string) {
-  return path.replace(/\\/g, "/");
 }
 
 /**
