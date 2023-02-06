@@ -3,7 +3,7 @@
 
 import * as vm from "vm";
 
-import { dirname, resolve } from "path";
+import { basename, dirname, join, resolve } from "path";
 import { mkdir, readFile } from "fs/promises";
 
 import { WASI } from "wasi";
@@ -32,6 +32,13 @@ export enum Target {
   SIM = "sim",
 }
 
+const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
+  [Target.TF_AWS]: "tfaws",
+  [Target.TF_AZURE]: "tfazure",
+  [Target.TF_GCP]: "tfgcp",
+  [Target.SIM]: undefined,
+}
+
 /**
  * Compile options for the `compile` command.
  * This is passed from Commander to the `compile` function.
@@ -39,6 +46,21 @@ export enum Target {
 export interface ICompileOptions {
   readonly outDir: string;
   readonly target: Target;
+}
+
+/**
+ * Determines the synth directory for a given target. This is the directory
+ * within the output directory where the SDK app will synthesize its artifacts
+ * for the given target.
+ */
+function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
+  const targetDirSuffix = DEFAULT_SYNTH_DIR_SUFFIX[target];
+  if (targetDirSuffix === undefined) {
+    // this target produces a single artifact, so we don't need a subdirectory
+    return outDir;
+  }
+  const entrypointName = basename(entrypoint, ".w");
+  return join(outDir, `${entrypointName}.${targetDirSuffix}`);
 }
 
 /**
@@ -51,14 +73,14 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   log("wing file: %s", wingFile);
   const wingDir = dirname(wingFile);
   log("wing dir: %s", wingDir);
-  const outDir = resolve(options.outDir);
-  log("out dir: %s", outDir);
-  const workDir = resolve(outDir, ".wing");
+  const synthDir = resolveSynthDir(options.outDir, entrypoint, options.target);
+  log("synth dir: %s", synthDir);
+  const workDir = resolve(synthDir, ".wing");
   log("work dir: %s", workDir);
 
   await Promise.all([
     mkdir(workDir, { recursive: true }),
-    mkdir(outDir, { recursive: true }),
+    mkdir(synthDir, { recursive: true }),
   ]);
 
   const wasi = new WASI({
@@ -66,14 +88,14 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
       ...process.env,
       RUST_BACKTRACE: "full",
       WINGSDK_MANIFEST_ROOT,
-      WINGSDK_SYNTH_DIR: outDir,
+      WINGSDK_SYNTH_DIR: synthDir,
       WINGC_PREFLIGHT,
     },
     preopens: {
       [wingDir]: wingDir, // for Rust's access to the source file
       [workDir]: workDir, // for Rust's access to the work directory
       [WINGSDK_MANIFEST_ROOT]: WINGSDK_MANIFEST_ROOT, // .jsii access
-      [outDir]: outDir, // for Rust's access to the output directory
+      [synthDir]: synthDir, // for Rust's access to the synth directory
     },
   });
 
@@ -103,8 +125,8 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     require,
     process: {
       env: {
-        WINGSDK_SYNTH_DIR: outDir,
-        WING_TARGET: options.target,
+        WINGSDK_SYNTH_DIR: synthDir,
+        WING_TARGET: options.target
       },
     },
     __dirname: workDir,
