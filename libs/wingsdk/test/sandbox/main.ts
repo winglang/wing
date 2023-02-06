@@ -19,7 +19,7 @@ class HelloWorld extends Construct {
 }
 
 const app = new tfgcp.App({
-  outdir: __dirname,
+  outdir: join(__dirname, "target"),
   projectId: "my-project",
   storageLocation: "US",
 });

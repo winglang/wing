@@ -3,19 +3,20 @@
 
 import * as vm from "vm";
 
-import { dirname, resolve } from "path";
+import { basename, dirname, join, resolve } from "path/posix";
 import { mkdir, readFile } from "fs/promises";
 
 import { WASI } from "wasi";
 import debug from "debug";
 import * as chalk from "chalk";
+import { normalPath } from "../util";
 
 const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
 
-const WINGC_WASM_PATH = resolve(__dirname, "../../wingc.wasm");
+const WINGC_WASM_PATH = normalPath(resolve(__dirname, "../../wingc.wasm"));
 log("wasm path: %s", WINGC_WASM_PATH);
-const WINGSDK_RESOLVED_PATH = require.resolve("@winglang/sdk");
+const WINGSDK_RESOLVED_PATH = normalPath(require.resolve("@winglang/sdk"));
 log("wingsdk module path: %s", WINGSDK_RESOLVED_PATH);
 const WINGSDK_MANIFEST_ROOT = resolve(WINGSDK_RESOLVED_PATH, "../..");
 log("wingsdk manifest path: %s", WINGSDK_MANIFEST_ROOT);
@@ -32,6 +33,13 @@ export enum Target {
   SIM = "sim",
 }
 
+const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
+  [Target.TF_AWS]: "tfaws",
+  [Target.TF_AZURE]: "tfazure",
+  [Target.TF_GCP]: "tfgcp",
+  [Target.SIM]: undefined,
+}
+
 /**
  * Compile options for the `compile` command.
  * This is passed from Commander to the `compile` function.
@@ -42,23 +50,38 @@ export interface ICompileOptions {
 }
 
 /**
+ * Determines the synth directory for a given target. This is the directory
+ * within the output directory where the SDK app will synthesize its artifacts
+ * for the given target.
+ */
+function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
+  const targetDirSuffix = DEFAULT_SYNTH_DIR_SUFFIX[target];
+  if (targetDirSuffix === undefined) {
+    // this target produces a single artifact, so we don't need a subdirectory
+    return outDir;
+  }
+  const entrypointName = basename(entrypoint, ".w");
+  return join(outDir, `${entrypointName}.${targetDirSuffix}`);
+}
+
+/**
  * Compiles a Wing program.
  * @param entrypoint The program .w entrypoint.
  * @param options Compile options.
  */
 export async function compile(entrypoint: string, options: ICompileOptions) {
-  const wingFile = entrypoint;
+  const wingFile = normalPath(entrypoint);
   log("wing file: %s", wingFile);
   const wingDir = dirname(wingFile);
   log("wing dir: %s", wingDir);
-  const outDir = resolve(options.outDir);
-  log("out dir: %s", outDir);
-  const workDir = resolve(outDir, ".wing");
+  const synthDir = resolveSynthDir(options.outDir, wingFile, options.target);
+  log("synth dir: %s", synthDir);
+  const workDir = resolve(synthDir, ".wing");
   log("work dir: %s", workDir);
 
   await Promise.all([
     mkdir(workDir, { recursive: true }),
-    mkdir(outDir, { recursive: true }),
+    mkdir(synthDir, { recursive: true }),
   ]);
 
   const wasi = new WASI({
@@ -66,14 +89,14 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
       ...process.env,
       RUST_BACKTRACE: "full",
       WINGSDK_MANIFEST_ROOT,
-      WINGSDK_SYNTH_DIR: outDir,
+      WINGSDK_SYNTH_DIR: synthDir,
       WINGC_PREFLIGHT,
     },
     preopens: {
       [wingDir]: wingDir, // for Rust's access to the source file
       [workDir]: workDir, // for Rust's access to the work directory
       [WINGSDK_MANIFEST_ROOT]: WINGSDK_MANIFEST_ROOT, // .jsii access
-      [outDir]: outDir, // for Rust's access to the output directory
+      [synthDir]: synthDir, // for Rust's access to the synth directory
     },
   });
 
@@ -103,7 +126,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     require,
     process: {
       env: {
-        WINGSDK_SYNTH_DIR: outDir,
+        WINGSDK_SYNTH_DIR: synthDir,
         WING_TARGET: options.target
       },
     },
