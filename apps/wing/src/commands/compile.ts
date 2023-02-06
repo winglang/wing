@@ -14,7 +14,7 @@ import { normalPath } from "../util";
 const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
 
-const WINGC_WASM_PATH = normalPath(resolve(__dirname, "../../wingc.wasm"));
+const WINGC_WASM_PATH = resolve(normalPath(__dirname), "../../wingc.wasm");
 log("wasm path: %s", WINGC_WASM_PATH);
 const WINGSDK_RESOLVED_PATH = normalPath(require.resolve("@winglang/sdk"));
 log("wingsdk module path: %s", WINGSDK_RESOLVED_PATH);
