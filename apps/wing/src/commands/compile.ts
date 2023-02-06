@@ -1,10 +1,11 @@
 import * as vm from "vm";
 
-import { basename, dirname, join, resolve } from "path";
 import { mkdir, readFile } from "fs/promises";
+import { basename, dirname, join, resolve } from "path/posix";
 
-import debug from "debug";
 import * as chalk from "chalk";
+import debug from "debug";
+import { normalPath } from "../util";
 import * as wingCompiler from "../wingc";
 
 const log = debug("wing:compile");
@@ -27,7 +28,7 @@ const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
   [Target.TF_AZURE]: "tfazure",
   [Target.TF_GCP]: "tfgcp",
   [Target.SIM]: undefined,
-}
+};
 
 /**
  * Compile options for the `compile` command.
@@ -59,11 +60,11 @@ function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
  * @param options Compile options.
  */
 export async function compile(entrypoint: string, options: ICompileOptions) {
-  const wingFile = entrypoint;
+  const wingFile = normalPath(entrypoint);
   log("wing file: %s", wingFile);
   const wingDir = dirname(wingFile);
   log("wing dir: %s", wingDir);
-  const synthDir = resolveSynthDir(options.outDir, entrypoint, options.target);
+  const synthDir = resolveSynthDir(options.outDir, wingFile, options.target);
   log("synth dir: %s", synthDir);
   const workDir = resolve(synthDir, ".wing");
   log("work dir: %s", workDir);
@@ -88,8 +89,8 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
       env: {
         // This function is used by the lsp command, which is not used in compilation
         send_notification: () => {},
-      }
-    }
+      },
+    },
   });
 
   const arg = `${wingFile};${workDir}`;
@@ -111,7 +112,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     process: {
       env: {
         WINGSDK_SYNTH_DIR: synthDir,
-        WING_TARGET: options.target
+        WING_TARGET: options.target,
       },
     },
     __dirname: workDir,
@@ -135,12 +136,25 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   try {
     vm.runInContext(artifact, context);
   } catch (e) {
-    console.error(chalk.bold.red("preflight error:") + " " + (e as any).message);
+    console.error(
+      chalk.bold.red("preflight error:") + " " + (e as any).message
+    );
 
-    if ((e as any).stack && (e as any).stack.includes("evalmachine.<anonymous>:")) {
+    if (
+      (e as any).stack &&
+      (e as any).stack.includes("evalmachine.<anonymous>:")
+    ) {
       console.log();
-      console.log("  " + chalk.bold.white("note:") + " " + chalk.white("intermediate javascript code:"));
-      const lineNumber = Number.parseInt((e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]) - 1;
+      console.log(
+        "  " +
+          chalk.bold.white("note:") +
+          " " +
+          chalk.white("intermediate javascript code:")
+      );
+      const lineNumber =
+        Number.parseInt(
+          (e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]
+        ) - 1;
       const lines = artifact.split("\n");
       let startLine = Math.max(lineNumber - 2, 0);
       let finishLine = Math.min(lineNumber + 2, lines.length - 1);
@@ -156,10 +170,19 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     }
 
     if (process.env.NODE_STACKTRACE) {
-      console.error("--------------------------------- STACK TRACE ---------------------------------")
+      console.error(
+        "--------------------------------- STACK TRACE ---------------------------------"
+      );
       console.error((e as any).stack);
     } else {
-      console.log("  " + chalk.bold.white("note:") + " " + chalk.white("run with `NODE_STACKTRACE=1` environment variable to display a stack trace"));
+      console.log(
+        "  " +
+          chalk.bold.white("note:") +
+          " " +
+          chalk.white(
+            "run with `NODE_STACKTRACE=1` environment variable to display a stack trace"
+          )
+      );
     }
   }
 }
