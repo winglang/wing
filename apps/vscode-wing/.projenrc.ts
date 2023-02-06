@@ -107,7 +107,7 @@ project.addFields({
 });
 
 const esbuildComment =
-  "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --external:winglang --format=cjs --platform=node --bundle";
+  "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --format=cjs --platform=node --bundle";
 project.compileTask.reset();
 project.compileTask.exec(esbuildComment);
 project.watchTask.reset(`${esbuildComment} --watch`);

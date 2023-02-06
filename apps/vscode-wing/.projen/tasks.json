@@ -61,7 +61,7 @@
       "description": "Only compile",
       "steps": [
         {
-          "exec": "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --external:winglang --format=cjs --platform=node --bundle"
+          "exec": "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --format=cjs --platform=node --bundle"
         }
       ]
     },
@@ -172,7 +172,7 @@
       "description": "Watch & compile in the background",
       "steps": [
         {
-          "exec": "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --external:winglang --format=cjs --platform=node --bundle --watch"
+          "exec": "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --format=cjs --platform=node --bundle --watch"
         }
       ]
     }
