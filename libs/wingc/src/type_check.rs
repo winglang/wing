@@ -1854,7 +1854,26 @@ impl<'a> TypeChecker<'a> {
 							let new_return_type = if sig.return_type.is_same_type_as(original_type_param) {
 								new_type_arg
 							} else {
-								sig.return_type
+								// Handle generic return types
+								// TODO: If a generic class has a method that returns another generic, it must be a builtin
+								if let Some(c) = sig.return_type.as_class() {
+									if c.type_parameters.is_some() {
+										let fqn = format!("{}.{}", WINGSDK_STD_MODULE, c.name.name);
+										match fqn.as_str() {
+											WINGSDK_MUT_ARRAY => self.types.add_type(Type::MutArray(new_type_arg)),
+											WINGSDK_ARRAY => self.types.add_type(Type::Array(new_type_arg)),
+											WINGSDK_MAP => self.types.add_type(Type::Map(new_type_arg)),
+											WINGSDK_MUT_MAP => self.types.add_type(Type::MutMap(new_type_arg)),
+											WINGSDK_SET => self.types.add_type(Type::Set(new_type_arg)),
+											WINGSDK_MUT_SET => self.types.add_type(Type::MutSet(new_type_arg)),
+											_ => self.general_type_error(format!("\"{}\" is not a supported generic return type", fqn)),
+										}
+									} else {
+										sig.return_type
+									}
+								} else {
+									sig.return_type
+								}
 							};
 
 							let new_args: Vec<UnsafeRef<Type>> = sig
