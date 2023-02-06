@@ -1,16 +1,18 @@
-import { IConstruct } from "constructs";
 import fs from "fs";
 import { resolve } from "path";
 import vm from "vm";
+import { IConstruct } from "constructs";
 
 /**
  * Behavioral interface of a plugin hook.
  */
-export interface IPluginHooks {
-  /** name of plugin */
-  name: string;
-  /** targets that hook is compatible with */
-  compatibleTargets?: string[];
+export interface ICompilationHook {
+  /**
+   *  name of plugin can be set by plugin as export
+   *
+   * @default - absolute path to plugin file
+   */
+  pluginName: string;
   /** preSynth phase */
   preSynth?(app: IConstruct): void;
   /** postSynth phase */
@@ -28,7 +30,7 @@ enum PluginPhases {
 export interface PluginManagerProps {
   /**
    * vm context to load plugins in with
-   * 
+   *
    * @default - create a new context with (require, console, exports, process, __dirname)
    */
   context?: vm.Context;
@@ -39,7 +41,7 @@ export interface PluginManagerProps {
  * managing their executions during the various phases of the plugin lifecycle.
  */
 export class PluginManager {
-  private hooks: IPluginHooks[];
+  private hooks: ICompilationHook[];
   private context?: vm.Context;
 
   constructor(plugins: string[], props: PluginManagerProps = {}) {
@@ -62,7 +64,6 @@ export class PluginManager {
       throw new Error(
         `Currently only javascript files are supported as plugins. Got: ${plugin}`
       );
-      
     }
     this.addPluginFromFilePath(plugin);
   }
@@ -74,46 +75,37 @@ export class PluginManager {
    * @param filePath absolute file path to the plugin
    */
   private addPluginFromFilePath(filePath: string) {
-    const pluginHooks: IPluginHooks = {
-      name: filePath,
+    const pluginHooks: ICompilationHook = {
+      pluginName: filePath, // can be overwritten by plugin (ex: exports.pluginName = "my-plugin")
     };
-    
+
     const pluginDir = resolve(filePath).split("/").slice(0, -1).join("/");
 
     const context =
       this.context ??
       vm.createContext({
-        require, 
-        console, 
-        exports: pluginHooks, 
-        process, 
-        __dirname: pluginDir 
+        require,
+        console,
+        exports: pluginHooks,
+        process,
+        __dirname: pluginDir,
       });
-    
+
     const pluginCode = fs.readFileSync(resolve(filePath), "utf8");
     const script = new vm.Script(pluginCode);
     script.runInNewContext(context);
 
-    if (this.isHookCompatible(pluginHooks)) {
-      this.hooks.push(pluginHooks);
-    } else {
-      console.log(
-        `Skipping plugin ${filePath} as is not compatible with target ${process.env.WING_TARGET}`
-      );
-    }
-
+    this.hooks.push(pluginHooks);
   }
 
-  private isHookCompatible(hook: IPluginHooks): boolean {
-    if (hook.compatibleTargets) {
-      return hook.compatibleTargets.includes(process.env.WING_TARGET!);
-    }
-    // if no explicit compatible targets defined assume it's compatible
-    return true;
-  }
-
-  private throwHookInvocationError(stage: string, name: string, err: any) {
-    throw new Error(`Plugin: "${name}" failed, during stage: "${stage}". cause: ${err.message}`);
+  private throwHookInvocationError(
+    stage: string,
+    pluginName: string,
+    err: any
+  ) {
+    throw new Error(
+      `Plugin: "${pluginName}" failed, during stage: "${stage}". cause: ${err.message}`
+    );
   }
 
   /**
@@ -130,7 +122,11 @@ export class PluginManager {
         try {
           hook.preSynth(app);
         } catch (err) {
-          this.throwHookInvocationError(PluginPhases.PRE_SYNTH, hook.name, err)
+          this.throwHookInvocationError(
+            PluginPhases.PRE_SYNTH,
+            hook.pluginName,
+            err
+          );
         }
       }
     }
@@ -150,9 +146,13 @@ export class PluginManager {
     for (const hook of this.hooks) {
       if (hook.postSynth) {
         try {
-          config = hook.postSynth(config) ?? config;
+          config = hook.postSynth(config) ?? config; // ignores undefined return values
         } catch (err) {
-          this.throwHookInvocationError(PluginPhases.POST_SYNTH, hook.name, err);
+          this.throwHookInvocationError(
+            PluginPhases.POST_SYNTH,
+            hook.pluginName,
+            err
+          );
         }
       }
     }
@@ -178,7 +178,11 @@ export class PluginManager {
         try {
           hook.validate(config);
         } catch (err) {
-          this.throwHookInvocationError(PluginPhases.VALIDATE, hook.name, err);
+          this.throwHookInvocationError(
+            PluginPhases.VALIDATE,
+            hook.pluginName,
+            err
+          );
         }
       }
     }

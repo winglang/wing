@@ -11,9 +11,9 @@ import * as cdktf from "cdktf";
 import { Construct, IConstruct } from "constructs";
 import { IPolyconFactory, Polycons } from "polycons";
 import stringify from "safe-stable-stringify";
+import { PluginManager } from "./plugin-manager";
 import { synthesizeTree } from "./tree";
 import { Logger } from "../cloud/logger";
-import { PluginManager } from "./plugin-manager";
 
 const TERRAFORM_STACK_NAME = "root";
 
@@ -81,7 +81,7 @@ export class CdktfApp extends Construct implements IApp {
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
   private readonly pluginManager: PluginManager;
-  
+
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
     const cdktfOutdir = join(outdir, ".tmp.cdktf.out");
@@ -155,9 +155,6 @@ export class CdktfApp extends Construct implements IApp {
       cdktfOutdir,
       this.cdktfApp.manifest.stacks[TERRAFORM_STACK_NAME].workingDirectory
     );
-    
-    console.log("STACK: ",cdktfStackDir);
-    console.log("OUT: ",cdktfOutdir);
 
     const files = readdirSync(cdktfStackDir, { withFileTypes: true });
 

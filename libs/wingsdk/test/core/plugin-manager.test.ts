@@ -40,14 +40,14 @@ exports.postSynth = function(config) {
   }
   return config;
 };
-`
+`;
 
 const DELETE_S3_BUCKET_PLUGIN_CODE = `
 exports.postSynth = function(config) {
   config.resource.aws_s3_bucket = {};
   return config;
 };
-`
+`;
 
 test("preSynth can add resources to construct tree", () => {
   // GIVEN
@@ -82,8 +82,7 @@ test("postSynth can modify terraform config", () => {
   new tfaws.Bucket(app, "Bucket", {});
 
   const synthOutput = app.synth();
-  // TODO: Maybe find a better way to get the path to the synthesized stack
-  const synthesizedStackPath = `${app.outdir}/cdktf.out/stacks/root/cdk.tf.json`;
+  const synthesizedStackPath = `${app.outdir}/main.tf.json`;
   // apply postSynth plugins
   pm.postSynth(synthOutput, synthesizedStackPath);
   const postSynthOutput = fs.readFileSync(synthesizedStackPath, "utf-8");
@@ -128,18 +127,21 @@ test("plugins are run in order they are passed in", () => {
   // GIVEN
   const tmpDir = mkdtemp();
   const createBucket = join(tmpDir, "create_bucket.js");
-  const deleteBuckets = join(tmpDir, "delete_bucket.js"); 
+  const deleteBuckets = join(tmpDir, "delete_bucket.js");
   fs.writeFileSync(createBucket, CREATE_S3_BUCKET_PLUGIN_CODE);
   fs.writeFileSync(deleteBuckets, DELETE_S3_BUCKET_PLUGIN_CODE);
 
   // WHEN
-  const app = new tfaws.App({ outdir: tmpDir, plugins: [createBucket, deleteBuckets] });
+  const app = new tfaws.App({
+    outdir: tmpDir,
+    plugins: [createBucket, deleteBuckets],
+  });
   new tfaws.Bucket(app, "Bucket", {});
   app.synth();
 
-  const synthesizedStackPath = `${app.outdir}/cdktf.out/stacks/root/cdk.tf.json`;
+  const synthesizedStackPath = `${app.outdir}/main.tf.json`;
   const postSynthOutput = fs.readFileSync(synthesizedStackPath, "utf-8");
 
   // THEN
   expect(tfResourcesOfCount(postSynthOutput, "aws_s3_bucket")).toEqual(0);
-})
+});

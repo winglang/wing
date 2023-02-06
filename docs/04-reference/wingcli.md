@@ -133,6 +133,16 @@ JavaScript bundles that include inflight code that executes on compute platform 
 
 You can deploy your stack to GCP using Terraform ([example](/getting-started/aws)).
 
+### Plugins
+
+Additionally the wing `compile` command can be provided an optional list of plugins to use during the compilation process.
+
+```sh
+$ wing compile --target tf-aws ENTRYPOINT.w --plugins PLUGIN1 PLUGIN2
+```
+The plugins can be absolute paths or relative paths (to the current working directory) to javascript files. For more the structure 
+or how to create a plugin see [Compiler Plugins](/reference/compiler-plugins).
+
 ## Test: `wing test`
 
 The `wing test` command can be used to compile and execute tests in Wing applications.
