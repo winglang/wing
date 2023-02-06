@@ -64,7 +64,7 @@ const LOW_MASK = 2n ** 32n - 1n;
 const HIGH_MASK = BigInt(32);
 
 /**
- * 
+ * Runs the given WASM function in the Wing Compiler WASM instance.
  * 
  * Assumptions:
  * 1. The called WASM function is expecting a pointer and a length representing a string
