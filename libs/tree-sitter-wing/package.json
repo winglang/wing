@@ -18,7 +18,10 @@
   "dependencies": {
     "nan": "^2.12.1"
   },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.20.7"
+  },
   "scripts": {
-    "test": "npx -y tree-sitter-cli@0.20.7 test"
+    "test": "tree-sitter test"
   }
 }
