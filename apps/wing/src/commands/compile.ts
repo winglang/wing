@@ -1,6 +1,3 @@
-// for WebAssembly typings:
-/// <reference lib="dom" />
-
 import * as vm from "vm";
 
 import { basename, dirname, join, resolve } from "path";
@@ -12,8 +9,6 @@ import { loadWingc, wingcInvoke } from "../wingc";
 
 const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
-
-
 const WINGC_PREFLIGHT = "preflight.js";
 
 /**
@@ -91,6 +86,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     },
     imports: {
       env: {
+        // This function is used by the lsp command, which is not used in compilation
         send_notification: () => {},
       }
     }

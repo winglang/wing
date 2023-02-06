@@ -3,6 +3,7 @@ import {
   InitializeParams,
   TextDocumentSyncKind,
   InitializeResult,
+  CompletionItem,
 } from "vscode-languageserver/node";
 
 import { loadWingc, wingcInvoke } from "../wingc";
@@ -16,8 +17,6 @@ export async function run_server() {
     },
   });
 
-  // Create a connection for the server, using stdio as a transport.
-  // Also include all preview / proposed LSP features.
   let connection = createConnection(process.stdin, process.stdout);
 
   connection.onInitialize((_params: InitializeParams) => {
@@ -25,7 +24,6 @@ export async function run_server() {
       capabilities: {
         textDocumentSync: TextDocumentSyncKind.Full,
         completionProvider: {
-          resolveProvider: false,
           triggerCharacters: ["."],
         },
       },
@@ -33,26 +31,35 @@ export async function run_server() {
     return result;
   });
 
-  // connection.onInitialized(() => {
-  //   connection.window.showInformationMessage("Wing language server initialized");
-  // });
   connection.onDidOpenTextDocument(async (params) => {
     const string = JSON.stringify(params);
-    await wingcInvoke(wingc, "wingc_on_did_open_text_document", string);
+    wingcInvoke(wingc, "wingc_on_did_open_text_document", string);
   });
   connection.onDidChangeTextDocument(async (params) => {
     const string = JSON.stringify(params);
-    await wingcInvoke(wingc, "wingc_on_did_change_text_document", string);
+    wingcInvoke(wingc, "wingc_on_did_change_text_document", string);
   });
   connection.onCompletion(async (params) => {
-    const result = await wingcInvoke(
+    const result = wingcInvoke(
       wingc,
       "wingc_on_completion",
       JSON.stringify(params)
-    );
+    ) as string;
+    return JSON.parse(result) as CompletionItem[];
+  });
+  connection.languages.semanticTokens.on(async (params) => {
+    const result = wingcInvoke(
+      wingc,
+      "wingc_on_semantic_tokens",
+      JSON.stringify(params)
+    ) as string;
     return JSON.parse(result) as any;
   });
 
+  /**
+   * This function is called by the WASM code to immediately 
+   * send a notification to the client.
+   */
   function send_notification(
     type_ptr: number,
     type_len: number,
@@ -73,9 +80,9 @@ export async function run_server() {
     );
     const data_str = new TextDecoder().decode(data_buf);
 
-    connection.sendNotification(type_str, JSON.parse(data_str));
+    // purposely not awaiting this, notifications are fire-and-forget
+    void connection.sendNotification(type_str, JSON.parse(data_str));
   }
 
-  // Listen on the connection
   connection.listen();
 }

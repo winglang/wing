@@ -33,9 +33,9 @@ async function main() {
     .argument("[simfile]", ".wsim simulator file")
     .action(run);
 
-    program
+  program
     .command("lsp")
-    .description("Run wing language server")
+    .description("Run the Wing language server on stdio")
     .action(run_server);
 
   program

@@ -6,16 +6,19 @@ use crate::{
 	Diagnostics,
 };
 use itertools::Itertools;
-use lsp_types::{CompletionItem, CompletionResponse, Position, Range, Url};
+use lsp_types::{
+	CompletionItem, CompletionResponse, Position, Range, SemanticToken, SemanticTokens, SemanticTokensResult, Url,
+};
 use std::{
 	cell::RefCell,
 	collections::{HashMap, HashSet},
 };
 use tree_sitter::Tree;
 
-use self::completions::completions_from_ast;
+use self::{completions::completions_from_ast, semantic_token::semantic_token_from_ast};
 
 mod completions;
+mod semantic_token;
 
 pub struct FileData {
 	pub contents: String,
@@ -27,7 +30,7 @@ thread_local! {
 	/// Under normal cases, wingc is not in full control of the process in which it is running.
 	/// This means that it cannot reliably control stateful data like this between function calls.
 	/// Here we will assume the process is single threaded, and use thread_local to store this data.
-	pub static FILES: RefCell<HashMap<String, FileData>> = RefCell::new(HashMap::new());
+	pub static FILES: RefCell<HashMap<Url, FileData>> = RefCell::new(HashMap::new());
 }
 
 #[cfg(target_arch = "wasm32")]
@@ -63,6 +66,28 @@ pub unsafe fn send_notification(
 }
 
 #[no_mangle]
+pub unsafe extern "C" fn wingc_on_did_change_text_document(ptr: u32, len: u32) {
+	let parse_string = ptr_to_string(ptr, len);
+	if let Ok(parsed) = serde_json::from_str(&parse_string) {
+		on_document_did_change(parsed);
+	} else {
+		eprintln!("Failed to parse 'did change' text document: {}", parse_string);
+	}
+}
+pub fn on_document_did_change(params: lsp_types::DidChangeTextDocumentParams) {
+	FILES.with(|files| {
+		let mut files = files.borrow_mut();
+		let uri = params.text_document.uri;
+		let uri_path = uri.to_file_path().unwrap();
+		let path = uri_path.to_str().unwrap();
+
+		let result = parse_text(path, params.content_changes[0].text.as_bytes());
+		send_diagnostics(&uri, &result.diagnostics);
+		files.insert(uri, result);
+	});
+}
+
+#[no_mangle]
 pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
 	let parse_string = ptr_to_string(ptr, len);
 	if let Ok(parsed) = serde_json::from_str(&parse_string) {
@@ -80,13 +105,10 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 	FILES.with(|files| {
 		let files = files.borrow();
 		let uri = params.text_document_position.text_document.uri;
-		let uri_path = uri.to_file_path().unwrap();
-		let path = uri_path.to_str().unwrap();
-		let result = files.get(path).unwrap();
+		let result = files.get(&uri).unwrap();
 
 		let position = params.text_document_position.position;
 		let completions = completions_from_ast(&result.contents.as_str(), &result.tree, position);
-		send_log("did complete");
 
 		CompletionResponse::Array(
 			completions
@@ -122,13 +144,63 @@ pub fn on_document_did_open(params: lsp_types::DidOpenTextDocumentParams) {
 		let uri_path = uri.to_file_path().unwrap();
 		let path = uri_path.to_str().unwrap();
 		let result = parse_text(path, params.text_document.text.as_bytes());
-		let diagnostics = result.diagnostics.clone();
-		files.insert(path.to_string(), result);
-		send_diagnostics(uri, &diagnostics);
-		send_log("did open");
+		send_diagnostics(&uri, &result.diagnostics);
+		files.insert(uri, result);
 	});
 }
 
+#[no_mangle]
+pub unsafe extern "C" fn wingc_on_semantic_tokens(ptr: u32, len: u32) {
+	let parse_string = ptr_to_string(ptr, len);
+	if let Ok(parsed) = serde_json::from_str(&parse_string) {
+		on_semantic_tokens(parsed);
+	} else {
+		eprintln!("Failed to parse 'did open' text document: {}", parse_string);
+	}
+}
+pub fn on_semantic_tokens(params: lsp_types::SemanticTokensParams) -> Option<SemanticTokensResult> {
+	FILES.with(|files| {
+		let files = files.borrow();
+		let parse_result = files.get(&params.text_document.uri).unwrap();
+		let absolute_tokens = semantic_token_from_ast(&parse_result.tree);
+
+		let mut last_line = 0;
+		let mut last_char = 0;
+
+		// convert absolute tokens to relative tokens
+		// this logic is specific to this endpoint for perf reasons
+		let mut relative_tokens: Vec<SemanticToken> = Vec::new();
+		for token in absolute_tokens.iter() {
+			let line = token.start.row - last_line;
+			let char;
+			if line == 0 {
+				char = token.start.column - last_char;
+			} else {
+				char = token.start.column;
+			}
+			relative_tokens.push(SemanticToken {
+				delta_line: line as u32,
+				delta_start: char as u32,
+				length: token.length as u32,
+				token_type: token.token_type as u32,
+				token_modifiers_bitset: 0,
+			});
+			last_line = token.start.row;
+			last_char = token.start.column;
+		}
+
+		if relative_tokens.len() == 0 {
+			None
+		} else {
+			Some(SemanticTokensResult::Tokens(SemanticTokens {
+				result_id: None,
+				data: relative_tokens,
+			}))
+		}
+	})
+}
+
+#[allow(dead_code)]
 fn send_log(message: &str) {
 	let notification = serde_json::json!({
 		"type": lsp_types::MessageType::INFO,
@@ -147,7 +219,7 @@ fn send_log(message: &str) {
 	}
 }
 
-fn send_diagnostics(uri: Url, diagnostics: &Diagnostics) {
+fn send_diagnostics(uri: &Url, diagnostics: &Diagnostics) {
 	let final_diags = diagnostics
 		.iter()
 		.filter(|item| matches!(item.level, DiagnosticLevel::Error) && item.span.is_some())
@@ -182,31 +254,7 @@ fn send_diagnostics(uri: Url, diagnostics: &Diagnostics) {
 	}
 }
 
-#[no_mangle]
-pub unsafe extern "C" fn wingc_on_did_change_text_document(ptr: u32, len: u32) {
-	let parse_string = ptr_to_string(ptr, len);
-	if let Ok(parsed) = serde_json::from_str(&parse_string) {
-		on_document_did_change(parsed);
-	} else {
-		eprintln!("Failed to parse 'did change' text document: {}", parse_string);
-	}
-}
-pub fn on_document_did_change(params: lsp_types::DidChangeTextDocumentParams) {
-	FILES.with(|files| {
-		let mut files = files.borrow_mut();
-		let uri = params.text_document.uri;
-		let uri_path = uri.to_file_path().unwrap();
-		let path = uri_path.to_str().unwrap();
-
-		let result = parse_text(path, params.content_changes[0].text.as_bytes());
-		let diagnostics = result.diagnostics.clone();
-		files.insert(path.to_string(), result);
-		send_diagnostics(uri, &diagnostics);
-	});
-	send_log("did change");
-}
-
-pub fn parse_text(source_file: &str, text: &[u8]) -> FileData {
+fn parse_text(source_file: &str, text: &[u8]) -> FileData {
 	let language = tree_sitter_wing::language();
 	let mut parser = tree_sitter::Parser::new();
 	parser.set_language(language).unwrap();

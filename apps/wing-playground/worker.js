@@ -25,6 +25,7 @@ let wasi = new WASI({
 
 const instance = wasi.instantiate(wasm, {
   env: {
+    // This function is used by the language server, which is not used in the playground
     send_notification: () => {},
   }
 });
