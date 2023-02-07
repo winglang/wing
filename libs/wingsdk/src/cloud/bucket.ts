@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
 import { Code, Resource } from "../core";
+import { TracingContext } from "../target-sim";
 
 /**
  * Global identifier for `Bucket`.
@@ -88,7 +89,7 @@ export interface IBucketClient {
    * @param body Content of the object we want to store into the bucket.
    * @inflight
    */
-  put(key: string, body: string): Promise<void>;
+  put(key: string, body: string, ctx?: TracingContext): Promise<void>;
 
   /**
    * Retrieve an object from the bucket.
@@ -97,7 +98,7 @@ export interface IBucketClient {
    * @Returns the object's body.
    * @inflight
    */
-  get(key: string): Promise<string>;
+  get(key: string, ctx?: TracingContext): Promise<string>;
 
   /**
    * Retrieve existing objects keys from the bucket.
@@ -105,7 +106,7 @@ export interface IBucketClient {
    * @returns a list of keys or an empty array if the bucket is empty.
    * @inflight
    */
-  list(prefix?: string): Promise<string[]>;
+  list(prefix?: string, ctx?: TracingContext): Promise<string[]>;
 
   /**
    * Delete an existing object using a key from the bucket
@@ -113,7 +114,11 @@ export interface IBucketClient {
    * @param opts Options available for delete an item from a bucket.
    * @inflight
    */
-  delete(key: string, opts?: BucketDeleteOptions): Promise<void>;
+  delete(
+    key: string,
+    opts?: BucketDeleteOptions,
+    ctx?: TracingContext
+  ): Promise<void>;
 }
 
 /**

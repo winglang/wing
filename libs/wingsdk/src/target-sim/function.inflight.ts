@@ -6,19 +6,18 @@ import {
   ENV_WING_SIM_INFLIGHT_RESOURCE_PATH,
   ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE,
 } from "./function";
-import { SimulatorResource } from "./resource";
+import { ISimulatorResourceInstance, TracingContext } from "./resource";
 import { FunctionSchema } from "./schema-resources";
 import { FUNCTION_TYPE, IFunctionClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
 
-export class Function extends SimulatorResource implements IFunctionClient {
+export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly filename: string;
   private readonly env: Record<string, string>;
   private readonly context: ISimulatorContext;
   private readonly timeout: number;
 
   constructor(props: FunctionSchema["props"], context: ISimulatorContext) {
-    super();
     if (props.sourceCodeLanguage !== "javascript") {
       throw new Error("Only JavaScript is supported");
     }
@@ -28,7 +27,15 @@ export class Function extends SimulatorResource implements IFunctionClient {
     this.timeout = props.timeout;
   }
 
-  public async invoke(payload: string): Promise<string> {
+  public async init(): Promise<void> {
+    return;
+  }
+
+  public async cleanup(): Promise<void> {
+    return;
+  }
+
+  public async invoke(payload: string, ctx?: TracingContext): Promise<string> {
     const userCode = fs.readFileSync(this.filename, "utf8");
     const wrapper = [
       "const exports = {};",
@@ -72,7 +79,7 @@ export class Function extends SimulatorResource implements IFunctionClient {
       activity: async () => {
         return vm.runInContext(wrapper, context, { timeout: this.timeout });
       },
-      ctx: this.tracingContext,
+      ctx,
     });
   }
 }

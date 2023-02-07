@@ -5,24 +5,32 @@ import {
   ENV_WING_SIM_INFLIGHT_RESOURCE_PATH,
   ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE,
 } from "./function";
-import { SimulatorResource } from "./resource";
+import { ISimulatorResourceInstance, TracingContext } from "./resource";
 import { LoggerSchema } from "./schema-resources";
 import { ILoggerClient } from "../cloud";
 import { ISimulatorContext, TraceType } from "../testing";
 
-export class Logger extends SimulatorResource implements ILoggerClient {
+export class Logger implements ILoggerClient, ISimulatorResourceInstance {
   private readonly logsDir: string;
   private readonly context: ISimulatorContext;
   public constructor(
     _props: LoggerSchema["props"],
     context: ISimulatorContext
   ) {
-    super();
     this.logsDir = fs.mkdtempSync(join(os.tmpdir(), "wing-sim-"));
     this.context = context;
   }
 
-  public async print(message: string): Promise<void> {
+  public async init(): Promise<void> {
+    return;
+  }
+
+  public async cleanup(): Promise<void> {
+    // TODO: clean up logs dir?
+    return;
+  }
+
+  public async print(message: string, ctx?: TracingContext): Promise<void> {
     if (!fs.existsSync(this.logsDir)) {
       throw new Error(`Logs directory ${this.logsDir} does not exist.`);
     }
@@ -37,7 +45,7 @@ export class Logger extends SimulatorResource implements ILoggerClient {
       sourcePath: resourcePath,
       sourceType: resourceType,
       timestamp: new Date().toISOString(),
-      ctx: this.tracingContext,
+      ctx,
     });
   }
 }

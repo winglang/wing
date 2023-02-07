@@ -1,21 +1,24 @@
-import { SimulatorResource } from "./resource";
+import { ISimulatorResourceInstance, TracingContext } from "./resource";
 import { CounterSchema } from "./schema-resources";
 import { ICounterClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
 
-export class Counter extends SimulatorResource implements ICounterClient {
+export class Counter implements ICounterClient, ISimulatorResourceInstance {
   private value: number;
   private readonly context: ISimulatorContext;
+
   public constructor(
     props: CounterSchema["props"],
     context: ISimulatorContext
   ) {
-    super();
     this.value = props.initial;
     this.context = context;
   }
 
-  public async inc(amount: number = 1): Promise<number> {
+  public async init(): Promise<void> {}
+  public async cleanup(): Promise<void> {}
+
+  public async inc(amount: number = 1, ctx?: TracingContext): Promise<number> {
     return this.context.withTrace({
       message: `Inc (amount=${amount}).`,
       activity: async () => {
@@ -23,11 +26,11 @@ export class Counter extends SimulatorResource implements ICounterClient {
         this.value += amount;
         return prev;
       },
-      ctx: this.tracingContext,
+      ctx,
     });
   }
 
-  public async dec(amount: number = 1): Promise<number> {
+  public async dec(amount: number = 1, ctx?: TracingContext): Promise<number> {
     return this.context.withTrace({
       message: `Dec (amount=${amount}).`,
       activity: async () => {
@@ -35,17 +38,17 @@ export class Counter extends SimulatorResource implements ICounterClient {
         this.value -= amount;
         return prev;
       },
-      ctx: this.tracingContext,
+      ctx,
     });
   }
 
-  public async peek(): Promise<number> {
+  public async peek(ctx?: TracingContext): Promise<number> {
     return this.context.withTrace({
       message: `Peek (value=${this.value})`,
       activity: async () => {
         return this.value;
       },
-      ctx: this.tracingContext,
+      ctx,
     });
   }
 }

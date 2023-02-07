@@ -2794,7 +2794,7 @@ Inflight interface for `Bucket`.
 ##### `delete` <a name="delete" id="@winglang/sdk.cloud.IBucketClient.delete"></a>
 
 ```wing
-delete(key: str, opts?: BucketDeleteOptions): void
+delete(key: str, opts?: BucketDeleteOptions, ctx?: TracingContext): void
 ```
 
 **Inflight client:** [true](#true)
@@ -2817,10 +2817,16 @@ Options available for delete an item from a bucket.
 
 ---
 
+###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.IBucketClient.delete.parameter.ctx"></a>
+
+- *Type:* sim.TracingContext
+
+---
+
 ##### `get` <a name="get" id="@winglang/sdk.cloud.IBucketClient.get"></a>
 
 ```wing
-get(key: str): str
+get(key: str, ctx?: TracingContext): str
 ```
 
 **Inflight client:** [true](#true)
@@ -2835,10 +2841,16 @@ Key of the object.
 
 ---
 
+###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.IBucketClient.get.parameter.ctx"></a>
+
+- *Type:* sim.TracingContext
+
+---
+
 ##### `list` <a name="list" id="@winglang/sdk.cloud.IBucketClient.list"></a>
 
 ```wing
-list(prefix?: str): MutArray<str>
+list(prefix?: str, ctx?: TracingContext): MutArray<str>
 ```
 
 **Inflight client:** [true](#true)
@@ -2853,10 +2865,16 @@ Limits the response to keys that begin with the specified prefix.
 
 ---
 
+###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.IBucketClient.list.parameter.ctx"></a>
+
+- *Type:* sim.TracingContext
+
+---
+
 ##### `put` <a name="put" id="@winglang/sdk.cloud.IBucketClient.put"></a>
 
 ```wing
-put(key: str, body: str): void
+put(key: str, body: str, ctx?: TracingContext): void
 ```
 
 **Inflight client:** [true](#true)
@@ -2876,6 +2894,12 @@ Key of the object.
 - *Type:* str
 
 Content of the object we want to store into the bucket.
+
+---
+
+###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.IBucketClient.put.parameter.ctx"></a>
+
+- *Type:* sim.TracingContext
 
 ---
 
@@ -2899,7 +2923,7 @@ Inflight interface for `Counter`.
 ##### `dec` <a name="dec" id="@winglang/sdk.cloud.ICounterClient.dec"></a>
 
 ```wing
-dec(amount?: num): num
+dec(amount?: num, ctx?: TracingContext): num
 ```
 
 **Inflight client:** [true](#true)
@@ -2914,10 +2938,16 @@ amount to decrement (default is 1).
 
 ---
 
+###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.ICounterClient.dec.parameter.ctx"></a>
+
+- *Type:* sim.TracingContext
+
+---
+
 ##### `inc` <a name="inc" id="@winglang/sdk.cloud.ICounterClient.inc"></a>
 
 ```wing
-inc(amount?: num): num
+inc(amount?: num, ctx?: TracingContext): num
 ```
 
 **Inflight client:** [true](#true)
@@ -2932,10 +2962,16 @@ amount to increment (default is 1).
 
 ---
 
+###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.ICounterClient.inc.parameter.ctx"></a>
+
+- *Type:* sim.TracingContext
+
+---
+
 ##### `peek` <a name="peek" id="@winglang/sdk.cloud.ICounterClient.peek"></a>
 
 ```wing
-peek(): num
+peek(ctx?: TracingContext): num
 ```
 
 **Inflight client:** [true](#true)
@@ -2944,6 +2980,12 @@ Get the current value of the counter.
 
 Using this API may introduce race conditions since the value can change between
 the time it is read and the time it is used in your code.
+
+###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.ICounterClient.peek.parameter.ctx"></a>
+
+- *Type:* sim.TracingContext
+
+---
 
 
 ### IFunctionClient <a name="IFunctionClient" id="@winglang/sdk.cloud.IFunctionClient"></a>
@@ -2963,7 +3005,7 @@ Inflight interface for `Function`.
 ##### `invoke` <a name="invoke" id="@winglang/sdk.cloud.IFunctionClient.invoke"></a>
 
 ```wing
-invoke(payload: str): str
+invoke(payload: str, ctx?: TracingContext): str
 ```
 
 **Inflight client:** [true](#true)
@@ -2973,6 +3015,12 @@ Invoke the function asynchronously with a given payload.
 ###### `payload`<sup>Required</sup> <a name="payload" id="@winglang/sdk.cloud.IFunctionClient.invoke.parameter.payload"></a>
 
 - *Type:* str
+
+---
+
+###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.IFunctionClient.invoke.parameter.ctx"></a>
+
+- *Type:* sim.TracingContext
 
 ---
 
@@ -3119,7 +3167,7 @@ Inflight interface for `Logger`.
 ##### `print` <a name="print" id="@winglang/sdk.cloud.ILoggerClient.print"></a>
 
 ```wing
-print(message: str): void
+print(message: str, ctx?: TracingContext): void
 ```
 
 **Inflight client:** [true](#true)
@@ -3133,6 +3181,12 @@ NOTICE: this is not an async function because it is wrapped by `console.log()`.
 - *Type:* str
 
 The message to print.
+
+---
+
+###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.ILoggerClient.print.parameter.ctx"></a>
+
+- *Type:* sim.TracingContext
 
 ---
 
@@ -3156,27 +3210,39 @@ Inflight interface for `Queue`.
 ##### `approx_size` <a name="approx_size" id="@winglang/sdk.cloud.IQueueClient.approxSize"></a>
 
 ```wing
-approx_size(): num
+approx_size(ctx?: TracingContext): num
 ```
 
 **Inflight client:** [true](#true)
 
 Retrieve the approximate number of messages in the queue.
 
+###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.IQueueClient.approxSize.parameter.ctx"></a>
+
+- *Type:* sim.TracingContext
+
+---
+
 ##### `purge` <a name="purge" id="@winglang/sdk.cloud.IQueueClient.purge"></a>
 
 ```wing
-purge(): void
+purge(ctx?: TracingContext): void
 ```
 
 **Inflight client:** [true](#true)
 
 Purge all of the messages in the queue.
 
+###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.IQueueClient.purge.parameter.ctx"></a>
+
+- *Type:* sim.TracingContext
+
+---
+
 ##### `push` <a name="push" id="@winglang/sdk.cloud.IQueueClient.push"></a>
 
 ```wing
-push(message: str): void
+push(message: str, ctx?: TracingContext): void
 ```
 
 **Inflight client:** [true](#true)
@@ -3188,6 +3254,12 @@ Push a message to the queue.
 - *Type:* str
 
 Payload to send to the queue.
+
+---
+
+###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.IQueueClient.push.parameter.ctx"></a>
+
+- *Type:* sim.TracingContext
 
 ---
 
@@ -3326,7 +3398,7 @@ Inflight interface for `Topic`.
 ##### `publish` <a name="publish" id="@winglang/sdk.cloud.ITopicClient.publish"></a>
 
 ```wing
-publish(message: str): void
+publish(message: str, ctx?: TracingContext): void
 ```
 
 **Inflight client:** [true](#true)
@@ -3338,6 +3410,12 @@ Publish message to topic.
 - *Type:* str
 
 Payload to publish to Topic.
+
+---
+
+###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.ITopicClient.publish.parameter.ctx"></a>
+
+- *Type:* sim.TracingContext
 
 ---
 

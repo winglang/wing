@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
 import { Code, Resource } from "../core";
+import { TracingContext } from "../target-sim";
 
 /**
  * Global identifier for `Counter`.
@@ -71,7 +72,7 @@ export interface ICounterClient {
    * @returns the previous value of the counter.
    * @inflight
    */
-  inc(amount?: number): Promise<number>;
+  inc(amount?: number, ctx?: TracingContext): Promise<number>;
 
   /**
    * Decrement the counter, returning the previous value.
@@ -79,7 +80,7 @@ export interface ICounterClient {
    * @returns the previous value of the counter.
    * @inflight
    */
-  dec(amount?: number): Promise<number>;
+  dec(amount?: number, ctx?: TracingContext): Promise<number>;
 
   /**
    * Get the current value of the counter.
@@ -88,21 +89,21 @@ export interface ICounterClient {
    * @returns current value
    * @inflight
    */
-  peek(): Promise<number>;
+  peek(ctx?: TracingContext): Promise<number>;
 }
 
 /**
  * Functionality shared between all `CounterClient` implementations regardless of the target.
  */
 export abstract class CounterClientBase implements ICounterClient {
-  inc(amount?: number): Promise<number> {
+  inc(amount?: number, _ctx?: TracingContext): Promise<number> {
     amount;
     throw new Error("Method not implemented.");
   }
-  dec(amount?: number): Promise<number> {
+  dec(amount?: number, _ctx?: TracingContext): Promise<number> {
     return this.inc(-1 * (amount ?? 1));
   }
-  peek(): Promise<number> {
+  peek(_ctx?: TracingContext): Promise<number> {
     throw new Error("Method not implemented.");
   }
 }

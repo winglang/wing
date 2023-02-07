@@ -2,12 +2,7 @@ import { existsSync } from "fs";
 import { join } from "path";
 import * as tar from "tar";
 import { SDK_VERSION } from "../constants";
-import {
-  ISimulatorResourceInstance,
-  ResourceContext,
-  SimulatorResource,
-  TracingContext,
-} from "../target-sim";
+import { ISimulatorResourceInstance, TracingContext } from "../target-sim";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
 // eslint-disable-next-line import/no-restricted-paths
@@ -372,22 +367,14 @@ export class Simulator {
     return [...this._traces];
   }
 
-  private isSimulatorResource(handle: any): handle is SimulatorResource {
-    return handle instanceof SimulatorResource;
-  }
-
   /**
    * Get a simulated resource instance.
    * @returns the resource
    */
-  public getResource(path: string, ctx?: ResourceContext): any {
+  public getResource(path: string): any {
     const handle = this.tryGetResource(path);
     if (!handle) {
       throw new Error(`Resource "${path}" not found.`);
-    }
-
-    if (this.isSimulatorResource(handle)) {
-      handle.addTracingContext(ctx?.tracing);
     }
     return handle;
   }

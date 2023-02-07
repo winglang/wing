@@ -2,6 +2,7 @@ import { Construct, IConstruct } from "constructs";
 import { Polycons } from "polycons";
 import { Code } from "../core/inflight";
 import { Resource } from "../core/resource";
+import { TracingContext } from "../target-sim";
 
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 export const LOGGER_SYMBOL = Symbol.for(LOGGER_TYPE);
@@ -96,7 +97,7 @@ export interface ILoggerClient {
    * @param message The message to print
    * @inflight
    */
-  print(message: string): void;
+  print(message: string, ctx?: TracingContext): void;
 }
 
 /**

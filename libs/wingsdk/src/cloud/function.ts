@@ -6,6 +6,7 @@ import { Polycons } from "polycons";
 import { Logger } from "./logger";
 import { Code, IInflightHost, IResource, Inflight, Resource } from "../core";
 import { Duration } from "../std";
+import { TracingContext } from "../target-sim";
 import { mkdtemp } from "../util";
 
 /**
@@ -179,7 +180,7 @@ export interface IFunctionClient {
    * Invoke the function asynchronously with a given payload.
    * @inflight
    */
-  invoke(payload: string): Promise<string>;
+  invoke(payload: string, ctx?: TracingContext): Promise<string>;
 }
 
 /**

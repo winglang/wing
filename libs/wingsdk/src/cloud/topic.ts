@@ -2,6 +2,7 @@ import { Construct } from "constructs";
 import { Polycons } from "polycons";
 import { Function } from "./function";
 import { Code, IResource, Inflight, Resource } from "../core";
+import { TracingContext } from "../target-sim";
 
 export const TOPIC_TYPE = "wingsdk.cloud.Topic";
 
@@ -77,7 +78,7 @@ export interface ITopicClient {
    * @param message Payload to publish to Topic
    * @inflight
    */
-  publish(message: string): Promise<void>;
+  publish(message: string, ctx?: TracingContext): Promise<void>;
 }
 
 /**

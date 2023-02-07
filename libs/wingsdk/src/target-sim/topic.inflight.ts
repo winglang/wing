@@ -1,21 +1,20 @@
-import { ISimulatorResourceInstance, SimulatorResource } from "./resource";
+import { ISimulatorResourceInstance, TracingContext } from "./resource";
 import { TopicSchema, TopicSubscriber } from "./schema-resources";
 import { IFunctionClient, ITopicClient, TOPIC_TYPE } from "../cloud";
 import { ISimulatorContext, TraceType } from "../testing/simulator";
 
-export class Topic extends SimulatorResource implements ITopicClient {
+export class Topic implements ITopicClient, ISimulatorResourceInstance {
   private readonly subscribers = new Array<TopicSubscriber>();
   private readonly context: ISimulatorContext;
 
   constructor(props: TopicSchema["props"], context: ISimulatorContext) {
-    super();
     for (const sub of props.subscribers ?? []) {
       this.subscribers.push({ ...sub });
     }
     this.context = context;
   }
 
-  private async publishMessage(message: string) {
+  private async publishMessage(message: string, ctx?: TracingContext) {
     for (const subscriber of this.subscribers) {
       const fnClient = this.context.findInstance(
         subscriber.functionHandle!
@@ -33,7 +32,6 @@ export class Topic extends SimulatorResource implements ITopicClient {
         sourcePath: this.context.resourcePath,
         sourceType: TOPIC_TYPE,
         timestamp: new Date().toISOString(),
-        ctx: this.tracingContext,
       });
 
       void (await fnClient.invoke(message).catch((err) => {
@@ -45,13 +43,13 @@ export class Topic extends SimulatorResource implements ITopicClient {
           sourceType: TOPIC_TYPE,
           type: TraceType.RESOURCE,
           timestamp: new Date().toISOString(),
-          ctx: this.tracingContext,
+          ctx,
         });
       }));
     }
   }
 
-  async publish(message: string): Promise<void> {
+  async publish(message: string, ctx?: TracingContext): Promise<void> {
     this.context.addTrace({
       data: {
         message: `Publish (message=${message}).`,
@@ -60,7 +58,7 @@ export class Topic extends SimulatorResource implements ITopicClient {
       sourceType: TOPIC_TYPE,
       type: TraceType.RESOURCE,
       timestamp: new Date().toISOString(),
-      ctx: this.tracingContext,
+      ctx,
     });
 
     return this.publishMessage(message);

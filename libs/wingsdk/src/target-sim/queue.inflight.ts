@@ -1,16 +1,15 @@
-import { ISimulatorResourceInstance, SimulatorResource } from "./resource";
+import { ISimulatorResourceInstance, TracingContext } from "./resource";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
 import { IFunctionClient, IQueueClient, QUEUE_TYPE } from "../cloud";
 import { ISimulatorContext, TraceType } from "../testing/simulator";
 
-export class Queue extends SimulatorResource implements IQueueClient {
+export class Queue implements IQueueClient, ISimulatorResourceInstance {
   private readonly messages = new Array<string>();
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly intervalId: NodeJS.Timeout;
   private readonly context: ISimulatorContext;
 
   constructor(props: QueueSchema["props"], context: ISimulatorContext) {
-    super();
     for (const sub of props.subscribers ?? []) {
       this.subscribers.push({ ...sub });
     }
@@ -23,38 +22,42 @@ export class Queue extends SimulatorResource implements IQueueClient {
     this.context = context;
   }
 
+  public async init(): Promise<void> {
+    return;
+  }
+
   public async cleanup(): Promise<void> {
     clearInterval(this.intervalId);
   }
 
-  public async push(message: string): Promise<void> {
+  public async push(message: string, ctx?: TracingContext): Promise<void> {
     // TODO: enforce maximum queue message size?
     return this.context.withTrace({
       message: `Push (message=${message}).`,
       activity: async () => {
         this.messages.push(message);
       },
-      ctx: this.tracingContext,
+      ctx,
     });
   }
 
-  public async purge(): Promise<void> {
+  public async purge(ctx?: TracingContext): Promise<void> {
     return this.context.withTrace({
       message: `Purge ().`,
       activity: async () => {
         this.messages.length = 0;
       },
-      ctx: this.tracingContext,
+      ctx,
     });
   }
 
-  public async approxSize(): Promise<number> {
+  public async approxSize(ctx?: TracingContext): Promise<number> {
     return this.context.withTrace({
       message: `ApproxSize ().`,
       activity: async () => {
         return this.messages.length;
       },
-      ctx: this.tracingContext,
+      ctx,
     });
   }
 
@@ -85,7 +88,6 @@ export class Queue extends SimulatorResource implements IQueueClient {
           sourcePath: this.context.resourcePath,
           sourceType: QUEUE_TYPE,
           timestamp: new Date().toISOString(),
-          ctx: this.tracingContext,
         });
         void fnClient.invoke(JSON.stringify({ messages })).catch((_err) => {
           // If the function returns an error, put the message back on the queue
@@ -97,7 +99,6 @@ export class Queue extends SimulatorResource implements IQueueClient {
             sourceType: QUEUE_TYPE,
             type: TraceType.RESOURCE,
             timestamp: new Date().toISOString(),
-            ctx: this.tracingContext,
           });
           this.messages.push(...messages);
         });

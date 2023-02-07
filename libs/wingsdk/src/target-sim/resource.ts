@@ -20,16 +20,6 @@ export function isSimulatorResource(obj: any): obj is ISimulatorResource {
 }
 
 /**
- * Resource context
- */
-export interface ResourceContext {
-  /**
-   * Tracing metadata for the resource.
-   */
-  readonly tracing: TracingContext;
-}
-
-/**
  * Tracing context
  */
 export interface TracingContext {
@@ -53,30 +43,4 @@ export interface ISimulatorResourceInstance {
    * (files, ports, etc).
    */
   cleanup(): Promise<void>;
-}
-
-/**
- * Base class for simulator resources.
- */
-export abstract class SimulatorResource implements ISimulatorResourceInstance {
-  /**
-   * Metadata for the resource.
-   */
-  protected tracingContext: TracingContext | undefined;
-
-  public async init(): Promise<void> {
-    return;
-  }
-
-  public async cleanup(): Promise<void> {
-    return;
-  }
-
-  /**
-   * Add metadata to the resource.
-   * @param ctx Tracing context
-   */
-  public addTracingContext(ctx?: TracingContext): void {
-    this.tracingContext = ctx;
-  }
 }
