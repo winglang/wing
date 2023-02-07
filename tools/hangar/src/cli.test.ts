@@ -1,7 +1,8 @@
 import { test, expect, beforeAll } from "vitest";
 import { posix as path, basename } from "path";
+import { $, within } from "zx";
+import * as fs from "fs-extra";
 import * as walk from "walkdir";
-import "zx/globals";
 
 const repoRoot = path.resolve(__dirname, "../../..");
 const testDir = path.join(repoRoot, "examples/tests");
