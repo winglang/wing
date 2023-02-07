@@ -8,7 +8,7 @@ OK, we are ready for our first Wing program!
 
 ## Create your project directory
 
-Let's create an empty directory for our project.
+Let's create an empty directory for your project.
 
 ```sh
 mkdir hello-wing

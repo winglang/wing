@@ -19,6 +19,8 @@ itertools = "0.10"
 inflections = "1.1.1"
 phf = { version = "0.11", features = ["macros"] }
 indexmap = "1.9.1"
+aho-corasick = "0.7.20"
+lsp-types = "0.93.2"
 
 [lib]
 path = "src/lib.rs"

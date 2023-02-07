@@ -928,7 +928,7 @@ new cloud.Topic(props?: TopicProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Topic.toString">to_string</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@winglang/sdk.cloud.Topic.onMessage">on_message</a></code> | Creates function to send messages when published. |
+| <code><a href="#@winglang/sdk.cloud.Topic.onMessage">on_message</a></code> | Run an inflight whenever an message is published to the topic. |
 
 ---
 
@@ -946,7 +946,7 @@ Returns a string representation of this construct.
 on_message(inflight: ~Inflight, props?: TopicOnMessageProps): Function
 ```
 
-Creates function to send messages when published.
+Run an inflight whenever an message is published to the topic.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Topic.onMessage.parameter.inflight"></a>
 
@@ -2143,7 +2143,7 @@ They will be joined with newline characters.
 
 ### TopicOnMessageProps <a name="TopicOnMessageProps" id="@winglang/sdk.cloud.TopicOnMessageProps"></a>
 
-Options for Topic.onMessage.
+Options for `Topic.onMessage`.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.TopicOnMessageProps.Initializer"></a>
 

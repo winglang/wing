@@ -9,7 +9,7 @@
     "copy": {
       "executor": "nx:run-commands",
       "dependsOn": [
-        "^build-wasm"
+        "^build"
       ],
       "options": {
         "command": "cp -v ../../target/wasm32-wasi/debug/wingc.wasm ./",
@@ -29,6 +29,16 @@
       ],
       "options": {
         "script": "build"
+      }
+    },
+    "test": {
+      "executor": "nx:run-script",
+      "dependsOn": [
+        "build",
+        "copy"
+      ],
+      "options": {
+        "script": "test"
       }
     },
     "package": {

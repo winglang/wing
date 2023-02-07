@@ -30,7 +30,7 @@ export abstract class TopicBase extends Resource {
   }
 
   /**
-   * Creates function to send messages when published
+   * Run an inflight whenever an message is published to the topic.
    */
   public abstract onMessage(
     inflight: Inflight,
@@ -39,7 +39,7 @@ export abstract class TopicBase extends Resource {
 }
 
 /**
- * Options for Topic.onMessage
+ * Options for `Topic.onMessage`.
  */
 export interface TopicOnMessageProps {}
 

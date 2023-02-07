@@ -10,6 +10,9 @@
             "type": "extensionHost",
             "request": "launch",
             "outFiles": ["${workspaceFolder}/apps/vscode-wing/lib/**/*.js"],
+            "env": {
+                "WING_BIN": "${workspaceFolder}/apps/wing/bin/wing",
+            },
             "args": [
                 "--disable-extensions", "--extensionDevelopmentPath=${workspaceFolder}/apps/vscode-wing"
             ]
