@@ -22,7 +22,10 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     if (props.sourceCodeLanguage !== "javascript") {
       throw new Error("Only JavaScript is supported");
     }
-    this.filename = path_.resolve(context.assetsDir, normalizePath(props.sourceCodeFile));
+    this.filename = path_.resolve(
+      context.assetsDir,
+      normalizePath(props.sourceCodeFile)
+    );
     this.env = props.environmentVariables ?? {};
     this.context = context;
     this.timeout = props.timeout;
