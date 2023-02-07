@@ -32,8 +32,8 @@ export async function load(options: WingCompilerLoadOptions) {
       ...(options.env ?? {}),
     },
     preopens: {
-      // .jsii access
-      [WINGSDK_MANIFEST_ROOT]: WINGSDK_MANIFEST_ROOT,
+      "/": "/",
+      ".": ".",
 
       ...(options.preopens ?? {}),
     },
