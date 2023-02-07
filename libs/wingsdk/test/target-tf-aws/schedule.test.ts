@@ -1,3 +1,4 @@
+import * as cdktf from "cdktf";
 import * as cloud from "../../src/cloud";
 import * as std from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
@@ -29,6 +30,15 @@ test("schedule behavior with rate", () => {
     "aws_s3_object", // S3 object for code
     "aws_scheduler_schedule", // main schedule
   ]);
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(
+      output,
+      "aws_scheduler_schedule",
+      {
+        schedule_expression: "rate(2 minutes)",
+      }
+    )
+  ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
@@ -57,6 +67,15 @@ test("schedule behavior with cron", () => {
     "aws_s3_object", // S3 object for code
     "aws_scheduler_schedule", // main schedule
   ]);
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(
+      output,
+      "aws_scheduler_schedule",
+      {
+        schedule_expression: "cron(0/1 * ? * * *)",
+      }
+    )
+  ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
