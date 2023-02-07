@@ -12,7 +12,7 @@
         "{workspaceRoot}/target/*/wingc.wasm"
       ],
       "dependsOn": [
-        "^build-wasm"
+        "^build"
       ],
       "options": {
         "command": "cp -v ../../target/wasm32-wasi/debug/wingc.wasm ./",

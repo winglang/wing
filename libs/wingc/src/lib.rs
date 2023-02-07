@@ -6,6 +6,7 @@ use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics, Wi
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
+use wasm_util::ptr_to_string;
 
 use crate::parser::Parser;
 use std::cell::RefCell;
@@ -23,9 +24,11 @@ pub mod capture;
 pub mod debug;
 pub mod diagnostic;
 pub mod jsify;
+pub mod lsp;
 pub mod parser;
 pub mod type_check;
 pub mod utilities;
+mod wasm_util;
 
 const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
 const WINGSDK_STD_MODULE: &'static str = "std";
@@ -42,15 +45,13 @@ const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
 
 const CONSTRUCT_BASE: &'static str = "constructs.Construct";
 
+const MACRO_REPLACE_SELF: &'static str = "$self$";
+const MACRO_REPLACE_ARGS: &'static str = "$args$";
+
 pub struct CompilerOutput {
 	pub preflight: String,
 	// pub inflights: BTreeMap<String, String>,
 	pub diagnostics: Diagnostics,
-}
-
-unsafe fn ptr_to_string(ptr: u32, len: u32) -> String {
-	let slice = std::slice::from_raw_parts(ptr as *const u8, len as usize);
-	String::from_utf8_unchecked(slice.to_vec())
 }
 
 #[no_mangle]
@@ -133,12 +134,15 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 	let env = SymbolEnv::new(None, types.void(), false, false, Phase::Preflight, 0);
 	scope.set_env(env);
 
+	// note: Globals are emitted here and wrapped in "{ ... }" blocks. Wrapping makes these emissions, actual
+	// statements and not expressions. this makes the runtime panic if these are used in place of expressions.
 	add_builtin(
 		UtilityFunctions::Print.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			args: vec![types.string()],
 			return_type: types.void(),
 			flight: Phase::Independent,
+			js_override: Some("{console.log($args$)}".to_string()),
 		}),
 		scope,
 		types,
@@ -149,6 +153,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 			args: vec![types.bool()],
 			return_type: types.void(),
 			flight: Phase::Independent,
+			js_override: Some("{((cond) => {if (!cond) throw new Error(`assertion failed: '$args$'`)})($args$)}".to_string()),
 		}),
 		scope,
 		types,
@@ -159,6 +164,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 			args: vec![types.string()],
 			return_type: types.void(),
 			flight: Phase::Independent,
+			js_override: Some("{((msg) => {throw new Error(msg)})($args$)}".to_string()),
 		}),
 		scope,
 		types,
@@ -169,6 +175,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 			args: vec![types.string()],
 			return_type: types.void(),
 			flight: Phase::Independent,
+			js_override: Some("{((msg) => {console.error(msg, (new Error()).stack);process.exit(1)})($args$)}".to_string()),
 		}),
 		scope,
 		types,

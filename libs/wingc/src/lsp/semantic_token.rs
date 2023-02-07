@@ -1,4 +1,4 @@
-use tower_lsp::lsp_types::SemanticTokenType;
+use lsp_types::SemanticTokenType;
 use tree_sitter::{Node, Point, Tree};
 use tree_sitter_traversal::{traverse, Order};
 
@@ -58,7 +58,7 @@ fn new_absolute_token(node: &Node, token_type: &SemanticTokenType) -> AbsoluteSe
 	let end = node.end_position();
 	AbsoluteSemanticToken {
 		start,
-		// TODO how can lsp handle multiline?
+		// TODO how can the lsp handle multiline tokens?
 		length: (end.column - start.column),
 		token_type: get_token_type(token_type),
 	}

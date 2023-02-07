@@ -36,7 +36,7 @@ Object {
             "COUNTER_HANDLE_4ecd8d46": "\${root/HelloWorld/Counter#attrs.handle}",
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Queue-OnMessage-401ee792/index.js",
+          "sourceCodeFile": "assets/queue-onmessage-401ee792_c8515faa/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -60,7 +60,216 @@ Object {
     ],
     "sdkVersion": "0.0.0",
   },
-  "assets/Queue-OnMessage-401ee792/index.js": "var __defProp = Object.defineProperty;
+  "app.wsim/tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "HelloWorld": Object {
+          "children": Object {
+            "Bucket": Object {
+              "attributes": Object {
+                "wing:resource:connections": Array [
+                  Object {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "put",
+                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
+                  },
+                ],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.1.228",
+              },
+              "display": Object {
+                "description": "A cloud object store",
+                "title": "Bucket",
+              },
+              "id": "Bucket",
+              "path": "root/HelloWorld/Bucket",
+            },
+            "Counter": Object {
+              "attributes": Object {
+                "wing:resource:connections": Array [
+                  Object {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "inc",
+                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
+                  },
+                ],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.1.228",
+              },
+              "display": Object {
+                "description": "A distributed atomic counter",
+                "title": "Counter",
+              },
+              "id": "Counter",
+              "path": "root/HelloWorld/Counter",
+            },
+            "Processor": Object {
+              "attributes": Object {
+                "wing:resource:connections": Array [
+                  Object {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "handle",
+                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
+                  },
+                ],
+                "wing:resource:stateful": false,
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.1.228",
+              },
+              "display": Object {
+                "description": "An inflight resource",
+                "hidden": true,
+                "title": "Inflight",
+              },
+              "id": "Processor",
+              "path": "root/HelloWorld/Processor",
+            },
+            "Queue": Object {
+              "attributes": Object {
+                "wing:resource:connections": Array [
+                  Object {
+                    "direction": "outbound",
+                    "implicit": false,
+                    "relationship": "on_message",
+                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
+                  },
+                ],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.1.228",
+              },
+              "display": Object {
+                "description": "A distributed message queue",
+                "title": "Queue",
+              },
+              "id": "Queue",
+              "path": "root/HelloWorld/Queue",
+            },
+            "Queue-OnMessage-401ee792": Object {
+              "attributes": Object {
+                "wing:resource:connections": Array [
+                  Object {
+                    "direction": "outbound",
+                    "implicit": false,
+                    "relationship": "inc",
+                    "resource": "root/HelloWorld/Counter",
+                  },
+                  Object {
+                    "direction": "outbound",
+                    "implicit": false,
+                    "relationship": "put",
+                    "resource": "root/HelloWorld/Bucket",
+                  },
+                  Object {
+                    "direction": "outbound",
+                    "implicit": false,
+                    "relationship": "handle",
+                    "resource": "root/HelloWorld/Processor",
+                  },
+                  Object {
+                    "direction": "outbound",
+                    "implicit": true,
+                    "relationship": "print",
+                    "resource": "root/WingLogger",
+                  },
+                  Object {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "on_message",
+                    "resource": "root/HelloWorld/Queue",
+                  },
+                ],
+                "wing:resource:stateful": false,
+              },
+              "children": Object {
+                "Code": Object {
+                  "constructInfo": Object {
+                    "fqn": "constructs.Construct",
+                    "version": "10.1.228",
+                  },
+                  "id": "Code",
+                  "path": "root/HelloWorld/Queue-OnMessage-401ee792/Code",
+                },
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.1.228",
+              },
+              "display": Object {
+                "description": "A cloud function (FaaS)",
+                "title": "Function",
+              },
+              "id": "Queue-OnMessage-401ee792",
+              "path": "root/HelloWorld/Queue-OnMessage-401ee792",
+            },
+            "Queue-OnMessageHandler-401ee792": Object {
+              "attributes": Object {
+                "wing:resource:connections": Array [],
+                "wing:resource:stateful": false,
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.1.228",
+              },
+              "id": "Queue-OnMessageHandler-401ee792",
+              "path": "root/HelloWorld/Queue-OnMessageHandler-401ee792",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "id": "HelloWorld",
+          "path": "root/HelloWorld",
+        },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.1.228",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+  "assets/queue-onmessage-401ee792_c8515faa/index.js": "var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;

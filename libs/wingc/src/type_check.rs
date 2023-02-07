@@ -313,6 +313,13 @@ pub struct FunctionSignature {
 	pub args: Vec<TypeRef>,
 	pub return_type: TypeRef,
 	pub flight: Phase,
+
+	/// During jsify, calls to this function will be replaced with this string
+	/// In JSII imports, this is denoted by the `@macro` attribute
+	/// This string may contain special tokens:
+	/// - `$self$`: The expression on which this function was called
+	/// - `$args$`: the arguments passed to this function call
+	pub js_override: Option<String>,
 }
 
 impl PartialEq for FunctionSignature {
@@ -855,8 +862,8 @@ impl<'a> TypeChecker<'a> {
 			}
 			ExprKind::Call { function, args } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
-				let func_type = self.resolve_reference(function, env, statement_idx)._type;
-				let this_args = if matches!(function, Reference::NestedIdentifier { .. }) {
+				let func_type = self.type_check_exp(function, env, statement_idx);
+				let this_args = if matches!(function.kind, ExprKind::Reference(Reference::NestedIdentifier { .. })) {
 					1
 				} else {
 					0
@@ -871,16 +878,13 @@ impl<'a> TypeChecker<'a> {
 				let func_sig = if let Some(func_sig) = func_type.as_function_sig() {
 					func_sig
 				} else {
-					return self.expr_error(exp, format!("\"{}\" should be a function or method", function));
+					return self.expr_error(&*function, format!("should be a function or method"));
 				};
 
 				if !can_call_flight(func_sig.flight, env.flight) {
 					self.expr_error(
 						exp,
-						format!(
-							"Cannot call {} function \"{}\" while in {} phase",
-							func_sig.flight, function, env.flight,
-						),
+						format!("Cannot call into {} phase while {}", func_sig.flight, env.flight),
 					);
 				}
 
@@ -899,14 +903,11 @@ impl<'a> TypeChecker<'a> {
 				let max_args = func_sig.args.len() - this_args;
 				if arg_count < min_args || arg_count > max_args {
 					let err_text = if min_args == max_args {
-						format!(
-							"Expected {} arguments but got {} when invoking \"{}\"",
-							min_args, arg_count, function
-						)
+						format!("Expected {} arguments but got {}", min_args, arg_count)
 					} else {
 						format!(
-							"Expected between {} and {} arguments but got {} when invoking \"{}\"",
-							min_args, max_args, arg_count, function
+							"Expected between {} and {} arguments but got {}",
+							min_args, max_args, arg_count
 						)
 					};
 					self.expr_error(exp, err_text);
@@ -1200,6 +1201,7 @@ impl<'a> TypeChecker<'a> {
 						.as_ref()
 						.map_or(self.types.void(), |t| self.resolve_type(t, env, statement_idx)),
 					flight: ast_sig.flight,
+					js_override: None,
 				};
 				// TODO: avoid creating a new type for each function_sig resolution
 				self.types.add_type(Type::Function(sig))
@@ -1306,8 +1308,29 @@ impl<'a> TypeChecker<'a> {
 				// TODO: Expression must be iterable
 				let exp_type = self.type_check_exp(iterable, env, stmt.idx);
 
+				let iterator_type = match &*exp_type {
+					// These are builtin iterables that have a clear/direct iterable type
+					Type::Array(t) => *t,
+					Type::Set(t) => *t,
+					Type::MutArray(t) => *t,
+					Type::MutSet(t) => *t,
+
+					// TODO: Handle non-builtin iterables
+					t => {
+						self.type_error(&TypeError {
+							message: format!("Unable to iterate over \"{}\"", t),
+							span: iterable.span.clone(),
+						});
+						self.types.anything()
+					}
+				};
+
 				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.flight, stmt.idx);
-				match scope_env.define(&iterator, SymbolKind::make_variable(exp_type, false), StatementIdx::Top) {
+				match scope_env.define(
+					&iterator,
+					SymbolKind::make_variable(iterator_type, false),
+					StatementIdx::Top,
+				) {
 					Err(type_error) => {
 						self.type_error(&type_error);
 					}
@@ -1831,7 +1854,26 @@ impl<'a> TypeChecker<'a> {
 							let new_return_type = if sig.return_type.is_same_type_as(original_type_param) {
 								new_type_arg
 							} else {
-								sig.return_type
+								// Handle generic return types
+								// TODO: If a generic class has a method that returns another generic, it must be a builtin
+								if let Some(c) = sig.return_type.as_class() {
+									if c.type_parameters.is_some() {
+										let fqn = format!("{}.{}", WINGSDK_STD_MODULE, c.name.name);
+										match fqn.as_str() {
+											WINGSDK_MUT_ARRAY => self.types.add_type(Type::MutArray(new_type_arg)),
+											WINGSDK_ARRAY => self.types.add_type(Type::Array(new_type_arg)),
+											WINGSDK_MAP => self.types.add_type(Type::Map(new_type_arg)),
+											WINGSDK_MUT_MAP => self.types.add_type(Type::MutMap(new_type_arg)),
+											WINGSDK_SET => self.types.add_type(Type::Set(new_type_arg)),
+											WINGSDK_MUT_SET => self.types.add_type(Type::MutSet(new_type_arg)),
+											_ => self.general_type_error(format!("\"{}\" is not a supported generic return type", fqn)),
+										}
+									} else {
+										sig.return_type
+									}
+								} else {
+									sig.return_type
+								}
 							};
 
 							let new_args: Vec<UnsafeRef<Type>> = sig
@@ -1849,7 +1891,8 @@ impl<'a> TypeChecker<'a> {
 							let new_sig = FunctionSignature {
 								args: new_args,
 								return_type: new_return_type,
-								flight: Phase::Independent,
+								flight: sig.flight.clone(),
+								js_override: sig.js_override.clone(),
 							};
 
 							match new_type_class.env.define(
