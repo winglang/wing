@@ -3,7 +3,7 @@ import { run } from "./run";
 import { mkdtemp } from "fs/promises";
 import { join } from "path";
 import { tmpdir } from "os";
-import { writeFileSync } from "fs";
+import { mkdirSync, writeFileSync } from "fs";
 import { resolve } from "path";
 
 jest.mock("open");
@@ -54,6 +54,25 @@ test("wing it with a file runs", async () => {
     } finally {
       process.chdir(prevdir);
     }
+});
+
+test("wing it with a nested file runs", async () => {  
+  const workdir = await mkdtemp(join(tmpdir(), "-wing-it-test"));
+  const subdir = join(workdir, "subdir");
+  const filePath = join(subdir, "foo.w");
+  const prevdir = process.cwd();
+  try {
+    process.chdir(workdir);
+
+    mkdirSync(subdir);
+    writeFileSync(filePath, "bring cloud;");
+
+    await run(filePath);
+    expect(open).toBeCalledWith("wing-console://" + resolve(filePath));
+  
+  } finally {
+    process.chdir(prevdir);
+  }
 });
 
 test("wing it with an invalid file throws exception", async () => {  
