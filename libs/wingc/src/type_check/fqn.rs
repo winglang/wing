@@ -70,7 +70,7 @@ impl<'a> FQN<'a> {
 	/// TODO: this is a temporary hack until we support interfaces.
 	pub fn is_construct_base(&self) -> bool {
 		// We treat both CONSTRUCT_BASE and WINGSDK_RESOURCE, as base constructs because in wingsdk we currently have stuff directly derived
-		// from `construct.Construct` and stuff derived `cloud.Resource` (which itself is derived from `constructs.Construct`).
+		// from `construct.Construct` and stuff derived `core.Resource` (which itself is derived from `constructs.Construct`).
 		// But since we don't support interfaces yet we can't import `core.Resource` so we just treat it as a base class.
 		// I'm also not sure we should ever import `core.Resource` because we might want to keep its internals hidden to the user:
 		// after all it's an abstract class representing our `resource` primitive. See https://github.com/winglang/wing/issues/261.
