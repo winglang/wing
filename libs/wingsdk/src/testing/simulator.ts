@@ -57,7 +57,7 @@ export interface IWithTraceProps {
   readonly message: any;
 
   /**
-   * Tracing context.
+   * The context of the trace
    * @default - no context
    */
   readonly ctx?: TracingContext;
@@ -99,7 +99,7 @@ export interface Trace {
   readonly timestamp: string;
 
   /**
-   * Tracing context.
+   * The context of the tracing.
    */
   readonly ctx?: TracingContext;
 }

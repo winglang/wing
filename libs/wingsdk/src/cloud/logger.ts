@@ -95,7 +95,7 @@ export interface ILoggerClient {
    * NOTICE: this is not an async function because it is wrapped by `console.log()`.
    *
    * @param message The message to print
-   * @param ctx Optional tracing context
+   * @param ctx Context of the tracing
    * @inflight
    */
   print(message: string, ctx?: TracingContext): void;

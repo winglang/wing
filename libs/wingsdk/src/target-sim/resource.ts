@@ -20,11 +20,11 @@ export function isSimulatorResource(obj: any): obj is ISimulatorResource {
 }
 
 /**
- * Tracing context
+ * Holds data related to tracing.
  */
 export interface TracingContext {
   /**
-   * Tracing label.
+   * The tracing label.
    */
   readonly label: string;
 }

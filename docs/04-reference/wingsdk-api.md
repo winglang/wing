@@ -2852,6 +2852,8 @@ Key of the object.
 
 - *Type:* sim.TracingContext
 
+Context of the tracing.
+
 ---
 
 ##### `list` <a name="list" id="@winglang/sdk.cloud.IBucketClient.list"></a>
@@ -2875,6 +2877,8 @@ Limits the response to keys that begin with the specified prefix.
 ###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.IBucketClient.list.parameter.ctx"></a>
 
 - *Type:* sim.TracingContext
+
+Context of the tracing.
 
 ---
 
@@ -2907,6 +2911,8 @@ Content of the object we want to store into the bucket.
 ###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.IBucketClient.put.parameter.ctx"></a>
 
 - *Type:* sim.TracingContext
+
+Context of the tracing.
 
 ---
 
@@ -2949,6 +2955,8 @@ amount to decrement (default is 1).
 
 - *Type:* sim.TracingContext
 
+Context of the tracing.
+
 ---
 
 ##### `inc` <a name="inc" id="@winglang/sdk.cloud.ICounterClient.inc"></a>
@@ -2973,6 +2981,8 @@ amount to increment (default is 1).
 
 - *Type:* sim.TracingContext
 
+Context of the tracing.
+
 ---
 
 ##### `peek` <a name="peek" id="@winglang/sdk.cloud.ICounterClient.peek"></a>
@@ -2985,12 +2995,11 @@ peek(ctx?: TracingContext): num
 
 Get the current value of the counter.
 
-Using this API may introduce race conditions since the value can change between
-the time it is read and the time it is used in your code.
-
 ###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.ICounterClient.peek.parameter.ctx"></a>
 
 - *Type:* sim.TracingContext
+
+Context of the tracing Using this API may introduce race conditions since the value can change between the time it is read and the time it is used in your code.
 
 ---
 
@@ -3195,6 +3204,8 @@ The message to print.
 
 - *Type:* sim.TracingContext
 
+Context of the tracing.
+
 ---
 
 
@@ -3228,6 +3239,8 @@ Retrieve the approximate number of messages in the queue.
 
 - *Type:* sim.TracingContext
 
+Context of the tracing.
+
 ---
 
 ##### `purge` <a name="purge" id="@winglang/sdk.cloud.IQueueClient.purge"></a>
@@ -3243,6 +3256,8 @@ Purge all of the messages in the queue.
 ###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.IQueueClient.purge.parameter.ctx"></a>
 
 - *Type:* sim.TracingContext
+
+Context of the tracing.
 
 ---
 
@@ -3267,6 +3282,8 @@ Payload to send to the queue.
 ###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.IQueueClient.push.parameter.ctx"></a>
 
 - *Type:* sim.TracingContext
+
+Context of the tracing.
 
 ---
 
@@ -3423,6 +3440,8 @@ Payload to publish to Topic.
 ###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.ITopicClient.publish.parameter.ctx"></a>
 
 - *Type:* sim.TracingContext
+
+Context of the tracing.
 
 ---
 

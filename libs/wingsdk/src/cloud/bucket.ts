@@ -87,7 +87,7 @@ export interface IBucketClient {
    * Put an object in the bucket.
    * @param key Key of the object.
    * @param body Content of the object we want to store into the bucket.
-   * @param ctx Optional tracing context
+   * @param ctx Context of the tracing
    * @inflight
    */
   put(key: string, body: string, ctx?: TracingContext): Promise<void>;
@@ -95,7 +95,7 @@ export interface IBucketClient {
   /**
    * Retrieve an object from the bucket.
    * @param key Key of the object.
-   * @param ctx Optional tracing context
+   * @param ctx Context of the tracing
    * @Throws if no object with the given key exists.
    * @Returns the object's body.
    * @inflight
@@ -105,7 +105,7 @@ export interface IBucketClient {
   /**
    * Retrieve existing objects keys from the bucket.
    * @param prefix Limits the response to keys that begin with the specified prefix.
-   * @param ctx Optional tracing context
+   * @param ctx Context of the tracing
    * @returns a list of keys or an empty array if the bucket is empty.
    * @inflight
    */

@@ -76,7 +76,7 @@ export interface ITopicClient {
   /**
    * Publish message to topic
    * @param message Payload to publish to Topic
-   * @param ctx Optional tracing context
+   * @param ctx Context of the tracing
    * @inflight
    */
   publish(message: string, ctx?: TracingContext): Promise<void>;

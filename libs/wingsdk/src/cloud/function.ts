@@ -1,13 +1,13 @@
-import { readFileSync, writeFileSync } from "fs";
-import { join } from "path";
 import { Construct } from "constructs";
 import * as esbuild from "esbuild-wasm";
+import { readFileSync, writeFileSync } from "fs";
+import { join } from "path";
 import { Polycons } from "polycons";
-import { Logger } from "./logger";
 import { Code, IInflightHost, IResource, Inflight, Resource } from "../core";
 import { Duration } from "../std";
 import { TracingContext } from "../target-sim";
 import { mkdtemp } from "../util";
+import { Logger } from "./logger";
 
 /**
  * Global identifier for `Function`.
@@ -178,6 +178,8 @@ export class Function extends FunctionBase {
 export interface IFunctionClient {
   /**
    * Invoke the function asynchronously with a given payload.
+   * @param payload The payload to pass to the function
+   * @param ctx Context of the tracing
    * @inflight
    */
   invoke(payload: string, ctx?: TracingContext): Promise<string>;

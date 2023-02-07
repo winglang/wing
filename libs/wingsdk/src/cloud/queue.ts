@@ -98,21 +98,21 @@ export interface IQueueClient {
   /**
    * Push a message to the queue.
    * @param message Payload to send to the queue.
-   * @param ctx Optional tracing context
+   * @param ctx Context of the tracing
    * @inflight
    */
   push(message: string, ctx?: TracingContext): Promise<void>;
 
   /**
    * Purge all of the messages in the queue.
-   * @param ctx Optional tracing context
+   * @param ctx Context of the tracing
    * @inflight
    */
   purge(ctx?: TracingContext): Promise<void>;
 
   /**
    * Retrieve the approximate number of messages in the queue.
-   * @param ctx Optional tracing context
+   * @param ctx Context of the tracing
    * @inflight
    */
   approxSize(ctx?: TracingContext): Promise<number>;
