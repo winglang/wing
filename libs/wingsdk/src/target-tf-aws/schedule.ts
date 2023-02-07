@@ -98,7 +98,7 @@ export class Schedule extends cloud.ScheduleBase {
       flexibleTimeWindow: { mode: "OFF" },
       scheduleExpression: this.scheduleExpression,
       target: {
-        arn: fn._arn,
+        arn: fn.arn,
         roleArn: role.arn,
       },
     });
