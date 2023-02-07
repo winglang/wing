@@ -70,11 +70,11 @@ resource TaskList {
     * @returns set of task id
     */
   inflight list_task_ids(): Set<str> {
-    let result = MutSet<str> {}; // #1172
+    let result = MutSet<str> {};
     for id in this._bucket.list() {
       result.add(id);
     }
-    return result.to_immut();
+    return result.copy();
   }
 
    /** 
@@ -86,48 +86,41 @@ resource TaskList {
     print("find_tasks_with: ${term}");
     let task_ids = this.list_task_ids();
     print("found ${task_ids.size} tasks");
-    let output = MutArray<str>[];// #1172
+    let output = MutArray<str>[];
     for id in task_ids {
-      let title = this.get_task(id); // https://winglang.slack.com/archives/C047QFSUL5R/p1674549602212669
+      let title = this.get_task(id); 
       if title.contains(term) { 
         print("found task ${id} with title \"${title}\" with term \"${term}\"");
         output.push(id);
       }
     }
     
-    print("found ${output.len} tasks which match term '${term}'");
-    return output.to_immut();
+    print("found ${output.length} tasks which match term '${term}'");
+    return output.copy();
   }
 }
 
 // --------------------------------------------
 // testing
 // --------------------------------------------
-resource Test {
-  tasks: TaskList;
-  init(name: str, test: inflight (Test)) {
-    this.tasks = new TaskList();
-    new cloud.Function(inflight (s: str): str => {
-      test(this);
-    }) as "test:${name}";
-  }
-}
 
-new Test("get and find task", inflight (t: Test) => {
-  t.tasks.add_task("clean the dishes");
+let tasks = new TaskList();
+
+new cloud.Function(inflight (s: str): str => {
+  tasks.add_task("clean the dishes");
   let result = t.tasks.find_tasks_with("clean the dishes");
-  assert(result.len == 1);
+  assert(result.length == 1);
   assert("clean the dishes" == t.tasks.get_task(result.at(0)));
-}) as "a1";
+}) as "test: get and find task";
 
 
-new Test("get, remove and find task", inflight (t: Test) => {
-  t.tasks.add_task("clean the dishes");
-  t.tasks.add_task("buy dishwasher soap");
-  t.tasks.remove_tasks(tasks.find_tasks_with("clean the").at(0));
-  let result = t.tasks.find_tasks_with("clean the dish");
-  assert(result.len == 0);
-}) as "a2";
+new cloud.Function(inflight (s: str): str => {
+  tasks.add_task("clean the dishes");
+  tasks.add_task("buy dishwasher soap");
+  tasks.remove_tasks(tasks.find_tasks_with("clean the").at(0));
+  let result = tasks.find_tasks_with("clean the dish");
+  assert(result.length == 0);
+}) as "test: get, remove and find task";
 ```
 
 ## Wing Console
