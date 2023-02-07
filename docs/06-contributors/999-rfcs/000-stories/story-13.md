@@ -104,7 +104,7 @@ resource TaskList {
     print("find_tasks_with: ${term}");
     let task_ids = this.list_task_ids();
     print("found ${task_ids.size} tasks");
-    let output = MutArray<str>[];// #1172
+    let output = MutArray<str>[];
     for id in task_ids {
       let j = this.get_task(id); 
       let title = Str.from_json(j.get("title"));
