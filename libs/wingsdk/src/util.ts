@@ -138,8 +138,8 @@ export function normalizePath(path: string) {
       path
         // force posix path separator
         .replace(/\\/g, "/")
-        // place drive letter in front of /
-        .replace(/^([a-zA-Z]):/, "/$1")
+        // remove drive letter
+        .replace(/^[a-zA-Z]:/, "")
     );
   } else {
     return path;
