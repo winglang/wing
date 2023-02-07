@@ -215,6 +215,7 @@ To access an array element, use the `[]` notation:
 let item2: Json = json_array[2];
 ```
 
+Trying to index a value that is not an array will fail at runtime.
 It is also possible to assign the native `str`, `num`, `bool` and `Array<T>` values and they will
 implicitly be casted to `Json`:
 
