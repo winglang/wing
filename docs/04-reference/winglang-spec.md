@@ -260,10 +260,10 @@ To obtain an array of all the values, use `Json.values(o)`. To obtain an array o
 pairs use `Json.entries(o)` (P2):
 
 ```js
-assert(Json.values(j).equals(Json [ 123, [ 1, 2, 3 ] ]));
-assert(Json.entries(j).equals(Json [
-  [ "hello", 123 ],
-  [ "world", [ 1, 2, 3 ] ]
+assert(Json.values(j).equals([ Json 123, Json [ 1, 2, 3 ] ]));
+assert(Json.entries(j).equals([
+  [ Json "hello", Json 123 ],
+  [ Json "world", Json [ 1, 2, 3 ] ]
 ]));
 ```
 
