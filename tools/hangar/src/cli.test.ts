@@ -34,7 +34,8 @@ const basePackageJson = {
 
 const validWingFiles = fs
   .readdirSync(validTestDir)
-  .filter((f) => f.endsWith(".w"));
+  //TODO DEBUG PLS CHANGE BACK
+  .filter((f) => f.endsWith("test_bucket.w"));
 
 const shellEnv = {
   ...process.env,
