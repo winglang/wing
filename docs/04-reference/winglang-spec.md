@@ -174,10 +174,39 @@ inflight (arg1: <type1>, arg2: <type2>, ...) => <type>
 
 #### 1.1.4 Json type
 
-Wing has a data type called `Json`. This type represents an immutable arbitrary [JSON
-value](https://www.json.org/json-en.html) (primitives, arrays and objects).
+Wing has a data type called `Json`. This type represents an immutable untyped [JSON
+value](https://www.json.org/json-en.html), including JSON primitives (`string`, `number`,
+`boolean`), arrays (both heterogenous and homogenous) and objects (key-value maps where keys are
+strings and values can be any other JSON value)).
 
-##### 1.1.4.1 Definition
+JSON is the "wire protocol of the cloud" and as such Wing offers built-in support for it. However,
+since Wing is statically-typed (type must be known during compilation) and JSON is dynamically typed
+(type is only known at runtime), bridging is required between these two models.
+
+Let's look at a quick example:
+
+```js
+struct Employee { 
+  id: str;
+  name: str;
+}
+
+let response = http_get("/employees"); // returns something like { "items": [ { "id": "12234", "name": "bob" }, ... ] }
+let employees = Array<Employee>.from_json(response.items);
+
+for e in employees {
+  print("hello, ${e.name}, your employee id is ${id}");
+}
+```
+
+In the above example, the `http_get` function returns a `Json` object from the server that has a
+single field `items`, with a JSON array of JSON objects, each with an `id` and `name` fields.
+
+The expression `response.items` returns a `Json` array, and we use `Array<T>.from_json` to convert
+this array from `Json` to an `Array<Employee>`. Note that by default `from_json` will perform schema
+validation on the array and on each item (based on the declaration of the `Employee` struct).
+
+##### 1.1.4.1 Literals
 
 Literals can be defined using the `Json` type initializers:
 
@@ -189,12 +218,14 @@ let json_array   = Json [ 1, 2, 3 ];
 let json_obj     = Json { boom: 123 };
 let json_mut_obj = MutJson {
   hello: 123, 
-  world: [ 1, "cat", 3 ], // <-- heterogenous array
-  boom: { hello: 1233 }
+  world: [ 1, "cat", 3 ],       // <-- heterogenous array
+  "boom boom": { hello: 1233 }  // <-- non-symbolic key
 };
 ```
 
-The type of elements within objects and arrays is still `Json`.
+Every value within a `Json` array or object also has a type of `Json`.
+
+##### 1.1.4.2 JSON objects
 
 To access a field within an object, use the `.` notation:
 
@@ -209,13 +240,46 @@ print(json_obj.boom.dude.world);
 // RUNTIME ERROR: Uncaught TypeError: Cannot read properties of undefined (reading 'world')
 ```
 
+Like in JavaScript, it is also possible to access object fields using `[]`:
+
+```js
+let foo = j["my-field"].your_field["their-field"];
+```
+
+To obtain an array of all the keys within a JSON object use the `Json.keys(o)` method. 
+
+
+```js
+let j = { hello: 123, world: [ 1, 2, 3 ] };
+assert(Json.keys(j) == ["hello", "world"]);
+```
+
+To obtain an array of all the values, use `Json.values(o)`. To obtain an array of all key/value
+pairs use `Json.entries(o)` (P2):
+
+```js
+assert(Json.values(j).equals(Json [ 123, [ 1, 2, 3 ] ]));
+assert(Json.entries(j).equals(Json [
+  [ "hello", 123 ],
+  [ "world", [ 1, 2, 3 ] ]
+]));
+```
+
+> NOTE: `values()` and `entries()` return an array inside a `Json` object because at the moment we
+> cannot represent heterogenous arrays in Wing.
+
+##### 1.1.4.3 JSON arrays
+
 To access an array element, use the `[]` notation:
 
 ```js
 let item2: Json = json_array[2];
 ```
 
-Trying to index a value that is not an array will fail at runtime.
+Trying to index a value that is not an array will return JavaScript `undefined`.
+
+##### 1.1.4.4 Assignment from native types
+
 It is also possible to assign the native `str`, `num`, `bool` and `Array<T>` values and they will
 implicitly be casted to `Json`:
 
@@ -233,56 +297,58 @@ let json_string = Json {
 };
 ```
 
-##### 1.1.4.2. Parsing
 
-To convert a `Json` to a strong-type, use the `parse_json()` static method on the relevant target
+##### 1.1.4.5 Assignment to native types
+
+We only allow implicit assignment from *safe* to *unsafe* types because otherwise we cannot
+guarantee safety (e.g. from `str` to `Json` but not from `Json` to `str`), so this won't work:
+
+```js
+let j = Json "hello";
+let s: str = j;
+//           ^ cannot assign `Json` to `str`.
+```
+
+To assign a `Json` to a strong-type variable, use the `from_json()` static method on the target
 type:
 
 ```js
-let my_str = str.parse_json(json_string);
-let my_number = num.parse_json(json_number);
-let my_arr = Array<num>.parse_json(json_array);
+let my_str = str.from_json(json_string);
+let my_number = num.from_json(json_number);
+let my_arr = Array<num>.from_json(json_array);
 ```
 
->
-> **A NOTE ABOUT NAMING**
->
-> `parse_json` is very long and pretty ugly. We should think of alternatives.
-> One option is to put all these methods under `Json.as_xxx()`,
-> so `Json.as_num(Json 1234) == 1234`. But this won't work very well for user-defined
-> structs...
->
-> ALSO: We should rename `str`/`num`/`bool` to `Str`/`Num`/`Bool`. Thoughts?
->
+##### 1.1.4.6 Schema validation
 
-All `parse_json()` methods will validate that the runtime type is compatible with the target type in
+All `from_json()` methods will validate that the runtime type is compatible with the target type in
 order to ensure type safety (at a runtime cost):
 
 ```js
-str.parse_json(json_number);      // RUNTIME ERROR: unable to parse number `123` as a string.
-num.parse_json(Json "\"hello\""); // RUNTIME ERROR: unable to parse string "hello" as a number
+str.from_json(json_number);      // RUNTIME ERROR: unable to parse number `123` as a string.
+num.from_json(Json "\"hello\""); // RUNTIME ERROR: unable to parse string "hello" as a number
 
 let my_array = Json [1,2,3,"hello"];
-Array<num>.parse_json(my_array); // RUNTIME ERROR: unable to parse `[1,2,3,"hello"]` as an array of `num`.
+Array<num>.from_json(my_array); // RUNTIME ERROR: unable to parse `[1,2,3,"hello"]` as an array of `num`.
 ```
+
 
 Use `unsafe: true` to disable this check at your own risk:
 
 ```js
-let x = num.parse_json(Json [1,2,3], unsafe: true);
+let x = num.from_json(Json [1,2,3], unsafe: true);
 print(x + 5); // OUTPUT: 1,2,35
 ```
 
-For each `parse_json()`, there is a `try_parse_json()` method which returns an optional `T?` which
+For each `from_json()`, there is a `try_from_json()` method which returns an optional `T?` which
 indicates if parsing was successful or not:
 
 ```js
-let s = str.try_parse_json(my_json) ?? "invalid string";
+let s = str.try_from_json(my_json) ?? "invalid string";
 ```
 
-##### 1.1.4.2. Structs and Schemas
+##### 1.1.4.7 Assignment to user-defined structs
 
-All [structs](#31-structs) also have a `parse()` method that can be used to parse `Json` into a
+All [structs](#31-structs) also have a `from_json()` method that can be used to parse `Json` into a
 struct:
 
 ```js
@@ -293,7 +359,7 @@ struct Contact {
 }
 
 let j = Json { first: "Wing", last: "Lyly" };
-let my_contact = Contact.parse(j);
+let my_contact = Contact.from_json(j);
 assert(my_contact.first == "Wing");
 ```
 
@@ -302,7 +368,7 @@ type-safe:
 
 ```js
 let p = Json { first: "Wing", phone: 1234 };
-Contact.parse(p);
+Contact.from_json(p);
 // RUNTIME ERROR: unable to parse Contact:
 // - field "last" is required and missing
 // - field "phone" is expected to be a string, got number.
@@ -313,7 +379,7 @@ true`:
 
 ```js
 let p = Json { first: "Wing", phone: 1234 };
-let x = Contact.parse(p, unsafe: true);
+let x = Contact.from_json(p, unsafe: true);
 assert(x.last.len > 0);
 // RUNTIME ERROR: Cannot read properties of undefined (reading 'length')
 ```
@@ -323,7 +389,7 @@ includes extraneous fields:
 
 ```js
 let p = Json { first: "hello", last: "world", another_field: "ignored" };
-let c = Contact.parse(p);
+let c = Contact.from_json(p);
 assert(c.first == "hello");
 assert(c.last == "world");
 // `c.another_field` is not a thing
@@ -332,9 +398,11 @@ assert(c.last == "world");
 This can be disabled using `partial: false` (P2):
 
 ```js
-Contact.parse(Json { first: "hello", last: "world", another_field: "ignored" }, partial: false);
+Contact.from_json(Json { first: "hello", last: "world", another_field: "ignored" }, partial: false);
 // RUNTIME ERROR: cannot parse Contact due to extraneous field "another_field"
 ```
+
+##### 1.1.4.7 Schemas
 
 Structs have a `schema` static method which returns a `JsonSchema` object (P2):
 
@@ -343,7 +411,7 @@ let schema = Contact.schema();
 schema.validate(j);
 ```
 
-##### 1.1.4.3. MutJson
+##### 1.1.4.8 Mutability
 
 To define a mutable JSON container, use the `MutJson` type:
 
@@ -362,6 +430,23 @@ my_obj.sub_object.arr = [1,"hello","world"];
 my_obj.foo = foo_num;
 ```
 
+For the sake of completeness, it is possible to also define primitives using `MutJson` but that's
+not very interesting because there is no way to mutate them:
+
+```js
+let foo = MutJson "hello";
+// ok what now?
+```
+
+Use the `Json.clone()` and `Json.clone_mut()` methods to get a *deep clone* of the object:
+
+```js
+let mut_json = MutJson { hello: 123 };
+let immut = Json.clone(mut_json);
+mut_json.hello = 999;
+assert(immut.hello == 123);
+```
+
 To delete a key from an object, use the `Json.delete()` method:
 
 ```js
@@ -378,7 +463,7 @@ implies that at the moment, it is not possible to mutate heterogenous JSON array
 
 ```js
 let j1 = MutJson { hello: [1,2,3,4] };
-let a1 = MutArray<num>.parse_json(j1);
+let a1 = MutArray<num>.from_json(j1);
 a1.push(5);
 
 j1.hello = a1;
@@ -386,9 +471,10 @@ j1.hello = a1;
 
 > We will need to revisit this as we progress if this is a major use case.
 
-##### 1.1.4.4 Formatting
+##### 1.1.4.9 Serialization
 
-The `Json.format(j: Json): str` static method can be used to serialize a `Json` as a string:
+The `Json.format(j: Json): str` static method can be used to serialize a `Json` as a string
+([JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)):
 
 ```js
 assert(Json.format(json_string) == "\"hello\"");
@@ -396,10 +482,23 @@ assert(Json.format(json_obj) == "{\"boom\":123}");
 assert(Json.format(json_mut_obj, indent: 2) == "{\n\"hello\": 123,\n"  \"world\": [\n    1,\n    2,\n    3\n  ],\n  \"boom\": {\n    \"hello\": 1233\n  }\n}");
 ```
 
-##### 1.1.4.5 Equality, diff and patch
+The `Json.parse(s: str): Json` static method can be used to parse a string into a `Json`:
 
-The `Json.equals(lhs: Json, rhs: Json): bool` static method can be used to determine if two
-values are equal (recursively comparing arrays and objects):
+```js
+let j_array = Json.parse("[1,2,3]");
+let arr = Array<num>.from_json(j_array);
+```
+
+`Json.try_parse` returns an optional:
+
+```js
+let o = Json.try_parse("xxx") ?? Json [1,2,3];
+```
+
+##### 1.1.4.10 Equality, diff and patch
+
+The `Json.equals(lhs: Json, rhs: Json): bool` static method can be used to determine if two values
+are equal (recursively comparing arrays and objects):
 
 ```js
 assert(Json.equals(json_string, Json "hello"));
@@ -409,7 +508,7 @@ assert(!Json.equals(Json { hello: [ 1, 2, 3 ] }, Json { hello: [ 1, 2 ] }));
 
 The `Json.diff(lhs: Json, rhs: Json): JsonPatch` static method can be used to calculate the deep
 difference between two JSON values. It returns a list of differences in
-[json-patch](https://jsonpatch.com/) format.
+[json-patch](https://jsonpatch.com/) format (P2).
 
 ```js
 let j1 = Json {
@@ -429,9 +528,9 @@ assert(Json.diff(j1, j2) = [
 ]);
 ```
 
-The `Json.patch(j: Json, patch: JsonPatch): Json` static method applies a `JsonPatch` to a `Json` object.
+The `Json.patch(j: Json, patch: JsonPatch): Json` static method applies a `JsonPatch` to a `Json` object (P2).
 
-##### 1.1.4.6. Printing
+##### 1.1.4.11 Printing
 
 A `Json` value can be printed using `print()`, in which case it will be pretty-formatted:
 
