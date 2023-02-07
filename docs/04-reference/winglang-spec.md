@@ -174,7 +174,7 @@ inflight (arg1: <type1>, arg2: <type2>, ...) => <type>
 
 #### 1.1.4 Json type
 
-Wing has a data type called `Json`. This type represents an immutable untyped [JSON
+Wing has a data type called `Json` (alias is `json`). This type represents an immutable untyped [JSON
 value](https://www.json.org/json-en.html), including JSON primitives (`string`, `number`,
 `boolean`), arrays (both heterogenous and homogenous) and objects (key-value maps where keys are
 strings and values can be any other JSON value)).
