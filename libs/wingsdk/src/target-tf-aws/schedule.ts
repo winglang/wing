@@ -29,8 +29,8 @@ export class Schedule extends cloud.ScheduleBase {
     }
 
     this.scheduleExpression = rate
-      ? `rate(${rate!.minutes} minutes)`
-      : `cron(${cron!})`;
+      ? `rate(${rate.minutes} minutes)`
+      : `cron(${cron})`;
   }
 
   public onTick(
