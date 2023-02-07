@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { join } from "path/posix";
+import { join } from "path";
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";

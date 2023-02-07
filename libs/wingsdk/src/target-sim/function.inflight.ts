@@ -10,7 +10,6 @@ import { ISimulatorResourceInstance } from "./resource";
 import { FunctionSchema } from "./schema-resources";
 import { FUNCTION_TYPE, IFunctionClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
-import { normalizePath } from "../util";
 
 export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly filename: string;
@@ -24,10 +23,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     }
     console.debug(`Assetdir ${context.assetsDir}`);
     console.debug(`Loading function from ${props.sourceCodeFile}`);
-    this.filename = path_.resolve(
-      normalizePath(context.assetsDir),
-      normalizePath(props.sourceCodeFile)
-    );
+    this.filename = path_.resolve(context.assetsDir, props.sourceCodeFile);
     this.env = props.environmentVariables ?? {};
     this.context = context;
     this.timeout = props.timeout;
