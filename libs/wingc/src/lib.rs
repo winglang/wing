@@ -297,7 +297,7 @@ mod sanity {
 		fs::read_dir(dir)
 			.unwrap()
 			.map(|entry| entry.unwrap().path())
-			.filter(|path| path.extension().map(|ext| ext == "w").unwrap_or(false))
+			.filter(|path| path.is_file() && path.extension().map(|ext| ext == "w").unwrap_or(false))
 	}
 
 	fn compile_test(test_dir: &str, expect_failure: bool) {
