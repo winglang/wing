@@ -27,26 +27,15 @@ enum PluginPhases {
   VALIDATE = "validate",
 }
 
-export interface PluginManagerProps {
-  /**
-   * vm context to load plugins in with
-   *
-   * @default - create a new context with (require, console, exports, process, __dirname)
-   */
-  context?: vm.Context;
-}
-
 /**
  * Plugin manager is responsible for loading hooks from plugins and
  * managing their executions during the various phases of the plugin lifecycle.
  */
 export class PluginManager {
   private hooks: ICompilationHook[];
-  private context?: vm.Context;
 
-  constructor(plugins: string[], props: PluginManagerProps = {}) {
+  constructor(plugins: string[]) {
     this.hooks = [];
-    this.context = props.context;
 
     for (const plugin of plugins) {
       this.add(plugin);
@@ -81,19 +70,17 @@ export class PluginManager {
 
     const pluginDir = resolve(filePath).split("/").slice(0, -1).join("/");
 
-    const context =
-      this.context ??
-      vm.createContext({
-        require,
-        console,
-        exports: pluginHooks,
-        process,
-        __dirname: pluginDir,
-      });
+    const context = vm.createContext({
+      require,
+      console,
+      exports: pluginHooks,
+      process,
+      __dirname: pluginDir,
+    });
 
     const pluginCode = readFileSync(resolve(filePath), "utf8");
     const script = new vm.Script(pluginCode);
-    script.runInNewContext(context);
+    script.runInContext(context);
 
     this.hooks.push(pluginHooks);
   }
