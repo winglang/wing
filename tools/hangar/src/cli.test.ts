@@ -1,6 +1,6 @@
 import { test, expect, beforeAll } from "vitest";
 import { posix as path, basename } from "path";
-import { $, within } from "zx";
+import { $, within } from "zx/core";
 import * as fs from "fs-extra";
 import * as walk from "walkdir";
 

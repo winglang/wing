@@ -9,6 +9,7 @@
   },
   "author": "Monada",
   "license": "Apache-2.0",
+  "type": "module",
   "devDependencies": {
     "npm": "^8.19.3",
     "vitest": "^0.28.4",
