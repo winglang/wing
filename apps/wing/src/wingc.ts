@@ -1,14 +1,13 @@
 import debug from "debug";
 import { readFile } from "fs/promises";
-import { resolve } from "path/posix";
+import { resolve } from "path";
 import { WASI } from "wasi";
-import { normalPath } from "./util";
 
 const log = debug("wing:compile");
 
-const WINGSDK_RESOLVED_PATH = normalPath(require.resolve("@winglang/sdk"));
+const WINGSDK_RESOLVED_PATH = require.resolve("@winglang/sdk");
 const WINGSDK_MANIFEST_ROOT = resolve(WINGSDK_RESOLVED_PATH, "../..");
-const WINGC_WASM_PATH = resolve(normalPath(__dirname), "../wingc.wasm");
+const WINGC_WASM_PATH = resolve(__dirname, "../wingc.wasm");
 
 export type WingCompilerFunction =
   | "wingc_compile"
@@ -24,6 +23,22 @@ export interface WingCompilerLoadOptions {
 }
 
 export async function load(options: WingCompilerLoadOptions) {
+  const preopens = {
+    // .jsii access
+    [WINGSDK_MANIFEST_ROOT]: WINGSDK_MANIFEST_ROOT,
+    ...(options.preopens ?? {}),
+  } as Record<string, string>;
+
+  if (process.platform === "win32") {
+    for (const [key, value] of Object.entries(preopens)) {
+      const split = value.split(":");
+      if (split.length === 2 && split[0].length === 1) {
+        delete preopens[key];
+        preopens[`/__${split[0]}`] = value;
+      }
+    }
+  }
+
   const wasi = new WASI({
     env: {
       ...process.env,
@@ -66,7 +81,7 @@ const HIGH_MASK = BigInt(32);
 
 /**
  * Runs the given WASM function in the Wing Compiler WASM instance.
- * 
+ *
  * Assumptions:
  * 1. The called WASM function is expecting a pointer and a length representing a string
  * 2. The string will be UTF-8 encoded

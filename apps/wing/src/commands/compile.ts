@@ -1,12 +1,12 @@
 import * as vm from "vm";
 
 import { mkdir, readFile } from "fs/promises";
-import { basename, dirname, join, resolve } from "path/posix";
+import { basename, dirname, join, resolve } from "path";
 
 import * as chalk from "chalk";
 import debug from "debug";
-import { normalPath } from "../util";
 import * as wingCompiler from "../wingc";
+import { normalPath } from "src/util";
 
 const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
@@ -60,11 +60,11 @@ function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
  * @param options Compile options.
  */
 export async function compile(entrypoint: string, options: ICompileOptions) {
-  const wingFile = normalPath(entrypoint);
+  const wingFile = entrypoint;
   log("wing file: %s", wingFile);
   const wingDir = dirname(wingFile);
   log("wing dir: %s", wingDir);
-  const synthDir = resolveSynthDir(normalPath(options.outDir), wingFile, options.target);
+  const synthDir = resolveSynthDir(options.outDir, wingFile, options.target);
   log("synth dir: %s", synthDir);
   const workDir = resolve(synthDir, ".wing");
   log("work dir: %s", workDir);
@@ -86,9 +86,14 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
         send_notification: () => {},
       },
     },
+    preopens: {
+      [wingDir]: wingDir, // for Rust's access to the source file
+      [workDir]: workDir, // for Rust's access to the work directory
+      [synthDir]: synthDir, // for Rust's access to the synth directory
+    },
   });
 
-  const arg = `${wingFile};${workDir}`;
+  const arg = `${normalPath(wingFile)};${normalPath(workDir)}`;
   log(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
   wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
 
