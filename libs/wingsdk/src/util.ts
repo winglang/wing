@@ -130,7 +130,24 @@ export function directorySnapshot(initialRoot: string) {
 }
 
 /**
- * Santize the text of a code bundle to remove path references that are system-specific.
+ * Normalize a path to be posix-style.
+ */
+export function normalizePath(path: string) {
+  if (process.platform === "win32") {
+    return (
+      path
+        // force posix path separator
+        .replace(/\\/g, "/")
+        // place drive letter in front of /
+        .replace(/^([a-zA-Z]):/, "/$1")
+    );
+  } else {
+    return path;
+  }
+}
+
+/**
+ * Sanitize the text of a code bundle to remove path references that are system-specific.
  */
 export function sanitizeCodeText(code: string): string {
   function removeAbsolutePaths(text: string) {
