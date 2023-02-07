@@ -207,34 +207,3 @@ function resolvePluginPaths(plugins: string[]): string[] {
   }
   return resolvedPluginPaths;
 }
-
-/**
- * Assumptions:
- * 1. The called WASM function is expecting a pointer and a length representing a string
- * 2. The string will be UTF-8 encoded
- * 3. The string will be less than 2^32 bytes long  (4GB)
- * 4. the WASI instance has already been started
- */
-async function wingcInvoke(
-  instance: WebAssembly.Instance,
-  func: string,
-  arg: string
-) {
-  const exports = instance.exports as any;
-
-  const bytes = new TextEncoder().encode(arg);
-  const argPointer = exports.wingc_malloc(bytes.byteLength);
-
-  try {
-    const argMemoryBuffer = new Uint8Array(
-      exports.memory.buffer,
-      argPointer,
-      bytes.byteLength
-    );
-    argMemoryBuffer.set(bytes);
-  
-    exports[func](argPointer, bytes.byteLength);
-  } finally {
-    exports.wingc_free(argPointer, bytes.byteLength);
-  }
-}

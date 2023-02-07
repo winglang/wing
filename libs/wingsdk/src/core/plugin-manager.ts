@@ -12,16 +12,16 @@ export interface ICompilationHook {
    *
    * @default - absolute path to plugin file
    */
-  pluginName: string;
-  /** preSynth phase */
+  name: string;
+  /** preSynth hook */
   preSynth?(app: IConstruct): void;
-  /** postSynth phase */
+  /** postSynth hook */
   postSynth?(config: any): any;
-  /** validate phase */
+  /** validate hook */
   validate?(config: any): void;
 }
 
-enum PluginPhases {
+enum CompilationPhase {
   PRE_SYNTH = "preSynth",
   POST_SYNTH = "postSynth",
   VALIDATE = "validate",
@@ -29,7 +29,7 @@ enum PluginPhases {
 
 /**
  * Plugin manager is responsible for loading hooks from plugins and
- * managing their executions during the various phases of the plugin lifecycle.
+ * managing their execution during compilation process.
  */
 export class PluginManager {
   private hooks: ICompilationHook[];
@@ -45,54 +45,38 @@ export class PluginManager {
   /**
    * Add plugins to the plugin manager based on the plugin type.
    *
-   * @param plugin the plugin to add
+   * @param pluginAbsolutePath the plugin to add
    */
-  public add(plugin: string) {
+  public add(pluginAbsolutePath: string) {
     // maybe we support other plugin types in the future (e.g. npm modules)
-    if (!plugin.endsWith(".js")) {
+    if (!pluginAbsolutePath.endsWith(".js")) {
       throw new Error(
-        `Currently only javascript files are supported as plugins. Got: ${plugin}`
+        `Currently only javascript files are supported as plugins. Got: ${pluginAbsolutePath}`
       );
     }
-    this.addPluginFromFilePath(plugin);
-  }
 
-  /**
-   * Loads hooks from a plugin file and adds them to the list of hooks
-   * that will later be run in the various plugin phases.
-   *
-   * @param filePath absolute file path to the plugin
-   */
-  private addPluginFromFilePath(filePath: string) {
-    const pluginHooks: ICompilationHook = {
-      pluginName: filePath, // can be overwritten by plugin (ex: exports.pluginName = "my-plugin")
+    const hooks: ICompilationHook = {
+      name: pluginAbsolutePath,
     };
 
-    const pluginDir = resolve(filePath).split("/").slice(0, -1).join("/");
+    const pluginDir = resolve(pluginAbsolutePath)
+      .split("/")
+      .slice(0, -1)
+      .join("/");
 
     const context = vm.createContext({
       require,
       console,
-      exports: pluginHooks,
+      exports: hooks,
       process,
       __dirname: pluginDir,
     });
 
-    const pluginCode = readFileSync(resolve(filePath), "utf8");
+    const pluginCode = readFileSync(resolve(pluginAbsolutePath), "utf8");
     const script = new vm.Script(pluginCode);
     script.runInContext(context);
 
-    this.hooks.push(pluginHooks);
-  }
-
-  private throwHookInvocationError(
-    stage: string,
-    pluginName: string,
-    err: any
-  ) {
-    throw new Error(
-      `Plugin: "${pluginName}" failed, during stage: "${stage}". cause: ${err.message}`
-    );
+    this.hooks.push(hooks);
   }
 
   /**
@@ -104,25 +88,13 @@ export class PluginManager {
    * @param app app construct to be passed to the preSynth hooks
    */
   public preSynth(app: IConstruct) {
-    for (const hook of this.hooks) {
-      if (hook.preSynth) {
-        try {
-          hook.preSynth(app);
-        } catch (err) {
-          this.throwHookInvocationError(
-            PluginPhases.PRE_SYNTH,
-            hook.pluginName,
-            err
-          );
-        }
-      }
-    }
+    this.callAllHooks(CompilationPhase.PRE_SYNTH, (hook) => hook.preSynth(app));
   }
 
   /**
    * Call all postSynth hooks
    *
-   * This phase is mutable, allowing plugins to modify the Terraform config
+   * This hook is mutable, allowing plugins to modify the Terraform config
    * after synthesis has occurred then overwrite the config file on disk
    * with the modified one.
    *
@@ -130,19 +102,10 @@ export class PluginManager {
    * @param synthesizedStackPath path to the synthesized stack json file
    */
   public postSynth(config: any, synthesizedStackPath: string): any {
-    for (const hook of this.hooks) {
-      if (hook.postSynth) {
-        try {
-          config = hook.postSynth(config) ?? config; // ignores undefined return values
-        } catch (err) {
-          this.throwHookInvocationError(
-            PluginPhases.POST_SYNTH,
-            hook.pluginName,
-            err
-          );
-        }
-      }
-    }
+    this.callAllHooks(CompilationPhase.POST_SYNTH, (hook) => {
+      config = hook.postSynth(config) ?? config;
+    });
+
     // Overwrite the config with the modified one
     writeFileSync(
       resolve(synthesizedStackPath),
@@ -154,23 +117,28 @@ export class PluginManager {
   /**
    * Call all validate hooks
    *
-   * This phase is immutable, allowing plugins to perform validations
+   * This hook is immutable, allowing plugins to perform validations
    * on the Terraform config after all modifications have been made.
    *
    * @param config Terraform config to be passed to the validate hooks
    */
   public validate(config: any) {
+    this.callAllHooks(CompilationPhase.VALIDATE, (hook) =>
+      hook.validate(config)
+    );
+  }
+
+  private callAllHooks(phase: CompilationPhase, callHook: (hook: any) => any) {
     for (const hook of this.hooks) {
-      if (hook.validate) {
-        try {
-          hook.validate(config);
-        } catch (err) {
-          this.throwHookInvocationError(
-            PluginPhases.VALIDATE,
-            hook.pluginName,
-            err
-          );
-        }
+      if (!hook[phase]) {
+        continue;
+      }
+      try {
+        callHook(hook);
+      } catch (err) {
+        throw new Error(
+          `Plugin "${hook.name}" failed, during "${phase}". ${err}`
+        );
       }
     }
   }

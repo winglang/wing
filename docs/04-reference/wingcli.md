@@ -135,7 +135,7 @@ You can deploy your stack to GCP using Terraform ([example](/getting-started/aws
 
 ### Plugins
 
-Additionally the wing `compile` command can be provided an optional list of plugins to use during the compilation process.
+Additionally the `compile` command can be provided an optional list of plugins to use during the compilation process.
 
 ```sh
 $ wing compile --target tf-aws ENTRYPOINT.w --plugins PLUGIN1 PLUGIN2

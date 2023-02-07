@@ -56,7 +56,7 @@ const ATTEMPT_TO_MODIFY_CONFIG_IN_VALIDATE_CODE = `
 exports.validate = function(config) {
   return "something terrible";
 }
-`
+`;
 
 test("preSynth can add resources to construct tree", () => {
   // GIVEN
