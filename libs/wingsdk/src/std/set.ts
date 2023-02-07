@@ -21,11 +21,33 @@ export class ImmutableSet {
   /**
    * Returns a boolean indicating whether an element with the specified value exists in the set.
    * @param value The value to test for presence in the Set object.
-   * @returns Returns `true` if an element with the specified value exists in the set; otherwise `false`.
+   * @returns `true` if an element with the specified value exists in the set; otherwise `false`.
    */
   public has(value: T1): boolean {
     value;
     throw new Error("Abstract");
+  }
+
+  /**
+   * Create a mutable shallow copy of this set
+   *
+   * @macro new Set($self$)
+   *
+   * @returns a MutableSet with the same values as this set
+   */
+  public copyMut(): MutableSet {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Create an immutable shallow copy of this set
+   *
+   * @macro Object.freeze(new Set($self$))
+   *
+   * @returns an ImmutableSet with the same values as this set
+   */
+  public copy(): ImmutableSet {
+    throw new Error("Macro");
   }
 }
 

@@ -1,4 +1,4 @@
-use tower_lsp::lsp_types::{CompletionItemKind, Position};
+use lsp_types::{CompletionItemKind, Position};
 use tree_sitter::{Node, Point, Tree};
 use tree_sitter_traversal::{traverse, Order};
 
