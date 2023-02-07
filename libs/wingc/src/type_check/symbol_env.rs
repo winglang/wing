@@ -232,6 +232,7 @@ impl SymbolEnv {
 		)
 	}
 
+	// TODO: can we make this more generic to avoid code duplication with lookup_nested_str?
 	pub fn lookup_nested_mut_str(
 		&mut self,
 		nested_str: &str,
@@ -313,6 +314,8 @@ impl SymbolEnv {
 	}
 
 	/// Pass `include_hidden: true` if it's OK to return types that have only been imported implicitly (such as through an inheritance chain), and false otherwise
+	///
+	/// TODO: can we make this more generic to avoid code duplication with lookup_nested?
 	fn lookup_nested_mut(
 		&mut self,
 		nested_vec: &[&Symbol],
