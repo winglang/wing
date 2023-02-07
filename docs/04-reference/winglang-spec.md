@@ -216,6 +216,80 @@ it cannot be modified anymore.
 
 ---
 
+#### 1.1.5 `Duration`
+
+The `Duration` (alias `duration`) type represents a time duration.
+
+Duration literals are numbers with `m`, `s`, `h` suffixes:
+
+```js
+let one_minute = 1m;
+let two_seconds = 2s;
+let three_hours = 3h;
+let half_minute: duration = 0.5m;
+```
+
+Then:
+
+```js
+assert(one_minute.seconds == 60);
+assert(half_minute.seconds == 30);
+assert(three_hours.minutes == 180);
+```
+
+Duration objects are immutable and can be referenced across inflight context.
+
+#### 1.1.6 `Datetime`
+
+The `Datetime` (alias `datetime`) type represents a single moment in time in a platform-independent
+format. It uses the
+[`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
+JavaScript object under the hood and encapsulate an integral number that represents milliseconds
+since the midnight at the beginning of January 1, 1970, UTC (the epoch).
+
+`Datetime` objects are immutable and can be referenced across inflight context.
+
+Here is the initial API for the `Datetime` type:
+
+```js
+struct DatetimeComponents {
+  year: num;
+  month: num;
+  day: num;
+  hour: num;
+  min: num;
+  sec: num;
+  ms: num;
+}
+
+class Datetime {
+  static now(): Datetime;                 // returns the current DateTime
+  static from_iso(iso: str): Datetime;    // creates a instance from an ISO-8601 string
+  static from_components(c: DatetimeComponents): Datetime;
+
+  timestamp: num;     // Date.valueOf()/1000 (non-leap seconds since epoch)
+  timestamp_ms: num;  // Date.valueOf() (non-leap milliseconds since epoch)
+
+  hours: num;         // Date.getHours()
+  min: num;           // Date.getMinutes()
+  sec: num;           // Date.getSeconds()
+  ms: num;            // Date.getMilliseconds()
+  day: num;           // Date.getDay()
+  month: num;         // Date.getMonth()
+  year: num;          // Date.getFullYear()
+
+  offset: num;        // Date.getTimezoneOffset() (returns the UTC timezone offset)
+  utc: Datetime;      // returns the same time in UTC timezone
+
+  to_iso(): str;      // returns ISO-8601 string
+}
+```
+
+[`▲ top`][top]
+
+---
+
+
 ### 1.2 Utility Functions
 
 | Name     | Extra information                                        |
@@ -226,7 +300,7 @@ it cannot be modified anymore.
 | `assert` | checks a condition and _panics_ if evaluated to false    |
 
 Wing is a statically typed language, so attempting to redefine any of the above
-functions, just like any other "symbol" will result in a compile-time error.  
+functions, just like any other "symbol" will result in a compile-time error. 
 
 Above functions can accept variadic arguments of any type except `throw` which
 only accepts one argument and that is the message to be contained in the error.
@@ -1942,7 +2016,7 @@ queue.add_consumer(filter);
 - [x] Make inflight functions `async` by default.
 - [ ] First class support for `regx`, `glob`, and `cron` types.
 - [ ] Support of math operations over `date` and `duration` types.
-- [ ] Add `time`, `date`, and `durations` as first class types with syntax.
+- [x] Add `time`, `date`, and `durations` as first class types with syntax.
 - [ ] More useful enums: Support for Enum Classes and Swift style enums.
 - [ ] Reflection: add an extended `typeof` operator to get type information.
 - [ ] Advanced OOP: Support for `abstract` and `private` implementations.
