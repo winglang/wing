@@ -3025,11 +3025,15 @@ Invoke the function asynchronously with a given payload.
 
 - *Type:* str
 
+The payload to pass to the function.
+
 ---
 
 ###### `ctx`<sup>Optional</sup> <a name="ctx" id="@winglang/sdk.cloud.IFunctionClient.invoke.parameter.ctx"></a>
 
 - *Type:* sim.TracingContext
+
+Context of the tracing.
 
 ---
 
