@@ -412,7 +412,12 @@ impl<'a> JsiiImporter<'a> {
 				// Define the rest of the arguments and create the method signature
 				if let Some(params) = &m.parameters {
 					if self.has_variadic_parameters(params) {
-						debug!("Skipping method {} with variadic parameters", m.name);
+						// TODO: support variadic parameters
+						// or TODO: emit compiler warning https://github.com/winglang/wing/issues/1475
+						debug!(
+							"Skipping method {} with variadic parameters (see https://github.com/winglang/wing/issues/397)",
+							m.name
+						);
 						continue;
 					}
 
