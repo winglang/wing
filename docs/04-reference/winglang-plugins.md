@@ -13,14 +13,13 @@ all resources in the resulting infrastructure.
 ## Plugin Design
 
 A compiler plugin is a JavaScript file that exports multiple functions (called hooks). These
-hooks are called by the compiler at various points during compilation
-also referred to as stages.
+hooks are called by the compiler at various points during compilation.
 
-At each stage the compiler plugin is provided with a context object that allows
-the plugin to hook into  the compilation process and apply customizations.
+Each hook is provided some context object that allows
+the plugin to hook into the compilation process and apply customizations.
 
-A single plugin can implement any number of stages. However, it is recommended
-to only implement the  stages that are needed.
+A single plugin can implement any number of hooks. However, it is recommended
+to only implement the hooks that are needed.
 
 ## Compilation Hooks
 
@@ -28,6 +27,11 @@ The compiler offers hooks that can be used to customize its behavior at various
 points during the compilation process.
 
 ### `preSynth` hook
+
+API Reference
+```ts
+preSynth(app: Construct): void;
+```
 
 This hook is called before the compiler begins to synthesize. In the context of a
 Terraform-based  target like `tf-aws`, this hook will have access to the root
@@ -50,6 +54,11 @@ exports.preSynth = function(app) {
 ```
 
 ### `postSynth` hook
+
+API Reference
+```ts
+postSynth(config: any): any;
+```
 
 This hook runs after artifacts were synthesized. When compiling to a
 Terraform-based target like `tf-aws`,  the hook will have access
@@ -78,9 +87,14 @@ exports.postSynth = function(config) {
 }
 ```
 
-### `validate` stage
+### `validate` hook
 
-This stage is called right after the `postSynth` stage and provided the same
+API Reference
+```ts
+validate(config: any): void;
+```
+
+This hook is called right after the `postSynth` hook and provided the same
 context object. In the context of a  Terraform-based target like `tf-aws`, this
 is the same Terraform JSON configuration. However, does not allow configuration
 to be mutated, which allows plugins to validate the configuration without
