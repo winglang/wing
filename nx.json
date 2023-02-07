@@ -22,29 +22,11 @@
     "test": [
       "{projectRoot}/test/**/*"
     ],
-    "examples": [
-      "{workspaceRoot}/examples/**/*.w"
-    ],
     "examples-tests": [
       "{workspaceRoot}/examples/tests/**/*.w"
     ],
-    "rust-conf": [
-      "{projectRoot}/Cargo.toml",
-      "{workspaceRoot}/Cargo.toml",
-      "{workspaceRoot}/Cargo.lock"
-    ],
-    "projen": [
-      "{projectRoot}/.projenrc.ts",
-      "{projectRoot}/.projenrc.js",
-      "{projectRoot}/.projen/*"
-    ],
-    "rust-wasm": [
-      "{workspaceRoot}/target/wasm32-wasi/debug/*.wasm",
-      "{workspaceRoot}/target/wasm32-wasi/release/*.wasm"
-    ],
-    "rust-native": [
-      "{workspaceRoot}/target/debug/*",
-      "{workspaceRoot}/target/release/*"
+    "rust-target": [
+      "{workspaceRoot}/target/**"
     ],
     "dist": [
       "{projectRoot}/dist/**/*"
@@ -56,8 +38,6 @@
       "options": {
         "cacheableOperations": [
           "build",
-          "build-native",
-          "build-wasm",
           "copy",
           "lint",
           "test",
@@ -80,38 +60,13 @@
         "^build"
       ]
     },
-    "build-native": {
-      "inputs": [
-        "project-files",
-        "workspace-files",
-        "src"
-      ],
-      "outputs": [
-        "{workspaceRoot}/rust-native"
-      ],
-      "dependsOn": [
-        "^build-native"
-      ]
-    },
-    "build-wasm": {
-      "inputs": [
-        "project-files",
-        "workspace-files",
-        "src"
-      ],
-      "outputs": [
-        "{workspaceRoot}/rust-wasm"
-      ],
-      "dependsOn": [
-        "^build-wasm"
-      ]
-    },
     "test": {
       "inputs": [
         "project-files",
         "workspace-files",
         "src",
-        "test"
+        "test",
+        "examples-tests"
       ]
     }
   }
