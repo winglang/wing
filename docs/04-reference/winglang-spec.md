@@ -291,7 +291,7 @@ let my_num: num = 183;
 let my_bool: bool = true;
 let my_arr: Array<num> = [1,2,3];
 
-let json_string = Json { 
+let json_obj = Json { 
   a: my_string,
   b: my_num,
   c: my_bool,
