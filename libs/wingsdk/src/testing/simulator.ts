@@ -4,6 +4,7 @@ import * as tar from "tar";
 import { SDK_VERSION } from "../constants";
 import {
   ISimulatorResourceInstance,
+  ResourceContext,
   SimulatorResource,
   TracingContext,
 } from "../target-sim";
@@ -379,14 +380,14 @@ export class Simulator {
    * Get a simulated resource instance.
    * @returns the resource
    */
-  public getResource(path: string, ctx?: TracingContext): any {
+  public getResource(path: string, ctx?: ResourceContext): any {
     const handle = this.tryGetResource(path);
     if (!handle) {
       throw new Error(`Resource "${path}" not found.`);
     }
 
-    if (this.isSimulatorResource(handle) && ctx) {
-      handle.addTracingContext(ctx);
+    if (this.isSimulatorResource(handle)) {
+      handle.addTracingContext(ctx?.tracing);
     }
     return handle;
   }
