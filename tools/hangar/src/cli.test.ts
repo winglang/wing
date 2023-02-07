@@ -1,9 +1,8 @@
 import { test, expect, beforeAll } from "vitest";
 import { posix as path, basename } from "path";
+import { execa } from "execa";
 import * as fs from "fs-extra";
 import * as walk from "walkdir";
-
-const { $, within } = await import("zx");
 
 const repoRoot = path.resolve(__dirname, "../../..");
 const testDir = path.join(repoRoot, "examples/tests");
@@ -46,26 +45,24 @@ const shellEnv = {
 };
 
 beforeAll(async () => {
-  await within(async () => {
-    $.env = shellEnv;
-    $.cwd = hangarDir;
+  Object.assign(process.env, shellEnv);
 
-    $.verbose = true;
-    await $`cd ${hangarDir}`;
+  // reset tmpDir
+  fs.removeSync(tmpDir);
+  fs.mkdirpSync(tmpDir);
+  fs.writeJsonSync(path.join(tmpDir, "package.json"), basePackageJson);
 
-    // setup temp dir
-    await $`rm -rf ${tmpDir}`;
-    await $`mkdir -p ${tmpDir}`;
-    fs.writeJsonSync(path.join(tmpDir, "package.json"), basePackageJson);
-
-    // ensure npx cache is primed and `version` works before bothering with the rest of the tests
-    $.cwd = tmpDir;
-    await $`cd ${tmpDir}`;
-    await $`${npmBin} install --no-package-lock --ignore-engines`;
-    let versionOutput = await $`${wingBin} --version`;
-
-    expect(versionOutput.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
+  // use execSync to install npm deps in tmpDir
+  console.debug(`Installing npm deps into ${tmpDir}...`);
+  await execa(npmBin, ["install", "--no-package-lock", "--ignore-engines"], {
+    cwd: tmpDir,
   });
+  console.debug(`Done!`);
+
+  const versionOutput = await execa(wingBin, ["--version"], {
+    cwd: tmpDir,
+  });
+  expect(versionOutput.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
 }, 1000 * 200);
 
 function sanitize_json_paths(path: string) {
@@ -84,20 +81,20 @@ function sanitize_json_paths(path: string) {
   return finalObj;
 }
 
-async function enterTestDir(testDir: string) {
-  $.env = shellEnv;
-  await $`mkdir -p ${testDir}`;
-  await $`cd ${testDir}`;
-  $.cwd = testDir;
-}
-
-async function runWingCommand(command: string[], wingFile: string) {
+async function runWingCommand(
+  command: string[],
+  wingFile: string,
+  cwd: string
+) {
   const isError = path.dirname(wingFile).endsWith("error");
 
-  const cmd: string[] = [wingBin, ...command, wingFile];
+  const args: string[] = [...command, wingFile];
 
   const work = async () => {
-    const out = await $`${cmd}`;
+    console.debug(`Running: "${args.join(" ")}"...`);
+    const out = await execa(wingBin, args, {
+      cwd,
+    });
     return out.exitCode;
   };
 
@@ -111,35 +108,33 @@ async function runWingCommand(command: string[], wingFile: string) {
 test.each(validWingFiles)(
   "wing compile --target tf-aws %s",
   async (wingFile) => {
-    await within(async () => {
-      const command = ["compile", "--target", "tf-aws"];
-      const test_dir = path.join(tmpDir, `${wingFile}_cdktf`);
-      const targetDir = path.join(
-        test_dir,
-        "target",
-        `${basename(wingFile, ".w")}.tfaws`
-      );
-      const tf_json = path.join(targetDir, "main.tf.json");
+    const command = ["compile", "--target", "tf-aws"];
+    const testDir = path.join(tmpDir, `${wingFile}_cdktf`);
+    const targetDir = path.join(
+      testDir,
+      "target",
+      `${basename(wingFile, ".w")}.tfaws`
+    );
+    const tf_json = path.join(targetDir, "main.tf.json");
 
-      await enterTestDir(test_dir);
+    fs.mkdirpSync(testDir);
 
-      await runWingCommand(command, path.join(validTestDir, wingFile));
-      const npx_tfJson = sanitize_json_paths(tf_json);
+    await runWingCommand(command, path.join(validTestDir, wingFile), testDir);
+    const npx_tfJson = sanitize_json_paths(tf_json);
 
-      expect(npx_tfJson).toMatchSnapshot("main.tf.json");
+    expect(npx_tfJson).toMatchSnapshot("main.tf.json");
 
-      // get all files in .wing dir
-      const dotWingFiles = walk.sync(path.join(targetDir, ".wing"), {
-        return_object: true,
-      });
-      for (const irFile in dotWingFiles) {
-        if (dotWingFiles[irFile].isFile()) {
-          expect(fs.readFileSync(irFile, "utf8")).toMatchSnapshot(
-            path.basename(irFile)
-          );
-        }
-      }
+    // get all files in .wing dir
+    const dotWingFiles = walk.sync(path.join(targetDir, ".wing"), {
+      return_object: true,
     });
+    for (const irFile in dotWingFiles) {
+      if (dotWingFiles[irFile].isFile()) {
+        expect(fs.readFileSync(irFile, "utf8")).toMatchSnapshot(
+          path.basename(irFile)
+        );
+      }
+    }
   },
   {
     timeout: 1000 * 30,
@@ -149,15 +144,13 @@ test.each(validWingFiles)(
 test.each(validWingFiles)(
   "wing test %s (--target sim)",
   async (wingFile) => {
-    await within(async () => {
-      const command = ["test"];
-      const test_dir = path.join(tmpDir, `${wingFile}_sim`);
-      await enterTestDir(test_dir);
+    const command = ["test"];
+    const testDir = path.join(tmpDir, `${wingFile}_sim`);
+    fs.mkdirpSync(testDir);
 
-      await runWingCommand(command, path.join(validTestDir, wingFile));
+    await runWingCommand(command, path.join(validTestDir, wingFile), testDir);
 
-      // TODO snapshot .wsim contents
-    });
+    // TODO snapshot .wsim contents
   },
   {
     timeout: 1000 * 30,
