@@ -567,35 +567,35 @@ impl Types {
 	}
 
 	pub fn number(&self) -> TypeRef {
-		self.get_type_ref(self.numeric_idx)
+		self.get_typeref(self.numeric_idx)
 	}
 
 	pub fn string(&self) -> TypeRef {
-		self.get_type_ref(self.string_idx)
+		self.get_typeref(self.string_idx)
 	}
 
 	pub fn bool(&self) -> TypeRef {
-		self.get_type_ref(self.bool_idx)
+		self.get_typeref(self.bool_idx)
 	}
 
 	pub fn duration(&self) -> TypeRef {
-		self.get_type_ref(self.duration_idx)
+		self.get_typeref(self.duration_idx)
 	}
 
 	pub fn anything(&self) -> TypeRef {
-		self.get_type_ref(self.anything_idx)
+		self.get_typeref(self.anything_idx)
 	}
 
 	pub fn void(&self) -> TypeRef {
-		self.get_type_ref(self.void_idx)
+		self.get_typeref(self.void_idx)
 	}
 
 	pub fn add_type(&mut self, t: Type) -> TypeRef {
 		self.types.push(Box::new(t));
-		self.get_type_ref(self.types.len() - 1)
+		self.get_typeref(self.types.len() - 1)
 	}
 
-	fn get_type_ref(&self, idx: usize) -> TypeRef {
+	fn get_typeref(&self, idx: usize) -> TypeRef {
 		let t = &self.types[idx];
 		UnsafeRef::<Type>(&**t as *const Type)
 	}
