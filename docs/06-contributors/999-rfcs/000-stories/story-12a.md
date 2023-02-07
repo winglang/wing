@@ -108,9 +108,9 @@ let tasks = new TaskList();
 
 new cloud.Function(inflight (s: str): str => {
   tasks.add_task("clean the dishes");
-  let result = t.tasks.find_tasks_with("clean the dishes");
+  let result = tasks.find_tasks_with("clean the dishes");
   assert(result.length == 1);
-  assert("clean the dishes" == t.tasks.get_task(result.at(0)));
+  assert("clean the dishes" == tasks.get_task(result.at(0)));
 }) as "test: get and find task";
 
 
