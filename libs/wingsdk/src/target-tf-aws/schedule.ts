@@ -21,6 +21,9 @@ export class Schedule extends cloud.ScheduleBase {
 
     const { rate, cron } = props;
 
+    if (rate && cron) {
+      throw new Error("rate and cron cannot be configured simultaneously.");
+    }
     if (!rate && !cron) {
       throw new Error("rate or cron need to be filled.");
     }
@@ -66,7 +69,7 @@ export class Schedule extends cloud.ScheduleBase {
       relationship: "on_tick",
     });
 
-    const role = new IamRole(this, "IamRole", {
+    const role = new IamRole(this, `${this.node.id}-ScheduleRole-${hash}`, {
       assumeRolePolicy: JSON.stringify({
         Version: "2012-10-17",
         Statement: [
@@ -80,7 +83,7 @@ export class Schedule extends cloud.ScheduleBase {
         ],
       }),
     });
-    new IamRolePolicy(this, "IamRolePolicy", {
+    new IamRolePolicy(this, `${this.node.id}-SchedulePolicy-${hash}`, {
       role: role.name,
       policy: JSON.stringify({
         Version: "2012-10-17",
