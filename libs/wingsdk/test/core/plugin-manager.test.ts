@@ -46,11 +46,17 @@ exports.postSynth = function(config) {
 };
 `;
 
-const RETURN_NULL_CONFIG = `
+const RETURN_NULL_CONFIG_CODE = `
 exports.postSynth = function(config) {
   // no return
 };
 `;
+
+const ATTEMPT_TO_MODIFY_CONFIG_IN_VALIDATE_CODE = `
+exports.validate = function(config) {
+  return "something terrible";
+}
+`
 
 test("preSynth can add resources to construct tree", () => {
   // GIVEN
@@ -116,7 +122,7 @@ test("postSynth return is ignored if undefined", () => {
   // GIVEN
   const tmpDir = mkdtemp();
   const pluginFile = join(tmpDir, "plugin.js");
-  fs.writeFileSync(pluginFile, RETURN_NULL_CONFIG);
+  fs.writeFileSync(pluginFile, RETURN_NULL_CONFIG_CODE);
 
   // WHEN
   const app = new tfaws.App({ outdir: tmpDir }); // exclude plugins from constructor for control
@@ -145,6 +151,27 @@ test("validate can throw an error", () => {
 
   // THEN
   expect(() => pm.validate(app)).toThrowError("some validation error");
+});
+
+test("validate cannot modify config", () => {
+  // GIVEN
+  const tmpDir = mkdtemp();
+  const pluginFile = join(tmpDir, "plugin.js");
+  fs.writeFileSync(pluginFile, ATTEMPT_TO_MODIFY_CONFIG_IN_VALIDATE_CODE);
+
+  // WHEN
+  const app = new tfaws.App({ outdir: tmpDir }); // exclude plugins from constructor for control
+  const pm = new PluginManager([pluginFile]);
+  new tfaws.Bucket(app, "Bucket", {});
+
+  const synthOutput = app.synth();
+  const synthesizedStackPath = `${app.terraformManifestPath}`;
+
+  pm.postSynth(JSON.parse(synthOutput), synthesizedStackPath);
+  const postSynthOutput = fs.readFileSync(synthesizedStackPath, "utf-8");
+
+  // THEN
+  expect(synthOutput).toEqual(postSynthOutput); // nothing should have changed
 });
 
 test("plugins are run in order they are passed in", () => {
