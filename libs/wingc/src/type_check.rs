@@ -608,10 +608,10 @@ impl Types {
 
 	pub fn add_namespace(&mut self, n: Namespace) -> NamespaceRef {
 		self.namespaces.push(Box::new(n));
-		self.get_namespace_ref(self.namespaces.len() - 1)
+		self.get_namespaceref(self.namespaces.len() - 1)
 	}
 
-	fn get_namespace_ref(&self, idx: usize) -> NamespaceRef {
+	fn get_namespaceref(&self, idx: usize) -> NamespaceRef {
 		let t = &self.namespaces[idx];
 		UnsafeRef::<Namespace>(&**t as *const Namespace)
 	}
