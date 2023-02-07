@@ -95,7 +95,10 @@ async function runWingCommand(
     console.debug(`Running: "${args.join(" ")}"...`);
     const out = await execa(wingBin, args, {
       cwd,
+      stdout: "inherit",
     });
+    console.debug(out.stdout);
+    console.debug(out.stderr);
     return out.exitCode;
   };
 
