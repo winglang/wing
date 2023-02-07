@@ -2,6 +2,7 @@ import debug from "debug";
 import { readFile } from "fs/promises";
 import { resolve } from "path";
 import { WASI } from "wasi";
+import { normalPath } from "./util";
 
 const log = debug("wing:compile");
 
@@ -43,7 +44,7 @@ export async function load(options: WingCompilerLoadOptions) {
     env: {
       ...process.env,
       RUST_BACKTRACE: "full",
-      WINGSDK_MANIFEST_ROOT,
+      WINGSDK_MANIFEST_ROOT: normalPath(WINGSDK_MANIFEST_ROOT),
       ...(options.env ?? {}),
     },
     preopens,
