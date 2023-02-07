@@ -22,6 +22,8 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     if (props.sourceCodeLanguage !== "javascript") {
       throw new Error("Only JavaScript is supported");
     }
+    console.debug(`Assetdir ${context.assetsDir}`);
+    console.debug(`Loading function from ${props.sourceCodeFile}`);
     this.filename = path_.resolve(
       normalizePath(context.assetsDir),
       normalizePath(props.sourceCodeFile)
