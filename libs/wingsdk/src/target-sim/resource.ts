@@ -24,7 +24,7 @@ export function isSimulatorResource(obj: any): obj is ISimulatorResource {
  */
 export interface TracingContext {
   /**
-   * Tracing metadata for the resource.
+   * Tracing label.
    */
   readonly label: string;
 }

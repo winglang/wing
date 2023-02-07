@@ -1,9 +1,9 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Function, FunctionProps } from "./function";
 import { Code, IResource, Inflight, Resource } from "../core";
 import { Duration } from "../std";
 import { TracingContext } from "../target-sim";
+import { Function, FunctionProps } from "./function";
 
 /**
  * Global identifier for `Queue`.
@@ -98,18 +98,21 @@ export interface IQueueClient {
   /**
    * Push a message to the queue.
    * @param message Payload to send to the queue.
+   * @param ctx Optional tracing context
    * @inflight
    */
   push(message: string, ctx?: TracingContext): Promise<void>;
 
   /**
    * Purge all of the messages in the queue.
+   * @param ctx Optional tracing context
    * @inflight
    */
   purge(ctx?: TracingContext): Promise<void>;
 
   /**
    * Retrieve the approximate number of messages in the queue.
+   * @param ctx Optional tracing context
    * @inflight
    */
   approxSize(ctx?: TracingContext): Promise<number>;

@@ -69,6 +69,7 @@ export interface ICounterClient {
   /**
    * Increments the counter atomically by a certain amount and returns the previous value.
    * @param amount amount to increment (default is 1).
+   * @param ctx Optional tracing context
    * @returns the previous value of the counter.
    * @inflight
    */
@@ -77,6 +78,7 @@ export interface ICounterClient {
   /**
    * Decrement the counter, returning the previous value.
    * @param amount amount to decrement (default is 1).
+   * @param ctx Optional tracing context
    * @returns the previous value of the counter.
    * @inflight
    */
@@ -84,6 +86,7 @@ export interface ICounterClient {
 
   /**
    * Get the current value of the counter.
+   * @param ctx Optional tracing context
    * Using this API may introduce race conditions since the value can change between
    * the time it is read and the time it is used in your code.
    * @returns current value
