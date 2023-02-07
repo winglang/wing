@@ -1831,10 +1831,10 @@ impl<'a> TypeChecker<'a> {
 		identifier: &Symbol,
 		statement_idx: usize,
 	) {
-		let (wingii_types, assembly_name) = if library_name == WINGSDK_ASSEMBLY_NAME {
+		let mut wingii_types = wingii::type_system::TypeSystem::new();
+		let assembly_name = if library_name == WINGSDK_ASSEMBLY_NAME {
 			// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
 			let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
-			let mut wingii_types = wingii::type_system::TypeSystem::new();
 			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
 				root: true,
 				deps: false,
@@ -1842,15 +1842,14 @@ impl<'a> TypeChecker<'a> {
 			let assembly_name = wingii_types
 				.load(manifest_root.as_str(), Some(wingii_loader_options))
 				.unwrap();
-			(wingii_types, assembly_name)
+			assembly_name
 		} else {
-			let mut wingii_types = wingii::type_system::TypeSystem::new();
 			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions { root: true, deps: true };
 			let source_dir = self.source_path.parent().unwrap().to_str().unwrap();
 			let assembly_name = wingii_types
 				.load_dep(library_name.as_str(), source_dir, &wingii_loader_options)
 				.unwrap();
-			(wingii_types, assembly_name)
+			assembly_name
 		};
 
 		debug!("Loaded JSII assembly {}", assembly_name);
