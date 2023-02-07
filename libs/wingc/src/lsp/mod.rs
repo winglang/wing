@@ -12,6 +12,7 @@ use lsp_types::{
 use std::{
 	cell::RefCell,
 	collections::{HashMap, HashSet},
+	path::Path,
 };
 use tree_sitter::Tree;
 
@@ -266,7 +267,7 @@ fn parse_text(source_file: &str, text: &[u8]) -> FileData {
 	let mut scope = wing_parser.wingit(&tree.root_node());
 
 	let mut types = type_check::Types::new();
-	let type_diag = type_check(&mut scope, &mut types);
+	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file));
 	let parse_diag = wing_parser.diagnostics.into_inner();
 
 	let diagnostics = vec![parse_diag, type_diag].concat();
