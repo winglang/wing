@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import * as path_ from "path/posix";
+import * as path_ from "path";
 import * as process from "process";
 import * as vm from "vm";
 import {
