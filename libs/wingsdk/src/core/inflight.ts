@@ -6,7 +6,6 @@ import { Construct } from "constructs";
 import { makeHandler } from "./internal";
 import { Connection, Display, IInflightHost, IResource } from "./resource";
 import { TreeInspector } from "./tree";
-import { normalizePath } from "../util";
 
 /**
  * Reference to a piece of code.
@@ -75,7 +74,7 @@ export class NodeJsCode extends Code {
 
   private constructor(path: string) {
     super();
-    this.path = normalizePath(path);
+    this.path = path;
   }
 }
 
@@ -186,13 +185,12 @@ export class InflightClient {
     clientClass: string,
     args: string[]
   ): Code {
-    const normalizedPath = normalizePath(filename);
-    const inflightDir = dirname(normalizedPath);
-    const inflightFile = basename(normalizedPath).split(".")[0] + ".inflight";
+    const inflightDir = dirname(filename);
+    const inflightFile = basename(filename).split(".")[0] + ".inflight";
     return NodeJsCode.fromInline(
-      `new (require("${require.resolve(
-        `${inflightDir}/${inflightFile}`
-      )}")).${clientClass}(${args.join(", ")})`
+      `new (require("${require
+        .resolve(`${inflightDir}/${inflightFile}`)
+        .replace(/\\/g, "\\\\")}")).${clientClass}(${args.join(", ")})`
     );
   }
   private constructor() {}
