@@ -12,13 +12,12 @@ Here is the expected test that should work in the end of this sprint:
 // npm install --save cdk-constants
 
 bring cloud;
-bring "cdk-constants" as cdk_constants;
+bring "jsii-code-samples" as stuff;
 
-// capture jsii data in preflight
-let text_from_jsii = cdk_constants.ManagedPolicies.AWS_LAMBDA_BASIC_EXECUTION_ROLE;
+let hello = new stuff.HelloWorld();
+let greeting = hello.say_hello("wingnuts");
 
-new cloud.Function(inflight (s: str): str => {
-  assert("service-role/AWSLambdaBasicExecutionRole" == text_from_jsii);
-}) as "test:able to capture jsii in preflight";
-
+new cloud.Function(inflight (m: str): str => {
+  assert(greeting == "Hello, wingnuts");
+}) as "test:say_hello";
 ```
