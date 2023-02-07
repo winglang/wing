@@ -6,7 +6,7 @@ import { basename, dirname, join, resolve } from "path";
 import * as chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
-import { normalPath } from "src/util";
+import { normalPath } from "../util";
 
 const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";

@@ -46,12 +46,7 @@ export async function load(options: WingCompilerLoadOptions) {
       WINGSDK_MANIFEST_ROOT,
       ...(options.env ?? {}),
     },
-    preopens: {
-      "/": "/",
-      ".": ".",
-
-      ...(options.preopens ?? {}),
-    },
+    preopens,
   });
 
   const importObject = {
