@@ -15,9 +15,15 @@ Also, it includes some non-functional requirements:
   - Give all permissions unless stated otherwise
   - If the developer explicitly set permissions, give only the stated permissions 
 - The code should work on sim, aws, azure
-- VScode should be able to autocomplete 
+- VScode should help developers with code completion and hover
+  - Windows support - vscode extention should work on windows
+  - Hover: when you hover over a symbol you get its type information
+  - Code Completion: 
+    - VScode should complete keywords (for, bring, if...)  in the right context
+    - VScode should complete symbols in scope 
+    - VScode should complete fields and methods of a object 
+    - VScode should complete type annotation after using the :
 - Console should be able to show all resources, and interact with them
-
 
 
 ```ts (wing)
