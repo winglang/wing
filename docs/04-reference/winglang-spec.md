@@ -275,7 +275,7 @@ assert(Json.entries(j).equals(Json [
 To access an array element, use the `[]` notation:
 
 ```js
-let item2: Json = json_array[2];
+let item2 = json_array[2]; // type: Json
 ```
 
 Trying to index a value that is not an array will return JavaScript `undefined`.
