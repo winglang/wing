@@ -88,7 +88,7 @@ export class Schedule extends cloud.ScheduleBase {
           {
             Effect: "Allow",
             Action: "lambda:InvokeFunction",
-            Resource: fn._arn,
+            Resource: fn.arn,
           },
         ],
       }),
