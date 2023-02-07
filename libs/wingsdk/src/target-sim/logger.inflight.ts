@@ -37,7 +37,7 @@ export class Logger extends SimulatorResource implements ILoggerClient {
       sourcePath: resourcePath,
       sourceType: resourceType,
       timestamp: new Date().toISOString(),
-      metadata: this.metadata?.tracing,
+      ctx: this.tracingContext,
     });
   }
 }

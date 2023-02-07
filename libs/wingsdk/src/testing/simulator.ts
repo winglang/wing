@@ -4,8 +4,8 @@ import * as tar from "tar";
 import { SDK_VERSION } from "../constants";
 import {
   ISimulatorResourceInstance,
-  ResourceMetadata,
   SimulatorResource,
+  TracingContext,
 } from "../target-sim";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
@@ -61,10 +61,10 @@ export interface IWithTraceProps {
   readonly message: any;
 
   /**
-   * Tracing metadata.
-   * @default - no metadata
+   * Tracing context.
+   * @default - no context
    */
-  readonly metadata?: object;
+  readonly ctx?: TracingContext;
 
   /**
    * A function to run as part of the trace.
@@ -103,9 +103,9 @@ export interface Trace {
   readonly timestamp: string;
 
   /**
-   * Tracing metadata.
+   * Tracing context.
    */
-  readonly metadata?: object;
+  readonly ctx?: TracingContext;
 }
 
 /**
@@ -265,7 +265,7 @@ export class Simulator {
               sourcePath: resourceConfig.path,
               sourceType: resourceConfig.type,
               timestamp: new Date().toISOString(),
-              metadata: props.metadata,
+              ctx: props.ctx,
             });
             return result;
           } catch (err) {
@@ -275,7 +275,7 @@ export class Simulator {
               sourcePath: resourceConfig.path,
               sourceType: resourceConfig.type,
               timestamp: new Date().toISOString(),
-              metadata: props.metadata,
+              ctx: props.ctx,
             });
             throw err;
           }
@@ -379,14 +379,14 @@ export class Simulator {
    * Get a simulated resource instance.
    * @returns the resource
    */
-  public getResource(path: string, config?: ResourceMetadata): any {
+  public getResource(path: string, ctx?: TracingContext): any {
     const handle = this.tryGetResource(path);
     if (!handle) {
       throw new Error(`Resource "${path}" not found.`);
     }
 
-    if (this.isSimulatorResource(handle) && config) {
-      handle.addMetadata(config);
+    if (this.isSimulatorResource(handle) && ctx) {
+      handle.addTracingContext(ctx);
     }
     return handle;
   }

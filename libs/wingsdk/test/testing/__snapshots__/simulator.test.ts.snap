@@ -26,22 +26,22 @@ Array [
         "type": "resource",
       },
       Object {
+        "ctx": undefined,
         "data": Object {
           "message": "hi",
         },
-        "metadata": undefined,
         "sourcePath": "root/test",
         "sourceType": "wingsdk.cloud.Function",
         "timestamp": "<TIMESTAMP>",
         "type": "log",
       },
       Object {
+        "ctx": undefined,
         "data": Object {
           "message": "Invoke (payload=\\"\\"\\"\\").",
           "result": undefined,
           "status": "success",
         },
-        "metadata": undefined,
         "sourcePath": "root/test",
         "sourceType": "wingsdk.cloud.Function",
         "timestamp": "<TIMESTAMP>",
@@ -95,22 +95,22 @@ Object {
       "type": "resource",
     },
     Object {
+      "ctx": undefined,
       "data": Object {
         "message": "hi",
       },
-      "metadata": undefined,
       "sourcePath": "root/test",
       "sourceType": "wingsdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",
       "type": "log",
     },
     Object {
+      "ctx": undefined,
       "data": Object {
         "message": "Invoke (payload=\\"\\"\\"\\").",
         "result": undefined,
         "status": "success",
       },
-      "metadata": undefined,
       "sourcePath": "root/test",
       "sourceType": "wingsdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",
@@ -172,22 +172,22 @@ Object {
       "type": "resource",
     },
     Object {
+      "ctx": undefined,
       "data": Object {
         "message": "I am about to fail",
       },
-      "metadata": undefined,
       "sourcePath": "root/test",
       "sourceType": "wingsdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",
       "type": "log",
     },
     Object {
+      "ctx": undefined,
       "data": Object {
         "error": [Error: test failed],
         "message": "Invoke (payload=\\"\\"\\"\\").",
         "status": "failure",
       },
-      "metadata": undefined,
       "sourcePath": "root/test",
       "sourceType": "wingsdk.cloud.Function",
       "timestamp": "<TIMESTAMP>",

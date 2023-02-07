@@ -34,7 +34,7 @@ export class Queue extends SimulatorResource implements IQueueClient {
       activity: async () => {
         this.messages.push(message);
       },
-      metadata: this.metadata?.tracing,
+      ctx: this.tracingContext,
     });
   }
 
@@ -44,7 +44,7 @@ export class Queue extends SimulatorResource implements IQueueClient {
       activity: async () => {
         this.messages.length = 0;
       },
-      metadata: this.metadata?.tracing,
+      ctx: this.tracingContext,
     });
   }
 
@@ -54,7 +54,7 @@ export class Queue extends SimulatorResource implements IQueueClient {
       activity: async () => {
         return this.messages.length;
       },
-      metadata: this.metadata?.tracing,
+      ctx: this.tracingContext,
     });
   }
 
@@ -85,7 +85,7 @@ export class Queue extends SimulatorResource implements IQueueClient {
           sourcePath: this.context.resourcePath,
           sourceType: QUEUE_TYPE,
           timestamp: new Date().toISOString(),
-          metadata: this.metadata?.tracing,
+          ctx: this.tracingContext,
         });
         void fnClient.invoke(JSON.stringify({ messages })).catch((_err) => {
           // If the function returns an error, put the message back on the queue
@@ -97,7 +97,7 @@ export class Queue extends SimulatorResource implements IQueueClient {
             sourceType: QUEUE_TYPE,
             type: TraceType.RESOURCE,
             timestamp: new Date().toISOString(),
-            metadata: this.metadata?.tracing,
+            ctx: this.tracingContext,
           });
           this.messages.push(...messages);
         });

@@ -72,7 +72,7 @@ export class Function extends SimulatorResource implements IFunctionClient {
       activity: async () => {
         return vm.runInContext(wrapper, context, { timeout: this.timeout });
       },
-      metadata: this.metadata?.tracing,
+      ctx: this.tracingContext,
     });
   }
 }

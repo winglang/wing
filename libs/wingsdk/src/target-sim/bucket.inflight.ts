@@ -26,7 +26,7 @@ export class Bucket extends SimulatorResource implements IBucketClient {
           const filename = join(this.fileDir, key);
           await fs.promises.writeFile(filename, value);
         },
-        metadata: this.metadata?.tracing,
+        ctx: this.tracingContext,
       });
     }
   }
@@ -42,7 +42,7 @@ export class Bucket extends SimulatorResource implements IBucketClient {
         const filename = join(this.fileDir, key);
         await fs.promises.writeFile(filename, value);
       },
-      metadata: this.metadata?.tracing,
+      ctx: this.tracingContext,
     });
   }
 
@@ -53,7 +53,7 @@ export class Bucket extends SimulatorResource implements IBucketClient {
         const filename = join(this.fileDir, key);
         return fs.promises.readFile(filename, "utf8");
       },
-      metadata: this.metadata?.tracing,
+      ctx: this.tracingContext,
     });
   }
 
@@ -66,7 +66,7 @@ export class Bucket extends SimulatorResource implements IBucketClient {
           ? fileNames.filter((fileName) => fileName.startsWith(prefix))
           : fileNames;
       },
-      metadata: this.metadata?.tracing,
+      ctx: this.tracingContext,
     });
   }
 
@@ -90,7 +90,7 @@ export class Bucket extends SimulatorResource implements IBucketClient {
         // unlink file from the filesystem
         return fs.promises.unlink(filePath);
       },
-      metadata: this.metadata?.tracing,
+      ctx: this.tracingContext,
     });
   }
 }

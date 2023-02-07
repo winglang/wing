@@ -23,7 +23,7 @@ export class Counter extends SimulatorResource implements ICounterClient {
         this.value += amount;
         return prev;
       },
-      metadata: this.metadata?.tracing,
+      ctx: this.tracingContext,
     });
   }
 
@@ -35,7 +35,7 @@ export class Counter extends SimulatorResource implements ICounterClient {
         this.value -= amount;
         return prev;
       },
-      metadata: this.metadata?.tracing,
+      ctx: this.tracingContext,
     });
   }
 
@@ -45,7 +45,7 @@ export class Counter extends SimulatorResource implements ICounterClient {
       activity: async () => {
         return this.value;
       },
-      metadata: this.metadata?.tracing,
+      ctx: this.tracingContext,
     });
   }
 }

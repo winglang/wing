@@ -22,11 +22,11 @@ export function isSimulatorResource(obj: any): obj is ISimulatorResource {
 /**
  * Resource configuration
  */
-export interface ResourceMetadata {
+export interface TracingContext {
   /**
    * Tracing metadata for the resource.
    */
-  readonly tracing: object;
+  readonly label: string;
 }
 
 /**
@@ -52,7 +52,7 @@ export abstract class SimulatorResource implements ISimulatorResourceInstance {
   /**
    * Metadata for the resource.
    */
-  protected metadata: ResourceMetadata | undefined;
+  protected tracingContext: TracingContext | undefined;
 
   public async init(): Promise<void> {
     return;
@@ -66,7 +66,7 @@ export abstract class SimulatorResource implements ISimulatorResourceInstance {
    * Add metadata to the resource.
    * @param metadata
    */
-  public addMetadata(metadata: ResourceMetadata): void {
-    this.metadata = metadata;
+  public addTracingContext(ctx: TracingContext): void {
+    this.tracingContext = ctx;
   }
 }

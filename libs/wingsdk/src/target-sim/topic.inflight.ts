@@ -33,7 +33,7 @@ export class Topic extends SimulatorResource implements ITopicClient {
         sourcePath: this.context.resourcePath,
         sourceType: TOPIC_TYPE,
         timestamp: new Date().toISOString(),
-        metadata: this.metadata?.tracing,
+        ctx: this.tracingContext,
       });
 
       void (await fnClient.invoke(message).catch((err) => {
@@ -45,7 +45,7 @@ export class Topic extends SimulatorResource implements ITopicClient {
           sourceType: TOPIC_TYPE,
           type: TraceType.RESOURCE,
           timestamp: new Date().toISOString(),
-          metadata: this.metadata?.tracing,
+          ctx: this.tracingContext,
         });
       }));
     }
@@ -60,7 +60,7 @@ export class Topic extends SimulatorResource implements ITopicClient {
       sourceType: TOPIC_TYPE,
       type: TraceType.RESOURCE,
       timestamp: new Date().toISOString(),
-      metadata: this.metadata?.tracing,
+      ctx: this.tracingContext,
     });
 
     return this.publishMessage(message);
