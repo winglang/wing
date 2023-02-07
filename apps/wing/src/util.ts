@@ -8,7 +8,7 @@ export function normalPath(path: string) {
     .replace(/\\/g, "/")
     // Remove drive letter
     // Note: This uses the assumption that starting a path with `/` in windows resolves to the default drive
-    .replace(/^[a-zA-Z]:/, "");
+    .replace(/^([a-zA-Z]):/, "$1");
   } else {
     return path;
   }
