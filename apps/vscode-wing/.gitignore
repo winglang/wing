@@ -38,5 +38,3 @@ jspm_packages/
 !/.eslintrc.json
 *.vsix
 !/.vscodeignore
-resources/wingsdk/
-resources/native/

@@ -36,7 +36,7 @@ Object {
             "COUNTER_HANDLE_4ecd8d46": "\${root/HelloWorld/Counter#attrs.handle}",
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Queue-OnMessage-401ee792/index.js",
+          "sourceCodeFile": "assets/queue-onmessage-401ee792_c8515faa/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -269,7 +269,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/Queue-OnMessage-401ee792/index.js": "var __defProp = Object.defineProperty;
+  "assets/queue-onmessage-401ee792_c8515faa/index.js": "var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
