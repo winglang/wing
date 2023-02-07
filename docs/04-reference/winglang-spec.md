@@ -179,6 +179,8 @@ value](https://www.json.org/json-en.html), including JSON primitives (`string`, 
 `boolean`), arrays (both heterogenous and homogenous) and objects (key-value maps where keys are
 strings and values can be any other JSON value)).
 
+`Json` objects are immutable and can be referenced across inflight context.
+
 JSON is the "wire protocol of the cloud" and as such Wing offers built-in support for it. However,
 since Wing is statically-typed (type must be known during compilation) and JSON is dynamically typed
 (type is only known at runtime), bridging is required between these two models.
@@ -677,7 +679,7 @@ let handler2 = inflight() => {
 ```
 
 Bridge between preflight and inflight is crossed with the help of immutable data
-structures, "structs" (user definable and `Struct`),  and the capture mechanism.
+structures, "structs" (user definable and `Struct`), and the capture mechanism.
 
 Preflight resource methods and initializers can receive an inflight function as
 an argument. This enables resources to define code that will be executed on the
