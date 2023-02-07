@@ -77,7 +77,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   const wingc = await wingCompiler.load({
     env: {
       RUST_BACKTRACE: "full",
-      WINGSDK_SYNTH_DIR: synthDir,
+      WINGSDK_SYNTH_DIR: normalPath(synthDir),
       WINGC_PREFLIGHT,
     },
     imports: {

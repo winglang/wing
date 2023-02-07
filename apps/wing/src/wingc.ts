@@ -35,10 +35,12 @@ export async function load(options: WingCompilerLoadOptions) {
       const split = value.split(":");
       if (split.length === 2 && split[0].length === 1) {
         delete preopens[key];
-        preopens[`/__${split[0]}`] = value;
+        preopens[`/__${split[0]}${normalPath(split[1])}`] = value;
       }
     }
   }
+
+  console.log("preopens:", preopens)
 
   const wasi = new WASI({
     env: {
