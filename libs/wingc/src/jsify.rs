@@ -311,47 +311,48 @@ impl JSifier {
 			},
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None, phase),
 			ExprKind::Call { function, args } => {
-				if let Some(function_type) = *function.evaluated_type.borrow() {
-					let needs_case_conversion = if let Some(obj) = function_type.as_class_or_resource() {
-						obj.should_case_convert_jsii
-					} else {
-						// There are two reasons this could happen:
-						// 1. The object is a `any` type, which is either something unimplemented or an explicit `any` from JSII.
-						// 2. The object is a builtin type (e.g. Array) but the call reference intentionally resolves to a JSII class.
-						// In either case, it's probably safe to assume that case conversion is required.
-						true
-					};
+				let function_type = function.evaluated_type.borrow().unwrap();
+				let function_sig = function_type
+					.as_function_sig()
+					.expect("Expected expression to be callable");
+				let mut needs_case_conversion = false;
 
-					let arg_string = self.jsify_arg_list(&args, None, None, needs_case_conversion, phase);
-					let expr_string = match &function.kind {
-						ExprKind::Reference(reference) => self.jsify_reference(reference, Some(needs_case_conversion), phase),
-						_ => format!("({})", self.jsify_expression(function, phase)),
-					};
-
-					if let Some(function_sig) = function_type.as_function_sig() {
-						if let Some(js_override) = &function_sig.js_override {
-							let self_string = &match &function.kind {
-								// for "loose" macros, e.g. `print()`, $self$ is the global object
-								ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
-								ExprKind::Reference(Reference::NestedIdentifier { object, .. }) => {
-									self.jsify_expression(object, phase).clone()
-								}
-
-								_ => expr_string,
-							};
-							let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS];
-							let replace_with = &[self_string, &arg_string];
-							let ac = AhoCorasick::new(patterns);
-							return ac.replace_all(js_override, replace_with);
+				let expr_string = match &function.kind {
+					ExprKind::Reference(reference) => {
+						if let Reference::NestedIdentifier { object, property } = reference {
+							let object_type = object.evaluated_type.borrow().unwrap();
+							if let Some(class) = object_type.as_class_or_resource() {
+								println!("{} Needs case conversion: {}", property, class.should_case_convert_jsii);
+								needs_case_conversion = class.should_case_convert_jsii;
+							} else {
+								// TODO I think in this case we shouldn't convert tye case but originally we had code that
+								// set `needs_case_conversion` to true for `any` and builtin types, and I'm not sure why..
+								needs_case_conversion = false;
+							}
 						}
-					} else {
-						panic!("Expressions at {} is not callable", function.span);
+						self.jsify_reference(reference, Some(needs_case_conversion), phase)
 					}
+					_ => format!("({})", self.jsify_expression(function, phase)),
+				};
+				let arg_string = self.jsify_arg_list(&args, None, None, needs_case_conversion, phase);
 
-					format!("({}{}({}))", auto_await, expr_string, arg_string)
-				} else {
-					panic!("Expressions at {} does not have type information", function.span);
+				if let Some(js_override) = &function_sig.js_override {
+					let self_string = &match &function.kind {
+						// for "loose" macros, e.g. `print()`, $self$ is the global object
+						ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
+						ExprKind::Reference(Reference::NestedIdentifier { object, .. }) => {
+							self.jsify_expression(object, phase).clone()
+						}
+
+						_ => expr_string,
+					};
+					let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS];
+					let replace_with = &[self_string, &arg_string];
+					let ac = AhoCorasick::new(patterns);
+					return ac.replace_all(js_override, replace_with);
 				}
+
+				format!("({}{}({}))", auto_await, expr_string, arg_string)
 			}
 			ExprKind::Unary { op, exp } => {
 				let op = match op {
