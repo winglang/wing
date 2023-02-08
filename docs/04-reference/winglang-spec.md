@@ -244,7 +244,7 @@ Duration objects are immutable and can be referenced across inflight context.
 The `Datetime` (alias `datetime`) type represents a single moment in time in a platform-independent
 format. It uses the
 [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
-JavaScript object under the hood and encapsulate an integral number that represents milliseconds
+JavaScript object under the hood and encapsulates an integral number that represents milliseconds
 since the midnight at the beginning of January 1, 1970, UTC (the epoch).
 
 `Datetime` objects are immutable and can be referenced across inflight context.
