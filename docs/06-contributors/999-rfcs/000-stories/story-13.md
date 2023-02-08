@@ -62,8 +62,7 @@ resource TaskList {
    * @returns the title of the task (optimistic)
    */
   inflight get_task(id: str): Json {
-    let blob = this._bucket.get(id);
-    return Json.parse(blob);
+    return this._bucket.get_json(id);
   }
 
   /** 
@@ -73,7 +72,7 @@ resource TaskList {
    * @returns The ID of the existing task.
    */
   inflight add_estimation(id: str, effort_estimation: duration): str {
-    let j = this.get_task(id).copy_mut();
+    let j = Json.clone_mut(this.get_task(id));
     j.set("effort_estimation", effort_estimation);
     this._bucket.put_json(id, j);
     return id;
@@ -113,7 +112,7 @@ resource TaskList {
     let output = MutArray<str>[];
     for id in task_ids {
       let j = this.get_task(id); 
-      let title = Str.from_json(j.get("title"));
+      let title = str.from_json(j.get("title"));
       if title.contains(term) { 
         print("found task ${id} with title \"${title}\" with term \"${term}\"");
         output.push(id);
@@ -134,8 +133,8 @@ new cloud.Function(inflight (s: str): str => {
   let result = t.tasks.find_tasks_with("clean the dishes");
   assert(result.len == 1);
   let t = t.tasks.get_task(result.at(0));
-  assert("clean the dishes" == Str.from_json(t.get("title")));
-}) as "test:get and find task";
+  assert("clean the dishes" == str.from_json(t.title));
+}) as "test:add, get and find task";
 
 new cloud.Function(inflight (s: str): str => {
   t.tasks.add_task("clean the dishes");
@@ -143,11 +142,11 @@ new cloud.Function(inflight (s: str): str => {
   t.tasks.remove_tasks(tasks.find_tasks_with("clean the").at(0));
   let result = t.tasks.find_tasks_with("clean the dish");
   assert(result.len == 0);
-}) as "test:get, remove and find task";
+}) as "test:add, remove and find task";
 
 new cloud.Function(inflight (s: str): str => {
   let id = t.tasks.add_task("clean the dishes");
-  let var j = t.tasks.get_task(id);
+  let j = Json.clone_mut(t.tasks.get_task(id));
   assert(!j.get("effort_estimation")); //  make sure effort estimation default nil
   task.add_estimation(id, 4h);
   j = t.tasks.get_task(id);
