@@ -652,7 +652,7 @@ impl<'a> TypeChecker<'a> {
 	pub fn add_globals(&mut self, scope: &Scope) {
 		self.add_module_to_env(
 			scope.env.borrow_mut().as_mut().unwrap(),
-			String::from("@winglang/sdk"),
+			WINGSDK_ASSEMBLY_NAME.to_string(),
 			vec![WINGSDK_STD_MODULE.to_string()],
 			&Symbol {
 				name: WINGSDK_STD_MODULE.to_string(),

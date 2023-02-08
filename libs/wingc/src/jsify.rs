@@ -11,11 +11,11 @@ use crate::{
 	},
 	capture::CaptureKind,
 	utilities::snake_case_to_camel_case,
-	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF,
+	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME,
 };
 
 const STDLIB: &str = "$stdlib";
-const STDLIB_MODULE: &str = "@winglang/sdk";
+const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 
 const TARGET_CODE: &str = r#"
 function __app(target) {
