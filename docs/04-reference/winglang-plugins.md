@@ -100,8 +100,8 @@ is the same Terraform JSON configuration. However, does not allow configuration
 to be mutated, which allows plugins to validate the configuration without
 worrying about another plugin mutating after the fact.
 
-The following example validates that buckets all have versioning enabled if they
-don't it will throw an  error during compilation.
+The following example validates that buckets all have versioning enabled
+and throw an  error during compilation if they don't.
 ```js
 // exports the validate function
 exports.validate = function(config) {

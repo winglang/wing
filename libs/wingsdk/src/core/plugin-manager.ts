@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from "fs";
-import { resolve } from "path";
+import { dirname, resolve } from "path";
 import * as vm from "vm";
 import { IConstruct } from "constructs";
 
@@ -59,10 +59,7 @@ export class PluginManager {
       name: pluginAbsolutePath,
     };
 
-    const pluginDir = resolve(pluginAbsolutePath)
-      .split("/")
-      .slice(0, -1)
-      .join("/");
+    const pluginDir = dirname(pluginAbsolutePath);
 
     const context = vm.createContext({
       require,
@@ -72,7 +69,7 @@ export class PluginManager {
       __dirname: pluginDir,
     });
 
-    const pluginCode = readFileSync(resolve(pluginAbsolutePath), "utf8");
+    const pluginCode = readFileSync(pluginAbsolutePath, "utf8");
     const script = new vm.Script(pluginCode);
     script.runInContext(context);
 
@@ -102,15 +99,20 @@ export class PluginManager {
    * @param synthesizedStackPath path to the synthesized stack json file
    */
   public postSynth(config: any, synthesizedStackPath: string): any {
+    let isConfigAltered = false;
     this.callAllHooks(CompilationPhase.POST_SYNTH, (hook) => {
+      const originalConfig = JSON.stringify(config);
       config = hook.postSynth(config) ?? config;
+      isConfigAltered = JSON.stringify(config) !== originalConfig;
     });
 
-    // Overwrite the config with the modified one
-    writeFileSync(
-      resolve(synthesizedStackPath),
-      JSON.stringify(config, null, 2)
-    );
+    // Only overwrite the config file if it has been modified
+    if (isConfigAltered) {
+      writeFileSync(
+        resolve(synthesizedStackPath),
+        JSON.stringify(config, null, 2)
+      );
+    }
     return config;
   }
 

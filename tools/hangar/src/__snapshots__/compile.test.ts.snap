@@ -41,7 +41,7 @@ const $App = __app(process.env.WING_TARGET);
 
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"anon_function\\" });
+  super({ outdir: $outdir, name: \\"anon_function\\", plugins: $plugins });
   
   const myfunc = (x) => {
     {console.log(\`\${x}\`)};
@@ -255,7 +255,7 @@ const $App = __app(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"asynchronous_model_implicit_await_in_functions\\" });
+  super({ outdir: $outdir, name: \\"asynchronous_model_implicit_await_in_functions\\", plugins: $plugins });
   
   const q = new cloud.Queue(this,\\"cloud.Queue\\");
   const str_to_str = new cloud.Function(this,\\"str_to_str\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
@@ -419,7 +419,7 @@ const $App = __app(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"capture_containers\\" });
+  super({ outdir: $outdir, name: \\"capture_containers\\", plugins: $plugins });
   
   const arr = Object.freeze([\\"hello\\", \\"world\\"]);
   const my_set = Object.freeze(new Set([\\"my\\", \\"my\\", \\"set\\"]));
@@ -664,7 +664,7 @@ const $App = __app(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"capture_containers_of_resources\\" });
+  super({ outdir: $outdir, name: \\"capture_containers_of_resources\\", plugins: $plugins });
   
   const arr = Object.freeze([new cloud.Bucket(this,\\"b1\\"), new cloud.Bucket(this,\\"b2\\")]);
   const map = Object.freeze(new Map([[ \\"my_queue\\", new cloud.Queue(this,\\"cloud.Queue\\") ]]));
@@ -860,7 +860,7 @@ const $App = __app(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"capture_in_binary\\" });
+  super({ outdir: $outdir, name: \\"capture_in_binary\\", plugins: $plugins });
   
   const b = new cloud.Bucket(this,\\"cloud.Bucket\\");
   const x = 12;
@@ -1027,7 +1027,7 @@ const $App = __app(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"capture_primitives\\" });
+  super({ outdir: $outdir, name: \\"capture_primitives\\", plugins: $plugins });
   
   const my_str = \\"hello, string\\";
   const my_num = 1234;
@@ -1230,7 +1230,7 @@ const $App = __app(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"capture_resource_and_data\\" });
+  super({ outdir: $outdir, name: \\"capture_resource_and_data\\", plugins: $plugins });
   
   const data = Object.freeze(new Set([1, 2, 3]));
   const res = new cloud.Bucket(this,\\"cloud.Bucket\\");
@@ -1650,7 +1650,7 @@ const $App = __app(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"captures\\" });
+  super({ outdir: $outdir, name: \\"captures\\", plugins: $plugins });
   
   const bucket1 = new cloud.Bucket(this,\\"cloud.Bucket\\");
   const bucket2 = new cloud.Bucket(this,\\"PublicBucket\\",{
@@ -1851,7 +1851,7 @@ const $App = __app(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"container_types\\" });
+  super({ outdir: $outdir, name: \\"container_types\\", plugins: $plugins });
   
   const bucket1 = new cloud.Bucket(this,\\"bucket1\\");
   const bucket2 = new cloud.Bucket(this,\\"bucket2\\");
@@ -1973,7 +1973,7 @@ const $App = __app(process.env.WING_TARGET);
 
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"enums\\" });
+  super({ outdir: $outdir, name: \\"enums\\", plugins: $plugins });
   
   const SomeEnum = Object.freeze((function (SomeEnum) {
     SomeEnum[SomeEnum[\\"ONE\\"] = 0] = \\"ONE\\";
@@ -2029,7 +2029,7 @@ const $App = __app(process.env.WING_TARGET);
 
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"expressions_binary_operators\\" });
+  super({ outdir: $outdir, name: \\"expressions_binary_operators\\", plugins: $plugins });
   
   const x = (-1);
   const y = (2 * x);
@@ -2084,7 +2084,7 @@ const $App = __app(process.env.WING_TARGET);
 
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"expressions_string_interpolation\\" });
+  super({ outdir: $outdir, name: \\"expressions_string_interpolation\\", plugins: $plugins });
   
   const regular_string = \\"str\\\\n\\\\\\"\\";
   const empty_string = \\"\\";
@@ -2306,7 +2306,7 @@ const $App = __app(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"file_counter\\" });
+  super({ outdir: $outdir, name: \\"file_counter\\", plugins: $plugins });
   
   const bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
   const counter = new cloud.Counter(this,\\"cloud.Counter\\",{ initial: 100 });
@@ -2374,7 +2374,7 @@ const $App = __app(process.env.WING_TARGET);
 
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"for_loop\\" });
+  super({ outdir: $outdir, name: \\"for_loop\\", plugins: $plugins });
   
   const words = Object.freeze([\\"wing\\", \\"lang\\", \\"dang\\"]);
   const unique_numbers = Object.freeze(new Set([1, 2, 3]));
@@ -2439,7 +2439,7 @@ const $App = __app(process.env.WING_TARGET);
 
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"forward_decl\\" });
+  super({ outdir: $outdir, name: \\"forward_decl\\", plugins: $plugins });
   
   class R extends $stdlib.core.Resource {
   constructor(scope, id, ) {
@@ -2658,7 +2658,7 @@ const $App = __app(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"hello\\" });
+  super({ outdir: $outdir, name: \\"hello\\", plugins: $plugins });
   
   const bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
   const queue = new cloud.Queue(this,\\"cloud.Queue\\");
@@ -2726,7 +2726,7 @@ const $App = __app(process.env.WING_TARGET);
 
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"identical_inflights\\" });
+  super({ outdir: $outdir, name: \\"identical_inflights\\", plugins: $plugins });
   
   const x = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\")),
@@ -2911,7 +2911,7 @@ const $App = __app(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"mut_container_types\\" });
+  super({ outdir: $outdir, name: \\"mut_container_types\\", plugins: $plugins });
   
   const bucket1 = new cloud.Bucket(this,\\"bucket1\\");
   const bucket2 = new cloud.Bucket(this,\\"bucket2\\");
@@ -2989,7 +2989,7 @@ const $App = __app(process.env.WING_TARGET);
 
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"primitive_methods\\" });
+  super({ outdir: $outdir, name: \\"primitive_methods\\", plugins: $plugins });
   
   const dur = $stdlib.std.Duration.fromSeconds(60);
   const stringy = \`\${dur.minutes}:\${dur.seconds}\`;
@@ -3174,7 +3174,7 @@ const $App = __app(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"print\\" });
+  super({ outdir: $outdir, name: \\"print\\", plugins: $plugins });
   
   const bucket1 = new cloud.Bucket(this,\\"cloud.Bucket\\");
   {console.log(\\"Hello world!\\")};
@@ -3240,7 +3240,7 @@ const $App = __app(process.env.WING_TARGET);
 
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"reassignment\\" });
+  super({ outdir: $outdir, name: \\"reassignment\\", plugins: $plugins });
   
   class R extends $stdlib.core.Resource {
   constructor(scope, id, ) {
@@ -3331,7 +3331,7 @@ const $App = __app(process.env.WING_TARGET);
 
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"resource\\" });
+  super({ outdir: $outdir, name: \\"resource\\", plugins: $plugins });
   
   class R extends $stdlib.core.Resource {
   constructor(scope, id, name) {
@@ -3500,7 +3500,7 @@ const $App = __app(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"statements_if\\" });
+  super({ outdir: $outdir, name: \\"statements_if\\", plugins: $plugins });
   
   if (true) {
     const x = 2;
@@ -3574,7 +3574,7 @@ const $App = __app(process.env.WING_TARGET);
 
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"statements_variable_declarations\\" });
+  super({ outdir: $outdir, name: \\"statements_variable_declarations\\", plugins: $plugins });
   
   const x = 2;
   const y = x;
@@ -3639,7 +3639,7 @@ const $App = __app(process.env.WING_TARGET);
 
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"std_containers\\" });
+  super({ outdir: $outdir, name: \\"std_containers\\", plugins: $plugins });
   
   const s_array = Object.freeze([\\"one\\", \\"two\\"]);
   const mut_array = [...(s_array)];
@@ -3915,7 +3915,7 @@ const $App = __app(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"test_bucket\\" });
+  super({ outdir: $outdir, name: \\"test_bucket\\", plugins: $plugins });
   
   const b = new cloud.Bucket(this,\\"cloud.Bucket\\");
   new cloud.Function(this,\\"test:put\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
@@ -3988,7 +3988,7 @@ const $App = __app(process.env.WING_TARGET);
 
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"while\\" });
+  super({ outdir: $outdir, name: \\"while\\", plugins: $plugins });
   
   while (false) {
     const x = 1;
@@ -4154,7 +4154,7 @@ const $App = __app(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"while_loop_await\\" });
+  super({ outdir: $outdir, name: \\"while_loop_await\\", plugins: $plugins });
   
   const queue = new cloud.Queue(this,\\"cloud.Queue\\");
   const iterator = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
