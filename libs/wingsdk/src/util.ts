@@ -130,16 +130,14 @@ export function directorySnapshot(initialRoot: string) {
 }
 
 /**
- * Normalize a path to be posix-style.
+ * Normalize a relative path to be posix-style.
  */
-export function normalizePath(path: string) {
+export function normalizeRelativePath(path: string) {
   if (process.platform === "win32") {
     return (
       path
         // force posix path separator
         .replace(/\\/g, "/")
-        // remove drive letter
-        .replace(/^[a-zA-Z]:/, "")
     );
   } else {
     return path;

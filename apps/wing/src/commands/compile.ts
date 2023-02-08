@@ -6,7 +6,7 @@ import { basename, dirname, join, resolve } from "path";
 import * as chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
-import { normalPath } from "../util";
+import { wasiPath } from "../util";
 
 const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
@@ -77,8 +77,13 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   const wingc = await wingCompiler.load({
     env: {
       RUST_BACKTRACE: "full",
-      WINGSDK_SYNTH_DIR: normalPath(synthDir),
+      WINGSDK_SYNTH_DIR: wasiPath(synthDir),
       WINGC_PREFLIGHT,
+    },
+    preopens: {
+      [wingDir]: wingDir, // for Rust's access to the source file
+      [workDir]: workDir, // for Rust's access to the work directory
+      [synthDir]: synthDir, // for Rust's access to the synth directory
     },
     imports: {
       env: {
@@ -86,14 +91,9 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
         send_notification: () => {},
       },
     },
-    preopens: {
-      [wingDir]: wingDir, // for Rust's access to the source file
-      [workDir]: workDir, // for Rust's access to the work directory
-      [synthDir]: synthDir, // for Rust's access to the synth directory
-    },
   });
 
-  const arg = `${normalPath(wingFile)};${normalPath(workDir)}`;
+  const arg = `${wasiPath(wingFile)};${wasiPath(workDir)}`;
   log(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
   wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
 
