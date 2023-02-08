@@ -1,14 +1,14 @@
 import debug from "debug";
 import { readFile } from "fs/promises";
-import { resolve } from "path/posix";
+import { resolve } from "path";
 import { WASI } from "wasi";
 import { normalPath } from "./util";
 
 const log = debug("wing:compile");
 
-const WINGSDK_RESOLVED_PATH = normalPath(require.resolve("@winglang/sdk"));
+const WINGSDK_RESOLVED_PATH = require.resolve("@winglang/sdk");
 const WINGSDK_MANIFEST_ROOT = resolve(WINGSDK_RESOLVED_PATH, "../..");
-const WINGC_WASM_PATH = resolve(normalPath(__dirname), "../wingc.wasm");
+const WINGC_WASM_PATH = resolve(__dirname, "../wingc.wasm");
 
 export type WingCompilerFunction =
   | "wingc_compile"
@@ -24,19 +24,27 @@ export interface WingCompilerLoadOptions {
 }
 
 export async function load(options: WingCompilerLoadOptions) {
+  const preopens = {
+    // .jsii access
+    [WINGSDK_MANIFEST_ROOT]: WINGSDK_MANIFEST_ROOT,
+    ...(options.preopens ?? {}),
+  } as Record<string, string>;
+
+  if (process.platform === "win32") {
+    for (const [key, value] of Object.entries(preopens)) {
+      delete preopens[key];
+      preopens[normalPath(value)] = value;
+    }
+  }
+
   const wasi = new WASI({
     env: {
       ...process.env,
       RUST_BACKTRACE: "full",
-      WINGSDK_MANIFEST_ROOT,
+      WINGSDK_MANIFEST_ROOT: normalPath(WINGSDK_MANIFEST_ROOT),
       ...(options.env ?? {}),
     },
-    preopens: {
-      // .jsii access
-      [WINGSDK_MANIFEST_ROOT]: WINGSDK_MANIFEST_ROOT,
-
-      ...(options.preopens ?? {}),
-    },
+    preopens,
   });
 
   const importObject = {
@@ -66,8 +74,11 @@ const HIGH_MASK = BigInt(32);
 
 /**
  * Runs the given WASM function in the Wing Compiler WASM instance.
+ *
+ * ### IMPORTANT
+ * For Windows support, ensure all paths provided by args or env are normalized to use forward slashes.
  * 
- * Assumptions:
+ * ### Assumptions
  * 1. The called WASM function is expecting a pointer and a length representing a string
  * 2. The string will be UTF-8 encoded
  * 3. The string will be less than 2^32 bytes long  (4GB)
