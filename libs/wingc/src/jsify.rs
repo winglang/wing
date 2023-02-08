@@ -702,6 +702,57 @@ impl JSifier {
 		format!("{};", self.jsify_symbol(&member.name))
 	}
 
+	/// Jsify a resource
+	/// This performs two things:
+	/// 1) It returns the JS code for the resource which includes:
+	/// 	- A JS class which inherits from `core.Resource` with all the preflight code of the resource.
+	/// 	- A `_toInflight` method in that class that creates inflight client for the resource. This code creates inflight
+	///     clients for all inner resources and passes them to the inflight client constructor.
+	///   - Calls to `core.Resource._annotateInflight` to annotate the inflight client's methods with binding information.
+	///     * Note that at this point the binding information includes ALL methods of all the captured resources. For all
+	///       client methods. In the future this needs to be generated based on the compiler's capture usage analysis
+	/// 		  in capture.rs. (see https://github.com/winglang/wing/issues/76, https://github.com/winglang/wing/issues/1449).
+	/// 2) It generates the JS code for the resource's inflight client and writes it to a JS file.
+	///
+	/// # Example
+	///
+	///  ```wing
+	/// bring cloud;
+	/// resource Foo {
+	///   init() {
+	/// 	  this.b = new cloud.Bucket();
+	///   }
+	///   inflight my_put() {
+	/// 	  this.b.put("foo", "bar");
+	/// 	}
+	/// }
+	/// ```
+	/// Will produce the following **preflight** JS code:
+	/// ```js
+	/// class Foo extends core.Resource {
+	///  constructor(scope, id) {
+	/// 	 super(scope, id);
+	/// 	 this.b = new cloud.Bucket(scope, id);
+	/// 	}
+	/// }
+	/// _toInflight() {
+	/// 	const b_client = this.b._toInflight();
+	///  	const self_client_path = require('path').resolve(__dirname, "clients/MyResource.inflight.js");
+	///   return $stdlib.core.NodeJsCode.fromInline(`(new (require("${self_client_path}")).MyResource_inflight({b: ${b_client.text}}))`);
+	/// }
+	/// MyResource._annotateInflight("my_put", {"this.b": { ops: ["put"]}});
+	/// ```
+	/// And generated Foo client will go into a file called `clients/Foo.inflight.js` that'll look like this:
+	/// ```js
+	/// export class Foo_inflight {
+	///   constructor({ b }) {
+	///     this.b = b;
+	///   }
+	///   async my_put() {
+	///     await this.b.put("foo","bar");
+	///   }
+	/// }
+	/// ```
 	fn jsify_resource(
 		&self,
 		env: &SymbolEnv,
@@ -886,7 +937,7 @@ impl JSifier {
 			"".to_string()
 		};
 
-		// TDOD jsify inflight fields
+		// TODO jsify inflight fields
 
 		let client_constructor = format!(
 			"constructor({{ {} }}) {{\n{}\n{}\n}}",
