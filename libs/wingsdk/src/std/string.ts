@@ -34,6 +34,6 @@ export class String {
    */
   public contains(searchString: string): boolean {
     searchString;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 }

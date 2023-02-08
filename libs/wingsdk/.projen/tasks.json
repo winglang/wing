@@ -235,16 +235,22 @@
       "name": "sandbox:deploy",
       "steps": [
         {
-          "exec": "cdktf deploy"
+          "spawn": "sandbox:synth"
+        },
+        {
+          "exec": "terraform init"
+        },
+        {
+          "exec": "terraform apply"
         }
       ],
-      "cwd": "test/sandbox"
+      "cwd": "test/sandbox/target"
     },
     "sandbox:destroy": {
       "name": "sandbox:destroy",
       "steps": [
         {
-          "exec": "cdktf destroy"
+          "exec": "terraform destroy"
         }
       ],
       "cwd": "test/sandbox"

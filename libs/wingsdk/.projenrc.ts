@@ -1,3 +1,4 @@
+import { join } from "path";
 import { JsonFile, cdk, javascript } from "projen";
 
 const JSII_DEPS = [
@@ -79,20 +80,24 @@ project.addDevDeps("@winglang/jsii-docgen@file:../../apps/jsii-docgen");
 
 // tasks for locally testing the SDK without needing wing compiler
 project.addDevDeps("tsx");
-project.addDevDeps("cdktf-cli");
-const sandboxDir = "test/sandbox";
-project.addTask("sandbox:synth", {
+const sandboxDir = join("test", "sandbox");
+
+const sandboxSynth = project.addTask("sandbox:synth", {
   exec: "tsx main.ts --tsconfig ../../tsconfig.dev.json",
   cwd: sandboxDir,
 });
-project.addTask("sandbox:deploy", {
-  exec: "cdktf deploy",
+
+const sandboxDeploy = project.addTask("sandbox:deploy", {
+  cwd: join("test", "sandbox", "target"),
+});
+sandboxDeploy.spawn(sandboxSynth);
+sandboxDeploy.exec("terraform init");
+sandboxDeploy.exec("terraform apply");
+
+const sandboxDestroy = project.addTask("sandbox:destroy", {
   cwd: sandboxDir,
 });
-project.addTask("sandbox:destroy", {
-  exec: "cdktf destroy",
-  cwd: sandboxDir,
-});
+sandboxDestroy.exec("terraform destroy");
 
 // Set up the project so that:
 // 1. Preflight code is compiled with JSII

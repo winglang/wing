@@ -1,24 +1,15 @@
-// for WebAssembly typings:
-/// <reference lib="dom" />
-
 import * as vm from "vm";
 
-import { dirname, resolve } from "path";
 import { mkdir, readFile } from "fs/promises";
+import { basename, dirname, join, resolve } from "path/posix";
 
-import { WASI } from "wasi";
-import debug from "debug";
 import * as chalk from "chalk";
+import debug from "debug";
+import { normalPath } from "../util";
+import * as wingCompiler from "../wingc";
 
 const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
-
-const WINGC_WASM_PATH = resolve(__dirname, "../../wingc.wasm");
-log("wasm path: %s", WINGC_WASM_PATH);
-const WINGSDK_RESOLVED_PATH = require.resolve("@winglang/sdk");
-log("wingsdk module path: %s", WINGSDK_RESOLVED_PATH);
-const WINGSDK_MANIFEST_ROOT = resolve(WINGSDK_RESOLVED_PATH, "../..");
-log("wingsdk manifest path: %s", WINGSDK_MANIFEST_ROOT);
 const WINGC_PREFLIGHT = "preflight.js";
 
 /**
@@ -32,6 +23,13 @@ export enum Target {
   SIM = "sim",
 }
 
+const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
+  [Target.TF_AWS]: "tfaws",
+  [Target.TF_AZURE]: "tfazure",
+  [Target.TF_GCP]: "tfgcp",
+  [Target.SIM]: undefined,
+};
+
 /**
  * Compile options for the `compile` command.
  * This is passed from Commander to the `compile` function.
@@ -42,52 +40,62 @@ export interface ICompileOptions {
 }
 
 /**
+ * Determines the synth directory for a given target. This is the directory
+ * within the output directory where the SDK app will synthesize its artifacts
+ * for the given target.
+ */
+function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
+  const targetDirSuffix = DEFAULT_SYNTH_DIR_SUFFIX[target];
+  if (targetDirSuffix === undefined) {
+    // this target produces a single artifact, so we don't need a subdirectory
+    return outDir;
+  }
+  const entrypointName = basename(entrypoint, ".w");
+  return join(outDir, `${entrypointName}.${targetDirSuffix}`);
+}
+
+/**
  * Compiles a Wing program.
  * @param entrypoint The program .w entrypoint.
  * @param options Compile options.
  */
 export async function compile(entrypoint: string, options: ICompileOptions) {
-  const wingFile = entrypoint;
+  const wingFile = normalPath(entrypoint);
   log("wing file: %s", wingFile);
   const wingDir = dirname(wingFile);
   log("wing dir: %s", wingDir);
-  const outDir = resolve(options.outDir);
-  log("out dir: %s", outDir);
-  const workDir = resolve(outDir, ".wing");
+  const synthDir = resolveSynthDir(normalPath(options.outDir), wingFile, options.target);
+  log("synth dir: %s", synthDir);
+  const workDir = resolve(synthDir, ".wing");
   log("work dir: %s", workDir);
 
   await Promise.all([
     mkdir(workDir, { recursive: true }),
-    mkdir(outDir, { recursive: true }),
+    mkdir(synthDir, { recursive: true }),
   ]);
 
-  const wasi = new WASI({
+  const wingc = await wingCompiler.load({
     env: {
-      ...process.env,
       RUST_BACKTRACE: "full",
-      WINGSDK_MANIFEST_ROOT,
-      WINGSDK_SYNTH_DIR: outDir,
+      WINGSDK_SYNTH_DIR: synthDir,
       WINGC_PREFLIGHT,
     },
     preopens: {
       [wingDir]: wingDir, // for Rust's access to the source file
       [workDir]: workDir, // for Rust's access to the work directory
-      [WINGSDK_MANIFEST_ROOT]: WINGSDK_MANIFEST_ROOT, // .jsii access
-      [outDir]: outDir, // for Rust's access to the output directory
+      [synthDir]: synthDir, // for Rust's access to the synth directory
+    },
+    imports: {
+      env: {
+        // This function is used by the lsp command, which is not used in compilation
+        send_notification: () => {},
+      },
     },
   });
 
-  const importObject = { wasi_snapshot_preview1: wasi.wasiImport };
-  log("compiling wingc WASM module");
-  const wasm = await WebAssembly.compile(await readFile(WINGC_WASM_PATH));
-  log("instantiating wingc WASM module");
-  const instance = await WebAssembly.instantiate(wasm, importObject);
-  log("invoking wingc with importObject: %o", importObject);
-  wasi.initialize(instance);
-
   const arg = `${wingFile};${workDir}`;
   log(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
-  await wingcInvoke(instance, WINGC_COMPILE, arg);
+  wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
 
   const artifactPath = resolve(workDir, WINGC_PREFLIGHT);
   log("reading artifact from %s", artifactPath);
@@ -103,8 +111,8 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     require,
     process: {
       env: {
-        WINGSDK_SYNTH_DIR: outDir,
-        WING_TARGET: options.target
+        WINGSDK_SYNTH_DIR: synthDir,
+        WING_TARGET: options.target,
       },
     },
     __dirname: workDir,
@@ -128,12 +136,25 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   try {
     vm.runInContext(artifact, context);
   } catch (e) {
-    console.error(chalk.bold.red("preflight error:") + " " + (e as any).message);
+    console.error(
+      chalk.bold.red("preflight error:") + " " + (e as any).message
+    );
 
-    if ((e as any).stack && (e as any).stack.includes("evalmachine.<anonymous>:")) {
+    if (
+      (e as any).stack &&
+      (e as any).stack.includes("evalmachine.<anonymous>:")
+    ) {
       console.log();
-      console.log("  " + chalk.bold.white("note:") + " " + chalk.white("intermediate javascript code:"));
-      const lineNumber = Number.parseInt((e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]) - 1;
+      console.log(
+        "  " +
+          chalk.bold.white("note:") +
+          " " +
+          chalk.white("intermediate javascript code:")
+      );
+      const lineNumber =
+        Number.parseInt(
+          (e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]
+        ) - 1;
       const lines = artifact.split("\n");
       let startLine = Math.max(lineNumber - 2, 0);
       let finishLine = Math.min(lineNumber + 2, lines.length - 1);
@@ -149,41 +170,19 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     }
 
     if (process.env.NODE_STACKTRACE) {
-      console.error("--------------------------------- STACK TRACE ---------------------------------")
+      console.error(
+        "--------------------------------- STACK TRACE ---------------------------------"
+      );
       console.error((e as any).stack);
     } else {
-      console.log("  " + chalk.bold.white("note:") + " " + chalk.white("run with `NODE_STACKTRACE=1` environment variable to display a stack trace"));
+      console.log(
+        "  " +
+          chalk.bold.white("note:") +
+          " " +
+          chalk.white(
+            "run with `NODE_STACKTRACE=1` environment variable to display a stack trace"
+          )
+      );
     }
-  }
-}
-
-/**
- * Assumptions:
- * 1. The called WASM function is expecting a pointer and a length representing a string
- * 2. The string will be UTF-8 encoded
- * 3. The string will be less than 2^32 bytes long  (4GB)
- * 4. the WASI instance has already been started
- */
-async function wingcInvoke(
-  instance: WebAssembly.Instance,
-  func: string,
-  arg: string
-) {
-  const exports = instance.exports as any;
-
-  const bytes = new TextEncoder().encode(arg);
-  const argPointer = exports.wingc_malloc(bytes.byteLength);
-
-  try {
-    const argMemoryBuffer = new Uint8Array(
-      exports.memory.buffer,
-      argPointer,
-      bytes.byteLength
-    );
-    argMemoryBuffer.set(bytes);
-  
-    exports[func](argPointer, bytes.byteLength);
-  } finally {
-    exports.wingc_free(argPointer, bytes.byteLength);
   }
 }

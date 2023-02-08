@@ -20,11 +20,6 @@
       "type": "build"
     },
     {
-      "name": "@winglang/sdk",
-      "version": "file:../../libs/wingsdk",
-      "type": "build"
-    },
-    {
       "name": "esbuild",
       "type": "build"
     },
@@ -51,10 +46,6 @@
     {
       "name": "eslint",
       "version": "^8",
-      "type": "build"
-    },
-    {
-      "name": "json-schema",
       "type": "build"
     },
     {
