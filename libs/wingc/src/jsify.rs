@@ -60,8 +60,8 @@ impl JSifier {
 		}
 	}
 
-	fn js_resolve_path(file_name: &str) -> String {
-		format!("require('path').resolve(__dirname, \"{}\")", file_name)
+	fn js_resolve_path(path_name: &str) -> String {
+		format!("require('path').resolve(__dirname, \"{}\")", path_name)
 	}
 
 	fn render_block(statements: impl IntoIterator<Item = impl core::fmt::Display>) -> String {
@@ -979,7 +979,7 @@ impl JSifier {
 		)
 	}
 
-	// Get the type and capture info for fields that are captured in the client of a the given resource
+	// Get the type and capture info for fields that are captured in the client of the given resource
 	fn get_captures(&self, resource_type: TypeRef) -> Vec<(String, TypeRef, Vec<String>)> {
 		resource_type
 			.as_resource()
@@ -989,7 +989,7 @@ impl JSifier {
 			.filter(|(_, kind, _)| {
 				let var = kind.as_variable().unwrap();
 				// We capture preflight non-reassignable fields, we currently only support capturing resources
-				// need to add immutable primitives in the future
+				// TODO: need to add immutable primitives in the future
 				var.flight != Phase::Inflight && !var.reassignable && var._type.as_resource().is_some()
 			})
 			.map(|(name, kind, _)| {
