@@ -3584,9 +3584,17 @@ new MyApp().synth();"
 `;
 
 exports[`wing compile --target tf-aws std_containers.w > index.js 1`] = `
-"async handle(body) { const { s_array } = this; {
-  const ss = (await s_array.at(1));
-  {console.log(\`\${s_array.length}\`)};
+"async handle(body) { const { immut_array, immut_map, immut_set, s, s_array, s_map, s_set } = this; {
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s === \\"two\\")'\`)})((s === \\"two\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await s_array.at(1)) === \\"two\\")'\`)})(((await s_array.at(1)) === \\"two\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_array.length === 2)'\`)})((s_array.length === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_array.length === 3)'\`)})((immut_array.length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await s_set.has(\\"one\\"))'\`)})((await s_set.has(\\"one\\")))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_set.size === 2)'\`)})((s_set.size === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_set.size === 3)'\`)})((immut_set.size === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await s_map.get(\\"one\\")) === 1)'\`)})(((await s_map.get(\\"one\\")) === 1))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_map.size === 2)'\`)})((s_map.size === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_map.size === 3)'\`)})((immut_map.size === 3))};
 } };"
 `;
 
@@ -3633,14 +3641,31 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"std_containers\\" });
   
-  const s_array = Object.freeze([\\"one\\", \\"two\\", \\"three\\", \\"four\\"]);
-  const s = (s_array.at(2));
+  const s_array = Object.freeze([\\"one\\", \\"two\\"]);
+  const mut_array = [...(s_array)];
+  (mut_array.push(\\"three\\"));
+  const immut_array = Object.freeze([...(mut_array)]);
+  const s_set = Object.freeze(new Set([\\"one\\", \\"two\\"]));
+  const mut_set = new Set(s_set);
+  (mut_set.add(\\"three\\"));
+  const immut_set = Object.freeze(new Set(mut_set));
+  const s_map = Object.freeze(new Map([[ \\"one\\", 1 ], [ \\"two\\", 2 ]]));
+  const mut_map = new Map(s_map);
+  (mut_map.set(\\"five\\",5));
+  const immut_map = Object.freeze(new Map(mut_map));
+  const s = (s_array.at(1));
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.31322868ffd7254f5a6339da1c6b1905571a70379d564da2abf4c176f3c444b6/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2bccfc7c5a6cf0ff8a0697876fd0e9b788b71a4288792fab940ebf8241e8689b/index.js\\")),
     bindings: {
       
       data: {
+        immut_array: immut_array,
+        immut_map: immut_map,
+        immut_set: immut_set,
+        s: s,
         s_array: s_array,
+        s_map: s_map,
+        s_set: s_set,
       },
     }
   });

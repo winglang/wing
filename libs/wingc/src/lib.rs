@@ -6,6 +6,7 @@ use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
+use wasm_util::ptr_to_string;
 
 use crate::parser::Parser;
 use std::cell::RefCell;
@@ -23,9 +24,11 @@ pub mod capture;
 pub mod debug;
 pub mod diagnostic;
 pub mod jsify;
+pub mod lsp;
 pub mod parser;
 pub mod type_check;
 pub mod utilities;
+mod wasm_util;
 
 const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
 const WINGSDK_STD_MODULE: &'static str = "std";
@@ -49,11 +52,6 @@ pub struct CompilerOutput {
 	pub preflight: String,
 	// pub inflights: BTreeMap<String, String>,
 	pub diagnostics: Diagnostics,
-}
-
-unsafe fn ptr_to_string(ptr: u32, len: u32) -> String {
-	let slice = std::slice::from_raw_parts(ptr as *const u8, len as usize);
-	String::from_utf8_unchecked(slice.to_vec())
 }
 
 #[no_mangle]
