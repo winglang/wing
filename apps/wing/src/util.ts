@@ -2,7 +2,7 @@
  * Normalizes paths from windows to posix while also making it suitable for WASI.
  */
 export function wasiPath(path: string) {
-  return path;
+  return path.replace(/\\+/g, "/");
   // if (process.platform === "win32") {
   //   return path
   //   // Replace backslashes with forward slashes

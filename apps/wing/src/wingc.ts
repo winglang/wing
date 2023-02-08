@@ -34,10 +34,10 @@ export async function load(options: WingCompilerLoadOptions) {
   // This creates fake preopens for absolute windows paths with the form "C:\a\b" -> "/__C/a/b"
   if (process.platform === "win32") {
     for (const [key, value] of Object.entries(preopens)) {
-      if (value.includes(":")) {
+      // if (value.includes(":")) {
         delete preopens[key];
         preopens[wasiPath(value)] = value;
-      }
+      // }
     }
   }
 
