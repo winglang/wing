@@ -855,7 +855,6 @@ impl JSifier {
 				return {STDLIB}.core.NodeJsCode.fromInline(`(new (require(\"${{self_client_path}}\")).{resource_name}_inflight({{{captured_fields}}}))`);
 			}}",
 			resource_name = resource_name.name,
-			
 		)
 	}
 
