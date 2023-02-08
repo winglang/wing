@@ -61,14 +61,14 @@ pub enum SymbolKind {
 	Namespace(Namespace),
 }
 
-// Information about a variable in the environment
+/// Information about a variable in the environment
 #[derive(Debug, Clone)]
 pub struct VariableInfo {
-	// Type of the variable
+	/// Type of the variable
 	pub _type: TypeRef,
-	// Can the variable be reassigned?
+	/// Can the variable be reassigned?
 	pub reassignable: bool,
-	// The phase in which this variable exists
+	/// The phase in which this variable exists
 	pub flight: Phase,
 }
 
@@ -1464,7 +1464,7 @@ impl<'a> TypeChecker<'a> {
 				constructor,
 				is_resource,
 			}) => {
-				// Resources canno't be defined inflight
+				// Resources cannot be defined inflight
 				assert!(!*is_resource || env.flight == Phase::Preflight);
 
 				if *is_resource {

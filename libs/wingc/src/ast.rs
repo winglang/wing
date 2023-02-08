@@ -103,14 +103,6 @@ pub struct UserDefinedType {
 	pub fields: Vec<Symbol>,
 }
 
-impl UserDefinedType {
-	pub fn get_fqn(&self) -> String {
-		let mut parts = vec![self.root.name.clone()];
-		parts.extend(self.fields.iter().map(|f| f.name.clone()));
-		parts.join(".")
-	}
-}
-
 impl Display for Type {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
