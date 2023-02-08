@@ -124,7 +124,12 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 
 	let wing_parser = Parser {
 		source: &source[..],
-		source_path,
+		source_name: source_path
+			.file_name()
+			.expect("Not a valid source file")
+			.to_str()
+			.unwrap()
+			.to_string(),
 		error_nodes: RefCell::new(HashSet::new()),
 		diagnostics: RefCell::new(Diagnostics::new()),
 	};
