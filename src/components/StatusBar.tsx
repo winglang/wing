@@ -1,28 +1,19 @@
 import classNames from "classnames";
-import { useMemo } from "react";
 
-import { Status } from "../../electron/main/types.js";
+import { State } from "../../electron/main/types.js";
 import { Loader } from "../design-system/Loader.js";
 
 export interface StatusBarProps {
   wingVersion?: string;
-  simulatorStatus?: Status;
-  compilerStatus?: Status;
+  cloudAppState: State;
   isError?: boolean;
 }
 
 export const StatusBar = ({
   wingVersion = "",
-  simulatorStatus,
-  compilerStatus,
+  cloudAppState,
   isError = false,
 }: StatusBarProps) => {
-  const status = useMemo(() => {
-    return simulatorStatus === "loading" || compilerStatus === "loading"
-      ? "loading"
-      : simulatorStatus;
-  }, [simulatorStatus, compilerStatus]);
-
   return (
     <footer className="bg-slate-100 py-1 px-2 flex text-2xs w-full text-slate-500 relative">
       <div className="w-full flex space-x-6">
@@ -40,8 +31,8 @@ export const StatusBar = ({
                 "flex",
               ])}
             >
-              {status === "loading" && <Loader size="1rem" />}
-              {status}
+              {cloudAppState === "loading" && <Loader size="1rem" />}
+              {cloudAppState}
             </span>
           </span>
         </div>

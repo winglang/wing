@@ -313,6 +313,10 @@
       "type": "build"
     },
     {
+      "name": "xstate",
+      "type": "build"
+    },
+    {
       "name": "zod",
       "type": "build"
     },

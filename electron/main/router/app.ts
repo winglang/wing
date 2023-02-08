@@ -21,8 +21,8 @@ export interface ExplorerItem {
 
 export const createAppRouter = () => {
   return router({
-    "app.status": publicProcedure.query(({ ctx }) => {
-      return ctx.appStatus();
+    "app.details": publicProcedure.query(({ ctx }) => {
+      return ctx.appDetails();
     }),
     "app.logs": publicProcedure
       .input(

@@ -3,8 +3,7 @@ import * as path from "node:path";
 
 import { Simulator, SimulatorProps } from "@winglang/sdk/lib/testing";
 
-import { Status } from "../types.js";
-
+import { AppEvent } from "./cloudAppState.js";
 import { NodeDisplay } from "./constructTreeNodeMap.js";
 
 const TREE_FILE_PATH = "tree.json";
@@ -50,7 +49,7 @@ export interface ConstructInfo {
 
 export interface CreateSimulatorProps {
   simulatorProps: SimulatorProps;
-  onSimulatorStatusChange: (status: Status, data?: unknown) => void;
+  sendCloudAppStateEvent: (event: AppEvent) => void;
 }
 
 // Creates a helper around the simulator that only returns the simulator instance
@@ -58,17 +57,17 @@ export interface CreateSimulatorProps {
 // stopping or reloading.
 export function createSimulator({
   simulatorProps,
-  onSimulatorStatusChange,
+  sendCloudAppStateEvent,
 }: CreateSimulatorProps) {
   const reportPromise = <T>(callback: () => Promise<T>) => {
     return async () => {
       try {
-        onSimulatorStatusChange("loading");
+        sendCloudAppStateEvent("SIMULATOR_LOADING");
         const res = await callback();
-        onSimulatorStatusChange("success");
+        sendCloudAppStateEvent("SIMULATOR_SUCCESS");
         return res;
       } catch (error) {
-        onSimulatorStatusChange("error", error);
+        sendCloudAppStateEvent("SIMULATOR_ERROR");
         throw error;
       }
     };

@@ -1,43 +1,43 @@
 import { ConsoleLogger } from "../consoleLogger.js";
-import { Status } from "../types.js";
 
+import { AppEvent } from "./cloudAppState.js";
 import { createSimulator } from "./createSimulator.js";
 import { runCompile } from "./runCompile.js";
+import { watchSimulatorFile } from "./watchSimulatorFile.js";
 
 export interface CreateWingAppProps {
   inputFile: string;
   consoleLogger: ConsoleLogger;
-  onSimulatorStatusChange: (status: Status, data?: unknown) => void;
-  onCompilerStatusChange: (status: Status, data?: unknown) => void;
+  sendCloudAppStateEvent: (event: AppEvent) => void;
 }
 
 export const createWingApp = async ({
   inputFile,
-  onSimulatorStatusChange,
-  onCompilerStatusChange,
+  sendCloudAppStateEvent,
   consoleLogger,
 }: CreateWingAppProps): Promise<ReturnType<typeof createSimulator>> => {
   return new Promise<ReturnType<typeof createSimulator>>(
     async (resolve, reject) => {
       let simulator: ReturnType<typeof createSimulator>;
       if (inputFile.endsWith(".w")) {
-        runCompile({
+        await runCompile({
           wingSrcFile: inputFile,
-          onCompilerStatusChange: (status, data) => {
-            onCompilerStatusChange(status, data);
-            if (status === "loading") {
-              onSimulatorStatusChange("loading");
+          onCompilerStatusChange: (state, data) => {
+            if (state === "loading") {
+              sendCloudAppStateEvent("COMPILER_LOADING");
             }
-            if (status === "error") {
-              onSimulatorStatusChange("error");
+            if (state === "error") {
+              sendCloudAppStateEvent("COMPILER_ERROR");
             }
-            if (status === "success") {
+            if (state === "success") {
+              sendCloudAppStateEvent("COMPILER_SUCCESS");
               if (simulator) {
+                void simulator.reload();
                 return;
               }
               simulator = createSimulator({
                 simulatorProps: { simfile: data as string },
-                onSimulatorStatusChange,
+                sendCloudAppStateEvent,
               });
               resolve(simulator);
             }
@@ -45,12 +45,19 @@ export const createWingApp = async ({
           consoleLogger,
         });
       } else {
-        resolve(
-          createSimulator({
-            simulatorProps: { simfile: inputFile },
-            onSimulatorStatusChange,
-          }),
-        );
+        // loading wsim file
+        const sim = createSimulator({
+          simulatorProps: { simfile: inputFile },
+          sendCloudAppStateEvent,
+        });
+        watchSimulatorFile({
+          simulatorStop: sim.stop,
+          simulatorReload: sim.reload,
+          simulatorFile: sim.getSimFile(),
+          sendCloudAppStateEvent,
+          consoleLogger,
+        });
+        resolve(sim);
       }
     },
   );

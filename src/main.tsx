@@ -7,7 +7,6 @@ import { WingSimulatorSchema } from "../electron/main/wingsdk.js";
 
 import { App } from "./App.js";
 import { AppContext, AppMode } from "./AppContext.js";
-import { DemoBase64WingSchema } from "./stories/mockData.js";
 import { trpc } from "./utils/trpc.js";
 
 const main = ({

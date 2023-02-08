@@ -1,6 +1,8 @@
 import { IpcRendererEvent } from "electron";
 import { useEffect, useState } from "react";
 
+import { State } from "../electron/main/types.js";
+
 import { VscodeLayout } from "./components/VscodeLayout.js";
 import { NotificationsProvider } from "./design-system/Notification.js";
 import { trpc } from "./utils/trpc.js";
@@ -8,39 +10,32 @@ import { useIpcEventListener } from "./utils/useIpcEventListener.js";
 
 export interface AppProps {}
 
-let initialized = false;
-
 export const App = ({}: AppProps) => {
-  const [simulatorStatus, setSimulatorStatus] = useState<
-    "loading" | "error" | "success" | "idle"
-  >("loading");
-  const [compilerStatus, setCompilerStatus] = useState<
-    "loading" | "error" | "success" | "idle"
-  >("loading");
+  const [cloudAppState, setCloudAppState] = useState<State>("loading");
   const trpcContext = trpc.useContext();
 
   const [wingVersion, setWingVersion] = useState<string>();
   trpc["app.invalidateQueries"].useSubscription(undefined, {
     async onData() {
+      console.debug("app.invalidateQueries");
       await trpcContext.invalidate();
     },
   });
 
   useEffect(() => {
-    // DEV NOTICE: spacial use case, avoid double invocation of this useEffect function when running in dev mode (react 18.x.x new strictMode)
-    if (initialized) {
-      return;
-    }
-
-    initialized = true;
-    trpcContext.client["app.status"]
+    trpcContext.client["app.details"]
       .query()
       .then((data) => {
-        setSimulatorStatus(data.simulatorStatus);
-        setCompilerStatus(data.compilerStatus);
         setWingVersion(data.wingVersion);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
+  }, []);
+
+  useEffect(() => {
+    console.debug("sending webapp.ready to main process");
+    if (window.electronTRPC) {
+      window.electronTRPC.ipcRenderer.send("webapp.ready");
+    }
   }, []);
 
   // TODO: Use TRPC directly.
@@ -61,27 +56,17 @@ export const App = ({}: AppProps) => {
 
   // TODO: Use TRPC directly.
   useIpcEventListener(
-    "app.compilerStatusChange",
+    "app.cloudAppState",
     (e: IpcRendererEvent, data) => {
-      setCompilerStatus(data);
+      console.debug("cloudAppState", data);
+      setCloudAppState(data);
     },
-  );
-
-  // TODO: Use TRPC directly.
-  useIpcEventListener(
-    "app.simulatorStatusChange",
-    (e: IpcRendererEvent, data) => {
-      setSimulatorStatus(data);
-    },
+    { immediate: true },
   );
 
   return (
     <NotificationsProvider>
-      <VscodeLayout
-        simulatorStatus={simulatorStatus}
-        compilerStatus={compilerStatus}
-        wingVersion={wingVersion}
-      />
+      <VscodeLayout cloudAppState={cloudAppState} wingVersion={wingVersion} />
     </NotificationsProvider>
   );
 };

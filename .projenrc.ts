@@ -64,6 +64,7 @@ const project = new TypeScriptProject({
     "dotenv",
     "electron-store",
     "analytics-node",
+    "xstate",
   ],
   // @ts-ignore
   minNodeVersion: "16.0.0",

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { LogEntry, LogLevel } from "../../electron/main/consoleLogger.js";
 import { ExplorerItem } from "../../electron/main/router/app.js";
+import { State } from "../../electron/main/types.js";
 import { BlueScreenOfDeath } from "../design-system/BlueScreenOfDeath.js";
 import { Breadcrumbs } from "../design-system/Breadcrumbs.js";
 import { Button } from "../design-system/Button.js";
@@ -29,16 +30,14 @@ import { ResourceView } from "./resource-views/ResourceView.js";
 import { StatusBar } from "./StatusBar.js";
 
 export interface VscodeLayoutProps {
-  simulatorStatus: "loading" | "error" | "success" | "idle";
-  compilerStatus: "loading" | "error" | "success" | "idle";
+  cloudAppState: State;
   wingVersion: string | undefined;
 }
 
 const NewIssueUrl = "https://github.com/winglang/wing/issues/new/choose";
 
 export const VscodeLayout = ({
-  simulatorStatus,
-  compilerStatus,
+  cloudAppState,
   wingVersion,
 }: VscodeLayoutProps) => {
   const [showBanner, setShowBanner] = useState(true);
@@ -149,24 +148,9 @@ export const VscodeLayout = ({
     },
   );
 
-  const isError = useMemo(() => {
-    return (
-      simulatorStatus === "error" ||
-      compilerStatus === "error" ||
-      explorerTree.isError
-    );
-  }, [simulatorStatus, compilerStatus, explorerTree]);
-
   const isLoading = useMemo(() => {
-    if (isError) {
-      return false;
-    }
-    return (
-      simulatorStatus === "loading" ||
-      compilerStatus === "loading" ||
-      explorerTree.isLoading
-    );
-  }, [simulatorStatus, compilerStatus, explorerTree]);
+    return cloudAppState === "loading" || explorerTree.isLoading;
+  }, [explorerTree, cloudAppState]);
 
   return (
     <div className="h-full flex flex-col bg-slate-50 select-none">
@@ -190,7 +174,7 @@ export const VscodeLayout = ({
         )}
 
         <BlueScreenOfDeath
-          hidden={!isError}
+          hidden={cloudAppState !== "error"}
           title={"An error has occurred:"}
           error={lastErrorMessage}
         />
@@ -327,7 +311,7 @@ export const VscodeLayout = ({
           </div>
         </div>
       </div>
-      {!isError && (
+      {cloudAppState !== "error" && (
         <TopResizableWidget className="border-t bg-white min-h-[5rem] h-[12rem] pt-1.5">
           <div className="relative h-full flex flex-col gap-2">
             {isLoading && (
@@ -357,9 +341,8 @@ export const VscodeLayout = ({
 
       <StatusBar
         wingVersion={wingVersion}
-        simulatorStatus={simulatorStatus}
-        compilerStatus={compilerStatus}
-        isError={isError}
+        cloudAppState={cloudAppState}
+        isError={cloudAppState === "error"}
       />
     </div>
   );

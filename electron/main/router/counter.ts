@@ -28,9 +28,12 @@ export const createCounterRouter = () => {
       )
       .query(async ({ input, ctx }) => {
         const simulator = await ctx.simulator();
-        const client = simulator.getResource(
+        const client = simulator.tryGetResource(
           input.resourcePath,
         ) as ICounterClient;
+        if (!client) {
+          return 0;
+        }
         const response = await client.peek();
         return response;
       }),

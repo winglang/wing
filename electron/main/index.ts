@@ -1,24 +1,16 @@
 import path from "node:path";
 
-import * as trpcExpress from "@trpc/server/adapters/express";
-import { applyWSSHandler } from "@trpc/server/adapters/ws";
-import cors from "cors";
 import { config } from "dotenv";
-import { BrowserWindow, Menu, app, dialog, screen, shell } from "electron";
+import { app, BrowserWindow, dialog, Menu, screen, shell } from "electron";
 import log from "electron-log";
 import { autoUpdater } from "electron-updater";
-import express from "express";
-import getPort from "get-port";
-import { WebSocketServer } from "ws";
 
-import { ConsoleLogger, LogEntry } from "./consoleLogger.js";
+import { ConsoleLogger, createConsoleLogger } from "./consoleLogger.js";
+import { createConsoleServer } from "./consoleServer.js";
 import { WING_PROTOCOL_SCHEME } from "./protocol.js";
-import { mergeAppRouters } from "./router/index.js";
 import { SegmentAnalytics } from "./segmentAnalytics.js";
-import { Status } from "./types.js";
+import { createCloudAppState } from "./utils/cloudAppState.js";
 import { createWingApp } from "./utils/createWingApp.js";
-import { getWingVersion } from "./utils/getWingVersion.js";
-import { watchSimulatorFile } from "./utils/watchSimulatorFile.js";
 
 config();
 
@@ -28,7 +20,7 @@ if (process.env.SEGMENT_WRITE_KEY) {
   const segment = new SegmentAnalytics(process.env.SEGMENT_WRITE_KEY);
   segment.analytics.track({
     anonymousId: segment.anonymousId,
-    event: "Application started",
+    event: "Console Application started",
   });
 }
 
@@ -98,138 +90,63 @@ function createWindowManager() {
       }
 
       let newWindow: BrowserWindow | undefined;
-      let simulatorStatus: Status = "idle";
-      let compilerStatus: Status = "idle";
 
-      const consoleLogger: ConsoleLogger = {
-        messages: new Array<LogEntry>(),
-        verbose(message, source) {
-          log.info(message);
-          this.messages.push({
-            timestamp: Date.now(),
-            level: "verbose",
-            message,
-            source: source ?? "console",
-          });
-          // TODO: Use TRPC websockets.
-          newWindow?.webContents.send("trpc.invalidate", "app.logs");
+      const consoleLogger: ConsoleLogger = createConsoleLogger(
+        (channel, args) => {
+          newWindow?.webContents.send(channel, args);
         },
-        log(message, source) {
-          log.info(message);
-          this.messages.push({
-            timestamp: Date.now(),
-            level: "info",
-            message,
-            source: source ?? "console",
-          });
+      );
+
+      const cloudAppStateService = createCloudAppState((state) => {
+        log.info("cloud app new state was sent to renderer process", state);
+        newWindow?.webContents.send("app.cloudAppState", state);
+        if (state === "success") {
+          log.info("simulator loaded, invalidate trpc queries");
+          // Clear the logs.
+          consoleLogger.messages = [];
           // TODO: Use TRPC websockets.
-          newWindow?.webContents.send("trpc.invalidate", "app.logs");
-        },
-        error(error, source) {
-          log.error(error);
-          this.messages.push({
-            timestamp: Date.now(),
-            level: "error",
-            message: error instanceof Error ? error.message : `${error}`,
-            source: source ?? "console",
-          });
-          // TODO: Use TRPC websockets.
-          newWindow?.webContents.send("trpc.invalidate", "app.logs");
-        },
-      };
-
-      const onSimulatorStatusChange = (status: Status) => {
-        simulatorStatus = status;
-        log.verbose("simulatorStatus", { status });
-        // TODO: user TRPC websockets.
-        newWindow?.webContents.send("app.simulatorStatusChange", status);
-      };
-
-      const onCompilerStatusChange = (status: Status) => {
-        compilerStatus = status;
-        log.verbose("compilerStatus", { status });
-        // TODO: user TRPC websockets.
-        newWindow?.webContents.send("app.compilerStatusChange", status);
-      };
-
-      const onSimulatorReloaded = () => {
-        log.verbose("notifyChange");
-
-        // Clear the logs.
-        consoleLogger.messages = [];
-
-        // TODO: Use TRPC websockets.
-        newWindow?.webContents.send("trpc.invalidate");
-      };
+          newWindow?.webContents.send("trpc.invalidate");
+        }
+      });
 
       const simulatorPromise = createWingApp({
         inputFile: simfile,
-        onSimulatorStatusChange,
-        onCompilerStatusChange,
+        sendCloudAppStateEvent: cloudAppStateService.send,
         consoleLogger,
       });
 
       // Create the express server and router for the simulator. Start
       // listening but don't wait for it, yet.
       consoleLogger.verbose("Starting the dev server...");
-      const server = await (async () => {
-        const app = express();
-        app.use(cors());
 
-        const router = mergeAppRouters();
-        const createContext = () => {
-          return {
-            async simulator() {
-              const sim = await simulatorPromise;
-              return sim.get();
-            },
-            async tree() {
-              const sim = await simulatorPromise;
-              return sim.tree();
-            },
-            logs() {
-              return consoleLogger.messages;
-            },
-            async appStatus() {
-              return {
-                simulatorStatus,
-                compilerStatus,
-                wingVersion: await getWingVersion(),
-              };
-            },
-          };
-        };
-        app.use(
-          "/",
-          trpcExpress.createExpressMiddleware({
-            router,
-            batching: { enabled: false },
-            createContext,
-          }),
-        );
-
-        consoleLogger.verbose("Looking for an open port");
-        const port = await getPort();
-        const server = app.listen(port);
-        await new Promise<void>((resolve) => {
-          server.on("listening", resolve);
-        });
-        consoleLogger.verbose(`Server is listening on port ${port}`);
-
-        const wss = new WebSocketServer({ server });
-        applyWSSHandler({
-          wss,
-          router,
-          createContext,
-        });
-
-        return { port, server };
-      })();
+      const server = await createConsoleServer({
+        cloudAppStateService,
+        consoleLogger,
+        simulatorPromise,
+      });
 
       newWindow = await createWindow({
         title: path.basename(simfile),
         port: server.port,
       });
+
+      newWindow.webContents.on(
+        "ipc-message",
+        async (event, channel, message) => {
+          log.verbose("ipc-message", { channel, message });
+          if (channel === "open-external-url") {
+            await shell.openExternal(message);
+            return;
+          }
+          if (channel === "webapp.ready") {
+            log.verbose("webapp ready event sending current state");
+            newWindow?.webContents.send(
+              "app.cloudAppState",
+              cloudAppStateService.getSnapshot().value,
+            );
+          }
+        },
+      );
 
       newWindow.setRepresentedFilename(simfile);
       windows.set(simfile, newWindow);
@@ -249,38 +166,10 @@ function createWindowManager() {
         },
       });
 
-      const simulatorFileWatcher = watchSimulatorFile({
-        simulator: simulatorInstance,
-        simulatorFile: simulatorPromiseResolved.getSimFile(),
-        onSimulatorStatusChange,
-        consoleLogger,
-        onSimulatorReloaded,
-        compilationStatus: () => {
-          log.info("Compilation status " + compilerStatus, "simulator");
-          return compilerStatus;
-        },
-      });
-
-      // The renderer process will send a message asking
-      // for the server port and the name of the file.
-      newWindow.webContents.on(
-        "ipc-message",
-        async (event, channel, message) => {
-          if (channel === "open-external-url") {
-            await shell.openExternal(message);
-            return;
-          }
-        },
-      );
-
       newWindow.on("closed", async () => {
         windows.delete(simfile);
         try {
-          await Promise.all([
-            simulatorFileWatcher?.close(),
-            server.server.close(),
-            simulatorInstance.stop(),
-          ]);
+          await Promise.all([server.server.close(), simulatorInstance.stop()]);
         } catch (error) {
           consoleLogger.error(error);
         }
@@ -288,6 +177,7 @@ function createWindowManager() {
 
       return newWindow;
     },
+
     async showOpenFileDialog() {
       await app.whenReady();
       const { canceled, filePaths } = await dialog.showOpenDialog({

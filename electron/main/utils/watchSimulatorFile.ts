@@ -1,7 +1,9 @@
 import { Simulator } from "@winglang/sdk/lib/testing";
+import { FSWatcher } from "chokidar";
 
 import { ConsoleLogger } from "../consoleLogger.js";
-import { Status } from "../types.js";
+
+import { AppEvent } from "./cloudAppState.js";
 
 // Chokidar is a CJS-only module and doesn't play well with ESM imports.
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -9,20 +11,18 @@ const chokidar = require("chokidar");
 
 export interface WatchSimulatorFileProps {
   simulatorFile: string;
-  simulator: Simulator;
+  simulatorStop: () => Promise<Simulator>;
+  simulatorReload: () => Promise<Simulator>;
   consoleLogger: ConsoleLogger;
-  onSimulatorStatusChange: (status: Status, data?: unknown) => void;
-  onSimulatorReloaded: () => void;
-  compilationStatus: () => Status;
+  sendCloudAppStateEvent: (event: AppEvent) => void;
 }
 export const watchSimulatorFile = ({
   simulatorFile,
-  simulator,
-  onSimulatorReloaded,
+  simulatorStop,
+  simulatorReload,
   consoleLogger,
-  onSimulatorStatusChange,
-  compilationStatus,
-}: WatchSimulatorFileProps): any => {
+  sendCloudAppStateEvent,
+}: WatchSimulatorFileProps): FSWatcher => {
   // Watch and handle changes in the simulator file.
   const watcher = chokidar
     .watch(simulatorFile, {
@@ -30,28 +30,25 @@ export const watchSimulatorFile = ({
     })
     .on("change", async () => {
       consoleLogger.verbose(`File ${simulatorFile} has been changed`);
-      if (compilationStatus() === "error") {
-        consoleLogger.verbose(`Compilation failed, not reloading simulator`);
-        return;
-      }
       try {
-        onSimulatorStatusChange("loading");
-        await simulator.reload();
+        consoleLogger.verbose(`Reloading simulator`);
+        await simulatorReload();
       } catch (error) {
-        onSimulatorStatusChange("error", error);
         consoleLogger.error(error);
         return;
       }
       consoleLogger.verbose("Simulator was reloaded");
-      onSimulatorReloaded();
-      onSimulatorStatusChange("success");
     })
     .on("unlink", async () => {
       consoleLogger.error(
         `File ${simulatorFile} has been removed, stopping the simulator`,
       );
-      onSimulatorStatusChange("error", "Simulator file was removed");
-      await simulator.stop();
+      sendCloudAppStateEvent("SIMULATOR_ERROR");
+      try {
+        await simulatorStop();
+      } catch (error) {
+        consoleLogger.error(error);
+      }
       // TODO: [sa] handle file deletion, what should we do?
     });
 

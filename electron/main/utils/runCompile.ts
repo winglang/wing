@@ -3,8 +3,10 @@ import { access } from "node:fs/promises";
 import * as os from "node:os";
 import path from "node:path";
 
+import { FSWatcher } from "chokidar";
+
 import { ConsoleLogger } from "../consoleLogger.js";
-import { Status } from "../types.js";
+import { State } from "../types.js";
 
 import { compile } from "./compile.js";
 
@@ -14,14 +16,14 @@ const chokidar = require("chokidar");
 
 export interface CreateCompileRunnerProps {
   wingSrcFile: string;
-  onCompilerStatusChange: (status: Status, data?: unknown) => void;
+  onCompilerStatusChange: (state: State, data?: unknown) => void;
   consoleLogger: ConsoleLogger;
 }
-export const runCompile = ({
+export const runCompile = async ({
   wingSrcFile,
   onCompilerStatusChange,
   consoleLogger,
-}: CreateCompileRunnerProps) => {
+}: CreateCompileRunnerProps): Promise<FSWatcher> => {
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "wing-app-target-dir-"));
   const fileName = path.basename(wingSrcFile, ".w");
   const compiledSimFile = path.join(tmpDir, fileName + ".wsim");
@@ -40,6 +42,7 @@ export const runCompile = ({
       } else {
         try {
           await access(compiledSimFile);
+          onCompilerStatusChange("success", compiledSimFile);
         } catch (error) {
           consoleLogger.error(
             `file ${compiledSimFile} doesn't exist ${
@@ -50,7 +53,6 @@ export const runCompile = ({
           onCompilerStatusChange("error", "Compilation failed");
           return;
         }
-        onCompilerStatusChange("success", compiledSimFile);
       }
     } catch (error) {
       consoleLogger.error(
@@ -63,22 +65,22 @@ export const runCompile = ({
     }
   };
 
-  void runCompile();
+  await runCompile();
 
   const wingSrcDir = path.dirname(wingSrcFile);
 
   // start watching wing src file directory and compile on change
-  chokidar
+  return chokidar
     .watch(wingSrcDir, {
       ignored: /(^|[/\\])\../,
       persistent: true,
     })
-    .on("change", () => {
+    .on("change", async () => {
       consoleLogger.verbose(
         `Wing application src directory content has been changed`,
         "compiler",
       );
-      void runCompile();
+      await runCompile();
     })
     .on("unlink", async () => {
       consoleLogger.error(
