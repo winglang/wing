@@ -100,8 +100,6 @@ test("schedule with two functions", () => {
   schedule.onTick(fn2);
   const output = app.synth();
 
-  console.log(output);
-
   // THEN
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role", // role for function
