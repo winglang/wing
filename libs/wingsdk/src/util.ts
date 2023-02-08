@@ -130,14 +130,14 @@ export function directorySnapshot(initialRoot: string) {
 }
 
 /**
- * Normalize a relative path to be posix-style.
+ * Normalized windows paths to posix-like paths.
  */
-export function normalizeRelativePath(path: string) {
+export function normalPath(path: string) {
   if (process.platform === "win32") {
     return (
       path
         // force posix path separator
-        .replace(/\\/g, "/")
+        .replace(/\\+/g, "/")
     );
   } else {
     return path;

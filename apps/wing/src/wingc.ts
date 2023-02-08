@@ -2,7 +2,7 @@ import debug from "debug";
 import { readFile } from "fs/promises";
 import { resolve } from "path";
 import { WASI } from "wasi";
-import { wasiPath } from "./util";
+import { normalPath } from "./util";
 
 const log = debug("wing:compile");
 
@@ -30,14 +30,10 @@ export async function load(options: WingCompilerLoadOptions) {
     ...(options.preopens ?? {}),
   } as Record<string, string>;
 
-  // node WASI preopens (and some node WASI features in general) do not work with absolute windows paths
-  // This creates fake preopens for absolute windows paths with the form "C:\a\b" -> "/__C/a/b"
   if (process.platform === "win32") {
     for (const [key, value] of Object.entries(preopens)) {
-      // if (value.includes(":")) {
-        delete preopens[key];
-        preopens[wasiPath(value)] = value;
-      // }
+      delete preopens[key];
+      preopens[normalPath(value)] = value;
     }
   }
 
@@ -45,7 +41,7 @@ export async function load(options: WingCompilerLoadOptions) {
     env: {
       ...process.env,
       RUST_BACKTRACE: "full",
-      WINGSDK_MANIFEST_ROOT: wasiPath(WINGSDK_MANIFEST_ROOT),
+      WINGSDK_MANIFEST_ROOT: normalPath(WINGSDK_MANIFEST_ROOT),
       ...(options.env ?? {}),
     },
     preopens,

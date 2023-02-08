@@ -1,15 +1,14 @@
 /**
- * Normalizes paths from windows to posix while also making it suitable for WASI.
+ * Normalized windows paths to posix-like paths.
  */
-export function wasiPath(path: string) {
-  return path.replace(/\\+/g, "/");
-  // if (process.platform === "win32") {
-  //   return path
-  //   // Replace backslashes with forward slashes
-  //   .replace(/\\/g, "/")
-  //   // "C:\a\b" -> "/__C/a/b"
-  //   .replace(/^([a-zA-Z]):/, "/__$1");
-  // } else {
-  //   return path;
-  // }
+export function normalPath(path: string) {
+  if (process.platform === "win32") {
+    return (
+      path
+        // force posix path separator
+        .replace(/\\+/g, "/")
+    );
+  } else {
+    return path;
+  }
 }

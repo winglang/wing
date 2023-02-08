@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { IResource, NodeJsCode, Resource } from "./core";
+import { normalPath } from "./util";
 
 /**
  * Convert a resource with a single method into a resource with a different
@@ -28,9 +29,8 @@ export function convertBetweenHandlers(
     public _toInflight(): NodeJsCode {
       const handlerClient = this.handler._toInflight();
       return NodeJsCode.fromInline(
-        `new (require("${newHandlerClientPath.replace(
-          /\\/g,
-          "\\\\"
+        `new (require("${normalPath(
+          newHandlerClientPath
         )}")).${newHandlerClientClassName}({ handler: ${handlerClient.text} })`
       );
     }
