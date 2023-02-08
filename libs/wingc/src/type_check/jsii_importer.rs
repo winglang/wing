@@ -53,7 +53,7 @@ pub struct JsiiImporter<'a> {
 	namespace_filter: &'a [String],
 	/// The name to assign to the module in the Wing type system.
 	identifier: &'a Symbol,
-	/// The wing type system: all imported types are added to `wing_types`.
+	/// The wing type system: all imported types are added to `wing_types.libraries`.
 	wing_types: &'a mut Types,
 	/// The index of the import statement that triggered this import. This is required so we'll know
 	/// later on if types defined by this import come before or after other statements in the code.
@@ -161,13 +161,18 @@ impl<'a> JsiiImporter<'a> {
 
 	fn lookup_or_create_type(&mut self, type_fqn: &FQN) -> TypeRef {
 		// Check if this type is already imported
-		if let Ok(t) = self.env.lookup_nested_str(type_fqn.as_str(), true, None) {
+		if let Ok(t) = self
+			.wing_types
+			.libraries
+			.lookup_nested_str(type_fqn.as_str(), true, None)
+		{
 			return t.as_type().expect(&format!("Expected {} to be a type", type_fqn));
 		}
 		// Define new type and return it
 		self.import_type(type_fqn);
 		self
-			.env
+			.wing_types
+			.libraries
 			.lookup_nested_str(type_fqn.as_str(), true, None)
 			.expect(&format!("Expected {} to be defined", type_fqn))
 			.as_type()
@@ -207,7 +212,7 @@ impl<'a> JsiiImporter<'a> {
 		// the type belongs to. If we are importing a type from the root of the assembly, then we need to make sure
 		// the assembly namespace is visible. (Note that we never need to hide a namespace that has already been made visible).
 		let assembly_should_be_visible = type_name.namespaces().count() == 0;
-		if let Some(symb) = self.env.try_lookup_mut(self.assembly_name, None) {
+		if let Some(symb) = self.wing_types.libraries.try_lookup_mut(self.assembly_name, None) {
 			if let SymbolKind::Namespace(ns) = symb {
 				// If this namespace is already imported but hidden then unhide it if it's being explicitly imported
 				if ns.hidden && assembly_should_be_visible {
@@ -227,7 +232,8 @@ impl<'a> JsiiImporter<'a> {
 				env: SymbolEnv::new(None, self.wing_types.void(), false, false, self.env.flight, 0),
 			});
 			self
-				.env
+				.wing_types
+				.libraries
 				.define(
 					&Symbol {
 						name: self.assembly_name.to_string(),
@@ -248,7 +254,8 @@ impl<'a> JsiiImporter<'a> {
 			let lookup_str = lookup_str.join(".");
 
 			let mut parent_ns = self
-				.env
+				.wing_types
+				.libraries
 				.lookup_nested_mut_str(&lookup_str, false, None)
 				.unwrap()
 				.as_namespace_ref()
@@ -366,7 +373,8 @@ impl<'a> JsiiImporter<'a> {
 
 		// TODO: don't we need to add this to the namespace earlier in case there's a self reference in the struct?
 		let mut ns = self
-			.env
+			.wing_types
+			.libraries
 			.lookup_nested_mut_str(jsii_interface_fqn.as_str_without_type_name(), true, None)
 			.unwrap()
 			.as_namespace_ref()
@@ -519,24 +527,29 @@ impl<'a> JsiiImporter<'a> {
 				None
 			} else {
 				let base_class_name = base_class_fqn.type_name();
-				let base_class_type =
-					if let Ok(base_class_type) = self.env.lookup_nested_str(base_class_fqn.as_str(), true, None) {
-						base_class_type
-							.as_type()
-							.expect("Base class name found but it's not a type")
-					} else {
-						// If the base class isn't defined yet then define it first (recursive call)
-						self.import_type(&base_class_fqn);
-						self
-							.env
-							.lookup_nested_str(&base_class_fqn.as_str(), true, None)
-							.expect(&format!(
-								"Failed to define base class {} of {}",
-								base_class_name, type_name
-							))
-							.as_type()
-							.unwrap()
-					};
+				let base_class_type = if let Ok(base_class_type) =
+					self
+						.wing_types
+						.libraries
+						.lookup_nested_str(base_class_fqn.as_str(), true, None)
+				{
+					base_class_type
+						.as_type()
+						.expect("Base class name found but it's not a type")
+				} else {
+					// If the base class isn't defined yet then define it first (recursive call)
+					self.import_type(&base_class_fqn);
+					self
+						.wing_types
+						.libraries
+						.lookup_nested_str(&base_class_fqn.as_str(), true, None)
+						.expect(&format!(
+							"Failed to define base class {} of {}",
+							base_class_name, type_name
+						))
+						.as_type()
+						.unwrap()
+				};
 
 				// Validate the base class is either a class or a resource
 				if base_class_type.as_resource().is_none() && base_class_type.as_class().is_none() {
@@ -605,7 +618,8 @@ impl<'a> JsiiImporter<'a> {
 			Type::Class(class_spec)
 		});
 		let mut ns = self
-			.env
+			.wing_types
+			.libraries
 			.lookup_nested_mut_str(jsii_class_fqn.as_str_without_type_name(), true, None)
 			.unwrap()
 			.as_namespace_ref()
@@ -734,7 +748,12 @@ impl<'a> JsiiImporter<'a> {
 
 			// Lookup type before we attempt to import it, this is required because `import_jsii_type` is recursive
 			// and might have already defined the current type internally
-			if self.env.lookup_nested_str(type_fqn.as_str(), true, None).is_ok() {
+			if self
+				.wing_types
+				.libraries
+				.lookup_nested_str(type_fqn.as_str(), true, None)
+				.is_ok()
+			{
 				debug!("Already imported {}.", type_fqn.as_str().blue());
 				continue;
 			}
@@ -755,7 +774,8 @@ impl<'a> JsiiImporter<'a> {
 			.collect::<Vec<_>>()
 			.join(".");
 		let ns = self
-			.env
+			.wing_types
+			.libraries
 			.lookup_nested_mut_str(&lookup_str, true, None)
 			.unwrap()
 			.as_namespace_ref()

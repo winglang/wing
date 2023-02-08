@@ -530,6 +530,7 @@ pub struct Types {
 	// Note: we need the box so reallocations of the vec while growing won't change the addresses of the types since they are referenced from the TypeRef struct
 	types: Vec<Box<Type>>,
 	namespaces: Vec<Box<Namespace>>,
+	pub libraries: SymbolEnv,
 	numeric_idx: usize,
 	string_idx: usize,
 	bool_idx: usize,
@@ -554,9 +555,13 @@ impl Types {
 		types.push(Box::new(Type::Void));
 		let void_idx = types.len() - 1;
 
+		let void_ref = UnsafeRef::<Type>(&*types[void_idx] as *const Type);
+		let libraries = SymbolEnv::new(None, void_ref, false, false, Phase::Preflight, 0);
+
 		Self {
 			types,
 			namespaces: Vec::new(),
+			libraries,
 			numeric_idx,
 			string_idx,
 			bool_idx,
