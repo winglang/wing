@@ -259,7 +259,7 @@ fn parse_text(source_file: &str, text: &[u8]) -> FileData {
 
 	let wing_parser = Parser {
 		source: &text[..],
-		source_name: source_file.to_string(),
+		source_path: Path::new(source_file),
 		error_nodes: RefCell::new(HashSet::new()),
 		diagnostics: RefCell::new(Diagnostics::new()),
 	};

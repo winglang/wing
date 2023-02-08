@@ -2,6 +2,7 @@ use indexmap::IndexSet;
 use phf::phf_map;
 use std::cell::RefCell;
 use std::collections::{BTreeMap, HashMap, HashSet};
+use std::path::Path;
 use std::{str, vec};
 use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
@@ -15,7 +16,7 @@ use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnosti
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
-	pub source_name: String,
+	pub source_path: &'a Path,
 	pub error_nodes: RefCell<HashSet<usize>>,
 	pub diagnostics: RefCell<Diagnostics>,
 }
@@ -146,7 +147,7 @@ impl Parser<'_> {
 			start_byte: node.byte_range().start,
 			end_byte: node.byte_range().end,
 			// TODO: Implement multi-file support
-			file_id: self.source_name.to_string(),
+			file_id: self.source_path.file_name().unwrap().to_str().unwrap().to_string(),
 		}
 	}
 
