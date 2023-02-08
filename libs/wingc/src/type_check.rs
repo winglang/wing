@@ -1518,7 +1518,7 @@ impl<'a> TypeChecker<'a> {
 				// Create a the real class environment to be filled with the class AST types
 				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), true, false, env.flight, stmt.idx);
 
-				// Add members to the class env
+				// Add fields to the class env
 				for field in fields.iter() {
 					let field_type = self.resolve_type(&field.member_type, env, stmt.idx);
 					match class_env.define(
