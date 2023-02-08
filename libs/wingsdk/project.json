@@ -6,8 +6,9 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npm run compile",
-        "cwd": "libs/wingsdk"
+        "commands": ["npm run pre-compile", "npm run compile", "npm run api-check"],
+        "cwd": "libs/wingsdk",
+        "parallel": false
       }
     },
     "package": {
