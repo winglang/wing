@@ -99,20 +99,18 @@ export class PluginManager {
    * @param synthesizedStackPath path to the synthesized stack json file
    */
   public postSynth(config: any, synthesizedStackPath: string): any {
-    let isConfigAltered = false;
     this.callAllHooks(CompilationPhase.POST_SYNTH, (hook) => {
-      const originalConfig = JSON.stringify(config);
       config = hook.postSynth(config) ?? config;
-      isConfigAltered = JSON.stringify(config) !== originalConfig;
     });
 
     // Only overwrite the config file if it has been modified
-    if (isConfigAltered) {
+    if (this.hooks.length > 0) {
       writeFileSync(
         resolve(synthesizedStackPath),
         JSON.stringify(config, null, 2)
       );
     }
+
     return config;
   }
 
