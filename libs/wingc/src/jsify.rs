@@ -453,7 +453,10 @@ impl JSifier {
 						module_name
 					}),
 					if module_name.name.starts_with("\"./") {
-						// TODO so many assumptions here, would only work with a JS file
+						// TODO so many assumptions here, would only work with a JS file, see:
+						// https://github.com/winglang/wing/issues/477
+						// https://github.com/winglang/wing/issues/478
+						// https://github.com/winglang/wing/issues/1027
 						format!("require({})", module_name.name)
 					} else {
 						format!("require('{}').{}", STDLIB_MODULE, module_name.name)
