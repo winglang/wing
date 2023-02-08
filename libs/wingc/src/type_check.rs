@@ -630,8 +630,7 @@ pub struct TypeChecker<'a> {
 	/// so all nodes implement some basic "tree" interface. For now this is good enough.
 	inner_scopes: Vec<*const Scope>,
 
-	/// The absolute path to the source file being type checked.
-	/// This is used to resolve relative paths in import statements.
+	/// The path to the source file being type checked.
 	source_path: &'a Path,
 
 	pub diagnostics: RefCell<Diagnostics>,
@@ -639,8 +638,6 @@ pub struct TypeChecker<'a> {
 
 impl<'a> TypeChecker<'a> {
 	pub fn new(types: &'a mut Types, source_path: &'a Path) -> Self {
-		// Assert that the source_path is absolute
-		assert!(source_path.is_absolute());
 		Self {
 			types: types,
 			inner_scopes: vec![],

@@ -223,7 +223,6 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 		source_path.extension().unwrap() == "w",
 		"Source file must have .w extension",
 	);
-	assert!(source_path.is_absolute(), "Source path must be absolute");
 
 	let file_name = source_path.file_name().unwrap().to_str().unwrap();
 	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
@@ -302,7 +301,6 @@ mod sanity {
 
 	fn compile_test(test_dir: &str, expect_failure: bool) {
 		for test_file in get_wing_files(test_dir) {
-			let test_file = test_file.canonicalize().unwrap();
 			println!("\n=== {} ===\n", test_file.display());
 
 			let mut out_dir = test_file.parent().unwrap().to_path_buf();
