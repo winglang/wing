@@ -21,15 +21,6 @@ impl<'a> From<&'a str> for FQN<'a> {
 	}
 }
 
-impl<'a> From<&'a String> for FQN<'a> {
-	fn from(fqn: &'a String) -> Self {
-		if fqn.split('.').count() < 2 {
-			panic!("Invalid FQN: {}", fqn);
-		}
-		FQN(fqn)
-	}
-}
-
 impl<'a> FQN<'a> {
 	/// Returns the FQN as a string.
 	pub fn as_str(&self) -> &str {

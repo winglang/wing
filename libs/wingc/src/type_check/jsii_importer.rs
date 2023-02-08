@@ -110,7 +110,7 @@ impl<'a> JsiiImporter<'a> {
 					// TODO: this should be a special type that represents "any resource" https://github.com/winglang/wing/issues/261
 					self.wing_types.anything()
 				} else {
-					self.lookup_or_create_type(&FQN::from(type_fqn))
+					self.lookup_or_create_type(&FQN::from(type_fqn.as_str()))
 				}
 			} else if let Some(Value::Object(d)) = obj.get("collection") {
 				let collection_kind = d
@@ -303,7 +303,7 @@ impl<'a> JsiiImporter<'a> {
 	///
 	/// See https://aws.github.io/jsii/specification/2-type-system/#interfaces-structs
 	fn import_interface(&mut self, jsii_interface: wingii::jsii::InterfaceType) {
-		let jsii_interface_fqn = FQN::from(&jsii_interface.fqn);
+		let jsii_interface_fqn = FQN::from(jsii_interface.fqn.as_str());
 		debug!("Importing interface {}", jsii_interface_fqn.as_str().green());
 		let type_name = jsii_interface_fqn.type_name();
 		match jsii_interface.datatype {
@@ -323,7 +323,7 @@ impl<'a> JsiiImporter<'a> {
 		let extends = if let Some(interfaces) = &jsii_interface.interfaces {
 			interfaces
 				.iter()
-				.map(|fqn| self.lookup_or_create_type(&FQN::from(fqn)))
+				.map(|fqn| self.lookup_or_create_type(&FQN::from(fqn.as_str())))
 				.collect::<Vec<_>>()
 		} else {
 			vec![]
@@ -506,13 +506,13 @@ impl<'a> JsiiImporter<'a> {
 
 	fn import_class(&mut self, jsii_class: wingii::jsii::ClassType) {
 		let mut is_resource = false;
-		let jsii_class_fqn = FQN::from(&jsii_class.fqn);
+		let jsii_class_fqn = FQN::from(jsii_class.fqn.as_str());
 		debug!("Importing class {}", jsii_class_fqn.as_str().green());
 		let type_name = jsii_class_fqn.type_name();
 
 		// Get the base class of the JSII class, define it via recursive call if it's not define yet
 		let base_class_type = if let Some(base_class_fqn) = &jsii_class.base {
-			let base_class_fqn = FQN::from(base_class_fqn);
+			let base_class_fqn = FQN::from(base_class_fqn.as_str());
 			// Hack: if the base class name is a resource base then we treat this class as a resource and don't need to define its parent.
 			if base_class_fqn.is_construct_base() {
 				is_resource = true;
@@ -583,11 +583,9 @@ impl<'a> JsiiImporter<'a> {
 						args
 							.iter()
 							.map(|a| {
-								self.lookup_or_create_type(&FQN::from(&format!(
-									"{}.{}",
-									jsii_class_fqn.as_str_without_type_name(),
-									a
-								)))
+								self.lookup_or_create_type(&FQN::from(
+									format!("{}.{}", jsii_class_fqn.as_str_without_type_name(), a).as_str(),
+								))
 							})
 							.collect::<Vec<_>>(),
 					)
@@ -723,7 +721,7 @@ impl<'a> JsiiImporter<'a> {
 		let assembly = self.jsii_types.find_assembly(self.assembly_name).unwrap();
 
 		for type_fqn in assembly.types.as_ref().unwrap().keys() {
-			let type_fqn = FQN::from(type_fqn);
+			let type_fqn = FQN::from(type_fqn.as_str());
 
 			// Skip types outside the imported namespace
 			if !type_fqn.is_in_namespace(self.namespace_filter) {
