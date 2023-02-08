@@ -19,6 +19,7 @@ use crate::{
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_MODULE: &str = "@winglang/sdk";
+const INFLIGHT_CLIENTS_DIR: &str = "clients";
 
 const TARGET_CODE: &str = r#"
 function __app(target) {
@@ -865,7 +866,7 @@ impl JSifier {
 			})
 			.collect::<Vec<_>>();
 
-		let client_relative_path = format!("clients/{}.inflight.js", resource_name.name);
+		let client_relative_path = format!("{}/{}.inflight.js", INFLIGHT_CLIENTS_DIR, resource_name.name);
 		formatdoc!("
 			_toInflight() {{
 				{inner_clients}
@@ -918,7 +919,7 @@ impl JSifier {
 			"".to_string()
 		};
 
-		// TODO jsify inflight fields
+		// TODO jsify inflight fields: https://github.com/winglang/wing/issues/864
 
 		let client_constructor = format!(
 			"constructor({{ {} }}) {{\n{}\n{}\n}}",
