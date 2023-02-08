@@ -1,5 +1,5 @@
 import { test, expect, beforeAll } from "vitest";
-import { posix as path, basename } from "path";
+import * as path from "path";
 import { execa } from "execa";
 import * as fs from "fs-extra";
 import * as walk from "walkdir";
@@ -34,8 +34,7 @@ const basePackageJson = {
 
 const validWingFiles = fs
   .readdirSync(validTestDir)
-  //TODO DEBUG PLS CHANGE BACK
-  .filter((f) => f.endsWith("test_bucket.w"));
+  .filter((f) => f.endsWith(".w"));
 
 const shellEnv = {
   ...process.env,
@@ -95,10 +94,7 @@ async function runWingCommand(
     console.debug(`Running: "${args.join(" ")}"...`);
     const out = await execa(wingBin, args, {
       cwd,
-      stdout: "inherit",
     });
-    console.debug(out.stdout);
-    console.debug(out.stderr);
     return out.exitCode;
   };
 
@@ -117,7 +113,7 @@ test.each(validWingFiles)(
     const targetDir = path.join(
       testDir,
       "target",
-      `${basename(wingFile, ".w")}.tfaws`
+      `${path.basename(wingFile, ".w")}.tfaws`
     );
     const tf_json = path.join(targetDir, "main.tf.json");
 

@@ -40,8 +40,6 @@ export async function load(options: WingCompilerLoadOptions) {
     }
   }
 
-  console.debug("preopens:", preopens)
-
   const wasi = new WASI({
     env: {
       ...process.env,
