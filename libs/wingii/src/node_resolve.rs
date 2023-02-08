@@ -105,16 +105,12 @@ fn resolve_as_file(path: &Path) -> Result<PathBuf, Box<dyn Error>> {
 /// Resolve by walking up node_modules folders.
 fn resolve_node_modules(target: &str, basedir: &Path) -> Result<PathBuf, Box<dyn Error>> {
 	let node_modules = basedir.join("node_modules");
-	dbg!(&node_modules);
 	if node_modules.is_dir() {
-		dbg!("node_modules is a dir");
 		let path = node_modules.join(target);
 		let result = resolve_as_file(&path).or_else(|_| resolve_as_directory(&path));
 		if result.is_ok() {
 			return result;
 		}
-	} else {
-		dbg!("node_modules not a dir");
 	}
 
 	match basedir.parent() {
