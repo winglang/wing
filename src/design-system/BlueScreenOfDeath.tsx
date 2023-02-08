@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { useEffect, useRef } from "react";
 
-import { parseLogMessage } from "../components/ConsoleLogs.js";
+import { formatAbsolutePaths } from "../components/ConsoleLogs.js";
 
 export const BlueScreenOfDeath = ({
   title,
@@ -18,7 +18,7 @@ export const BlueScreenOfDeath = ({
     if (errorRef.current === null) {
       return;
     }
-    errorRef.current.innerHTML = parseLogMessage(
+    errorRef.current.innerHTML = formatAbsolutePaths(
       error,
       "underline text-slate-300 hover:text-slate-400",
       true,
@@ -39,7 +39,7 @@ export const BlueScreenOfDeath = ({
         <div className="leading-[40px]">
           <div>{title}</div>
           <div className="py-4">
-            <span className="focus:outline-none" ref={errorRef} />
+            <span className="focus:outline-none select-text" ref={errorRef} />
           </div>
           <div className="w-full text-center py-4">
             Click on any error reference to navigate to your IDE{" "}

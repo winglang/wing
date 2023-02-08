@@ -18,14 +18,14 @@ interface LogEntryProps {
   isSelected: boolean;
 }
 
-export const parseLogMessage = (
+export const formatAbsolutePaths = (
   error: string,
   className: string,
   expanded: boolean = false,
 ) => {
   return error
     .replace(
-      /((?:[a-z]:)?[/\\]\S+):(\d+):(\d+)/gi,
+      /\B((?:[a-z]:)?[/\\]\S+):(\d+):(\d+)/gi,
       (match, path, line, column) => {
         return `<a class="${className}" onclick="event.stopPropagation()" href="vscode://file/${path}:${line}:${column}">${match}</a>`;
       },
@@ -69,7 +69,7 @@ const LogEntryRow = ({
     if (expandableRef.current === null) {
       return;
     }
-    const html = parseLogMessage(
+    const html = formatAbsolutePaths(
       log.message,
       "text-sky-500 underline hover:text-sky-800",
       expanded,
