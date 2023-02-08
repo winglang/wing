@@ -840,23 +840,22 @@ impl JSifier {
 					inner_member_name, inner_member_name,
 				)
 			})
-			.collect::<Vec<_>>();
+			.collect_vec()
+			.join("\n");
 
-		let client_relative_path = format!("{}/{}.inflight.js", INFLIGHT_CLIENTS_DIR, resource_name.name);
+		let client_path = Self::js_resolve_path(&format!("{}/{}.inflight.js", INFLIGHT_CLIENTS_DIR, resource_name.name));
+		let captured_fields = captured_fields
+			.iter()
+			.map(|(inner_member_name, _, _)| format!("{}: ${{{}_client.text}}", inner_member_name, inner_member_name))
+			.join(", ");
 		formatdoc!("
 			_toInflight() {{
 				{inner_clients}
 				const self_client_path = {client_path};
-				return {stdlib}.core.NodeJsCode.fromInline(`(new (require(\"${{self_client_path}}\")).{resource_name}_inflight({{{captured_fields}}}))`);
+				return {STDLIB}.core.NodeJsCode.fromInline(`(new (require(\"${{self_client_path}}\")).{resource_name}_inflight({{{captured_fields}}}))`);
 			}}",
-			inner_clients = inner_clients.join("\n"),
-			client_path = Self::js_resolve_path(&client_relative_path),
-			stdlib = STDLIB,
 			resource_name = resource_name.name,
-			captured_fields = captured_fields
-			.iter()
-			.map(|(inner_member_name, _, _)| format!("{}: ${{{}_client.text}}", inner_member_name, inner_member_name))
-			.join(", ")
+			
 		)
 	}
 
