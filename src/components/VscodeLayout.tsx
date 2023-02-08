@@ -131,8 +131,12 @@ export const VscodeLayout = ({
     if (div) {
       div.scrollTo({ top: div.scrollHeight });
     }
-    const lastError = logs.data
-      ?.reverse()
+
+    if (!logs.data) {
+      return;
+    }
+    const lastError = [...logs.data]
+      .reverse()
       .find((log: LogEntry) => log.level === "error");
     if (lastError) {
       setLastErrorMessage(lastError.message);
