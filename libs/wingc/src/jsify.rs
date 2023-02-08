@@ -1,4 +1,5 @@
 use aho_corasick::AhoCorasick;
+use indoc::formatdoc;
 use itertools::Itertools;
 use std::{cell::RefCell, cmp::Ordering, fs, path::PathBuf, vec};
 
@@ -865,16 +866,20 @@ impl JSifier {
 			.collect::<Vec<_>>();
 
 		let client_relative_path = format!("clients/{}.inflight.js", resource_name.name);
-		format!(
-			"_toInflight() {{\n{}\nconst self_client_path = {};\nreturn {}.core.NodeJsCode.fromInline(`(new (require(\"${{self_client_path}}\")).{}_inflight({{{}}}))`);\n}}",
-			inner_clients.join("\n"),
-			Self::js_resolve_path(&client_relative_path),
-			STDLIB,
-			resource_name.name,
-			captured_fields
-				.iter()
-				.map(|(inner_member_name, _, _)| format!("{}: ${{{}_client.text}}", inner_member_name, inner_member_name))
-				.join(", ")
+		formatdoc!("
+			_toInflight() {{
+				{inner_clients}
+				const self_client_path = {client_path};
+				return {stdlib}.core.NodeJsCode.fromInline(`(new (require(\"${{self_client_path}}\")).{resource_name}_inflight({{{captured_fields}}}))`);
+			}}",
+			inner_clients = inner_clients.join("\n"),
+			client_path = Self::js_resolve_path(&client_relative_path),
+			stdlib = STDLIB,
+			resource_name = resource_name.name,
+			captured_fields = captured_fields
+			.iter()
+			.map(|(inner_member_name, _, _)| format!("{}: ${{{}_client.text}}", inner_member_name, inner_member_name))
+			.join(", ")
 		)
 	}
 
