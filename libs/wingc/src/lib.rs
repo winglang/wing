@@ -134,13 +134,6 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 	(scope, wing_parser.diagnostics.into_inner())
 }
 
-/// Type check the given source file. Returns a list of diagnostics.
-/// If the list is empty, the source file is valid.
-///
-/// The name of the source_file is passed in separately so that npm/jsii dependencies can be resolved
-/// relative to the source file.
-///
-/// TODO: should we pass or provide a "project directory" or "source directory" instead?
 pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> Diagnostics {
 	let env = SymbolEnv::new(None, types.void(), false, false, Phase::Preflight, 0);
 	scope.set_env(env);

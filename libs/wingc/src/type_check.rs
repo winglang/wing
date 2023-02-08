@@ -647,7 +647,6 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	pub fn add_globals(&mut self, scope: &Scope) {
-		// Add all types from the Wing SDK's `std` namespace
 		self.add_module_to_env(
 			scope.env.borrow_mut().as_mut().unwrap(),
 			WINGSDK_ASSEMBLY_NAME.to_string(),

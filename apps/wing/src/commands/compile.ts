@@ -60,11 +60,11 @@ function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
  * @param options Compile options.
  */
 export async function compile(entrypoint: string, options: ICompileOptions) {
-  const wingFile = normalPath(entrypoint);
+  const wingFile = normalPath(resolve(entrypoint));
   log("wing file: %s", wingFile);
   const wingDir = dirname(wingFile);
   log("wing dir: %s", wingDir);
-  const synthDir = resolveSynthDir(normalPath(options.outDir), wingFile, options.target);
+  const synthDir = resolveSynthDir(normalPath(resolve(options.outDir)), wingFile, options.target);
   log("synth dir: %s", synthDir);
   const workDir = resolve(synthDir, ".wing");
   log("work dir: %s", workDir);
