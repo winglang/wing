@@ -17,17 +17,17 @@
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
     "contributors:check": "all-contributors check",
-    "postinstall": "run-p install:*",
+    "postinstall": "run-p -l --max-parallel 3 \"install:*\"",
     "docs": "./scripts/docsite.sh",
+    "install:sdk": "npm --prefix libs/wingsdk install",
     "install:wasi": "bash scripts/setup_wasi.sh",
-    "install:vscode-wing": "npm --prefix apps/vscode-wing install",
     "install:tree-sitter-wing": "npm --prefix libs/tree-sitter-wing install",
     "install:wing-api-checker": "npm --prefix apps/wing-api-checker install",
     "install:jsii-docgen": "npm --prefix apps/jsii-docgen install",
-    "install:wing-playground": "npm --prefix apps/wing-playground install",
     "install:winglang": "npm --prefix apps/wing install",
-    "install:sdk": "npm --prefix libs/wingsdk install",
-    "install:hangar": "npm --prefix tools/hangar install"
+    "install:wing-playground": "npm --prefix apps/wing-playground install",
+    "install:hangar": "npm --prefix tools/hangar install",
+    "install:vscode-wing": "npm --prefix apps/vscode-wing install"
   },
   "volta": {
     "node": "18.12.1",
