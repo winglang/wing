@@ -136,10 +136,7 @@ impl JSifier {
 		lines.push("{".to_string());
 
 		for statement in scope.statements.iter() {
-			let statement_str = format!(
-				"{}",
-				self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, phase)
-			);
+			let statement_str = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, phase);
 			let result = statement_str.split("\n");
 			for l in result {
 				lines.push(format!("  {}", l));
@@ -319,10 +316,9 @@ impl JSifier {
 
 				let expr_string = match &function.kind {
 					ExprKind::Reference(reference) => {
-						if let Reference::NestedIdentifier { object, property } = reference {
+						if let Reference::NestedIdentifier { object, .. } = reference {
 							let object_type = object.evaluated_type.borrow().unwrap();
 							if let Some(class) = object_type.as_class_or_resource() {
-								println!("{} Needs case conversion: {}", property, class.should_case_convert_jsii);
 								needs_case_conversion = class.should_case_convert_jsii;
 							} else {
 								// TODO I think in this case we shouldn't convert tye case but originally we had code that
@@ -838,38 +834,18 @@ impl JSifier {
 	}
 
 	fn jsify_resource_constructor(&self, constructor: &Constructor, no_parent: bool) -> String {
-		let mut lines = vec![];
-		lines.push("{".to_string());
-
-		// If there's no parent then this resource id derived from the base resource class (core.Resource) and we need
-		// to manually call its super
-		if no_parent {
-			lines.push("	super(scope, id);".to_string());
-		}
-
-		for statement in constructor.statements.statements.iter() {
-			let statement_str = self.jsify_statement(
-				constructor.statements.env.borrow().as_ref().unwrap(),
-				statement,
-				Phase::Preflight,
-			);
-			let result = statement_str.split("\n");
-			for l in result {
-				lines.push(format!("  {}", l));
-			}
-		}
-
-		lines.push("}".to_string());
-
 		format!(
-			"constructor(scope, id, {}) {{\n{}\n}}",
+			"constructor(scope, id, {}) {{\n{}\n{}\n}}",
 			constructor
 				.parameters
 				.iter()
 				.map(|(name, _)| name.name.clone())
 				.collect::<Vec<_>>()
 				.join(", "),
-			lines.join("\n")
+			// If there's no parent then this resource is derived from the base resource class (core.Resource) and we need
+			// to manually call its super
+			if no_parent { "	super(scope, id);" } else { "" },
+			self.jsify_scope(&constructor.statements, Phase::Preflight)
 		)
 	}
 
