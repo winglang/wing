@@ -6,7 +6,7 @@ use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics, Wi
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
-use wasm_util::{combine_ptr_and_length, ptr_to_string};
+use wasm_util::{ptr_to_string, string_to_combined_ptr};
 
 use crate::parser::Parser;
 use std::cell::RefCell;
@@ -84,8 +84,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 			err.iter().map(|d| format!("{}", d)).collect::<Vec<_>>().join("\n")
 		);
 
-		let leaked = result.into_bytes().leak();
-		combine_ptr_and_length(leaked.as_ptr() as u32, leaked.len() as u32)
+		string_to_combined_ptr(result)
 	} else {
 		0
 	}
