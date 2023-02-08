@@ -1569,7 +1569,7 @@ impl<'a> TypeChecker<'a> {
 						name: WING_CONSTRUCTOR_NAME.into(),
 						span: name.span.clone(),
 					},
-					SymbolKind::make_variable(constructor_type, false, class_env.flight),
+					SymbolKind::make_variable(constructor_type, false, constructor.signature.flight),
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -1598,7 +1598,7 @@ impl<'a> TypeChecker<'a> {
 					constructor_sig.return_type,
 					false,
 					true,
-					class_env.flight,
+					constructor.signature.flight,
 					stmt.idx,
 				);
 				self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
