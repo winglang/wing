@@ -1834,6 +1834,9 @@ impl<'a> TypeChecker<'a> {
 		statement_idx: usize,
 	) {
 		let mut wingii_types = wingii::type_system::TypeSystem::new();
+
+		// Loading the SDK is handled different from loading any other jsii modules because with the SDK we provide an exact
+		// location to locate the SDK, whereas for the other modules we need to search for them from the source directory.
 		let assembly_name = if library_name == WINGSDK_ASSEMBLY_NAME {
 			// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
 			let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
