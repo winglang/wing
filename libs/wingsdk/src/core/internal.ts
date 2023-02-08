@@ -19,7 +19,7 @@ export function makeHandler(
         `Didn't find any client code for resource ${k} - are you sure it's returning a core.Code?`
       );
     }
-    clients[k] = v.resource._toInflight().text;
+    clients[k] = clientCode;
   }
 
   for (const [k, v] of Object.entries(bindings.data ?? {})) {
