@@ -14,7 +14,7 @@ export async function test(entrypoints: string[]) {
 async function testOne(entrypoint: string) {
   const workdir = await mkdtemp(join(tmpdir(), "wing-test-"));
   await compile(entrypoint, { outDir: workdir, target: Target.SIM });
-  const wsim = (await readdir(workdir)).find(f => extname(f) === ".wsim");
+  const wsim = (await readdir(workdir)).find((f) => extname(f) === ".wsim");
   if (!wsim) {
     throw new Error("no .wsim file found in output directory");
   }
@@ -30,8 +30,10 @@ async function testOne(entrypoint: string) {
 
   // find the longest `path` of all the tests
   const longestPath = results.reduce(
-    (longest, result) => result.path.length > longest ? result.path.length : longest, 
-    0);
+    (longest, result) =>
+      result.path.length > longest ? result.path.length : longest,
+    0
+  );
 
   // if there are no inflight tests, add a dummy "pass" result
   // to indicate that compilation and preflight checks passed
@@ -44,21 +46,15 @@ async function testOne(entrypoint: string) {
   }
 
   for (const result of results.sort(sortTests)) {
-    const status = result.pass 
-      ? chalk.green("pass") 
-      : chalk.red("fail");
+    const status = result.pass ? chalk.green("pass") : chalk.red("fail");
 
     const pathWithPadding = chalk.whiteBright(result.path.padEnd(longestPath));
-    const error = result.error 
-      ? `\n${chalk.red(result.error)}`
-      : "";
+    const error = result.error ? `\n${chalk.red(result.error)}` : "";
 
-    const sep = chalk.gray(' | ');
-    const row = [
-      status,
-      basename(entrypoint),
-      pathWithPadding + error,
-    ].join(sep);
+    const sep = chalk.gray(" | ");
+    const row = [status, basename(entrypoint), pathWithPadding + error].join(
+      sep
+    );
 
     console.log(row);
 

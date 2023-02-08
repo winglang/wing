@@ -130,7 +130,7 @@ export function directorySnapshot(initialRoot: string) {
 }
 
 /**
- * Normalized windows paths to posix-like paths.
+ * Normalize windows paths to be posix-like.
  */
 export function normalPath(path: string) {
   if (process.platform === "win32") {

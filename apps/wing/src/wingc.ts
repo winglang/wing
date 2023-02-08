@@ -75,7 +75,10 @@ const HIGH_MASK = BigInt(32);
 /**
  * Runs the given WASM function in the Wing Compiler WASM instance.
  *
- * Assumptions:
+ * ### IMPORTANT
+ * For Windows support, ensure all paths provided by args or env are normalized to use forward slashes.
+ * 
+ * ### Assumptions
  * 1. The called WASM function is expecting a pointer and a length representing a string
  * 2. The string will be UTF-8 encoded
  * 3. The string will be less than 2^32 bytes long  (4GB)
