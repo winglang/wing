@@ -1664,7 +1664,7 @@ impl<'a> TypeChecker<'a> {
 				// Create an environment for the struct
 				let mut struct_env = SymbolEnv::new(None, self.types.void(), true, false, env.flight, stmt.idx);
 
-				// Add members to the struct env
+				// Add fields to the struct env
 				for field in members.iter() {
 					let field_type = self.resolve_type(&field.member_type, env, stmt.idx);
 					match struct_env.define(
