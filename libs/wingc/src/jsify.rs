@@ -535,23 +535,7 @@ impl JSifier {
 					"return;".into()
 				}
 			}
-			StmtKind::Class(AstClass {
-				name,
-				fields,
-				methods,
-				parent,
-				constructor,
-				is_resource,
-			}) => self.jsify_class(
-				env,
-				name,
-				*is_resource,
-				phase,
-				parent,
-				constructor,
-				&fields.iter().collect::<Vec<_>>(),
-				&methods.iter().collect::<Vec<_>>(),
-			),
+			StmtKind::Class(class) => self.jsify_class(env, class, phase),
 			StmtKind::Struct { name, extends, members } => {
 				format!(
 					"interface {}{} {{\n{}\n}}",
@@ -751,50 +735,42 @@ impl JSifier {
 	///   }
 	/// }
 	/// ```
-	fn jsify_resource(
-		&self,
-		env: &SymbolEnv,
-		name: &Symbol,
-		phase: Phase,
-		parent: &Option<UserDefinedType>,
-		constructor: &Constructor,
-		methods: &[&(Symbol, FunctionDefinition)],
-	) -> String {
+	fn jsify_resource(&self, env: &SymbolEnv, class: &AstClass, phase: Phase) -> String {
 		assert!(phase == Phase::Preflight);
 
 		// Lookup the resource type
-		let resource_type = env.lookup(name, None).unwrap().as_type().unwrap();
+		let resource_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
 		// Get fields to be captured by resource's client
 		let captured_fields = self.get_captures(resource_type);
 
 		// Jsify inflight client
-		let inflight_methods = methods
+		let inflight_methods = class
+			.methods
 			.iter()
 			.filter(|(_, m)| m.signature.flight == Phase::Inflight)
-			.map(|t| *t)
 			.collect::<Vec<_>>();
-		self.jsify_resource_client(env, name, &captured_fields, &inflight_methods, parent);
+		self.jsify_resource_client(env, &class.name, &captured_fields, &inflight_methods, &class.parent);
 
 		// Get all preflight methods to be jsified to the preflight class
-		let preflight_methods = methods
+		let preflight_methods = class
+			.methods
 			.iter()
 			.filter(|(_, m)| m.signature.flight != Phase::Inflight)
-			.map(|t| *t)
 			.collect::<Vec<_>>();
 
-		let toinflight_method = self.jsify_toinflight_method(name, &captured_fields);
+		let toinflight_method = self.jsify_toinflight_method(&class.name, &captured_fields);
 
 		// Jsify class
 		let resource_class = format!(
 			"class {}{} {{\n{}\n{}\n{}\n}}",
-			self.jsify_symbol(name),
-			if let Some(parent) = parent {
+			self.jsify_symbol(&class.name),
+			if let Some(parent) = &class.parent {
 				format!(" extends {}", self.jsify_user_defined_type(parent))
 			} else {
 				format!(" extends {}.{}", STDLIB, WINGSDK_RESOURCE)
 			},
-			self.jsify_resource_constructor(constructor, parent.is_none()),
+			self.jsify_resource_constructor(&class.constructor, class.parent.is_none()),
 			preflight_methods
 				.iter()
 				.map(|(n, m)| format!(
@@ -826,7 +802,7 @@ impl JSifier {
 			.map(|(method_name, ..)| {
 				format!(
 					"{}._annotateInflight(\"{}\", {{{}}});",
-					name.name, method_name.name, default_annotation
+					class.name.name, method_name.name, default_annotation
 				)
 			})
 			.collect_vec();
@@ -965,41 +941,33 @@ impl JSifier {
 		fs::write(&relative_file_path, client_source).expect("Writing client inflight source");
 	}
 
-	fn jsify_class(
-		&self,
-		env: &SymbolEnv,
-		name: &Symbol,
-		is_resource: bool,
-		phase: Phase,
-		parent: &Option<UserDefinedType>,
-		constructor: &Constructor,
-		fields: &[&ClassField],
-		methods: &[&(Symbol, FunctionDefinition)],
-	) -> String {
-		if is_resource {
-			return self.jsify_resource(env, name, phase, parent, constructor, methods);
+	fn jsify_class(&self, env: &SymbolEnv, class: &AstClass, phase: Phase) -> String {
+		if class.is_resource {
+			return self.jsify_resource(env, class, phase);
 		}
 
 		format!(
 			"class {}{}\n{{\n{}\n{}\n{}\n}}",
-			self.jsify_symbol(name),
-			if let Some(parent) = parent {
+			self.jsify_symbol(&class.name),
+			if let Some(parent) = &class.parent {
 				format!(" extends {}", self.jsify_user_defined_type(parent))
 			} else {
 				"".to_string()
 			},
 			self.jsify_function(
 				Some("constructor"),
-				&constructor.parameters,
-				&constructor.statements,
+				&class.constructor.parameters,
+				&class.constructor.statements,
 				phase
 			),
-			fields
+			class
+				.fields
 				.iter()
 				.map(|m| self.jsify_class_member(m))
 				.collect::<Vec<String>>()
 				.join("\n"),
-			methods
+			class
+				.methods
 				.iter()
 				.map(|(n, m)| format!(
 					"{} = {}",
