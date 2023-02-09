@@ -1,6 +1,7 @@
 {
   "name": "sdk",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
+
   "implicitDependencies": ["wing-api-checker", "jsii-docgen"],
   "targets": {
     "build": {
@@ -16,8 +17,8 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": ["npm run bump", "npm pack", "npm run unbump"],
-        "parallel": false,
-        "cwd": "libs/wingsdk"
+        "cwd": "libs/wingsdk",
+        "parallel": false
       }
     }
   }
