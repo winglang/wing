@@ -53,6 +53,8 @@ body:
     - SDK
     - Wing Console
     - IDE Extension
+    - CLI
+    - Plugins
     - Documentation
     - Development Environment
     - Contributor Experience
