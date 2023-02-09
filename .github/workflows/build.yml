@@ -182,6 +182,7 @@ jobs:
       matrix:
         runner:
           - ubuntu-latest
+          - windows-latest
         node: [18, 19]
     runs-on: ${{ matrix.runner }}
     env:
