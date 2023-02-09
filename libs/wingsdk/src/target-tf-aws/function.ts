@@ -35,7 +35,6 @@ export class Function extends cloud.FunctionBase {
   private policyStatements?: any[];
   /**
    * Unqualified Function ARN
-   *
    * @returns Unqualified ARN of the function
    */
   public readonly arn: string;
