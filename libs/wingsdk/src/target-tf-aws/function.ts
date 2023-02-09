@@ -38,8 +38,8 @@ export class Function extends cloud.FunctionBase {
    * @returns Unqualified ARN of the function
    */
   public readonly arn: string;
-  /** 
-   * Qualified Function ARN 
+  /**
+   * Qualified Function ARN
    * @returns Qualified ARN of the function
    */
   public readonly qualifiedArn: string;
