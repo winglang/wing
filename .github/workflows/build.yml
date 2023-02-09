@@ -121,20 +121,13 @@ jobs:
       - name: Lint Nx
         run: npx nx workspace-lint
 
-      - name: Build and Unit Test
+      - name: Build, Test, and Package
         uses: MansaGroup/nrwl-nx-action@v2
         with:
-          targets: "build"
+          targets: "build,test,package"
           all: true
           # Exclude E2E testing
           args: "--exclude=hangar --configuration=release --output-style=stream --verbose"
-
-      - name: Create NPM packages
-        uses: MansaGroup/nrwl-nx-action@v2
-        with:
-          targets: "package"
-          projects: "winglang,sdk"
-          args: "--configuration=release --output-style=stream --verbose"
 
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v2
