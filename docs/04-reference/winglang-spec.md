@@ -9,7 +9,7 @@ keywords: [Wing reference, Wing language, language, Wing language spec, Wing pro
 
 This document is a *specification* of the programming language, and many features
 are still not implemented (see [project board](https://github.com/orgs/winglang/projects/1)).
- 
+
 :::
 
 ## 0. Preface
@@ -782,30 +782,153 @@ let f = (arg1: num, var arg2: num) => {
 
 ### 1.7 Optionality
 
-Symbol `?` can mark a type as optional.  
-Optionality means the value behind type can be either present or nil.
+Tri-state "nullity" values (`null`, `undefined` in JavaScript) are a primary source of bugs in
+software. Being able to guarantee that a value will never be null makes it possible to write safe
+code without thinking about nullity.
 
-Rules of optionality apply to the entire new container type of `type?` and not
-the value behind it (`type`).  
+So we are going to try and design Wing without allowing users to explicitly assign or use the `nil`
+value. Instead, the language offers syntax to support the various use cases that arise when dealing
+with *optionality*.
 
-Using the `??` operator allows one to safely access the value behind an optional
-variable by always providing a default, in case the variable is nil. This forces
-a value to be present for the l-value (left hand side of the assignment operator
-and guarantees what's returned is type-stripped from its `?` keyword).
+#### 1.7.1 Definition
 
-> ```TS
-> let x? = 44;
-> let y = x ?? 55;
+The symbol `?` can mark a variable, function argument, return type or a field as optional (same as
+`Option<T>` in Rust).
+
+```js
+struct Person {
+  name: str;
+  address: str?;
+}
+
+let x = (foo: str?): num? => {
+  print(foo ?? "foo is not defined");
+  return 12;
+};
+
+class Foo {
+  my_opt: num?;
+}
+```
+
+In the above struct, the `address` field, the `foo` argument and the `my_opt` field are all marked
+as optionals using `?`.
+
+This means, for example, that when a `Person` can be initialized without defining the `address`
+field:
+
+```js
+let my_person = Person { name: "david" };
+```
+
+Let's look at various use cases for how to interact with optionals.
+
+#### 1.7.2 Assignment
+
+A reassignable variable or field can only be assigned to a concrete value. There is no way to
+explicitly assign a "null" value:
+
+```js
+let var x: str?;
+x = "hello"; // OK
+
+x = nil;
+//  ^^^ ERROR: no explicit `nil` in this language.
+```
+
+> You can be a smart-ass and do this:
+> ```js
+> let make_nil = (): str? => { return ?; }
+> x = make_nil();
 > ```
+> Good luck with that.
 
-<details><summary>Equivalent TypeScript Code</summary>
+#### 1.7.2 Testing if an optional has a value
 
-> ```TS
-> const x: number? = 44;
-> const y: number = x ?? 55;
-> ```
+Object of type `str?` cannot be used within `==` or `!=` expressions because we don't have a null
+value. Instead, use the the `?` operator to get a `bool` that indicates if the optional is defined
+or not:
 
-</details>
+```js
+let is_address_defined = my_person.address?; // type is `bool`
+
+// or within a condition
+if my_person.address? {
+  print("address is defined but i do not care what it is");
+}
+
+// can be negated
+if !my_person.address? {
+  print("address is not defined");
+}
+```
+
+#### 1.7.3 Unwrapping within conditions
+
+The `if let` statement can be used to test if an optional is defined an *unwrap* it into a
+non-optional variable defined inside the block:
+
+```js
+if let address = my_person.address {
+  assert(address.len > 0);
+  print(address); // address is type `str`
+}
+```
+
+#### 1.7.4 Unwrap and provide a default value
+
+The `??` operator can be used to unwrap or provide a default value:
+
+```js
+let address = my_person.address ?? "Planet Earth";
+```
+
+#### 1.7.5 Throwing an error if a value is not defined (P2)
+
+Another common use case is to bail out with an error in case a value is not defined. To support this
+`throw()` can be used as an r-value. This promotes defensive and safe programming.
+
+```js
+let address = my_person.address ?? throw("address is required");
+```
+
+#### 1.7.6 Optional return types
+
+If a function returns an optional type, use the `return ?` statement to indicate that the value is
+not defined.
+
+```js
+let parse_last_name = (full_name: str): str? => {
+  let parts = full_name.split(" ");
+  if parts.len < 2 {
+    return ?;
+  }
+
+  return parts.at(1);
+}
+```
+
+#### 1.7.7 Lazy evaluation (P2)
+
+The `?=` expression can be used to implement lazy evaluation:
+
+```js
+class Person {
+  first: str;
+  last: str;
+  var full_name: str?;
+  
+  init(first: str, last: str) {
+    this.first = first;
+    this.last = last;
+  }
+
+  // lazy evaluation
+  full_name(): str {
+    return this.full_name ?= "${this._first} ${this._last}";
+  }
+}
+```
 
 [`▲ top`][top]
 
