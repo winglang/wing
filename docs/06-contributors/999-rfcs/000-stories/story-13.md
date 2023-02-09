@@ -1,10 +1,9 @@
-# User Story 13 - Task List with uuid, Json and duration
+# User Story 13 - Task List with Json and duration
 
 > **Status**: Expected released on 2023/02/16
 
 The following code is an iteration of Wing's task list.
 This version of it includes the following functional changes:
-- Using npm's uuid package inflight instead of the counter resource 
 - Storing Json instead of a string
 - Using duration for estimated effort
 
@@ -28,8 +27,6 @@ Also, it includes some non-functional requirements:
 
 ```ts (wing)
 bring cloud;
-// need to run: npm install @winglibs/uuid --save
-bring uuid;
 
 /**
  * Represents a cloud task list.
@@ -37,9 +34,13 @@ bring uuid;
 resource TaskList {
   /** stores the tasks */
   _bucket: cloud.Bucket;
+
+  /** used to create a global id */
+  _counter: cloud.Counter;
   
   init() {
     this._bucket = new cloud.Bucket();
+    this._counter = new cloud.Counter();
   }
 
   /** 
@@ -47,7 +48,7 @@ resource TaskList {
    * @returns The ID of the new task.
    */
   inflight add_task(title: str): str {
-    let id = uuid.Uuid.v4();
+    let id = "${this._counter.inc()}";
     let j = Json { 
       title: title, 
     };
