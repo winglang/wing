@@ -2337,7 +2337,7 @@ let schedule_props = cloud.ScheduleProps{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.cron">cron</a></code> | <code>str</code> | Trigger events according to a cron schedule. |
+| <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.cron">cron</a></code> | <code>str</code> | Trigger events according to a cron schedule using the UNIX cron format. |
 | <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.rate">rate</a></code> | <code>std.Duration</code> | Trigger events at a periodic rate. |
 
 ---
@@ -2351,14 +2351,16 @@ cron: str;
 - *Type:* str
 - *Default:* undefined
 
-Trigger events according to a cron schedule.
+Trigger events according to a cron schedule using the UNIX cron format.
+
+[minute] [hour] [day of month] [month] [day of week]
 
 ---
 
 *Example*
 
 ```wing
-"0/1 * ? * * *"
+"0/1 * ? * *"
 ```
 
 
