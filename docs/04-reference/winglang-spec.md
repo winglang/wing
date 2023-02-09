@@ -925,7 +925,7 @@ class Person {
 
   // lazy evaluation
   full_name(): str {
-    return this.full_name ?= "${this._first} ${this._last}";
+    return this.full_name =? "${this._first} ${this._last}";
   }
 }
 ```
