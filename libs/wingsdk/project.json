@@ -1,13 +1,12 @@
 {
   "name": "sdk",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-
   "implicitDependencies": ["wing-api-checker", "jsii-docgen"],
   "targets": {
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["npm run pre-compile", "npm run compile", "ls -la ."],
+        "commands": ["npm run pre-compile", "npm run compile"],
         "cwd": "libs/wingsdk",
         "parallel": false
       }
