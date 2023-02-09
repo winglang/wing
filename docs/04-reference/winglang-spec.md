@@ -252,7 +252,7 @@ To obtain an array of all the keys within a JSON object use the `Json.keys(o)` m
 
 
 ```js
-let j = { hello: 123, world: [ 1, 2, 3 ] };
+let j = Json { hello: 123, world: [ 1, 2, 3 ] };
 assert(Json.keys(j) == ["hello", "world"]);
 ```
 
