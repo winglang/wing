@@ -910,7 +910,7 @@ let parse_last_name = (full_name: str): str? => {
 
 #### 1.7.7 Lazy evaluation (P2)
 
-The `?=` expression can be used to implement lazy evaluation:
+The `=?` expression can be used to implement lazy evaluation:
 
 ```js
 class Person {
