@@ -136,7 +136,6 @@ test("cron with more than five values", () => {
   expect(
     () =>
       new cloud.Schedule(app, "Schedule", {
-        rate: std.Duration.fromSeconds(30),
         cron: "0/1 * ? * * *",
       })
   ).toThrow(/cron only accepts five values (minute, hour, day of month, month, day of week)./);
