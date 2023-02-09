@@ -125,7 +125,7 @@ test("schedule with rate and cron simultaneously", () => {
         rate: std.Duration.fromSeconds(30),
         cron: "0/1 * ? * *",
       })
-  ).toThrow(/rate and cron cannot be configured simultaneously./);
+  ).toThrow("rate and cron cannot be configured simultaneously.");
 });
 
 test("cron with more than five values", () => {
@@ -138,7 +138,7 @@ test("cron with more than five values", () => {
       new cloud.Schedule(app, "Schedule", {
         cron: "0/1 * ? * * *",
       })
-  ).toThrow(/cron only accepts five values (minute, hour, day of month, month, day of week)./);
+  ).toThrow("cron only accepts five values (minute, hour, day of month, month, day of week).");
 });
 
 test("schedule without rate or cron", () => {
@@ -147,7 +147,7 @@ test("schedule without rate or cron", () => {
 
   // THEN
   expect(() => new cloud.Schedule(app, "Schedule")).toThrow(
-    /rate or cron need to be filled./
+    "rate or cron need to be filled."
   );
 });
 
@@ -161,5 +161,5 @@ test("schedule with rate less than 1 minute", () => {
       new cloud.Schedule(app, "Schedule", {
         rate: std.Duration.fromSeconds(30),
       })
-  ).toThrow(/rate can not be set to less than 1 minute./);
+  ).toThrow("rate can not be set to less than 1 minute.");
 });
