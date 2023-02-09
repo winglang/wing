@@ -15,7 +15,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NODEJS_VERSION: "18.x"
   # Testing runs out of memory without this
   NODE_OPTIONS: "--max-old-space-size=4096"
   PROJEN_BUMP_VERSION: "0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}"
@@ -100,10 +99,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODEJS_VERSION }}
+      - name: Setup Node/NPM
+        uses: volta-cli/action@v4.0.0
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
@@ -222,11 +219,6 @@ jobs:
     steps:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODEJS_VERSION }}
 
       - name: Tag commit
         uses: tvdias/github-tagger@v0.0.1
