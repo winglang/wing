@@ -7,7 +7,7 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["npm run pre-compile", "npm run compile", "ls -al ."],
+        "commands": ["npm run pre-compile", "npm run compile", "ls -la ."],
         "cwd": "libs/wingsdk",
         "parallel": false
       }
