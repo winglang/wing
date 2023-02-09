@@ -21,8 +21,9 @@ export interface ScheduleProps {
   readonly rate?: Duration;
 
   /**
-   * Trigger events according to a cron schedule.
-   * @example "0/1 * ? * * *"
+   * Trigger events according to a cron schedule using the UNIX cron format.
+   * [minute] [hour] [day of month] [month] [day of week]
+   * @example "0/1 * ? * *"
    * @default undefined
    */
   readonly cron?: string;

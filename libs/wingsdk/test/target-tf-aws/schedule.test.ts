@@ -52,7 +52,7 @@ test("schedule behavior with cron", () => {
     `async handle(event) { console.log("Received: ", event); }`
   );
   const schedule = new cloud.Schedule(app, "Schedule", {
-    cron: "0/1 * ? * * *",
+    cron: "0/1 * ? * *",
   });
   schedule.onTick(fn);
   const output = app.synth();
@@ -94,7 +94,7 @@ test("schedule with two functions", () => {
     `async handle(event) { console.log("Received: ", event); }`
   );
   const schedule = new cloud.Schedule(app, "Schedule", {
-    cron: "0/1 * ? * * *",
+    cron: "0/1 * ? * *",
   });
   schedule.onTick(fn1);
   schedule.onTick(fn2);
@@ -123,7 +123,7 @@ test("schedule with rate and cron simultaneously", () => {
     () =>
       new cloud.Schedule(app, "Schedule", {
         rate: std.Duration.fromSeconds(30),
-        cron: "0/1 * ? * * *",
+        cron: "0/1 * ? * *",
       })
   ).toThrow(/rate and cron cannot be configured simultaneously./);
 });
