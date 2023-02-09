@@ -607,7 +607,7 @@ struct DatetimeComponents {
 class Datetime {
   static utc_now(): Datetime;             // returns the current time in UTC timezone
   static system_now(): Datetime;          // returns the current time in system timezone
-  static from_iso(iso: str): Datetime;    // creates a instance from an ISO-8601 string
+  static from_iso(iso: str): Datetime;    // creates an instance from an ISO-8601 string
   static from_components(c: DatetimeComponents): Datetime;
 
   timestamp: num;     // Date.valueOf()/1000 (non-leap seconds since epoch)
