@@ -172,6 +172,21 @@
         },
         {
           "exec": "vitest --run --coverage"
+        },
+        {
+          "exec": "rm ~/.npmrc"
+        },
+        {
+          "exec": "npm cache clean --force"
+        },
+        {
+          "exec": "npm config set registry http://registry.npmjs.org"
+        },
+        {
+          "exec": "npm i -g winglang"
+        },
+        {
+          "exec": "export PLAYWRIGHT_TEST=true && xvfb-maybe --auto-servernum --server-args=\"-screen 0 3440x1440x24\" -- npx playwright test"
         }
       ]
     },

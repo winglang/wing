@@ -1,6 +1,6 @@
 export const SpinnerLoader = () => {
   return (
-    <div role="status">
+    <div role="status" data-testid="main-view-loader">
       <svg
         aria-hidden="true"
         className="w-8 h-8 text-gray-200 animate-spin dark:text-slate-600 fill-slate-600"

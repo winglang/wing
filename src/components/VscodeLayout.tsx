@@ -157,7 +157,10 @@ export const VscodeLayout = ({
   }, [explorerTree, cloudAppState]);
 
   return (
-    <div className="h-full flex flex-col bg-slate-50 select-none">
+    <div
+      data-testid="vscode-layout"
+      className="h-full flex flex-col bg-slate-50 select-none"
+    >
       {showBanner && (
         <HeaderBanner
           title={
@@ -229,7 +232,7 @@ export const VscodeLayout = ({
             )}
           </div>
 
-          <div className="flex-1 flex">
+          <div data-testid="map-view" className="flex-1 flex">
             <div className="flex-1 relative">
               <ScrollableArea overflowX className="flex flex-col">
                 {currentNode.data &&

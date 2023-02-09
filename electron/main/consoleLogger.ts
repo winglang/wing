@@ -21,6 +21,8 @@ export interface ConsoleLogger {
 export const createConsoleLogger = (
   onLog: (channel: string, args: string) => void,
 ): ConsoleLogger => {
+  log.transports.console.bind(process.stdout);
+
   return {
     messages: new Array<LogEntry>(),
     verbose(message, source) {

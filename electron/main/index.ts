@@ -16,6 +16,8 @@ config();
 
 log.info("Application entrypoint");
 
+log.transports.console.bind(process.stdout);
+
 if (process.env.SEGMENT_WRITE_KEY) {
   const segment = new SegmentAnalytics(process.env.SEGMENT_WRITE_KEY);
   segment.analytics.track({
@@ -60,9 +62,15 @@ async function createWindow(options: { title?: string; port: number }) {
   });
 
   if (import.meta.env.DEV) {
+    log.info("DEV mode");
+    log.info("loadURL", `${import.meta.env.BASE_URL}?port=${options.port}`);
     void window.loadURL(`${import.meta.env.BASE_URL}?port=${options.port}`);
-    window.webContents.openDevTools();
+    if (!process.env.PLAYWRIGHT_TEST && !process.env.CI) {
+      window.webContents.openDevTools();
+    }
   } else {
+    log.info("PROD mode");
+    log.info("loadFile", path.join(ROOT_PATH.dist, "index.html"));
     void window.loadFile(path.join(ROOT_PATH.dist, "index.html"), {
       query: {
         port: options.port.toString(),
@@ -304,10 +312,12 @@ async function main() {
     );
   }
 
-  if (import.meta.env.DEV) {
-    const installExtension = await import("electron-devtools-installer");
-    await installExtension.default(installExtension.REACT_DEVELOPER_TOOLS.id);
-
+  if (import.meta.env.DEV || process.env.PLAYWRIGHT_TEST || process.env.CI) {
+    log.info("Running in dev mode, skipping Get Started window");
+    if (!process.env.PLAYWRIGHT_TEST && !process.env.CI) {
+      const installExtension = await import("electron-devtools-installer");
+      await installExtension.default(installExtension.REACT_DEVELOPER_TOOLS.id);
+    }
     // Open the demo Wing file (includes compiling).
     await windowManager.open(`${__dirname}/../../../../demo/index.w`);
 

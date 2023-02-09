@@ -25,6 +25,10 @@
       "type": "build"
     },
     {
+      "name": "@playwright/test",
+      "type": "build"
+    },
+    {
       "name": "@popperjs/core",
       "type": "build"
     },
@@ -68,7 +72,7 @@
     },
     {
       "name": "@types/node",
-      "version": "^16",
+      "version": "^18",
       "type": "build"
     },
     {
@@ -232,6 +236,14 @@
       "type": "build"
     },
     {
+      "name": "playwright",
+      "type": "build"
+    },
+    {
+      "name": "playwright-core",
+      "type": "build"
+    },
+    {
       "name": "postcss",
       "type": "build"
     },
@@ -314,6 +326,10 @@
     },
     {
       "name": "xstate",
+      "type": "build"
+    },
+    {
+      "name": "xvfb-maybe",
       "type": "build"
     },
     {

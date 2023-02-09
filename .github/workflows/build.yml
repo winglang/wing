@@ -27,11 +27,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18.x
       - name: Install dependencies
         run: npm install
       - name: build
         run: npx projen build
+      - name: upload playwright report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: playwright-report
+          path: playwright-report/
       - name: Find mutations
         id: self_mutation
         run: |-

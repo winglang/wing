@@ -65,10 +65,14 @@ const project = new TypeScriptProject({
     "electron-store",
     "analytics-node",
     "xstate",
+    "@playwright/test",
+    "playwright",
+    "playwright-core",
+    "xvfb-maybe",
   ],
   // @ts-ignore
-  minNodeVersion: "16.0.0",
-  workflowNodeVersion: "16.x",
+  minNodeVersion: "18.0.0",
+  workflowNodeVersion: "18.x",
 });
 
 project.addTask("dev").exec("tsx scripts/dev.mts");
@@ -82,14 +86,38 @@ project
 
 project
   .tryFindObjectFile(".github/workflows/build.yml")
+  ?.project.tryFindObjectFile(".github/workflows/build.yml")
   ?.addOverride(
     "jobs.build.env.SEGMENT_WRITE_KEY",
     "${{ secrets.SEGMENT_WRITE_KEY }}",
   );
 
+project.buildWorkflow?.addPostBuildSteps({
+  name: "upload playwright report",
+  if: "${{ always() }}",
+  uses: "actions/upload-artifact@v2",
+  with: {
+    name: "playwright-report",
+    path: "playwright-report/",
+  },
+});
+
 project.compileTask.exec("tsx scripts/build.mts");
 
 project.tasks.tryFind("package")?.reset();
+
+project.tasks.tryFind("test")?.exec("rm ~/.npmrc");
+project.tasks.tryFind("test")?.exec("npm cache clean --force");
+project.tasks
+  .tryFind("test")
+  ?.exec("npm config set registry http://registry.npmjs.org");
+project.tasks.tryFind("test")?.exec("npm i -g winglang");
+
+project.tasks
+  .tryFind("test")
+  ?.exec(
+    'export PLAYWRIGHT_TEST=true && xvfb-maybe --auto-servernum --server-args="-screen 0 3440x1440x24" -- npx playwright test',
+  );
 
 project.package.addField("main", "dist/vite/electron/main/index.js");
 
@@ -112,7 +140,7 @@ project.release?.addJobs({
     steps: [
       {
         uses: "actions/setup-node@v3",
-        with: { "node-version": "16.x" },
+        with: { "node-version": "18.x" },
       },
       {
         name: "Checkout",
@@ -226,10 +254,13 @@ for (const tsconfig of tsconfigFiles) {
       include.push(
         "./scripts/**/*",
         "./test/**/*",
+        "./e2e/**/*",
         "./vite.config.ts",
+        "./vitest.config.ts",
         "./.projenrc.ts",
         "./tailwind.config.cjs",
         "./postcss.config.cjs",
+        "./playwright.config.ts",
       );
     }
     tsconfig.addOverride("include", include);
@@ -238,6 +269,8 @@ for (const tsconfig of tsconfigFiles) {
 
 project.addGitIgnore("*.env");
 project.addGitIgnore("/release");
+project.addGitIgnore("/test-results");
+project.addGitIgnore("/playwright-report");
 
 if (project.eslint) {
   project.tasks
