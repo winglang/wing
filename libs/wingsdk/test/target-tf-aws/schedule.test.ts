@@ -138,7 +138,9 @@ test("cron with more than five values", () => {
       new cloud.Schedule(app, "Schedule", {
         cron: "0/1 * ? * * *",
       })
-  ).toThrow("cron only accepts five values (minute, hour, day of month, month, day of week).");
+  ).toThrow(
+    "cron only accepts five values (minute, hour, day of month, month, day of week)."
+  );
 });
 
 test("schedule without rate or cron", () => {

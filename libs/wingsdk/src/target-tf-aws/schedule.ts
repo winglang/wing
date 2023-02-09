@@ -31,7 +31,9 @@ export class Schedule extends cloud.ScheduleBase {
       throw new Error("rate can not be set to less than 1 minute.");
     }
     if (cron && cron.split(" ").length > 5) {
-      throw new Error("cron only accepts five values (minute, hour, day of month, month, day of week).");
+      throw new Error(
+        "cron only accepts five values (minute, hour, day of month, month, day of week)."
+      );
     }
 
     /*
