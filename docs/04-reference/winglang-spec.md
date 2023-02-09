@@ -333,12 +333,12 @@ let my_array = Json [1,2,3,"hello"];
 Array<num>.from_json(my_array); // RUNTIME ERROR: unable to parse `[1,2,3,"hello"]` as an array of `num`.
 ```
 
-
-Use `unsafe: true` to disable this check at your own risk:
+Use `unsafe: true` to disable this check at your own risk (P2):
 
 ```js
-let x = num.from_json(Json [1,2,3], unsafe: true);
-print(x + 5); // OUTPUT: 1,2,35
+let trust_me = Json [1,2,3];
+let x = Array<num>.from_json(trust_me, unsafe: true);
+assert(x.at(1) == 2);
 ```
 
 For each `from_json()`, there is a `try_from_json()` method which returns an optional `T?` which
