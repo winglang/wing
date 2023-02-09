@@ -128,6 +128,20 @@ test("schedule with rate and cron simultaneously", () => {
   ).toThrow(/rate and cron cannot be configured simultaneously./);
 });
 
+test("cron with more than five values", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+
+  // THEN
+  expect(
+    () =>
+      new cloud.Schedule(app, "Schedule", {
+        rate: std.Duration.fromSeconds(30),
+        cron: "0/1 * ? * * *",
+      })
+  ).toThrow(/cron only accepts five values (minute, hour, day of month, month, day of week)./);
+});
+
 test("schedule without rate or cron", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
