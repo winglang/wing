@@ -29,6 +29,7 @@ jobs:
             repo
             playground
             vscode
+            plugins
           types: |-
             feat
             fix
