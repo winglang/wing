@@ -33,9 +33,16 @@ export class Function extends cloud.FunctionBase {
   private readonly function: LambdaFunction;
   private readonly role: IamRole;
   private policyStatements?: any[];
-  /** Function ARN */
+  /**
+   * Unqualified Function ARN
+   *
+   * @returns Unqualified ARN of the function
+   */
   public readonly arn: string;
-  /** Qualified ARN */
+  /** 
+   * Qualified Function ARN 
+   * @returns Qualified ARN of the function
+   */
   public readonly qualifiedArn: string;
 
   constructor(
