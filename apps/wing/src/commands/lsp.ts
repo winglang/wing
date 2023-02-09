@@ -26,6 +26,7 @@ export async function run_server() {
         completionProvider: {
           triggerCharacters: ["."],
         },
+        hoverProvider: true,
       },
     };
     return result;
@@ -52,12 +53,28 @@ export async function run_server() {
       wingc,
       "wingc_on_semantic_tokens",
       JSON.stringify(params)
-    ) as string;
-    return JSON.parse(result) as any;
+    );
+    if (result == 0) {
+      return null;
+    } else {
+      return JSON.parse(result as string) as any;
+    }
+  });
+  connection.onHover(async (params) => {
+    const result = wingCompiler.invoke(
+      wingc,
+      "wingc_on_hover",
+      JSON.stringify(params)
+    );
+    if (result == 0) {
+      return null;
+    } else {
+      return JSON.parse(result as string) as any;
+    }
   });
 
   /**
-   * This function is called by the WASM code to immediately 
+   * This function is called by the WASM code to immediately
    * send a notification to the client.
    */
   function send_notification(
