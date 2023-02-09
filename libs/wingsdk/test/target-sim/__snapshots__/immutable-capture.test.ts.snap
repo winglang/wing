@@ -17,7 +17,7 @@ Object {
           "environmentVariables": Object {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -113,7 +113,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/Function/index.js": "var $logger = function(env) {
+  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -273,7 +273,7 @@ Object {
             "BUCKET_HANDLE_4fecd6d0": "\${root/B1#attrs.handle}",
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -401,7 +401,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/Function/index.js": "var $logger = function(env) {
+  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -588,7 +588,7 @@ Object {
           "environmentVariables": Object {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -684,7 +684,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/Function/index.js": "var $logger = function(env) {
+  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -824,7 +824,7 @@ Object {
           "environmentVariables": Object {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -920,7 +920,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/Function/index.js": "var $logger = function(env) {
+  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -1057,7 +1057,7 @@ Object {
           "environmentVariables": Object {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1153,7 +1153,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/Function/index.js": "var $logger = function(env) {
+  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -1287,7 +1287,7 @@ Object {
           "environmentVariables": Object {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1383,7 +1383,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/Function/index.js": "var $logger = function(env) {
+  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -1523,7 +1523,7 @@ Object {
           "environmentVariables": Object {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1619,7 +1619,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/Function/index.js": "var $logger = function(env) {
+  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -1765,7 +1765,7 @@ Object {
           "environmentVariables": Object {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1861,7 +1861,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/Function/index.js": "var $logger = function(env) {
+  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -2013,7 +2013,7 @@ Object {
           "environmentVariables": Object {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -2109,7 +2109,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/Function/index.js": "var $logger = function(env) {
+  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -2272,7 +2272,7 @@ Object {
             "BUCKET_HANDLE_4fecd6d0": "\${root/B1#attrs.handle}",
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -2400,7 +2400,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/Function/index.js": "var $logger = function(env) {
+  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -2580,7 +2580,7 @@ Object {
           "environmentVariables": Object {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -2676,7 +2676,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/Function/index.js": "var $logger = function(env) {
+  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -2810,7 +2810,7 @@ Object {
           "environmentVariables": Object {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -2906,7 +2906,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/Function/index.js": "var $logger = function(env) {
+  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -3049,7 +3049,7 @@ Object {
           "environmentVariables": Object {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -3145,7 +3145,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/Function/index.js": "var $logger = function(env) {
+  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -3285,7 +3285,7 @@ Object {
           "environmentVariables": Object {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -3381,7 +3381,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/Function/index.js": "var $logger = function(env) {
+  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -3518,7 +3518,7 @@ Object {
           "environmentVariables": Object {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -3614,7 +3614,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/Function/index.js": "var $logger = function(env) {
+  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -3757,7 +3757,7 @@ Object {
           "environmentVariables": Object {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -3853,7 +3853,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/Function/index.js": "var $logger = function(env) {
+  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -4046,7 +4046,7 @@ Object {
             "BUCKET_HANDLE_ea7944ef": "\${root/B4#attrs.handle}",
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -4222,7 +4222,7 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "assets/Function/index.js": "var $logger = function(env) {
+  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);

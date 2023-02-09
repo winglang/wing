@@ -1,13 +1,8 @@
-import { test, expect, beforeAll, afterAll, vitest } from "vitest";
-import { posix as path, basename } from "path";
-import { runServer } from "verdaccio";
+import { test, expect, beforeAll } from "vitest";
+import * as path from "path";
+import { execa } from "execa";
+import * as fs from "fs-extra";
 import * as walk from "walkdir";
-import "zx/globals";
-
-require("dotenv").config();
-const registryServer = await runServer("./verdaccio.config.yaml");
-const registryPort = 4873;
-const registryUrl = `http://localhost:${registryPort}`;
 
 const repoRoot = path.resolve(__dirname, "../../..");
 const testDir = path.join(repoRoot, "examples/tests");
@@ -15,11 +10,9 @@ const validTestDir = path.join(testDir, "valid");
 const hangarDir = path.join(repoRoot, "tools/hangar");
 const tmpDir = path.join(hangarDir, "tmp");
 const npmCacheDir = path.join(tmpDir, ".npm");
-const registryDir = path.join(tmpDir, "registry");
 
-const yarnBin = path.join(hangarDir, "node_modules/.bin/yarn");
 const npmBin = path.join(hangarDir, "node_modules/.bin/npm");
-const npxBin = path.join(hangarDir, "node_modules/.bin/npx");
+const wingBin = path.join(tmpDir, "node_modules/.bin/wing");
 
 const targetWingTGZ =
   process.env.HANGAR_WING_TGZ ??
@@ -28,52 +21,48 @@ const targetWingSDKTGZ =
   process.env.HANGAR_WINGSDK_TGZ ??
   path.join(repoRoot, `libs/wingsdk/winglang-sdk-0.0.0.tgz`);
 
+const basePackageJson = {
+  name: "hangar-test",
+  description: "",
+  version: "0.0.0",
+  dependencies: {
+    "@winglang/sdk": `file:${targetWingSDKTGZ}`,
+    winglang: `file:${targetWingTGZ}`,
+  },
+  devDependencies: {},
+};
+
 const validWingFiles = fs
   .readdirSync(validTestDir)
   .filter((f) => f.endsWith(".w"));
 
 const shellEnv = {
   ...process.env,
-  npm_config_registry: registryUrl,
-  "npm_config_@winglang:registry": registryUrl,
   npm_config_audit: "false",
   npm_config_progress: "false",
   npm_config_yes: "true",
   npm_config_cache: npmCacheDir,
-  npm_config_userconfig: path.join(hangarDir, "test.npmrc"),
 };
 
-afterAll(async () => {
-  registryServer.close();
-});
-
 beforeAll(async () => {
-  await within(async () => {
-    $.env = shellEnv;
-    $.cwd = hangarDir;
+  Object.assign(process.env, shellEnv);
 
-    $.verbose = true;
-    await $`cd ${hangarDir}`;
+  // reset tmpDir
+  fs.removeSync(tmpDir);
+  fs.mkdirpSync(tmpDir);
+  fs.writeJsonSync(path.join(tmpDir, "package.json"), basePackageJson);
 
-    await $`rm -rf ${tmpDir}`;
-    await $`mkdir -p ${npmCacheDir}`;
-    await $`mkdir -p ${registryDir}`;
-
-    registryServer.listen(registryPort, () => {});
-    await $`${npmBin} publish --@winglang:registry=${registryUrl} ${targetWingTGZ}`;
-    await $`${npmBin} publish --@winglang:registry=${registryUrl} ${targetWingSDKTGZ}`;
-
-    // ensure version works before bothering with the rest of the tests
-    $.cwd = tmpDir;
-    await $`cd ${tmpDir}`;
-    await $`${yarnBin} init -y`;
-    await $`${yarnBin} add winglang --no-lockfile --ignore-engines`;
-    let yarnOutput = await $`node_modules/.bin/wing --version`;
-    let npxOutput = await $`${npxBin} winglang --version`;
-
-    expect(npxOutput.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
-    expect(yarnOutput.stdout).toStrictEqual(npxOutput.stdout);
+  // use execSync to install npm deps in tmpDir
+  console.debug(`Installing npm deps into ${tmpDir}...`);
+  await execa(npmBin, ["install", "--no-package-lock", "--ignore-engines"], {
+    cwd: tmpDir,
   });
+  console.debug(`Done!`);
+
+  const versionOutput = await execa(wingBin, ["--version"], {
+    cwd: tmpDir,
+  });
+  expect(versionOutput.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
 }, 1000 * 200);
 
 function sanitize_json_paths(path: string) {
@@ -92,77 +81,60 @@ function sanitize_json_paths(path: string) {
   return finalObj;
 }
 
-async function enterTestDir(testDir: string) {
-  $.env = shellEnv;
-  await $`mkdir -p ${testDir}`;
-  await $`cd ${testDir}`;
-  $.cwd = testDir;
-}
+async function runWingCommand(
+  command: string[],
+  wingFile: string,
+  cwd: string
+) {
+  const isError = path.dirname(wingFile).endsWith("error");
 
-enum InvocationType {
-	Direct,
-	NPX,
-}
+  const args: string[] = [...command, wingFile];
 
-async function runWingCommand(type: InvocationType, command: string[], wingFile: string) {
-	const isError = path.dirname(wingFile).endsWith("error");
+  const work = async () => {
+    console.debug(`Running: "${args.join(" ")}"...`);
+    const out = await execa(wingBin, args, {
+      cwd,
+    });
+    return out.exitCode;
+  };
 
-  const cmd: string[] = [];
-
-  if (type === InvocationType.Direct) {
-    cmd.push(npxBin);
-    cmd.push("winglang");
+  if (isError) {
+    await expect(work()).rejects.toThrow();
   } else {
-    cmd.push("../node_modules/.bin/wing");
+    await expect(work()).resolves.toBe(0);
   }
-
-  cmd.push(...command);
-  cmd.push(wingFile);
-
-	const work = async () => {
-    const out = await $`${cmd}`;
-		return out.exitCode;
-	};
-
-	if (isError) {
-		await expect(work()).rejects.toThrow();
-	} else {
-		await expect(work()).resolves.toBe(0);
-	}
 }
 
 test.each(validWingFiles)(
   "wing compile --target tf-aws %s",
   async (wingFile) => {
-    await within(async () => {
-      const command = ["compile", "--target", "tf-aws"];
-      const test_dir = path.join(tmpDir, `${wingFile}_cdktf`);
-      const targetDir = path.join(test_dir, "target", `${basename(wingFile, ".w")}.tfaws`);
-      const tf_json = path.join(targetDir, "main.tf.json");
+    const command = ["compile", "--target", "tf-aws"];
+    const testDir = path.join(tmpDir, `${wingFile}_cdktf`);
+    const targetDir = path.join(
+      testDir,
+      "target",
+      `${path.basename(wingFile, ".w")}.tfaws`
+    );
+    const tf_json = path.join(targetDir, "main.tf.json");
 
-      await enterTestDir(test_dir);
+    fs.mkdirpSync(testDir);
 
-      await runWingCommand(InvocationType.NPX, command, path.join(validTestDir, wingFile));
-      const npx_tfJson = sanitize_json_paths(tf_json);
+    await runWingCommand(command, path.join(validTestDir, wingFile), testDir);
+    const npx_tfJson = sanitize_json_paths(tf_json);
 
-      expect(npx_tfJson).toMatchSnapshot("main.tf.json");
+    expect(npx_tfJson).toMatchSnapshot("main.tf.json");
 
-      // get all files in .wing dir
-      const dotWingFiles = await walk.sync(path.join(targetDir, ".wing"), {
-        return_object: true,
-      });
-      for (const irFile in dotWingFiles) {
-        if (dotWingFiles[irFile].isFile()) {
-          expect(fs.readFileSync(irFile, "utf8")).toMatchSnapshot(
-            path.basename(irFile)
-          );
-        }
-      }
-
-      await runWingCommand(InvocationType.Direct, command, path.join(validTestDir, wingFile));
-
-      expect(sanitize_json_paths(tf_json)).toStrictEqual(npx_tfJson);
+    // get all files in .wing dir
+    const dotWingFiles = walk.sync(path.join(targetDir, ".wing"), {
+      return_object: true,
     });
+    for (const irFile in dotWingFiles) {
+      if (dotWingFiles[irFile].isFile()) {
+        expect(fs.readFileSync(irFile, "utf8")).toMatchSnapshot(
+          path.basename(irFile)
+        );
+      }
+    }
   },
   {
     timeout: 1000 * 30,
@@ -172,16 +144,13 @@ test.each(validWingFiles)(
 test.each(validWingFiles)(
   "wing test %s (--target sim)",
   async (wingFile) => {
-    await within(async () => {
-      const command = ["test"];
-      const test_dir = path.join(tmpDir, `${wingFile}_sim`);
-      await enterTestDir(test_dir);
+    const command = ["test"];
+    const testDir = path.join(tmpDir, `${wingFile}_sim`);
+    fs.mkdirpSync(testDir);
 
-      await runWingCommand(InvocationType.NPX, command, path.join(validTestDir, wingFile));
-      await runWingCommand(InvocationType.Direct, command, path.join(validTestDir, wingFile));
+    await runWingCommand(command, path.join(validTestDir, wingFile), testDir);
 
-      // TODO snapshot .wsim contents
-    });
+    // TODO snapshot .wsim contents
   },
   {
     timeout: 1000 * 30,
