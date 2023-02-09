@@ -242,10 +242,7 @@ Duration objects are immutable and can be referenced across inflight context.
 #### 1.1.6 `Datetime`
 
 The `Datetime` (alias `datetime`) type represents a single moment in time in a platform-independent
-format. It uses the
-[`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
-JavaScript object under the hood and encapsulates an integral number that represents milliseconds
-since the midnight at the beginning of January 1, 1970, UTC (the epoch).
+format.
 
 `Datetime` objects are immutable and can be referenced across inflight context.
 
@@ -260,10 +257,12 @@ struct DatetimeComponents {
   min: num;
   sec: num;
   ms: num;
+  tz: num; // timezone offset in minutes from UTC
 }
 
 class Datetime {
-  static now(): Datetime;                 // returns the current DateTime
+  static utc_now(): Datetime;             // returns the current time in UTC timezone
+  static system_now(): Datetime;          // returns the current time in system timezone
   static from_iso(iso: str): Datetime;    // creates a instance from an ISO-8601 string
   static from_components(c: DatetimeComponents): Datetime;
 
@@ -278,11 +277,23 @@ class Datetime {
   month: num;         // Date.getMonth()
   year: num;          // Date.getFullYear()
 
-  offset: num;        // Date.getTimezoneOffset() (returns the UTC timezone offset)
+  timezone: num;      // Date.getTimezoneOffset() (offset in minutes from UTC)
   utc: Datetime;      // returns the same time in UTC timezone
 
   to_iso(): str;      // returns ISO-8601 string
 }
+```
+
+A few examples:
+
+```js
+let now = Datetime.utc_now();
+print("It is now ${now.month}/${now.day}/${now.year} at ${now.hours}:${now.min}:${now.sec})");
+assert(now.timezone == 0); // UTC
+
+let t1 = DateTime.from_iso("2023-02-09T06:20:17.573Z");
+print("Timezone is GMT${d.timezone() / 60}"); // output: Timezone is GMT-2
+print("UTC: ${t1.utc.to_iso())}");            // output: 2023-02-09T06:21:03.000Z
 ```
 
 [`▲ top`][top]
