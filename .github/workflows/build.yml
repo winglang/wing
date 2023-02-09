@@ -99,7 +99,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Node/NPM
+      # Reads versions from root package.json "volta" section
+      - name: Setup Node/NPM with pinned Volta version
         uses: volta-cli/action@v4.0.0
 
       - name: Install Rust
