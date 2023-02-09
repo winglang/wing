@@ -23,9 +23,6 @@ pub struct SymbolEnv {
 	statement_idx: usize,
 }
 
-// TODO See TypeRef for why this is necessary
-unsafe impl Send for SymbolEnv {}
-
 // The index (position) of the statement where a certain symbol was defined
 // this is useful to determine if a symbol can be used in a certain
 // expression or whether it is being used before it's defined.

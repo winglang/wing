@@ -142,9 +142,6 @@ pub struct Namespace {
 	pub env: SymbolEnv,
 }
 
-// TODO See TypeRef for why this is necessary
-unsafe impl Send for SymbolKind {}
-
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct Class {
@@ -380,10 +377,6 @@ impl Display for Type {
 		}
 	}
 }
-
-// TODO Allows for use in async runtime
-// TODO either avoid shared memory or use Arc<Mutex<...>> instead
-unsafe impl Send for TypeRef {}
 
 impl TypeRef {
 	pub fn as_resource(&self) -> Option<&Class> {
