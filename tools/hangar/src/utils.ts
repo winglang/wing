@@ -9,7 +9,6 @@ export async function runWingCommand(
   args: string[],
   shouldSucceed: boolean
 ) {
-  console.debug(`Running: "${args.join(" ")}"...`);
   const out = await execa(wingBin, [...args, wingFile], {
     cwd,
     reject: false,

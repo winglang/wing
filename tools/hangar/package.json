@@ -4,8 +4,8 @@
   "description": "wing test suite",
   "scripts": {
     "test": "vitest run",
-    "test:watch": "vitest watch",
-    "test:update": "vitest run --update"
+    "test:watch": "vitest watch --reporter=verbose",
+    "test:update": "vitest run --update --reporter=verbose"
   },
   "author": "Monada",
   "license": "Apache-2.0",
