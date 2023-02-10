@@ -7,6 +7,7 @@ import * as walk from "walkdir";
 const repoRoot = path.resolve(__dirname, "../../..");
 const testDir = path.join(repoRoot, "examples/tests");
 const validTestDir = path.join(testDir, "valid");
+const invalidTestDir = path.join(testDir, "invalid");
 const hangarDir = path.join(repoRoot, "tools/hangar");
 const tmpDir = path.join(hangarDir, "tmp");
 const npmCacheDir = path.join(tmpDir, ".npm");
@@ -34,6 +35,9 @@ const basePackageJson = {
 
 const validWingFiles = fs
   .readdirSync(validTestDir)
+  .filter((f) => f.endsWith(".w"));
+const invalidWingFiles = fs
+  .readdirSync(invalidTestDir)
   .filter((f) => f.endsWith(".w"));
 
 const shellEnv = {
@@ -82,33 +86,21 @@ function sanitize_json_paths(path: string) {
 }
 
 async function runWingCommand(
-  command: string[],
+  cwd: string,
   wingFile: string,
-  cwd: string
+  args: string[],
 ) {
-  const isError = path.dirname(wingFile).endsWith("error");
-
-  const args: string[] = [...command, wingFile];
-
-  const work = async () => {
-    console.debug(`Running: "${args.join(" ")}"...`);
-    const out = await execa(wingBin, args, {
-      cwd,
-    });
-    return out.exitCode;
-  };
-
-  if (isError) {
-    await expect(work()).rejects.toThrow();
-  } else {
-    await expect(work()).resolves.toBe(0);
-  }
+  console.debug(`Running: "${args.join(" ")}"...`);
+  const out = await execa(wingBin, [...args, wingFile], {
+    cwd,
+  });
+  return out;
 }
 
 test.each(validWingFiles)(
   "wing compile --target tf-aws %s",
   async (wingFile) => {
-    const command = ["compile", "--target", "tf-aws"];
+    const args = ["compile", "--target", "tf-aws"];
     const testDir = path.join(tmpDir, `${wingFile}_cdktf`);
     const targetDir = path.join(
       testDir,
@@ -119,7 +111,9 @@ test.each(validWingFiles)(
 
     fs.mkdirpSync(testDir);
 
-    await runWingCommand(command, path.join(validTestDir, wingFile), testDir);
+    const out = await runWingCommand(testDir, path.join(validTestDir, wingFile), args);
+    expect(out.exitCode).toBe(0);
+
     const npx_tfJson = sanitize_json_paths(tf_json);
 
     expect(npx_tfJson).toMatchSnapshot("main.tf.json");
@@ -144,13 +138,31 @@ test.each(validWingFiles)(
 test.each(validWingFiles)(
   "wing test %s (--target sim)",
   async (wingFile) => {
-    const command = ["test"];
+    const args = ["test"];
     const testDir = path.join(tmpDir, `${wingFile}_sim`);
     fs.mkdirpSync(testDir);
 
-    await runWingCommand(command, path.join(validTestDir, wingFile), testDir);
+    const out = await runWingCommand(testDir, path.join(validTestDir, wingFile), args);
+    expect(out.exitCode).toBe(0);
 
     // TODO snapshot .wsim contents
+  },
+  {
+    timeout: 1000 * 30,
+  }
+);
+
+test.each(invalidWingFiles)(
+  "wing test %s (--target sim) - invalid",
+  async (wingFile) => {
+    const args = ["test"];
+    const testDir = path.join(tmpDir, `invalid_${wingFile}_sim`);
+    fs.mkdirpSync(testDir);
+
+    const out = await runWingCommand(testDir, path.join(invalidTestDir, wingFile), args);
+    expect(out.exitCode).toBe(1);
+
+    expect(out.stderr).toMatchSnapshot("stderr");
   },
   {
     timeout: 1000 * 30,
