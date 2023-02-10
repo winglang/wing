@@ -1,15 +1,13 @@
 import * as fs from "fs-extra";
 import ansiEscapesSerializer from "jest-serializer-ansi-escapes";
 import * as path from "path";
-import { expect, test } from "vitest";
+import { describe, test } from "vitest";
 import { tmpDir, validTestDir, validWingFiles } from "./paths";
 import { runWingCommand } from "./utils";
 
-expect.addSnapshotSerializer(ansiEscapesSerializer);
-
-test.each(validWingFiles)(
-  "wing test %s (--target sim)",
-  async (wingFile) => {
+describe.each(validWingFiles)("%s", (wingFile) => {
+  test.concurrent("wing test --target sim", async ({ expect }) => {
+    expect.addSnapshotSerializer(ansiEscapesSerializer);
     const args = ["test"];
     const testDir = path.join(tmpDir, `${wingFile}_sim`);
     fs.mkdirpSync(testDir);
@@ -22,10 +20,5 @@ test.each(validWingFiles)(
     );
 
     expect(out.stdout).toMatchSnapshot("stdout");
-
-    // TODO snapshot .wsim contents
-  },
-  {
-    timeout: 1000 * 60 * 5,
-  }
-);
+  });
+});
