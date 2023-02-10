@@ -13,8 +13,7 @@ export async function runWingCommand(
   const out = await execa(wingBin, [...args, wingFile], {
     cwd,
     reject: false,
-    detached: true,
-    stdio: ["ipc"],
+    stdin: "ignore",
   });
   if (shouldSucceed) {
     expect(out.stderr).toBe("");
