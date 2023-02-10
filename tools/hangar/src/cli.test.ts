@@ -113,6 +113,7 @@ test.each(validWingFiles)(
       path.join(validTestDir, wingFile),
       args
     );
+    expect(out.stderr).toBe("");
     expect(out.exitCode).toBe(0);
 
     const npx_tfJson = sanitize_json_paths(tf_json);
@@ -148,6 +149,7 @@ test.each(validWingFiles)(
       path.join(validTestDir, wingFile),
       args
     );
+    expect(out.stderr).toBe("");
     expect(out.exitCode).toBe(0);
 
     // TODO snapshot .wsim contents
