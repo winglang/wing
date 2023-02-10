@@ -683,6 +683,16 @@
           }
         ]
       },
+      "async": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "async_modifier",
+            "named": true
+          }
+        ]
+      },
       "block": {
         "multiple": false,
         "required": true,
@@ -986,6 +996,16 @@
           {
             "type": "inflight",
             "named": false
+          }
+        ]
+      },
+      "reassignable": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "reassignable",
+            "named": true
           }
         ]
       },
@@ -2461,8 +2481,8 @@
     "named": false
   },
   {
-    "type": "async",
-    "named": false
+    "type": "async_modifier",
+    "named": true
   },
   {
     "type": "await",
