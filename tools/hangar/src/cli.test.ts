@@ -85,12 +85,24 @@ function sanitize_json_paths(path: string) {
   return finalObj;
 }
 
-async function runWingCommand(cwd: string, wingFile: string, args: string[]) {
+async function runWingCommand(
+  cwd: string,
+  wingFile: string,
+  args: string[],
+  shouldSucceed: boolean
+) {
   console.debug(`Running: "${args.join(" ")}"...`);
   const out = await execa(wingBin, [...args, wingFile], {
     cwd,
     reject: false,
   });
+  if (shouldSucceed) {
+    expect(out.stderr).toBe("");
+    expect(out.exitCode).toBe(0);
+  } else {
+    expect(out.stderr).not.toBe("");
+    expect(out.exitCode).not.toBe(0);
+  }
   return out;
 }
 
@@ -108,13 +120,12 @@ test.each(validWingFiles)(
 
     fs.mkdirpSync(testDir);
 
-    const out = await runWingCommand(
+    await runWingCommand(
       testDir,
       path.join(validTestDir, wingFile),
-      args
+      args,
+      true
     );
-    expect(out.stderr).toBe("");
-    expect(out.exitCode).toBe(0);
 
     const npx_tfJson = sanitize_json_paths(tf_json);
 
@@ -144,13 +155,12 @@ test.each(validWingFiles)(
     const testDir = path.join(tmpDir, `${wingFile}_sim`);
     fs.mkdirpSync(testDir);
 
-    const out = await runWingCommand(
+    await runWingCommand(
       testDir,
       path.join(validTestDir, wingFile),
-      args
+      args,
+      true
     );
-    expect(out.stderr).toBe("");
-    expect(out.exitCode).toBe(0);
 
     // TODO snapshot .wsim contents
   },
@@ -169,15 +179,14 @@ test.each(invalidWingFiles)(
     const out = await runWingCommand(
       testDir,
       path.join(invalidTestDir, wingFile),
-      args
+      args,
+      false
     );
-    expect(out.exitCode).toBe(1);
 
     const stderr = out.stderr;
 
     // Remove absolute paths
-    const stderrSanitized = stderr
-      .replaceAll(invalidTestDir, "<TEST_DIR>");
+    const stderrSanitized = stderr.replaceAll(invalidTestDir, "<TEST_DIR>");
 
     expect(stderrSanitized).toMatchSnapshot("stderr");
   },
