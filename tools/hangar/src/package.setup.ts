@@ -4,8 +4,8 @@ import * as path from "path";
 import {
   npmBin,
   npmCacheDir,
-  targetWingSDKTGZ,
-  targetWingTGZ,
+  targetWingSDKSpec,
+  targetWingSpec,
   tmpDir,
   wingBin
 } from "./paths";
@@ -15,8 +15,8 @@ const basePackageJson = {
   description: "",
   version: "0.0.0",
   dependencies: {
-    "@winglang/sdk": `file:${targetWingSDKTGZ}`,
-    winglang: `file:${targetWingTGZ}`,
+    "@winglang/sdk": `${targetWingSDKSpec}`,
+    winglang: `${targetWingSpec}`,
   },
   devDependencies: {},
 };
@@ -39,7 +39,7 @@ export default async function () {
 
   // use execSync to install npm deps in tmpDir
   console.debug(`Installing npm deps into ${tmpDir}...`);
-  await execa(npmBin, ["install", "--no-package-lock", "--ignore-engines"], {
+  await execa(npmBin, ["install", "--no-package-lock", "--ignore-engines", "--install-links=false"], {
     cwd: tmpDir,
   });
   console.debug(`Done!`);

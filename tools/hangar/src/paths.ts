@@ -12,12 +12,11 @@ export const npmCacheDir = path.join(tmpDir, ".npm");
 export const npmBin = path.join(hangarDir, "node_modules/.bin/npm");
 export const wingBin = path.join(tmpDir, "node_modules/.bin/wing");
 
-export const targetWingTGZ =
-  process.env.HANGAR_WING_TGZ ??
-  path.join(repoRoot, `apps/wing/winglang-0.0.0.tgz`);
-export const targetWingSDKTGZ =
-  process.env.HANGAR_WINGSDK_TGZ ??
-  path.join(repoRoot, `libs/wingsdk/winglang-sdk-0.0.0.tgz`);
+export const targetWingSpec =
+  process.env.HANGAR_WING_SPEC ?? `file:${path.join(repoRoot, `apps/wing`)}`;
+export const targetWingSDKSpec =
+  process.env.HANGAR_WINGSDK_SPEC ??
+  `file:${path.join(repoRoot, `libs/wingsdk`)}`;
 
 export const validWingFiles = fs
   .readdirSync(validTestDir)
