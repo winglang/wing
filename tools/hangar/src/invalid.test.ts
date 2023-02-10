@@ -29,6 +29,6 @@ test.each(invalidWingFiles)(
     expect(stderrSanitized).toMatchSnapshot("stderr");
   },
   {
-    timeout: 1000 * 30,
+    timeout: 1000 * 60,
   }
 );

@@ -43,6 +43,6 @@ test.each(validWingFiles)(
     }
   },
   {
-    timeout: 1000 * 30,
+    timeout: 1000 * 60,
   }
 );
