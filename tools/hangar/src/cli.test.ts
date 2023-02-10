@@ -189,7 +189,11 @@ test.each(invalidWingFiles)(
       // Remove absolute paths
       .replaceAll(invalidTestDir.replaceAll("\\", "/"), "<TEST_DIR>")
       // Normalize line endings
-      .replaceAll("\r\n", "\n");
+      .replaceAll("\r\n", "\n")
+      // For the error about a missing semicolon, remove the char number
+      // because it's usually the last char of the line which is 
+      // different due to windows line endings (`\r\n`)
+      .replace(/:\d+ \| ';' expected./g, ":0 | ';' expected.");
 
     expect(stderrSanitized).toMatchSnapshot("stderr");
   },
