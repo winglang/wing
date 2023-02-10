@@ -186,7 +186,10 @@ test.each(invalidWingFiles)(
     const stderr = out.stderr;
 
     // Remove absolute paths
-    const stderrSanitized = stderr.replaceAll(invalidTestDir, "<TEST_DIR>");
+    const stderrSanitized = stderr.replaceAll(
+      invalidTestDir.replaceAll("\\", "/"),
+      "<TEST_DIR>"
+    );
 
     expect(stderrSanitized).toMatchSnapshot("stderr");
   },
