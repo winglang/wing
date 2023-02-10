@@ -254,6 +254,11 @@
       "type": "peer"
     },
     {
+      "name": "aws-cdk-lib",
+      "version": "^2.64.0",
+      "type": "peer"
+    },
+    {
       "name": "cdktf",
       "version": "0.15.2",
       "type": "peer"
@@ -285,6 +290,11 @@
     {
       "name": "@cdktf/provider-random",
       "version": "^5.0.0",
+      "type": "runtime"
+    },
+    {
+      "name": "aws-cdk-lib",
+      "version": "^2.64.0",
       "type": "runtime"
     },
     {

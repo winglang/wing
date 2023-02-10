@@ -1,5 +1,6 @@
 export * from "./app";
 export * from "./attributes";
+export * from "./cdk-app";
 export * from "./dependency";
 export * from "./file-base";
 export * from "./files";

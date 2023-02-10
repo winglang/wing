@@ -9,6 +9,7 @@ const JSII_DEPS = [
   "@cdktf/provider-aws@^12.0.1",
   "@cdktf/provider-azurerm@^5.0.1",
   "@cdktf/provider-google@^5.0.2",
+  "aws-cdk-lib@^2.64.0",
 ];
 
 const project = new cdk.JsiiProject({

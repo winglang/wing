@@ -29,6 +29,8 @@ function __app(target) {
 			return $stdlib.tfgcp.App;
 		case "tf-azure":
 			return $stdlib.tfazure.App;
+		case "cdk":
+			return $stdlib.cdk.App;
 		default:
 			throw new Error(`Unknown WING_TARGET value: "${process.env.WING_TARGET ?? ""}"`);
 	}

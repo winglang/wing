@@ -21,6 +21,7 @@ export enum Target {
   TF_AZURE = "tf-azure",
   TF_GCP = "tf-gcp",
   SIM = "sim",
+  CDK = "cdk",
 }
 
 const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
@@ -28,6 +29,7 @@ const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
   [Target.TF_AZURE]: "tfazure",
   [Target.TF_GCP]: "tfgcp",
   [Target.SIM]: undefined,
+  [Target.CDK]: "cdk",
 };
 
 /**
@@ -88,7 +90,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     imports: {
       env: {
         // This function is used by the lsp command, which is not used in compilation
-        send_notification: () => {},
+        send_notification: () => { },
       },
     },
   });
@@ -147,9 +149,9 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
       console.log();
       console.log(
         "  " +
-          chalk.bold.white("note:") +
-          " " +
-          chalk.white("intermediate javascript code:")
+        chalk.bold.white("note:") +
+        " " +
+        chalk.white("intermediate javascript code:")
       );
       const lineNumber =
         Number.parseInt(
@@ -177,11 +179,11 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     } else {
       console.log(
         "  " +
-          chalk.bold.white("note:") +
-          " " +
-          chalk.white(
-            "run with `NODE_STACKTRACE=1` environment variable to display a stack trace"
-          )
+        chalk.bold.white("note:") +
+        " " +
+        chalk.white(
+          "run with `NODE_STACKTRACE=1` environment variable to display a stack trace"
+        )
       );
     }
   }

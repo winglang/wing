@@ -80,6 +80,7 @@
     "@cdktf/provider-azurerm": "^5.0.1",
     "@cdktf/provider-google": "^5.0.2",
     "@cdktf/provider-random": "^5.0.0",
+    "aws-cdk-lib": "^2.64.0",
     "cdktf": "0.15.2",
     "constructs": "~10.1.228",
     "polycons": "^0.1.1"
@@ -101,6 +102,7 @@
     "@cdktf/provider-azurerm": "^5.0.1",
     "@cdktf/provider-google": "^5.0.2",
     "@cdktf/provider-random": "^5.0.0",
+    "aws-cdk-lib": "^2.64.0",
     "cdktf": "0.15.2",
     "constructs": "~10.1.228",
     "debug": "^4.3.4",
