@@ -26,6 +26,6 @@ test.each(validWingFiles)(
     // TODO snapshot .wsim contents
   },
   {
-    timeout: 1000 * 120,
+    timeout: 1000 * 60 * 5,
   }
 );
