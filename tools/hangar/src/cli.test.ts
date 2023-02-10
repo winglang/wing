@@ -176,9 +176,11 @@ test.each(invalidWingFiles)(
     const testDir = path.join(tmpDir, `invalid_${wingFile}_sim`);
     fs.mkdirpSync(testDir);
 
+    const relativeWingFile = path.relative(testDir, path.join(invalidTestDir, wingFile));
+
     const out = await runWingCommand(
       testDir,
-      path.join(invalidTestDir, wingFile),
+      relativeWingFile,
       args,
       false
     );
@@ -187,7 +189,7 @@ test.each(invalidWingFiles)(
 
     const stderrSanitized = stderr
       // Remove absolute paths
-      .replaceAll(invalidTestDir.replaceAll("\\", "/"), "<TEST_DIR>")
+      .replaceAll(relativeWingFile, relativeWingFile.replaceAll("\\", "/"))
       // Normalize line endings
       .replaceAll("\r\n", "\n")
       // For the error about a missing semicolon, remove the char number
