@@ -13,6 +13,7 @@
     "@types/fs-extra": "^11.0.1",
     "execa": "^6.1.0",
     "fs-extra": "^11.1.0",
+    "jest-serializer-ansi-escapes": "^2.0.1",
     "npm": "^8.19.3",
     "vitest": "^0.28.4",
     "walkdir": "^0.4.1"

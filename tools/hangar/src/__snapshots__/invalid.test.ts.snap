@@ -1,0 +1,204 @@
+// Vitest Snapshot v1
+
+exports[`wing test access_hidden_namespace.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 1 error(s)
+Error at ../../../../examples/tests/invalid/access_hidden_namespace.w:8:5 | \\"core\\" was not brought"
+`;
+
+exports[`wing test bring.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 1 error(s)
+Error at ../../../../examples/tests/invalid/bring.w:1:1 | Redundant import of \\"std\\""
+`;
+
+exports[`wing test capture_mutables.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 5 error(s)
+Error at ../../../../examples/tests/invalid/capture_mutables.w:8:10 | Cannot reference 'a' of type 'MutArray<str>' from an inflight context
+Error at ../../../../examples/tests/invalid/capture_mutables.w:10:10 | Cannot reference 's' of type 'MutSet<num>' from an inflight context
+Error at ../../../../examples/tests/invalid/capture_mutables.w:12:10 | Cannot reference 'm' of type 'MutMap<bool>' from an inflight context
+Error at ../../../../examples/tests/invalid/capture_mutables.w:14:10 | Cannot reference 'a_cloned' of type 'MutArray<str>' from an inflight context
+Error at ../../../../examples/tests/invalid/capture_mutables.w:14:19 | Unknown symbol \\"size\\""
+`;
+
+exports[`wing test capture_reassignable.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 1 error(s)
+Error at ../../../../examples/tests/invalid/capture_reassignable.w:6:17 | Cannot capture a reassignable variable \\"x\\""
+`;
+
+exports[`wing test container_types.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 17 error(s)
+Error at ../../../../examples/tests/invalid/container_types.w:2:28 | Expected type to be \\"num\\", but got \\"str\\" instead
+Error at ../../../../examples/tests/invalid/container_types.w:3:12 | Expected \\"Set\\" type, found \\"Array<num>\\"
+Error at ../../../../examples/tests/invalid/container_types.w:5:24 | Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
+Error at ../../../../examples/tests/invalid/container_types.w:6:6 | Unknown symbol \\"some_random_method\\"
+Error at ../../../../examples/tests/invalid/container_types.w:9:32 | Expected type to be \\"num\\", but got \\"str\\" instead
+Error at ../../../../examples/tests/invalid/container_types.w:10:20 | Expected expression
+Error at ../../../../examples/tests/invalid/container_types.w:10:24 | Unknown parser error.
+Error at ../../../../examples/tests/invalid/container_types.w:10:28 | Unknown parser error.
+Error at ../../../../examples/tests/invalid/container_types.w:10:40 | Unknown parser error.
+Error at ../../../../examples/tests/invalid/container_types.w:12:20 | Expected type to be \\"Map<num>\\", but got \\"Map<str>\\" instead
+Error at ../../../../examples/tests/invalid/container_types.w:12:26 | Unknown symbol \\"some_random_method\\"
+Error at ../../../../examples/tests/invalid/container_types.w:15:24 | Expected type to be \\"num\\", but got \\"str\\" instead
+Error at ../../../../examples/tests/invalid/container_types.w:16:10 | Expected \\"Array\\" type, found \\"Set<num>\\"
+Error at ../../../../examples/tests/invalid/container_types.w:17:20 | Expected type to be \\"Set<num>\\", but got \\"Array<num>\\" instead
+Error at ../../../../examples/tests/invalid/container_types.w:17:24 | Expected type to be \\"num\\", but got \\"str\\" instead
+Error at ../../../../examples/tests/invalid/container_types.w:19:20 | Expected type to be \\"Set<str>\\", but got \\"Set<num>\\" instead
+Error at ../../../../examples/tests/invalid/container_types.w:20:4 | Unknown symbol \\"some_random_method\\""
+`;
+
+exports[`wing test enums.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 2 error(s)
+Error | Enum \\"SomeEnum (at ../../../../examples/tests/invalid/enums.w:1:6)\\" does not contain value \\"FOUR\\"
+Error at ../../../../examples/tests/invalid/enums.w:8:11 | Expression must be a class or resource instance to access property \\"TWO\\", instead found type \\"SomeEnum (at ../../../../examples/tests/invalid/enums.w:1:6)\\""
+`;
+
+exports[`wing test for_loop.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 1 error(s)
+Error at ../../../../examples/tests/invalid/for_loop.w:5:13 | Unable to iterate over \\"Bucket (at src/cloud/bucket.ts:53:1)\\""
+`;
+
+exports[`wing test missing_semicolon.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 4 error(s)
+Error at ../../../../examples/tests/invalid/missing_semicolon.w:7:1 | Expected expression
+Error at ../../../../examples/tests/invalid/missing_semicolon.w:11:1 | Unknown parser error.
+Error at ../../../../examples/tests/invalid/missing_semicolon.w:16:0 | ';' expected.
+Error at ../../../../examples/tests/invalid/missing_semicolon.w:19:28 | '}' expected."
+`;
+
+exports[`wing test mut_container_types.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 14 error(s)
+Error at ../../../../examples/tests/invalid/mut_container_types.w:2:29 | Expected type to be \\"num\\", but got \\"str\\" instead
+Error at ../../../../examples/tests/invalid/mut_container_types.w:3:12 | Expected \\"Set\\" type, found \\"MutArray<num>\\"
+Error at ../../../../examples/tests/invalid/mut_container_types.w:4:27 | Expected type to be \\"MutArray<num>\\", but got \\"Array<num>\\" instead
+Error at ../../../../examples/tests/invalid/mut_container_types.w:6:27 | Expected type to be \\"MutArray<num>\\", but got \\"MutArray<str>\\" instead
+Error at ../../../../examples/tests/invalid/mut_container_types.w:7:6 | Unknown symbol \\"some_method\\"
+Error at ../../../../examples/tests/invalid/mut_container_types.w:10:25 | Expected type to be \\"num\\", but got \\"str\\" instead
+Error at ../../../../examples/tests/invalid/mut_container_types.w:11:10 | Expected \\"Array\\" type, found \\"MutSet<num>\\"
+Error at ../../../../examples/tests/invalid/mut_container_types.w:12:23 | Expected type to be \\"MutSet<num>\\", but got \\"Set<num>\\" instead
+Error at ../../../../examples/tests/invalid/mut_container_types.w:14:23 | Expected type to be \\"MutSet<num>\\", but got \\"MutSet<str>\\" instead
+Error at ../../../../examples/tests/invalid/mut_container_types.w:15:4 | Unknown symbol \\"some_method\\"
+Error at ../../../../examples/tests/invalid/mut_container_types.w:18:31 | Expected type to be \\"num\\", but got \\"str\\" instead
+Error at ../../../../examples/tests/invalid/mut_container_types.w:20:10 | Expected \\"Array\\" type, found \\"MutMap<str>\\"
+Error at ../../../../examples/tests/invalid/mut_container_types.w:22:23 | Expected type to be \\"MutMap<num>\\", but got \\"Map<str>\\" instead
+Error at ../../../../examples/tests/invalid/mut_container_types.w:25:23 | Expected type to be \\"MutMap<str>\\", but got \\"MutMap<num>\\" instead"
+`;
+
+exports[`wing test optional_invoke.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 5 error(s)
+Error at ../../../../examples/tests/invalid/optional_invoke.w:3:1 | Unknown parser error.
+Error at ../../../../examples/tests/invalid/optional_invoke.w:3:10 | Unknown parser error.
+Error at ../../../../examples/tests/invalid/optional_invoke.w:3:21 | Expected expression
+Error at ../../../../examples/tests/invalid/optional_invoke.w:7:1 | Unknown parser error.
+Error at ../../../../examples/tests/invalid/optional_invoke.w:8:1 | Unknown symbol \\"f\\""
+`;
+
+exports[`wing test optionals.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 3 error(s)
+Error at ../../../../examples/tests/invalid/optionals.w:1:1 | Unknown parser error.
+Error at ../../../../examples/tests/invalid/optionals.w:1:10 | Unknown parser error.
+Error at ../../../../examples/tests/invalid/optionals.w:6:1 | Unknown symbol \\"f\\""
+`;
+
+exports[`wing test primitives.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 4 error(s)
+Error at ../../../../examples/tests/invalid/primitives.w:5:7 | Unexpected expression \\"structured_access_expression\\"
+Error at ../../../../examples/tests/invalid/primitives.w:9:16 | Unknown symbol \\"join\\"
+Error at ../../../../examples/tests/invalid/primitives.w:11:5 | Unknown symbol \\"push\\"
+Error at ../../../../examples/tests/invalid/primitives.w:13:14 | Expected type to be \\"str\\", but got \\"num\\" instead"
+`;
+
+exports[`wing test reassign_to_nonreassignable.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 4 error(s)
+Error at ../../../../examples/tests/invalid/reassign_to_nonreassignable.w:3:1 | Variable x is not reassignable 
+Error at ../../../../examples/tests/invalid/reassign_to_nonreassignable.w:13:5 | Variable this.f is not reassignable 
+Error at ../../../../examples/tests/invalid/reassign_to_nonreassignable.w:19:3 | Variable arg is not reassignable 
+Error at ../../../../examples/tests/invalid/reassign_to_nonreassignable.w:21:0 | ';' expected."
+`;
+
+exports[`wing test resource_access_field_as_method.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 1 error(s)
+Error at ../../../../examples/tests/invalid/resource_access_field_as_method.w:8:1 | should be a function or method"
+`;
+
+exports[`wing test resource_inflight.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 1 error(s)
+Error | Cannot create the resource \\"Bucket (at src/cloud/bucket.ts:53:1)\\" in inflight phase"
+`;
+
+exports[`wing test sorted_errors_no_span.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 6 error(s)
+Error | Class c (at ../../../../examples/tests/invalid/sorted_errors_no_span.w:3:7)'s parent \\"any\\" is not a class
+Error | Class e (at ../../../../examples/tests/invalid/sorted_errors_no_span.w:7:7)'s parent \\"any\\" is not a class
+Error at ../../../../examples/tests/invalid/sorted_errors_no_span.w:1:14 | Expected type to be \\"num\\", but got \\"str\\" instead
+Error at ../../../../examples/tests/invalid/sorted_errors_no_span.w:3:17 | Expected b (at ../../../../examples/tests/invalid/sorted_errors_no_span.w:3:17) to be a type but it's a variable
+Error at ../../../../examples/tests/invalid/sorted_errors_no_span.w:6:14 | Expected type to be \\"num\\", but got \\"str\\" instead
+Error at ../../../../examples/tests/invalid/sorted_errors_no_span.w:7:17 | Expected b (at ../../../../examples/tests/invalid/sorted_errors_no_span.w:7:17) to be a type but it's a variable"
+`;
+
+exports[`wing test statements_if.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 5 error(s)
+Error at ../../../../examples/tests/invalid/statements_if.w:2:1 | Unexpected unary operator \\"--\\"
+Error at ../../../../examples/tests/invalid/statements_if.w:5:4 | Expected type to be \\"bool\\", but got \\"num\\" instead
+Error at ../../../../examples/tests/invalid/statements_if.w:5:5 | Expected type to be \\"bool\\", but got \\"num\\" instead
+Error at ../../../../examples/tests/invalid/statements_if.w:8:5 | Expected type to be \\"bool\\", but got \\"num\\" instead
+Error at ../../../../examples/tests/invalid/statements_if.w:8:10 | Expected type to be \\"bool\\", but got \\"num\\" instead"
+`;
+
+exports[`wing test struct_expansion.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 6 error(s)
+Error at ../../../../examples/tests/invalid/struct_expansion.w:3:15 | \\"bublic\\" is not a field of \\"BucketProps (at src/cloud/bucket.ts:13:1)\\"
+Error at ../../../../examples/tests/invalid/struct_expansion.w:4:15 | Expected between 0 and 1 arguments but got 2 when instantiating \\"Bucket (at src/cloud/bucket.ts:53:1)\\"
+Error at ../../../../examples/tests/invalid/struct_expansion.w:4:32 | Expected type to be \\"BucketProps (at src/cloud/bucket.ts:13:1)?\\", but got \\"num\\" instead
+Error at ../../../../examples/tests/invalid/struct_expansion.w:6:15 | Expected expression
+Error at ../../../../examples/tests/invalid/struct_expansion.w:7:15 | Unknown parser error.
+Error at ../../../../examples/tests/invalid/struct_expansion.w:11:3 | Unknown symbol \\"handler\\""
+`;
+
+exports[`wing test types_string_interpolation.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 2 error(s)
+Error at ../../../../examples/tests/invalid/types_string_interpolation.w:3:12 | Expected type to be one of \\"str,num\\", but got \\"bool\\" instead
+Error at ../../../../examples/tests/invalid/types_string_interpolation.w:6:12 | Expected type to be one of \\"str,num\\", but got \\"bool\\" instead"
+`;
+
+exports[`wing test types_strings_arithmetic.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 6 error(s)
+Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:1:16 | Expected type to be \\"num\\", but got \\"str\\" instead
+Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:1:16 | Expected type to be \\"num\\", but got \\"str\\" instead
+Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:1:16 | Expected type to be \\"num\\", but got \\"str\\" instead
+Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:4:14 | Expected type to be \\"num\\", but got \\"str\\" instead
+Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:10:30 | Expected type to be \\"num\\", but got \\"str\\" instead
+Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:10:30 | Expected type to be \\"num\\", but got \\"str\\" instead"
+`;
+
+exports[`wing test unimplemented_grammar.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 5 error(s)
+Error at ../../../../examples/tests/invalid/unimplemented_grammar.w:1:8 | builtin \\"void\\" is not supported yet see https://github.com/winglang/wing/issues/432
+Error at ../../../../examples/tests/invalid/unimplemented_grammar.w:2:8 | builtin \\"any\\" is not supported yet see https://github.com/winglang/wing/issues/434
+Error at ../../../../examples/tests/invalid/unimplemented_grammar.w:3:20 | builtin container type \\"Promise\\" is not supported yet see https://github.com/winglang/wing/issues/529
+Error at ../../../../examples/tests/invalid/unimplemented_grammar.w:4:9 | expression \\"defer_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
+Error at ../../../../examples/tests/invalid/unimplemented_grammar.w:5:9 | expression \\"await_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116"
+`;
+
+exports[`wing test unknown_symbol.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 2 error(s)
+Error at ../../../../examples/tests/invalid/unknown_symbol.w:1:18 | Unknown symbol \\"cloud\\"
+Error at ../../../../examples/tests/invalid/unknown_symbol.w:3:13 | Unknown symbol \\"y\\""
+`;
+
+exports[`wing test use_before_defined.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 2 error(s)
+Error at ../../../../examples/tests/invalid/use_before_defined.w:1:10 | Unknown symbol \\"y\\"
+Error at ../../../../examples/tests/invalid/use_before_defined.w:5:12 | Symbol \\"x\\" used before being defined"
+`;
+
+exports[`wing test variable_scoping.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 1 error(s)
+Error at ../../../../examples/tests/invalid/variable_scoping.w:6:11 | Unknown symbol \\"x\\""
+`;
+
+exports[`wing test void_in_expression_position.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 4 error(s)
+Error at ../../../../examples/tests/invalid/void_in_expression_position.w:1:1 | Expression must be a class or resource instance to access property \\"get\\", instead found type \\"void\\"
+Error at ../../../../examples/tests/invalid/void_in_expression_position.w:4:23 | Expected type to be one of \\"str,num\\", but got \\"void\\" instead
+Error at ../../../../examples/tests/invalid/void_in_expression_position.w:7:13 | Expected type to be \\"num\\", but got \\"void\\" instead
+Error at ../../../../examples/tests/invalid/void_in_expression_position.w:11:5 | Cannot assign expression of type \\"void\\" to a variable"
+`;
