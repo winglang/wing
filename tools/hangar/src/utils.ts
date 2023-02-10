@@ -13,6 +13,7 @@ export async function runWingCommand(
   const out = await execa(wingBin, [...args, wingFile], {
     cwd,
     reject: false,
+    detached: true,
   });
   if (shouldSucceed) {
     expect(out.stderr).toBe("");
