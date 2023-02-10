@@ -14,6 +14,7 @@ export async function runWingCommand(
     cwd,
     reject: false,
     detached: true,
+    stdio: ["ipc"],
   });
   if (shouldSucceed) {
     expect(out.stderr).toBe("");

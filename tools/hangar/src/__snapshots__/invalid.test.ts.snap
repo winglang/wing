@@ -24,6 +24,11 @@ exports[`wing test capture_reassignable.w (--target sim) - invalid > stderr 1`] 
 Error at ../../../../examples/tests/invalid/capture_reassignable.w:6:17 | Cannot capture a reassignable variable \\"x\\""
 `;
 
+exports[`wing test cloud_function_expects_inflight.w (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 1 error(s)
+Error at ../../../../examples/tests/invalid/cloud_function_expects_inflight.w:3:20 | Expected type to be \\"fn(any): any\\", but got \\"fn(str): str\\" instead"
+`;
+
 exports[`wing test container_types.w (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 17 error(s)
 Error at ../../../../examples/tests/invalid/container_types.w:2:28 | Expected type to be \\"num\\", but got \\"str\\" instead
