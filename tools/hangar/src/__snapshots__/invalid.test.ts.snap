@@ -60,7 +60,7 @@ exports[`wing test missing_semicolon.w (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 4 error(s)
 Error at ../../../../examples/tests/invalid/missing_semicolon.w:7:1 | Expected expression
 Error at ../../../../examples/tests/invalid/missing_semicolon.w:11:1 | Unknown parser error.
-Error at ../../../../examples/tests/invalid/missing_semicolon.w:16:0 | ';' expected.
+Error at ../../../../examples/tests/invalid/missing_semicolon.w:16:24 | ';' expected.
 Error at ../../../../examples/tests/invalid/missing_semicolon.w:19:28 | '}' expected."
 `;
 
@@ -111,7 +111,7 @@ exports[`wing test reassign_to_nonreassignable.w (--target sim) - invalid > stde
 Error at ../../../../examples/tests/invalid/reassign_to_nonreassignable.w:3:1 | Variable x is not reassignable 
 Error at ../../../../examples/tests/invalid/reassign_to_nonreassignable.w:13:5 | Variable this.f is not reassignable 
 Error at ../../../../examples/tests/invalid/reassign_to_nonreassignable.w:19:3 | Variable arg is not reassignable 
-Error at ../../../../examples/tests/invalid/reassign_to_nonreassignable.w:21:0 | ';' expected."
+Error at ../../../../examples/tests/invalid/reassign_to_nonreassignable.w:21:2 | ';' expected."
 `;
 
 exports[`wing test resource_access_field_as_method.w (--target sim) - invalid > stderr 1`] = `
