@@ -118,21 +118,23 @@ impl Display for Type {
 			Type::Set(t) => write!(f, "Set<{}>", t),
 			Type::MutSet(t) => write!(f, "MutSet<{}>", t),
 			Type::FunctionSignature(sig) => {
-				write!(
-					f,
-					"fn({}): {}",
-					sig
-						.parameters
-						.iter()
-						.map(|a| format!("{}", a))
-						.collect::<Vec<String>>()
-						.join(", "),
-					if let Some(ret_val) = &sig.return_type {
-						format!("{}", ret_val)
-					} else {
-						"void".to_string()
-					}
-				)
+				let phase_str = match sig.flight {
+					Phase::Inflight => "inflight ",
+					Phase::Preflight => "preflight ",
+					Phase::Independent => "",
+				};
+				let params_str = sig
+					.parameters
+					.iter()
+					.map(|a| format!("{}", a))
+					.collect::<Vec<String>>()
+					.join(", ");
+				let ret_type_str = if let Some(ret_val) = &sig.return_type {
+					format!("{}", ret_val)
+				} else {
+					"void".to_string()
+				};
+				write!(f, "{phase_str}({params_str}): {ret_type_str}",)
 			}
 			Type::UserDefined(user_defined_type) => {
 				write!(f, "{}", user_defined_type.root)
