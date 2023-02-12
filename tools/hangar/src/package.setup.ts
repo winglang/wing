@@ -7,7 +7,7 @@ import {
   targetWingSDKSpec,
   targetWingSpec,
   tmpDir,
-  wingBin
+  wingBin,
 } from "./paths";
 
 const basePackageJson = {
@@ -27,7 +27,6 @@ const shellEnv = {
   npm_config_progress: "false",
   npm_config_yes: "true",
   npm_config_cache: npmCacheDir,
-  FORCE_COLOR: "false",
 };
 
 export default async function () {
@@ -40,9 +39,18 @@ export default async function () {
 
   // use execSync to install npm deps in tmpDir
   console.debug(`Installing npm deps into ${tmpDir}...`);
-  await execa(npmBin, ["install", "--no-package-lock", "--ignore-engines", "--install-links=false"], {
-    cwd: tmpDir,
-  });
+  await execa(
+    npmBin,
+    [
+      "install",
+      "--no-package-lock",
+      "--ignore-engines",
+      "--install-links=false",
+    ],
+    {
+      cwd: tmpDir,
+    }
+  );
   console.debug(`Done!`);
 
   const versionOutput = await execa(wingBin, ["--version"], {
