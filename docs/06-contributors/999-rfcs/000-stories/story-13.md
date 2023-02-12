@@ -98,7 +98,7 @@ resource TaskList {
     for id in this._bucket.list() {
       result.add(id);
     }
-    return result.copy_mut();
+    return result.copy();
   }
 
    /** 
