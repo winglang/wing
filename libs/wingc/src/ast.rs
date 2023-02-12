@@ -17,6 +17,15 @@ pub struct Symbol {
 	pub span: WingSpan,
 }
 
+impl Symbol {
+	pub fn global(name: &str) -> Self {
+		Self {
+			name: name.to_string(),
+			span: WingSpan::global(),
+		}
+	}
+}
+
 impl Ord for Symbol {
 	fn cmp(&self, other: &Self) -> std::cmp::Ordering {
 		self.name.cmp(&other.name).then(self.span.cmp(&other.span))
@@ -83,7 +92,15 @@ pub enum Type {
 	Set(Box<Type>),
 	MutSet(Box<Type>),
 	FunctionSignature(FunctionSignature),
-	CustomType { root: Symbol, fields: Vec<Symbol> },
+	UserDefined(UserDefinedType),
+}
+
+// In the future this may be an enum for type-alias, class, etc. For now its just a nested name.
+// Also this root,fields thing isn't really useful, should just turn in to a Vec<Symbol>.
+#[derive(Debug, Clone)]
+pub struct UserDefinedType {
+	pub root: Symbol,
+	pub fields: Vec<Symbol>,
 }
 
 impl Display for Type {
@@ -119,8 +136,8 @@ impl Display for Type {
 				};
 				write!(f, "{phase_str}({params_str}): {ret_type_str}",)
 			}
-			Type::CustomType { root, fields: _ } => {
-				write!(f, "{}", root)
+			Type::UserDefined(user_defined_type) => {
+				write!(f, "{}", user_defined_type.root)
 			}
 		}
 	}
@@ -187,6 +204,16 @@ pub struct ElifBlock {
 }
 
 #[derive(Debug)]
+pub struct Class {
+	pub name: Symbol,
+	pub fields: Vec<ClassField>,
+	pub methods: Vec<(Symbol, FunctionDefinition)>,
+	pub constructor: Constructor,
+	pub parent: Option<UserDefinedType>,
+	pub is_resource: bool,
+}
+
+#[derive(Debug)]
 pub enum StmtKind {
 	Use {
 		module_name: Symbol, // Reference?
@@ -220,18 +247,11 @@ pub enum StmtKind {
 	},
 	Return(Option<Expr>),
 	Scope(Scope),
-	Class {
-		name: Symbol,
-		members: Vec<ClassMember>,
-		methods: Vec<(Symbol, FunctionDefinition)>,
-		constructor: Constructor,
-		parent: Option<Type>,
-		is_resource: bool,
-	},
+	Class(Class),
 	Struct {
 		name: Symbol,
 		extends: Vec<Symbol>,
-		members: Vec<ClassMember>,
+		members: Vec<ClassField>,
 	},
 	Enum {
 		name: Symbol,
@@ -240,7 +260,7 @@ pub enum StmtKind {
 }
 
 #[derive(Debug)]
-pub struct ClassMember {
+pub struct ClassField {
 	pub name: Symbol,
 	pub member_type: Type,
 	pub reassignable: bool,

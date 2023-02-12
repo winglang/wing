@@ -2,9 +2,9 @@ use crate::{
 	ast::{Phase, Symbol},
 	debug,
 	diagnostic::{CharacterLocation, WingSpan},
-	type_check::{self, symbol_env::SymbolEnv},
 	type_check::{
-		symbol_env::StatementIdx, Class, FunctionSignature, Struct, SymbolKind, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME,
+		self, symbol_env::StatementIdx, Class, FunctionSignature, Struct, SymbolKind, Type, TypeRef, Types,
+		WING_CONSTRUCTOR_NAME,
 	},
 	utilities::camel_case_to_snake_case,
 	CONSTRUCT_BASE, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT, WINGSDK_RESOURCE,
@@ -13,7 +13,7 @@ use colored::Colorize;
 use serde_json::Value;
 use wingii::jsii::{self, Assembly};
 
-use super::Namespace;
+use super::{symbol_env::SymbolEnv, Namespace};
 
 trait JsiiInterface {
 	fn methods<'a>(&'a self) -> &'a Option<Vec<jsii::Method>>;
@@ -218,10 +218,7 @@ impl<'a> JsiiImporter<'a> {
 			self
 				.env
 				.define(
-					&Symbol {
-						name: namespace_name.to_string(),
-						span: WingSpan::global(),
-					},
+					&Symbol::global(namespace_name),
 					SymbolKind::Namespace(Namespace {
 						name: namespace_name.to_string(),
 						hidden: namespace_name != self.module_name,
@@ -373,7 +370,7 @@ impl<'a> JsiiImporter<'a> {
 				class_env
 					.define(
 						&Self::jsii_name_to_symbol(&name, &m.location_in_module),
-						SymbolKind::make_variable(method_sig, false),
+						SymbolKind::make_variable(method_sig, false, flight),
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -402,7 +399,7 @@ impl<'a> JsiiImporter<'a> {
 				class_env
 					.define(
 						&Self::jsii_name_to_symbol(&camel_case_to_snake_case(&p.name), &p.location_in_module),
-						SymbolKind::make_variable(wing_type, matches!(p.immutable, Some(true))),
+						SymbolKind::make_variable(wing_type, matches!(p.immutable, Some(true)), flight),
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -578,7 +575,7 @@ impl<'a> JsiiImporter<'a> {
 			}));
 			if let Err(e) = class_env.define(
 				&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &initializer.location_in_module),
-				SymbolKind::make_variable(method_sig, false),
+				SymbolKind::make_variable(method_sig, false, phase),
 				StatementIdx::Top,
 			) {
 				panic!("Invalid JSII library, failed to define {}'s init: {}", type_name, e)
