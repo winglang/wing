@@ -286,6 +286,11 @@ resource Bucket {
   inflight put(key: str, value: Blob): void;
 
   /**
+   * Upload a Json object to bucket
+   */
+  inflight put_json(key: str, value: Json): void;
+
+  /**
    * Get a file from the bucket.
    */
   inflight get(key: str): Blob;
