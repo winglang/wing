@@ -172,7 +172,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_func_Code_58BA0E0E.bucket}",
         "s3_key": "\${aws_s3_object.root_func_S3Object_F6163647.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
       "root_strtostr_05420EE8": {
         "//": {
@@ -192,7 +192,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_strtostr_Code_5BA38746.bucket}",
         "s3_key": "\${aws_s3_object.root_strtostr_S3Object_C6E06A09.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -365,7 +365,7 @@ exports[`wing compile --target tf-aws capture_containers.w > main.tf.json 1`] = 
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -530,7 +530,7 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > main.t
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -764,7 +764,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -973,7 +973,7 @@ exports[`wing compile --target tf-aws capture_primitives.w > main.tf.json 1`] = 
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudFunction_S3Object_C8435368.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -1134,7 +1134,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > main.tf.json
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -1415,7 +1415,7 @@ exports[`wing compile --target tf-aws captures.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_AnotherFunction_Code_B0183137.bucket}",
         "s3_key": "\${aws_s3_object.root_AnotherFunction_S3Object_5AD7E879.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
       "root_cloudFunction_6A57BA0A": {
         "//": {
@@ -1438,7 +1438,7 @@ exports[`wing compile --target tf-aws captures.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudFunction_S3Object_C8435368.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
       "root_cloudQueueOnMessagee46e5cb7_C394DE2A": {
         "//": {
@@ -1461,7 +1461,7 @@ exports[`wing compile --target tf-aws captures.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -2210,7 +2210,7 @@ exports[`wing compile --target tf-aws file_counter.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -2562,7 +2562,7 @@ exports[`wing compile --target tf-aws hello.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -3078,7 +3078,7 @@ exports[`wing compile --target tf-aws print.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudFunction_S3Object_C8435368.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -3446,7 +3446,7 @@ exports[`wing compile --target tf-aws statements_if.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -3789,7 +3789,7 @@ exports[`wing compile --target tf-aws test_bucket.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_testget_Code_EC989716.bucket}",
         "s3_key": "\${aws_s3_object.root_testget_S3Object_071392B9.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
       "root_testput_449428F9": {
         "//": {
@@ -3810,7 +3810,7 @@ exports[`wing compile --target tf-aws test_bucket.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_testput_Code_DE7653AD.bucket}",
         "s3_key": "\${aws_s3_object.root_testput_S3Object_30BF1DDD.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -4100,7 +4100,7 @@ exports[`wing compile --target tf-aws while_loop_await.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessageb3f3d188_Code_4D451A84.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueOnMessageb3f3d188_S3Object_18BDF7F0.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
