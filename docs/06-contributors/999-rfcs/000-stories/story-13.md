@@ -150,8 +150,8 @@ new cloud.Function(inflight (s: str): str => {
   let id = tasks.add_task("clean the dishes");
   let j = Json.clone_mut(tasks.get_task(id));
   assert(!j.get("effort_estimation")); //  make sure effort estimation default nil
-  task.add_estimation(id, 4h);
-  j = tasks.get_task(id);
-  assert(4h == j.get("effort_estimation"));
+  tasks.add_estimation(id, 4h);
+  let j2 = tasks.get_task(id);
+  assert(4h == j2.get("effort_estimation"));
 }) as "test: effort estimation";
 ```
