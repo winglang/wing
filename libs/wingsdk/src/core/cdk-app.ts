@@ -19,7 +19,7 @@ export class CdkApp extends Construct implements IApp {
 
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
-    const cdkOutdir = join(outdir, ".tmp.cdk.out");
+    const cdkOutdir = join(outdir, ".");
 
     mkdirSync(cdkOutdir, { recursive: true });
 
@@ -49,4 +49,10 @@ export class CdkApp extends Construct implements IApp {
 
     return "";
   }
+
+  /**
+   * Move files from `outdir/.tmp.cdk.out` to `outdir`.
+   */
+  // private moveCdkArtifactsToOutdir(): void {
+  // }
 }

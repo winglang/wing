@@ -1,8 +1,10 @@
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { BucketEncryption, Bucket as S3Bucket } from 'aws-cdk-lib/aws-s3';
+import { BlockPublicAccess, BucketEncryption, Bucket as S3Bucket } from "aws-cdk-lib/aws-s3";
+import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { CaseConventions, NameOptions, ResourceNames } from "../utils/resource-names";
+import { RemovalPolicy } from "aws-cdk-lib";
 
 export const BUCKET_PREFIX_OPTS: NameOptions = {
   maxLen: 37,
@@ -19,10 +21,13 @@ export const BUCKET_PREFIX_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.BucketBase {
-  // private readonly bucket: S3Bucket;
+  private readonly bucket: S3Bucket;
+  private readonly public: boolean;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps) {
     super(scope, id, props);
+
+    this.public = props.public ?? false;
 
     const bucketPrefix = ResourceNames.generateName(this, BUCKET_PREFIX_OPTS);
 
@@ -38,16 +43,22 @@ export class Bucket extends cloud.BucketBase {
       );
     }
 
-    new S3Bucket(this, "Default", {
+
+    this.bucket = new S3Bucket(this, "Default", {
       bucketName: bucketPrefix,
       encryption: BucketEncryption.S3_MANAGED,
+      blockPublicAccess: this.public ? undefined : BlockPublicAccess.BLOCK_ALL,
+      publicReadAccess: this.public ? true : false,
+      removalPolicy: RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
     });
   }
 
   public addObject(key: string, body: string): void {
-    key;
-    body;
-    throw new Error("Method not implemented.");
+    new BucketDeployment(this, `S3Object-${key}`, {
+      destinationBucket: this.bucket,
+      sources: [Source.data(key, body)],
+    });
   }
 
   /** @internal */
