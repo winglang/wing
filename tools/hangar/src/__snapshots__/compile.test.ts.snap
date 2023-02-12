@@ -2389,6 +2389,15 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`forward_decl.w > wing compile --target tf-aws > R.inflight.js 1`] = `
+"export class R_inflight  {
+constructor({  }) {
+
+
+}
+}"
+`;
+
 exports[`forward_decl.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
@@ -3181,6 +3190,15 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`reassignment.w > wing compile --target tf-aws > R.inflight.js 1`] = `
+"export class R_inflight  {
+constructor({  }) {
+
+
+}
+}"
+`;
+
 exports[`reassignment.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
@@ -3261,6 +3279,15 @@ constructor() {
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`resource.w > wing compile --target tf-aws > R.inflight.js 1`] = `
+"export class R_inflight  {
+constructor({  }) {
+
+
+}
+}"
 `;
 
 exports[`resource.w > wing compile --target tf-aws > main.tf.json 1`] = `
