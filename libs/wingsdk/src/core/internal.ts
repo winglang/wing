@@ -13,7 +13,13 @@ export function makeHandler(
   const clients: Record<string, string> = {};
 
   for (const [k, v] of Object.entries(bindings.resources ?? {})) {
-    clients[k] = v.resource._toInflight().text;
+    const clientCode = v.resource._toInflight().text;
+    if (!clientCode) {
+      throw new Error(
+        `Didn't find any client code for resource ${k} - are you sure it's returning a core.Code?`
+      );
+    }
+    clients[k] = clientCode;
   }
 
   for (const [k, v] of Object.entries(bindings.data ?? {})) {

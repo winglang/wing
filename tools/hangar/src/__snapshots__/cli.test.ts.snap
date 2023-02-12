@@ -2389,6 +2389,15 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`wing compile --target tf-aws forward_decl.w > R.inflight.js 1`] = `
+"export class R_inflight  {
+constructor({  }) {
+
+
+}
+}"
+`;
+
 exports[`wing compile --target tf-aws forward_decl.w > main.tf.json 1`] = `
 {
   "//": {
@@ -2432,11 +2441,12 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"forward_decl\\" });
   
-  class R
+  class R extends $stdlib.core.Resource {
+  constructor(scope, id, ) {
+  	super(scope, id);
   {
-  constructor() {
   }
-  f;
+  }
   method2 = () => {
     (this.method1());
     {console.log(\`\${this.f}\`)};
@@ -2444,7 +2454,13 @@ constructor() {
   }
   method1 = () => {
   }
+  _toInflight() {
+  	
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/R.inflight.js\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R_inflight({}))\`);
   }
+  }
+  
   const x = \\"hi\\";
   if (true) {
     {console.log(\`\${x}\`)};
@@ -3174,6 +3190,15 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`wing compile --target tf-aws reassignment.w > R.inflight.js 1`] = `
+"export class R_inflight  {
+constructor({  }) {
+
+
+}
+}"
+`;
+
 exports[`wing compile --target tf-aws reassignment.w > main.tf.json 1`] = `
 {
   "//": {
@@ -3217,20 +3242,26 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"reassignment\\" });
   
-  class R
+  class R extends $stdlib.core.Resource {
+  constructor(scope, id, ) {
+  	super(scope, id);
   {
-  constructor() {
     if (true) {
       this.f = 1;
       this.f1 = 0;
     }
   }
-  f;
-  f1;
+  }
   inc = () => {
     this.f = (this.f + 1);
   }
+  _toInflight() {
+  	
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/R.inflight.js\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R_inflight({}))\`);
   }
+  }
+  
   let x = 5;
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === 5)'\`)})((x === 5))};
   x = (x + 1);
@@ -3248,6 +3279,15 @@ constructor() {
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`wing compile --target tf-aws resource.w > R.inflight.js 1`] = `
+"export class R_inflight  {
+constructor({  }) {
+
+
+}
+}"
 `;
 
 exports[`wing compile --target tf-aws resource.w > main.tf.json 1`] = `
@@ -3293,14 +3333,21 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"resource\\" });
   
-  class R
+  class R extends $stdlib.core.Resource {
+  constructor(scope, id, name) {
+  	super(scope, id);
   {
-  constructor(name) {
     this.name = name;
   }
-  name;
-  
   }
+  
+  _toInflight() {
+  	
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/R.inflight.js\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R_inflight({}))\`);
+  }
+  }
+  
   const res = new R(this,\\"R\\",\\"Arr\\");
   {console.log(res.name)};
 }
