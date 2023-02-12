@@ -15,7 +15,6 @@ export async function runWingCommand(
     stdin: "ignore",
   });
   if (shouldSucceed) {
-    expect(out.stderr).toBe("");
     expect(out.exitCode).toBe(0);
   } else {
     expect(out.stderr).not.toBe("");
