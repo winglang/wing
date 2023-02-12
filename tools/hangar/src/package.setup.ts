@@ -27,6 +27,7 @@ const shellEnv = {
   npm_config_progress: "false",
   npm_config_yes: "true",
   npm_config_cache: npmCacheDir,
+  FORCE_COLOR: "true",
 };
 
 export default async function () {

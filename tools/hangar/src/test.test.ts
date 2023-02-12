@@ -14,12 +14,14 @@ describe.each(validWingFiles)("%s", (wingFile) => {
       const testDir = path.join(tmpDir, `${wingFile}_sim`);
       fs.mkdirpSync(testDir);
 
-      await runWingCommand(
+      const out = await runWingCommand(
         testDir,
         path.join(validTestDir, wingFile),
         args,
         true
       );
+
+      expect(out.stdout).toMatchSnapshot("stdout");
 
       // TODO snapshot .wsim contents
     },
