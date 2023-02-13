@@ -1473,7 +1473,10 @@ impl<'a> TypeChecker<'a> {
 					if identifier.is_none() {
 						self.stmt_error(
 							stmt,
-							format!("bring \"{}\" must be assigned to an identifier", module_name.name),
+							format!(
+								"bring \"{}\" must be assigned to an identifier (e.g. bring \"foo\" as foo)",
+								module_name.name
+							),
 						);
 						return;
 					}
