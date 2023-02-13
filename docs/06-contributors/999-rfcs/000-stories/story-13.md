@@ -66,20 +66,7 @@ resource TaskList {
     return this._bucket.get_json(id);
   }
 
-  /** 
-   * Sets effort estimation on a test
-   * @param id - the id of the task to return
-   * @param effort_estimation - the time (duration) estimated for this task
-   * @returns The ID of the existing task.
-   */
-  inflight add_estimation(id: str, effort_estimation: duration): str {
-    let j = Json.clone_mut(this.get_task(id));
-    j.set("effort_estimation", effort_estimation);
-    this._bucket.put_json(id, j);
-    return id;
-  }
-
-  /** 
+    /** 
    * Removes a task from the list
    * @param id - the id of the task to be removed
    */
@@ -113,7 +100,7 @@ resource TaskList {
     let output = MutArray<str>[];
     for id in task_ids {
       let j = this.get_task(id); 
-      let title = str.from_json(j.get("title"));
+      let title = j.get("title"); // notice that I've decided to create a small baby macro get function that should be removed next sprint
       if title.contains(term) { 
         print("found task ${id} with title \"${title}\" with term \"${term}\"");
         output.push(id);
@@ -145,13 +132,4 @@ new cloud.Function(inflight (s: str): str => {
   let result = tasks.find_tasks_with("clean the dish");
   assert(result.len == 0);
 }) as "test:add, remove and find task";
-
-new cloud.Function(inflight (s: str): str => {
-  let id = tasks.add_task("clean the dishes");
-  let j = Json.clone_mut(tasks.get_task(id));
-  assert(!j.get("effort_estimation")); //  make sure effort estimation default nil
-  tasks.add_estimation(id, 4h);
-  let j2 = tasks.get_task(id);
-  assert(4h == j2.get("effort_estimation"));
-}) as "test: effort estimation";
 ```
