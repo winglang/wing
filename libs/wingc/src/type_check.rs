@@ -381,17 +381,19 @@ impl Display for Type {
 			Type::Void => write!(f, "void"),
 			Type::Optional(v) => write!(f, "{}?", v),
 			Type::Function(sig) => {
-				write!(
-					f,
-					"fn({}): {}",
-					sig
-						.args
-						.iter()
-						.map(|a| format!("{}", a))
-						.collect::<Vec<String>>()
-						.join(", "),
-					format!("{}", sig.return_type)
-				)
+				let phase_str = match sig.flight {
+					Phase::Inflight => "inflight ",
+					Phase::Preflight => "preflight ",
+					Phase::Independent => "",
+				};
+				let params_str = sig
+					.args
+					.iter()
+					.map(|a| format!("{}", a))
+					.collect::<Vec<String>>()
+					.join(", ");
+				let ret_type_str = format!("{}", sig.return_type);
+				write!(f, "{phase_str}({params_str}): {ret_type_str}",)
 			}
 			Type::Class(class) => write!(f, "{}", class.name.name),
 			Type::Resource(class) => write!(f, "{}", class.name.name),

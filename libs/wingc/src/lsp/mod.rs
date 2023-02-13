@@ -4,7 +4,7 @@ use crate::{
 	diagnostic::{DiagnosticLevel, WingSpan},
 	parser::Parser,
 	type_check,
-	type_check::Types,
+	type_check::{symbol_env::SymbolEnv, Types},
 	wasm_util::{combine_ptr_and_length, ptr_to_string, string_to_combined_ptr},
 	Diagnostics,
 };
@@ -387,7 +387,6 @@ fn parse_text(source_file: &str, text: &[u8]) -> FileData {
 
 	let mut scope = wing_parser.wingit(&tree.root_node());
 
-	let mut types = type_check::Types::new();
 	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file));
 	let parse_diag = wing_parser.diagnostics.into_inner();
 
