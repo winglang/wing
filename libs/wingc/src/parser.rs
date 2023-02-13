@@ -466,7 +466,7 @@ impl Parser<'_> {
 				let inner_type = self.build_type_annotation(&type_node.named_child(0).unwrap()).unwrap();
 				Ok(TypeAnnotation::Optional(Box::new(inner_type)))
 			}
-			"custom_type" => Ok(self.build_user_defined_type(&type_node)?),
+			"custom_type" => Ok(self.build_udt_annotation(&type_node)?),
 			"function_type" => {
 				let param_type_list_node = type_node.child_by_field_name("parameter_types").unwrap();
 				let mut cursor = param_type_list_node.walk();
@@ -528,7 +528,7 @@ impl Parser<'_> {
 		})
 	}
 
-	fn build_user_defined_type(&self, nested_node: &Node) -> DiagnosticResult<TypeAnnotation> {
+	fn build_udt_annotation(&self, nested_node: &Node) -> DiagnosticResult<TypeAnnotation> {
 		let mut cursor = nested_node.walk();
 		Ok(TypeAnnotation::UserDefined(UserDefinedType {
 			root: self.node_symbol(&nested_node.child_by_field_name("object").unwrap())?,
