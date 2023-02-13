@@ -567,6 +567,8 @@ impl Types {
 		types.push(Box::new(Type::Void));
 		let void_idx = types.len() - 1;
 
+		// TODO: this is hack to create the top-level mapping from lib names to symbols
+		// We construct a void ref by hand since we can't call self.void() while constructing the Types struct
 		let void_ref = UnsafeRef::<Type>(&*types[void_idx] as *const Type);
 		let libraries = SymbolEnv::new(None, void_ref, false, false, Phase::Preflight, 0);
 
