@@ -117,29 +117,33 @@ impl Display for Type {
 			Type::MutMap(t) => write!(f, "MutMap<{}>", t),
 			Type::Set(t) => write!(f, "Set<{}>", t),
 			Type::MutSet(t) => write!(f, "MutSet<{}>", t),
-			Type::FunctionSignature(sig) => {
-				let phase_str = match sig.flight {
-					Phase::Inflight => "inflight ",
-					Phase::Preflight => "preflight ",
-					Phase::Independent => "",
-				};
-				let params_str = sig
-					.parameters
-					.iter()
-					.map(|a| format!("{}", a))
-					.collect::<Vec<String>>()
-					.join(", ");
-				let ret_type_str = if let Some(ret_val) = &sig.return_type {
-					format!("{}", ret_val)
-				} else {
-					"void".to_string()
-				};
-				write!(f, "{phase_str}({params_str}): {ret_type_str}",)
-			}
+			Type::FunctionSignature(sig) => write!(f, "{}", sig),
 			Type::UserDefined(user_defined_type) => {
 				write!(f, "{}", user_defined_type.root)
 			}
 		}
+	}
+}
+
+impl Display for FunctionSignature {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let phase_str = match self.flight {
+			Phase::Inflight => "inflight ",
+			Phase::Preflight => "preflight ",
+			Phase::Independent => "",
+		};
+		let params_str = self
+			.parameters
+			.iter()
+			.map(|a| format!("{}", a))
+			.collect::<Vec<String>>()
+			.join(", ");
+		let ret_type_str = if let Some(ret_val) = &self.return_type {
+			format!("{}", ret_val)
+		} else {
+			"void".to_string()
+		};
+		write!(f, "{phase_str}({params_str}): {ret_type_str}")
 	}
 }
 

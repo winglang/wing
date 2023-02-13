@@ -340,7 +340,7 @@ impl Subtype for Type {
 
 #[derive(Debug)]
 pub struct FunctionSignature {
-	pub args: Vec<TypeRef>,
+	pub parameters: Vec<TypeRef>,
 	pub return_type: TypeRef,
 	pub flight: Phase,
 
@@ -355,9 +355,9 @@ pub struct FunctionSignature {
 impl PartialEq for FunctionSignature {
 	fn eq(&self, other: &Self) -> bool {
 		self
-			.args
+			.parameters
 			.iter()
-			.zip(other.args.iter())
+			.zip(other.parameters.iter())
 			.all(|(x, y)| x.is_same_type_as(y))
 			&& self.return_type.is_same_type_as(&other.return_type)
 			&& self.flight == other.flight
@@ -384,19 +384,7 @@ impl Display for Type {
 			Type::Boolean => write!(f, "bool"),
 			Type::Void => write!(f, "void"),
 			Type::Optional(v) => write!(f, "{}?", v),
-			Type::Function(sig) => {
-				write!(
-					f,
-					"fn({}): {}",
-					sig
-						.args
-						.iter()
-						.map(|a| format!("{}", a))
-						.collect::<Vec<String>>()
-						.join(", "),
-					format!("{}", sig.return_type)
-				)
-			}
+			Type::Function(sig) => write!(f, "{}", sig),
 			Type::Class(class) => write!(f, "{}", class.name),
 			Type::Resource(class) => write!(f, "{}", class.name),
 			Type::Struct(s) => write!(f, "{}", s.name),
@@ -408,6 +396,24 @@ impl Display for Type {
 			Type::MutSet(v) => write!(f, "MutSet<{}>", v),
 			Type::Enum(s) => write!(f, "{}", s.name),
 		}
+	}
+}
+
+impl Display for FunctionSignature {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let phase_str = match self.flight {
+			Phase::Inflight => "inflight ",
+			Phase::Preflight => "preflight ",
+			Phase::Independent => "",
+		};
+		let params_str = self
+			.parameters
+			.iter()
+			.map(|a| format!("{}", a))
+			.collect::<Vec<String>>()
+			.join(", ");
+		let ret_type_str = self.return_type.to_string();
+		write!(f, "{phase_str}({params_str}): {ret_type_str}")
 	}
 }
 
@@ -855,14 +861,14 @@ impl<'a> TypeChecker<'a> {
 				self.validate_type(constructor_sig.return_type, type_, exp);
 
 				if !arg_list.named_args.is_empty() {
-					let last_arg = constructor_sig.args.last().unwrap().maybe_unwrap_option();
+					let last_arg = constructor_sig.parameters.last().unwrap().maybe_unwrap_option();
 					self.validate_structural_type(&arg_list.named_args, &last_arg, exp, env, statement_idx);
 				}
 
 				// Count number of optional parameters from the end of the constructor's params
 				// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
 				let num_optionals = constructor_sig
-					.args
+					.parameters
 					.iter()
 					.rev()
 					.take_while(|arg| arg.is_option())
@@ -870,8 +876,8 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify arity
 				let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
-				let min_args = constructor_sig.args.len() - num_optionals;
-				let max_args = constructor_sig.args.len();
+				let min_args = constructor_sig.parameters.len() - num_optionals;
+				let max_args = constructor_sig.parameters.len();
 				if arg_count < min_args || arg_count > max_args {
 					let err_text = if min_args == max_args {
 						format!(
@@ -888,7 +894,7 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Verify passed arguments match the constructor
-				for (arg_expr, arg_type) in arg_list.pos_args.iter().zip(constructor_sig.args.iter()) {
+				for (arg_expr, arg_type) in arg_list.pos_args.iter().zip(constructor_sig.parameters.iter()) {
 					let arg_expr_type = self.type_check_exp(arg_expr, env, statement_idx);
 					self.validate_type(arg_expr_type, *arg_type, arg_expr);
 				}
@@ -951,18 +957,23 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				if !args.named_args.is_empty() {
-					let last_arg = func_sig.args.last().unwrap().maybe_unwrap_option();
+					let last_arg = func_sig.parameters.last().unwrap().maybe_unwrap_option();
 					self.validate_structural_type(&args.named_args, &last_arg, exp, env, statement_idx);
 				}
 
 				// Count number of optional parameters from the end of the function's params
 				// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
-				let num_optionals = func_sig.args.iter().rev().take_while(|arg| arg.is_option()).count();
+				let num_optionals = func_sig
+					.parameters
+					.iter()
+					.rev()
+					.take_while(|arg| arg.is_option())
+					.count();
 
 				// Verity arity
 				let arg_count = args.pos_args.len() + (if args.named_args.is_empty() { 0 } else { 1 });
-				let min_args = func_sig.args.len() - num_optionals - this_args;
-				let max_args = func_sig.args.len() - this_args;
+				let min_args = func_sig.parameters.len() - num_optionals - this_args;
+				let max_args = func_sig.parameters.len() - this_args;
 				if arg_count < min_args || arg_count > max_args {
 					let err_text = if min_args == max_args {
 						format!("Expected {} arguments but got {}", min_args, arg_count)
@@ -976,10 +987,10 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				let params = func_sig
-					.args
+					.parameters
 					.iter()
 					.skip(this_args)
-					.take(func_sig.args.len() - num_optionals);
+					.take(func_sig.parameters.len() - num_optionals);
 				let args = args.pos_args.iter();
 
 				for (arg_type, param_exp) in params.zip(args) {
@@ -1257,7 +1268,7 @@ impl<'a> TypeChecker<'a> {
 					args.push(self.resolve_type(arg, env, statement_idx));
 				}
 				let sig = FunctionSignature {
-					args,
+					parameters: args,
 					return_type: ast_sig
 						.return_type
 						.as_ref()
@@ -1879,8 +1890,8 @@ impl<'a> TypeChecker<'a> {
 	/// * `env` - The function's environment to prime with the args.
 	///
 	fn add_arguments_to_env(&mut self, args: &Vec<(Symbol, bool)>, sig: &FunctionSignature, env: &mut SymbolEnv) {
-		assert!(args.len() == sig.args.len());
-		for (arg, arg_type) in args.iter().zip(sig.args.iter()) {
+		assert!(args.len() == sig.parameters.len());
+		for (arg, arg_type) in args.iter().zip(sig.parameters.iter()) {
 			match env.define(
 				&arg.0,
 				SymbolKind::make_variable(*arg_type, arg.1, env.flight),
@@ -1993,7 +2004,7 @@ impl<'a> TypeChecker<'a> {
 							};
 
 							let new_args: Vec<UnsafeRef<Type>> = sig
-								.args
+								.parameters
 								.iter()
 								.map(|arg| {
 									if arg.is_same_type_as(original_type_param) {
@@ -2005,7 +2016,7 @@ impl<'a> TypeChecker<'a> {
 								.collect();
 
 							let new_sig = FunctionSignature {
-								args: new_args,
+								parameters: new_args,
 								return_type: new_return_type,
 								flight: sig.flight.clone(),
 								js_override: sig.js_override.clone(),

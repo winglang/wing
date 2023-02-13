@@ -152,7 +152,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> D
 	add_builtin(
 		UtilityFunctions::Print.to_string().as_str(),
 		Type::Function(FunctionSignature {
-			args: vec![types.string()],
+			parameters: vec![types.string()],
 			return_type: types.void(),
 			flight: Phase::Independent,
 			js_override: Some("{console.log($args$)}".to_string()),
@@ -163,7 +163,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> D
 	add_builtin(
 		UtilityFunctions::Assert.to_string().as_str(),
 		Type::Function(FunctionSignature {
-			args: vec![types.bool()],
+			parameters: vec![types.bool()],
 			return_type: types.void(),
 			flight: Phase::Independent,
 			js_override: Some("{((cond) => {if (!cond) throw new Error(`assertion failed: '$args$'`)})($args$)}".to_string()),
@@ -174,7 +174,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> D
 	add_builtin(
 		UtilityFunctions::Throw.to_string().as_str(),
 		Type::Function(FunctionSignature {
-			args: vec![types.string()],
+			parameters: vec![types.string()],
 			return_type: types.void(),
 			flight: Phase::Independent,
 			js_override: Some("{((msg) => {throw new Error(msg)})($args$)}".to_string()),
@@ -185,7 +185,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> D
 	add_builtin(
 		UtilityFunctions::Panic.to_string().as_str(),
 		Type::Function(FunctionSignature {
-			args: vec![types.string()],
+			parameters: vec![types.string()],
 			return_type: types.void(),
 			flight: Phase::Independent,
 			js_override: Some("{((msg) => {console.error(msg, (new Error()).stack);process.exit(1)})($args$)}".to_string()),
