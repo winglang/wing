@@ -177,8 +177,8 @@ jobs:
         node: [18, 19]
     runs-on: ${{ matrix.runner }}
     env:
-      HANGAR_WING_TGZ: ${{ github.workspace }}/wing/winglang-${{ needs.prepare.outputs.version }}.tgz
-      HANGAR_WINGSDK_TGZ: ${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.prepare.outputs.version }}.tgz
+      HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.prepare.outputs.version }}.tgz"
+      HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.prepare.outputs.version }}.tgz"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
