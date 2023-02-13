@@ -153,7 +153,7 @@ pub struct FunctionSignature {
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct FunctionDefinition {
-	// List of names of function parameters and whether they are reassignable (`var`) or not.
+	/// List of names of function parameters and whether they are reassignable (`var`) or not.
 	pub parameters: Vec<(Symbol, bool)>, // TODO: move into FunctionSignature and make optional
 
 	pub statements: Scope,
@@ -164,7 +164,7 @@ pub struct FunctionDefinition {
 
 #[derive(Debug)]
 pub struct Constructor {
-	// List of names of constructor parameters and whether they are reassignable (`var`) or not.
+	/// List of names of constructor parameters and whether they are reassignable (`var`) or not.
 	pub parameters: Vec<(Symbol, bool)>,
 
 	pub statements: Scope,
@@ -215,7 +215,7 @@ pub struct Class {
 
 #[derive(Debug)]
 pub enum StmtKind {
-	Use {
+	Bring {
 		module_name: Symbol, // Reference?
 		identifier: Option<Symbol>,
 	},

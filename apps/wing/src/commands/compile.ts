@@ -108,13 +108,22 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   const artifact = await readFile(artifactPath, "utf-8");
   log("artifact: %s", artifact);
 
+  const preflightRequire = (path: string) => {
+    // Try looking for dependencies not only in the current directory (wherever
+    // the wing CLI was installed to), but also in the source code directory.
+    // This is necessary because the Wing app may have installed dependencies in
+    // the project directory.
+    const requirePath = require.resolve(path, { paths: [__dirname, wingDir]});
+    return require(requirePath);
+  };
+
   // If you're wondering how the execution of the preflight works, despite it
   // being in a different directory: it works because at the top of the file
   // require.resolve is called to cache wingsdk in-memory. So by the time VM
   // is starting up, the passed context already has wingsdk in it.
   // "__dirname" is also synthetically changed so nested requires work.
   const context = vm.createContext({
-    require,
+    require: preflightRequire,
     process: {
       env: {
         WINGSDK_SYNTH_DIR: synthDir,

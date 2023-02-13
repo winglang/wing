@@ -1,3 +1,4 @@
+mod fqn;
 mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{
@@ -6,8 +7,8 @@ use crate::ast::{
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
 use crate::{
-	debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_MAP, WINGSDK_MUT_SET,
-	WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING,
+	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_MAP,
+	WINGSDK_MUT_ARRAY, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING,
 };
 use derivative::Derivative;
 use indexmap::IndexSet;
@@ -16,6 +17,7 @@ use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display};
+use std::path::Path;
 use symbol_env::SymbolEnv;
 
 use self::symbol_env::StatementIdx;
@@ -58,7 +60,7 @@ pub type TypeRef = UnsafeRef<Type>;
 pub enum SymbolKind {
 	Type(TypeRef),
 	Variable(VariableInfo),
-	Namespace(Namespace),
+	Namespace(NamespaceRef),
 }
 
 /// Information about a variable in the environment
@@ -95,6 +97,13 @@ impl SymbolKind {
 		}
 	}
 
+	fn as_namespace_ref(&self) -> Option<NamespaceRef> {
+		match self {
+			SymbolKind::Namespace(ns) => Some(ns.clone()),
+			_ => None,
+		}
+	}
+
 	fn as_namespace(&self) -> Option<&Namespace> {
 		match self {
 			SymbolKind::Namespace(ns) => Some(ns),
@@ -102,7 +111,7 @@ impl SymbolKind {
 		}
 	}
 
-	fn as_mut_namespace(&mut self) -> Option<&mut Namespace> {
+	fn as_mut_namespace_ref(&mut self) -> Option<&mut Namespace> {
 		match self {
 			SymbolKind::Namespace(ref mut ns) => Some(ns),
 			_ => None,
@@ -153,6 +162,14 @@ pub struct Namespace {
 
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
+}
+
+pub type NamespaceRef = UnsafeRef<Namespace>;
+
+impl Debug for NamespaceRef {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		write!(f, "{:?}", &**self)
+	}
 }
 
 // TODO See TypeRef for why this is necessary
@@ -521,9 +538,11 @@ impl Debug for TypeRef {
 }
 
 pub struct Types {
-	// TODO: Remove the box and change TypeRef to just be an index into the types array
+	// TODO: Remove the box and change TypeRef and NamespaceRef to just be indices into the types array and namespaces array respectively
 	// Note: we need the box so reallocations of the vec while growing won't change the addresses of the types since they are referenced from the TypeRef struct
 	types: Vec<Box<Type>>,
+	namespaces: Vec<Box<Namespace>>,
+	pub libraries: SymbolEnv,
 	numeric_idx: usize,
 	string_idx: usize,
 	bool_idx: usize,
@@ -548,8 +567,15 @@ impl Types {
 		types.push(Box::new(Type::Void));
 		let void_idx = types.len() - 1;
 
+		// TODO: this is hack to create the top-level mapping from lib names to symbols
+		// We construct a void ref by hand since we can't call self.void() while constructing the Types struct
+		let void_ref = UnsafeRef::<Type>(&*types[void_idx] as *const Type);
+		let libraries = SymbolEnv::new(None, void_ref, false, false, Phase::Preflight, 0);
+
 		Self {
 			types,
+			namespaces: Vec::new(),
+			libraries,
 			numeric_idx,
 			string_idx,
 			bool_idx,
@@ -588,46 +614,68 @@ impl Types {
 		self.get_typeref(self.types.len() - 1)
 	}
 
+	fn get_typeref(&self, idx: usize) -> TypeRef {
+		let t = &self.types[idx];
+		UnsafeRef::<Type>(&**t as *const Type)
+	}
+
 	pub fn stringables(&self) -> Vec<TypeRef> {
 		// TODO: This should be more complex and return all types that have some stringification facility
 		// see: https://github.com/winglang/wing/issues/741
 		vec![self.string(), self.number()]
 	}
 
-	fn get_typeref(&self, idx: usize) -> TypeRef {
-		let t = &self.types[idx];
-		UnsafeRef::<Type>(&**t as *const Type)
+	pub fn add_namespace(&mut self, n: Namespace) -> NamespaceRef {
+		self.namespaces.push(Box::new(n));
+		self.get_namespaceref(self.namespaces.len() - 1)
+	}
+
+	fn get_namespaceref(&self, idx: usize) -> NamespaceRef {
+		let t = &self.namespaces[idx];
+		UnsafeRef::<Namespace>(&**t as *const Namespace)
 	}
 }
 
 pub struct TypeChecker<'a> {
 	types: &'a mut Types,
 
-	// Scratchpad for storing inner scopes so we can do breadth first traversal of the AST tree during type checking
-	// TODO: this is a list of unsafe pointers to the statement's inner scopes. We use
-	// unsafe because we can't return a mutable reference to the inner scopes since this method
-	// already uses references to the statement that contains the scopes. Using unsafe here just
-	// makes it a lot simpler. Ideally we should avoid returning anything here and have some way
-	// to iterate over the inner scopes given the outer scope. For this we need to model our AST
-	// so all nodes implement some basic "tree" interface. For now this is good enough.
+	/// Scratchpad for storing inner scopes so we can do breadth first traversal of the AST tree during type checking
+	///
+	/// TODO: this is a list of unsafe pointers to the statement's inner scopes. We use
+	/// unsafe because we can't return a mutable reference to the inner scopes since this method
+	/// already uses references to the statement that contains the scopes. Using unsafe here just
+	/// makes it a lot simpler. Ideally we should avoid returning anything here and have some way
+	/// to iterate over the inner scopes given the outer scope. For this we need to model our AST
+	/// so all nodes implement some basic "tree" interface. For now this is good enough.
 	inner_scopes: Vec<*const Scope>,
+
+	/// The path to the source file being type checked.
+	source_path: &'a Path,
 
 	pub diagnostics: RefCell<Diagnostics>,
 }
 
 impl<'a> TypeChecker<'a> {
-	pub fn new(types: &'a mut Types) -> Self {
+	pub fn new(types: &'a mut Types, source_path: &'a Path) -> Self {
 		Self {
 			types: types,
 			inner_scopes: vec![],
+			source_path,
 			diagnostics: RefCell::new(Diagnostics::new()),
 		}
 	}
 
 	pub fn add_globals(&mut self, scope: &Scope) {
-		for m in [WINGSDK_STD_MODULE] {
-			self.add_module_to_env(scope.env.borrow_mut().as_mut().unwrap(), m.to_string(), 0);
-		}
+		self.add_module_to_env(
+			scope.env.borrow_mut().as_mut().unwrap(),
+			WINGSDK_ASSEMBLY_NAME.to_string(),
+			vec![WINGSDK_STD_MODULE.to_string()],
+			&Symbol {
+				name: WINGSDK_STD_MODULE.to_string(),
+				span: WingSpan::global(),
+			},
+			0,
+		);
 	}
 
 	// TODO: All calls to this should be removed and we should make sure type checks are done
@@ -1409,21 +1457,62 @@ impl<'a> TypeChecker<'a> {
 				}
 				self.validate_type(exp_type, var_info._type, value);
 			}
-			StmtKind::Use {
+			StmtKind::Bring {
 				module_name,
 				identifier,
 			} => {
-				_ = {
-					// If provided use alias identifier as the namespace name
-					let namespace_name = identifier.as_ref().unwrap_or(module_name);
+				// library_name is the name of the library we are importing from the JSII world
+				let library_name: String;
+				// namespace_filter describes what types we are importing from the library
+				// e.g. [] means we are importing everything from `mylib`
+				// e.g. ["ns1", "ns2"] means we are importing everything from `mylib.ns1.ns2`
+				let namespace_filter: Vec<String>;
+				// alias is the symbol we are giving to the imported library or namespace
+				let alias: &Symbol;
 
-					if namespace_name.name == WINGSDK_STD_MODULE {
-						self.stmt_error(stmt, format!("Redundant import of \"{}\"", WINGSDK_STD_MODULE));
+				if module_name.name.starts_with('"') && module_name.name.ends_with('"') {
+					// case 1: bring "library_name" as identifier;
+					if identifier.is_none() {
+						self.stmt_error(
+							stmt,
+							format!(
+								"bring \"{}\" must be assigned to an identifier (e.g. bring \"foo\" as foo)",
+								module_name.name
+							),
+						);
 						return;
 					}
+					// We assume we have a jsii library and we use `module_name` as the library name, and set no
+					// namespace filter (we only support importing a full library at the moment)
+					library_name = module_name.name[1..module_name.name.len() - 1].to_string();
+					namespace_filter = vec![];
+					alias = identifier.as_ref().unwrap();
+				} else {
+					// case 2: bring module_name;
+					// case 3: bring module_name as identifier;
+					match module_name.name.as_str() {
+						// If the module name is a built-in module, then we use @winglang/sdk as the library name,
+						// and import the module as a namespace. If the user doesn't specify an identifier, then
+						// we use the module name as the identifier.
+						// For example, `bring fs` will import the `fs` namespace from @winglang/sdk and assign it
+						// to an identifier named `fs`.
+						WINGSDK_CLOUD_MODULE | WINGSDK_FS_MODULE => {
+							library_name = WINGSDK_ASSEMBLY_NAME.to_string();
+							namespace_filter = vec![module_name.name.clone()];
+							alias = identifier.as_ref().unwrap_or(&module_name);
+						}
+						WINGSDK_STD_MODULE => {
+							self.stmt_error(stmt, format!("Redundant bring of \"{}\"", WINGSDK_STD_MODULE));
+							return;
+						}
+						_ => {
+							self.stmt_error(stmt, format!("\"{}\" is not a built-in module", module_name.name));
+							return;
+						}
+					}
+				};
 
-					self.add_module_to_env(env, module_name.name.clone(), stmt.idx);
-				}
+				self.add_module_to_env(env, library_name, namespace_filter, &alias, stmt.idx);
 			}
 			StmtKind::Scope(scope) => {
 				scope.set_env(SymbolEnv::new(
@@ -1734,25 +1823,50 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn add_module_to_env(&mut self, env: &mut SymbolEnv, module_name: String, statement_idx: usize) {
-		// TODO Hack: treat "cloud" or "std" as "_ in wingsdk" until I figure out the path issue
-		if module_name == "cloud" || module_name == "fs" || module_name == WINGSDK_STD_MODULE {
-			let mut wingii_types = wingii::type_system::TypeSystem::new();
+	fn add_module_to_env(
+		&mut self,
+		env: &mut SymbolEnv,
+		library_name: String,
+		namespace_filter: Vec<String>,
+		alias: &Symbol,
+		statement_idx: usize,
+	) {
+		let mut wingii_types = wingii::type_system::TypeSystem::new();
+
+		// Loading the SDK is handled different from loading any other jsii modules because with the SDK we provide an exact
+		// location to locate the SDK, whereas for the other modules we need to search for them from the source directory.
+		let assembly_name = if library_name == WINGSDK_ASSEMBLY_NAME {
+			// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
+			let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
 			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
 				root: true,
 				deps: false,
 			};
-			// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
-			let wingsdk_manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
-			let name = wingii_types
-				.load(wingsdk_manifest_root.as_str(), Some(wingii_loader_options))
+			let assembly_name = wingii_types
+				.load(manifest_root.as_str(), Some(wingii_loader_options))
 				.unwrap();
-			debug!("Loaded JSII assembly {}", name);
-			let assembly = wingii_types.find_assembly(&name).unwrap();
+			assembly_name
+		} else {
+			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions { root: true, deps: true };
+			let source_dir = self.source_path.parent().unwrap().to_str().unwrap();
+			let assembly_name = wingii_types
+				.load_dep(library_name.as_str(), source_dir, &wingii_loader_options)
+				.unwrap();
+			assembly_name
+		};
 
-			let mut jsii_importer = JsiiImporter::new(&wingii_types, assembly, &module_name, self.types, statement_idx, env);
-			jsii_importer.import_to_env();
-		}
+		debug!("Loaded JSII assembly {}", assembly_name);
+
+		let mut jsii_importer = JsiiImporter::new(
+			&wingii_types,
+			&assembly_name,
+			&namespace_filter,
+			&alias,
+			self.types,
+			statement_idx,
+			env,
+		);
+		jsii_importer.import_to_env();
 	}
 
 	/// Add function arguments to the function's environment

@@ -55,7 +55,7 @@ jobs:
         working-directory: apps/jsii-docgen
       - name: Install dependencies
         if: steps.token-check.outputs.HAS_TOKEN == 'true'
-        run: npm ci
+        run: npm ci --ignore-scripts
       - name: build
         if: steps.token-check.outputs.HAS_TOKEN == 'true'
         run: npx projen build
