@@ -9,6 +9,9 @@ use crate::{CONSTRUCT_BASE, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE};
 /// The FQN typically looks like:
 /// `assembly_name.namespace1.namespace2...namespaceN.type_name`
 /// where there may be zero or more namespaces.
+///
+/// TODO: What if a jsii library an npm package that has a dot in its name?
+/// https://github.com/winglang/wing/issues/1515
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct FQN<'a>(&'a str);
 

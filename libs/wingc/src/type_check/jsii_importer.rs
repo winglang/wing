@@ -637,6 +637,7 @@ impl<'a> JsiiImporter<'a> {
 				for (i, param) in params.iter().enumerate() {
 					// If this is a resource then skip scope and id arguments
 					// TODO hack - skip this check if the resource's name is "App"
+					// https://github.com/winglang/wing/issues/1485
 					if is_resource && type_name != "App" {
 						if i == 0 {
 							assert!(param.name == "scope");
