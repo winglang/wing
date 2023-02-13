@@ -25,8 +25,5 @@ describe.each(validWingFiles)("%s", (wingFile) => {
 
       // TODO snapshot .wsim contents
     },
-    {
-      timeout: 1000 * 30,
-    }
   );
 });

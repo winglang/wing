@@ -2391,9 +2391,9 @@ new MyApp().synth();"
 
 exports[`forward_decl.w > wing compile --target tf-aws > R.inflight.js 1`] = `
 "export class R_inflight  {
-constructor({  }) {
+constructor({ f }) {
 
-
+  this.f = f;
 }
 }"
 `;
@@ -2455,9 +2455,9 @@ constructor() {
   method1 = () => {
   }
   _toInflight() {
-  	
+  	const f_client = this._lift(this.f);
   	const self_client_path = require('path').resolve(__dirname, \\"clients/R.inflight.js\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R_inflight({}))\`);
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R_inflight({f: \${f_client}}))\`);
   }
   }
   
@@ -3192,9 +3192,9 @@ new MyApp().synth();"
 
 exports[`reassignment.w > wing compile --target tf-aws > R.inflight.js 1`] = `
 "export class R_inflight  {
-constructor({  }) {
+constructor({ f1 }) {
 
-
+  this.f1 = f1;
 }
 }"
 `;
@@ -3256,9 +3256,9 @@ constructor() {
     this.f = (this.f + 1);
   }
   _toInflight() {
-  	
+  	const f1_client = this._lift(this.f1);
   	const self_client_path = require('path').resolve(__dirname, \\"clients/R.inflight.js\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R_inflight({}))\`);
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R_inflight({f1: \${f1_client}}))\`);
   }
   }
   
@@ -3283,9 +3283,9 @@ new MyApp().synth();"
 
 exports[`resource.w > wing compile --target tf-aws > R.inflight.js 1`] = `
 "export class R_inflight  {
-constructor({  }) {
+constructor({ name }) {
 
-
+  this.name = name;
 }
 }"
 `;
@@ -3342,9 +3342,9 @@ constructor() {
   }
   
   _toInflight() {
-  	
+  	const name_client = this._lift(this.name);
   	const self_client_path = require('path').resolve(__dirname, \\"clients/R.inflight.js\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R_inflight({}))\`);
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R_inflight({name: \${name_client}}))\`);
   }
   }
   
@@ -3937,6 +3937,673 @@ constructor() {
         b: {
           resource: b,
           ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        },
+      },
+      
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`user-defined-resources-captures.w > wing compile --target tf-aws > MyResource.inflight.js 1`] = `
+"export class MyResource_inflight  {
+constructor({ array_of_queues, set_of_str, my_bool, my_resource, my_str, my_num, map_of_num, array_of_str }) {
+
+  this.array_of_queues = array_of_queues;
+  this.set_of_str = set_of_str;
+  this.my_bool = my_bool;
+  this.my_resource = my_resource;
+  this.my_str = my_str;
+  this.my_num = my_num;
+  this.map_of_num = map_of_num;
+  this.array_of_str = array_of_str;
+}
+async capture_resource() {
+  (await this.my_resource.put(\\"f1.txt\\",\\"f1\\"));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.my_resource.get(\\"f1.txt\\")) === \\"f1\\")'\`)})(((await this.my_resource.get(\\"f1.txt\\")) === \\"f1\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.my_resource.list()).length === 1)'\`)})(((await this.my_resource.list()).length === 1))};
+}
+async capture_primitives() {
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.my_str === \\"my_string\\")'\`)})((this.my_str === \\"my_string\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.my_num === 42)'\`)})((this.my_num === 42))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.my_bool === true)'\`)})((this.my_bool === true))};
+}
+async capture_array() {
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.array_of_str.length === 2)'\`)})((this.array_of_str.length === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.array_of_str.at(0)) === \\"s1\\")'\`)})(((await this.array_of_str.at(0)) === \\"s1\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.array_of_str.at(1)) === \\"s2\\")'\`)})(((await this.array_of_str.at(1)) === \\"s2\\"))};
+}
+async capture_map() {
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.map_of_num.get(\\"k1\\")) === 11)'\`)})(((await this.map_of_num.get(\\"k1\\")) === 11))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.map_of_num.get(\\"k2\\")) === 22)'\`)})(((await this.map_of_num.get(\\"k2\\")) === 22))};
+}
+async capture_set() {
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await this.set_of_str.has(\\"s1\\"))'\`)})((await this.set_of_str.has(\\"s1\\")))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await this.set_of_str.has(\\"s2\\"))'\`)})((await this.set_of_str.has(\\"s2\\")))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(!(await this.set_of_str.has(\\"s3\\")))'\`)})((!(await this.set_of_str.has(\\"s3\\"))))};
+}
+async capture_array_of_queues() {
+  (await (await this.array_of_queues.at(0)).push(\\"q1\\"));
+  (await (await this.array_of_queues.at(1)).push(\\"q2\\"));
+}}"
+`;
+
+exports[`user-defined-resources-captures.w > wing compile --target tf-aws > index.js 1`] = `
+"async handle() { const { r } = this; {
+  (await r.capture_array_of_queues());
+} };"
+`;
+
+exports[`user-defined-resources-captures.w > wing compile --target tf-aws > index.js 2`] = `
+"async handle() { const { r } = this; {
+  (await r.capture_primitives());
+} };"
+`;
+
+exports[`user-defined-resources-captures.w > wing compile --target tf-aws > index.js 3`] = `
+"async handle() { const { r } = this; {
+  (await r.capture_map());
+} };"
+`;
+
+exports[`user-defined-resources-captures.w > wing compile --target tf-aws > index.js 4`] = `
+"async handle() { const { r } = this; {
+  (await r.capture_resource());
+} };"
+`;
+
+exports[`user-defined-resources-captures.w > wing compile --target tf-aws > index.js 5`] = `
+"async handle() { const { r } = this; {
+  (await r.capture_set());
+} };"
+`;
+
+exports[`user-defined-resources-captures.w > wing compile --target tf-aws > index.js 6`] = `
+"async handle() { const { r } = this; {
+  (await r.capture_array());
+} };"
+`;
+
+exports[`user-defined-resources-captures.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_testcapturearray_IamRole_0E03D456": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_array/IamRole",
+            "uniqueId": "root_testcapturearray_IamRole_0E03D456",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+      "root_testcapturearrayofqueues_IamRole_223C9195": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_array_of_queues/IamRole",
+            "uniqueId": "root_testcapturearrayofqueues_IamRole_223C9195",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+      "root_testcapturemap_IamRole_1B5F9F5E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_map/IamRole",
+            "uniqueId": "root_testcapturemap_IamRole_1B5F9F5E",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+      "root_testcaptureprimitives_IamRole_67F1EAC9": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_primitives/IamRole",
+            "uniqueId": "root_testcaptureprimitives_IamRole_67F1EAC9",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+      "root_testcaptureresource_IamRole_69F520A4": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_resource/IamRole",
+            "uniqueId": "root_testcaptureresource_IamRole_69F520A4",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+      "root_testcaptureset_IamRole_1FCDC76B": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_set/IamRole",
+            "uniqueId": "root_testcaptureset_IamRole_1FCDC76B",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_testcapturearray_IamRolePolicy_FBEBD531": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_array/IamRolePolicy",
+            "uniqueId": "root_testcapturearray_IamRolePolicy_FBEBD531",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_testcapturearray_IamRole_0E03D456.name}",
+      },
+      "root_testcapturearrayofqueues_IamRolePolicy_C28D32CE": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_array_of_queues/IamRolePolicy",
+            "uniqueId": "root_testcapturearrayofqueues_IamRolePolicy_C28D32CE",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_testcapturearrayofqueues_IamRole_223C9195.name}",
+      },
+      "root_testcapturemap_IamRolePolicy_8E51A860": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_map/IamRolePolicy",
+            "uniqueId": "root_testcapturemap_IamRolePolicy_8E51A860",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_testcapturemap_IamRole_1B5F9F5E.name}",
+      },
+      "root_testcaptureprimitives_IamRolePolicy_E3C1E921": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_primitives/IamRolePolicy",
+            "uniqueId": "root_testcaptureprimitives_IamRolePolicy_E3C1E921",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_testcaptureprimitives_IamRole_67F1EAC9.name}",
+      },
+      "root_testcaptureresource_IamRolePolicy_86C59E76": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_resource/IamRolePolicy",
+            "uniqueId": "root_testcaptureresource_IamRolePolicy_86C59E76",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_testcaptureresource_IamRole_69F520A4.name}",
+      },
+      "root_testcaptureset_IamRolePolicy_D409E226": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_set/IamRolePolicy",
+            "uniqueId": "root_testcaptureset_IamRolePolicy_D409E226",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_testcaptureset_IamRole_1FCDC76B.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_testcapturearray_IamRolePolicyAttachment_C9E8AD0C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_array/IamRolePolicyAttachment",
+            "uniqueId": "root_testcapturearray_IamRolePolicyAttachment_C9E8AD0C",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_testcapturearray_IamRole_0E03D456.name}",
+      },
+      "root_testcapturearrayofqueues_IamRolePolicyAttachment_35651451": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_array_of_queues/IamRolePolicyAttachment",
+            "uniqueId": "root_testcapturearrayofqueues_IamRolePolicyAttachment_35651451",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_testcapturearrayofqueues_IamRole_223C9195.name}",
+      },
+      "root_testcapturemap_IamRolePolicyAttachment_CF9F2BD2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_map/IamRolePolicyAttachment",
+            "uniqueId": "root_testcapturemap_IamRolePolicyAttachment_CF9F2BD2",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_testcapturemap_IamRole_1B5F9F5E.name}",
+      },
+      "root_testcaptureprimitives_IamRolePolicyAttachment_962C5CDE": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_primitives/IamRolePolicyAttachment",
+            "uniqueId": "root_testcaptureprimitives_IamRolePolicyAttachment_962C5CDE",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_testcaptureprimitives_IamRole_67F1EAC9.name}",
+      },
+      "root_testcaptureresource_IamRolePolicyAttachment_5E6259D6": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_resource/IamRolePolicyAttachment",
+            "uniqueId": "root_testcaptureresource_IamRolePolicyAttachment_5E6259D6",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_testcaptureresource_IamRole_69F520A4.name}",
+      },
+      "root_testcaptureset_IamRolePolicyAttachment_69E9E796": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_set/IamRolePolicyAttachment",
+            "uniqueId": "root_testcaptureset_IamRolePolicyAttachment_69E9E796",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_testcaptureset_IamRole_1FCDC76B.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_testcapturearray_85E4D097": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_array/Default",
+            "uniqueId": "root_testcapturearray_85E4D097",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_51ee81c0": "\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.bucket}",
+            "QUEUE_URL_409f9855": "\${aws_sqs_queue.root_MyResource_q2_A7C72267.url}",
+            "QUEUE_URL_5a2f5a6e": "\${aws_sqs_queue.root_MyResource_q1_3171D68C.url}",
+            "WING_FUNCTION_NAME": "test-capture_array-c84da7f0",
+          },
+        },
+        "function_name": "test-capture_array-c84da7f0",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_testcapturearray_IamRole_0E03D456.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_testcapturearray_Code_013E59DB.bucket}",
+        "s3_key": "\${aws_s3_object.root_testcapturearray_S3Object_56C01E37.key}",
+        "timeout": 30,
+      },
+      "root_testcapturearrayofqueues_B444E46D": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_array_of_queues/Default",
+            "uniqueId": "root_testcapturearrayofqueues_B444E46D",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_51ee81c0": "\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.bucket}",
+            "QUEUE_URL_409f9855": "\${aws_sqs_queue.root_MyResource_q2_A7C72267.url}",
+            "QUEUE_URL_5a2f5a6e": "\${aws_sqs_queue.root_MyResource_q1_3171D68C.url}",
+            "WING_FUNCTION_NAME": "test-capture_array_of_queues-c8f52b65",
+          },
+        },
+        "function_name": "test-capture_array_of_queues-c8f52b65",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_testcapturearrayofqueues_IamRole_223C9195.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_testcapturearrayofqueues_Code_D7325F27.bucket}",
+        "s3_key": "\${aws_s3_object.root_testcapturearrayofqueues_S3Object_C899E4CF.key}",
+        "timeout": 30,
+      },
+      "root_testcapturemap_7AEC532C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_map/Default",
+            "uniqueId": "root_testcapturemap_7AEC532C",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_51ee81c0": "\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.bucket}",
+            "QUEUE_URL_409f9855": "\${aws_sqs_queue.root_MyResource_q2_A7C72267.url}",
+            "QUEUE_URL_5a2f5a6e": "\${aws_sqs_queue.root_MyResource_q1_3171D68C.url}",
+            "WING_FUNCTION_NAME": "test-capture_map-c8002cff",
+          },
+        },
+        "function_name": "test-capture_map-c8002cff",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_testcapturemap_IamRole_1B5F9F5E.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_testcapturemap_Code_5F6F5256.bucket}",
+        "s3_key": "\${aws_s3_object.root_testcapturemap_S3Object_3618C235.key}",
+        "timeout": 30,
+      },
+      "root_testcaptureprimitives_11A0A604": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_primitives/Default",
+            "uniqueId": "root_testcaptureprimitives_11A0A604",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_51ee81c0": "\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.bucket}",
+            "QUEUE_URL_409f9855": "\${aws_sqs_queue.root_MyResource_q2_A7C72267.url}",
+            "QUEUE_URL_5a2f5a6e": "\${aws_sqs_queue.root_MyResource_q1_3171D68C.url}",
+            "WING_FUNCTION_NAME": "test-capture_primitives-c8a111ce",
+          },
+        },
+        "function_name": "test-capture_primitives-c8a111ce",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_testcaptureprimitives_IamRole_67F1EAC9.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_testcaptureprimitives_Code_966F0D4F.bucket}",
+        "s3_key": "\${aws_s3_object.root_testcaptureprimitives_S3Object_FC670079.key}",
+        "timeout": 30,
+      },
+      "root_testcaptureresource_369B2B56": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_resource/Default",
+            "uniqueId": "root_testcaptureresource_369B2B56",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_51ee81c0": "\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.bucket}",
+            "QUEUE_URL_409f9855": "\${aws_sqs_queue.root_MyResource_q2_A7C72267.url}",
+            "QUEUE_URL_5a2f5a6e": "\${aws_sqs_queue.root_MyResource_q1_3171D68C.url}",
+            "WING_FUNCTION_NAME": "test-capture_resource-c829c6e3",
+          },
+        },
+        "function_name": "test-capture_resource-c829c6e3",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_testcaptureresource_IamRole_69F520A4.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_testcaptureresource_Code_EC29DF7A.bucket}",
+        "s3_key": "\${aws_s3_object.root_testcaptureresource_S3Object_3988F6DC.key}",
+        "timeout": 30,
+      },
+      "root_testcaptureset_140F1255": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_set/Default",
+            "uniqueId": "root_testcaptureset_140F1255",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_51ee81c0": "\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.bucket}",
+            "QUEUE_URL_409f9855": "\${aws_sqs_queue.root_MyResource_q2_A7C72267.url}",
+            "QUEUE_URL_5a2f5a6e": "\${aws_sqs_queue.root_MyResource_q1_3171D68C.url}",
+            "WING_FUNCTION_NAME": "test-capture_set-c849421f",
+          },
+        },
+        "function_name": "test-capture_set-c849421f",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_testcaptureset_IamRole_1FCDC76B.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_testcaptureset_Code_E2484ABD.bucket}",
+        "s3_key": "\${aws_s3_object.root_testcaptureset_S3Object_86C9A729.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_MyResource_cloudBucket_AF30D75E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/MyResource/cloud.Bucket/Default",
+            "uniqueId": "root_MyResource_cloudBucket_AF30D75E",
+          },
+        },
+        "bucket_prefix": "cloud-bucket-c8f3d54f-",
+      },
+      "root_testcapturearray_Code_013E59DB": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_array/Code",
+            "uniqueId": "root_testcapturearray_Code_013E59DB",
+          },
+        },
+        "bucket_prefix": "code-c87e637c-",
+      },
+      "root_testcapturearrayofqueues_Code_D7325F27": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_array_of_queues/Code",
+            "uniqueId": "root_testcapturearrayofqueues_Code_D7325F27",
+          },
+        },
+        "bucket_prefix": "code-c8433a86-",
+      },
+      "root_testcapturemap_Code_5F6F5256": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_map/Code",
+            "uniqueId": "root_testcapturemap_Code_5F6F5256",
+          },
+        },
+        "bucket_prefix": "code-c80e6a8e-",
+      },
+      "root_testcaptureprimitives_Code_966F0D4F": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_primitives/Code",
+            "uniqueId": "root_testcaptureprimitives_Code_966F0D4F",
+          },
+        },
+        "bucket_prefix": "code-c83bb55b-",
+      },
+      "root_testcaptureresource_Code_EC29DF7A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_resource/Code",
+            "uniqueId": "root_testcaptureresource_Code_EC29DF7A",
+          },
+        },
+        "bucket_prefix": "code-c8b99a85-",
+      },
+      "root_testcaptureset_Code_E2484ABD": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_set/Code",
+            "uniqueId": "root_testcaptureset_Code_E2484ABD",
+          },
+        },
+        "bucket_prefix": "code-c8c60189-",
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_MyResource_cloudBucket_PublicAccessBlock_953F0137": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/MyResource/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_MyResource_cloudBucket_PublicAccessBlock_953F0137",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_MyResource_cloudBucket_Encryption_1E1FD60D": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/MyResource/cloud.Bucket/Encryption",
+            "uniqueId": "root_MyResource_cloudBucket_Encryption_1E1FD60D",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+    },
+    "aws_s3_object": {
+      "root_testcapturearray_S3Object_56C01E37": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:capture_array/S3Object",
+            "uniqueId": "root_testcapturearray_S3Object_56C01E37",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_testcapturearray_Code_013E59DB.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`user-defined-resources-captures.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"user-defined-resources-captures\\" });
+  
+  class MyResource extends $stdlib.core.Resource {
+  constructor(scope, id, ) {
+  	super(scope, id);
+  {
+    this.my_resource = new cloud.Bucket(this,\\"cloud.Bucket\\");
+    this.my_str = \\"my_string\\";
+    this.my_num = 42;
+    this.my_bool = true;
+    this.array_of_str = Object.freeze([\\"s1\\", \\"s2\\"]);
+    this.map_of_num = Object.freeze(new Map([[ \\"k1\\", 11 ], [ \\"k2\\", 22 ]]));
+    this.set_of_str = Object.freeze(new Set([\\"s1\\", \\"s2\\", \\"s1\\"]));
+    this.array_of_queues = Object.freeze([new cloud.Queue(this,\\"q1\\"), new cloud.Queue(this,\\"q2\\")]);
+  }
+  }
+  
+  _toInflight() {
+  	const array_of_queues_client = this._lift(this.array_of_queues);
+  const set_of_str_client = this._lift(this.set_of_str);
+  const my_bool_client = this._lift(this.my_bool);
+  const my_resource_client = this._lift(this.my_resource);
+  const my_str_client = this._lift(this.my_str);
+  const my_num_client = this._lift(this.my_num);
+  const map_of_num_client = this._lift(this.map_of_num);
+  const array_of_str_client = this._lift(this.array_of_str);
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/MyResource.inflight.js\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).MyResource_inflight({array_of_queues: \${array_of_queues_client}, set_of_str: \${set_of_str_client}, my_bool: \${my_bool_client}, my_resource: \${my_resource_client}, my_str: \${my_str_client}, my_num: \${my_num_client}, map_of_num: \${map_of_num_client}, array_of_str: \${array_of_str_client}}))\`);
+  }
+  }
+  MyResource._annotateInflight(\\"capture_resource\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.set_of_str\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.array_of_str\\": { ops: []}});
+  MyResource._annotateInflight(\\"capture_primitives\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.set_of_str\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.array_of_str\\": { ops: []}});
+  MyResource._annotateInflight(\\"capture_array\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.set_of_str\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.array_of_str\\": { ops: []}});
+  MyResource._annotateInflight(\\"capture_map\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.set_of_str\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.array_of_str\\": { ops: []}});
+  MyResource._annotateInflight(\\"capture_set\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.set_of_str\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.array_of_str\\": { ops: []}});
+  MyResource._annotateInflight(\\"capture_array_of_queues\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.set_of_str\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.array_of_str\\": { ops: []}});
+  const r = new MyResource(this,\\"MyResource\\");
+  new cloud.Function(this,\\"test:capture_resource\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.b5e7bd6cc9f6c741c4f0afa8adc0208ccee08e6297495b1fbe29db8afb6ee789/index.js\\")),
+    bindings: {
+      resources: {
+        r: {
+          resource: r,
+          ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
+        },
+      },
+      
+    }
+  }));
+  new cloud.Function(this,\\"test:capture_primitives\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1814d20e284e4a33aff014ce4391d7da7998b0cd7db8ebee477a5400763bbe7b/index.js\\")),
+    bindings: {
+      resources: {
+        r: {
+          resource: r,
+          ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
+        },
+      },
+      
+    }
+  }));
+  new cloud.Function(this,\\"test:capture_array\\",new $stdlib.core.Inflight(this, \\"$Inflight3\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.c341832069b7b13603626bc26227d936f0a7d7b7da45751e3666d6f4e7fa599a/index.js\\")),
+    bindings: {
+      resources: {
+        r: {
+          resource: r,
+          ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
+        },
+      },
+      
+    }
+  }));
+  new cloud.Function(this,\\"test:capture_map\\",new $stdlib.core.Inflight(this, \\"$Inflight4\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.7235e8fbf10f106318ff9c22489e4e955483c8de6b39df0dbf143fdfa4691109/index.js\\")),
+    bindings: {
+      resources: {
+        r: {
+          resource: r,
+          ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
+        },
+      },
+      
+    }
+  }));
+  new cloud.Function(this,\\"test:capture_set\\",new $stdlib.core.Inflight(this, \\"$Inflight5\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.b7df534fba155b498841a75f4610f6bb576ee00e2fbe6869317adf3718597864/index.js\\")),
+    bindings: {
+      resources: {
+        r: {
+          resource: r,
+          ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
+        },
+      },
+      
+    }
+  }));
+  new cloud.Function(this,\\"test:capture_array_of_queues\\",new $stdlib.core.Inflight(this, \\"$Inflight6\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.179eef1ca19aa2bf908a3113209c3d8b96c23bac7bc35f1d6381c0f5cd2ec603/index.js\\")),
+    bindings: {
+      resources: {
+        r: {
+          resource: r,
+          ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
         },
       },
       
