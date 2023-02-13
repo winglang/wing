@@ -15,10 +15,10 @@ use crate::{
 };
 use std::collections::{BTreeMap, BTreeSet};
 
-/* This is a definition of how a resource is captured. The most basic way to capture a resource
-is to use a subset of its client's methods. In that case we need to specify the name of the method
-used in the capture. Currently this is the only capture definition supported.
-In the future we might want add more verbose capture definitions like regexes on method parameters etc. */
+/// This is a definition of how a resource is captured. The most basic way to capture a resource
+/// is to use a subset of its client's methods. In that case we need to specify the name of the method
+/// used in the capture. Currently this is the only capture definition supported.
+/// In the future we might want add more verbose capture definitions like regexes on method parameters etc.
 #[derive(Debug, PartialEq, Eq, Hash, Ord, PartialOrd)]
 pub struct CaptureDef {
 	pub method: String,
@@ -457,7 +457,7 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 					res.extend(scan_captures_in_inflight_scope(&m.statements, diagnostics))
 				}
 			}
-			StmtKind::Use {
+			StmtKind::Bring {
 				module_name: _,
 				identifier: _,
 			} => {
