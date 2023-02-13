@@ -9,21 +9,13 @@ This version of it includes the following functional changes:
 
 Also, it includes some non-functional requirements: 
 - The Bucket should be replicated across different regions 
-  - +100 if we are able to do the same for azure as well
-- Least privileged permissions are granted:
-  - Give all permissions unless stated otherwise
-  - If the developer explicitly set permissions, give only the stated permissions 
-- The code should work on sim, aws, azure
+- Least privileged permissions syntax is defined in RFC
+- The code should work on sim, aws
 - VScode should help developers with code completion and hover
   - Windows support - vscode extention should work on windows
   - Hover: when you hover over a symbol you get its type information
-  - Code Completion: 
-    - VScode should complete keywords (for, bring, if...)  in the right context
-    - VScode should complete symbols in scope 
-    - VScode should complete fields and methods of a object 
-    - VScode should complete type annotation after using the :
 - Console should be able to show all resources, and interact with them
-
+- The wing command can be used in windows
 
 ```ts (wing)
 bring cloud;
