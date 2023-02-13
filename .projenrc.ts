@@ -1,5 +1,6 @@
-import { TypeScriptProject } from "@winglang/projen";
 import { JobPermission } from "projen/lib/github/workflows-model.js";
+
+import { TypeScriptProject } from "./projen/index.js";
 
 const project = new TypeScriptProject({
   name: "wing-console",
@@ -13,9 +14,8 @@ const project = new TypeScriptProject({
     "get-port",
     "electron-log",
     "@winglang/sdk",
-    "@winglang/polycons",
+    "polycons",
     "constructs",
-    "@winglang/projen",
     "@babel/core",
     "@types/react",
     "@types/react-dom",
@@ -57,7 +57,7 @@ const project = new TypeScriptProject({
     "react-popper",
     "@popperjs/core",
     "vite-plugin-webfont-dl",
-    "esbuild",
+    "esbuild@^0.16.0",
     "ws",
     "@types/ws",
     "nanoid",
@@ -70,10 +70,9 @@ const project = new TypeScriptProject({
     "playwright-core",
     "xvfb-maybe",
   ],
-  // @ts-ignore
-  minNodeVersion: "18.0.0",
-  workflowNodeVersion: "18.x",
 });
+
+project.package.addField("private", true);
 
 project.addTask("dev").exec("tsx scripts/dev.mts");
 
@@ -86,7 +85,6 @@ project
 
 project
   .tryFindObjectFile(".github/workflows/build.yml")
-  ?.project.tryFindObjectFile(".github/workflows/build.yml")
   ?.addOverride(
     "jobs.build.env.SEGMENT_WRITE_KEY",
     "${{ secrets.SEGMENT_WRITE_KEY }}",
@@ -106,13 +104,7 @@ project.compileTask.exec("tsx scripts/build.mts");
 
 project.tasks.tryFind("package")?.reset();
 
-project.tasks.tryFind("test")?.exec("rm ~/.npmrc");
-project.tasks.tryFind("test")?.exec("npm cache clean --force");
-project.tasks
-  .tryFind("test")
-  ?.exec("npm config set registry http://registry.npmjs.org");
 project.tasks.tryFind("test")?.exec("npm i -g winglang");
-
 project.tasks
   .tryFind("test")
   ?.exec(
@@ -151,15 +143,6 @@ project.release?.addJobs({
         name: "Download build artifacts",
         uses: "actions/download-artifact@v3",
         with: { name: "build-artifact", path: "dist" },
-      },
-      {
-        name: "Login to private npm registry",
-        run: [
-          "npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN",
-        ].join("\n"),
-        env: {
-          PROJEN_GITHUB_TOKEN: "${{ secrets.PROJEN_GITHUB_TOKEN }}",
-        },
       },
       {
         name: "Install dependencies",

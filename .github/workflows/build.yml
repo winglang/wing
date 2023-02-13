@@ -20,10 +20,6 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-      - name: Login to private npm registry
-        env:
-          PROJEN_GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
-        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:

@@ -8,7 +8,7 @@ interface ButtonProps {
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
   className?: string;
-  icon?: (props: React.ComponentProps<"svg">) => JSX.Element;
+  icon?: React.ForwardRefExoticComponent<React.SVGProps<SVGSVGElement>>;
   onClick?: (event: React.MouseEvent<HTMLElement>) => void;
 }
 

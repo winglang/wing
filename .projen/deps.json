@@ -106,14 +106,6 @@
       "type": "build"
     },
     {
-      "name": "@winglang/polycons",
-      "type": "build"
-    },
-    {
-      "name": "@winglang/projen",
-      "type": "build"
-    },
-    {
       "name": "@winglang/sdk",
       "type": "build"
     },
@@ -175,6 +167,7 @@
     },
     {
       "name": "esbuild",
+      "version": "^0.16.0",
       "type": "build"
     },
     {
@@ -219,10 +212,6 @@
       "type": "build"
     },
     {
-      "name": "json-schema",
-      "type": "build"
-    },
-    {
       "name": "lodash.throttle",
       "type": "build"
     },
@@ -241,6 +230,10 @@
     },
     {
       "name": "playwright-core",
+      "type": "build"
+    },
+    {
+      "name": "polycons",
       "type": "build"
     },
     {

@@ -174,15 +174,6 @@
           "exec": "vitest --run --coverage"
         },
         {
-          "exec": "rm ~/.npmrc"
-        },
-        {
-          "exec": "npm cache clean --force"
-        },
-        {
-          "exec": "npm config set registry http://registry.npmjs.org"
-        },
-        {
           "exec": "npm i -g winglang"
         },
         {

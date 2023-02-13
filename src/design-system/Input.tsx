@@ -10,7 +10,7 @@ export interface InputProps {
   value?: string;
   readOnly?: boolean;
   onFocus?: React.FocusEventHandler<HTMLInputElement>;
-  leftIcon?: (props: React.ComponentProps<"svg">) => JSX.Element;
+  leftIcon?: React.ForwardRefExoticComponent<React.SVGProps<SVGSVGElement>>;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
