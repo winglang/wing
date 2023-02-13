@@ -119,7 +119,7 @@ impl<'a> JSifier<'a> {
 		if self.shim {
 			js.insert(
 				0,
-				format!("super({{ outdir: $outdir, name: \"{}\" }});\n", self.app_name),
+				format!("super({{ outdir: $outdir, name: \"{}\", plugins: $plugins }});\n", self.app_name),
 			);
 			output.push(format!(
 				"class MyApp extends {} {{\nconstructor() {}\n}}",

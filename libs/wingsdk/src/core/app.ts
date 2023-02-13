@@ -11,6 +11,7 @@ import * as cdktf from "cdktf";
 import { Construct, IConstruct } from "constructs";
 import { IPolyconFactory, Polycons } from "polycons";
 import stringify from "safe-stable-stringify";
+import { PluginManager } from "./plugin-manager";
 import { synthesizeTree } from "./tree";
 import { Logger } from "../cloud/logger";
 
@@ -58,6 +59,12 @@ export interface AppProps {
    * @default - use the default polycon factory included in the Wing SDK
    */
   readonly customFactory?: IPolyconFactory;
+
+  /**
+   * Absolute paths to plugin javascript files.
+   * @default - [] no plugins
+   */
+  readonly plugins?: string[];
 }
 
 /**
@@ -69,9 +76,14 @@ export class CdktfApp extends Construct implements IApp {
    * Directory where artifacts are synthesized to.
    */
   public readonly outdir: string;
+  /**
+   * Path to the Terraform manifest file.
+   */
+  public readonly terraformManifestPath: string;
 
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
+  private readonly pluginManager: PluginManager;
 
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
@@ -91,9 +103,12 @@ export class CdktfApp extends Construct implements IApp {
 
     super(cdktfStack, "Default");
 
+    this.pluginManager = new PluginManager(props.plugins ?? []);
+
     this.outdir = outdir;
     this.cdktfApp = cdktfApp;
     this.cdktfStack = cdktfStack;
+    this.terraformManifestPath = join(this.outdir, "main.tf.json");
 
     // register a logger for this app.
     Logger.register(this);
@@ -107,6 +122,7 @@ export class CdktfApp extends Construct implements IApp {
    */
   public synth(): string {
     // synthesize Terraform files in `outdir/.tmp.cdktf.out/stacks/root`
+    this.pluginManager.preSynth(this);
     this.cdktfApp.synth();
 
     // move Terraform files from `outdir/.tmp.cdktf.out/stacks/root` to `outdir`
@@ -127,6 +143,9 @@ export class CdktfApp extends Construct implements IApp {
     // return a cleaned snapshot of the resulting Terraform manifest for unit testing
     const tfConfig = this.cdktfStack.toTerraform();
     const cleaned = cleanTerraformConfig(tfConfig);
+
+    this.pluginManager.postSynth(tfConfig, `${this.outdir}/main.tf.json`);
+    this.pluginManager.validate(tfConfig);
     return stringify(cleaned, null, 2) ?? "";
   }
 
