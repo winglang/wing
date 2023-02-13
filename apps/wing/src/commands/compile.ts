@@ -1,7 +1,7 @@
 import * as vm from "vm";
 
 import { mkdir, readFile } from "fs/promises";
-import { basename, dirname, join, resolve, isAbsolute } from "path";
+import { basename, dirname, join, resolve } from "path";
 
 import * as chalk from "chalk";
 import debug from "debug";
@@ -212,7 +212,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
 function resolvePluginPaths(plugins: string[]): string[] {
   const resolvedPluginPaths: string[] = [];
   for (const plugin of plugins) {
-    resolvedPluginPaths.push(isAbsolute(plugin) ? plugin : resolve(process.cwd(), plugin));
+    resolvedPluginPaths.push(resolve(process.cwd(), plugin));
   }
   return resolvedPluginPaths;
 }
