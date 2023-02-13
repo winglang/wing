@@ -16,6 +16,8 @@
     "contributors:check": "all-contributors check",
     "contributors:generate": "all-contributors generate",
     "docs": "./scripts/docsite.sh",
+    "install:examples-valid": "npm --prefix examples/tests/valid --install-links=false install",
+    "install:examples-invalid": "npm --prefix examples/tests/invalid --install-links=false install",
     "install:hangar": "npm --prefix tools/hangar --install-links=false install",
     "install:jsii-docgen": "npm --prefix apps/jsii-docgen --install-links=false install",
     "install:sdk": "npm --prefix libs/wingsdk --install-links=false install",
