@@ -1,9 +1,11 @@
 use crate::{
-	ast::{Scope, Stmt, Symbol},
+	ast::{Expr, Scope, Stmt, Symbol},
+	capture::scan_for_inflights_in_scope,
 	diagnostic::{DiagnosticLevel, WingSpan},
 	parser::Parser,
 	type_check,
-	wasm_util::{ptr_to_string, string_to_combined_ptr},
+	type_check::Types,
+	wasm_util::{combine_ptr_and_length, ptr_to_string, string_to_combined_ptr},
 	Diagnostics,
 };
 use itertools::Itertools;
@@ -25,14 +27,17 @@ mod semantic_token;
 
 /// The result of running wingc on a file
 pub struct FileData {
-	/// Text data contained in the file (utf8)
+	/// Text data contained in the file (ut ≥f8)
 	pub contents: String,
 	/// tree-sitter tree
 	pub tree: Tree,
 	/// The diagnostics returned by wingc
 	pub diagnostics: Diagnostics,
 	/// The top scope of the file
-	pub scope: RefCell<Scope>,
+	pub scope: Scope,
+
+	/// The universal type collection for the scope. This
+	pub types: Types,
 }
 
 lazy_static! {
@@ -90,7 +95,7 @@ pub unsafe extern "C" fn wingc_on_did_change_text_document(ptr: u32, len: u32) {
 }
 pub fn on_document_did_change(params: lsp_types::DidChangeTextDocumentParams) {
 	FILES.with(|files| {
-		let mut files = files.borrow_mut();
+		let files = files.borrow_mut();
 		let uri = params.text_document.uri;
 		let uri_path = uri.to_file_path().unwrap();
 		let path = uri_path.to_str().unwrap();
@@ -153,7 +158,7 @@ pub unsafe extern "C" fn wingc_on_did_open_text_document(ptr: u32, len: u32) {
 }
 pub fn on_document_did_open(params: lsp_types::DidOpenTextDocumentParams) {
 	FILES.with(|files| {
-		let mut files = files.borrow_mut();
+		let files = files.borrow_mut();
 		let uri = params.text_document.uri;
 		let uri_path = uri.to_file_path().unwrap();
 		let path = uri_path.to_str().unwrap();
@@ -251,7 +256,7 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 			.unwrap();
 		let position = params.text_document_position_params.position;
 
-		let scope = parse_result.scope.borrow();
+		let scope = &parse_result.scope;
 		let point_context = find_symbol_in_scope(&scope, position);
 
 		if let Some(point_context) = point_context {
@@ -265,30 +270,40 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 
 			let mut hover_string = String::new();
 			let symbol = point_context.2;
-			hover_string.push_str(&format!("{}: ", symbol.name));
+			let symbol_name = symbol.name.as_str();
 
 			let env_ref = point_context.0.env.borrow();
 			let env = env_ref.as_ref().unwrap();
 
-			if let Ok(lookup) = env.lookup(symbol, None) {
-				match lookup {
+			dbg!("pre lookup");
+
+			if let Ok(lookup) = env.lookup_ext(symbol, None) {
+				dbg!("mid lookup");
+				match lookup.0 {
 					type_check::SymbolKind::Type(t) => {
-						let ff = &**t;
-						hover_string.push_str(format!("{}", ff).as_str());
-						hover_string.push_str(format!("{:p}", t).as_str());
+						hover_string.push_str(format!("**{}**", t).as_str());
 					}
 					type_check::SymbolKind::Variable(v) => {
-						let ff = &*v._type;
-						hover_string.push_str(format!("{}", ff).as_str());
-						hover_string.push_str(format!("{:p}", ff).as_str());
+						let flight = match lookup.1.flight {
+							crate::ast::Phase::Inflight => "inflight ",
+							crate::ast::Phase::Preflight => "preflight ",
+							crate::ast::Phase::Independent => "",
+						};
+						if v.reassignable {
+							hover_string.push_str(format!("```wing\n{flight}let var {symbol_name}: {}\n```", &v._type).as_str());
+						} else {
+							hover_string.push_str(format!("```wing\n{flight}let {symbol_name}: {}\n```", &v._type).as_str());
+						}
 					}
 					type_check::SymbolKind::Namespace(n) => {
-						hover_string.push_str(n.name.as_str());
+						hover_string.push_str(format!("```wing\nbring **{}**\n```", n.name).as_str());
 					}
 				}
+			} else {
+				hover_string.push_str(&format!("**{}**", symbol.name));
 			}
 
-			hover_string.push_str(format!("\n\n*{}*", symbol.span).as_str());
+			dbg!("lookup done");
 
 			hover.range = Some(Range::new(
 				Position {
@@ -349,6 +364,8 @@ fn send_diagnostics(uri: &Url, diagnostics: &Diagnostics) {
 }
 
 fn parse_text(source_file: &str, text: &[u8]) -> FileData {
+	let mut types = type_check::Types::new();
+
 	let language = tree_sitter_wing::language();
 	let mut parser = tree_sitter::Parser::new();
 	parser.set_language(language).unwrap();
@@ -369,17 +386,20 @@ fn parse_text(source_file: &str, text: &[u8]) -> FileData {
 
 	let mut scope = wing_parser.wingit(&tree.root_node());
 
-	let mut types = type_check::Types::new();
 	let type_diag = type_check(&mut scope, &mut types);
 	let parse_diag = wing_parser.diagnostics.into_inner();
 
-	let diagnostics = vec![parse_diag, type_diag].concat();
+	let mut capture_diagnostics = Diagnostics::new();
+	scan_for_inflights_in_scope(&scope, &mut capture_diagnostics);
+
+	let diagnostics = vec![parse_diag, type_diag, capture_diagnostics].concat();
 
 	return FileData {
 		contents: String::from_utf8(text.to_vec()).unwrap(),
 		tree,
 		diagnostics,
-		scope: RefCell::new(scope),
+		scope,
+		types,
 	};
 }
 
@@ -387,8 +407,11 @@ type PointContext<'a> = (&'a Scope, &'a Stmt, &'a Symbol);
 
 fn find_symbol_in_scope<'a>(scope: &'a Scope, position: Position) -> Option<PointContext<'a>> {
 	for statement in scope.statements.iter() {
-		if let Some(point_context) = find_symbol_in_statement(scope, statement, position) {
-			return Some(point_context);
+		if span_contains(&statement.span, &position) {
+			if let Some(point_context) = find_symbol_in_statement(scope, statement, position) {
+				return Some(point_context);
+			}
+			return None;
 		}
 	}
 	None
@@ -421,12 +444,18 @@ fn find_symbol_in_statement<'a>(scope: &'a Scope, statement: &'a Stmt, position:
 			if span_contains(&var_name.span, &position) {
 				return Some((scope, statement, &var_name));
 			}
+			if let Some(point_context) = find_symbol_in_expression(scope, statement, initial_value, position) {
+				return Some(point_context);
+			}
 		}
 		crate::ast::StmtKind::ForLoop {
 			iterator,
 			iterable,
 			statements,
 		} => {
+			if let Some(point_context) = find_symbol_in_expression(scope, statement, iterable, position) {
+				return Some(point_context);
+			}
 			if span_contains(&iterator.span, &position) {
 				return Some((scope, statement, &iterator));
 			}
@@ -435,6 +464,9 @@ fn find_symbol_in_statement<'a>(scope: &'a Scope, statement: &'a Stmt, position:
 			}
 		}
 		crate::ast::StmtKind::While { condition, statements } => {
+			if let Some(point_context) = find_symbol_in_expression(scope, statement, condition, position) {
+				return Some(point_context);
+			}
 			if let Some(point_context) = find_symbol_in_scope(statements, position) {
 				return Some(point_context);
 			}
@@ -445,6 +477,9 @@ fn find_symbol_in_statement<'a>(scope: &'a Scope, statement: &'a Stmt, position:
 			elif_statements,
 			else_statements,
 		} => {
+			if let Some(point_context) = find_symbol_in_expression(scope, statement, condition, position) {
+				return Some(point_context);
+			}
 			if let Some(point_context) = find_symbol_in_scope(statements, position) {
 				return Some(point_context);
 			}
@@ -459,30 +494,66 @@ fn find_symbol_in_statement<'a>(scope: &'a Scope, statement: &'a Stmt, position:
 				}
 			}
 		}
-		crate::ast::StmtKind::Expression(_) => {}
-		crate::ast::StmtKind::Assignment { variable, value } => {}
-		crate::ast::StmtKind::Return(_) => {}
-		crate::ast::StmtKind::Scope(s) => return find_symbol_in_scope(s, position),
-		crate::ast::StmtKind::Class {
-			name,
-			members,
-			methods,
-			constructor,
-			parent,
-			is_resource,
-		} => {
-			if span_contains(&name.span, &position) {
-				return Some((scope, statement, &name));
+		crate::ast::StmtKind::Expression(expr) => {
+			if let Some(point_context) = find_symbol_in_expression(scope, statement, expr, position) {
+				return Some(point_context);
 			}
+		}
+		crate::ast::StmtKind::Assignment { variable, value } => {
+			if let Some(point_context) = find_symbol_in_expression(scope, statement, value, position) {
+				return Some(point_context);
+			}
+			match variable {
+				crate::ast::Reference::Identifier(symb) => {
+					if span_contains(&symb.span, &position) {
+						return Some((scope, statement, symb));
+					}
+				}
+				crate::ast::Reference::NestedIdentifier { object, property } => {
+					if span_contains(&property.span, &position) {
+						return Some((scope, statement, &property));
+					}
+					if let Some(point_context) = find_symbol_in_expression(scope, statement, object, position) {
+						return Some(point_context);
+					}
+				}
+			}
+		}
+		crate::ast::StmtKind::Return(ret) => {
+			if let Some(ret) = ret {
+				return find_symbol_in_expression(scope, statement, ret, position);
+			}
+		}
+		crate::ast::StmtKind::Scope(s) => return find_symbol_in_scope(s, position),
+		crate::ast::StmtKind::Class(c) => {
+			if span_contains(&c.name.span, &position) {
+				return Some((scope, statement, &c.name));
+			}
+			// TODO
 		}
 		crate::ast::StmtKind::Struct { name, extends, members } => {
 			if span_contains(&name.span, &position) {
 				return Some((scope, statement, &name));
 			}
+			for member in members.iter() {
+				if span_contains(&member.name.span, &position) {
+					return Some((scope, statement, &member.name));
+				}
+			}
+			for extend in extends.iter() {
+				if span_contains(&extend.span, &position) {
+					return Some((scope, statement, &extend));
+				}
+			}
 		}
 		crate::ast::StmtKind::Enum { name, values } => {
 			if span_contains(&name.span, &position) {
 				return Some((scope, statement, &name));
+			}
+			for value in values.iter() {
+				if span_contains(&value.span, &position) {
+					return Some((scope, statement, &value));
+				}
 			}
 		}
 	}
@@ -490,9 +561,166 @@ fn find_symbol_in_statement<'a>(scope: &'a Scope, statement: &'a Stmt, position:
 	None
 }
 
+fn find_symbol_in_expression<'a>(
+	scope: &'a Scope,
+	statement: &'a Stmt,
+	expression: &'a Expr,
+	position: Position,
+) -> Option<PointContext<'a>> {
+	if !span_contains(&expression.span, &position) {
+		return None;
+	}
+	match &expression.kind {
+		crate::ast::ExprKind::New {
+			class,
+			obj_id,
+			obj_scope,
+			arg_list,
+		} => {
+			if let Some(ret) = find_symbol_in_expression(scope, statement, obj_scope.as_ref()?, position) {
+				return Some(ret);
+			}
+			for arg in arg_list.named_args.iter() {
+				if span_contains(&arg.0.span, &position) {
+					return Some((scope, statement, &arg.0));
+				}
+				if let Some(ret) = find_symbol_in_expression(scope, statement, arg.1, position) {
+					return Some(ret);
+				}
+			}
+			for arg in arg_list.pos_args.iter() {
+				if let Some(ret) = find_symbol_in_expression(scope, statement, arg, position) {
+					return Some(ret);
+				}
+			}
+		}
+		crate::ast::ExprKind::Literal(l) => match l {
+			crate::ast::Literal::String(_) => {}
+			crate::ast::Literal::InterpolatedString(s) => {
+				for part in s.parts.iter() {
+					if let crate::ast::InterpolatedStringPart::Expr(e) = part {
+						if let Some(ret) = find_symbol_in_expression(scope, statement, e, position) {
+							return Some(ret);
+						}
+					}
+				}
+			}
+			crate::ast::Literal::Number(_) => {}
+			crate::ast::Literal::Duration(_) => {}
+			crate::ast::Literal::Boolean(_) => {}
+		},
+		crate::ast::ExprKind::Reference(r) => match r {
+			crate::ast::Reference::Identifier(i) => {
+				if span_contains(&i.span, &position) {
+					return Some((scope, statement, &i));
+				}
+			}
+			crate::ast::Reference::NestedIdentifier { object, property } => {
+				if span_contains(&object.span, &position) {
+					return find_symbol_in_expression(scope, statement, object, position);
+				}
+				if span_contains(&property.span, &position) {
+					return Some((scope, statement, &property));
+				}
+			}
+		},
+		crate::ast::ExprKind::Call { function, args } => {
+			if let Some(ret) = find_symbol_in_expression(scope, statement, function, position) {
+				return Some(ret);
+			}
+			for arg in args.named_args.iter() {
+				if span_contains(&arg.0.span, &position) {
+					return Some((scope, statement, &arg.0));
+				}
+				if let Some(ret) = find_symbol_in_expression(scope, statement, arg.1, position) {
+					return Some(ret);
+				}
+			}
+			for arg in args.pos_args.iter() {
+				if let Some(ret) = find_symbol_in_expression(scope, statement, arg, position) {
+					return Some(ret);
+				}
+			}
+		}
+		crate::ast::ExprKind::Unary { op, exp } => {
+			if let Some(ret) = find_symbol_in_expression(scope, statement, exp, position) {
+				return Some(ret);
+			}
+		}
+		crate::ast::ExprKind::Binary { op, lexp, rexp } => {
+			if let Some(ret) = find_symbol_in_expression(scope, statement, lexp, position) {
+				return Some(ret);
+			}
+			if let Some(ret) = find_symbol_in_expression(scope, statement, rexp, position) {
+				return Some(ret);
+			}
+		}
+		crate::ast::ExprKind::ArrayLiteral { type_, items } => {
+			for item in items.iter() {
+				if let Some(ret) = find_symbol_in_expression(scope, statement, item, position) {
+					return Some(ret);
+				}
+			}
+		}
+		crate::ast::ExprKind::StructLiteral { type_, fields } => {
+			for field in fields.iter() {
+				if let Some(ret) = find_symbol_in_expression(scope, statement, field.1, position) {
+					return Some(ret);
+				}
+				if span_contains(&field.0.span, &position) {
+					return Some((scope, statement, &field.0));
+				}
+			}
+		}
+		crate::ast::ExprKind::MapLiteral { type_, fields } => {
+			for field in fields.iter() {
+				if let Some(ret) = find_symbol_in_expression(scope, statement, field.1, position) {
+					return Some(ret);
+				}
+			}
+		}
+		crate::ast::ExprKind::SetLiteral { type_, items } => {
+			for item in items.iter() {
+				if let Some(ret) = find_symbol_in_expression(scope, statement, item, position) {
+					return Some(ret);
+				}
+			}
+		}
+		crate::ast::ExprKind::FunctionClosure(f) => {
+			let new_scope = &f.statements;
+			let parameters = &f.parameters;
+
+			if let Some(ret) = find_symbol_in_scope(new_scope, position) {
+				return Some(ret);
+			}
+			for parameter in parameters.iter() {
+				if span_contains(&parameter.0.span, &position) {
+					return Some((new_scope, statement, &parameter.0));
+				}
+			}
+		}
+	};
+
+	None
+}
+
 fn span_contains(span: &WingSpan, position: &Position) -> bool {
-	span.start.row <= position.line as usize
-		&& span.end.row >= position.line as usize
-		&& span.start.column <= position.character as usize
-		&& span.end.column >= position.character as usize
+	let pos_line = position.line as usize;
+	let pos_char = position.character as usize;
+	let start = span.start;
+	let end = span.end;
+
+	if pos_line >= start.row && pos_line <= end.row {
+		if start.row == end.row && pos_line == start.row {
+			pos_char >= start.column && pos_char <= end.column
+		} else if pos_line == start.row {
+			pos_char >= start.column
+		} else if pos_line == end.row {
+			pos_char <= end.column
+		} else {
+			true
+		}
+	} else {
+		false
+	}
 }
