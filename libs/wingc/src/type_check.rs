@@ -1826,7 +1826,7 @@ impl<'a> TypeChecker<'a> {
 		env: &mut SymbolEnv,
 		library_name: String,
 		namespace_filter: Vec<String>,
-		identifier: &Symbol,
+		alias: &Symbol,
 		statement_idx: usize,
 	) {
 		let mut wingii_types = wingii::type_system::TypeSystem::new();
@@ -1859,7 +1859,7 @@ impl<'a> TypeChecker<'a> {
 			&wingii_types,
 			&assembly_name,
 			&namespace_filter,
-			&identifier,
+			&alias,
 			self.types,
 			statement_idx,
 			env,

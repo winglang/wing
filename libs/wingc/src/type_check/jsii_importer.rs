@@ -52,7 +52,7 @@ pub struct JsiiImporter<'a> {
 	/// if they are referenced from a type in the specified `module_name`.
 	namespace_filter: &'a [String],
 	/// The name to assign to the module in the Wing type system.
-	identifier: &'a Symbol,
+	alias: &'a Symbol,
 	/// The wing type system: all imported types are added to `wing_types.libraries`.
 	wing_types: &'a mut Types,
 	/// The index of the import statement that triggered this import. This is required so we'll know
@@ -70,7 +70,7 @@ impl<'a> JsiiImporter<'a> {
 		jsii_types: &'a wingii::type_system::TypeSystem,
 		assembly_name: &'a str,
 		namespace_filter: &'a [String],
-		identifier: &'a Symbol,
+		alias: &'a Symbol,
 		wing_types: &'a mut Types,
 		import_statement_idx: usize,
 		env: &'a mut SymbolEnv,
@@ -79,7 +79,7 @@ impl<'a> JsiiImporter<'a> {
 			jsii_types,
 			assembly_name,
 			namespace_filter,
-			identifier,
+			alias,
 			wing_types,
 			import_statement_idx,
 			env,
@@ -782,7 +782,7 @@ impl<'a> JsiiImporter<'a> {
 		self
 			.env
 			.define(
-				self.identifier,
+				self.alias,
 				SymbolKind::Namespace(ns),
 				StatementIdx::Index(self.import_statement_idx),
 			)
