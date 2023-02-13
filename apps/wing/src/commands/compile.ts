@@ -107,7 +107,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   const artifact = await readFile(artifactPath, "utf-8");
   log("artifact: %s", artifact);
 
-  const fakeRequire = (path: string) => {
+  const preflightRequire = (path: string) => {
     // Try looking for dependencies not only in the current directory (wherever
     // the wing CLI was installed to), but also in the source code directory.
     // This is necessary because the Wing app may have installed dependencies in
@@ -122,7 +122,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   // is starting up, the passed context already has wingsdk in it.
   // "__dirname" is also synthetically changed so nested requires work.
   const context = vm.createContext({
-    require: fakeRequire,
+    require: preflightRequire,
     process: {
       env: {
         WINGSDK_SYNTH_DIR: synthDir,
