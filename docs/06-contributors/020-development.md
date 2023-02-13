@@ -29,7 +29,7 @@ cd wing
 npm install
 ```
 
-:::note Nx commands
+:::note Nx Commands
 [Nx] commands in this document are structured as
 
 ```sh
