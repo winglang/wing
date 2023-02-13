@@ -16,6 +16,7 @@ use lsp_types::{
 use std::{
 	cell::RefCell,
 	collections::{HashMap, HashSet},
+	path::Path,
 	sync::RwLock,
 };
 use tree_sitter::Tree;
@@ -386,7 +387,8 @@ fn parse_text(source_file: &str, text: &[u8]) -> FileData {
 
 	let mut scope = wing_parser.wingit(&tree.root_node());
 
-	let type_diag = type_check(&mut scope, &mut types);
+	let mut types = type_check::Types::new();
+	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file));
 	let parse_diag = wing_parser.diagnostics.into_inner();
 
 	let mut capture_diagnostics = Diagnostics::new();
@@ -422,7 +424,7 @@ fn find_symbol_in_statement<'a>(scope: &'a Scope, statement: &'a Stmt, position:
 		return None;
 	}
 	match &statement.kind {
-		crate::ast::StmtKind::Use {
+		crate::ast::StmtKind::Bring {
 			module_name,
 			identifier,
 		} => {
