@@ -31,7 +31,7 @@ Error at capture_reassignable.w:6:17 | Cannot capture a reassignable variable \\
 
 exports[`cloud_function_expects_inflight.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 1 error(s)
-Error at cloud_function_expects_inflight.w:3:20 | Expected type to be \\"fn(any): any\\", but got \\"fn(str): str\\" instead"
+Error at cloud_function_expects_inflight.w:3:20 | Expected type to be \\"inflight (any): any\\", but got \\"preflight (str): str\\" instead"
 `;
 
 exports[`container_types.w > wing test (--target sim) - invalid > stderr 1`] = `
