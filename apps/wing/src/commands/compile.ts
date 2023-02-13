@@ -38,6 +38,7 @@ const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
 export interface ICompileOptions {
   readonly outDir: string;
   readonly target: Target;
+  readonly plugins?: string[];
 }
 
 /**
@@ -131,7 +132,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     },
     __dirname: workDir,
     __filename: artifactPath,
-
+    $plugins: resolvePluginPaths(options.plugins ?? []),
     // since the SDK is loaded in the outer VM, we need these to be the same class instance,
     // otherwise "instanceof" won't work between preflight code and the SDK. this is needed e.g. in
     // `serializeImmutableData` which has special cases for serializing these types.
@@ -199,4 +200,19 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
       );
     }
   }
+}
+
+/**
+ * Resolves a list of plugin paths as absolute paths, using the current working directory
+ * if absolute path is not provided.
+ * 
+ * @param plugins list of plugin paths (absolute or relative)
+ * @returns list of absolute plugin paths or relative to cwd
+ */
+function resolvePluginPaths(plugins: string[]): string[] {
+  const resolvedPluginPaths: string[] = [];
+  for (const plugin of plugins) {
+    resolvedPluginPaths.push(resolve(process.cwd(), plugin));
+  }
+  return resolvedPluginPaths;
 }

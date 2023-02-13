@@ -55,6 +55,10 @@ async function main() {
       .choices(["tf-aws", "tf-azure", "tf-gcp", "sim"])
       .makeOptionMandatory()
     )
+    .option(
+      "-p, --plugins [plugin...]",
+      "Compiler plugins"
+    )
     .action(compile);
 
   program
