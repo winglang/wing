@@ -1,6 +1,9 @@
 mod jsii_importer;
 pub mod symbol_env;
-use crate::ast::{Type as AstType, *};
+use crate::ast::{
+	Class as AstClass, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
+	Type as AstType, UnaryOperator, UserDefinedType,
+};
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
 use crate::{
 	debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_MAP, WINGSDK_MUT_SET,
@@ -8,6 +11,7 @@ use crate::{
 };
 use derivative::Derivative;
 use indexmap::IndexSet;
+use itertools::Itertools;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -57,15 +61,24 @@ pub enum SymbolKind {
 	Namespace(Namespace),
 }
 
+/// Information about a variable in the environment
 #[derive(Debug, Clone)]
 pub struct VariableInfo {
+	/// Type of the variable
 	pub _type: TypeRef,
+	/// Can the variable be reassigned?
 	pub reassignable: bool,
+	/// The phase in which this variable exists
+	pub flight: Phase,
 }
 
 impl SymbolKind {
-	pub fn make_variable(_type: TypeRef, reassignable: bool) -> Self {
-		SymbolKind::Variable(VariableInfo { _type, reassignable })
+	pub fn make_variable(_type: TypeRef, reassignable: bool, flight: Phase) -> Self {
+		SymbolKind::Variable(VariableInfo {
+			_type,
+			reassignable,
+			flight,
+		})
 	}
 
 	pub fn as_variable(&self) -> Option<VariableInfo> {
@@ -96,7 +109,7 @@ impl SymbolKind {
 		}
 	}
 
-	fn as_type(&self) -> Option<TypeRef> {
+	pub fn as_type(&self) -> Option<TypeRef> {
 		match &self {
 			SymbolKind::Type(t) => Some(t.clone()),
 			_ => None,
@@ -154,12 +167,12 @@ pub struct Class {
 }
 
 impl Class {
-	pub fn methods(&self) -> impl Iterator<Item = (String, TypeRef)> + '_ {
+	pub fn methods(&self, with_ancestry: bool) -> impl Iterator<Item = (String, TypeRef)> + '_ {
 		self
 			.env
-			.iter()
-			.filter(|(_, t)| t.as_variable().unwrap()._type.as_function_sig().is_some())
-			.map(|(s, t)| (s.clone(), t.as_variable().unwrap()._type.clone()))
+			.iter(with_ancestry)
+			.filter(|(_, t, _)| t.as_variable().unwrap()._type.as_function_sig().is_some())
+			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap()._type.clone()))
 	}
 }
 
@@ -670,6 +683,7 @@ impl<'a> TypeChecker<'a> {
 		VariableInfo {
 			_type: self.types.anything(),
 			reassignable: false,
+			flight: Phase::Independent,
 		}
 	}
 
@@ -960,7 +974,7 @@ impl<'a> TypeChecker<'a> {
 					.expect(&format!("Expected \"{}\" to be a struct type", struct_type));
 
 				// Verify that all fields are present and are of the right type
-				if st.env.iter().count() > fields.len() {
+				if st.env.iter(true).count() > fields.len() {
 					panic!("Not all fields of {} are initialized.", struct_type);
 				}
 				for (k, v) in fields.iter() {
@@ -1103,7 +1117,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// Verify that all non-optional fields are present and are of the right type
-		for (k, v) in expected_struct.env.iter().map(|(k, v)| {
+		for (k, v) in expected_struct.env.iter(true).map(|(k, v, _)| {
 			(
 				k,
 				v.as_variable()
@@ -1199,25 +1213,8 @@ impl<'a> TypeChecker<'a> {
 				// TODO: avoid creating a new type for each function_sig resolution
 				self.types.add_type(Type::Function(sig))
 			}
-			AstType::CustomType { root, fields } => {
-				// Resolve all types down the fields list and return the last one (which is likely to be a real type and not a namespace)
-				let mut nested_name = vec![root];
-				nested_name.extend(fields);
-
-				match env.lookup_nested(&nested_name, false, Some(statement_idx)) {
-					Ok(_type) => {
-						if let SymbolKind::Type(t) = *_type {
-							t
-						} else {
-							let symb = nested_name.last().unwrap();
-							self.type_error(&TypeError {
-								message: format!("Expected {} to be a type but it's a {}", symb, _type),
-								span: symb.span.clone(),
-							})
-						}
-					}
-					Err(type_error) => self.type_error(&type_error),
-				}
+			AstType::UserDefined(user_defined_type) => {
+				resolve_user_defined_type(user_defined_type, env, statement_idx).unwrap_or_else(|e| self.type_error(&e))
 			}
 			AstType::Array(v) => {
 				let value_type = self.resolve_type(v, env, statement_idx);
@@ -1272,7 +1269,7 @@ impl<'a> TypeChecker<'a> {
 					self.validate_type(inferred_type, explicit_type, initial_value);
 					match env.define(
 						var_name,
-						SymbolKind::make_variable(explicit_type, *reassignable),
+						SymbolKind::make_variable(explicit_type, *reassignable, env.flight),
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
@@ -1283,7 +1280,7 @@ impl<'a> TypeChecker<'a> {
 				} else {
 					match env.define(
 						var_name,
-						SymbolKind::make_variable(inferred_type, *reassignable),
+						SymbolKind::make_variable(inferred_type, *reassignable, env.flight),
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
@@ -1321,7 +1318,7 @@ impl<'a> TypeChecker<'a> {
 				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.flight, stmt.idx);
 				match scope_env.define(
 					&iterator,
-					SymbolKind::make_variable(iterator_type, false),
+					SymbolKind::make_variable(iterator_type, false, env.flight),
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -1452,19 +1449,16 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 			}
-			StmtKind::Class {
+			StmtKind::Class(AstClass {
 				name,
-				members,
+				fields,
 				methods,
 				parent,
 				constructor,
 				is_resource,
-			} => {
-				let env_flight = if *is_resource {
-					Phase::Preflight
-				} else {
-					Phase::Inflight
-				};
+			}) => {
+				// Resources cannot be defined inflight
+				assert!(!*is_resource || env.flight == Phase::Preflight);
 
 				if *is_resource {
 					// TODO
@@ -1472,7 +1466,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify parent is actually a known Class/Resource and get their env
 				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {
-					let t = self.resolve_type(parent_type, env, stmt.idx);
+					let t = resolve_user_defined_type(parent_type, env, stmt.idx).unwrap_or_else(|e| self.type_error(&e));
 					if *is_resource {
 						if let Type::Resource(ref class) = *t {
 							(Some(t), Some(class.env.get_ref()))
@@ -1492,7 +1486,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-				let dummy_env = SymbolEnv::new(None, self.types.void(), true, false, env_flight, stmt.idx);
+				let dummy_env = SymbolEnv::new(None, self.types.void(), true, false, env.flight, stmt.idx);
 
 				// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
 				let class_spec = Class {
@@ -1515,14 +1509,14 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create a the real class environment to be filled with the class AST types
-				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), true, false, env_flight, stmt.idx);
+				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), true, false, env.flight, stmt.idx);
 
-				// Add members to the class env
-				for member in members.iter() {
-					let member_type = self.resolve_type(&member.member_type, env, stmt.idx);
+				// Add fields to the class env
+				for field in fields.iter() {
+					let field_type = self.resolve_type(&field.member_type, env, stmt.idx);
 					match class_env.define(
-						&member.name,
-						SymbolKind::make_variable(member_type, member.reassignable),
+						&field.name,
+						SymbolKind::make_variable(field_type, field.reassignable, field.flight),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -1538,16 +1532,16 @@ impl<'a> TypeChecker<'a> {
 					// Add myself as first parameter to all class methods (self)
 					sig.parameters.insert(
 						0,
-						AstType::CustomType {
+						AstType::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
-						},
+						}),
 					);
 
 					let method_type = self.resolve_type(&AstType::FunctionSignature(sig), env, stmt.idx);
 					match class_env.define(
 						method_name,
-						SymbolKind::make_variable(method_type, false),
+						SymbolKind::make_variable(method_type, false, method_def.signature.flight),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -1568,7 +1562,7 @@ impl<'a> TypeChecker<'a> {
 						name: WING_CONSTRUCTOR_NAME.into(),
 						span: name.span.clone(),
 					},
-					SymbolKind::make_variable(constructor_type, false),
+					SymbolKind::make_variable(constructor_type, false, constructor.signature.flight),
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -1597,7 +1591,7 @@ impl<'a> TypeChecker<'a> {
 					constructor_sig.return_type,
 					false,
 					true,
-					env_flight,
+					constructor.signature.flight,
 					stmt.idx,
 				);
 				self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
@@ -1608,7 +1602,7 @@ impl<'a> TypeChecker<'a> {
 							name: "this".into(),
 							span: name.span.clone(),
 						},
-						SymbolKind::make_variable(class_type, false),
+						SymbolKind::make_variable(class_type, false, constructor_env.flight),
 						StatementIdx::Top,
 					)
 					.expect("Expected `this` to be added to constructor env");
@@ -1663,12 +1657,12 @@ impl<'a> TypeChecker<'a> {
 				// Create an environment for the struct
 				let mut struct_env = SymbolEnv::new(None, self.types.void(), true, false, env.flight, stmt.idx);
 
-				// Add members to the struct env
-				for member in members.iter() {
-					let member_type = self.resolve_type(&member.member_type, env, stmt.idx);
+				// Add fields to the struct env
+				for field in members.iter() {
+					let field_type = self.resolve_type(&field.member_type, env, stmt.idx);
 					match struct_env.define(
-						&member.name,
-						SymbolKind::make_variable(member_type, false),
+						&field.name,
+						SymbolKind::make_variable(field_type, false, field.flight),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -1766,7 +1760,11 @@ impl<'a> TypeChecker<'a> {
 	fn add_arguments_to_env(&mut self, args: &Vec<(Symbol, bool)>, sig: &FunctionSignature, env: &mut SymbolEnv) {
 		assert!(args.len() == sig.args.len());
 		for (arg, arg_type) in args.iter().zip(sig.args.iter()) {
-			match env.define(&arg.0, SymbolKind::make_variable(*arg_type, arg.1), StatementIdx::Top) {
+			match env.define(
+				&arg.0,
+				SymbolKind::make_variable(*arg_type, arg.1, env.flight),
+				StatementIdx::Top,
+			) {
 				Err(type_error) => {
 					self.type_error(&type_error);
 				}
@@ -1839,9 +1837,13 @@ impl<'a> TypeChecker<'a> {
 		// Note: this is currently limited to top-level function signatures and fields
 		for (type_index, original_type_param) in original_type_params.iter().enumerate() {
 			let new_type_arg = type_params[type_index];
-			for (name, symbol) in original_type_class.env.iter() {
+			for (name, symbol, _) in original_type_class.env.iter(true) {
 				match symbol {
-					SymbolKind::Variable(VariableInfo { _type: v, .. }) => {
+					SymbolKind::Variable(VariableInfo {
+						_type: v,
+						reassignable,
+						flight,
+					}) => {
 						// Replace type params in function signatures
 						if let Some(sig) = v.as_function_sig() {
 							let new_return_type = if sig.return_type.is_same_type_as(original_type_param) {
@@ -1894,7 +1896,7 @@ impl<'a> TypeChecker<'a> {
 									name: name.clone(),
 									span: WingSpan::global(),
 								},
-								SymbolKind::make_variable(self.types.add_type(Type::Function(new_sig)), false),
+								SymbolKind::make_variable(self.types.add_type(Type::Function(new_sig)), *reassignable, *flight),
 								StatementIdx::Top,
 							) {
 								Err(type_error) => {
@@ -1905,6 +1907,7 @@ impl<'a> TypeChecker<'a> {
 						} else if let Some(VariableInfo {
 							_type: var,
 							reassignable,
+							flight,
 						}) = symbol.as_variable()
 						{
 							let new_var_type = if var.is_same_type_as(original_type_param) {
@@ -1918,7 +1921,7 @@ impl<'a> TypeChecker<'a> {
 									name: name.clone(),
 									span: WingSpan::global(),
 								},
-								SymbolKind::make_variable(new_var_type, reassignable),
+								SymbolKind::make_variable(new_var_type, reassignable, flight),
 								StatementIdx::Top,
 							) {
 								Err(type_error) => {
@@ -1999,6 +2002,8 @@ impl<'a> TypeChecker<'a> {
 					return VariableInfo {
 						_type,
 						reassignable: false,
+						// Since we only support enum variants here we assume they are phase independent, for static methods this should be fixed
+						flight: Phase::Independent,
 					};
 				}
 
@@ -2021,6 +2026,7 @@ impl<'a> TypeChecker<'a> {
 					Type::Anything => VariableInfo {
 						_type: instance_type,
 						reassignable: false,
+						flight: env.flight,
 					},
 
 					// Lookup wingsdk std types, hydrating generics if necessary
@@ -2078,6 +2084,7 @@ impl<'a> TypeChecker<'a> {
 							),
 						),
 						reassignable: false,
+						flight: Phase::Independent,
 					},
 				};
 
@@ -2085,6 +2092,7 @@ impl<'a> TypeChecker<'a> {
 					VariableInfo {
 						_type: res._type,
 						reassignable: true,
+						flight: res.flight,
 					}
 				} else {
 					res
@@ -2133,7 +2141,7 @@ fn add_parent_members_to_struct_env(
 			});
 		};
 		// Add each member of current parent to the struct's environment (if it wasn't already added by a previous parent)
-		for (parent_member_name, parent_member) in parent_struct.env.iter() {
+		for (parent_member_name, parent_member, _) in parent_struct.env.iter(true) {
 			let member_type = parent_member
 				.as_variable()
 				.expect("Expected struct member to be a variable")
@@ -2161,11 +2169,50 @@ fn add_parent_members_to_struct_env(
 						name: parent_member_name,
 						span: name.span.clone(),
 					},
-					SymbolKind::make_variable(member_type, false),
+					SymbolKind::make_variable(member_type, false, struct_env.flight),
 					StatementIdx::Top,
 				)?;
 			}
 		}
 	}
 	Ok(())
+}
+
+pub fn resolve_user_defined_type(
+	user_defined_type: &UserDefinedType,
+	env: &SymbolEnv,
+	statement_idx: usize,
+) -> Result<TypeRef, TypeError> {
+	// Resolve all types down the fields list and return the last one (which is likely to be a real type and not a namespace)
+	let mut nested_name = vec![&user_defined_type.root];
+	nested_name.extend(user_defined_type.fields.iter().collect_vec());
+
+	match env.lookup_nested(&nested_name, false, Some(statement_idx)) {
+		Ok(_type) => {
+			if let SymbolKind::Type(t) = *_type {
+				Ok(t)
+			} else {
+				let symb = nested_name.last().unwrap();
+				Err(TypeError {
+					message: format!("Expected {} to be a type but it's a {}", symb, _type),
+					span: symb.span.clone(),
+				})
+			}
+		}
+		Err(type_error) => Err(type_error),
+	}
+}
+
+pub fn resolve_user_defined_type_by_fqn(
+	user_defined_type_name: &str,
+	env: &SymbolEnv,
+	statement_idx: usize,
+) -> Result<TypeRef, TypeError> {
+	let mut fields = user_defined_type_name
+		.split('.')
+		.map(|s| Symbol::global(s))
+		.collect_vec();
+	let root = fields.remove(0);
+	let user_defined_type = UserDefinedType { root, fields };
+	resolve_user_defined_type(&user_defined_type, env, statement_idx)
 }

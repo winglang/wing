@@ -1,0 +1,60 @@
+// Vitest Snapshot v1
+
+exports[`anon_function.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>anon_function.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`asynchronous_model_implicit_await_in_functions.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>asynchronous_model_implicit_await_in_functions.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`capture_containers.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>capture_containers.w<gray> | </color><brightWhite>root/test</color>"`;
+
+exports[`capture_containers_of_resources.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>capture_containers_of_resources.w<gray> | </color><brightWhite>root/test</color>"`;
+
+exports[`capture_in_binary.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>capture_in_binary.w<gray> | </color><brightWhite>root/test</color>"`;
+
+exports[`capture_primitives.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>capture_primitives.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`capture_resource_and_data.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>capture_resource_and_data.w<gray> | </color><brightWhite>root/test</color>"`;
+
+exports[`captures.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>captures.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`container_types.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>container_types.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`enums.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>enums.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`expressions_binary_operators.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>expressions_binary_operators.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`expressions_string_interpolation.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>expressions_string_interpolation.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`file_counter.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>file_counter.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`for_loop.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>for_loop.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`forward_decl.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>forward_decl.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`hello.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>hello.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`identical_inflights.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>identical_inflights.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`mut_container_types.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>mut_container_types.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`primitive_methods.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>primitive_methods.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`print.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>print.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`reassignment.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>reassignment.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`resource.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>resource.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`statements_if.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>statements_if.w<gray> | </color><brightWhite>root/test</color>"`;
+
+exports[`statements_variable_declarations.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>statements_variable_declarations.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`std_containers.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>std_containers.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`test_bucket.w > wing test --target sim > stdout 1`] = `
+"<green>pass</color><gray> | </color>test_bucket.w<gray> | </color><brightWhite>root/test:get</color>
+<green>pass</color><gray> | </color>test_bucket.w<gray> | </color><brightWhite>root/test:put</color>"
+`;
+
+exports[`while.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>while.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+
+exports[`while_loop_await.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>while_loop_await.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;

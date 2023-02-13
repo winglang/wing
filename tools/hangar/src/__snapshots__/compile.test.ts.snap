@@ -1,6 +1,6 @@
 // Vitest Snapshot v1
 
-exports[`wing compile --target tf-aws anon_function.w > main.tf.json 1`] = `
+exports[`anon_function.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -18,7 +18,7 @@ exports[`wing compile --target tf-aws anon_function.w > main.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws anon_function.w > preflight.js 1`] = `
+exports[`anon_function.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -60,19 +60,19 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_functions.w > index.js 1`] = `
+exports[`asynchronous_model_implicit_await_in_functions.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(s) { const { str_to_str } = this; {
   (await str_to_str.invoke(\\"one\\"));
   {console.log((await str_to_str.invoke(\\"two\\")))};
 } };"
 `;
 
-exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_functions.w > index.js 2`] = `
+exports[`asynchronous_model_implicit_await_in_functions.w > wing compile --target tf-aws > index.js 2`] = `
 "async handle(s) { const {  } = this; {
 } };"
 `;
 
-exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_functions.w > main.tf.json 1`] = `
+exports[`asynchronous_model_implicit_await_in_functions.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -172,7 +172,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_func_Code_58BA0E0E.bucket}",
         "s3_key": "\${aws_s3_object.root_func_S3Object_F6163647.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
       "root_strtostr_05420EE8": {
         "//": {
@@ -192,7 +192,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_strtostr_Code_5BA38746.bucket}",
         "s3_key": "\${aws_s3_object.root_strtostr_S3Object_C6E06A09.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -231,7 +231,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
 }
 `;
 
-exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_functions.w > preflight.js 1`] = `
+exports[`asynchronous_model_implicit_await_in_functions.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -282,7 +282,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws capture_containers.w > index.js 1`] = `
+exports[`capture_containers.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(s) { const { arr, arr_of_map, my_map, my_set } = this; {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(0)) === \\"hello\\")'\`)})(((await arr.at(0)) === \\"hello\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(1)) === \\"world\\")'\`)})(((await arr.at(1)) === \\"world\\"))};
@@ -295,7 +295,7 @@ exports[`wing compile --target tf-aws capture_containers.w > index.js 1`] = `
 } };"
 `;
 
-exports[`wing compile --target tf-aws capture_containers.w > main.tf.json 1`] = `
+exports[`capture_containers.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -365,7 +365,7 @@ exports[`wing compile --target tf-aws capture_containers.w > main.tf.json 1`] = 
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -395,7 +395,7 @@ exports[`wing compile --target tf-aws capture_containers.w > main.tf.json 1`] = 
 }
 `;
 
-exports[`wing compile --target tf-aws capture_containers.w > preflight.js 1`] = `
+exports[`capture_containers.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -443,7 +443,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws capture_containers_of_resources.w > index.js 1`] = `
+exports[`capture_containers_of_resources.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(s) { const { arr, map, set } = this; {
   const b1 = (await arr.at(0));
   const b2 = (await arr.at(1));
@@ -457,7 +457,7 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > index.
 } };"
 `;
 
-exports[`wing compile --target tf-aws capture_containers_of_resources.w > main.tf.json 1`] = `
+exports[`capture_containers_of_resources.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -530,7 +530,7 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > main.t
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -640,7 +640,7 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > main.t
 }
 `;
 
-exports[`wing compile --target tf-aws capture_containers_of_resources.w > preflight.js 1`] = `
+exports[`capture_containers_of_resources.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -685,7 +685,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws capture_in_binary.w > index.js 1`] = `
+exports[`capture_in_binary.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(e) { const { b, x } = this; {
   (await b.put(\\"file\\",\\"foo\\"));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b.get(\\"file\\")) === \\"foo\\")'\`)})(((await b.get(\\"file\\")) === \\"foo\\"))};
@@ -693,7 +693,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > index.js 1`] = `
 } };"
 `;
 
-exports[`wing compile --target tf-aws capture_in_binary.w > main.tf.json 1`] = `
+exports[`capture_in_binary.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -764,7 +764,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -836,7 +836,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > main.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws capture_in_binary.w > preflight.js 1`] = `
+exports[`capture_in_binary.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -884,7 +884,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws capture_primitives.w > index.js 1`] = `
+exports[`capture_primitives.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(s) { const { my_bool, my_dur, my_num, my_second_bool, my_str } = this; {
   {console.log(my_str)};
   const n = my_num;
@@ -903,7 +903,7 @@ exports[`wing compile --target tf-aws capture_primitives.w > index.js 1`] = `
 } };"
 `;
 
-exports[`wing compile --target tf-aws capture_primitives.w > main.tf.json 1`] = `
+exports[`capture_primitives.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -973,7 +973,7 @@ exports[`wing compile --target tf-aws capture_primitives.w > main.tf.json 1`] = 
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudFunction_S3Object_C8435368.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -1003,7 +1003,7 @@ exports[`wing compile --target tf-aws capture_primitives.w > main.tf.json 1`] = 
 }
 `;
 
-exports[`wing compile --target tf-aws capture_primitives.w > preflight.js 1`] = `
+exports[`capture_primitives.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -1053,7 +1053,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws capture_resource_and_data.w > index.js 1`] = `
+exports[`capture_resource_and_data.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(e) { const { data, queue, res } = this; {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(data.size === 3)'\`)})((data.size === 3))};
   (await res.put(\\"file.txt\\",\\"world\\"));
@@ -1062,7 +1062,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > index.js 1`]
 } };"
 `;
 
-exports[`wing compile --target tf-aws capture_resource_and_data.w > main.tf.json 1`] = `
+exports[`capture_resource_and_data.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -1134,7 +1134,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > main.tf.json
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -1206,7 +1206,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > main.tf.json
 }
 `;
 
-exports[`wing compile --target tf-aws capture_resource_and_data.w > preflight.js 1`] = `
+exports[`capture_resource_and_data.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -1259,7 +1259,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws captures.w > index.js 1`] = `
+exports[`captures.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(event) { const { bucket1, bucket2, bucket3 } = this; {
   (await bucket1.put(\\"file.txt\\",\\"data\\"));
   (await bucket2.get(\\"file.txt\\"));
@@ -1271,7 +1271,7 @@ exports[`wing compile --target tf-aws captures.w > index.js 1`] = `
 } };"
 `;
 
-exports[`wing compile --target tf-aws captures.w > main.tf.json 1`] = `
+exports[`captures.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -1415,7 +1415,7 @@ exports[`wing compile --target tf-aws captures.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_AnotherFunction_Code_B0183137.bucket}",
         "s3_key": "\${aws_s3_object.root_AnotherFunction_S3Object_5AD7E879.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
       "root_cloudFunction_6A57BA0A": {
         "//": {
@@ -1438,7 +1438,7 @@ exports[`wing compile --target tf-aws captures.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudFunction_S3Object_C8435368.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
       "root_cloudQueueOnMessagee46e5cb7_C394DE2A": {
         "//": {
@@ -1461,7 +1461,7 @@ exports[`wing compile --target tf-aws captures.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -1626,7 +1626,7 @@ exports[`wing compile --target tf-aws captures.w > main.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws captures.w > preflight.js 1`] = `
+exports[`captures.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -1687,7 +1687,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws container_types.w > main.tf.json 1`] = `
+exports[`container_types.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -1827,7 +1827,7 @@ exports[`wing compile --target tf-aws container_types.w > main.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws container_types.w > preflight.js 1`] = `
+exports[`container_types.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -1932,7 +1932,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws enums.w > main.tf.json 1`] = `
+exports[`enums.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -1950,7 +1950,7 @@ exports[`wing compile --target tf-aws enums.w > main.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws enums.w > preflight.js 1`] = `
+exports[`enums.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -1988,7 +1988,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws expressions_binary_operators.w > main.tf.json 1`] = `
+exports[`expressions_binary_operators.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2006,7 +2006,7 @@ exports[`wing compile --target tf-aws expressions_binary_operators.w > main.tf.j
 }
 `;
 
-exports[`wing compile --target tf-aws expressions_binary_operators.w > preflight.js 1`] = `
+exports[`expressions_binary_operators.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -2043,7 +2043,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws expressions_string_interpolation.w > main.tf.json 1`] = `
+exports[`expressions_string_interpolation.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2061,7 +2061,7 @@ exports[`wing compile --target tf-aws expressions_string_interpolation.w > main.
 }
 `;
 
-exports[`wing compile --target tf-aws expressions_string_interpolation.w > preflight.js 1`] = `
+exports[`expressions_string_interpolation.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -2098,7 +2098,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws file_counter.w > index.js 1`] = `
+exports[`file_counter.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(body) { const { bucket, counter } = this; {
   const next = (await counter.inc());
   const key = \`myfile-\${\\"hi\\"}.txt\`;
@@ -2106,7 +2106,7 @@ exports[`wing compile --target tf-aws file_counter.w > index.js 1`] = `
 } };"
 `;
 
-exports[`wing compile --target tf-aws file_counter.w > main.tf.json 1`] = `
+exports[`file_counter.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2210,7 +2210,7 @@ exports[`wing compile --target tf-aws file_counter.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -2282,7 +2282,7 @@ exports[`wing compile --target tf-aws file_counter.w > main.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws file_counter.w > preflight.js 1`] = `
+exports[`file_counter.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -2333,7 +2333,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws for_loop.w > main.tf.json 1`] = `
+exports[`for_loop.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2351,7 +2351,7 @@ exports[`wing compile --target tf-aws for_loop.w > main.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws for_loop.w > preflight.js 1`] = `
+exports[`for_loop.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -2389,7 +2389,16 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws forward_decl.w > main.tf.json 1`] = `
+exports[`forward_decl.w > wing compile --target tf-aws > R.inflight.js 1`] = `
+"export class R_inflight  {
+constructor({  }) {
+
+
+}
+}"
+`;
+
+exports[`forward_decl.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2407,7 +2416,7 @@ exports[`wing compile --target tf-aws forward_decl.w > main.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws forward_decl.w > preflight.js 1`] = `
+exports[`forward_decl.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -2432,11 +2441,12 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"forward_decl\\" });
   
-  class R
+  class R extends $stdlib.core.Resource {
+  constructor(scope, id, ) {
+  	super(scope, id);
   {
-  constructor() {
   }
-  f;
+  }
   method2 = () => {
     (this.method1());
     {console.log(\`\${this.f}\`)};
@@ -2444,7 +2454,13 @@ constructor() {
   }
   method1 = () => {
   }
+  _toInflight() {
+  	
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/R.inflight.js\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R_inflight({}))\`);
   }
+  }
+  
   const x = \\"hi\\";
   if (true) {
     {console.log(\`\${x}\`)};
@@ -2455,14 +2471,14 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws hello.w > index.js 1`] = `
+exports[`hello.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(message) { const { bucket } = this; {
   (await bucket.put(\\"hello.txt\\",\`Hello, \${message}!\`));
   return message;
 } };"
 `;
 
-exports[`wing compile --target tf-aws hello.w > main.tf.json 1`] = `
+exports[`hello.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2546,7 +2562,7 @@ exports[`wing compile --target tf-aws hello.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -2618,7 +2634,7 @@ exports[`wing compile --target tf-aws hello.w > main.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws hello.w > preflight.js 1`] = `
+exports[`hello.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -2664,12 +2680,12 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws identical_inflights.w > index.js 1`] = `
+exports[`identical_inflights.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle() { const {  } = this; {
 } };"
 `;
 
-exports[`wing compile --target tf-aws identical_inflights.w > main.tf.json 1`] = `
+exports[`identical_inflights.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2687,7 +2703,7 @@ exports[`wing compile --target tf-aws identical_inflights.w > main.tf.json 1`] =
 }
 `;
 
-exports[`wing compile --target tf-aws identical_inflights.w > preflight.js 1`] = `
+exports[`identical_inflights.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -2731,7 +2747,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws mut_container_types.w > main.tf.json 1`] = `
+exports[`mut_container_types.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2871,7 +2887,7 @@ exports[`wing compile --target tf-aws mut_container_types.w > main.tf.json 1`] =
 }
 `;
 
-exports[`wing compile --target tf-aws mut_container_types.w > preflight.js 1`] = `
+exports[`mut_container_types.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -2932,7 +2948,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws primitive_methods.w > main.tf.json 1`] = `
+exports[`primitive_methods.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2950,7 +2966,7 @@ exports[`wing compile --target tf-aws primitive_methods.w > main.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws primitive_methods.w > preflight.js 1`] = `
+exports[`primitive_methods.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -2986,13 +3002,13 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws print.w > index.js 1`] = `
+exports[`print.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(event) { const {  } = this; {
   {console.log(event)};
 } };"
 `;
 
-exports[`wing compile --target tf-aws print.w > main.tf.json 1`] = `
+exports[`print.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3062,7 +3078,7 @@ exports[`wing compile --target tf-aws print.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudFunction_S3Object_C8435368.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -3134,7 +3150,7 @@ exports[`wing compile --target tf-aws print.w > main.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws print.w > preflight.js 1`] = `
+exports[`print.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -3174,7 +3190,16 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws reassignment.w > main.tf.json 1`] = `
+exports[`reassignment.w > wing compile --target tf-aws > R.inflight.js 1`] = `
+"export class R_inflight  {
+constructor({  }) {
+
+
+}
+}"
+`;
+
+exports[`reassignment.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3192,7 +3217,7 @@ exports[`wing compile --target tf-aws reassignment.w > main.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws reassignment.w > preflight.js 1`] = `
+exports[`reassignment.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -3217,20 +3242,26 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"reassignment\\" });
   
-  class R
+  class R extends $stdlib.core.Resource {
+  constructor(scope, id, ) {
+  	super(scope, id);
   {
-  constructor() {
     if (true) {
       this.f = 1;
       this.f1 = 0;
     }
   }
-  f;
-  f1;
+  }
   inc = () => {
     this.f = (this.f + 1);
   }
+  _toInflight() {
+  	
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/R.inflight.js\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R_inflight({}))\`);
   }
+  }
+  
   let x = 5;
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === 5)'\`)})((x === 5))};
   x = (x + 1);
@@ -3250,7 +3281,16 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws resource.w > main.tf.json 1`] = `
+exports[`resource.w > wing compile --target tf-aws > R.inflight.js 1`] = `
+"export class R_inflight  {
+constructor({  }) {
+
+
+}
+}"
+`;
+
+exports[`resource.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3268,7 +3308,7 @@ exports[`wing compile --target tf-aws resource.w > main.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws resource.w > preflight.js 1`] = `
+exports[`resource.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -3293,14 +3333,21 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"resource\\" });
   
-  class R
+  class R extends $stdlib.core.Resource {
+  constructor(scope, id, name) {
+  	super(scope, id);
   {
-  constructor(name) {
     this.name = name;
   }
-  name;
-  
   }
+  
+  _toInflight() {
+  	
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/R.inflight.js\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R_inflight({}))\`);
+  }
+  }
+  
   const res = new R(this,\\"R\\",\\"Arr\\");
   {console.log(res.name)};
 }
@@ -3308,7 +3355,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws statements_if.w > index.js 1`] = `
+exports[`statements_if.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(s) { const {  } = this; {
   if (true) {
     const x = 2;
@@ -3329,7 +3376,7 @@ exports[`wing compile --target tf-aws statements_if.w > index.js 1`] = `
 } };"
 `;
 
-exports[`wing compile --target tf-aws statements_if.w > main.tf.json 1`] = `
+exports[`statements_if.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3399,7 +3446,7 @@ exports[`wing compile --target tf-aws statements_if.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -3429,7 +3476,7 @@ exports[`wing compile --target tf-aws statements_if.w > main.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws statements_if.w > preflight.js 1`] = `
+exports[`statements_if.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -3486,7 +3533,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws statements_variable_declarations.w > main.tf.json 1`] = `
+exports[`statements_variable_declarations.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3504,7 +3551,7 @@ exports[`wing compile --target tf-aws statements_variable_declarations.w > main.
 }
 `;
 
-exports[`wing compile --target tf-aws statements_variable_declarations.w > preflight.js 1`] = `
+exports[`statements_variable_declarations.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -3536,7 +3583,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws std_containers.w > index.js 1`] = `
+exports[`std_containers.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(body) { const { immut_array, immut_map, immut_set, s, s_array, s_map, s_set } = this; {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s === \\"two\\")'\`)})((s === \\"two\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await s_array.at(1)) === \\"two\\")'\`)})(((await s_array.at(1)) === \\"two\\"))};
@@ -3551,7 +3598,7 @@ exports[`wing compile --target tf-aws std_containers.w > index.js 1`] = `
 } };"
 `;
 
-exports[`wing compile --target tf-aws std_containers.w > main.tf.json 1`] = `
+exports[`std_containers.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3569,7 +3616,7 @@ exports[`wing compile --target tf-aws std_containers.w > main.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws std_containers.w > preflight.js 1`] = `
+exports[`std_containers.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -3627,14 +3674,14 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws test_bucket.w > index.js 1`] = `
+exports[`test_bucket.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(_) { const { b } = this; {
   (await b.put(\\"hello.txt\\",\\"world\\"));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b.get(\\"hello.txt\\")) === \\"world\\")'\`)})(((await b.get(\\"hello.txt\\")) === \\"world\\"))};
 } };"
 `;
 
-exports[`wing compile --target tf-aws test_bucket.w > index.js 2`] = `
+exports[`test_bucket.w > wing compile --target tf-aws > index.js 2`] = `
 "async handle(_) { const { b } = this; {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b.list()).length === 0)'\`)})(((await b.list()).length === 0))};
   (await b.put(\\"hello.txt\\",\\"world\\"));
@@ -3642,7 +3689,7 @@ exports[`wing compile --target tf-aws test_bucket.w > index.js 2`] = `
 } };"
 `;
 
-exports[`wing compile --target tf-aws test_bucket.w > main.tf.json 1`] = `
+exports[`test_bucket.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3742,7 +3789,7 @@ exports[`wing compile --target tf-aws test_bucket.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_testget_Code_EC989716.bucket}",
         "s3_key": "\${aws_s3_object.root_testget_S3Object_071392B9.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
       "root_testput_449428F9": {
         "//": {
@@ -3763,7 +3810,7 @@ exports[`wing compile --target tf-aws test_bucket.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_testput_Code_DE7653AD.bucket}",
         "s3_key": "\${aws_s3_object.root_testput_S3Object_30BF1DDD.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -3844,7 +3891,7 @@ exports[`wing compile --target tf-aws test_bucket.w > main.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws test_bucket.w > preflight.js 1`] = `
+exports[`test_bucket.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -3900,7 +3947,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws while.w > main.tf.json 1`] = `
+exports[`while.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3918,7 +3965,7 @@ exports[`wing compile --target tf-aws while.w > main.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws while.w > preflight.js 1`] = `
+exports[`while.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -3955,13 +4002,13 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile --target tf-aws while_loop_await.w > index.js 1`] = `
+exports[`while_loop_await.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(j) { const {  } = this; {
   return (j + 1);
 } };"
 `;
 
-exports[`wing compile --target tf-aws while_loop_await.w > index.js 2`] = `
+exports[`while_loop_await.w > wing compile --target tf-aws > index.js 2`] = `
 "async handle(body) { const {  } = this; {
   const i = 0;
   while (((await iterator(i)) < 3)) {
@@ -3970,7 +4017,7 @@ exports[`wing compile --target tf-aws while_loop_await.w > index.js 2`] = `
 } };"
 `;
 
-exports[`wing compile --target tf-aws while_loop_await.w > main.tf.json 1`] = `
+exports[`while_loop_await.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -4053,7 +4100,7 @@ exports[`wing compile --target tf-aws while_loop_await.w > main.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessageb3f3d188_Code_4D451A84.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueOnMessageb3f3d188_S3Object_18BDF7F0.key}",
-        "timeout": 60,
+        "timeout": 30,
       },
     },
     "aws_s3_bucket": {
@@ -4083,7 +4130,7 @@ exports[`wing compile --target tf-aws while_loop_await.w > main.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile --target tf-aws while_loop_await.w > preflight.js 1`] = `
+exports[`while_loop_await.w > wing compile --target tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 

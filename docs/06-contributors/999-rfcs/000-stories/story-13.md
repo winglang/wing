@@ -98,7 +98,7 @@ resource TaskList {
     for id in this._bucket.list() {
       result.add(id);
     }
-    return result.copy_mut();
+    return result.copy();
   }
 
    /** 
@@ -128,29 +128,30 @@ resource TaskList {
 // --------------------------------------------
 // testing
 // --------------------------------------------
+let tasks = new TaskList();
 
 new cloud.Function(inflight (s: str): str => {
-  t.tasks.add_task("clean the dishes");
-  let result = t.tasks.find_tasks_with("clean the dishes");
+  tasks.add_task("clean the dishes");
+  let result = tasks.find_tasks_with("clean the dishes");
   assert(result.len == 1);
-  let t = t.tasks.get_task(result.at(0));
+  let t = tasks.get_task(result.at(0));
   assert("clean the dishes" == str.from_json(t.title));
 }) as "test:add, get and find task";
 
 new cloud.Function(inflight (s: str): str => {
-  t.tasks.add_task("clean the dishes");
-  t.tasks.add_task("buy dishwasher soap");
-  t.tasks.remove_tasks(tasks.find_tasks_with("clean the").at(0));
-  let result = t.tasks.find_tasks_with("clean the dish");
+  tasks.add_task("clean the dishes");
+  tasks.add_task("buy dishwasher soap");
+  tasks.remove_tasks(tasks.find_tasks_with("clean the").at(0));
+  let result = tasks.find_tasks_with("clean the dish");
   assert(result.len == 0);
 }) as "test:add, remove and find task";
 
 new cloud.Function(inflight (s: str): str => {
-  let id = t.tasks.add_task("clean the dishes");
-  let j = Json.clone_mut(t.tasks.get_task(id));
+  let id = tasks.add_task("clean the dishes");
+  let j = Json.clone_mut(tasks.get_task(id));
   assert(!j.get("effort_estimation")); //  make sure effort estimation default nil
-  task.add_estimation(id, 4h);
-  j = t.tasks.get_task(id);
-  assert(4h == j.get("effort_estimation"));
+  tasks.add_estimation(id, 4h);
+  let j2 = tasks.get_task(id);
+  assert(4h == j2.get("effort_estimation"));
 }) as "test: effort estimation";
 ```

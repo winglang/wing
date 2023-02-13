@@ -50,10 +50,13 @@ self.onmessage = async (event) => {
     let file = wasi.fs.open("/code.w", defaultFilePerms);
     file.writeString(event.data);
 
-    await wingcInvoke(instance, WINGC_COMPILE, "code.w");
+    const compileResult = wingcInvoke(instance, WINGC_COMPILE, "code.w");
     const stderr = wasi.getStderrString();
     if (stderr) {
       throw stderr;
+    }
+    if (compileResult !== 0) {
+      throw compileResult;
     }
 
     const stdout = wasi.getStdoutString();
@@ -95,18 +98,34 @@ self.onmessage = async (event) => {
 
 self.postMessage("WORKER_READY");
 
+// When WASM stuff returns a value, we need both a pointer and a length,
+// We are using 32 bits for each, so we can combine them into a single 64 bit value.
+// This is a bit mask to extract the low order 32 bits.
+// https://stackoverflow.com/questions/5971645/extracting-high-and-low-order-bytes-of-a-64-bit-integer
+const LOW_MASK = 2n ** 32n - 1n;
+const HIGH_MASK = BigInt(32);
+
 /**
+ * Runs the given WASM function in the Wing Compiler WASM instance.
+ * 
  * Assumptions:
  * 1. The called WASM function is expecting a pointer and a length representing a string
  * 2. The string will be UTF-8 encoded
  * 3. The string will be less than 2^32 bytes long  (4GB)
- * 4. the WASI instance has already been started
+ * 4. The WASI instance has already been initialized
  */
-async function wingcInvoke(instance, func, arg) {
+export function wingcInvoke(
+  instance,
+  func,
+  arg
+) {
   const exports = instance.exports;
 
   const bytes = new TextEncoder().encode(arg);
   const argPointer = exports.wingc_malloc(bytes.byteLength);
+
+  // track memory to free after the call
+  const toFree = [[argPointer, bytes.byteLength]];
 
   try {
     const argMemoryBuffer = new Uint8Array(
@@ -115,9 +134,28 @@ async function wingcInvoke(instance, func, arg) {
       bytes.byteLength
     );
     argMemoryBuffer.set(bytes);
-  
-    exports[func](argPointer, bytes.byteLength);
+
+    const result = exports[func](argPointer, bytes.byteLength);
+
+    if (result === 0 || result === undefined || result === 0n) {
+      return 0;
+    } else {
+      const returnPtr = Number(result >> HIGH_MASK);
+      const returnLen = Number(result & LOW_MASK);
+
+      const entireMemoryBuffer = new Uint8Array(exports.memory.buffer);
+      const extractedBuffer = entireMemoryBuffer.slice(
+        returnPtr,
+        returnPtr + returnLen
+      );
+
+      toFree.push([returnPtr, returnLen]);
+
+      return new TextDecoder().decode(extractedBuffer) + "";
+    }
   } finally {
-    exports.wingc_free(argPointer, bytes.byteLength);
+    toFree.forEach(([pointer, length]) => {
+      exports.wingc_free(pointer, length);
+    });
   }
 }

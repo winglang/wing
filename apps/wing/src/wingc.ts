@@ -108,7 +108,7 @@ export function invoke(
 
     const result = exports[func](argPointer, bytes.byteLength);
 
-    if (result === 0 || result === undefined) {
+    if (result === 0 || result === undefined || result === 0n) {
       return 0;
     } else {
       const returnPtr = Number(result >> HIGH_MASK);
