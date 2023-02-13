@@ -107,7 +107,7 @@ resource TaskList {
       }
     }
     
-    print("found ${output.len} tasks which match term '${term}'");
+    print("found ${output.length} tasks which match term '${term}'");
     return output.copy();
   }
 }
@@ -120,7 +120,7 @@ let tasks = new TaskList();
 new cloud.Function(inflight (s: str): str => {
   tasks.add_task("clean the dishes");
   let result = tasks.find_tasks_with("clean the dishes");
-  assert(result.len == 1);
+  assert(result.length == 1);
   let t = tasks.get_task(result.at(0));
   assert("clean the dishes" == t.get_str(title));
 }) as "test:add, get and find task";
@@ -130,6 +130,6 @@ new cloud.Function(inflight (s: str): str => {
   tasks.add_task("buy dishwasher soap");
   tasks.remove_tasks(tasks.find_tasks_with("clean the").at(0));
   let result = tasks.find_tasks_with("clean the dish");
-  assert(result.len == 0);
+  assert(result.length == 0);
 }) as "test:add, remove and find task";
 ```
