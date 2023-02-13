@@ -174,12 +174,14 @@ function createWindowManager() {
       simulatorInstance.onTrace({
         callback(event) {
           // TODO: Refactor the whole logs and events so we support all of the fields that the simulator uses.
-          consoleLogger.log(
-            `[${event.sourceType}] ${
-              event.data.message ?? JSON.stringify(event.data, undefined, 2)
-            }`,
-            "simulator",
-          );
+          const message = `[${event.sourceType}] ${
+            event.data.message ?? JSON.stringify(event.data, undefined, 2)
+          }`;
+          if (event.type === "log") {
+            consoleLogger.log(message, "simulator");
+          } else {
+            consoleLogger.verbose(message, "simulator");
+          }
         },
       });
 

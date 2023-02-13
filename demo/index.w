@@ -5,6 +5,7 @@ let queue = new cloud.Queue();
 
 let handler = inflight (message: str): str => {
   bucket.put("hello.txt", "Hello, ${message}!");
+  print("Hello, ${message}!");
   return message;
 };
 
