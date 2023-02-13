@@ -2,11 +2,11 @@
 extern crate lazy_static;
 
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
-use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics, WingSpan};
+use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
-use wasm_util::ptr_to_string;
+use wasm_util::{ptr_to_string, string_to_combined_ptr};
 
 use crate::parser::Parser;
 use std::cell::RefCell;
@@ -71,7 +71,7 @@ pub unsafe extern "C" fn wingc_free(ptr: u32, size: u32) {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) {
+pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	let args = ptr_to_string(ptr, len);
 
 	let split = args.split(";").collect::<Vec<&str>>();
@@ -82,11 +82,15 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) {
 	if let Err(mut err) = results {
 		// Sort error messages by line number (ascending)
 		err.sort_by(|a, b| a.cmp(&b));
-		eprintln!(
-			"Compilation failed with {} errors\n{}",
+		let result = format!(
+			"Compilation failed with {} error(s)\n{}",
 			err.len(),
 			err.iter().map(|d| format!("{}", d)).collect::<Vec<_>>().join("\n")
 		);
+
+		string_to_combined_ptr(result)
+	} else {
+		0
 	}
 }
 
@@ -200,10 +204,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> D
 
 // TODO: refactor this (why is scope needed?) (move to separate module?)
 fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
-	let sym = Symbol {
-		name: name.to_string(),
-		span: WingSpan::global(),
-	};
+	let sym = Symbol::global(name);
 	scope
 		.env
 		.borrow_mut()
@@ -211,7 +212,7 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.unwrap()
 		.define(
 			&sym,
-			SymbolKind::make_variable(types.add_type(typ), false),
+			SymbolKind::make_variable(types.add_type(typ), false, Phase::Independent),
 			StatementIdx::Top,
 		)
 		.expect("Failed to add builtin");

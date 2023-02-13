@@ -6,6 +6,7 @@ import { basename, dirname, join, resolve } from "path";
 import * as chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
+import { exit } from "process";
 import { normalPath } from "../util";
 
 const log = debug("wing:compile");
@@ -95,7 +96,11 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
 
   const arg = `${normalPath(wingFile)};${normalPath(workDir)}`;
   log(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
-  wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
+  const compileResult = wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
+  if (compileResult !== 0) {
+    console.error(compileResult);
+    exit(1);
+  }
 
   const artifactPath = resolve(workDir, WINGC_PREFLIGHT);
   log("reading artifact from %s", artifactPath);

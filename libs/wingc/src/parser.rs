@@ -7,9 +7,9 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Constructor, ElifBlock, Expr, ExprKind, FunctionDefinition, FunctionSignature,
-	InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type,
-	UnaryOperator,
+	ArgList, BinaryOperator, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionDefinition,
+	FunctionSignature, InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind,
+	Symbol, Type, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 
@@ -292,7 +292,7 @@ impl Parser<'_> {
 
 	fn build_class_statement(&self, statement_node: &Node, is_resource: bool) -> DiagnosticResult<StmtKind> {
 		let mut cursor = statement_node.walk();
-		let mut members = vec![];
+		let mut fields = vec![];
 		let mut methods = vec![];
 		let mut constructor = None;
 		let name = self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?;
@@ -321,13 +321,13 @@ impl Parser<'_> {
 						_ => {}
 					}
 				}
-				("class_member", _) => members.push(ClassMember {
+				("class_member", _) => fields.push(ClassField {
 					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
 					member_type: self.build_type(&class_element.child_by_field_name("type").unwrap())?,
 					reassignable: class_element.child_by_field_name("reassignable").is_some(),
 					flight: Phase::Preflight,
 				}),
-				("inflight_class_member", _) => members.push(ClassMember {
+				("inflight_class_member", _) => fields.push(ClassField {
 					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
 					member_type: self.build_type(&class_element.child_by_field_name("type").unwrap())?,
 					reassignable: class_element.child_by_field_name("reassignable").is_some(),
@@ -348,10 +348,10 @@ impl Parser<'_> {
 						statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
 						signature: FunctionSignature {
 							parameters: parameters.iter().map(|p| p.1.clone()).collect(),
-							return_type: Some(Box::new(Type::CustomType {
+							return_type: Some(Box::new(Type::UserDefined(UserDefinedType {
 								root: name.clone(),
 								fields: vec![],
-							})),
+							}))),
 							flight: if is_resource { Phase::Preflight } else { Phase::Inflight }, // TODO: for now classes can only be constructed inflight
 						},
 					})
@@ -383,18 +383,28 @@ impl Parser<'_> {
 		}
 
 		let parent = if let Some(parent_node) = statement_node.child_by_field_name("parent") {
-			Some(self.build_type(&parent_node)?)
+			let parent_type = self.build_type(&parent_node)?;
+			match parent_type {
+				Type::UserDefined(parent_type) => Some(parent_type),
+				_ => {
+					self.add_error::<Node>(
+						format!("Parent type must be a user defined type, found {}", parent_type),
+						&parent_node,
+					)?;
+					None
+				}
+			}
 		} else {
 			None
 		};
-		Ok(StmtKind::Class {
+		Ok(StmtKind::Class(Class {
 			name,
-			members,
+			fields,
 			methods,
 			parent,
 			constructor: constructor.unwrap(),
 			is_resource,
-		})
+		}))
 	}
 
 	fn build_anonymous_closure(&self, anon_closure_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
@@ -456,7 +466,7 @@ impl Parser<'_> {
 				let inner_type = self.build_type(&type_node.named_child(0).unwrap()).unwrap();
 				Ok(Type::Optional(Box::new(inner_type)))
 			}
-			"custom_type" => Ok(self.build_custom_type(&type_node)?),
+			"custom_type" => Ok(self.build_user_defined_type(&type_node)?),
 			"function_type" => {
 				let param_type_list_node = type_node.child_by_field_name("parameter_types").unwrap();
 				let mut cursor = param_type_list_node.walk();
@@ -506,15 +516,15 @@ impl Parser<'_> {
 		})
 	}
 
-	fn build_custom_type(&self, nested_node: &Node) -> DiagnosticResult<Type> {
+	fn build_user_defined_type(&self, nested_node: &Node) -> DiagnosticResult<Type> {
 		let mut cursor = nested_node.walk();
-		Ok(Type::CustomType {
+		Ok(Type::UserDefined(UserDefinedType {
 			root: self.node_symbol(&nested_node.child_by_field_name("object").unwrap())?,
 			fields: nested_node
 				.children_by_field_name("fields", &mut cursor)
 				.map(|n| self.node_symbol(&n).unwrap())
 				.collect(),
-		})
+		}))
 	}
 
 	fn build_reference(&self, reference_node: &Node) -> DiagnosticResult<Reference> {

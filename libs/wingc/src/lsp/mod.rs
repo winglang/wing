@@ -2,7 +2,7 @@ use crate::{
 	diagnostic::DiagnosticLevel,
 	parser::Parser,
 	type_check,
-	wasm_util::{combine_ptr_and_length, ptr_to_string},
+	wasm_util::{ptr_to_string, string_to_combined_ptr},
 	Diagnostics,
 };
 use itertools::Itertools;
@@ -105,8 +105,7 @@ pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
 		let result = serde_json::to_string(&result).unwrap();
 
 		// return result as u64 with ptr and len
-		let leaked = result.into_bytes().leak();
-		combine_ptr_and_length(leaked.as_ptr() as u32, leaked.len() as u32)
+		string_to_combined_ptr(result)
 	} else {
 		panic!("Failed to parse 'completion': {}", parse_string);
 	}

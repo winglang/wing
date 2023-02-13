@@ -1,5 +1,13 @@
+// Currently we don't really take advantage of this "capture" phase in the compiler to deal with capturing resource fields.
+// So this phase currently only handles capturing of inflight closures which will probably be removed
+// too (see https://github.com/winglang/wing/issues/1448).
+// We need to rethink the "capture" phase - maybe it's just code analysis for binding annotations
+// (see https://github.com/winglang/wing/issues/1449, https://github.com/winglang/wing/issues/76)?
+// Ideally we should make sure the "jsify" phase is dumb and just deal with, well, jsifying, and move anything smart to
+// this capture phase.
+
 use crate::{
-	ast::{ArgList, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, StmtKind, Symbol},
+	ast::{ArgList, Class, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, StmtKind, Symbol},
 	debug,
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
 	type_check::symbol_env::SymbolEnv,
@@ -63,17 +71,20 @@ pub fn scan_for_inflights_in_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 				}
 			}
 			StmtKind::Scope(s) => scan_for_inflights_in_scope(s, diagnostics),
-			StmtKind::Class {
-				name: _,
-				members: _,
-				methods,
+			StmtKind::Class(Class {
 				constructor,
-				parent: _,
-				is_resource: _,
-			} => {
+				is_resource,
+				methods,
+				..
+			}) => {
+				// TODO: If this is a resource then we need to capture all its members, see file's top comment
+				if *is_resource {
+					// TODO: currently there's no special treatment for resources, see file's top comment
+				}
+
 				match constructor.signature.flight {
 					Phase::Inflight => {
-						// TODO: what do I do with these?
+						// TODO: the result of this is not used, see file's top comment
 						scan_captures_in_inflight_scope(&constructor.statements, diagnostics);
 					}
 					Phase::Independent => scan_for_inflights_in_scope(&constructor.statements, diagnostics),
@@ -82,7 +93,7 @@ pub fn scan_for_inflights_in_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 				for (_, method_def) in methods.iter() {
 					match method_def.signature.flight {
 						Phase::Inflight => {
-							// TODO: what do I do with these?
+							// TODO: the result of this is not used, see file's top comment
 							scan_captures_in_inflight_scope(&method_def.statements, diagnostics);
 						}
 						Phase::Independent => scan_for_inflights_in_scope(&constructor.statements, diagnostics),
@@ -256,7 +267,7 @@ fn scan_captures_in_expression(
 								//   2. analyzing inflight code and figuring out what methods are being used on the object
 								res.extend(
 									resource
-										.methods()
+										.methods(true)
 										.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Phase::Inflight))
 										.map(|(name, _)| Capture {
 											object: symbol.clone(),
@@ -438,14 +449,9 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 				}
 			}
 			StmtKind::Scope(s) => res.extend(scan_captures_in_inflight_scope(s, diagnostics)),
-			StmtKind::Class {
-				name: _,
-				members: _,
-				methods,
-				constructor,
-				parent: _,
-				is_resource: _,
-			} => {
+			StmtKind::Class(Class {
+				methods, constructor, ..
+			}) => {
 				res.extend(scan_captures_in_inflight_scope(&constructor.statements, diagnostics));
 				for (_, m) in methods.iter() {
 					res.extend(scan_captures_in_inflight_scope(&m.statements, diagnostics))
