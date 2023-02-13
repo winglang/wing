@@ -3,8 +3,8 @@ use crate::{
 	debug,
 	diagnostic::{CharacterLocation, WingSpan},
 	type_check::{
-		self, symbol_env::StatementIdx, Class, FunctionSignature, Struct, SymbolKind, Type, TypeRef, Types,
-		WING_CONSTRUCTOR_NAME,
+		self, fqn::is_construct_base, symbol_env::StatementIdx, Class, FunctionSignature, Struct, SymbolKind, Type,
+		TypeRef, Types, WING_CONSTRUCTOR_NAME,
 	},
 	utilities::camel_case_to_snake_case,
 	WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT,
@@ -181,7 +181,7 @@ impl<'a> JsiiImporter<'a> {
 
 	fn import_type(&mut self, type_fqn: &FQN) {
 		// Hack: if the class name is a construct base then we treat this class as a resource and don't need to define it
-		if type_fqn.is_construct_base() {
+		if is_construct_base(&type_fqn) {
 			return;
 		}
 
@@ -519,7 +519,7 @@ impl<'a> JsiiImporter<'a> {
 		let base_class_type = if let Some(base_class_fqn) = &jsii_class.base {
 			let base_class_fqn = FQN::from(base_class_fqn.as_str());
 			// Hack: if the base class name is a resource base then we treat this class as a resource and don't need to define its parent.
-			if base_class_fqn.is_construct_base() {
+			if is_construct_base(&base_class_fqn) {
 				is_resource = true;
 				None
 			} else {

@@ -4,7 +4,7 @@ use crate::{CONSTRUCT_BASE, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE};
 
 /// Represents a fully-qualified name (FQN) of a type in a JSII library.
 /// For example, `@aws-cdk/aws-ec2.Vpc` is a FQN.
-/// The FQN uniquely identifies a type.
+/// The FQN uniquely identifies a type within the JSII ecosystem.
 ///
 /// The FQN typically looks like:
 /// `assembly_name.namespace1.namespace2...namespaceN.type_name`
@@ -37,7 +37,7 @@ impl<'a> FQN<'a> {
 	}
 
 	/// Returns the "assembly" part of the FQN. This is the name of the
-	/// npm library or wing library the type is defined in.
+	/// JSII library or Wing library the type is defined in.
 	#[allow(dead_code)]
 	pub fn assembly(&self) -> &str {
 		self.0.split('.').next().unwrap()
@@ -59,18 +59,6 @@ impl<'a> FQN<'a> {
 		parts
 	}
 
-	/// Returns true if the FQN represents a "construct base class".
-	///
-	/// TODO: this is a temporary hack until we support interfaces.
-	pub fn is_construct_base(&self) -> bool {
-		// We treat both CONSTRUCT_BASE and WINGSDK_RESOURCE, as base constructs because in wingsdk we currently have stuff directly derived
-		// from `construct.Construct` and stuff derived `core.Resource` (which itself is derived from `constructs.Construct`).
-		// But since we don't support interfaces yet we can't import `core.Resource` so we just treat it as a base class.
-		// I'm also not sure we should ever import `core.Resource` because we might want to keep its internals hidden to the user:
-		// after all it's an abstract class representing our `resource` primitive. See https://github.com/winglang/wing/issues/261.
-		self.0 == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE) || self.0 == CONSTRUCT_BASE
-	}
-
 	/// Returns true if the FQN belongs to a namespace that is a prefix of the given namespace filter.
 	/// For example, if the FQN is `my_lib.ns1.ns2.MyResource` then the resource is part of these filters:
 	/// - `[]`
@@ -87,6 +75,18 @@ impl<'a> FQN<'a> {
 				.zip(namespace_filter.iter())
 				.all(|(ns, filter)| ns == filter.as_ref())
 	}
+}
+
+/// Returns true if the FQN represents a "construct base class".
+///
+/// TODO: this is a temporary hack until we support interfaces.
+pub fn is_construct_base(fqn: &FQN) -> bool {
+	// We treat both CONSTRUCT_BASE and WINGSDK_RESOURCE, as base constructs because in wingsdk we currently have stuff directly derived
+	// from `construct.Construct` and stuff derived `core.Resource` (which itself is derived from `constructs.Construct`).
+	// But since we don't support interfaces yet we can't import `core.Resource` so we just treat it as a base class.
+	// I'm also not sure we should ever import `core.Resource` because we might want to keep its internals hidden to the user:
+	// after all it's an abstract class representing our `resource` primitive. See https://github.com/winglang/wing/issues/261.
+	fqn.as_str() == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE) || fqn.as_str() == CONSTRUCT_BASE
 }
 
 impl Display for FQN<'_> {
@@ -145,11 +145,11 @@ mod tests {
 
 	#[test]
 	fn test_fqn_is_construct_base() {
-		assert_eq!(FQN(CONSTRUCT_BASE).is_construct_base(), true);
+		assert_eq!(is_construct_base(&FQN(CONSTRUCT_BASE)), true);
 		assert_eq!(
-			FQN(&format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE)).is_construct_base(),
+			is_construct_base(&FQN(&format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE))),
 			true
 		);
-		assert_eq!(FQN("@winglang/sdk.cloud.Bucket").is_construct_base(), false);
+		assert_eq!(is_construct_base(&FQN("@winglang/sdk.cloud.Bucket")), false);
 	}
 }
