@@ -100,7 +100,7 @@ resource TaskList {
     let output = MutArray<str>[];
     for id in task_ids {
       let j = this.get_task(id); 
-      let title = j.get("title"); // notice that I've decided to create a small baby macro get function that should be removed next sprint
+      let title = j.get("title"); // notice this require us to create a small "get" function  implementation that should be removed by next sprint, maybe there is a different way around this. @hasanaburayyan and @staycoolcall911 ?
       if title.contains(term) { 
         print("found task ${id} with title \"${title}\" with term \"${term}\"");
         output.push(id);
