@@ -3,7 +3,7 @@ mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{
 	Class as AstClass, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-	Type as AstType, UnaryOperator, UserDefinedType,
+	TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
 use crate::{
@@ -817,7 +817,7 @@ impl<'a> TypeChecker<'a> {
 				// TODO: obj_id, obj_scope ignored, should use it once we support Type::Resource and then remove it from Classes (fail if a class has an id if grammar doesn't handle this for us)
 
 				// Lookup the type in the env
-				let type_ = self.resolve_type(class, env, statement_idx);
+				let type_ = self.resolve_type_annotation(class, env, statement_idx);
 				let (class_env, class_symbol) = match *type_ {
 					Type::Class(ref class) => (&class.env, &class.name),
 					Type::Resource(ref class) => {
@@ -1003,7 +1003,7 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::ArrayLiteral { type_, items } => {
 				// Infer type based on either the explicit type or the value in one of the items
 				let container_type = if let Some(type_) = type_ {
-					self.resolve_type(type_, env, statement_idx)
+					self.resolve_type_annotation(type_, env, statement_idx)
 				} else if !items.is_empty() {
 					let some_val_type = self.type_check_exp(items.iter().next().unwrap(), env, statement_idx);
 					self.types.add_type(Type::Array(some_val_type))
@@ -1028,7 +1028,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			ExprKind::StructLiteral { type_, fields } => {
 				// Find this struct's type in the environment
-				let struct_type = self.resolve_type(type_, env, statement_idx);
+				let struct_type = self.resolve_type_annotation(type_, env, statement_idx);
 
 				if struct_type.is_anything() {
 					return struct_type;
@@ -1065,7 +1065,7 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::MapLiteral { fields, type_ } => {
 				// Infer type based on either the explicit type or the value in one of the fields
 				let container_type = if let Some(type_) = type_ {
-					self.resolve_type(type_, env, statement_idx)
+					self.resolve_type_annotation(type_, env, statement_idx)
 				} else if !fields.is_empty() {
 					let some_val_type = self.type_check_exp(fields.iter().next().unwrap().1, env, statement_idx);
 					self.types.add_type(Type::Map(some_val_type))
@@ -1091,7 +1091,7 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::SetLiteral { type_, items } => {
 				// Infer type based on either the explicit type or the value in one of the items
 				let container_type = if let Some(type_) = type_ {
-					self.resolve_type(type_, env, statement_idx)
+					self.resolve_type_annotation(type_, env, statement_idx)
 				} else if !items.is_empty() {
 					let some_val_type = self.type_check_exp(items.iter().next().unwrap(), env, statement_idx);
 					self.types.add_type(Type::Set(some_val_type))
@@ -1122,8 +1122,8 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Create a type_checker function signature from the AST function definition, assuming success we can add this function to the env
-				let function_type = self.resolve_type(
-					&AstType::FunctionSignature(func_def.signature.clone()),
+				let function_type = self.resolve_type_annotation(
+					&TypeAnnotation::FunctionSignature(func_def.signature.clone()),
 					env,
 					statement_idx,
 				);
@@ -1252,63 +1252,62 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn resolve_type(&mut self, ast_type: &AstType, env: &SymbolEnv, statement_idx: usize) -> TypeRef {
-		match ast_type {
-			AstType::Number => self.types.number(),
-			AstType::String => self.types.string(),
-			AstType::Bool => self.types.bool(),
-			AstType::Duration => self.types.duration(),
-			AstType::Optional(v) => {
-				let value_type = self.resolve_type(v, env, statement_idx);
+	fn resolve_type_annotation(&mut self, annotation: &TypeAnnotation, env: &SymbolEnv, statement_idx: usize) -> TypeRef {
+		match annotation {
+			TypeAnnotation::Number => self.types.number(),
+			TypeAnnotation::String => self.types.string(),
+			TypeAnnotation::Bool => self.types.bool(),
+			TypeAnnotation::Duration => self.types.duration(),
+			TypeAnnotation::Optional(v) => {
+				let value_type = self.resolve_type_annotation(v, env, statement_idx);
 				self.types.add_type(Type::Optional(value_type))
 			}
-			AstType::FunctionSignature(ast_sig) => {
+			TypeAnnotation::FunctionSignature(ast_sig) => {
 				let mut args = vec![];
 				for arg in ast_sig.parameters.iter() {
-					args.push(self.resolve_type(arg, env, statement_idx));
+					args.push(self.resolve_type_annotation(arg, env, statement_idx));
 				}
 				let sig = FunctionSignature {
 					parameters: args,
-					return_type: ast_sig
-						.return_type
-						.as_ref()
-						.map_or(self.types.void(), |t| self.resolve_type(t, env, statement_idx)),
+					return_type: ast_sig.return_type.as_ref().map_or(self.types.void(), |t| {
+						self.resolve_type_annotation(t, env, statement_idx)
+					}),
 					flight: ast_sig.flight,
 					js_override: None,
 				};
 				// TODO: avoid creating a new type for each function_sig resolution
 				self.types.add_type(Type::Function(sig))
 			}
-			AstType::UserDefined(user_defined_type) => {
+			TypeAnnotation::UserDefined(user_defined_type) => {
 				resolve_user_defined_type(user_defined_type, env, statement_idx).unwrap_or_else(|e| self.type_error(&e))
 			}
-			AstType::Array(v) => {
-				let value_type = self.resolve_type(v, env, statement_idx);
+			TypeAnnotation::Array(v) => {
+				let value_type = self.resolve_type_annotation(v, env, statement_idx);
 				// TODO: avoid creating a new type for each array resolution
 				self.types.add_type(Type::Array(value_type))
 			}
-			AstType::MutArray(v) => {
-				let value_type = self.resolve_type(v, env, statement_idx);
+			TypeAnnotation::MutArray(v) => {
+				let value_type = self.resolve_type_annotation(v, env, statement_idx);
 				// TODO: avoid creating a new type for each array resolution
 				self.types.add_type(Type::MutArray(value_type))
 			}
-			AstType::Set(v) => {
-				let value_type = self.resolve_type(v, env, statement_idx);
+			TypeAnnotation::Set(v) => {
+				let value_type = self.resolve_type_annotation(v, env, statement_idx);
 				// TODO: avoid creating a new type for each set resolution
 				self.types.add_type(Type::Set(value_type))
 			}
-			AstType::MutSet(v) => {
-				let value_type = self.resolve_type(v, env, statement_idx);
+			TypeAnnotation::MutSet(v) => {
+				let value_type = self.resolve_type_annotation(v, env, statement_idx);
 				// TODO: avoid creating a new type for each set resolution
 				self.types.add_type(Type::MutSet(value_type))
 			}
-			AstType::Map(v) => {
-				let value_type = self.resolve_type(v, env, statement_idx);
+			TypeAnnotation::Map(v) => {
+				let value_type = self.resolve_type_annotation(v, env, statement_idx);
 				// TODO: avoid creating a new type for each map resolution
 				self.types.add_type(Type::Map(value_type))
 			}
-			AstType::MutMap(v) => {
-				let value_type = self.resolve_type(v, env, statement_idx);
+			TypeAnnotation::MutMap(v) => {
+				let value_type = self.resolve_type_annotation(v, env, statement_idx);
 				// TODO: avoid creating a new type for each map resolution
 				self.types.add_type(Type::MutMap(value_type))
 			}
@@ -1323,7 +1322,7 @@ impl<'a> TypeChecker<'a> {
 				initial_value,
 				type_,
 			} => {
-				let explicit_type = type_.as_ref().map(|t| self.resolve_type(t, env, stmt.idx));
+				let explicit_type = type_.as_ref().map(|t| self.resolve_type_annotation(t, env, stmt.idx));
 				let inferred_type = self.type_check_exp(initial_value, env, stmt.idx);
 				if inferred_type.is_void() {
 					self.type_error(&TypeError {
@@ -1620,7 +1619,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Add fields to the class env
 				for field in fields.iter() {
-					let field_type = self.resolve_type(&field.member_type, env, stmt.idx);
+					let field_type = self.resolve_type_annotation(&field.member_type, env, stmt.idx);
 					match class_env.define(
 						&field.name,
 						SymbolKind::make_variable(field_type, field.reassignable, field.flight),
@@ -1639,13 +1638,13 @@ impl<'a> TypeChecker<'a> {
 					// Add myself as first parameter to all class methods (self)
 					sig.parameters.insert(
 						0,
-						AstType::UserDefined(UserDefinedType {
+						TypeAnnotation::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
 						}),
 					);
 
-					let method_type = self.resolve_type(&AstType::FunctionSignature(sig), env, stmt.idx);
+					let method_type = self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(sig), env, stmt.idx);
 					match class_env.define(
 						method_name,
 						SymbolKind::make_variable(method_type, false, method_def.signature.flight),
@@ -1659,8 +1658,8 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Add the constructor to the class env
-				let constructor_type = self.resolve_type(
-					&AstType::FunctionSignature(constructor.signature.clone()),
+				let constructor_type = self.resolve_type_annotation(
+					&TypeAnnotation::FunctionSignature(constructor.signature.clone()),
 					env,
 					stmt.idx,
 				);
@@ -1766,7 +1765,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Add fields to the struct env
 				for field in members.iter() {
-					let field_type = self.resolve_type(&field.member_type, env, stmt.idx);
+					let field_type = self.resolve_type_annotation(&field.member_type, env, stmt.idx);
 					match struct_env.define(
 						&field.name,
 						SymbolKind::make_variable(field_type, false, field.flight),

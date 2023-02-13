@@ -8,7 +8,7 @@ use sha2::{Digest, Sha256};
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, ClassField, Constructor, Expr, ExprKind, FunctionDefinition,
-		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
+		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator,
 		UserDefinedType,
 	},
 	capture::CaptureKind,
@@ -220,9 +220,9 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_type(&self, typ: &Type) -> String {
+	fn jsify_type(&self, typ: &TypeAnnotation) -> String {
 		match typ {
-			Type::UserDefined(user_defined_type) => self.jsify_user_defined_type(user_defined_type),
+			TypeAnnotation::UserDefined(user_defined_type) => self.jsify_user_defined_type(user_defined_type),
 			_ => todo!(),
 		}
 	}
