@@ -1500,7 +1500,7 @@ impl<'a> TypeChecker<'a> {
 							alias = identifier.as_ref().unwrap_or(&module_name);
 						}
 						WINGSDK_STD_MODULE => {
-							self.stmt_error(stmt, format!("Redundant import of \"{}\"", WINGSDK_STD_MODULE));
+							self.stmt_error(stmt, format!("Redundant bring of \"{}\"", WINGSDK_STD_MODULE));
 							return;
 						}
 						_ => {
