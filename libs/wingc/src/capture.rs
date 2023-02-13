@@ -275,7 +275,7 @@ fn scan_captures_in_expression(
 										})
 										.collect::<Vec<Capture>>(),
 								);
-							} else if t.is_immutable_collection() || t.is_primitive() {
+							} else if t.is_capturable() {
 								// capture as an immutable data type (primitive/collection)
 								res.push(Capture {
 									object: symbol.clone(),

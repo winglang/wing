@@ -718,9 +718,9 @@ impl JSifier {
 	/// 	}
 	/// }
 	/// _toInflight() {
-	/// 	const b_client = this.b._toInflight();
+	/// 	const b_client = this._lift(b);
 	///  	const self_client_path = require('path').resolve(__dirname, "clients/MyResource.inflight.js");
-	///   return $stdlib.core.NodeJsCode.fromInline(`(new (require("${self_client_path}")).MyResource_inflight({b: ${b_client.text}}))`);
+	///   return $stdlib.core.NodeJsCode.fromInline(`(new (require("${self_client_path}")).MyResource_inflight({b: ${b_client}}))`);
 	/// }
 	/// MyResource._annotateInflight("my_put", {"this.b": { ops: ["put"]}});
 	/// ```
@@ -836,7 +836,7 @@ impl JSifier {
 			.iter()
 			.map(|(inner_member_name, _, _)| {
 				format!(
-					"const {}_client = this.{}._toInflight();",
+					"const {}_client = this._lift(this.{});",
 					inner_member_name, inner_member_name,
 				)
 			})
@@ -846,7 +846,7 @@ impl JSifier {
 		let client_path = Self::js_resolve_path(&format!("{}/{}.inflight.js", INFLIGHT_CLIENTS_DIR, resource_name.name));
 		let captured_fields = captured_fields
 			.iter()
-			.map(|(inner_member_name, _, _)| format!("{}: ${{{}_client.text}}", inner_member_name, inner_member_name))
+			.map(|(inner_member_name, _, _)| format!("{}: ${{{}_client}}", inner_member_name, inner_member_name))
 			.join(", ");
 		formatdoc!("
 			_toInflight() {{
@@ -986,26 +986,30 @@ impl JSifier {
 			.iter(true)
 			.filter(|(_, kind, _)| {
 				let var = kind.as_variable().unwrap();
-				// We capture preflight non-reassignable fields, we currently only support capturing resources
-				// TODO: need to add immutable primitives in the future
-				var.flight != Phase::Inflight && !var.reassignable && var._type.as_resource().is_some()
+				// We capture preflight non-reassignable fields
+				var.flight != Phase::Inflight && !var.reassignable && var._type.is_capturable()
 			})
 			.map(|(name, kind, _)| {
 				let _type = kind.as_variable().unwrap()._type;
 				// TODO: For now we collect all the inflight methods in the resource (in the future we
 				// we'll need to analyze each inflight method to see what it does with the captured resource)
-				let methods = _type
-					.as_resource()
-					.unwrap()
-					.methods(true)
-					.filter_map(|(name, sig)| {
-						if sig.as_function_sig().unwrap().flight == Phase::Inflight {
-							Some(name)
-						} else {
-							None
-						}
-					})
-					.collect_vec();
+				let methods = if _type.as_resource().is_some() {
+					_type
+						.as_resource()
+						.unwrap()
+						.methods(true)
+						.filter_map(|(name, sig)| {
+							if sig.as_function_sig().unwrap().flight == Phase::Inflight {
+								Some(name)
+							} else {
+								None
+							}
+						})
+						.collect_vec()
+				} else {
+					vec![]
+				};
+
 				(name, _type, methods)
 			})
 			.collect_vec()

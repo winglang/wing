@@ -83,7 +83,7 @@ ${Object.entries(clients)
   return new Handler();
 }
 
-function serializeImmutableData(obj: any): string {
+export function serializeImmutableData(obj: any): string {
   switch (typeof obj) {
     case "string":
     case "boolean":
