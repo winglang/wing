@@ -19,7 +19,7 @@ export interface ConsoleLogger {
 }
 
 export const createConsoleLogger = (
-  onLog: (channel: string, args: string) => void,
+  onLog: (logLevel: LogLevel, message: string) => void,
 ): ConsoleLogger => {
   log.transports.console.bind(process.stdout);
 
@@ -33,8 +33,7 @@ export const createConsoleLogger = (
         message,
         source: source ?? "console",
       });
-      // TODO: Use TRPC websockets.
-      onLog("trpc.invalidate", "app.logs");
+      onLog("verbose", message);
     },
     log(message, source) {
       log.info(message);
@@ -44,19 +43,18 @@ export const createConsoleLogger = (
         message,
         source: source ?? "console",
       });
-      // TODO: Use TRPC websockets.
-      onLog("trpc.invalidate", "app.logs");
+      onLog("info", message);
     },
     error(error, source) {
       log.error(error);
+      const message = error instanceof Error ? error.message : `${error}`;
       this.messages.push({
         timestamp: Date.now(),
         level: "error",
-        message: error instanceof Error ? error.message : `${error}`,
+        message,
         source: source ?? "console",
       });
-      // TODO: Use TRPC websockets.
-      onLog("trpc.invalidate", "app.logs");
+      onLog("error", message);
     },
   };
 };

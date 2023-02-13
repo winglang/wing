@@ -40,6 +40,7 @@ export const createAppRouter = () => {
               simulator: z.boolean(),
             }),
             timestamp: z.number(),
+            text: z.string(),
           }),
         }),
       )
@@ -50,9 +51,16 @@ export const createAppRouter = () => {
             (entry) =>
               input.filters.level[entry.level] &&
               input.filters.source[entry.source] &&
-              entry.timestamp >= input.filters.timestamp,
+              entry.timestamp >= input.filters.timestamp &&
+              (!input.filters.text ||
+                entry.message
+                  .toLowerCase()
+                  .includes(input.filters.text.toLowerCase())),
           );
       }),
+    "app.error": publicProcedure.query(({ ctx }) => {
+      return ctx.errorMessage();
+    }),
     "app.explorerTree": publicProcedure.query(async ({ ctx }) => {
       const simulator = await ctx.simulator();
       const { tree } = await ctx.tree();

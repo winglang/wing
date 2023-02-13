@@ -16,6 +16,7 @@ export const createConsoleServer = async (options: {
   simulatorPromise: Promise<ReturnType<typeof createSimulator>>;
   consoleLogger: ConsoleLogger;
   cloudAppStateService: any;
+  errorMessage: () => string | undefined;
 }): Promise<{ port: number; server: http.Server }> => {
   const app = express();
   app.use(cors());
@@ -38,6 +39,9 @@ export const createConsoleServer = async (options: {
         return {
           wingVersion: await getWingVersion(),
         };
+      },
+      errorMessage() {
+        return options.errorMessage();
       },
     };
   };

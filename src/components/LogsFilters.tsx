@@ -64,11 +64,11 @@ export default function LogsFilters({
 
   return (
     <Listbox value={selected} onChange={(types) => onChange?.(types)} multiple>
-      <div className="relative mt-1 inline-block">
+      <div className="relative inline-block">
         <div ref={setReferenceElement}>
           <Listbox.Button
             as={Button}
-            className="relative pr-8"
+            className="relative pr-8 min-w-[8rem]"
             disabled={disabled}
           >
             <span className="block truncate">{combinationName}</span>

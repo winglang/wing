@@ -22,7 +22,7 @@ export const StatusBar = ({
           <span className="text-slate-600">{wingVersion}</span>
         </div>
 
-        <div className="flex space-x-1 min-w-[7rem]">
+        <div className="flex space-x-1 min-w-[6rem]">
           <span>Status:</span>
           <span className="text-slate-600">
             <span

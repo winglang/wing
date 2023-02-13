@@ -98,10 +98,16 @@ function createWindowManager() {
       }
 
       let newWindow: BrowserWindow | undefined;
+      let lastErrorMessage: string = "";
 
       const consoleLogger: ConsoleLogger = createConsoleLogger(
-        (channel, args) => {
-          newWindow?.webContents.send(channel, args);
+        (level, message) => {
+          lastErrorMessage = "";
+          if (level === "error") {
+            lastErrorMessage = message;
+            newWindow?.webContents.send("trpc.invalidate", "app.error");
+          }
+          newWindow?.webContents.send("trpc.invalidate", "app.logs");
         },
       );
 
@@ -131,6 +137,9 @@ function createWindowManager() {
         cloudAppStateService,
         consoleLogger,
         simulatorPromise,
+        errorMessage() {
+          return lastErrorMessage;
+        },
       });
 
       newWindow = await createWindow({

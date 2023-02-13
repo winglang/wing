@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { LogEntry, LogLevel } from "../../electron/main/consoleLogger.js";
+import { LogLevel } from "../../electron/main/consoleLogger.js";
 import { ExplorerItem } from "../../electron/main/router/app.js";
 import { State } from "../../electron/main/types.js";
 import { BlueScreenOfDeath } from "../design-system/BlueScreenOfDeath.js";
 import { Breadcrumbs } from "../design-system/Breadcrumbs.js";
-import { Button } from "../design-system/Button.js";
 import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
 import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
@@ -20,10 +19,10 @@ import { ResourceIcon } from "../stories/utils.js";
 import { trpc } from "../utils/trpc.js";
 import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
 
+import { ConsoleFilters } from "./ConsoleFilters.js";
 import { ConsoleLogs } from "./ConsoleLogs.js";
 import { DetailedNode } from "./DetailedNode.js";
 import { HeaderBanner } from "./HeaderBanner.js";
-import LogsFilters from "./LogsFilters.js";
 import { MetadataPanel } from "./MetadataPanel.js";
 import { EmptyConstructView } from "./resource-views/EmptyConstructView.jsx";
 import { ResourceView } from "./resource-views/ResourceView.js";
@@ -43,6 +42,7 @@ export const VscodeLayout = ({
   const [showBanner, setShowBanner] = useState(true);
   const treeMenu = useTreeMenuItems();
 
+  const errorMessage = trpc["app.error"].useQuery();
   const explorerTree = trpc["app.explorerTree"].useQuery();
   useEffect(() => {
     if (explorerTree.data) {
@@ -102,30 +102,38 @@ export const VscodeLayout = ({
   const [selectedLogTypeFilters, setSelectedLogTypeFilters] = useState<
     LogLevel[]
   >(["info", "warn", "error"]);
+  const [searchText, setSearchText] = useState("");
 
   const [logsTimeFilter, setLogsTimeFilter] = useState(0);
   const clearLogs = () => {
     setLogsTimeFilter(Date.now());
   };
 
-  const logs = trpc["app.logs"].useQuery({
-    filters: {
-      level: {
-        verbose: selectedLogTypeFilters.includes("verbose"),
-        info: selectedLogTypeFilters.includes("info"),
-        warn: selectedLogTypeFilters.includes("warn"),
-        error: selectedLogTypeFilters.includes("error"),
+  const logs = trpc["app.logs"].useQuery(
+    {
+      filters: {
+        level: {
+          verbose: selectedLogTypeFilters.includes("verbose"),
+          info: selectedLogTypeFilters.includes("info"),
+          warn: selectedLogTypeFilters.includes("warn"),
+          error: selectedLogTypeFilters.includes("error"),
+        },
+        source: {
+          compiler: true,
+          console: true,
+          simulator: true,
+        },
+        text: searchText,
+        timestamp: logsTimeFilter,
       },
-      source: {
-        compiler: true,
-        console: true,
-        simulator: true,
-      },
-      timestamp: logsTimeFilter,
     },
-  });
+    {
+      keepPreviousData: true,
+    },
+  );
+
   const logsRef = useRef<HTMLDivElement>(null);
-  const [lastErrorMessage, setLastErrorMessage] = useState<string>("");
+
   useEffect(() => {
     const div = logsRef.current;
     if (div) {
@@ -134,12 +142,6 @@ export const VscodeLayout = ({
 
     if (!logs.data) {
       return;
-    }
-    const lastError = [...logs.data]
-      .reverse()
-      .find((log: LogEntry) => log.level === "error");
-    if (lastError) {
-      setLastErrorMessage(lastError.message);
     }
   }, [logs.data]);
 
@@ -183,7 +185,7 @@ export const VscodeLayout = ({
         <BlueScreenOfDeath
           hidden={cloudAppState !== "error"}
           title={"An error has occurred:"}
-          error={lastErrorMessage}
+          error={errorMessage.data ?? ""}
         />
 
         <RightResizableWidget className="h-full flex flex-col w-80 min-w-[10rem] min-h-[15rem] border-r border-slate-200">
@@ -324,22 +326,16 @@ export const VscodeLayout = ({
             {isLoading && (
               <div className="absolute bg-white bg-opacity-70 h-full w-full z-50" />
             )}
-            <div className="flex px-4 space-x-2">
-              <LogsFilters
-                selected={selectedLogTypeFilters}
-                onChange={(types) => setSelectedLogTypeFilters(types)}
-                disabled={isLoading}
-              />
-              <Button
-                className="mt-1"
-                label="Clear"
-                onClick={() => clearLogs()}
-              />
-            </div>
-
+            <ConsoleFilters
+              selectedLogTypeFilters={selectedLogTypeFilters}
+              setSelectedLogTypeFilters={setSelectedLogTypeFilters}
+              clearLogs={clearLogs}
+              isLoading={isLoading}
+              onSearch={setSearchText}
+            />
             <div className="relative h-full">
               <ScrollableArea ref={logsRef} overflowY className="px-4 pb-1.5">
-                <ConsoleLogs logs={logs.data ?? []} />
+                <ConsoleLogs logs={logs?.data ?? []} />
               </ScrollableArea>
             </div>
           </div>

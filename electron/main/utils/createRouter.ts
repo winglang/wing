@@ -12,6 +12,7 @@ export interface RouterContext {
   appDetails: () => Promise<{
     wingVersion: string | undefined;
   }>;
+  errorMessage: () => string | undefined;
 }
 
 const t = initTRPC.context<RouterContext>().create({});
