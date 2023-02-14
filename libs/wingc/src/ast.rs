@@ -119,7 +119,7 @@ impl Display for TypeAnnotation {
 			TypeAnnotation::MutSet(t) => write!(f, "MutSet<{}>", t),
 			TypeAnnotation::FunctionSignature(sig) => write!(f, "{}", sig),
 			TypeAnnotation::UserDefined(user_defined_type) => {
-				write!(f, "{}", user_defined_type.root)
+				write!(f, "{}", user_defined_type.root.name)
 			}
 		}
 	}
