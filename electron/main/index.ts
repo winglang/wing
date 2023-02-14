@@ -278,6 +278,8 @@ async function main() {
     // except for the File menu, which is the second entry on the list.
     // TODO: Test it in different environments, since `Menu.getApplicationMenu()` may return null.
     const defaultMenuItems = Menu.getApplicationMenu()?.items!;
+    // remove default Help menu
+    defaultMenuItems.pop();
     Menu.setApplicationMenu(
       Menu.buildFromTemplate([
         {
@@ -319,6 +321,31 @@ async function main() {
           ],
         },
         ...defaultMenuItems.slice(2),
+        {
+          role: "help",
+          submenu: [
+            {
+              label: "Learn More",
+              click: async () => {
+                await shell.openExternal("https://winglang.io");
+              },
+            },
+            {
+              label: "Documentation",
+              click: async () => {
+                await shell.openExternal("https://docs.winglang.io");
+              },
+            },
+            {
+              label: "Open an Issue",
+              click: async () => {
+                await shell.openExternal(
+                  "https://github.com/winglang/wing/issues/new/choose",
+                );
+              },
+            },
+          ],
+        },
       ]),
     );
   }

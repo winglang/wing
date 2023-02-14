@@ -22,7 +22,6 @@ import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
 import { ConsoleFilters } from "./ConsoleFilters.js";
 import { ConsoleLogs } from "./ConsoleLogs.js";
 import { DetailedNode } from "./DetailedNode.js";
-import { HeaderBanner } from "./HeaderBanner.js";
 import { MetadataPanel } from "./MetadataPanel.js";
 import { EmptyConstructView } from "./resource-views/EmptyConstructView.jsx";
 import { ResourceView } from "./resource-views/ResourceView.js";
@@ -33,13 +32,10 @@ export interface VscodeLayoutProps {
   wingVersion: string | undefined;
 }
 
-const NewIssueUrl = "https://github.com/winglang/wing/issues/new/choose";
-
 export const VscodeLayout = ({
   cloudAppState,
   wingVersion,
 }: VscodeLayoutProps) => {
-  const [showBanner, setShowBanner] = useState(true);
   const treeMenu = useTreeMenuItems();
 
   const errorMessage = trpc["app.error"].useQuery();
@@ -56,13 +52,6 @@ export const VscodeLayout = ({
   useEffect(() => {
     treeMenu.expandAll();
   }, [treeMenu.items]);
-
-  const openExternalUrl = (url: string) => {
-    // TODO: Use TRPC directly.
-    if (window.electronTRPC) {
-      window.electronTRPC.ipcRenderer.send("open-external-url", url);
-    }
-  };
 
   const childRelationships = trpc["app.childRelationships"].useQuery(
     {
@@ -163,16 +152,6 @@ export const VscodeLayout = ({
       data-testid="vscode-layout"
       className="h-full flex flex-col bg-slate-50 select-none"
     >
-      {showBanner && (
-        <HeaderBanner
-          title={
-            "Our Console is at an initial stage of development, and we'd love to hear your feedback!"
-          }
-          buttonLabel={"Open an issue"}
-          onClick={() => openExternalUrl(NewIssueUrl)}
-          onClose={() => setShowBanner(false)}
-        />
-      )}
       <div className="flex-1 flex relative">
         {isLoading && (
           <div className="absolute bg-white bg-opacity-70 h-full w-full z-50">
