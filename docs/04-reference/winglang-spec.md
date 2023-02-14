@@ -782,11 +782,11 @@ let f = (arg1: num, var arg2: num) => {
 
 ### 1.7 Optionality
 
-Tri-state "nullity" values (`null`, `undefined` in JavaScript) are a primary source of bugs in
-software. Being able to guarantee that a value will never be null makes it possible to write safe
+Tri-state values (`null`, `undefined`, `nil`) are a primary source of bugs in software.
+Being able to guarantee that a value will never be null makes it possible to write safe
 code without thinking about nullity.
 
-So we are going to try and design Wing without allowing users to explicitly assign or use the `nil`
+We are going to try and design Wing without allowing users to explicitly assign or use the `nil`
 value. Instead, the language offers syntax to support the various use cases that arise when dealing
 with *optionality*.
 
@@ -806,6 +806,9 @@ let x = (foo: str?): num? => {
   return 12;
 };
 
+let var y: num?;
+y = 123;
+
 class Foo {
   my_opt: num?;
 }
@@ -814,11 +817,17 @@ class Foo {
 In the above struct, the `address` field, the `foo` argument and the `my_opt` field are all marked
 as optionals using `?`.
 
-This means, for example, that when a `Person` can be initialized without defining the `address`
+This means, for example, that a `Person` can be initialized without defining the `address`
 field:
 
 ```js
 let my_person = Person { name: "david" };
+```
+
+This is not supported:
+
+```js
+let y: num?;
 ```
 
 Let's look at various use cases for how to interact with optionals.
@@ -833,15 +842,16 @@ let var x: str?;
 x = "hello"; // OK
 
 x = nil;
-//  ^^^ ERROR: no explicit `nil` in this language.
+//  ^^^ ERROR: cannot explicitly assign `nil`
 ```
 
 > You can be a smart-ass and do this:
 > ```js
-> let make_nil = (): str? => { return ?; }
+> let make_nil = (): str? => { return nil; }
 > x = make_nil();
 > ```
-> Good luck with that.
+>
+> If we see that this is needed in the future, we will add support for something like `x = nil;` yea...
 
 #### 1.7.2 Testing if an optional has a value
 
@@ -869,9 +879,22 @@ The `if let` statement can be used to test if an optional is defined an *unwrap*
 non-optional variable defined inside the block:
 
 ```js
+if def(x) || foo == "bar" {
+  print(x);
+//      ^  x is of type `str?` did you mean to use `if let x = x`?
+}
+
 if let address = my_person.address {
   assert(address.len > 0);
   print(address); // address is type `str`
+}
+
+if let _ = my_person.address {
+  // this means that address is defined
+}
+
+if let _ = my_person.address { } else {
+  // address is not defined
 }
 ```
 
@@ -882,6 +905,19 @@ The `??` operator can be used to unwrap or provide a default value:
 ```js
 let address = my_person.address ?? "Planet Earth";
 ```
+
+#### 1.7.5 Optional chaining
+
+The `?.` syntax can be used to for optional chaining:
+
+```js
+let ip_address: str? = options.networking?.ip_address;
+(options.networking?).to_str()
+
+```
+
+The type of `ip_address` is `str?` and optionality will be propagated
+
 
 #### 1.7.5 Throwing an error if a value is not defined (P2)
 
@@ -894,14 +930,16 @@ let address = my_person.address ?? throw("address is required");
 
 #### 1.7.6 Optional return types
 
-If a function returns an optional type, use the `return ?` statement to indicate that the value is
+If a function returns an optional type, use the `return nil;` statement to indicate that the value is
 not defined.
+
+> This is currently the only scenario in the language where `nil` is allowed.
 
 ```js
 let parse_last_name = (full_name: str): str? => {
   let parts = full_name.split(" ");
   if parts.len < 2 {
-    return ?;
+    return nil;
   }
 
   return parts.at(1);
@@ -916,7 +954,8 @@ The `=?` expression can be used to implement lazy evaluation:
 class Person {
   first: str;
   last: str;
-  var full_name: str?;
+
+  var _full_name: str?;
   
   init(first: str, last: str) {
     this.first = first;
@@ -925,7 +964,7 @@ class Person {
 
   // lazy evaluation
   full_name(): str {
-    return this.full_name =? "${this._first} ${this._last}";
+    return this._full_name =? "${this._first} ${this._last}";
   }
 }
 ```
