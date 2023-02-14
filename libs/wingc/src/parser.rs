@@ -9,7 +9,7 @@ use tree_sitter_traversal::{traverse, Order};
 use crate::ast::{
 	ArgList, BinaryOperator, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionDefinition,
 	FunctionSignature, InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind,
-	Symbol, Type, UnaryOperator, UserDefinedType,
+	Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 
@@ -177,7 +177,7 @@ impl Parser<'_> {
 
 			"variable_definition_statement" => {
 				let type_ = if let Some(type_node) = statement_node.child_by_field_name("type") {
-					Some(self.build_type(&type_node)?)
+					Some(self.build_type_annotation(&type_node)?)
 				} else {
 					None
 				};
@@ -323,13 +323,13 @@ impl Parser<'_> {
 				}
 				("class_member", _) => fields.push(ClassField {
 					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
-					member_type: self.build_type(&class_element.child_by_field_name("type").unwrap())?,
+					member_type: self.build_type_annotation(&class_element.child_by_field_name("type").unwrap())?,
 					reassignable: class_element.child_by_field_name("reassignable").is_some(),
 					flight: Phase::Preflight,
 				}),
 				("inflight_class_member", _) => fields.push(ClassField {
 					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
-					member_type: self.build_type(&class_element.child_by_field_name("type").unwrap())?,
+					member_type: self.build_type_annotation(&class_element.child_by_field_name("type").unwrap())?,
 					reassignable: class_element.child_by_field_name("reassignable").is_some(),
 					flight: Phase::Inflight,
 				}),
@@ -348,7 +348,7 @@ impl Parser<'_> {
 						statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
 						signature: FunctionSignature {
 							parameters: parameters.iter().map(|p| p.1.clone()).collect(),
-							return_type: Some(Box::new(Type::UserDefined(UserDefinedType {
+							return_type: Some(Box::new(TypeAnnotation::UserDefined(UserDefinedType {
 								root: name.clone(),
 								fields: vec![],
 							}))),
@@ -383,9 +383,9 @@ impl Parser<'_> {
 		}
 
 		let parent = if let Some(parent_node) = statement_node.child_by_field_name("parent") {
-			let parent_type = self.build_type(&parent_node)?;
+			let parent_type = self.build_type_annotation(&parent_node)?;
 			match parent_type {
-				Type::UserDefined(parent_type) => Some(parent_type),
+				TypeAnnotation::UserDefined(parent_type) => Some(parent_type),
 				_ => {
 					self.add_error::<Node>(
 						format!("Parent type must be a user defined type, found {}", parent_type),
@@ -419,7 +419,7 @@ impl Parser<'_> {
 			signature: FunctionSignature {
 				parameters: parameters.iter().map(|p| p.1.clone()).collect(),
 				return_type: if let Some(rt) = func_def_node.child_by_field_name("type") {
-					Some(Box::new(self.build_type(&rt)?))
+					Some(Box::new(self.build_type_annotation(&rt)?))
 				} else {
 					None
 				},
@@ -434,7 +434,7 @@ impl Parser<'_> {
 	/// # Returns
 	/// A vector of tuples for each parameter in the list. The tuples are the name, type and a bool letting
 	/// us know whether the parameter is reassignable or not respectively.
-	fn build_parameter_list(&self, parameter_list_node: &Node) -> DiagnosticResult<Vec<(Symbol, Type, bool)>> {
+	fn build_parameter_list(&self, parameter_list_node: &Node) -> DiagnosticResult<Vec<(Symbol, TypeAnnotation, bool)>> {
 		let mut res = vec![];
 		let mut cursor = parameter_list_node.walk();
 		for parameter_definition_node in parameter_list_node.named_children(&mut cursor) {
@@ -444,7 +444,7 @@ impl Parser<'_> {
 
 			res.push((
 				self.node_symbol(&parameter_definition_node.child_by_field_name("name").unwrap())?,
-				self.build_type(&parameter_definition_node.child_by_field_name("type").unwrap())?,
+				self.build_type_annotation(&parameter_definition_node.child_by_field_name("type").unwrap())?,
 				parameter_definition_node.child_by_field_name("reassignable").is_some(),
 			))
 		}
@@ -452,32 +452,32 @@ impl Parser<'_> {
 		Ok(res)
 	}
 
-	fn build_type(&self, type_node: &Node) -> DiagnosticResult<Type> {
+	fn build_type_annotation(&self, type_node: &Node) -> DiagnosticResult<TypeAnnotation> {
 		match type_node.kind() {
 			"builtin_type" => match self.node_text(type_node) {
-				"num" => Ok(Type::Number),
-				"str" => Ok(Type::String),
-				"bool" => Ok(Type::Bool),
-				"duration" => Ok(Type::Duration),
+				"num" => Ok(TypeAnnotation::Number),
+				"str" => Ok(TypeAnnotation::String),
+				"bool" => Ok(TypeAnnotation::Bool),
+				"duration" => Ok(TypeAnnotation::Duration),
 				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
 				other => return self.report_unimplemented_grammar(other, "builtin", type_node),
 			},
 			"optional" => {
-				let inner_type = self.build_type(&type_node.named_child(0).unwrap()).unwrap();
-				Ok(Type::Optional(Box::new(inner_type)))
+				let inner_type = self.build_type_annotation(&type_node.named_child(0).unwrap()).unwrap();
+				Ok(TypeAnnotation::Optional(Box::new(inner_type)))
 			}
-			"custom_type" => Ok(self.build_user_defined_type(&type_node)?),
+			"custom_type" => Ok(self.build_udt_annotation(&type_node)?),
 			"function_type" => {
 				let param_type_list_node = type_node.child_by_field_name("parameter_types").unwrap();
 				let mut cursor = param_type_list_node.walk();
 				let parameters = param_type_list_node
 					.named_children(&mut cursor)
-					.filter_map(|param_type| self.build_type(&param_type).ok())
-					.collect::<Vec<Type>>();
+					.filter_map(|param_type| self.build_type_annotation(&param_type).ok())
+					.collect::<Vec<TypeAnnotation>>();
 				let return_type = type_node
 					.child_by_field_name("return_type")
-					.map(|n| Box::new(self.build_type(&n).unwrap()));
-				Ok(Type::FunctionSignature(FunctionSignature {
+					.map(|n| Box::new(self.build_type_annotation(&n).unwrap()));
+				Ok(TypeAnnotation::FunctionSignature(FunctionSignature {
 					parameters,
 					return_type,
 					flight: if type_node.child_by_field_name("inflight").is_some() {
@@ -491,12 +491,24 @@ impl Parser<'_> {
 				let container_type = self.node_text(&type_node.child_by_field_name("collection_type").unwrap());
 				let element_type = type_node.child_by_field_name("type_parameter").unwrap();
 				match container_type {
-					"Map" => Ok(Type::Map(Box::new(self.build_type(&element_type)?))),
-					"MutMap" => Ok(Type::MutMap(Box::new(self.build_type(&element_type)?))),
-					"Array" => Ok(Type::Array(Box::new(self.build_type(&element_type)?))),
-					"MutArray" => Ok(Type::MutArray(Box::new(self.build_type(&element_type)?))),
-					"Set" => Ok(Type::Set(Box::new(self.build_type(&element_type)?))),
-					"MutSet" => Ok(Type::MutSet(Box::new(self.build_type(&element_type)?))),
+					"Map" => Ok(TypeAnnotation::Map(Box::new(
+						self.build_type_annotation(&element_type)?,
+					))),
+					"MutMap" => Ok(TypeAnnotation::MutMap(Box::new(
+						self.build_type_annotation(&element_type)?,
+					))),
+					"Array" => Ok(TypeAnnotation::Array(Box::new(
+						self.build_type_annotation(&element_type)?,
+					))),
+					"MutArray" => Ok(TypeAnnotation::MutArray(Box::new(
+						self.build_type_annotation(&element_type)?,
+					))),
+					"Set" => Ok(TypeAnnotation::Set(Box::new(
+						self.build_type_annotation(&element_type)?,
+					))),
+					"MutSet" => Ok(TypeAnnotation::MutSet(Box::new(
+						self.build_type_annotation(&element_type)?,
+					))),
 					"ERROR" => self.add_error(format!("Expected builtin container type"), type_node)?,
 					other => self.report_unimplemented_grammar(other, "builtin container type", type_node),
 				}
@@ -516,9 +528,9 @@ impl Parser<'_> {
 		})
 	}
 
-	fn build_user_defined_type(&self, nested_node: &Node) -> DiagnosticResult<Type> {
+	fn build_udt_annotation(&self, nested_node: &Node) -> DiagnosticResult<TypeAnnotation> {
 		let mut cursor = nested_node.walk();
-		Ok(Type::UserDefined(UserDefinedType {
+		Ok(TypeAnnotation::UserDefined(UserDefinedType {
 			root: self.node_symbol(&nested_node.child_by_field_name("object").unwrap())?,
 			fields: nested_node
 				.children_by_field_name("fields", &mut cursor)
@@ -579,7 +591,7 @@ impl Parser<'_> {
 		let expression_span = self.node_span(expression_node);
 		match expression_node.kind() {
 			"new_expression" => {
-				let class = self.build_type(&expression_node.child_by_field_name("class").unwrap())?;
+				let class = self.build_type_annotation(&expression_node.child_by_field_name("class").unwrap())?;
 
 				let arg_list = if let Some(args_node) = expression_node.child_by_field_name("args") {
 					self.build_arg_list(&args_node)
@@ -748,7 +760,7 @@ impl Parser<'_> {
 			),
 			"array_literal" => {
 				let array_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
-					Some(self.build_type(&type_node)?)
+					Some(self.build_type_annotation(&type_node)?)
 				} else {
 					None
 				};
@@ -769,7 +781,7 @@ impl Parser<'_> {
 			}
 			"map_literal" => {
 				let map_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
-					Some(self.build_type(&type_node)?)
+					Some(self.build_type_annotation(&type_node)?)
 				} else {
 					None
 				};
@@ -800,7 +812,7 @@ impl Parser<'_> {
 
 				// Special case: empty {} (which is detected as map by tree-sitter) -
 				// if it is annotated as a Set/MutSet we should treat it as a set literal
-				if let Some(Type::Set(_)) | Some(Type::MutSet(_)) = map_type {
+				if let Some(TypeAnnotation::Set(_)) | Some(TypeAnnotation::MutSet(_)) = map_type {
 					if fields.is_empty() {
 						return self.build_set_literal(expression_node);
 					}
@@ -816,7 +828,7 @@ impl Parser<'_> {
 			}
 			"set_literal" => self.build_set_literal(expression_node),
 			"struct_literal" => {
-				let type_ = self.build_type(&expression_node.child_by_field_name("type").unwrap());
+				let type_ = self.build_type_annotation(&expression_node.child_by_field_name("type").unwrap());
 				let mut fields = BTreeMap::new();
 				let mut cursor = expression_node.walk();
 				for field in expression_node.children_by_field_name("fields", &mut cursor) {
@@ -847,7 +859,7 @@ impl Parser<'_> {
 	fn build_set_literal(&self, expression_node: &Node) -> Result<Expr, ()> {
 		let expression_span = self.node_span(expression_node);
 		let set_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
-			Some(self.build_type(&type_node)?)
+			Some(self.build_type_annotation(&type_node)?)
 		} else {
 			None
 		};

@@ -3,7 +3,7 @@ mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{
 	Class as AstClass, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-	Type as AstType, UnaryOperator, UserDefinedType,
+	TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
 use crate::{
@@ -340,7 +340,7 @@ impl Subtype for Type {
 
 #[derive(Debug)]
 pub struct FunctionSignature {
-	pub args: Vec<TypeRef>,
+	pub parameters: Vec<TypeRef>,
 	pub return_type: TypeRef,
 	pub flight: Phase,
 
@@ -355,9 +355,9 @@ pub struct FunctionSignature {
 impl PartialEq for FunctionSignature {
 	fn eq(&self, other: &Self) -> bool {
 		self
-			.args
+			.parameters
 			.iter()
-			.zip(other.args.iter())
+			.zip(other.parameters.iter())
 			.all(|(x, y)| x.is_same_type_as(y))
 			&& self.return_type.is_same_type_as(&other.return_type)
 			&& self.flight == other.flight
@@ -384,19 +384,7 @@ impl Display for Type {
 			Type::Boolean => write!(f, "bool"),
 			Type::Void => write!(f, "void"),
 			Type::Optional(v) => write!(f, "{}?", v),
-			Type::Function(sig) => {
-				write!(
-					f,
-					"fn({}): {}",
-					sig
-						.args
-						.iter()
-						.map(|a| format!("{}", a))
-						.collect::<Vec<String>>()
-						.join(", "),
-					format!("{}", sig.return_type)
-				)
-			}
+			Type::Function(sig) => write!(f, "{}", sig),
 			Type::Class(class) => write!(f, "{}", class.name),
 			Type::Resource(class) => write!(f, "{}", class.name),
 			Type::Struct(s) => write!(f, "{}", s.name),
@@ -408,6 +396,24 @@ impl Display for Type {
 			Type::MutSet(v) => write!(f, "MutSet<{}>", v),
 			Type::Enum(s) => write!(f, "{}", s.name),
 		}
+	}
+}
+
+impl Display for FunctionSignature {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let phase_str = match self.flight {
+			Phase::Inflight => "inflight ",
+			Phase::Preflight => "preflight ",
+			Phase::Independent => "",
+		};
+		let params_str = self
+			.parameters
+			.iter()
+			.map(|a| format!("{}", a))
+			.collect::<Vec<String>>()
+			.join(", ");
+		let ret_type_str = self.return_type.to_string();
+		write!(f, "{phase_str}({params_str}): {ret_type_str}")
 	}
 }
 
@@ -826,7 +832,7 @@ impl<'a> TypeChecker<'a> {
 				// TODO: obj_id, obj_scope ignored, should use it once we support Type::Resource and then remove it from Classes (fail if a class has an id if grammar doesn't handle this for us)
 
 				// Lookup the type in the env
-				let type_ = self.resolve_type(class, env, statement_idx);
+				let type_ = self.resolve_type_annotation(class, env, statement_idx);
 				let (class_env, class_symbol) = match *type_ {
 					Type::Class(ref class) => (&class.env, &class.name),
 					Type::Resource(ref class) => {
@@ -870,14 +876,14 @@ impl<'a> TypeChecker<'a> {
 				self.validate_type(constructor_sig.return_type, type_, exp);
 
 				if !arg_list.named_args.is_empty() {
-					let last_arg = constructor_sig.args.last().unwrap().maybe_unwrap_option();
+					let last_arg = constructor_sig.parameters.last().unwrap().maybe_unwrap_option();
 					self.validate_structural_type(&arg_list.named_args, &last_arg, exp, env, statement_idx);
 				}
 
 				// Count number of optional parameters from the end of the constructor's params
 				// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
 				let num_optionals = constructor_sig
-					.args
+					.parameters
 					.iter()
 					.rev()
 					.take_while(|arg| arg.is_option())
@@ -885,8 +891,8 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify arity
 				let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
-				let min_args = constructor_sig.args.len() - num_optionals;
-				let max_args = constructor_sig.args.len();
+				let min_args = constructor_sig.parameters.len() - num_optionals;
+				let max_args = constructor_sig.parameters.len();
 				if arg_count < min_args || arg_count > max_args {
 					let err_text = if min_args == max_args {
 						format!(
@@ -903,7 +909,7 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Verify passed arguments match the constructor
-				for (arg_expr, arg_type) in arg_list.pos_args.iter().zip(constructor_sig.args.iter()) {
+				for (arg_expr, arg_type) in arg_list.pos_args.iter().zip(constructor_sig.parameters.iter()) {
 					let arg_expr_type = self.type_check_exp(arg_expr, env, statement_idx);
 					self.validate_type(arg_expr_type, *arg_type, arg_expr);
 				}
@@ -966,18 +972,23 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				if !args.named_args.is_empty() {
-					let last_arg = func_sig.args.last().unwrap().maybe_unwrap_option();
+					let last_arg = func_sig.parameters.last().unwrap().maybe_unwrap_option();
 					self.validate_structural_type(&args.named_args, &last_arg, exp, env, statement_idx);
 				}
 
 				// Count number of optional parameters from the end of the function's params
 				// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
-				let num_optionals = func_sig.args.iter().rev().take_while(|arg| arg.is_option()).count();
+				let num_optionals = func_sig
+					.parameters
+					.iter()
+					.rev()
+					.take_while(|arg| arg.is_option())
+					.count();
 
 				// Verity arity
 				let arg_count = args.pos_args.len() + (if args.named_args.is_empty() { 0 } else { 1 });
-				let min_args = func_sig.args.len() - num_optionals - this_args;
-				let max_args = func_sig.args.len() - this_args;
+				let min_args = func_sig.parameters.len() - num_optionals - this_args;
+				let max_args = func_sig.parameters.len() - this_args;
 				if arg_count < min_args || arg_count > max_args {
 					let err_text = if min_args == max_args {
 						format!("Expected {} arguments but got {}", min_args, arg_count)
@@ -991,10 +1002,10 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				let params = func_sig
-					.args
+					.parameters
 					.iter()
 					.skip(this_args)
-					.take(func_sig.args.len() - num_optionals);
+					.take(func_sig.parameters.len() - num_optionals);
 				let args = args.pos_args.iter();
 
 				for (arg_type, param_exp) in params.zip(args) {
@@ -1007,7 +1018,7 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::ArrayLiteral { type_, items } => {
 				// Infer type based on either the explicit type or the value in one of the items
 				let container_type = if let Some(type_) = type_ {
-					self.resolve_type(type_, env, statement_idx)
+					self.resolve_type_annotation(type_, env, statement_idx)
 				} else if !items.is_empty() {
 					let some_val_type = self.type_check_exp(items.iter().next().unwrap(), env, statement_idx);
 					self.types.add_type(Type::Array(some_val_type))
@@ -1032,7 +1043,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			ExprKind::StructLiteral { type_, fields } => {
 				// Find this struct's type in the environment
-				let struct_type = self.resolve_type(type_, env, statement_idx);
+				let struct_type = self.resolve_type_annotation(type_, env, statement_idx);
 
 				if struct_type.is_anything() {
 					return struct_type;
@@ -1069,7 +1080,7 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::MapLiteral { fields, type_ } => {
 				// Infer type based on either the explicit type or the value in one of the fields
 				let container_type = if let Some(type_) = type_ {
-					self.resolve_type(type_, env, statement_idx)
+					self.resolve_type_annotation(type_, env, statement_idx)
 				} else if !fields.is_empty() {
 					let some_val_type = self.type_check_exp(fields.iter().next().unwrap().1, env, statement_idx);
 					self.types.add_type(Type::Map(some_val_type))
@@ -1095,7 +1106,7 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::SetLiteral { type_, items } => {
 				// Infer type based on either the explicit type or the value in one of the items
 				let container_type = if let Some(type_) = type_ {
-					self.resolve_type(type_, env, statement_idx)
+					self.resolve_type_annotation(type_, env, statement_idx)
 				} else if !items.is_empty() {
 					let some_val_type = self.type_check_exp(items.iter().next().unwrap(), env, statement_idx);
 					self.types.add_type(Type::Set(some_val_type))
@@ -1126,8 +1137,8 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Create a type_checker function signature from the AST function definition, assuming success we can add this function to the env
-				let function_type = self.resolve_type(
-					&AstType::FunctionSignature(func_def.signature.clone()),
+				let function_type = self.resolve_type_annotation(
+					&TypeAnnotation::FunctionSignature(func_def.signature.clone()),
 					env,
 					statement_idx,
 				);
@@ -1256,63 +1267,62 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn resolve_type(&mut self, ast_type: &AstType, env: &SymbolEnv, statement_idx: usize) -> TypeRef {
-		match ast_type {
-			AstType::Number => self.types.number(),
-			AstType::String => self.types.string(),
-			AstType::Bool => self.types.bool(),
-			AstType::Duration => self.types.duration(),
-			AstType::Optional(v) => {
-				let value_type = self.resolve_type(v, env, statement_idx);
+	fn resolve_type_annotation(&mut self, annotation: &TypeAnnotation, env: &SymbolEnv, statement_idx: usize) -> TypeRef {
+		match annotation {
+			TypeAnnotation::Number => self.types.number(),
+			TypeAnnotation::String => self.types.string(),
+			TypeAnnotation::Bool => self.types.bool(),
+			TypeAnnotation::Duration => self.types.duration(),
+			TypeAnnotation::Optional(v) => {
+				let value_type = self.resolve_type_annotation(v, env, statement_idx);
 				self.types.add_type(Type::Optional(value_type))
 			}
-			AstType::FunctionSignature(ast_sig) => {
+			TypeAnnotation::FunctionSignature(ast_sig) => {
 				let mut args = vec![];
 				for arg in ast_sig.parameters.iter() {
-					args.push(self.resolve_type(arg, env, statement_idx));
+					args.push(self.resolve_type_annotation(arg, env, statement_idx));
 				}
 				let sig = FunctionSignature {
-					args,
-					return_type: ast_sig
-						.return_type
-						.as_ref()
-						.map_or(self.types.void(), |t| self.resolve_type(t, env, statement_idx)),
+					parameters: args,
+					return_type: ast_sig.return_type.as_ref().map_or(self.types.void(), |t| {
+						self.resolve_type_annotation(t, env, statement_idx)
+					}),
 					flight: ast_sig.flight,
 					js_override: None,
 				};
 				// TODO: avoid creating a new type for each function_sig resolution
 				self.types.add_type(Type::Function(sig))
 			}
-			AstType::UserDefined(user_defined_type) => {
+			TypeAnnotation::UserDefined(user_defined_type) => {
 				resolve_user_defined_type(user_defined_type, env, statement_idx).unwrap_or_else(|e| self.type_error(&e))
 			}
-			AstType::Array(v) => {
-				let value_type = self.resolve_type(v, env, statement_idx);
+			TypeAnnotation::Array(v) => {
+				let value_type = self.resolve_type_annotation(v, env, statement_idx);
 				// TODO: avoid creating a new type for each array resolution
 				self.types.add_type(Type::Array(value_type))
 			}
-			AstType::MutArray(v) => {
-				let value_type = self.resolve_type(v, env, statement_idx);
+			TypeAnnotation::MutArray(v) => {
+				let value_type = self.resolve_type_annotation(v, env, statement_idx);
 				// TODO: avoid creating a new type for each array resolution
 				self.types.add_type(Type::MutArray(value_type))
 			}
-			AstType::Set(v) => {
-				let value_type = self.resolve_type(v, env, statement_idx);
+			TypeAnnotation::Set(v) => {
+				let value_type = self.resolve_type_annotation(v, env, statement_idx);
 				// TODO: avoid creating a new type for each set resolution
 				self.types.add_type(Type::Set(value_type))
 			}
-			AstType::MutSet(v) => {
-				let value_type = self.resolve_type(v, env, statement_idx);
+			TypeAnnotation::MutSet(v) => {
+				let value_type = self.resolve_type_annotation(v, env, statement_idx);
 				// TODO: avoid creating a new type for each set resolution
 				self.types.add_type(Type::MutSet(value_type))
 			}
-			AstType::Map(v) => {
-				let value_type = self.resolve_type(v, env, statement_idx);
+			TypeAnnotation::Map(v) => {
+				let value_type = self.resolve_type_annotation(v, env, statement_idx);
 				// TODO: avoid creating a new type for each map resolution
 				self.types.add_type(Type::Map(value_type))
 			}
-			AstType::MutMap(v) => {
-				let value_type = self.resolve_type(v, env, statement_idx);
+			TypeAnnotation::MutMap(v) => {
+				let value_type = self.resolve_type_annotation(v, env, statement_idx);
 				// TODO: avoid creating a new type for each map resolution
 				self.types.add_type(Type::MutMap(value_type))
 			}
@@ -1327,7 +1337,7 @@ impl<'a> TypeChecker<'a> {
 				initial_value,
 				type_,
 			} => {
-				let explicit_type = type_.as_ref().map(|t| self.resolve_type(t, env, stmt.idx));
+				let explicit_type = type_.as_ref().map(|t| self.resolve_type_annotation(t, env, stmt.idx));
 				let inferred_type = self.type_check_exp(initial_value, env, stmt.idx);
 				if inferred_type.is_void() {
 					self.type_error(&TypeError {
@@ -1624,7 +1634,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Add fields to the class env
 				for field in fields.iter() {
-					let field_type = self.resolve_type(&field.member_type, env, stmt.idx);
+					let field_type = self.resolve_type_annotation(&field.member_type, env, stmt.idx);
 					match class_env.define(
 						&field.name,
 						SymbolKind::make_variable(field_type, field.reassignable, field.flight),
@@ -1643,13 +1653,13 @@ impl<'a> TypeChecker<'a> {
 					// Add myself as first parameter to all class methods (self)
 					sig.parameters.insert(
 						0,
-						AstType::UserDefined(UserDefinedType {
+						TypeAnnotation::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
 						}),
 					);
 
-					let method_type = self.resolve_type(&AstType::FunctionSignature(sig), env, stmt.idx);
+					let method_type = self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(sig), env, stmt.idx);
 					match class_env.define(
 						method_name,
 						SymbolKind::make_variable(method_type, false, method_def.signature.flight),
@@ -1663,8 +1673,8 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Add the constructor to the class env
-				let constructor_type = self.resolve_type(
-					&AstType::FunctionSignature(constructor.signature.clone()),
+				let constructor_type = self.resolve_type_annotation(
+					&TypeAnnotation::FunctionSignature(constructor.signature.clone()),
 					env,
 					stmt.idx,
 				);
@@ -1770,7 +1780,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Add fields to the struct env
 				for field in members.iter() {
-					let field_type = self.resolve_type(&field.member_type, env, stmt.idx);
+					let field_type = self.resolve_type_annotation(&field.member_type, env, stmt.idx);
 					match struct_env.define(
 						&field.name,
 						SymbolKind::make_variable(field_type, false, field.flight),
@@ -1894,8 +1904,8 @@ impl<'a> TypeChecker<'a> {
 	/// * `env` - The function's environment to prime with the args.
 	///
 	fn add_arguments_to_env(&mut self, args: &Vec<(Symbol, bool)>, sig: &FunctionSignature, env: &mut SymbolEnv) {
-		assert!(args.len() == sig.args.len());
-		for (arg, arg_type) in args.iter().zip(sig.args.iter()) {
+		assert!(args.len() == sig.parameters.len());
+		for (arg, arg_type) in args.iter().zip(sig.parameters.iter()) {
 			match env.define(
 				&arg.0,
 				SymbolKind::make_variable(*arg_type, arg.1, env.flight),
@@ -2008,7 +2018,7 @@ impl<'a> TypeChecker<'a> {
 							};
 
 							let new_args: Vec<UnsafeRef<Type>> = sig
-								.args
+								.parameters
 								.iter()
 								.map(|arg| {
 									if arg.is_same_type_as(original_type_param) {
@@ -2020,7 +2030,7 @@ impl<'a> TypeChecker<'a> {
 								.collect();
 
 							let new_sig = FunctionSignature {
-								args: new_args,
+								parameters: new_args,
 								return_type: new_return_type,
 								flight: sig.flight.clone(),
 								js_override: sig.js_override.clone(),

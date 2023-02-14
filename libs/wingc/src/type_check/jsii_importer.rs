@@ -99,7 +99,7 @@ impl<'a> JsiiImporter<'a> {
 			} else if let Some(Value::String(type_fqn)) = obj.get("fqn") {
 				if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_INFLIGHT) {
 					self.wing_types.add_type(Type::Function(FunctionSignature {
-						args: vec![self.wing_types.anything()],
+						parameters: vec![self.wing_types.anything()],
 						return_type: self.wing_types.anything(),
 						flight: Phase::Inflight,
 						js_override: None,
@@ -431,7 +431,7 @@ impl<'a> JsiiImporter<'a> {
 					}
 				}
 				let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
-					args: arg_types,
+					parameters: arg_types,
 					return_type,
 					flight,
 					js_override: m
@@ -651,7 +651,7 @@ impl<'a> JsiiImporter<'a> {
 				}
 			}
 			let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
-				args: arg_types,
+				parameters: arg_types,
 				return_type: new_type,
 				flight: phase,
 				js_override: None,

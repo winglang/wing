@@ -8,7 +8,7 @@ use sha2::{Digest, Sha256};
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, ClassField, Constructor, Expr, ExprKind, FunctionDefinition,
-		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
+		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator,
 		UserDefinedType,
 	},
 	capture::CaptureKind,
@@ -61,7 +61,10 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn js_resolve_path(path_name: &str) -> String {
-		format!("require('path').resolve(__dirname, \"{}\")", path_name)
+		format!(
+			"require('path').resolve(__dirname, \"{}\").replace(/\\\\/g, \"/\")",
+			path_name
+		)
 	}
 
 	fn render_block(statements: impl IntoIterator<Item = impl core::fmt::Display>) -> String {
@@ -119,7 +122,10 @@ impl<'a> JSifier<'a> {
 		if self.shim {
 			js.insert(
 				0,
-				format!("super({{ outdir: $outdir, name: \"{}\" }});\n", self.app_name),
+				format!(
+					"super({{ outdir: $outdir, name: \"{}\", plugins: $plugins }});\n",
+					self.app_name
+				),
 			);
 			output.push(format!(
 				"class MyApp extends {} {{\nconstructor() {}\n}}",
@@ -220,9 +226,9 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_type(&self, typ: &Type) -> String {
+	fn jsify_type(&self, typ: &TypeAnnotation) -> String {
 		match typ {
-			Type::UserDefined(user_defined_type) => self.jsify_user_defined_type(user_defined_type),
+			TypeAnnotation::UserDefined(user_defined_type) => self.jsify_user_defined_type(user_defined_type),
 			_ => todo!(),
 		}
 	}
