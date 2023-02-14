@@ -3528,39 +3528,13 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`resource.w > wing compile --target tf-aws > Bar.inflight.js 1`] = `
-"export class Bar_inflight  {
-constructor({ b, foo }) {
+exports[`resource.w > wing compile --target tf-aws > R.inflight.js 1`] = `
+"export class R_inflight  {
+constructor({  }) {
 
-  this.b = b;
-  this.foo = foo;
+
 }
-async my_method() {
-  (await this.foo.foo_inc());
-  (await this.b.put(\\"foo\\",\`counter is: \${(await this.foo.foo_get())}\`));
-  return (await this.b.get(\\"foo\\"));
-}}"
-`;
-
-exports[`resource.w > wing compile --target tf-aws > Foo.inflight.js 1`] = `
-"export class Foo_inflight  {
-constructor({ c }) {
-
-  this.c = c;
-}
-async foo_inc() {
-  (await this.c.inc());
-}
-async foo_get() {
-  return (await this.c.peek());
-}}"
-`;
-
-exports[`resource.w > wing compile --target tf-aws > index.js 1`] = `
-"async handle() { const { res } = this; {
-  const s = (await res.my_method());
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s === \\"counter is: 1\\")'\`)})((s === \\"counter is: 1\\"))};
-} };"
+}"
 `;
 
 exports[`resource.w > wing compile --target tf-aws > main.tf.json 1`] = `
@@ -3577,151 +3551,6 @@ exports[`resource.w > wing compile --target tf-aws > main.tf.json 1`] = `
     "aws": [
       {},
     ],
-  },
-  "resource": {
-    "aws_dynamodb_table": {
-      "root_Bar_Foo_cloudCounter_616CF239": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Bar/Foo/cloud.Counter/Default",
-            "uniqueId": "root_Bar_Foo_cloudCounter_616CF239",
-          },
-        },
-        "attribute": [
-          {
-            "name": "id",
-            "type": "S",
-          },
-        ],
-        "billing_mode": "PAY_PER_REQUEST",
-        "hash_key": "id",
-        "name": "wing-counter-cloud.Counter-c8ef80ad",
-      },
-    },
-    "aws_iam_role": {
-      "root_test_IamRole_6CDC2D16": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/test/IamRole",
-            "uniqueId": "root_test_IamRole_6CDC2D16",
-          },
-        },
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
-      },
-    },
-    "aws_iam_role_policy": {
-      "root_test_IamRolePolicy_474A6820": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/test/IamRolePolicy",
-            "uniqueId": "root_test_IamRolePolicy_474A6820",
-          },
-        },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}\\",\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}\\",\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}\\",\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}\\",\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_Bar_Foo_cloudCounter_616CF239.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:GetItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_Bar_Foo_cloudCounter_616CF239.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
-        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
-      },
-    },
-    "aws_iam_role_policy_attachment": {
-      "root_test_IamRolePolicyAttachment_1102A28A": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/test/IamRolePolicyAttachment",
-            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
-          },
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
-      },
-    },
-    "aws_lambda_function": {
-      "root_test_AAE85061": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/test/Default",
-            "uniqueId": "root_test_AAE85061",
-          },
-        },
-        "environment": {
-          "variables": {
-            "BUCKET_NAME_7c00f6db": "\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.bucket}",
-            "DYNAMODB_TABLE_NAME_c7446906": "\${aws_dynamodb_table.root_Bar_Foo_cloudCounter_616CF239.name}",
-            "WING_FUNCTION_NAME": "test-c8b6eece",
-          },
-        },
-        "function_name": "test-c8b6eece",
-        "handler": "index.handler",
-        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
-        "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
-        "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
-        "timeout": 30,
-      },
-    },
-    "aws_s3_bucket": {
-      "root_Bar_cloudBucket_5110D8F6": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Bar/cloud.Bucket/Default",
-            "uniqueId": "root_Bar_cloudBucket_5110D8F6",
-          },
-        },
-        "bucket_prefix": "cloud-bucket-c8028e1e-",
-      },
-      "root_test_Code_2D131EC2": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/test/Code",
-            "uniqueId": "root_test_Code_2D131EC2",
-          },
-        },
-        "bucket_prefix": "code-c883c33b-",
-      },
-    },
-    "aws_s3_bucket_public_access_block": {
-      "root_Bar_cloudBucket_PublicAccessBlock_C309B1E2": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Bar/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "root_Bar_cloudBucket_PublicAccessBlock_C309B1E2",
-          },
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true,
-      },
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "root_Bar_cloudBucket_Encryption_4B5D823F": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Bar/cloud.Bucket/Encryption",
-            "uniqueId": "root_Bar_cloudBucket_Encryption_4B5D823F",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
-      },
-    },
-    "aws_s3_object": {
-      "root_test_S3Object_A16CD789": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/test/S3Object",
-            "uniqueId": "root_test_S3Object_A16CD789",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
-        "key": "<ASSET_KEY>",
-      },
-    },
   },
 }
 `;
@@ -3747,58 +3576,27 @@ function __app(target) {
 }
 const $App = __app(process.env.WING_TARGET);
 
-const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"resource\\", plugins: $plugins });
   
-  class Foo extends $stdlib.core.Resource {
-  constructor(scope, id, ) {
-  	super(scope, id);
-  {
-    this.c = new cloud.Counter(this,\\"cloud.Counter\\");
-  }
-  }
-  
-  _toInflight() {
-  	const c_client = this.c._toInflight();
-  	const self_client_path = require('path').resolve(__dirname, \\"clients/Foo.inflight.js\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo_inflight({c: \${c_client.text}}))\`);
-  }
-  }
-  Foo._annotateInflight(\\"foo_inc\\", {\\"this.c\\": { ops: [\\"dec\\", \\"inc\\", \\"peek\\"]}});
-  Foo._annotateInflight(\\"foo_get\\", {\\"this.c\\": { ops: [\\"dec\\", \\"inc\\", \\"peek\\"]}});
-  class Bar extends $stdlib.core.Resource {
+  class R extends $stdlib.core.Resource {
   constructor(scope, id, name) {
   	super(scope, id);
   {
     this.name = name;
-    this.b = new cloud.Bucket(this,\\"cloud.Bucket\\");
-    this.foo = new Foo(this,\\"Foo\\");
   }
   }
   
   _toInflight() {
-  	const b_client = this.b._toInflight();
-  const foo_client = this.foo._toInflight();
-  	const self_client_path = require('path').resolve(__dirname, \\"clients/Bar.inflight.js\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Bar_inflight({b: \${b_client.text}, foo: \${foo_client.text}}))\`);
+  	
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/R.inflight.js\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R_inflight({}))\`);
   }
   }
-  Bar._annotateInflight(\\"my_method\\", {\\"this.b\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.foo\\": { ops: [\\"foo_get\\", \\"foo_inc\\"]}});
-  const res = new Bar(this,\\"Bar\\",\\"Arr\\");
-  new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.20a3bac6918ff352ca6c869d22d5803fccfc31d0f69d4a63d04477a4bf8863d8/index.js\\")),
-    bindings: {
-      resources: {
-        res: {
-          resource: res,
-          ops: [\\"my_method\\"]
-        },
-      },
-      
-    }
-  }));
+  
+  const res = new R(this,\\"R\\",\\"Arr\\");
+  {console.log(res.name)};
 }
 }
 new MyApp().synth();"

@@ -3,7 +3,7 @@ use crate::{
 	diagnostic::TypeError,
 	type_check::{SymbolKind, Type, TypeRef},
 };
-use std::collections::{HashSet, BTreeMap, btree_map};
+use std::collections::{hash_map, HashMap, HashSet};
 use std::fmt::Debug;
 
 use super::{UnsafeRef, VariableInfo};
@@ -11,8 +11,7 @@ use super::{UnsafeRef, VariableInfo};
 pub type SymbolEnvRef = UnsafeRef<SymbolEnv>;
 
 pub struct SymbolEnv {
-	// We use a BTreeMaps here so that we can iterate over the symbols in a deterministic order (snapshot tests)
-	pub(crate) symbol_map: BTreeMap<String, (StatementIdx, SymbolKind)>,
+	pub(crate) symbol_map: HashMap<String, (StatementIdx, SymbolKind)>,
 	parent: Option<SymbolEnvRef>,
 
 	// TODO: This doesn't make much sense in the context of the "environment" but I needed a way to propagate the return type of a function
@@ -79,7 +78,7 @@ impl SymbolEnv {
 		assert!(matches!(*return_type, Type::Void) || parent.is_some());
 
 		Self {
-			symbol_map: BTreeMap::new(),
+			symbol_map: HashMap::new(),
 			parent,
 			return_type,
 			is_class,
@@ -379,7 +378,7 @@ impl SymbolEnv {
 pub struct SymbolEnvIter<'a> {
 	seen_keys: HashSet<String>,
 	curr_env: &'a SymbolEnv,
-	curr_pos: btree_map::Iter<'a, String, (StatementIdx, SymbolKind)>,
+	curr_pos: hash_map::Iter<'a, String, (StatementIdx, SymbolKind)>,
 	with_ancestry: bool,
 }
 
