@@ -35,7 +35,7 @@ export const Button = forwardRef<
         ref={ref}
         type={type}
         className={classNames(
-          "inline-flex gap-2 items-center py-1.5 border text-xs font-medium rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition ease-in-out",
+          "inline-flex gap-2 items-center py-1.5 border text-xs font-medium rounded shadow-sm outline-none focus:ring-2 focus:ring-sky-500/50 transition ease-in-out",
           (label || children) && "px-2.5",
           className,
           {
