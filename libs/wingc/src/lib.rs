@@ -238,14 +238,6 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 		}]);
 	}
 
-	if source_path.extension().unwrap() != "w" {
-		return Err(vec![Diagnostic {
-			message: format!("Source file must have .w extension: {}", source_path.display()),
-			span: None,
-			level: DiagnosticLevel::Error,
-		}]);
-	}
-
 	let file_name = source_path.file_name().unwrap().to_str().unwrap();
 	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
