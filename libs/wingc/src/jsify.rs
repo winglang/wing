@@ -61,9 +61,11 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn js_resolve_path(path_name: &str) -> String {
-		format!("require('path').resolve(__dirname, \"{}\")", path_name)
-			// escape backslashes for windows paths
-			.replace("\\", "\\\\")
+		format!(
+			"require('path').resolve(__dirname, \"{}\").replace(/\\\\/g, \"/\")",
+			// normalize path separators to posix
+			path_name.replace("\\", "/")
+		)
 	}
 
 	fn render_block(statements: impl IntoIterator<Item = impl core::fmt::Display>) -> String {
