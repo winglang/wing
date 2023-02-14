@@ -125,8 +125,11 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
    * Add an environment variable to the function.
    */
   public addEnvironment(name: string, value: string) {
-    if (this._env[name] !== undefined) {
-      throw new Error(`Environment variable "${name}" already set.`);
+    let existingValue = this._env[name];
+    if (existingValue !== undefined && existingValue !== value) {
+      throw new Error(
+        `Environment variable "${name}" already set to a different value (${value}).`
+      );
     }
     this._env[name] = value;
   }

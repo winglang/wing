@@ -51,6 +51,16 @@ test("basic function with environment variables", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
+test("addEnvironment can be called consecutively with the same arguments", () => {
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const fn = new cloud.Function(app, "Function", inflight);
+  fn.addEnvironment("FOO", "BAR");
+  fn.addEnvironment("BOOM", "BAM");
+  fn.addEnvironment("FOO", "BAR"); // no throw
+  app.synth();
+});
+
 test("function name valid", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
