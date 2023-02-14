@@ -32,7 +32,7 @@ export class Schedule extends cloud.ScheduleBase {
     }
     if (cron && cron.split(" ").length > 5) {
       throw new Error(
-        "cron only accepts five values (minute, hour, day of month, month, day of week)."
+        "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
       );
     }
 
