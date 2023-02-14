@@ -63,8 +63,7 @@ impl<'a> JSifier<'a> {
 	fn js_resolve_path(path_name: &str) -> String {
 		format!(
 			"require('path').resolve(__dirname, \"{}\").replace(/\\\\/g, \"/\")",
-			// normalize path separators to posix
-			path_name.replace("\\", "/")
+			path_name
 		)
 	}
 
