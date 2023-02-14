@@ -1,24 +1,24 @@
 use aho_corasick::AhoCorasick;
 use indoc::formatdoc;
 use itertools::Itertools;
-use std::{cell::RefCell, cmp::Ordering, fs, path::PathBuf, vec};
+use std::{cell::RefCell, cmp::Ordering, fs, path::Path, vec};
 
 use sha2::{Digest, Sha256};
 
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, ClassField, Constructor, Expr, ExprKind, FunctionDefinition,
-		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
+		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator,
 		UserDefinedType,
 	},
 	capture::CaptureKind,
 	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, TypeRef},
 	utilities::snake_case_to_camel_case,
-	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_RESOURCE,
+	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
 };
 
 const STDLIB: &str = "$stdlib";
-const STDLIB_MODULE: &str = "@winglang/sdk";
+const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 const INFLIGHT_CLIENTS_DIR: &str = "clients";
 
 const TARGET_CODE: &str = r#"
@@ -43,15 +43,15 @@ const TARGET_APP: &str = "$App";
 
 const INFLIGHT_OBJ_PREFIX: &str = "$Inflight";
 
-pub struct JSifier {
-	pub out_dir: PathBuf,
+pub struct JSifier<'a> {
+	pub out_dir: &'a Path,
 	shim: bool,
 	app_name: String,
 	inflight_counter: RefCell<usize>,
 }
 
-impl JSifier {
-	pub fn new(out_dir: PathBuf, app_name: &str, shim: bool) -> Self {
+impl<'a> JSifier<'a> {
+	pub fn new(out_dir: &'a Path, app_name: &str, shim: bool) -> Self {
 		Self {
 			out_dir,
 			shim,
@@ -95,7 +95,7 @@ impl JSifier {
 			if line.is_empty() {
 				continue;
 			}
-			if let StmtKind::Use {
+			if let StmtKind::Bring {
 				identifier: _,
 				module_name: _,
 			} = statement.kind
@@ -119,7 +119,7 @@ impl JSifier {
 		if self.shim {
 			js.insert(
 				0,
-				format!("super({{ outdir: $outdir, name: \"{}\" }});\n", self.app_name),
+				format!("super({{ outdir: $outdir, name: \"{}\", plugins: $plugins }});\n", self.app_name),
 			);
 			output.push(format!(
 				"class MyApp extends {} {{\nconstructor() {}\n}}",
@@ -220,9 +220,9 @@ impl JSifier {
 		}
 	}
 
-	fn jsify_type(&self, typ: &Type) -> String {
+	fn jsify_type(&self, typ: &TypeAnnotation) -> String {
 		match typ {
-			Type::UserDefined(user_defined_type) => self.jsify_user_defined_type(user_defined_type),
+			TypeAnnotation::UserDefined(user_defined_type) => self.jsify_user_defined_type(user_defined_type),
 			_ => todo!(),
 		}
 	}
@@ -438,7 +438,7 @@ impl JSifier {
 
 	fn jsify_statement(&self, env: &SymbolEnv, statement: &Stmt, phase: Phase) -> String {
 		match &statement.kind {
-			StmtKind::Use {
+			StmtKind::Bring {
 				module_name,
 				identifier,
 			} => {
@@ -450,7 +450,7 @@ impl JSifier {
 					} else {
 						module_name
 					}),
-					if module_name.name.starts_with("\"./") {
+					if module_name.name.starts_with("\"") {
 						// TODO so many assumptions here, would only work with a JS file, see:
 						// https://github.com/winglang/wing/issues/477
 						// https://github.com/winglang/wing/issues/478
