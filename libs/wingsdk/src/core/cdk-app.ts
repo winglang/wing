@@ -19,7 +19,7 @@ export class CdkApp extends Construct implements IApp {
 
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
-    const cdkOutdir = join(outdir, ".");
+    const cdkOutdir = join(outdir, "./cdk.out");
 
     mkdirSync(cdkOutdir, { recursive: true });
 
