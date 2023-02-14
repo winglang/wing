@@ -219,11 +219,32 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 }
 
 pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOutput, Diagnostics> {
-	assert!(source_path.is_file(), "Source path must be a file");
-	assert!(
-		source_path.extension().unwrap() == "w",
-		"Source file must have .w extension",
-	);
+	if !source_path.exists() {
+		return Err(vec![Diagnostic {
+			message: format!("Source file cannot be found: {}", source_path.display()),
+			span: None,
+			level: DiagnosticLevel::Error,
+		}]);
+	}
+
+	if !source_path.is_file() {
+		return Err(vec![Diagnostic {
+			message: format!(
+				"Source path must be a file (not a directory or symlink): {}",
+				source_path.display()
+			),
+			span: None,
+			level: DiagnosticLevel::Error,
+		}]);
+	}
+
+	if source_path.extension().unwrap() != "w" {
+		return Err(vec![Diagnostic {
+			message: format!("Source file must have .w extension: {}", source_path.display()),
+			span: None,
+			level: DiagnosticLevel::Error,
+		}]);
+	}
 
 	let file_name = source_path.file_name().unwrap().to_str().unwrap();
 	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
