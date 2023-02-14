@@ -46,7 +46,7 @@ exports[`print.w > wing test --target sim > stdout 1`] = `"<green>pass</color><g
 
 exports[`reassignment.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>reassignment.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
 
-exports[`resource.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>resource.w<gray> | </color><brightWhite>(no inflight tests)</color>"`;
+exports[`resource.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>resource.w<gray> | </color><brightWhite>root/test</color>"`;
 
 exports[`statements_if.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>statements_if.w<gray> | </color><brightWhite>root/test</color>"`;
 

@@ -61,7 +61,10 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn js_resolve_path(path_name: &str) -> String {
-		format!("require('path').resolve(__dirname, \"{}\")", path_name)
+		format!(
+			"require('path').resolve(__dirname, \"{}\").replace(/\\\\/g, \"/\")",
+			path_name
+		)
 	}
 
 	fn render_block(statements: impl IntoIterator<Item = impl core::fmt::Display>) -> String {
@@ -119,7 +122,10 @@ impl<'a> JSifier<'a> {
 		if self.shim {
 			js.insert(
 				0,
-				format!("super({{ outdir: $outdir, name: \"{}\" }});\n", self.app_name),
+				format!(
+					"super({{ outdir: $outdir, name: \"{}\", plugins: $plugins }});\n",
+					self.app_name
+				),
 			);
 			output.push(format!(
 				"class MyApp extends {} {{\nconstructor() {}\n}}",

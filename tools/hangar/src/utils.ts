@@ -15,7 +15,10 @@ export async function runWingCommand(
     stdin: "ignore",
   });
   if (shouldSucceed) {
-    expect(out.exitCode).toBe(0);
+    if (out.exitCode !== 0) {
+      // Note: reading stdout here on windows will fail if it's empty
+      throw out.stderr;
+    }
   } else {
     expect(out.stderr).not.toBe("");
     expect(out.exitCode).not.toBe(0);
