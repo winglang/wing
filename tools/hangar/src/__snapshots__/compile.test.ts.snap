@@ -259,14 +259,14 @@ constructor() {
   
   const q = new cloud.Queue(this,\\"cloud.Queue\\");
   const str_to_str = new cloud.Function(this,\\"str_to_str\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       
       
     }
   }));
   const func = new cloud.Function(this,\\"func\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2241fd974faa47c8b8d27f5a3e172f473ca36c6b44cb328a58655fd2d0aac7d7/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2241fd974faa47c8b8d27f5a3e172f473ca36c6b44cb328a58655fd2d0aac7d7/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       resources: {
         str_to_str: {
@@ -516,7 +516,7 @@ constructor() {
   const hello = new stuff.HelloWorld();
   const greeting = (hello.sayHello(\\"wingnuts\\"));
   new cloud.Function(this,\\"test:say_hello\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5d209e0c3acca40c825662cab73c204803d9dd9f7903de90d0da6dc99ea7fa35/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5d209e0c3acca40c825662cab73c204803d9dd9f7903de90d0da6dc99ea7fa35/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       
       data: {
@@ -673,7 +673,7 @@ constructor() {
   const my_map = Object.freeze(new Map([[ \\"hello\\", 123 ], [ \\"world\\", 999 ]]));
   const arr_of_map = Object.freeze([Object.freeze(new Map([[ \\"bang\\", 123 ]]))]);
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2342d82d8096c3cfa44f12187d5dd9fb250167dc7ea113fbdfa095b6a80902fa/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2342d82d8096c3cfa44f12187d5dd9fb250167dc7ea113fbdfa095b6a80902fa/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       
       data: {
@@ -917,7 +917,7 @@ constructor() {
   const map = Object.freeze(new Map([[ \\"my_queue\\", new cloud.Queue(this,\\"cloud.Queue\\") ]]));
   const set = Object.freeze(new Set([\\"foo\\", \\"foo\\", \\"bar\\"]));
   new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.68b5dd7ab9b303083af8250f1fcc5b7e7d61eedba1aafbd12082e1b4bb22ea03/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.68b5dd7ab9b303083af8250f1fcc5b7e7d61eedba1aafbd12082e1b4bb22ea03/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       
       data: {
@@ -1112,7 +1112,7 @@ constructor() {
   const b = new cloud.Bucket(this,\\"cloud.Bucket\\");
   const x = 12;
   const handler2 = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.d3cc1deae5ea8972097ff15c11d688f395bd17117453789488a005b829eea245/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.d3cc1deae5ea8972097ff15c11d688f395bd17117453789488a005b829eea245/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       resources: {
         b: {
@@ -1282,7 +1282,7 @@ constructor() {
   const my_second_bool = false;
   const my_dur = $stdlib.std.Duration.fromSeconds(600);
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.275873c041545c7a2de55149fb73b77f5b75da61d16914ceadd71c3445173d97/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.275873c041545c7a2de55149fb73b77f5b75da61d16914ceadd71c3445173d97/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       
       data: {
@@ -1483,7 +1483,7 @@ constructor() {
   const res = new cloud.Bucket(this,\\"cloud.Bucket\\");
   const queue = new cloud.Queue(this,\\"cloud.Queue\\");
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.10149a479ee5940e90f4621a2bca78dda7429636b1f235fcd785b3e33c131537/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.10149a479ee5940e90f4621a2bca78dda7429636b1f235fcd785b3e33c131537/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       resources: {
         queue: {
@@ -1906,7 +1906,7 @@ constructor() {
   const bucket3 = new cloud.Bucket(this,\\"PrivateBucket\\",{ public: false });
   const queue = new cloud.Queue(this,\\"cloud.Queue\\");
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5f0e4e25898a72c973f063e92444f7572d58a18cdd38b3fb3a575af6adf7440f/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5f0e4e25898a72c973f063e92444f7572d58a18cdd38b3fb3a575af6adf7440f/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       resources: {
         bucket1: {
@@ -2559,7 +2559,7 @@ constructor() {
   const counter = new cloud.Counter(this,\\"cloud.Counter\\",{ initial: 100 });
   const queue = new cloud.Queue(this,\\"cloud.Queue\\",{ timeout: $stdlib.std.Duration.fromSeconds(10) });
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1ece6a476239c44d64d8b687b9e4389715198c49564defb8766e8b85b0f54620/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1ece6a476239c44d64d8b687b9e4389715198c49564defb8766e8b85b0f54620/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       resources: {
         bucket: {
@@ -2703,7 +2703,7 @@ constructor() {
   }
   _toInflight() {
   	
-  	const self_client_path = require('path').resolve(__dirname, \\"clients/R.inflight.js\\");
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/R.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R_inflight({}))\`);
   }
   }
@@ -2910,7 +2910,7 @@ constructor() {
   const bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
   const queue = new cloud.Queue(this,\\"cloud.Queue\\");
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.a05c4d4842809464e34a3ca630f420646c038a9d145ef67e20f3f2fd3a937f94/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.a05c4d4842809464e34a3ca630f420646c038a9d145ef67e20f3f2fd3a937f94/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       resources: {
         bucket: {
@@ -2976,14 +2976,14 @@ constructor() {
   super({ outdir: $outdir, name: \\"identical_inflights\\", plugins: $plugins });
   
   const x = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       
       
     }
   });
   const y = new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       
       
@@ -3426,7 +3426,7 @@ constructor() {
   const bucket1 = new cloud.Bucket(this,\\"cloud.Bucket\\");
   {console.log(\\"Hello world!\\")};
   new cloud.Function(this,\\"cloud.Function\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.eeb10908f35dd17ca239f77c5c30ce7a1bd0464d804a789596c23a5b437a72f2/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.eeb10908f35dd17ca239f77c5c30ce7a1bd0464d804a789596c23a5b437a72f2/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       
       
@@ -3504,7 +3504,7 @@ constructor() {
   }
   _toInflight() {
   	
-  	const self_client_path = require('path').resolve(__dirname, \\"clients/R.inflight.js\\");
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/R.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R_inflight({}))\`);
   }
   }
@@ -3762,7 +3762,7 @@ constructor() {
   
   _toInflight() {
   	const c_client = this.c._toInflight();
-  	const self_client_path = require('path').resolve(__dirname, \\"clients/Foo.inflight.js\\");
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/Foo.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo_inflight({c: \${c_client.text}}))\`);
   }
   }
@@ -3781,14 +3781,14 @@ constructor() {
   _toInflight() {
   	const b_client = this.b._toInflight();
   const foo_client = this.foo._toInflight();
-  	const self_client_path = require('path').resolve(__dirname, \\"clients/Bar.inflight.js\\");
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/Bar.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Bar_inflight({b: \${b_client.text}, foo: \${foo_client.text}}))\`);
   }
   }
   Bar._annotateInflight(\\"my_method\\", {\\"this.b\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.foo\\": { ops: [\\"foo_get\\", \\"foo_inc\\"]}});
   const res = new Bar(this,\\"Bar\\",\\"Arr\\");
   new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.20a3bac6918ff352ca6c869d22d5803fccfc31d0f69d4a63d04477a4bf8863d8/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.20a3bac6918ff352ca6c869d22d5803fccfc31d0f69d4a63d04477a4bf8863d8/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       resources: {
         res: {
@@ -3971,7 +3971,7 @@ constructor() {
     }
   }
   new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.09c5e24751d9ba1246f91518f2f7f5c5d1102a09d0b1acff479ae27ad134090f/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.09c5e24751d9ba1246f91518f2f7f5c5d1102a09d0b1acff479ae27ad134090f/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       
       
@@ -4104,7 +4104,7 @@ constructor() {
   const immut_map = Object.freeze(new Map(mut_map));
   const s = (s_array.at(1));
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2bccfc7c5a6cf0ff8a0697876fd0e9b788b71a4288792fab940ebf8241e8689b/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2bccfc7c5a6cf0ff8a0697876fd0e9b788b71a4288792fab940ebf8241e8689b/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       
       data: {
@@ -4368,7 +4368,7 @@ constructor() {
   
   const b = new cloud.Bucket(this,\\"cloud.Bucket\\");
   new cloud.Function(this,\\"test:put\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.9f10a129b90bc1328dcb1e6194e3902931d1011d95e46825362ef5b06ec17380/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.9f10a129b90bc1328dcb1e6194e3902931d1011d95e46825362ef5b06ec17380/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       resources: {
         b: {
@@ -4380,7 +4380,7 @@ constructor() {
     }
   }));
   new cloud.Function(this,\\"test:get\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1b9abefaef8ce4230db863000273d2c12bacb97e33ac10e6c8b50341e415fdac/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1b9abefaef8ce4230db863000273d2c12bacb97e33ac10e6c8b50341e415fdac/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       resources: {
         b: {
@@ -4607,14 +4607,14 @@ constructor() {
   
   const queue = new cloud.Queue(this,\\"cloud.Queue\\");
   const iterator = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.82d0059fdbaebaab6d1be68f497052f9d5b8662f4333952a6e9ad55f564e0c97/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.82d0059fdbaebaab6d1be68f497052f9d5b8662f4333952a6e9ad55f564e0c97/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       
       
     }
   });
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.f259e8d1edc5d47946ec1a1f3aa23e59fe550255ec12b899cffb307ecf525df6/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.f259e8d1edc5d47946ec1a1f3aa23e59fe550255ec12b899cffb307ecf525df6/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       
       
