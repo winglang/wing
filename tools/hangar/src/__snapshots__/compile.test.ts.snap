@@ -3530,10 +3530,10 @@ new MyApp().synth();"
 
 exports[`resource.w > wing compile --target tf-aws > Bar.inflight.js 1`] = `
 "export class Bar_inflight  {
-constructor({ foo, b }) {
+constructor({ b, foo }) {
 
-  this.foo = foo;
   this.b = b;
+  this.foo = foo;
 }
 async my_method() {
   (await this.foo.foo_inc());
@@ -3617,7 +3617,7 @@ exports[`resource.w > wing compile --target tf-aws > main.tf.json 1`] = `
             "uniqueId": "root_test_IamRolePolicy_474A6820",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_Bar_Foo_cloudCounter_616CF239.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:GetItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_Bar_Foo_cloudCounter_616CF239.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}\\",\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}\\",\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}\\",\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}\\",\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}\\",\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}\\",\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}\\",\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}\\",\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_Bar_Foo_cloudCounter_616CF239.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:GetItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_Bar_Foo_cloudCounter_616CF239.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
       },
     },
@@ -3779,13 +3779,13 @@ constructor() {
   }
   
   _toInflight() {
-  	const foo_client = this.foo._toInflight();
-  const b_client = this.b._toInflight();
+  	const b_client = this.b._toInflight();
+  const foo_client = this.foo._toInflight();
   	const self_client_path = require('path').resolve(__dirname, \\"clients/Bar.inflight.js\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Bar_inflight({foo: \${foo_client.text}, b: \${b_client.text}}))\`);
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Bar_inflight({b: \${b_client.text}, foo: \${foo_client.text}}))\`);
   }
   }
-  Bar._annotateInflight(\\"my_method\\", {\\"this.foo\\": { ops: [\\"foo_get\\", \\"foo_inc\\"]}, \\"this.b\\": { ops: [\\"list\\", \\"delete\\", \\"put\\", \\"get\\"]}});
+  Bar._annotateInflight(\\"my_method\\", {\\"this.b\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.foo\\": { ops: [\\"foo_get\\", \\"foo_inc\\"]}});
   const res = new Bar(this,\\"Bar\\",\\"Arr\\");
   new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.20a3bac6918ff352ca6c869d22d5803fccfc31d0f69d4a63d04477a4bf8863d8/index.js\\")),
