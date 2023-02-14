@@ -41,7 +41,7 @@ export class Schedule extends cloud.ScheduleBase {
      * month, and day of week), but the AWS EventBridge Schedule uses a 6-string
      * format adding the year at the bottom of the string.
      *
-     * That way, we add * at the bottom.
+     * We append * to the cron string for year field.
      */
     this.scheduleExpression = rate
       ? `rate(${rate.minutes} minutes)`
