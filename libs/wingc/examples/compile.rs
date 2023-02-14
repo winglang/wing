@@ -1,7 +1,7 @@
 // Compiles a source file and prints any errors to stderr.
 // This should only be used for testing wingc directly.
 
-use std::{env, process};
+use std::{env, path::Path, process};
 use wingc::compile;
 
 pub fn main() {
@@ -11,9 +11,9 @@ pub fn main() {
 		panic!("Usage: cargo run --example compile <source_file>");
 	}
 
-	let source = &args[1];
+	let source_path = &args[1];
 
-	let results = compile(source, None);
+	let results = compile(Path::new(source_path), None);
 	if let Err(mut err) = results {
 		// Sort error messages by line number (ascending)
 		err.sort_by(|a, b| a.cmp(&b));

@@ -6,6 +6,7 @@ import { basename, dirname, join, resolve } from "path";
 import * as chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
+import { exit } from "process";
 import { normalPath } from "../util";
 
 const log = debug("wing:compile");
@@ -37,6 +38,7 @@ const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
 export interface ICompileOptions {
   readonly outDir: string;
   readonly target: Target;
+  readonly plugins?: string[];
 }
 
 /**
@@ -95,12 +97,25 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
 
   const arg = `${normalPath(wingFile)};${normalPath(workDir)}`;
   log(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
-  wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
+  const compileResult = wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
+  if (compileResult !== 0) {
+    console.error(compileResult);
+    exit(1);
+  }
 
   const artifactPath = resolve(workDir, WINGC_PREFLIGHT);
   log("reading artifact from %s", artifactPath);
   const artifact = await readFile(artifactPath, "utf-8");
   log("artifact: %s", artifact);
+
+  const preflightRequire = (path: string) => {
+    // Try looking for dependencies not only in the current directory (wherever
+    // the wing CLI was installed to), but also in the source code directory.
+    // This is necessary because the Wing app may have installed dependencies in
+    // the project directory.
+    const requirePath = require.resolve(path, { paths: [__dirname, wingDir]});
+    return require(requirePath);
+  };
 
   // If you're wondering how the execution of the preflight works, despite it
   // being in a different directory: it works because at the top of the file
@@ -108,7 +123,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   // is starting up, the passed context already has wingsdk in it.
   // "__dirname" is also synthetically changed so nested requires work.
   const context = vm.createContext({
-    require,
+    require: preflightRequire,
     process: {
       env: {
         WINGSDK_SYNTH_DIR: synthDir,
@@ -117,7 +132,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     },
     __dirname: workDir,
     __filename: artifactPath,
-
+    $plugins: resolvePluginPaths(options.plugins ?? []),
     // since the SDK is loaded in the outer VM, we need these to be the same class instance,
     // otherwise "instanceof" won't work between preflight code and the SDK. this is needed e.g. in
     // `serializeImmutableData` which has special cases for serializing these types.
@@ -185,4 +200,19 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
       );
     }
   }
+}
+
+/**
+ * Resolves a list of plugin paths as absolute paths, using the current working directory
+ * if absolute path is not provided.
+ * 
+ * @param plugins list of plugin paths (absolute or relative)
+ * @returns list of absolute plugin paths or relative to cwd
+ */
+function resolvePluginPaths(plugins: string[]): string[] {
+  const resolvedPluginPaths: string[] = [];
+  for (const plugin of plugins) {
+    resolvedPluginPaths.push(resolve(process.cwd(), plugin));
+  }
+  return resolvedPluginPaths;
 }
