@@ -2,7 +2,7 @@
   "name": "vscode-wing",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "implicitDependencies": [
-    "winglang", "sdk"
+    "winglang", "sdk", "wingc"
   ],
   "targets": {
     "build": {

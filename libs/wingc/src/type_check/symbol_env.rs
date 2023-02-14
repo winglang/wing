@@ -12,7 +12,7 @@ pub type SymbolEnvRef = UnsafeRef<SymbolEnv>;
 
 pub struct SymbolEnv {
 	pub(crate) symbol_map: HashMap<String, (StatementIdx, SymbolKind)>,
-	parent: Option<SymbolEnvRef>,
+	pub parent: Option<SymbolEnvRef>,
 
 	// TODO: This doesn't make much sense in the context of the "environment" but I needed a way to propagate the return type of a function
 	// down the scopes. Think of a nicer way to do this.

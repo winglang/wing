@@ -36,14 +36,8 @@ pub struct FileData {
 	pub diagnostics: Diagnostics,
 	/// The top scope of the file
 	pub scope: Scope,
-
-	/// The universal type collection for the scope. This
+	/// The universal type collection for the scope. This is saved to ensure references live long enough.
 	pub types: Types,
-}
-
-lazy_static! {
-	static ref NOTIFICATION_TYPE_LOG: Vec<u8> = "window/logMessage".to_string().into_bytes();
-	static ref NOTIFICATION_TYPE_DIAGNOSTIC: Vec<u8> = "textDocument/publishDiagnostics".to_string().into_bytes();
 }
 
 thread_local! {
@@ -51,6 +45,11 @@ thread_local! {
 	/// This means that it cannot reliably manage stateful data like this between function calls.
 	/// Here we will assume the process is single threaded, and use thread_local to store this data.
 	pub static FILES: RefCell<RwLock<HashMap<Url,FileData>>> = RefCell::new(RwLock::new(HashMap::new()));
+}
+
+lazy_static! {
+	static ref NOTIFICATION_TYPE_LOG: Vec<u8> = "window/logMessage".to_string().into_bytes();
+	static ref NOTIFICATION_TYPE_DIAGNOSTIC: Vec<u8> = "textDocument/publishDiagnostics".to_string().into_bytes();
 }
 
 #[cfg(target_arch = "wasm32")]
@@ -258,6 +257,8 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 		let position = params.text_document_position_params.position;
 
 		let scope = &parse_result.scope;
+		let root_env = &scope.env.borrow();
+		let root_env = root_env.as_ref().unwrap();
 		let point_context = find_symbol_in_scope(&scope, position);
 
 		if let Some(point_context) = point_context {
@@ -275,6 +276,10 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 
 			let env_ref = point_context.0.env.borrow();
 			let env = env_ref.as_ref().unwrap();
+
+			if let Some(parent) = env.parent {
+				dbg!(format!("{:p} = {:p}", root_env, &parent));
+			}
 
 			dbg!("pre lookup");
 
