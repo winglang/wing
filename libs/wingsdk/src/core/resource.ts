@@ -4,6 +4,7 @@ import {
   WING_ATTRIBUTE_RESOURCE_STATEFUL,
 } from "./attributes";
 import { Code } from "./inflight";
+import { serializeImmutableData } from "./internal";
 import { IInspectable, TreeInspector } from "./tree";
 import { Duration } from "../std";
 import { log } from "../util";
@@ -202,6 +203,19 @@ export abstract class Resource
         implicit: conn.implicit,
       }))
     );
+  }
+
+  /**
+   * "Lifts" a value into an inflight context. If the value is a resource (i.e. has a `_toInflight`
+   * method), this method will be called and the result will be returned. Otherwise, the value is
+   * returned as-is.
+   *
+   * @param value The value to lift.
+   * @returns a string representation of the value in an inflight context.
+   * @internal
+   */
+  protected _lift(value: any): string {
+    return serializeImmutableData(value);
   }
 }
 

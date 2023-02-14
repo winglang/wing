@@ -521,6 +521,22 @@ impl TypeRef {
 			false
 		}
 	}
+
+	pub fn is_capturable(&self) -> bool {
+		match **self {
+			Type::Resource(_) => true,
+			Type::Enum(_) => true,
+			Type::Number => true,
+			Type::String => true,
+			Type::Duration => true,
+			Type::Boolean => true,
+			Type::Array(v) => v.is_capturable(),
+			Type::Map(v) => v.is_capturable(),
+			Type::Set(v) => v.is_capturable(),
+			Type::Struct(_) => true,
+			_ => false,
+		}
+	}
 }
 
 impl Subtype for TypeRef {

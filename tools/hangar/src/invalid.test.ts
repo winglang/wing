@@ -29,8 +29,5 @@ describe.each(invalidWingFiles)("%s", (wingFile) => {
 
       expect(stderrSanitized).toMatchSnapshot("stderr");
     },
-    {
-      timeout: 1000 * 30,
-    }
   );
 });
