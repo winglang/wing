@@ -80,6 +80,7 @@ pub mod type_system {
 	use crate::util::package_json;
 	use crate::Result;
 	use std::collections::HashMap;
+	use std::error::Error;
 	use std::path::Path;
 
 	pub struct TypeSystem {
@@ -180,7 +181,7 @@ pub mod type_system {
 		pub fn load_dep(&mut self, dep: &str, search_start: &str, opts: &AssemblyLoadOptions) -> Result<AssemblyName> {
 			let is_root = opts.root;
 			let module_dir = package_json::find_dependency_directory(dep, search_start)
-				.expect(format!("could not find module {} in {}", dep, search_start).as_str());
+				.ok_or::<Box<dyn Error>>(format!("could not find module {} in {}", dep, search_start).into())?;
 			self.load_module(
 				&module_dir,
 				&AssemblyLoadOptions {

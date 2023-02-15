@@ -696,7 +696,7 @@ impl<'a> TypeChecker<'a> {
 				name: WINGSDK_STD_MODULE.to_string(),
 				span: WingSpan::global(),
 			},
-			0,
+			None,
 		);
 	}
 
@@ -1538,7 +1538,7 @@ impl<'a> TypeChecker<'a> {
 					}
 				};
 
-				self.add_module_to_env(env, library_name, namespace_filter, &alias, stmt.idx);
+				self.add_module_to_env(env, library_name, namespace_filter, &alias, Some(&stmt));
 			}
 			StmtKind::Scope(scope) => {
 				scope.set_env(SymbolEnv::new(
@@ -1893,7 +1893,8 @@ impl<'a> TypeChecker<'a> {
 		library_name: String,
 		namespace_filter: Vec<String>,
 		alias: &Symbol,
-		statement_idx: usize,
+		// the statement that initiated the bring, if any
+		stmt: Option<&Stmt>,
 	) {
 		let mut wingii_types = wingii::type_system::TypeSystem::new();
 
@@ -1906,16 +1907,33 @@ impl<'a> TypeChecker<'a> {
 				root: true,
 				deps: false,
 			};
-			let assembly_name = wingii_types
-				.load(manifest_root.as_str(), Some(wingii_loader_options))
-				.unwrap();
+			let assembly_name = match wingii_types.load(manifest_root.as_str(), Some(wingii_loader_options)) {
+				Ok(name) => name,
+				Err(type_error) => {
+					self.type_error(&TypeError {
+						message: format!("Cannot locate Wing standard library (checking \"{}\"", manifest_root),
+						span: stmt.map(|s| s.span.clone()).unwrap_or(WingSpan::global()),
+					});
+					debug!("{:?}", type_error);
+					return;
+				}
+			};
+
 			assembly_name
 		} else {
 			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions { root: true, deps: true };
 			let source_dir = self.source_path.parent().unwrap().to_str().unwrap();
-			let assembly_name = wingii_types
-				.load_dep(library_name.as_str(), source_dir, &wingii_loader_options)
-				.unwrap();
+			let assembly_name = match wingii_types.load_dep(library_name.as_str(), source_dir, &wingii_loader_options) {
+				Ok(name) => name,
+				Err(type_error) => {
+					self.type_error(&TypeError {
+						message: format!("Cannot find module \"{}\" in source directory", library_name),
+						span: stmt.map(|s| s.span.clone()).unwrap_or(WingSpan::global()),
+					});
+					debug!("{:?}", type_error);
+					return;
+				}
+			};
 			assembly_name
 		};
 
@@ -1927,7 +1945,7 @@ impl<'a> TypeChecker<'a> {
 			&namespace_filter,
 			&alias,
 			self.types,
-			statement_idx,
+			stmt.map(|s| s.idx).unwrap_or(0),
 			env,
 		);
 		jsii_importer.import_to_env();
