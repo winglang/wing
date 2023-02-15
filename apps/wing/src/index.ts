@@ -72,7 +72,7 @@ async function main() {
     .command("test")
     .description("Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers")
     .argument("<entrypoint...>", "all entrypoints to test")
-    .action(test);
+    .action(actionErrorHandler(test));
 
   program
     .command("docs")
