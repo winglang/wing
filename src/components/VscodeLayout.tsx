@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { LogLevel } from "../../electron/main/consoleLogger.js";
+import { LogEntry, LogLevel } from "../../electron/main/consoleLogger.js";
 import { ExplorerItem } from "../../electron/main/router/app.js";
 import { State } from "../../electron/main/types.js";
 import { BlueScreenOfDeath } from "../design-system/BlueScreenOfDeath.js";
@@ -133,6 +133,13 @@ export const VscodeLayout = ({
       return;
     }
   }, [logs.data]);
+
+  const onLogSelected = (log: LogEntry) => {
+    const path = log.ctx?.sourcePath;
+    if (path) {
+      treeMenu.setCurrent(path);
+    }
+  };
 
   const metadata = trpc["app.nodeMetadata"].useQuery(
     {
@@ -314,7 +321,10 @@ export const VscodeLayout = ({
             />
             <div className="relative h-full">
               <ScrollableArea ref={logsRef} overflowY className="px-4 pb-1.5">
-                <ConsoleLogs logs={logs?.data ?? []} />
+                <ConsoleLogs
+                  logs={logs.data ?? []}
+                  onLogSelected={onLogSelected}
+                />
               </ScrollableArea>
             </div>
           </div>

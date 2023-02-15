@@ -4,18 +4,23 @@ export type LogLevel = "verbose" | "info" | "warn" | "error";
 
 export type LogSource = "compiler" | "console" | "simulator";
 
+export interface TracingContext {
+  sourcePath: string;
+}
+
 export interface LogEntry {
   timestamp: number;
   level: LogLevel;
   message: string;
   source: LogSource;
+  ctx?: TracingContext;
 }
 
 export interface ConsoleLogger {
   messages: LogEntry[];
-  verbose: (message: string, source?: LogSource) => void;
-  log: (message: string, source?: LogSource) => void;
-  error: (message: unknown, source?: LogSource) => void;
+  verbose: (message: string, source?: LogSource, ctx?: TracingContext) => void;
+  log: (message: string, source?: LogSource, ctx?: TracingContext) => void;
+  error: (message: unknown, source?: LogSource, ctx?: TracingContext) => void;
 }
 
 export const createConsoleLogger = (
@@ -25,27 +30,29 @@ export const createConsoleLogger = (
 
   return {
     messages: new Array<LogEntry>(),
-    verbose(message, source) {
+    verbose(message, source, ctx) {
       log.info(message);
       this.messages.push({
         timestamp: Date.now(),
         level: "verbose",
         message,
         source: source ?? "console",
+        ctx,
       });
       onLog("verbose", message);
     },
-    log(message, source) {
+    log(message, source, ctx) {
       log.info(message);
       this.messages.push({
         timestamp: Date.now(),
         level: "info",
         message,
         source: source ?? "console",
+        ctx,
       });
       onLog("info", message);
     },
-    error(error, source) {
+    error(error, source, ctx) {
       log.error(error);
       const message = error instanceof Error ? error.message : `${error}`;
       this.messages.push({
@@ -53,6 +60,7 @@ export const createConsoleLogger = (
         level: "error",
         message,
         source: source ?? "console",
+        ctx,
       });
       onLog("error", message);
     },

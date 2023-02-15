@@ -158,14 +158,16 @@ const LogEntryRow = ({
 
 export interface ConsoleLogsProps {
   logs: LogEntry[];
+  onLogSelected?: (log: LogEntry) => void;
 }
 
-export const ConsoleLogs = ({ logs }: ConsoleLogsProps) => {
+export const ConsoleLogs = ({ logs, onLogSelected }: ConsoleLogsProps) => {
   const [selectedLog, setSelectedLog] = useState<LogEntry | undefined>(
     undefined,
   );
   const handleMouseDown = (log: LogEntry) => {
     setSelectedLog(log);
+    onLogSelected?.(log);
   };
   return (
     <>

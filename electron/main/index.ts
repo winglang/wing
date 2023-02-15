@@ -178,9 +178,13 @@ function createWindowManager() {
             event.data.message ?? JSON.stringify(event.data, undefined, 2)
           }`;
           if (event.type === "log") {
-            consoleLogger.log(message, "simulator");
+            consoleLogger.log(message, "simulator", {
+              sourcePath: event.sourcePath,
+            });
           } else {
-            consoleLogger.verbose(message, "simulator");
+            consoleLogger.verbose(message, "simulator", {
+              sourcePath: event.sourcePath,
+            });
           }
         },
       });
