@@ -16,6 +16,13 @@ if (!SUPPORTED_NODE_VERSION) {
 }
 const log = debug("wing:cli");
 
+function actionErrorHandler(fn: (...args: any[]) => Promise<any>) {
+  return (...args: any[]) => fn(...args).catch((err: Error) => {
+    console.error(err.message);
+    process.exit(1);
+  });
+}
+
 async function main() {
   checkNodeVersion()
 
@@ -59,7 +66,7 @@ async function main() {
       "-p, --plugins [plugin...]",
       "Compiler plugins"
     )
-    .action(compile);
+    .action(actionErrorHandler(compile));
 
   program
     .command("test")
