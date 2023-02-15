@@ -1,3 +1,4 @@
+use lsp_types::Position;
 use tree_sitter::Point;
 
 use crate::debug;
@@ -25,6 +26,27 @@ impl WingSpan {
 			start_byte: 0,
 			end_byte: 0,
 			file_id: String::from(""),
+		}
+	}
+
+	pub fn contains(self: &Self, position: &Position) -> bool {
+		let pos_line = position.line as usize;
+		let pos_char = position.character as usize;
+		let start = self.start;
+		let end = self.end;
+
+		if pos_line >= start.row && pos_line <= end.row {
+			if start.row == end.row && pos_line == start.row {
+				pos_char >= start.column && pos_char <= end.column
+			} else if pos_line == start.row {
+				pos_char >= start.column
+			} else if pos_line == end.row {
+				pos_char <= end.column
+			} else {
+				true
+			}
+		} else {
+			false
 		}
 	}
 }

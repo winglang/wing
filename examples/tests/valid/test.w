@@ -7,3 +7,5 @@ let handler = inflight () => {
 if true {
   arr;
 }
+
+arr;

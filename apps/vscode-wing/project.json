@@ -12,6 +12,14 @@
         "cwd": "apps/vscode-wing",
         "script": "build"
       }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build", "build"],
+      "options": {
+        "cwd": "apps/vscode-wing",
+        "command": "RUST_BACKTRACE=1 WING_BIN=\"$NX_WORKSPACE_ROOT/apps/wing/bin/wing\" code ../../examples --disable-extensions --extensionDevelopmentPath=$NX_WORKSPACE_ROOT/apps/vscode-wing"
+      }
     }
   }
 }

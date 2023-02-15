@@ -1,6 +1,10 @@
-use lsp_types::SemanticTokenType;
+use lsp_types::{SemanticToken, SemanticTokenType, SemanticTokens, SemanticTokensResult};
 use tree_sitter::{Node, Point, Tree};
 use tree_sitter_traversal::{traverse, Order};
+
+use crate::wasm_util::{combine_ptr_and_length, ptr_to_string};
+
+use crate::lsp::sync::FILES;
 
 // For efficiency, this lets us minimize store space when communicating through the LSP
 pub const LEGEND_TYPE: &[SemanticTokenType] = &[
@@ -123,4 +127,65 @@ fn semantic_token_from_node(node: &Node) -> Option<AbsoluteSemanticToken> {
 		}
 		_ => None,
 	}
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn wingc_on_semantic_tokens(ptr: u32, len: u32) -> u64 {
+	let parse_string = ptr_to_string(ptr, len);
+	if let Ok(parsed) = serde_json::from_str(&parse_string) {
+		if let Some(token_result) = on_semantic_tokens(parsed) {
+			let result = serde_json::to_string(&token_result).unwrap();
+
+			// return result as u64 with ptr and len
+			let leaked = result.into_bytes().leak();
+			combine_ptr_and_length(leaked.as_ptr() as u32, leaked.len() as u32)
+		} else {
+			0
+		}
+	} else {
+		eprintln!("Failed to parse 'did open' text document: {}", parse_string);
+		0
+	}
+}
+pub fn on_semantic_tokens(params: lsp_types::SemanticTokensParams) -> Option<SemanticTokensResult> {
+	FILES.with(|files| {
+		let files = files.borrow();
+		let files = files.read().unwrap();
+		let parse_result = files.get(&params.text_document.uri).unwrap();
+		let absolute_tokens = semantic_token_from_ast(&parse_result.tree);
+
+		let mut last_line = 0;
+		let mut last_char = 0;
+
+		// convert absolute tokens to relative tokens
+		// this logic is specific to this endpoint for perf reasons
+		let mut relative_tokens: Vec<SemanticToken> = Vec::new();
+		for token in absolute_tokens.iter() {
+			let line = token.start.row - last_line;
+			let char;
+			if line == 0 {
+				char = token.start.column - last_char;
+			} else {
+				char = token.start.column;
+			}
+			relative_tokens.push(SemanticToken {
+				delta_line: line as u32,
+				delta_start: char as u32,
+				length: token.length as u32,
+				token_type: token.token_type as u32,
+				token_modifiers_bitset: 0,
+			});
+			last_line = token.start.row;
+			last_char = token.start.column;
+		}
+
+		if relative_tokens.len() == 0 {
+			None
+		} else {
+			Some(SemanticTokensResult::Tokens(SemanticTokens {
+				result_id: None,
+				data: relative_tokens,
+			}))
+		}
+	})
 }
