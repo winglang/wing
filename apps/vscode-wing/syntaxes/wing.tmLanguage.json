@@ -85,20 +85,32 @@
     "keywords": {
       "patterns": [
         {
-          "name": "keyword.control.wing",
-          "match": "\\b(?:extends|as|class|else|for|from|if|in|new|return|inflight|use|fn|resource|be|let|break|continue|protected|internal|rw|try|throw|catch|finally|bring|struct|def|shape)\\b"
+          "name": "keyword.control.flow.wing",
+          "match": "\\b(?:extends|class|else|if|return|resource|let|protected|internal|try|catch|finally|bring|struct|enum|as)\\b"
+        },
+        {
+          "name": "keyword.control.loop.wing",
+          "match": "\\b(?:for|in|break|continue)\\b"
+        },
+        {
+          "name": "keyword.operator.new.wing",
+          "match": "\\b(?:new)\\b"
+        },
+        {
+          "name": "storage.modifier.wing",
+          "match":  "\\b(?:inflight|preflight|var|protected|internal)\\b"
         }
       ]
     },
     "type-primitive": {
       "name": "support.type.wing",
-      "match": "\\b(?:void|str|num|bool|any|Map|Set|MutMap|MutSet|Array|MutArray|Promise)\\b"
+      "match": "\\b(?:void|str|num|bool|any|duration|Map|Set|MutMap|MutSet|Array|MutArray|Promise)\\b"
     },
     "numbers": {
       "patterns": [
         {
           "name": "constant.numeric.wing",
-          "match": "\\b(?:[1-9][0-9]*[smh]?)\\b"
+          "match": "\\b(?:-?[1-9][0-9]*[smh]?)\\b"
         }
       ]
     },
