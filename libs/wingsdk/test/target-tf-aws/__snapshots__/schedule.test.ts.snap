@@ -40,7 +40,7 @@ exports[`schedule behavior with cron 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_ScheduleOnTickc5395e41_Code_C7AC6B0A.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_ScheduleOnTickc5395e41_S3Object_DE498BA0.key}\\",
-        \\"timeout\\": 60
+        \\"timeout\\": 30
       }
     },
     \\"aws_s3_bucket\\": {
@@ -146,7 +146,7 @@ Object {
                   "version": "10.1.228",
                 },
                 "display": Object {
-                  "description": "A cloud schedule",
+                  "description": "A cloud schedule to trigger events at regular intervals",
                   "title": "Schedule",
                 },
                 "id": "Schedule",
@@ -365,7 +365,7 @@ exports[`schedule behavior with rate 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_ScheduleOnTickc5395e41_Code_C7AC6B0A.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_ScheduleOnTickc5395e41_S3Object_DE498BA0.key}\\",
-        \\"timeout\\": 60
+        \\"timeout\\": 30
       }
     },
     \\"aws_s3_bucket\\": {
@@ -471,7 +471,7 @@ Object {
                   "version": "10.1.228",
                 },
                 "display": Object {
-                  "description": "A cloud schedule",
+                  "description": "A cloud schedule to trigger events at regular intervals",
                   "title": "Schedule",
                 },
                 "id": "Schedule",
@@ -708,7 +708,7 @@ exports[`schedule with two functions 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_ScheduleOnTick0a615500_Code_12A9FE62.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_ScheduleOnTick0a615500_S3Object_EB395932.key}\\",
-        \\"timeout\\": 60
+        \\"timeout\\": 30
       },
       \\"root_ScheduleOnTick7b33bcba_F513E6E2\\": {
         \\"environment\\": {
@@ -722,7 +722,7 @@ exports[`schedule with two functions 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_ScheduleOnTick7b33bcba_Code_4537EF5B.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_ScheduleOnTick7b33bcba_S3Object_4D569B28.key}\\",
-        \\"timeout\\": 60
+        \\"timeout\\": 30
       }
     },
     \\"aws_s3_bucket\\": {
@@ -900,7 +900,7 @@ Object {
                   "version": "10.1.228",
                 },
                 "display": Object {
-                  "description": "A cloud schedule",
+                  "description": "A cloud schedule to trigger events at regular intervals",
                   "title": "Schedule",
                 },
                 "id": "Schedule",
