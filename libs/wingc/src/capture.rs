@@ -309,8 +309,9 @@ fn scan_captures_in_expression(
 								._type,
 							phase,
 						),
-						Err(type_error) => {
-							panic!("{}", type_error);
+						Err(_type_error) => {
+							// type errors are already reported in previous diagnostics
+							return res;
 						}
 					};
 
