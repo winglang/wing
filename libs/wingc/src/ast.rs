@@ -263,10 +263,15 @@ pub enum StmtKind {
 	},
 	TryCatch {
 		try_statements: Scope,
-		catch_statements: Scope,
-		exception_var: Option<Symbol>,
+		catch_block: Option<CatchBlock>,
 		finally_statements: Option<Scope>,
 	},
+}
+
+#[derive(Debug)]
+pub struct CatchBlock {
+	pub statements: Scope,
+	pub exception_var: Option<Symbol>,
 }
 
 #[derive(Debug)]

@@ -1848,8 +1848,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			StmtKind::TryCatch {
 				try_statements,
-				catch_statements,
-				exception_var,
+				catch_block,
 				finally_statements,
 			} => {
 				// Create a new environment for the try block
@@ -1865,30 +1864,32 @@ impl<'a> TypeChecker<'a> {
 				self.inner_scopes.push(try_statements);
 
 				// Create a new environment for the catch block
-				let mut catch_env = SymbolEnv::new(
-					Some(env.get_ref()),
-					self.types.void(),
-					false,
-					false,
-					env.flight,
-					stmt.idx,
-				);
+				if let Some(catch_block) = catch_block {
+					let mut catch_env = SymbolEnv::new(
+						Some(env.get_ref()),
+						self.types.void(),
+						false,
+						false,
+						env.flight,
+						stmt.idx,
+					);
 
-				// Add the exception variable to the catch block
-				if let Some(exception_var) = exception_var {
-					match catch_env.define(
-						exception_var,
-						SymbolKind::make_variable(self.types.string(), false, env.flight),
-						StatementIdx::Top,
-					) {
-						Err(type_error) => {
-							self.type_error(&type_error);
+					// Add the exception variable to the catch block
+					if let Some(exception_var) = &catch_block.exception_var {
+						match catch_env.define(
+							exception_var,
+							SymbolKind::make_variable(self.types.string(), false, env.flight),
+							StatementIdx::Top,
+						) {
+							Err(type_error) => {
+								self.type_error(&type_error);
+							}
+							_ => {}
 						}
-						_ => {}
 					}
+					catch_block.statements.set_env(catch_env);
+					self.inner_scopes.push(&catch_block.statements);
 				}
-				catch_statements.set_env(catch_env);
-				self.inner_scopes.push(catch_statements);
 
 				// Create a new environment for the finally block
 				if let Some(finally_statements) = finally_statements {

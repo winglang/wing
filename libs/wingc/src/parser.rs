@@ -7,7 +7,7 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionDefinition,
+	ArgList, BinaryOperator, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionDefinition,
 	FunctionSignature, InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind,
 	Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
@@ -194,12 +194,19 @@ impl Parser<'_> {
 
 	fn build_try_catch_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
 		let try_statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
-		let catch_statements = self.build_scope(&statement_node.child_by_field_name("catch_block").unwrap());
-		let exception_var = if let Some(exception_var_node) = statement_node.child_by_field_name("exception_identifier") {
-			Some(self.node_symbol(&exception_var_node)?)
+		let catch_block = if let Some(catch_block) = statement_node.child_by_field_name("catch_block") {
+			Some(CatchBlock {
+				statements: self.build_scope(&catch_block),
+				exception_var: if let Some(exception_var_node) = statement_node.child_by_field_name("exception_identifier") {
+					Some(self.node_symbol(&exception_var_node)?)
+				} else {
+					None
+				},
+			})
 		} else {
 			None
 		};
+
 		let finally_statements = if let Some(finally_node) = statement_node.child_by_field_name("finally_block") {
 			Some(self.build_scope(&finally_node))
 		} else {
@@ -208,8 +215,7 @@ impl Parser<'_> {
 
 		Ok(StmtKind::TryCatch {
 			try_statements,
-			catch_statements,
-			exception_var,
+			catch_block,
 			finally_statements,
 		})
 	}

@@ -228,9 +228,11 @@ module.exports = grammar({
       seq(
         "try",
         field("block", $.block),
-        "catch",
-        optional(field("exception_identifier", $.identifier)),
-        field("catch_block", $.block),
+        optional(seq(
+          "catch",
+          optional(field("exception_identifier", $.identifier)),
+          field("catch_block", $.block),
+        )),
         optional(seq("finally", field("finally_block", $.block)))
       ),
 
