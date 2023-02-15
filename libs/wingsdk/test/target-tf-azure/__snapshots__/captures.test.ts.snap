@@ -21,9 +21,7 @@ exports[`function with a bucket binding requiring only read 2`] = `
     \\"azurerm_linux_function_app\\": {
       \\"root_Function_9E43762E\\": {
         \\"app_settings\\": {
-          \\"BUCKET_NAME_e51fbb13\\": \\"\${azurerm_storage_container.root_Bucket_D7A55221.name}\\",
           \\"FUNCTIONS_WORKER_RUNTIME\\": \\"node\\",
-          \\"STORAGE_ACCOUNT_e51fbb13\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\",
           \\"WEBSITE_RUN_FROM_PACKAGE\\": \\"https://\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}.blob.core.windows.net/\${azurerm_storage_container.root_Function_FunctionBucket_B5F263FB.name}/\${azurerm_storage_blob.root_Function_CodeBlob_5AAEAFFA.name}\\"
         },
         \\"https_only\\": true,
@@ -125,9 +123,7 @@ exports[`function with a bucket binding requiring read_write 2`] = `
     \\"azurerm_linux_function_app\\": {
       \\"root_Function_9E43762E\\": {
         \\"app_settings\\": {
-          \\"BUCKET_NAME_e51fbb13\\": \\"\${azurerm_storage_container.root_Bucket_D7A55221.name}\\",
           \\"FUNCTIONS_WORKER_RUNTIME\\": \\"node\\",
-          \\"STORAGE_ACCOUNT_e51fbb13\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\",
           \\"WEBSITE_RUN_FROM_PACKAGE\\": \\"https://\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}.blob.core.windows.net/\${azurerm_storage_container.root_Function_FunctionBucket_B5F263FB.name}/\${azurerm_storage_blob.root_Function_CodeBlob_5AAEAFFA.name}\\"
         },
         \\"https_only\\": true,

@@ -22,6 +22,7 @@ export class App extends Construct implements core.IApp {
   public readonly outdir: string;
   private readonly files: core.Files;
   private readonly name: string;
+  private presynthed = false;
 
   constructor(props: core.AppProps) {
     super(undefined as any, "root");
@@ -37,6 +38,16 @@ export class App extends Construct implements core.IApp {
    * app's outdir, and returns a path to the .wsim file.
    */
   public synth(): string {
+    // call preSynthesize() on every construct in the tree
+    if (!this.presynthed) {
+      for (const c of this.node.findAll()) {
+        if (typeof (c as any).preSynthesize === "function") {
+          (c as any).preSynthesize();
+        }
+      }
+      this.presynthed = true;
+    }
+
     const workdir = mkdtemp();
 
     // write application assets into workdir

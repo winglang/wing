@@ -84,6 +84,7 @@ export class CdktfApp extends Construct implements IApp {
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
   private readonly pluginManager: PluginManager;
+  private presynthed = false;
 
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
@@ -121,6 +122,16 @@ export class CdktfApp extends Construct implements IApp {
    * for unit testing.
    */
   public synth(): string {
+    // call preSynthesize() on every construct in the tree
+    if (!this.presynthed) {
+      for (const c of this.node.findAll()) {
+        if (typeof (c as any).preSynthesize === "function") {
+          (c as any).preSynthesize();
+        }
+      }
+      this.presynthed = true;
+    }
+
     // synthesize Terraform files in `outdir/.tmp.cdktf.out/stacks/root`
     this.pluginManager.preSynth(this);
     this.cdktfApp.synth();
