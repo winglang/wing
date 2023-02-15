@@ -751,11 +751,12 @@ impl<'a> TypeChecker<'a> {
 		self.types.anything()
 	}
 
-	fn variable_error(&self, type_error: &TypeError) -> VariableInfo {
+	fn variable_error(&self, type_error: TypeError) -> VariableInfo {
+		let TypeError { message, span } = type_error;
 		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
-			message: type_error.message.clone(),
-			span: Some(type_error.span.clone()),
+			message,
+			span: Some(span),
 		});
 
 		VariableInfo {
@@ -2158,13 +2159,13 @@ impl<'a> TypeChecker<'a> {
 					if let Some(var) = var.as_variable() {
 						var
 					} else {
-						self.variable_error(&TypeError {
+						self.variable_error(TypeError {
 							message: format!("Expected identifier {}, to be a variable, but it's a {}", symbol, var),
 							span: symbol.span.clone(),
 						})
 					}
 				}
-				Err(type_error) => self.variable_error(&type_error),
+				Err(type_error) => self.variable_error(type_error),
 			},
 			Reference::NestedIdentifier { object, property } => {
 				// There's a special case where the object is actually a type and the property is either a static method or an enum variant.
@@ -2290,7 +2291,7 @@ impl<'a> TypeChecker<'a> {
 	fn get_property_from_class(&mut self, class: &Class, property: &Symbol) -> VariableInfo {
 		match class.env.lookup(property, None) {
 			Ok(field) => field.as_variable().expect("Expected property to be a variable"),
-			Err(type_error) => self.variable_error(&type_error),
+			Err(type_error) => self.variable_error(type_error),
 		}
 	}
 }
