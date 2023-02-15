@@ -740,11 +740,12 @@ impl<'a> TypeChecker<'a> {
 		});
 	}
 
-	fn type_error(&self, type_error: &TypeError) -> TypeRef {
+	fn type_error(&self, type_error: TypeError) -> TypeRef {
+		let TypeError { message, span } = type_error;
 		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
-			message: type_error.message.clone(),
-			span: Some(type_error.span.clone()),
+			message,
+			span: Some(span),
 		});
 
 		self.types.anything()
@@ -865,7 +866,7 @@ impl<'a> TypeChecker<'a> {
 				) {
 					Ok(v) => v.as_variable().expect("Expected constructor to be a variable")._type,
 					Err(type_error) => {
-						self.type_error(&type_error);
+						self.type_error(type_error);
 						return self.types.anything();
 					}
 				};
@@ -1295,7 +1296,7 @@ impl<'a> TypeChecker<'a> {
 				self.types.add_type(Type::Function(sig))
 			}
 			TypeAnnotation::UserDefined(user_defined_type) => {
-				resolve_user_defined_type(user_defined_type, env, statement_idx).unwrap_or_else(|e| self.type_error(&e))
+				resolve_user_defined_type(user_defined_type, env, statement_idx).unwrap_or_else(|e| self.type_error(e))
 			}
 			TypeAnnotation::Array(v) => {
 				let value_type = self.resolve_type_annotation(v, env, statement_idx);
@@ -1341,7 +1342,7 @@ impl<'a> TypeChecker<'a> {
 				let explicit_type = type_.as_ref().map(|t| self.resolve_type_annotation(t, env, stmt.idx));
 				let inferred_type = self.type_check_exp(initial_value, env, stmt.idx);
 				if inferred_type.is_void() {
-					self.type_error(&TypeError {
+					self.type_error(TypeError {
 						message: format!("Cannot assign expression of type \"{}\" to a variable", inferred_type),
 						span: var_name.span.clone(),
 					});
@@ -1354,7 +1355,7 @@ impl<'a> TypeChecker<'a> {
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
-							self.type_error(&type_error);
+							self.type_error(type_error);
 						}
 						_ => {}
 					};
@@ -1365,7 +1366,7 @@ impl<'a> TypeChecker<'a> {
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
-							self.type_error(&type_error);
+							self.type_error(type_error);
 						}
 						_ => {}
 					};
@@ -1388,7 +1389,7 @@ impl<'a> TypeChecker<'a> {
 
 					// TODO: Handle non-builtin iterables
 					t => {
-						self.type_error(&TypeError {
+						self.type_error(TypeError {
 							message: format!("Unable to iterate over \"{}\"", t),
 							span: iterable.span.clone(),
 						});
@@ -1403,7 +1404,7 @@ impl<'a> TypeChecker<'a> {
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
-						self.type_error(&type_error);
+						self.type_error(type_error);
 					}
 					_ => {}
 				};
@@ -1588,7 +1589,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify parent is actually a known Class/Resource and get their env
 				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {
-					let t = resolve_user_defined_type(parent_type, env, stmt.idx).unwrap_or_else(|e| self.type_error(&e));
+					let t = resolve_user_defined_type(parent_type, env, stmt.idx).unwrap_or_else(|e| self.type_error(e));
 					if *is_resource {
 						if let Type::Resource(ref class) = *t {
 							(Some(t), Some(class.env.get_ref()))
@@ -1625,7 +1626,7 @@ impl<'a> TypeChecker<'a> {
 				});
 				match env.define(name, SymbolKind::Type(class_type), StatementIdx::Top) {
 					Err(type_error) => {
-						self.type_error(&type_error);
+						self.type_error(type_error);
 					}
 					_ => {}
 				};
@@ -1642,7 +1643,7 @@ impl<'a> TypeChecker<'a> {
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
-							self.type_error(&type_error);
+							self.type_error(type_error);
 						}
 						_ => {}
 					};
@@ -1667,7 +1668,7 @@ impl<'a> TypeChecker<'a> {
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
-							self.type_error(&type_error);
+							self.type_error(type_error);
 						}
 						_ => {}
 					};
@@ -1688,7 +1689,7 @@ impl<'a> TypeChecker<'a> {
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
-						self.type_error(&type_error);
+						self.type_error(type_error);
 					}
 					_ => {}
 				};
@@ -1788,7 +1789,7 @@ impl<'a> TypeChecker<'a> {
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
-							self.type_error(&type_error);
+							self.type_error(type_error);
 						}
 						_ => {}
 					};
@@ -1801,7 +1802,7 @@ impl<'a> TypeChecker<'a> {
 						Ok(kind) => match &*kind {
 							SymbolKind::Type(_type) => Some(*_type),
 							_ => {
-								self.type_error(&TypeError {
+								self.type_error(TypeError {
 									message: format!("Expected {} to be a type", parent),
 									span: parent.span.clone(),
 								});
@@ -1809,14 +1810,14 @@ impl<'a> TypeChecker<'a> {
 							}
 						},
 						Err(type_error) => {
-							self.type_error(&type_error);
+							self.type_error(type_error);
 							None
 						}
 					})
 					.collect::<Vec<_>>();
 
 				if let Err(e) = add_parent_members_to_struct_env(&extends_types, name, &mut struct_env) {
-					self.type_error(&e);
+					self.type_error(e);
 				}
 				match env.define(
 					name,
@@ -1828,7 +1829,7 @@ impl<'a> TypeChecker<'a> {
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
-						self.type_error(&type_error);
+						self.type_error(type_error);
 					}
 					_ => {}
 				};
@@ -1841,7 +1842,7 @@ impl<'a> TypeChecker<'a> {
 
 				match env.define(name, SymbolKind::Type(enum_type_ref), StatementIdx::Top) {
 					Err(type_error) => {
-						self.type_error(&type_error);
+						self.type_error(type_error);
 					}
 					_ => {}
 				};
@@ -1868,7 +1869,7 @@ impl<'a> TypeChecker<'a> {
 							StatementIdx::Top,
 						) {
 							Err(type_error) => {
-								self.type_error(&type_error);
+								self.type_error(type_error);
 							}
 							_ => {}
 						}
@@ -1951,7 +1952,7 @@ impl<'a> TypeChecker<'a> {
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
-					self.type_error(&type_error);
+					self.type_error(type_error);
 				}
 				_ => {}
 			};
@@ -2085,7 +2086,7 @@ impl<'a> TypeChecker<'a> {
 								StatementIdx::Top,
 							) {
 								Err(type_error) => {
-									self.type_error(&type_error);
+									self.type_error(type_error);
 								}
 								_ => {}
 							}
@@ -2110,7 +2111,7 @@ impl<'a> TypeChecker<'a> {
 								StatementIdx::Top,
 							) {
 								Err(type_error) => {
-									self.type_error(&type_error);
+									self.type_error(type_error);
 								}
 								_ => {}
 							}
