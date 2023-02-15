@@ -944,7 +944,8 @@ type is inferred iff a default value is provided.
 Exceptions and `try/catch/finally` is the error mechanism. Mechanics directly
 translate to JavaScript. You can create a new exception with a `throw` call.
 
-In the presence of `try`, `catch` is required but `finally` is optional.
+In the presence of `try`, both `catch` and `finally` are optional.
+In the presence of `catch` the variable holding the exception (`e` in the example below) is optional.
 
 `panic` is meant to be fatal error handling.  
 `throw` is meant to be recoverable error handling.
