@@ -75,6 +75,7 @@ pub fn completions_from_ast(source: &str, tree: &Tree, position: Position) -> Ve
 			"variable_definition_statement" => {
 				let name = node.child_by_field_name("name").unwrap();
 				let name_text = name.utf8_text(source.as_bytes()).unwrap();
+				dbg!(name_text);
 				let completion = WingCompletionItem {
 					text: name_text.to_string(),
 					kind: CompletionItemKind::VARIABLE,
@@ -119,11 +120,10 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 					let text = item.text.as_str();
 					CompletionItem {
 						label: text.to_string(),
-						insert_text: Some(text.to_string()),
+						insert_text: None,
 						kind: Some(item.kind),
 						detail: item.detail.clone(),
 						preselect: Some(true),
-
 						..Default::default()
 					}
 				})

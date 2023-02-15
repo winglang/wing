@@ -36,8 +36,6 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 		let position = params.text_document_position_params.position;
 
 		let scope = &parse_result.scope;
-		let root_env = &scope.env.borrow();
-		let root_env = root_env.as_ref().unwrap();
 		let point_context = find_symbol_in_scope(&scope, position);
 
 		if let Some(point_context) = point_context {
@@ -55,10 +53,6 @@ pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 
 			let env_ref = point_context.0.env.borrow();
 			let env = env_ref.as_ref().unwrap();
-
-			if let Some(parent) = env.parent {
-				dbg!(format!("{:p} = {:p}", root_env, &parent));
-			}
 
 			if let Ok(lookup) = env.lookup_ext(symbol, None) {
 				match lookup.0 {

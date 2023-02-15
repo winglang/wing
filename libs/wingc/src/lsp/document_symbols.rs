@@ -29,7 +29,50 @@ pub unsafe extern "C" fn wingc_on_document_symbol(ptr: u32, len: u32) -> u64 {
 fn create_symbols<'a>(scope: &'a Scope) -> Vec<DocumentSymbol> {
 	let mut symbols: Vec<DocumentSymbol> = vec![];
 
-	let mut symbol_visitor = |scope: &'a Scope, statement: &'a Stmt, _expr: Option<&'a Expr>, symbol: &'a Symbol| {
+	let mut symbol_visitor = |_scope: &'a Scope, statement: &'a Stmt, _expr: Option<&'a Expr>, symbol: &'a Symbol| {
+		let symbol_kind = match &statement.kind {
+			StmtKind::Bring { .. } => SymbolKind::NAMESPACE,
+			StmtKind::VariableDef { var_name, .. } => {
+				if var_name.name == symbol.name {
+					SymbolKind::VARIABLE
+				} else {
+					return;
+				}
+			}
+			StmtKind::ForLoop { iterator, .. } => {
+				if iterator.name == symbol.name {
+					SymbolKind::VARIABLE
+				} else {
+					return;
+				}
+			}
+			StmtKind::Class(c) => {
+				if c.name.name == symbol.name {
+					SymbolKind::CLASS
+				} else {
+					// eventually we should handle the entire class symbol hierarchy
+					return;
+				}
+			}
+			StmtKind::Struct { name, .. } => {
+				if name.name == symbol.name {
+					SymbolKind::STRUCT
+				} else {
+					// eventually we should handle the entire struct symbol hierarchy
+					return;
+				}
+			}
+			StmtKind::Enum { name, .. } => {
+				if name.name == symbol.name {
+					SymbolKind::ENUM
+				} else {
+					// eventually we should handle the entire enum symbol hierarchy
+					return;
+				}
+			}
+			_ => return,
+		};
+
 		let symbol_range = Range {
 			start: Position {
 				line: symbol.span.start.row as u32,
@@ -40,7 +83,6 @@ fn create_symbols<'a>(scope: &'a Scope) -> Vec<DocumentSymbol> {
 				character: symbol.span.end.column as u32,
 			},
 		};
-		let symbol_kind = SymbolKind::OBJECT;
 
 		// "deprecated" is deprecated (lol) but still required
 		#[allow(deprecated)]

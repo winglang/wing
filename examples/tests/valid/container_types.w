@@ -76,6 +76,7 @@ assert(s3.has(1));
 let s4: Set<num> = Set<num> {1, 2, 3};
 assert(s4.size == 3);
 assert(s4.has(1));
+
 let s6: Set<cloud.Bucket> = {bucket1, bucket2, bucket3};
 assert(s6.size == 3);
 assert(s6.has(bucket2));

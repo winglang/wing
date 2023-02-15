@@ -27,12 +27,14 @@ export interface WingCompilerLoadOptions {
 
 export async function load(options: WingCompilerLoadOptions) {
   const preopens = {
+    "/": "/",
     // .jsii access
     [WINGSDK_MANIFEST_ROOT]: WINGSDK_MANIFEST_ROOT,
     ...(options.preopens ?? {}),
   } as Record<string, string>;
 
   if (process.platform === "win32") {
+    preopens["C:\\"] = "C:\\";
     for (const [key, value] of Object.entries(preopens)) {
       delete preopens[key];
       preopens[normalPath(value)] = value;
