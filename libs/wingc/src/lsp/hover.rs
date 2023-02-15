@@ -5,9 +5,8 @@ use crate::{
 	wasm_util::{combine_ptr_and_length, ptr_to_string},
 };
 
-use crate::lsp::sync::FILES;
-
 use crate::lsp::ast_traversal::find_symbol_in_scope;
+use crate::lsp::sync::FILES;
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_hover(ptr: u32, len: u32) -> u64 {

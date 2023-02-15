@@ -4,7 +4,7 @@ use crate::ast::ExprKind::*;
 use crate::ast::StmtKind::*;
 use crate::ast::{Scope, *};
 
-type PointContext<'a> = (&'a Scope, &'a Stmt, &'a Symbol);
+pub type PointContext<'a> = (&'a Scope, &'a Stmt, &'a Symbol);
 
 pub fn find_symbol_in_scope<'a>(scope: &'a Scope, position: Position) -> Option<PointContext<'a>> {
 	let mut found_symbol: Option<PointContext<'a>> = None;

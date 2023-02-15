@@ -27,6 +27,7 @@ export async function run_server() {
           triggerCharacters: ["."],
         },
         hoverProvider: true,
+        documentSymbolProvider: true
       },
     };
     return result;
@@ -47,6 +48,18 @@ export async function run_server() {
       JSON.stringify(params)
     ) as string;
     return JSON.parse(result) as CompletionItem[];
+  });
+  connection.onDocumentSymbol(async (params) => {
+    const result = wingCompiler.invoke(
+      wingc,
+      "wingc_on_document_symbol",
+      JSON.stringify(params)
+    );
+    if (result == 0) {
+      return null;
+    } else {
+      return JSON.parse(result as string) as any;
+    }
   });
   connection.languages.semanticTokens.on(async (params) => {
     const result = wingCompiler.invoke(

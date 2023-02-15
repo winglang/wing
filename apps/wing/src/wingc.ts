@@ -15,6 +15,7 @@ export type WingCompilerFunction =
   | "wingc_on_did_open_text_document"
   | "wingc_on_did_change_text_document"
   | "wingc_on_completion"
+  | "wingc_on_document_symbol"
   | "wingc_on_semantic_tokens"
   | "wingc_on_hover";
 

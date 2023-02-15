@@ -2,9 +2,8 @@ use lsp_types::{SemanticToken, SemanticTokenType, SemanticTokens, SemanticTokens
 use tree_sitter::{Node, Point, Tree};
 use tree_sitter_traversal::{traverse, Order};
 
-use crate::wasm_util::{combine_ptr_and_length, ptr_to_string};
-
 use crate::lsp::sync::FILES;
+use crate::wasm_util::{combine_ptr_and_length, ptr_to_string};
 
 // For efficiency, this lets us minimize store space when communicating through the LSP
 pub const LEGEND_TYPE: &[SemanticTokenType] = &[

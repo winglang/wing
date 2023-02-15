@@ -2,9 +2,8 @@ use lsp_types::{CompletionItem, CompletionItemKind, CompletionResponse, Position
 use tree_sitter::{Node, Point, Tree};
 use tree_sitter_traversal::{traverse, Order};
 
-use crate::wasm_util::{ptr_to_string, string_to_combined_ptr};
-
 use crate::lsp::sync::FILES;
+use crate::wasm_util::{ptr_to_string, string_to_combined_ptr};
 
 #[derive(Debug)]
 pub struct WingCompletionItem {
@@ -123,6 +122,8 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						insert_text: Some(text.to_string()),
 						kind: Some(item.kind),
 						detail: item.detail.clone(),
+						preselect: Some(true),
+
 						..Default::default()
 					}
 				})
