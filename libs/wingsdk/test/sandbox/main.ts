@@ -13,38 +13,15 @@ class HelloWorld extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    const counter = new cloud.Counter(this, "Counter", {
-      initial: 1000,
-    });
-    const bucket = new cloud.Bucket(this, "Bucket");
-    const queue = new cloud.Queue(this, "Queue");
-    const processor = testing.Testing.makeHandler(
-      this,
-      "Processor",
-      `async handle(event) {
-        let next = await this.counter.inc();
-          let key = "file-" + next + ".txt";
-          await this.bucket.put(key, event);
-      }`,
-      {
-        resources: {
-          counter: {
-            resource: counter,
-            ops: [cloud.CounterInflightMethods.INC],
-          },
-          bucket: {
-            resource: bucket,
-            ops: [cloud.BucketInflightMethods.PUT],
-          },
-        },
-      }
-    );
-    queue.onMessage(processor);
+    const bucket = new cloud.Bucket(this, "Bucket", { public: false });
+    bucket.addObject("test.txt", "yoyoyo");
   }
 }
 
-const app = new sim.App({
+const app = new tfgcp.App({
   outdir: join(__dirname, "target"),
+  projectId: "my-project",
+  storageLocation: "US",
 });
 new HelloWorld(app, "HelloWorld");
 app.synth();
