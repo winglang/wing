@@ -251,9 +251,13 @@ Resource definition
 resource A {
     init() {}
     preflight_func() {}
+    async preflight_func() {}
+    public preflight_func2() {}
     inflight inflight_func() {}
+    public inflight inflight_func2() {}
     pf_member: str;
     inflight if_member: str;
+    public inflight var if_member2: str;
 }
 
 ---
@@ -269,7 +273,25 @@ resource A {
                 parameter_list: (parameter_list)
                 block: (block)
             )
+            (function_definition
+                async: (async_modifier)
+                name: (identifier)
+                parameter_list: (parameter_list)
+                block: (block)
+            )
+            (function_definition
+                access_modifier: (access_modifier)
+                name: (identifier)
+                parameter_list: (parameter_list)
+                block: (block)
+            )
             (inflight_function_definition
+                name: (identifier)
+                parameter_list: (parameter_list)
+                block: (block)
+            )
+            (inflight_function_definition
+                access_modifier: (access_modifier)
                 name: (identifier)
                 parameter_list: (parameter_list)
                 block: (block)
@@ -279,6 +301,12 @@ resource A {
                 type: (builtin_type)
             )
             (inflight_class_member
+                name: (identifier)
+                type: (builtin_type)
+            )
+            (inflight_class_member
+                access_modifier: (access_modifier)
+                reassignable: (reassignable)
                 name: (identifier)
                 type: (builtin_type)
             )
