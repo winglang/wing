@@ -139,7 +139,7 @@ test("cron with more than five values", () => {
         cron: "0/1 * ? * * *",
       })
   ).toThrow(
-    "cron only accepts five values (minute, hour, day of month, month, day of week)."
+    "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
   );
 });
 

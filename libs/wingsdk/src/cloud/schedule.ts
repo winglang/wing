@@ -38,7 +38,8 @@ export abstract class ScheduleBase extends Resource {
     super(scope, id);
 
     this.display.title = "Schedule";
-    this.display.description = "A cloud schedule to trigger events at regular intervals";
+    this.display.description =
+      "A cloud schedule to trigger events at regular intervals";
 
     if (!scope) {
       return;
@@ -59,7 +60,7 @@ export abstract class ScheduleBase extends Resource {
 /**
  * Options for Schedule.onTick.
  */
-export interface ScheduleOnTickProps extends FunctionProps { }
+export interface ScheduleOnTickProps extends FunctionProps {}
 
 /**
  * Represents a schedule.
@@ -90,7 +91,7 @@ export class Schedule extends ScheduleBase {
  *
  * @inflight `wingsdk.cloud.IScheduleOnTickHandlerClient`
  */
-export interface IScheduleOnTickHandler extends IResource { }
+export interface IScheduleOnTickHandler extends IResource {}
 
 /**
  * Inflight client for `IScheduleOnTickHandler`.

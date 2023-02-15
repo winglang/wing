@@ -37,7 +37,7 @@ export class Schedule extends cloud.ScheduleBase {
     }
 
     /*
-     * The schedule cron string is Unix cron format: [minute] [hour] [day of month] [month] [day of week] 
+     * The schedule cron string is Unix cron format: [minute] [hour] [day of month] [month] [day of week]
      * AWS EventBridge Schedule uses a 6 field format which includes year: [minute] [hour] [day of month] [month] [day of week] [year]
      * https://docs.aws.amazon.com/scheduler/latest/UserGuide/schedule-types.html#cron-based
      *
