@@ -7,7 +7,7 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionDefinition,
+	ArgList, BinaryOperator, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionDefinition,
 	FunctionSignature, InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind,
 	Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
@@ -166,83 +166,21 @@ impl Parser<'_> {
 
 	fn build_statement(&self, statement_node: &Node, idx: usize) -> DiagnosticResult<Stmt> {
 		let stmt_kind = match statement_node.kind() {
-			"short_import_statement" => StmtKind::Bring {
-				module_name: self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?,
-				identifier: if let Some(identifier) = statement_node.child_by_field_name("alias") {
-					Some(self.node_symbol(&identifier)?)
-				} else {
-					None
-				},
-			},
+			"short_import_statement" => self.build_bring_statement(statement_node)?,
 
-			"variable_definition_statement" => {
-				let type_ = if let Some(type_node) = statement_node.child_by_field_name("type") {
-					Some(self.build_type_annotation(&type_node)?)
-				} else {
-					None
-				};
-
-				StmtKind::VariableDef {
-					reassignable: statement_node.child_by_field_name("reassignable").is_some(),
-					var_name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?,
-					initial_value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
-					type_,
-				}
-			}
-			"variable_assignment_statement" => StmtKind::Assignment {
-				variable: self.build_reference(&statement_node.child_by_field_name("name").unwrap())?,
-				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
-			},
+			"variable_definition_statement" => self.build_variable_def_statement(statement_node)?,
+			"variable_assignment_statement" => self.build_assignment_statement(statement_node)?,
 
 			"expression_statement" => StmtKind::Expression(self.build_expression(&statement_node.named_child(0).unwrap())?),
 			"block" => StmtKind::Scope(self.build_scope(statement_node)),
-			"if_statement" => {
-				let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
-
-				let mut elif_vec = vec![];
-				let mut cursor = statement_node.walk();
-				for node in statement_node.children_by_field_name("elif_block", &mut cursor) {
-					let conditions = self.build_expression(&node.child_by_field_name("condition").unwrap());
-					let statements = self.build_scope(&node.child_by_field_name("block").unwrap());
-					let elif = ElifBlock {
-						condition: conditions.unwrap(),
-						statements: statements,
-					};
-					elif_vec.push(elif);
-				}
-
-				let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
-					Some(self.build_scope(&else_block))
-				} else {
-					None
-				};
-
-				StmtKind::If {
-					condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
-					statements: if_block,
-					elif_statements: elif_vec,
-					else_statements: else_block,
-				}
-			}
-			"for_in_loop" => StmtKind::ForLoop {
-				iterator: self.node_symbol(&statement_node.child_by_field_name("iterator").unwrap())?,
-				iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
-				statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
-			},
-			"while_statement" => StmtKind::While {
-				condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
-				statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
-			},
-			"return_statement" => StmtKind::Return(
-				if let Some(return_expression_node) = statement_node.child_by_field_name("expression") {
-					Some(self.build_expression(&return_expression_node)?)
-				} else {
-					None
-				},
-			),
+			"if_statement" => self.build_if_statement(statement_node)?,
+			"for_in_loop" => self.build_for_statement(statement_node)?,
+			"while_statement" => self.build_while_satetment(statement_node)?,
+			"return_statement" => self.build_return_statement(statement_node)?,
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
 			"enum_definition" => self.build_enum_statement(statement_node)?,
+			"try_catch_statement" => self.build_try_catch_statement(statement_node)?,
 			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -251,6 +189,117 @@ impl Parser<'_> {
 			kind: stmt_kind,
 			span: self.node_span(statement_node),
 			idx,
+		})
+	}
+
+	fn build_try_catch_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
+		let try_statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
+		let catch_block = if let Some(catch_block) = statement_node.child_by_field_name("catch_block") {
+			Some(CatchBlock {
+				statements: self.build_scope(&catch_block),
+				exception_var: if let Some(exception_var_node) = statement_node.child_by_field_name("exception_identifier") {
+					Some(self.node_symbol(&exception_var_node)?)
+				} else {
+					None
+				},
+			})
+		} else {
+			None
+		};
+
+		let finally_statements = if let Some(finally_node) = statement_node.child_by_field_name("finally_block") {
+			Some(self.build_scope(&finally_node))
+		} else {
+			None
+		};
+
+		Ok(StmtKind::TryCatch {
+			try_statements,
+			catch_block,
+			finally_statements,
+		})
+	}
+
+	fn build_return_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
+		Ok(StmtKind::Return(
+			if let Some(return_expression_node) = statement_node.child_by_field_name("expression") {
+				Some(self.build_expression(&return_expression_node)?)
+			} else {
+				None
+			},
+		))
+	}
+
+	fn build_while_satetment(&self, statement_node: &Node) -> Result<StmtKind, ()> {
+		Ok(StmtKind::While {
+			condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
+			statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
+		})
+	}
+
+	fn build_for_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
+		Ok(StmtKind::ForLoop {
+			iterator: self.node_symbol(&statement_node.child_by_field_name("iterator").unwrap())?,
+			iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
+			statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
+		})
+	}
+
+	fn build_if_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
+		let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
+		let mut elif_vec = vec![];
+		let mut cursor = statement_node.walk();
+		for node in statement_node.children_by_field_name("elif_block", &mut cursor) {
+			let conditions = self.build_expression(&node.child_by_field_name("condition").unwrap());
+			let statements = self.build_scope(&node.child_by_field_name("block").unwrap());
+			let elif = ElifBlock {
+				condition: conditions.unwrap(),
+				statements: statements,
+			};
+			elif_vec.push(elif);
+		}
+		let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
+			Some(self.build_scope(&else_block))
+		} else {
+			None
+		};
+		Ok(StmtKind::If {
+			condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
+			statements: if_block,
+			elif_statements: elif_vec,
+			else_statements: else_block,
+		})
+	}
+
+	fn build_assignment_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
+		Ok(StmtKind::Assignment {
+			variable: self.build_reference(&statement_node.child_by_field_name("name").unwrap())?,
+			value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
+		})
+	}
+
+	fn build_variable_def_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
+		let type_ = if let Some(type_node) = statement_node.child_by_field_name("type") {
+			Some(self.build_type_annotation(&type_node)?)
+		} else {
+			None
+		};
+		Ok(StmtKind::VariableDef {
+			reassignable: statement_node.child_by_field_name("reassignable").is_some(),
+			var_name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?,
+			initial_value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
+			type_,
+		})
+	}
+
+	fn build_bring_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
+		Ok(StmtKind::Bring {
+			module_name: self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?,
+			identifier: if let Some(identifier) = statement_node.child_by_field_name("alias") {
+				Some(self.node_symbol(&identifier)?)
+			} else {
+				None
+			},
 		})
 	}
 
