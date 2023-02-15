@@ -109,7 +109,7 @@ export abstract class Resource extends Construct implements IResource {
     });
   }
 
-  private readonly bindMap: Map<IResource, string[]> = new Map();
+  private readonly bindMap: Map<IResource, Set<string>> = new Map();
 
   /** @internal */
   public readonly _connections: Connection[] = [];
@@ -158,9 +158,11 @@ export abstract class Resource extends Construct implements IResource {
 
     // Register the binding between this resource and the host
     if (!this.bindMap.has(host)) {
-      this.bindMap.set(host, []);
+      this.bindMap.set(host, new Set());
     }
-    this.bindMap.get(host)?.push(...ops);
+    for (let op of ops) {
+      this.bindMap.get(host)!.add(op);
+    }
 
     // Collect a list of all immediate child bindings
     const resources: Record<string, string[]> = {};
@@ -286,7 +288,7 @@ export abstract class Resource extends Construct implements IResource {
     // By aggregating the binding operations, we can avoid performing
     // multiple bindings for the same resource-host pairs.
     for (const [host, ops] of this.bindMap.entries()) {
-      this._bind(host, ops);
+      this._bind(host, Array.from(ops));
     }
   }
 
