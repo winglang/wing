@@ -587,6 +587,40 @@ impl<'a> JSifier<'a> {
 					name,
 				)
 			}
+			StmtKind::TryCatch {
+				try_statements,
+				catch_statements,
+				exception_var,
+				finally_statements,
+			} => {
+				let try_block = self.jsify_scope(try_statements, phase);
+				let catch_block = self.jsify_scope(catch_statements, phase);
+				let (exception_var, exception_var_conversion) = if let Some(exception_var) = exception_var {
+					let exception_var_str = self.jsify_symbol(exception_var);
+					(
+						format!("($error_{})", exception_var_str),
+						format!("const {} = $error_{}.message;", exception_var_str, exception_var_str),
+					)
+				} else {
+					("".to_string(), "".to_string())
+				};
+				let finally_block = if let Some(finally_statements) = finally_statements {
+					format!("{};", self.jsify_scope(finally_statements, phase))
+				} else {
+					"".to_string()
+				};
+				formatdoc!(
+					"
+					try {{
+						{try_block}
+					}} catch {exception_var} {{
+						{exception_var_conversion};
+						{catch_block}
+					}} finally {{
+						{finally_block}
+					}}"
+				)
+			}
 		}
 	}
 

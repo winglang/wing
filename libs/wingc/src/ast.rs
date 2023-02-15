@@ -261,6 +261,12 @@ pub enum StmtKind {
 		name: Symbol,
 		values: IndexSet<Symbol>,
 	},
+	TryCatch {
+		try_statements: Scope,
+		catch_statements: Scope,
+		exception_var: Option<Symbol>,
+		finally_statements: Option<Scope>,
+	},
 }
 
 #[derive(Debug)]

@@ -293,6 +293,10 @@
           "named": true
         },
         {
+          "type": "try_catch_statement",
+          "named": true
+        },
+        {
           "type": "variable_assignment_statement",
           "named": true
         },
@@ -1988,6 +1992,10 @@
           "named": true
         },
         {
+          "type": "try_catch_statement",
+          "named": true
+        },
+        {
           "type": "variable_assignment_statement",
           "named": true
         },
@@ -2170,6 +2178,52 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "try_catch_statement",
+    "named": true,
+    "fields": {
+      "block": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "catch_block": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "exception_identifier": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "finally_block": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -2497,6 +2551,10 @@
     "named": false
   },
   {
+    "type": "catch",
+    "named": false
+  },
+  {
     "type": "class",
     "named": false
   },
@@ -2530,6 +2588,10 @@
   },
   {
     "type": "false",
+    "named": false
+  },
+  {
+    "type": "finally",
     "named": false
   },
   {
@@ -2618,6 +2680,10 @@
   },
   {
     "type": "true",
+    "named": false
+  },
+  {
+    "type": "try",
     "named": false
   },
   {

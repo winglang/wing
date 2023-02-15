@@ -1846,6 +1846,64 @@ impl<'a> TypeChecker<'a> {
 					_ => {}
 				};
 			}
+			StmtKind::TryCatch {
+				try_statements,
+				catch_statements,
+				exception_var,
+				finally_statements,
+			} => {
+				// Create a new environment for the try block
+				let try_env = SymbolEnv::new(
+					Some(env.get_ref()),
+					self.types.void(),
+					false,
+					false,
+					env.flight,
+					stmt.idx,
+				);
+				try_statements.set_env(try_env);
+				self.inner_scopes.push(try_statements);
+
+				// Create a new environment for the catch block
+				let mut catch_env = SymbolEnv::new(
+					Some(env.get_ref()),
+					self.types.void(),
+					false,
+					false,
+					env.flight,
+					stmt.idx,
+				);
+
+				// Add the exception variable to the catch block
+				if let Some(exception_var) = exception_var {
+					match catch_env.define(
+						exception_var,
+						SymbolKind::make_variable(self.types.string(), false, env.flight),
+						StatementIdx::Top,
+					) {
+						Err(type_error) => {
+							self.type_error(&type_error);
+						}
+						_ => {}
+					}
+				}
+				catch_statements.set_env(catch_env);
+				self.inner_scopes.push(catch_statements);
+
+				// Create a new environment for the finally block
+				if let Some(finally_statements) = finally_statements {
+					let finally_env = SymbolEnv::new(
+						Some(env.get_ref()),
+						self.types.void(),
+						false,
+						false,
+						env.flight,
+						stmt.idx,
+					);
+					finally_statements.set_env(finally_env);
+					self.inner_scopes.push(finally_statements);
+				}
+			}
 		}
 	}
 

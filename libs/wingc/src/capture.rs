@@ -465,6 +465,18 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 			}
 			// Type definitions with no expressions in them can't capture anything
 			StmtKind::Struct { .. } | StmtKind::Enum { .. } => {}
+			StmtKind::TryCatch {
+				try_statements,
+				catch_statements,
+				exception_var: _,
+				finally_statements,
+			} => {
+				res.extend(scan_captures_in_inflight_scope(try_statements, diagnostics));
+				res.extend(scan_captures_in_inflight_scope(catch_statements, diagnostics));
+				if let Some(finally_statements) = finally_statements {
+					res.extend(scan_captures_in_inflight_scope(finally_statements, diagnostics));
+				}
+			}
 		}
 	}
 	res

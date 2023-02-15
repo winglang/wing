@@ -78,6 +78,7 @@ module.exports = grammar({
         $.if_statement,
         $.struct_definition,
         $.enum_definition,
+        $.try_catch_statement,
       ),
 
     short_import_statement: ($) =>
@@ -221,6 +222,16 @@ module.exports = grammar({
         "elif",
         field("condition", $.expression),
         field("block", $.block),
+      ),
+
+    try_catch_statement: ($) =>
+      seq(
+        "try",
+        field("block", $.block),
+        "catch",
+        optional(field("exception_identifier", $.identifier)),
+        field("catch_block", $.block),
+        optional(seq("finally", field("finally_block", $.block)))
       ),
 
     expression: ($) =>
