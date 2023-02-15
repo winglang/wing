@@ -275,7 +275,7 @@ fn scan_captures_in_expression(
 										})
 										.collect::<Vec<Capture>>(),
 								);
-							} else if t.is_immutable_collection() || t.is_primitive() {
+							} else if t.is_capturable() {
 								// capture as an immutable data type (primitive/collection)
 								res.push(Capture {
 									object: symbol.clone(),
@@ -309,8 +309,9 @@ fn scan_captures_in_expression(
 								._type,
 							phase,
 						),
-						Err(type_error) => {
-							panic!("{}", type_error);
+						Err(_type_error) => {
+							// type errors are already reported in previous diagnostics
+							return res;
 						}
 					};
 
@@ -465,6 +466,19 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 			}
 			// Type definitions with no expressions in them can't capture anything
 			StmtKind::Struct { .. } | StmtKind::Enum { .. } => {}
+			StmtKind::TryCatch {
+				try_statements,
+				catch_block,
+				finally_statements,
+			} => {
+				res.extend(scan_captures_in_inflight_scope(try_statements, diagnostics));
+				if let Some(catch_block) = catch_block {
+					res.extend(scan_captures_in_inflight_scope(&catch_block.statements, diagnostics));
+				}
+				if let Some(finally_statements) = finally_statements {
+					res.extend(scan_captures_in_inflight_scope(finally_statements, diagnostics));
+				}
+			}
 		}
 	}
 	res

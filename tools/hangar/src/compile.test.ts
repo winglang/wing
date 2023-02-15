@@ -43,8 +43,5 @@ describe.each(validWingFiles)("%s", (wingFile) => {
         }
       }
     },
-    {
-      timeout: 1000 * 30,
-    }
   );
 });

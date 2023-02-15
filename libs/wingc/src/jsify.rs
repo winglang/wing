@@ -587,6 +587,40 @@ impl<'a> JSifier<'a> {
 					name,
 				)
 			}
+			StmtKind::TryCatch {
+				try_statements,
+				catch_block,
+				finally_statements,
+			} => {
+				let try_block = self.jsify_scope(try_statements, phase);
+				let mut catch_statements = "".to_string();
+				let mut js_exception_var = "".to_string();
+				let mut exception_var_conversion = "".to_string();
+				if let Some(catch_block) = catch_block {
+					catch_statements = self.jsify_scope(&catch_block.statements, phase);
+					if let Some(exception_var_symbol) = &catch_block.exception_var {
+						let exception_var_str = self.jsify_symbol(exception_var_symbol);
+						js_exception_var = format!("($error_{exception_var_str})");
+						exception_var_conversion = format!("const {exception_var_str} = $error_{exception_var_str}.message;");
+					}
+				}
+				let finally_block = if let Some(finally_statements) = finally_statements {
+					format!("{};", self.jsify_scope(finally_statements, phase))
+				} else {
+					"".to_string()
+				};
+				formatdoc!(
+					"
+					try {{
+						{try_block}
+					}} catch {js_exception_var} {{
+						{exception_var_conversion}
+						{catch_statements}
+					}} finally {{
+						{finally_block}
+					}}"
+				)
+			}
 		}
 	}
 
@@ -724,9 +758,9 @@ impl<'a> JSifier<'a> {
 	/// 	}
 	/// }
 	/// _toInflight() {
-	/// 	const b_client = this.b._toInflight();
+	/// 	const b_client = this._lift(b);
 	///  	const self_client_path = require('path').resolve(__dirname, "clients/MyResource.inflight.js");
-	///   return $stdlib.core.NodeJsCode.fromInline(`(new (require("${self_client_path}")).MyResource_inflight({b: ${b_client.text}}))`);
+	///   return $stdlib.core.NodeJsCode.fromInline(`(new (require("${self_client_path}")).MyResource_inflight({b: ${b_client}}))`);
 	/// }
 	/// MyResource._annotateInflight("my_put", {"this.b": { ops: ["put"]}});
 	/// ```
@@ -842,7 +876,7 @@ impl<'a> JSifier<'a> {
 			.iter()
 			.map(|(inner_member_name, _, _)| {
 				format!(
-					"const {}_client = this.{}._toInflight();",
+					"const {}_client = this._lift(this.{});",
 					inner_member_name, inner_member_name,
 				)
 			})
@@ -852,7 +886,7 @@ impl<'a> JSifier<'a> {
 		let client_path = Self::js_resolve_path(&format!("{}/{}.inflight.js", INFLIGHT_CLIENTS_DIR, resource_name.name));
 		let captured_fields = captured_fields
 			.iter()
-			.map(|(inner_member_name, _, _)| format!("{}: ${{{}_client.text}}", inner_member_name, inner_member_name))
+			.map(|(inner_member_name, _, _)| format!("{}: ${{{}_client}}", inner_member_name, inner_member_name))
 			.join(", ");
 		formatdoc!("
 			_toInflight() {{
@@ -992,26 +1026,30 @@ impl<'a> JSifier<'a> {
 			.iter(true)
 			.filter(|(_, kind, _)| {
 				let var = kind.as_variable().unwrap();
-				// We capture preflight non-reassignable fields, we currently only support capturing resources
-				// TODO: need to add immutable primitives in the future
-				var.flight != Phase::Inflight && !var.reassignable && var._type.as_resource().is_some()
+				// We capture preflight non-reassignable fields
+				var.flight != Phase::Inflight && !var.reassignable && var._type.is_capturable()
 			})
 			.map(|(name, kind, _)| {
 				let _type = kind.as_variable().unwrap()._type;
 				// TODO: For now we collect all the inflight methods in the resource (in the future we
 				// we'll need to analyze each inflight method to see what it does with the captured resource)
-				let methods = _type
-					.as_resource()
-					.unwrap()
-					.methods(true)
-					.filter_map(|(name, sig)| {
-						if sig.as_function_sig().unwrap().flight == Phase::Inflight {
-							Some(name)
-						} else {
-							None
-						}
-					})
-					.collect_vec();
+				let methods = if _type.as_resource().is_some() {
+					_type
+						.as_resource()
+						.unwrap()
+						.methods(true)
+						.filter_map(|(name, sig)| {
+							if sig.as_function_sig().unwrap().flight == Phase::Inflight {
+								Some(name)
+							} else {
+								None
+							}
+						})
+						.collect_vec()
+				} else {
+					vec![]
+				};
+
 				(name, _type, methods)
 			})
 			.collect_vec()

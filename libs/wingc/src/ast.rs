@@ -261,6 +261,17 @@ pub enum StmtKind {
 		name: Symbol,
 		values: IndexSet<Symbol>,
 	},
+	TryCatch {
+		try_statements: Scope,
+		catch_block: Option<CatchBlock>,
+		finally_statements: Option<Scope>,
+	},
+}
+
+#[derive(Debug)]
+pub struct CatchBlock {
+	pub statements: Scope,
+	pub exception_var: Option<Symbol>,
 }
 
 #[derive(Debug)]

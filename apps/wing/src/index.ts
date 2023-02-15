@@ -16,6 +16,13 @@ if (!SUPPORTED_NODE_VERSION) {
 }
 const log = debug("wing:cli");
 
+function actionErrorHandler(fn: (...args: any[]) => Promise<any>) {
+  return (...args: any[]) => fn(...args).catch((err: Error) => {
+    console.error(err.message);
+    process.exit(1);
+  });
+}
+
 async function main() {
   checkNodeVersion()
 
@@ -59,13 +66,13 @@ async function main() {
       "-p, --plugins [plugin...]",
       "Compiler plugins"
     )
-    .action(compile);
+    .action(actionErrorHandler(compile));
 
   program
     .command("test")
     .description("Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers")
     .argument("<entrypoint...>", "all entrypoints to test")
-    .action(test);
+    .action(actionErrorHandler(test));
 
   program
     .command("docs")
