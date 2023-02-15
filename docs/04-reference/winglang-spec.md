@@ -193,11 +193,13 @@ struct Employee {
   name: str;
 }
 
-let response = http_get("/employees"); // returns something like { "items": [ { "id": "12234", "name": "bob" }, ... ] }
+let response = http_get("/employees"); 
+ // returns something like { "items": [ { "id": "12234", "name": "bob" }, ... ] }
+ 
 let employees = Array<Employee>.from_json(response.items);
 
 for e in employees {
-  print("hello, ${e.name}, your employee id is ${id}");
+  print("hello, ${e.name}, your employee id is ${e.id}");
 }
 ```
 
