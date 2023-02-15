@@ -125,11 +125,7 @@ export class CdktfApp extends Construct implements IApp {
   public synth(): string {
     // call preSynthesize() on every construct in the tree
     if (!this.presynthed) {
-      for (const c of this.node.findAll()) {
-        if (typeof (c as any).preSynthesize === "function") {
-          (c as any).preSynthesize();
-        }
-      }
+      preSynthesizeAllConstructs(this);
       this.presynthed = true;
     }
 
@@ -224,4 +220,12 @@ function cleanTerraformConfig(template: any): any {
   cleaned.terraform = undefined;
   cleaned.provider = undefined;
   return cleaned;
+}
+
+export function preSynthesizeAllConstructs(app: IApp): void {
+  for (const c of app.node.findAll()) {
+    if (typeof (c as any)._preSynthesize === "function") {
+      (c as any)._preSynthesize();
+    }
+  }
 }

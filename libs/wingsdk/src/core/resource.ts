@@ -40,7 +40,10 @@ export interface IResource extends IInspectable, IConstruct {
   _bind(host: IInflightHost, ops: string[]): void;
 
   /**
-   * TODO
+   * Register that the resource needs to be bound to the host for the given
+   * operations. This means that the resource's `_bind` method will be called
+   * during pre-synthesis.
+   *
    * @internal
    */
   _registerBind(host: IInflightHost, ops: string[]): void;
@@ -146,7 +149,10 @@ export abstract class Resource extends Construct implements IResource {
   }
 
   /**
-   * TODO
+   * Register that the resource needs to be bound to the host for the given
+   * operations. This means that the resource's `_bind` method will be called
+   * during pre-synthesis.
+   *
    * @internal
    */
   public _registerBind(host: IInflightHost, ops: string[]) {
@@ -283,7 +289,15 @@ export abstract class Resource extends Construct implements IResource {
     );
   }
 
-  public preSynthesize(): void {
+  /**
+   * A hook for performing operations after the tree of resources has been
+   * created, but before they are synthesized.
+   *
+   * Currently used for binding resources to hosts.
+   *
+   * @internal
+   */
+  public _preSynthesize(): void {
     // Perform the live bindings betweeen resources and hosts
     // By aggregating the binding operations, we can avoid performing
     // multiple bindings for the same resource-host pairs.

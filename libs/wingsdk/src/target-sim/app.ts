@@ -9,6 +9,7 @@ import { WingSimulatorSchema } from "./schema";
 import { Logger } from "../cloud";
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
+import { preSynthesizeAllConstructs } from "../core/app";
 import { mkdtemp, SIMULATOR_FILE_PATH } from "../util";
 
 /**
@@ -40,11 +41,7 @@ export class App extends Construct implements core.IApp {
   public synth(): string {
     // call preSynthesize() on every construct in the tree
     if (!this.presynthed) {
-      for (const c of this.node.findAll()) {
-        if (typeof (c as any).preSynthesize === "function") {
-          (c as any).preSynthesize();
-        }
-      }
+      preSynthesizeAllConstructs(this);
       this.presynthed = true;
     }
 
