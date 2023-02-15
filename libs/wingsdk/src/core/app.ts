@@ -84,7 +84,7 @@ export class CdktfApp extends Construct implements IApp {
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
   private readonly pluginManager: PluginManager;
-  private presynthed = false;
+  private presynthed: boolean;
 
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
@@ -110,6 +110,7 @@ export class CdktfApp extends Construct implements IApp {
     this.cdktfApp = cdktfApp;
     this.cdktfStack = cdktfStack;
     this.terraformManifestPath = join(this.outdir, "main.tf.json");
+    this.presynthed = false;
 
     // register a logger for this app.
     Logger.register(this);
