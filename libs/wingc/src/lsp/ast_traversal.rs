@@ -31,10 +31,6 @@ pub fn visit_symbols<'a>(
 		ForLoop { iterator, .. } => {
 			visitor_function(scope, statement, None, iterator);
 		}
-		While { .. } => {}
-		If { .. } => {}
-		Return { .. } => {}
-		Expression { .. } => {}
 		Assignment { variable, .. } => match variable {
 			crate::ast::Reference::Identifier(s) => {
 				visitor_function(scope, statement, None, s);
@@ -43,7 +39,6 @@ pub fn visit_symbols<'a>(
 				visitor_function(scope, statement, None, property);
 			}
 		},
-		Scope(_) => {}
 		Class(c) => {
 			visitor_function(scope, statement, None, &c.name);
 			for param in c.constructor.parameters.iter() {
@@ -74,6 +69,12 @@ pub fn visit_symbols<'a>(
 				visitor_function(scope, statement, None, value);
 			}
 		}
+		TryCatch { .. } => {}
+		While { .. } => {}
+		If { .. } => {}
+		Return { .. } => {}
+		Expression { .. } => {}
+		Scope(_) => {}
 	};
 	visit_statements(scope, &mut statement_visitor_function);
 
@@ -199,6 +200,21 @@ pub fn visit_statements<'a>(scope: &'a Scope, visitor_function: &mut dyn FnMut(&
 					visit_statements(&method.1.statements, visitor_function);
 				}
 			}
+			TryCatch {
+				try_statements,
+				catch_block,
+				finally_statements,
+			} => {
+				visit_statements(try_statements, visitor_function);
+
+				if let Some(catch_block) = catch_block {
+					visit_statements(&catch_block.statements, visitor_function);
+				}
+
+				if let Some(finally_statements) = finally_statements {
+					visit_statements(finally_statements, visitor_function);
+				}
+			}
 			Struct { .. } => {}
 			Enum { .. } => {}
 		}
@@ -322,6 +338,7 @@ pub fn visit_expressions<'a>(scope: &'a Scope, visitor_function: &mut dyn FnMut(
 			Scope(_) => {}
 			Enum { .. } => {}
 			Bring { .. } => {}
+			TryCatch { .. } => {}
 		};
 	};
 

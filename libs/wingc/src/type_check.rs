@@ -1914,7 +1914,7 @@ impl<'a> TypeChecker<'a> {
 			let assembly_name = wingii_types.load_dep(library_name.as_str(), source_dir, &wingii_loader_options);
 
 			if let Err(err) = assembly_name {
-				self.type_error(&TypeError {
+				self.type_error(TypeError {
 					message: format!("{}", err),
 					span: alias.span.clone(),
 				});
