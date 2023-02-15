@@ -4501,6 +4501,83 @@ constructor() {
   };
   }
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === \\"finally with no catch and no exception\\")'\`)})((x === \\"finally with no catch and no exception\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((() => {
+    try {
+    	{
+    }
+    } catch  {
+    	
+    	
+    } finally {
+    	{
+      return 1;
+    };
+    }
+  })()) === 1)'\`)})((((() => {
+    try {
+    	{
+    }
+    } catch  {
+    	
+    	
+    } finally {
+    	{
+      return 1;
+    };
+    }
+  })()) === 1))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((() => {
+    try {
+    	{
+      {((msg) => {throw new Error(msg)})(\\"\\")};
+    }
+    } catch  {
+    	
+    	{
+      return 2;
+    }
+    } finally {
+    	
+    }
+  })()) === 2)'\`)})((((() => {
+    try {
+    	{
+      {((msg) => {throw new Error(msg)})(\\"\\")};
+    }
+    } catch  {
+    	
+    	{
+      return 2;
+    }
+    } finally {
+    	
+    }
+  })()) === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((() => {
+    try {
+    	{
+      return 3;
+    }
+    } catch  {
+    	
+    	
+    } finally {
+    	{
+    };
+    }
+  })()) === 3)'\`)})((((() => {
+    try {
+    	{
+      return 3;
+    }
+    } catch  {
+    	
+    	
+    } finally {
+    	{
+    };
+    }
+  })()) === 3))};
 }
 }
 new MyApp().synth();"

@@ -175,7 +175,7 @@ impl Parser<'_> {
 			"block" => StmtKind::Scope(self.build_scope(statement_node)),
 			"if_statement" => self.build_if_statement(statement_node)?,
 			"for_in_loop" => self.build_for_statement(statement_node)?,
-			"while_statement" => self.build_while_satetment(statement_node)?,
+			"while_statement" => self.build_while_statement(statement_node)?,
 			"return_statement" => self.build_return_statement(statement_node)?,
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
@@ -192,7 +192,7 @@ impl Parser<'_> {
 		})
 	}
 
-	fn build_try_catch_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
+	fn build_try_catch_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		let try_statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
 		let catch_block = if let Some(catch_block) = statement_node.child_by_field_name("catch_block") {
 			Some(CatchBlock {
@@ -213,6 +213,14 @@ impl Parser<'_> {
 			None
 		};
 
+		// If both catch and finally are missing, report an error
+		if catch_block.is_none() && finally_statements.is_none() {
+			return self.add_error::<StmtKind>(
+				String::from("Missing `catch` or `finally` blocks for this try statement"),
+				&statement_node,
+			);
+		}
+
 		Ok(StmtKind::TryCatch {
 			try_statements,
 			catch_block,
@@ -220,7 +228,7 @@ impl Parser<'_> {
 		})
 	}
 
-	fn build_return_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
+	fn build_return_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		Ok(StmtKind::Return(
 			if let Some(return_expression_node) = statement_node.child_by_field_name("expression") {
 				Some(self.build_expression(&return_expression_node)?)
@@ -230,14 +238,14 @@ impl Parser<'_> {
 		))
 	}
 
-	fn build_while_satetment(&self, statement_node: &Node) -> Result<StmtKind, ()> {
+	fn build_while_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		Ok(StmtKind::While {
 			condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
 			statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
 		})
 	}
 
-	fn build_for_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
+	fn build_for_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		Ok(StmtKind::ForLoop {
 			iterator: self.node_symbol(&statement_node.child_by_field_name("iterator").unwrap())?,
 			iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
@@ -245,7 +253,7 @@ impl Parser<'_> {
 		})
 	}
 
-	fn build_if_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
+	fn build_if_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
 		let mut elif_vec = vec![];
 		let mut cursor = statement_node.walk();
@@ -271,14 +279,14 @@ impl Parser<'_> {
 		})
 	}
 
-	fn build_assignment_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
+	fn build_assignment_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		Ok(StmtKind::Assignment {
 			variable: self.build_reference(&statement_node.child_by_field_name("name").unwrap())?,
 			value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
 		})
 	}
 
-	fn build_variable_def_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
+	fn build_variable_def_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		let type_ = if let Some(type_node) = statement_node.child_by_field_name("type") {
 			Some(self.build_type_annotation(&type_node)?)
 		} else {
@@ -292,7 +300,7 @@ impl Parser<'_> {
 		})
 	}
 
-	fn build_bring_statement(&self, statement_node: &Node) -> Result<StmtKind, ()> {
+	fn build_bring_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		Ok(StmtKind::Bring {
 			module_name: self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?,
 			identifier: if let Some(identifier) = statement_node.child_by_field_name("alias") {
