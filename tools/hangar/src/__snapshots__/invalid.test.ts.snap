@@ -11,8 +11,9 @@ Error at bring.w:1:1 | Redundant bring of \\"std\\""
 `;
 
 exports[`bring_jsii.w > wing test (--target sim) - invalid > stderr 1`] = `
-"Compilation failed with 1 error(s)
-Error at bring_jsii.w:1:1 | bring \\"\\"jsii-code-samples\\"\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)"
+"Compilation failed with 2 error(s)
+Error at bring_jsii.w:1:1 | bring \\"\\"jsii-code-samples\\"\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
+Error at bring_jsii.w:4:1 | Cannot find module \\"foobar\\" in source directory"
 `;
 
 exports[`capture_mutables.w > wing test (--target sim) - invalid > stderr 1`] = `
