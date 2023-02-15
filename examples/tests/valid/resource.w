@@ -25,9 +25,9 @@ resource Bar {
   // Use a user defined resource inside another user defined resource
   foo: Foo;
   
-  init(name: str) {
+  init(name: str, b: cloud.Bucket) {
     this.name = name;
-    this.b = new cloud.Bucket();
+    this.b = b;
     this.foo = new Foo();
   }
 
@@ -40,8 +40,10 @@ resource Bar {
   }
 }
 
-let res = new Bar("Arr");
+let bucket = new cloud.Bucket();
+let res = new Bar("Arr", bucket);
 new cloud.Function(inflight () => {
   let s = res.my_method();
   assert(s == "counter is: 1");
+  assert(bucket.list().length == 1);
 }) as "test";
