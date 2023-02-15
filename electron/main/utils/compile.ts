@@ -1,6 +1,7 @@
 import { exec } from "node:child_process";
 import util from "node:util";
 
+import log from "electron-log";
 import fixPath from "fix-path";
 
 import { ConsoleLogger } from "../consoleLogger.js";
@@ -18,7 +19,7 @@ export const compile = async ({
   consoleLogger,
   outDir,
 }: ICompileOptions): Promise<CompileStatusTypes> => {
-  consoleLogger.verbose(
+  log.info(
     `exec child process: wing compile ${wingSrcFile} -t sim -o ${outDir}`,
     "compiler",
   );
@@ -28,13 +29,13 @@ export const compile = async ({
       `wing compile ${wingSrcFile} -t sim -o ${outDir}`,
     );
     if (stdout) {
-      consoleLogger.verbose(stdout, "compiler");
+      log.info(stdout, "compiler");
     }
     if (stderr) {
       consoleLogger.error(stderr, "compiler");
       return "error";
     }
-    consoleLogger.verbose(`Compilation succeeded`, "compiler");
+    log.info(`Compilation succeeded`, "compiler");
     return "success";
   } catch (error) {
     consoleLogger.error(error, "compiler");

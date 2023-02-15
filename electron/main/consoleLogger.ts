@@ -55,13 +55,6 @@ export const createConsoleLogger = (
     error(error, source, ctx) {
       log.error(error);
       const message = error instanceof Error ? error.message : `${error}`;
-      this.messages.push({
-        timestamp: Date.now(),
-        level: "error",
-        message,
-        source: source ?? "console",
-        ctx,
-      });
       onLog("error", message);
     },
   };

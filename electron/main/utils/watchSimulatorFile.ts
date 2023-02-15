@@ -1,5 +1,6 @@
 import { Simulator } from "@winglang/sdk/lib/testing";
 import { FSWatcher } from "chokidar";
+import log from "electron-log";
 
 import { ConsoleLogger } from "../consoleLogger.js";
 
@@ -29,15 +30,15 @@ export const watchSimulatorFile = ({
       persistent: true,
     })
     .on("change", async () => {
-      consoleLogger.verbose(`File ${simulatorFile} has been changed`);
+      log.info(`File ${simulatorFile} has been changed`);
       try {
-        consoleLogger.verbose(`Reloading simulator`);
+        log.info(`Reloading simulator`);
         await simulatorReload();
       } catch (error) {
         consoleLogger.error(error);
         return;
       }
-      consoleLogger.verbose("Simulator was reloaded");
+      log.info("Simulator was reloaded");
     })
     .on("unlink", async () => {
       consoleLogger.error(

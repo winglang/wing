@@ -3,6 +3,7 @@ import http from "node:http";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { applyWSSHandler } from "@trpc/server/adapters/ws";
 import cors from "cors";
+import log from "electron-log";
 import express from "express";
 import getPort from "get-port";
 import { WebSocketServer } from "ws";
@@ -53,14 +54,13 @@ export const createConsoleServer = async (options: {
       createContext,
     }),
   );
-
-  options.consoleLogger.verbose("Looking for an open port");
+  log.info("Looking for an open port");
   const port = await getPort();
   const server = app.listen(port);
   await new Promise<void>((resolve) => {
     server.on("listening", resolve);
   });
-  options.consoleLogger.verbose(`Server is listening on port ${port}`);
+  log.info(`Server is listening on port ${port}`);
 
   const wss = new WebSocketServer({ server });
   applyWSSHandler({

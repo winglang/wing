@@ -131,7 +131,7 @@ function createWindowManager() {
 
       // Create the express server and router for the simulator. Start
       // listening but don't wait for it, yet.
-      consoleLogger.verbose("Starting the dev server...");
+      log.info("Starting the dev server...");
 
       const server = await createConsoleServer({
         cloudAppStateService,

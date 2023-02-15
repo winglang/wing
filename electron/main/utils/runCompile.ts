@@ -4,6 +4,7 @@ import * as os from "node:os";
 import path from "node:path";
 
 import { FSWatcher } from "chokidar";
+import log from "electron-log";
 
 import { ConsoleLogger } from "../consoleLogger.js";
 import { State } from "../types.js";
@@ -27,7 +28,7 @@ export const runCompile = async ({
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "wing-app-target-dir-"));
   const fileName = path.basename(wingSrcFile, ".w");
   const compiledSimFile = path.join(tmpDir, fileName + ".wsim");
-  consoleLogger.verbose(`compiling ${wingSrcFile} into ${tmpDir}`, "compiler");
+  log.info(`compiling ${wingSrcFile} into ${tmpDir}`, "compiler");
 
   const runCompile = async () => {
     try {
@@ -76,7 +77,7 @@ export const runCompile = async ({
       persistent: true,
     })
     .on("change", async () => {
-      consoleLogger.verbose(
+      log.info(
         `Wing application src directory content has been changed`,
         "compiler",
       );
