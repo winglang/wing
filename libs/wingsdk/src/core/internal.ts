@@ -70,13 +70,16 @@ ${Object.entries(clients)
   }
 
   const annotation: Record<string, { ops: Array<string> }> = {};
+  
+  // Start with data bindings so if the same resource is bound to both data and resources we won't loose the ops
+  for (const k of Object.keys(bindings.data ?? {})) {
+    annotation["this." + k] = { ops: [] };
+  }
+  
   for (const [k, v] of Object.entries(bindings.resources ?? {})) {
     annotation["this." + k] = { ops: v.ops };
   }
 
-  for (const k of Object.keys(bindings.data ?? {})) {
-    annotation["this." + k] = { ops: [] };
-  }
 
   Handler._annotateInflight("handle", annotation);
 
