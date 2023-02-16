@@ -3,7 +3,7 @@ bring cloud;
 let bucket = new cloud.Bucket();
 let queue = new cloud.Queue();
 
-let var handler = inflight (message: str): str => {
+let handler = inflight (message: str): str => {
   bucket.put("hello.txt", "Hello, ${message}!");
   return message;
 };

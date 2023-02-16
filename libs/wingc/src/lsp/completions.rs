@@ -75,7 +75,6 @@ pub fn completions_from_ast(source: &str, tree: &Tree, position: Position) -> Ve
 			"variable_definition_statement" => {
 				let name = node.child_by_field_name("name").unwrap();
 				let name_text = name.utf8_text(source.as_bytes()).unwrap();
-				dbg!(name_text);
 				let completion = WingCompletionItem {
 					text: name_text.to_string(),
 					kind: CompletionItemKind::VARIABLE,
