@@ -385,16 +385,16 @@ impl Display for Type {
 			Type::Void => write!(f, "void"),
 			Type::Optional(v) => write!(f, "{}?", v),
 			Type::Function(sig) => write!(f, "{}", sig),
-			Type::Class(class) => write!(f, "{}", class.name),
-			Type::Resource(class) => write!(f, "{}", class.name),
-			Type::Struct(s) => write!(f, "{}", s.name),
+			Type::Class(class) => write!(f, "{}", class.name.name),
+			Type::Resource(class) => write!(f, "{}", class.name.name),
+			Type::Struct(s) => write!(f, "{}", s.name.name),
 			Type::Array(v) => write!(f, "Array<{}>", v),
 			Type::MutArray(v) => write!(f, "MutArray<{}>", v),
 			Type::Map(v) => write!(f, "Map<{}>", v),
 			Type::MutMap(v) => write!(f, "MutMap<{}>", v),
 			Type::Set(v) => write!(f, "Set<{}>", v),
 			Type::MutSet(v) => write!(f, "MutSet<{}>", v),
-			Type::Enum(s) => write!(f, "{}", s.name),
+			Type::Enum(s) => write!(f, "{}", s.name.name),
 		}
 	}
 }
