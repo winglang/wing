@@ -4,21 +4,6 @@ use crate::ast::ExprKind::*;
 use crate::ast::StmtKind::*;
 use crate::ast::{Scope, *};
 
-pub type PointContext<'a> = (&'a Scope, &'a Stmt, &'a Symbol);
-
-pub fn find_symbol_in_scope<'a>(scope: &'a Scope, position: Position) -> Option<PointContext<'a>> {
-	let mut found_symbol: Option<PointContext<'a>> = None;
-	let mut symbol_visitor = |scope: &'a Scope, statement: &'a Stmt, _expr: Option<&'a Expr>, symbol: &'a Symbol| {
-		if symbol.span.contains(&position) {
-			found_symbol = Some((scope, statement, symbol));
-		}
-	};
-
-	visit_symbols(scope, &mut symbol_visitor);
-
-	found_symbol
-}
-
 pub fn visit_symbols<'a>(
 	scope: &'a Scope,
 	visitor_function: &mut dyn FnMut(&'a Scope, &'a Stmt, Option<&'a Expr>, &'a Symbol),
