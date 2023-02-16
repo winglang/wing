@@ -31,6 +31,10 @@ test.beforeAll(async () => {
     ?.stderr?.on("data", (error) => console.log(`stderr: ${error}`));
 });
 
+test.beforeEach(async ({ page }, testInfo) => {
+  testInfo.snapshotSuffix = "";
+});
+
 test("show app", async () => {
   // Evaluation expression in the Electron context.
   const appPath = await electronApp.evaluate(async ({ app }) => {
@@ -59,7 +63,6 @@ test("no loader", async () => {
 
 test("tree menu", async () => {
   // Get the first window that the app opens, wait if necessary.
-
   const window = await electronApp.firstWindow();
   window.on("console", console.log);
   await window.setViewportSize({ width: 1920, height: 1080 });
