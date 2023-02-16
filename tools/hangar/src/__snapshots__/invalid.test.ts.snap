@@ -57,13 +57,13 @@ Error at container_types.w:20:4 | Unknown symbol \\"some_random_method\\""
 
 exports[`enums.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 2 error(s)
-Error | Enum \\"SomeEnum (at enums.w:1:6)\\" does not contain value \\"FOUR\\"
-Error at enums.w:8:11 | Expression must be a class or resource instance to access property \\"TWO\\", instead found type \\"SomeEnum (at enums.w:1:6)\\""
+Error | Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
+Error at enums.w:8:11 | Expression must be a class or resource instance to access property \\"TWO\\", instead found type \\"SomeEnum\\""
 `;
 
 exports[`for_loop.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 1 error(s)
-Error at for_loop.w:5:13 | Unable to iterate over \\"Bucket (at src/cloud/bucket.ts:53:1)\\""
+Error at for_loop.w:5:13 | Unable to iterate over \\"Bucket\\""
 `;
 
 exports[`missing_semicolon.w > wing test (--target sim) - invalid > stderr 1`] = `
@@ -155,9 +155,9 @@ Error at statements_if.w:8:10 | Expected type to be \\"bool\\", but got \\"num\\
 
 exports[`struct_expansion.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 6 error(s)
-Error at struct_expansion.w:3:15 | \\"bublic\\" is not a field of \\"BucketProps (at src/cloud/bucket.ts:13:1)\\"
-Error at struct_expansion.w:4:15 | Expected between 0 and 1 arguments but got 2 when instantiating \\"Bucket (at src/cloud/bucket.ts:53:1)\\"
-Error at struct_expansion.w:4:32 | Expected type to be \\"BucketProps (at src/cloud/bucket.ts:13:1)?\\", but got \\"num\\" instead
+Error at struct_expansion.w:3:15 | \\"bublic\\" is not a field of \\"BucketProps\\"
+Error at struct_expansion.w:4:15 | Expected between 0 and 1 arguments but got 2 when instantiating \\"Bucket\\"
+Error at struct_expansion.w:4:32 | Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
 Error at struct_expansion.w:6:15 | Expected expression
 Error at struct_expansion.w:7:15 | Unknown parser error.
 Error at struct_expansion.w:11:3 | Unknown symbol \\"handler\\""
