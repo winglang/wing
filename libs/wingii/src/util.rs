@@ -63,7 +63,7 @@ pub mod package_json {
 		find_up(directory, |dir| {
 			let package_json = dir.join("package.json");
 			if package_json.exists() {
-				if package_name.starts_with(".") || package_name.starts_with("/") {
+				if package_name.starts_with("./") || package_name.starts_with("../") || package_name.starts_with("/") {
 					return true;
 				}
 				let package_json = fs::read_to_string(&package_json).unwrap();
