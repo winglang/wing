@@ -14,6 +14,7 @@ import stringify from "safe-stable-stringify";
 import { PluginManager } from "./plugin-manager";
 import { synthesizeTree } from "./tree";
 import { Logger } from "../cloud/logger";
+import { IResource } from "./resource";
 
 const TERRAFORM_STACK_NAME = "root";
 
@@ -230,8 +231,8 @@ function cleanTerraformConfig(template: any): any {
 
 export function preSynthesizeAllConstructs(app: IApp): void {
   for (const c of app.node.findAll()) {
-    if (typeof (c as any)._preSynthesize === "function") {
-      (c as any)._preSynthesize();
+    if (typeof (c as IResource)._preSynthesize === "function") {
+      (c as IResource)._preSynthesize();
     }
   }
 }

@@ -143,6 +143,10 @@ export class Inflight extends Construct implements IResource {
     throw new Error("Method not implemented.");
   }
   /** @internal */
+  public _preSynthesize(): void {
+    throw new Error("Method not implemented.");
+  }
+  /** @internal */
   public _inspect(_inspector: TreeInspector): void {
     throw new Error("Method not implemented.");
   }

@@ -53,6 +53,16 @@ export interface IResource extends IInspectable, IConstruct {
    * @internal
    */
   _toInflight(): Code;
+
+  /**
+   * A hook for performing operations after the tree of resources has been
+   * created, but before they are synthesized.
+   *
+   * Currently used for binding resources to hosts.
+   *
+   * @internal
+   */
+  _preSynthesize(): void;
 }
 
 const BIND_METADATA_PREFIX = "$bindings__";
