@@ -11,6 +11,8 @@ use std::{
 
 use serde_json::Value;
 
+use crate::util::package_json::is_path_dependency;
+
 static ROOT: &str = "/";
 static NODE_EXTENSIONS: [&str; 3] = [".js", "json", ".node"];
 static NODE_MAIN_FIELDS: [&str; 1] = ["main"];
@@ -68,7 +70,7 @@ pub fn resolve_from(target: &str, basedir: &Path) -> Result<PathBuf, Box<dyn Err
 	};
 
 	// 3. If X begins with './' or '../' or '/'
-	if target.starts_with("./") || target.starts_with("../") || target.starts_with("/") {
+	if is_path_dependency(target) {
 		let path = basedir.join(target);
 		return resolve_as_file(&path)
 			.or_else(|_| resolve_as_directory(&path))

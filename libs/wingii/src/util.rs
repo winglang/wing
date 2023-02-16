@@ -63,7 +63,7 @@ pub mod package_json {
 		find_up(directory, |dir| {
 			let package_json = dir.join("package.json");
 			if package_json.exists() {
-				if package_name.starts_with("./") || package_name.starts_with("../") || package_name.starts_with("/") {
+				if is_path_dependency(package_name) {
 					return true;
 				}
 				let package_json = fs::read_to_string(&package_json).unwrap();
@@ -85,5 +85,11 @@ pub mod package_json {
 		} else {
 			None
 		}
+	}
+
+	/// If the dependency looks like a path, return the path
+	/// This means it starts with `./`, `../`, or `/`
+	pub fn is_path_dependency(dependency_name: &str) -> bool {
+		dependency_name.starts_with("./") || dependency_name.starts_with("../") || dependency_name.starts_with("/")
 	}
 }
