@@ -669,8 +669,12 @@ pub fn get_symbols_from_statement<'a>(context: TreeLocationContext<'a>) -> Vec<(
 				return_symbols.push((context, identifier));
 			}
 		}
-		VariableDef { var_name, .. } => {
+		VariableDef { var_name, type_, .. } => {
 			return_symbols.push((context, var_name));
+
+			if let Some(type_) = type_ {
+				return_symbols.extend(get_symbols_from_type_annotation(context, type_));
+			}
 		}
 		ForLoop {
 			iterator, statements, ..
@@ -694,16 +698,35 @@ pub fn get_symbols_from_statement<'a>(context: TreeLocationContext<'a>) -> Vec<(
 		},
 		Class(c) => {
 			return_symbols.push((context, &c.name));
+
+			let constructor_sig = &c.constructor.signature;
 			for param in c.constructor.parameters.iter() {
 				return_symbols.push((context, &param.0));
 			}
+			for param in constructor_sig.parameters.iter() {
+				return_symbols.extend(get_symbols_from_type_annotation(context, param));
+			}
+			if let Some(return_type) = &constructor_sig.return_type {
+				return_symbols.extend(get_symbols_from_type_annotation(context, return_type));
+			}
+
 			for field in c.fields.iter() {
 				return_symbols.push((context, &field.name));
+				return_symbols.extend(get_symbols_from_type_annotation(context, &field.member_type));
 			}
+
 			for method in c.methods.iter() {
 				return_symbols.push((context, &method.0));
 				for parameter in method.1.parameters.iter() {
 					return_symbols.push((context, &parameter.0));
+				}
+
+				let method_sig = &method.1.signature;
+				for param in method_sig.parameters.iter() {
+					return_symbols.extend(get_symbols_from_type_annotation(context, param));
+				}
+				if let Some(return_type) = &method_sig.return_type {
+					return_symbols.extend(get_symbols_from_type_annotation(context, return_type));
 				}
 			}
 		}
@@ -711,6 +734,7 @@ pub fn get_symbols_from_statement<'a>(context: TreeLocationContext<'a>) -> Vec<(
 			return_symbols.push((context, name));
 			for member in members.iter() {
 				return_symbols.push((context, &member.name));
+				return_symbols.extend(get_symbols_from_type_annotation(context, &member.member_type));
 			}
 			for extend in extends.iter() {
 				return_symbols.push((context, extend));
@@ -744,12 +768,12 @@ pub fn get_symbols_from_expression<'a>(context: TreeLocationContext<'a>) -> Vec<
 
 	if let Some(expression) = context.expression {
 		match &expression.kind {
-			New { arg_list, .. } => {
+			New { arg_list, class, .. } => {
+				return_symbols.extend(get_symbols_from_type_annotation(context, class));
 				for arg in arg_list.named_args.iter() {
 					return_symbols.push((context, arg.0));
 				}
 			}
-			Literal(_) => {}
 			Reference(r) => match r {
 				crate::ast::Reference::Identifier(s) => {
 					return_symbols.push((context, s));
@@ -763,7 +787,9 @@ pub fn get_symbols_from_expression<'a>(context: TreeLocationContext<'a>) -> Vec<
 					return_symbols.push((context, arg.0));
 				}
 			}
-			StructLiteral { fields, .. } => {
+			StructLiteral { fields, type_, .. } => {
+				return_symbols.extend(get_symbols_from_type_annotation(context, type_));
+
 				for field in fields.iter() {
 					return_symbols.push((context, &field.0));
 				}
@@ -774,17 +800,75 @@ pub fn get_symbols_from_expression<'a>(context: TreeLocationContext<'a>) -> Vec<
 					scope: &f.statements,
 					..context
 				};
+
 				for parameter in f.parameters.iter() {
 					return_symbols.push((function_context, &parameter.0));
+				}
+
+				for sig_type in f.signature.parameters.iter() {
+					return_symbols.extend(get_symbols_from_type_annotation(context, sig_type));
+				}
+
+				if let Some(return_type) = &f.signature.return_type {
+					return_symbols.extend(get_symbols_from_type_annotation(context, return_type));
+				}
+			}
+			ArrayLiteral { type_, .. } => {
+				if let Some(type_) = type_ {
+					return_symbols.extend(get_symbols_from_type_annotation(context, type_));
+				}
+			}
+			MapLiteral { type_, .. } => {
+				if let Some(type_) = type_ {
+					return_symbols.extend(get_symbols_from_type_annotation(context, type_));
+				}
+			}
+			SetLiteral { type_, .. } => {
+				if let Some(type_) = type_ {
+					return_symbols.extend(get_symbols_from_type_annotation(context, type_));
 				}
 			}
 			Unary { .. } => {}
 			Binary { .. } => {}
-			ArrayLiteral { .. } => {}
-			MapLiteral { .. } => {}
-			SetLiteral { .. } => {}
+			Literal(_) => {}
 		};
 	}
 
 	return_symbols
+}
+
+pub fn get_symbols_from_type_annotation<'a>(
+	context: TreeLocationContext<'a>,
+	type_annotation: &'a TypeAnnotation,
+) -> Vec<(TreeLocationContext<'a>, &'a Symbol)> {
+	let mut symbols = vec![];
+	match type_annotation {
+		TypeAnnotation::Number => symbols,
+		TypeAnnotation::String => symbols,
+		TypeAnnotation::Bool => symbols,
+		TypeAnnotation::Duration => symbols,
+		TypeAnnotation::Optional(t) => get_symbols_from_type_annotation(context, t),
+		TypeAnnotation::Array(t) => get_symbols_from_type_annotation(context, t),
+		TypeAnnotation::MutArray(t) => get_symbols_from_type_annotation(context, t),
+		TypeAnnotation::Map(t) => get_symbols_from_type_annotation(context, t),
+		TypeAnnotation::MutMap(t) => get_symbols_from_type_annotation(context, t),
+		TypeAnnotation::Set(t) => get_symbols_from_type_annotation(context, t),
+		TypeAnnotation::MutSet(t) => get_symbols_from_type_annotation(context, t),
+		TypeAnnotation::FunctionSignature(t) => {
+			for parameter in t.parameters.iter() {
+				symbols.extend(get_symbols_from_type_annotation(context, parameter));
+			}
+			if let Some(return_type) = &t.return_type {
+				symbols.extend(get_symbols_from_type_annotation(context, return_type));
+			}
+			symbols
+		}
+		TypeAnnotation::UserDefined(t) => {
+			symbols.push((context, &t.root));
+			for property in t.fields.iter() {
+				symbols.push((context, property));
+			}
+			symbols
+		}
+	}
 }

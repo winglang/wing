@@ -104,7 +104,7 @@ pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
 					hover_string.push_str(format!("```wing\n{symbol_name}: {expression_type}\n```").as_str());
 				} else {
 					// It's a symbol of some kind, but not sure how to handle it yet
-					hover_string.push_str(format!("```wing\n{symbol_name}```").as_str());
+					hover_string.push_str(format!("```wing\n{symbol_name}\n```").as_str());
 				}
 			}
 
