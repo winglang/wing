@@ -1,16 +1,13 @@
 {
   "name": "vscode-wing",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "implicitDependencies": [
-    "winglang", "sdk", "wingc"
-  ],
+  "implicitDependencies": ["winglang"],
   "targets": {
     "build": {
-      "executor": "nx:run-script",
-      "dependsOn": ["^build", "copy"],
+      "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/vscode-wing",
-        "script": "build"
+        "command": "npm run build"
       }
     },
     "dev": {
