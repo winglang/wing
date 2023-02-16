@@ -105,7 +105,7 @@ and throw an  error during compilation if they don't.
 ```js
 // exports the validate function
 exports.validate = function(config) {
-  for (const bucketEntry of Objects.keys(config.resource.aws_s3_bucket)) {
+  for (const bucketEntry of Object.keys(config.resource.aws_s3_bucket)) {
     const bucket = config.resource.aws_s3_bucket[bucketEntry];
     if (!bucket.versioning.enabled) {
       throw new Error(`Bucket ${bucketEntry} does not have versioning enabled`);
