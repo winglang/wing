@@ -12,9 +12,9 @@ import { Construct, IConstruct } from "constructs";
 import { IPolyconFactory, Polycons } from "polycons";
 import stringify from "safe-stable-stringify";
 import { PluginManager } from "./plugin-manager";
+import { IResource } from "./resource";
 import { synthesizeTree } from "./tree";
 import { Logger } from "../cloud/logger";
-import { IResource } from "./resource";
 
 const TERRAFORM_STACK_NAME = "root";
 
