@@ -46,6 +46,7 @@ enum LookupResult<'a> {
 	DefinedLater,
 }
 
+#[derive(Debug)]
 pub struct SymbolLookupInfo {
 	/// The phase the symbol was defined in
 	pub flight: Phase,

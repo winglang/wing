@@ -1,11 +1,15 @@
 use crate::ast::{Scope, *};
-use crate::lsp::ast_traversal::visit_symbols;
 use crate::lsp::sync::FILES;
 use crate::wasm_util::{combine_ptr_and_length, ptr_to_string};
 use lsp_types::DocumentSymbol;
 use lsp_types::Position;
 use lsp_types::Range;
 use lsp_types::SymbolKind;
+
+use super::ast_traversal::{
+	get_expressions_from_statement, get_statements_from_scope_raw, get_symbols_from_expression,
+	get_symbols_from_statement, TreeLocationContext,
+};
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_document_symbol(ptr: u32, len: u32) -> u64 {
@@ -27,23 +31,36 @@ pub unsafe extern "C" fn wingc_on_document_symbol(ptr: u32, len: u32) -> u64 {
 }
 
 fn create_symbols<'a>(scope: &'a Scope) -> Vec<DocumentSymbol> {
-	let mut symbols: Vec<DocumentSymbol> = vec![];
+	let mut document_symbols: Vec<DocumentSymbol> = vec![];
+	let mut raw_symbols: Vec<(TreeLocationContext<'a>, &'a Symbol)> = vec![];
 
-	let mut symbol_visitor = |_scope: &'a Scope, statement: &'a Stmt, _expr: Option<&'a Expr>, symbol: &'a Symbol| {
+	let all_statements = get_statements_from_scope_raw(scope);
+	for context in all_statements {
+		raw_symbols.extend(get_symbols_from_statement(context));
+
+		let all_expressions = get_expressions_from_statement(context);
+		for expression_context in all_expressions {
+			raw_symbols.extend(get_symbols_from_expression(expression_context));
+		}
+	}
+
+	for symbol_lookup in raw_symbols {
+		let statement = symbol_lookup.0.statement;
+		let symbol = symbol_lookup.1;
 		let symbol_kind = match &statement.kind {
 			StmtKind::Bring { .. } => SymbolKind::NAMESPACE,
 			StmtKind::VariableDef { var_name, .. } => {
 				if var_name.name == symbol.name {
 					SymbolKind::VARIABLE
 				} else {
-					return;
+					continue;
 				}
 			}
 			StmtKind::ForLoop { iterator, .. } => {
 				if iterator.name == symbol.name {
 					SymbolKind::VARIABLE
 				} else {
-					return;
+					continue;
 				}
 			}
 			StmtKind::Class(c) => {
@@ -51,7 +68,7 @@ fn create_symbols<'a>(scope: &'a Scope) -> Vec<DocumentSymbol> {
 					SymbolKind::CLASS
 				} else {
 					// eventually we should handle the entire class symbol hierarchy
-					return;
+					continue;
 				}
 			}
 			StmtKind::Struct { name, .. } => {
@@ -59,7 +76,7 @@ fn create_symbols<'a>(scope: &'a Scope) -> Vec<DocumentSymbol> {
 					SymbolKind::STRUCT
 				} else {
 					// eventually we should handle the entire struct symbol hierarchy
-					return;
+					continue;
 				}
 			}
 			StmtKind::Enum { name, .. } => {
@@ -67,10 +84,10 @@ fn create_symbols<'a>(scope: &'a Scope) -> Vec<DocumentSymbol> {
 					SymbolKind::ENUM
 				} else {
 					// eventually we should handle the entire enum symbol hierarchy
-					return;
+					continue;
 				}
 			}
-			_ => return,
+			_ => continue,
 		};
 
 		let symbol_range = Range {
@@ -97,12 +114,10 @@ fn create_symbols<'a>(scope: &'a Scope) -> Vec<DocumentSymbol> {
 			deprecated: None,
 		};
 
-		symbols.push(symbol);
-	};
+		document_symbols.push(symbol);
+	}
 
-	visit_symbols(scope, &mut symbol_visitor);
-
-	symbols
+	document_symbols
 }
 
 pub fn on_document_symbols<'a>(params: lsp_types::DocumentSymbolParams) -> Option<Vec<DocumentSymbol>> {

@@ -34,14 +34,14 @@ pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
 
 		let position = params.text_document_position_params.position;
 
-		let scope = &parse_result.scope;
-		let root_env_ref = scope.env.borrow();
+		let root_scope = &parse_result.scope;
+		let root_env_ref = root_scope.env.borrow();
 		let root_env = root_env_ref.as_ref().unwrap();
 
-		if let Some(symbol_context) = find_symbol(scope, &position) {
-			dbg!(symbol_context);
+		if let Some(symbol_context) = find_symbol(root_scope, &position) {
 			let symbol = symbol_context.1;
 			let expr = symbol_context.0.expression;
+			let scope = symbol_context.0.scope;
 			let symbol_name = &symbol.name;
 			let expression_type = if let Some(expr) = expr {
 				let t = expr.evaluated_type.borrow();
@@ -85,13 +85,13 @@ pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
 					}
 					crate::type_check::SymbolKind::Variable(v) => {
 						let flight = match lookup_info.flight {
-							crate::ast::Phase::Inflight => "inflight",
-							crate::ast::Phase::Preflight => "preflight",
+							crate::ast::Phase::Inflight => "inflight ",
+							crate::ast::Phase::Preflight => "preflight ",
 							crate::ast::Phase::Independent => "",
 						};
-						let reassignable = if v.reassignable { "var" } else { "" };
+						let reassignable = if v.reassignable { "var " } else { "" };
 						let _type = &v._type;
-						hover_string.push_str(format!("```wing\n{flight} {reassignable} {symbol_name}: {_type}\n```").as_str());
+						hover_string.push_str(format!("```wing\n{flight}{reassignable}{symbol_name}: {_type}\n```").as_str());
 					}
 					crate::type_check::SymbolKind::Namespace(n) => {
 						let namespace_name = &n.name;
@@ -102,6 +102,9 @@ pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
 				if reference.is_some() && expression_type.is_some() {
 					let expression_type = expression_type.unwrap();
 					hover_string.push_str(format!("```wing\n{symbol_name}: {expression_type}\n```").as_str());
+				} else {
+					// It's a symbol of some kind, but not sure how to handle it yet
+					hover_string.push_str(format!("```wing\n{symbol_name}```").as_str());
 				}
 			}
 
