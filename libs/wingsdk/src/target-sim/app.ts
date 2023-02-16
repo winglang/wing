@@ -23,7 +23,8 @@ export class App extends Construct implements core.IApp {
   public readonly outdir: string;
   private readonly files: core.Files;
   private readonly name: string;
-  private presynthed = false;
+  private readonly simfile: string;
+  private synthed = false;
 
   constructor(props: core.AppProps) {
     super(undefined as any, "root");
@@ -32,6 +33,7 @@ export class App extends Construct implements core.IApp {
     Polycons.register(this, props.customFactory ?? new PolyconFactory());
     Logger.register(this);
     this.files = new core.Files({ app: this, stateFile: props.stateFile });
+    this.simfile = path.join(this.outdir, `${this.name}.wsim`);
   }
 
   /**
@@ -39,11 +41,12 @@ export class App extends Construct implements core.IApp {
    * app's outdir, and returns a path to the .wsim file.
    */
   public synth(): string {
-    // call preSynthesize() on every construct in the tree
-    if (!this.presynthed) {
-      preSynthesizeAllConstructs(this);
-      this.presynthed = true;
+    if (this.synthed) {
+      return this.simfile;
     }
+
+    // call preSynthesize() on every construct in the tree
+    preSynthesizeAllConstructs(this);
 
     const workdir = mkdtemp();
 
@@ -56,15 +59,13 @@ export class App extends Construct implements core.IApp {
     // write tree.json file into workdir
     core.synthesizeTree(this, workdir);
 
-    // tar + gzip the workdir, and write it as a .wsim file to the outdir
-    const filename = `${this.name}.wsim`;
-    const simfile = path.join(this.outdir, filename);
+    // tar + gzip the workdir, and write it as a .wsim file to the simfile
     tar.create(
       {
         gzip: true,
         cwd: workdir,
         sync: true,
-        file: simfile,
+        file: this.simfile,
       },
       ["./"]
     );
@@ -73,7 +74,9 @@ export class App extends Construct implements core.IApp {
     // (for backwards compatibility with older versions of the Wing console)
     core.synthesizeTree(this, this.outdir);
 
-    return simfile;
+    this.synthed = true;
+
+    return this.simfile;
   }
 
   private synthSimulatorFile(outdir: string) {
