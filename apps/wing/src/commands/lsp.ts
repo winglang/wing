@@ -42,7 +42,6 @@ export async function run_server() {
     wingCompiler.invoke(wingc, "wingc_on_did_change_text_document", string);
   });
   connection.onCompletion(async (params) => {
-    connection.console.log("onCompletion");
     const result = wingCompiler.invoke(
       wingc,
       "wingc_on_completion",
