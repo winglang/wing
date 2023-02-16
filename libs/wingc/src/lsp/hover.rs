@@ -4,7 +4,7 @@ use crate::lsp::ast_traversal::find_symbol;
 use crate::lsp::sync::FILES;
 use crate::{
 	ast::ExprKind,
-	wasm_util::{combine_ptr_and_length, ptr_to_string},
+	wasm_util::{ptr_to_string, string_to_combined_ptr},
 };
 
 #[no_mangle]
@@ -14,9 +14,7 @@ pub unsafe extern "C" fn wingc_on_hover(ptr: u32, len: u32) -> u64 {
 		if let Some(token_result) = on_hover(parsed) {
 			let result = serde_json::to_string(&token_result).unwrap();
 
-			// return result as u64 with ptr and len
-			let leaked = result.into_bytes().leak();
-			combine_ptr_and_length(leaked.as_ptr() as u32, leaked.len() as u32)
+			string_to_combined_ptr(result)
 		} else {
 			0
 		}

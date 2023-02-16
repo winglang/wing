@@ -1,13 +1,12 @@
 use crate::ast::{Scope, *};
-use crate::lsp::sync::FILES;
-use crate::wasm_util::{combine_ptr_and_length, ptr_to_string};
-use lsp_types::DocumentSymbol;
-use lsp_types::SymbolKind;
-
-use super::ast_traversal::{
+use crate::lsp::ast_traversal::{
 	get_expressions_from_statement, get_statements_from_scope_raw, get_symbols_from_expression,
 	get_symbols_from_statement, TreeLocationContext,
 };
+use crate::lsp::sync::FILES;
+use crate::wasm_util::{ptr_to_string, string_to_combined_ptr};
+use lsp_types::DocumentSymbol;
+use lsp_types::SymbolKind;
 
 #[no_mangle]
 pub unsafe extern "C" fn wingc_on_document_symbol(ptr: u32, len: u32) -> u64 {
@@ -16,9 +15,7 @@ pub unsafe extern "C" fn wingc_on_document_symbol(ptr: u32, len: u32) -> u64 {
 		if let Some(token_result) = on_document_symbols(parsed) {
 			let result = serde_json::to_string(&token_result).unwrap();
 
-			// return result as u64 with ptr and len
-			let leaked = result.into_bytes().leak();
-			combine_ptr_and_length(leaked.as_ptr() as u32, leaked.len() as u32)
+			string_to_combined_ptr(result)
 		} else {
 			0
 		}
@@ -26,6 +23,25 @@ pub unsafe extern "C" fn wingc_on_document_symbol(ptr: u32, len: u32) -> u64 {
 		eprintln!("Failed to parse 'onHover' text document: {}", parse_string);
 		0
 	}
+}
+
+pub fn on_document_symbols<'a>(params: lsp_types::DocumentSymbolParams) -> Option<Vec<DocumentSymbol>> {
+	FILES.with(|files| {
+		let files = files.borrow();
+		let files = files.read();
+		let files = files.unwrap();
+		let parse_result = files.get(&params.text_document.uri);
+		let parse_result = parse_result.unwrap();
+		let scope = &parse_result.scope;
+
+		let symbols = create_symbols(scope);
+
+		if symbols.is_empty() {
+			None
+		} else {
+			Some(symbols)
+		}
+	})
 }
 
 fn create_symbols<'a>(scope: &'a Scope) -> Vec<DocumentSymbol> {
@@ -107,23 +123,4 @@ fn create_symbols<'a>(scope: &'a Scope) -> Vec<DocumentSymbol> {
 	}
 
 	document_symbols
-}
-
-pub fn on_document_symbols<'a>(params: lsp_types::DocumentSymbolParams) -> Option<Vec<DocumentSymbol>> {
-	FILES.with(|files| {
-		let files = files.borrow();
-		let files = files.read();
-		let files = files.unwrap();
-		let parse_result = files.get(&params.text_document.uri);
-		let parse_result = parse_result.unwrap();
-		let scope = &parse_result.scope;
-
-		let symbols = create_symbols(scope);
-
-		if symbols.is_empty() {
-			None
-		} else {
-			Some(symbols)
-		}
-	})
 }
