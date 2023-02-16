@@ -69,8 +69,8 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
 
     // indicates that we are calling "handle" on the handler resource
     // and that we are calling "print" on the logger.
-    inflight._bind(this, ["handle"]);
-    logger._bind(this, ["print"]);
+    inflight._registerBind(this, ["handle"]);
+    logger._registerBind(this, ["print"]);
 
     const inflightClient = inflight._toInflight();
     const loggerClientCode = logger._toInflight();

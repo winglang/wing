@@ -135,7 +135,15 @@ export class Inflight extends Construct implements IResource {
     throw new Error("Method not implemented.");
   }
   /** @internal */
+  public _registerBind(_host: IInflightHost, _ops: string[]): void {
+    throw new Error("Method not implemented.");
+  }
+  /** @internal */
   public _toInflight(): Code {
+    throw new Error("Method not implemented.");
+  }
+  /** @internal */
+  public _preSynthesize(): void {
     throw new Error("Method not implemented.");
   }
   /** @internal */
