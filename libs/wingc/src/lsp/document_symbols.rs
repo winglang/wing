@@ -2,8 +2,6 @@ use crate::ast::{Scope, *};
 use crate::lsp::sync::FILES;
 use crate::wasm_util::{combine_ptr_and_length, ptr_to_string};
 use lsp_types::DocumentSymbol;
-use lsp_types::Position;
-use lsp_types::Range;
 use lsp_types::SymbolKind;
 
 use super::ast_traversal::{
@@ -90,16 +88,7 @@ fn create_symbols<'a>(scope: &'a Scope) -> Vec<DocumentSymbol> {
 			_ => continue,
 		};
 
-		let symbol_range = Range {
-			start: Position {
-				line: symbol.span.start.row as u32,
-				character: symbol.span.start.column as u32,
-			},
-			end: Position {
-				line: symbol.span.end.row as u32,
-				character: symbol.span.end.column as u32,
-			},
-		};
+		let symbol_range = symbol.span.range();
 
 		// "deprecated" is deprecated (lol) but still required
 		#[allow(deprecated)]

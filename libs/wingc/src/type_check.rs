@@ -18,8 +18,7 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display};
 use std::path::Path;
-
-use self::symbol_env::{StatementIdx, SymbolEnv};
+use symbol_env::{StatementIdx, SymbolEnv};
 
 pub struct UnsafeRef<T>(*const T);
 impl<T> Clone for UnsafeRef<T> {
@@ -1500,7 +1499,7 @@ impl<'a> TypeChecker<'a> {
 						self.stmt_error(
 							stmt,
 							format!(
-								"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
+								"bring \"{}\" must be assigned to an identifier (e.g. bring \"foo\" as foo)",
 								module_name.name
 							),
 						);
@@ -1911,18 +1910,10 @@ impl<'a> TypeChecker<'a> {
 		} else {
 			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions { root: true, deps: true };
 			let source_dir = self.source_path.parent().unwrap().to_str().unwrap();
-			let assembly_name = wingii_types.load_dep(library_name.as_str(), source_dir, &wingii_loader_options);
-
-			if let Err(err) = assembly_name {
-				self.type_error(TypeError {
-					message: format!("{}", err),
-					span: alias.span.clone(),
-				});
-
-				return;
-			}
-
-			assembly_name.unwrap()
+			let assembly_name = wingii_types
+				.load_dep(library_name.as_str(), source_dir, &wingii_loader_options)
+				.unwrap();
+			assembly_name
 		};
 
 		debug!("Loaded JSII assembly {}", assembly_name);

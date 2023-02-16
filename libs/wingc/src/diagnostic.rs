@@ -29,6 +29,19 @@ impl WingSpan {
 		}
 	}
 
+	pub fn range(self: &Self) -> lsp_types::Range {
+		lsp_types::Range {
+			start: Position {
+				line: self.start.row as u32,
+				character: self.start.column as u32,
+			},
+			end: Position {
+				line: self.end.row as u32,
+				character: self.end.column as u32,
+			},
+		}
+	}
+
 	pub fn contains(self: &Self, position: &Position) -> bool {
 		let pos_line = position.line as usize;
 		let pos_char = position.character as usize;

@@ -13,7 +13,7 @@ pub type SymbolEnvRef = UnsafeRef<SymbolEnv>;
 pub struct SymbolEnv {
 	// We use a BTreeMaps here so that we can iterate over the symbols in a deterministic order (snapshot tests)
 	pub(crate) symbol_map: BTreeMap<String, (StatementIdx, SymbolKind)>,
-	pub parent: Option<SymbolEnvRef>,
+	parent: Option<SymbolEnvRef>,
 
 	// TODO: This doesn't make much sense in the context of the "environment" but I needed a way to propagate the return type of a function
 	// down the scopes. Think of a nicer way to do this.

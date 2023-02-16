@@ -1,4 +1,4 @@
-use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position, Range};
+use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind};
 
 use crate::lsp::ast_traversal::find_symbol;
 use crate::lsp::sync::FILES;
@@ -114,16 +114,7 @@ pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
 						kind: MarkupKind::Markdown,
 						value: hover_string,
 					}),
-					range: Some(Range::new(
-						Position {
-							line: span.start.row as u32,
-							character: span.start.column as u32,
-						},
-						Position {
-							line: span.end.row as u32,
-							character: span.end.column as u32,
-						},
-					)),
+					range: Some(span.range()),
 				});
 			}
 		}
