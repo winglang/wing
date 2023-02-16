@@ -8,7 +8,7 @@ export const EmptyConstructView = ({
   resourcePath,
 }: EmptyConstructViewProps) => {
   return (
-    <div className="text-center mt-8">
+    <div className="text-center px-4 py-2">
       <div className="flex justify-center">
         <div className="relative text-slate-500">
           <div className="opacity-40">

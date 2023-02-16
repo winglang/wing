@@ -39,7 +39,7 @@ export const BlueScreenOfDeath = ({
         <div className="leading-[40px]">
           <div>{title}</div>
           <div className="py-4">
-            <span className="focus:outline-none select-text" ref={errorRef} />
+            <span className="outline-none select-text" ref={errorRef} />
           </div>
           <div className="w-full text-center py-4">
             Click on any error reference to navigate to your IDE{" "}

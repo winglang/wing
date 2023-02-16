@@ -17,6 +17,7 @@ export const InspectorSectionHeading = ({
     <button
       className={classNames(
         "w-full px-4 py-1 flex items-center gap-1 bg-white hover:bg-slate-50 group relative",
+        "border-t border-gray-200",
       )}
       onClick={onClick}
     >

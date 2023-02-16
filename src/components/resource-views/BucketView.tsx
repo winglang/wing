@@ -82,7 +82,7 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
   }, [selectedEntries]);
 
   return (
-    <div className="h-full flex-1 space-y-2 p-4 flex flex-col text-sm">
+    <div className="h-full flex-1 space-y-2 px-4 py-2 flex flex-col text-sm">
       <div className="flex justify-between items-center gap-1">
         <div className="flex items-center gap-1">
           <Button

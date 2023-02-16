@@ -1,6 +1,6 @@
 import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import React from "react";
+import React, { Fragment, useEffect, useMemo, useRef } from "react";
 
 import { Square2StackMinusIcon, Square2StackPlusIcon } from "./icons/index.js";
 import { ScrollableArea } from "./ScrollableArea.js";
@@ -127,8 +127,6 @@ function MenuItems({
   );
 }
 
-export const SELECTED_TREE_ITEM_CSS_ID = "current-tree-item";
-
 interface MenuItemProps {
   item: TreeMenuItem;
   selectedItem?: string;
@@ -146,16 +144,47 @@ function MenuItem({
   onItemClick,
   onItemToggle,
 }: MenuItemProps) {
-  const open = openedMenuItems.includes(item.id);
-  const hasChildren = !item.children || item.children.length === 0;
+  const open = useMemo(() => {
+    return openedMenuItems.includes(item.id);
+  }, [openedMenuItems, item.id]);
+
+  const hasChildren = useMemo(() => {
+    if (!item.children) {
+      return false;
+    }
+
+    return item.children.length > 0;
+  }, [item.children]);
+
+  const ref = useRef<HTMLDivElement>(null);
+  // TODO: Can't use scrollIntoView on two different items at the same time (e.g. the tree menu and the map view). Need to figure out a way to do this (only scrolling the map view item when the tree menu item clicked, and only scrolling the tree menu item if the map view item is clicked). Here's some links to bug reports in Chrome:
+  // https://bugs.chromium.org/p/chromium/issues/detail?id=1121151
+  // https://bugs.chromium.org/p/chromium/issues/detail?id=1043933
+  // https://bugs.chromium.org/p/chromium/issues/detail?id=833617
+  // useEffect(() => {
+  //   if (selectedItem === item.id) {
+  //     requestAnimationFrame(() => {
+  //       ref.current?.scrollIntoView({
+  //         behavior: "smooth",
+  //         block: "nearest",
+  //         inline: "nearest",
+  //       });
+  //     });
+  //   }
+  // }, [selectedItem, item.id]);
+
+  const ChevronIcon = useMemo(
+    () => (open ? ChevronDownIcon : ChevronRightIcon),
+    [open],
+  );
 
   return (
-    <>
+    <Fragment>
       <div
+        ref={ref}
         className={classNames(
           "w-full flex cursor-pointer group hover:bg-slate-200/50",
           selectedItem === item.id && "bg-slate-200",
-          selectedItem === item.id && SELECTED_TREE_ITEM_CSS_ID,
         )}
         onClick={(e) => {
           e.stopPropagation();
@@ -168,36 +197,24 @@ function MenuItem({
       >
         <button
           type={"button"}
-          className="pl-4 py-0.5 flex items-center"
+          className={classNames("pl-4 py-0.5 flex items-center", {
+            invisible: !hasChildren,
+          })}
           style={{ marginLeft: `${8 * indentationLevel}px` }}
           onClick={(e) => {
             e.stopPropagation();
             onItemToggle?.(item);
           }}
         >
-          {open ? (
-            <ChevronDownIcon
-              className={classNames(
-                "w-4 h-4 text-slate-500 mr-1.5 flex-shrink-0 group-hover:text-slate-600",
-                {
-                  invisible: hasChildren,
-                  "text-slate-600": selectedItem === item.id,
-                },
-              )}
-              aria-hidden="true"
-            />
-          ) : (
-            <ChevronRightIcon
-              className={classNames(
-                "w-4 h-4 text-slate-500 mr-1.5 flex-shrink-0 group-hover:text-slate-600",
-                {
-                  invisible: hasChildren,
-                  "text-slate-600": selectedItem === item.id,
-                },
-              )}
-              aria-hidden="true"
-            />
-          )}
+          <ChevronIcon
+            className={classNames(
+              "w-4 h-4 text-slate-500 mr-1.5 flex-shrink-0 group-hover:text-slate-600",
+              {
+                "text-slate-600": selectedItem === item.id,
+              },
+            )}
+            aria-hidden="true"
+          />
         </button>
         <button
           type={"button"}
@@ -235,6 +252,6 @@ function MenuItem({
           onItemToggle={onItemToggle}
         />
       )}
-    </>
+    </Fragment>
   );
 }

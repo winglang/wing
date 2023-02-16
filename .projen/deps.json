@@ -71,6 +71,10 @@
       "type": "build"
     },
     {
+      "name": "@types/lodash.uniqby",
+      "type": "build"
+    },
+    {
       "name": "@types/node",
       "version": "^18",
       "type": "build"
@@ -166,6 +170,10 @@
       "type": "build"
     },
     {
+      "name": "elkjs",
+      "type": "build"
+    },
+    {
       "name": "esbuild",
       "version": "^0.16.0",
       "type": "build"
@@ -208,11 +216,19 @@
       "type": "build"
     },
     {
+      "name": "framer-motion",
+      "type": "build"
+    },
+    {
       "name": "get-port",
       "type": "build"
     },
     {
       "name": "lodash.throttle",
+      "type": "build"
+    },
+    {
+      "name": "lodash.uniqby",
       "type": "build"
     },
     {

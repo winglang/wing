@@ -24,6 +24,7 @@ const main = ({
       queries: {
         networkMode: "offlineFirst",
         refetchOnWindowFocus: false,
+        keepPreviousData: true,
       },
     },
   });

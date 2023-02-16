@@ -69,6 +69,10 @@ const project = new TypeScriptProject({
     "playwright",
     "playwright-core",
     "xvfb-maybe",
+    "elkjs",
+    "framer-motion",
+    "lodash.uniqby",
+    "@types/lodash.uniqby",
   ],
 });
 
@@ -235,6 +239,7 @@ for (const tsconfig of tsconfigFiles) {
     const include = ["./src/**/*", "./electron/**/*"];
     if (tsconfig.path.endsWith("tsconfig.dev.json")) {
       include.push(
+        "./projen/**/*",
         "./scripts/**/*",
         "./test/**/*",
         "./e2e/**/*",

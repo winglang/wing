@@ -34,7 +34,7 @@ export const QueueView = ({ resourcePath }: QueueViewProps) => {
   const id = useId();
 
   return (
-    <div className="h-full w-full flex flex-col gap-4 p-4">
+    <div className="h-full w-full flex flex-col gap-4 px-4 py-2">
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-4">
           <label

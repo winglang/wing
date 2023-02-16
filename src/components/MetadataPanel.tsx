@@ -3,13 +3,15 @@ import {
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/20/solid";
 import classNames from "classnames";
-import { useEffect, useState } from "react";
+import { PropsWithChildren, useEffect, useMemo, useState } from "react";
 
 import { InspectorSection } from "../design-system/InspectorSection.js";
+import { Pill } from "../design-system/Pill.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
 import { ResourceIcon } from "../stories/utils.js";
 
 import { AttributeView } from "./AttributeView.js";
+import { ResourceView } from "./resource-views/ResourceView.js";
 
 interface Attribute {
   key: string;
@@ -61,14 +63,11 @@ export const MetadataPanel = ({
   outbound,
   onConnectionNodeClick,
 }: MetadataProps) => {
-  const [attributeGroups, setAttributeGroups] = useState<AttributeGroup[]>();
-  const [connectionsGroups, setConnectionsGroups] =
-    useState<ConnectionsGroup[]>();
   const [closedInspectorSections, setClosedInspectorSections] = useState<
     string[]
-  >([]);
+  >(() => []);
 
-  useEffect(() => {
+  const { attributeGroups, connectionsGroups } = useMemo(() => {
     const connectionsGroupsArray: ConnectionsGroup[] = [];
     let attrGroups: AttributeGroup[] = [
       {
@@ -128,10 +127,15 @@ export const MetadataPanel = ({
       connectionsGroupsArray.push({
         groupName: "Inbound",
         type: "inbound",
-        connections: inbound.map((node) => ({
-          id: node.id,
-          path: node.path,
-          icon: <ResourceIcon resourceType={node.type} className="w-4 h-4" />,
+        connections: inbound.map((relationship) => ({
+          id: relationship.id,
+          path: relationship.path,
+          icon: (
+            <ResourceIcon
+              resourceType={relationship.type}
+              className="w-4 h-4"
+            />
+          ),
         })),
       });
     }
@@ -139,15 +143,22 @@ export const MetadataPanel = ({
       connectionsGroupsArray.push({
         groupName: "Outbound",
         type: "outbound",
-        connections: outbound.map((node) => ({
-          id: node.id,
-          path: node.path,
-          icon: <ResourceIcon resourceType={node.type} className="w-4 h-4" />,
+        connections: outbound.map((relationship) => ({
+          id: relationship.id,
+          path: relationship.path,
+          icon: (
+            <ResourceIcon
+              resourceType={relationship.type}
+              className="w-4 h-4"
+            />
+          ),
         })),
       });
     }
-    setAttributeGroups(attrGroups);
-    setConnectionsGroups(connectionsGroupsArray);
+    return {
+      attributeGroups: attrGroups,
+      connectionsGroups: connectionsGroupsArray,
+    };
   }, [node, inbound, outbound]);
 
   const toggleInspectorSection = (section: string) => {
@@ -165,6 +176,19 @@ export const MetadataPanel = ({
 
   return (
     <ScrollableArea overflowY className="h-full text-sm bg-white">
+      <div className="flex items-center gap-2 px-2 py-1.5">
+        <div className="flex-shrink-0">
+          <ResourceIcon className="w-6 h-6" resourceType={node.type} />
+        </div>
+
+        <div className="flex flex-col min-w-0">
+          <div className="text-sm font-medium truncate">{node.id}</div>
+          <div className="flex">
+            <Pill>{node.type}</Pill>
+          </div>
+        </div>
+      </div>
+
       {node && (
         <>
           {attributeGroups?.map((attributeGroup) => {
@@ -195,6 +219,7 @@ export const MetadataPanel = ({
               </div>
             );
           })}
+
           {connectionsGroups && connectionsGroups.length > 0 && (
             <InspectorSection
               text="Relationships"
@@ -216,16 +241,16 @@ export const MetadataPanel = ({
                             onConnectionNodeClick?.(connection.path)
                           }
                         >
-                          <div className="flex-0 flex-shrink-0 flex items-center gap-2 text-slate-500 min-w-[140px]">
+                          <div className="flex-0 flex-shrink-0 flex items-center gap-2 text-slate-500 min-w-[100px]">
                             <div className="flex-0 flex-shrink-0">
                               {connectionGroup.type === "inbound" ? (
                                 <ArrowLeftOnRectangleIcon
-                                  className="w-4 h-4 rotate-180"
+                                  className="w-4 h-4 rotate-180 text-green-500"
                                   aria-hidden="true"
                                 />
                               ) : (
                                 <ArrowRightOnRectangleIcon
-                                  className="w-4 h-4"
+                                  className="w-4 h-4 text-red-500"
                                   aria-hidden="true"
                                 />
                               )}
@@ -251,6 +276,23 @@ export const MetadataPanel = ({
               </div>
             </InspectorSection>
           )}
+
+          {node.type.startsWith("wingsdk.cloud") && (
+            <InspectorSection
+              text="Interact"
+              open={!closedInspectorSections.includes("interact")}
+              onClick={() => toggleInspectorSection("interact")}
+            >
+              <div className="bg-slate-100 border-t border-slate-200">
+                <ResourceView
+                  resourceType={node.type}
+                  resourcePath={node.path}
+                />
+              </div>
+            </InspectorSection>
+          )}
+
+          <div className="border-t border-slate-200"></div>
         </>
       )}
     </ScrollableArea>

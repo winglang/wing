@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { LogEntry, LogLevel } from "../../electron/main/consoleLogger.js";
 import { ExplorerItem } from "../../electron/main/router/app.js";
@@ -10,21 +10,16 @@ import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
 import { SpinnerLoader } from "../design-system/SpinnerLoader.js";
 import { TopResizableWidget } from "../design-system/TopResizableWidget.js";
-import {
-  SELECTED_TREE_ITEM_CSS_ID,
-  TreeMenu,
-  TreeMenuItem,
-} from "../design-system/TreeMenu.js";
+import { TreeMenu, TreeMenuItem } from "../design-system/TreeMenu.js";
 import { ResourceIcon } from "../stories/utils.js";
 import { trpc } from "../utils/trpc.js";
 import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
 
 import { ConsoleFilters } from "./ConsoleFilters.js";
 import { ConsoleLogs } from "./ConsoleLogs.js";
-import { DetailedNode } from "./DetailedNode.js";
+import { ElkMap } from "./elk-map/ElkMap.js";
+import { ContainerNode } from "./ElkMapNodes.js";
 import { MetadataPanel } from "./MetadataPanel.js";
-import { EmptyConstructView } from "./resource-views/EmptyConstructView.jsx";
-import { ResourceView } from "./resource-views/ResourceView.js";
 import { StatusBar } from "./StatusBar.js";
 
 export interface VscodeLayoutProps {
@@ -52,41 +47,6 @@ export const VscodeLayout = ({
   useEffect(() => {
     treeMenu.expandAll();
   }, [treeMenu.items]);
-
-  const childRelationships = trpc["app.childRelationships"].useQuery(
-    {
-      path: treeMenu.currentItemId,
-    },
-    {
-      enabled: !!treeMenu.currentItemId,
-    },
-  );
-
-  useEffect(() => {
-    document.querySelector(`.${SELECTED_TREE_ITEM_CSS_ID}`)?.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
-      inline: "nearest",
-    });
-  }, [treeMenu.currentItemId]);
-
-  const breadcrumbs = trpc["app.nodeBreadcrumbs"].useQuery(
-    {
-      path: treeMenu.currentItemId,
-    },
-    {
-      enabled: !!treeMenu.currentItemId,
-    },
-  );
-
-  const currentNode = trpc["app.node"].useQuery(
-    {
-      path: treeMenu.currentItemId,
-    },
-    {
-      enabled: !!treeMenu.currentItemId,
-    },
-  );
 
   const [selectedLogTypeFilters, setSelectedLogTypeFilters] = useState<
     LogLevel[]
@@ -154,6 +114,23 @@ export const VscodeLayout = ({
     return cloudAppState === "loading" || explorerTree.isLoading;
   }, [explorerTree, cloudAppState]);
 
+  const map = trpc["app.map"].useQuery();
+  const mapRefs = useRef<{ [key: string]: HTMLElement | undefined }>({});
+  useEffect(() => {
+    if (!treeMenu.currentItemId) {
+      return;
+    }
+
+    const element = mapRefs.current[treeMenu.currentItemId];
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "center",
+      });
+    }
+  }, [treeMenu.currentItemId]);
+
   return (
     <div
       data-testid="vscode-layout"
@@ -193,101 +170,50 @@ export const VscodeLayout = ({
         </RightResizableWidget>
 
         <div className="flex-1 flex flex-col">
-          <div className="flex-0 flex-shrink-0 w-full h-9 relative bg-white border-b">
-            {breadcrumbs.data && (
-              <ScrollableArea
-                overflowX
-                scrollbarSize="xs"
-                className="flex flex-col justify-around overflow-y-hidden"
-              >
-                <Breadcrumbs
-                  breadcrumbs={breadcrumbs.data.map((node) => ({
-                    id: node.path,
-                    name: node.id,
-                    icon: (
-                      <ResourceIcon
-                        resourceType={node.type}
-                        className="w-4 h-4"
+          <div className="flex-1 flex">
+            <div className="flex-1 flex flex-col">
+              <div className="flex-shrink-0 h-9 bg-gray-50"></div>
+              <div className="h-full relative">
+                <ScrollableArea overflowX overflowY className="bg-white">
+                  <div
+                    data-testid="map-view"
+                    className="min-h-full flex justify-around items-center"
+                  >
+                    {map.data && (
+                      <ElkMap
+                        nodes={map.data.nodes}
+                        edges={map.data.edges}
+                        selectedNodeId={treeMenu.currentItemId}
+                        onSelectedNodeIdChange={(id) => {
+                          treeMenu.setCurrent(id);
+                        }}
+                        node={({ node }) => (
+                          <div
+                            ref={(element) =>
+                              (mapRefs.current[node.id] = element || undefined)
+                            }
+                            className="h-full flex flex-col relative"
+                          >
+                            <ContainerNode
+                              name={node.data?.label}
+                              open={node.children && node.children?.length > 0}
+                              selected={node.id === treeMenu.currentItemId}
+                              resourceType={node.data?.type}
+                              icon={(props) => (
+                                <ResourceIcon
+                                  resourceType={node.data?.type}
+                                  solid
+                                  {...props}
+                                />
+                              )}
+                            />
+                          </div>
+                        )}
                       />
-                    ),
-                  }))}
-                  onBreadcrumbClicked={(breadcrumb) => {
-                    treeMenu.expand(breadcrumb.id);
-                    treeMenu.setCurrent(breadcrumb.id);
-                  }}
-                />
-              </ScrollableArea>
-            )}
-          </div>
-
-          <div data-testid="map-view" className="flex-1 flex">
-            <div className="flex-1 relative">
-              <ScrollableArea overflowX className="flex flex-col">
-                {currentNode.data &&
-                  !currentNode.data?.type?.startsWith("wingsdk.") &&
-                  childRelationships.data &&
-                  childRelationships.data.length === 0 && (
-                    <EmptyConstructView
-                      resourceType={currentNode.data.type}
-                      resourcePath={currentNode.data.path}
-                    />
-                  )}
-                {!currentNode.data?.type?.startsWith("wingsdk.") &&
-                  childRelationships.data && (
-                    <div className="flex-1 bg-slate-50 min-w-[40rem] p-4 mx-auto flex flex-col gap-y-2">
-                      {childRelationships.data.map((child, index) => (
-                        <DetailedNode
-                          key={`${child.node.path}_${index}`}
-                          node={{
-                            id: child.node.id,
-                            path: child.node.path,
-                            type: child.node.type,
-                            title: "",
-                            icon: (
-                              <ResourceIcon
-                                resourceType={child.node.type}
-                                className="w-4 h-4"
-                              />
-                            ),
-                          }}
-                          inbound={child.inbound.map((relationship) => ({
-                            id: relationship.node.id,
-                            path: relationship.node.path,
-                            icon: (
-                              <ResourceIcon
-                                resourceType={relationship.node.type}
-                                className="w-4 h-4"
-                              />
-                            ),
-                            relationshipName: relationship.relationshipType,
-                          }))}
-                          outbound={child.outbound.map((relationship) => ({
-                            id: relationship.node.id,
-                            path: relationship.node.path,
-                            icon: (
-                              <ResourceIcon
-                                resourceType={relationship.node.type}
-                                className="w-4 h-4"
-                              />
-                            ),
-                            relationshipName: relationship.relationshipType,
-                          }))}
-                          onClick={(path) => {
-                            treeMenu.expand(path);
-                            treeMenu.setCurrent(path);
-                          }}
-                        />
-                      ))}
-                    </div>
-                  )}
-
-                {currentNode.data?.type?.startsWith("wingsdk.cloud") && (
-                  <ResourceView
-                    resourceType={currentNode.data.type}
-                    resourcePath={currentNode.data.path}
-                  />
-                )}
-              </ScrollableArea>
+                    )}
+                  </div>
+                </ScrollableArea>
+              </div>
             </div>
 
             <LeftResizableWidget className="bg-white flex-shrink w-80 min-w-[10rem] border-l z-10">

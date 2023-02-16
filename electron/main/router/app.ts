@@ -1,11 +1,13 @@
 import { TRPCError } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
+import uniqby from "lodash.uniqby";
 import { z } from "zod";
 
 import {
   Node,
   NodeDisplay,
   buildConstructTreeNodeMap,
+  NodeConnection,
 } from "../utils/constructTreeNodeMap.js";
 import { publicProcedure, router } from "../utils/createRouter.js";
 import { ConstructTreeNode } from "../utils/createSimulator.js";
@@ -214,6 +216,20 @@ export const createAppRouter = () => {
           });
         }
 
+        // Since connections may be duplicated, we need to filter them out. While deduplicating,
+        // we keep only one connection per resource and direction (because the SDK currently has
+        // no way to distinguish between multiple connections to the same resource).
+        // Also, we need to filter out connections to hidden nodes.
+        const connections = uniqby(
+          node.attributes?.["wing:resource:connections"] ?? [],
+          (connection) => {
+            return `${connection.direction}-${connection.resource}`;
+          },
+        ).filter((connection) => {
+          const node = nodeMap.get(connection.resource);
+          return !node?.display?.hidden;
+        });
+
         const config = getResourceConfig(path, simulator);
 
         return {
@@ -223,40 +239,30 @@ export const createAppRouter = () => {
             type: getResourceType(node, simulator),
             props: config?.props,
           },
-          inbound:
-            node.attributes?.["wing:resource:connections"]
-              ?.filter(({ direction, resource }) => {
-                if (direction !== "inbound") {
-                  return;
-                }
-                const node = nodeMap.get(resource)!;
-                return !node.display?.hidden;
-              })
-              .map((connection) => {
-                const node = nodeMap.get(connection.resource)!;
-                return {
-                  id: node.id,
-                  path: node.path,
-                  type: getResourceType(node, simulator),
-                };
-              }) ?? [],
-          outbound:
-            node.attributes?.["wing:resource:connections"]
-              ?.filter(({ direction, resource }) => {
-                if (direction !== "outbound") {
-                  return;
-                }
-                const node = nodeMap.get(resource)!;
-                return !node.display?.hidden;
-              })
-              .map((connection) => {
-                const node = nodeMap.get(connection.resource)!;
-                return {
-                  id: node.id,
-                  path: node.path,
-                  type: getResourceType(node, simulator),
-                };
-              }) ?? [],
+          inbound: connections
+            .filter(({ direction }) => {
+              return direction === "inbound";
+            })
+            .map((connection) => {
+              const node = nodeMap.get(connection.resource)!;
+              return {
+                id: node.id,
+                path: node.path,
+                type: getResourceType(node, simulator),
+              };
+            }),
+          outbound: connections
+            .filter(({ direction }) => {
+              return direction === "outbound";
+            })
+            .map((connection) => {
+              const node = nodeMap.get(connection.resource)!;
+              return {
+                id: node.id,
+                path: node.path,
+                type: getResourceType(node, simulator),
+              };
+            }),
         };
       }),
     // TODO: Implement and use this subscription to invalidate from the backend to the frontend.
@@ -269,6 +275,20 @@ export const createAppRouter = () => {
         //   clearInterval(timer);
         // };
       });
+    }),
+    "app.map": publicProcedure.query(async ({ ctx }) => {
+      const simulator = await ctx.simulator();
+      const { tree } = await ctx.tree();
+      const nodes = [createMapNodeFromConstructTreeNode(tree, simulator)];
+      const edges = uniqby(
+        createMapEdgeFromConstructTreeNode(tree),
+        (edge) => edge.id,
+      );
+
+      return {
+        nodes,
+        edges,
+      };
     }),
   });
 };
@@ -292,6 +312,70 @@ function createExplorerItemFromConstructTreeNode(
           )
       : undefined,
   };
+}
+
+interface MapNode {
+  id: string;
+  data: {
+    label?: string;
+    type?: string;
+    display?: NodeDisplay;
+  };
+  children?: MapNode[];
+}
+
+function createMapNodeFromConstructTreeNode(
+  node: ConstructTreeNode,
+  simulator: Simulator,
+): MapNode {
+  return {
+    id: node.path,
+    data: {
+      label: node.id,
+      type: getResourceType(node, simulator),
+      display: node.display,
+    },
+    children: node.children
+      ? Object.values(node.children)
+          .filter((node) => {
+            return !node.display?.hidden;
+          })
+          .map((node) => createMapNodeFromConstructTreeNode(node, simulator))
+      : undefined,
+  };
+}
+
+interface MapEdge {
+  id: string;
+  source: string;
+  target: string;
+}
+
+function createMapEdgeFromConstructTreeNode(
+  node: ConstructTreeNode,
+): MapEdge[] {
+  if (node.display?.hidden) {
+    return [];
+  }
+
+  return [
+    ...(node.attributes?.["wing:resource:connections"]
+      ?.filter(({ direction }: NodeConnection) => {
+        if (direction === "inbound") {
+          return true;
+        }
+      })
+      ?.map((connection: NodeConnection) => {
+        return {
+          id: `${connection.resource} -> ${node.path}`,
+          source: connection.resource,
+          target: node.path,
+        };
+      }) ?? []),
+    ...(Object.values(node.children ?? {})?.map((child) =>
+      createMapEdgeFromConstructTreeNode(child),
+    ) ?? []),
+  ].flat();
 }
 
 /**

@@ -16,7 +16,7 @@ export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
   const id = useId();
   return (
     <form
-      className="h-full w-full flex flex-col p-4"
+      className="h-full w-full flex flex-col px-4 py-2"
       method="POST"
       aria-disabled={appMode === "webapp"}
       onSubmit={(event) => {

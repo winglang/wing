@@ -20,8 +20,8 @@ module.exports = {
       colors: {
         // We can specify the tone for the gray color.
         // gray: colors.neutral,
-        // gray: colors.slate,
-        gray: colors.gray,
+        gray: colors.slate,
+        // gray: colors.gray,
         "monada-light": "#AEF8EC",
         "monada-dark": "#2ad5c1",
         "monada-black": "#03120E",

@@ -74,7 +74,7 @@ export default function LogsFilters({
             <span className="block truncate">{combinationName}</span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1.5">
               <ChevronUpDownIcon
-                className="h-4 w-4 text-gray-400"
+                className="h-4 w-4 text-slate-400"
                 aria-hidden="true"
               />
             </span>
@@ -94,9 +94,9 @@ export default function LogsFilters({
               style={styles.popper}
               {...attributes.popper}
             >
-              <Listbox.Options className="z-10 m-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-xs shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Listbox.Options className="z-10 m-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-xs shadow-lg ring-1 ring-black ring-opacity-5 outline-none">
                 <li
-                  className="relative cursor-default select-none py-2 pl-10 pr-4 text-gray-900 hover:bg-indigo-50 hover:text-indigo-900"
+                  className="relative cursor-default select-none py-2 pl-10 pr-4 text-slate-900 hover:bg-sky-50 hover:text-sky-900"
                   onClick={() => onChange?.(["info", "warn", "error"])}
                 >
                   <span className={`block truncate font-normal`}>Default</span>
@@ -116,9 +116,7 @@ export default function LogsFilters({
                     key={logTypeIndex}
                     className={({ active }) =>
                       `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                        active
-                          ? "bg-indigo-50 text-indigo-900"
-                          : "text-gray-900"
+                        active ? "bg-sky-50 text-sky-900" : "text-slate-900"
                       }`
                     }
                     value={logType}
@@ -133,7 +131,7 @@ export default function LogsFilters({
                           {logLevelNames[logType]}
                         </span>
                         {selected ? (
-                          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-600">
+                          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-sky-600">
                             <CheckIcon className="h-4 w-4" aria-hidden="true" />
                           </span>
                         ) : undefined}

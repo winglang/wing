@@ -6,6 +6,12 @@ export interface NodeDisplay {
   hidden?: boolean;
 }
 
+export interface NodeConnection {
+  direction: "inbound" | "outbound";
+  relationship: string;
+  resource: string;
+}
+
 export interface Node {
   id: string;
   path: string;
@@ -13,11 +19,7 @@ export interface Node {
   constructInfo: ConstructInfo | undefined;
   attributes:
     | ({
-        "wing:resource:connections"?: {
-          direction: "inbound" | "outbound";
-          relationship: string;
-          resource: string;
-        }[];
+        "wing:resource:connections"?: NodeConnection[];
         "wing:resource:stateful"?: boolean;
       } & Record<string, any>)
     | undefined;
