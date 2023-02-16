@@ -122,7 +122,7 @@ export abstract class Resource extends Construct implements IResource {
     });
   }
 
-  private readonly bindMap: Map<IResource, Set<string>> = new Map();
+  private readonly bindMap: Map<IInflightHost, Set<string>> = new Map();
 
   /** @internal */
   public readonly _connections: Connection[] = [];
