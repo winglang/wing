@@ -63,6 +63,9 @@ pub mod package_json {
 		find_up(directory, |dir| {
 			let package_json = dir.join("package.json");
 			if package_json.exists() {
+				if package_name.starts_with(".") || package_name.starts_with("/") {
+					return true;
+				}
 				let package_json = fs::read_to_string(&package_json).unwrap();
 				let package_json: serde_json::Value = serde_json::from_str(&package_json).unwrap();
 				package_json.get("name").map(|x| x.as_str()).flatten() == Some(package_name)
