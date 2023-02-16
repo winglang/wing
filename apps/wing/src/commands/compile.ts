@@ -6,7 +6,6 @@ import { basename, dirname, join, resolve } from "path";
 import * as chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
-import { exit } from "process";
 import { normalPath } from "../util";
 
 const log = debug("wing:compile");
@@ -57,7 +56,7 @@ function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
 }
 
 /**
- * Compiles a Wing program.
+ * Compiles a Wing program. Throws an error if compilation fails.
  * @param entrypoint The program .w entrypoint.
  * @param options Compile options.
  */
@@ -99,8 +98,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   log(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
   const compileResult = wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
   if (compileResult !== 0) {
-    console.error(compileResult);
-    exit(1);
+    throw new Error(compileResult.toString());
   }
 
   const artifactPath = resolve(workDir, WINGC_PREFLIGHT);

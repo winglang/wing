@@ -740,21 +740,23 @@ impl<'a> TypeChecker<'a> {
 		});
 	}
 
-	fn type_error(&self, type_error: &TypeError) -> TypeRef {
+	fn type_error(&self, type_error: TypeError) -> TypeRef {
+		let TypeError { message, span } = type_error;
 		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
-			message: type_error.message.clone(),
-			span: Some(type_error.span.clone()),
+			message,
+			span: Some(span),
 		});
 
 		self.types.anything()
 	}
 
-	fn variable_error(&self, type_error: &TypeError) -> VariableInfo {
+	fn variable_error(&self, type_error: TypeError) -> VariableInfo {
+		let TypeError { message, span } = type_error;
 		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
-			message: type_error.message.clone(),
-			span: Some(type_error.span.clone()),
+			message,
+			span: Some(span),
 		});
 
 		VariableInfo {
@@ -865,7 +867,7 @@ impl<'a> TypeChecker<'a> {
 				) {
 					Ok(v) => v.as_variable().expect("Expected constructor to be a variable")._type,
 					Err(type_error) => {
-						self.type_error(&type_error);
+						self.type_error(type_error);
 						return self.types.anything();
 					}
 				};
@@ -1295,7 +1297,7 @@ impl<'a> TypeChecker<'a> {
 				self.types.add_type(Type::Function(sig))
 			}
 			TypeAnnotation::UserDefined(user_defined_type) => {
-				resolve_user_defined_type(user_defined_type, env, statement_idx).unwrap_or_else(|e| self.type_error(&e))
+				resolve_user_defined_type(user_defined_type, env, statement_idx).unwrap_or_else(|e| self.type_error(e))
 			}
 			TypeAnnotation::Array(v) => {
 				let value_type = self.resolve_type_annotation(v, env, statement_idx);
@@ -1341,7 +1343,7 @@ impl<'a> TypeChecker<'a> {
 				let explicit_type = type_.as_ref().map(|t| self.resolve_type_annotation(t, env, stmt.idx));
 				let inferred_type = self.type_check_exp(initial_value, env, stmt.idx);
 				if inferred_type.is_void() {
-					self.type_error(&TypeError {
+					self.type_error(TypeError {
 						message: format!("Cannot assign expression of type \"{}\" to a variable", inferred_type),
 						span: var_name.span.clone(),
 					});
@@ -1354,7 +1356,7 @@ impl<'a> TypeChecker<'a> {
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
-							self.type_error(&type_error);
+							self.type_error(type_error);
 						}
 						_ => {}
 					};
@@ -1365,7 +1367,7 @@ impl<'a> TypeChecker<'a> {
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
-							self.type_error(&type_error);
+							self.type_error(type_error);
 						}
 						_ => {}
 					};
@@ -1388,7 +1390,7 @@ impl<'a> TypeChecker<'a> {
 
 					// TODO: Handle non-builtin iterables
 					t => {
-						self.type_error(&TypeError {
+						self.type_error(TypeError {
 							message: format!("Unable to iterate over \"{}\"", t),
 							span: iterable.span.clone(),
 						});
@@ -1403,7 +1405,7 @@ impl<'a> TypeChecker<'a> {
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
-						self.type_error(&type_error);
+						self.type_error(type_error);
 					}
 					_ => {}
 				};
@@ -1588,7 +1590,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify parent is actually a known Class/Resource and get their env
 				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {
-					let t = resolve_user_defined_type(parent_type, env, stmt.idx).unwrap_or_else(|e| self.type_error(&e));
+					let t = resolve_user_defined_type(parent_type, env, stmt.idx).unwrap_or_else(|e| self.type_error(e));
 					if *is_resource {
 						if let Type::Resource(ref class) = *t {
 							(Some(t), Some(class.env.get_ref()))
@@ -1625,7 +1627,7 @@ impl<'a> TypeChecker<'a> {
 				});
 				match env.define(name, SymbolKind::Type(class_type), StatementIdx::Top) {
 					Err(type_error) => {
-						self.type_error(&type_error);
+						self.type_error(type_error);
 					}
 					_ => {}
 				};
@@ -1642,7 +1644,7 @@ impl<'a> TypeChecker<'a> {
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
-							self.type_error(&type_error);
+							self.type_error(type_error);
 						}
 						_ => {}
 					};
@@ -1667,7 +1669,7 @@ impl<'a> TypeChecker<'a> {
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
-							self.type_error(&type_error);
+							self.type_error(type_error);
 						}
 						_ => {}
 					};
@@ -1688,7 +1690,7 @@ impl<'a> TypeChecker<'a> {
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
-						self.type_error(&type_error);
+						self.type_error(type_error);
 					}
 					_ => {}
 				};
@@ -1788,7 +1790,7 @@ impl<'a> TypeChecker<'a> {
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
-							self.type_error(&type_error);
+							self.type_error(type_error);
 						}
 						_ => {}
 					};
@@ -1801,7 +1803,7 @@ impl<'a> TypeChecker<'a> {
 						Ok(kind) => match &*kind {
 							SymbolKind::Type(_type) => Some(*_type),
 							_ => {
-								self.type_error(&TypeError {
+								self.type_error(TypeError {
 									message: format!("Expected {} to be a type", parent),
 									span: parent.span.clone(),
 								});
@@ -1809,14 +1811,14 @@ impl<'a> TypeChecker<'a> {
 							}
 						},
 						Err(type_error) => {
-							self.type_error(&type_error);
+							self.type_error(type_error);
 							None
 						}
 					})
 					.collect::<Vec<_>>();
 
 				if let Err(e) = add_parent_members_to_struct_env(&extends_types, name, &mut struct_env) {
-					self.type_error(&e);
+					self.type_error(e);
 				}
 				match env.define(
 					name,
@@ -1828,7 +1830,7 @@ impl<'a> TypeChecker<'a> {
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
-						self.type_error(&type_error);
+						self.type_error(type_error);
 					}
 					_ => {}
 				};
@@ -1841,10 +1843,48 @@ impl<'a> TypeChecker<'a> {
 
 				match env.define(name, SymbolKind::Type(enum_type_ref), StatementIdx::Top) {
 					Err(type_error) => {
-						self.type_error(&type_error);
+						self.type_error(type_error);
 					}
 					_ => {}
 				};
+			}
+			StmtKind::TryCatch {
+				try_statements,
+				catch_block,
+				finally_statements,
+			} => {
+				// Create a new environment for the try block
+				let try_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.flight, stmt.idx);
+				try_statements.set_env(try_env);
+				self.inner_scopes.push(try_statements);
+
+				// Create a new environment for the catch block
+				if let Some(catch_block) = catch_block {
+					let mut catch_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.flight, stmt.idx);
+
+					// Add the exception variable to the catch block
+					if let Some(exception_var) = &catch_block.exception_var {
+						match catch_env.define(
+							exception_var,
+							SymbolKind::make_variable(self.types.string(), false, env.flight),
+							StatementIdx::Top,
+						) {
+							Err(type_error) => {
+								self.type_error(type_error);
+							}
+							_ => {}
+						}
+					}
+					catch_block.statements.set_env(catch_env);
+					self.inner_scopes.push(&catch_block.statements);
+				}
+
+				// Create a new environment for the finally block
+				if let Some(finally_statements) = finally_statements {
+					let finally_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.flight, stmt.idx);
+					finally_statements.set_env(finally_env);
+					self.inner_scopes.push(finally_statements);
+				}
 			}
 		}
 	}
@@ -1913,7 +1953,7 @@ impl<'a> TypeChecker<'a> {
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
-					self.type_error(&type_error);
+					self.type_error(type_error);
 				}
 				_ => {}
 			};
@@ -2047,7 +2087,7 @@ impl<'a> TypeChecker<'a> {
 								StatementIdx::Top,
 							) {
 								Err(type_error) => {
-									self.type_error(&type_error);
+									self.type_error(type_error);
 								}
 								_ => {}
 							}
@@ -2072,7 +2112,7 @@ impl<'a> TypeChecker<'a> {
 								StatementIdx::Top,
 							) {
 								Err(type_error) => {
-									self.type_error(&type_error);
+									self.type_error(type_error);
 								}
 								_ => {}
 							}
@@ -2119,13 +2159,13 @@ impl<'a> TypeChecker<'a> {
 					if let Some(var) = var.as_variable() {
 						var
 					} else {
-						self.variable_error(&TypeError {
+						self.variable_error(TypeError {
 							message: format!("Expected identifier {}, to be a variable, but it's a {}", symbol, var),
 							span: symbol.span.clone(),
 						})
 					}
 				}
-				Err(type_error) => self.variable_error(&type_error),
+				Err(type_error) => self.variable_error(type_error),
 			},
 			Reference::NestedIdentifier { object, property } => {
 				// There's a special case where the object is actually a type and the property is either a static method or an enum variant.
@@ -2251,7 +2291,7 @@ impl<'a> TypeChecker<'a> {
 	fn get_property_from_class(&mut self, class: &Class, property: &Symbol) -> VariableInfo {
 		match class.env.lookup(property, None) {
 			Ok(field) => field.as_variable().expect("Expected property to be a variable"),
-			Err(type_error) => self.variable_error(&type_error),
+			Err(type_error) => self.variable_error(type_error),
 		}
 	}
 }

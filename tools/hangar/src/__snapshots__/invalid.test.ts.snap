@@ -163,6 +163,11 @@ Error at struct_expansion.w:7:15 | Unknown parser error.
 Error at struct_expansion.w:11:3 | Unknown symbol \\"handler\\""
 `;
 
+exports[`try_no_catch_or_finally.w > wing test (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 1 error(s)
+Error at try_no_catch_or_finally.w:1:1 | Missing \`catch\` or \`finally\` blocks for this try statement"
+`;
+
 exports[`types_string_interpolation.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 2 error(s)
 Error at types_string_interpolation.w:3:12 | Expected type to be one of \\"str,num\\", but got \\"bool\\" instead
@@ -189,9 +194,10 @@ Error at unimplemented_grammar.w:5:9 | expression \\"await_expression\\" is not 
 `;
 
 exports[`unknown_symbol.w > wing test (--target sim) - invalid > stderr 1`] = `
-"Compilation failed with 2 error(s)
-Error at unknown_symbol.w:1:18 | Unknown symbol \\"cloud\\"
-Error at unknown_symbol.w:3:13 | Unknown symbol \\"y\\""
+"Compilation failed with 3 error(s)
+Error at unknown_symbol.w:3:18 | Unknown symbol \\"clod\\"
+Error at unknown_symbol.w:6:13 | Unknown symbol \\"y\\"
+Error at unknown_symbol.w:17:25 | Unknown symbol \\"method_which_is_not_part_of_bucket_api\\""
 `;
 
 exports[`use_before_defined.w > wing test (--target sim) - invalid > stderr 1`] = `
