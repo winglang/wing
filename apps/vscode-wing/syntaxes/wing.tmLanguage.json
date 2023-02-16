@@ -15,34 +15,37 @@
     {
       "include": "#type-primitive"
     },
-		{
-			"include": "#statement"
-		},
+    {
+      "include": "#statement"
+    },
     {
       "include": "#constants"
     },
     {
       "include": "#identifiers"
+    },
+    {
+      "include": "#members"
     }
   ],
   "repository": {
-		"template-string": {
-			"name": "string.quoted.double",
-			"begin": "\"",
-			"end": "\"",
-			"patterns": [
-				{
-					"include": "#template-element"
-				},
-				{
-					"include": "#string-character-escape"
-				}
-			]
-		},
-		"string-character-escape": {
-			"name": "constant.character.escape.wing",
-			"match": "\\\\(x\\h{2}|[0-2][0-7]{0,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.|$)"
-		},
+    "template-string": {
+      "name": "string.quoted.double.wing",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "include": "#template-element"
+        },
+        {
+          "include": "#string-character-escape"
+        }
+      ]
+    },
+    "string-character-escape": {
+      "name": "constant.character.escape.wing",
+      "match": "\\\\(x\\h{2}|[0-2][0-7]{0,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.|$)"
+    },
     "template-element": {
       "patterns": [
         {
@@ -58,41 +61,89 @@
             "0": {
               "name": "punctuation.definition.template-expression.end.wing"
             }
-          }
+          },
+          "patterns": [
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "#template-string"
+            },
+            {
+              "include": "#numbers"
+            },
+            {
+              "include": "#statement"
+            },
+            {
+              "include": "#constants"
+            },
+            {
+              "include": "#identifiers"
+            }
+          ]
         }
       ]
     },
     "comment": {
       "patterns": [
         {
-          "name": "comment.line",
+          "name": "comment.line.wing",
           "match": "//.*"
         },
         {
-          "name": "comment.block",
+          "name": "comment.block.wing",
           "begin": "/\\*",
           "end": "\\*/"
         }
       ]
     },
-		"statement": {
-			"patterns": [
-				{
-					"include": "#comment"
-				}
-			]
-		},
+    "statement": {
+      "patterns": [
+        {
+          "include": "#comment"
+        }
+      ]
+    },
     "keywords": {
       "patterns": [
         {
-          "name": "keyword.control.wing",
-          "match": "\\b(?:extends|as|class|else|for|from|if|in|new|return|inflight|use|fn|resource|be|let|break|continue|protected|internal|rw|try|throw|catch|finally|bring|struct|def|shape)\\b"
+          "name": "keyword.control.flow.wing",
+          "match": "\\b(?:else|if|return|try|catch|finally|bring|as)\\b"
+        },
+        {
+          "name": "keyword.control.loop.wing",
+          "match": "\\b(?:for|in|break|continue)\\b"
+        },
+        {
+          "name": "keyword.operator.new.wing",
+          "match": "\\b(?:new)\\b"
+        },
+        {
+          "name": "storage.modifier.wing",
+          "match": "\\b(?:inflight|preflight|var|let|protected|internal|extends)\\b"
+        },
+        {
+          "name": "storage.type.wing",
+          "match": "\\b(?:class|resource|struct|enum)\\b"
+        },
+        {
+          "name": "support.function.wing",
+          "match": "\\b(?:print|assert|throw|panic)\\b"
         }
       ]
     },
     "type-primitive": {
-      "name": "support.type.wing",
-      "match": "\\b(?:void|str|num|bool|any|Map|Set|MutMap|MutSet|Array|MutArray|Promise)\\b"
+      "patterns": [
+        {
+          "name": "support.type.wing",
+          "match": "\\b(?:void|any)\\b"
+        },
+        {
+          "name": "support.class.wing",
+          "match": "\\b(?:void|str|num|bool|any|duration|Map|Set|MutMap|MutSet|Array|MutArray|Promise|Json|MutJson)\\b"
+        }
+      ]
     },
     "numbers": {
       "patterns": [
@@ -105,15 +156,15 @@
     "constants": {
       "patterns": [
         {
-          "name": "constant.language.this",
+          "name": "constant.language.this.wing",
           "match": "(?<!\\.|\\$)\\b(this)\\b(?!\\$)"
         },
         {
-          "name": "constant.language.boolean",
+          "name": "constant.language.boolean.wing",
           "match": "(?<!\\.|\\$)\\b(true|false)\\b(?!\\$)"
         },
         {
-          "name": "constant.language.null",
+          "name": "constant.language.null.wing",
           "match": "(?<!\\.|\\$)\\b(nil)\\b(?!\\$)"
         }
       ]
@@ -121,8 +172,20 @@
     "identifiers": {
       "patterns": [
         {
-          "name": "variable",
+          "name": "variable.wing",
           "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+        }
+      ]
+    },
+    "members": {
+      "patterns": [
+        {
+          "match": "\\.([a-zA-Z_][a-zA-Z0-9_]*)\\(",
+          "captures": {
+            "1": {
+              "name": "entity.name.function.wing"
+            }
+          }
         }
       ]
     }
