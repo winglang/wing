@@ -1,4 +1,4 @@
-use lsp_types::Position;
+use lsp_types::{Position, Range};
 use tree_sitter::Point;
 
 use crate::debug;
@@ -29,8 +29,8 @@ impl WingSpan {
 		}
 	}
 
-	pub fn range(self: &Self) -> lsp_types::Range {
-		lsp_types::Range {
+	pub fn range(self: &Self) -> Range {
+		Range {
 			start: Position {
 				line: self.start.row as u32,
 				character: self.start.column as u32,
