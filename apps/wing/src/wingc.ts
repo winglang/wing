@@ -15,11 +15,59 @@ export type WingCompilerFunction =
   | "wingc_on_semantic_tokens";
 
 export interface WingCompilerLoadOptions {
+  /**
+   * Additional imports to pass to the WASI instance. Imports objects/functions that WASM code can invoke.
+   *
+   * @default `{ wasi_snapshot_preview1: wasi.wasiImport, env: { send_notification: () => {} }`
+   */
   imports?: Record<string, any>;
+
+  /**
+   * Preopen directories for the WASI instance.
+   * These are directories that the sandboxed WASI instance can access.
+   * The also represent mappings from the WASI instance's filesystem to the host filesystem. (map key -> value)
+   *
+   * The following directories are always preopened:
+   * - `/`
+   * - `@winglang/sdk` module directory
+   *
+   * @default - No additional preopens are added other than the above
+   */
   preopens?: Record<string, string>;
+
+  /**
+   * Environment variables to pass to the WASI instance.
+   *
+   * The following variables are always set:
+   *
+   * - Current process environment variables
+   * - `RUST_BACKTRACE`=`full`
+   * - `WINGSDK_MANIFEST_ROOT`=The path to the `@winglang/sdk` module
+   *
+   *
+   * @default - No additional envs are added other than the above
+   */
   env?: Record<string, string>;
+
+  /**
+   * A filesystem for the WASI instance to use.
+   *
+   * @default - The `fs` module from Node.js
+   */
   fs?: any;
+
+  /**
+   * The bytes of of the `wingc.wasm` data loaded into memory.
+   *
+   * @default - The wingc.wasm bundled with this package is read from disk.
+   */
   wingcWASMData?: Uint8Array;
+
+  /**
+   * The path to a directory containing the `@winglang/sdk` module
+   *
+   * @default - The `@winglang/sdk` module is resolved via `require.resolve()`.
+   */
   wingsdkManifestRoot?: string;
 }
 
@@ -78,6 +126,7 @@ export async function load(options: WingCompilerLoadOptions) {
   log("instantiating wingc WASM module with importObject: %o", importObject);
   const instance = new WebAssembly.Instance(mod, importObject);
 
+  log("starting wingc WASM module");
   wasi.start(instance);
 
   return instance;
