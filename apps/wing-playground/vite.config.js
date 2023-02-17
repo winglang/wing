@@ -4,6 +4,7 @@ import { nodePolyfills } from "vite-plugin-node-polyfills";
 /** @type {import('vite').UserConfig} */
 export default {
   resolve: {
+    preserveSymlinks: true,
     alias: {
       "wasi-js/dist/bindings/node": "wasi-js/dist/bindings/browser",
     },
@@ -12,6 +13,9 @@ export default {
   worker: {
     format: "es",
     plugins: [nodePolyfills()],
+    rollupOptions: {
+      preserveSymlinks: true,
+    },
   },
   build: {
     target: "es2022",
@@ -29,6 +33,7 @@ export default {
     include: ["winglang"],
     esbuildOptions: {
       target: "es2022",
+      preserveSymlinks: true,
     },
     force: true,
   },
