@@ -10,6 +10,7 @@
   "engines": {
     "node": ">=v18.0.0"
   },
+  "main": "dist/lib.js",
   "bin": {
     "wing": "./bin/wing"
   },
@@ -35,7 +36,8 @@
     "is-installed-globally": "^0.4.0",
     "open": "^8.4.0",
     "update-notifier": "^6.0.2",
-    "vscode-languageserver": "^8.0.2"
+    "vscode-languageserver": "^8.0.2",
+    "wasi-js": "^1.7.3"
   },
   "devDependencies": {
     "@types/debug": "^4.1.7",

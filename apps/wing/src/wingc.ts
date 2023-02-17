@@ -1,14 +1,11 @@
 import debug from "debug";
-import { readFile } from "fs/promises";
-import { resolve } from "path";
-import { WASI } from "wasi";
+import { readFileSync } from "fs";
 import { normalPath } from "./util";
+import WASI from "wasi-js";
+import { resolve } from "path";
+import wasiBindings from "wasi-js/dist/bindings/node";
 
 const log = debug("wing:compile");
-
-const WINGSDK_RESOLVED_PATH = require.resolve("@winglang/sdk");
-const WINGSDK_MANIFEST_ROOT = resolve(WINGSDK_RESOLVED_PATH, "../..");
-const WINGC_WASM_PATH = resolve(__dirname, "../wingc.wasm");
 
 export type WingCompilerFunction =
   | "wingc_compile"
@@ -21,9 +18,16 @@ export interface WingCompilerLoadOptions {
   imports?: Record<string, any>;
   preopens?: Record<string, string>;
   env?: Record<string, string>;
+  fs?: any;
+  wingcWASMData?: Uint8Array;
+  wingsdkManifestRoot?: string;
 }
 
 export async function load(options: WingCompilerLoadOptions) {
+  const WINGSDK_MANIFEST_ROOT =
+    options.wingsdkManifestRoot ??
+    resolve(require.resolve("@winglang/sdk"), "../..");
+
   const preopens = {
     "/": "/",
     // .jsii access
@@ -39,7 +43,14 @@ export async function load(options: WingCompilerLoadOptions) {
     }
   }
 
+  // check if running in browser
+  const bindings = {
+    ...wasiBindings,
+    fs: options.fs ?? require("fs"),
+  };
+
   const wasi = new WASI({
+    bindings,
     env: {
       ...process.env,
       RUST_BACKTRACE: "full",
@@ -51,18 +62,23 @@ export async function load(options: WingCompilerLoadOptions) {
 
   const importObject = {
     wasi_snapshot_preview1: wasi.wasiImport,
+    env: {
+      // This function is used only by the lsp
+      send_notification: () => {},
+    },
     ...(options.imports ?? {}),
-  };
+  } as any;
 
   log("compiling wingc WASM module");
-  const wasm = await WebAssembly.compile(await readFile(WINGC_WASM_PATH));
+  const binary =
+    options.wingcWASMData ??
+    new Uint8Array(readFileSync(resolve(__dirname, "../wingc.wasm")));
+  const mod = new WebAssembly.Module(binary);
 
-  log("instantiating wingc WASM module");
+  log("instantiating wingc WASM module with importObject: %o", importObject);
+  const instance = new WebAssembly.Instance(mod, importObject);
 
-  const instance = await WebAssembly.instantiate(wasm, importObject);
-  log("invoking wingc with importObject: %o", importObject);
-
-  wasi.initialize(instance);
+  wasi.start(instance);
 
   return instance;
 }
@@ -79,7 +95,7 @@ const HIGH_MASK = BigInt(32);
  *
  * ### IMPORTANT
  * For Windows support, ensure all paths provided by args or env are normalized to use forward slashes.
- * 
+ *
  * ### Assumptions
  * 1. The called WASM function is expecting a pointer and a length representing a string
  * 2. The string will be UTF-8 encoded
