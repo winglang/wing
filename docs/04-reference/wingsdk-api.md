@@ -3676,18 +3676,12 @@ Inflight client for `IScheduleOnTickHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IScheduleOnTickHandlerClient.handle"></a>
 
 ```wing
-handle(message: str): void
+handle(): void
 ```
 
 **Inflight client:** [true](#true)
 
 Function that will be called when a message is received from the schedule.
-
-###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.IScheduleOnTickHandlerClient.handle.parameter.message"></a>
-
-- *Type:* str
-
----
 
 
 ### ITopicClient <a name="ITopicClient" id="@winglang/sdk.cloud.ITopicClient"></a>

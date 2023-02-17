@@ -101,5 +101,5 @@ export interface IScheduleOnTickHandlerClient {
    * Function that will be called when a message is received from the schedule.
    * @inflight
    */
-  handle(message: string): Promise<void>;
+  handle(): Promise<void>;
 }

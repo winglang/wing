@@ -10,7 +10,7 @@ export class ScheduleOnTickHandlerClient
   constructor({ handler }: { handler: IFunctionHandlerClient }) {
     this.handler = handler;
   }
-  public async handle(event: any) {
-    await this.handler.handle(event.detail);
+  public async handle() {
+    await this.handler.handle("");
   }
 }
