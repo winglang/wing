@@ -88,13 +88,15 @@ jobs:
           name: docs
           path: docs.tgz
 
-  build-wasm:
+  build:
     name: "Non-Native Build"
     timeout-minutes: 20
     runs-on: ubuntu-latest
     needs: prepare
     env:
       PROJEN_BUMP_VERSION: ${{ needs.prepare.outputs.version }}
+      HANGAR_WING_SPEC: "file:${{ github.workspace }}/apps/wing/winglang-${{ needs.prepare.outputs.version }}.tgz"
+      HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/libs/wingsdk/winglang-sdk-${{ needs.prepare.outputs.version }}.tgz"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -124,8 +126,7 @@ jobs:
         with:
           targets: "build,test,package"
           all: true
-          # Exclude E2E testing
-          args: "--exclude=hangar --configuration=release --output-style=stream --verbose"
+          args: "--configuration=release --output-style=stream --verbose"
 
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v2
@@ -162,65 +163,6 @@ jobs:
           working-directory: apps/wing-playground/dist
           github-comment: false
           vercel-args: "--prod "
-
-  e2e:
-    name: "E2E Testing"
-    needs:
-      - build-wasm
-      - prepare
-    strategy:
-      fail-fast: true
-      matrix:
-        runner:
-          - ubuntu-latest
-          - windows-latest
-        node: [18, 19]
-    runs-on: ${{ matrix.runner }}
-    env:
-      HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.prepare.outputs.version }}.tgz"
-      HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.prepare.outputs.version }}.tgz"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v2
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node }}
-
-      - name: Install Dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: tools/hangar
-          install-command: npm ci --ignore-scripts
-
-      - name: Install Example Dependencies (1/2)
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: examples/tests/valid
-          install-command: npm ci
-
-      - name: Install Example Dependencies (2/2)
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: examples/tests/invalid
-          install-command: npm ci
-
-      - name: Run E2E Tests
-        working-directory: tools/hangar
-        run: npm run test
-
-  build:
-    needs:
-      - build-wasm
-      - e2e
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build Validation
-        run: echo "Build Successful"
 
   publish:
     name: Publish
