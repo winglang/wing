@@ -11,8 +11,8 @@
   "author": "Monada",
   "dependencies": {
     "@cowasm/memfs": "^3.5.1",
-    "@winglang/sdk": "file:../../libs/wingsdk",
-    "winglang": "file:../../apps/wing"
+    "winglang": "file:../../apps/wing",
+    "@winglang/sdk": "file:../../libs/wingsdk"
   },
   "devDependencies": {
     "vite": "^4.1.1",

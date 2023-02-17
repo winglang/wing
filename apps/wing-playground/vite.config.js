@@ -1,8 +1,8 @@
 // idk how many of these are actually needed
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
-export default 
-{
+/** @type {import('vite').UserConfig} */
+export default {
   resolve: {
     alias: {
       "wasi-js/dist/bindings/node": "wasi-js/dist/bindings/browser",
@@ -22,14 +22,14 @@ export default
   },
   server: {
     fs: {
-      allow: ['..']
-    }
+      allow: [".."],
+    },
   },
   optimizeDeps: {
     include: ["winglang"],
-    esbuildOptions : {
-        target: "es2022"
+    esbuildOptions: {
+      target: "es2022",
     },
-    force: true
-}
+    force: true,
+  },
 };

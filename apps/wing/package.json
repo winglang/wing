@@ -10,7 +10,7 @@
   "engines": {
     "node": ">=v18.0.0"
   },
-  "main": "dist/lib.js",
+  "main": "./dist/index.js",
   "bin": {
     "wing": "./bin/wing"
   },
