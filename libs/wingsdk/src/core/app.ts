@@ -12,6 +12,7 @@ import { Construct, IConstruct } from "constructs";
 import { IPolyconFactory, Polycons } from "polycons";
 import stringify from "safe-stable-stringify";
 import { PluginManager } from "./plugin-manager";
+import { IResource } from "./resource";
 import { synthesizeTree } from "./tree";
 import { Logger } from "../cloud/logger";
 
@@ -84,6 +85,8 @@ export class CdktfApp extends Construct implements IApp {
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
   private readonly pluginManager: PluginManager;
+  private synthed: boolean;
+  private synthedOutput: string | undefined;
 
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
@@ -109,6 +112,7 @@ export class CdktfApp extends Construct implements IApp {
     this.cdktfApp = cdktfApp;
     this.cdktfStack = cdktfStack;
     this.terraformManifestPath = join(this.outdir, "main.tf.json");
+    this.synthed = false;
 
     // register a logger for this app.
     Logger.register(this);
@@ -121,6 +125,13 @@ export class CdktfApp extends Construct implements IApp {
    * for unit testing.
    */
   public synth(): string {
+    if (this.synthed) {
+      return this.synthedOutput!;
+    }
+
+    // call preSynthesize() on every construct in the tree
+    preSynthesizeAllConstructs(this);
+
     // synthesize Terraform files in `outdir/.tmp.cdktf.out/stacks/root`
     this.pluginManager.preSynth(this);
     this.cdktfApp.synth();
@@ -146,7 +157,11 @@ export class CdktfApp extends Construct implements IApp {
 
     this.pluginManager.postSynth(tfConfig, `${this.outdir}/main.tf.json`);
     this.pluginManager.validate(tfConfig);
-    return stringify(cleaned, null, 2) ?? "";
+
+    this.synthed = true;
+    this.synthedOutput = stringify(cleaned, null, 2) ?? "";
+
+    return this.synthedOutput;
   }
 
   /**
@@ -212,4 +227,12 @@ function cleanTerraformConfig(template: any): any {
   cleaned.terraform = undefined;
   cleaned.provider = undefined;
   return cleaned;
+}
+
+export function preSynthesizeAllConstructs(app: IApp): void {
+  for (const c of app.node.findAll()) {
+    if (typeof (c as IResource)._preSynthesize === "function") {
+      (c as IResource)._preSynthesize();
+    }
+  }
 }

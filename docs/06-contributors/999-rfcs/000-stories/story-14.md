@@ -1,6 +1,6 @@
-# User Story 13 - Task List with Json and duration
+# User Story 14 - Task List with Json and duration
 
-> **Status**: Expected released on 2023/03/04
+> **Status**: Expected released on 2023/03/02
 
 The following code is an iteration of Wing's task list.
 This version of it includes the following functional changes:
