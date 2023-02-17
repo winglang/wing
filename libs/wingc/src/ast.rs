@@ -119,7 +119,7 @@ impl Display for TypeAnnotation {
 			TypeAnnotation::MutSet(t) => write!(f, "MutSet<{}>", t),
 			TypeAnnotation::FunctionSignature(sig) => write!(f, "{}", sig),
 			TypeAnnotation::UserDefined(user_defined_type) => {
-				write!(f, "{}", user_defined_type.root)
+				write!(f, "{}", user_defined_type.root.name)
 			}
 		}
 	}
@@ -261,6 +261,17 @@ pub enum StmtKind {
 		name: Symbol,
 		values: IndexSet<Symbol>,
 	},
+	TryCatch {
+		try_statements: Scope,
+		catch_block: Option<CatchBlock>,
+		finally_statements: Option<Scope>,
+	},
+}
+
+#[derive(Debug)]
+pub struct CatchBlock {
+	pub statements: Scope,
+	pub exception_var: Option<Symbol>,
 }
 
 #[derive(Debug)]

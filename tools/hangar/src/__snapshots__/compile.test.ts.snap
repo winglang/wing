@@ -529,6 +529,155 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`bring_jsii_path.w > wing compile --target tf-aws > index.js 1`] = `
+"async handle(m) { const { greeting } = this; {
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(greeting === \\"Hello, wingnuts\\")'\`)})((greeting === \\"Hello, wingnuts\\"))};
+} };"
+`;
+
+exports[`bring_jsii_path.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_testsayhello_IamRole_CD3CFB9C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:say_hello/IamRole",
+            "uniqueId": "root_testsayhello_IamRole_CD3CFB9C",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_testsayhello_IamRolePolicy_265A46FB": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:say_hello/IamRolePolicy",
+            "uniqueId": "root_testsayhello_IamRolePolicy_265A46FB",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_testsayhello_IamRole_CD3CFB9C.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_testsayhello_IamRolePolicyAttachment_1B179C34": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:say_hello/IamRolePolicyAttachment",
+            "uniqueId": "root_testsayhello_IamRolePolicyAttachment_1B179C34",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_testsayhello_IamRole_CD3CFB9C.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_testsayhello_8E3F8CF7": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:say_hello/Default",
+            "uniqueId": "root_testsayhello_8E3F8CF7",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "test-say_hello-c867d9d9",
+          },
+        },
+        "function_name": "test-say_hello-c867d9d9",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_testsayhello_IamRole_CD3CFB9C.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_testsayhello_Code_D4453363.bucket}",
+        "s3_key": "\${aws_s3_object.root_testsayhello_S3Object_A9281CAB.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_testsayhello_Code_D4453363": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:say_hello/Code",
+            "uniqueId": "root_testsayhello_Code_D4453363",
+          },
+        },
+        "bucket_prefix": "code-c89e1bce-",
+      },
+    },
+    "aws_s3_object": {
+      "root_testsayhello_S3Object_A9281CAB": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:say_hello/S3Object",
+            "uniqueId": "root_testsayhello_S3Object_A9281CAB",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_testsayhello_Code_D4453363.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`bring_jsii_path.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+const jsii_code_samples = require(\\"./node_modules/jsii-code-samples\\");
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"bring_jsii_path\\", plugins: $plugins });
+  
+  const hello = new jsii_code_samples.HelloWorld();
+  const greeting = (hello.sayHello(\\"wingnuts\\"));
+  new cloud.Function(this,\\"test:say_hello\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5d209e0c3acca40c825662cab73c204803d9dd9f7903de90d0da6dc99ea7fa35/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+      
+      data: {
+        greeting: greeting,
+      },
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
 exports[`capture_containers.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(s) { const { arr, arr_of_map, my_map, my_set } = this; {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(0)) === \\"hello\\")'\`)})(((await arr.at(0)) === \\"hello\\"))};
@@ -1344,7 +1493,7 @@ exports[`capture_resource_and_data.w > wing compile --target tf-aws > main.tf.js
             "uniqueId": "root_test_IamRolePolicy_474A6820",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:SendMessage\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"sqs:PurgeQueue\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"sqs:GetQueueAttributes\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"sqs:SendMessage\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"sqs:PurgeQueue\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"sqs:GetQueueAttributes\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
       },
     },
@@ -1591,7 +1740,7 @@ exports[`captures.w > wing compile --target tf-aws > main.tf.json 1`] = `
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_IamRolePolicy_99F6B872",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.root_cloudQueueOnMessagee46e5cb7_IamRole_D8F85094.name}",
       },
     },
@@ -2407,7 +2556,7 @@ exports[`file_counter.w > wing compile --target tf-aws > main.tf.json 1`] = `
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_IamRolePolicy_99F6B872",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:GetItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:GetItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.root_cloudQueueOnMessagee46e5cb7_IamRole_D8F85094.name}",
       },
     },
@@ -2760,7 +2909,7 @@ exports[`hello.w > wing compile --target tf-aws > main.tf.json 1`] = `
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_IamRolePolicy_99F6B872",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.root_cloudQueueOnMessagee46e5cb7_IamRole_D8F85094.name}",
       },
     },
@@ -3558,9 +3707,10 @@ async foo_get() {
 `;
 
 exports[`resource.w > wing compile --target tf-aws > index.js 1`] = `
-"async handle() { const { res } = this; {
+"async handle() { const { bucket, res } = this; {
   const s = (await res.my_method());
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s === \\"counter is: 1\\")'\`)})((s === \\"counter is: 1\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await bucket.list()).length === 1)'\`)})(((await bucket.list()).length === 1))};
 } };"
 `;
 
@@ -3618,7 +3768,7 @@ exports[`resource.w > wing compile --target tf-aws > main.tf.json 1`] = `
             "uniqueId": "root_test_IamRolePolicy_474A6820",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}\\",\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}\\",\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}\\",\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}\\",\\"\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_Bar_Foo_cloudCounter_616CF239.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:GetItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_Bar_Foo_cloudCounter_616CF239.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_Bar_Foo_cloudCounter_616CF239.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:GetItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_Bar_Foo_cloudCounter_616CF239.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
       },
     },
@@ -3644,7 +3794,7 @@ exports[`resource.w > wing compile --target tf-aws > main.tf.json 1`] = `
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_7c00f6db": "\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.bucket}",
+            "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
             "DYNAMODB_TABLE_NAME_c7446906": "\${aws_dynamodb_table.root_Bar_Foo_cloudCounter_616CF239.name}",
             "WING_FUNCTION_NAME": "test-c8b6eece",
           },
@@ -3659,14 +3809,14 @@ exports[`resource.w > wing compile --target tf-aws > main.tf.json 1`] = `
       },
     },
     "aws_s3_bucket": {
-      "root_Bar_cloudBucket_5110D8F6": {
+      "root_cloudBucket_4F3C4F53": {
         "//": {
           "metadata": {
-            "path": "root/Default/Bar/cloud.Bucket/Default",
-            "uniqueId": "root_Bar_cloudBucket_5110D8F6",
+            "path": "root/Default/cloud.Bucket/Default",
+            "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
-        "bucket_prefix": "cloud-bucket-c8028e1e-",
+        "bucket_prefix": "cloud-bucket-c87175e7-",
       },
       "root_test_Code_2D131EC2": {
         "//": {
@@ -3679,29 +3829,29 @@ exports[`resource.w > wing compile --target tf-aws > main.tf.json 1`] = `
       },
     },
     "aws_s3_bucket_public_access_block": {
-      "root_Bar_cloudBucket_PublicAccessBlock_C309B1E2": {
+      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Bar/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "root_Bar_cloudBucket_PublicAccessBlock_C309B1E2",
+            "path": "root/Default/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
           },
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.bucket}",
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true,
       },
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "root_Bar_cloudBucket_Encryption_4B5D823F": {
+      "root_cloudBucket_Encryption_8ED0CD9C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Bar/cloud.Bucket/Encryption",
-            "uniqueId": "root_Bar_cloudBucket_Encryption_4B5D823F",
+            "path": "root/Default/cloud.Bucket/Encryption",
+            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_Bar_cloudBucket_5110D8F6.bucket}",
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -3770,11 +3920,11 @@ constructor() {
   Foo._annotateInflight(\\"foo_inc\\", {\\"this.c\\": { ops: [\\"dec\\", \\"inc\\", \\"peek\\"]}});
   Foo._annotateInflight(\\"foo_get\\", {\\"this.c\\": { ops: [\\"dec\\", \\"inc\\", \\"peek\\"]}});
   class Bar extends $stdlib.core.Resource {
-  constructor(scope, id, name) {
+  constructor(scope, id, name, b) {
   	super(scope, id);
   {
     this.name = name;
-    this.b = new cloud.Bucket(this,\\"cloud.Bucket\\");
+    this.b = b;
     this.foo = new Foo(this,\\"Foo\\");
   }
   }
@@ -3788,11 +3938,16 @@ constructor() {
   }
   }
   Bar._annotateInflight(\\"my_method\\", {\\"this.b\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.foo\\": { ops: [\\"foo_get\\", \\"foo_inc\\"]}, \\"this.name\\": { ops: []}});
-  const res = new Bar(this,\\"Bar\\",\\"Arr\\");
+  const bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  const res = new Bar(this,\\"Bar\\",\\"Arr\\",bucket);
   new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.20a3bac6918ff352ca6c869d22d5803fccfc31d0f69d4a63d04477a4bf8863d8/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.e50bc85b13df379286b4aa72aa88788422e26d9146adbc9bba989a8a59253a73/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       resources: {
+        bucket: {
+          resource: bucket,
+          ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        },
         res: {
           resource: res,
           ops: [\\"my_method\\"]
@@ -4393,6 +4548,191 @@ constructor() {
       
     }
   }));
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`try_catch.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+}
+`;
+
+exports[`try_catch.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"try_catch\\", plugins: $plugins });
+  
+  let x = \\"\\";
+  try {
+  	{
+    {((msg) => {throw new Error(msg)})(\\"hello\\")};
+    x = \\"no way I got here\\";
+  }
+  } catch ($error_e) {
+  	const e = $error_e.message;
+  	{
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(e === \\"hello\\")'\`)})((e === \\"hello\\"))};
+    x = \\"caught\\";
+  }
+  } finally {
+  	{
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === \\"caught\\")'\`)})((x === \\"caught\\"))};
+    x = \\"finally\\";
+  };
+  }
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === \\"finally\\")'\`)})((x === \\"finally\\"))};
+  try {
+  	{
+    x = \\"I got here\\";
+  }
+  } catch ($error_e) {
+  	const e = $error_e.message;
+  	{
+    x = \\"caught\\";
+  }
+  } finally {
+  	{
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === \\"I got here\\")'\`)})((x === \\"I got here\\"))};
+    x = \\"finally\\";
+  };
+  }
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === \\"finally\\")'\`)})((x === \\"finally\\"))};
+  try {
+  	{
+    {((msg) => {throw new Error(msg)})(\\"hello\\")};
+  }
+  } catch  {
+  	
+  	
+  } finally {
+  	{
+    x = \\"finally with no catch\\";
+  };
+  }
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === \\"finally with no catch\\")'\`)})((x === \\"finally with no catch\\"))};
+  try {
+  	{
+  }
+  } catch  {
+  	
+  	
+  } finally {
+  	{
+    x = \\"finally with no catch and no exception\\";
+  };
+  }
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === \\"finally with no catch and no exception\\")'\`)})((x === \\"finally with no catch and no exception\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((() => {
+    try {
+    	{
+    }
+    } catch  {
+    	
+    	
+    } finally {
+    	{
+      return 1;
+    };
+    }
+  })()) === 1)'\`)})((((() => {
+    try {
+    	{
+    }
+    } catch  {
+    	
+    	
+    } finally {
+    	{
+      return 1;
+    };
+    }
+  })()) === 1))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((() => {
+    try {
+    	{
+      {((msg) => {throw new Error(msg)})(\\"\\")};
+    }
+    } catch  {
+    	
+    	{
+      return 2;
+    }
+    } finally {
+    	
+    }
+  })()) === 2)'\`)})((((() => {
+    try {
+    	{
+      {((msg) => {throw new Error(msg)})(\\"\\")};
+    }
+    } catch  {
+    	
+    	{
+      return 2;
+    }
+    } finally {
+    	
+    }
+  })()) === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((() => {
+    try {
+    	{
+      return 3;
+    }
+    } catch  {
+    	
+    	
+    } finally {
+    	{
+    };
+    }
+  })()) === 3)'\`)})((((() => {
+    try {
+    	{
+      return 3;
+    }
+    } catch  {
+    	
+    	
+    } finally {
+    	{
+    };
+    }
+  })()) === 3))};
 }
 }
 new MyApp().synth();"
