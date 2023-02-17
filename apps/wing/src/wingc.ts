@@ -57,7 +57,7 @@ export interface WingCompilerLoadOptions {
   fs?: any;
 
   /**
-   * The bytes of of the `wingc.wasm` data loaded into memory.
+   * The bytes of the `wingc.wasm` data loaded into memory.
    *
    * @default - The wingc.wasm bundled with this package is read from disk.
    */
