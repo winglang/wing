@@ -12,7 +12,7 @@ Error at ../../../../examples/tests/invalid/bring.w:1:1 | Redundant bring of \\"
 
 exports[`bring_jsii.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 2 error(s)
-Error at ../../../../examples/tests/invalid/bring_jsii.w:1:1 | bring \\"\\"jsii-code-samples\\"\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
+Error at ../../../../examples/tests/invalid/bring_jsii.w:1:1 | bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
 Error at ../../../../examples/tests/invalid/bring_jsii.w:4:1 | Cannot find module \\"foobar\\" in source directory"
 `;
 
