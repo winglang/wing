@@ -45,17 +45,18 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODEJS_VERSION }}
+      - namae: Install dependencies
+        if: steps.token-check.outputs.HAS_TOKEN == 'true'
+        run: npm ci
+        working-directory: "."
       - name: Build transitive dependency (wing-api-checker)
         if: steps.token-check.outputs.HAS_TOKEN == 'true'
-        run: npm ci && npm run build
+        run: npm run build
         working-directory: apps/wing-api-checker
       - name: Build transitive dependency (jsii-docgen)
         if: steps.token-check.outputs.HAS_TOKEN == 'true'
-        run: npm ci && npm run build
+        run: npm run build
         working-directory: apps/jsii-docgen
-      - name: Install dependencies
-        if: steps.token-check.outputs.HAS_TOKEN == 'true'
-        run: npm ci --ignore-scripts
       - name: build
         if: steps.token-check.outputs.HAS_TOKEN == 'true'
         run: npx projen build
