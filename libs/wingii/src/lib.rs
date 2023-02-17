@@ -179,8 +179,10 @@ pub mod type_system {
 
 		pub fn load_dep(&mut self, dep: &str, search_start: &str, opts: &AssemblyLoadOptions) -> Result<AssemblyName> {
 			let is_root = opts.root;
-			let module_dir = package_json::find_dependency_directory(dep, search_start)
-				.expect(format!("could not find module {} in {}", dep, search_start).as_str());
+			let module_dir = package_json::find_dependency_directory(dep, search_start).ok_or(format!(
+				"Unable to load \"{}\": Module not found in \"{}\"",
+				dep, search_start
+			))?;
 			self.load_module(
 				&module_dir,
 				&AssemblyLoadOptions {
