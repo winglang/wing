@@ -61,6 +61,17 @@ export class Bucket extends cloud.BucketBase {
     });
   }
 
+  // /** @internal */
+  // public bind(host: core.IInflightHost, ops: string[]): void {
+  //   if (!(host instanceof Function)) {
+  //     throw new Error("buckets can only be bound by cdk.Function for now");
+  //   }
+
+  //   if (ops.includes(cloud.BucketInflightMethods.PUT)) {
+
+  //   }
+  // }
+
   /** @internal */
   public _toInflight(): core.Code {
     return core.InflightClient.for(__filename, "BucketClient", [
@@ -72,3 +83,5 @@ export class Bucket extends cloud.BucketBase {
     return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
 }
+
+Bucket._annotateInflight("put", {});
