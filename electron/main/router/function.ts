@@ -13,6 +13,22 @@ type ResponseEnvelope =
       error: unknown;
     };
 
+interface ErrorLike {
+  message: string;
+}
+
+const isErrorLike = (value: unknown): value is ErrorLike => {
+  if (value instanceof Error) {
+    return true;
+  }
+
+  if (typeof value === "object" && value !== null && "message" in value) {
+    return true;
+  }
+
+  return false;
+};
+
 export const createFunctionRouter = () => {
   return router({
     "function.invoke": publicProcedure
@@ -36,7 +52,7 @@ export const createFunctionRouter = () => {
         } catch (error) {
           const response: ResponseEnvelope = {
             success: false,
-            error: error instanceof Error ? error.message : error,
+            error: isErrorLike(error) ? error.message : String(error),
           };
           return response;
         }

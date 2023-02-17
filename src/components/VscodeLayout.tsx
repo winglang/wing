@@ -71,6 +71,7 @@ export const VscodeLayout = ({
           compiler: true,
           console: true,
           simulator: true,
+          user: true,
         },
         text: searchText,
         timestamp: logsTimeFilter,

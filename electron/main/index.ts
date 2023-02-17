@@ -186,6 +186,9 @@ function createWindowManager() {
               sourcePath: event.sourcePath,
             });
           }
+          if (event.data.status === "failure") {
+            consoleLogger.error(event.data.error.message, "user");
+          }
         },
       });
 

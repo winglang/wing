@@ -2,7 +2,7 @@ import log from "electron-log";
 
 export type LogLevel = "verbose" | "info" | "warn" | "error";
 
-export type LogSource = "compiler" | "console" | "simulator";
+export type LogSource = "compiler" | "console" | "simulator" | "user";
 
 export interface TracingContext {
   sourcePath: string;
@@ -55,6 +55,15 @@ export const createConsoleLogger = (
     error(error, source, ctx) {
       log.error(error);
       const message = error instanceof Error ? error.message : `${error}`;
+      if (source === "user") {
+        this.messages.push({
+          timestamp: Date.now(),
+          level: "error",
+          message,
+          source,
+          ctx,
+        });
+      }
       onLog("error", message);
     },
   };

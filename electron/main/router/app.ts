@@ -40,6 +40,7 @@ export const createAppRouter = () => {
               compiler: z.boolean(),
               console: z.boolean(),
               simulator: z.boolean(),
+              user: z.boolean(),
             }),
             timestamp: z.number(),
             text: z.string(),
