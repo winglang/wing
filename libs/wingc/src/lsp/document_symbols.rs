@@ -1,6 +1,6 @@
 use crate::ast::{Scope, *};
 use crate::lsp::ast_traversal::{
-	get_expressions_from_statement, get_statements_from_scope_raw, get_symbols_from_expression,
+	get_expressions_from_statement, get_statements_from_scope_no_context, get_symbols_from_expression,
 	get_symbols_from_statement, TreeLocationContext,
 };
 use crate::lsp::sync::FILES;
@@ -48,7 +48,7 @@ fn create_symbols<'a>(scope: &'a Scope) -> Vec<DocumentSymbol> {
 	let mut document_symbols: Vec<DocumentSymbol> = vec![];
 	let mut raw_symbols: Vec<(TreeLocationContext<'a>, &'a Symbol)> = vec![];
 
-	let all_statements = get_statements_from_scope_raw(scope);
+	let all_statements = get_statements_from_scope_no_context(scope);
 	for context in all_statements {
 		raw_symbols.extend(get_symbols_from_statement(context));
 

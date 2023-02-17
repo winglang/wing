@@ -4,6 +4,7 @@ use crate::ast::ExprKind::*;
 use crate::ast::StmtKind::*;
 use crate::ast::{Scope, *};
 
+/// While traversing the AST, this represent the context of a given node.
 #[derive(Debug, Clone, Copy)]
 pub struct TreeLocationContext<'a> {
 	pub scope: &'a Scope,
@@ -11,8 +12,9 @@ pub struct TreeLocationContext<'a> {
 	pub expression: Option<&'a Expr>,
 }
 
+/// Traverse the AST and find the symbol at the given position.
 pub fn find_symbol<'a>(scope: &'a Scope, position: &'a Position) -> Option<(TreeLocationContext<'a>, &'a Symbol)> {
-	let all_statements = get_statements_from_scope_raw(scope);
+	let all_statements = get_statements_from_scope_no_context(scope);
 	for context in all_statements {
 		let statement = context.statement;
 		if !statement.span.contains(position) {
@@ -41,6 +43,7 @@ pub fn find_symbol<'a>(scope: &'a Scope, position: &'a Position) -> Option<(Tree
 	None
 }
 
+/// Traverse the given statement context and return all expressions inside it (recursive).
 pub fn get_expressions_from_statement<'a>(context: TreeLocationContext) -> Vec<TreeLocationContext> {
 	let mut return_expressions: Vec<TreeLocationContext> = vec![];
 	match &context.statement.kind {
@@ -199,6 +202,7 @@ pub fn get_expressions_from_statement<'a>(context: TreeLocationContext) -> Vec<T
 	return_expressions
 }
 
+/// Traverse the given expression context and return all expressions inside it, including itself (recursive).
 pub fn get_expressions_from_expression<'a>(context: TreeLocationContext) -> Vec<TreeLocationContext> {
 	let mut return_expressions = vec![context];
 
@@ -337,6 +341,7 @@ pub fn get_expressions_from_expression<'a>(context: TreeLocationContext) -> Vec<
 	return_expressions
 }
 
+/// Traverse the given statement context and return all statements inside it, including itself (recursive).
 pub fn get_statements_from_statement<'a>(context: TreeLocationContext) -> Vec<TreeLocationContext> {
 	let mut return_statements = vec![context];
 	match &context.statement.kind {
@@ -487,6 +492,7 @@ pub fn get_statements_from_statement<'a>(context: TreeLocationContext) -> Vec<Tr
 	return_statements
 }
 
+/// Traverse the given expression context and return all statements inside it (recursive).
 pub fn get_statements_from_expression<'a>(context: TreeLocationContext) -> Vec<TreeLocationContext> {
 	let mut return_statements = vec![];
 
@@ -616,6 +622,7 @@ pub fn get_statements_from_expression<'a>(context: TreeLocationContext) -> Vec<T
 	return_statements
 }
 
+/// Traverse the given scope context and return all statements inside it (recursive).
 pub fn get_statements_from_scope<'a>(context: TreeLocationContext) -> Vec<TreeLocationContext> {
 	let mut return_statements = vec![];
 	for statement in context.scope.statements.iter() {
@@ -628,6 +635,7 @@ pub fn get_statements_from_scope<'a>(context: TreeLocationContext) -> Vec<TreeLo
 	return_statements
 }
 
+/// Traverse the given scope context and return all expressions inside it (recursive).
 pub fn get_expressions_from_scope<'a>(context: TreeLocationContext) -> Vec<TreeLocationContext> {
 	let mut return_expressions = vec![];
 	for statement in context.scope.statements.iter() {
@@ -640,7 +648,9 @@ pub fn get_expressions_from_scope<'a>(context: TreeLocationContext) -> Vec<TreeL
 	return_expressions
 }
 
-pub fn get_statements_from_scope_raw<'a>(scope: &'a Scope) -> Vec<TreeLocationContext> {
+/// Traverse the given scope and return all statements inside it (recursive).
+/// This should usually be used to start traversal.
+pub fn get_statements_from_scope_no_context<'a>(scope: &'a Scope) -> Vec<TreeLocationContext> {
 	let mut return_statements = vec![];
 	for statement in scope.statements.iter() {
 		let context = TreeLocationContext {
@@ -653,6 +663,7 @@ pub fn get_statements_from_scope_raw<'a>(scope: &'a Scope) -> Vec<TreeLocationCo
 	return_statements
 }
 
+/// Traverse the given statement context and all of its symbols (NOT recursive).
 pub fn get_symbols_from_statement<'a>(context: TreeLocationContext<'a>) -> Vec<(TreeLocationContext<'a>, &'a Symbol)> {
 	let mut return_symbols = vec![];
 
@@ -763,6 +774,7 @@ pub fn get_symbols_from_statement<'a>(context: TreeLocationContext<'a>) -> Vec<(
 	return_symbols
 }
 
+/// Traverse the given expression context and all of its symbols (NOT recursive).
 pub fn get_symbols_from_expression<'a>(context: TreeLocationContext<'a>) -> Vec<(TreeLocationContext<'a>, &'a Symbol)> {
 	let mut return_symbols = vec![];
 
@@ -837,6 +849,7 @@ pub fn get_symbols_from_expression<'a>(context: TreeLocationContext<'a>) -> Vec<
 	return_symbols
 }
 
+/// Traverse the given type annotation node and all of its symbols (recursive).
 pub fn get_symbols_from_type_annotation<'a>(
 	context: TreeLocationContext<'a>,
 	type_annotation: &'a TypeAnnotation,
