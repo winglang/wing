@@ -1,7 +1,6 @@
 bring cloud;
 
-// This resource has no inflight methods (no client) but it still needs to be captured
-// so we can access its fields.
+// This resource has no inflight methods (no client) but we can still access its fields inflight
 resource A {
   field: str;
   init() { this.field = "hey"; }
