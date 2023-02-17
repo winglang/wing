@@ -1504,7 +1504,7 @@ impl<'a> TypeChecker<'a> {
 						self.stmt_error(
 							stmt,
 							format!(
-								"bring \"{}\" must be assigned to an identifier (e.g. bring \"foo\" as foo)",
+								"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
 								module_name.name
 							),
 						);
