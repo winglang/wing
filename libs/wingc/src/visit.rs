@@ -3,6 +3,22 @@ use crate::ast::{
 	Stmt, StmtKind,
 };
 
+/// Visitor pattern inspired by implementation from https://docs.rs/syn/latest/syn/visit/index.html
+///
+/// If you are implementing a visitor, you can delegate back to the
+/// default implementation to visit the children of a node by calling
+/// visit::visit_<node_type>(self, node);
+///
+/// For example:
+///
+/// impl<'ast> Visit<'ast> for ExprVisitor {
+///   fn visit_item_fn(&mut self, exp: &'ast Expr) {
+///     println!("Expr with span={}", exp.span);
+///
+///     // Delegate to the default impl to visit any nested expressions.
+///     visit::visit_expr(self, exp);
+///   }
+/// }
 pub trait Visit<'ast> {
 	fn visit_scope(&mut self, e: &'ast Scope) {
 		visit_scope(self, e);
