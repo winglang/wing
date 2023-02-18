@@ -13,7 +13,7 @@ const CDK_STACK_NAME = "root";
 /**
  * An app that knows how to synthesize constructs into CDK configuration.
  */
-export class CdkApp extends Construct implements IApp {
+export class AwsCdkApp extends Construct implements IApp {
   /**
    * Directory where artifacts are synthesized to.
    */
@@ -58,31 +58,77 @@ export class CdkApp extends Construct implements IApp {
     // synthesize cdk.Stack files in `outdir/cdk.out`
     this.cdkApp.synth();
     this.synthPackageJson();
-    this.synthDeploymentCode();
+    this.synthDeployCode();
+    this.synthDestroyCode();
 
     const template = Template.fromStack(this.cdkStack)
     return stringify(template.toJSON(), null, 2) ?? "";
   }
 
   /**
-   * Create index.js file
+   * Create destroy.js file
    */
-  synthDeploymentCode(): void {
-
+  synthDestroyCode(): void {
     const code = [
-      "const { intro, outro, spinner, text } = require(\"@clack/prompts\");",
-      "const { writeFileSync } = require(\"fs\");",
+      "const { intro, outro, spinner } = require(\"@clack/prompts\");",
+      "const { readFileSync, unlinkSync, existsSync } = require(\"fs\");",
       "const { execSync } = require(\"child_process\");",
       "const color = require(\"picocolors\");",
       "",
       "async function main() {",
       "  intro(`${color.bgCyan(color.black(\" CDK App \"))}`);",
       "",
-      "  const appName = await text({",
-      "    message: \"Choose the stack name\",",
-      "  });",
+      "  var appName;",
+      "  if (existsSync(\"./stack-name\")) {",
+      "    appName = readFileSync(\"./stack-name\", { encoding: \"utf8\" });",
+      "  } else {",
+      "    outro(`Can't find the stack name`);",
+      "    return;",
+      "  }",
       "",
-      "  writeFileSync(\"./stack-name.txt\", `${appName}`)",
+      "  const s = spinner();",
+      "  s.start(\"Removing stack\");",
+      "  execSync(`aws cloudformation delete-stack --stack-name ${appName}`);",
+      "  s.stop(\"Stack removed\");",
+      "",
+      "  s.start(\"Deleting stack-name file\");",
+      "  unlinkSync(\"./stack-name\");",
+      "  s.stop(\"stack-name file deleted\");",
+      "",
+      "  outro(\"CDK App removed\");",
+      "}",
+      "",
+      "main().catch(console.error);",
+    ];
+
+    writeFileSync(this.outdir.concat("/destroy.js"), code.join("\n"), "utf8");
+  }
+
+  /**
+   * Create deploy.js file
+   */
+  synthDeployCode(): void {
+
+    const code = [
+      "const { intro, outro, spinner, text, note } = require(\"@clack/prompts\");",
+      "const { writeFileSync, readFileSync, existsSync } = require(\"fs\");",
+      "const { execSync } = require(\"child_process\");",
+      "const color = require(\"picocolors\");",
+      "",
+      "async function main() {",
+      "  intro(`${color.bgCyan(color.black(\" CDK App \"))}`);",
+      "",
+      "  var appName;",
+      "  if (existsSync(\"./stack-name\")) {",
+      "    appName = readFileSync(\"./stack-name\", { encoding: \"utf8\" });",
+      "    note(`${appName}`, \"stack-name\");",
+      "  } else {",
+      "    appName = await text({",
+      "      message: \"Choose the stack name\",",
+      "    });",
+      "",
+      "    writeFileSync(\"./stack-name\", `${appName}`)",
+      "  }",
       "",
       "  const s = spinner();",
       "  s.start(\"Upload assets\");",
@@ -99,7 +145,7 @@ export class CdkApp extends Construct implements IApp {
       "main().catch(console.error);",
     ];
 
-    writeFileSync(this.outdir.concat("/index.js"), code.join("\n"), "utf8");
+    writeFileSync(this.outdir.concat("/deploy.js"), code.join("\n"), "utf8");
   }
 
   /**
@@ -113,7 +159,8 @@ export class CdkApp extends Construct implements IApp {
         "description": "",
         "main": "index.js",
         "scripts": {
-          "deploy": "node index.js"
+          "deploy": "node deploy.js",
+          "destroy": "node destroy.js",
         },
         "keywords": [],
         "author": "",

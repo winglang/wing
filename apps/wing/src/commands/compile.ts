@@ -21,7 +21,7 @@ export enum Target {
   TF_AZURE = "tf-azure",
   TF_GCP = "tf-gcp",
   SIM = "sim",
-  CDK = "cdk",
+  AWSCDK = "awscdk",
 }
 
 const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
@@ -29,7 +29,7 @@ const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
   [Target.TF_AZURE]: "tfazure",
   [Target.TF_GCP]: "tfgcp",
   [Target.SIM]: undefined,
-  [Target.CDK]: "cdk",
+  [Target.AWSCDK]: "awscdk",
 };
 
 /**
