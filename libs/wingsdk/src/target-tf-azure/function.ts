@@ -6,7 +6,7 @@ import { RoleAssignment } from "@cdktf/provider-azurerm/lib/role-assignment";
 import { ServicePlan } from "@cdktf/provider-azurerm/lib/service-plan";
 import { StorageAccount } from "@cdktf/provider-azurerm/lib/storage-account";
 import { StorageBlob } from "@cdktf/provider-azurerm/lib/storage-blob";
-import { AssetType, TerraformAsset } from "cdktf";
+import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Bucket, StorageAccountPermissions } from "./bucket";
@@ -152,11 +152,13 @@ export class Function extends cloud.FunctionBase {
         },
       },
       httpsOnly: true,
-      appSettings: {
-        ...this.env,
-        WEBSITE_RUN_FROM_PACKAGE: `https://${this.storageAccount.name}.blob.core.windows.net/${functionCodeBucket.storageContainer.name}/${functionCodeBlob.name}`,
-        FUNCTIONS_WORKER_RUNTIME: functionRuntime,
-      },
+      appSettings: Lazy.anyValue({
+        produce: () => ({
+          ...this.env,
+          WEBSITE_RUN_FROM_PACKAGE: `https://${this.storageAccount.name}.blob.core.windows.net/${functionCodeBucket.storageContainer.name}/${functionCodeBlob.name}`,
+          FUNCTIONS_WORKER_RUNTIME: functionRuntime,
+        }),
+      }) as any,
     });
 
     // Add permissions to read function code

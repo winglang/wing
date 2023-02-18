@@ -8,6 +8,8 @@ exports[`bring_fs.w > wing test --target sim > stdout 1`] = `"<green>pass</color
 
 exports[`bring_jsii.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>bring_jsii.w<gray> | </color><brightWhite>root/test:say_hello</color>"`;
 
+exports[`bring_jsii_path.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>bring_jsii_path.w<gray> | </color><brightWhite>root/test:say_hello</color>"`;
+
 exports[`capture_containers.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>capture_containers.w<gray> | </color><brightWhite>root/test</color>"`;
 
 exports[`capture_containers_of_resources.w > wing test --target sim > stdout 1`] = `"<green>pass</color><gray> | </color>capture_containers_of_resources.w<gray> | </color><brightWhite>root/test</color>"`;
