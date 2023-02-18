@@ -529,6 +529,155 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`bring_jsii_path.w > wing compile --target tf-aws > index.js 1`] = `
+"async handle(m) { const { greeting } = this; {
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(greeting === \\"Hello, wingnuts\\")'\`)})((greeting === \\"Hello, wingnuts\\"))};
+} };"
+`;
+
+exports[`bring_jsii_path.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_testsayhello_IamRole_CD3CFB9C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:say_hello/IamRole",
+            "uniqueId": "root_testsayhello_IamRole_CD3CFB9C",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_testsayhello_IamRolePolicy_265A46FB": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:say_hello/IamRolePolicy",
+            "uniqueId": "root_testsayhello_IamRolePolicy_265A46FB",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_testsayhello_IamRole_CD3CFB9C.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_testsayhello_IamRolePolicyAttachment_1B179C34": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:say_hello/IamRolePolicyAttachment",
+            "uniqueId": "root_testsayhello_IamRolePolicyAttachment_1B179C34",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_testsayhello_IamRole_CD3CFB9C.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_testsayhello_8E3F8CF7": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:say_hello/Default",
+            "uniqueId": "root_testsayhello_8E3F8CF7",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "test-say_hello-c867d9d9",
+          },
+        },
+        "function_name": "test-say_hello-c867d9d9",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_testsayhello_IamRole_CD3CFB9C.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_testsayhello_Code_D4453363.bucket}",
+        "s3_key": "\${aws_s3_object.root_testsayhello_S3Object_A9281CAB.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_testsayhello_Code_D4453363": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:say_hello/Code",
+            "uniqueId": "root_testsayhello_Code_D4453363",
+          },
+        },
+        "bucket_prefix": "code-c89e1bce-",
+      },
+    },
+    "aws_s3_object": {
+      "root_testsayhello_S3Object_A9281CAB": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:say_hello/S3Object",
+            "uniqueId": "root_testsayhello_S3Object_A9281CAB",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_testsayhello_Code_D4453363.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`bring_jsii_path.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+const jsii_code_samples = require(\\"./node_modules/jsii-code-samples\\");
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"bring_jsii_path\\", plugins: $plugins });
+  
+  const hello = new jsii_code_samples.HelloWorld();
+  const greeting = (hello.sayHello(\\"wingnuts\\"));
+  new cloud.Function(this,\\"test:say_hello\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5d209e0c3acca40c825662cab73c204803d9dd9f7903de90d0da6dc99ea7fa35/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+      
+      data: {
+        greeting: greeting,
+      },
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
 exports[`capture_containers.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(s) { const { arr, arr_of_map, my_map, my_set } = this; {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(0)) === \\"hello\\")'\`)})(((await arr.at(0)) === \\"hello\\"))};
@@ -3263,19 +3412,6 @@ exports[`print.w > wing compile --target tf-aws > index.js 2`] = `
 } };"
 `;
 
-exports[`print.w > wing compile --target tf-aws > index.js 3`] = `
-"async handle() { const {  } = this; {
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
-} };"
-`;
-
-exports[`print.w > wing compile --target tf-aws > index.js 4`] = `
-"async handle() { const {  } = this; {
-  {console.log(\\"print before error\\")};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(1 === 2)'\`)})((1 === 2))};
-} };"
-`;
-
 exports[`print.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
@@ -3293,15 +3429,6 @@ exports[`print.w > wing compile --target tf-aws > main.tf.json 1`] = `
   },
   "resource": {
     "aws_iam_role": {
-      "root_test_IamRole_6CDC2D16": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/test/IamRole",
-            "uniqueId": "root_test_IamRole_6CDC2D16",
-          },
-        },
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
-      },
       "root_testprint1_IamRole_AC783F9C": {
         "//": {
           "metadata": {
@@ -3320,27 +3447,8 @@ exports[`print.w > wing compile --target tf-aws > main.tf.json 1`] = `
         },
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
-      "root_testprint3_IamRole_0A57CC90": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/test:print3/IamRole",
-            "uniqueId": "root_testprint3_IamRole_0A57CC90",
-          },
-        },
-        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
-      },
     },
     "aws_iam_role_policy": {
-      "root_test_IamRolePolicy_474A6820": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/test/IamRolePolicy",
-            "uniqueId": "root_test_IamRolePolicy_474A6820",
-          },
-        },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
-        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
-      },
       "root_testprint1_IamRolePolicy_806AD6C3": {
         "//": {
           "metadata": {
@@ -3361,28 +3469,8 @@ exports[`print.w > wing compile --target tf-aws > main.tf.json 1`] = `
         "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
         "role": "\${aws_iam_role.root_testprint2_IamRole_1A5A4191.name}",
       },
-      "root_testprint3_IamRolePolicy_FB338273": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/test:print3/IamRolePolicy",
-            "uniqueId": "root_testprint3_IamRolePolicy_FB338273",
-          },
-        },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
-        "role": "\${aws_iam_role.root_testprint3_IamRole_0A57CC90.name}",
-      },
     },
     "aws_iam_role_policy_attachment": {
-      "root_test_IamRolePolicyAttachment_1102A28A": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/test/IamRolePolicyAttachment",
-            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
-          },
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
-      },
       "root_testprint1_IamRolePolicyAttachment_E361420B": {
         "//": {
           "metadata": {
@@ -3403,38 +3491,8 @@ exports[`print.w > wing compile --target tf-aws > main.tf.json 1`] = `
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "\${aws_iam_role.root_testprint2_IamRole_1A5A4191.name}",
       },
-      "root_testprint3_IamRolePolicyAttachment_4B1A5BE8": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/test:print3/IamRolePolicyAttachment",
-            "uniqueId": "root_testprint3_IamRolePolicyAttachment_4B1A5BE8",
-          },
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "\${aws_iam_role.root_testprint3_IamRole_0A57CC90.name}",
-      },
     },
     "aws_lambda_function": {
-      "root_test_AAE85061": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/test/Default",
-            "uniqueId": "root_test_AAE85061",
-          },
-        },
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "test-c8b6eece",
-          },
-        },
-        "function_name": "test-c8b6eece",
-        "handler": "index.handler",
-        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
-        "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
-        "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
-        "timeout": 30,
-      },
       "root_testprint1_86EB7ADD": {
         "//": {
           "metadata": {
@@ -3475,37 +3533,8 @@ exports[`print.w > wing compile --target tf-aws > main.tf.json 1`] = `
         "s3_key": "\${aws_s3_object.root_testprint2_S3Object_22A6E03D.key}",
         "timeout": 30,
       },
-      "root_testprint3_4962510C": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/test:print3/Default",
-            "uniqueId": "root_testprint3_4962510C",
-          },
-        },
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "test-print3-c80c4091",
-          },
-        },
-        "function_name": "test-print3-c80c4091",
-        "handler": "index.handler",
-        "role": "\${aws_iam_role.root_testprint3_IamRole_0A57CC90.arn}",
-        "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_testprint3_Code_7222B534.bucket}",
-        "s3_key": "\${aws_s3_object.root_testprint3_S3Object_57025A04.key}",
-        "timeout": 30,
-      },
     },
     "aws_s3_bucket": {
-      "root_test_Code_2D131EC2": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/test/Code",
-            "uniqueId": "root_test_Code_2D131EC2",
-          },
-        },
-        "bucket_prefix": "code-c883c33b-",
-      },
       "root_testprint1_Code_EF1D7786": {
         "//": {
           "metadata": {
@@ -3524,25 +3553,16 @@ exports[`print.w > wing compile --target tf-aws > main.tf.json 1`] = `
         },
         "bucket_prefix": "code-c8d35efe-",
       },
-      "root_testprint3_Code_7222B534": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/test:print3/Code",
-            "uniqueId": "root_testprint3_Code_7222B534",
-          },
-        },
-        "bucket_prefix": "code-c8d32412-",
-      },
     },
     "aws_s3_object": {
-      "root_test_S3Object_A16CD789": {
+      "root_testprint1_S3Object_BF976A20": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/S3Object",
-            "uniqueId": "root_test_S3Object_A16CD789",
+            "path": "root/Default/test:print1/S3Object",
+            "uniqueId": "root_testprint1_S3Object_BF976A20",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "bucket": "\${aws_s3_bucket.root_testprint1_Code_EF1D7786.bucket}",
         "key": "<ASSET_KEY>",
       },
     },
@@ -3577,29 +3597,15 @@ constructor() {
   super({ outdir: $outdir, name: \\"print\\", plugins: $plugins });
   
   {console.log(\\"preflight print\\")};
-  new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.d8e1caab95335530452b0e8738c2997dcdf377483199cb522c4743ccddb04e4d/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
-    bindings: {
-      
-      
-    }
-  }));
-  new cloud.Function(this,\\"test:print1\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
+  new cloud.Function(this,\\"test:print1\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5d5065e7d4d5abb68575b6b618fc014e76b4159c3240fef327354a5900bb9fa6/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       
       
     }
   }));
-  new cloud.Function(this,\\"test:print2\\",new $stdlib.core.Inflight(this, \\"$Inflight3\\", {
+  new cloud.Function(this,\\"test:print2\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.44e74a6db41cb5fd5b35696592c6a747e9831b228b4d1ce62b6e65f43dee835d/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
-    bindings: {
-      
-      
-    }
-  }));
-  new cloud.Function(this,\\"test:print3\\",new $stdlib.core.Inflight(this, \\"$Inflight4\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.92f66a9c45fe5d2698df9b88631d424ef4969273c2cf066c2ea0b0165153c04d/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       
       
