@@ -606,13 +606,13 @@ impl Parser<'_> {
 		}
 	}
 
-	fn build_arg_list(&self, args_node: &Node) -> DiagnosticResult<ArgList> {
+	fn build_arg_list(&self, arg_list_node: &Node) -> DiagnosticResult<ArgList> {
 		let mut pos_args = vec![];
 		let mut named_args = HashMap::new();
 
-		let mut cursor = args_node.walk();
+		let mut cursor = arg_list_node.walk();
 		let mut seen_keyword_args = false;
-		for child in args_node.named_children(&mut cursor) {
+		for child in arg_list_node.named_children(&mut cursor) {
 			if child.is_extra() {
 				continue;
 			}

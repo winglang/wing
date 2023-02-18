@@ -884,7 +884,7 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Count number of optional parameters from the end of the constructor's params
-				// Allow args to be missing up to that number of nil values to try and make the number of arguments match
+				// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
 				let num_optionals = constructor_sig
 					.parameters
 					.iter()
@@ -980,7 +980,7 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Count number of optional parameters from the end of the function's params
-				// Allow args to be missing up to that number of nil values to try and make the number of arguments match
+				// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
 				let num_optionals = func_sig
 					.parameters
 					.iter()

@@ -179,7 +179,7 @@ impl<'a> JSifier<'a> {
 		return format!("{}", symbol.name);
 	}
 
-	fn jsify_args(
+	fn jsify_arg_list(
 		&self,
 		arg_list: &ArgList,
 		scope: Option<&str>,
@@ -281,7 +281,7 @@ impl<'a> JSifier<'a> {
 					format!(
 						"new {}({})",
 						self.jsify_type(class),
-						self.jsify_args(
+						self.jsify_arg_list(
 							&arg_list,
 							Some("this"),
 							Some(&format!("{}", obj_id.as_ref().unwrap_or(&self.jsify_type(class)))),
@@ -293,7 +293,7 @@ impl<'a> JSifier<'a> {
 					format!(
 						"new {}({})",
 						self.jsify_type(&class),
-						self.jsify_args(&arg_list, None, None, should_case_convert, phase)
+						self.jsify_arg_list(&arg_list, None, None, should_case_convert, phase)
 					)
 				}
 			}
@@ -338,7 +338,7 @@ impl<'a> JSifier<'a> {
 					}
 					_ => format!("({})", self.jsify_expression(function, phase)),
 				};
-				let arg_string = self.jsify_args(&arg_list, None, None, needs_case_conversion, phase);
+				let arg_string = self.jsify_arg_list(&arg_list, None, None, needs_case_conversion, phase);
 
 				if let Some(js_override) = &function_sig.js_override {
 					let self_string = &match &function.kind {
