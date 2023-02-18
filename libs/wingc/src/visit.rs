@@ -215,7 +215,10 @@ where
 				}
 			}
 		}
-		_ => {}
+		Literal::Boolean(_) => {}
+		Literal::Number(_) => {}
+		Literal::Duration(_) => {}
+		Literal::String(_) => {}
 	}
 }
 
