@@ -128,12 +128,12 @@ fn scan_captures_in_expression(
 			class: _,
 			obj_id: _,
 			obj_scope: _,
-			args,
+			arg_list,
 		} => {
-			for e in args.pos_args.iter() {
+			for e in arg_list.pos_args.iter() {
 				res.extend(scan_captures_in_expression(e, env, statement_idx, diagnostics));
 			}
-			for e in args.named_args.values() {
+			for e in arg_list.named_args.values() {
 				res.extend(scan_captures_in_expression(e, env, statement_idx, diagnostics));
 			}
 		}
@@ -237,9 +237,13 @@ fn scan_captures_in_expression(
 				}
 			}
 		},
-		ExprKind::Call { function, args } => {
-			res.extend(scan_captures_in_call(&function, &args, env, statement_idx, diagnostics))
-		}
+		ExprKind::Call { function, arg_list } => res.extend(scan_captures_in_call(
+			&function,
+			&arg_list,
+			env,
+			statement_idx,
+			diagnostics,
+		)),
 		ExprKind::Unary { op: _, exp } => res.extend(scan_captures_in_expression(exp, env, statement_idx, diagnostics)),
 		ExprKind::Binary { op: _, left, right } => {
 			res.extend(scan_captures_in_expression(left, env, statement_idx, diagnostics));

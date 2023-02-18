@@ -606,7 +606,7 @@ impl Parser<'_> {
 		}
 	}
 
-	fn build_args(&self, args_node: &Node) -> DiagnosticResult<ArgList> {
+	fn build_arg_list(&self, args_node: &Node) -> DiagnosticResult<ArgList> {
 		let mut pos_args = vec![];
 		let mut named_args = HashMap::new();
 
@@ -650,8 +650,8 @@ impl Parser<'_> {
 			"new_expression" => {
 				let class = self.build_type_annotation(&expression_node.child_by_field_name("class").unwrap())?;
 
-				let args = if let Some(args_node) = expression_node.child_by_field_name("args") {
-					self.build_args(&args_node)
+				let arg_list = if let Some(args_node) = expression_node.child_by_field_name("args") {
+					self.build_arg_list(&args_node)
 				} else {
 					Ok(ArgList::new())
 				};
@@ -669,7 +669,7 @@ impl Parser<'_> {
 					ExprKind::New {
 						class,
 						obj_id,
-						args: args?,
+						arg_list: arg_list?,
 						obj_scope,
 					},
 					expression_span,
@@ -798,7 +798,7 @@ impl Parser<'_> {
 			"call" => Ok(Expr::new(
 				ExprKind::Call {
 					function: Box::new(self.build_expression(&expression_node.child_by_field_name("caller").unwrap())?),
-					args: self.build_args(&expression_node.child_by_field_name("args").unwrap())?,
+					arg_list: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
 				},
 				expression_span,
 			)),

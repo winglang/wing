@@ -153,12 +153,12 @@ where
 			class: _,
 			obj_id: _,
 			obj_scope,
-			args,
+			arg_list,
 		} => {
 			if let Some(scope) = obj_scope {
 				v.visit_expr(scope);
 			}
-			v.visit_args(args);
+			v.visit_args(arg_list);
 		}
 		ExprKind::Literal(lit) => {
 			v.visit_literal(lit);
@@ -166,9 +166,9 @@ where
 		ExprKind::Reference(ref_) => {
 			v.visit_reference(ref_);
 		}
-		ExprKind::Call { function, args } => {
+		ExprKind::Call { function, arg_list } => {
 			v.visit_expr(function);
-			v.visit_args(args);
+			v.visit_args(arg_list);
 		}
 		ExprKind::Unary { op: _, exp } => {
 			v.visit_expr(exp);

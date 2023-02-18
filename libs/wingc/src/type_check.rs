@@ -829,7 +829,7 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::New {
 				class,
 				obj_id: _, // TODO
-				args,
+				arg_list,
 				obj_scope, // TODO
 			} => {
 				// TODO: obj_id, obj_scope ignored, should use it once we support Type::Resource and then remove it from Classes (fail if a class has an id if grammar doesn't handle this for us)
@@ -878,9 +878,9 @@ impl<'a> TypeChecker<'a> {
 				// Verify return type (This should never fail since we define the constructors return type during AST building)
 				self.validate_type(constructor_sig.return_type, type_, exp);
 
-				if !args.named_args.is_empty() {
+				if !arg_list.named_args.is_empty() {
 					let last_arg = constructor_sig.parameters.last().unwrap().maybe_unwrap_option();
-					self.validate_structural_type(&args.named_args, &last_arg, exp, env, statement_idx);
+					self.validate_structural_type(&arg_list.named_args, &last_arg, exp, env, statement_idx);
 				}
 
 				// Count number of optional parameters from the end of the constructor's params
@@ -893,7 +893,7 @@ impl<'a> TypeChecker<'a> {
 					.count();
 
 				// Verify arity
-				let arg_count = args.pos_args.len() + (if args.named_args.is_empty() { 0 } else { 1 });
+				let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
 				let min_args = constructor_sig.parameters.len() - num_optionals;
 				let max_args = constructor_sig.parameters.len();
 				if arg_count < min_args || arg_count > max_args {
@@ -912,7 +912,7 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Verify passed arguments match the constructor
-				for (arg_expr, arg_type) in args.pos_args.iter().zip(constructor_sig.parameters.iter()) {
+				for (arg_expr, arg_type) in arg_list.pos_args.iter().zip(constructor_sig.parameters.iter()) {
 					let arg_expr_type = self.type_check_exp(arg_expr, env, statement_idx);
 					self.validate_type(arg_expr_type, *arg_type, arg_expr);
 				}
@@ -946,7 +946,7 @@ impl<'a> TypeChecker<'a> {
 				}
 				type_
 			}
-			ExprKind::Call { function, args } => {
+			ExprKind::Call { function, arg_list } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
 				let func_type = self.type_check_exp(function, env, statement_idx);
 				let this_args = if matches!(function.kind, ExprKind::Reference(Reference::NestedIdentifier { .. })) {
@@ -974,9 +974,9 @@ impl<'a> TypeChecker<'a> {
 					);
 				}
 
-				if !args.named_args.is_empty() {
+				if !arg_list.named_args.is_empty() {
 					let last_arg = func_sig.parameters.last().unwrap().maybe_unwrap_option();
-					self.validate_structural_type(&args.named_args, &last_arg, exp, env, statement_idx);
+					self.validate_structural_type(&arg_list.named_args, &last_arg, exp, env, statement_idx);
 				}
 
 				// Count number of optional parameters from the end of the function's params
@@ -989,7 +989,7 @@ impl<'a> TypeChecker<'a> {
 					.count();
 
 				// Verity arity
-				let arg_count = args.pos_args.len() + (if args.named_args.is_empty() { 0 } else { 1 });
+				let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
 				let min_args = func_sig.parameters.len() - num_optionals - this_args;
 				let max_args = func_sig.parameters.len() - this_args;
 				if arg_count < min_args || arg_count > max_args {
@@ -1009,7 +1009,7 @@ impl<'a> TypeChecker<'a> {
 					.iter()
 					.skip(this_args)
 					.take(func_sig.parameters.len() - num_optionals);
-				let args = args.pos_args.iter();
+				let args = arg_list.pos_args.iter();
 
 				for (arg_type, param_exp) in params.zip(args) {
 					let param_type = self.type_check_exp(param_exp, env, statement_idx);

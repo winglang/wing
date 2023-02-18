@@ -288,13 +288,13 @@ pub enum ExprKind {
 		class: TypeAnnotation,
 		obj_id: Option<String>,
 		obj_scope: Option<Box<Expr>>,
-		args: ArgList,
+		arg_list: ArgList,
 	},
 	Literal(Literal),
 	Reference(Reference),
 	Call {
 		function: Box<Expr>,
-		args: ArgList,
+		arg_list: ArgList,
 	},
 	Unary {
 		// TODO: Split to LogicalUnary, NumericUnary

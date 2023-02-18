@@ -181,28 +181,28 @@ impl<'a> JSifier<'a> {
 
 	fn jsify_args(
 		&self,
-		args: &ArgList,
+		arg_list: &ArgList,
 		scope: Option<&str>,
 		id: Option<&str>,
 		case_convert: bool,
 		phase: Phase,
 	) -> String {
-		let mut arg_list = vec![];
+		let mut args = vec![];
 		let mut structure_args = vec![];
 
 		if let Some(scope_str) = scope {
-			arg_list.push(scope_str.to_string());
+			args.push(scope_str.to_string());
 		}
 
 		if let Some(id_str) = id {
-			arg_list.push(format!("\"{}\"", id_str));
+			args.push(format!("\"{}\"", id_str));
 		}
 
-		for arg in args.pos_args.iter() {
-			arg_list.push(self.jsify_expression(arg, phase));
+		for arg in arg_list.pos_args.iter() {
+			args.push(self.jsify_expression(arg, phase));
 		}
 
-		for arg in args.named_args.iter() {
+		for arg in arg_list.named_args.iter() {
 			// convert snake to camel case
 			structure_args.push(format!(
 				"{}: {}",
@@ -216,13 +216,13 @@ impl<'a> JSifier<'a> {
 		}
 
 		if !structure_args.is_empty() {
-			arg_list.push(format!("{{ {} }}", structure_args.join(", ")));
+			args.push(format!("{{ {} }}", structure_args.join(", ")));
 		}
 
-		if arg_list.is_empty() {
+		if args.is_empty() {
 			"".to_string()
 		} else {
-			arg_list.join(",")
+			args.join(",")
 		}
 	}
 
@@ -259,7 +259,7 @@ impl<'a> JSifier<'a> {
 			ExprKind::New {
 				class,
 				obj_id,
-				args,
+				arg_list,
 				obj_scope: _, // TODO
 			} => {
 				let expression_type = expression.evaluated_type.borrow();
@@ -282,7 +282,7 @@ impl<'a> JSifier<'a> {
 						"new {}({})",
 						self.jsify_type(class),
 						self.jsify_args(
-							&args,
+							&arg_list,
 							Some("this"),
 							Some(&format!("{}", obj_id.as_ref().unwrap_or(&self.jsify_type(class)))),
 							should_case_convert,
@@ -293,7 +293,7 @@ impl<'a> JSifier<'a> {
 					format!(
 						"new {}({})",
 						self.jsify_type(&class),
-						self.jsify_args(&args, None, None, should_case_convert, phase)
+						self.jsify_args(&arg_list, None, None, should_case_convert, phase)
 					)
 				}
 			}
@@ -315,7 +315,7 @@ impl<'a> JSifier<'a> {
 				Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 			},
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None, phase),
-			ExprKind::Call { function, args } => {
+			ExprKind::Call { function, arg_list } => {
 				let function_type = function.evaluated_type.borrow().unwrap();
 				let function_sig = function_type
 					.as_function_sig()
@@ -338,7 +338,7 @@ impl<'a> JSifier<'a> {
 					}
 					_ => format!("({})", self.jsify_expression(function, phase)),
 				};
-				let arg_string = self.jsify_args(&args, None, None, needs_case_conversion, phase);
+				let arg_string = self.jsify_args(&arg_list, None, None, needs_case_conversion, phase);
 
 				if let Some(js_override) = &function_sig.js_override {
 					let self_string = &match &function.kind {
