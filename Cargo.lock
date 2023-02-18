@@ -435,6 +435,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "indoc"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6fe2b9d82064e8a0226fddb3547f37f28eaa46d0fc210e275d835f08cf3b76a7"
+
+[[package]]
 name = "inflections"
 version = "1.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -531,22 +537,6 @@ name = "memchr"
 version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
-
-[[package]]
-name = "node-builtins"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "237ad7a9faa3cd869e4bb27d19c2c8a3127d66401cdc4c724640cac9be340761"
-
-[[package]]
-name = "node-resolve"
-version = "2.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f6a90e3b24b73097866f78daad37dba3bc693222b3b59fbdc4dd5adb3c8e2399"
-dependencies = [
- "node-builtins",
- "serde_json",
-]
 
 [[package]]
 name = "num-integer"
@@ -1348,6 +1338,7 @@ dependencies = [
  "derivative",
  "globset",
  "indexmap",
+ "indoc",
  "inflections",
  "itertools",
  "lazy_static",
@@ -1366,7 +1357,6 @@ name = "wingii"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "node-resolve",
  "rand",
  "schemafy_lib",
  "serde",

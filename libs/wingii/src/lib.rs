@@ -1,3 +1,5 @@
+use std::error::Error;
+
 extern crate serde;
 extern crate serde_json;
 
@@ -7,19 +9,21 @@ mod test;
 // this is public temporarily until reflection API is finalized
 pub mod jsii;
 
-mod types;
+mod node_resolve;
 mod util;
+
+pub type Result<T> = std::result::Result<T, Box<dyn Error>>;
 
 pub mod spec {
 	use crate::jsii::Assembly;
-	use crate::types::WingIIResult;
+	use crate::Result;
 	use std::fs;
 	use std::path::Path;
 
 	pub const SPEC_FILE_NAME: &str = ".jsii";
 	pub const REDIRECT_FIELD: &str = "jsii/file-redirect";
 
-	pub fn find_assembly_file(directory: &str) -> WingIIResult<String> {
+	pub fn find_assembly_file(directory: &str) -> Result<String> {
 		let dot_jsii_file = Path::new(directory).join(SPEC_FILE_NAME);
 		if dot_jsii_file.exists() {
 			Ok(dot_jsii_file.to_str().unwrap().to_string())
@@ -42,7 +46,7 @@ pub mod spec {
 		}
 	}
 
-	pub fn load_assembly_from_file(path_to_file: &str) -> WingIIResult<Assembly> {
+	pub fn load_assembly_from_file(path_to_file: &str) -> Result<Assembly> {
 		let path = Path::new(path_to_file);
 		let manifest = fs::read_to_string(path)?;
 		let manifest = serde_json::from_str(&manifest)?;
@@ -61,20 +65,20 @@ pub mod spec {
 		}
 	}
 
-	pub fn load_assembly_from_path(path: &str) -> WingIIResult<Assembly> {
+	pub fn load_assembly_from_path(path: &str) -> Result<Assembly> {
 		let file = find_assembly_file(path)?;
 		load_assembly_from_file(&file)
 	}
 }
 
 pub mod type_system {
-	type SchemaName = String;
+	type AssemblyName = String;
 
 	use crate::jsii;
 	use crate::jsii::Assembly;
 	use crate::spec;
-	use crate::types::{WingIIResult, WingIIResultVoid};
 	use crate::util::package_json;
+	use crate::Result;
 	use std::collections::HashMap;
 	use std::path::Path;
 
@@ -137,7 +141,7 @@ pub mod type_system {
 			self.find_type(fqn, "enum")
 		}
 
-		pub fn load(&mut self, file_or_directory: &str, opts: Option<AssemblyLoadOptions>) -> WingIIResult<SchemaName> {
+		pub fn load(&mut self, file_or_directory: &str, opts: Option<AssemblyLoadOptions>) -> Result<AssemblyName> {
 			let opts = opts.unwrap_or(AssemblyLoadOptions { deps: true, root: true });
 			if Path::new(file_or_directory).is_dir() {
 				self.load_module(file_or_directory, &opts)
@@ -147,18 +151,18 @@ pub mod type_system {
 			}
 		}
 
-		fn load_assembly(&mut self, path: &str) -> WingIIResult<Assembly> {
+		fn load_assembly(&mut self, path: &str) -> Result<Assembly> {
 			Ok(spec::load_assembly_from_file(path)?)
 		}
 
-		fn add_root(&mut self, assembly: &Assembly) -> WingIIResultVoid {
+		fn add_root(&mut self, assembly: &Assembly) -> Result<()> {
 			if !(self.roots.iter().any(|a| a == &assembly.name)) {
 				self.roots.push(assembly.name.clone());
 			}
 			Ok(())
 		}
 
-		fn add_assembly(&mut self, assembly: Assembly, is_root: bool) -> WingIIResult<SchemaName> {
+		fn add_assembly(&mut self, assembly: Assembly, is_root: bool) -> Result<AssemblyName> {
 			if !self.assemblies.contains_key(&assembly.name) {
 				self.assemblies.insert(assembly.name.clone(), assembly.clone());
 			}
@@ -168,12 +172,27 @@ pub mod type_system {
 			Ok(assembly.name)
 		}
 
-		fn load_file(&mut self, file: &str, is_root: Option<bool>) -> WingIIResult<SchemaName> {
+		fn load_file(&mut self, file: &str, is_root: Option<bool>) -> Result<AssemblyName> {
 			let assembly = spec::load_assembly_from_path(file)?;
 			self.add_assembly(assembly, is_root.unwrap_or(false))
 		}
 
-		fn load_module(&mut self, module_directory: &str, opts: &AssemblyLoadOptions) -> WingIIResult<SchemaName> {
+		pub fn load_dep(&mut self, dep: &str, search_start: &str, opts: &AssemblyLoadOptions) -> Result<AssemblyName> {
+			let is_root = opts.root;
+			let module_dir = package_json::find_dependency_directory(dep, search_start).ok_or(format!(
+				"Unable to load \"{}\": Module not found in \"{}\"",
+				dep, search_start
+			))?;
+			self.load_module(
+				&module_dir,
+				&AssemblyLoadOptions {
+					root: is_root,
+					deps: opts.deps,
+				},
+			)
+		}
+
+		fn load_module(&mut self, module_directory: &str, opts: &AssemblyLoadOptions) -> Result<AssemblyName> {
 			let is_root = opts.root;
 			let file_path = std::path::Path::new(module_directory).join("package.json");
 			let package_json = std::fs::read_to_string(file_path)?;

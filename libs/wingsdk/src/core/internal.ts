@@ -13,7 +13,13 @@ export function makeHandler(
   const clients: Record<string, string> = {};
 
   for (const [k, v] of Object.entries(bindings.resources ?? {})) {
-    clients[k] = v.resource._toInflight().text;
+    const clientCode = v.resource._toInflight().text;
+    if (!clientCode) {
+      throw new Error(
+        `Didn't find any client code for resource ${k} - are you sure it's returning a core.Code?`
+      );
+    }
+    clients[k] = clientCode;
   }
 
   for (const [k, v] of Object.entries(bindings.data ?? {})) {
@@ -77,7 +83,7 @@ ${Object.entries(clients)
   return new Handler();
 }
 
-function serializeImmutableData(obj: any): string {
+export function serializeImmutableData(obj: any): string {
   switch (typeof obj) {
     case "string":
     case "boolean":

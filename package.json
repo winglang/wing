@@ -16,6 +16,8 @@
     "contributors:check": "all-contributors check",
     "contributors:generate": "all-contributors generate",
     "docs": "./scripts/docsite.sh",
+    "install:examples-valid": "npm --prefix examples/tests/valid --install-links=false install",
+    "install:examples-invalid": "npm --prefix examples/tests/invalid --install-links=false install",
     "install:hangar": "npm --prefix tools/hangar --install-links=false install",
     "install:jsii-docgen": "npm --prefix apps/jsii-docgen --install-links=false install",
     "install:sdk": "npm --prefix libs/wingsdk --install-links=false install",
@@ -24,7 +26,7 @@
     "install:wasi": "bash scripts/setup_wasi.sh",
     "install:wing-api-checker": "npm --prefix apps/wing-api-checker --install-links=false install",
     "install:wing-playground": "npm --prefix apps/wing-playground --install-links=false install",
-    "install:winglang": "npm --prefix apps/wing --install-links=false install",
+    "install:winglang": "npm --prefix apps/wing --install-links=false install --ignore-scripts",
     "nx": "nx",
     "postinstall": "run-p -l --max-parallel 3 'install:*'",
     "test": "nx run-many --target=test --all=true"

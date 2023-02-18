@@ -5,6 +5,7 @@ import { Counter } from "./counter";
 import { Function } from "./function";
 import { Logger } from "./logger";
 import { Queue } from "./queue";
+import { Schedule } from "./schedule";
 import { Topic } from "./topic";
 import {
   BUCKET_TYPE,
@@ -13,6 +14,7 @@ import {
   LOGGER_TYPE,
   QUEUE_TYPE,
   TOPIC_TYPE,
+  SCHEDULE_TYPE,
 } from "../cloud";
 
 /**
@@ -39,6 +41,8 @@ export class PolyconFactory implements IPolyconFactory {
         return new Counter(scope, id, args[0]);
       case TOPIC_TYPE:
         return new Topic(scope, id, args[0]);
+      case SCHEDULE_TYPE:
+        return new Schedule(scope, id, args[0]);
       default:
         throw new Error(`Type ${type} not implemented for tf-aws target.`);
     }
