@@ -6,6 +6,21 @@ const iam_policy = require("@cdktf/provider-aws/lib/iam-policy");
 const iam_policy_attachment = require("@cdktf/provider-aws/lib/iam-policy-attachment");
 const s3_bucket_versioning = require("@cdktf/provider-aws/lib/s3-bucket-versioning");
 
+/**
+ * Plugin: replicate-s3
+ * 
+ * Description: 
+ * Enables s3 bucket versioning and creates replica buckets for all s3 resources.
+ * Creates 1 replica bucket for each s3 bucket in app.
+ * 
+ * Optional Env Variables:
+ * REPLICA_PREFIX - name prefix to give to replica buckets. (default: replica-)
+ * REPLICA_STORAGE_CLASS - storage class for replica buckets. (default: STANDARD) https://docs.aws.amazon.com/AmazonS3/latest/API/API_Destination.html#AmazonS3-Type-Destination-StorageClass
+ */
+
+// compatibleTargets not currently used see: https://github.com/winglang/wing/issues/1474
+exports.compatibleTargets = ["tf-aws"]
+
 class ReplicateS3Aspect {
   constructor() {
     this.replicaPrefix = process.env.REPLICA_PREFIX ?? "replica-"
