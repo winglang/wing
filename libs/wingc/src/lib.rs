@@ -2,10 +2,12 @@
 extern crate lazy_static;
 
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
+use capture::CaptureVisitor;
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
+use visit::Visit;
 use wasm_util::{ptr_to_string, string_to_combined_ptr};
 
 use crate::parser::Parser;
@@ -15,7 +17,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use crate::ast::Phase;
-use crate::capture::scan_for_inflights_in_scope;
+// use crate::capture::scan_for_inflights_in_scope;
 use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::{TypeChecker, Types};
 
@@ -28,6 +30,7 @@ pub mod lsp;
 pub mod parser;
 pub mod type_check;
 pub mod utilities;
+pub mod visit;
 mod wasm_util;
 
 const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
@@ -259,9 +262,9 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 	diagnostics.extend(type_check_diagnostics);
 
 	// Analyze inflight captures
-	let mut capture_diagnostics = Diagnostics::new();
-	scan_for_inflights_in_scope(&scope, &mut capture_diagnostics);
-	diagnostics.extend(capture_diagnostics);
+	let mut capture_visitor = CaptureVisitor::new();
+	capture_visitor.visit_scope(&scope);
+	diagnostics.extend(capture_visitor.diagnostics);
 
 	// Filter diagnostics to only errors
 	let errors = diagnostics

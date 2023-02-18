@@ -794,24 +794,24 @@ impl<'a> TypeChecker<'a> {
 				Literal::Duration(_) => self.types.duration(),
 				Literal::Boolean(_) => self.types.bool(),
 			},
-			ExprKind::Binary { op, lexp, rexp } => {
-				let ltype = self.type_check_exp(lexp, env, statement_idx);
-				let rtype = self.type_check_exp(rexp, env, statement_idx);
+			ExprKind::Binary { op, left, right } => {
+				let ltype = self.type_check_exp(left, env, statement_idx);
+				let rtype = self.type_check_exp(right, env, statement_idx);
 
 				if op.boolean_args() {
-					self.validate_type(ltype, self.types.bool(), rexp);
-					self.validate_type(rtype, self.types.bool(), rexp);
+					self.validate_type(ltype, self.types.bool(), right);
+					self.validate_type(rtype, self.types.bool(), right);
 				} else if op.numerical_args() {
-					self.validate_type(ltype, self.types.number(), rexp);
-					self.validate_type(rtype, self.types.number(), rexp);
+					self.validate_type(ltype, self.types.number(), right);
+					self.validate_type(rtype, self.types.number(), right);
 				} else {
-					self.validate_type(ltype, rtype, rexp);
+					self.validate_type(ltype, rtype, right);
 				}
 
 				if op.boolean_result() {
 					self.types.bool()
 				} else {
-					self.validate_type(ltype, self.types.number(), rexp);
+					self.validate_type(ltype, self.types.number(), right);
 					ltype
 				}
 			}
@@ -829,7 +829,7 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::New {
 				class,
 				obj_id: _, // TODO
-				arg_list,
+				args,
 				obj_scope, // TODO
 			} => {
 				// TODO: obj_id, obj_scope ignored, should use it once we support Type::Resource and then remove it from Classes (fail if a class has an id if grammar doesn't handle this for us)
@@ -878,13 +878,13 @@ impl<'a> TypeChecker<'a> {
 				// Verify return type (This should never fail since we define the constructors return type during AST building)
 				self.validate_type(constructor_sig.return_type, type_, exp);
 
-				if !arg_list.named_args.is_empty() {
+				if !args.named_args.is_empty() {
 					let last_arg = constructor_sig.parameters.last().unwrap().maybe_unwrap_option();
-					self.validate_structural_type(&arg_list.named_args, &last_arg, exp, env, statement_idx);
+					self.validate_structural_type(&args.named_args, &last_arg, exp, env, statement_idx);
 				}
 
 				// Count number of optional parameters from the end of the constructor's params
-				// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
+				// Allow args to be missing up to that number of nil values to try and make the number of arguments match
 				let num_optionals = constructor_sig
 					.parameters
 					.iter()
@@ -893,7 +893,7 @@ impl<'a> TypeChecker<'a> {
 					.count();
 
 				// Verify arity
-				let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
+				let arg_count = args.pos_args.len() + (if args.named_args.is_empty() { 0 } else { 1 });
 				let min_args = constructor_sig.parameters.len() - num_optionals;
 				let max_args = constructor_sig.parameters.len();
 				if arg_count < min_args || arg_count > max_args {
@@ -912,7 +912,7 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Verify passed arguments match the constructor
-				for (arg_expr, arg_type) in arg_list.pos_args.iter().zip(constructor_sig.parameters.iter()) {
+				for (arg_expr, arg_type) in args.pos_args.iter().zip(constructor_sig.parameters.iter()) {
 					let arg_expr_type = self.type_check_exp(arg_expr, env, statement_idx);
 					self.validate_type(arg_expr_type, *arg_type, arg_expr);
 				}
@@ -980,7 +980,7 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Count number of optional parameters from the end of the function's params
-				// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
+				// Allow args to be missing up to that number of nil values to try and make the number of arguments match
 				let num_optionals = func_sig
 					.parameters
 					.iter()

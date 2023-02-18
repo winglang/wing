@@ -606,13 +606,13 @@ impl Parser<'_> {
 		}
 	}
 
-	fn build_arg_list(&self, arg_list_node: &Node) -> DiagnosticResult<ArgList> {
+	fn build_args(&self, args_node: &Node) -> DiagnosticResult<ArgList> {
 		let mut pos_args = vec![];
 		let mut named_args = HashMap::new();
 
-		let mut cursor = arg_list_node.walk();
+		let mut cursor = args_node.walk();
 		let mut seen_keyword_args = false;
-		for child in arg_list_node.named_children(&mut cursor) {
+		for child in args_node.named_children(&mut cursor) {
 			if child.is_extra() {
 				continue;
 			}
@@ -650,8 +650,8 @@ impl Parser<'_> {
 			"new_expression" => {
 				let class = self.build_type_annotation(&expression_node.child_by_field_name("class").unwrap())?;
 
-				let arg_list = if let Some(args_node) = expression_node.child_by_field_name("args") {
-					self.build_arg_list(&args_node)
+				let args = if let Some(args_node) = expression_node.child_by_field_name("args") {
+					self.build_args(&args_node)
 				} else {
 					Ok(ArgList::new())
 				};
@@ -669,7 +669,7 @@ impl Parser<'_> {
 					ExprKind::New {
 						class,
 						obj_id,
-						arg_list: arg_list?,
+						args: args?,
 						obj_scope,
 					},
 					expression_span,
@@ -677,8 +677,8 @@ impl Parser<'_> {
 			}
 			"binary_expression" => Ok(Expr::new(
 				ExprKind::Binary {
-					lexp: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())?),
-					rexp: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap())?),
+					left: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())?),
+					right: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap())?),
 					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
 						"+" => BinaryOperator::Add,
 						"-" => BinaryOperator::Sub,
@@ -798,7 +798,7 @@ impl Parser<'_> {
 			"call" => Ok(Expr::new(
 				ExprKind::Call {
 					function: Box::new(self.build_expression(&expression_node.child_by_field_name("caller").unwrap())?),
-					args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
+					args: self.build_args(&expression_node.child_by_field_name("args").unwrap())?,
 				},
 				expression_span,
 			)),

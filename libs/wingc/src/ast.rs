@@ -288,7 +288,7 @@ pub enum ExprKind {
 		class: TypeAnnotation,
 		obj_id: Option<String>,
 		obj_scope: Option<Box<Expr>>,
-		arg_list: ArgList,
+		args: ArgList,
 	},
 	Literal(Literal),
 	Reference(Reference),
@@ -304,8 +304,8 @@ pub enum ExprKind {
 	Binary {
 		// TODO: Split to LogicalBinary, NumericBinary, Bit/String??
 		op: BinaryOperator,
-		lexp: Box<Expr>,
-		rexp: Box<Expr>,
+		left: Box<Expr>,
+		right: Box<Expr>,
 	},
 	ArrayLiteral {
 		type_: Option<TypeAnnotation>,
