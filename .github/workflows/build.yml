@@ -89,7 +89,7 @@ jobs:
           path: docs.tgz
 
   build:
-    name: "Non-Native Build"
+    name: Build
     timeout-minutes: 20
     runs-on: ubuntu-latest
     needs: prepare
