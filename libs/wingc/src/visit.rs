@@ -11,6 +11,7 @@ use crate::ast::{
 ///
 /// For example:
 ///
+/// ```ignore
 /// impl<'ast> Visit<'ast> for ExprVisitor {
 ///   fn visit_item_fn(&mut self, exp: &'ast Expr) {
 ///     println!("Expr with span={}", exp.span);
@@ -19,6 +20,7 @@ use crate::ast::{
 ///     visit::visit_expr(self, exp);
 ///   }
 /// }
+/// ```
 pub trait Visit<'ast> {
 	fn visit_scope(&mut self, e: &'ast Scope) {
 		visit_scope(self, e);
