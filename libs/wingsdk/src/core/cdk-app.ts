@@ -1,10 +1,12 @@
 import { Construct } from "constructs";
 import * as cdk from "aws-cdk-lib";
+import { Template } from 'aws-cdk-lib/assertions';
 import { IApp, AppProps } from "./app";
 import { join } from "path";
 import { mkdirSync, writeFileSync } from "fs";
+import stringify from "safe-stable-stringify";
 import { Polycons } from "polycons";
-// import { Logger } from "../cloud";
+import { Logger } from "../cloud";
 
 const CDK_STACK_NAME = "root";
 
@@ -18,7 +20,7 @@ export class CdkApp extends Construct implements IApp {
   public readonly outdir: string;
 
   private readonly cdkApp: cdk.App;
-  // private readonly cdkStack: cdk.Stack;
+  private readonly cdkStack: cdk.Stack;
 
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
@@ -40,25 +42,36 @@ export class CdkApp extends Construct implements IApp {
 
     this.outdir = outdir;
     this.cdkApp = cdkApp;
-    // this.cdkStack = cdkStack;
+    this.cdkStack = cdkStack;
 
     // register a logger for this app.
-    // Logger.register(this);
+    Logger.register(this);
   }
 
+  /**
+ * Synthesize the app into CDK configuration in a `cdk.out` directory.
+ *
+ * This method returns a cleaned snapshot of the resulting CDK template
+ * for unit testing.
+ */
   synth(): string {
     // synthesize cdk.Stack files in `outdir/cdk.out`
     this.cdkApp.synth();
     this.synthPackageJson();
     this.synthDeploymentCode();
 
-    return "";
+    const template = Template.fromStack(this.cdkStack)
+    return stringify(template.toJSON(), null, 2) ?? "";
   }
 
+  /**
+   * Create index.js file
+   */
   synthDeploymentCode(): void {
 
     const code = [
       "const { intro, outro, spinner, text } = require(\"@clack/prompts\");",
+      "const { writeFileSync } = require(\"fs\");",
       "const { execSync } = require(\"child_process\");",
       "const color = require(\"picocolors\");",
       "",
@@ -68,6 +81,8 @@ export class CdkApp extends Construct implements IApp {
       "  const appName = await text({",
       "    message: \"Choose the stack name\",",
       "  });",
+      "",
+      "  writeFileSync(\"./stack-name.txt\", `${appName}`)",
       "",
       "  const s = spinner();",
       "  s.start(\"Upload assets\");",
@@ -87,6 +102,9 @@ export class CdkApp extends Construct implements IApp {
     writeFileSync(this.outdir.concat("/index.js"), code.join("\n"), "utf8");
   }
 
+  /**
+   * Create package.json file
+   */
   synthPackageJson(): void {
     const packageJson = JSON.stringify(
       {

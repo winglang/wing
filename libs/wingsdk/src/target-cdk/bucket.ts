@@ -29,15 +29,15 @@ export class Bucket extends cloud.BucketBase {
 
     this.public = props.public ?? false;
 
-    const bucketPrefix = ResourceNames.generateName(this, BUCKET_PREFIX_OPTS);
+    const bucketName = ResourceNames.generateName(this, BUCKET_PREFIX_OPTS);
 
     // names cannot begin with 'xn--'
-    if (bucketPrefix.startsWith("xn--")) {
+    if (bucketName.startsWith("xn--")) {
       throw new Error("AWS S3 bucket names cannot begin with 'xn--'.");
     }
 
     // names must begin with a letter or number
-    if (!/^[a-z0-9]/.test(bucketPrefix)) {
+    if (!/^[a-z0-9]/.test(bucketName)) {
       throw new Error(
         "AWS S3 bucket names must begin with a letter or number."
       );
@@ -45,7 +45,7 @@ export class Bucket extends cloud.BucketBase {
 
 
     this.bucket = new S3Bucket(this, "Default", {
-      bucketName: bucketPrefix,
+      bucketName: bucketName,
       encryption: BucketEncryption.S3_MANAGED,
       blockPublicAccess: this.public ? undefined : BlockPublicAccess.BLOCK_ALL,
       publicReadAccess: this.public ? true : false,

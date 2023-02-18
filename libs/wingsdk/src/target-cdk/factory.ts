@@ -1,8 +1,10 @@
 import { IConstruct } from "constructs";
 import { IPolyconFactory } from "polycons";
 import { Bucket } from "./bucket";
+import { Logger } from "./logger";
 import {
   BUCKET_TYPE,
+  LOGGER_TYPE
 } from "../cloud";
 
 /**
@@ -23,8 +25,8 @@ export class PolyconFactory implements IPolyconFactory {
       //   return new Function(scope, id, args[0], args[1]);
       // case QUEUE_TYPE:
       //   return new Queue(scope, id, args[0]);
-      // case LOGGER_TYPE:
-      //   return new Logger(scope, id);
+      case LOGGER_TYPE:
+        return new Logger(scope, id);
       // case COUNTER_TYPE:
       //   return new Counter(scope, id, args[0]);
       // case TOPIC_TYPE:
