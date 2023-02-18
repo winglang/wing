@@ -3572,7 +3572,6 @@ Function that will be called when a message is received from the queue.
 
 - *Implemented By:* awscdk.Bucket, cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Schedule, cloud.ScheduleBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfaws.Schedule, tfazure.Bucket, tfazure.Function, tfgcp.Bucket, tfgcp.Logger, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.IScheduleOnTickHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IResource
 
-
 Abstract interface for `Resource`.
 
 
