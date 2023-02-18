@@ -764,6 +764,7 @@ pub fn get_symbols_from_statement<'a>(context: TreeLocationContext<'a>) -> Vec<(
 				}
 			}
 		}
+		// These nodes do not define any new symbols
 		While { .. } => {}
 		If { .. } => {}
 		Return { .. } => {}

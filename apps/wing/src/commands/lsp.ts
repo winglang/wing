@@ -4,6 +4,8 @@ import {
   TextDocumentSyncKind,
   InitializeResult,
   CompletionItem,
+  DocumentSymbol,
+  Hover,
 } from "vscode-languageserver/node";
 
 import * as wingCompiler from "../wingc";
@@ -58,19 +60,7 @@ export async function run_server() {
     if (result == 0) {
       return null;
     } else {
-      return JSON.parse(result as string) as any;
-    }
-  });
-  connection.languages.semanticTokens.on(async (params) => {
-    const result = wingCompiler.invoke(
-      wingc,
-      "wingc_on_semantic_tokens",
-      JSON.stringify(params)
-    );
-    if (result == 0) {
-      return null;
-    } else {
-      return JSON.parse(result as string) as any;
+      return JSON.parse(result as string) as DocumentSymbol[];
     }
   });
   connection.onHover(async (params) => {
@@ -82,7 +72,7 @@ export async function run_server() {
     if (result == 0) {
       return null;
     } else {
-      return JSON.parse(result as string) as any;
+      return JSON.parse(result as string) as Hover;
     }
   });
 

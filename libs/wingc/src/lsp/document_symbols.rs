@@ -4,7 +4,7 @@ use crate::lsp::ast_traversal::{
 	get_symbols_from_statement, TreeLocationContext,
 };
 use crate::lsp::sync::FILES;
-use crate::wasm_util::{ptr_to_string, string_to_combined_ptr};
+use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use lsp_types::DocumentSymbol;
 use lsp_types::SymbolKind;
 
@@ -12,20 +12,16 @@ use lsp_types::SymbolKind;
 pub unsafe extern "C" fn wingc_on_document_symbol(ptr: u32, len: u32) -> u64 {
 	let parse_string = ptr_to_string(ptr, len);
 	if let Ok(parsed) = serde_json::from_str(&parse_string) {
-		if let Some(token_result) = on_document_symbols(parsed) {
-			let result = serde_json::to_string(&token_result).unwrap();
+		let doc_symbols = on_document_symbols(parsed);
+		let result = serde_json::to_string(&doc_symbols).unwrap();
 
-			string_to_combined_ptr(result)
-		} else {
-			0
-		}
+		string_to_combined_ptr(result)
 	} else {
-		eprintln!("Failed to parse 'onHover' text document: {}", parse_string);
-		0
+		WASM_RETURN_ERROR
 	}
 }
 
-pub fn on_document_symbols<'a>(params: lsp_types::DocumentSymbolParams) -> Option<Vec<DocumentSymbol>> {
+pub fn on_document_symbols<'a>(params: lsp_types::DocumentSymbolParams) -> Vec<DocumentSymbol> {
 	FILES.with(|files| {
 		let files = files.borrow();
 		let files = files.read();
@@ -34,13 +30,7 @@ pub fn on_document_symbols<'a>(params: lsp_types::DocumentSymbolParams) -> Optio
 		let parse_result = parse_result.unwrap();
 		let scope = &parse_result.scope;
 
-		let symbols = create_symbols(scope);
-
-		if symbols.is_empty() {
-			None
-		} else {
-			Some(symbols)
-		}
+		create_symbols(scope)
 	})
 }
 

@@ -3,7 +3,7 @@ use tree_sitter::{Node, Point, Tree};
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::lsp::sync::FILES;
-use crate::wasm_util::{ptr_to_string, string_to_combined_ptr};
+use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
 #[derive(Debug)]
 pub struct WingCompletionItem {
@@ -99,7 +99,7 @@ pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
 		// return result as u64 with ptr and len
 		string_to_combined_ptr(result)
 	} else {
-		panic!("Failed to parse 'completion': {}", parse_string);
+		WASM_RETURN_ERROR
 	}
 }
 pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse {

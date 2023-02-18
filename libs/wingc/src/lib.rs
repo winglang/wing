@@ -6,7 +6,7 @@ use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
-use wasm_util::{ptr_to_string, string_to_combined_ptr};
+use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
 use crate::parser::Parser;
 use std::cell::RefCell;
@@ -90,7 +90,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 
 		string_to_combined_ptr(result)
 	} else {
-		0
+		WASM_RETURN_ERROR
 	}
 }
 

@@ -2,6 +2,7 @@ use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind};
 
 use crate::lsp::ast_traversal::find_symbol;
 use crate::lsp::sync::FILES;
+use crate::wasm_util::WASM_RETURN_ERROR;
 use crate::{
 	ast::ExprKind,
 	wasm_util::{ptr_to_string, string_to_combined_ptr},
@@ -16,11 +17,11 @@ pub unsafe extern "C" fn wingc_on_hover(ptr: u32, len: u32) -> u64 {
 
 			string_to_combined_ptr(result)
 		} else {
-			0
+			WASM_RETURN_ERROR
 		}
 	} else {
 		eprintln!("Failed to parse 'onHover' text document: {}", parse_string);
-		0
+		WASM_RETURN_ERROR
 	}
 }
 pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
@@ -41,21 +42,17 @@ pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
 			let expr = symbol_context.0.expression;
 			let scope = symbol_context.0.scope;
 			let symbol_name = &symbol.name;
-			let expression_type = if let Some(expr) = expr {
+			let expression_type = expr.as_ref().and_then(|expr| {
 				let t = expr.evaluated_type.borrow();
 				t.clone()
-			} else {
-				None
-			};
-			let reference = if let Some(expr) = expr {
+			});
+			let reference = expr.as_ref().and_then(|expr| {
 				if let ExprKind::Reference(reference) = &expr.kind {
 					Some(reference)
 				} else {
 					None
 				}
-			} else {
-				None
-			};
+			});
 			let span = if let Some(_) = reference {
 				&expr.unwrap().span
 			} else {
