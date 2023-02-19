@@ -39,9 +39,6 @@
     "vscode-languageserver": "^8.0.2",
     "wasi-js": "^1.7.3"
   },
-  "bundledDependencies": [
-    "wasi-js"
-  ],
   "devDependencies": {
     "@types/debug": "^4.1.7",
     "@types/jest": "^29.2.6",
