@@ -26,7 +26,7 @@
     "install:wasi": "bash scripts/setup_wasi.sh",
     "install:wing-api-checker": "npm --prefix apps/wing-api-checker --install-links=false install",
     "install:wing-playground": "npm --prefix apps/wing-playground --install-links=false install",
-    "install:winglang": "npm --prefix apps/wing --install-links=false install --ignore-scripts",
+    "install:winglang": "npm --prefix apps/wing --install-links=false install",
     "nx": "nx",
     "postinstall": "run-p -l --max-parallel 3 'install:*'",
     "test": "nx run-many --target=test --all=true"
