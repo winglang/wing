@@ -44,6 +44,8 @@ export class Function extends cloud.Function {
    * @returns Qualified ARN of the function
    */
   public readonly qualifiedArn: string;
+  /** Function INVOKE_ARN */
+  public readonly invokeArn: string;
 
   constructor(
     scope: Construct,
@@ -166,6 +168,7 @@ export class Function extends cloud.Function {
 
     this.arn = this.function.arn;
     this.qualifiedArn = this.function.qualifiedArn;
+    this.invokeArn = this.function.invokeArn;
 
     // terraform rejects templates with zero environment variables
     this.addEnvironment("WING_FUNCTION_NAME", name);
