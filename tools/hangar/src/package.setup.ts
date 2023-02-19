@@ -27,6 +27,7 @@ const shellEnv = {
   npm_config_progress: "false",
   npm_config_yes: "true",
   npm_config_cache: npmCacheDir,
+  npm_config_loglevel: "info",
   FORCE_COLOR: "true",
 };
 
@@ -40,7 +41,7 @@ export default async function () {
 
   // use execSync to install npm deps in tmpDir
   console.debug(`Installing npm deps into ${tmpDir}...`);
-  await execa(
+  const installResult = await execa(
     npmBin,
     [
       "install",
@@ -52,6 +53,13 @@ export default async function () {
       cwd: tmpDir,
     }
   );
+  if (installResult.exitCode !== 0) {
+    throw new Error(`Failed to install npm deps: ${installResult.stderr}`);
+  }
+  if(installResult.stdout.includes("npm info run")) {
+    throw new Error(`Install contains script hook: ${installResult.stdout}`);
+  }
+
   console.debug(`Done!`);
 
   const versionOutput = await execa(wingBin, ["--version"], {
