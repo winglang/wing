@@ -48,7 +48,6 @@ async function testOne(entrypoint: string) {
   for (const result of results.sort(sortTests)) {
     const status = result.pass ? chalk.green("pass") : chalk.red("fail");
 
-    const pathWithPadding = chalk.whiteBright(result.path.padEnd(longestPath));
     const details = new Array<string>();
 
     // add any log messages that were emitted during the test
@@ -78,7 +77,10 @@ async function testOne(entrypoint: string) {
 
     if (result.path?.length > 0) {
       firstRow.push(chalk.gray("»"));
-      firstRow.push(pathWithPadding);
+      firstRow.push(chalk.whiteBright(result.path.padEnd(longestPath)));
+    } else {
+      firstRow.push(chalk.gray("(no tests)"));
+
     }
 
     // okay we are ready to print the test result
