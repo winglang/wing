@@ -1,6 +1,8 @@
 .DS_Store
 node_modules/
 .env
+*.tfstate
+*.tfstate.*
 
 # Generated wing output
 *.w.out/
