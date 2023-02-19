@@ -1127,12 +1127,11 @@ let queue_on_message_props = cloud.QueueOnMessageProps{ ... }
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name**                                                                                          | **Type**                                                        | **Description**                                                |
-| ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | -------------------------------------------------------------- |
-| <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.env">env</a></code>              | <code>MutMap&lt;str&gt;</code>                                  | Environment variables to pass to the function.                 |
-| <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.memory">memory</a></code>        | <code>num</code>                                                | The amount of memory to allocate to the function, in MB.       |
-| <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.timeout">timeout</a></code>      | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run.               |
-| <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.batchSize">batch_size</a></code> | <code>num</code>                                                | The maximum number of messages to send to subscribers at once. |
+| **Name**                                                                             | **Type**                       | **Description**             |
+| ------------------------------------------------------------------------------------ | ------------------------------ | --------------------------- |
+| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The response's headers.     |
+| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.status">status</a></code>   | <code>num</code>               | The response's status code. |
+| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.body">body</a></code>       | <code>cloud.Json</code>        | The response's body.        |
 
 ---
 
@@ -1165,11 +1164,10 @@ The amount of memory to allocate to the function, in MB.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueOnMessageProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+body: Json;
 ```
 
-- _Type:_ <a href="#@winglang/sdk.std.Duration">Duration</a>
-- _Default:_ 1m
+- _Type:_ cloud.Json
 
 The maximum amount of time the function can run.
 

@@ -140,7 +140,7 @@ export class Api extends cloud.ApiBase {
       `${this.node.id}-OnRequestHandler-${inflightNodeHash}`,
       inflight,
       join(__dirname, "api.onrequest.inflight.js"),
-      "ApiOnGetRequestHandlerClient"
+      "ApiOnRequestHandlerClient"
     );
     return new cloud.Function(
       this,

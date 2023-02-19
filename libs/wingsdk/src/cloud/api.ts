@@ -212,7 +212,7 @@ export interface ApiResponse {
   /** The response's status code. */
   readonly status: number;
   /** The response's body. */
-  readonly body?: Json;
+  readonly body?: any;
   /** The response's headers. */
   readonly headers: Record<string, string>;
 }

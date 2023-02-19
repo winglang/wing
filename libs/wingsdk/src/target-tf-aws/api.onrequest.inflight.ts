@@ -29,7 +29,7 @@ export class ApiOnRequestHandlerClient {
 function mapCloudApiResponseToApigatewayResponse(resp: ApiResponse) {
   return {
     statusCode: resp.status,
-    body: JSON.stringify(resp.body),
+    body: JSON.stringify(Object.fromEntries(resp.body)),
     headers: resp.headers,
   };
 }
