@@ -59,8 +59,8 @@ async function main() {
         "-t, --target <target>",
         "Target platform"
       )
-      .choices(["tf-aws", "tf-azure", "tf-gcp", "sim"])
-      .makeOptionMandatory()
+        .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
+        .makeOptionMandatory()
     )
     .option(
       "-p, --plugins [plugin...]",

@@ -29,7 +29,7 @@ export class AwsCdkApp extends Construct implements IApp {
     mkdirSync(cdkOutdir, { recursive: true });
 
     const cdkApp = new cdk.App({ outdir: cdkOutdir });
-    const cdkStack = new cdk.Stack(cdkApp, CDK_STACK_NAME + cdkApp.node.addr.substring(0, 8));
+    const cdkStack = new cdk.Stack(cdkApp, CDK_STACK_NAME);
 
     if (!props.customFactory) {
       throw new Error(
