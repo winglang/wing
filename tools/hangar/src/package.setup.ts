@@ -27,7 +27,8 @@ const shellEnv = {
   npm_config_progress: "false",
   npm_config_yes: "true",
   npm_config_cache: npmCacheDir,
-  npm_config_loglevel: "info",
+  npm_config_color: "false",
+  npm_config_foreground_scripts: "true",
   FORCE_COLOR: "true",
 };
 
@@ -56,8 +57,8 @@ export default async function () {
   if (installResult.exitCode !== 0) {
     throw new Error(`Failed to install npm deps: ${installResult.stderr}`);
   }
-  if(installResult.stdout.includes("npm info run")) {
-    throw new Error(`Install contains script hook: ${installResult.stdout}`);
+  if(installResult.stdout.includes(">")) {
+    throw new Error(`Install contains unexpected script hook: ${installResult.stdout}`);
   }
 
   console.debug(`Done!`);
