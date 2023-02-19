@@ -79,7 +79,7 @@ include permissions for the **read:packages** scope (see
 #### AWS Account and Credentials
 
 To deploy Wing applications to the AWS Cloud, you'll need an [AWS
-account](portal.aws.amazon.com/billing/signup) and [AWS
+account](https://portal.aws.amazon.com/billing/signup) and [AWS
 credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
 configured on your system.
 
@@ -219,8 +219,8 @@ and contributors to the project.
 
 As such, our focus for this sprint is:
 
-- Consolidate everything related to Wing into the [monadahq/winglang](github.com/monadahq/winglang/) GitHub repo. This includes:
-  - The [Wing SDK](github.com/monadahq/wingsdk)
+- Consolidate everything related to Wing into the [monadahq/winglang](https://github.com/monadahq/winglang/) GitHub repo. This includes:
+  - The [Wing SDK](https://github.com/monadahq/wingsdk)
   - The [language spec](https://github.com/monadahq/winglang-spec) - should go under `docs/winglang-spec.md`
   - The [language requirements RFC](https://github.com/monadahq/rfcs/blob/main/0044-winglang-requirements.md) - 
     should go under `rfcs/winglang-reqs.md`

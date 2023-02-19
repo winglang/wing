@@ -40,7 +40,7 @@ async function testOne(entrypoint: string) {
   if (results.length === 0) {
     results.push({
       pass: true,
-      path: "(no inflight tests)",
+      path: '',
       traces: [],
     });
   }
@@ -48,15 +48,51 @@ async function testOne(entrypoint: string) {
   for (const result of results.sort(sortTests)) {
     const status = result.pass ? chalk.green("pass") : chalk.red("fail");
 
-    const pathWithPadding = chalk.whiteBright(result.path.padEnd(longestPath));
-    const error = result.error ? `\n${chalk.red(result.error)}` : "";
+    const details = new Array<string>();
 
-    const sep = chalk.gray(" | ");
-    const row = [status, basename(entrypoint), pathWithPadding + error].join(
-      sep
-    );
+    // add any log messages that were emitted during the test
+    for (const log of result.traces.filter(t => t.type == "log")) {
+      details.push(chalk.gray(log.data.message));
+    }
 
-    console.log(row);
+    // if the test failed, add the error message and trace
+    if (result.error) {
+      details.push(...result.error.split("\n").map(l => chalk.red(l)));
+    }
+
+    // construct the first row of the test result by collecting the various components and joining
+    // them with spaces.
+
+    const firstRow = new Array<string>();
+    firstRow.push(status);
+
+    // if we have details, surround the rows with a box, otherwise, just print a line
+    if (details.length > 0) {
+      firstRow.push(chalk.gray("┌"));
+    } else {
+      firstRow.push(chalk.gray("─"));
+    }
+
+    firstRow.push(basename(entrypoint));
+
+    if (result.path?.length > 0) {
+      firstRow.push(chalk.gray("»"));
+      firstRow.push(chalk.whiteBright(result.path.padEnd(longestPath)));
+    } else {
+      firstRow.push(chalk.gray("(no tests)"));
+
+    }
+
+    // okay we are ready to print the test result
+
+    // print the primary description of the test
+    console.log(firstRow.join(" "));
+
+    // print additional rows that are related to this test
+    for (let i = 0; i < details.length; i++) {
+      const left = i === details.length - 1 ? "└" : "│";
+      console.log(`    ${chalk.gray(` ${left} `)}${details[i]}`);
+    }
 
     if (!result.pass) {
       hasFailures = true;
