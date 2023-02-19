@@ -88,6 +88,12 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
       [workDir]: workDir, // for Rust's access to the work directory
       [synthDir]: synthDir, // for Rust's access to the synth directory
     },
+    imports: {
+      env: {
+        // This function is used by the lsp command, which is not used in compilation
+        send_notification: () => {},
+      },
+    },
   });
 
   const arg = `${normalPath(wingFile)};${normalPath(workDir)}`;
