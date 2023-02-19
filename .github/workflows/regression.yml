@@ -1,9 +1,13 @@
 name: "Regression Tests"
 on:
-  workflow_dispatch: {}
-  schedule:
-    # Run every 12 hours
-    - cron: '0 */12 * * *'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to test against"
+        required: true
+        default: "latest"
+  release:
+    types: [published]
 
 jobs:
   e2e:
@@ -18,17 +22,23 @@ jobs:
         node: [18, 19]
     runs-on: ${{ matrix.runner }}
     steps:
+      - name: Validate version
+        id: validate-version
+        env:
+          RAW_VERSION: "${{ if github.event_name == 'release' && github.event.release.tag_name || github.event.inputs.version}}"
+        run: |
+          if [[ -z "${RAW_VERSION}" ]]; then
+            echo "No version specified"
+            exit 1
+          fi
+          NEW_VERSION="${RAW_VERSION/v/}"
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "Using Version $NEW_VERSION"
+
       - name: Checkout main
         uses: actions/checkout@v3
         with:
           ref: main
-          fetch-depth: 0
-
-      - name: Get latest tag
-        id: latest-tag
-        run: |
-          CURRENT_VERSION="$(git describe --tags --abbrev=0 | cut -c 2-)"
-          echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -46,8 +56,7 @@ jobs:
 
       - name: Run E2E Tests
         env:
-          HANGAR_WING_SPEC: "${{ steps.latest-tag.outputs.version }}"
-          HANGAR_WINGSDK_SPEC: "${{ steps.latest-tag.outputs.version }}"
+          HANGAR_WING_SPEC: "${{ steps.validate-version.outputs.version }}"
+          HANGAR_WINGSDK_SPEC: "${{ steps.validate-version.outputs.version }}"
         working-directory: tools/hangar
         run: npm run test
-      
