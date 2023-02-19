@@ -3,7 +3,7 @@ import * as cdk from "aws-cdk-lib";
 import { Template } from 'aws-cdk-lib/assertions';
 import { IApp, AppProps } from "./app";
 import { join } from "path";
-import { mkdirSync, writeFileSync } from "fs";
+import { mkdirSync } from "fs";
 import stringify from "safe-stable-stringify";
 import { Polycons } from "polycons";
 import { Logger } from "../cloud";
@@ -29,7 +29,7 @@ export class AwsCdkApp extends Construct implements IApp {
     mkdirSync(cdkOutdir, { recursive: true });
 
     const cdkApp = new cdk.App({ outdir: cdkOutdir });
-    const cdkStack = new cdk.Stack(cdkApp, CDK_STACK_NAME);
+    const cdkStack = new cdk.Stack(cdkApp, CDK_STACK_NAME + cdkApp.node.addr.substring(0, 8));
 
     if (!props.customFactory) {
       throw new Error(
@@ -57,122 +57,8 @@ export class AwsCdkApp extends Construct implements IApp {
   synth(): string {
     // synthesize cdk.Stack files in `outdir/cdk.out`
     this.cdkApp.synth();
-    this.synthPackageJson();
-    this.synthDeployCode();
-    this.synthDestroyCode();
 
     const template = Template.fromStack(this.cdkStack)
     return stringify(template.toJSON(), null, 2) ?? "";
-  }
-
-  /**
-   * Create destroy.js file
-   */
-  synthDestroyCode(): void {
-    const code = [
-      "const { intro, outro, spinner } = require(\"@clack/prompts\");",
-      "const { readFileSync, unlinkSync, existsSync } = require(\"fs\");",
-      "const { execSync } = require(\"child_process\");",
-      "const color = require(\"picocolors\");",
-      "",
-      "async function main() {",
-      "  intro(`${color.bgCyan(color.black(\" CDK App \"))}`);",
-      "",
-      "  var appName;",
-      "  if (existsSync(\"./stack-name\")) {",
-      "    appName = readFileSync(\"./stack-name\", { encoding: \"utf8\" });",
-      "  } else {",
-      "    outro(`Can't find the stack name`);",
-      "    return;",
-      "  }",
-      "",
-      "  const s = spinner();",
-      "  s.start(\"Removing stack\");",
-      "  execSync(`aws cloudformation delete-stack --stack-name ${appName}`);",
-      "  s.stop(\"Stack removed\");",
-      "",
-      "  s.start(\"Deleting stack-name file\");",
-      "  unlinkSync(\"./stack-name\");",
-      "  s.stop(\"stack-name file deleted\");",
-      "",
-      "  outro(\"CDK App removed\");",
-      "}",
-      "",
-      "main().catch(console.error);",
-    ];
-
-    writeFileSync(this.outdir.concat("/destroy.js"), code.join("\n"), "utf8");
-  }
-
-  /**
-   * Create deploy.js file
-   */
-  synthDeployCode(): void {
-
-    const code = [
-      "const { intro, outro, spinner, text, note } = require(\"@clack/prompts\");",
-      "const { writeFileSync, readFileSync, existsSync } = require(\"fs\");",
-      "const { execSync } = require(\"child_process\");",
-      "const color = require(\"picocolors\");",
-      "",
-      "async function main() {",
-      "  intro(`${color.bgCyan(color.black(\" CDK App \"))}`);",
-      "",
-      "  var appName;",
-      "  if (existsSync(\"./stack-name\")) {",
-      "    appName = readFileSync(\"./stack-name\", { encoding: \"utf8\" });",
-      "    note(`${appName}`, \"stack-name\");",
-      "  } else {",
-      "    appName = await text({",
-      "      message: \"Choose the stack name\",",
-      "    });",
-      "",
-      "    writeFileSync(\"./stack-name\", `${appName}`)",
-      "  }",
-      "",
-      "  const s = spinner();",
-      "  s.start(\"Upload assets\");",
-      "  execSync('./node_modules/cdk-assets/bin/cdk-assets -p ./cdk.out/root.assets.json publish', { stdio: 'pipe' });",
-      "  s.stop(\"Finish upload assets\");",
-      "",
-      "  s.start(\"Deploying stack\");",
-      "  execSync(`aws cloudformation deploy --template-file cdk.out/root.template.json --capabilities CAPABILITY_NAMED_IAM --stack-name ${appName}`);",
-      "  s.stop(\"Stack deployed\");",
-      "",
-      "  outro(`You're all set!`);",
-      "}",
-      "",
-      "main().catch(console.error);",
-    ];
-
-    writeFileSync(this.outdir.concat("/deploy.js"), code.join("\n"), "utf8");
-  }
-
-  /**
-   * Create package.json file
-   */
-  synthPackageJson(): void {
-    const packageJson = JSON.stringify(
-      {
-        "name": "target",
-        "version": "1.0.0",
-        "description": "",
-        "main": "index.js",
-        "scripts": {
-          "deploy": "node deploy.js",
-          "destroy": "node destroy.js",
-        },
-        "keywords": [],
-        "author": "",
-        "license": "ISC",
-        "dependencies": {
-          "@clack/prompts": "^0.4.3",
-          "cdk-assets": "^2.64.0",
-          "child_process": "^1.0.2",
-          "picocolors": "^1.0.0"
-        }
-      }, undefined, 2);
-
-    writeFileSync(this.outdir.concat("/package.json"), packageJson, "utf8");
   }
 }
