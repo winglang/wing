@@ -20,7 +20,7 @@ Let's quickly walk through everything we've done together:
 
 Here's some recommended reading:
 
-- [Contributor's Handbook](../contributors/handbook) - the one-stop shop for contributing to Wing.
+- [Contributor's Handbook](../contributors/) - the one-stop shop for contributing to Wing.
 - [Concepts](../category/concepts) - a collection of topics on various concepts of the Wing language.
 - [Language Specification](../reference/spec) - the full specification of the language
   (note that it is not fully implemented yet).

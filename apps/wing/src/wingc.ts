@@ -1,11 +1,14 @@
 import debug from "debug";
-import { readFileSync } from "fs";
-import { normalPath } from "./util";
-import WASI from "wasi-js";
+import { readFile } from "fs/promises";
 import { resolve } from "path";
-import wasiBindings from "wasi-js/dist/bindings/node";
+import { WASI } from "wasi";
+import { normalPath } from "./util";
 
 const log = debug("wing:compile");
+
+const WINGSDK_RESOLVED_PATH = require.resolve("@winglang/sdk");
+const WINGSDK_MANIFEST_ROOT = resolve(WINGSDK_RESOLVED_PATH, "../..");
+const WINGC_WASM_PATH = resolve(__dirname, "../wingc.wasm");
 
 export type WingCompilerFunction =
   | "wingc_compile"
@@ -17,67 +20,12 @@ export type WingCompilerFunction =
   | "wingc_on_hover";
 
 export interface WingCompilerLoadOptions {
-  /**
-   * Additional imports to pass to the WASI instance. Imports objects/functions that WASM code can invoke.
-   *
-   * @default `{ wasi_snapshot_preview1: wasi.wasiImport, env: { send_notification: () => {} }`
-   */
   imports?: Record<string, any>;
-
-  /**
-   * Preopen directories for the WASI instance.
-   * These are directories that the sandboxed WASI instance can access.
-   * The also represent mappings from the WASI instance's filesystem to the host filesystem. (map key -> value)
-   *
-   * The following directories are always preopened:
-   * - `/`
-   * - `@winglang/sdk` module directory
-   *
-   * @default - No additional preopens are added other than the above
-   */
   preopens?: Record<string, string>;
-
-  /**
-   * Environment variables to pass to the WASI instance.
-   *
-   * The following variables are always set:
-   *
-   * - Current process environment variables
-   * - `RUST_BACKTRACE`=`full`
-   * - `WINGSDK_MANIFEST_ROOT`=The path to the `@winglang/sdk` module
-   *
-   *
-   * @default - No additional envs are added other than the above
-   */
   env?: Record<string, string>;
-
-  /**
-   * A filesystem for the WASI instance to use.
-   *
-   * @default - The `fs` module from Node.js
-   */
-  fs?: any;
-
-  /**
-   * The bytes of the `wingc.wasm` data loaded into memory.
-   *
-   * @default - The wingc.wasm bundled with this package is read from disk.
-   */
-  wingcWASMData?: Uint8Array;
-
-  /**
-   * The path to a directory containing the `@winglang/sdk` module
-   *
-   * @default - The `@winglang/sdk` module is resolved via `require.resolve()`.
-   */
-  wingsdkManifestRoot?: string;
 }
 
 export async function load(options: WingCompilerLoadOptions) {
-  const WINGSDK_MANIFEST_ROOT =
-    options.wingsdkManifestRoot ??
-    resolve(require.resolve("@winglang/sdk"), "../..");
-
   const preopens = {
     "/": "/",
     // .jsii access
@@ -93,14 +41,7 @@ export async function load(options: WingCompilerLoadOptions) {
     }
   }
 
-  // check if running in browser
-  const bindings = {
-    ...wasiBindings,
-    fs: options.fs ?? require("fs"),
-  };
-
   const wasi = new WASI({
-    bindings,
     env: {
       ...process.env,
       RUST_BACKTRACE: "full",
@@ -112,24 +53,18 @@ export async function load(options: WingCompilerLoadOptions) {
 
   const importObject = {
     wasi_snapshot_preview1: wasi.wasiImport,
-    env: {
-      // This function is used only by the lsp
-      send_notification: () => {},
-    },
     ...(options.imports ?? {}),
-  } as any;
+  };
 
   log("compiling wingc WASM module");
-  const binary =
-    options.wingcWASMData ??
-    new Uint8Array(readFileSync(resolve(__dirname, "../wingc.wasm")));
-  const mod = new WebAssembly.Module(binary);
+  const wasm = await WebAssembly.compile(await readFile(WINGC_WASM_PATH));
 
-  log("instantiating wingc WASM module with importObject: %o", importObject);
-  const instance = new WebAssembly.Instance(mod, importObject);
+  log("instantiating wingc WASM module");
 
-  log("starting wingc WASM module");
-  wasi.start(instance);
+  const instance = await WebAssembly.instantiate(wasm, importObject);
+  log("invoking wingc with importObject: %o", importObject);
+
+  wasi.initialize(instance);
 
   return instance;
 }
@@ -146,7 +81,7 @@ const HIGH_MASK = BigInt(32);
  *
  * ### IMPORTANT
  * For Windows support, ensure all paths provided by args or env are normalized to use forward slashes.
- *
+ * 
  * ### Assumptions
  * 1. The called WASM function is expecting a pointer and a length representing a string
  * 2. The string will be UTF-8 encoded
