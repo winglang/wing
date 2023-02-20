@@ -274,7 +274,9 @@ constructor() {
           ops: [\\"invoke\\"]
         },
       },
-      
+      data: {
+        str_to_str: str_to_str,
+      },
     }
   }));
 }
@@ -1270,6 +1272,7 @@ constructor() {
         },
       },
       data: {
+        b: b,
         x: x,
       },
     }
@@ -1646,10 +1649,183 @@ constructor() {
       },
       data: {
         data: data,
+        queue: queue,
+        res: res,
       },
     }
   });
   new cloud.Function(this,\\"test\\",handler);
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`capture_resource_with_no_inflight.w > wing compile --target tf-aws > A.inflight.js 1`] = `
+"export class A_inflight  {
+constructor({ field }) {
+
+  this.field = field;
+}
+}"
+`;
+
+exports[`capture_resource_with_no_inflight.w > wing compile --target tf-aws > index.js 1`] = `
+"async handle() { const { a } = this; {
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"hey\\" === a.field)'\`)})((\\"hey\\" === a.field))};
+} };"
+`;
+
+exports[`capture_resource_with_no_inflight.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_test_IamRole_6CDC2D16": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRole",
+            "uniqueId": "root_test_IamRole_6CDC2D16",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_test_IamRolePolicy_474A6820": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicy",
+            "uniqueId": "root_test_IamRolePolicy_474A6820",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_test_IamRolePolicyAttachment_1102A28A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicyAttachment",
+            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_test_AAE85061": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Default",
+            "uniqueId": "root_test_AAE85061",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "test-c8b6eece",
+          },
+        },
+        "function_name": "test-c8b6eece",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_test_Code_2D131EC2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Code",
+            "uniqueId": "root_test_Code_2D131EC2",
+          },
+        },
+        "bucket_prefix": "code-c883c33b-",
+      },
+    },
+    "aws_s3_object": {
+      "root_test_S3Object_A16CD789": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/S3Object",
+            "uniqueId": "root_test_S3Object_A16CD789",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`capture_resource_with_no_inflight.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"capture_resource_with_no_inflight\\", plugins: $plugins });
+  
+  class A extends $stdlib.core.Resource {
+  	constructor(scope, id, ) {
+  	super(scope, id);
+  {
+    this.field = \\"hey\\";
+  }
+  }
+  	
+  	_toInflight() {
+  	const field_client = this._lift(this.field);
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/A.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).A_inflight({field: \${field_client}}))\`);
+  }
+  }
+  
+  const a = new A(this,\\"A\\");
+  new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.b771192b636450edefdc8f4b596a6372d5b2520efa1fcdb75c51589c12a10c59/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+      
+      data: {
+        a: a,
+      },
+    }
+  }));
 }
 }
 new MyApp().synth();"
@@ -2071,7 +2247,11 @@ constructor() {
           ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
         },
       },
-      
+      data: {
+        bucket1: bucket1,
+        bucket2: bucket2,
+        bucket3: bucket3,
+      },
     }
   });
   (queue.onMessage(handler,{ batchSize: 5 }));
@@ -2720,7 +2900,10 @@ constructor() {
           ops: [\\"dec\\",\\"inc\\",\\"peek\\"]
         },
       },
-      
+      data: {
+        bucket: bucket,
+        counter: counter,
+      },
     }
   });
   (queue.onMessage(handler));
@@ -2838,19 +3021,19 @@ constructor() {
   super({ outdir: $outdir, name: \\"forward_decl\\", plugins: $plugins });
   
   class R extends $stdlib.core.Resource {
-  constructor(scope, id, ) {
+  	constructor(scope, id, ) {
   	super(scope, id);
   {
   }
   }
-  method2 = () => {
+  	method2 = () => {
     (this.method1());
     {console.log(\`\${this.f}\`)};
     (this.method2());
   }
   method1 = () => {
   }
-  _toInflight() {
+  	_toInflight() {
   	const f_client = this._lift(this.f);
   	const self_client_path = require('path').resolve(__dirname, \\"clients/R.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R_inflight({f: \${f_client}}))\`);
@@ -3067,7 +3250,9 @@ constructor() {
           ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
         },
       },
-      
+      data: {
+        bucket: bucket,
+      },
     }
   });
   (queue.onMessage(handler));
@@ -3669,7 +3854,7 @@ constructor() {
   super({ outdir: $outdir, name: \\"reassignment\\", plugins: $plugins });
   
   class R extends $stdlib.core.Resource {
-  constructor(scope, id, ) {
+  	constructor(scope, id, ) {
   	super(scope, id);
   {
     if (true) {
@@ -3678,10 +3863,10 @@ constructor() {
     }
   }
   }
-  inc = () => {
+  	inc = () => {
     this.f = (this.f + 1);
   }
-  _toInflight() {
+  	_toInflight() {
   	const f1_client = this._lift(this.f1);
   	const self_client_path = require('path').resolve(__dirname, \\"clients/R.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R_inflight({f1: \${f1_client}}))\`);
@@ -3934,14 +4119,14 @@ constructor() {
   super({ outdir: $outdir, name: \\"resource\\", plugins: $plugins });
   
   class Foo extends $stdlib.core.Resource {
-  constructor(scope, id, ) {
+  	constructor(scope, id, ) {
   	super(scope, id);
   {
     this.c = new cloud.Counter(this,\\"cloud.Counter\\");
   }
   }
-  
-  _toInflight() {
+  	
+  	_toInflight() {
   	const c_client = this._lift(this.c);
   	const self_client_path = require('path').resolve(__dirname, \\"clients/Foo.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo_inflight({c: \${c_client}}))\`);
@@ -3950,7 +4135,7 @@ constructor() {
   Foo._annotateInflight(\\"foo_inc\\", {\\"this.c\\": { ops: [\\"dec\\", \\"inc\\", \\"peek\\"]}});
   Foo._annotateInflight(\\"foo_get\\", {\\"this.c\\": { ops: [\\"dec\\", \\"inc\\", \\"peek\\"]}});
   class Bar extends $stdlib.core.Resource {
-  constructor(scope, id, name, b) {
+  	constructor(scope, id, name, b) {
   	super(scope, id);
   {
     this.name = name;
@@ -3958,8 +4143,8 @@ constructor() {
     this.foo = new Foo(this,\\"Foo\\");
   }
   }
-  
-  _toInflight() {
+  	
+  	_toInflight() {
   	const b_client = this._lift(this.b);
   const foo_client = this._lift(this.foo);
   const name_client = this._lift(this.name);
@@ -3983,7 +4168,10 @@ constructor() {
           ops: [\\"my_method\\"]
         },
       },
-      
+      data: {
+        bucket: bucket,
+        res: res,
+      },
     }
   }));
 }
@@ -4563,7 +4751,9 @@ constructor() {
           ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
         },
       },
-      
+      data: {
+        b: b,
+      },
     }
   }));
   new cloud.Function(this,\\"test:get\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
@@ -4575,7 +4765,9 @@ constructor() {
           ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
         },
       },
-      
+      data: {
+        b: b,
+      },
     }
   }));
 }
@@ -5324,7 +5516,7 @@ constructor() {
   super({ outdir: $outdir, name: \\"user-defined-resources-captures\\", plugins: $plugins });
   
   class MyResource extends $stdlib.core.Resource {
-  constructor(scope, id, ) {
+  	constructor(scope, id, ) {
   	super(scope, id);
   {
     this.my_resource = new cloud.Bucket(this,\\"cloud.Bucket\\");
@@ -5337,8 +5529,8 @@ constructor() {
     this.array_of_queues = Object.freeze([new cloud.Queue(this,\\"q1\\"), new cloud.Queue(this,\\"q2\\")]);
   }
   }
-  
-  _toInflight() {
+  	
+  	_toInflight() {
   	const array_of_queues_client = this._lift(this.array_of_queues);
   const array_of_str_client = this._lift(this.array_of_str);
   const map_of_num_client = this._lift(this.map_of_num);
@@ -5367,7 +5559,9 @@ constructor() {
           ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
         },
       },
-      
+      data: {
+        r: r,
+      },
     }
   }));
   new cloud.Function(this,\\"test:capture_primitives\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
@@ -5379,7 +5573,9 @@ constructor() {
           ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
         },
       },
-      
+      data: {
+        r: r,
+      },
     }
   }));
   new cloud.Function(this,\\"test:capture_array\\",new $stdlib.core.Inflight(this, \\"$Inflight3\\", {
@@ -5391,7 +5587,9 @@ constructor() {
           ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
         },
       },
-      
+      data: {
+        r: r,
+      },
     }
   }));
   new cloud.Function(this,\\"test:capture_map\\",new $stdlib.core.Inflight(this, \\"$Inflight4\\", {
@@ -5403,7 +5601,9 @@ constructor() {
           ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
         },
       },
-      
+      data: {
+        r: r,
+      },
     }
   }));
   new cloud.Function(this,\\"test:capture_set\\",new $stdlib.core.Inflight(this, \\"$Inflight5\\", {
@@ -5415,7 +5615,9 @@ constructor() {
           ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
         },
       },
-      
+      data: {
+        r: r,
+      },
     }
   }));
   new cloud.Function(this,\\"test:capture_array_of_queues\\",new $stdlib.core.Inflight(this, \\"$Inflight6\\", {
@@ -5427,7 +5629,9 @@ constructor() {
           ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
         },
       },
-      
+      data: {
+        r: r,
+      },
     }
   }));
 }

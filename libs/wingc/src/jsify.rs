@@ -802,8 +802,13 @@ impl<'a> JSifier<'a> {
 		let toinflight_method = self.jsify_toinflight_method(&class.name, &captured_fields);
 
 		// Jsify class
-		let resource_class = format!(
-			"class {}{} {{\n{}\n{}\n{}\n}}",
+		let resource_class = formatdoc!(
+			"
+			class {}{} {{
+				{}
+				{}
+				{toinflight_method}
+			}}",
 			self.jsify_symbol(&class.name),
 			if let Some(parent) = &class.parent {
 				format!(" extends {}", self.jsify_user_defined_type(parent))
@@ -820,7 +825,6 @@ impl<'a> JSifier<'a> {
 				))
 				.collect::<Vec<String>>()
 				.join("\n"),
-			toinflight_method
 		);
 
 		// For each inflight methods generate an annotation which includes a list of all the captured
