@@ -1,14 +1,14 @@
+import assert from "assert";
 import { execa } from "execa";
-import * as fs from "fs-extra";
-import * as path from "path";
-import * as nodeAssert from "node:assert";
+import fs from "fs-extra";
+import path from "path";
 import {
   npmBin,
   npmCacheDir,
   targetWingSDKSpec,
   targetWingSpec,
   tmpDir,
-  wingBin,
+  wingBin
 } from "./paths";
 
 const basePackageJson = {
@@ -56,17 +56,17 @@ export default async function () {
     }
   );
 
-  nodeAssert.equal(
+  assert.equal(
     installResult.exitCode,
     0,
     `Failed to install npm deps: \n${installResult.stderr}`
   );
-  nodeAssert.doesNotMatch(
+  assert.doesNotMatch(
     installResult.stdout,
     />/,
     `Install contains unexpected script hook: \n${installResult.stdout}`
   );
-  nodeAssert.doesNotMatch(
+  assert.doesNotMatch(
     installResult.stdout,
     / warn /,
     `Install contains unexpected warning: \n${installResult.stdout}`
@@ -78,13 +78,13 @@ export default async function () {
     cwd: tmpDir,
   });
 
-  nodeAssert.equal(
+  assert.equal(
     versionOutput.exitCode,
     0,
     `Failed to get wing version: ${versionOutput.stderr}`
   );
 
-  nodeAssert.match(
+  assert.match(
     versionOutput.stdout,
     /^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/,
     `Wing version invalid: ${versionOutput.stderr}`
