@@ -28,7 +28,7 @@ jobs:
       - name: Get Latest Wing Version
         id: get-version
         run: |
-          echo version=$(curl -s https://registry.npmjs.org/winglang | jq -r '.["dist-tags"].latest') >> $GITHUB_OUTPUT
+          echo version=$(npm view winglang version) >> $GITHUB_OUTPUT
       - name: Install Wing
         run: |
           ${{ matrix.install_command }}@${{ steps.get-version.outputs.version }}
