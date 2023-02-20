@@ -60,4 +60,11 @@ project.testTask.reset(
   "jest --passWithNoTests --all --updateSnapshot --coverageProvider=v8 --testTimeout=30000"
 );
 
+project.addFields({
+  volta: {
+    node: "19.6.1",
+    npm: "9.5.0",
+  },
+});
+
 project.synth();

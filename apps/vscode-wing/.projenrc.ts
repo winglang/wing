@@ -117,4 +117,11 @@ project.packageTask.reset(
 );
 project.packageTask.exec("vsce package -o vscode-wing.vsix");
 
+project.addFields({
+  volta: {
+    node: "19.6.1",
+    npm: "9.5.0",
+  },
+});
+
 project.synth();

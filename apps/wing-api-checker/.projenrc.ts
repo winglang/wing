@@ -25,4 +25,11 @@ bumpTask.reset(
   "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
 );
 
+project.addFields({
+  volta: {
+    node: "19.6.1",
+    npm: "9.5.0",
+  },
+});
+
 project.synth();

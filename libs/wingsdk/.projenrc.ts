@@ -238,4 +238,11 @@ project.testTask.reset(
 );
 project.testTask.spawn(project.eslint?.eslintTask!);
 
+project.addFields({
+  volta: {
+    node: "19.6.1",
+    npm: "9.5.0",
+  },
+});
+
 project.synth();
