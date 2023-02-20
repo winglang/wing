@@ -1,4 +1,5 @@
 const { typescript, javascript } = require("projen");
+const rootPackageJson = require("../../package.json");
 
 const project = new typescript.TypeScriptProject({
   name: "@winglang/jsii-docgen",
@@ -61,10 +62,7 @@ project.testTask.reset(
 );
 
 project.addFields({
-  volta: {
-    node: "19.6.1",
-    npm: "9.5.0",
-  },
+  volta: rootPackageJson.volta,
 });
 
 project.synth();

@@ -2,6 +2,7 @@ import { IgnoreFile } from "projen";
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptAppProject } from "projen/lib/typescript";
 import { VSCodeExtensionContributions } from "./src/project/vscode_types";
+import rootPackageJson from "../../package.json";
 
 const VSCODE_BASE_VERSION = "1.70.0";
 
@@ -118,10 +119,7 @@ project.packageTask.reset(
 project.packageTask.exec("vsce package -o vscode-wing.vsix");
 
 project.addFields({
-  volta: {
-    node: "19.6.1",
-    npm: "9.5.0",
-  },
+  volta: rootPackageJson.volta,
 });
 
 project.synth();

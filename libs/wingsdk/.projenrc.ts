@@ -1,5 +1,6 @@
 import { join } from "path";
 import { JsonFile, cdk, javascript } from "projen";
+import rootPackageJson from "../../package.json";
 
 const JSII_DEPS = [
   "constructs@~10.1.228",
@@ -239,10 +240,7 @@ project.testTask.reset(
 project.testTask.spawn(project.eslint?.eslintTask!);
 
 project.addFields({
-  volta: {
-    node: "19.6.1",
-    npm: "9.5.0",
-  },
+  volta: rootPackageJson.volta,
 });
 
 project.synth();

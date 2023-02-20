@@ -49,7 +49,6 @@
     "eslint-plugin-prettier": "^4.2.1",
     "jest": "^27",
     "jest-junit": "^13",
-    "json-schema": "^0.4.0",
     "npm-check-updates": "^16",
     "prettier": "^2.8.3",
     "projen": "^0.67.11",
@@ -113,6 +112,10 @@
     }
   },
   "types": "lib/index.d.ts",
+  "volta": {
+    "node": "19.6.1",
+    "npm": "9.5.0"
+  },
   "overrides": {
     "@types/babel__traverse": "7.18.2"
   },

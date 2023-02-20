@@ -1,4 +1,5 @@
 import { javascript, typescript } from "projen";
+import rootPackageJson from "../../package.json";
 
 const project = new typescript.TypeScriptProject({
   defaultReleaseBranch: "main",
@@ -26,10 +27,7 @@ bumpTask.reset(
 );
 
 project.addFields({
-  volta: {
-    node: "19.6.1",
-    npm: "9.5.0",
-  },
+  volta: rootPackageJson.volta,
 });
 
 project.synth();
