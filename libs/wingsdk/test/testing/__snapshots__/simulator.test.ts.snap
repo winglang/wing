@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`returns tree data 1`] = `
+exports[`provides raw tree data 1`] = `
 Object {
   "tree": Object {
     "children": Object {

@@ -184,6 +184,13 @@ fn scan_captures_in_expression(
 										})
 										.collect::<Vec<Capture>>(),
 								);
+								// If there are any capturable fields in the resource then we'll create a capture definition for the resource as well
+								if resource.fields(true).any(|(_, t)| t.is_capturable()) {
+									res.push(Capture {
+										object: symbol.clone(),
+										kind: CaptureKind::ImmutableData,
+									});
+								}
 							} else if t.is_capturable() {
 								// capture as an immutable data type (primitive/collection)
 								res.push(Capture {
@@ -226,12 +233,9 @@ fn scan_captures_in_expression(
 
 					// TODO: handle accessing things other than function_sigs while recursively accessing Reference?
 					if let Some(func) = prop_type.as_function_sig() {
-						if matches!(func.flight, Phase::Preflight) {
-							panic!("Can't access preflight method {} inflight", property);
-						}
-						debug!(
-							"We seem to be accessing the preflight method {}.{} {} inflight!",
-							resource.name.name, property.name, property.span
+						assert!(
+							func.flight != Phase::Preflight,
+							"Can't access preflight method {property} inflight"
 						);
 					}
 				}

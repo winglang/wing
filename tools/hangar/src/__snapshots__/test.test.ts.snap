@@ -20,6 +20,8 @@ exports[`capture_primitives.w > wing test --target sim > stdout 1`] = `"<green>p
 
 exports[`capture_resource_and_data.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> capture_resource_and_data.w <gray>»</color> <brightWhite>root/test</color>"`;
 
+exports[`capture_resource_with_no_inflight.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> capture_resource_with_no_inflight.w <gray>»</color> <brightWhite>root/test</color>"`;
+
 exports[`captures.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> captures.w <gray>(no tests)</color>"`;
 
 exports[`container_types.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> container_types.w <gray>(no tests)</color>"`;

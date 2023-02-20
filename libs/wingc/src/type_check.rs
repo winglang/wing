@@ -194,6 +194,14 @@ impl Class {
 			.filter(|(_, t, _)| t.as_variable().unwrap()._type.as_function_sig().is_some())
 			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap()._type.clone()))
 	}
+
+	pub fn fields(&self, with_ancestry: bool) -> impl Iterator<Item = (String, TypeRef)> + '_ {
+		self
+			.env
+			.iter(with_ancestry)
+			.filter(|(_, t, _)| t.as_variable().unwrap()._type.as_function_sig().is_none())
+			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap()._type.clone()))
+	}
 }
 
 #[derive(Derivative)]
