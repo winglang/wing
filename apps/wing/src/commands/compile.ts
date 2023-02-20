@@ -105,7 +105,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     // the wing CLI was installed to), but also in the source code directory.
     // This is necessary because the Wing app may have installed dependencies in
     // the project directory.
-    const requirePath = require.resolve(path, { paths: [__dirname, wingDir]});
+    const requirePath = require.resolve(path, { paths: [__dirname, wingDir, ...(require.resolve.paths(path) ?? [])]});
     return require(requirePath);
   };
 
