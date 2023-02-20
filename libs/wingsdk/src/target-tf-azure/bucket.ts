@@ -70,6 +70,11 @@ export class Bucket extends cloud.BucketBase {
       storageAccountName: this.storageAccount.name,
       containerAccessType: this.public ? "public" : "private",
     });
+
+    this.inflights.add("put");
+    this.inflights.add("get");
+    this.inflights.add("delete");
+    this.inflights.add("list");
   }
 
   public addObject(key: string, body: string): void {
@@ -90,7 +95,7 @@ export class Bucket extends cloud.BucketBase {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: core.Resource, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("buckets can only be bound by tfazure.Function for now");
     }
@@ -135,8 +140,3 @@ export class Bucket extends cloud.BucketBase {
     return `STORAGE_ACCOUNT_${this.storageContainer.node.addr.slice(-8)}`;
   }
 }
-
-Bucket._annotateInflight("put", {});
-Bucket._annotateInflight("get", {});
-Bucket._annotateInflight("delete", {});
-Bucket._annotateInflight("list", {});

@@ -8,7 +8,7 @@ use crate::ast::{
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
 use crate::{
 	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_MAP,
-	WINGSDK_MUT_ARRAY, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING,
+	WINGSDK_MUT_ARRAY, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_RESOURCE,
 };
 use derivative::Derivative;
 use indexmap::IndexSet;
@@ -1588,6 +1588,8 @@ impl<'a> TypeChecker<'a> {
 					// TODO
 				}
 
+
+				
 				// Verify parent is actually a known Class/Resource and get their env
 				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {
 					let t = resolve_user_defined_type(parent_type, env, stmt.idx).unwrap_or_else(|e| self.type_error(e));
@@ -1605,6 +1607,20 @@ impl<'a> TypeChecker<'a> {
 							(None, None)
 						}
 					}
+				} else if *is_resource {
+					// If this is a "resource", we will implicitly inherit from core.Resource
+					let resource_fqn = &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE);
+					let resource_base_type = self.types.libraries
+						.lookup_nested_str(resource_fqn, true, None)
+						.expect("core.Resource not found")
+						.as_type()
+						.expect("core.Resource is not a type");
+
+					let resource_base_class = resource_base_type
+						.as_resource()
+						.expect("core.Resource is not a resource");
+
+					(Some(resource_base_type), Some(resource_base_class.env.get_ref()))
 				} else {
 					(None, None)
 				};

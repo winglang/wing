@@ -7,7 +7,7 @@ use crate::{
 		TypeRef, Types, WING_CONSTRUCTOR_NAME,
 	},
 	utilities::camel_case_to_snake_case,
-	WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT,
+	WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT, CONSTRUCT_BASE,
 };
 use colored::Colorize;
 use serde_json::Value;
@@ -180,11 +180,6 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	fn import_type(&mut self, type_fqn: &FQN) {
-		// Hack: if the class name is a construct base then we treat this class as a resource and don't need to define it
-		if is_construct_base(&type_fqn) {
-			return;
-		}
-
 		self.setup_namespaces_for(&type_fqn);
 
 		// Check if this is a JSII interface and import it if it is
@@ -518,11 +513,14 @@ impl<'a> JsiiImporter<'a> {
 		// Get the base class of the JSII class, define it via recursive call if it's not define yet
 		let base_class_type = if let Some(base_class_fqn) = &jsii_class.base {
 			let base_class_fqn = FQN::from(base_class_fqn.as_str());
-			// Hack: if the base class name is a resource base then we treat this class as a resource and don't need to define its parent.
+
+			// if the base class name is a resource or construct base then we treat it as a resource
 			if is_construct_base(&base_class_fqn) {
 				is_resource = true;
-				None
-			} else {
+			}
+			
+			// if the base class is not constructs.Construct, import it
+			if base_class_fqn.as_str() != CONSTRUCT_BASE {
 				let base_class_name = base_class_fqn.type_name();
 				let base_class_type = if let Ok(base_class_type) =
 					self
@@ -553,6 +551,8 @@ impl<'a> JsiiImporter<'a> {
 					panic!("Base class {} of {} is not a resource", base_class_name, type_name);
 				}
 				Some(base_class_type)
+			} else {
+				None				
 			}
 		} else {
 			None

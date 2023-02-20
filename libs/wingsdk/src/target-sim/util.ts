@@ -2,7 +2,7 @@ import { access, constants } from "fs";
 import { promisify } from "util";
 import { IConstruct } from "constructs";
 import { Function } from "./function";
-import { IInflightHost, NodeJsCode, Resource } from "../core";
+import { NodeJsCode, Resource } from "../core";
 
 /**
  * Check if a file exists for an specific path
@@ -30,7 +30,7 @@ function makeEnvVarName(type: string, resource: IConstruct): string {
 export function bindSimulatorResource(
   type: string,
   resource: Resource,
-  host: IInflightHost
+  host: Resource
 ) {
   if (!(host instanceof Function)) {
     throw new Error(

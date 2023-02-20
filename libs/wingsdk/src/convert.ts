@@ -24,6 +24,7 @@ export function convertBetweenHandlers(
     constructor(theScope: Construct, theId: string, handler: IResource) {
       super(theScope, theId);
       this.handler = handler;
+      this.inflights.add("handle", { ref: "this.handler", op: "handle" });
     }
 
     public _toInflight(): NodeJsCode {
@@ -35,10 +36,6 @@ export function convertBetweenHandlers(
       );
     }
   }
-
-  NewHandler._annotateInflight("handle", {
-    "this.handler": { ops: ["handle"] },
-  });
 
   return new NewHandler(scope, id, baseHandler);
 }

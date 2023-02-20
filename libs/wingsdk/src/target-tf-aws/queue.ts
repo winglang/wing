@@ -38,6 +38,10 @@ export class Queue extends cloud.QueueBase {
         "initialMessages not supported yet for AWS target - https://github.com/winglang/wing/issues/281"
       );
     }
+
+    this.inflights.add("push");
+    this.inflights.add("purge");
+    this.inflights.add("approx_size");
   }
 
   public onMessage(
@@ -93,7 +97,7 @@ export class Queue extends cloud.QueueBase {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: core.Resource, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("queues can only be bound by tfaws.Function for now");
     }
@@ -140,7 +144,3 @@ export class Queue extends cloud.QueueBase {
     return `QUEUE_URL_${this.node.addr.slice(-8)}`;
   }
 }
-
-Queue._annotateInflight("push", {});
-Queue._annotateInflight("purge", {});
-Queue._annotateInflight("approx_size", {});

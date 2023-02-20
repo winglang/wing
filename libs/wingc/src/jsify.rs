@@ -801,6 +801,19 @@ impl<'a> JSifier<'a> {
 
 		let toinflight_method = self.jsify_toinflight_method(&class.name, &captured_fields);
 
+		// for each captured field and inflight method, generate a call to `this.inflights._verify(method, this.field)`
+		// TODO: only pass the relevant captured fields and ops to each method.
+		let verify_calls = captured_fields
+			.iter()
+			.cartesian_product(inflight_methods)
+			.map(|((field_name, _, _), (method_name, _))| {
+				format!(
+					"this.inflights._verify(\"{}\", \"this.{}\");",
+					method_name.name,
+					field_name
+				)
+			}).join("\n");
+
 		// Jsify class
 		let resource_class = format!(
 			"class {}{} {{\n{}\n{}\n{}\n}}",
@@ -810,7 +823,7 @@ impl<'a> JSifier<'a> {
 			} else {
 				format!(" extends {}.{}", STDLIB, WINGSDK_RESOURCE)
 			},
-			self.jsify_resource_constructor(&class.constructor, class.parent.is_none()),
+			self.jsify_resource_constructor(&class.constructor, class.parent.is_none(), verify_calls),
 			preflight_methods
 				.iter()
 				.map(|(n, m)| format!(
@@ -823,37 +836,13 @@ impl<'a> JSifier<'a> {
 			toinflight_method
 		);
 
-		// For each inflight methods generate an annotation which includes a list of all the captured
-		// fields and all the ops they provide.
-		// TODO: in the future we should only pass the relevant captured fields and ops to each method.
-		let default_annotation = captured_fields
-			.iter()
-			.map(|(name, _, ops)| {
-				format!(
-					"\"this.{}\": {{ ops: [{}]}}",
-					name,
-					ops.iter().map(|op| format!("\"{}\"", op)).collect_vec().join(", ")
-				)
-			})
-			.collect_vec()
-			.join(", ");
-		let inflight_annotations = inflight_methods
-			.iter()
-			.map(|(method_name, ..)| {
-				format!(
-					"{}._annotateInflight(\"{}\", {{{}}});",
-					class.name.name, method_name.name, default_annotation
-				)
-			})
-			.collect_vec();
-
 		// Return the preflight resource class
-		return format!("{}\n{}", resource_class, inflight_annotations.join("\n"));
+		return resource_class;
 	}
 
-	fn jsify_resource_constructor(&self, constructor: &Constructor, no_parent: bool) -> String {
+	fn jsify_resource_constructor(&self, constructor: &Constructor, no_parent: bool, verify_calls: String) -> String {
 		format!(
-			"constructor(scope, id, {}) {{\n{}\n{}\n}}",
+			"constructor(scope, id, {}) {{\n{}\n{}\n{}\n}}",
 			constructor
 				.parameters
 				.iter()
@@ -863,7 +852,8 @@ impl<'a> JSifier<'a> {
 			// If there's no parent then this resource is derived from the base resource class (core.Resource) and we need
 			// to manually call its super
 			if no_parent { "	super(scope, id);" } else { "" },
-			self.jsify_scope(&constructor.statements, Phase::Preflight)
+			self.jsify_scope(&constructor.statements, Phase::Preflight),
+			verify_calls,
 		)
 	}
 

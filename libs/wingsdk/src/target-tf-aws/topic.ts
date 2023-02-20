@@ -32,6 +32,8 @@ export class Topic extends cloud.TopicBase {
     this.topic = new SnsTopic(this, "Default", {
       name: ResourceNames.generateName(this, NAME_OPTS),
     });
+
+    this.inflights.add("publish");
   }
 
   public onMessage(
@@ -90,7 +92,7 @@ export class Topic extends cloud.TopicBase {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: core.Resource, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("topics can only be bound by tfaws.Function for now");
     }
@@ -119,5 +121,3 @@ export class Topic extends cloud.TopicBase {
     return `TOPIC_ARN_${this.node.addr.slice(-8)}`;
   }
 }
-
-Topic._annotateInflight("publish", {});

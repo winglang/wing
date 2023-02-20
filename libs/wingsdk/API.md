@@ -135,6 +135,7 @@ metadata is recorded in the tree.json file.
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Bucket.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Bucket.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Bucket.property.inflights">inflights</a></code> | <code>core.Inflights</code> | Records references from inflight methods of this resource to other resources. |
 | <code><a href="#@winglang/sdk.cloud.Bucket.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -160,6 +161,18 @@ display: Display;
 - *Type:* core.Display
 
 Information on how to display a resource in the UI.
+
+---
+
+##### `inflights`<sup>Required</sup> <a name="inflights" id="@winglang/sdk.cloud.Bucket.property.inflights"></a>
+
+```wing
+inflights: Inflights;
+```
+
+- *Type:* core.Inflights
+
+Records references from inflight methods of this resource to other resources.
 
 ---
 
@@ -289,6 +302,7 @@ metadata is recorded in the tree.json file.
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Counter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Counter.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Counter.property.inflights">inflights</a></code> | <code>core.Inflights</code> | Records references from inflight methods of this resource to other resources. |
 | <code><a href="#@winglang/sdk.cloud.Counter.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 | <code><a href="#@winglang/sdk.cloud.Counter.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
 
@@ -315,6 +329,18 @@ display: Display;
 - *Type:* core.Display
 
 Information on how to display a resource in the UI.
+
+---
+
+##### `inflights`<sup>Required</sup> <a name="inflights" id="@winglang/sdk.cloud.Counter.property.inflights"></a>
+
+```wing
+inflights: Inflights;
+```
+
+- *Type:* core.Inflights
+
+Records references from inflight methods of this resource to other resources.
 
 ---
 
@@ -484,6 +510,7 @@ metadata is recorded in the tree.json file.
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Function.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Function.property.inflights">inflights</a></code> | <code>core.Inflights</code> | Records references from inflight methods of this resource to other resources. |
 | <code><a href="#@winglang/sdk.cloud.Function.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 | <code><a href="#@winglang/sdk.cloud.Function.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Returns the set of environment variables for this function. |
 
@@ -510,6 +537,18 @@ display: Display;
 - *Type:* core.Display
 
 Information on how to display a resource in the UI.
+
+---
+
+##### `inflights`<sup>Required</sup> <a name="inflights" id="@winglang/sdk.cloud.Function.property.inflights"></a>
+
+```wing
+inflights: Inflights;
+```
+
+- *Type:* core.Inflights
+
+Records references from inflight methods of this resource to other resources.
 
 ---
 
@@ -670,6 +709,7 @@ Create a logger and register it to the given scope.
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Logger.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Logger.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Logger.property.inflights">inflights</a></code> | <code>core.Inflights</code> | Records references from inflight methods of this resource to other resources. |
 | <code><a href="#@winglang/sdk.cloud.Logger.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -695,6 +735,18 @@ display: Display;
 - *Type:* core.Display
 
 Information on how to display a resource in the UI.
+
+---
+
+##### `inflights`<sup>Required</sup> <a name="inflights" id="@winglang/sdk.cloud.Logger.property.inflights"></a>
+
+```wing
+inflights: Inflights;
+```
+
+- *Type:* core.Inflights
+
+Records references from inflight methods of this resource to other resources.
 
 ---
 
@@ -845,6 +897,7 @@ metadata is recorded in the tree.json file.
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Queue.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Queue.property.inflights">inflights</a></code> | <code>core.Inflights</code> | Records references from inflight methods of this resource to other resources. |
 | <code><a href="#@winglang/sdk.cloud.Queue.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -870,6 +923,18 @@ display: Display;
 - *Type:* core.Display
 
 Information on how to display a resource in the UI.
+
+---
+
+##### `inflights`<sup>Required</sup> <a name="inflights" id="@winglang/sdk.cloud.Queue.property.inflights"></a>
+
+```wing
+inflights: Inflights;
+```
+
+- *Type:* core.Inflights
+
+Records references from inflight methods of this resource to other resources.
 
 ---
 
@@ -1020,6 +1085,7 @@ metadata is recorded in the tree.json file.
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Schedule.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Schedule.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Schedule.property.inflights">inflights</a></code> | <code>core.Inflights</code> | Records references from inflight methods of this resource to other resources. |
 | <code><a href="#@winglang/sdk.cloud.Schedule.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -1045,6 +1111,18 @@ display: Display;
 - *Type:* core.Display
 
 Information on how to display a resource in the UI.
+
+---
+
+##### `inflights`<sup>Required</sup> <a name="inflights" id="@winglang/sdk.cloud.Schedule.property.inflights"></a>
+
+```wing
+inflights: Inflights;
+```
+
+- *Type:* core.Inflights
+
+Records references from inflight methods of this resource to other resources.
 
 ---
 
@@ -1195,6 +1273,7 @@ metadata is recorded in the tree.json file.
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Topic.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Topic.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Topic.property.inflights">inflights</a></code> | <code>core.Inflights</code> | Records references from inflight methods of this resource to other resources. |
 | <code><a href="#@winglang/sdk.cloud.Topic.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -1220,6 +1299,18 @@ display: Display;
 - *Type:* core.Display
 
 Information on how to display a resource in the UI.
+
+---
+
+##### `inflights`<sup>Required</sup> <a name="inflights" id="@winglang/sdk.cloud.Topic.property.inflights"></a>
+
+```wing
+inflights: Inflights;
+```
+
+- *Type:* core.Inflights
+
+Records references from inflight methods of this resource to other resources.
 
 ---
 
@@ -1258,9 +1349,9 @@ let add_connection_props = core.AddConnectionProps{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.core.AddConnectionProps.property.from">from</a></code> | <code>core.IResource</code> | The resource creating the connection to `to`. |
+| <code><a href="#@winglang/sdk.core.AddConnectionProps.property.from">from</a></code> | <code>core.Resource</code> | The resource creating the connection to `to`. |
 | <code><a href="#@winglang/sdk.core.AddConnectionProps.property.relationship">relationship</a></code> | <code>str</code> | The type of relationship between the resources. |
-| <code><a href="#@winglang/sdk.core.AddConnectionProps.property.to">to</a></code> | <code>core.IResource</code> | The resource `from` is connecting to. |
+| <code><a href="#@winglang/sdk.core.AddConnectionProps.property.to">to</a></code> | <code>core.Resource</code> | The resource `from` is connecting to. |
 | <code><a href="#@winglang/sdk.core.AddConnectionProps.property.implicit">implicit</a></code> | <code>bool</code> | Whether the relationship is implicit, i.e. it is not explicitly defined by the user. |
 
 ---
@@ -1268,10 +1359,10 @@ let add_connection_props = core.AddConnectionProps{ ... }
 ##### `from`<sup>Required</sup> <a name="from" id="@winglang/sdk.core.AddConnectionProps.property.from"></a>
 
 ```wing
-from: IResource;
+from: Resource;
 ```
 
-- *Type:* core.IResource
+- *Type:* core.Resource
 
 The resource creating the connection to `to`.
 
@@ -1292,10 +1383,10 @@ The type of relationship between the resources.
 ##### `to`<sup>Required</sup> <a name="to" id="@winglang/sdk.core.AddConnectionProps.property.to"></a>
 
 ```wing
-to: IResource;
+to: Resource;
 ```
 
-- *Type:* core.IResource
+- *Type:* core.Resource
 
 The resource `from` is connecting to.
 
@@ -2079,6 +2170,55 @@ Data and resource binding information.
 
 ---
 
+### InflightReference <a name="InflightReference" id="@winglang/sdk.core.InflightReference"></a>
+
+Represents a reference from an inflight method to another resource or object.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.core.InflightReference.Initializer"></a>
+
+```wing
+bring core;
+
+let inflight_reference = core.InflightReference{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.core.InflightReference.property.ref">ref</a></code> | <code>str</code> | The referenced resource or object. |
+| <code><a href="#@winglang/sdk.core.InflightReference.property.op">op</a></code> | <code>str</code> | The operation (method) that is performed on the referenced resource or object. |
+
+---
+
+##### `ref`<sup>Required</sup> <a name="ref" id="@winglang/sdk.core.InflightReference.property.ref"></a>
+
+```wing
+ref: str;
+```
+
+- *Type:* str
+
+The referenced resource or object.
+
+Use the syntax `this.resourceName` to refer to an object
+that is stored as a field on the resource.
+
+---
+
+##### `op`<sup>Optional</sup> <a name="op" id="@winglang/sdk.core.InflightReference.property.op"></a>
+
+```wing
+op: str;
+```
+
+- *Type:* str
+- *Default:* no operation is performed, this can be used to reference data objects for example.
+
+The operation (method) that is performed on the referenced resource or object.
+
+---
+
 ### InflightResourceBinding <a name="InflightResourceBinding" id="@winglang/sdk.core.InflightResourceBinding"></a>
 
 A resource binding.
@@ -2155,30 +2295,6 @@ obj: any;
 The object that will be serialized into the file during synthesis.
 
 ---
-
-### OperationAnnotation <a name="OperationAnnotation" id="@winglang/sdk.core.OperationAnnotation"></a>
-
-Annotations about what resources an inflight operation may access.
-
-The following example says that the operation may call "put" on a resource
-at "this.inner", or it may call "get" on a resource passed as an argument named
-"other".
-
-*Example*
-
-```wing
-{ "this.inner": { ops: ["put"] }, "other": { ops: ["get"] } }
-```
-
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.core.OperationAnnotation.Initializer"></a>
-
-```wing
-bring core;
-
-let operation_annotation = core.OperationAnnotation{ ... }
-```
-
 
 ### QueueOnMessageProps <a name="QueueOnMessageProps" id="@winglang/sdk.cloud.QueueOnMessageProps"></a>
 
@@ -2837,6 +2953,74 @@ Creates a `Code` instance with code for creating an inflight client.
 
 
 
+### Inflights <a name="Inflights" id="@winglang/sdk.core.Inflights"></a>
+
+Records information about inflight methods of a resource.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.core.Inflights.Initializer"></a>
+
+```wing
+bring core;
+
+new core.Inflights(parent: Resource)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.core.Inflights.Initializer.parameter.parent">parent</a></code> | <code>core.Resource</code> | *No description.* |
+
+---
+
+##### `parent`<sup>Required</sup> <a name="parent" id="@winglang/sdk.core.Inflights.Initializer.parameter.parent"></a>
+
+- *Type:* core.Resource
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.core.Inflights.add">add</a></code> | Indicates which resources are referenced (and how) by each inflight operation (method/property). |
+
+---
+
+##### `add` <a name="add" id="@winglang/sdk.core.Inflights.add"></a>
+
+```wing
+add(method: str, opts?: InflightReference): void
+```
+
+Indicates which resources are referenced (and how) by each inflight operation (method/property).
+
+Use the syntax `this.resourceName` to refer to a resource that is stored as
+a field on the resource.
+
+For completeness, this method must be called for all inflight methods, even if they don't
+reference any other resources.
+
+For example if I have a `fancy_get()` infilght method that calls `get` on an underlying
+`cloud.Bucket`, then it would be annotated as follow:
+
+```ts
+add("fancy_get", { ref: "this.bucket", op: "get" });
+```
+
+###### `method`<sup>Required</sup> <a name="method" id="@winglang/sdk.core.Inflights.add.parameter.method"></a>
+
+- *Type:* str
+
+---
+
+###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.core.Inflights.add.parameter.opts"></a>
+
+- *Type:* core.InflightReference
+
+---
+
+
+
+
 ### NodeJsCode <a name="NodeJsCode" id="@winglang/sdk.core.NodeJsCode"></a>
 
 Reference to a piece of Node.js code.
@@ -3351,51 +3535,9 @@ Entrypoint function that will be called when the cloud function is invoked.
 ---
 
 
-### IInflightHost <a name="IInflightHost" id="@winglang/sdk.core.IInflightHost"></a>
-
-- *Extends:* core.IResource
-
-- *Implemented By:* cloud.Function, cloud.FunctionBase, sim.Function, tfaws.Function, tfazure.Function, core.IInflightHost
-
-A resource that can run inflight code.
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.core.IInflightHost.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.core.IInflightHost.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.core.IInflightHost.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.core.IInflightHost.property.display"></a>
-
-```wing
-display: Display;
-```
-
-- *Type:* core.Display
-
-Information on how to display a resource in the UI.
-
----
-
 ### IInspectable <a name="IInspectable" id="@winglang/sdk.core.IInspectable"></a>
 
-- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Schedule, cloud.ScheduleBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfaws.Schedule, tfazure.Bucket, tfazure.Function, tfgcp.Bucket, tfgcp.Logger, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.IScheduleOnTickHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IInspectable, core.IResource
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Schedule, cloud.ScheduleBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfaws.Schedule, tfazure.Bucket, tfazure.Function, tfgcp.Bucket, tfgcp.Logger, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.IScheduleOnTickHandler, cloud.ITopicOnMessageHandler, core.IInspectable, core.IResource
 
 Interface for examining a construct and exposing metadata.
 
@@ -3570,7 +3712,7 @@ Function that will be called when a message is received from the queue.
 
 - *Extends:* core.IInspectable, constructs.IConstruct
 
-- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Schedule, cloud.ScheduleBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfaws.Schedule, tfazure.Bucket, tfazure.Function, tfgcp.Bucket, tfgcp.Logger, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.IScheduleOnTickHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IResource
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Schedule, cloud.ScheduleBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfaws.Schedule, tfazure.Bucket, tfazure.Function, tfgcp.Bucket, tfgcp.Logger, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.IScheduleOnTickHandler, cloud.ITopicOnMessageHandler, core.IResource
 
 Abstract interface for `Resource`.
 

@@ -18,6 +18,8 @@ export abstract class LoggerBase extends Resource {
     this.display.hidden = true;
     this.display.title = "Logger";
     this.display.description = "A cloud logging facility";
+
+    this.inflights.add("print");
   }
 
   /**

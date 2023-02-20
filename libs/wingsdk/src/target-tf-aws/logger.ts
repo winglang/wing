@@ -1,4 +1,3 @@
-import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
@@ -9,12 +8,8 @@ import * as core from "../core";
  * @inflight `@winglang/sdk.cloud.ILoggerClient`
  */
 export class Logger extends cloud.LoggerBase {
-  constructor(scope: Construct, id: string) {
-    super(scope, id);
-  }
-
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: core.Resource, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("loggers can only be bound by tfaws.Function for now");
     }
@@ -27,5 +22,3 @@ export class Logger extends cloud.LoggerBase {
     return core.InflightClient.for(__filename, "LoggerClient", []);
   }
 }
-
-Logger._annotateInflight("print", {});

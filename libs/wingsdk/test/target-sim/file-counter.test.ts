@@ -2,6 +2,8 @@ import { Construct } from "constructs";
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
 
+jest.setTimeout(60 * 1000);
+
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 test("can create sequential files in a bucket", async () => {

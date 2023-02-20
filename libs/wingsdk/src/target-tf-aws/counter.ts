@@ -34,10 +34,14 @@ export class Counter extends cloud.CounterBase {
       hashKey: HASH_KEY,
       billingMode: "PAY_PER_REQUEST",
     });
+
+    this.inflights.add("inc");
+    this.inflights.add("dec");
+    this.inflights.add("peek");
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: core.Resource, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("counters can only be bound by tfaws.Function for now");
     }
@@ -78,7 +82,3 @@ export class Counter extends cloud.CounterBase {
     return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
   }
 }
-
-Counter._annotateInflight("inc", {});
-Counter._annotateInflight("dec", {});
-Counter._annotateInflight("peek", {});

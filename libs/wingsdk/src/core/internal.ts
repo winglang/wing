@@ -47,6 +47,19 @@ export function makeHandler(
       this.display.title = display?.title;
       this.display.description = display?.description;
       this.display.hidden = display?.hidden;
+
+      this.inflights.add("handle");
+
+      // record inflight references from handle to all captured resources and data
+      for (const [k, v] of Object.entries(bindings.resources ?? {})) {
+        for (const op of v.ops) {
+          this.inflights.add("handle", { ref: "this." + k, op });
+        }
+      }
+
+      for (const k of Object.keys(bindings.data ?? {})) {
+        this.inflights.add("handle", { ref: "this." + k });
+      }
     }
 
     public _toInflight(): NodeJsCode {
@@ -68,17 +81,6 @@ ${Object.entries(clients)
       );
     }
   }
-
-  const annotation: Record<string, { ops: Array<string> }> = {};
-  for (const [k, v] of Object.entries(bindings.resources ?? {})) {
-    annotation["this." + k] = { ops: v.ops };
-  }
-
-  for (const k of Object.keys(bindings.data ?? {})) {
-    annotation["this." + k] = { ops: [] };
-  }
-
-  Handler._annotateInflight("handle", annotation);
 
   return new Handler();
 }

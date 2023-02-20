@@ -150,10 +150,12 @@ export class Function extends cloud.FunctionBase {
 
     // terraform rejects templates with zero environment variables
     this.addEnvironment("WING_FUNCTION_NAME", name);
+
+    this.inflights.add("invoke");
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: core.Resource, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by tfaws.Function for now");
     }
@@ -221,5 +223,3 @@ export interface PolicyStatement {
   /** Effect ("Allow" or "Deny") */
   readonly effect?: string;
 }
-
-Function._annotateInflight("invoke", {});

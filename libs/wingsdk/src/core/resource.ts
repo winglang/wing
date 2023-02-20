@@ -10,11 +10,6 @@ import { Duration } from "../std";
 import { log } from "../util";
 
 /**
- * A resource that can run inflight code.
- */
-export interface IInflightHost extends IResource {}
-
-/**
  * Abstract interface for `Resource`.
  */
 export interface IResource extends IInspectable, IConstruct {
@@ -37,7 +32,7 @@ export interface IResource extends IInspectable, IConstruct {
    *
    * @internal
    */
-  _bind(host: IInflightHost, ops: string[]): void;
+  _bind(host: Resource, ops: string[]): void;
 
   /**
    * Register that the resource needs to be bound to the host for the given
@@ -46,7 +41,7 @@ export interface IResource extends IInspectable, IConstruct {
    *
    * @internal
    */
-  _registerBind(host: IInflightHost, ops: string[]): void;
+  _registerBind(host: Resource, ops: string[]): void;
 
   /**
    * Return a code snippet that can be used to reference this resource inflight.
@@ -64,8 +59,6 @@ export interface IResource extends IInspectable, IConstruct {
    */
   _preSynthesize(): void;
 }
-
-const BIND_METADATA_PREFIX = "$bindings__";
 
 /**
  * Shared behavior between all Wing SDK resources.
@@ -96,33 +89,8 @@ export abstract class Resource extends Construct implements IResource {
     });
   }
 
-  /**
-   * Annotate a class with with metadata about what operations it supports
-   * inflight, and what sub-resources each operation requires access to.
-   *
-   * For example if `MyBucket` has a `fancy_get` method that calls `get` on an
-   * underlying `cloud.Bucket`, then it would be annotated as follows:
-   * ```
-   * MyBucket._annotateInflight("fancy_get", {
-   *  "this.bucket": { ops: ["get"] }
-   * });
-   * ```
-   *
-   * The Wing compiler will automatically generate the correct annotations by
-   * scanning the source code, but in the Wing SDK we have to add them manually.
-   *
-   * @internal
-   */
-  public static _annotateInflight(op: string, annotation: OperationAnnotation) {
-    const sym = Symbol.for(BIND_METADATA_PREFIX + op);
-    Object.defineProperty(this.prototype, sym, {
-      value: annotation,
-      enumerable: false,
-      writable: false,
-    });
-  }
-
-  private readonly bindMap: Map<IInflightHost, Set<string>> = new Map();
+  private readonly _inflights = new Inflights(this);
+  private readonly bindMap: Map<Resource, Set<string>> = new Map();
 
   /** @internal */
   public readonly _connections: Connection[] = [];
@@ -152,10 +120,17 @@ export abstract class Resource extends Construct implements IResource {
    *
    * @internal
    */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public _bind(host: Resource, ops: string[]): void {
     // Do nothing by default
     host;
     ops;
+  }
+
+  /**
+   * Records references from inflight methods of this resource to other resources.
+   */
+  public get inflights() {
+    return this._inflights;
   }
 
   /**
@@ -165,7 +140,7 @@ export abstract class Resource extends Construct implements IResource {
    *
    * @internal
    */
-  public _registerBind(host: IInflightHost, ops: string[]) {
+  public _registerBind(host: Resource, ops: string[]) {
     log(
       `Registering a binding for a resource (${this.node.path}) to a host (${
         host.node.path
@@ -181,20 +156,7 @@ export abstract class Resource extends Construct implements IResource {
     }
 
     // Collect a list of all immediate child bindings
-    const resources: Record<string, string[]> = {};
-    for (let op of ops) {
-      const sym = Symbol.for(BIND_METADATA_PREFIX + op);
-      const bindAnnotation: OperationAnnotation = (this as any)[sym];
-      if (!bindAnnotation) {
-        throw new Error(
-          `Resource ${this.node.path} does not support operation ${op}`
-        );
-      }
-      for (let resource of Object.keys(bindAnnotation)) {
-        resources[resource] = resources[resource] ?? [];
-        resources[resource].push(...bindAnnotation[resource].ops);
-      }
-    }
+    const resources: Record<string, string[]> = this.inflights._get(ops);
 
     // this is how resources will look:
     // resources = {
@@ -234,7 +196,7 @@ export abstract class Resource extends Construct implements IResource {
    */
   private registerBindObject(
     obj: any,
-    host: IResource,
+    host: Resource,
     ops: string[] = ["?"]
   ): void {
     switch (typeof obj) {
@@ -357,6 +319,99 @@ export abstract class Resource extends Construct implements IResource {
 }
 
 /**
+ * Records information about inflight methods of a resource.
+ */
+export class Inflights {
+  private readonly refsByMethod: Record<string, InflightReference[]> = {};
+  public constructor(private readonly parent: Resource) {}
+
+  /**
+   * Indicates which resources are referenced (and how) by each inflight operation
+   * (method/property). Use the syntax `this.resourceName` to refer to a resource that is stored as
+   * a field on the resource.
+   *
+   * For completeness, this method must be called for all inflight methods, even if they don't
+   * reference any other resources.
+   *
+   * For example if I have a `fancy_get()` infilght method that calls `get` on an underlying
+   * `cloud.Bucket`, then it would be annotated as follow:
+   *
+   * ```ts
+   * add("fancy_get", { ref: "this.bucket", op: "get" });
+   * ```
+   */
+  public add(method: string, opts?: InflightReference): void {
+    this.refsByMethod[method] = this.refsByMethod[method] ?? [];
+    if (opts) {
+      this.refsByMethod[method].push(opts);
+    }
+  }
+
+  /**
+   * Checks if we have recorded the reference between the given method and the given resource.
+   * @param method The method name
+   * @param ref The resource reference (e.g. `this.bucket`)
+   *
+   * @internal
+   */
+  public _verify(method: string, ref: string) {
+    const refs = this.refsByMethod[method] ?? [];
+    for (const r of refs) {
+      // found a reference to the given resource
+      if (r.ref === ref) {
+        return;
+      }
+    }
+
+    throw new Error(
+      `${this.parent.node.path}: unable to determine reference between "${method}" and "${ref}". Use \`this.inflight.add("${method}", ref: "${ref}", op: "<OP>")\`.`
+    );
+  }
+
+  /**
+   * @internal
+   */
+  public _get(methods: string[]): Record<string, string[]> {
+    const resources: Record<string, string[]> = {};
+
+    for (let method of methods) {
+      const refs = this.refsByMethod[method];
+      if (!refs) {
+        throw new Error(
+          `Resource "${this.parent.node.path}" does not support operation ${method}`
+        );
+      }
+
+      for (const ref of refs) {
+        resources[ref.ref] = resources[ref.ref] ?? [];
+        if (ref.op) {
+          resources[ref.ref].push(ref.op);
+        }
+      }
+    }
+
+    return resources;
+  }
+}
+
+/**
+ * Represents a reference from an inflight method to another resource or object.
+ */
+export interface InflightReference {
+  /**
+   * The referenced resource or object. Use the syntax `this.resourceName` to refer to an object
+   * that is stored as a field on the resource.
+   */
+  readonly ref: string;
+
+  /**
+   * The operation (method) that is performed on the referenced resource or object.
+   * @default - no operation is performed, this can be used to reference data objects for example.
+   */
+  readonly op?: string;
+}
+
+/**
  * The direction of a connection.
  *
  * Visually speaking, if a resource A has an outbound connection with resource B,
@@ -383,12 +438,12 @@ export interface AddConnectionProps {
   /**
    * The resource creating the connection to `to`.
    */
-  readonly from: IResource;
+  readonly from: Resource;
 
   /**
    * The resource `from` is connecting to.
    */
-  readonly to: IResource;
+  readonly to: Resource;
 
   /**
    * The type of relationship between the resources.
@@ -427,21 +482,6 @@ export interface Connection {
    * defined by the user.
    */
   readonly implicit: boolean;
-}
-
-/**
- * Annotations about what resources an inflight operation may access.
- *
- * The following example says that the operation may call "put" on a resource
- * at "this.inner", or it may call "get" on a resource passed as an argument named
- * "other".
- * @example
- * { "this.inner": { ops: ["put"] }, "other": { ops: ["get"] } }
- */
-export interface OperationAnnotation {
-  [resource: string]: {
-    ops: string[];
-  };
 }
 
 /**

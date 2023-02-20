@@ -82,7 +82,7 @@ export class Bucket extends cloud.BucketBase {
   }
 
   /** @internal */
-  public _bind(_inflightHost: core.IInflightHost, _ops: string[]): void {
+  public _bind(_inflightHost: core.Resource, _ops: string[]): void {
     // TODO: support functions once tfgcp functions are implemented
     throw new Error("Method not implemented.");
   }

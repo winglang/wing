@@ -24,6 +24,10 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
     this.timeout = props.timeout ?? std.Duration.fromSeconds(30);
     this.subscribers = [];
     this.initialMessages.push(...(props.initialMessages ?? []));
+
+    this.inflights.add("push");
+    this.inflights.add("purge");
+    this.inflights.add("approx_size");
   }
 
   public onMessage(
@@ -103,7 +107,7 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: core.Resource, ops: string[]): void {
     bindSimulatorResource("queue", this, host);
     super._bind(host, ops);
   }
@@ -113,7 +117,3 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
     return makeSimulatorJsClient("queue", this);
   }
 }
-
-Queue._annotateInflight("push", {});
-Queue._annotateInflight("purge", {});
-Queue._annotateInflight("approx_size", {});

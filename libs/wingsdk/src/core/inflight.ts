@@ -4,7 +4,7 @@ import { tmpdir } from "os";
 import { basename, dirname, join } from "path";
 import { Construct } from "constructs";
 import { makeHandler } from "./internal";
-import { Connection, Display, IInflightHost, IResource } from "./resource";
+import { Connection, Display, IResource, Resource } from "./resource";
 import { TreeInspector } from "./tree";
 import { normalPath } from "../util";
 
@@ -131,11 +131,11 @@ export class Inflight extends Construct implements IResource {
     });
   }
   /** @internal */
-  public _bind(_host: IInflightHost, _ops: string[]): void {
+  public _bind(_host: Resource, _ops: string[]): void {
     throw new Error("Method not implemented.");
   }
   /** @internal */
-  public _registerBind(_host: IInflightHost, _ops: string[]): void {
+  public _registerBind(_host: Resource, _ops: string[]): void {
     throw new Error("Method not implemented.");
   }
   /** @internal */

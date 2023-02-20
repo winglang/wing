@@ -107,28 +107,15 @@ impl SymbolEnv {
 			});
 		}
 
-		// Avoid variable shadowing
-		if let Some(_parent_env) = self.parent {
-			if let Some(parent_kind) = self.try_lookup(&symbol.name, None) {
-				// If we're a class we allow "symbol shadowing" for methods
-				let is_function = if let SymbolKind::Variable(VariableInfo { _type: t, .. }) = kind {
-					matches!(*t, Type::Function(_))
-				} else {
-					false
-				};
-				let is_parent_function = if let SymbolKind::Variable(VariableInfo { _type: t, .. }) = *parent_kind {
-					matches!(*t, Type::Function(_))
-				} else {
-					false
-				};
-				if !(self.is_class && is_parent_function && is_function) {
-					return Err(TypeError {
-						span: symbol.span.clone(),
-						message: format!("Symbol \"{}\" already defined in parent scope.", symbol.name),
-					});
-				}
-			}
+		// Avoid symbol shadowing (unless we're in a class and then derived classes can shadow symbols
+		// from their parent class)
+		if self.parent.is_some() && self.try_lookup(&symbol.name, None).is_some() && !self.is_class {
+			return Err(TypeError {
+				span: symbol.span.clone(),
+				message: format!("Symbol \"{}\" already defined in parent scope.", symbol.name),
+			});
 		}
+
 		self.symbol_map.insert(symbol.name.clone(), (pos, kind));
 
 		Ok(())
@@ -202,10 +189,21 @@ impl SymbolEnv {
 
 		match lookup_result {
 			LookupResult::Found((kind, symbol_info)) => Ok((kind, symbol_info)),
-			LookupResult::NotFound => Err(TypeError {
-				message: format!("Unknown symbol \"{}\"", &symbol.name),
-				span: symbol.span.clone(),
-			}),
+			LookupResult::NotFound => {
+
+				// create a list of available symbols in this environment
+				let available_symbols = self
+					.symbol_map
+					.keys()
+					.map(|s| format!("\"{}\"", s.to_string()))
+					.collect::<Vec<String>>()
+					.join(",");
+
+				Err(TypeError {
+					message: format!("Unknown symbol \"{}\". Did you mean? {}", &symbol.name, available_symbols),
+					span: symbol.span.clone(),
+				})
+			},
 			LookupResult::DefinedLater => Err(TypeError {
 				message: format!("Symbol \"{}\" used before being defined", symbol.name),
 				span: symbol.span.clone(),

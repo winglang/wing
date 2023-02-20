@@ -18,6 +18,11 @@ export class Bucket extends cloud.BucketBase implements ISimulatorResource {
     super(scope, id, props);
 
     this.public = props.public ?? false;
+
+    this.inflights.add("put");
+    this.inflights.add("get");
+    this.inflights.add("delete");
+    this.inflights.add("list");
   }
 
   public addObject(key: string, body: string): void {
@@ -38,7 +43,7 @@ export class Bucket extends cloud.BucketBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: core.Resource, ops: string[]): void {
     bindSimulatorResource("bucket", this, host);
     super._bind(host, ops);
   }
@@ -48,8 +53,3 @@ export class Bucket extends cloud.BucketBase implements ISimulatorResource {
     return makeSimulatorJsClient("bucket", this);
   }
 }
-
-Bucket._annotateInflight("put", {});
-Bucket._annotateInflight("get", {});
-Bucket._annotateInflight("delete", {});
-Bucket._annotateInflight("list", {});

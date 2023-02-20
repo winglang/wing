@@ -47,6 +47,8 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
       lines: [readFileSync(this.assetPath, "utf-8")],
     });
     this.code = core.NodeJsCode.fromFile(assetPath);
+
+    this.inflights.add("invoke");
   }
 
   public toSimulator(): BaseResourceSchema {
@@ -65,7 +67,7 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: core.Resource, ops: string[]): void {
     bindSimulatorResource("function", this, host);
     super._bind(host, ops);
   }
@@ -75,5 +77,3 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
     return makeSimulatorJsClient("function", this);
   }
 }
-
-Function._annotateInflight("invoke", {});

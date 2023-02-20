@@ -17,6 +17,10 @@ export class Counter extends cloud.CounterBase implements ISimulatorResource {
     super(scope, id, props);
 
     this.initial = props.initial ?? 0;
+
+    this.inflights.add("inc");
+    this.inflights.add("dec");
+    this.inflights.add("peek");
   }
 
   public toSimulator(): BaseResourceSchema {
@@ -32,7 +36,7 @@ export class Counter extends cloud.CounterBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: core.Resource, ops: string[]): void {
     bindSimulatorResource("counter", this, host);
     super._bind(host, ops);
   }
@@ -42,7 +46,3 @@ export class Counter extends cloud.CounterBase implements ISimulatorResource {
     return makeSimulatorJsClient("counter", this);
   }
 }
-
-Counter._annotateInflight("inc", {});
-Counter._annotateInflight("dec", {});
-Counter._annotateInflight("peek", {});
