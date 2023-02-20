@@ -127,7 +127,7 @@ jobs:
           targets: "build,test,package"
           all: true
           # If pushing, exclude hangar because we're going to run it in a separate job
-          args: "${{ github.env.WORKFLOW_FULL_E2E == 'true' ?? '--exclude=hangar ' || '' }}--configuration=release --output-style=stream --verbose"
+          args: "${{ github.env.WORKFLOW_FULL_E2E == 'true' && '--exclude=hangar ' || '' }}--configuration=release --output-style=stream --verbose"
 
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v2
