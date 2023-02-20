@@ -6,6 +6,8 @@
 
 [macOS (arm64)](https://wing-console.s3.amazonaws.com/wing-console-arm64.dmg)
 
+[windows](https://wing-console.s3.amazonaws.com/wing-console.exe)
+
 ## Installation
 
 ```sh
