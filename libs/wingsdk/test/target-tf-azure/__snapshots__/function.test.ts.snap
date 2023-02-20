@@ -109,7 +109,7 @@ Object {
                   "CodeBlob": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-azurerm.storageBlob.StorageBlob",
-                      "version": "5.0.1",
+                      "version": "5.0.6",
                     },
                     "id": "CodeBlob",
                     "path": "root/Default/Function/CodeBlob",
@@ -117,7 +117,7 @@ Object {
                   "Function": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-azurerm.linuxFunctionApp.LinuxFunctionApp",
-                      "version": "5.0.1",
+                      "version": "5.0.6",
                     },
                     "id": "Function",
                     "path": "root/Default/Function/Function",
@@ -131,7 +131,7 @@ Object {
                       "Bucket": Object {
                         "constructInfo": Object {
                           "fqn": "@cdktf/provider-azurerm.storageContainer.StorageContainer",
-                          "version": "5.0.1",
+                          "version": "5.0.6",
                         },
                         "id": "Bucket",
                         "path": "root/Default/Function/FunctionBucket/Bucket",
@@ -139,7 +139,7 @@ Object {
                     },
                     "constructInfo": Object {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.228",
+                      "version": "10.1.255",
                     },
                     "display": Object {
                       "description": "A cloud object store",
@@ -151,7 +151,7 @@ Object {
                   "ReadLambdaCodeAssignment": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-azurerm.roleAssignment.RoleAssignment",
-                      "version": "5.0.1",
+                      "version": "5.0.6",
                     },
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/Function/ReadLambdaCodeAssignment",
@@ -159,7 +159,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.255",
                 },
                 "display": Object {
                   "description": "A cloud function (FaaS)",
@@ -175,7 +175,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.255",
                 },
                 "display": Object {
                   "description": "An inflight resource",
@@ -188,7 +188,7 @@ Object {
               "ResourceGroup": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-azurerm.resourceGroup.ResourceGroup",
-                  "version": "5.0.1",
+                  "version": "5.0.6",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -196,7 +196,7 @@ Object {
               "ServicePlan": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-azurerm.servicePlan.ServicePlan",
-                  "version": "5.0.1",
+                  "version": "5.0.6",
                 },
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
@@ -204,7 +204,7 @@ Object {
               "StorageAccount": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-azurerm.storageAccount.StorageAccount",
-                  "version": "5.0.1",
+                  "version": "5.0.6",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -223,7 +223,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.255",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -236,7 +236,7 @@ Object {
               "azure": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
-                  "version": "5.0.1",
+                  "version": "5.0.6",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -244,7 +244,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.255",
             },
             "id": "Default",
             "path": "root/Default",
@@ -388,7 +388,7 @@ Object {
                   "CodeBlob": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-azurerm.storageBlob.StorageBlob",
-                      "version": "5.0.1",
+                      "version": "5.0.6",
                     },
                     "id": "CodeBlob",
                     "path": "root/Default/Function/CodeBlob",
@@ -396,7 +396,7 @@ Object {
                   "Function": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-azurerm.linuxFunctionApp.LinuxFunctionApp",
-                      "version": "5.0.1",
+                      "version": "5.0.6",
                     },
                     "id": "Function",
                     "path": "root/Default/Function/Function",
@@ -410,7 +410,7 @@ Object {
                       "Bucket": Object {
                         "constructInfo": Object {
                           "fqn": "@cdktf/provider-azurerm.storageContainer.StorageContainer",
-                          "version": "5.0.1",
+                          "version": "5.0.6",
                         },
                         "id": "Bucket",
                         "path": "root/Default/Function/FunctionBucket/Bucket",
@@ -418,7 +418,7 @@ Object {
                     },
                     "constructInfo": Object {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.228",
+                      "version": "10.1.255",
                     },
                     "display": Object {
                       "description": "A cloud object store",
@@ -430,7 +430,7 @@ Object {
                   "ReadLambdaCodeAssignment": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-azurerm.roleAssignment.RoleAssignment",
-                      "version": "5.0.1",
+                      "version": "5.0.6",
                     },
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/Function/ReadLambdaCodeAssignment",
@@ -438,7 +438,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.255",
                 },
                 "display": Object {
                   "description": "A cloud function (FaaS)",
@@ -454,7 +454,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.255",
                 },
                 "display": Object {
                   "description": "An inflight resource",
@@ -467,7 +467,7 @@ Object {
               "ResourceGroup": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-azurerm.resourceGroup.ResourceGroup",
-                  "version": "5.0.1",
+                  "version": "5.0.6",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -475,7 +475,7 @@ Object {
               "ServicePlan": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-azurerm.servicePlan.ServicePlan",
-                  "version": "5.0.1",
+                  "version": "5.0.6",
                 },
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
@@ -483,7 +483,7 @@ Object {
               "StorageAccount": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-azurerm.storageAccount.StorageAccount",
-                  "version": "5.0.1",
+                  "version": "5.0.6",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -502,7 +502,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.255",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -515,7 +515,7 @@ Object {
               "azure": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
-                  "version": "5.0.1",
+                  "version": "5.0.6",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -523,7 +523,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.255",
             },
             "id": "Default",
             "path": "root/Default",
@@ -648,7 +648,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.255",
                 },
                 "display": Object {
                   "description": "An inflight resource",
@@ -661,7 +661,7 @@ Object {
               "ResourceGroup": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-azurerm.resourceGroup.ResourceGroup",
-                  "version": "5.0.1",
+                  "version": "5.0.6",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -669,7 +669,7 @@ Object {
               "ServicePlan": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-azurerm.servicePlan.ServicePlan",
-                  "version": "5.0.1",
+                  "version": "5.0.6",
                 },
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
@@ -677,7 +677,7 @@ Object {
               "StorageAccount": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-azurerm.storageAccount.StorageAccount",
-                  "version": "5.0.1",
+                  "version": "5.0.6",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -696,7 +696,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.255",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -709,7 +709,7 @@ Object {
               "azure": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
-                  "version": "5.0.1",
+                  "version": "5.0.6",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -738,7 +738,7 @@ Object {
                   "CodeBlob": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-azurerm.storageBlob.StorageBlob",
-                      "version": "5.0.1",
+                      "version": "5.0.6",
                     },
                     "id": "CodeBlob",
                     "path": "root/Default/someFunction01/CodeBlob",
@@ -746,7 +746,7 @@ Object {
                   "Function": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-azurerm.linuxFunctionApp.LinuxFunctionApp",
-                      "version": "5.0.1",
+                      "version": "5.0.6",
                     },
                     "id": "Function",
                     "path": "root/Default/someFunction01/Function",
@@ -760,7 +760,7 @@ Object {
                       "Bucket": Object {
                         "constructInfo": Object {
                           "fqn": "@cdktf/provider-azurerm.storageContainer.StorageContainer",
-                          "version": "5.0.1",
+                          "version": "5.0.6",
                         },
                         "id": "Bucket",
                         "path": "root/Default/someFunction01/FunctionBucket/Bucket",
@@ -768,7 +768,7 @@ Object {
                     },
                     "constructInfo": Object {
                       "fqn": "constructs.Construct",
-                      "version": "10.1.228",
+                      "version": "10.1.255",
                     },
                     "display": Object {
                       "description": "A cloud object store",
@@ -780,7 +780,7 @@ Object {
                   "ReadLambdaCodeAssignment": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-azurerm.roleAssignment.RoleAssignment",
-                      "version": "5.0.1",
+                      "version": "5.0.6",
                     },
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/someFunction01/ReadLambdaCodeAssignment",
@@ -788,7 +788,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.255",
                 },
                 "display": Object {
                   "description": "A cloud function (FaaS)",
@@ -800,7 +800,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.255",
             },
             "id": "Default",
             "path": "root/Default",

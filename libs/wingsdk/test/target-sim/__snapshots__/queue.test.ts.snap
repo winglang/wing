@@ -33,7 +33,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -50,7 +50,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A distributed message queue",
@@ -62,7 +62,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.255",
       },
       "id": "root",
       "path": "root",
@@ -79,7 +79,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -96,7 +96,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A distributed message queue",
@@ -108,7 +108,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.255",
       },
       "id": "root",
       "path": "root",
@@ -194,7 +194,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "An inflight resource",
@@ -218,7 +218,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -242,7 +242,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A distributed message queue",
@@ -279,7 +279,7 @@ Object {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.1.228",
+                "version": "10.1.255",
               },
               "id": "Code",
               "path": "root/my_queue-OnMessage-e645076f/Code",
@@ -287,7 +287,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A cloud function (FaaS)",
@@ -303,7 +303,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
@@ -311,7 +311,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.255",
       },
       "id": "root",
       "path": "root",
@@ -405,7 +405,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "An inflight resource",
@@ -429,7 +429,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -453,7 +453,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A distributed message queue",
@@ -490,7 +490,7 @@ exports.handler = async function(event) {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.1.228",
+                "version": "10.1.255",
               },
               "id": "Code",
               "path": "root/my_queue-OnMessage-e645076f/Code",
@@ -498,7 +498,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A cloud function (FaaS)",
@@ -514,7 +514,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
@@ -522,7 +522,7 @@ exports.handler = async function(event) {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.255",
       },
       "id": "root",
       "path": "root",
@@ -579,7 +579,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -596,7 +596,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A distributed message queue",
@@ -608,7 +608,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.255",
       },
       "id": "root",
       "path": "root",
@@ -625,7 +625,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -642,7 +642,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A distributed message queue",
@@ -654,7 +654,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.255",
       },
       "id": "root",
       "path": "root",
@@ -744,7 +744,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "An inflight resource",
@@ -768,7 +768,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -792,7 +792,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A distributed message queue",
@@ -829,7 +829,7 @@ Object {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.1.228",
+                "version": "10.1.255",
               },
               "id": "Code",
               "path": "root/my_queue-OnMessage-e645076f/Code",
@@ -837,7 +837,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A cloud function (FaaS)",
@@ -853,7 +853,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
@@ -861,7 +861,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.255",
       },
       "id": "root",
       "path": "root",
@@ -955,7 +955,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "An inflight resource",
@@ -979,7 +979,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -1003,7 +1003,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A distributed message queue",
@@ -1040,7 +1040,7 @@ exports.handler = async function(event) {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.1.228",
+                "version": "10.1.255",
               },
               "id": "Code",
               "path": "root/my_queue-OnMessage-e645076f/Code",
@@ -1048,7 +1048,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A cloud function (FaaS)",
@@ -1064,7 +1064,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
@@ -1072,7 +1072,7 @@ exports.handler = async function(event) {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.255",
       },
       "id": "root",
       "path": "root",
@@ -1157,7 +1157,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "An inflight resource",
@@ -1181,7 +1181,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -1205,7 +1205,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A distributed message queue",
@@ -1242,7 +1242,7 @@ Object {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.1.228",
+                "version": "10.1.255",
               },
               "id": "Code",
               "path": "root/my_queue-OnMessage-e645076f/Code",
@@ -1250,7 +1250,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A cloud function (FaaS)",
@@ -1266,7 +1266,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
@@ -1274,7 +1274,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.255",
       },
       "id": "root",
       "path": "root",
@@ -1368,7 +1368,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "An inflight resource",
@@ -1392,7 +1392,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -1416,7 +1416,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A distributed message queue",
@@ -1453,7 +1453,7 @@ exports.handler = async function(event) {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.1.228",
+                "version": "10.1.255",
               },
               "id": "Code",
               "path": "root/my_queue-OnMessage-e645076f/Code",
@@ -1461,7 +1461,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A cloud function (FaaS)",
@@ -1477,7 +1477,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
@@ -1485,7 +1485,7 @@ exports.handler = async function(event) {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.255",
       },
       "id": "root",
       "path": "root",

@@ -31,7 +31,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -48,7 +48,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A pub/sub notification topic",
@@ -60,7 +60,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.255",
       },
       "id": "root",
       "path": "root",
@@ -77,7 +77,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -94,7 +94,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.255",
           },
           "display": Object {
             "description": "A pub/sub notification topic",
@@ -106,7 +106,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.255",
       },
       "id": "root",
       "path": "root",
