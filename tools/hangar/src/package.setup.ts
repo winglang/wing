@@ -1,6 +1,7 @@
 import { execa } from "execa";
 import * as fs from "fs-extra";
 import * as path from "path";
+import * as nodeAssert from "node:assert";
 import {
   npmBin,
   npmCacheDir,
@@ -27,6 +28,8 @@ const shellEnv = {
   npm_config_progress: "false",
   npm_config_yes: "true",
   npm_config_cache: npmCacheDir,
+  npm_config_color: "false",
+  npm_config_foreground_scripts: "true",
   FORCE_COLOR: "true",
 };
 
@@ -40,7 +43,7 @@ export default async function () {
 
   // use execSync to install npm deps in tmpDir
   console.debug(`Installing npm deps into ${tmpDir}...`);
-  await execa(
+  const installResult = await execa(
     npmBin,
     [
       "install",
@@ -52,18 +55,33 @@ export default async function () {
       cwd: tmpDir,
     }
   );
+
+  nodeAssert.equal(
+    installResult.exitCode,
+    0,
+    `Failed to install npm deps: \n${installResult.stderr}`
+  );
+  nodeAssert.doesNotMatch(
+    installResult.stdout,
+    />/,
+    `Install contains unexpected script hook: \n${installResult.stdout}`
+  );
+
   console.debug(`Done!`);
 
   const versionOutput = await execa(wingBin, ["--version"], {
     cwd: tmpDir,
   });
 
-  if (versionOutput.exitCode !== 0) {
-    throw new Error(`Failed to get wing version: ${versionOutput.stderr}`);
-  }
+  nodeAssert.equal(
+    versionOutput.exitCode,
+    0,
+    `Failed to get wing version: ${versionOutput.stderr}`
+  );
 
-  // expect(versionOutput.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
-  if (!versionOutput.stdout.match(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/)) {
-    throw new Error(`Wing version invalid: ${versionOutput.stderr}`);
-  }
+  nodeAssert.match(
+    versionOutput.stdout,
+    /^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/,
+    `Wing version invalid: ${versionOutput.stderr}`
+  );
 }
