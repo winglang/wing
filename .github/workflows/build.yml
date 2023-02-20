@@ -20,7 +20,7 @@ env:
   PROJEN_BUMP_VERSION: "0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}"
   RUST_VERSION: "1.66.0"
   WORKFLOW_FULL_E2E: ${{ github.event_name == 'push' }}
-  WORKFLOW_PUBLISH: ${{ github.event_name == 'push' && /github.repository == 'winglang/wing' }}
+  WORKFLOW_PUBLISH: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
 
 jobs:
   prepare:
