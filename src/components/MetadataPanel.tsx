@@ -63,9 +63,9 @@ export const MetadataPanel = ({
   outbound,
   onConnectionNodeClick,
 }: MetadataProps) => {
-  const [closedInspectorSections, setClosedInspectorSections] = useState<
-    string[]
-  >(() => []);
+  const [openInspectorSections, setOpenInspectorSections] = useState(() => [
+    "interact",
+  ]);
 
   const { attributeGroups, connectionsGroups } = useMemo(() => {
     const connectionsGroupsArray: ConnectionsGroup[] = [];
@@ -162,7 +162,7 @@ export const MetadataPanel = ({
   }, [node, inbound, outbound]);
 
   const toggleInspectorSection = (section: string) => {
-    setClosedInspectorSections(([...sections]) => {
+    setOpenInspectorSections(([...sections]) => {
       const index = sections.indexOf(section);
       if (index === -1) {
         sections.push(section);
@@ -196,9 +196,9 @@ export const MetadataPanel = ({
               <div key={attributeGroup.groupName}>
                 <InspectorSection
                   text={attributeGroup.groupName}
-                  open={
-                    !closedInspectorSections.includes(attributeGroup.groupName)
-                  }
+                  open={openInspectorSections.includes(
+                    attributeGroup.groupName,
+                  )}
                   onClick={() =>
                     toggleInspectorSection(attributeGroup.groupName)
                   }
@@ -223,7 +223,7 @@ export const MetadataPanel = ({
           {connectionsGroups && connectionsGroups.length > 0 && (
             <InspectorSection
               text="Relationships"
-              open={!closedInspectorSections.includes("relationships")}
+              open={openInspectorSections.includes("relationships")}
               onClick={() => toggleInspectorSection("relationships")}
             >
               <div className="border-t">
@@ -280,7 +280,7 @@ export const MetadataPanel = ({
           {node.type.startsWith("wingsdk.cloud") && (
             <InspectorSection
               text="Interact"
-              open={!closedInspectorSections.includes("interact")}
+              open={openInspectorSections.includes("interact")}
               onClick={() => toggleInspectorSection("interact")}
             >
               <div className="bg-slate-100 border-t border-slate-200">
