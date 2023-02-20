@@ -1472,6 +1472,112 @@ Whether the bucket's objects should be publicly accessible.
 
 ---
 
+### CdkAppProps <a name="CdkAppProps" id="@winglang/sdk.core.CdkAppProps"></a>
+
+AWS-CDK App props.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.core.CdkAppProps.Initializer"></a>
+
+```wing
+bring core;
+
+let cdk_app_props = core.CdkAppProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.core.CdkAppProps.property.customFactory">custom_factory</a></code> | <code>polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
+| <code><a href="#@winglang/sdk.core.CdkAppProps.property.name">name</a></code> | <code>str</code> | The name of the app. |
+| <code><a href="#@winglang/sdk.core.CdkAppProps.property.outdir">outdir</a></code> | <code>str</code> | Directory where artifacts are synthesized to. |
+| <code><a href="#@winglang/sdk.core.CdkAppProps.property.plugins">plugins</a></code> | <code>MutArray&lt;str&gt;</code> | Absolute paths to plugin javascript files. |
+| <code><a href="#@winglang/sdk.core.CdkAppProps.property.stateFile">state_file</a></code> | <code>str</code> | The path to a state file which will track all synthesized files. |
+| <code><a href="#@winglang/sdk.core.CdkAppProps.property.stackName">stack_name</a></code> | <code>str</code> | CDK Stack Name. |
+
+---
+
+##### `custom_factory`<sup>Optional</sup> <a name="custom_factory" id="@winglang/sdk.core.CdkAppProps.property.customFactory"></a>
+
+```wing
+custom_factory: IPolyconFactory;
+```
+
+- *Type:* polycons.IPolyconFactory
+- *Default:* use the default polycon factory included in the Wing SDK
+
+A custom factory to resolve polycons.
+
+---
+
+##### `name`<sup>Optional</sup> <a name="name" id="@winglang/sdk.core.CdkAppProps.property.name"></a>
+
+```wing
+name: str;
+```
+
+- *Type:* str
+- *Default:* "app"
+
+The name of the app.
+
+---
+
+##### `outdir`<sup>Optional</sup> <a name="outdir" id="@winglang/sdk.core.CdkAppProps.property.outdir"></a>
+
+```wing
+outdir: str;
+```
+
+- *Type:* str
+- *Default:* current working directory
+
+Directory where artifacts are synthesized to.
+
+---
+
+##### `plugins`<sup>Optional</sup> <a name="plugins" id="@winglang/sdk.core.CdkAppProps.property.plugins"></a>
+
+```wing
+plugins: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+- *Default:* [] no plugins
+
+Absolute paths to plugin javascript files.
+
+---
+
+##### `state_file`<sup>Optional</sup> <a name="state_file" id="@winglang/sdk.core.CdkAppProps.property.stateFile"></a>
+
+```wing
+state_file: str;
+```
+
+- *Type:* str
+- *Default:* no state file
+
+The path to a state file which will track all synthesized files.
+
+If a
+statefile is not specified, we won't be able to remove extrenous files.
+
+---
+
+##### `stack_name`<sup>Optional</sup> <a name="stack_name" id="@winglang/sdk.core.CdkAppProps.property.stackName"></a>
+
+```wing
+stack_name: str;
+```
+
+- *Type:* str
+- *Default:* undefined
+
+CDK Stack Name.
+
+---
+
 ### Connection <a name="Connection" id="@winglang/sdk.core.Connection"></a>
 
 A connection between two resources.

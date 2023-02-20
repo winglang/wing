@@ -14,6 +14,7 @@ import { Logger } from "../cloud";
 export interface CdkAppProps extends AppProps {
   /**
    * CDK Stack Name
+   * @default - undefined
    */
   readonly stackName?: string;
 }
