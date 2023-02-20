@@ -315,7 +315,7 @@ impl<'a> JSifier<'a> {
 				Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 			},
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None, phase),
-			ExprKind::Call { function, args } => {
+			ExprKind::Call { function, arg_list } => {
 				let function_type = function.evaluated_type.borrow().unwrap();
 				let function_sig = function_type
 					.as_function_sig()
@@ -338,7 +338,7 @@ impl<'a> JSifier<'a> {
 					}
 					_ => format!("({})", self.jsify_expression(function, phase)),
 				};
-				let arg_string = self.jsify_arg_list(&args, None, None, needs_case_conversion, phase);
+				let arg_string = self.jsify_arg_list(&arg_list, None, None, needs_case_conversion, phase);
 
 				if let Some(js_override) = &function_sig.js_override {
 					let self_string = &match &function.kind {
@@ -365,7 +365,7 @@ impl<'a> JSifier<'a> {
 				};
 				format!("({}{})", op, self.jsify_expression(exp, phase))
 			}
-			ExprKind::Binary { op, lexp, rexp } => {
+			ExprKind::Binary { op, left, right } => {
 				let op = match op {
 					BinaryOperator::Add => "+",
 					BinaryOperator::Sub => "-",
@@ -383,9 +383,9 @@ impl<'a> JSifier<'a> {
 				};
 				format!(
 					"({} {} {})",
-					self.jsify_expression(lexp, phase),
+					self.jsify_expression(left, phase),
 					op,
-					self.jsify_expression(rexp, phase)
+					self.jsify_expression(right, phase)
 				)
 			}
 			ExprKind::ArrayLiteral { items, .. } => {
