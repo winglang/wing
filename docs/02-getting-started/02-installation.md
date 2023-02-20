@@ -77,11 +77,9 @@ to use it, but it's great. It's available through the [VSCode Marketplace](https
 
 ## Wing Console
 
-:::caution Wing Console is currently only supported in macOS
+:::caution Wing Console doesn't support Linux yet
 
-Click :thumbsup: on [this issue](https://github.com/winglang/wing/issues/630)
-to indicate that you are looking for Windows support, or :thumbsup: on
-[this issue](https://github.com/winglang/wing/issues/723) to indicate that you
+Click :thumbsup: on [this issue](https://github.com/winglang/wing/issues/723) to indicate that you
 are looking for Linux support.
 
 :::
@@ -90,8 +88,9 @@ are looking for Linux support.
 The Wing Console is a desktop application that allows you to interact with your
 Wing applications running locally on the cloud simulator.
 
-1. Download the latest version of the **Wing Console** for [macOS](https://wing-console.s3.amazonaws.com/wing-console.dmg) or [macOS arm64](https://wing-console.s3.amazonaws.com/wing-console-arm64.dmg).
-2. Accept the license agreement and drag the Wing Console app into **Applications**:
+1. Download the latest version of the **Wing Console** for [macOS](https://wing-console.s3.amazonaws.com/wing-console.dmg), [macOS arm64](https://wing-console.s3.amazonaws.com/wing-console-arm64.dmg) or [windows](https://wing-console.s3.amazonaws.com/wing-console.exe)
+2. Accept the license agreement.
+3. In macOS: drag the Wing Console app into **Applications**
 
 ![Drag the Wing Console app into Applications](./console-install.png 'Wing Console app installation')
 
