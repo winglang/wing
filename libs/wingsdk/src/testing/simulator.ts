@@ -494,6 +494,9 @@ export class Simulator {
     };
   }
 
+  /**
+   * Obtain information about the application's resource tree.
+   */
   public tree(): Tree {
     return this._tree;
   }
