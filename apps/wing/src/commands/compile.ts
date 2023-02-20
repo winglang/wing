@@ -191,6 +191,8 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
           )
       );
     }
+
+    process.exitCode = 1;
   }
 }
 

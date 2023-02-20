@@ -8,7 +8,7 @@ import {
   targetWingSDKSpec,
   targetWingSpec,
   tmpDir,
-  wingBin
+  wingBin,
 } from "./paths";
 
 const basePackageJson = {
@@ -43,18 +43,15 @@ export default async function () {
 
   // use execSync to install npm deps in tmpDir
   console.debug(`Installing npm deps into ${tmpDir}...`);
-  const installResult = await execa(
-    npmBin,
-    [
-      "install",
-      "--no-package-lock",
-      "--ignore-engines",
-      "--install-links=false",
-    ],
-    {
-      cwd: tmpDir,
-    }
-  );
+  const installArgs = ["install", "--no-package-lock"];
+
+  if (!process.env.HANGAR_WING_SPEC?.endsWith(".tgz")) {
+    installArgs.push("--install-links=false");
+  }
+
+  const installResult = await execa(npmBin, installArgs, {
+    cwd: tmpDir,
+  });
 
   assert.equal(
     installResult.exitCode,
