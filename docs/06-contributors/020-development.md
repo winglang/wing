@@ -11,7 +11,7 @@ This topic includes a description of common development workflows for the Wing p
 Here is a list of minimal tools you should install to build the Wing repo in your development
 environment:
 
-* [Node.js] v18 and npm v8
+* [Node.js] v19 and npm v9
   * We recommend [volta] to manage node tools
 * [Rust]
 * [AWS CLI]

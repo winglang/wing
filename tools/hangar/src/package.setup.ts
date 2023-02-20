@@ -66,6 +66,11 @@ export default async function () {
     />/,
     `Install contains unexpected script hook: \n${installResult.stdout}`
   );
+  nodeAssert.doesNotMatch(
+    installResult.stdout,
+    / warn /,
+    `Install contains unexpected warning: \n${installResult.stdout}`
+  );
 
   console.debug(`Done!`);
 
