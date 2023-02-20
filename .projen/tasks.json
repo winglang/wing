@@ -166,6 +166,9 @@
     "test": {
       "name": "test",
       "description": "Run tests",
+      "env": {
+        "PLAYWRIGHT_TEST": "true"
+      },
       "steps": [
         {
           "spawn": "eslint"
@@ -177,7 +180,7 @@
           "exec": "npm i -g winglang"
         },
         {
-          "exec": "export PLAYWRIGHT_TEST=true && xvfb-maybe --auto-servernum --server-args=\"-screen 0 3440x1440x24\" -- npx playwright test"
+          "exec": "xvfb-maybe --auto-servernum --server-args=\"-screen 0 3440x1440x24\" -- npx playwright test"
         }
       ]
     },

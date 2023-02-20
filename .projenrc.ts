@@ -94,6 +94,22 @@ project
     "${{ secrets.SEGMENT_WRITE_KEY }}",
   );
 
+project
+  .tryFindObjectFile(".github/workflows/build.yml")
+  ?.addOverride("jobs.build.strategy.matrix.os", [
+    "ubuntu-latest",
+    "windows-latest",
+    "macos-latest",
+  ]);
+
+project
+  .tryFindObjectFile(".github/workflows/build.yml")
+  ?.addOverride("jobs.build.steps.3.run", "npx projen build -RunAsAdmin");
+
+project
+  .tryFindObjectFile(".github/workflows/build.yml")
+  ?.addOverride("jobs.build.runs-on", "${{ matrix.os }}");
+
 project.buildWorkflow?.addPostBuildSteps({
   name: "upload playwright report",
   if: "${{ always() }}",
@@ -108,11 +124,12 @@ project.compileTask.exec("tsx scripts/build.mts");
 
 project.tasks.tryFind("package")?.reset();
 
+project.tasks.tryFind("test")?.env("PLAYWRIGHT_TEST", "true");
 project.tasks.tryFind("test")?.exec("npm i -g winglang");
 project.tasks
   .tryFind("test")
   ?.exec(
-    'export PLAYWRIGHT_TEST=true && xvfb-maybe --auto-servernum --server-args="-screen 0 3440x1440x24" -- npx playwright test',
+    'xvfb-maybe --auto-servernum --server-args="-screen 0 3440x1440x24" -- npx playwright test',
   );
 
 project.package.addField("main", "dist/vite/electron/main/index.js");
@@ -183,7 +200,7 @@ project.release?.addJobs({
       },
       {
         name: "Release to GitHub",
-        run: 'errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF release/Wing\\ Console-* release/latest-mac.yml 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi',
+        run: 'errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF release/Wing\\ Console* release/latest-mac.yml release/latest.yml 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi',
         env: {
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
           GITHUB_REPOSITORY: "${{ github.repository }}",

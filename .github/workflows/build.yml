@@ -6,7 +6,7 @@ on:
   workflow_dispatch: {}
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     permissions:
       contents: write
     outputs:
@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: build
-        run: npx projen build
+        run: npx projen build -RunAsAdmin
       - name: upload playwright report
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
@@ -51,6 +51,12 @@ jobs:
           echo "::error::Files were changed during build (see build log). If this was triggered from a fork, you will need to update your branch."
           cat .repo.patch
           exit 1
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
   self-mutation:
     needs: build
     runs-on: ubuntu-latest

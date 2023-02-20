@@ -41,68 +41,106 @@ await writeFile(
   )}\n`,
 );
 
-try {
-  await build({
-    targets: Platform.MAC.createTarget(),
-    // eslint-disable-next-line unicorn/no-null
-    publish: process.env.CI ? "always" : null,
-    config: {
-      appId: "co.monada.WingConsole",
-      productName: "Wing Console",
-      publish: [
-        {
-          provider: "s3",
-          bucket: "a1bnbufeqmg-km85vfnen3",
-        },
-      ],
-      protocols: [{ name: "Wing Console", schemes: [WING_PROTOCOL_SCHEME] }],
-      fileAssociations: [{ ext: "wsim", name: "Wing Sim File" }],
-      directories: {
-        output: "release",
-        buildResources: "electron/resources",
-      },
-      files: ["dist/vite"],
-
-      mac: {
-        target: {
-          target: "default",
-          arch: ["x64", "arm64"],
-        },
-      },
-      dmg: {
-        sign: true,
-        icon: "electron/resources/icon.icns",
-        background: "electron/resources/background.png",
-      },
-      afterSign: async (context) => {
-        if (context.electronPlatformName === "darwin") {
-          try {
-            const values = getEnvironmentValues(
-              "APPLE_ID",
-              "APPLE_ID_PASSWORD",
-            );
-            const appPath = `${context.appOutDir}/${context.packager.appInfo.productFilename}.app`;
-            console.log(`  • notarizing app=${appPath}`);
-            await notarize({
-              appBundleId: context.packager.appInfo.macBundleIdentifier,
-              appleId: values.APPLE_ID,
-              appleIdPassword: values.APPLE_ID_PASSWORD,
-              appPath,
-            });
-            console.log(`  • notarization successful`);
-          } catch (error) {
-            if (error instanceof MissingEnvironmentVariable) {
-              console.log(
-                `  • skipped macOS application notarization  reason=${error.message}`,
-              );
-            } else {
-              throw error;
-            }
-          }
-        }
+const targets =
+  Platform.current() === Platform.WINDOWS
+    ? [Platform.WINDOWS]
+    : [Platform.MAC, Platform.WINDOWS];
+const arch = {
+  mac: {
+    mac: {
+      target: {
+        target: "default",
+        arch: ["x64", "arm64"],
       },
     },
-  });
+    dmg: {
+      sign: true,
+      icon: "electron/resources/icon.icns",
+      background: "electron/resources/background.png",
+    },
+  },
+  win: {
+    win: {
+      target: "nsis",
+    },
+  },
+};
+
+try {
+  for (const target of targets) {
+    await build({
+      targets: target.createTarget(),
+      // eslint-disable-next-line unicorn/no-null
+      publish: process.env.CI ? "always" : null,
+      config: {
+        appId: "co.monada.WingConsole",
+        productName: "Wing Console",
+        publish: [
+          {
+            provider: "s3",
+            bucket: "a1bnbufeqmg-km85vfnen3",
+          },
+        ],
+        protocols: [{ name: "Wing Console", schemes: [WING_PROTOCOL_SCHEME] }],
+        fileAssociations: [{ ext: "wsim", name: "Wing Sim File" }],
+        directories: {
+          output: "release",
+          buildResources: "electron/resources",
+        },
+        files: ["dist/vite"],
+        mac:
+          target === Platform.MAC
+            ? {
+                target: {
+                  target: "default",
+                  arch: ["x64", "arm64"],
+                },
+              }
+            : undefined,
+        dmg:
+          target === Platform.MAC
+            ? {
+                sign: true,
+                icon: "electron/resources/icon.icns",
+                background: "electron/resources/background.png",
+              }
+            : undefined,
+        win:
+          target === Platform.WINDOWS
+            ? {
+                target: "nsis",
+              }
+            : undefined,
+        afterSign: async (context) => {
+          if (context.electronPlatformName === "darwin") {
+            try {
+              const values = getEnvironmentValues(
+                "APPLE_ID",
+                "APPLE_ID_PASSWORD",
+              );
+              const appPath = `${context.appOutDir}/${context.packager.appInfo.productFilename}.app`;
+              console.log(`  • notarizing app=${appPath}`);
+              await notarize({
+                appBundleId: context.packager.appInfo.macBundleIdentifier,
+                appleId: values.APPLE_ID,
+                appleIdPassword: values.APPLE_ID_PASSWORD,
+                appPath,
+              });
+              console.log(`  • notarization successful`);
+            } catch (error) {
+              if (error instanceof MissingEnvironmentVariable) {
+                console.log(
+                  `  • skipped macOS application notarization  reason=${error.message}`,
+                );
+              } else {
+                throw error;
+              }
+            }
+          }
+        },
+      },
+    });
+  }
 } finally {
   await writeFile("package.json", packageJson);
 }

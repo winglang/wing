@@ -62,15 +62,18 @@ async function createWindow(options: { title?: string; port: number }) {
   });
 
   if (import.meta.env.DEV) {
-    log.info("DEV mode");
-    log.info("loadURL", `${import.meta.env.BASE_URL}?port=${options.port}`);
+    log.info("creating window in DEV mode");
+    log.info(
+      "window.loadURL",
+      `${import.meta.env.BASE_URL}?port=${options.port}`,
+    );
     void window.loadURL(`${import.meta.env.BASE_URL}?port=${options.port}`);
     if (!process.env.PLAYWRIGHT_TEST && !process.env.CI) {
       window.webContents.openDevTools();
     }
   } else {
-    log.info("PROD mode");
-    log.info("loadFile", path.join(ROOT_PATH.dist, "index.html"));
+    log.info("creating window in PROD mode");
+    log.info("window.loadFile", path.join(ROOT_PATH.dist, "index.html"));
     void window.loadFile(path.join(ROOT_PATH.dist, "index.html"), {
       query: {
         port: options.port.toString(),
@@ -85,14 +88,29 @@ async function createWindow(options: { title?: string; port: number }) {
  * Creates a window manager, which reuses windows if the file is already open.
  */
 function createWindowManager() {
+  log.info("createWindowManager");
+
   const windows = new Map<string, BrowserWindow>();
+
+  const onFileInputClose = () => {
+    if (windows.size === 0) {
+      log.info(
+        "file input dialog was closed, since there are no more application windows open, quit app",
+      );
+      app.quit();
+    }
+  };
 
   return {
     async open(simfile: string) {
       simfile = path.resolve(process.cwd(), simfile);
-
+      log.info("window manager open()", { simfile });
       const window = windows.get(simfile);
       if (window) {
+        log.info("window already exists, focusing");
+        if (window.isMinimized()) {
+          window.restore();
+        }
         window.focus();
         return window;
       }
@@ -193,6 +211,7 @@ function createWindowManager() {
       });
 
       newWindow.on("closed", async () => {
+        log.info("window closed", simfile);
         windows.delete(simfile);
         try {
           await Promise.all([server.server.close(), simulatorInstance.stop()]);
@@ -205,12 +224,14 @@ function createWindowManager() {
     },
 
     async showOpenFileDialog() {
+      log.info("window manager showOpenFileDialog()");
       await app.whenReady();
       const { canceled, filePaths } = await dialog.showOpenDialog({
         properties: ["openFile"],
         filters: [{ name: "Wing File", extensions: ["wsim", "w"] }],
       });
       if (canceled) {
+        onFileInputClose();
         return;
       }
 
@@ -224,43 +245,88 @@ function createWindowManager() {
   };
 }
 
-log.info("Create window manager");
 const windowManager = createWindowManager();
 
 async function main() {
-  if (!app.requestSingleInstanceLock()) {
-    log.info("Another instance is already running, exiting");
+  log.info("Application start: main()");
+
+  // If the application started by opening it directly, we should allow the user to choose a file to open.
+  // Otherwise, the application was open using a file and we should start the application without the file input dialog
+  let shouldShowGetStarted = true;
+
+  let deeplinkingUrl;
+
+  // set deeplinking urls
+  log.info("setting up deeplinks urls");
+  if (process.platform === "win32") {
+    log.info("setting protocl for win32");
+    // set protocol link on windows
+    app.setAsDefaultProtocolClient(WING_PROTOCOL_SCHEME, process.execPath, [
+      path.resolve(process.argv[2] ?? ""),
+    ]);
+  } else {
+    log.info("setting protocol for mac");
+    // set protocol link on mac
+    app.setAsDefaultProtocolClient(WING_PROTOCOL_SCHEME);
+  }
+
+  if (process.platform === "win32") {
+    deeplinkingUrl = process.argv.find((arg) =>
+      arg.startsWith(`${WING_PROTOCOL_SCHEME}://`),
+    );
+    log.info("runnig in win32. check for deeplink argument", deeplinkingUrl);
+  }
+
+  // Force single application instance
+  const singleInstanceLock = app.requestSingleInstanceLock();
+  log.info("singleInstanceLock", singleInstanceLock);
+  if (singleInstanceLock) {
+    log.info("this is the main instance, setting second instance listener");
+    app.on("second-instance", async (e, argv) => {
+      log.info("second instance args", argv);
+      if (process.platform !== "darwin") {
+        log.info("second instance is not darwin");
+        // Find the arg that is our custom protocol url and store it
+        deeplinkingUrl = argv.find((arg) =>
+          arg.startsWith(`${WING_PROTOCOL_SCHEME}://`),
+        );
+        log.info("deeplinkingUrl (second instance)", deeplinkingUrl);
+        if (deeplinkingUrl) {
+          shouldShowGetStarted = false;
+          const filename = deeplinkingUrl.slice(
+            `${WING_PROTOCOL_SCHEME}://`.length,
+          );
+          log.info("open file from deeplink (second instance):", filename);
+          await windowManager.open(filename);
+        }
+      }
+    });
+
+    if (deeplinkingUrl) {
+      shouldShowGetStarted = false;
+      const filename = deeplinkingUrl.slice(
+        `${WING_PROTOCOL_SCHEME}://`.length,
+      );
+      log.info("open file from deeplink:", process.platform, filename);
+      await windowManager.open(filename);
+    }
+  } else {
+    log.info("another instance is running, quiting this one");
     app.quit();
     return;
   }
 
-  if (process.defaultApp) {
-    const filename = process.argv[1];
-    if (filename) {
-      app.setAsDefaultProtocolClient(WING_PROTOCOL_SCHEME, process.execPath, [
-        path.resolve(filename),
-      ]);
-    }
-  } else {
-    app.setAsDefaultProtocolClient(WING_PROTOCOL_SCHEME);
-  }
+  app.on("open-url", (event, url) => {
+    shouldShowGetStarted = false;
+    const filename = url.slice(`${WING_PROTOCOL_SCHEME}://`.length);
+    log.info("open-url", { url, filename });
+    void windowManager.open(filename);
+  });
 
   app.on("activate", (event, hasVisibleWindows) => {
     if (!hasVisibleWindows) {
       void windowManager.showOpenFileDialog();
     }
-  });
-
-  // If the application started by opening it directly, we should show the Get Started window.
-  // Otherwise, the application was open using a file and we should start the simulator.
-  let shouldShowGetStarted = true;
-
-  app.on("open-url", (event, url) => {
-    shouldShowGetStarted = false;
-
-    const filename = url.slice(`${WING_PROTOCOL_SCHEME}://`.length);
-    log.info("open-url", { url, filename });
-    void windowManager.open(filename);
   });
 
   app.on("open-file", (event, filename) => {
@@ -271,7 +337,9 @@ async function main() {
   });
 
   app.on("window-all-closed", () => {
+    log.info("window-all-closed event");
     if (process.platform !== "darwin" || import.meta.env.DEV) {
+      log.info("calling app.quit()");
       app.quit();
     }
   });
@@ -280,85 +348,82 @@ async function main() {
   await app.whenReady();
   log.info("app is ready");
 
-  if (process.platform === "darwin") {
-    // The default menu from Electron come with very useful items. We're going to reuse everything
-    // except for the File menu, which is the second entry on the list.
-    // TODO: Test it in different environments, since `Menu.getApplicationMenu()` may return null.
-    const defaultMenuItems = Menu.getApplicationMenu()?.items!;
-    // remove default Help menu
-    defaultMenuItems.pop();
-    Menu.setApplicationMenu(
-      Menu.buildFromTemplate([
-        {
-          ...defaultMenuItems[0]!,
-          submenu: defaultMenuItems[0]!.submenu!.items.map((item) => ({
-            ...item,
-            label: item.label.replace("wing-console", "Wing Console"),
-          })) as any,
-        },
-        {
-          label: "File",
-          submenu: [
-            {
-              label: "Open",
-              accelerator: "Command+O",
-              async click() {
-                const { canceled, filePaths } = await dialog.showOpenDialog({
-                  properties: ["openFile"],
-                  filters: [{ name: "Wing File", extensions: ["wsim", "w"] }],
-                });
-                if (canceled) {
-                  return;
-                }
+  // The default menu from Electron come with very useful items.
+  // File menu, which is the second entry on the list and Help menu (which is the last) are being modified
+  const defaultMenuItems = Menu.getApplicationMenu()?.items!;
+  // remove default Help menu
+  defaultMenuItems.pop();
+  Menu.setApplicationMenu(
+    Menu.buildFromTemplate([
+      {
+        ...defaultMenuItems[0]!,
+        submenu: defaultMenuItems[0]!.submenu!.items.map((item) => ({
+          ...item,
+          label: item.label.replace("wing-console", "Wing Console"),
+        })) as any,
+      },
+      {
+        label: "File",
+        submenu: [
+          {
+            label: "Open",
+            accelerator: "Command+O",
+            async click() {
+              const { canceled, filePaths } = await dialog.showOpenDialog({
+                properties: ["openFile"],
+                filters: [{ name: "Wing File", extensions: ["wsim", "w"] }],
+              });
+              if (canceled) {
+                return;
+              }
 
-                const [simfile] = filePaths;
-                if (simfile) {
-                  void windowManager.open(simfile);
-                }
-              },
+              const [simfile] = filePaths;
+              if (simfile) {
+                void windowManager.open(simfile);
+              }
             },
-            { type: "separator" },
-            {
-              label: "Close Window",
-              accelerator: "Command+W",
-              click() {
-                BrowserWindow.getFocusedWindow()?.close();
-              },
+          },
+          { type: "separator" },
+          {
+            label: "Close Window",
+            accelerator: "Command+W",
+            click() {
+              BrowserWindow.getFocusedWindow()?.close();
             },
-          ],
-        },
-        ...defaultMenuItems.slice(2),
-        {
-          role: "help",
-          submenu: [
-            {
-              label: "Learn More",
-              click: async () => {
-                await shell.openExternal("https://winglang.io");
-              },
+          },
+        ],
+      },
+      ...defaultMenuItems.slice(2),
+      {
+        role: "help",
+        submenu: [
+          {
+            label: "Learn More",
+            click: async () => {
+              await shell.openExternal("https://winglang.io");
             },
-            {
-              label: "Documentation",
-              click: async () => {
-                await shell.openExternal("https://docs.winglang.io");
-              },
+          },
+          {
+            label: "Documentation",
+            click: async () => {
+              await shell.openExternal("https://docs.winglang.io");
             },
-            {
-              label: "Open an Issue",
-              click: async () => {
-                await shell.openExternal(
-                  "https://github.com/winglang/wing/issues/new/choose",
-                );
-              },
+          },
+          {
+            label: "Open an Issue",
+            click: async () => {
+              await shell.openExternal(
+                "https://github.com/winglang/wing/issues/new/choose",
+              );
             },
-          ],
-        },
-      ]),
-    );
-  }
+          },
+        ],
+      },
+    ]),
+  );
 
   if (import.meta.env.DEV || process.env.PLAYWRIGHT_TEST || process.env.CI) {
-    log.info("Running in dev mode, skipping Get Started window");
+    log.info("Running in dev mode, skipping file input window");
     if (!process.env.PLAYWRIGHT_TEST && !process.env.CI) {
       const installExtension = await import("electron-devtools-installer");
       await installExtension.default(installExtension.REACT_DEVELOPER_TOOLS.id);
@@ -379,5 +444,4 @@ async function main() {
   }
 }
 
-log.info("Application start: main()");
 void main();
