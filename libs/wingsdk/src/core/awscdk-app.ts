@@ -65,7 +65,7 @@ export class AwsCdkApp extends Construct implements IApp {
     Logger.register(this);
   }
 
-  /**
+/**
  * Synthesize the app into CDK configuration in a `cdk.out` directory.
  *
  * This method returns a cleaned snapshot of the resulting CDK template
