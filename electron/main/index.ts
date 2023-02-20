@@ -11,6 +11,7 @@ import { WING_PROTOCOL_SCHEME } from "./protocol.js";
 import { SegmentAnalytics } from "./segmentAnalytics.js";
 import { createCloudAppState } from "./utils/cloudAppState.js";
 import { createWingApp } from "./utils/createWingApp.js";
+import { platform } from "os";
 
 config();
 
@@ -353,74 +354,80 @@ async function main() {
   const defaultMenuItems = Menu.getApplicationMenu()?.items!;
   // remove default Help menu
   defaultMenuItems.pop();
-  Menu.setApplicationMenu(
-    Menu.buildFromTemplate([
-      {
-        ...defaultMenuItems[0]!,
-        submenu: defaultMenuItems[0]!.submenu!.items.map((item) => ({
-          ...item,
-          label: item.label.replace("wing-console", "Wing Console"),
-        })) as any,
-      },
-      {
-        label: "File",
-        submenu: [
-          {
-            label: "Open",
-            accelerator: "Command+O",
-            async click() {
-              const { canceled, filePaths } = await dialog.showOpenDialog({
-                properties: ["openFile"],
-                filters: [{ name: "Wing File", extensions: ["wsim", "w"] }],
-              });
-              if (canceled) {
-                return;
-              }
 
-              const [simfile] = filePaths;
-              if (simfile) {
-                void windowManager.open(simfile);
-              }
-            },
+  const menuTemplateArray = [
+    {
+      ...defaultMenuItems[0]!,
+      submenu: defaultMenuItems[0]!.submenu!.items.map((item) => ({
+        ...item,
+        label: item.label.replace("wing-console", "Wing Console"),
+      })) as any,
+    },
+    {
+      label: "File",
+      submenu: [
+        {
+          label: "Open",
+          accelerator: "Command+O",
+          async click() {
+            const { canceled, filePaths } = await dialog.showOpenDialog({
+              properties: ["openFile"],
+              filters: [{ name: "Wing File", extensions: ["wsim", "w"] }],
+            });
+            if (canceled) {
+              return;
+            }
+
+            const [simfile] = filePaths;
+            if (simfile) {
+              void windowManager.open(simfile);
+            }
           },
-          { type: "separator" },
-          {
-            label: "Close Window",
-            accelerator: "Command+W",
-            click() {
-              BrowserWindow.getFocusedWindow()?.close();
-            },
+        },
+        { type: "separator" },
+        {
+          label: "Close Window",
+          accelerator: "Command+W",
+          click() {
+            BrowserWindow.getFocusedWindow()?.close();
           },
-        ],
-      },
-      ...defaultMenuItems.slice(2),
-      {
-        role: "help",
-        submenu: [
-          {
-            label: "Learn More",
-            click: async () => {
-              await shell.openExternal("https://winglang.io");
-            },
+        },
+      ],
+    },
+    ...defaultMenuItems.slice(2),
+    {
+      role: "help",
+      submenu: [
+        {
+          label: "Learn More",
+          click: async () => {
+            await shell.openExternal("https://winglang.io");
           },
-          {
-            label: "Documentation",
-            click: async () => {
-              await shell.openExternal("https://docs.winglang.io");
-            },
+        },
+        {
+          label: "Documentation",
+          click: async () => {
+            await shell.openExternal("https://docs.winglang.io");
           },
-          {
-            label: "Open an Issue",
-            click: async () => {
-              await shell.openExternal(
-                "https://github.com/winglang/wing/issues/new/choose",
-              );
-            },
+        },
+        {
+          label: "Open an Issue",
+          click: async () => {
+            await shell.openExternal(
+              "https://github.com/winglang/wing/issues/new/choose",
+            );
           },
-        ],
-      },
-    ]),
-  );
+        },
+      ],
+    },
+  ];
+
+  if (process.platform !== "darwin") {
+    // remove the first menu item on windows and linux
+    menuTemplateArray.shift();
+  }
+
+  Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplateArray as any));
 
   if (import.meta.env.DEV || process.env.PLAYWRIGHT_TEST || process.env.CI) {
     log.info("Running in dev mode, skipping file input window");
