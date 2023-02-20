@@ -36,7 +36,7 @@ export class AwsCdkApp extends Construct implements IApp {
     const stackName = props.stackName ?? process.env.CDK_STACK_NAME;
     if (stackName === undefined) {
       throw new Error(
-        "A CK stack name must be specified through the CDK_STACK_NAME environment variable."
+        "A CDK stack name must be specified through the CDK_STACK_NAME environment variable."
       );
     }
 
