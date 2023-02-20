@@ -64,7 +64,6 @@
     "jsii": "^1.73.0",
     "jsii-diff": "^1.73.0",
     "jsii-pacmak": "^1.73.0",
-    "json-schema": "^0.4.0",
     "npm-check-updates": "^16",
     "patch-package": "^6.5.1",
     "prettier": "^2.8.3",
@@ -186,6 +185,10 @@
     "excludeTypescript": [
       "src/**/*.inflight.ts"
     ]
+  },
+  "volta": {
+    "node": "19.6.1",
+    "npm": "9.5.0"
   },
   "overrides": {
     "@types/prettier": "2.6.0",
