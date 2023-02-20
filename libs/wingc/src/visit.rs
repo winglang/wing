@@ -5,9 +5,12 @@ use crate::ast::{
 
 /// Visitor pattern inspired by implementation from https://docs.rs/syn/latest/syn/visit/index.html
 ///
-/// If you are implementing a visitor, you can delegate back to the
-/// default implementation to visit the children of a node by calling
-/// visit::visit_<node_type>(self, node);
+/// A visitor visits each node in the AST in depth-first order. The
+/// default implementation of each method is to do nothing, so you only
+/// need to implement the methods for the nodes you are interested in.
+///
+/// You can delegate back to the default implementation to visit the children
+/// of a node by calling `visit::visit_<node_type>(self, node)`.
 ///
 /// For example:
 ///
@@ -21,33 +24,37 @@ use crate::ast::{
 ///   }
 /// }
 /// ```
+///
+/// TODO: Can we code-generate this based on data in `ast.rs`?
+/// TODO: Provide a VisitMut trait that allows for mutation of the AST nodes
+/// (each method would accept a `&mut node` instead of `&node`)
 pub trait Visit<'ast> {
-	fn visit_scope(&mut self, e: &'ast Scope) {
-		visit_scope(self, e);
+	fn visit_scope(&mut self, node: &'ast Scope) {
+		visit_scope(self, node);
 	}
-	fn visit_stmt(&mut self, e: &'ast Stmt) {
-		visit_stmt(self, e);
+	fn visit_stmt(&mut self, node: &'ast Stmt) {
+		visit_stmt(self, node);
 	}
-	fn visit_class(&mut self, e: &'ast Class) {
-		visit_class(self, e);
+	fn visit_class(&mut self, node: &'ast Class) {
+		visit_class(self, node);
 	}
-	fn visit_constructor(&mut self, e: &'ast Constructor) {
-		visit_constructor(self, e);
+	fn visit_constructor(&mut self, node: &'ast Constructor) {
+		visit_constructor(self, node);
 	}
-	fn visit_expr(&mut self, e: &'ast Expr) {
-		visit_expr(self, e);
+	fn visit_expr(&mut self, node: &'ast Expr) {
+		visit_expr(self, node);
 	}
-	fn visit_literal(&mut self, e: &'ast Literal) {
-		visit_literal(self, e);
+	fn visit_literal(&mut self, node: &'ast Literal) {
+		visit_literal(self, node);
 	}
-	fn visit_reference(&mut self, e: &'ast Reference) {
-		visit_reference(self, e);
+	fn visit_reference(&mut self, node: &'ast Reference) {
+		visit_reference(self, node);
 	}
-	fn visit_function_definition(&mut self, e: &'ast FunctionDefinition) {
-		visit_function_definition(self, e);
+	fn visit_function_definition(&mut self, node: &'ast FunctionDefinition) {
+		visit_function_definition(self, node);
 	}
-	fn visit_args(&mut self, e: &'ast ArgList) {
-		visit_args(self, e);
+	fn visit_args(&mut self, node: &'ast ArgList) {
+		visit_args(self, node);
 	}
 }
 
