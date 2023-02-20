@@ -130,6 +130,9 @@ Array [
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\"\\").",
   "Subscriber error - returning 1 messages to queue.",
+  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+  "Invoke (payload=\\"\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\"\\").",
+  "Subscriber error - returning 1 messages to queue.",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
@@ -346,6 +349,7 @@ __export(queue_onmessage_inflight_exports, {
 var QueueOnMessageHandlerClient;
 var init_queue_onmessage_inflight = __esm({
   \\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.ts\\"() {
+    \\"use strict\\";
     QueueOnMessageHandlerClient = class {
       constructor({ handler }) {
         this.handler = handler;
@@ -895,6 +899,7 @@ __export(queue_onmessage_inflight_exports, {
 var QueueOnMessageHandlerClient;
 var init_queue_onmessage_inflight = __esm({
   \\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.ts\\"() {
+    \\"use strict\\";
     QueueOnMessageHandlerClient = class {
       constructor({ handler }) {
         this.handler = handler;
@@ -1307,6 +1312,7 @@ __export(queue_onmessage_inflight_exports, {
 var QueueOnMessageHandlerClient;
 var init_queue_onmessage_inflight = __esm({
   \\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.ts\\"() {
+    \\"use strict\\";
     QueueOnMessageHandlerClient = class {
       constructor({ handler }) {
         this.handler = handler;
