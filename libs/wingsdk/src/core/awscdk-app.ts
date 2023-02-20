@@ -8,7 +8,15 @@ import stringify from "safe-stable-stringify";
 import { Polycons } from "polycons";
 import { Logger } from "../cloud";
 
-const CDK_STACK_NAME = "root";
+/**
+ * AWS-CDK App props
+ */
+export interface CdkAppProps extends AppProps {
+  /**
+   * CDK Stack Name
+   */
+  readonly stackName?: string;
+}
 
 /**
  * An app that knows how to synthesize constructs into CDK configuration.
@@ -22,14 +30,22 @@ export class AwsCdkApp extends Construct implements IApp {
   private readonly cdkApp: cdk.App;
   private readonly cdkStack: cdk.Stack;
 
-  constructor(props: AppProps) {
+  constructor(props: CdkAppProps) {
+
+    const stackName = props.stackName ?? process.env.CDK_STACK_NAME;
+    if (stackName === undefined) {
+      throw new Error(
+        "A CK stack name must be specified through the CDK_STACK_NAME environment variable."
+      );
+    }
+
     const outdir = props.outdir ?? ".";
-    const cdkOutdir = join(outdir, "./cdk.out");
+    const cdkOutdir = join(outdir, ".");
 
     mkdirSync(cdkOutdir, { recursive: true });
 
     const cdkApp = new cdk.App({ outdir: cdkOutdir });
-    const cdkStack = new cdk.Stack(cdkApp, CDK_STACK_NAME);
+    const cdkStack = new cdk.Stack(cdkApp, stackName);
 
     if (!props.customFactory) {
       throw new Error(

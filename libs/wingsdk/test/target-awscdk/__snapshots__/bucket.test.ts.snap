@@ -99,7 +99,6 @@ Object {
             },
           ],
         },
-        "BucketName": "my-bucket-c8045fcc",
         "Tags": Array [
           Object {
             "Key": "aws-cdk:auto-delete-objects",
@@ -312,7 +311,6 @@ Object {
             },
           ],
         },
-        "BucketName": "my-bucket-c8045fcc",
         "PublicAccessBlockConfiguration": Object {
           "BlockPublicAcls": true,
           "BlockPublicPolicy": true,
