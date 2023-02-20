@@ -5,5 +5,4 @@ export * from "./file-base";
 export * from "./files";
 export * from "./inflight";
 export * from "./resource";
-export * from "./awscdk-app";
 export * from "./tree";
