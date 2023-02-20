@@ -346,7 +346,6 @@ __export(queue_onmessage_inflight_exports, {
 var QueueOnMessageHandlerClient;
 var init_queue_onmessage_inflight = __esm({
   \\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.ts\\"() {
-    \\"use strict\\";
     QueueOnMessageHandlerClient = class {
       constructor({ handler }) {
         this.handler = handler;
@@ -896,7 +895,6 @@ __export(queue_onmessage_inflight_exports, {
 var QueueOnMessageHandlerClient;
 var init_queue_onmessage_inflight = __esm({
   \\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.ts\\"() {
-    \\"use strict\\";
     QueueOnMessageHandlerClient = class {
       constructor({ handler }) {
         this.handler = handler;
@@ -1309,7 +1307,6 @@ __export(queue_onmessage_inflight_exports, {
 var QueueOnMessageHandlerClient;
 var init_queue_onmessage_inflight = __esm({
   \\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.ts\\"() {
-    \\"use strict\\";
     QueueOnMessageHandlerClient = class {
       constructor({ handler }) {
         this.handler = handler;
