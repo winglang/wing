@@ -36,6 +36,7 @@ exports[`schedule behavior with cron 1`] = `
         },
         \\"function_name\\": \\"Schedule-OnTick-c5395e41-c861b8f8\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_ScheduleOnTickc5395e41_IamRole_D42951B2.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_ScheduleOnTickc5395e41_Code_C7AC6B0A.bucket}\\",
@@ -93,7 +94,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "An inflight resource",
@@ -119,7 +120,7 @@ Object {
                   "Schedule-ScheduleEvent-c5395e41": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.schedulerSchedule.SchedulerSchedule",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Schedule-ScheduleEvent-c5395e41",
                     "path": "root/Default/Schedule/Schedule-ScheduleEvent-c5395e41",
@@ -127,7 +128,7 @@ Object {
                   "Schedule-SchedulePolicy-c5395e41": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Schedule-SchedulePolicy-c5395e41",
                     "path": "root/Default/Schedule/Schedule-SchedulePolicy-c5395e41",
@@ -135,7 +136,7 @@ Object {
                   "Schedule-ScheduleRole-c5395e41": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Schedule-ScheduleRole-c5395e41",
                     "path": "root/Default/Schedule/Schedule-ScheduleRole-c5395e41",
@@ -143,7 +144,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud schedule to trigger events at regular intervals",
@@ -188,7 +189,7 @@ Object {
                   "Code": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Code",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Code",
@@ -196,7 +197,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Default",
@@ -204,7 +205,7 @@ Object {
                   "IamRole": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Schedule-OnTick-c5395e41/IamRole",
@@ -212,7 +213,7 @@ Object {
                   "IamRolePolicy": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Schedule-OnTick-c5395e41/IamRolePolicy",
@@ -220,7 +221,7 @@ Object {
                   "IamRolePolicyAttachment": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Schedule-OnTick-c5395e41/IamRolePolicyAttachment",
@@ -228,7 +229,7 @@ Object {
                   "S3Object": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Schedule-OnTick-c5395e41/S3Object",
@@ -236,7 +237,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud function (FaaS)",
@@ -252,7 +253,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "id": "Schedule-OnTickHandler-c5395e41",
                 "path": "root/Default/Schedule-OnTickHandler-c5395e41",
@@ -271,7 +272,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -284,7 +285,7 @@ Object {
               "aws": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -292,7 +293,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
@@ -361,6 +362,7 @@ exports[`schedule behavior with rate 1`] = `
         },
         \\"function_name\\": \\"Schedule-OnTick-c5395e41-c861b8f8\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_ScheduleOnTickc5395e41_IamRole_D42951B2.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_ScheduleOnTickc5395e41_Code_C7AC6B0A.bucket}\\",
@@ -418,7 +420,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "An inflight resource",
@@ -444,7 +446,7 @@ Object {
                   "Schedule-ScheduleEvent-c5395e41": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.schedulerSchedule.SchedulerSchedule",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Schedule-ScheduleEvent-c5395e41",
                     "path": "root/Default/Schedule/Schedule-ScheduleEvent-c5395e41",
@@ -452,7 +454,7 @@ Object {
                   "Schedule-SchedulePolicy-c5395e41": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Schedule-SchedulePolicy-c5395e41",
                     "path": "root/Default/Schedule/Schedule-SchedulePolicy-c5395e41",
@@ -460,7 +462,7 @@ Object {
                   "Schedule-ScheduleRole-c5395e41": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Schedule-ScheduleRole-c5395e41",
                     "path": "root/Default/Schedule/Schedule-ScheduleRole-c5395e41",
@@ -468,7 +470,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud schedule to trigger events at regular intervals",
@@ -513,7 +515,7 @@ Object {
                   "Code": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Code",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Code",
@@ -521,7 +523,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Default",
@@ -529,7 +531,7 @@ Object {
                   "IamRole": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Schedule-OnTick-c5395e41/IamRole",
@@ -537,7 +539,7 @@ Object {
                   "IamRolePolicy": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Schedule-OnTick-c5395e41/IamRolePolicy",
@@ -545,7 +547,7 @@ Object {
                   "IamRolePolicyAttachment": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Schedule-OnTick-c5395e41/IamRolePolicyAttachment",
@@ -553,7 +555,7 @@ Object {
                   "S3Object": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Schedule-OnTick-c5395e41/S3Object",
@@ -561,7 +563,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud function (FaaS)",
@@ -577,7 +579,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "id": "Schedule-OnTickHandler-c5395e41",
                 "path": "root/Default/Schedule-OnTickHandler-c5395e41",
@@ -596,7 +598,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -609,7 +611,7 @@ Object {
               "aws": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -617,7 +619,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
@@ -704,6 +706,7 @@ exports[`schedule with two functions 1`] = `
         },
         \\"function_name\\": \\"Schedule-OnTick-0a615500-c8fd8480\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_ScheduleOnTick0a615500_IamRole_CDDD9C52.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_ScheduleOnTick0a615500_Code_12A9FE62.bucket}\\",
@@ -718,6 +721,7 @@ exports[`schedule with two functions 1`] = `
         },
         \\"function_name\\": \\"Schedule-OnTick-7b33bcba-c86000d7\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_ScheduleOnTick7b33bcba_IamRole_02FDC318.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_ScheduleOnTick7b33bcba_Code_4537EF5B.bucket}\\",
@@ -793,7 +797,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "An inflight resource",
@@ -817,7 +821,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "An inflight resource",
@@ -849,7 +853,7 @@ Object {
                   "Schedule-ScheduleEvent-0a615500": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.schedulerSchedule.SchedulerSchedule",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Schedule-ScheduleEvent-0a615500",
                     "path": "root/Default/Schedule/Schedule-ScheduleEvent-0a615500",
@@ -857,7 +861,7 @@ Object {
                   "Schedule-ScheduleEvent-7b33bcba": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.schedulerSchedule.SchedulerSchedule",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Schedule-ScheduleEvent-7b33bcba",
                     "path": "root/Default/Schedule/Schedule-ScheduleEvent-7b33bcba",
@@ -865,7 +869,7 @@ Object {
                   "Schedule-SchedulePolicy-0a615500": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Schedule-SchedulePolicy-0a615500",
                     "path": "root/Default/Schedule/Schedule-SchedulePolicy-0a615500",
@@ -873,7 +877,7 @@ Object {
                   "Schedule-SchedulePolicy-7b33bcba": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Schedule-SchedulePolicy-7b33bcba",
                     "path": "root/Default/Schedule/Schedule-SchedulePolicy-7b33bcba",
@@ -881,7 +885,7 @@ Object {
                   "Schedule-ScheduleRole-0a615500": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Schedule-ScheduleRole-0a615500",
                     "path": "root/Default/Schedule/Schedule-ScheduleRole-0a615500",
@@ -889,7 +893,7 @@ Object {
                   "Schedule-ScheduleRole-7b33bcba": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Schedule-ScheduleRole-7b33bcba",
                     "path": "root/Default/Schedule/Schedule-ScheduleRole-7b33bcba",
@@ -897,7 +901,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud schedule to trigger events at regular intervals",
@@ -942,7 +946,7 @@ Object {
                   "Code": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Code",
                     "path": "root/Default/Schedule-OnTick-0a615500/Code",
@@ -950,7 +954,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Schedule-OnTick-0a615500/Default",
@@ -958,7 +962,7 @@ Object {
                   "IamRole": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Schedule-OnTick-0a615500/IamRole",
@@ -966,7 +970,7 @@ Object {
                   "IamRolePolicy": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Schedule-OnTick-0a615500/IamRolePolicy",
@@ -974,7 +978,7 @@ Object {
                   "IamRolePolicyAttachment": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Schedule-OnTick-0a615500/IamRolePolicyAttachment",
@@ -982,7 +986,7 @@ Object {
                   "S3Object": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Schedule-OnTick-0a615500/S3Object",
@@ -990,7 +994,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud function (FaaS)",
@@ -1035,7 +1039,7 @@ Object {
                   "Code": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Code",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/Code",
@@ -1043,7 +1047,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/Default",
@@ -1051,7 +1055,7 @@ Object {
                   "IamRole": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/IamRole",
@@ -1059,7 +1063,7 @@ Object {
                   "IamRolePolicy": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/IamRolePolicy",
@@ -1067,7 +1071,7 @@ Object {
                   "IamRolePolicyAttachment": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/IamRolePolicyAttachment",
@@ -1075,7 +1079,7 @@ Object {
                   "S3Object": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/S3Object",
@@ -1083,7 +1087,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud function (FaaS)",
@@ -1099,7 +1103,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "id": "Schedule-OnTickHandler-0a615500",
                 "path": "root/Default/Schedule-OnTickHandler-0a615500",
@@ -1111,7 +1115,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "id": "Schedule-OnTickHandler-7b33bcba",
                 "path": "root/Default/Schedule-OnTickHandler-7b33bcba",
@@ -1136,7 +1140,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -1149,7 +1153,7 @@ Object {
               "aws": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1157,7 +1161,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
