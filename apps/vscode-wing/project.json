@@ -1,16 +1,21 @@
 {
   "name": "vscode-wing",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "implicitDependencies": [
-    "winglang", "sdk"
-  ],
+  "implicitDependencies": ["winglang"],
   "targets": {
     "build": {
-      "executor": "nx:run-script",
-      "dependsOn": ["^build", "copy"],
+      "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/vscode-wing",
-        "script": "build"
+        "command": "npm run build"
+      }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build", "build"],
+      "options": {
+        "cwd": "apps/vscode-wing",
+        "command": "RUST_BACKTRACE=1 WING_BIN=\"$NX_WORKSPACE_ROOT/apps/wing/bin/wing\" code ../../examples --disable-extensions --extensionDevelopmentPath=$NX_WORKSPACE_ROOT/apps/vscode-wing"
       }
     }
   }

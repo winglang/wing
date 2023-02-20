@@ -6,6 +6,12 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
         "path": "root/HelloWorld/Counter",
         "props": Object {
           "initial": 1000,
@@ -20,12 +26,6 @@ Object {
           "public": false,
         },
         "type": "wingsdk.cloud.Bucket",
-      },
-      Object {
-        "attrs": Object {},
-        "path": "root/WingLogger",
-        "props": Object {},
-        "type": "wingsdk.cloud.Logger",
       },
       Object {
         "attrs": Object {},

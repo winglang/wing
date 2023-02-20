@@ -15,7 +15,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NODEJS_VERSION: "18.x"
   # Testing runs out of memory without this
   NODE_OPTIONS: "--max-old-space-size=4096"
   PROJEN_BUMP_VERSION: "0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}"
@@ -100,10 +99,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODEJS_VERSION }}
+      # Reads versions from root package.json "volta" section
+      - name: Setup Node/NPM with pinned Volta version
+        uses: volta-cli/action@v4.0.0
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
@@ -121,20 +119,13 @@ jobs:
       - name: Lint Nx
         run: npx nx workspace-lint
 
-      - name: Build and Unit Test
+      - name: Build, Test, and Package
         uses: MansaGroup/nrwl-nx-action@v2
         with:
-          targets: "build"
+          targets: "build,test,package"
           all: true
           # Exclude E2E testing
           args: "--exclude=hangar --configuration=release --output-style=stream --verbose"
-
-      - name: Create NPM packages
-        uses: MansaGroup/nrwl-nx-action@v2
-        with:
-          targets: "package"
-          projects: "winglang,sdk"
-          args: "--configuration=release --output-style=stream --verbose"
 
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v2
@@ -186,8 +177,8 @@ jobs:
         node: [18, 19]
     runs-on: ${{ matrix.runner }}
     env:
-      HANGAR_WING_TGZ: ${{ github.workspace }}/wing/winglang-${{ needs.prepare.outputs.version }}.tgz
-      HANGAR_WINGSDK_TGZ: ${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.prepare.outputs.version }}.tgz
+      HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.prepare.outputs.version }}.tgz"
+      HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.prepare.outputs.version }}.tgz"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -205,6 +196,18 @@ jobs:
         with:
           working-directory: tools/hangar
           install-command: npm ci --ignore-scripts
+
+      - name: Install Example Dependencies (1/2)
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: examples/tests/valid
+          install-command: npm ci
+
+      - name: Install Example Dependencies (2/2)
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: examples/tests/invalid
+          install-command: npm ci
 
       - name: Run E2E Tests
         working-directory: tools/hangar
@@ -229,11 +232,6 @@ jobs:
     steps:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODEJS_VERSION }}
 
       - name: Tag commit
         uses: tvdias/github-tagger@v0.0.1

@@ -34,7 +34,7 @@ exports[`basic function 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
-        \\"timeout\\": 60
+        \\"timeout\\": 30
       }
     },
     \\"aws_s3_bucket\\": {
@@ -263,7 +263,7 @@ exports[`basic function with environment variables 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
-        \\"timeout\\": 60
+        \\"timeout\\": 30
       }
     },
     \\"aws_s3_bucket\\": {
@@ -717,7 +717,7 @@ exports[`function name valid 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_TheMightyFunction01_Code_019941EA.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_TheMightyFunction01_S3Object_6949E35F.key}\\",
-        \\"timeout\\": 60
+        \\"timeout\\": 30
       }
     },
     \\"aws_s3_bucket\\": {
@@ -944,7 +944,7 @@ exports[`replace invalid character from function name 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_TheMightyFunction_Code_28F77D89.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_TheMightyFunction_S3Object_D0A75871.key}\\",
-        \\"timeout\\": 60
+        \\"timeout\\": 30
       }
     },
     \\"aws_s3_bucket\\": {

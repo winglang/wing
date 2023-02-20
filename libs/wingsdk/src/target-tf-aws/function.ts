@@ -152,7 +152,7 @@ export class Function extends cloud.FunctionBase {
       },
       timeout: props.timeout
         ? props.timeout.seconds
-        : Duration.fromMinutes(1).seconds,
+        : Duration.fromMinutes(0.5).seconds,
     });
 
     this.arn = this.function.arn;

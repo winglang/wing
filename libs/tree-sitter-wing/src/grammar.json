@@ -217,6 +217,10 @@
         {
           "type": "SYMBOL",
           "name": "enum_definition"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "try_catch_statement"
         }
       ]
     },
@@ -771,6 +775,22 @@
       "type": "SEQ",
       "members": [
         {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "access_modifier",
+              "content": {
+                "type": "SYMBOL",
+                "name": "access_modifier"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
           "type": "FIELD",
           "name": "phase_modifier",
           "content": {
@@ -783,10 +803,10 @@
           "members": [
             {
               "type": "FIELD",
-              "name": "access_modifier",
+              "name": "reassignable",
               "content": {
                 "type": "SYMBOL",
-                "name": "access_modifier"
+                "name": "reassignable"
               }
             },
             {
@@ -1048,6 +1068,89 @@
             "type": "SYMBOL",
             "name": "block"
           }
+        }
+      ]
+    },
+    "try_catch_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "try"
+        },
+        {
+          "type": "FIELD",
+          "name": "block",
+          "content": {
+            "type": "SYMBOL",
+            "name": "block"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "catch"
+                },
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "FIELD",
+                      "name": "exception_identifier",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "identifier"
+                      }
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
+                },
+                {
+                  "type": "FIELD",
+                  "name": "catch_block",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "block"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "finally"
+                },
+                {
+                  "type": "FIELD",
+                  "name": "finally_block",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "block"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
     },
@@ -1945,8 +2048,12 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "STRING",
-              "value": "async"
+              "type": "FIELD",
+              "name": "async",
+              "content": {
+                "type": "SYMBOL",
+                "name": "async_modifier"
+              }
             },
             {
               "type": "BLANK"
@@ -1999,14 +2106,6 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "FIELD",
-          "name": "phase_modifier",
-          "content": {
-            "type": "SYMBOL",
-            "name": "_inflight_specifier"
-          }
-        },
-        {
           "type": "CHOICE",
           "members": [
             {
@@ -2023,16 +2122,12 @@
           ]
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "async"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+          "type": "FIELD",
+          "name": "phase_modifier",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_inflight_specifier"
+          }
         },
         {
           "type": "FIELD",
@@ -2075,6 +2170,10 @@
           }
         }
       ]
+    },
+    "async_modifier": {
+      "type": "STRING",
+      "value": "async"
     },
     "access_modifier": {
       "type": "CHOICE",

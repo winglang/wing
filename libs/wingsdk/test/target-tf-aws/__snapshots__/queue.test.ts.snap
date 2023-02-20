@@ -257,7 +257,7 @@ exports[`queue with a consumer function 2`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessagec5395e41_Code_F10D8CAB.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_QueueOnMessagec5395e41_S3Object_9BE0A142.key}\\",
-        \\"timeout\\": 60
+        \\"timeout\\": 30
       }
     },
     \\"aws_s3_bucket\\": {
