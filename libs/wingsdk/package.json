@@ -64,7 +64,6 @@
     "jsii": "^1.73.0",
     "jsii-diff": "^1.73.0",
     "jsii-pacmak": "^1.73.0",
-    "json-schema": "^0.4.0",
     "npm-check-updates": "^16",
     "patch-package": "^6.5.1",
     "prettier": "^2.8.3",
