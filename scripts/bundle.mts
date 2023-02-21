@@ -45,26 +45,6 @@ const targets =
   Platform.current() === Platform.WINDOWS
     ? [Platform.WINDOWS]
     : [Platform.MAC, Platform.WINDOWS];
-const arch = {
-  mac: {
-    mac: {
-      target: {
-        target: "default",
-        arch: ["x64", "arm64"],
-      },
-    },
-    dmg: {
-      sign: true,
-      icon: "electron/resources/icon.icns",
-      background: "electron/resources/background.png",
-    },
-  },
-  win: {
-    win: {
-      target: "nsis",
-    },
-  },
-};
 
 try {
   for (const target of targets) {
@@ -108,7 +88,10 @@ try {
         win:
           target === Platform.WINDOWS
             ? {
-                target: "nsis",
+                target: {
+                  target: "nsis",
+                  arch: ["x64", "arm64"],
+                },
               }
             : undefined,
         afterSign: async (context) => {
