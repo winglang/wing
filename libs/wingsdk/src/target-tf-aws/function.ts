@@ -130,6 +130,13 @@ export class Function extends cloud.FunctionBase {
 
     const name = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
 
+    // validate memory size
+    if (props.memory && (props.memory < 128 || props.memory > 10240)) {
+      throw new Error(
+        "Memory should be in between 128 & 10240"
+      )
+    }
+
     // Create Lambda function
     this.function = new LambdaFunction(this, "Default", {
       functionName: name,
