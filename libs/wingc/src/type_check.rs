@@ -18,9 +18,7 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display};
 use std::path::Path;
-use symbol_env::SymbolEnv;
-
-use self::symbol_env::StatementIdx;
+use symbol_env::{StatementIdx, SymbolEnv};
 
 pub struct UnsafeRef<T>(*const T);
 impl<T> Clone for UnsafeRef<T> {
@@ -172,9 +170,6 @@ impl Debug for NamespaceRef {
 	}
 }
 
-// TODO See TypeRef for why this is necessary
-unsafe impl Send for SymbolKind {}
-
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct Class {
@@ -192,6 +187,14 @@ impl Class {
 			.env
 			.iter(with_ancestry)
 			.filter(|(_, t, _)| t.as_variable().unwrap()._type.as_function_sig().is_some())
+			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap()._type.clone()))
+	}
+
+	pub fn fields(&self, with_ancestry: bool) -> impl Iterator<Item = (String, TypeRef)> + '_ {
+		self
+			.env
+			.iter(with_ancestry)
+			.filter(|(_, t, _)| t.as_variable().unwrap()._type.as_function_sig().is_none())
 			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap()._type.clone()))
 	}
 }
@@ -794,24 +797,24 @@ impl<'a> TypeChecker<'a> {
 				Literal::Duration(_) => self.types.duration(),
 				Literal::Boolean(_) => self.types.bool(),
 			},
-			ExprKind::Binary { op, lexp, rexp } => {
-				let ltype = self.type_check_exp(lexp, env, statement_idx);
-				let rtype = self.type_check_exp(rexp, env, statement_idx);
+			ExprKind::Binary { op, left, right } => {
+				let ltype = self.type_check_exp(left, env, statement_idx);
+				let rtype = self.type_check_exp(right, env, statement_idx);
 
 				if op.boolean_args() {
-					self.validate_type(ltype, self.types.bool(), rexp);
-					self.validate_type(rtype, self.types.bool(), rexp);
+					self.validate_type(ltype, self.types.bool(), right);
+					self.validate_type(rtype, self.types.bool(), right);
 				} else if op.numerical_args() {
-					self.validate_type(ltype, self.types.number(), rexp);
-					self.validate_type(rtype, self.types.number(), rexp);
+					self.validate_type(ltype, self.types.number(), right);
+					self.validate_type(rtype, self.types.number(), right);
 				} else {
-					self.validate_type(ltype, rtype, rexp);
+					self.validate_type(ltype, rtype, right);
 				}
 
 				if op.boolean_result() {
 					self.types.bool()
 				} else {
-					self.validate_type(ltype, self.types.number(), rexp);
+					self.validate_type(ltype, self.types.number(), right);
 					ltype
 				}
 			}
@@ -946,7 +949,7 @@ impl<'a> TypeChecker<'a> {
 				}
 				type_
 			}
-			ExprKind::Call { function, args } => {
+			ExprKind::Call { function, arg_list } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
 				let func_type = self.type_check_exp(function, env, statement_idx);
 				let this_args = if matches!(function.kind, ExprKind::Reference(Reference::NestedIdentifier { .. })) {
@@ -974,9 +977,9 @@ impl<'a> TypeChecker<'a> {
 					);
 				}
 
-				if !args.named_args.is_empty() {
+				if !arg_list.named_args.is_empty() {
 					let last_arg = func_sig.parameters.last().unwrap().maybe_unwrap_option();
-					self.validate_structural_type(&args.named_args, &last_arg, exp, env, statement_idx);
+					self.validate_structural_type(&arg_list.named_args, &last_arg, exp, env, statement_idx);
 				}
 
 				// Count number of optional parameters from the end of the function's params
@@ -989,7 +992,7 @@ impl<'a> TypeChecker<'a> {
 					.count();
 
 				// Verity arity
-				let arg_count = args.pos_args.len() + (if args.named_args.is_empty() { 0 } else { 1 });
+				let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
 				let min_args = func_sig.parameters.len() - num_optionals - this_args;
 				let max_args = func_sig.parameters.len() - this_args;
 				if arg_count < min_args || arg_count > max_args {
@@ -1009,7 +1012,7 @@ impl<'a> TypeChecker<'a> {
 					.iter()
 					.skip(this_args)
 					.take(func_sig.parameters.len() - num_optionals);
-				let args = args.pos_args.iter();
+				let args = arg_list.pos_args.iter();
 
 				for (arg_type, param_exp) in params.zip(args) {
 					let param_type = self.type_check_exp(param_exp, env, statement_idx);

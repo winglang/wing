@@ -13,15 +13,15 @@ export async function runWingCommand(
     cwd,
     reject: false,
     stdin: "ignore",
+    all: true,
   });
   if (shouldSucceed) {
     if (out.exitCode !== 0) {
-      // Note: reading stdout here on windows will fail if it's empty
-      throw out.stderr;
+      throw out.all;
     }
   } else {
-    expect(out.stderr).not.toBe("");
     expect(out.exitCode).not.toBe(0);
+    expect(out.all).not.toBe("");
   }
   return out;
 }

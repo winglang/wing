@@ -83,6 +83,11 @@ export class Function extends cloud.FunctionBase {
     fs.mkdirSync(`${codeDir}/${functionName}`);
     fs.renameSync(`${codeDir}/index.js`, `${outDir}/index.js`);
 
+    // throw an error if props.memory is defined for an Azure function
+    if (props.memory) {
+      throw new Error("memory is an invalid parameter on Azure");
+    }
+
     // As per documentation "a function must have exactly one trigger" so for now
     // by default a function will support http get requests
     // when we bind other resources like queues or topics this function.json will need to

@@ -1,5 +1,9 @@
 {
-    "dependencies": {
-        "jsii-code-samples": "1.7.0"
-    }
+  "dependencies": {
+    "jsii-code-samples": "1.7.0"
+  },
+  "volta": {
+    "node": "18.12.1",
+    "npm": "8.19.3"
+  }
 }

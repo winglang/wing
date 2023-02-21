@@ -1,7 +1,7 @@
+import assert from "assert";
 import { execa } from "execa";
-import * as fs from "fs-extra";
-import * as path from "path";
-import * as nodeAssert from "node:assert";
+import fs from "fs-extra";
+import path from "path";
 import {
   npmBin,
   npmCacheDir,
@@ -43,28 +43,26 @@ export default async function () {
 
   // use execSync to install npm deps in tmpDir
   console.debug(`Installing npm deps into ${tmpDir}...`);
-  const installResult = await execa(
-    npmBin,
-    [
-      "install",
-      "--no-package-lock",
-      "--ignore-engines",
-      "--install-links=false",
-    ],
-    {
-      cwd: tmpDir,
-    }
-  );
+  const installArgs = ["install", "--no-package-lock", "--install-links=false"];
 
-  nodeAssert.equal(
+  const installResult = await execa(npmBin, installArgs, {
+    cwd: tmpDir,
+  });
+
+  assert.equal(
     installResult.exitCode,
     0,
     `Failed to install npm deps: \n${installResult.stderr}`
   );
-  nodeAssert.doesNotMatch(
+  assert.doesNotMatch(
     installResult.stdout,
     />/,
     `Install contains unexpected script hook: \n${installResult.stdout}`
+  );
+  assert.doesNotMatch(
+    installResult.stdout,
+    / warn /,
+    `Install contains unexpected warning: \n${installResult.stdout}`
   );
 
   console.debug(`Done!`);
@@ -73,13 +71,13 @@ export default async function () {
     cwd: tmpDir,
   });
 
-  nodeAssert.equal(
+  assert.equal(
     versionOutput.exitCode,
     0,
     `Failed to get wing version: ${versionOutput.stderr}`
   );
 
-  nodeAssert.match(
+  assert.match(
     versionOutput.stdout,
     /^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/,
     `Wing version invalid: ${versionOutput.stderr}`

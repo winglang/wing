@@ -131,6 +131,15 @@ describe("run all tests", () => {
   });
 });
 
+test("provides raw tree data", async () => {
+  const app = new SimApp();
+  new Test(app, "test", ["console.log('hi');"]);
+  const sim = await app.startSimulator();
+  const treeData = sim.tree().rawData();
+  expect(treeData).toBeDefined();
+  expect(treeData).toMatchSnapshot();
+});
+
 class Test extends Function {
   constructor(
     scope: Construct,

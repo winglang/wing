@@ -1,5 +1,9 @@
 {
   "dependencies": {
     "@jsii/spec": "^1.72.0"
+  },
+  "volta": {
+    "node": "18.12.1",
+    "npm": "8.19.3"
   }
 }
