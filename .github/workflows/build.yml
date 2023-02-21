@@ -31,25 +31,25 @@ jobs:
       version: ${{ steps.info.outputs.version || steps.pr_info.outputs.version }}
     steps:
       - name: Checkout
-        if: github.env.WORKFLOW_PUBLISH == 'true'
+        if: ${{ env.WORKFLOW_PUBLISH == 'true' }}
         uses: actions/checkout@v3
 
       - name: Get tags
         id: tags
-        if: github.env.WORKFLOW_PUBLISH == 'true'
+        if: ${{ env.WORKFLOW_PUBLISH == 'true' }}
         run: |
           git fetch --unshallow --tags
           LAST_VERSION="$(git describe --tags `git rev-list --tags --max-count=1`)"
           echo "last-version=${LAST_VERSION#?}" >> $GITHUB_OUTPUT
 
       - name: Install Dependencies
-        if: github.env.WORKFLOW_PUBLISH == 'true'
+        if: ${{ env.WORKFLOW_PUBLISH == 'true' }}
         uses: bahmutov/npm-install@v1
         with:
           install-command: npm ci --ignore-scripts
 
       - name: Get Version Info
-        if: github.env.WORKFLOW_PUBLISH == 'true'
+        if: ${{ env.WORKFLOW_PUBLISH == 'true' }}
         id: info
         env:
           # Needed for `auto` cli
@@ -62,7 +62,7 @@ jobs:
 
       # newlines are easier to handle in single-line yaml
       - run: "echo '\n' >> CHANGELOG.md"
-        if: github.env.WORKFLOW_PUBLISH == 'true'
+        if: ${{ env.WORKFLOW_PUBLISH == 'true' }}
 
       - name: PR Version Info
         id: pr_info
@@ -80,11 +80,11 @@ jobs:
           path: CHANGELOG.md
 
       - name: Compress Docs
-        if: github.env.WORKFLOW_PUBLISH == 'true'
+        if: ${{ env.WORKFLOW_PUBLISH == 'true' }}
         run: tar -czvf docs.tgz docs/*
 
       - name: Upload Docs
-        if: github.env.WORKFLOW_PUBLISH == 'true'
+        if: ${{ env.WORKFLOW_PUBLISH == 'true' }}
         uses: actions/upload-artifact@v2
         with:
           name: docs
@@ -127,7 +127,7 @@ jobs:
           targets: "build,test,package"
           all: true
           # If pushing, exclude hangar because we're going to run it in a separate job
-          args: "${{ github.env.WORKFLOW_FULL_E2E == 'true' && '--exclude=hangar ' || '' }}--configuration=release --output-style=stream --verbose"
+          args: "${{ env.WORKFLOW_FULL_E2E == 'true' && '--exclude=hangar ' || '' }}--configuration=release --output-style=stream --verbose"
 
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v2
@@ -154,7 +154,7 @@ jobs:
           path: apps/vscode-wing/vscode-wing.vsix
 
       - name: "Publish Wing Playground"
-        if: github.env.WORKFLOW_PUBLISH == 'true'
+        if: ${{ env.WORKFLOW_PUBLISH == 'true' }}
         uses: amondnet/vercel-action@v25.1.0
         with:
           github-token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
@@ -219,7 +219,7 @@ jobs:
 
   publish:
     name: Publish
-    if: github.env.WORKFLOW_PUBLISH == 'true'
+    if: ${{ env.WORKFLOW_PUBLISH == 'true' }}
     needs:
       - e2e
       - prepare
