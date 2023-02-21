@@ -150,6 +150,7 @@ We are also actively tracking planned features in our roadmap:
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/ogre14t"><img src="https://avatars.githubusercontent.com/u/24970799?v=4?s=100" width="100px;" alt="Owen Watkins"/><br /><sub><b>Owen Watkins</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=ogre14t" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/RaphaelManke"><img src="https://avatars.githubusercontent.com/u/15867688?v=4?s=100" width="100px;" alt="Raphael Manke"/><br /><sub><b>Raphael Manke</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=RaphaelManke" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/msalman-abid"><img src="https://avatars.githubusercontent.com/u/49055716?v=4?s=100" width="100px;" alt="Salman Abid"/><br /><sub><b>Salman Abid</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=msalman-abid" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/vanjaoljaca"><img src="https://avatars.githubusercontent.com/u/31779?v=4?s=100" width="100px;" alt="Vanja Oljaca"/><br /><sub><b>Vanja Oljaca</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=vanjaoljaca" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>

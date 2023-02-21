@@ -369,6 +369,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "vanjaoljaca",
+      "name": "Vanja Oljaca",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31779?v=4",
+      "profile": "https://github.com/vanjaoljaca",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
