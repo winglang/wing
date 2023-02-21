@@ -23,5 +23,9 @@
   },
   "scripts": {
     "test": "tree-sitter test"
+  },
+  "volta": {
+    "node": "18.12.1",
+    "npm": "8.19.3"
   }
 }

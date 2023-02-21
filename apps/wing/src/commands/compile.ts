@@ -105,7 +105,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     // the wing CLI was installed to), but also in the source code directory.
     // This is necessary because the Wing app may have installed dependencies in
     // the project directory.
-    const requirePath = require.resolve(path, { paths: [__dirname, wingDir]});
+    const requirePath = require.resolve(path, { paths: [__dirname, wingDir] });
     return require(requirePath);
   };
 
@@ -191,13 +191,15 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
           )
       );
     }
+
+    process.exitCode = 1;
   }
 }
 
 /**
  * Resolves a list of plugin paths as absolute paths, using the current working directory
  * if absolute path is not provided.
- * 
+ *
  * @param plugins list of plugin paths (absolute or relative)
  * @returns list of absolute plugin paths or relative to cwd
  */
