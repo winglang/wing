@@ -153,6 +153,9 @@ We are also actively tracking planned features in our roadmap:
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/vanjaoljaca"><img src="https://avatars.githubusercontent.com/u/31779?v=4?s=100" width="100px;" alt="Vanja Oljaca"/><br /><sub><b>Vanja Oljaca</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=vanjaoljaca" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/attias"><img src="https://avatars.githubusercontent.com/u/4300416?v=4?s=100" width="100px;" alt="attias"/><br /><sub><b>attias</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=attias" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mortax"><img src="https://avatars.githubusercontent.com/u/788303?v=4?s=100" width="100px;" alt="john r. durand"/><br /><sub><b>john r. durand</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=mortax" title="Code">💻</a></td>
+    </tr>
   </tbody>
   <tfoot>
     <tr>
