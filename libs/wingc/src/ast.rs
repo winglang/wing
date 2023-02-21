@@ -294,7 +294,7 @@ pub enum ExprKind {
 	Reference(Reference),
 	Call {
 		function: Box<Expr>,
-		args: ArgList,
+		arg_list: ArgList,
 	},
 	Unary {
 		// TODO: Split to LogicalUnary, NumericUnary
@@ -304,8 +304,8 @@ pub enum ExprKind {
 	Binary {
 		// TODO: Split to LogicalBinary, NumericBinary, Bit/String??
 		op: BinaryOperator,
-		lexp: Box<Expr>,
-		rexp: Box<Expr>,
+		left: Box<Expr>,
+		right: Box<Expr>,
 	},
 	ArrayLiteral {
 		type_: Option<TypeAnnotation>,
