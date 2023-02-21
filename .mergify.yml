@@ -25,5 +25,5 @@ pull_request_rules:
       - "#changes-requested-reviews-by=0"
       - "#review-threads-unresolved=0"
       - -approved-reviews-by~=author
-      - check-success=build
+      - check-success=Build
       - check-success=Validate PR title
