@@ -18,9 +18,7 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display};
 use std::path::Path;
-use symbol_env::SymbolEnv;
-
-use self::symbol_env::StatementIdx;
+use symbol_env::{StatementIdx, SymbolEnv};
 
 pub struct UnsafeRef<T>(*const T);
 impl<T> Clone for UnsafeRef<T> {
@@ -171,9 +169,6 @@ impl Debug for NamespaceRef {
 		write!(f, "{:?}", &**self)
 	}
 }
-
-// TODO See TypeRef for why this is necessary
-unsafe impl Send for SymbolKind {}
 
 #[derive(Derivative)]
 #[derivative(Debug)]

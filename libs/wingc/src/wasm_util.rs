@@ -1,3 +1,5 @@
+pub static WASM_RETURN_ERROR: u64 = 0;
+
 /// Convert pointer and length into utf8 string represented by the bytes
 pub unsafe fn ptr_to_string(ptr: u32, len: u32) -> String {
 	let slice = std::slice::from_raw_parts(ptr as *const u8, len as usize);
