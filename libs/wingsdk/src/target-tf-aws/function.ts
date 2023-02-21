@@ -138,6 +138,13 @@ export class Function extends cloud.FunctionBase {
 
     const name = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
 
+    // validate memory size
+    if (props.memory && (props.memory < 128 || props.memory > 10240)) {
+      throw new Error(
+        "Memory for AWS Lambda function should be in between 128 and 10240"
+      );
+    }
+
     // Create Lambda function
     this.function = new LambdaFunction(this, "Default", {
       functionName: name,
@@ -153,6 +160,7 @@ export class Function extends cloud.FunctionBase {
       timeout: props.timeout
         ? props.timeout.seconds
         : Duration.fromMinutes(0.5).seconds,
+      memorySize: props.memory ? props.memory : undefined,
     });
 
     this.arn = this.function.arn;
