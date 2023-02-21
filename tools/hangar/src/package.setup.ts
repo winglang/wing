@@ -1,6 +1,7 @@
+import assert from "assert";
 import { execa } from "execa";
-import * as fs from "fs-extra";
-import * as path from "path";
+import fs from "fs-extra";
+import path from "path";
 import {
   npmBin,
   npmCacheDir,
@@ -27,6 +28,8 @@ const shellEnv = {
   npm_config_progress: "false",
   npm_config_yes: "true",
   npm_config_cache: npmCacheDir,
+  npm_config_color: "false",
+  npm_config_foreground_scripts: "true",
   FORCE_COLOR: "true",
 };
 
@@ -40,30 +43,43 @@ export default async function () {
 
   // use execSync to install npm deps in tmpDir
   console.debug(`Installing npm deps into ${tmpDir}...`);
-  await execa(
-    npmBin,
-    [
-      "install",
-      "--no-package-lock",
-      "--ignore-engines",
-      "--install-links=false",
-    ],
-    {
-      cwd: tmpDir,
-    }
+  const installArgs = ["install", "--no-package-lock", "--install-links=false"];
+
+  const installResult = await execa(npmBin, installArgs, {
+    cwd: tmpDir,
+  });
+
+  assert.equal(
+    installResult.exitCode,
+    0,
+    `Failed to install npm deps: \n${installResult.stderr}`
   );
+  assert.doesNotMatch(
+    installResult.stdout,
+    />/,
+    `Install contains unexpected script hook: \n${installResult.stdout}`
+  );
+  assert.doesNotMatch(
+    installResult.stdout,
+    / warn /,
+    `Install contains unexpected warning: \n${installResult.stdout}`
+  );
+
   console.debug(`Done!`);
 
   const versionOutput = await execa(wingBin, ["--version"], {
     cwd: tmpDir,
   });
 
-  if (versionOutput.exitCode !== 0) {
-    throw new Error(`Failed to get wing version: ${versionOutput.stderr}`);
-  }
+  assert.equal(
+    versionOutput.exitCode,
+    0,
+    `Failed to get wing version: ${versionOutput.stderr}`
+  );
 
-  // expect(versionOutput.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
-  if (!versionOutput.stdout.match(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/)) {
-    throw new Error(`Wing version invalid: ${versionOutput.stderr}`);
-  }
+  assert.match(
+    versionOutput.stdout,
+    /^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/,
+    `Wing version invalid: ${versionOutput.stderr}`
+  );
 }

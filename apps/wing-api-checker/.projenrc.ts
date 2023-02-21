@@ -1,4 +1,5 @@
 import { javascript, typescript } from "projen";
+import rootPackageJson from "../../package.json";
 
 const project = new typescript.TypeScriptProject({
   defaultReleaseBranch: "main",
@@ -24,5 +25,9 @@ const bumpTask = project.tasks.tryFind("bump")!;
 bumpTask.reset(
   "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
 );
+
+project.addFields({
+  volta: rootPackageJson.volta,
+});
 
 project.synth();
