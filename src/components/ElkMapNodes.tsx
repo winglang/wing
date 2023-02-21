@@ -36,6 +36,7 @@ export interface ContainerNodeProps {
   hideBottomBar?: boolean;
   selected?: boolean;
   resourceType: BaseResourceSchema["type"] | undefined;
+  depth: number;
   onClick?: () => void;
   onMouseEnter?: () => void;
 }
@@ -48,6 +49,7 @@ export const ContainerNode = ({
   onClick,
   onMouseEnter,
   resourceType,
+  depth,
   ...props
 }: PropsWithChildren<ContainerNodeProps>) => {
   return (
@@ -161,9 +163,12 @@ export const ContainerNode = ({
               "group-hover:border-sky-300",
               "transition-all",
               "shadow-inner",
+              depth % 2 === 0 ? "bg-slate-200/30" : "bg-white",
               {
-                "bg-slate-200/30 border-gray-300": !selected,
-                "border-sky-300 bg-white": selected,
+                // "bg-slate-200/30 border-gray-300": !selected,
+                // "border-sky-300 bg-white": selected,
+                "border-gray-300": !selected,
+                "border-sky-300": selected,
               },
             )}
           ></div>

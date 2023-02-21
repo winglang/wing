@@ -47,6 +47,7 @@ const layoutOptions: LayoutOptions = {
 
 export type NodeItemProps<T> = {
   node: Node<T>;
+  depth: number;
 };
 
 export interface ElkMapProps<T> {
@@ -145,7 +146,7 @@ export const ElkMap = <T extends unknown = undefined>(
   );
 
   const renderElk = useCallback(
-    (node: ElkNode) => {
+    (node: ElkNode, depth = 0) => {
       if (!nodeStaticData.nodeRecord) return;
       const offset = offsets?.get(node.id) ?? { x: 0, y: 0 };
       const data = nodeStaticData.nodeRecord[node.id];
@@ -182,10 +183,10 @@ export const ElkMap = <T extends unknown = undefined>(
             onMouseEnter={() => setHighlighted(node.id)}
             onMouseLeave={() => setHighlighted(undefined)}
           >
-            <NodeItem node={data} />
+            <NodeItem node={data} depth={depth} />
           </motion.div>
 
-          {node.children?.map((node) => renderElk(node))}
+          {node.children?.map((node) => renderElk(node, depth + 1))}
         </Fragment>
       );
     },
@@ -212,24 +213,24 @@ export const ElkMap = <T extends unknown = undefined>(
         >
           <defs>
             <marker
-              className="stroke-slate-500 fill-slate-500"
+              className="stroke-none fill-slate-500"
               markerWidth="6"
               markerHeight="4"
               orient="auto"
               id="arrow-head"
-              refX="5"
+              refX="4"
               refY="2"
             >
               <path d="M0 0 v4 l5 -2 z" />
             </marker>
 
             <marker
-              className="stroke-sky-500 fill-sky-500"
+              className="stroke-none fill-sky-500"
               markerHeight="6"
               markerWidth="4"
               orient="auto"
               id="arrow-head-selected"
-              refX="5"
+              refX="4"
               refY="2"
             >
               <path d="M0 0 v4 l5 -2 z" />

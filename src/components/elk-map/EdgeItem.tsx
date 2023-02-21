@@ -39,7 +39,7 @@ export const EdgeItem = ({
       className={classNames(
         "stroke-1 fill-none",
         highlighted ? "stroke-[1.5px] stroke-sky-500 z-10" : "stroke-slate-400",
-        fade ? "opacity-30" : "opacity-75",
+        fade && "opacity-40",
         "transition-all",
       )}
     >

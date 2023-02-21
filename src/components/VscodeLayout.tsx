@@ -188,7 +188,7 @@ export const VscodeLayout = ({
                         onSelectedNodeIdChange={(id) => {
                           treeMenu.setCurrent(id);
                         }}
-                        node={({ node }) => (
+                        node={({ node, depth }) => (
                           <div
                             ref={(element) =>
                               (mapRefs.current[node.id] = element || undefined)
@@ -207,6 +207,7 @@ export const VscodeLayout = ({
                                   {...props}
                                 />
                               )}
+                              depth={depth}
                             />
                           </div>
                         )}
