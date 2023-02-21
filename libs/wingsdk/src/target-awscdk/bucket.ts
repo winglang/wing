@@ -1,9 +1,13 @@
+import { RemovalPolicy } from "aws-cdk-lib";
+import {
+  BlockPublicAccess,
+  BucketEncryption,
+  Bucket as S3Bucket,
+} from "aws-cdk-lib/aws-s3";
+import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { BlockPublicAccess, BucketEncryption, Bucket as S3Bucket } from "aws-cdk-lib/aws-s3";
-import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
-import { RemovalPolicy } from "aws-cdk-lib";
 
 /**
  * AWS implementation of `cloud.Bucket`.

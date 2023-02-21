@@ -15,14 +15,17 @@ test("create a bucket", async () => {
 
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
-  template.hasResourceProperties("AWS::S3::Bucket", Match.objectLike({
-    PublicAccessBlockConfiguration: {
-      BlockPublicAcls: true,
-      BlockPublicPolicy: true,
-      IgnorePublicAcls: true,
-      RestrictPublicBuckets: true,
-    },
-  }));
+  template.hasResourceProperties(
+    "AWS::S3::Bucket",
+    Match.objectLike({
+      PublicAccessBlockConfiguration: {
+        BlockPublicAcls: true,
+        BlockPublicPolicy: true,
+        IgnorePublicAcls: true,
+        RestrictPublicBuckets: true,
+      },
+    })
+  );
   expect(template.toJSON()).toMatchSnapshot();
 });
 

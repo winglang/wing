@@ -1,13 +1,13 @@
-import { Construct } from "constructs";
-import { PolyconFactory } from "./factory";
-import * as cdk from "aws-cdk-lib";
-import { Template } from 'aws-cdk-lib/assertions';
-import { IApp, AppProps } from "../core";
-import { join } from "path";
 import { mkdirSync } from "fs";
-import stringify from "safe-stable-stringify";
+import { join } from "path";
+import * as cdk from "aws-cdk-lib";
+import { Template } from "aws-cdk-lib/assertions";
+import { Construct } from "constructs";
 import { Polycons } from "polycons";
+import stringify from "safe-stable-stringify";
+import { PolyconFactory } from "./factory";
 import { Logger } from "../cloud";
+import { IApp, AppProps } from "../core";
 
 /**
  * AWS-CDK App props
@@ -33,7 +33,6 @@ export class App extends Construct implements IApp {
   private readonly cdkStack: cdk.Stack;
 
   constructor(props: CdkAppProps) {
-
     const customFactory = props.customFactory ?? new PolyconFactory();
 
     const stackName = props.stackName ?? process.env.CDK_STACK_NAME;
@@ -69,16 +68,16 @@ export class App extends Construct implements IApp {
   }
 
   /**
- * Synthesize the app into CDK configuration in a `cdk.out` directory.
- *
- * This method returns a cleaned snapshot of the resulting CDK template
- * for unit testing.
- */
+   * Synthesize the app into CDK configuration in a `cdk.out` directory.
+   *
+   * This method returns a cleaned snapshot of the resulting CDK template
+   * for unit testing.
+   */
   synth(): string {
     // synthesize cdk.Stack files in `outdir/cdk.out`
     this.cdkApp.synth();
 
-    const template = Template.fromStack(this.cdkStack)
+    const template = Template.fromStack(this.cdkStack);
     return stringify(template.toJSON(), null, 2) ?? "";
   }
 }
