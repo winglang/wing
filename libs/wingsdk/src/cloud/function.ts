@@ -30,6 +30,12 @@ export interface FunctionProps {
    * @default 1m
    */
   readonly timeout?: Duration;
+
+  /**
+   * The amount of memory to allocate to the function, in MB.
+   * @default 128
+   */
+  readonly memory?: number;
 }
 
 /**
