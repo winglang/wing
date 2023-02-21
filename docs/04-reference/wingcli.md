@@ -141,7 +141,7 @@ Usage:
 
 ```sh
 $ export CDK_STACK_NAME="my-project"
-$ wing compile --target awscdk cdk-app.w
+$ wing compile --target awscdk app.w
 ```
 
 The output includes both a AWS-CDK configuration file (under `target/<file name>.awscdk`) and
@@ -149,7 +149,7 @@ JavaScript bundles that include inflight code that executes on compute platform 
 
 You can deploy your stack to AWS using `cdk deploy` command
 ```sh
-$ cdk deploy --app target/cdk-app.awscdk
+$ cdk deploy --app target/app.awscdk
 ```
 
 ### Plugins
