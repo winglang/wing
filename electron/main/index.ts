@@ -206,7 +206,9 @@ function createWindowManager() {
             });
           }
           if (event.data.status === "failure") {
-            consoleLogger.error(event.data.error.message, "user");
+            consoleLogger.error(event.data.error.message, "user", {
+              sourcePath: event.sourcePath,
+            });
           }
         },
       });

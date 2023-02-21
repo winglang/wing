@@ -1,4 +1,8 @@
-import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  XCircleIcon,
+} from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import throttle from "lodash.throttle";
 import { Fragment, useEffect, useRef, useState } from "react";
@@ -14,8 +18,7 @@ const dateTimeFormat = new Intl.DateTimeFormat(undefined, {
 
 interface LogEntryProps {
   log: LogEntry;
-  onMouseDownHandler: (log: LogEntry) => void;
-  isSelected: boolean;
+  onResourceClick: (log: LogEntry) => void;
 }
 
 export const formatAbsolutePaths = (
@@ -33,18 +36,14 @@ export const formatAbsolutePaths = (
     .replace(/(\r\n|\n|\r)/gm, expanded ? "<br />" : "\n");
 };
 
-const LogEntryRow = ({
-  log,
-  isSelected,
-  onMouseDownHandler,
-}: LogEntryProps) => {
+const LogEntryRow = ({ log, onResourceClick }: LogEntryProps) => {
   const [expanded, setExpanded] = useState(false);
   const expandableRef = useRef<HTMLElement>(null);
   const [overflows, setOverflows] = useState(false);
 
   useEffect(() => {
     const computeOverflows = throttle(() => {
-      const element = expandableRef.current;
+      const element = expandableRef.current?.parentNode as HTMLElement;
       if (!element) {
         return;
       }
@@ -79,110 +78,96 @@ const LogEntryRow = ({
 
   return (
     <Fragment>
-      <div className="flex text-slate-400 text-2xs">
-        {dateTimeFormat.format(log.timestamp)}
-      </div>
-
-      <div className="pl-2">
-        <div
-          className={classNames(
-            "px-2 rounded-lg text-2xs inline-flex uppercase",
-            {
-              "bg-slate-400 text-white": true,
-            },
-          )}
-        >
-          {log.source}
-        </div>
-      </div>
-
-      <div>
-        <div
-          className={classNames(
-            "px-2 rounded-lg text-2xs inline-flex uppercase",
-            {
-              "bg-slate-50 text-slate-500": log.level === "verbose",
-              "bg-slate-400 text-white": log.level === "info",
-              "bg-yellow-400 text-white": log.level === "warn",
-              "bg-red-400 text-white": log.level === "error",
-            },
-          )}
-        >
-          {log.level}
-        </div>
-      </div>
-
-      <button
+      <div
         className={classNames(
-          "text-left text-2xs px-1.5 py-0.5 group select-text",
+          "group w-full flex",
           "flex min-w-0",
+          "justify-between px-2",
+          "border-b border-slate-50 text-2xs py-0.5",
           {
-            "hover:bg-slate-100": canBeExpanded,
-            "cursor-default": !canBeExpanded,
-            "text-slate-700": log.level !== "verbose",
-            "hover:text-slate-800": log.level !== "verbose" && canBeExpanded,
-            "text-slate-400": log.level === "verbose",
-            "hover:text-slate-500": log.level === "verbose" && canBeExpanded,
-            "bg-slate-100": isSelected,
+            "text-blue-500": log.level === "verbose",
+            "hover:text-blue-600": log.level === "verbose" && canBeExpanded,
+            "text-slate-700": log.level === "info",
+            "hover:text-slate-800": log.level === "info" && canBeExpanded,
+            "text-yellow-500": log.level === "warn",
+            "hover:text-yellow-600": log.level === "warn" && canBeExpanded,
+            "text-red-500 bg-red-100": log.level === "error",
+            "hover:text-red-600": log.level === "error" && canBeExpanded,
           },
         )}
-        onMouseDown={() => onMouseDownHandler(log)}
-        onClick={() => {
-          if (canBeExpanded) {
-            setExpanded((expanded) => !expanded);
-          }
-        }}
       >
-        <div
-          className={classNames(
-            "flex-shrink-0 pr-1.5",
-            canBeExpanded && "group-hover:bg-slate-100",
-          )}
-        >
-          <ChevronIcon
-            className={classNames("w-3.5 h-3.5 inline-block", {
-              invisible: !canBeExpanded,
-            })}
+        <div className="flex-shrink-0">
+          <XCircleIcon
+            className={classNames(
+              "w-3.5 h-3.5",
+              "text-red-500 mr-1 inline-block -mt-0.5",
+              {
+                invisible: log.level !== "error",
+              },
+            )}
           />
         </div>
-        <span
-          ref={expandableRef}
-          className={classNames({
-            truncate: !expanded,
-          })}
-        />
-      </button>
+
+        <div className="flex text-slate-500 ml-1">
+          {dateTimeFormat.format(log.timestamp)}
+        </div>
+
+        <div
+          className={classNames(
+            "cursor-default select-text min-w-0 ml-2 text-left grow",
+            {
+              truncate: !expanded,
+            },
+          )}
+        >
+          {canBeExpanded && (
+            <button
+              onClick={() => {
+                setExpanded((expanded) => !expanded);
+              }}
+            >
+              <ChevronIcon
+                className={classNames(
+                  "w-3.5 h-3.5",
+                  "text-slate-500 mr-0.5 inline-block -mt-0.5",
+                  "hover:text-slate-600",
+                )}
+              />
+            </button>
+          )}
+          <span ref={expandableRef} />
+        </div>
+
+        <div className="justify-end ml-1">
+          <a
+            onClick={() => onResourceClick(log)}
+            className={classNames(
+              "flex cursor-pointer underline truncate",
+              "text-slate-500 hover:text-slate-600",
+            )}
+          >
+            {log.ctx?.sourcePath}
+          </a>
+        </div>
+      </div>
     </Fragment>
   );
 };
 
 export interface ConsoleLogsProps {
   logs: LogEntry[];
-  onLogSelected?: (log: LogEntry) => void;
+  onResourceClick?: (log: LogEntry) => void;
 }
 
-export const ConsoleLogs = ({ logs, onLogSelected }: ConsoleLogsProps) => {
-  const [selectedLog, setSelectedLog] = useState<LogEntry | undefined>(
-    undefined,
-  );
-  const handleMouseDown = (log: LogEntry) => {
-    setSelectedLog(log);
-    onLogSelected?.(log);
-  };
+export const ConsoleLogs = ({ logs, onResourceClick }: ConsoleLogsProps) => {
   return (
     <>
-      <div
-        className="grid gap-x-2 text-2xs font-mono"
-        style={{
-          gridTemplateColumns: "max-content max-content max-content 1fr",
-        }}
-      >
+      <div className="w-full gap-x-2 text-2xs font-mono">
         {logs.map((log, logIndex) => (
           <LogEntryRow
-            key={`${logIndex}-${log.timestamp}`}
+            key={`${log.id}`}
             log={log}
-            isSelected={selectedLog === log}
-            onMouseDownHandler={handleMouseDown}
+            onResourceClick={(logEntry) => onResourceClick?.(logEntry)}
           />
         ))}
         {logs.length === 0 && (

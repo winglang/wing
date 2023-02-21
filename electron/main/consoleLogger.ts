@@ -1,4 +1,5 @@
 import log from "electron-log";
+import { nanoid } from "nanoid";
 
 export type LogLevel = "verbose" | "info" | "warn" | "error";
 
@@ -9,6 +10,7 @@ export interface TracingContext {
 }
 
 export interface LogEntry {
+  id: string;
   timestamp: number;
   level: LogLevel;
   message: string;
@@ -33,6 +35,7 @@ export const createConsoleLogger = (
     verbose(message, source, ctx) {
       log.info(message);
       this.messages.push({
+        id: `${nanoid()}`,
         timestamp: Date.now(),
         level: "verbose",
         message,
@@ -44,6 +47,7 @@ export const createConsoleLogger = (
     log(message, source, ctx) {
       log.info(message);
       this.messages.push({
+        id: `${nanoid()}`,
         timestamp: Date.now(),
         level: "info",
         message,
@@ -57,6 +61,7 @@ export const createConsoleLogger = (
       const message = error instanceof Error ? error.message : `${error}`;
       if (source === "user") {
         this.messages.push({
+          id: `${nanoid()}`,
           timestamp: Date.now(),
           level: "error",
           message,

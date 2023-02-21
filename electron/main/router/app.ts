@@ -56,7 +56,7 @@ export const createAppRouter = () => {
               input.filters.source[entry.source] &&
               entry.timestamp >= input.filters.timestamp &&
               (!input.filters.text ||
-                entry.message
+                `${entry.message}${entry.ctx?.sourcePath}`
                   .toLowerCase()
                   .includes(input.filters.text.toLowerCase())),
           );

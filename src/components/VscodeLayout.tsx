@@ -95,7 +95,7 @@ export const VscodeLayout = ({
     }
   }, [logs.data]);
 
-  const onLogSelected = (log: LogEntry) => {
+  const onResourceClick = (log: LogEntry) => {
     const path = log.ctx?.sourcePath;
     if (path) {
       treeMenu.setCurrent(path);
@@ -251,7 +251,7 @@ export const VscodeLayout = ({
               <ScrollableArea ref={logsRef} overflowY className="px-4 pb-1.5">
                 <ConsoleLogs
                   logs={logs.data ?? []}
-                  onLogSelected={onLogSelected}
+                  onResourceClick={onResourceClick}
                 />
               </ScrollableArea>
             </div>
