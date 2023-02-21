@@ -2,7 +2,7 @@
 queue_rules:
   - name: default
     conditions:
-      - status-success=build
+      - status-success=Build
       - status-success=Validate PR title
 
 pull_request_rules:
