@@ -11,7 +11,6 @@ use crate::{
 		ArgList, Class, Constructor, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase, Reference,
 		Scope, StmtKind, Symbol,
 	},
-	debug,
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
 	type_check::symbol_env::SymbolEnv,
 	type_check::Type,

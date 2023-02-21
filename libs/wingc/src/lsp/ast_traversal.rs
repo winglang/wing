@@ -232,18 +232,18 @@ pub fn get_expressions_from_expression<'a>(context: TreeLocationContext) -> Vec<
 					}));
 				}
 			},
-			Call { function, args } => {
+			Call { function, arg_list } => {
 				return_expressions.extend(get_expressions_from_expression(TreeLocationContext {
 					expression: Some(function),
 					..context
 				}));
-				for arg in args.named_args.iter() {
+				for arg in arg_list.named_args.iter() {
 					return_expressions.extend(get_expressions_from_expression(TreeLocationContext {
 						expression: Some(&arg.1),
 						..context
 					}));
 				}
-				for arg in args.pos_args.iter() {
+				for arg in arg_list.pos_args.iter() {
 					return_expressions.extend(get_expressions_from_expression(TreeLocationContext {
 						expression: Some(arg),
 						..context
@@ -256,13 +256,13 @@ pub fn get_expressions_from_expression<'a>(context: TreeLocationContext) -> Vec<
 					..context
 				}));
 			}
-			Binary { lexp, rexp, .. } => {
+			Binary { left, right, .. } => {
 				return_expressions.extend(get_expressions_from_expression(TreeLocationContext {
-					expression: Some(lexp),
+					expression: Some(left),
 					..context
 				}));
 				return_expressions.extend(get_expressions_from_expression(TreeLocationContext {
-					expression: Some(rexp),
+					expression: Some(right),
 					..context
 				}));
 			}
@@ -522,18 +522,18 @@ pub fn get_statements_from_expression<'a>(context: TreeLocationContext) -> Vec<T
 					}));
 				}
 			},
-			Call { function, args } => {
+			Call { function, arg_list } => {
 				return_statements.extend(get_statements_from_expression(TreeLocationContext {
 					expression: Some(function),
 					..context
 				}));
-				for arg in args.named_args.iter() {
+				for arg in arg_list.named_args.iter() {
 					return_statements.extend(get_statements_from_expression(TreeLocationContext {
 						expression: Some(&arg.1),
 						..context
 					}));
 				}
-				for arg in args.pos_args.iter() {
+				for arg in arg_list.pos_args.iter() {
 					return_statements.extend(get_statements_from_expression(TreeLocationContext {
 						expression: Some(arg),
 						..context
@@ -546,13 +546,13 @@ pub fn get_statements_from_expression<'a>(context: TreeLocationContext) -> Vec<T
 					..context
 				}));
 			}
-			Binary { lexp, rexp, .. } => {
+			Binary { left, right, .. } => {
 				return_statements.extend(get_statements_from_expression(TreeLocationContext {
-					expression: Some(lexp),
+					expression: Some(left),
 					..context
 				}));
 				return_statements.extend(get_statements_from_expression(TreeLocationContext {
-					expression: Some(rexp),
+					expression: Some(right),
 					..context
 				}));
 			}
@@ -795,8 +795,8 @@ pub fn get_symbols_from_expression<'a>(context: TreeLocationContext<'a>) -> Vec<
 					return_symbols.push((context, property));
 				}
 			},
-			Call { args, .. } => {
-				for arg in args.named_args.iter() {
+			Call { arg_list, .. } => {
+				for arg in arg_list.named_args.iter() {
 					return_symbols.push((context, arg.0));
 				}
 			}

@@ -5,10 +5,11 @@ use std::sync::RwLock;
 use std::{cell::RefCell, collections::HashMap};
 use tree_sitter::Tree;
 
-use crate::capture::scan_for_inflights_in_scope;
+use crate::capture::CaptureVisitor;
 use crate::lsp::notifications::send_diagnostics;
 use crate::parser::Parser;
 use crate::type_check;
+use crate::visit::Visit;
 use crate::{ast::Scope, diagnostic::Diagnostics, type_check::Types, wasm_util::ptr_to_string};
 
 /// The result of running wingc on a file
@@ -102,10 +103,11 @@ fn partial_compile(source_file: &str, text: &[u8]) -> FileData {
 	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file));
 	let parse_diag = wing_parser.diagnostics.into_inner();
 
-	let mut capture_diagnostics = Diagnostics::new();
-	scan_for_inflights_in_scope(&scope, &mut capture_diagnostics);
+	// Analyze inflight captures
+	let mut capture_visitor = CaptureVisitor::new();
+	capture_visitor.visit_scope(&scope);
 
-	let diagnostics = vec![parse_diag, type_diag, capture_diagnostics].concat();
+	let diagnostics = vec![parse_diag, type_diag, capture_visitor.diagnostics].concat();
 
 	return FileData {
 		contents: String::from_utf8(text.to_vec()).unwrap(),
