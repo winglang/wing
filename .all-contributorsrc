@@ -333,6 +333,69 @@
       "contributions": [
         "tool"
       ]
+    },
+    {
+      "login": "kaseyaburayyan",
+      "name": "Kasey Abu-Rayyan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/123706066?v=4",
+      "profile": "https://github.com/kaseyaburayyan",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ogre14t",
+      "name": "Owen Watkins",
+      "avatar_url": "https://avatars.githubusercontent.com/u/24970799?v=4",
+      "profile": "https://github.com/ogre14t",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "RaphaelManke",
+      "name": "Raphael Manke",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15867688?v=4",
+      "profile": "https://github.com/RaphaelManke",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "msalman-abid",
+      "name": "Salman Abid",
+      "avatar_url": "https://avatars.githubusercontent.com/u/49055716?v=4",
+      "profile": "https://github.com/msalman-abid",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "vanjaoljaca",
+      "name": "Vanja Oljaca",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31779?v=4",
+      "profile": "https://github.com/vanjaoljaca",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "attias",
+      "name": "attias",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4300416?v=4",
+      "profile": "https://github.com/attias",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "mortax",
+      "name": "john r. durand",
+      "avatar_url": "https://avatars.githubusercontent.com/u/788303?v=4",
+      "profile": "https://github.com/mortax",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

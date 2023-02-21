@@ -146,6 +146,15 @@ We are also actively tracking planned features in our roadmap:
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="http://itaikeren.com"><img src="https://avatars.githubusercontent.com/u/16226013?v=4?s=100" width="100px;" alt="Itai Keren"/><br /><sub><b>Itai Keren</b></sub></a><br /><a href="#tool-itaikeren" title="Tools">🔧</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/kaseyaburayyan"><img src="https://avatars.githubusercontent.com/u/123706066?v=4?s=100" width="100px;" alt="Kasey Abu-Rayyan"/><br /><sub><b>Kasey Abu-Rayyan</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=kaseyaburayyan" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ogre14t"><img src="https://avatars.githubusercontent.com/u/24970799?v=4?s=100" width="100px;" alt="Owen Watkins"/><br /><sub><b>Owen Watkins</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=ogre14t" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/RaphaelManke"><img src="https://avatars.githubusercontent.com/u/15867688?v=4?s=100" width="100px;" alt="Raphael Manke"/><br /><sub><b>Raphael Manke</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=RaphaelManke" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/msalman-abid"><img src="https://avatars.githubusercontent.com/u/49055716?v=4?s=100" width="100px;" alt="Salman Abid"/><br /><sub><b>Salman Abid</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=msalman-abid" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/vanjaoljaca"><img src="https://avatars.githubusercontent.com/u/31779?v=4?s=100" width="100px;" alt="Vanja Oljaca"/><br /><sub><b>Vanja Oljaca</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=vanjaoljaca" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/attias"><img src="https://avatars.githubusercontent.com/u/4300416?v=4?s=100" width="100px;" alt="attias"/><br /><sub><b>attias</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=attias" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mortax"><img src="https://avatars.githubusercontent.com/u/788303?v=4?s=100" width="100px;" alt="john r. durand"/><br /><sub><b>john r. durand</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=mortax" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>
