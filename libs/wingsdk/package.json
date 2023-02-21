@@ -187,6 +187,16 @@
       "src/**/*.inflight.ts"
     ]
   },
+  "volta": {
+    "node": "18.12.1",
+    "npm": "8.19.3"
+  },
+  "files": [
+    "lib",
+    ".jsii",
+    "API.md",
+    "patches"
+  ],
   "overrides": {
     "@types/prettier": "2.6.0",
     "@types/babel__traverse": "7.18.2"

@@ -5,7 +5,6 @@
 !/.projen/files.json
 !/package.json
 !/LICENSE
-!/.npmignore
 logs
 *.log
 npm-debug.log*

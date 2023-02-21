@@ -96,20 +96,26 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
     const tempdir = mkdtemp();
     const outfile = join(tempdir, "index.js");
 
-    esbuild.buildSync({
-      bundle: true,
-      stdin: {
-        contents: lines.join("\n"),
-        resolveDir: tempdir,
-        sourcefile: "inflight.js",
-      },
-      target: "node16",
-      platform: "node",
-      absWorkingDir: tempdir,
-      outfile,
-      minify: false,
-      external: ["aws-sdk"],
-    });
+    try {
+      esbuild.buildSync({
+        bundle: true,
+        stdin: {
+          contents: lines.join("\n"),
+          resolveDir: tempdir,
+          sourcefile: "inflight.js",
+        },
+        nodePaths: [join(__dirname, "..", "..", "node_modules")],
+        target: "node16",
+        platform: "node",
+        absWorkingDir: tempdir,
+        outfile,
+        minify: false,
+        logLevel: "silent",
+        external: ["aws-sdk"],
+      });
+    } catch (e) {
+      throw new Error(`Failed to bundle function: ${e}`);
+    }
 
     // the bundled contains line comments with file paths, which are not useful for us, especially
     // since they may contain system-specific paths. sadly, esbuild doesn't have a way to disable
