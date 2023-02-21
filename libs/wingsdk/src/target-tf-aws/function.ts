@@ -140,7 +140,9 @@ export class Function extends cloud.FunctionBase {
 
     // validate memory size
     if (props.memory && (props.memory < 128 || props.memory > 10240)) {
-      throw new Error("Memory for AWS Lambda function should be in between 128 and 10240");
+      throw new Error(
+        "Memory for AWS Lambda function should be in between 128 and 10240"
+      );
     }
 
     // Create Lambda function
