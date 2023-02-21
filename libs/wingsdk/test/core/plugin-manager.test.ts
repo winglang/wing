@@ -1,13 +1,12 @@
 import fs from "fs";
 import { join, resolve } from "path";
-import * as cdktf from "cdktf";
 import { IamRole } from "@cdktf/provider-aws/lib/iam-role";
 import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
+import * as cdktf from "cdktf";
 import { PluginManager } from "../../src/core/plugin-manager";
 import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp } from "../../src/util";
 import { tfResourcesOfCount } from "../util";
-
 
 const PLUGIN_CODE = `
 var s3_bucket = require("@cdktf/provider-aws/lib/s3-bucket");
@@ -200,43 +199,43 @@ test("plugins are run in order they are passed in", () => {
   expect(tfResourcesOfCount(postSynthOutput, "aws_s3_bucket")).toEqual(0);
 });
 
-
 describe("test plugin examples", () => {
-  const EXAMPLES_DIR = "../../examples/plugins"
-  
+  const EXAMPLES_DIR = "../../examples/plugins";
+
   test("permission-boundary.js - applies permission boundary to IAM Roles", () => {
     // GIVEN
     const tmpDir = mkdtemp();
     const expectedPermissionBoundaryArn = "some:fake:arn:SUPERADMIN";
-    const plugin = resolve(process.cwd(), `${EXAMPLES_DIR}/permission-boundary.js`)
+    const plugin = resolve(
+      process.cwd(),
+      `${EXAMPLES_DIR}/permission-boundary.js`
+    );
     process.env.PERMISSION_BOUNDARY_ARN = expectedPermissionBoundaryArn;
-    
+
     // WHEN
     const app = new tfaws.App({ outdir: tmpDir });
     const pm = new PluginManager([plugin]);
-    new IamRole(app, 'SomeRole', {
-      name: 'some-role',
-      assumeRolePolicy: JSON.stringify({})
+    new IamRole(app, "SomeRole", {
+      name: "some-role",
+      assumeRolePolicy: JSON.stringify({}),
     });
     pm.preSynth(app);
     const output = app.synth();
-    
+
     // THEN
     expect(
-      cdktf.Testing.toHaveResourceWithProperties(output, 
-      "aws_iam_role",
-      {
-        permissions_boundary: expectedPermissionBoundaryArn
+      cdktf.Testing.toHaveResourceWithProperties(output, "aws_iam_role", {
+        permissions_boundary: expectedPermissionBoundaryArn,
       })
     ).toEqual(true);
   });
-  
+
   test("replicate-s3.js - replicates s3 buckets and enables versioning", () => {
     // GIVEN
     const tmpDir = mkdtemp();
     const REPLICA_PREFIX = "some-prefix";
     const REPLICA_STORAGE_CLASS = "STANDARD";
-    const plugin = resolve(process.cwd(), `${EXAMPLES_DIR}/replicate-s3.js`)
+    const plugin = resolve(process.cwd(), `${EXAMPLES_DIR}/replicate-s3.js`);
     process.env.REPLICA_PREFIX = REPLICA_PREFIX;
     process.env.REPLICA_STORAGE_CLASS = REPLICA_STORAGE_CLASS;
 
@@ -244,16 +243,18 @@ describe("test plugin examples", () => {
     const app = new tfaws.App({ outdir: tmpDir });
     const pm = new PluginManager([plugin]);
 
-    new S3Bucket(app, "BucketA", {bucket: "bucket-a"});
-    new S3Bucket(app, "BucketB", {bucket: "bucket-b"});
+    new S3Bucket(app, "BucketA", { bucket: "bucket-a" });
+    new S3Bucket(app, "BucketB", { bucket: "bucket-b" });
 
     pm.preSynth(app);
     const output = app.synth();
-    
+
     // THEN
     expect(tfResourcesOfCount(output, "aws_s3_bucket")).toEqual(4); // 2 buckets + 2 replicas
     expect(tfResourcesOfCount(output, "aws_s3_bucket_versioning")).toEqual(4); // 2 buckets + 2 replicas
-    expect(tfResourcesOfCount(output, "aws_s3_bucket_replication_configuration")).toEqual(2); // 2 replica rules
+    expect(
+      tfResourcesOfCount(output, "aws_s3_bucket_replication_configuration")
+    ).toEqual(2); // 2 replica rules
   });
 
   test("tf-s3-backend.js - creates s3 backend config", () => {
@@ -262,7 +263,7 @@ describe("test plugin examples", () => {
     const TF_BACKEND_BUCKET = "my-wing-bucket";
     const TF_BACKEND_BUCKET_REGION = "us-east-1";
     const STATE_FILE = "some-state-file.tfstate";
-    const plugin = resolve(process.cwd(), `${EXAMPLES_DIR}/tf-s3-backend.js`)
+    const plugin = resolve(process.cwd(), `${EXAMPLES_DIR}/tf-s3-backend.js`);
     process.env.TF_BACKEND_BUCKET = TF_BACKEND_BUCKET;
     process.env.TF_BACKEND_BUCKET_REGION = TF_BACKEND_BUCKET_REGION;
     process.env.STATE_FILE = STATE_FILE;
@@ -276,13 +277,15 @@ describe("test plugin examples", () => {
     pm.postSynth(JSON.parse(output), app.terraformManifestPath);
 
     // THEN
-    const alteredOutput = JSON.parse(fs.readFileSync(app.terraformManifestPath, "utf-8"));
+    const alteredOutput = JSON.parse(
+      fs.readFileSync(app.terraformManifestPath, "utf-8")
+    );
     expect(alteredOutput.terraform.backend).toEqual({
       s3: {
         bucket: TF_BACKEND_BUCKET,
         region: TF_BACKEND_BUCKET_REGION,
-        key: STATE_FILE
-      }
-    })    
+        key: STATE_FILE,
+      },
+    });
   });
-})
+});
