@@ -2,10 +2,7 @@ import { IConstruct } from "constructs";
 import { IPolyconFactory } from "polycons";
 import { Bucket } from "./bucket";
 import { Logger } from "./logger";
-import {
-  BUCKET_TYPE,
-  LOGGER_TYPE
-} from "../cloud";
+import { BUCKET_TYPE, LOGGER_TYPE } from "../cloud";
 
 /**
  * Polycon factory which resolves polycons in `cloud` into preflight resources
