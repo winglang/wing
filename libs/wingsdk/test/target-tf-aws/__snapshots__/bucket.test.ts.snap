@@ -45,7 +45,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -58,7 +58,7 @@ Object {
               "aws": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -72,7 +72,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
@@ -80,7 +80,7 @@ Object {
                   "Encryption": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
@@ -88,7 +88,7 @@ Object {
                   "PublicPolicy": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3BucketPolicy.S3BucketPolicy",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
@@ -96,7 +96,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud object store",
@@ -108,7 +108,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
@@ -191,7 +191,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/The-Uncanny.Bucket/Default",
@@ -199,7 +199,7 @@ Object {
                   "Encryption": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Encryption",
                     "path": "root/Default/The-Uncanny.Bucket/Encryption",
@@ -207,7 +207,7 @@ Object {
                   "PublicAccessBlock": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "PublicAccessBlock",
                     "path": "root/Default/The-Uncanny.Bucket/PublicAccessBlock",
@@ -215,7 +215,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud object store",
@@ -231,7 +231,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -244,7 +244,7 @@ Object {
               "aws": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -252,7 +252,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
@@ -333,7 +333,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -346,7 +346,7 @@ Object {
               "aws": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -360,7 +360,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/the-uncanny.bucket/Default",
@@ -368,7 +368,7 @@ Object {
                   "Encryption": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Encryption",
                     "path": "root/Default/the-uncanny.bucket/Encryption",
@@ -376,7 +376,7 @@ Object {
                   "PublicAccessBlock": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "PublicAccessBlock",
                     "path": "root/Default/the-uncanny.bucket/PublicAccessBlock",
@@ -384,7 +384,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud object store",
@@ -396,7 +396,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
@@ -486,7 +486,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -499,7 +499,7 @@ Object {
               "aws": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -513,7 +513,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
@@ -521,7 +521,7 @@ Object {
                   "Encryption": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
@@ -529,7 +529,7 @@ Object {
                   "PublicPolicy": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3BucketPolicy.S3BucketPolicy",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "PublicPolicy",
                     "path": "root/Default/my_bucket/PublicPolicy",
@@ -537,7 +537,7 @@ Object {
                   "S3Object-file1.txt": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "S3Object-file1.txt",
                     "path": "root/Default/my_bucket/S3Object-file1.txt",
@@ -545,7 +545,7 @@ Object {
                   "S3Object-file2.txt": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "S3Object-file2.txt",
                     "path": "root/Default/my_bucket/S3Object-file2.txt",
@@ -553,7 +553,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud object store",
@@ -565,7 +565,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
@@ -646,7 +646,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -659,7 +659,7 @@ Object {
               "aws": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -673,7 +673,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
@@ -681,7 +681,7 @@ Object {
                   "Encryption": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Encryption",
                     "path": "root/Default/my_bucket/Encryption",
@@ -689,7 +689,7 @@ Object {
                   "PublicAccessBlock": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "PublicAccessBlock",
                     "path": "root/Default/my_bucket/PublicAccessBlock",
@@ -697,7 +697,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud object store",
@@ -709,7 +709,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",

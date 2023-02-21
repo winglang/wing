@@ -18,7 +18,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "constructs.Construct",
-          "version": "10.1.228",
+          "version": "10.1.245",
         },
         "display": Object {
           "description": "A cloud logging facility",
@@ -44,7 +44,7 @@ Object {
           "Code": Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Code",
             "path": "root/test/Code",
@@ -52,7 +52,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "constructs.Construct",
-          "version": "10.1.228",
+          "version": "10.1.245",
         },
         "display": Object {
           "description": "A cloud function (FaaS)",
@@ -68,7 +68,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "constructs.Construct",
-          "version": "10.1.228",
+          "version": "10.1.245",
         },
         "display": Object {
           "description": "An inflight resource",
@@ -81,7 +81,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "constructs.Construct",
-      "version": "10.1.228",
+      "version": "10.1.245",
     },
     "id": "root",
     "path": "root",
