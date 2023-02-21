@@ -33,8 +33,16 @@ export class Function extends cloud.FunctionBase {
   private readonly function: LambdaFunction;
   private readonly role: IamRole;
   private policyStatements?: any[];
-  /** Function ARN */
+  /**
+   * Unqualified Function ARN
+   * @returns Unqualified ARN of the function
+   */
   public readonly arn: string;
+  /**
+   * Qualified Function ARN
+   * @returns Qualified ARN of the function
+   */
+  public readonly qualifiedArn: string;
 
   constructor(
     scope: Construct,
@@ -143,6 +151,7 @@ export class Function extends cloud.FunctionBase {
       handler: "index.handler",
       runtime: "nodejs16.x",
       role: this.role.arn,
+      publish: true,
       environment: {
         variables: Lazy.anyValue({ produce: () => this.env }) as any,
       },
@@ -153,6 +162,7 @@ export class Function extends cloud.FunctionBase {
     });
 
     this.arn = this.function.arn;
+    this.qualifiedArn = this.function.qualifiedArn;
 
     // terraform rejects templates with zero environment variables
     this.addEnvironment("WING_FUNCTION_NAME", name);

@@ -29,7 +29,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Queue/Default",
@@ -37,7 +37,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A distributed message queue",
@@ -53,7 +53,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -66,7 +66,7 @@ Object {
               "aws": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -74,7 +74,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
@@ -136,7 +136,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/The-Incredible_Queue-01/Default",
@@ -144,7 +144,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A distributed message queue",
@@ -160,7 +160,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -173,7 +173,7 @@ Object {
               "aws": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -181,7 +181,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
@@ -252,6 +252,7 @@ exports[`queue with a consumer function 2`] = `
         },
         \\"function_name\\": \\"Queue-OnMessage-c5395e41-c87b8107\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_QueueOnMessagec5395e41_IamRole_800EDB96.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessagec5395e41_Code_F10D8CAB.bucket}\\",
@@ -303,7 +304,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "An inflight resource",
@@ -329,7 +330,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Queue/Default",
@@ -337,7 +338,7 @@ Object {
                   "EventSourceMapping": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.lambdaEventSourceMapping.LambdaEventSourceMapping",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "EventSourceMapping",
                     "path": "root/Default/Queue/EventSourceMapping",
@@ -345,7 +346,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A distributed message queue",
@@ -390,7 +391,7 @@ Object {
                   "Code": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Code",
                     "path": "root/Default/Queue-OnMessage-c5395e41/Code",
@@ -398,7 +399,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Queue-OnMessage-c5395e41/Default",
@@ -406,7 +407,7 @@ Object {
                   "IamRole": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Queue-OnMessage-c5395e41/IamRole",
@@ -414,7 +415,7 @@ Object {
                   "IamRolePolicy": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Queue-OnMessage-c5395e41/IamRolePolicy",
@@ -422,7 +423,7 @@ Object {
                   "IamRolePolicyAttachment": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Queue-OnMessage-c5395e41/IamRolePolicyAttachment",
@@ -430,7 +431,7 @@ Object {
                   "S3Object": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Queue-OnMessage-c5395e41/S3Object",
@@ -438,7 +439,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud function (FaaS)",
@@ -454,7 +455,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "id": "Queue-OnMessageHandler-c5395e41",
                 "path": "root/Default/Queue-OnMessageHandler-c5395e41",
@@ -473,7 +474,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -486,7 +487,7 @@ Object {
               "aws": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -494,7 +495,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
@@ -557,7 +558,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Queue/Default",
@@ -565,7 +566,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A distributed message queue",
@@ -581,7 +582,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -594,7 +595,7 @@ Object {
               "aws": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -602,7 +603,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
@@ -664,7 +665,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/The*Incredible$Queue/Default",
@@ -672,7 +673,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A distributed message queue",
@@ -688,7 +689,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -701,7 +702,7 @@ Object {
               "aws": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -709,7 +710,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
