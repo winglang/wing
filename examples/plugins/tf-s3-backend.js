@@ -22,7 +22,7 @@ exports.postSynth = function(config) {
   config.terraform.backend = {
     s3: {
       bucket: process.env.TF_BACKEND_BUCKET,
-      region: process.env.AWS_REGION,
+      region: process.env.TF_BACKEND_BUCKET_REGION,
       key: process.env.STATE_FILE ?? "wing-tf.tfstate",
     }  
   }
