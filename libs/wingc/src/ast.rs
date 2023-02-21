@@ -17,6 +17,15 @@ pub struct Symbol {
 	pub span: WingSpan,
 }
 
+impl Symbol {
+	pub fn global(name: &str) -> Self {
+		Self {
+			name: name.to_string(),
+			span: WingSpan::global(),
+		}
+	}
+}
+
 impl Ord for Symbol {
 	fn cmp(&self, other: &Self) -> std::cmp::Ordering {
 		self.name.cmp(&other.name).then(self.span.cmp(&other.span))
@@ -70,71 +79,85 @@ impl Display for Phase {
 }
 
 #[derive(Debug, Clone)]
-pub enum Type {
+pub enum TypeAnnotation {
 	Number,
 	String,
 	Bool,
 	Duration,
-	Optional(Box<Type>),
-	Array(Box<Type>),
-	MutArray(Box<Type>),
-	Map(Box<Type>),
-	MutMap(Box<Type>),
-	Set(Box<Type>),
-	MutSet(Box<Type>),
+	Optional(Box<TypeAnnotation>),
+	Array(Box<TypeAnnotation>),
+	MutArray(Box<TypeAnnotation>),
+	Map(Box<TypeAnnotation>),
+	MutMap(Box<TypeAnnotation>),
+	Set(Box<TypeAnnotation>),
+	MutSet(Box<TypeAnnotation>),
 	FunctionSignature(FunctionSignature),
-	CustomType { root: Symbol, fields: Vec<Symbol> },
+	UserDefined(UserDefinedType),
 }
 
-impl Display for Type {
+// In the future this may be an enum for type-alias, class, etc. For now its just a nested name.
+// Also this root,fields thing isn't really useful, should just turn in to a Vec<Symbol>.
+#[derive(Debug, Clone)]
+pub struct UserDefinedType {
+	pub root: Symbol,
+	pub fields: Vec<Symbol>,
+}
+
+impl Display for TypeAnnotation {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
-			Type::Number => write!(f, "num"),
-			Type::String => write!(f, "str"),
-			Type::Bool => write!(f, "bool"),
-			Type::Duration => write!(f, "duration"),
-			Type::Optional(t) => write!(f, "{}?", t),
-			Type::Array(t) => write!(f, "Array<{}>", t),
-			Type::MutArray(t) => write!(f, "MutArray<{}>", t),
-			Type::Map(t) => write!(f, "Map<{}>", t),
-			Type::MutMap(t) => write!(f, "MutMap<{}>", t),
-			Type::Set(t) => write!(f, "Set<{}>", t),
-			Type::MutSet(t) => write!(f, "MutSet<{}>", t),
-			Type::FunctionSignature(sig) => {
-				write!(
-					f,
-					"fn({}): {}",
-					sig
-						.parameters
-						.iter()
-						.map(|a| format!("{}", a))
-						.collect::<Vec<String>>()
-						.join(", "),
-					if let Some(ret_val) = &sig.return_type {
-						format!("{}", ret_val)
-					} else {
-						"void".to_string()
-					}
-				)
-			}
-			Type::CustomType { root, fields: _ } => {
-				write!(f, "{}", root)
+			TypeAnnotation::Number => write!(f, "num"),
+			TypeAnnotation::String => write!(f, "str"),
+			TypeAnnotation::Bool => write!(f, "bool"),
+			TypeAnnotation::Duration => write!(f, "duration"),
+			TypeAnnotation::Optional(t) => write!(f, "{}?", t),
+			TypeAnnotation::Array(t) => write!(f, "Array<{}>", t),
+			TypeAnnotation::MutArray(t) => write!(f, "MutArray<{}>", t),
+			TypeAnnotation::Map(t) => write!(f, "Map<{}>", t),
+			TypeAnnotation::MutMap(t) => write!(f, "MutMap<{}>", t),
+			TypeAnnotation::Set(t) => write!(f, "Set<{}>", t),
+			TypeAnnotation::MutSet(t) => write!(f, "MutSet<{}>", t),
+			TypeAnnotation::FunctionSignature(sig) => write!(f, "{}", sig),
+			TypeAnnotation::UserDefined(user_defined_type) => {
+				write!(f, "{}", user_defined_type.root.name)
 			}
 		}
 	}
 }
 
+impl Display for FunctionSignature {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let phase_str = match self.flight {
+			Phase::Inflight => "inflight ",
+			Phase::Preflight => "preflight ",
+			Phase::Independent => "",
+		};
+		let params_str = self
+			.parameters
+			.iter()
+			.map(|a| format!("{}", a))
+			.collect::<Vec<String>>()
+			.join(", ");
+		let ret_type_str = if let Some(ret_val) = &self.return_type {
+			format!("{}", ret_val)
+		} else {
+			"void".to_string()
+		};
+		write!(f, "{phase_str}({params_str}): {ret_type_str}")
+	}
+}
+
 #[derive(Debug, Clone)]
 pub struct FunctionSignature {
-	pub parameters: Vec<Type>,
-	pub return_type: Option<Box<Type>>,
+	pub parameters: Vec<TypeAnnotation>,
+	pub return_type: Option<Box<TypeAnnotation>>,
 	pub flight: Phase,
 }
 
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct FunctionDefinition {
-	// List of names of function parameters and whether they are reassignable (`var`) or not.
+	/// List of names of function parameters and whether they are reassignable (`var`) or not.
 	pub parameters: Vec<(Symbol, bool)>, // TODO: move into FunctionSignature and make optional
 
 	pub statements: Scope,
@@ -145,7 +168,7 @@ pub struct FunctionDefinition {
 
 #[derive(Debug)]
 pub struct Constructor {
-	// List of names of constructor parameters and whether they are reassignable (`var`) or not.
+	/// List of names of constructor parameters and whether they are reassignable (`var`) or not.
 	pub parameters: Vec<(Symbol, bool)>,
 
 	pub statements: Scope,
@@ -185,8 +208,18 @@ pub struct ElifBlock {
 }
 
 #[derive(Debug)]
+pub struct Class {
+	pub name: Symbol,
+	pub fields: Vec<ClassField>,
+	pub methods: Vec<(Symbol, FunctionDefinition)>,
+	pub constructor: Constructor,
+	pub parent: Option<UserDefinedType>,
+	pub is_resource: bool,
+}
+
+#[derive(Debug)]
 pub enum StmtKind {
-	Use {
+	Bring {
 		module_name: Symbol, // Reference?
 		identifier: Option<Symbol>,
 	},
@@ -194,7 +227,7 @@ pub enum StmtKind {
 		reassignable: bool,
 		var_name: Symbol,
 		initial_value: Expr,
-		type_: Option<Type>,
+		type_: Option<TypeAnnotation>,
 	},
 	ForLoop {
 		iterator: Symbol,
@@ -218,29 +251,33 @@ pub enum StmtKind {
 	},
 	Return(Option<Expr>),
 	Scope(Scope),
-	Class {
-		name: Symbol,
-		members: Vec<ClassMember>,
-		methods: Vec<(Symbol, FunctionDefinition)>,
-		constructor: Constructor,
-		parent: Option<Type>,
-		is_resource: bool,
-	},
+	Class(Class),
 	Struct {
 		name: Symbol,
 		extends: Vec<Symbol>,
-		members: Vec<ClassMember>,
+		members: Vec<ClassField>,
 	},
 	Enum {
 		name: Symbol,
 		values: IndexSet<Symbol>,
 	},
+	TryCatch {
+		try_statements: Scope,
+		catch_block: Option<CatchBlock>,
+		finally_statements: Option<Scope>,
+	},
 }
 
 #[derive(Debug)]
-pub struct ClassMember {
+pub struct CatchBlock {
+	pub statements: Scope,
+	pub exception_var: Option<Symbol>,
+}
+
+#[derive(Debug)]
+pub struct ClassField {
 	pub name: Symbol,
-	pub member_type: Type,
+	pub member_type: TypeAnnotation,
 	pub reassignable: bool,
 	pub flight: Phase,
 }
@@ -248,7 +285,7 @@ pub struct ClassMember {
 #[derive(Debug)]
 pub enum ExprKind {
 	New {
-		class: Type,
+		class: TypeAnnotation,
 		obj_id: Option<String>,
 		obj_scope: Option<Box<Expr>>,
 		arg_list: ArgList,
@@ -257,7 +294,7 @@ pub enum ExprKind {
 	Reference(Reference),
 	Call {
 		function: Box<Expr>,
-		args: ArgList,
+		arg_list: ArgList,
 	},
 	Unary {
 		// TODO: Split to LogicalUnary, NumericUnary
@@ -267,25 +304,25 @@ pub enum ExprKind {
 	Binary {
 		// TODO: Split to LogicalBinary, NumericBinary, Bit/String??
 		op: BinaryOperator,
-		lexp: Box<Expr>,
-		rexp: Box<Expr>,
+		left: Box<Expr>,
+		right: Box<Expr>,
 	},
 	ArrayLiteral {
-		type_: Option<Type>,
+		type_: Option<TypeAnnotation>,
 		items: Vec<Expr>,
 	},
 	StructLiteral {
-		type_: Type,
+		type_: TypeAnnotation,
 		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
 		fields: BTreeMap<Symbol, Expr>,
 	},
 	MapLiteral {
-		type_: Option<Type>,
+		type_: Option<TypeAnnotation>,
 		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
 		fields: BTreeMap<String, Expr>,
 	},
 	SetLiteral {
-		type_: Option<Type>,
+		type_: Option<TypeAnnotation>,
 		items: Vec<Expr>,
 	},
 	FunctionClosure(FunctionDefinition),

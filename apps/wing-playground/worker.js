@@ -1,8 +1,7 @@
-import wingcURL from "./wingc.wasm?url";
-import { init, WASI } from "@wasmer/wasi";
-import { env } from "process";
-
-const WINGC_COMPILE = "wingc_compile";
+import { load, invoke } from "winglang";
+import { createFsFromVolume } from "@cowasm/memfs";
+import wingcURL from "winglang/wingc.wasm?url";
+import { Volume } from "@cowasm/memfs";
 
 const wingsdkJSIIContent = await import("@winglang/sdk/.jsii?raw").then(
   (i) => i.default
@@ -11,29 +10,24 @@ const wingsdkPackageJsonContent = await import(
   "@winglang/sdk/package.json?raw"
 ).then((i) => i.default);
 
-await init();
+const fs = createFsFromVolume(
+  Volume.fromJSON({
+    "/wingsdk/package.json": wingsdkPackageJsonContent,
+    "/wingsdk/.jsii": wingsdkJSIIContent,
+  })
+);
 
-const wasm = await WebAssembly.compileStreaming(fetch(wingcURL));
+let wasmFetchData = await fetch(wingcURL).then((d) => d.arrayBuffer());
+const wingcWASMData = new Uint8Array(wasmFetchData);
 
-let wasi = new WASI({
+const wingc = await load({
   env: {
-    ...env,
-    WINGSDK_MANIFEST_ROOT: "/wingsdk",
     RUST_BACKTRACE: "full",
   },
+  fs: fs,
+  wingcWASMData,
+  wingsdkManifestRoot: "/wingsdk",
 });
-
-const instance = await wasi.instantiate(wasm, {});
-
-const defaultFilePerms = { read: true, write: true, create: true };
-wasi.fs.createDir("/wingsdk");
-let wingsdk_packagejson_file = wasi.fs.open(
-  "/wingsdk/package.json",
-  defaultFilePerms
-);
-wingsdk_packagejson_file.writeString(wingsdkPackageJsonContent);
-let wingsdk_jsii_file = wasi.fs.open("/wingsdk/.jsii", defaultFilePerms);
-wingsdk_jsii_file.writeString(wingsdkJSIIContent);
 
 self.onmessage = async (event) => {
   if (event.data === "") {
@@ -42,77 +36,39 @@ self.onmessage = async (event) => {
   }
 
   try {
-    let file = wasi.fs.open("/code.w", defaultFilePerms);
-    file.writeString(event.data);
+    fs.writeFileSync("/code.w", event.data);
 
-    await wingcInvoke(instance, WINGC_COMPILE, "code.w");
-    const stderr = wasi.getStderrString();
-    if (stderr) {
-      throw stderr;
+    const compileResult = invoke(wingc, "wingc_compile", "/code.w");
+
+    if (compileResult !== 0) {
+      throw compileResult;
     }
 
-    const stdout = wasi.getStdoutString();
     let intermediateJS = "";
 
-    const intermediatePath = "/code.w.out/preflight.js";
-    const intermediateFile = wasi.fs.open(intermediatePath, defaultFilePerms);
-    intermediateJS += intermediateFile.readString();
-    wasi.fs.removeFile(intermediatePath);
+    intermediateJS += fs.readFileSync("/code.w.out/preflight.js").toString();
 
     let procRegex = /fromFile\(.+"(.+index\.js)"/g;
     let procMatch;
     while ((procMatch = procRegex.exec(intermediateJS))) {
       const proc = procMatch[1];
       const procPath = `/code.w.out/${proc}`;
-      let procFile = wasi.fs.open(procPath, defaultFilePerms);
-      intermediateJS += `\n\n// ${proc}\n// START\n${procFile.readString()}\n// END`;
-      wasi.fs.removeFile(procPath);
+      let procFile = fs.readFileSync(procPath);
+      intermediateJS += `\n\n// ${proc}\n// START\n${procFile}\n// END`;
     }
 
     self.postMessage({
-      stdout,
-      stderr: wasi.getStderrString(),
+      stdout: "",
+      stderr: "",
       intermediateJS,
     });
   } catch (error) {
-    console.error(error);
     self.postMessage({
       stderr: error,
-      stdout: wasi.getStdoutString(),
+      stdout: "",
       intermediateJS: null,
     });
-  } finally {
-    try {
-      wasi.fs.removeFile("/code.w");
-    } catch (error) {}
   }
 };
 
 self.postMessage("WORKER_READY");
-
-/**
- * Assumptions:
- * 1. The called WASM function is expecting a pointer and a length representing a string
- * 2. The string will be UTF-8 encoded
- * 3. The string will be less than 2^32 bytes long  (4GB)
- * 4. the WASI instance has already been started
- */
-async function wingcInvoke(instance, func, arg) {
-  const exports = instance.exports;
-
-  const bytes = new TextEncoder().encode(arg);
-  const argPointer = exports.wingc_malloc(bytes.byteLength);
-
-  try {
-    const argMemoryBuffer = new Uint8Array(
-      exports.memory.buffer,
-      argPointer,
-      bytes.byteLength
-    );
-    argMemoryBuffer.set(bytes);
-  
-    exports[func](argPointer, bytes.byteLength);
-  } finally {
-    exports.wingc_free(argPointer, bytes.byteLength);
-  }
-}

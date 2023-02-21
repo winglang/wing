@@ -27,6 +27,28 @@ export class ImmutableArray {
     index;
     throw new Error("Abstract");
   }
+
+  /**
+   * Create a mutable shallow copy of this array
+   *
+   * @macro [...($self$)]
+   *
+   * @returns a MutableArray with the same values as this array
+   */
+  public copyMut(): MutableArray {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Create an immutable shallow copy of this array
+   *
+   * @macro Object.freeze([...($self$)])
+   *
+   * @returns an ImmutableArray with the same values as this array
+   */
+  public copy(): ImmutableArray {
+    throw new Error("Macro");
+  }
 }
 
 /**

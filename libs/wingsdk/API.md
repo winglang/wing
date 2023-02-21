@@ -890,6 +890,181 @@ with a fresh copy without any consequences.
 ---
 
 
+### Schedule <a name="Schedule" id="@winglang/sdk.cloud.Schedule"></a>
+
+**Inflight client:** [@winglang/sdk.cloud.IScheduleClient](#@winglang/sdk.cloud.IScheduleClient)
+
+Represents a schedule.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Schedule.Initializer"></a>
+
+```wing
+bring cloud;
+
+new cloud.Schedule(props?: ScheduleProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Schedule.Initializer.parameter.props">props</a></code> | <code>cloud.ScheduleProps</code> | *No description.* |
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Schedule.Initializer.parameter.props"></a>
+
+- *Type:* cloud.ScheduleProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Schedule.toString">to_string</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/sdk.cloud.Schedule.onTick">on_tick</a></code> | Create a function that runs when receiving the scheduled event. |
+
+---
+
+##### `to_string` <a name="to_string" id="@winglang/sdk.cloud.Schedule.toString"></a>
+
+```wing
+to_string(): str
+```
+
+Returns a string representation of this construct.
+
+##### `on_tick` <a name="on_tick" id="@winglang/sdk.cloud.Schedule.onTick"></a>
+
+```wing
+on_tick(inflight: ~Inflight, props?: ScheduleOnTickProps): Function
+```
+
+Create a function that runs when receiving the scheduled event.
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Schedule.onTick.parameter.inflight"></a>
+
+- *Type:* core.Inflight
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Schedule.onTick.parameter.props"></a>
+
+- *Type:* cloud.ScheduleOnTickProps
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Schedule.isConstruct">is_construct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@winglang/sdk.cloud.Schedule.addConnection">add_connection</a></code> | Adds a connection between two resources. |
+
+---
+
+##### `is_construct` <a name="is_construct" id="@winglang/sdk.cloud.Schedule.isConstruct"></a>
+
+```wing
+bring cloud;
+
+cloud.Schedule.is_construct(x: any)
+```
+
+Checks if `x` is a construct.
+
+Use this method instead of `instanceof` to properly detect `Construct`
+instances, even when the construct library is symlinked.
+
+Explanation: in JavaScript, multiple copies of the `constructs` library on
+disk are seen as independent, completely different libraries. As a
+consequence, the class `Construct` in each copy of the `constructs` library
+is seen as a different class, and an instance of one class will not test as
+`instanceof` the other class. `npm install` will not create installations
+like this, but users may manually symlink construct libraries together or
+use a monorepo tool: in those cases, multiple copies of the `constructs`
+library can be accidentally installed, and `instanceof` will behave
+unpredictably. It is safest to avoid using `instanceof`, and using
+this type-testing method instead.
+
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/sdk.cloud.Schedule.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Schedule.addConnection"></a>
+
+```wing
+bring cloud;
+
+cloud.Schedule.add_connection(props: AddConnectionProps)
+```
+
+Adds a connection between two resources.
+
+A connection is a piece of
+metadata describing how one resource is related to another resource. This
+metadata is recorded in the tree.json file.
+
+###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Schedule.addConnection.parameter.props"></a>
+
+- *Type:* core.AddConnectionProps
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Schedule.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.Schedule.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Schedule.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Schedule.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Schedule.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* core.Display
+
+Information on how to display a resource in the UI.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/sdk.cloud.Schedule.property.stateful"></a>
+
+```wing
+stateful: bool;
+```
+
+- *Type:* bool
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+
 ### Topic <a name="Topic" id="@winglang/sdk.cloud.Topic"></a>
 
 **Inflight client:** [@winglang/sdk.cloud.ITopicClient](#@winglang/sdk.cloud.ITopicClient)
@@ -1158,6 +1333,7 @@ let app_props = core.AppProps{ ... }
 | <code><a href="#@winglang/sdk.core.AppProps.property.customFactory">custom_factory</a></code> | <code>polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
 | <code><a href="#@winglang/sdk.core.AppProps.property.name">name</a></code> | <code>str</code> | The name of the app. |
 | <code><a href="#@winglang/sdk.core.AppProps.property.outdir">outdir</a></code> | <code>str</code> | Directory where artifacts are synthesized to. |
+| <code><a href="#@winglang/sdk.core.AppProps.property.plugins">plugins</a></code> | <code>MutArray&lt;str&gt;</code> | Absolute paths to plugin javascript files. |
 | <code><a href="#@winglang/sdk.core.AppProps.property.stateFile">state_file</a></code> | <code>str</code> | The path to a state file which will track all synthesized files. |
 
 ---
@@ -1198,6 +1374,19 @@ outdir: str;
 - *Default:* current working directory
 
 Directory where artifacts are synthesized to.
+
+---
+
+##### `plugins`<sup>Optional</sup> <a name="plugins" id="@winglang/sdk.core.AppProps.property.plugins"></a>
+
+```wing
+plugins: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+- *Default:* [] no plugins
+
+Absolute paths to plugin javascript files.
 
 ---
 
@@ -2126,6 +2315,116 @@ timeout: Duration;
 How long a queue's consumers have to process a message.
 
 ---
+
+### ScheduleOnTickProps <a name="ScheduleOnTickProps" id="@winglang/sdk.cloud.ScheduleOnTickProps"></a>
+
+Options for Schedule.onTick.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ScheduleOnTickProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let schedule_on_tick_props = cloud.ScheduleOnTickProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout">timeout</a></code> | <code>std.Duration</code> | The maximum amount of time the function can run. |
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.ScheduleOnTickProps.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* No environment variables.
+
+Environment variables to pass to the function.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout"></a>
+
+```wing
+timeout: Duration;
+```
+
+- *Type:* std.Duration
+- *Default:* 1m
+
+The maximum amount of time the function can run.
+
+---
+
+### ScheduleProps <a name="ScheduleProps" id="@winglang/sdk.cloud.ScheduleProps"></a>
+
+Properties for `Schedule`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ScheduleProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let schedule_props = cloud.ScheduleProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.cron">cron</a></code> | <code>str</code> | Trigger events according to a cron schedule using the UNIX cron format. |
+| <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.rate">rate</a></code> | <code>std.Duration</code> | Trigger events at a periodic rate. |
+
+---
+
+##### `cron`<sup>Optional</sup> <a name="cron" id="@winglang/sdk.cloud.ScheduleProps.property.cron"></a>
+
+```wing
+cron: str;
+```
+
+- *Type:* str
+- *Default:* undefined
+
+Trigger events according to a cron schedule using the UNIX cron format.
+
+[minute] [hour] [day of month] [month] [day of week]
+
+---
+
+*Example*
+
+```wing
+"0/1 * ? * *"
+```
+
+
+##### `rate`<sup>Optional</sup> <a name="rate" id="@winglang/sdk.cloud.ScheduleProps.property.rate"></a>
+
+```wing
+rate: Duration;
+```
+
+- *Type:* std.Duration
+- *Default:* undefined
+
+Trigger events at a periodic rate.
+
+---
+
+*Example*
+
+```wing
+1m
+```
+
 
 ### TextFileProps <a name="TextFileProps" id="@winglang/sdk.fs.TextFileProps"></a>
 
@@ -3124,7 +3423,7 @@ Information on how to display a resource in the UI.
 
 ### IInspectable <a name="IInspectable" id="@winglang/sdk.core.IInspectable"></a>
 
-- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfazure.Bucket, tfazure.Function, tfgcp.Bucket, tfgcp.Logger, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IInspectable, core.IResource
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Schedule, cloud.ScheduleBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfaws.Schedule, tfazure.Bucket, tfazure.Function, tfgcp.Bucket, tfgcp.Logger, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.IScheduleOnTickHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IInspectable, core.IResource
 
 Interface for examining a construct and exposing metadata.
 
@@ -3299,7 +3598,7 @@ Function that will be called when a message is received from the queue.
 
 - *Extends:* core.IInspectable, constructs.IConstruct
 
-- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfazure.Bucket, tfazure.Function, tfgcp.Bucket, tfgcp.Logger, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IResource
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Schedule, cloud.ScheduleBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfaws.Schedule, tfazure.Bucket, tfazure.Function, tfgcp.Bucket, tfgcp.Logger, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.IScheduleOnTickHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IResource
 
 Abstract interface for `Resource`.
 
@@ -3336,6 +3635,75 @@ display: Display;
 Information on how to display a resource in the UI.
 
 ---
+
+### IScheduleOnTickHandler <a name="IScheduleOnTickHandler" id="@winglang/sdk.cloud.IScheduleOnTickHandler"></a>
+
+- *Extends:* core.IResource
+
+- *Implemented By:* cloud.IScheduleOnTickHandler
+
+**Inflight client:** [wingsdk.cloud.IScheduleOnTickHandlerClient](#wingsdk.cloud.IScheduleOnTickHandlerClient)
+
+Represents a resource with an inflight "handle" method that can be passed to `Schedule.on_tick`.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IScheduleOnTickHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.IScheduleOnTickHandler.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IScheduleOnTickHandler.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.IScheduleOnTickHandler.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* core.Display
+
+Information on how to display a resource in the UI.
+
+---
+
+### IScheduleOnTickHandlerClient <a name="IScheduleOnTickHandlerClient" id="@winglang/sdk.cloud.IScheduleOnTickHandlerClient"></a>
+
+- *Implemented By:* cloud.IScheduleOnTickHandlerClient
+
+Inflight client for `IScheduleOnTickHandler`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IScheduleOnTickHandlerClient.handle">handle</a></code> | Function that will be called when a message is received from the schedule. |
+
+---
+
+##### `handle` <a name="handle" id="@winglang/sdk.cloud.IScheduleOnTickHandlerClient.handle"></a>
+
+```wing
+handle(): void
+```
+
+**Inflight client:** [true](#true)
+
+Function that will be called when a message is received from the schedule.
+
 
 ### ITopicClient <a name="ITopicClient" id="@winglang/sdk.cloud.ITopicClient"></a>
 

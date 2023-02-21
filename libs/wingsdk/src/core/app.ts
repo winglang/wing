@@ -1,9 +1,18 @@
-import { mkdirSync, readdirSync, renameSync, rmSync } from "fs";
+import {
+  mkdirSync,
+  readdirSync,
+  renameSync,
+  rmSync,
+  rmdirSync,
+  existsSync,
+} from "fs";
 import { join } from "path";
 import * as cdktf from "cdktf";
 import { Construct, IConstruct } from "constructs";
 import { IPolyconFactory, Polycons } from "polycons";
 import stringify from "safe-stable-stringify";
+import { PluginManager } from "./plugin-manager";
+import { IResource } from "./resource";
 import { synthesizeTree } from "./tree";
 import { Logger } from "../cloud/logger";
 
@@ -51,6 +60,12 @@ export interface AppProps {
    * @default - use the default polycon factory included in the Wing SDK
    */
   readonly customFactory?: IPolyconFactory;
+
+  /**
+   * Absolute paths to plugin javascript files.
+   * @default - [] no plugins
+   */
+  readonly plugins?: string[];
 }
 
 /**
@@ -62,9 +77,16 @@ export class CdktfApp extends Construct implements IApp {
    * Directory where artifacts are synthesized to.
    */
   public readonly outdir: string;
+  /**
+   * Path to the Terraform manifest file.
+   */
+  public readonly terraformManifestPath: string;
 
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
+  private readonly pluginManager: PluginManager;
+  private synthed: boolean;
+  private synthedOutput: string | undefined;
 
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
@@ -84,9 +106,13 @@ export class CdktfApp extends Construct implements IApp {
 
     super(cdktfStack, "Default");
 
+    this.pluginManager = new PluginManager(props.plugins ?? []);
+
     this.outdir = outdir;
     this.cdktfApp = cdktfApp;
     this.cdktfStack = cdktfStack;
+    this.terraformManifestPath = join(this.outdir, "main.tf.json");
+    this.synthed = false;
 
     // register a logger for this app.
     Logger.register(this);
@@ -99,7 +125,15 @@ export class CdktfApp extends Construct implements IApp {
    * for unit testing.
    */
   public synth(): string {
+    if (this.synthed) {
+      return this.synthedOutput!;
+    }
+
+    // call preSynthesize() on every construct in the tree
+    preSynthesizeAllConstructs(this);
+
     // synthesize Terraform files in `outdir/.tmp.cdktf.out/stacks/root`
+    this.pluginManager.preSynth(this);
     this.cdktfApp.synth();
 
     // move Terraform files from `outdir/.tmp.cdktf.out/stacks/root` to `outdir`
@@ -120,13 +154,21 @@ export class CdktfApp extends Construct implements IApp {
     // return a cleaned snapshot of the resulting Terraform manifest for unit testing
     const tfConfig = this.cdktfStack.toTerraform();
     const cleaned = cleanTerraformConfig(tfConfig);
-    return stringify(cleaned, null, 2) ?? "";
+
+    this.pluginManager.postSynth(tfConfig, `${this.outdir}/main.tf.json`);
+    this.pluginManager.validate(tfConfig);
+
+    this.synthed = true;
+    this.synthedOutput = stringify(cleaned, null, 2) ?? "";
+
+    return this.synthedOutput;
   }
 
   /**
    * Move files from `outdir/cdktf.out/stacks/root` to `outdir`.
    */
   private moveCdktfArtifactsToOutdir(): void {
+    const directoriesToMove = ["assets"];
     const cdktfOutdir = this.cdktfApp.outdir;
     const cdktfStackDir = join(
       cdktfOutdir,
@@ -134,10 +176,18 @@ export class CdktfApp extends Construct implements IApp {
     );
 
     const files = readdirSync(cdktfStackDir, { withFileTypes: true });
+
     for (const file of files) {
-      if (file.isFile()) {
+      if (file.isFile() || directoriesToMove.includes(file.name)) {
         const source = join(cdktfStackDir, file.name);
         const destination = join(this.outdir, file.name);
+
+        // If the file is a directory we need to delete contents of previous synthesis
+        // or rename will fail
+        if (existsSync(destination)) {
+          rmdirSync(destination, { recursive: true });
+        }
+
         renameSync(source, destination);
       }
     }
@@ -177,4 +227,12 @@ function cleanTerraformConfig(template: any): any {
   cleaned.terraform = undefined;
   cleaned.provider = undefined;
   return cleaned;
+}
+
+export function preSynthesizeAllConstructs(app: IApp): void {
+  for (const c of app.node.findAll()) {
+    if (typeof (c as IResource)._preSynthesize === "function") {
+      (c as IResource)._preSynthesize();
+    }
+  }
 }

@@ -50,7 +50,7 @@ exports[`inflight function uses a logger 2`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.Function_Code_00C44A32.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.Function_S3Object_C62A0C2D.key}\\",
-        \\"timeout\\": 60
+        \\"timeout\\": 30
       }
     },
     \\"aws_s3_bucket\\": {

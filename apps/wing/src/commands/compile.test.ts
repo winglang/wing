@@ -48,6 +48,12 @@ describe("compile command tests", () => {
     expect(files).toContain("captures.wsim");
     expect(files).toContain("tree.json");
   });
+
+  it("should error if a nonexistent file is compiled", async () => {
+    const outDir = mkdtemp();
+    return expect(compile("non-existent-file.w", { outDir, target: Target.SIM }))
+      .rejects.toThrowError(/Source file cannot be found/);
+  });
 });
 
 function mkdtemp() {

@@ -91,8 +91,6 @@ export class Bucket extends cloud.BucketBase {
 
   /** @internal */
   public _bind(host: core.IInflightHost, ops: string[]): void {
-    host;
-    ops;
     if (!(host instanceof Function)) {
       throw new Error("buckets can only be bound by tfazure.Function for now");
     }
@@ -118,6 +116,7 @@ export class Bucket extends cloud.BucketBase {
 
     host.addEnvironment(this.envName(), this.storageContainer.name);
     host.addEnvironment(this.envStorageAccountName(), this.storageAccount.name);
+    super._bind(host, ops);
   }
 
   /** @internal */

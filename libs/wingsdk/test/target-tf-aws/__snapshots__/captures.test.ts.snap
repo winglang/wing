@@ -49,7 +49,7 @@ exports[`function with a bucket binding 2`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
-        \\"timeout\\": 60
+        \\"timeout\\": 30
       }
     },
     \\"aws_s3_bucket\\": {
@@ -169,7 +169,7 @@ exports[`function with a function binding 3`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function1_Code_9E57A288.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function1_S3Object_AA76C357.key}\\",
-        \\"timeout\\": 60
+        \\"timeout\\": 30
       },
       \\"root_Function2_A135D90B\\": {
         \\"environment\\": {
@@ -184,7 +184,7 @@ exports[`function with a function binding 3`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function2_Code_F5825D80.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function2_S3Object_7E3557EA.key}\\",
-        \\"timeout\\": 60
+        \\"timeout\\": 30
       }
     },
     \\"aws_s3_bucket\\": {
@@ -293,7 +293,7 @@ exports[`function with a queue binding 3`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
-        \\"timeout\\": 60
+        \\"timeout\\": 30
       },
       \\"root_QueueOnMessage5cb7e554_EEFD94BA\\": {
         \\"environment\\": {
@@ -307,7 +307,7 @@ exports[`function with a queue binding 3`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessage5cb7e554_Code_8F59E986.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_QueueOnMessage5cb7e554_S3Object_24400915.key}\\",
-        \\"timeout\\": 60
+        \\"timeout\\": 30
       }
     },
     \\"aws_s3_bucket\\": {
@@ -383,7 +383,7 @@ exports[`two functions reusing the same IFunctionHandler 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function1_Code_9E57A288.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function1_S3Object_AA76C357.key}\\",
-        \\"timeout\\": 60
+        \\"timeout\\": 30
       },
       \\"root_Function2_A135D90B\\": {
         \\"environment\\": {
@@ -397,7 +397,7 @@ exports[`two functions reusing the same IFunctionHandler 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function2_Code_F5825D80.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function2_S3Object_7E3557EA.key}\\",
-        \\"timeout\\": 60
+        \\"timeout\\": 30
       }
     },
     \\"aws_s3_bucket\\": {

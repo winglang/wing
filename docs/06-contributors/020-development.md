@@ -29,12 +29,19 @@ cd wing
 npm install
 ```
 
-:::note
+:::note Nx Commands
+[Nx] commands in this document are structured as
 
-The first time you run `npm install` you may be asked to enter your system password, this is because
-it's taking care of installing the [wasi-sdk](https://github.com/WebAssembly/wasi-sdk) for you.
+```sh
+npx nx <target> <project>
+# or
+npx nx <target> <project> -- <args>
 
-If you wish to install it manually, you may do so by running `scripts/setup_wasi.sh`
+```
+
+- `npx` can be omitted if [Nx] is installed globally
+- `<project>` may be omitted if the current working directory is within the given project directory. If not within any project directory, it will default to the `winglang` CLI project
+- If any paths are present in `<args>`, ensure they are either absolute or relative to the project directory
 
 :::
 
@@ -85,23 +92,24 @@ Nx will be installed alongside the rest of the project's dependencies after you 
 from the root directory, and can be accessed with `npx nx` (it does not need to be installed
 separately).
 
+:::note
+
+The first time you run `npm install` you may be asked to enter your system password, this is because
+it's taking care of installing the [wasi-sdk](https://github.com/WebAssembly/wasi-sdk) for you.
+
+If you wish to install it manually, you may do so by running `scripts/setup_wasi.sh`
+
+:::
+
 ## 🧪 How do I run tests?
 
 End-to-end tests are hosted under `./tools/hangar`. To get started, first ensure you can [build
 wing](#-how-do-i-build-wing).
 
-To run the tests (and update snapshots), run the following commands from the root of the Hangar
-project:
+To run the tests (and update snapshots), run the following command from anywhere in the monorepo:
 
 ```sh
-cd tools/hangar
-npm test
-```
-
-Or, you can run the following command from the root of the monorepo:
-
-```sh
-npx nx run hangar:test
+npx nx test hangar
 ```
 
 ## How do I work only on the compiler?
@@ -110,11 +118,10 @@ The following command runs the cargo tests, currently just ensures the valid exa
 invalid ones do not.
 
 ```sh
-cd libs/wingc
-npx nx test
+npx nx test wingc
 ```
 
-The following command runs `wingc` on a file. This performs all the compilation steps. Run from the root.
+The following command runs `wingc` on a file. This performs all the compilation steps. Run from the root or `apps/wing`.
 
 ```sh
 npx nx wing -- compile <path to a .w file (full path, or relative to the location of the apps/wing folder)>
@@ -124,17 +131,16 @@ You can find the compilation artifacts in the apps/wing/targets folder
 
 ## How do I make changes to the Wing grammar?
 
-After making changes to grammar.js, run:
+After making changes to `grammar.js`, run:
 
 ```sh
-cd libs/tree-sitter-wing
-npx tree-sitter-cli generate
+npx nx build tree-sitter-wing
 ```
 
 To run the grammar tests (that are located in the `test` folder):
 
 ```sh
-npx tree-sitter-cli test
+npx nx test tree-sitter-wing
 ```
 
 To build the grammar as WASM for the web-based playground. Leave off `--docker` if you have emscripten
@@ -156,7 +162,7 @@ Make sure to also run `build-wasm` before each time the grammar changes
 ## 🔨 How do I build the VSCode extension?
 
 The VSCode extension is located in `apps/vscode-wing`. Most of the logic is in the language server, which
-is located in `apps/vscode-wing`. Running `npx nx build` from `apps/vscode-wing` will ensure the
+is located in `apps/vscode-wing`. Running `npx nx build vscode-wing` will ensure the
 language server is built first and the binary is available. This creates an installable VSIX file.
 
 A VSCode launch configuration is available to open a VSCode with a development version of the

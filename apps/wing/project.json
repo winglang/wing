@@ -9,7 +9,7 @@
     "copy": {
       "executor": "nx:run-commands",
       "dependsOn": [
-        "^build-wasm"
+        "^build"
       ],
       "options": {
         "command": "cp -v ../../target/wasm32-wasi/debug/wingc.wasm ./",
@@ -47,7 +47,7 @@
         "build"
       ],
       "options": {
-        "commands": ["npm run bump", "npm pack", "npm run unbump"],
+        "commands": ["npx patch-package", "npm run bump", "npm pack", "npm run unbump"],
         "cwd": "apps/wing",
         "parallel": false
       }

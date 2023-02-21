@@ -2,48 +2,26 @@
   "name": "wing-playground",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "implicitDependencies": [
-    "wingc",
+    "winglang",
     "sdk"
   ],
   "targets": {
-    "copy": {
-      "executor": "nx:run-commands",
-      "inputs": [
-        "{workspaceRoot}/target/*/wingc.wasm"
-      ],
-      "dependsOn": [
-        "^build-wasm"
-      ],
-      "options": {
-        "command": "cp -v ../../target/wasm32-wasi/debug/wingc.wasm ./",
-        "cwd": "apps/wing-playground"
-      },
-      "configurations": {
-        "release": {
-          "command": "cp -v ../../target/wasm32-wasi/release/wingc.wasm ./"
-        }
-      }
-    },
     "build": {
-      "executor": "nx:run-script",
-      "dependsOn": [
-        "copy",
-        "^build"
-      ],
+      "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/wing-playground",
-        "script": "build"
+        "command": "npm run build"
       }
     },
     "dev": {
-      "executor": "nx:run-script",
+      "executor": "nx:run-commands",
       "dependsOn": [
-        "copy",
+        "build",
         "^build"
       ],
       "options": {
         "cwd": "apps/wing-playground",
-        "script": "dev"
+        "command": "npm run dev"
       }
     }
   }

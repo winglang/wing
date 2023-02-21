@@ -1,16 +1,28 @@
+// Currently we don't really take advantage of this "capture" phase in the compiler to deal with capturing resource fields.
+// So this phase currently only handles capturing of inflight closures which will probably be removed
+// too (see https://github.com/winglang/wing/issues/1448).
+// We need to rethink the "capture" phase - maybe it's just code analysis for binding annotations
+// (see https://github.com/winglang/wing/issues/1449, https://github.com/winglang/wing/issues/76)?
+// Ideally we should make sure the "jsify" phase is dumb and just deal with, well, jsifying, and move anything smart to
+// this capture phase.
+
 use crate::{
-	ast::{ArgList, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, StmtKind, Symbol},
+	ast::{
+		ArgList, Class, Constructor, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase, Reference,
+		Scope, StmtKind, Symbol,
+	},
 	debug,
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
 	type_check::symbol_env::SymbolEnv,
 	type_check::Type,
+	visit::Visit,
 };
 use std::collections::{BTreeMap, BTreeSet};
 
-/* This is a definition of how a resource is captured. The most basic way to capture a resource
-is to use a subset of its client's methods. In that case we need to specify the name of the method
-used in the capture. Currently this is the only capture definition supported.
-In the future we might want add more verbose capture definitions like regexes on method parameters etc. */
+/// This is a definition of how a resource is captured. The most basic way to capture a resource
+/// is to use a subset of its client's methods. In that case we need to specify the name of the method
+/// used in the capture. Currently this is the only capture definition supported.
+/// In the future we might want add more verbose capture definitions like regexes on method parameters etc.
 #[derive(Debug, PartialEq, Eq, Hash, Ord, PartialOrd)]
 pub struct CaptureDef {
 	pub method: String,
@@ -40,138 +52,46 @@ fn collect_captures(capture_list: Vec<Capture>) -> Captures {
 	captures
 }
 
-pub fn scan_for_inflights_in_scope(scope: &Scope, diagnostics: &mut Diagnostics) {
-	for s in scope.statements.iter() {
-		match &s.kind {
-			StmtKind::ForLoop {
-				iterator: _,
-				iterable: _,
-				statements,
-			} => scan_for_inflights_in_scope(&statements, diagnostics),
-			StmtKind::If {
-				condition: _,
-				statements,
-				elif_statements,
-				else_statements,
-			} => {
-				scan_for_inflights_in_scope(statements, diagnostics);
-				for elif in elif_statements {
-					scan_for_inflights_in_scope(&elif.statements, diagnostics);
-				}
-				if let Some(else_statements) = else_statements {
-					scan_for_inflights_in_scope(else_statements, diagnostics);
-				}
-			}
-			StmtKind::Scope(s) => scan_for_inflights_in_scope(s, diagnostics),
-			StmtKind::Class {
-				name: _,
-				members: _,
-				methods,
-				constructor,
-				parent: _,
-				is_resource: _,
-			} => {
-				match constructor.signature.flight {
-					Phase::Inflight => {
-						// TODO: what do I do with these?
-						scan_captures_in_inflight_scope(&constructor.statements, diagnostics);
-					}
-					Phase::Independent => scan_for_inflights_in_scope(&constructor.statements, diagnostics),
-					Phase::Preflight => scan_for_inflights_in_scope(&constructor.statements, diagnostics),
-				}
-				for (_, method_def) in methods.iter() {
-					match method_def.signature.flight {
-						Phase::Inflight => {
-							// TODO: what do I do with these?
-							scan_captures_in_inflight_scope(&method_def.statements, diagnostics);
-						}
-						Phase::Independent => scan_for_inflights_in_scope(&constructor.statements, diagnostics),
-						Phase::Preflight => scan_for_inflights_in_scope(&method_def.statements, diagnostics),
-					}
-				}
-			}
-			StmtKind::VariableDef { initial_value, .. } => {
-				scan_for_inflights_in_expression(initial_value, diagnostics);
-			}
-			StmtKind::Expression(exp) => {
-				scan_for_inflights_in_expression(exp, diagnostics);
-			}
-			StmtKind::Assignment { variable: _, value } => {
-				scan_for_inflights_in_expression(value, diagnostics);
-			}
-			StmtKind::Return(Some(exp)) => {
-				scan_for_inflights_in_expression(exp, diagnostics);
-			}
-			_ => (),
+pub struct CaptureVisitor {
+	pub diagnostics: Diagnostics,
+}
+
+impl CaptureVisitor {
+	pub fn new() -> Self {
+		Self {
+			diagnostics: Diagnostics::new(),
 		}
 	}
 }
 
-pub fn scan_for_inflights_in_expression(expr: &Expr, diagnostics: &mut Diagnostics) {
-	match &expr.kind {
-		ExprKind::New {
-			class: _,
-			obj_id: _,
-			obj_scope,
-			arg_list,
-		} => {
-			if let Some(obj_scope) = obj_scope {
-				scan_for_inflights_in_expression(obj_scope, diagnostics);
+impl Visit<'_> for CaptureVisitor {
+	// TODO: currently there's no special treatment for resources, see file's top comment
+
+	fn visit_constructor(&mut self, constructor: &Constructor) {
+		match constructor.signature.flight {
+			Phase::Inflight => {
+				// TODO: the result of this is not used, see file's top comment
+				scan_captures_in_inflight_scope(&constructor.statements, &mut self.diagnostics);
 			}
-			scan_for_inflights_in_arglist(arg_list, diagnostics);
+			Phase::Independent => self.visit_scope(&constructor.statements),
+			Phase::Preflight => self.visit_scope(&constructor.statements),
 		}
-		ExprKind::Literal(Literal::InterpolatedString(istr)) => {
-			for part in istr.parts.iter() {
-				if let InterpolatedStringPart::Expr(e) = part {
-					scan_for_inflights_in_expression(e, diagnostics);
-				}
-			}
-		}
-		ExprKind::Reference(Reference::NestedIdentifier { object, property: _ }) => {
-			scan_for_inflights_in_expression(object, diagnostics);
-		}
-		ExprKind::Call { function, args } => {
-			scan_for_inflights_in_expression(function, diagnostics);
-			scan_for_inflights_in_arglist(args, diagnostics);
-		}
-		ExprKind::Unary { op: _, exp } => {
-			scan_for_inflights_in_expression(exp, diagnostics);
-		}
-		ExprKind::Binary { op: _, lexp, rexp } => {
-			scan_for_inflights_in_expression(lexp, diagnostics);
-			scan_for_inflights_in_expression(rexp, diagnostics);
-		}
-		ExprKind::StructLiteral { type_: _, fields } => {
-			for (_, value) in fields.iter() {
-				scan_for_inflights_in_expression(value, diagnostics);
-			}
-		}
-		ExprKind::MapLiteral { type_: _, fields } => {
-			for (_, value) in fields.iter() {
-				scan_for_inflights_in_expression(value, diagnostics);
-			}
-		}
-		ExprKind::FunctionClosure(func_def) => {
-			if let Phase::Inflight = func_def.signature.flight {
+	}
+
+	fn visit_function_definition(&mut self, func_def: &FunctionDefinition) {
+		match func_def.signature.flight {
+			Phase::Inflight => {
 				let mut func_captures = func_def.captures.borrow_mut();
 				assert!(func_captures.is_none());
 				assert!(func_def.statements.env.borrow().is_some()); // make sure env is defined
 				*func_captures = Some(collect_captures(scan_captures_in_inflight_scope(
 					&func_def.statements,
-					diagnostics,
+					&mut self.diagnostics,
 				)));
 			}
+			Phase::Independent => self.visit_scope(&func_def.statements),
+			Phase::Preflight => self.visit_scope(&func_def.statements),
 		}
-		_ => (),
-	}
-}
-
-fn scan_for_inflights_in_arglist(args: &ArgList, diagnostics: &mut Diagnostics) {
-	for arg in args.pos_args.iter() {
-		scan_for_inflights_in_expression(arg, diagnostics);
-	}
-	for (_, arg_expr) in args.named_args.iter() {
-		scan_for_inflights_in_expression(arg_expr, diagnostics);
 	}
 }
 
@@ -256,7 +176,7 @@ fn scan_captures_in_expression(
 								//   2. analyzing inflight code and figuring out what methods are being used on the object
 								res.extend(
 									resource
-										.methods()
+										.methods(true)
 										.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Phase::Inflight))
 										.map(|(name, _)| Capture {
 											object: symbol.clone(),
@@ -264,7 +184,14 @@ fn scan_captures_in_expression(
 										})
 										.collect::<Vec<Capture>>(),
 								);
-							} else if t.is_immutable_collection() || t.is_primitive() {
+								// If there are any capturable fields in the resource then we'll create a capture definition for the resource as well
+								if resource.fields(true).any(|(_, t)| t.is_capturable()) {
+									res.push(Capture {
+										object: symbol.clone(),
+										kind: CaptureKind::ImmutableData,
+									});
+								}
+							} else if t.is_capturable() {
 								// capture as an immutable data type (primitive/collection)
 								res.push(Capture {
 									object: symbol.clone(),
@@ -298,31 +225,33 @@ fn scan_captures_in_expression(
 								._type,
 							phase,
 						),
-						Err(type_error) => {
-							panic!("{}", type_error);
+						Err(_type_error) => {
+							// type errors are already reported in previous diagnostics
+							return res;
 						}
 					};
 
 					// TODO: handle accessing things other than function_sigs while recursively accessing Reference?
 					if let Some(func) = prop_type.as_function_sig() {
-						if matches!(func.flight, Phase::Preflight) {
-							panic!("Can't access preflight method {} inflight", property);
-						}
-						debug!(
-							"We seem to be accessing the preflight method {}.{} {} inflight!",
-							resource.name.name, property.name, property.span
+						assert!(
+							func.flight != Phase::Preflight,
+							"Can't access preflight method {property} inflight"
 						);
 					}
 				}
 			}
 		},
-		ExprKind::Call { function, args } => {
-			res.extend(scan_captures_in_call(&function, &args, env, statement_idx, diagnostics))
-		}
+		ExprKind::Call { function, arg_list } => res.extend(scan_captures_in_call(
+			&function,
+			&arg_list,
+			env,
+			statement_idx,
+			diagnostics,
+		)),
 		ExprKind::Unary { op: _, exp } => res.extend(scan_captures_in_expression(exp, env, statement_idx, diagnostics)),
-		ExprKind::Binary { op: _, lexp, rexp } => {
-			res.extend(scan_captures_in_expression(lexp, env, statement_idx, diagnostics));
-			res.extend(scan_captures_in_expression(rexp, env, statement_idx, diagnostics));
+		ExprKind::Binary { op: _, left, right } => {
+			res.extend(scan_captures_in_expression(left, env, statement_idx, diagnostics));
+			res.extend(scan_captures_in_expression(right, env, statement_idx, diagnostics));
 		}
 		ExprKind::Literal(lit) => match lit {
 			Literal::String(_) => {}
@@ -438,20 +367,15 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 				}
 			}
 			StmtKind::Scope(s) => res.extend(scan_captures_in_inflight_scope(s, diagnostics)),
-			StmtKind::Class {
-				name: _,
-				members: _,
-				methods,
-				constructor,
-				parent: _,
-				is_resource: _,
-			} => {
+			StmtKind::Class(Class {
+				methods, constructor, ..
+			}) => {
 				res.extend(scan_captures_in_inflight_scope(&constructor.statements, diagnostics));
 				for (_, m) in methods.iter() {
 					res.extend(scan_captures_in_inflight_scope(&m.statements, diagnostics))
 				}
 			}
-			StmtKind::Use {
+			StmtKind::Bring {
 				module_name: _,
 				identifier: _,
 			} => {
@@ -459,6 +383,19 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 			}
 			// Type definitions with no expressions in them can't capture anything
 			StmtKind::Struct { .. } | StmtKind::Enum { .. } => {}
+			StmtKind::TryCatch {
+				try_statements,
+				catch_block,
+				finally_statements,
+			} => {
+				res.extend(scan_captures_in_inflight_scope(try_statements, diagnostics));
+				if let Some(catch_block) = catch_block {
+					res.extend(scan_captures_in_inflight_scope(&catch_block.statements, diagnostics));
+				}
+				if let Some(finally_statements) = finally_statements {
+					res.extend(scan_captures_in_inflight_scope(finally_statements, diagnostics));
+				}
+			}
 		}
 	}
 	res

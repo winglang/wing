@@ -1,5 +1,95 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`provides raw tree data 1`] = `
+Object {
+  "tree": Object {
+    "children": Object {
+      "WingLogger": Object {
+        "attributes": Object {
+          "wing:resource:connections": Array [
+            Object {
+              "direction": "inbound",
+              "implicit": true,
+              "relationship": "print",
+              "resource": "root/test",
+            },
+          ],
+          "wing:resource:stateful": true,
+        },
+        "constructInfo": Object {
+          "fqn": "constructs.Construct",
+          "version": "10.1.228",
+        },
+        "display": Object {
+          "description": "A cloud logging facility",
+          "hidden": true,
+          "title": "Logger",
+        },
+        "id": "WingLogger",
+        "path": "root/WingLogger",
+      },
+      "test": Object {
+        "attributes": Object {
+          "wing:resource:connections": Array [
+            Object {
+              "direction": "outbound",
+              "implicit": true,
+              "relationship": "print",
+              "resource": "root/WingLogger",
+            },
+          ],
+          "wing:resource:stateful": false,
+        },
+        "children": Object {
+          "Code": Object {
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "id": "Code",
+            "path": "root/test/Code",
+          },
+        },
+        "constructInfo": Object {
+          "fqn": "constructs.Construct",
+          "version": "10.1.228",
+        },
+        "display": Object {
+          "description": "A cloud function (FaaS)",
+          "title": "Function",
+        },
+        "id": "test",
+        "path": "root/test",
+      },
+      "test.handler": Object {
+        "attributes": Object {
+          "wing:resource:connections": Array [],
+          "wing:resource:stateful": false,
+        },
+        "constructInfo": Object {
+          "fqn": "constructs.Construct",
+          "version": "10.1.228",
+        },
+        "display": Object {
+          "description": "An inflight resource",
+          "hidden": true,
+          "title": "Inflight",
+        },
+        "id": "test.handler",
+        "path": "root/test.handler",
+      },
+    },
+    "constructInfo": Object {
+      "fqn": "constructs.Construct",
+      "version": "10.1.228",
+    },
+    "id": "root",
+    "path": "root",
+  },
+  "version": "tree-0.1",
+}
+`;
+
 exports[`run all tests single test 1`] = `
 Array [
   Object {

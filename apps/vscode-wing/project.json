@@ -1,57 +1,21 @@
 {
   "name": "vscode-wing",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "implicitDependencies": [
-    "wing-language-server",
-    "sdk"
-  ],
+  "implicitDependencies": ["winglang"],
   "targets": {
-    "copy": {
-      "executor": "nx:run-commands",
-      "inputs": [
-        "{workspaceRoot}/target/*/wing-language-server"
-      ],
-      "outputs": [
-        "{projectRoot}/resources/native/wing-language-server"
-      ],
-      "dependsOn": [
-        "^build-native",
-        "^build"
-      ],
-      "options": {
-        "commands": [
-          "mkdir -p resources/native",
-          "mkdir -p resources/wingsdk",
-          "rm -f resources/native/*",
-          "rm -f resources/wingsdk/*",
-          "cp -v ../../target/debug/wing-language-server resources/native",
-          "cp -v node_modules/@winglang/sdk/package.json resources/wingsdk/package.json",
-          "cp -v node_modules/@winglang/sdk/.jsii resources/wingsdk/.jsii"
-        ],
-        "cwd": "apps/vscode-wing",
-        "parallel": false
-      },
-      "configurations": {
-        "release": {
-          "commands": [
-            "echo 'Skipping wls copy. Get platform-specific binaries from CI'"
-          ]
-        }
-      }
-    },
     "build": {
-      "executor": "nx:run-script",
-      "dependsOn": ["copy"],
+      "executor": "nx:run-commands",
       "options": {
         "cwd": "apps/vscode-wing",
-        "script": "build"
+        "command": "npm run build"
       }
     },
-    "build-multi": {
-      "executor": "nx:run-script",
+    "dev": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["^build", "build"],
       "options": {
         "cwd": "apps/vscode-wing",
-        "script": "build"
+        "command": "RUST_BACKTRACE=1 WING_BIN=\"$NX_WORKSPACE_ROOT/apps/wing/bin/wing\" code ../../examples --disable-extensions --extensionDevelopmentPath=$NX_WORKSPACE_ROOT/apps/vscode-wing"
       }
     }
   }

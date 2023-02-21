@@ -1,7 +1,7 @@
 name: Build
 
 on:
-  pull_request_target:
+  pull_request:
     types:
       - opened
       - synchronize
@@ -15,7 +15,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NODEJS_VERSION: "18.x"
   # Testing runs out of memory without this
   NODE_OPTIONS: "--max-old-space-size=4096"
   PROJEN_BUMP_VERSION: "0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}"
@@ -32,9 +31,6 @@ jobs:
       - name: Checkout
         if: github.event_name == 'push' && github.repository == 'winglang/wing'
         uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref || github.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Get tags
         id: tags
@@ -102,14 +98,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref || github.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODEJS_VERSION }}
+      # Reads versions from root package.json "volta" section
+      - name: Setup Node/NPM with pinned Volta version
+        uses: volta-cli/action@v4.0.0
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
@@ -121,37 +113,19 @@ jobs:
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
 
-      - name: Install wasi-sdk
-        run: scripts/setup_wasi.sh
-
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
 
       - name: Lint Nx
         run: npx nx workspace-lint
 
-      - name: Build
+      - name: Build, Test, and Package
         uses: MansaGroup/nrwl-nx-action@v2
         with:
-          targets: "build"
+          targets: "build,test,package"
           all: true
-          # Exclude native-dependent projects
-          args: "--exclude=wing-language-server,vscode-wing --configuration=release --output-style=stream --verbose"
-
-      - name: Test
-        uses: MansaGroup/nrwl-nx-action@v2
-        with:
-          targets: "test"
-          all: true
-          # Exclude E2E testing and native-dependent projects
-          args: "--exclude=hangar,wing-language-server,vscode-wing --configuration=release --output-style=stream --verbose"
-
-      - name: Create NPM packages
-        uses: MansaGroup/nrwl-nx-action@v2
-        with:
-          targets: "package"
-          projects: "winglang,sdk"
-          args: "--configuration=release --output-style=stream --verbose"
+          # Exclude E2E testing
+          args: "--exclude=hangar --configuration=release --output-style=stream --verbose"
 
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v2
@@ -165,11 +139,17 @@ jobs:
           name: wingsdk
           path: libs/wingsdk/*.tgz
 
-      - name: Upload WingC Binary
+      - name: Upload WingC WASM
         uses: actions/upload-artifact@v2
         with:
           name: wingc
           path: target/wasm32-wasi/release/wingc.wasm
+
+      - name: Upload extension
+        uses: actions/upload-artifact@v2
+        with:
+          name: vscode-wing
+          path: apps/vscode-wing/vscode-wing.vsix
 
       - name: "Publish Wing Playground"
         if: github.event_name == 'push' && github.repository == 'winglang/wing'
@@ -183,94 +163,25 @@ jobs:
           github-comment: false
           vercel-args: "--prod "
 
-  build-native:
-    needs: prepare
-    env:
-      PROJEN_BUMP_VERSION: ${{ needs.prepare.outputs.version }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: macos-latest
-            arch: x64
-          - os: ubuntu-latest
-            arch: x64
-          # TODO libnode build currently invalid for the following configs
-          # - os: macos-latest
-          #   arch: arm64
-          # - os: ubuntu-latest
-          #   arch: x86
-    runs-on: ${{ matrix.os }}
-    name: "Native Build"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref || github.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODEJS_VERSION }}
-
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: ${{ env.RUST_VERSION }}
-          components: rustfmt
-          override: true
-
-      - name: Setup Cargo Cache
-        uses: Swatinem/rust-cache@v2
-
-      - name: Install Dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          # Don't need to install sub-project dependencies
-          install-command: npm install --ignore-scripts
-
-      - name: Lint Nx
-        run: npx nx workspace-lint
-
-      - name: Build
-        uses: MansaGroup/nrwl-nx-action@v2
-        with:
-          targets: "build-native"
-          projects: "wing-language-server"
-          args: "--configuration=release --output-style=stream --verbose"
-
-      - name: Test
-        uses: MansaGroup/nrwl-nx-action@v2
-        with:
-          targets: "test"
-          projects: "wingii"
-          args: "--configuration=release --output-style=stream --verbose"
-
-      - name: Upload Wing Language Server
-        uses: actions/upload-artifact@v2
-        with:
-          name: wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
-          path: target/release/wing-language-server
-
   e2e:
     name: "E2E Testing"
     needs:
       - build-wasm
+      - prepare
     strategy:
       fail-fast: true
       matrix:
         runner:
           - ubuntu-latest
-          # - macos-latest
+          - windows-latest
         node: [18, 19]
     runs-on: ${{ matrix.runner }}
+    env:
+      HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.prepare.outputs.version }}.tgz"
+      HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.prepare.outputs.version }}.tgz"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref || github.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
@@ -286,69 +197,25 @@ jobs:
           working-directory: tools/hangar
           install-command: npm ci --ignore-scripts
 
-      - name: Run E2E Tests
-        env:
-          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          export HANGAR_WING_TGZ="$(pwd)/$(find wing/*.tgz)"
-          export HANGAR_WINGSDK_TGZ="$(pwd)/$(find wingsdk/*.tgz)"
-          cd tools/hangar
-          HANGAR_WING_TGZ=$HANGAR_WING_TGZ HANGAR_WINGSDK_TGZ=$HANGAR_WINGSDK_TGZ npm run test
-
-  build-vscode:
-    name: "Build VSCode Extension"
-    needs:
-      - prepare
-      - build-native
-      - build-wasm
-    env:
-      PROJEN_BUMP_VERSION: ${{ needs.prepare.outputs.version }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref || github.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
-
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v2
-
-      - name: Prepare language server binaries
-        run: cp -r wing-language-server-* ./apps/vscode-wing/resources
-
-      - name: Prepare WingSDK files
-        run: |
-          mkdir -p apps/vscode-wing/resources/wingsdk
-          tar -xzf wingsdk/*.tgz -C apps/vscode-wing/resources/wingsdk --strip-components=1 package/package.json package/.jsii
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODEJS_VERSION }}
-
-      - name: Install Dependencies
+      - name: Install Example Dependencies (1/2)
         uses: bahmutov/npm-install@v1
-
-      - name: Build
-        uses: MansaGroup/nrwl-nx-action@v2
         with:
-          # build-multi assumes all required resources are present
-          targets: "build-multi"
-          projects: "vscode-wing"
-          args: "--configuration=release --output-style=stream --verbose"
+          working-directory: examples/tests/valid
+          install-command: npm ci
 
-      - name: Upload extension
-        uses: actions/upload-artifact@v2
+      - name: Install Example Dependencies (2/2)
+        uses: bahmutov/npm-install@v1
         with:
-          name: vscode-wing
-          path: apps/vscode-wing/vscode-wing.vsix
+          working-directory: examples/tests/invalid
+          install-command: npm ci
+
+      - name: Run E2E Tests
+        working-directory: tools/hangar
+        run: npm run test
 
   build:
     needs:
-      - build-native
       - build-wasm
-      - build-vscode
       - e2e
     runs-on: ubuntu-latest
     steps:
@@ -365,11 +232,6 @@ jobs:
     steps:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODEJS_VERSION }}
 
       - name: Tag commit
         uses: tvdias/github-tagger@v0.0.1

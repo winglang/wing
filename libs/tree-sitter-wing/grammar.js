@@ -78,6 +78,7 @@ module.exports = grammar({
         $.if_statement,
         $.struct_definition,
         $.enum_definition,
+        $.try_catch_statement,
       ),
 
     short_import_statement: ($) =>
@@ -165,8 +166,9 @@ module.exports = grammar({
       ),
     inflight_class_member: ($) =>
       seq(
-        field("phase_modifier", $._inflight_specifier),
         optional(field("access_modifier", $.access_modifier)),
+        field("phase_modifier", $._inflight_specifier),
+        optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
         $._type_annotation,
         ";"
@@ -220,6 +222,18 @@ module.exports = grammar({
         "elif",
         field("condition", $.expression),
         field("block", $.block),
+      ),
+
+    try_catch_statement: ($) =>
+      seq(
+        "try",
+        field("block", $.block),
+        optional(seq(
+          "catch",
+          optional(field("exception_identifier", $.identifier)),
+          field("catch_block", $.block),
+        )),
+        optional(seq("finally", field("finally_block", $.block)))
       ),
 
     expression: ($) =>
@@ -362,7 +376,7 @@ module.exports = grammar({
     function_definition: ($) =>
       seq(
         optional(field("access_modifier", $.access_modifier)),
-        optional("async"),
+        optional(field("async", $.async_modifier)),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         optional(field("return_type", $._type_annotation)),
@@ -371,14 +385,15 @@ module.exports = grammar({
 
     inflight_function_definition: ($) =>
       seq(
-        field("phase_modifier", $._inflight_specifier),
         optional(field("access_modifier", $.access_modifier)),
-        optional("async"),
+        field("phase_modifier", $._inflight_specifier),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         optional(field("return_type", $._type_annotation)),
         field("block", $.block)
       ),
+
+    async_modifier: ($) => "async",
 
     access_modifier: ($) => choice("public", "private", "protected"),
 
