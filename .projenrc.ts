@@ -98,13 +98,15 @@ project
   .tryFindObjectFile(".github/workflows/build.yml")
   ?.addOverride("jobs.build.strategy.matrix.os", [
     "ubuntu-latest",
-    "windows-latest",
+    // TODO: Add after fixing the "-RunAsAdmin" issue.
+    // "windows-latest",
     "macos-latest",
   ]);
 
-project
-  .tryFindObjectFile(".github/workflows/build.yml")
-  ?.addOverride("jobs.build.steps.3.run", "npx projen build -RunAsAdmin");
+// TODO: Add after fixing the "-RunAsAdmin" issue.
+// project
+//   .tryFindObjectFile(".github/workflows/build.yml")
+//   ?.addOverride("jobs.build.steps.3.run", "npx projen build -RunAsAdmin");
 
 project
   .tryFindObjectFile(".github/workflows/build.yml")

@@ -1,3 +1,4 @@
+import { platform } from "node:os";
 import path from "node:path";
 
 import { config } from "dotenv";
@@ -11,7 +12,6 @@ import { WING_PROTOCOL_SCHEME } from "./protocol.js";
 import { SegmentAnalytics } from "./segmentAnalytics.js";
 import { createCloudAppState } from "./utils/cloudAppState.js";
 import { createWingApp } from "./utils/createWingApp.js";
-import { platform } from "os";
 
 config();
 

@@ -30,7 +30,7 @@ export const useNodeStaticData = <T,>({
   useEffect(() => {
     const timestamp = Date.now();
 
-    const renderNode = (node: Node<T>) => {
+    const renderNode = (node: Node<T>, depth = 0) => {
       return (
         <Fragment key={node.id}>
           <div className="inline-block">
@@ -38,10 +38,10 @@ export const useNodeStaticData = <T,>({
               className={classNames("h-full relative")}
               ref={(element) => (refs.current[node.id] = element)}
             >
-              <NodeItem node={node} />
+              <NodeItem node={node} depth={depth} />
             </div>
           </div>
-          {node.children?.map((node) => renderNode(node))}
+          {node.children?.map((node) => renderNode(node, depth + 1))}
         </Fragment>
       );
     };
