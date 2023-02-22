@@ -81,7 +81,7 @@ export class String {
    *
    * @returns a new lower case string.
    */
-  public lCase(): string {
+  public lowercase(): string {
     throw new Error("Abstract");
   }
 
