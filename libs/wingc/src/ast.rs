@@ -1,5 +1,5 @@
 use std::cell::RefCell;
-use std::collections::{BTreeMap, HashMap};
+use std::collections::BTreeMap;
 use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 
@@ -348,14 +348,14 @@ impl Expr {
 #[derive(Debug)]
 pub struct ArgList {
 	pub pos_args: Vec<Expr>,
-	pub named_args: HashMap<Symbol, Expr>,
+	pub named_args: BTreeMap<Symbol, Expr>,
 }
 
 impl ArgList {
 	pub fn new() -> Self {
 		ArgList {
 			pos_args: vec![],
-			named_args: HashMap::new(),
+			named_args: BTreeMap::new(),
 		}
 	}
 }
