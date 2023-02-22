@@ -138,7 +138,7 @@ export class String {
    *
    * @returns a new upper case string.
    */
-  public uCase(): string {
+  public uppercase(): string {
     throw new Error("Abstract");
   }
 }
