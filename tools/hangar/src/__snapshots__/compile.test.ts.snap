@@ -3588,6 +3588,9 @@ constructor() {
   super({ outdir: $outdir, name: \\"primitive_methods\\", plugins: $plugins });
   
   const dur = $stdlib.std.Duration.fromSeconds(60);
+  const dur2 = $stdlib.std.Duration.fromSeconds(600);
+  const f = (d) => {
+  };
   const stringy = \`\${dur.minutes}:\${dur.seconds}\`;
   {console.log(stringy)};
   if ((stringy.includes(\\"60\\") && (((stringy.split(\\":\\")).at(0)) === \\"60\\"))) {

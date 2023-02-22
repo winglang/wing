@@ -1,4 +1,6 @@
 let dur = 1m;
+let dur2: duration = 10m;
+let f = (d: duration) => {};
 let stringy = "${dur.minutes}:${dur.seconds}";
 print(stringy);
 
