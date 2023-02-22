@@ -2567,6 +2567,10 @@
     "named": false
   },
   {
+    "type": "duration",
+    "named": false
+  },
+  {
     "type": "elif",
     "named": false
   },
