@@ -44,6 +44,39 @@ test("get object from a bucket", async () => {
   expect(response).toEqual(VALUE);
 });
 
+test("tryGet object from a bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+  s3Mock.on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
+    Body: createMockStream(VALUE),
+  });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response = await client.tryGet(KEY);
+
+  // THEN
+  expect(response).toEqual(VALUE);
+});
+
+test("tryGet invalid object returns empty", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  s3Mock
+    .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects(mockError());
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response = await client.tryGet(KEY);
+
+  // THEN
+  expect(response).toEqual(undefined);
+});
+
 test("put an object into a bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
@@ -108,3 +141,9 @@ test("delete object from a bucket with mustExist option", async () => {
   // THEN
   expect(response).toEqual(undefined);
 });
+
+function mockError() {
+  const error = new Error("Error");
+  error.name = "NoSuchKey";
+  return error;
+}

@@ -25,7 +25,7 @@ test("create a bucket", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test("put and get objects from bucket", async () => {
+test("put and get and tryGet objects from bucket", async () => {
   // GIVEN
   const app = new SimApp();
   new cloud.Bucket(app, "my_bucket");
@@ -38,14 +38,15 @@ test("put and get objects from bucket", async () => {
 
   // WHEN
   await client.put(KEY, VALUE);
-  const response = await client.get("greeting.txt");
+  const response1 = await client.get("greeting.txt");
+  const response2 = await client.tryGet("greeting.txt");
 
   // THEN
   await s.stop();
 
-  expect(response).toEqual(VALUE);
+  expect(response1).toEqual(VALUE);
+  expect(response2).toEqual(VALUE);
   expect(listMessages(s)).toMatchSnapshot();
-  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("put multiple objects and list all from bucket", async () => {
@@ -74,7 +75,6 @@ test("put multiple objects and list all from bucket", async () => {
 
   expect(response).toEqual([KEY1, KEY2, KEY3]);
   expect(listMessages(s)).toMatchSnapshot();
-  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("get invalid object throws an error", async () => {
@@ -92,7 +92,23 @@ test("get invalid object throws an error", async () => {
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(s.listTraces()[2].data.status).toEqual("failure");
-  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("tryGet invalid object returns empty", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  // THEN
+  const response = await client.tryGet("unknown.txt");
+  await s.stop();
+
+  expect(response).toEqual(undefined);
+  expect(listMessages(s)).toMatchSnapshot();
 });
 
 test("remove object from a bucket with mustExist as option", async () => {

@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
+import { InflightError, InflightErrorCode } from "./error";
 import { Code, Resource } from "../core";
 
 /**
@@ -93,11 +94,19 @@ export interface IBucketClient {
   /**
    * Retrieve an object from the bucket.
    * @param key Key of the object.
-   * @Throws if no object with the given key exists.
-   * @Returns the object's body.
+   * @throws if no object with the given key exists.
+   * @returns the object's body.
    * @inflight
    */
   get(key: string): Promise<string>;
+
+  /**
+   * Retrieve an object from the bucket, if it exists.
+   * @param key Key of the object.
+   * @returns the object's body, if it exists
+   * @inflight
+   */
+  tryGet(key: string): Promise<string | undefined>;
 
   /**
    * Retrieve existing objects keys from the bucket.
@@ -114,6 +123,34 @@ export interface IBucketClient {
    * @inflight
    */
   delete(key: string, opts?: BucketDeleteOptions): Promise<void>;
+}
+
+/**
+ * Base class for inflight `Bucket` implementations.
+ * @internal
+ */
+export abstract class BucketClientBase implements IBucketClient {
+  public abstract put(key: string, body: string): Promise<void>;
+  public abstract get(key: string): Promise<string>;
+  public async tryGet(key: string): Promise<string | undefined> {
+    try {
+      return await this.get(key);
+    } catch (e) {
+      if (
+        e instanceof InflightError &&
+        e.code === InflightErrorCode.NOT_FOUND
+      ) {
+        return undefined;
+      }
+      // We haven't seen this error before, so we rethrow it.
+      throw e;
+    }
+  }
+  public abstract list(prefix?: string): Promise<string[]>;
+  public abstract delete(
+    key: string,
+    opts?: BucketDeleteOptions
+  ): Promise<void>;
 }
 
 /**

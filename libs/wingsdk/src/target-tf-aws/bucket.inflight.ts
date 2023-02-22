@@ -3,18 +3,26 @@ import * as consumers from "stream/consumers";
 import {
   DeleteObjectCommand,
   GetObjectCommand,
+  GetObjectCommandOutput,
   ListObjectsCommand,
   ListObjectsCommandOutput,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
-import { BucketDeleteOptions, IBucketClient } from "../cloud";
+import {
+  BucketClientBase,
+  BucketDeleteOptions,
+  InflightError,
+  InflightErrorCode,
+} from "../cloud";
 
-export class BucketClient implements IBucketClient {
+export class BucketClient extends BucketClientBase {
   constructor(
     private readonly bucketName: string,
     private readonly s3Client = new S3Client({})
-  ) {}
+  ) {
+    super();
+  }
 
   public async put(key: string, body: string): Promise<void> {
     const command = new PutObjectCommand({
@@ -31,7 +39,21 @@ export class BucketClient implements IBucketClient {
       Bucket: this.bucketName,
       Key: key,
     });
-    const resp = await this.s3Client.send(command);
+
+    let resp: GetObjectCommandOutput;
+    try {
+      resp = await this.s3Client.send(command);
+    } catch (e) {
+      if ((e as any).name === "NoSuchKey") {
+        throw new InflightError(
+          InflightErrorCode.NOT_FOUND,
+          `Key not found: ${key}`,
+          e
+        );
+      }
+      throw e;
+    }
+
     return consumers.text(resp.Body as Readable);
   }
 

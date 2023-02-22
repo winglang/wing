@@ -1,8 +1,8 @@
 import { DefaultAzureCredential } from "@azure/identity";
 import { BlobServiceClient, ContainerClient } from "@azure/storage-blob";
-import { BucketDeleteOptions, IBucketClient } from "../cloud";
+import { BucketClientBase, BucketDeleteOptions } from "../cloud";
 
-export class BucketClient implements IBucketClient {
+export class BucketClient extends BucketClientBase {
   private readonly bucketName: string;
   private readonly blobServiceClient: BlobServiceClient;
   private readonly containerClient: ContainerClient;
@@ -14,6 +14,7 @@ export class BucketClient implements IBucketClient {
     storageAccount: string,
     blobServiceClient?: BlobServiceClient
   ) {
+    super();
     this.bucketName = bucketName;
     this.blobServiceClient =
       blobServiceClient ??
@@ -56,7 +57,14 @@ export class BucketClient implements IBucketClient {
       await this.streamToBuffer(downloadResponse.readableStreamBody)
     ).toString();
 
+    // TODO: throw InflightError and enable support for tryGet
+
     return downloaded;
+  }
+
+  public async tryGet(key: string): Promise<string | undefined> {
+    key;
+    throw new Error("Method not implemented.");
   }
 
   /**

@@ -4,14 +4,23 @@ import { join } from "path";
 import { ISimulatorResourceInstance } from "./resource";
 import { BucketSchema } from "./schema-resources";
 import { exists } from "./util";
-import { BucketDeleteOptions, IBucketClient } from "../cloud";
+import {
+  BucketClientBase,
+  BucketDeleteOptions,
+  InflightError,
+  InflightErrorCode,
+} from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
 
-export class Bucket implements IBucketClient, ISimulatorResourceInstance {
+export class Bucket
+  extends BucketClientBase
+  implements ISimulatorResourceInstance
+{
   private readonly fileDir: string;
   private readonly context: ISimulatorContext;
   private readonly initialObjects: Record<string, string>;
   public constructor(props: BucketSchema["props"], context: ISimulatorContext) {
+    super();
     this.fileDir = fs.mkdtempSync(join(os.tmpdir(), "wing-sim-"));
     this.context = context;
     this.initialObjects = props.initialObjects ?? {};
@@ -47,8 +56,29 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Get (key=${key}).`,
       activity: async () => {
-        const filename = join(this.fileDir, key);
-        return fs.promises.readFile(filename, "utf8");
+        const filePath = join(this.fileDir, key);
+        const fileExists = await exists(filePath);
+        if (!fileExists) {
+          throw new InflightError(
+            InflightErrorCode.NOT_FOUND,
+            `Key not found: ${key}`
+          );
+        }
+        return fs.promises.readFile(filePath, "utf8");
+      },
+    });
+  }
+
+  public async tryGet(key: string): Promise<string> {
+    return this.context.withTrace({
+      message: `TryGet (key=${key}).`,
+      activity: async () => {
+        const filePath = join(this.fileDir, key);
+        const fileExists = await exists(filePath);
+        if (!fileExists) {
+          return undefined;
+        }
+        return fs.promises.readFile(filePath, "utf8");
       },
     });
   }

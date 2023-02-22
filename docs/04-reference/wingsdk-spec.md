@@ -296,6 +296,16 @@ resource Bucket {
   inflight get(key: str): Blob;
 
   /**
+   * Get a file from the bucket. Returns null if the file does not exist.
+   */
+  inflight try_get(key: str): Blob?;
+
+  /**
+   * Get a Json object from the bucket. Throws if the file is not valid JSON.
+   */
+  inflight get_json(key: str): Json;
+
+  /**
    * Delete a file from the bucket.
    */
   inflight delete(key: str): void;
