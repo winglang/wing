@@ -82,8 +82,8 @@ const LogEntryRow = ({ log, onResourceClick }: LogEntryProps) => {
         className={classNames(
           "group w-full flex",
           "flex min-w-0",
-          "justify-between px-2",
-          "border-b border-slate-50 text-2xs py-0.5",
+          "justify-between",
+          "border-t border-slate-200 text-2xs py-0.5",
           {
             "text-blue-500": log.level === "verbose",
             "hover:text-blue-600": log.level === "verbose" && canBeExpanded,

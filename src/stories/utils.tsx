@@ -98,7 +98,7 @@ export const CustomResourceIcon = (props: React.SVGProps<SVGSVGElement>) => {
   );
 };
 
-const getResourceIconComponent = (
+export const getResourceIconComponent = (
   resourceType: BaseResourceSchema["type"] | undefined,
   { solid = false }: { solid?: boolean } = {},
 ) => {

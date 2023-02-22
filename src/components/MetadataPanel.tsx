@@ -2,13 +2,25 @@ import {
   ArrowLeftOnRectangleIcon,
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/20/solid";
+import {
+  ArrowPathRoundedSquareIcon,
+  CubeTransparentIcon,
+  CursorArrowRaysIcon,
+} from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import { PropsWithChildren, useEffect, useMemo, useState } from "react";
+import {
+  ForwardRefExoticComponent,
+  PropsWithChildren,
+  SVGProps,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import { InspectorSection } from "../design-system/InspectorSection.js";
 import { Pill } from "../design-system/Pill.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
-import { ResourceIcon } from "../stories/utils.js";
+import { getResourceIconComponent, ResourceIcon } from "../stories/utils.js";
 
 import { AttributeView } from "./AttributeView.js";
 import { ResourceView } from "./resource-views/ResourceView.js";
@@ -23,6 +35,7 @@ interface Attribute {
 interface AttributeGroup {
   groupName: string;
   attributes: Attribute[];
+  icon?: ForwardRefExoticComponent<SVGProps<SVGSVGElement>>;
 }
 
 interface ConnectionsGroup {
@@ -72,6 +85,7 @@ export const MetadataPanel = ({
     let attrGroups: AttributeGroup[] = [
       {
         groupName: "Node",
+        icon: CubeTransparentIcon,
         attributes: [
           { key: "ID", value: node.id },
           {
@@ -87,6 +101,7 @@ export const MetadataPanel = ({
         case "wingsdk.cloud.Function": {
           attrGroups.push({
             groupName: "Function",
+            icon: getResourceIconComponent(node.type),
             attributes: [
               { key: "Entry", value: node.props.sourceCodeFile },
               { key: "Language", value: node.props.sourceCodeLanguage },
@@ -102,6 +117,7 @@ export const MetadataPanel = ({
         case "wingsdk.cloud.Queue": {
           attrGroups.push({
             groupName: "Queue",
+            icon: getResourceIconComponent(node.type),
             attributes: [{ key: "Timeout", value: `${node.props.timeout}s` }],
           });
 
@@ -110,6 +126,7 @@ export const MetadataPanel = ({
         case "wingsdk.cloud.Bucket": {
           attrGroups.push({
             groupName: "Bucket",
+            icon: getResourceIconComponent(node.type),
             attributes: [
               {
                 key: "Public",
@@ -175,8 +192,8 @@ export const MetadataPanel = ({
   };
 
   return (
-    <ScrollableArea overflowY className="h-full text-sm bg-white">
-      <div className="flex items-center gap-2 px-2 py-1.5">
+    <ScrollableArea overflowY className="h-full text-sm bg-slate-50">
+      <div className="flex items-center gap-2 px-2 py-2">
         <div className="flex-shrink-0">
           <ResourceIcon className="w-6 h-6" resourceType={node.type} />
         </div>
@@ -196,6 +213,7 @@ export const MetadataPanel = ({
               <div key={attributeGroup.groupName}>
                 <InspectorSection
                   text={attributeGroup.groupName}
+                  icon={attributeGroup.icon}
                   open={openInspectorSections.includes(
                     attributeGroup.groupName,
                   )}
@@ -204,7 +222,7 @@ export const MetadataPanel = ({
                   }
                 >
                   <div className="border-t">
-                    <div className="px-4 py-1.5 flex flex-col gap-y-1 gap-x-4 bg-slate-100">
+                    <div className="px-2 py-1.5 flex flex-col gap-y-1 gap-x-4 bg-slate-50">
                       {attributeGroup.attributes.map((attribute) => {
                         return (
                           <AttributeView
@@ -224,17 +242,18 @@ export const MetadataPanel = ({
             <InspectorSection
               text="Relationships"
               open={openInspectorSections.includes("relationships")}
+              icon={ArrowPathRoundedSquareIcon}
               onClick={() => toggleInspectorSection("relationships")}
             >
               <div className="border-t">
                 {connectionsGroups.map((connectionGroup) => (
                   <div key={connectionGroup.groupName}>
-                    <div className="relative bg-slate-100">
+                    <div className="relative bg-slate-50">
                       {connectionGroup.connections.map((connection, index) => (
                         <button
                           key={`${connection.path}_${index}`}
                           className={classNames(
-                            "w-full flex-shrink-0 max-w-full truncate bg-slate-100 hover:bg-slate-200/50 shadow-sm text-sm px-4 py-1 flex items-center gap-1 min-w-0 text-slate-700",
+                            "w-full flex-shrink-0 max-w-full truncate bg-slate-50 hover:bg-slate-200/50 shadow-sm text-sm px-4 py-1 flex items-center gap-1 min-w-0 text-slate-700",
                           )}
                           title={connection.path}
                           onClick={() =>
@@ -242,7 +261,7 @@ export const MetadataPanel = ({
                           }
                         >
                           <div className="flex-0 flex-shrink-0 flex items-center gap-2 text-slate-500 min-w-[100px]">
-                            <div className="flex-0 flex-shrink-0">
+                            <div className="pl-2 flex-0 flex-shrink-0">
                               {connectionGroup.type === "inbound" ? (
                                 <ArrowLeftOnRectangleIcon
                                   className="w-4 h-4 rotate-180 text-green-500"
@@ -257,8 +276,8 @@ export const MetadataPanel = ({
                             </div>
                             <span className="text-slate-500 uppercase text-xs">
                               {connectionGroup.type === "inbound"
-                                ? "in"
-                                : "out"}
+                                ? "In"
+                                : "Out"}
                             </span>
                           </div>
 
@@ -280,10 +299,11 @@ export const MetadataPanel = ({
           {node.type.startsWith("wingsdk.cloud") && (
             <InspectorSection
               text="Interact"
+              icon={CursorArrowRaysIcon}
               open={openInspectorSections.includes("interact")}
               onClick={() => toggleInspectorSection("interact")}
             >
-              <div className="bg-slate-100 border-t border-slate-200">
+              <div className="bg-slate-50 border-t border-slate-200">
                 <ResourceView
                   resourceType={node.type}
                   resourcePath={node.path}
@@ -292,7 +312,7 @@ export const MetadataPanel = ({
             </InspectorSection>
           )}
 
-          <div className="border-t border-slate-200"></div>
+          <div className="border-t border-slate-300"></div>
         </>
       )}
     </ScrollableArea>

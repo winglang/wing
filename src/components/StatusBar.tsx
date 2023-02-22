@@ -15,7 +15,7 @@ export const StatusBar = ({
   isError = false,
 }: StatusBarProps) => {
   return (
-    <footer className="bg-slate-100 py-1 px-2 flex text-2xs w-full text-slate-500 relative">
+    <footer className="bg-slate-50 py-1 px-4 flex text-2xs w-full text-slate-500 relative border-t border-slate-300">
       <div className="w-full flex space-x-6">
         <div title={wingVersion} className="truncate space-x-1 min-w-[7rem]">
           <span>Wing version:</span>

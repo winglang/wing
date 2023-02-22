@@ -27,7 +27,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...props}
           className={classNames(
-            "inline-flex gap-2 items-center px-2.5 py-1.5 border text-xs font-medium rounded outline-none focus:ring-2 focus:ring-sky-500/50 transition ease-in-out border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:border-sky-500",
+            "inline-flex gap-2 items-center px-2.5 py-1.5 border text-xs rounded outline-none focus:ring-2 focus:ring-sky-500/50 transition ease-in-out border-slate-300 bg-white text-slate-700 focus:border-sky-500",
             LeftIcon && "pl-7",
             className,
           )}

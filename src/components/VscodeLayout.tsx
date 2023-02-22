@@ -152,7 +152,7 @@ export const VscodeLayout = ({
           error={errorMessage.data ?? ""}
         />
 
-        <RightResizableWidget className="h-full flex flex-col w-80 min-w-[10rem] min-h-[15rem] border-r border-slate-200">
+        <RightResizableWidget className="h-full flex flex-col w-80 min-w-[10rem] min-h-[15rem] border-r border-slate-300">
           <TreeMenu
             title="Explorer"
             items={treeMenu.items}
@@ -218,7 +218,7 @@ export const VscodeLayout = ({
               </div>
             </div>
 
-            <LeftResizableWidget className="bg-white flex-shrink w-80 min-w-[10rem] border-l z-10">
+            <LeftResizableWidget className="bg-white flex-shrink w-80 min-w-[10rem] border-l border-slate-300 z-10">
               {metadata.data && (
                 <MetadataPanel
                   node={metadata.data.node}
@@ -235,7 +235,7 @@ export const VscodeLayout = ({
         </div>
       </div>
       {cloudAppState !== "error" && (
-        <TopResizableWidget className="border-t bg-white min-h-[5rem] h-[12rem] pt-1.5">
+        <TopResizableWidget className="border-t border-slate-300 bg-slate-50 min-h-[5rem] h-[12rem] pt-1.5">
           <div className="relative h-full flex flex-col gap-2">
             {isLoading && (
               <div className="absolute bg-white bg-opacity-70 h-full w-full z-50" />

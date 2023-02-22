@@ -75,7 +75,7 @@ export const TreeMenu = ({
         <div className="absolute inset-0">
           <ScrollableArea
             overflowY
-            className="h-full w-full text-sm text-slate-800 bg-slate-100 flex flex-col gap-1"
+            className="h-full w-full text-sm text-slate-800 bg-slate-50 flex flex-col gap-1"
           >
             <div className="flex flex-col">
               <MenuItems

@@ -28,6 +28,21 @@ In order to see the logs in real time:
 tail -f ~/Library/Logs/wing-console/main.log
 ```
 
+## Testing
+
+```sh
+npx projen test
+```
+
+End to end:
+
+```sh
+# Build the electron files
+npx tsx scripts/build.mts
+# Run Playwright tests and update snapshots
+PLAYWRIGHT_TEST=true npx playwright test -u
+```
+
 ## Storybook
 
 ```sh

@@ -159,11 +159,11 @@ export const ContainerNode = ({
             className={classNames(
               "flex-1 rounded-b",
               "border-x border-b border-dashed",
-              "group-focus:border-sky-300 group-focus:bg-white",
+              "group-focus:border-sky-300",
               "group-hover:border-sky-300",
               "transition-all",
               "shadow-inner",
-              depth % 2 === 0 ? "bg-slate-200/30" : "bg-white",
+              depth % 2 === 0 ? "bg-slate-50" : "bg-white",
               {
                 // "bg-slate-200/30 border-gray-300": !selected,
                 // "border-sky-300 bg-white": selected,
