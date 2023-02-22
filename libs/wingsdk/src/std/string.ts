@@ -77,7 +77,7 @@ export class String {
   /**
    * Returns this string in lower case.
    *
-   * @macro $self$.toLowerCase()
+   * @macro $self$.toLocaleLowerCase()
    *
    * @returns a new lower case string.
    */
