@@ -73,6 +73,17 @@ export class String {
   }
 
   /**
+   * Returns this string in lower case.
+   *
+   * @macro $self$.toLowerCase()
+   *
+   * @returns a new lower case string.
+   */
+  public lCase(): string {
+    throw new Error("Abstract");
+  }
+
+  /**
    * Splits string by separator.
    *
    * @param separator separator to split by.
@@ -110,13 +121,11 @@ export class String {
   }
 
   /**
-   * Returns this string in lower case.
+   * Removes white spaces from start and end of this string.
    *
-   * @macro $self$.toLowerCase()
-   *
-   * @returns a new lower case string.
+   * @returns a new string with white spaces removed from start and end.
    */
-  public toLowCase(): string {
+  public trim(): string {
     throw new Error("Abstract");
   }
 
@@ -127,16 +136,7 @@ export class String {
    *
    * @returns a new upper case string.
    */
-  public toUpCase(): string {
-    throw new Error("Abstract");
-  }
-
-  /**
-   * Removes white spaces from start and end of this string.
-   *
-   * @returns a new string with white spaces removed from start and end.
-   */
-  public trim(): string {
+  public uCase(): string {
     throw new Error("Abstract");
   }
 }
