@@ -7,7 +7,7 @@ import { Polycons } from "polycons";
 import stringify from "safe-stable-stringify";
 import { PolyconFactory } from "./factory";
 import { Logger } from "../cloud";
-import { IApp, AppProps } from "../core";
+import { IApp, AppProps, preSynthesizeAllConstructs } from "../core";
 
 /**
  * AWS-CDK App props
@@ -31,6 +31,8 @@ export class App extends Construct implements IApp {
 
   private readonly cdkApp: cdk.App;
   private readonly cdkStack: cdk.Stack;
+  private synthed: boolean;
+  private synthedOutput: string | undefined;
 
   constructor(props: CdkAppProps) {
     const customFactory = props.customFactory ?? new PolyconFactory();
@@ -62,6 +64,7 @@ export class App extends Construct implements IApp {
     this.outdir = outdir;
     this.cdkApp = cdkApp;
     this.cdkStack = cdkStack;
+    this.synthed = false;
 
     // register a logger for this app.
     Logger.register(this);
@@ -74,10 +77,20 @@ export class App extends Construct implements IApp {
    * for unit testing.
    */
   synth(): string {
+    if (this.synthed) {
+      return this.synthedOutput!;
+    }
+
+    // call preSynthesize() on every construct in the tree
+    preSynthesizeAllConstructs(this);
+
     // synthesize cdk.Stack files in `outdir/cdk.out`
     this.cdkApp.synth();
 
     const template = Template.fromStack(this.cdkStack);
-    return stringify(template.toJSON(), null, 2) ?? "";
+
+    this.synthed = true;
+    this.synthedOutput = stringify(template.toJSON(), null, 2) ?? "";
+    return this.synthedOutput;
   }
 }
