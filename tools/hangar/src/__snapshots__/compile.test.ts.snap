@@ -3066,8 +3066,7 @@ new MyApp().synth();"
 
 exports[`hello.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(message) { const { bucket } = this; {
-  (await bucket.put(\\"hello.txt\\",\`Hello, \${message}!\`));
-  return message;
+  (await bucket.put(\\"wing.txt\\",\`Hello, \${message}\`));
 } };"
 `;
 
@@ -3256,8 +3255,8 @@ constructor() {
   
   const bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
   const queue = new cloud.Queue(this,\\"cloud.Queue\\");
-  const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.a05c4d4842809464e34a3ca630f420646c038a9d145ef67e20f3f2fd3a937f94/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+  (queue.onMessage(new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.211d46e8ec3b5ce3e93872fcb29755356fb3566f5016eae5fcd6ec0f670ab580/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       resources: {
         bucket: {
@@ -3269,8 +3268,7 @@ constructor() {
         bucket: bucket,
       },
     }
-  });
-  (queue.onMessage(handler));
+  })));
 }
 }
 new MyApp().synth();"
@@ -4426,21 +4424,6 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`std_containers.w > wing compile --target tf-aws > index.js 1`] = `
-"async handle(body) { const { immut_array, immut_map, immut_set, s, s_array, s_map, s_set } = this; {
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s === \\"two\\")'\`)})((s === \\"two\\"))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await s_array.at(1)) === \\"two\\")'\`)})(((await s_array.at(1)) === \\"two\\"))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_array.length === 2)'\`)})((s_array.length === 2))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_array.length === 3)'\`)})((immut_array.length === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await s_set.has(\\"one\\"))'\`)})((await s_set.has(\\"one\\")))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_set.size === 2)'\`)})((s_set.size === 2))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_set.size === 3)'\`)})((immut_set.size === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await s_map.get(\\"one\\")) === 1)'\`)})(((await s_map.get(\\"one\\")) === 1))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_map.size === 2)'\`)})((s_map.size === 2))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_map.size === 3)'\`)})((immut_map.size === 3))};
-} };"
-`;
-
 exports[`std_containers.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
@@ -4497,21 +4480,179 @@ constructor() {
   (mut_map.set(\\"five\\",5));
   const immut_map = Object.freeze(new Map(mut_map));
   const s = (s_array.at(1));
-  const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2bccfc7c5a6cf0ff8a0697876fd0e9b788b71a4288792fab940ebf8241e8689b/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s === \\"two\\")'\`)})((s === \\"two\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s_array.at(1)) === \\"two\\")'\`)})(((s_array.at(1)) === \\"two\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_array.length === 2)'\`)})((s_array.length === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_array.length === 3)'\`)})((immut_array.length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_set.has(\\"one\\"))'\`)})((s_set.has(\\"one\\")))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_set.size === 2)'\`)})((s_set.size === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_set.size === 3)'\`)})((immut_set.size === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s_map.get(\\"one\\")) === 1)'\`)})(((s_map.get(\\"one\\")) === 1))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_map.size === 2)'\`)})((s_map.size === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_map.size === 3)'\`)})((immut_map.size === 3))};
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`std_string.w > wing compile --target tf-aws > index.js 1`] = `
+"async handle() { const { s1 } = this; {
+  {console.log(\`index of \\\\\\"s\\\\\\" in s1 is \${s1.indexOf(\\"s\\")}\`)};
+  {console.log((await (await s1.split(\\" \\")).at(1)))};
+} };"
+`;
+
+exports[`std_string.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_teststring_IamRole_A23B11BC": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:string/IamRole",
+            "uniqueId": "root_teststring_IamRole_A23B11BC",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_teststring_IamRolePolicy_E68C254E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:string/IamRolePolicy",
+            "uniqueId": "root_teststring_IamRolePolicy_E68C254E",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_teststring_IamRole_A23B11BC.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_teststring_IamRolePolicyAttachment_CF9D26FE": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:string/IamRolePolicyAttachment",
+            "uniqueId": "root_teststring_IamRolePolicyAttachment_CF9D26FE",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_teststring_IamRole_A23B11BC.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_teststring_0FD8A9C3": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:string/Default",
+            "uniqueId": "root_teststring_0FD8A9C3",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "test-string-c8b12930",
+          },
+        },
+        "function_name": "test-string-c8b12930",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_teststring_IamRole_A23B11BC.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_teststring_Code_042172E8.bucket}",
+        "s3_key": "\${aws_s3_object.root_teststring_S3Object_9049C921.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_teststring_Code_042172E8": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:string/Code",
+            "uniqueId": "root_teststring_Code_042172E8",
+          },
+        },
+        "bucket_prefix": "code-c8c4d274-",
+      },
+    },
+    "aws_s3_object": {
+      "root_teststring_S3Object_9049C921": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:string/S3Object",
+            "uniqueId": "root_teststring_S3Object_9049C921",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_teststring_Code_042172E8.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`std_string.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"std_string\\", plugins: $plugins });
+  
+  const s1 = \\"some string\\";
+  const s2 = \\"s are immutable\\";
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s1.length === 11)'\`)})((s1.length === 11))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s1.at(7)) === \\"r\\")'\`)})(((s1.at(7)) === \\"r\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: 's1.includes(\\"some\\")'\`)})(s1.includes(\\"some\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(!\\"some\\".includes(s1))'\`)})((!\\"some\\".includes(s1)))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: 's1.endsWith(\\"string\\")'\`)})(s1.endsWith(\\"string\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s1.indexOf(\\"s\\") === 0)'\`)})((s1.indexOf(\\"s\\") === 0))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"Some String\\".toLowerCase() === \\"some string\\")'\`)})((\\"Some String\\".toLowerCase() === \\"some string\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((s1.split(\\" \\")).at(0)) === \\"some\\")'\`)})((((s1.split(\\" \\")).at(0)) === \\"some\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: 's1.startsWith(\\"some\\")'\`)})(s1.startsWith(\\"some\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s1.substring(5)) === \\"string\\")'\`)})(((s1.substring(5)) === \\"string\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s1.substring(5,7)) === \\"st\\")'\`)})(((s1.substring(5,7)) === \\"st\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((\\"   some string   \\".trim()) === \\"some string\\")'\`)})(((\\"   some string   \\".trim()) === \\"some string\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"Some String\\".toUpperCase() === \\"SOME STRING\\")'\`)})((\\"Some String\\".toUpperCase() === \\"SOME STRING\\"))};
+  new cloud.Function(this,\\"test:string\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.354ccd03d617a49615e652e83b0212305b2dd6f2ba51a69bf34231da425967e5/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       
       data: {
-        immut_array: immut_array,
-        immut_map: immut_map,
-        immut_set: immut_set,
-        s: s,
-        s_array: s_array,
-        s_map: s_map,
-        s_set: s_set,
+        s1: s1,
       },
     }
-  });
+  }));
 }
 }
 new MyApp().synth();"
