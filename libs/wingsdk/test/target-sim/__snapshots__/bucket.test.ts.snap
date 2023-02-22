@@ -45,7 +45,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.245",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -62,7 +62,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.245",
           },
           "display": Object {
             "description": "A cloud object store",
@@ -74,7 +74,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.245",
       },
       "id": "root",
       "path": "root",
@@ -91,7 +91,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.245",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -108,7 +108,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.245",
           },
           "display": Object {
             "description": "A cloud object store",
@@ -120,7 +120,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.245",
       },
       "id": "root",
       "path": "root",
@@ -208,7 +208,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.245",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -225,7 +225,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.245",
           },
           "display": Object {
             "description": "A cloud object store",
@@ -237,7 +237,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.245",
       },
       "id": "root",
       "path": "root",
@@ -254,7 +254,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.245",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -271,7 +271,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.245",
           },
           "display": Object {
             "description": "A cloud object store",
@@ -283,7 +283,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.245",
       },
       "id": "root",
       "path": "root",
@@ -336,7 +336,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.245",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -353,7 +353,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.245",
           },
           "display": Object {
             "description": "A cloud object store",
@@ -365,7 +365,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.245",
       },
       "id": "root",
       "path": "root",
@@ -382,7 +382,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.245",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -399,7 +399,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.245",
           },
           "display": Object {
             "description": "A cloud object store",
@@ -411,7 +411,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.245",
       },
       "id": "root",
       "path": "root",

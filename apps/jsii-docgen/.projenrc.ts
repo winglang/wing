@@ -1,4 +1,5 @@
 const { typescript, javascript } = require("projen");
+const rootPackageJson = require("../../package.json");
 
 const project = new typescript.TypeScriptProject({
   name: "@winglang/jsii-docgen",
@@ -59,5 +60,9 @@ project.package.addPackageResolutions("@types/babel__traverse@7.18.2");
 project.testTask.reset(
   "jest --passWithNoTests --all --updateSnapshot --coverageProvider=v8 --testTimeout=30000"
 );
+
+project.addFields({
+  volta: rootPackageJson.volta,
+});
 
 project.synth();

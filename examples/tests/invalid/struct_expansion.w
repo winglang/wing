@@ -11,6 +11,7 @@ new cloud.Function(
   handler, 
   cloud.FunctionProps {
     env: Map<str> {},
-    timeout: 1m
+    timeout: 1m,
+    memory: 256
   }
 );

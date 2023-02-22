@@ -4,6 +4,8 @@ import {
   TextDocumentSyncKind,
   InitializeResult,
   CompletionItem,
+  DocumentSymbol,
+  Hover,
 } from "vscode-languageserver/node";
 
 import * as wingCompiler from "../wingc";
@@ -26,6 +28,8 @@ export async function run_server() {
         completionProvider: {
           triggerCharacters: ["."],
         },
+        hoverProvider: true,
+        documentSymbolProvider: true,
       },
     };
     return result;
@@ -47,17 +51,33 @@ export async function run_server() {
     ) as string;
     return JSON.parse(result) as CompletionItem[];
   });
-  connection.languages.semanticTokens.on(async (params) => {
+  connection.onDocumentSymbol(async (params) => {
     const result = wingCompiler.invoke(
       wingc,
-      "wingc_on_semantic_tokens",
+      "wingc_on_document_symbol",
       JSON.stringify(params)
-    ) as string;
-    return JSON.parse(result) as any;
+    );
+    if (result == 0) {
+      return null;
+    } else {
+      return JSON.parse(result as string) as DocumentSymbol[];
+    }
+  });
+  connection.onHover(async (params) => {
+    const result = wingCompiler.invoke(
+      wingc,
+      "wingc_on_hover",
+      JSON.stringify(params)
+    );
+    if (result == 0) {
+      return null;
+    } else {
+      return JSON.parse(result as string) as Hover;
+    }
   });
 
   /**
-   * This function is called by the WASM code to immediately 
+   * This function is called by the WASM code to immediately
    * send a notification to the client.
    */
   function send_notification(

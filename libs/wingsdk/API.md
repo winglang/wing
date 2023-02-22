@@ -1955,6 +1955,7 @@ let function_props = cloud.FunctionProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code>std.Duration</code> | The maximum amount of time the function can run. |
 
 ---
@@ -1969,6 +1970,19 @@ env: MutMap<str>;
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.FunctionProps.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- *Type:* num
+- *Default:* 128
+
+The amount of memory to allocate to the function, in MB.
 
 ---
 
@@ -2197,6 +2211,7 @@ let queue_on_message_props = cloud.QueueOnMessageProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.timeout">timeout</a></code> | <code>std.Duration</code> | The maximum amount of time the function can run. |
 | <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.batchSize">batch_size</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
 
@@ -2212,6 +2227,19 @@ env: MutMap<str>;
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.QueueOnMessageProps.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- *Type:* num
+- *Default:* 128
+
+The amount of memory to allocate to the function, in MB.
 
 ---
 
@@ -2305,6 +2333,7 @@ let schedule_on_tick_props = cloud.ScheduleOnTickProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout">timeout</a></code> | <code>std.Duration</code> | The maximum amount of time the function can run. |
 
 ---
@@ -2319,6 +2348,19 @@ env: MutMap<str>;
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.ScheduleOnTickProps.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- *Type:* num
+- *Default:* 128
+
+The amount of memory to allocate to the function, in MB.
 
 ---
 

@@ -103,6 +103,7 @@ export interface IBucketClient {
   /**
    * Retrieve an object from the bucket, if it exists.
    * @param key Key of the object.
+   * @throws if there is any error other than the object not existing.
    * @returns the object's body, if it exists
    * @inflight
    */
