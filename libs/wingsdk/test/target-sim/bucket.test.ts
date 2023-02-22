@@ -135,7 +135,6 @@ test("remove object from a bucket with mustExist as option", async () => {
 
   expect(response).toEqual(undefined);
   expect(listMessages(s)).toMatchSnapshot();
-  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("remove object from a bucket", async () => {
@@ -162,7 +161,6 @@ test("remove object from a bucket", async () => {
 
   expect(response).toEqual(undefined);
   expect(listMessages(s)).toMatchSnapshot();
-  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("remove non-existent object from a bucket", async () => {

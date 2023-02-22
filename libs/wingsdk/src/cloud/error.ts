@@ -1,7 +1,7 @@
 /**
  * Error thrown by a resource while running inflight code.
  */
-export class InflightError {
+export class InflightError extends Error {
   constructor(
     /** Error code */
     public readonly code: InflightErrorCode,
@@ -10,7 +10,7 @@ export class InflightError {
     /** Parent error, if any */
     public readonly cause?: any // Error
   ) {
-    // stub API, no implementation here is needed
+    super(message);
   }
 }
 
