@@ -41,9 +41,11 @@ export class Bucket extends cloud.BucketBase {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename.replace("awscdk", "tf-aws"), "BucketClient", [
-      `process.env["${this.envName()}"]`,
-    ]);
+    return core.InflightClient.for(
+      __filename.replace("awscdk", "tf-aws"),
+      "BucketClient",
+      [`process.env["${this.envName()}"]`]
+    );
   }
 
   private envName(): string {
