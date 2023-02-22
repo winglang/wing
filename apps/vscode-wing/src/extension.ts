@@ -25,6 +25,7 @@ export async function activate(context: ExtensionContext) {
 }
 
 async function startLanguageServer(context: ExtensionContext) {
+  const extVersion = context.extension.packageJSON.version;
   const configuredWingBin = workspace
     .getConfiguration()
     .get<string>(CFG_WING_BIN, "npx");
@@ -34,8 +35,8 @@ async function startLanguageServer(context: ExtensionContext) {
     // check if wing is installed
     const result = await which(wingBin, { nothrow: true });
     if (!result) {
-      const npmInstallOption = `Install via "npm install -g winglang@${context.extension.packageJSON.version}"`;
-      const npxOption = `Use "npx winglang"`;
+      const npmInstallOption = `Install globally with npm`;
+      const npxOption = `Use npx (not recommended)`;
       const choice = await window.showWarningMessage(
         `"${wingBin}" is not in PATH, please choose one of the following options to use the Wing language server`,
         npmInstallOption,
@@ -43,8 +44,9 @@ async function startLanguageServer(context: ExtensionContext) {
       );
 
       if (choice === npmInstallOption) {
-        execSync(
-          `npm install -g winglang@${context.extension.packageJSON.version}`
+        execSync(`npm install -g winglang@${extVersion}`);
+        void window.showInformationMessage(
+          `Wing v${extVersion} has been installed!`
         );
         wingBin = "wing";
       } else if (choice === npxOption) {
@@ -59,9 +61,7 @@ async function startLanguageServer(context: ExtensionContext) {
   }
 
   const args =
-    wingBin === "npx"
-      ? ["-y", "-q", `winglang@${context.extension.packageJSON.version}`, "lsp"]
-      : ["lsp"];
+    wingBin === "npx" ? ["-y", "-q", `winglang@${extVersion}`, "lsp"] : ["lsp"];
 
   const run: Executable = {
     command: wingBin,
