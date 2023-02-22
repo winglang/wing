@@ -38,7 +38,6 @@ impl<'a> FQN<'a> {
 
 	/// Returns the "assembly" part of the FQN. This is the name of the
 	/// JSII library or Wing library the type is defined in.
-	#[allow(dead_code)]
 	pub fn assembly(&self) -> &str {
 		self.0.split('.').next().unwrap()
 	}

@@ -125,20 +125,8 @@ impl<'a> JsiiImporter<'a> {
 					.as_object()
 					.expect("'elementtype' must be an object");
 
-				// TODO: Handle non-primitive collections
-				let primitive_type = element_type
-					.get("primitive")
-					.expect("non-primitive collection types are not yet supported")
-					.as_str()
-					.expect("'primitive' must be a string");
+				let wing_type = self.type_ref_to_wing_type(&Value::Object(element_type.clone()));
 
-				let wing_type = match primitive_type {
-					"string" => self.wing_types.string(),
-					"number" => self.wing_types.number(),
-					"boolean" => self.wing_types.bool(),
-					"any" => self.wing_types.anything(),
-					_ => panic!("Unsupported primitive type '{}'", primitive_type),
-				};
 				match collection_kind {
 					"array" => self.wing_types.add_type(Type::Array(wing_type)),
 					"map" => self.wing_types.add_type(Type::Map(wing_type)),
@@ -209,33 +197,48 @@ impl<'a> JsiiImporter<'a> {
 
 	fn setup_namespaces_for(&mut self, type_name: &FQN) {
 		// First, create a namespace in the Wing type system (if there isn't one already) corresponding to the JSII assembly
-		// the type belongs to. If we are importing a type from the root of the assembly, then we need to make sure
-		// the assembly namespace is visible. (Note that we never need to hide a namespace that has already been made visible).
-		let assembly_should_be_visible = type_name.namespaces().count() == 0;
-		if let Some(symb) = self.wing_types.libraries.try_lookup_mut(self.assembly_name, None) {
+		// the type belongs to.
+		debug!("Setting up namespaces for {}", type_name);
+
+		// Track whether the current namespace should be made visible. A compiler namespace should be made visible if it's
+		// the same-as or contained-within the corresponding jsii namespace the JsiiImporter is importing.
+		//
+		// For example, if self.assembly_name is libA and self.namespace_filter is ["ns1"] then that means a compiler
+		// namespace corresponding to libA.ns1 should be visible, as well as any namespaces that have to be created inside
+		// of it (like libA.ns1.ns2). All other compiler namespaces, like the namespace corresponding to libA, or namespaces
+		// corresponding to other libraries (like libB) can be hidden by default.
+		//
+		// TODO: this can probably be removed (https://github.com/winglang/wing/issues/1487)
+		let type_name_matches_filter =
+			type_name.assembly() == self.assembly_name && type_name.is_in_namespace(&self.namespace_filter);
+		let mut should_be_visible = type_name_matches_filter && self.namespace_filter.len() == 0;
+
+		if let Some(symb) = self.wing_types.libraries.try_lookup_mut(type_name.assembly(), None) {
 			if let SymbolKind::Namespace(ns) = symb {
 				// If this namespace is already imported but hidden then unhide it if it's being explicitly imported
-				if ns.hidden && assembly_should_be_visible {
+				if ns.hidden && should_be_visible {
 					ns.hidden = false;
 				}
 			} else {
 				// TODO: make this a proper error
 				panic!(
 					"Tried importing {} but {} already defined as a {}",
-					type_name, self.assembly_name, symb
+					type_name,
+					type_name.assembly(),
+					symb
 				)
 			}
 		} else {
 			let ns = self.wing_types.add_namespace(Namespace {
-				name: self.assembly_name.to_string(),
-				hidden: !assembly_should_be_visible,
+				name: type_name.assembly().to_string(),
+				hidden: !should_be_visible,
 				env: SymbolEnv::new(None, self.wing_types.void(), false, false, self.env.flight, 0),
 			});
 			self
 				.wing_types
 				.libraries
 				.define(
-					&Symbol::global(self.assembly_name),
+					&Symbol::global(type_name.assembly()),
 					SymbolKind::Namespace(ns),
 					StatementIdx::Top,
 				)
@@ -246,7 +249,7 @@ impl<'a> JsiiImporter<'a> {
 
 		// Next, ensure there is a namespace for each of the namespaces in the type name
 		for (ns_idx, namespace_name) in type_name.namespaces().enumerate() {
-			let mut lookup_str = vec![self.assembly_name];
+			let mut lookup_str = vec![type_name.assembly()];
 			lookup_str.extend(type_name.namespaces().take(ns_idx));
 			let lookup_str = lookup_str.join(".");
 
@@ -258,11 +261,12 @@ impl<'a> JsiiImporter<'a> {
 				.as_namespace_ref()
 				.unwrap();
 
-			let namespace_should_be_visible = ns_idx + 1 == type_name.namespaces().count();
+			should_be_visible =
+				type_name_matches_filter && (should_be_visible | (ns_idx + 1 == self.namespace_filter.len()) as bool);
 			if let Some(symb) = parent_ns.env.try_lookup_mut(namespace_name, None) {
 				if let SymbolKind::Namespace(ns) = symb {
 					// If this namespace is already imported but hidden then unhide it if it's being explicitly imported
-					if ns.hidden && namespace_should_be_visible {
+					if ns.hidden && should_be_visible {
 						ns.hidden = false;
 					}
 				} else {
@@ -275,7 +279,7 @@ impl<'a> JsiiImporter<'a> {
 			} else {
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: namespace_name.to_string(),
-					hidden: !namespace_should_be_visible,
+					hidden: !should_be_visible,
 					env: SymbolEnv::new(
 						Some(parent_ns.env.get_ref()),
 						self.wing_types.void(),
@@ -319,7 +323,26 @@ impl<'a> JsiiImporter<'a> {
 				}
 			}
 			_ => {
-				debug!("The JSII interface {} is not a \"datatype\", skipping", type_name);
+				// We import the interface as an any type
+				// TODO: fix once the compiler supports interfaces (https://github.com/winglang/wing/issues/123)
+				let new_type_symbol = Self::jsii_name_to_symbol(&type_name, &jsii_interface.location_in_module);
+				let mut ns = self
+					.wing_types
+					.libraries
+					.lookup_nested_mut_str(jsii_interface_fqn.as_str_without_type_name(), true, None)
+					.unwrap()
+					.as_namespace_ref()
+					.unwrap();
+				ns.env
+					.define(
+						&new_type_symbol,
+						SymbolKind::Type(self.wing_types.anything()),
+						StatementIdx::Top,
+					)
+					.expect(&format!(
+						"Invalid JSII library: failed to define struct type {}",
+						type_name
+					));
 				return;
 			}
 		}
@@ -615,13 +638,14 @@ impl<'a> JsiiImporter<'a> {
 		} else {
 			Type::Class(class_spec)
 		});
+		let ns_str = jsii_class_fqn.as_str_without_type_name();
 		let mut ns = self
 			.wing_types
 			.libraries
-			.lookup_nested_mut_str(jsii_class_fqn.as_str_without_type_name(), true, None)
-			.unwrap()
+			.lookup_nested_mut_str(ns_str, true, None)
+			.expect(&format!("Failed to find namespace \"{}\"", &ns_str))
 			.as_namespace_ref()
-			.unwrap();
+			.expect("Symbol was not a namespace");
 		ns.env
 			.define(&new_type_symbol, SymbolKind::Type(new_type), StatementIdx::Top)
 			.expect(&format!("Invalid JSII library: failed to define class {}", type_name));
