@@ -41,14 +41,13 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		if self.is_found() {
 			return;
 		}
+		let last_scope = self.current_scope;
+		self.current_scope = Some(node);
 		for stmt in &node.statements {
-			let last_scope = self.current_scope;
-			self.current_scope = Some(node);
 			self.visit_stmt(stmt);
-
-			if !self.is_found() {
-				self.current_scope = last_scope;
-			}
+		}
+		if !self.is_found() {
+			self.current_scope = last_scope;
 		}
 	}
 
