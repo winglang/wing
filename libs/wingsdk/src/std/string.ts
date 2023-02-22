@@ -134,7 +134,7 @@ export class String {
   /**
    * Returns this string in upper case.
    *
-   * @macro $self$.toUpperCase()
+   * @macro $self$.toLocaleUpperCase()
    *
    * @returns a new upper case string.
    */
