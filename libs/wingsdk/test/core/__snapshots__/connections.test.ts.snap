@@ -1,0 +1,294 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`create a bucket 1`] = `
+Object {
+  "app.wsim/simulator.json": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/my_bucket",
+        "props": Object {
+          "initialObjects": Object {},
+          "public": false,
+        },
+        "type": "wingsdk.cloud.Bucket",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/my_function",
+        "props": Object {
+          "environmentVariables": Object {
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+          },
+          "sourceCodeFile": "assets/my_function_c85c4e0e/index.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "app.wsim/tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "Handler": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": Object {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/my_function",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+        "my_bucket": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "relationship",
+                "resource": "root/my_function",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
+          },
+          "id": "my_bucket",
+          "path": "root/my_bucket",
+        },
+        "my_function": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/WingLogger",
+              },
+              Object {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "relationship",
+                "resource": "root/my_bucket",
+              },
+            ],
+            "wing:resource:stateful": false,
+          },
+          "children": Object {
+            "Code": Object {
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "id": "Code",
+              "path": "root/my_function/Code",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": Object {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "my_function",
+          "path": "root/my_function",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.1.245",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+  "assets/my_function_c85c4e0e/index.js": "var $logger = function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+}(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await new (function() {
+    return class Handler {
+      constructor(clients) {
+        for (const [name, client] of Object.entries(clients)) {
+          this[name] = client;
+        }
+      }
+      async handle() {
+        return \\"hello\\";
+      }
+    };
+  }())({}).handle(event);
+};
+",
+  "tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "Handler": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": Object {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/my_function",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+        "my_bucket": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "relationship",
+                "resource": "root/my_function",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
+          },
+          "id": "my_bucket",
+          "path": "root/my_bucket",
+        },
+        "my_function": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/WingLogger",
+              },
+              Object {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "relationship",
+                "resource": "root/my_bucket",
+              },
+            ],
+            "wing:resource:stateful": false,
+          },
+          "children": Object {
+            "Code": Object {
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "id": "Code",
+              "path": "root/my_function/Code",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": Object {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "my_function",
+          "path": "root/my_function",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.1.245",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;

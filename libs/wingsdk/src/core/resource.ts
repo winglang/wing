@@ -82,18 +82,42 @@ export abstract class Resource extends Construct implements IResource {
     const from = props.from;
     const to = props.to;
     const implicit = props.implicit ?? false;
-    from._connections.push({
+
+    const fromConnection = {
       resource: to,
       relationship: props.relationship,
       direction: Direction.OUTBOUND,
       implicit,
-    });
-    to._connections.push({
+    };
+    if (
+      !from._connections.some(
+        (c) =>
+          c.resource === fromConnection.resource &&
+          c.relationship === fromConnection.relationship &&
+          c.direction === fromConnection.direction &&
+          c.implicit === fromConnection.implicit
+      )
+    ) {
+      from._connections.push(fromConnection);
+    }
+
+    const toConnection = {
       resource: from,
       relationship: props.relationship,
       direction: Direction.INBOUND,
       implicit,
-    });
+    };
+    if (
+      !to._connections.some(
+        (c) =>
+          c.resource === toConnection.resource &&
+          c.relationship === toConnection.relationship &&
+          c.direction === toConnection.direction &&
+          c.implicit === toConnection.implicit
+      )
+    ) {
+      to._connections.push(toConnection);
+    }
   }
 
   /**
