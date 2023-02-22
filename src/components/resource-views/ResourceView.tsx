@@ -37,5 +37,5 @@ export const ResourceView = ({
     }
   };
 
-  return <div className={"flex-1 flex w-full"}>{getResourceView()}</div>;
+  return <div className="flex-1 flex w-full">{getResourceView()}</div>;
 };
