@@ -3773,12 +3773,12 @@ new std.String()
 | <code><a href="#@winglang/sdk.std.String.contains">contains</a></code> | Checks if string includes substring. |
 | <code><a href="#@winglang/sdk.std.String.ends">ends</a></code> | Does this string end with the given searchString? |
 | <code><a href="#@winglang/sdk.std.String.indexOf">index_of</a></code> | Returns the index of the first occurrence of searchString found. |
-| <code><a href="#@winglang/sdk.std.String.lCase">l_case</a></code> | Returns this string in lower case. |
+| <code><a href="#@winglang/sdk.std.String.lowercase">lowercase</a></code> | Returns this string in lower case. |
 | <code><a href="#@winglang/sdk.std.String.split">split</a></code> | Splits string by separator. |
 | <code><a href="#@winglang/sdk.std.String.starts">starts</a></code> | Does this string start with the given searchString? |
 | <code><a href="#@winglang/sdk.std.String.substring">substring</a></code> | Returns a string between indexStart, indexEnd. |
 | <code><a href="#@winglang/sdk.std.String.trim">trim</a></code> | Removes white spaces from start and end of this string. |
-| <code><a href="#@winglang/sdk.std.String.uCase">u_case</a></code> | Returns this string in upper case. |
+| <code><a href="#@winglang/sdk.std.String.uppercase">uppercase</a></code> | Returns this string in upper case. |
 
 ---
 
@@ -3862,10 +3862,10 @@ substring to search for.
 
 ---
 
-##### `l_case` <a name="l_case" id="@winglang/sdk.std.String.lCase"></a>
+##### `lowercase` <a name="lowercase" id="@winglang/sdk.std.String.lowercase"></a>
 
 ```wing
-l_case(): str
+lowercase(): str
 ```
 
 Returns this string in lower case.
@@ -3934,10 +3934,10 @@ trim(): str
 
 Removes white spaces from start and end of this string.
 
-##### `u_case` <a name="u_case" id="@winglang/sdk.std.String.uCase"></a>
+##### `uppercase` <a name="uppercase" id="@winglang/sdk.std.String.uppercase"></a>
 
 ```wing
-u_case(): str
+uppercase(): str
 ```
 
 Returns this string in upper case.
