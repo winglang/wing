@@ -41,8 +41,12 @@ const project = new TypeScriptAppProject({
     },
   },
 
-  deps: [`@types/vscode@^${VSCODE_BASE_VERSION}`, "vscode-languageclient"],
-  devDeps: ["@types/node", "esbuild", "@vscode/vsce"],
+  deps: [
+    `@types/vscode@^${VSCODE_BASE_VERSION}`,
+    "vscode-languageclient",
+    "which",
+  ],
+  devDeps: ["@types/node", "@types/which", "esbuild", "@vscode/vsce"],
 });
 
 project.addGitIgnore("*.vsix");
@@ -88,6 +92,19 @@ const contributes: VSCodeExtensionContributions = {
       injectTo: ["text.html.markdown"],
       embeddedLanguages: {
         "meta.embedded.block.wing": "wing",
+      },
+    },
+  ],
+  configuration: [
+    {
+      title: "Wing CLI Location",
+      properties: {
+        "wing.bin": {
+          type: "string",
+          default: "wing",
+          description:
+            "Path to the Wing binary. Will be `wing` from PATH by default.\nSet to `npx` to automatically retrieve the version that matches this extension",
+        },
       },
     },
   ],

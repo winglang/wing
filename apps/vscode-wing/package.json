@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@types/node": "^14",
+    "@types/which": "^2.0.2",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "@vscode/vsce": "^2.16.0",
@@ -47,7 +48,8 @@
   },
   "dependencies": {
     "@types/vscode": "^1.70.0",
-    "vscode-languageclient": "^8.0.2"
+    "vscode-languageclient": "^8.0.2",
+    "which": "^2.0.2"
   },
   "keywords": [
     "cdk",
@@ -111,6 +113,18 @@
         ],
         "embeddedLanguages": {
           "meta.embedded.block.wing": "wing"
+        }
+      }
+    ],
+    "configuration": [
+      {
+        "title": "Wing CLI Location",
+        "properties": {
+          "wing.bin": {
+            "type": "string",
+            "default": "wing",
+            "description": "Path to the Wing binary. Will be `wing` from PATH by default.\nSet to `npx` to automatically retrieve the version that matches this extension"
+          }
         }
       }
     ]

@@ -1,4 +1,3 @@
-mod ast_traversal;
 mod completions;
 mod document_symbols;
 mod hover;

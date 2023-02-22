@@ -1,6 +1,6 @@
 use crate::ast::{
 	ArgList, Class, Constructor, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Reference, Scope,
-	Stmt, StmtKind,
+	Stmt, StmtKind, Symbol, TypeAnnotation,
 };
 
 /// Visitor pattern inspired by implementation from https://docs.rs/syn/latest/syn/visit/index.html
@@ -56,6 +56,10 @@ pub trait Visit<'ast> {
 	fn visit_args(&mut self, node: &'ast ArgList) {
 		visit_args(self, node);
 	}
+	fn visit_type_annotation(&mut self, node: &'ast TypeAnnotation) {
+		visit_type_annotation(self, node)
+	}
+	fn visit_symbol(&mut self, _node: &'ast Symbol) {}
 }
 
 pub fn visit_scope<'ast, V>(v: &mut V, node: &'ast Scope)
@@ -73,24 +77,36 @@ where
 {
 	match &node.kind {
 		StmtKind::Bring {
-			module_name: _,
-			identifier: _,
-		} => {}
+			module_name,
+			identifier,
+		} => {
+			v.visit_symbol(module_name);
+			if let Some(identifier) = identifier {
+				v.visit_symbol(identifier);
+			}
+		}
 		StmtKind::VariableDef {
 			reassignable: _,
-			var_name: _,
+			var_name,
 			initial_value,
-			type_: _,
+			type_,
 		} => {
+			v.visit_symbol(var_name);
+			if let Some(type_) = type_ {
+				v.visit_type_annotation(type_);
+			}
 			v.visit_expr(initial_value);
 		}
 		StmtKind::ForLoop {
-			iterator: _,
+			iterator,
 			iterable,
 			statements,
 		} => {
 			v.visit_expr(iterable);
 			v.visit_scope(statements);
+
+			// Note: The iterator is defined in the inner scope, so it is not visited in depth-first order
+			v.visit_symbol(iterator);
 		}
 		StmtKind::While { condition, statements } => {
 			v.visit_expr(condition);
@@ -130,12 +146,22 @@ where
 		StmtKind::Class(class) => {
 			v.visit_class(class);
 		}
-		StmtKind::Struct {
-			name: _,
-			extends: _,
-			members: _,
-		} => {}
-		StmtKind::Enum { name: _, values: _ } => {}
+		StmtKind::Struct { name, extends, members } => {
+			v.visit_symbol(name);
+			for extend in extends {
+				v.visit_symbol(extend);
+			}
+			for member in members {
+				v.visit_symbol(&member.name);
+				v.visit_type_annotation(&member.member_type);
+			}
+		}
+		StmtKind::Enum { name, values } => {
+			v.visit_symbol(name);
+			for value in values {
+				v.visit_symbol(value);
+			}
+		}
 		StmtKind::TryCatch {
 			try_statements,
 			catch_block,
@@ -144,6 +170,11 @@ where
 			v.visit_scope(try_statements);
 			if let Some(catch_block) = catch_block {
 				v.visit_scope(&catch_block.statements);
+
+				// Note: This symbol is defined in the catch block's scope, so its node is not visited in depth-first order
+				if let Some(exception_var) = &catch_block.exception_var {
+					v.visit_symbol(exception_var);
+				}
 			}
 			if let Some(finally_statements) = finally_statements {
 				v.visit_scope(finally_statements);
@@ -156,8 +187,17 @@ pub fn visit_class<'ast, V>(v: &mut V, node: &'ast Class)
 where
 	V: Visit<'ast> + ?Sized,
 {
+	v.visit_symbol(&node.name);
+
 	v.visit_constructor(&node.constructor);
+
+	for field in &node.fields {
+		v.visit_symbol(&field.name);
+		v.visit_type_annotation(&field.member_type);
+	}
+
 	for method in &node.methods {
+		v.visit_symbol(&method.0);
 		v.visit_function_definition(&method.1);
 	}
 }
@@ -166,6 +206,16 @@ pub fn visit_constructor<'ast, V>(v: &mut V, node: &'ast Constructor)
 where
 	V: Visit<'ast> + ?Sized,
 {
+	for param in &node.parameters {
+		v.visit_symbol(&param.0);
+	}
+	for param_type in &node.signature.parameters {
+		v.visit_type_annotation(param_type);
+	}
+	if let Some(return_type) = &node.signature.return_type {
+		v.visit_type_annotation(return_type);
+	}
+
 	v.visit_scope(&node.statements);
 }
 
@@ -175,11 +225,12 @@ where
 {
 	match &node.kind {
 		ExprKind::New {
-			class: _,
+			class,
 			obj_id: _,
 			obj_scope,
 			arg_list,
 		} => {
+			v.visit_type_annotation(class);
 			if let Some(scope) = obj_scope {
 				v.visit_expr(scope);
 			}
@@ -202,22 +253,32 @@ where
 			v.visit_expr(left);
 			v.visit_expr(right);
 		}
-		ExprKind::ArrayLiteral { type_: _, items } => {
+		ExprKind::ArrayLiteral { type_, items } => {
+			if let Some(type_) = type_ {
+				v.visit_type_annotation(type_);
+			}
 			for item in items {
 				v.visit_expr(item);
 			}
 		}
-		ExprKind::StructLiteral { type_: _, fields } => {
+		ExprKind::StructLiteral { type_, fields } => {
+			v.visit_type_annotation(type_);
 			for val in fields.values() {
 				v.visit_expr(val);
 			}
 		}
-		ExprKind::MapLiteral { type_: _, fields } => {
+		ExprKind::MapLiteral { type_, fields } => {
+			if let Some(type_) = type_ {
+				v.visit_type_annotation(type_);
+			}
 			for val in fields.values() {
 				v.visit_expr(val);
 			}
 		}
-		ExprKind::SetLiteral { type_: _, items } => {
+		ExprKind::SetLiteral { type_, items } => {
+			if let Some(type_) = type_ {
+				v.visit_type_annotation(type_);
+			}
 			for item in items {
 				v.visit_expr(item);
 			}
@@ -252,10 +313,13 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match node {
-		Reference::NestedIdentifier { property: _, object } => {
+		Reference::NestedIdentifier { property, object } => {
 			v.visit_expr(object);
+			v.visit_symbol(property);
 		}
-		Reference::Identifier(_) => {}
+		Reference::Identifier(s) => {
+			v.visit_symbol(s);
+		}
 	}
 }
 
@@ -263,6 +327,16 @@ pub fn visit_function_definition<'ast, V>(v: &mut V, node: &'ast FunctionDefinit
 where
 	V: Visit<'ast> + ?Sized,
 {
+	for param in &node.parameters {
+		v.visit_symbol(&param.0);
+	}
+	for param_type in &node.signature.parameters {
+		v.visit_type_annotation(param_type);
+	}
+	if let Some(return_type) = &node.signature.return_type {
+		v.visit_type_annotation(return_type);
+	}
+
 	v.visit_scope(&node.statements);
 }
 
@@ -274,6 +348,40 @@ where
 		v.visit_expr(&arg);
 	}
 	for arg in &node.named_args {
+		v.visit_symbol(&arg.0);
 		v.visit_expr(&arg.1);
+	}
+}
+
+pub fn visit_type_annotation<'ast, V>(v: &mut V, node: &'ast TypeAnnotation)
+where
+	V: Visit<'ast> + ?Sized,
+{
+	match node {
+		TypeAnnotation::Number => {}
+		TypeAnnotation::String => {}
+		TypeAnnotation::Bool => {}
+		TypeAnnotation::Duration => {}
+		TypeAnnotation::Optional(t) => v.visit_type_annotation(t),
+		TypeAnnotation::Array(t) => v.visit_type_annotation(t),
+		TypeAnnotation::MutArray(t) => v.visit_type_annotation(t),
+		TypeAnnotation::Map(t) => v.visit_type_annotation(t),
+		TypeAnnotation::MutMap(t) => v.visit_type_annotation(t),
+		TypeAnnotation::Set(t) => v.visit_type_annotation(t),
+		TypeAnnotation::MutSet(t) => v.visit_type_annotation(t),
+		TypeAnnotation::FunctionSignature(f) => {
+			for arg_type in &f.parameters {
+				v.visit_type_annotation(&arg_type);
+			}
+			if let Some(return_type) = &f.return_type {
+				v.visit_type_annotation(return_type);
+			}
+		}
+		TypeAnnotation::UserDefined(t) => {
+			v.visit_symbol(&t.root);
+			for field in &t.fields {
+				v.visit_symbol(field);
+			}
+		}
 	}
 }
