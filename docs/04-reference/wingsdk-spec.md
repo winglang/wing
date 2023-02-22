@@ -612,6 +612,12 @@ resource Counter {
    * @default - key: "default"
    */
   inflight peek(key: string?): number;
+
+  /**
+   * Reset a counter to a given value.
+   * @default - key: "default"
+   */
+  inflight reset(value: num, key: string?): void;
 }
 ```
 
