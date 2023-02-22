@@ -286,6 +286,75 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`bring_cdktf.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_s3_bucket": {
+      "root_Bucket_966015A6": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Bucket",
+            "uniqueId": "root_Bucket_966015A6",
+          },
+        },
+        "bucket_prefix": "hello",
+        "versioning": {
+          "enabled": true,
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`bring_cdktf.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const aws = require(\\"@cdktf/provider-aws\\");
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"bring_cdktf\\", plugins: $plugins });
+  
+  new aws.s3Bucket.S3Bucket(this,\\"Bucket\\",{ bucketPrefix: \\"hello\\", versioning: {
+  \\"enabled\\": true,
+  \\"mfa_delete\\": true,}
+   });
+}
+}
+new MyApp().synth();"
+`;
+
 exports[`bring_fs.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
