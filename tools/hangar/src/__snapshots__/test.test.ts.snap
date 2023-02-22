@@ -4,6 +4,8 @@ exports[`anon_function.w > wing test --target sim > stdout 1`] = `"<green>pass</
 
 exports[`asynchronous_model_implicit_await_in_functions.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> asynchronous_model_implicit_await_in_functions.w <gray>(no tests)</color>"`;
 
+exports[`bring_cdktf.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> bring_cdktf.w <gray>(no tests)</color>"`;
+
 exports[`bring_fs.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> bring_fs.w <gray>(no tests)</color>"`;
 
 exports[`bring_jsii.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> bring_jsii.w <gray>»</color> <brightWhite>root/test:say_hello</color>"`;

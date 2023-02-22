@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "jsii-code-samples": "1.7.0"
+    "jsii-code-samples": "1.7.0",
+    "@cdktf/provider-aws": "12.0.5"
   },
   "volta": {
     "node": "18.12.1",
