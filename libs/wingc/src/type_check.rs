@@ -153,11 +153,6 @@ const WING_CONSTRUCTOR_NAME: &'static str = "init";
 pub struct Namespace {
 	pub name: String,
 
-	// When `true` this namespace contains symbols that can't be explicitly accessed from the code.
-	// While the internals of imported modules might still need these symbols (and types) to be
-	// available to them.
-	pub hidden: bool,
-
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
 }
@@ -1998,11 +1993,7 @@ impl<'a> TypeChecker<'a> {
 		original_fqn: &str,
 		type_params: Vec<TypeRef>,
 	) -> TypeRef {
-		let original_type = env
-			.lookup_nested_str(original_fqn, true, None)
-			.unwrap()
-			.as_type()
-			.unwrap();
+		let original_type = env.lookup_nested_str(original_fqn, None).unwrap().as_type().unwrap();
 		let original_type_class = original_type.as_class().unwrap();
 		let original_type_params = if let Some(tp) = original_type_class.type_parameters.as_ref() {
 			tp
@@ -2167,7 +2158,7 @@ impl<'a> TypeChecker<'a> {
 			}
 		}
 		path.reverse();
-		match env.lookup_nested(&path, false, Some(statement_idx)) {
+		match env.lookup_nested(&path, Some(statement_idx)) {
 			Ok(SymbolKind::Type(type_ref)) => Some(*type_ref),
 			_ => None,
 		}
@@ -2264,7 +2255,7 @@ impl<'a> TypeChecker<'a> {
 					}
 					Type::String => self.get_property_from_class(
 						env
-							.lookup_nested_str(WINGSDK_STRING, false, None)
+							.lookup_nested_str(WINGSDK_STRING, None)
 							.unwrap()
 							.as_type()
 							.unwrap()
@@ -2274,7 +2265,7 @@ impl<'a> TypeChecker<'a> {
 					),
 					Type::Duration => self.get_property_from_class(
 						env
-							.lookup_nested_str(WINGSDK_DURATION, false, None)
+							.lookup_nested_str(WINGSDK_DURATION, None)
 							.unwrap()
 							.as_type()
 							.unwrap()
@@ -2395,7 +2386,7 @@ pub fn resolve_user_defined_type(
 	let mut nested_name = vec![&user_defined_type.root];
 	nested_name.extend(user_defined_type.fields.iter().collect_vec());
 
-	match env.lookup_nested(&nested_name, false, Some(statement_idx)) {
+	match env.lookup_nested(&nested_name, Some(statement_idx)) {
 		Ok(_type) => {
 			if let SymbolKind::Type(t) = *_type {
 				Ok(t)
