@@ -2879,99 +2879,6 @@ Creates a `Code` instance with code for creating an inflight client.
 
 
 
-### InflightError <a name="InflightError" id="@winglang/sdk.cloud.InflightError"></a>
-
-Error thrown by a resource while running inflight code.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.InflightError.Initializer"></a>
-
-```wing
-bring cloud;
-
-new cloud.InflightError(code: InflightErrorCode, message: str, cause?: any)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.InflightError.Initializer.parameter.code">code</a></code> | <code>cloud.InflightErrorCode</code> | Error code. |
-| <code><a href="#@winglang/sdk.cloud.InflightError.Initializer.parameter.message">message</a></code> | <code>str</code> | Human-readable error message. |
-| <code><a href="#@winglang/sdk.cloud.InflightError.Initializer.parameter.cause">cause</a></code> | <code>any</code> | Parent error, if any. |
-
----
-
-##### `code`<sup>Required</sup> <a name="code" id="@winglang/sdk.cloud.InflightError.Initializer.parameter.code"></a>
-
-- *Type:* cloud.InflightErrorCode
-
-Error code.
-
----
-
-##### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.InflightError.Initializer.parameter.message"></a>
-
-- *Type:* str
-
-Human-readable error message.
-
----
-
-##### `cause`<sup>Optional</sup> <a name="cause" id="@winglang/sdk.cloud.InflightError.Initializer.parameter.cause"></a>
-
-- *Type:* any
-
-Parent error, if any.
-
----
-
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.InflightError.property.code">code</a></code> | <code>cloud.InflightErrorCode</code> | Error code. |
-| <code><a href="#@winglang/sdk.cloud.InflightError.property.message">message</a></code> | <code>str</code> | Human-readable error message. |
-| <code><a href="#@winglang/sdk.cloud.InflightError.property.cause">cause</a></code> | <code>any</code> | Parent error, if any. |
-
----
-
-##### `code`<sup>Required</sup> <a name="code" id="@winglang/sdk.cloud.InflightError.property.code"></a>
-
-```wing
-code: InflightErrorCode;
-```
-
-- *Type:* cloud.InflightErrorCode
-
-Error code.
-
----
-
-##### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.InflightError.property.message"></a>
-
-```wing
-message: str;
-```
-
-- *Type:* str
-
-Human-readable error message.
-
----
-
-##### `cause`<sup>Optional</sup> <a name="cause" id="@winglang/sdk.cloud.InflightError.property.cause"></a>
-
-```wing
-cause: any;
-```
-
-- *Type:* any
-
-Parent error, if any.
-
----
-
-
 ### NodeJsCode <a name="NodeJsCode" id="@winglang/sdk.core.NodeJsCode"></a>
 
 Reference to a piece of Node.js code.
@@ -3967,25 +3874,6 @@ Indicates that this resource calls, triggers, or references the resource it is c
 ##### `INBOUND` <a name="INBOUND" id="@winglang/sdk.core.Direction.INBOUND"></a>
 
 Indicates that this resource is called, triggered, or referenced by the resource it is connected to.
-
----
-
-
-### InflightErrorCode <a name="InflightErrorCode" id="@winglang/sdk.cloud.InflightErrorCode"></a>
-
-Error codes for `InflightError`.
-
-#### Members <a name="Members" id="Members"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.cloud.InflightErrorCode.NOT_FOUND">NOT_FOUND</a></code> | Indicates that a resource was not found. |
-
----
-
-##### `NOT_FOUND` <a name="NOT_FOUND" id="@winglang/sdk.cloud.InflightErrorCode.NOT_FOUND"></a>
-
-Indicates that a resource was not found.
 
 ---
 
