@@ -19,7 +19,11 @@ export class Logger extends cloud.LoggerBase {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename.replace("awscdk", "tf-aws"), "LoggerClient", []);
+    return core.InflightClient.for(
+      __filename.replace("awscdk", "tf-aws"),
+      "LoggerClient",
+      []
+    );
   }
 }
 
