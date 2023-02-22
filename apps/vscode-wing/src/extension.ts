@@ -1,6 +1,6 @@
-import { execSync } from "child_process";
+import { exec } from "child_process";
 import { env } from "process";
-import { ExtensionContext, window, workspace } from "vscode";
+import { ExtensionContext, ProgressLocation, window, workspace } from "vscode";
 import {
   Executable,
   LanguageClient,
@@ -27,36 +27,55 @@ export async function activate(context: ExtensionContext) {
 async function startLanguageServer(context: ExtensionContext) {
   const extVersion = context.extension.packageJSON.version;
   const configuredWingBin = workspace
-    .getConfiguration()
-    .get<string>(CFG_WING_BIN, "npx");
+    .getConfiguration("wing")
+    .get<string>(CFG_WING_BIN, "wing");
   let wingBin = env.WING_BIN ?? configuredWingBin;
 
   if (wingBin !== "npx") {
     // check if wing is installed
-    const result = await which(wingBin, { nothrow: true });
+    const result = which.sync(wingBin, { nothrow: true });
     if (!result) {
       const npmInstallOption = `Install globally with npm`;
-      const npxOption = `Use npx (not recommended)`;
       const choice = await window.showWarningMessage(
         `"${wingBin}" is not in PATH, please choose one of the following options to use the Wing language server`,
-        npmInstallOption,
-        npxOption
+        npmInstallOption
       );
 
       if (choice === npmInstallOption) {
-        execSync(`npm install -g winglang@${extVersion}`);
-        void window.showInformationMessage(
-          `Wing v${extVersion} has been installed!`
+        await window.withProgress(
+          {
+            location: ProgressLocation.Notification,
+            cancellable: false,
+          },
+          async (progress) => {
+            progress.report({ message: `Installing Wing v${extVersion}...` });
+            return new Promise((resolve, reject) => {
+              exec(`npm install -g winglang@${extVersion}`, (error, stdout) => {
+                if (error) {
+                  reject(error);
+                } else {
+                  resolve(stdout);
+                }
+              });
+            })
+              .then(() => {
+                wingBin = "wing";
+                void window.showInformationMessage(
+                  `Wing v${extVersion} has been installed!`
+                );
+              })
+              .catch((e) => {
+                void window.showErrorMessage(
+                  `Failed to install Wing v${extVersion}: ${e}`
+                );
+                wingBin = "npx";
+              });
+          }
         );
-        wingBin = "wing";
-      } else if (choice === npxOption) {
-        wingBin = "npx";
       } else {
         // User decided to ignore the warning
         return;
       }
-    } else {
-      wingBin = result;
     }
   }
 

@@ -97,7 +97,7 @@ const contributes: VSCodeExtensionContributions = {
   ],
   configuration: [
     {
-      title: "Wing CLI Location",
+      title: "Wing",
       properties: {
         "wing.bin": {
           type: "string",
