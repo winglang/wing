@@ -4,12 +4,8 @@ import { join } from "path";
 import { ISimulatorResourceInstance } from "./resource";
 import { BucketSchema } from "./schema-resources";
 import { exists } from "./util";
-import {
-  BucketClientBase,
-  BucketDeleteOptions,
-  InflightError,
-  InflightErrorCode,
-} from "../cloud";
+import { BucketClientBase, BucketDeleteOptions } from "../cloud";
+import { InflightError, InflightErrorCode } from "../cloud/error";
 import { ISimulatorContext } from "../testing/simulator";
 
 export class Bucket

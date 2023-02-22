@@ -14,19 +14,6 @@ export class InflightError {
   }
 }
 
-// hack so that `InflightError` extends `Error` even though JSII doesn't allow this
-exports.InflightError = (function () {
-  return class extends Error {
-    constructor(
-      public readonly code: InflightErrorCode,
-      public readonly message: string,
-      public readonly cause?: any
-    ) {
-      super(message);
-    }
-  };
-})();
-
 /**
  * Error codes for `InflightError`.
  */

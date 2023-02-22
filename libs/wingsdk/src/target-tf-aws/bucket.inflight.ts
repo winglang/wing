@@ -9,12 +9,8 @@ import {
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
-import {
-  BucketClientBase,
-  BucketDeleteOptions,
-  InflightError,
-  InflightErrorCode,
-} from "../cloud";
+import { BucketClientBase, BucketDeleteOptions } from "../cloud";
+import { InflightError, InflightErrorCode } from "../cloud/error";
 
 export class BucketClient extends BucketClientBase {
   constructor(
