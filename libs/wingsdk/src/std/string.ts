@@ -64,6 +64,8 @@ export class String {
   /**
    * Returns the index of the first occurrence of searchString found.
    *
+   * @macro $self$.indexOf($args$)
+   *
    * @param searchString substring to search for.
    * @returns the index of the first occurrence of searchString found, or -1 if not found.
    */
