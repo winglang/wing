@@ -207,10 +207,16 @@ pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
 			let env_ref = scope.env.borrow();
 			let env = env_ref.as_ref().expect("All scopes should have a symbol environment");
 
-			let mut symbol_lookup = env.lookup_ext(symbol, None);
+			let mut symbol_lookup = root_env.lookup_ext(symbol, None);
 			if symbol_lookup.is_err() {
-				// If the symbol is not found in the current scope, try the root scope
-				symbol_lookup = root_env.lookup_ext(symbol, None);
+				// If the symbol is not found in the root scope, try the given scope
+				symbol_lookup = env.lookup_ext(symbol, None);
+
+				// NOTE: We lookup in the root scope first because failing to lookup there is much faster than failing to lookup in an inner scope.
+				// The reason for this is due to a current bug in SymbolEnv where the .parent ref gets lost when referencing the root, and becomes bad data
+				// This bad data sometimes causes the lookup to take a long time (lots of entries), or even panic.
+				// This should not cause incorrect lookups because we do not generally have shadowing in Wing
+				// https://github.com/winglang/wing/issues/1644
 			}
 
 			let mut hover_string = String::new();
