@@ -45,6 +45,7 @@ const project = new cdk.JsiiProject({
     "@azure/identity@3.1.3",
     "@azure/core-paging",
     // simulator dependencies
+    "uuid",
     "tar",
   ],
   devDeps: [
@@ -53,6 +54,7 @@ const project = new cdk.JsiiProject({
     "@types/debug",
     "@types/fs-extra",
     "@types/tar",
+    "@types/uuid",
     "aws-sdk-client-mock",
     "aws-sdk-client-mock-jest",
     "eslint-plugin-sort-exports",

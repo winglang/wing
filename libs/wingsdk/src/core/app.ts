@@ -1,11 +1,4 @@
-import {
-  mkdirSync,
-  readdirSync,
-  renameSync,
-  rmSync,
-  rmdirSync,
-  existsSync,
-} from "fs";
+import { mkdirSync, readdirSync, renameSync, rmSync, existsSync } from "fs";
 import { join } from "path";
 import * as cdktf from "cdktf";
 import { Construct, IConstruct } from "constructs";
@@ -185,7 +178,7 @@ export class CdktfApp extends Construct implements IApp {
         // If the file is a directory we need to delete contents of previous synthesis
         // or rename will fail
         if (existsSync(destination)) {
-          rmdirSync(destination, { recursive: true });
+          rmSync(destination, { recursive: true });
         }
 
         renameSync(source, destination);

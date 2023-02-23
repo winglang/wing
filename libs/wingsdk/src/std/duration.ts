@@ -60,4 +60,13 @@ export class Duration {
   public get hours() {
     return this.minutes / 60;
   }
+
+  /**
+   * Return the total number of milliseconds in this Duration.
+   *
+   * @returns the value of this `Duration` expressed in milliseconds.
+   */
+  public get milliseconds() {
+    return this.seconds * 1000;
+  }
 }

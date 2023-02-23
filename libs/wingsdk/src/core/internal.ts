@@ -102,6 +102,7 @@ export function serializeImmutableData(obj: any): string {
           seconds: obj.seconds,
           minutes: obj.minutes,
           hours: obj.hours,
+          milliseconds: obj.milliseconds,
         });
       }
 

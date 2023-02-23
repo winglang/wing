@@ -5,6 +5,7 @@ import { Counter } from "./counter";
 import { Function } from "./function";
 import { Logger } from "./logger";
 import { Queue } from "./queue";
+import { Timer } from "./timer";
 import { Topic } from "./topic";
 import * as cloud from "../cloud";
 
@@ -32,6 +33,8 @@ export class PolyconFactory implements IPolyconFactory {
         return new Counter(scope, id, args[0]);
       case cloud.TOPIC_TYPE:
         return new Topic(scope, id, args[0]);
+      case cloud.TIMER_TYPE:
+        return new Timer(scope, id, args[0]);
       default:
         throw new Error(`Type ${polyconId} not implemented.`);
     }

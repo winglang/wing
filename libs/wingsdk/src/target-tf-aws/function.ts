@@ -5,6 +5,7 @@ import { IamRole } from "@cdktf/provider-aws/lib/iam-role";
 import { IamRolePolicy } from "@cdktf/provider-aws/lib/iam-role-policy";
 import { IamRolePolicyAttachment } from "@cdktf/provider-aws/lib/iam-role-policy-attachment";
 import { LambdaFunction } from "@cdktf/provider-aws/lib/lambda-function";
+import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
 import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
@@ -12,6 +13,7 @@ import { Construct } from "constructs";
 import { BUCKET_PREFIX_OPTS } from "./bucket";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Resource } from "../core";
 import { Duration } from "../std/duration";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
 
@@ -48,7 +50,7 @@ export class Function extends cloud.FunctionBase {
     scope: Construct,
     id: string,
     inflight: cloud.IFunctionHandler,
-    props: cloud.FunctionProps
+    props: cloud.FunctionProps = {}
   ) {
     super(scope, id, inflight, props);
 
@@ -223,9 +225,32 @@ export class Function extends cloud.FunctionBase {
     return this.function.functionName;
   }
 
+  /**
+   * Grants the given identity permissions to invoke this function.
+   * @param principal The AWS principal to grant invoke permissions to (e.g. "s3.amazonaws.com", "events.amazonaws.com", "sns.amazonaws.com")
+   */
+  public addPermissionToInvoke(
+    source: Resource,
+    principal: string,
+    sourceArn: string
+  ) {
+    new LambdaPermission(this, `InvokePermission-${source.node.addr}`, {
+      functionName: this._functionName,
+      qualifier: this.function.version,
+      action: "lambda:InvokeFunction",
+      principal: principal,
+      sourceArn: sourceArn,
+    });
+  }
+
   private envName(): string {
     return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }
+}
+
+export interface FunctionPermission {
+  readonly action: string;
+  readonly principal: string;
 }
 
 /**

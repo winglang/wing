@@ -713,7 +713,7 @@ exports.handler = async function(event) {
       }
     };
   }())({
-    my_array: [{ seconds: 600, minutes: 10, hours: 0.16666666666666666 }, { seconds: 1200, minutes: 20, hours: 0.3333333333333333 }]
+    my_array: [{ seconds: 600, minutes: 10, hours: 0.16666666666666666, milliseconds: 6e5 }, { seconds: 1200, minutes: 20, hours: 0.3333333333333333, milliseconds: 12e5 }]
   }).handle(event);
 };
 ",
@@ -1412,7 +1412,7 @@ exports.handler = async function(event) {
       }
     };
   }())({
-    my_capture: { seconds: 7200, minutes: 120, hours: 2 }
+    my_capture: { seconds: 7200, minutes: 120, hours: 2, milliseconds: 72e5 }
   }).handle(event);
 };
 ",
@@ -2141,7 +2141,7 @@ exports.handler = async function(event) {
       }
     };
   }())({
-    my_map: /* @__PURE__ */ new Map([[\\"foo\\", [{ seconds: 600, minutes: 10, hours: 0.16666666666666666 }, { seconds: 1200, minutes: 20, hours: 0.3333333333333333 }]], [\\"bar\\", [{ seconds: 1800, minutes: 30, hours: 0.5 }, { seconds: 2400, minutes: 40, hours: 0.6666666666666666 }]]])
+    my_map: /* @__PURE__ */ new Map([[\\"foo\\", [{ seconds: 600, minutes: 10, hours: 0.16666666666666666, milliseconds: 6e5 }, { seconds: 1200, minutes: 20, hours: 0.3333333333333333, milliseconds: 12e5 }]], [\\"bar\\", [{ seconds: 1800, minutes: 30, hours: 0.5, milliseconds: 18e5 }, { seconds: 2400, minutes: 40, hours: 0.6666666666666666, milliseconds: 24e5 }]]])
   }).handle(event);
 };
 ",
@@ -3174,7 +3174,7 @@ exports.handler = async function(event) {
       }
     };
   }())({
-    my_set: /* @__PURE__ */ new Set([{ seconds: 600, minutes: 10, hours: 0.16666666666666666 }, { seconds: 1200, minutes: 20, hours: 0.3333333333333333 }])
+    my_set: /* @__PURE__ */ new Set([{ seconds: 600, minutes: 10, hours: 0.16666666666666666, milliseconds: 6e5 }, { seconds: 1200, minutes: 20, hours: 0.3333333333333333, milliseconds: 12e5 }])
   }).handle(event);
 };
 ",

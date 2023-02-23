@@ -4,7 +4,7 @@ import { IFunctionClient } from "../cloud";
 
 export class FunctionClient implements IFunctionClient {
   constructor(
-    private readonly functionArn: string,
+    public readonly functionArn: string,
     private readonly lambdaClient = new LambdaClient({})
   ) {}
 

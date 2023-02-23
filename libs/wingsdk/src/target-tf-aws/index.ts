@@ -5,3 +5,4 @@ export * from "./factory";
 export * from "./function";
 export * from "./queue";
 export * from "./schedule";
+export * from "./timer";

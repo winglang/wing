@@ -4,6 +4,7 @@ import { Function } from "./function.inflight";
 import { Logger } from "./logger.inflight";
 import { Queue } from "./queue.inflight";
 import { ISimulatorResourceInstance } from "./resource";
+import { Timer } from "./timer.inflight";
 import { Topic } from "./topic.inflight";
 import * as cloud from "../cloud";
 import { ISimulatorFactory, ISimulatorContext } from "../testing/simulator";
@@ -27,6 +28,8 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return new Counter(props, context);
       case cloud.TOPIC_TYPE:
         return new Topic(props, context);
+      case cloud.TIMER_TYPE:
+        return new Timer(props, context);
       default:
         throw new Error(`Type ${type} not implemented.`);
     }

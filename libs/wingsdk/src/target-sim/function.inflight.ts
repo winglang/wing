@@ -10,6 +10,7 @@ import { ISimulatorResourceInstance } from "./resource";
 import { FunctionSchema } from "./schema-resources";
 import { FUNCTION_TYPE, IFunctionClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
+import { tryRunInContext } from "../util";
 
 export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly filename: string;
@@ -76,9 +77,8 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
 
     return this.context.withTrace({
       message: `Invoke (payload="${JSON.stringify(payload)}").`,
-      activity: async () => {
-        return vm.runInContext(wrapper, context, { timeout: this.timeout });
-      },
+      activity: async () =>
+        tryRunInContext(wrapper, context, { timeout: this.timeout }),
     });
   }
 }

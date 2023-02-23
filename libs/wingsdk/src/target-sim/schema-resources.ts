@@ -5,6 +5,7 @@ import {
   FUNCTION_TYPE,
   LOGGER_TYPE,
   QUEUE_TYPE,
+  TIMER_TYPE,
   TOPIC_TYPE,
 } from "../cloud";
 
@@ -83,4 +84,9 @@ export interface CounterSchema extends BaseResourceSchema {
     /** The initial value of the counter. */
     readonly initial: number;
   };
+}
+
+export interface TimerSchema extends BaseResourceSchema {
+  readonly type: typeof TIMER_TYPE;
+  readonly props: {};
 }

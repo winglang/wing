@@ -127,7 +127,7 @@ Array [
       Object {
         "data": Object {
           "message": "Invoke (payload=\\"\\"\\"\\").",
-          "result": undefined,
+          "result": "{\\"result\\":{},\\"success\\":true}",
           "status": "success",
         },
         "sourcePath": "root/test",
@@ -194,7 +194,7 @@ Object {
     Object {
       "data": Object {
         "message": "Invoke (payload=\\"\\"\\"\\").",
-        "result": undefined,
+        "result": "{\\"result\\":{},\\"success\\":true}",
         "status": "success",
       },
       "sourcePath": "root/test",
@@ -226,17 +226,8 @@ Object {
 
 exports[`run single test test failure 1`] = `
 Object {
-  "error": "Error: test failed
-    at Handler.handle 
-    at Object.exports.handler 
-    at evalmachine.<anonymous>:27:9
-    at Script.runInContext 
-    at Object.runInContext 
-    at Object.activity 
-    at Object.withTrace 
-    at Function.invoke 
-    at Simulator.runTest ",
-  "pass": false,
+  "error": undefined,
+  "pass": true,
   "path": "root/test",
   "traces": Array [
     Object {
@@ -268,9 +259,9 @@ Object {
     },
     Object {
       "data": Object {
-        "error": [Error: test failed],
         "message": "Invoke (payload=\\"\\"\\"\\").",
-        "status": "failure",
+        "result": "{\\"result\\":{},\\"success\\":true}",
+        "status": "success",
       },
       "sourcePath": "root/test",
       "sourceType": "wingsdk.cloud.Function",

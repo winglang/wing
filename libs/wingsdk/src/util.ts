@@ -1,6 +1,7 @@
 import { mkdtempSync, readdirSync, readFileSync, statSync } from "fs";
 import { tmpdir } from "os";
 import { extname, join } from "path";
+import * as vm from "vm";
 import { debug } from "debug";
 import * as tar from "tar";
 import { Code } from "./core";
@@ -160,4 +161,49 @@ export function sanitizeCodeText(code: string): string {
 
 export function sanitizeCode(code: Code): string {
   return sanitizeCodeText(code.text);
+}
+
+export function tryRunInContext(
+  code: string,
+  context: vm.Context,
+  options: vm.RunningScriptOptions = {}
+): any {
+  try {
+    return {
+      result: vm.runInContext(code, context, options),
+      success: true,
+    };
+  } catch (e) {
+    const err = e as Error;
+    const message = [];
+    message.push(err.message);
+
+    if (err.stack?.includes("evalmachine.<anonymous>:")) {
+      message.push(
+        "================================================================"
+      );
+
+      const lineNumber =
+        Number.parseInt(
+          err.stack.split("evalmachine.<anonymous>:")[1].split(":")[0]
+        ) - 1;
+      const lines = code.split("\n");
+      const startLine = Math.max(lineNumber - 5, 0);
+      const finishLine = Math.min(lineNumber + 5, lines.length - 1);
+
+      // print line and its surrounding lines
+      for (let i = startLine; i <= finishLine; i++) {
+        if (i === lineNumber) {
+          message.push(">> " + lines[i]);
+        } else {
+          message.push("   " + lines[i]);
+        }
+      }
+      message.push(
+        "================================================================"
+      );
+    }
+
+    throw new Error(message.join("\n"));
+  }
 }
