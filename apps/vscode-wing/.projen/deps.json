@@ -6,6 +6,10 @@
       "type": "build"
     },
     {
+      "name": "@types/which",
+      "type": "build"
+    },
+    {
       "name": "@typescript-eslint/eslint-plugin",
       "version": "^5",
       "type": "build"
@@ -76,6 +80,10 @@
     },
     {
       "name": "vscode-languageclient",
+      "type": "runtime"
+    },
+    {
+      "name": "which",
       "type": "runtime"
     }
   ],

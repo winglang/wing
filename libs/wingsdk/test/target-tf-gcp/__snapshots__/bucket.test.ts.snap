@@ -42,7 +42,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -55,7 +55,7 @@ Object {
               "google": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-google.provider.GoogleProvider",
-                  "version": "5.0.2",
+                  "version": "5.0.3",
                 },
                 "id": "google",
                 "path": "root/Default/google",
@@ -69,7 +69,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-google.storageBucket.StorageBucket",
-                      "version": "5.0.2",
+                      "version": "5.0.3",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
@@ -85,7 +85,7 @@ Object {
                   "PublicAccessIamMember": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-google.storageBucketIamMember.StorageBucketIamMember",
-                      "version": "5.0.2",
+                      "version": "5.0.3",
                     },
                     "id": "PublicAccessIamMember",
                     "path": "root/Default/my_bucket/PublicAccessIamMember",
@@ -93,7 +93,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud object store",
@@ -113,7 +113,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
@@ -193,7 +193,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -206,7 +206,7 @@ Object {
               "google": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-google.provider.GoogleProvider",
-                  "version": "5.0.2",
+                  "version": "5.0.3",
                 },
                 "id": "google",
                 "path": "root/Default/google",
@@ -220,7 +220,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-google.storageBucket.StorageBucket",
-                      "version": "5.0.2",
+                      "version": "5.0.3",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
@@ -236,7 +236,7 @@ Object {
                   "Object-file1.txt": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-google.storageBucketObject.StorageBucketObject",
-                      "version": "5.0.2",
+                      "version": "5.0.3",
                     },
                     "id": "Object-file1.txt",
                     "path": "root/Default/my_bucket/Object-file1.txt",
@@ -244,7 +244,7 @@ Object {
                   "Object-file2.txt": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-google.storageBucketObject.StorageBucketObject",
-                      "version": "5.0.2",
+                      "version": "5.0.3",
                     },
                     "id": "Object-file2.txt",
                     "path": "root/Default/my_bucket/Object-file2.txt",
@@ -252,7 +252,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud object store",
@@ -272,7 +272,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
@@ -340,7 +340,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -353,7 +353,7 @@ Object {
               "google": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-google.provider.GoogleProvider",
-                  "version": "5.0.2",
+                  "version": "5.0.3",
                 },
                 "id": "google",
                 "path": "root/Default/google",
@@ -367,7 +367,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-google.storageBucket.StorageBucket",
-                      "version": "5.0.2",
+                      "version": "5.0.3",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
@@ -383,7 +383,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud object store",
@@ -403,7 +403,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
@@ -480,7 +480,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -493,7 +493,7 @@ Object {
               "google": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-google.provider.GoogleProvider",
-                  "version": "5.0.2",
+                  "version": "5.0.3",
                 },
                 "id": "google",
                 "path": "root/Default/google",
@@ -507,7 +507,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-google.storageBucket.StorageBucket",
-                      "version": "5.0.2",
+                      "version": "5.0.3",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket1/Default",
@@ -523,7 +523,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud object store",
@@ -541,7 +541,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-google.storageBucket.StorageBucket",
-                      "version": "5.0.2",
+                      "version": "5.0.3",
                     },
                     "id": "Default",
                     "path": "root/Default/my_bucket2/Default",
@@ -557,7 +557,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud object store",
@@ -577,7 +577,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",

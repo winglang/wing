@@ -99,3 +99,21 @@ test("basic function with timeout explicitly set", () => {
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
+
+test("basic function with memory size specified", () => {
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  new cloud.Function(app, "Function", inflight, { memory: 512 });
+  const output = app.synth();
+
+  expect(tfResourcesOf(output)).toEqual([
+    "aws_iam_role", // role for Lambda
+    "aws_iam_role_policy", // policy for role
+    "aws_iam_role_policy_attachment", // execution policy for role
+    "aws_lambda_function", // Lambda
+    "aws_s3_bucket", // S3 bucket for code
+    "aws_s3_object", // S3 object for code
+  ]);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});

@@ -32,6 +32,8 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
   ) {
     super(scope, id, inflight, props);
 
+    // props.memory is unused since we are not simulating it
+
     this.timeout = props.timeout ?? Duration.fromMinutes(1);
     const assetPath = join(
       "assets",

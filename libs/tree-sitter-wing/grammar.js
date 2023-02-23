@@ -364,7 +364,7 @@ module.exports = grammar({
 
     parameter_type_list: ($) => seq("(", commaSep($._type), ")"),
 
-    builtin_type: ($) => choice("num", "bool", "any", "str", "void"),
+    builtin_type: ($) => choice("num", "bool", "any", "str", "void", "duration"),
 
     constructor: ($) =>
       seq(

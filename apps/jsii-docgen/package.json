@@ -113,6 +113,10 @@
     }
   },
   "types": "lib/index.d.ts",
+  "volta": {
+    "node": "18.12.1",
+    "npm": "8.19.3"
+  },
   "overrides": {
     "@types/babel__traverse": "7.18.2"
   },

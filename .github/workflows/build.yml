@@ -29,25 +29,25 @@ jobs:
       version: ${{ steps.info.outputs.version || steps.pr_info.outputs.version }}
     steps:
       - name: Checkout
-        if: github.event_name == 'push' && github.repository == 'winglang/wing'
+        if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
         uses: actions/checkout@v3
 
       - name: Get tags
         id: tags
-        if: github.event_name == 'push' && github.repository == 'winglang/wing'
+        if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
         run: |
           git fetch --unshallow --tags
           LAST_VERSION="$(git describe --tags `git rev-list --tags --max-count=1`)"
           echo "last-version=${LAST_VERSION#?}" >> $GITHUB_OUTPUT
 
       - name: Install Dependencies
-        if: github.event_name == 'push' && github.repository == 'winglang/wing'
+        if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
         uses: bahmutov/npm-install@v1
         with:
           install-command: npm ci --ignore-scripts
 
       - name: Get Version Info
-        if: github.event_name == 'push' && github.repository == 'winglang/wing'
+        if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
         id: info
         env:
           # Needed for `auto` cli
@@ -60,7 +60,7 @@ jobs:
 
       # newlines are easier to handle in single-line yaml
       - run: "echo '\n' >> CHANGELOG.md"
-        if: github.event_name == 'push' && github.repository == 'winglang/wing'
+        if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
 
       - name: PR Version Info
         id: pr_info
@@ -78,18 +78,18 @@ jobs:
           path: CHANGELOG.md
 
       - name: Compress Docs
-        if: github.event_name == 'push' && github.repository == 'winglang/wing'
+        if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
         run: tar -czvf docs.tgz docs/*
 
       - name: Upload Docs
-        if: github.event_name == 'push' && github.repository == 'winglang/wing'
+        if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
         uses: actions/upload-artifact@v2
         with:
           name: docs
           path: docs.tgz
 
-  build-wasm:
-    name: "Non-Native Build"
+  build:
+    name: "Build"
     timeout-minutes: 20
     runs-on: ubuntu-latest
     needs: prepare
@@ -124,8 +124,8 @@ jobs:
         with:
           targets: "build,test,package"
           all: true
-          # Exclude E2E testing
-          args: "--exclude=hangar --configuration=release --output-style=stream --verbose"
+          # If pushing, exclude hangar because we're going to run it in a separate job
+          args: "${{ github.event_name == 'push' && '--exclude=hangar ' || '' }}--configuration=release --output-style=stream --verbose"
 
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v2
@@ -152,7 +152,7 @@ jobs:
           path: apps/vscode-wing/vscode-wing.vsix
 
       - name: "Publish Wing Playground"
-        if: github.event_name == 'push' && github.repository == 'winglang/wing'
+        if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
         uses: amondnet/vercel-action@v25.1.0
         with:
           github-token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
@@ -165,8 +165,9 @@ jobs:
 
   e2e:
     name: "E2E Testing"
+    if: github.event_name == 'push'
     needs:
-      - build-wasm
+      - build
       - prepare
     strategy:
       fail-fast: true
@@ -174,6 +175,7 @@ jobs:
         runner:
           - ubuntu-latest
           - windows-latest
+          - macos-latest
         node: [18, 19]
     runs-on: ${{ matrix.runner }}
     env:
@@ -213,20 +215,11 @@ jobs:
         working-directory: tools/hangar
         run: npm run test
 
-  build:
-    needs:
-      - build-wasm
-      - e2e
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build Validation
-        run: echo "Build Successful"
-
   publish:
     name: Publish
-    if: github.event_name == 'push' && github.repository == 'winglang/wing'
+    if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
     needs:
-      - build
+      - e2e
       - prepare
     runs-on: ubuntu-latest
     steps:
