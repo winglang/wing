@@ -1999,48 +1999,48 @@ The maximum amount of time the function can run.
 
 ---
 
-### InflightBindings <a name="InflightBindings" id="@winglang/sdk.core.InflightBindings"></a>
+### InflightBinding <a name="InflightBinding" id="@winglang/sdk.core.InflightBinding"></a>
 
-Inflight bindings.
+An inflight binding.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.core.InflightBindings.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.core.InflightBinding.Initializer"></a>
 
 ```wing
 bring core;
 
-let inflight_bindings = core.InflightBindings{ ... }
+let inflight_binding = core.InflightBinding{ ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.core.InflightBindings.property.data">data</a></code> | <code>MutMap&lt;any&gt;</code> | Immutable data being referenced by the inflight (key is the symbol); |
-| <code><a href="#@winglang/sdk.core.InflightBindings.property.resources">resources</a></code> | <code>MutMap&lt;core.InflightResourceBinding&gt;</code> | Resources being referenced by the inflight (key is the symbol). |
+| <code><a href="#@winglang/sdk.core.InflightBinding.property.obj">obj</a></code> | <code>any</code> | The resource or capturable value. |
+| <code><a href="#@winglang/sdk.core.InflightBinding.property.ops">ops</a></code> | <code>MutArray&lt;str&gt;</code> | The list of operations used on the resource. |
 
 ---
 
-##### `data`<sup>Optional</sup> <a name="data" id="@winglang/sdk.core.InflightBindings.property.data"></a>
+##### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.core.InflightBinding.property.obj"></a>
 
 ```wing
-data: MutMap<any>;
+obj: any;
 ```
 
-- *Type:* MutMap&lt;any&gt;
+- *Type:* any
 
-Immutable data being referenced by the inflight (key is the symbol);
+The resource or capturable value.
 
 ---
 
-##### `resources`<sup>Optional</sup> <a name="resources" id="@winglang/sdk.core.InflightBindings.property.resources"></a>
+##### `ops`<sup>Optional</sup> <a name="ops" id="@winglang/sdk.core.InflightBinding.property.ops"></a>
 
 ```wing
-resources: MutMap<InflightResourceBinding>;
+ops: MutArray<str>;
 ```
 
-- *Type:* MutMap&lt;core.InflightResourceBinding&gt;
+- *Type:* MutArray&lt;str&gt;
 
-Resources being referenced by the inflight (key is the symbol).
+The list of operations used on the resource.
 
 ---
 
@@ -2061,7 +2061,7 @@ let inflight_props = core.InflightProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.core.InflightProps.property.code">code</a></code> | <code>core.Code</code> | Reference to the inflight code. Only JavaScript code is currently supported. |
-| <code><a href="#@winglang/sdk.core.InflightProps.property.bindings">bindings</a></code> | <code>core.InflightBindings</code> | Data and resource binding information. |
+| <code><a href="#@winglang/sdk.core.InflightProps.property.bindings">bindings</a></code> | <code>MutMap&lt;core.InflightBinding&gt;</code> | Data and resource binding information. |
 
 ---
 
@@ -2083,58 +2083,13 @@ all references to resources must be made through `this.<resource>`.
 ##### `bindings`<sup>Optional</sup> <a name="bindings" id="@winglang/sdk.core.InflightProps.property.bindings"></a>
 
 ```wing
-bindings: InflightBindings;
+bindings: MutMap<InflightBinding>;
 ```
 
-- *Type:* core.InflightBindings
+- *Type:* MutMap&lt;core.InflightBinding&gt;
 - *Default:* no bindings
 
 Data and resource binding information.
-
----
-
-### InflightResourceBinding <a name="InflightResourceBinding" id="@winglang/sdk.core.InflightResourceBinding"></a>
-
-A resource binding.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.core.InflightResourceBinding.Initializer"></a>
-
-```wing
-bring core;
-
-let inflight_resource_binding = core.InflightResourceBinding{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.core.InflightResourceBinding.property.ops">ops</a></code> | <code>MutArray&lt;str&gt;</code> | The list of operations used on the resource. |
-| <code><a href="#@winglang/sdk.core.InflightResourceBinding.property.resource">resource</a></code> | <code>core.IResource</code> | The resource. |
-
----
-
-##### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.core.InflightResourceBinding.property.ops"></a>
-
-```wing
-ops: MutArray<str>;
-```
-
-- *Type:* MutArray&lt;str&gt;
-
-The list of operations used on the resource.
-
----
-
-##### `resource`<sup>Required</sup> <a name="resource" id="@winglang/sdk.core.InflightResourceBinding.property.resource"></a>
-
-```wing
-resource: IResource;
-```
-
-- *Type:* core.IResource
-
-The resource.
 
 ---
 

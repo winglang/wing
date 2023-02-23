@@ -2006,48 +2006,48 @@ The maximum amount of time the function can run.
 
 ---
 
-### InflightBindings <a name="InflightBindings" id="@winglang/sdk.core.InflightBindings"></a>
+### InflightBinding <a name="InflightBinding" id="@winglang/sdk.core.InflightBinding"></a>
 
-Inflight bindings.
+An inflight binding.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.core.InflightBindings.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.core.InflightBinding.Initializer"></a>
 
 ```wing
 bring core;
 
-let inflight_bindings = core.InflightBindings{ ... }
+let inflight_binding = core.InflightBinding{ ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.core.InflightBindings.property.data">data</a></code> | <code>MutMap&lt;any&gt;</code> | Immutable data being referenced by the inflight (key is the symbol); |
-| <code><a href="#@winglang/sdk.core.InflightBindings.property.resources">resources</a></code> | <code>MutMap&lt;core.InflightResourceBinding&gt;</code> | Resources being referenced by the inflight (key is the symbol). |
+| <code><a href="#@winglang/sdk.core.InflightBinding.property.obj">obj</a></code> | <code>any</code> | The resource or capturable value. |
+| <code><a href="#@winglang/sdk.core.InflightBinding.property.ops">ops</a></code> | <code>MutArray&lt;str&gt;</code> | The list of operations used on the resource. |
 
 ---
 
-##### `data`<sup>Optional</sup> <a name="data" id="@winglang/sdk.core.InflightBindings.property.data"></a>
+##### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.core.InflightBinding.property.obj"></a>
 
 ```wing
-data: MutMap<any>;
+obj: any;
 ```
 
-- *Type:* MutMap&lt;any&gt;
+- *Type:* any
 
-Immutable data being referenced by the inflight (key is the symbol);
+The resource or capturable value.
 
 ---
 
-##### `resources`<sup>Optional</sup> <a name="resources" id="@winglang/sdk.core.InflightBindings.property.resources"></a>
+##### `ops`<sup>Optional</sup> <a name="ops" id="@winglang/sdk.core.InflightBinding.property.ops"></a>
 
 ```wing
-resources: MutMap<InflightResourceBinding>;
+ops: MutArray<str>;
 ```
 
-- *Type:* MutMap&lt;core.InflightResourceBinding&gt;
+- *Type:* MutArray&lt;str&gt;
 
-Resources being referenced by the inflight (key is the symbol).
+The list of operations used on the resource.
 
 ---
 
@@ -2068,7 +2068,7 @@ let inflight_props = core.InflightProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.core.InflightProps.property.code">code</a></code> | <code>core.Code</code> | Reference to the inflight code. Only JavaScript code is currently supported. |
-| <code><a href="#@winglang/sdk.core.InflightProps.property.bindings">bindings</a></code> | <code>core.InflightBindings</code> | Data and resource binding information. |
+| <code><a href="#@winglang/sdk.core.InflightProps.property.bindings">bindings</a></code> | <code>MutMap&lt;core.InflightBinding&gt;</code> | Data and resource binding information. |
 
 ---
 
@@ -2090,58 +2090,13 @@ all references to resources must be made through `this.<resource>`.
 ##### `bindings`<sup>Optional</sup> <a name="bindings" id="@winglang/sdk.core.InflightProps.property.bindings"></a>
 
 ```wing
-bindings: InflightBindings;
+bindings: MutMap<InflightBinding>;
 ```
 
-- *Type:* core.InflightBindings
+- *Type:* MutMap&lt;core.InflightBinding&gt;
 - *Default:* no bindings
 
 Data and resource binding information.
-
----
-
-### InflightResourceBinding <a name="InflightResourceBinding" id="@winglang/sdk.core.InflightResourceBinding"></a>
-
-A resource binding.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.core.InflightResourceBinding.Initializer"></a>
-
-```wing
-bring core;
-
-let inflight_resource_binding = core.InflightResourceBinding{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.core.InflightResourceBinding.property.ops">ops</a></code> | <code>MutArray&lt;str&gt;</code> | The list of operations used on the resource. |
-| <code><a href="#@winglang/sdk.core.InflightResourceBinding.property.resource">resource</a></code> | <code>core.IResource</code> | The resource. |
-
----
-
-##### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.core.InflightResourceBinding.property.ops"></a>
-
-```wing
-ops: MutArray<str>;
-```
-
-- *Type:* MutArray&lt;str&gt;
-
-The list of operations used on the resource.
-
----
-
-##### `resource`<sup>Required</sup> <a name="resource" id="@winglang/sdk.core.InflightResourceBinding.property.resource"></a>
-
-```wing
-resource: IResource;
-```
-
-- *Type:* core.IResource
-
-The resource.
 
 ---
 
@@ -3780,12 +3735,12 @@ new std.String()
 | <code><a href="#@winglang/sdk.std.String.contains">contains</a></code> | Checks if string includes substring. |
 | <code><a href="#@winglang/sdk.std.String.ends">ends</a></code> | Does this string end with the given searchString? |
 | <code><a href="#@winglang/sdk.std.String.indexOf">index_of</a></code> | Returns the index of the first occurrence of searchString found. |
-| <code><a href="#@winglang/sdk.std.String.lCase">l_case</a></code> | Returns this string in lower case. |
+| <code><a href="#@winglang/sdk.std.String.lowercase">lowercase</a></code> | Returns this string in lower case. |
 | <code><a href="#@winglang/sdk.std.String.split">split</a></code> | Splits string by separator. |
 | <code><a href="#@winglang/sdk.std.String.starts">starts</a></code> | Does this string start with the given searchString? |
 | <code><a href="#@winglang/sdk.std.String.substring">substring</a></code> | Returns a string between indexStart, indexEnd. |
 | <code><a href="#@winglang/sdk.std.String.trim">trim</a></code> | Removes white spaces from start and end of this string. |
-| <code><a href="#@winglang/sdk.std.String.uCase">u_case</a></code> | Returns this string in upper case. |
+| <code><a href="#@winglang/sdk.std.String.uppercase">uppercase</a></code> | Returns this string in upper case. |
 
 ---
 
@@ -3869,10 +3824,10 @@ substring to search for.
 
 ---
 
-##### `l_case` <a name="l_case" id="@winglang/sdk.std.String.lCase"></a>
+##### `lowercase` <a name="lowercase" id="@winglang/sdk.std.String.lowercase"></a>
 
 ```wing
-l_case(): str
+lowercase(): str
 ```
 
 Returns this string in lower case.
@@ -3941,10 +3896,10 @@ trim(): str
 
 Removes white spaces from start and end of this string.
 
-##### `u_case` <a name="u_case" id="@winglang/sdk.std.String.uCase"></a>
+##### `uppercase` <a name="uppercase" id="@winglang/sdk.std.String.uppercase"></a>
 
 ```wing
-u_case(): str
+uppercase(): str
 ```
 
 Returns this string in upper case.
