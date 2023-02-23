@@ -210,7 +210,7 @@ pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
 
 		let root_scope = &parse_result.scope;
 		let root_env = root_scope.env.borrow();
-		let root_env = root_env.as_ref().unwrap();
+		let root_env = root_env.as_ref().expect("All scopes should have a symbol environment");
 
 		let mut hover_visitor = HoverVisitor::new(position);
 		hover_visitor.visit_scope(root_scope);
