@@ -1,6 +1,6 @@
 use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
 
-use crate::ast::{Class, Constructor, Expr, FunctionDefinition, Reference, Scope, Stmt, Symbol};
+use crate::ast::{Class, Constructor, Expr, FunctionDefinition, Reference, Scope, Stmt, StmtKind, Symbol};
 use crate::diagnostic::WingSpan;
 use crate::lsp::sync::FILES;
 use crate::visit::Visit;
@@ -63,7 +63,39 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			return;
 		}
 
-		crate::visit::visit_stmt(self, node);
+		// Handle situations where symbols are actually defined in inner scopes
+		match &node.kind {
+			StmtKind::ForLoop {
+				iterator,
+				iterable,
+				statements,
+			} => {
+				self.with_scope(statements, |v| {
+					v.visit_symbol(iterator);
+				});
+				self.visit_expr(iterable);
+				self.visit_scope(statements);
+			}
+			StmtKind::TryCatch {
+				try_statements,
+				catch_block,
+				finally_statements,
+			} => {
+				self.visit_scope(try_statements);
+				if let Some(catch_block) = catch_block {
+					if let Some(exception_var) = &catch_block.exception_var {
+						self.with_scope(&catch_block.statements, |v| {
+							v.visit_symbol(exception_var);
+						});
+					}
+					self.visit_scope(&catch_block.statements);
+				}
+				if let Some(finally_statements) = finally_statements {
+					self.visit_scope(finally_statements);
+				}
+			}
+			_ => crate::visit::visit_stmt(self, node),
+		}
 	}
 
 	fn visit_expr(&mut self, node: &'a Expr) {

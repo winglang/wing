@@ -102,11 +102,9 @@ where
 			iterable,
 			statements,
 		} => {
+			v.visit_symbol(iterator);
 			v.visit_expr(iterable);
 			v.visit_scope(statements);
-
-			// Note: The iterator is defined in the inner scope, so it is not visited in depth-first order
-			v.visit_symbol(iterator);
 		}
 		StmtKind::While { condition, statements } => {
 			v.visit_expr(condition);
@@ -169,12 +167,10 @@ where
 		} => {
 			v.visit_scope(try_statements);
 			if let Some(catch_block) = catch_block {
-				v.visit_scope(&catch_block.statements);
-
-				// Note: This symbol is defined in the catch block's scope, so its node is not visited in depth-first order
 				if let Some(exception_var) = &catch_block.exception_var {
 					v.visit_symbol(exception_var);
 				}
+				v.visit_scope(&catch_block.statements);
 			}
 			if let Some(finally_statements) = finally_statements {
 				v.visit_scope(finally_statements);
