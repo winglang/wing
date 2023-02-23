@@ -7,3 +7,4 @@ let xf = 1.0;
 let yf = (-20.22) * xf;
 let zf = (xf + (yf) - -0.01);
 let xyzf = 501 \ (99 + 1);
+assert(xyzf == 5);
