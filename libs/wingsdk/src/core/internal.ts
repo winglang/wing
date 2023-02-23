@@ -1,5 +1,5 @@
 import { IConstruct } from "constructs";
-import { InflightBinding, NodeJsCode } from "./inflight";
+import { InflightBindings, NodeJsCode } from "./inflight";
 import { DisplayProps, IResource, Resource } from "./resource";
 import { Duration } from "../std";
 
@@ -7,7 +7,7 @@ export function makeHandler(
   scope: IConstruct,
   id: string,
   code: string,
-  bindings: Record<string, InflightBinding> = {},
+  bindings: InflightBindings = {},
   display?: DisplayProps
 ): Resource {
   const clients: Record<string, string> = {};

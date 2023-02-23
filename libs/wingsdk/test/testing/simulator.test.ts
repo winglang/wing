@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Bucket, Function } from "../../src/cloud";
-import { InflightBinding } from "../../src/core";
+import { InflightBindings } from "../../src/core";
 import { SimApp, Testing, TestResult } from "../../src/testing";
 
 describe("run single test", () => {
@@ -141,7 +141,7 @@ class Test extends Function {
     scope: Construct,
     id: string,
     code: string[],
-    bindings: Record<string, InflightBinding> = {}
+    bindings: InflightBindings = {}
   ) {
     super(
       scope,

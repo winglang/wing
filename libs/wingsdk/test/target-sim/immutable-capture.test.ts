@@ -1,12 +1,16 @@
 import { Construct } from "constructs";
 import { Bucket } from "../../src/cloud";
 import { Function, IFunctionClient } from "../../src/cloud/function";
-import { Inflight, InflightBinding, NodeJsCode } from "../../src/core/inflight";
+import {
+  Inflight,
+  InflightBindings,
+  NodeJsCode,
+} from "../../src/core/inflight";
 import { Duration } from "../../src/std";
 import { SimApp } from "../../src/testing";
 
 interface CaptureTest {
-  bindings: Record<string, InflightBinding>;
+  bindings: InflightBindings;
   inflightCode?: string[];
   whenInflightExpression?: string;
   thenResolvesTo?: any;

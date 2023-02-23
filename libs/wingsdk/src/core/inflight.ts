@@ -79,6 +79,8 @@ export class NodeJsCode extends Code {
   }
 }
 
+export type InflightBindings = Record<string, InflightBinding>;
+
 /**
  * Props for `Inflight`.
  */
@@ -96,7 +98,7 @@ export interface InflightProps {
    * Data and resource binding information.
    * @default - no bindings
    */
-  readonly bindings?: Record<string, InflightBinding>;
+  readonly bindings?: InflightBindings;
 }
 
 /**

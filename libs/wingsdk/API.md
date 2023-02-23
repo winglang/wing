@@ -2032,7 +2032,7 @@ The resource or capturable value.
 
 ---
 
-##### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.core.InflightBinding.property.ops"></a>
+##### `ops`<sup>Optional</sup> <a name="ops" id="@winglang/sdk.core.InflightBinding.property.ops"></a>
 
 ```wing
 ops: MutArray<str>;
