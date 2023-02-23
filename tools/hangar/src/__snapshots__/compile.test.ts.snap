@@ -346,10 +346,10 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"bring_cdktf\\", plugins: $plugins });
   
-  new aws.s3Bucket.S3Bucket(this,\\"Bucket\\",{ versioning: {
+  new aws.s3Bucket.S3Bucket(this,\\"Bucket\\",{ bucketPrefix: \\"hello\\", versioning: {
   \\"enabled\\": true,
   \\"mfa_delete\\": true,}
-  , bucketPrefix: \\"hello\\" });
+   });
 }
 }
 new MyApp().synth();"
