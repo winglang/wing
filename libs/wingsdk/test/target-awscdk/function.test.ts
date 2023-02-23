@@ -1,9 +1,9 @@
 import { Match, Template } from "aws-cdk-lib/assertions";
 import * as cloud from "../../src/cloud";
-import * as awscdk from "../../src/target-awscdk";
-import { mkdtemp } from "../../src/util";
-import { Testing } from "../../src/testing";
 import { Duration } from "../../src/std";
+import * as awscdk from "../../src/target-awscdk";
+import { Testing } from "../../src/testing";
+import { mkdtemp } from "../../src/util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
@@ -55,8 +55,8 @@ test("basic function with environment variables", () => {
         Variables: {
           BOOM: "BAM",
           FOO: "BAR",
-        }
-      }
+        },
+      },
     })
   );
   expect(template.toJSON()).toMatchSnapshot();

@@ -1,4 +1,5 @@
 import { RemovalPolicy } from "aws-cdk-lib";
+import { Effect } from "aws-cdk-lib/aws-iam";
 import {
   BlockPublicAccess,
   BucketEncryption,
@@ -9,7 +10,6 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Effect } from "aws-cdk-lib/aws-iam";
 
 /**
  * AWS implementation of `cloud.Bucket`.
@@ -52,21 +52,21 @@ export class Bucket extends cloud.BucketBase {
         effect: Effect.ALLOW,
         actions: ["s3:PutObject*", "s3:Abort*"],
         resources: [`${this.bucket.bucketArn}`, `${this.bucket.bucketArn}/*`],
-      })
+      });
     }
     if (ops.includes(cloud.BucketInflightMethods.GET)) {
       host.addPolicyStatements({
         effect: Effect.ALLOW,
         actions: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
         resources: [`${this.bucket.bucketArn}`, `${this.bucket.bucketArn}/*`],
-      })
+      });
     }
     if (ops.includes(cloud.BucketInflightMethods.LIST)) {
       host.addPolicyStatements({
         effect: Effect.ALLOW,
         actions: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
         resources: [`${this.bucket.bucketArn}`, `${this.bucket.bucketArn}/*`],
-      })
+      });
     }
     if (ops.includes(cloud.BucketInflightMethods.DELETE)) {
       host.addPolicyStatements({
@@ -77,7 +77,7 @@ export class Bucket extends cloud.BucketBase {
           "s3:PutLifecycleConfiguration*",
         ],
         resources: [`${this.bucket.bucketArn}`, `${this.bucket.bucketArn}/*`],
-      })
+      });
     }
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
@@ -88,9 +88,11 @@ export class Bucket extends cloud.BucketBase {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename.replace("awscdk", "tf-aws"), "BucketClient", [
-      `process.env["${this.envName()}"]`
-    ]);
+    return core.InflightClient.for(
+      __filename.replace("awscdk", "tf-aws"),
+      "BucketClient",
+      [`process.env["${this.envName()}"]`]
+    );
   }
 
   private envName(): string {

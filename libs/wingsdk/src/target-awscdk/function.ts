@@ -1,10 +1,14 @@
 import { resolve } from "path";
+import { Duration } from "aws-cdk-lib";
+import {
+  Effect,
+  PolicyStatement,
+  PolicyStatementProps,
+} from "aws-cdk-lib/aws-iam";
+import { Function as CdkFunction, Code, Runtime } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Function as CdkFunction, Code, Runtime } from "aws-cdk-lib/aws-lambda";
-import { Effect, PolicyStatement, PolicyStatementProps } from "aws-cdk-lib/aws-iam";
-import { Duration } from "aws-cdk-lib";
 
 /**
  * AWS implementation of `cloud.Function`.
@@ -16,7 +20,12 @@ export class Function extends cloud.FunctionBase {
   /** Function ARN */
   public readonly arn: string;
 
-  constructor(scope: Construct, id: string, inflight: cloud.IFunctionHandler, props: cloud.FunctionProps) {
+  constructor(
+    scope: Construct,
+    id: string,
+    inflight: cloud.IFunctionHandler,
+    props: cloud.FunctionProps
+  ) {
     super(scope, id, inflight, props);
 
     // bundled code is guaranteed to be in a fresh directory
@@ -42,9 +51,11 @@ export class Function extends cloud.FunctionBase {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename.replace("awscdk", "tf-aws"), "FunctionClient", [
-      `process.env["${this.envName()}"]`,
-    ]);
+    return core.InflightClient.for(
+      __filename.replace("awscdk", "tf-aws"),
+      "FunctionClient",
+      [`process.env["${this.envName()}"]`]
+    );
   }
 
   /**
@@ -61,11 +72,13 @@ export class Function extends cloud.FunctionBase {
    */
   public addPolicyStatements(...statements: PolicyStatementProps[]) {
     statements.map((s) => {
-      this.function.addToRolePolicy(new PolicyStatement({
-        actions: s.actions,
-        resources: s.resources,
-        effect: s.effect ?? Effect.ALLOW,
-      }));
+      this.function.addToRolePolicy(
+        new PolicyStatement({
+          actions: s.actions,
+          resources: s.resources,
+          effect: s.effect ?? Effect.ALLOW,
+        })
+      );
     });
   }
 
