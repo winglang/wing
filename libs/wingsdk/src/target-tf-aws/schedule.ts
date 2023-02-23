@@ -44,7 +44,9 @@ export class Schedule extends cloud.ScheduleBase {
      * We append * to the cron string for year field.
      */
     this.scheduleExpression = rate
-      ? (rate.minutes === 1 ? `rate(${rate.minutes} minute)` : `rate(${rate.minutes} minutes)`)
+      ? rate.minutes === 1
+        ? `rate(${rate.minutes} minute)`
+        : `rate(${rate.minutes} minutes)`
       : `cron(${cron} *)`;
 
     this.rule = new CloudwatchEventRule(this, "Schedule", {
