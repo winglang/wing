@@ -11,8 +11,8 @@ module.exports = {
   theme: {
     fontFamily: {
       ...defaultTheme.fontFamily,
-      sans: ["Roboto", ...defaultTheme.fontFamily.sans],
-      mono: ["Roboto Mono", ...defaultTheme.fontFamily.mono],
+      sans: ["IBM Plex Sans", ...defaultTheme.fontFamily.sans],
+      mono: ["IBM Plex Mono", ...defaultTheme.fontFamily.mono],
       "share-tech": ["Share Tech Mono", ...defaultTheme.fontFamily.mono],
     },
 
