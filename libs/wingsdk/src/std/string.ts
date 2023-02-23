@@ -30,7 +30,7 @@ export class String {
    * @param strN one or more strings to concatenate to this string.
    * @returns a new combined string.
    */
-  public concat(...strN: string[]): string {
+  public concat(strN: string): string {
     strN;
     throw new Error("Abstract");
   }

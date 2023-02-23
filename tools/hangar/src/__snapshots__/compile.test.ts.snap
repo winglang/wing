@@ -4568,9 +4568,10 @@ new MyApp().synth();"
 `;
 
 exports[`std_string.w > wing compile --target tf-aws > index.js 1`] = `
-"async handle() { const { s1 } = this; {
+"async handle() { const { s1, s2 } = this; {
   {console.log(\`index of \\\\\\"s\\\\\\" in s1 is \${s1.indexOf(\\"s\\")}\`)};
   {console.log((await (await s1.split(\\" \\")).at(1)))};
+  {console.log((await s1.concat(s2)))};
 } };"
 `;
 
@@ -4705,6 +4706,7 @@ constructor() {
   const s2 = \\"s are immutable\\";
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s1.length === 11)'\`)})((s1.length === 11))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s1.at(7)) === \\"r\\")'\`)})(((s1.at(7)) === \\"r\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s1.concat(s2)) === \\"some strings are immutable\\")'\`)})(((s1.concat(s2)) === \\"some strings are immutable\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: 's1.includes(\\"some\\")'\`)})(s1.includes(\\"some\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(!\\"some\\".includes(s1))'\`)})((!\\"some\\".includes(s1)))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: 's1.endsWith(\\"string\\")'\`)})(s1.endsWith(\\"string\\"))};
@@ -4717,11 +4719,12 @@ constructor() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((\\"   some string   \\".trim()) === \\"some string\\")'\`)})(((\\"   some string   \\".trim()) === \\"some string\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"Some String\\".toLocaleUpperCase() === \\"SOME STRING\\")'\`)})((\\"Some String\\".toLocaleUpperCase() === \\"SOME STRING\\"))};
   new cloud.Function(this,\\"test:string\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.354ccd03d617a49615e652e83b0212305b2dd6f2ba51a69bf34231da425967e5/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.0fb01e81c63b003d77d6245e36ba84561e3e2d3268e69a7c975f81cfe7565fac/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       
       data: {
         s1: s1,
+        s2: s2,
       },
     }
   }));

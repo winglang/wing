@@ -70,7 +70,8 @@ exports[`std_containers.w > wing test --target sim > stdout 1`] = `"<green>pass<
 exports[`std_string.w > wing test --target sim > stdout 1`] = `
 "<green>pass</color> <gray>┌</color> std_string.w <gray>»</color> <brightWhite>root/test:string</color>
     <gray> │ </color><gray>index of \\"s\\" in s1 is 0</color>
-    <gray> └ </color><gray>string</color>"
+    <gray> │ </color><gray>string</color>
+    <gray> └ </color><gray>some strings are immutable</color>"
 `;
 
 exports[`test_bucket.w > wing test --target sim > stdout 1`] = `
