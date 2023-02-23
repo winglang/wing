@@ -636,21 +636,6 @@ impl<'a> JSifier<'a> {
 		for capture in func_def.captures.borrow().as_ref().unwrap().iter() {
 			capture_names.push(capture.symbol.name.clone());
 
-			// for kind in cap_kind.iter() {
-			// 	match kind {
-			// 		CaptureKind::ImmutableData => {
-			// 			bindings.push(format!(
-			// 				"{}: {},",
-			// 				symbol,
-			// 				Self::render_block([format!("obj: {},", capture.symbol)])
-			// 			));
-			// 		}
-			// 		CaptureKind::Resource(def) => {
-			// 			ops.push(def.method.clone());
-			// 		}
-			// 	}
-			// }
-
 			bindings.push(format!(
 				"{}: {},",
 				capture.symbol.name,
