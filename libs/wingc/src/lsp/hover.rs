@@ -34,6 +34,15 @@ impl<'a> HoverVisitor<'a> {
 	fn should_check_span(&self, span: &'a WingSpan) -> bool {
 		span.contains(&self.position)
 	}
+
+	fn with_scope(&mut self, scope: &'a Scope, mut f: impl FnMut(&mut Self)) {
+		let last_scope = self.current_scope;
+		self.current_scope = Some(scope);
+		f(self);
+		if !self.is_found() {
+			self.current_scope = last_scope;
+		}
+	}
 }
 
 impl<'a> Visit<'a> for HoverVisitor<'a> {
@@ -41,34 +50,37 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		if self.is_found() {
 			return;
 		}
-		let last_scope = self.current_scope;
-		self.current_scope = Some(node);
-		for stmt in &node.statements {
-			self.visit_stmt(stmt);
-		}
-		if !self.is_found() {
-			self.current_scope = last_scope;
-		}
+
+		self.with_scope(node, |v| {
+			for stmt in &node.statements {
+				v.visit_stmt(stmt);
+			}
+		});
 	}
 
 	fn visit_stmt(&mut self, node: &'a Stmt) {
 		if self.is_found() {
 			return;
 		}
-		if node.span.contains(&self.position) {
-			crate::visit::visit_stmt(self, node);
+		if !self.should_check_span(&node.span) {
+			return;
 		}
+
+		crate::visit::visit_stmt(self, node);
 	}
 
 	fn visit_expr(&mut self, node: &'a Expr) {
 		if self.is_found() {
 			return;
 		}
+		if !self.should_check_span(&node.span) {
+			return;
+		}
+
 		let last_expr = self.current_expr;
 		self.current_expr = Some(node);
-		if self.should_check_span(&node.span) {
-			crate::visit::visit_expr(self, node);
-		}
+
+		crate::visit::visit_expr(self, node);
 
 		if !self.is_found() {
 			self.current_expr = last_expr;
@@ -80,6 +92,11 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			return;
 		}
 
+		self.with_scope(&node.statements, |v| {
+			for param in &node.parameters {
+				v.visit_symbol(&param.0);
+			}
+		});
 		for param_type in &node.signature.parameters {
 			self.visit_type_annotation(param_type);
 		}
@@ -87,15 +104,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			self.visit_type_annotation(return_type);
 		}
 
-		let last_scope = self.current_scope;
-		self.current_scope = Some(&node.statements);
-		for param in &node.parameters {
-			self.visit_symbol(&param.0);
-		}
-		if !self.is_found() {
-			self.current_scope = last_scope;
-			self.visit_scope(&node.statements);
-		}
+		self.visit_scope(&node.statements);
 	}
 
 	fn visit_class(&mut self, node: &'a Class) {
@@ -104,23 +113,19 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		}
 		self.visit_symbol(&node.name);
 
-		let last_scope = self.current_scope;
-		self.current_scope = Some(&node.constructor.statements);
+		self.visit_constructor(&node.constructor);
 
-		for field in &node.fields {
-			self.visit_symbol(&field.name);
-			self.visit_type_annotation(&field.member_type);
-		}
+		self.with_scope(&node.constructor.statements, |v| {
+			for field in &node.fields {
+				v.visit_symbol(&field.name);
+				v.visit_type_annotation(&field.member_type);
+			}
 
-		for method in &node.methods {
-			self.visit_symbol(&method.0);
-			self.visit_function_definition(&method.1);
-		}
-
-		if !self.is_found() {
-			self.current_scope = last_scope;
-			self.visit_constructor(&node.constructor);
-		}
+			for method in &node.methods {
+				v.visit_symbol(&method.0);
+				v.visit_function_definition(&method.1);
+			}
+		});
 	}
 
 	fn visit_constructor(&mut self, node: &'a Constructor) {
@@ -135,16 +140,13 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			self.visit_type_annotation(return_type);
 		}
 
-		let last_scope = self.current_scope;
-		self.current_scope = Some(&node.statements);
-		for param in &node.parameters {
-			self.visit_symbol(&param.0);
-		}
+		self.with_scope(&node.statements, |v| {
+			for param in &node.parameters {
+				v.visit_symbol(&param.0);
+			}
+		});
 
-		if !self.is_found() {
-			self.current_scope = last_scope;
-			self.visit_scope(&node.statements);
-		}
+		self.visit_scope(&node.statements);
 	}
 
 	fn visit_symbol(&mut self, node: &'a Symbol) {
@@ -190,7 +192,7 @@ pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
 		hover_visitor.visit_scope(root_scope);
 
 		if let Some(symbol) = hover_visitor.found_symbol {
-			let scope = hover_visitor.current_scope.expect("All symbols should be in a scope");
+			let scope = hover_visitor.current_scope.expect("All symbols must be in a scope");
 			let expr = hover_visitor.current_expr;
 			let symbol_name = &symbol.name;
 			let expression_type = expr.and_then(|expr| {

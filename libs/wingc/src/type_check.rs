@@ -1167,7 +1167,7 @@ impl<'a> TypeChecker<'a> {
 				function_type
 			}
 		};
-		*exp.evaluated_type.borrow_mut() = Some(t);
+		exp.evaluated_type.replace(Some(t));
 		t
 	}
 
