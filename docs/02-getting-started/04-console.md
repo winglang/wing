@@ -25,7 +25,7 @@ We can use the Wing CLI to start the console with our newly created Wing source 
 wing it hello.w
 ```
 
-The Wing Console will now compile hello.w source file to [the simulator target](./simulator#the-simulator-target-sim)
+The Wing Console will now compile hello.w source file to [the simulator target](./06-simulator.md#the-simulator-target-sim)
 and load the application. 
 
 > The console will "hot reload" your app on each change in the source file parent directory.
