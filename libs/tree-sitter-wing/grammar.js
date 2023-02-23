@@ -465,6 +465,7 @@ module.exports = grammar({
         ["-", PREC.ADD],
         ["*", PREC.MULTIPLY],
         ["/", PREC.MULTIPLY],
+        ["\\", PREC.MULTIPLY],
         ["%", PREC.MULTIPLY],
         ["||", PREC.LOGICAL_OR],
         ["&&", PREC.LOGICAL_AND],

@@ -38,6 +38,7 @@ Binary expressions
 (5+1) % 1;
 5+1 % 1;
 5 % 1 + 1;
+501\(99 + 1);
 
 ---
 
@@ -75,6 +76,17 @@ Binary expressions
                 right: (number)
             )
             right: (number)
+        )
+    )
+    (expression_statement
+        (binary_expression
+            left: (number)
+            right: (parenthesized_expression
+                (binary_expression
+                    left: (number)
+                    right: (number)
+                )
+            )
         )
     )
 )
