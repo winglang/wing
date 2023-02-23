@@ -2770,6 +2770,122 @@ Title of the resource.
 ---
 
 
+### Duration <a name="Duration" id="@winglang/sdk.std.Duration"></a>
+
+Represents a length of time.
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Duration.fromHours">from_hours</a></code> | Create a Duration representing an amount of hours. |
+| <code><a href="#@winglang/sdk.std.Duration.fromMinutes">from_minutes</a></code> | Create a Duration representing an amount of minutes. |
+| <code><a href="#@winglang/sdk.std.Duration.fromSeconds">from_seconds</a></code> | Create a Duration representing an amount of seconds. |
+
+---
+
+##### `from_hours` <a name="from_hours" id="@winglang/sdk.std.Duration.fromHours"></a>
+
+```wing
+bring std;
+
+std.Duration.from_hours(amount: num)
+```
+
+Create a Duration representing an amount of hours.
+
+###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/sdk.std.Duration.fromHours.parameter.amount"></a>
+
+- *Type:* num
+
+the amount of Hours the `Duration` will represent.
+
+---
+
+##### `from_minutes` <a name="from_minutes" id="@winglang/sdk.std.Duration.fromMinutes"></a>
+
+```wing
+bring std;
+
+std.Duration.from_minutes(amount: num)
+```
+
+Create a Duration representing an amount of minutes.
+
+###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/sdk.std.Duration.fromMinutes.parameter.amount"></a>
+
+- *Type:* num
+
+the amount of Minutes the `Duration` will represent.
+
+---
+
+##### `from_seconds` <a name="from_seconds" id="@winglang/sdk.std.Duration.fromSeconds"></a>
+
+```wing
+bring std;
+
+std.Duration.from_seconds(amount: num)
+```
+
+Create a Duration representing an amount of seconds.
+
+###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/sdk.std.Duration.fromSeconds.parameter.amount"></a>
+
+- *Type:* num
+
+the amount of Seconds the `Duration` will represent.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.Duration.property.hours">hours</a></code> | <code>num</code> | Return the total number of hours in this Duration. |
+| <code><a href="#@winglang/sdk.std.Duration.property.minutes">minutes</a></code> | <code>num</code> | Return the total number of minutes in this Duration. |
+| <code><a href="#@winglang/sdk.std.Duration.property.seconds">seconds</a></code> | <code>num</code> | Return the total number of seconds in this Duration. |
+
+---
+
+##### `hours`<sup>Required</sup> <a name="hours" id="@winglang/sdk.std.Duration.property.hours"></a>
+
+```wing
+hours: num;
+```
+
+- *Type:* num
+
+Return the total number of hours in this Duration.
+
+---
+
+##### `minutes`<sup>Required</sup> <a name="minutes" id="@winglang/sdk.std.Duration.property.minutes"></a>
+
+```wing
+minutes: num;
+```
+
+- *Type:* num
+
+Return the total number of minutes in this Duration.
+
+---
+
+##### `seconds`<sup>Required</sup> <a name="seconds" id="@winglang/sdk.std.Duration.property.seconds"></a>
+
+```wing
+seconds: num;
+```
+
+- *Type:* num
+
+Return the total number of seconds in this Duration.
+
+---
+
+
 ### Files <a name="Files" id="@winglang/sdk.core.Files"></a>
 
 Handles the synthesis of files.
@@ -2843,6 +2959,269 @@ The path to a state file which will track all synthesized files.
 ---
 
 
+### ImmutableArray <a name="ImmutableArray" id="@winglang/sdk.std.ImmutableArray"></a>
+
+Immutable Array.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.ImmutableArray.Initializer"></a>
+
+```wing
+bring std;
+
+new std.ImmutableArray()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.at">at</a></code> | Get the value at the given index. |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.copy">copy</a></code> | Create an immutable shallow copy of this array. |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this array. |
+
+---
+
+##### `at` <a name="at" id="@winglang/sdk.std.ImmutableArray.at"></a>
+
+```wing
+at(index: num): T1
+```
+
+Get the value at the given index.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.ImmutableArray.at.parameter.index"></a>
+
+- *Type:* num
+
+index of the value to get.
+
+---
+
+##### `copy` <a name="copy" id="@winglang/sdk.std.ImmutableArray.copy"></a>
+
+```wing
+copy(): ImmutableArray
+```
+
+Create an immutable shallow copy of this array.
+
+##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.ImmutableArray.copyMut"></a>
+
+```wing
+copy_mut(): MutableArray
+```
+
+Create a mutable shallow copy of this array.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.property.length">length</a></code> | <code>num</code> | The length of the array. |
+
+---
+
+##### `length`<sup>Required</sup> <a name="length" id="@winglang/sdk.std.ImmutableArray.property.length"></a>
+
+```wing
+length: num;
+```
+
+- *Type:* num
+
+The length of the array.
+
+---
+
+
+### ImmutableMap <a name="ImmutableMap" id="@winglang/sdk.std.ImmutableMap"></a>
+
+Immutable Map.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.ImmutableMap.Initializer"></a>
+
+```wing
+bring std;
+
+new std.ImmutableMap()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.ImmutableMap.copy">copy</a></code> | Create an immutable shallow copy of this map. |
+| <code><a href="#@winglang/sdk.std.ImmutableMap.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this map. |
+| <code><a href="#@winglang/sdk.std.ImmutableMap.get">get</a></code> | Returns a specified element from the map. |
+| <code><a href="#@winglang/sdk.std.ImmutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
+
+---
+
+##### `copy` <a name="copy" id="@winglang/sdk.std.ImmutableMap.copy"></a>
+
+```wing
+copy(): ImmutableMap
+```
+
+Create an immutable shallow copy of this map.
+
+##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.ImmutableMap.copyMut"></a>
+
+```wing
+copy_mut(): MutableMap
+```
+
+Create a mutable shallow copy of this map.
+
+##### `get` <a name="get" id="@winglang/sdk.std.ImmutableMap.get"></a>
+
+```wing
+get(key: str): T1
+```
+
+Returns a specified element from the map.
+
+If the value that is associated to the provided key is an object, then you will get a reference
+to that object and any change made to that object will effectively modify it inside the map.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.ImmutableMap.get.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to return.
+
+---
+
+##### `has` <a name="has" id="@winglang/sdk.std.ImmutableMap.has"></a>
+
+```wing
+has(key: str): bool
+```
+
+Returns a boolean indicating whether an element with the specified key exists or not.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.ImmutableMap.has.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to test for presence.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.ImmutableMap.property.size">size</a></code> | <code>num</code> | Returns the number of elements in the map. |
+
+---
+
+##### `size`<sup>Required</sup> <a name="size" id="@winglang/sdk.std.ImmutableMap.property.size"></a>
+
+```wing
+size: num;
+```
+
+- *Type:* num
+
+Returns the number of elements in the map.
+
+---
+
+
+### ImmutableSet <a name="ImmutableSet" id="@winglang/sdk.std.ImmutableSet"></a>
+
+Immutable Set.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.ImmutableSet.Initializer"></a>
+
+```wing
+bring std;
+
+new std.ImmutableSet()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.ImmutableSet.copy">copy</a></code> | Create an immutable shallow copy of this set. |
+| <code><a href="#@winglang/sdk.std.ImmutableSet.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this set. |
+| <code><a href="#@winglang/sdk.std.ImmutableSet.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
+
+---
+
+##### `copy` <a name="copy" id="@winglang/sdk.std.ImmutableSet.copy"></a>
+
+```wing
+copy(): ImmutableSet
+```
+
+Create an immutable shallow copy of this set.
+
+##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.ImmutableSet.copyMut"></a>
+
+```wing
+copy_mut(): MutableSet
+```
+
+Create a mutable shallow copy of this set.
+
+##### `has` <a name="has" id="@winglang/sdk.std.ImmutableSet.has"></a>
+
+```wing
+has(value: T1): bool
+```
+
+Returns a boolean indicating whether an element with the specified value exists in the set.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.ImmutableSet.has.parameter.value"></a>
+
+- *Type:* std.T1
+
+The value to test for presence in the Set object.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.ImmutableSet.property.size">size</a></code> | <code>num</code> | The length of the set. |
+
+---
+
+##### `size`<sup>Required</sup> <a name="size" id="@winglang/sdk.std.ImmutableSet.property.size"></a>
+
+```wing
+size: num;
+```
+
+- *Type:* num
+
+The length of the set.
+
+---
+
+
 ### InflightClient <a name="InflightClient" id="@winglang/sdk.core.InflightClient"></a>
 
 Utility class with functions about inflight clients.
@@ -2884,6 +3263,389 @@ Creates a `Code` instance with code for creating an inflight client.
 
 ---
 
+
+
+### MutableArray <a name="MutableArray" id="@winglang/sdk.std.MutableArray"></a>
+
+Mutable Array.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.MutableArray.Initializer"></a>
+
+```wing
+bring std;
+
+new std.MutableArray()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.MutableArray.at">at</a></code> | Get the value at the given index. |
+| <code><a href="#@winglang/sdk.std.MutableArray.copy">copy</a></code> | Create an immutable shallow copy of this array. |
+| <code><a href="#@winglang/sdk.std.MutableArray.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this array. |
+| <code><a href="#@winglang/sdk.std.MutableArray.pop">pop</a></code> | Remove value from end of array. |
+| <code><a href="#@winglang/sdk.std.MutableArray.push">push</a></code> | Add value to end of array. |
+
+---
+
+##### `at` <a name="at" id="@winglang/sdk.std.MutableArray.at"></a>
+
+```wing
+at(index: num): T1
+```
+
+Get the value at the given index.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutableArray.at.parameter.index"></a>
+
+- *Type:* num
+
+index of the value to get.
+
+---
+
+##### `copy` <a name="copy" id="@winglang/sdk.std.MutableArray.copy"></a>
+
+```wing
+copy(): ImmutableArray
+```
+
+Create an immutable shallow copy of this array.
+
+##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.MutableArray.copyMut"></a>
+
+```wing
+copy_mut(): MutableArray
+```
+
+Create a mutable shallow copy of this array.
+
+##### `pop` <a name="pop" id="@winglang/sdk.std.MutableArray.pop"></a>
+
+```wing
+pop(): T1
+```
+
+Remove value from end of array.
+
+##### `push` <a name="push" id="@winglang/sdk.std.MutableArray.push"></a>
+
+```wing
+push(value: T1): void
+```
+
+Add value to end of array.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableArray.push.parameter.value"></a>
+
+- *Type:* std.T1
+
+value to add.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.MutableArray.property.length">length</a></code> | <code>num</code> | The length of the array. |
+
+---
+
+##### `length`<sup>Required</sup> <a name="length" id="@winglang/sdk.std.MutableArray.property.length"></a>
+
+```wing
+length: num;
+```
+
+- *Type:* num
+
+The length of the array.
+
+---
+
+
+### MutableMap <a name="MutableMap" id="@winglang/sdk.std.MutableMap"></a>
+
+Mutable Map.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.MutableMap.Initializer"></a>
+
+```wing
+bring std;
+
+new std.MutableMap()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.MutableMap.copy">copy</a></code> | Create an immutable shallow copy of this map. |
+| <code><a href="#@winglang/sdk.std.MutableMap.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this map. |
+| <code><a href="#@winglang/sdk.std.MutableMap.get">get</a></code> | Returns a specified element from the map. |
+| <code><a href="#@winglang/sdk.std.MutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
+| <code><a href="#@winglang/sdk.std.MutableMap.clear">clear</a></code> | Removes all elements. |
+| <code><a href="#@winglang/sdk.std.MutableMap.delete">delete</a></code> | Removes the specified element from a map. |
+| <code><a href="#@winglang/sdk.std.MutableMap.set">set</a></code> | Adds or updates an entry in a Map object with a specified key and a value. |
+
+---
+
+##### `copy` <a name="copy" id="@winglang/sdk.std.MutableMap.copy"></a>
+
+```wing
+copy(): ImmutableMap
+```
+
+Create an immutable shallow copy of this map.
+
+##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.MutableMap.copyMut"></a>
+
+```wing
+copy_mut(): MutableMap
+```
+
+Create a mutable shallow copy of this map.
+
+##### `get` <a name="get" id="@winglang/sdk.std.MutableMap.get"></a>
+
+```wing
+get(key: str): T1
+```
+
+Returns a specified element from the map.
+
+If the value that is associated to the provided key is an object, then you will get a reference
+to that object and any change made to that object will effectively modify it inside the map.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.get.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to return.
+
+---
+
+##### `has` <a name="has" id="@winglang/sdk.std.MutableMap.has"></a>
+
+```wing
+has(key: str): bool
+```
+
+Returns a boolean indicating whether an element with the specified key exists or not.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.has.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to test for presence.
+
+---
+
+##### `clear` <a name="clear" id="@winglang/sdk.std.MutableMap.clear"></a>
+
+```wing
+clear(): void
+```
+
+Removes all elements.
+
+##### `delete` <a name="delete" id="@winglang/sdk.std.MutableMap.delete"></a>
+
+```wing
+delete(key: str): bool
+```
+
+Removes the specified element from a map.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.delete.parameter.key"></a>
+
+- *Type:* str
+
+The key.
+
+---
+
+##### `set` <a name="set" id="@winglang/sdk.std.MutableMap.set"></a>
+
+```wing
+set(key: str, value: T1): void
+```
+
+Adds or updates an entry in a Map object with a specified key and a value.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.set.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to add.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableMap.set.parameter.value"></a>
+
+- *Type:* std.T1
+
+The value of the element to add.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.MutableMap.property.size">size</a></code> | <code>num</code> | Returns the number of elements in the map. |
+
+---
+
+##### `size`<sup>Required</sup> <a name="size" id="@winglang/sdk.std.MutableMap.property.size"></a>
+
+```wing
+size: num;
+```
+
+- *Type:* num
+
+Returns the number of elements in the map.
+
+---
+
+
+### MutableSet <a name="MutableSet" id="@winglang/sdk.std.MutableSet"></a>
+
+Mutable Set.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.MutableSet.Initializer"></a>
+
+```wing
+bring std;
+
+new std.MutableSet()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.MutableSet.copy">copy</a></code> | Create an immutable shallow copy of this set. |
+| <code><a href="#@winglang/sdk.std.MutableSet.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this set. |
+| <code><a href="#@winglang/sdk.std.MutableSet.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
+| <code><a href="#@winglang/sdk.std.MutableSet.add">add</a></code> | Add value to set. |
+| <code><a href="#@winglang/sdk.std.MutableSet.clear">clear</a></code> | The clear() method removes all elements from a set. |
+| <code><a href="#@winglang/sdk.std.MutableSet.delete">delete</a></code> | Removes a specified value from a set, if it is in the set. |
+
+---
+
+##### `copy` <a name="copy" id="@winglang/sdk.std.MutableSet.copy"></a>
+
+```wing
+copy(): ImmutableSet
+```
+
+Create an immutable shallow copy of this set.
+
+##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.MutableSet.copyMut"></a>
+
+```wing
+copy_mut(): MutableSet
+```
+
+Create a mutable shallow copy of this set.
+
+##### `has` <a name="has" id="@winglang/sdk.std.MutableSet.has"></a>
+
+```wing
+has(value: T1): bool
+```
+
+Returns a boolean indicating whether an element with the specified value exists in the set.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.has.parameter.value"></a>
+
+- *Type:* std.T1
+
+The value to test for presence in the Set object.
+
+---
+
+##### `add` <a name="add" id="@winglang/sdk.std.MutableSet.add"></a>
+
+```wing
+add(value: T1): MutableSet
+```
+
+Add value to set.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.add.parameter.value"></a>
+
+- *Type:* std.T1
+
+value to add.
+
+---
+
+##### `clear` <a name="clear" id="@winglang/sdk.std.MutableSet.clear"></a>
+
+```wing
+clear(): void
+```
+
+The clear() method removes all elements from a set.
+
+##### `delete` <a name="delete" id="@winglang/sdk.std.MutableSet.delete"></a>
+
+```wing
+delete(value: T1): bool
+```
+
+Removes a specified value from a set, if it is in the set.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.delete.parameter.value"></a>
+
+- *Type:* std.T1
+
+The value to remove from the set.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.MutableSet.property.size">size</a></code> | <code>num</code> | The length of the set. |
+
+---
+
+##### `size`<sup>Required</sup> <a name="size" id="@winglang/sdk.std.MutableSet.property.size"></a>
+
+```wing
+size: num;
+```
+
+- *Type:* num
+
+The length of the set.
+
+---
 
 
 ### NodeJsCode <a name="NodeJsCode" id="@winglang/sdk.core.NodeJsCode"></a>
@@ -2990,6 +3752,246 @@ text: str;
 The code contents.
 
 ---
+
+
+### String <a name="String" id="@winglang/sdk.std.String"></a>
+
+String.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.String.Initializer"></a>
+
+```wing
+bring std;
+
+new std.String()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.String.at">at</a></code> | Returns the character at the specified index. |
+| <code><a href="#@winglang/sdk.std.String.concat">concat</a></code> | Combines the text of two (or more) strings and returns a new string. |
+| <code><a href="#@winglang/sdk.std.String.contains">contains</a></code> | Checks if string includes substring. |
+| <code><a href="#@winglang/sdk.std.String.ends">ends</a></code> | Does this string end with the given searchString? |
+| <code><a href="#@winglang/sdk.std.String.indexOf">index_of</a></code> | Returns the index of the first occurrence of searchString found. |
+| <code><a href="#@winglang/sdk.std.String.lCase">l_case</a></code> | Returns this string in lower case. |
+| <code><a href="#@winglang/sdk.std.String.split">split</a></code> | Splits string by separator. |
+| <code><a href="#@winglang/sdk.std.String.starts">starts</a></code> | Does this string start with the given searchString? |
+| <code><a href="#@winglang/sdk.std.String.substring">substring</a></code> | Returns a string between indexStart, indexEnd. |
+| <code><a href="#@winglang/sdk.std.String.trim">trim</a></code> | Removes white spaces from start and end of this string. |
+| <code><a href="#@winglang/sdk.std.String.uCase">u_case</a></code> | Returns this string in upper case. |
+
+---
+
+##### `at` <a name="at" id="@winglang/sdk.std.String.at"></a>
+
+```wing
+at(index: num): str
+```
+
+Returns the character at the specified index.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.String.at.parameter.index"></a>
+
+- *Type:* num
+
+position of the character.
+
+---
+
+##### `concat` <a name="concat" id="@winglang/sdk.std.String.concat"></a>
+
+```wing
+concat(str_n: str): str
+```
+
+Combines the text of two (or more) strings and returns a new string.
+
+###### `str_n`<sup>Required</sup> <a name="str_n" id="@winglang/sdk.std.String.concat.parameter.strN"></a>
+
+- *Type:* str
+
+one or more strings to concatenate to this string.
+
+---
+
+##### `contains` <a name="contains" id="@winglang/sdk.std.String.contains"></a>
+
+```wing
+contains(search_string: str): bool
+```
+
+Checks if string includes substring.
+
+###### `search_string`<sup>Required</sup> <a name="search_string" id="@winglang/sdk.std.String.contains.parameter.searchString"></a>
+
+- *Type:* str
+
+substring to search for.
+
+---
+
+##### `ends` <a name="ends" id="@winglang/sdk.std.String.ends"></a>
+
+```wing
+ends(search_string: str): bool
+```
+
+Does this string end with the given searchString?
+
+###### `search_string`<sup>Required</sup> <a name="search_string" id="@winglang/sdk.std.String.ends.parameter.searchString"></a>
+
+- *Type:* str
+
+substring to search for.
+
+---
+
+##### `index_of` <a name="index_of" id="@winglang/sdk.std.String.indexOf"></a>
+
+```wing
+index_of(search_string: str): num
+```
+
+Returns the index of the first occurrence of searchString found.
+
+###### `search_string`<sup>Required</sup> <a name="search_string" id="@winglang/sdk.std.String.indexOf.parameter.searchString"></a>
+
+- *Type:* str
+
+substring to search for.
+
+---
+
+##### `l_case` <a name="l_case" id="@winglang/sdk.std.String.lCase"></a>
+
+```wing
+l_case(): str
+```
+
+Returns this string in lower case.
+
+##### `split` <a name="split" id="@winglang/sdk.std.String.split"></a>
+
+```wing
+split(separator: str): MutArray<str>
+```
+
+Splits string by separator.
+
+###### `separator`<sup>Required</sup> <a name="separator" id="@winglang/sdk.std.String.split.parameter.separator"></a>
+
+- *Type:* str
+
+separator to split by.
+
+---
+
+##### `starts` <a name="starts" id="@winglang/sdk.std.String.starts"></a>
+
+```wing
+starts(search_string: str): bool
+```
+
+Does this string start with the given searchString?
+
+###### `search_string`<sup>Required</sup> <a name="search_string" id="@winglang/sdk.std.String.starts.parameter.searchString"></a>
+
+- *Type:* str
+
+substring to search for.
+
+---
+
+##### `substring` <a name="substring" id="@winglang/sdk.std.String.substring"></a>
+
+```wing
+substring(index_start: num, index_end?: num): str
+```
+
+Returns a string between indexStart, indexEnd.
+
+###### `index_start`<sup>Required</sup> <a name="index_start" id="@winglang/sdk.std.String.substring.parameter.indexStart"></a>
+
+- *Type:* num
+
+index of the character we slice at.
+
+---
+
+###### `index_end`<sup>Optional</sup> <a name="index_end" id="@winglang/sdk.std.String.substring.parameter.indexEnd"></a>
+
+- *Type:* num
+
+optional - index of the character we end slicing at.
+
+---
+
+##### `trim` <a name="trim" id="@winglang/sdk.std.String.trim"></a>
+
+```wing
+trim(): str
+```
+
+Removes white spaces from start and end of this string.
+
+##### `u_case` <a name="u_case" id="@winglang/sdk.std.String.uCase"></a>
+
+```wing
+u_case(): str
+```
+
+Returns this string in upper case.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.String.property.length">length</a></code> | <code>num</code> | The length of the string. |
+
+---
+
+##### `length`<sup>Required</sup> <a name="length" id="@winglang/sdk.std.String.property.length"></a>
+
+```wing
+length: num;
+```
+
+- *Type:* num
+
+The length of the string.
+
+---
+
+
+### T1 <a name="T1" id="@winglang/sdk.std.T1"></a>
+
+Generic type argument.
+
+This type is replaced at compile time.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.T1.Initializer"></a>
+
+```wing
+bring std;
+
+new std.T1()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+
 
 
 ### TreeInspector <a name="TreeInspector" id="@winglang/sdk.core.TreeInspector"></a>
