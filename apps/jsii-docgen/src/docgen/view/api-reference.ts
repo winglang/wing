@@ -32,7 +32,11 @@ export class ApiReference {
     const wingSdkHacks = assembly.name === "@winglang/sdk";
     if (wingSdkHacks) {
       submodules = submodules.filter(
-        (s) => s.name === "cloud" || s.name === "core" || s.name === "fs"
+        (s) =>
+          s.name === "cloud" ||
+          s.name === "core" ||
+          s.name === "fs" ||
+          s.name === "std"
       );
     }
     if (allSubmodules ?? false) {
