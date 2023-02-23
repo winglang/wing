@@ -1,7 +1,6 @@
 use lsp_types::{DidChangeTextDocumentParams, DidOpenTextDocumentParams, Url};
 use std::collections::HashSet;
 use std::path::Path;
-use std::sync::RwLock;
 use std::{cell::RefCell, collections::HashMap};
 use tree_sitter::Tree;
 
@@ -30,7 +29,7 @@ thread_local! {
 	/// When consumed as a WASM library, wingc is not in control of the process/memory in which it is running.
 	/// This means that it cannot reliably manage stateful data like this between function calls.
 	/// Here we will assume the process is single threaded, and use thread_local to store this data.
-	pub static FILES: RefCell<RwLock<HashMap<Url,FileData>>> = RefCell::new(RwLock::new(HashMap::new()));
+	pub static FILES: RefCell<HashMap<Url,FileData>> = RefCell::new(HashMap::new());
 }
 
 #[no_mangle]
@@ -44,13 +43,13 @@ pub unsafe extern "C" fn wingc_on_did_open_text_document(ptr: u32, len: u32) {
 }
 pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
 	FILES.with(|files| {
-		let files = files.borrow_mut();
+		let mut files = files.borrow_mut();
 		let uri = params.text_document.uri;
 		let uri_path = uri.to_file_path().unwrap();
 		let path = uri_path.to_str().unwrap();
 		let result = partial_compile(path, params.text_document.text.as_bytes());
 		send_diagnostics(&uri, &result.diagnostics);
-		files.write().unwrap().insert(uri, result);
+		files.insert(uri, result);
 	});
 }
 
@@ -65,14 +64,14 @@ pub unsafe extern "C" fn wingc_on_did_change_text_document(ptr: u32, len: u32) {
 }
 pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
 	FILES.with(|files| {
-		let files = files.borrow_mut();
+		let mut files = files.borrow_mut();
 		let uri = params.text_document.uri;
 		let uri_path = uri.to_file_path().unwrap();
 		let path = uri_path.to_str().unwrap();
 
 		let result = partial_compile(path, params.content_changes[0].text.as_bytes());
 		send_diagnostics(&uri, &result.diagnostics);
-		files.write().unwrap().insert(uri, result);
+		files.insert(uri, result);
 	});
 }
 
