@@ -5,6 +5,7 @@ import { IamRole } from "@cdktf/provider-aws/lib/iam-role";
 import { IamRolePolicy } from "@cdktf/provider-aws/lib/iam-role-policy";
 import { IamRolePolicyAttachment } from "@cdktf/provider-aws/lib/iam-role-policy-attachment";
 import { LambdaFunction } from "@cdktf/provider-aws/lib/lambda-function";
+import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
 import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
@@ -216,6 +217,24 @@ export class Function extends cloud.FunctionBase {
         Effect: s.effect ?? "Allow",
       }))
     );
+  }
+
+  /**
+   * Grants the given identity permissions to invoke this function.
+   * @param principal The AWS principal to grant invoke permissions to (e.g. "s3.amazonaws.com", "events.amazonaws.com", "sns.amazonaws.com")
+   */
+  public addPermissionToInvoke(
+    source: core.Resource,
+    principal: string,
+    sourceArn: string
+  ) {
+    new LambdaPermission(this, `InvokePermission-${source.node.addr}`, {
+      functionName: this._functionName,
+      qualifier: this.function.version,
+      action: "lambda:InvokeFunction",
+      principal: principal,
+      sourceArn: sourceArn,
+    });
   }
 
   /** @internal */
