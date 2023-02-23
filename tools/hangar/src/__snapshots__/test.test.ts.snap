@@ -36,8 +36,6 @@ exports[`expressions_string_interpolation.w > wing test --target sim > stdout 1`
 
 exports[`file_counter.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> file_counter.w <gray>(no tests)</color>"`;
 
-exports[`floor_division.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> floor_division.w <gray>»</color> <brightWhite>root/test:floor_division</color>"`;
-
 exports[`for_loop.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> for_loop.w <gray>(no tests)</color>"`;
 
 exports[`forward_decl.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> forward_decl.w <gray>(no tests)</color>"`;
