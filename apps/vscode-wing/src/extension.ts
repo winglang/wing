@@ -33,8 +33,7 @@ async function startLanguageServer(context: ExtensionContext) {
   let wingBin = env.WING_BIN ?? configuredWingBin;
 
   if (wingBin !== "npx") {
-    // check if wing is installed
-    const result = which.sync(wingBin, { nothrow: true });
+    const result = wingBinaryLocation(wingBin);
     if (!result) {
       const npmInstallOption = `Install globally with npm`;
       const choice = await window.showWarningMessage(
@@ -43,36 +42,7 @@ async function startLanguageServer(context: ExtensionContext) {
       );
 
       if (choice === npmInstallOption) {
-        await window.withProgress(
-          {
-            location: ProgressLocation.Notification,
-            cancellable: false,
-          },
-          async (progress) => {
-            progress.report({ message: `Installing Wing v${extVersion}...` });
-            return new Promise((resolve, reject) => {
-              exec(`npm install -g winglang@${extVersion}`, (error, stdout) => {
-                if (error) {
-                  reject(error);
-                } else {
-                  resolve(stdout);
-                }
-              });
-            })
-              .then(() => {
-                wingBin = "wing";
-                void window.showInformationMessage(
-                  `Wing v${extVersion} has been installed!`
-                );
-              })
-              .catch((e) => {
-                void window.showErrorMessage(
-                  `Failed to install Wing v${extVersion}: ${e}`
-                );
-                wingBin = "npx";
-              });
-          }
-        );
+        wingBin = await guidedWingInstallation(extVersion);
       } else {
         // User decided to ignore the warning
         return;
@@ -109,4 +79,52 @@ async function startLanguageServer(context: ExtensionContext) {
   );
 
   await client.start();
+}
+
+/**
+ * Install wing globally using npm if desired by the user
+ *
+ * @returns "wing" if wing is successfully installed, "npx" otherwise
+ */
+async function guidedWingInstallation(version: string) {
+  return window.withProgress(
+    {
+      location: ProgressLocation.Notification,
+      cancellable: false,
+    },
+    async (progress) => {
+      progress.report({ message: `Installing Wing v${version}...` });
+      return new Promise((resolve, reject) => {
+        exec(`npm install -g winglang@${version}`, (error, stdout) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(stdout);
+          }
+        });
+      })
+        .then(() => {
+          void window.showInformationMessage(
+            `Wing v${version} has been installed!`
+          );
+          return "wing";
+        })
+        .catch((e) => {
+          void window.showErrorMessage(
+            `Failed to install Wing v${version}: ${e}`
+          );
+          return "npx";
+        });
+    }
+  );
+}
+
+/**
+ * Get the absolute location of the wing executable
+ *
+ * @param command The command to search for, defaults to "wing"
+ * @returns The absolute path to the wing executable, or null if not found/installed
+ */
+function wingBinaryLocation(command?: string) {
+  return which.sync(command ?? "wing", { nothrow: true });
 }

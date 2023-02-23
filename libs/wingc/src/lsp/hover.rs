@@ -238,7 +238,7 @@ pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
 			});
 			let span = if let Some(_) = reference {
 				// When hovering over a reference, we want to highlight the entire relevant expression
-				// e.g. when hovering over `b` in `a.b.c`, we want to highlight `a.b`
+				// e.g. Hovering over `b` in `a.b.c` will highlight `a.b`
 				&expr.expect("Missing type for expression").span
 			} else {
 				&symbol.span
