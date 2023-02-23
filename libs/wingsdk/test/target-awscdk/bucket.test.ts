@@ -40,3 +40,17 @@ test("bucket is public", () => {
   template.resourceCountIs("AWS::S3::Bucket", 1);
   expect(template.toJSON()).toMatchSnapshot();
 });
+
+test("bucket with two preflight objects", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const bucket = new cloud.Bucket(app, "my_bucket", { public: true });
+  bucket.addObject("file1.txt", "hello world");
+  bucket.addObject("file2.txt", "boom bam");
+  const output = app.synth();
+
+  // THEN
+  const template = Template.fromJSON(JSON.parse(output));
+  template.resourceCountIs("Custom::CDKBucketDeployment", 2);
+  expect(template.toJSON()).toMatchSnapshot();
+});

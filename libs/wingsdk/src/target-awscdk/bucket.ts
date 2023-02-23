@@ -6,8 +6,10 @@ import {
 } from "aws-cdk-lib/aws-s3";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { Construct } from "constructs";
+import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Effect } from "aws-cdk-lib/aws-iam";
 
 /**
  * AWS implementation of `cloud.Bucket`.
@@ -40,12 +42,55 @@ export class Bucket extends cloud.BucketBase {
   }
 
   /** @internal */
+  public _bind(host: core.IInflightHost, ops: string[]): void {
+    if (!(host instanceof Function)) {
+      throw new Error("buckets can only be bound by tfaws.Function for now");
+    }
+
+    if (ops.includes(cloud.BucketInflightMethods.PUT)) {
+      host.addPolicyStatements({
+        effect: Effect.ALLOW,
+        actions: ["s3:PutObject*", "s3:Abort*"],
+        resources: [`${this.bucket.bucketArn}`, `${this.bucket.bucketArn}/*`],
+      })
+    }
+    if (ops.includes(cloud.BucketInflightMethods.GET)) {
+      host.addPolicyStatements({
+        effect: Effect.ALLOW,
+        actions: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+        resources: [`${this.bucket.bucketArn}`, `${this.bucket.bucketArn}/*`],
+      })
+    }
+    if (ops.includes(cloud.BucketInflightMethods.LIST)) {
+      host.addPolicyStatements({
+        effect: Effect.ALLOW,
+        actions: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+        resources: [`${this.bucket.bucketArn}`, `${this.bucket.bucketArn}/*`],
+      })
+    }
+    if (ops.includes(cloud.BucketInflightMethods.DELETE)) {
+      host.addPolicyStatements({
+        effect: Effect.ALLOW,
+        actions: [
+          "s3:DeleteObject*",
+          "s3:DeleteObjectVersion*",
+          "s3:PutLifecycleConfiguration*",
+        ],
+        resources: [`${this.bucket.bucketArn}`, `${this.bucket.bucketArn}/*`],
+      })
+    }
+    // The bucket name needs to be passed through an environment variable since
+    // it may not be resolved until deployment time.
+    host.addEnvironment(this.envName(), this.bucket.bucketName);
+
+    super._bind(host, ops);
+  }
+
+  /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(
-      __filename.replace("awscdk", "tf-aws"),
-      "BucketClient",
-      [`process.env["${this.envName()}"]`]
-    );
+    return core.InflightClient.for(__filename.replace("awscdk", "tf-aws"), "BucketClient", [
+      `process.env["${this.envName()}"]`
+    ]);
   }
 
   private envName(): string {
@@ -54,3 +99,6 @@ export class Bucket extends cloud.BucketBase {
 }
 
 Bucket._annotateInflight("put", {});
+Bucket._annotateInflight("get", {});
+Bucket._annotateInflight("delete", {});
+Bucket._annotateInflight("list", {});
