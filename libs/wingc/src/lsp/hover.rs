@@ -59,10 +59,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 	}
 
 	fn visit_stmt(&mut self, node: &'a Stmt) {
-		if self.is_found() {
-			return;
-		}
-		if !self.should_check_span(&node.span) {
+		if self.is_found() || !self.should_check_span(&node.span) {
 			return;
 		}
 
@@ -70,10 +67,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 	}
 
 	fn visit_expr(&mut self, node: &'a Expr) {
-		if self.is_found() {
-			return;
-		}
-		if !self.should_check_span(&node.span) {
+		if self.is_found() || !self.should_check_span(&node.span) {
 			return;
 		}
 
@@ -150,13 +144,11 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 	}
 
 	fn visit_symbol(&mut self, node: &'a Symbol) {
-		if self.is_found() {
+		if self.is_found() || !self.should_check_span(&node.span) {
 			return;
 		}
 
-		if self.should_check_span(&node.span) {
-			self.found_symbol = Some(node);
-		}
+		self.found_symbol = Some(node);
 	}
 }
 

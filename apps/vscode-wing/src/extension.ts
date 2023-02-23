@@ -12,7 +12,8 @@ import which from "which";
 const LANGUAGE_SERVER_NAME = "Wing Language Server";
 const LANGUAGE_SERVER_ID = "wing-language-server";
 
-const CFG_WING_BIN = "wing.bin";
+const CFG_WING = "wing";
+const CFG_WING_BIN = `${CFG_WING}.bin`;
 
 let client: LanguageClient;
 
@@ -27,7 +28,7 @@ export async function activate(context: ExtensionContext) {
 async function startLanguageServer(context: ExtensionContext) {
   const extVersion = context.extension.packageJSON.version;
   const configuredWingBin = workspace
-    .getConfiguration("wing")
+    .getConfiguration(CFG_WING)
     .get<string>(CFG_WING_BIN, "wing");
   let wingBin = env.WING_BIN ?? configuredWingBin;
 
