@@ -366,18 +366,18 @@ impl<'a> JSifier<'a> {
 				format!("({}{})", op, self.jsify_expression(exp, phase))
 			}
 			ExprKind::Binary { op, left, right } => {
-				if let BinaryOperator::FloorDiv = *op {
-					return format!(
-						"Math.floor({} / {})",
-						self.jsify_expression(left, phase),
-						self.jsify_expression(right, phase)
-					);
-				}
 				let op = match op {
 					BinaryOperator::Add => "+",
 					BinaryOperator::Sub => "-",
 					BinaryOperator::Mul => "*",
 					BinaryOperator::Div => "/",
+					BinaryOperator::FloorDiv => {
+						return format!(
+							"Math.floor({} / {})",
+							self.jsify_expression(left, phase),
+							self.jsify_expression(right, phase)
+						);
+					},
 					BinaryOperator::Mod => "%",
 					BinaryOperator::Greater => ">",
 					BinaryOperator::GreaterOrEqual => ">=",
@@ -387,7 +387,6 @@ impl<'a> JSifier<'a> {
 					BinaryOperator::NotEqual => "!==",
 					BinaryOperator::LogicalAnd => "&&",
 					BinaryOperator::LogicalOr => "||",
-					_ => "",
 				};
 				format!(
 					"({} {} {})",
