@@ -24,15 +24,13 @@ test("can create sequential files in a bucket", async () => {
             await this.bucket.put(key, event);
         }`,
         {
-          resources: {
-            counter: {
-              resource: counter,
-              ops: [cloud.CounterInflightMethods.INC],
-            },
-            bucket: {
-              resource: bucket,
-              ops: [cloud.BucketInflightMethods.PUT],
-            },
+          counter: {
+            obj: counter,
+            ops: [cloud.CounterInflightMethods.INC],
+          },
+          bucket: {
+            obj: bucket,
+            ops: [cloud.BucketInflightMethods.PUT],
           },
         }
       );

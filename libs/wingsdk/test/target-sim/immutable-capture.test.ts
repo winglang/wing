@@ -1,20 +1,19 @@
 import { Construct } from "constructs";
 import { Bucket } from "../../src/cloud";
 import { Function, IFunctionClient } from "../../src/cloud/function";
-import { InflightBindings } from "../../src/core";
-import { Inflight, NodeJsCode } from "../../src/core/inflight";
+import { Inflight, InflightBinding, NodeJsCode } from "../../src/core/inflight";
 import { Duration } from "../../src/std";
 import { SimApp } from "../../src/testing";
 
 interface CaptureTest {
-  bindings: InflightBindings;
+  bindings: Record<string, InflightBinding>;
   inflightCode?: string[];
   whenInflightExpression?: string;
   thenResolvesTo?: any;
 }
 
 captureTest("array", () => ({
-  bindings: { data: { my_capture: ["hello", "dude"] } },
+  bindings: { my_capture: { obj: ["hello", "dude"] } },
   inflightCode: [
     `assert(this.my_capture.length === 2)`,
     `assert(this.my_capture[0] === "hello")`,
@@ -23,7 +22,7 @@ captureTest("array", () => ({
 }));
 
 captureTest("string", () => ({
-  bindings: { data: { my_capture: "bam bam bam" } },
+  bindings: { my_capture: { obj: "bam bam bam" } },
   inflightCode: [
     `assert(this.my_capture.length === 11)`,
     `assert(this.my_capture === "bam bam bam")`,
@@ -31,18 +30,18 @@ captureTest("string", () => ({
 }));
 
 captureTest("number", () => ({
-  bindings: { data: { my_capture: 123 } },
+  bindings: { my_capture: { obj: 123 } },
   inflightCode: [`assert(this.my_capture + 20 === 143)`],
 }));
 
 captureTest("boolean", () => ({
-  bindings: { data: { my_capture: false } },
+  bindings: { my_capture: { obj: false } },
   inflightCode: [`assert(this.my_capture === false)`],
 }));
 
 captureTest("struct", () => ({
   bindings: {
-    data: { my_capture: { hello: "dude", world: "cup", foo: "bar" } },
+    my_capture: { obj: { hello: "dude", world: "cup", foo: "bar" } },
   },
   inflightCode: [
     `assert(this.my_capture.hello === "dude")`,
@@ -54,7 +53,7 @@ captureTest("struct", () => ({
 
 captureTest("set", () => ({
   bindings: {
-    data: { my_capture: new Set(["boom", "bam", "bang"]) },
+    my_capture: { obj: new Set(["boom", "bam", "bang"]) },
   },
   inflightCode: [
     `assert(this.my_capture.has("boom"))`,
@@ -65,7 +64,7 @@ captureTest("set", () => ({
 }));
 
 captureTest("duration", () => ({
-  bindings: { data: { my_capture: Duration.fromHours(2) } },
+  bindings: { my_capture: { obj: Duration.fromHours(2) } },
   inflightCode: [
     `assert(this.my_capture.minutes === 120)`,
     `assert(this.my_capture.seconds === 7200)`,
@@ -75,8 +74,8 @@ captureTest("duration", () => ({
 
 captureTest("map", () => ({
   bindings: {
-    data: {
-      my_capture: Object.freeze(
+    my_capture: {
+      obj: Object.freeze(
         new Map([
           ["foo", 123],
           ["bar", 456],
@@ -95,8 +94,8 @@ captureTest("map", () => ({
 
 captureTest("array of durations", () => ({
   bindings: {
-    data: {
-      my_array: [Duration.fromMinutes(10), Duration.fromMinutes(20)],
+    my_array: {
+      obj: [Duration.fromMinutes(10), Duration.fromMinutes(20)],
     },
   },
   inflightCode: [
@@ -108,8 +107,8 @@ captureTest("array of durations", () => ({
 
 captureTest("map of arrays", () => ({
   bindings: {
-    data: {
-      my_map: Object.freeze(
+    my_map: {
+      obj: Object.freeze(
         new Map([
           ["foo", [1, 2]],
           ["bar", [3, 4]],
@@ -131,8 +130,8 @@ captureTest("map of arrays", () => ({
 // array of maps
 captureTest("array of maps", () => ({
   bindings: {
-    data: {
-      my_array: [
+    my_array: {
+      obj: [
         Object.freeze(
           new Map([
             ["foo", 1],
@@ -157,8 +156,8 @@ captureTest("array of maps", () => ({
 // set of durations
 captureTest("set of durations", () => ({
   bindings: {
-    data: {
-      my_set: new Set([Duration.fromMinutes(10), Duration.fromMinutes(20)]),
+    my_set: {
+      obj: new Set([Duration.fromMinutes(10), Duration.fromMinutes(20)]),
     },
   },
   inflightCode: [
@@ -171,8 +170,8 @@ captureTest("set of durations", () => ({
 // map of arrays of durations
 captureTest("map of arrays of durations", () => ({
   bindings: {
-    data: {
-      my_map: Object.freeze(
+    my_map: {
+      obj: Object.freeze(
         new Map([
           ["foo", [Duration.fromMinutes(10), Duration.fromMinutes(20)]],
           ["bar", [Duration.fromMinutes(30), Duration.fromMinutes(40)]],
@@ -191,8 +190,8 @@ captureTest("map of arrays of durations", () => ({
 // struct of maps
 captureTest("struct of maps", () => ({
   bindings: {
-    data: {
-      my_struct: {
+    my_struct: {
+      obj: {
         foo: Object.freeze(
           new Map([
             ["foo", 1],
@@ -219,8 +218,8 @@ captureTest("struct of maps", () => ({
 // array of buckets
 captureTest("array of buckets", (scope) => ({
   bindings: {
-    data: {
-      my_buckets: [new Bucket(scope, "B1"), new Bucket(scope, "B2")],
+    my_buckets: {
+      obj: [new Bucket(scope, "B1"), new Bucket(scope, "B2")],
     },
   },
   inflightCode: [
@@ -236,8 +235,8 @@ captureTest("array of buckets", (scope) => ({
 // map of buckets
 captureTest("map of buckets", (scope) => ({
   bindings: {
-    data: {
-      my_map: Object.freeze(
+    my_map: {
+      obj: Object.freeze(
         new Map([
           ["foo", new Bucket(scope, "B1")],
           ["bar", new Bucket(scope, "B2")],
@@ -255,8 +254,8 @@ captureTest("map of buckets", (scope) => ({
 // struct with resources
 captureTest("struct with resources", (scope) => ({
   bindings: {
-    data: {
-      my_struct: {
+    my_struct: {
+      obj: {
         bucky: new Bucket(scope, "B1"),
         mapy: Object.freeze(
           new Map([

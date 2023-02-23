@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Bucket, Function } from "../../src/cloud";
-import { InflightBindings } from "../../src/core";
+import { InflightBinding } from "../../src/core";
 import { SimApp, Testing, TestResult } from "../../src/testing";
 
 describe("run single test", () => {
@@ -95,11 +95,9 @@ describe("run all tests", () => {
         "assert(keys.length === 5);",
       ],
       {
-        resources: {
-          bucket: {
-            resource: bucket,
-            ops: ["put"],
-          },
+        bucket: {
+          obj: bucket,
+          ops: ["put"],
         },
       }
     );
@@ -114,11 +112,9 @@ describe("run all tests", () => {
         "assert(keys.length === 1);",
       ],
       {
-        resources: {
-          bucket: {
-            resource: bucket,
-            ops: ["put", "list"],
-          },
+        bucket: {
+          obj: bucket,
+          ops: ["put", "list"],
         },
       }
     );
@@ -145,7 +141,7 @@ class Test extends Function {
     scope: Construct,
     id: string,
     code: string[],
-    bindings?: InflightBindings
+    bindings: Record<string, InflightBinding> = {}
   ) {
     super(
       scope,

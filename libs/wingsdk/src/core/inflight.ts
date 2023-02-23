@@ -96,7 +96,7 @@ export interface InflightProps {
    * Data and resource binding information.
    * @default - no bindings
    */
-  readonly bindings?: InflightBindings;
+  readonly bindings?: Record<string, InflightBinding>;
 }
 
 /**
@@ -124,7 +124,7 @@ export class Inflight extends Construct implements IResource {
       throw new Error("Only Node.js code is supported");
     }
 
-    return makeHandler(scope, id, props.code.text, props.bindings ?? {}, {
+    return makeHandler(scope, id, props.code.text, props.bindings, {
       hidden: this.display.hidden,
       title: this.display.title,
       description: this.display.description,
@@ -153,33 +153,18 @@ export class Inflight extends Construct implements IResource {
 }
 
 /**
- * A resource binding.
+ * An inflight binding.
  */
-export interface InflightResourceBinding {
+export interface InflightBinding {
   /**
-   * The resource.
+   * The resource or capturable value.
    */
-  readonly resource: IResource;
+  readonly obj: any;
 
   /**
    * The list of operations used on the resource.
    */
-  readonly ops: string[];
-}
-
-/**
- * Inflight bindings.
- */
-export interface InflightBindings {
-  /**
-   * Resources being referenced by the inflight (key is the symbol).
-   */
-  readonly resources?: Record<string, InflightResourceBinding>;
-
-  /**
-   * Immutable data being referenced by the inflight (key is the symbol);
-   */
-  readonly data?: Record<string, any>;
+  readonly ops?: string[];
 }
 
 /**

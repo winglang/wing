@@ -37,11 +37,9 @@ test("function with a counter binding", () => {
   console.log(val);
 }`,
     {
-      resources: {
-        my_counter: {
-          resource: counter,
-          ops: [cloud.CounterInflightMethods.INC],
-        },
+      my_counter: {
+        obj: counter,
+        ops: [cloud.CounterInflightMethods.INC],
       },
     }
   );
@@ -73,11 +71,9 @@ test("inc() policy statement", () => {
   console.log(val);
 }`,
     {
-      resources: {
-        my_counter: {
-          resource: counter,
-          ops: [cloud.CounterInflightMethods.INC],
-        },
+      my_counter: {
+        obj: counter,
+        ops: [cloud.CounterInflightMethods.INC],
       },
     }
   );
@@ -100,11 +96,9 @@ test("dec() policy statement", () => {
   console.log(val);
 }`,
     {
-      resources: {
-        my_counter: {
-          resource: counter,
-          ops: [cloud.CounterInflightMethods.DEC],
-        },
+      my_counter: {
+        obj: counter,
+        ops: [cloud.CounterInflightMethods.DEC],
       },
     }
   );
@@ -127,11 +121,9 @@ test("peek() policy statement", () => {
   console.log(val);
 }`,
     {
-      resources: {
-        my_counter: {
-          resource: counter,
-          ops: [cloud.CounterInflightMethods.PEEK],
-        },
+      my_counter: {
+        obj: counter,
+        ops: [cloud.CounterInflightMethods.PEEK],
       },
     }
   );
