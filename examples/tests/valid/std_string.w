@@ -9,13 +9,13 @@ assert(s1.contains("some"));
 assert(!"some".contains(s1));
 assert(s1.ends("string"));
 assert(s1.index_of("s") == 0);
-assert("Some String".l_case() == "some string");
+assert("Some String".lowercase() == "some string");
 assert(s1.split(" ").at(0) == "some");
 assert(s1.starts("some"));
 assert(s1.substring(5) == "string");
 assert(s1.substring(5, 7) == "st");
 assert("   some string   ".trim() == "some string");
-assert("Some String".u_case() == "SOME STRING");
+assert("Some String".uppercase() == "SOME STRING");
   
 // For debugging the test
 new cloud.Function(inflight () => {
