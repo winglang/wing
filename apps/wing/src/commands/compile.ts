@@ -100,7 +100,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   } catch (e) {
     // This is a bug in Wing, not the user's code.
     console.error(e);
-    console.log("  " + chalk.bold.red("error:") + " An internal error occurred while Wing was compiling. Please report this bug by creating an issue on GitHub (github.com/winglang/wing) with your Wing code.");
+    console.log("\n\n" + chalk.bold.red("Internal error:") + " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace.");
     process.exit(1);
   }
   if (compileResult !== 0) {
