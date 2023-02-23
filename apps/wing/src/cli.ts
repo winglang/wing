@@ -55,10 +55,7 @@ async function main() {
       join(process.cwd(), "target")
     )
     .addOption(
-      new Option(
-        "-t, --target <target>",
-        "Target platform"
-      )
+      new Option("-t, --target <target>", "Target platform")
         .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
         .makeOptionMandatory()
     )
