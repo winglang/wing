@@ -14,8 +14,8 @@ Wing applications on the local machine.
 Make sure you have [installed](./installation#wing-console) the Wing Console on your system
 before getting started with this step.
 
-If you are unable to install the Wing Console (e.g. you are running on Windows), you can
-also test your application [programmatically](./simulator) or [deploy it to AWS](./aws).
+If you are unable to install the Wing Console (e.g. you are running on Linux), you can
+also test your application [programmatically](./06-simulator.md) or [deploy it to AWS](./05-aws.md).
 
 :::
 
