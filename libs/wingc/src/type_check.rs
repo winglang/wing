@@ -15,7 +15,7 @@ use indexmap::IndexSet;
 use itertools::Itertools;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 use std::fmt::{Debug, Display};
 use std::path::Path;
 use symbol_env::{StatementIdx, SymbolEnv};
@@ -1171,10 +1171,10 @@ impl<'a> TypeChecker<'a> {
 		t
 	}
 
-	/// Validate that a given hashmap can be assigned to a variable of given struct type
+	/// Validate that a given map can be assigned to a variable of given struct type
 	fn validate_structural_type(
 		&mut self,
-		object: &HashMap<Symbol, Expr>,
+		object: &BTreeMap<Symbol, Expr>,
 		expected_type: &TypeRef,
 		value: &Expr,
 		env: &SymbolEnv,
@@ -1189,7 +1189,7 @@ impl<'a> TypeChecker<'a> {
 
 		// Verify that there are no extraneous fields
 		// Also map original field names to the ones in the struct type
-		let mut field_map = HashMap::new();
+		let mut field_map = BTreeMap::new();
 		for (k, _) in object.iter() {
 			let field = expected_struct.env.try_lookup(&k.name, None);
 			if let Some(field) = field {

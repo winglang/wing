@@ -14,7 +14,7 @@
     "build": "nx build winglang",
     "contributors:add": "all-contributors add",
     "contributors:check": "all-contributors check",
-    "contributors:generate": "all-contributors generate",
+    "contributors:update": "all-contributors check | grep \"Missing contributors\" -A 1 | tail -n1 | sed -e \"s/,//g\" | xargs -n1 | grep -v \"\\[bot\\]\" | xargs -n1 -I{} all-contributors add {} code",
     "docs": "./scripts/docsite.sh",
     "install:examples-valid": "npm --prefix examples/tests/valid install",
     "install:examples-invalid": "npm --prefix examples/tests/invalid install",
