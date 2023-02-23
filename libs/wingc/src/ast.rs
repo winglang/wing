@@ -408,6 +408,7 @@ pub enum BinaryOperator {
 	Sub,
 	Mul,
 	Div,
+	FloorDiv,
 	Mod,
 	Greater,
 	GreaterOrEqual,
@@ -439,7 +440,7 @@ impl BinaryOperator {
 	pub fn numerical_args(&self) -> bool {
 		use BinaryOperator::*;
 		match self {
-			Add | Sub | Mul | Div | Mod | Greater | GreaterOrEqual | Less | LessOrEqual => true,
+			Add | Sub | Mul | Div | FloorDiv | Mod | Greater | GreaterOrEqual | Less | LessOrEqual => true,
 			_ => false,
 		}
 	}

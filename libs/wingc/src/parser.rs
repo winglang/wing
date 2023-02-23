@@ -693,6 +693,7 @@ impl Parser<'_> {
 						"%" => BinaryOperator::Mod,
 						"*" => BinaryOperator::Mul,
 						"/" => BinaryOperator::Div,
+						"\\" => BinaryOperator::FloorDiv,
 						"ERROR" => self.add_error::<BinaryOperator>(format!("Expected binary operator"), expression_node)?,
 						other => return self.report_unimplemented_grammar(other, "binary operator", expression_node),
 					},
