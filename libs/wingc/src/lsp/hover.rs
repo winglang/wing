@@ -189,7 +189,7 @@ pub unsafe extern "C" fn wingc_on_hover(ptr: u32, len: u32) -> u64 {
 	let parse_string = ptr_to_string(ptr, len);
 	if let Ok(parsed) = serde_json::from_str(&parse_string) {
 		if let Some(token_result) = on_hover(parsed) {
-			let result = serde_json::to_string(&token_result).unwrap();
+			let result = serde_json::to_string(&token_result).expect("Failed to serialize Hover response");
 
 			string_to_combined_ptr(result)
 		} else {
@@ -204,7 +204,13 @@ pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
 	FILES.with(|files| {
 		let files = files.borrow();
 		let parse_result = files.get(&params.text_document_position_params.text_document.uri.clone());
-		let parse_result = parse_result.unwrap();
+		let parse_result = parse_result.expect(
+			format!(
+				"Compiled data not found for \"{}\"",
+				params.text_document_position_params.text_document.uri
+			)
+			.as_str(),
+		);
 
 		let position = params.text_document_position_params.position;
 

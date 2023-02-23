@@ -154,7 +154,7 @@ pub unsafe extern "C" fn wingc_on_document_symbol(ptr: u32, len: u32) -> u64 {
 	let parse_string = ptr_to_string(ptr, len);
 	if let Ok(parsed) = serde_json::from_str(&parse_string) {
 		let doc_symbols = on_document_symbols(parsed);
-		let result = serde_json::to_string(&doc_symbols).unwrap();
+		let result = serde_json::to_string(&doc_symbols).expect("Failed to serialize DocumentSymbol response");
 
 		string_to_combined_ptr(result)
 	} else {
