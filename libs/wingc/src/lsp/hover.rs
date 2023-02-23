@@ -1,8 +1,10 @@
 use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
 
-use crate::ast::{Class, Constructor, Expr, FunctionDefinition, Reference, Scope, Stmt, StmtKind, Symbol};
+use crate::ast::{Class, Constructor, Expr, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol};
 use crate::diagnostic::WingSpan;
 use crate::lsp::sync::FILES;
+use crate::type_check::symbol_env::SymbolLookupInfo;
+use crate::type_check::SymbolKind;
 use crate::visit::Visit;
 use crate::wasm_util::WASM_RETURN_ERROR;
 use crate::{
@@ -212,105 +214,107 @@ pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
 			.as_str(),
 		);
 
-		let position = params.text_document_position_params.position;
-
 		let root_scope = &parse_result.scope;
 		let root_env = root_scope.env.borrow();
 		let root_env = root_env.as_ref().expect("All scopes should have a symbol environment");
 
-		let mut hover_visitor = HoverVisitor::new(position);
+		let mut hover_visitor = HoverVisitor::new(params.text_document_position_params.position);
 		hover_visitor.visit_scope(root_scope);
 
 		if let Some(symbol) = hover_visitor.found_symbol {
-			let scope = hover_visitor.current_scope.expect("All symbols must be in a scope");
-			let expr = hover_visitor.current_expr;
-			let symbol_name = &symbol.name;
-			let expression_type = expr.and_then(|expr| {
-				let t = expr.evaluated_type.borrow();
-				t.clone()
-			});
-			let reference = expr.and_then(|expr| {
-				if let ExprKind::Reference(reference) = &expr.kind {
-					Some(reference)
-				} else {
-					None
+			// If the given symbol is in a nested identifier, we can skip looking it up in the symbol environment
+			if let Some(expr) = hover_visitor.current_expr {
+				if let ExprKind::Reference(Reference::NestedIdentifier { property, .. }) = &expr.kind {
+					return build_nested_identifier_hover(&property, &expr);
 				}
-			});
-			let span = if let Some(_) = reference {
-				// When hovering over a reference, we want to highlight the entire relevant expression
-				// e.g. Hovering over `b` in `a.b.c` will highlight `a.b`
-				&expr.expect("Missing type for expression").span
-			} else {
-				&symbol.span
-			};
+			}
 
-			let env_ref = scope.env.borrow();
-			let env = env_ref.as_ref().expect("All scopes should have a symbol environment");
+			let env = hover_visitor
+				.current_scope
+				.expect("All symbols must be in a scope")
+				.env
+				.borrow();
 
-			let mut symbol_lookup = root_env.lookup_ext(symbol, None);
-			if symbol_lookup.is_err() {
+			let symbol_lookup = root_env.lookup_ext(symbol, None).or_else(|_| {
 				// If the symbol is not found in the root scope, try the given scope
-				symbol_lookup = env.lookup_ext(symbol, None);
 
 				// NOTE: We lookup in the root scope first because failing to lookup there is much faster than failing to lookup in an inner scope.
-				// The reason for this is due to a current bug in SymbolEnv where the .parent ref gets lost when referencing the root, and becomes bad data
+				// The reason for this is due to a current bug in SymbolEnv where the .parent ref gets lost when referencing the root, and becomes bad data.
 				// This bad data sometimes causes the lookup to take a long time (lots of entries), or even panic.
-				// This should not cause incorrect lookups because we do not generally have shadowing in Wing
+				// This should not cause incorrect lookups because we do not generally have variable shadowing in Wing.
 				// https://github.com/winglang/wing/issues/1644
-			}
+				let env = env.as_ref().expect("All scopes should have a symbol environment");
+				env.lookup_ext(symbol, None)
+			});
 
-			let mut hover_string = String::new();
-
-			if let Ok(symbol_lookup) = symbol_lookup {
-				let symbol_kind = symbol_lookup.0;
-				let lookup_info = symbol_lookup.1;
-
-				match symbol_kind {
-					crate::type_check::SymbolKind::Type(t) => {
-						hover_string = format!("**{}**", t);
-					}
-					crate::type_check::SymbolKind::Variable(v) => {
-						let flight = match lookup_info.flight {
-							crate::ast::Phase::Inflight => "inflight ",
-							crate::ast::Phase::Preflight => "preflight ",
-							crate::ast::Phase::Independent => "",
-						};
-						let reassignable = if v.reassignable { "var " } else { "" };
-						let _type = &v._type;
-						hover_string = format!("```wing\n{flight}{reassignable}{symbol_name}: {_type}\n```");
-					}
-					crate::type_check::SymbolKind::Namespace(n) => {
-						let namespace_name = &n.name;
-						hover_string = format!("```wing\nbring {namespace_name}\n```");
-					}
-				};
+			let hover_string = if let Ok(symbol_lookup) = symbol_lookup {
+				format_symbol_with_lookup(&symbol.name, symbol_lookup)
 			} else {
-				if let Some(reference) = reference {
-					match reference {
-						Reference::Identifier(_) => {}
-						Reference::NestedIdentifier { object: _, property } => {
-							let symbol_name = &property.name;
-							let expression_type = expression_type.expect("Missing type for reference");
-							hover_string = format!("```wing\n{symbol_name}: {expression_type}\n```");
-						}
-					}
-				} else {
-					// It's a symbol of some kind, but not sure how to handle it yet
-					hover_string = format!("```wing\n{symbol_name}\n```");
-				}
-			}
+				format_unknown_symbol(&symbol.name)
+			};
 
-			if !hover_string.is_empty() {
-				return Some(Hover {
-					contents: HoverContents::Markup(MarkupContent {
-						kind: MarkupKind::Markdown,
-						value: hover_string,
-					}),
-					range: Some(span.range()),
-				});
-			}
+			return Some(Hover {
+				contents: HoverContents::Markup(MarkupContent {
+					kind: MarkupKind::Markdown,
+					value: hover_string,
+				}),
+				range: Some(symbol.span.range()),
+			});
 		}
 
 		None
 	})
+}
+
+/// Formats a hover string for a symbol that has been found in the symbol environment
+fn format_symbol_with_lookup(symbol_name: &str, symbol_lookup: (&SymbolKind, SymbolLookupInfo)) -> String {
+	let symbol_kind = symbol_lookup.0;
+	let lookup_info = symbol_lookup.1;
+
+	match symbol_kind {
+		SymbolKind::Type(t) => {
+			format!("**{}**", t)
+		}
+		SymbolKind::Variable(variable_info) => {
+			let flight = match lookup_info.flight {
+				Phase::Inflight => "inflight ",
+				Phase::Preflight => "preflight ",
+				Phase::Independent => "",
+			};
+			let reassignable = if variable_info.reassignable { "var " } else { "" };
+			let _type = &variable_info._type;
+
+			format!("```wing\n{flight}{reassignable}{symbol_name}: {_type}\n```")
+		}
+		SymbolKind::Namespace(namespace) => {
+			let namespace_name = &namespace.name;
+
+			format!("```wing\nbring {namespace_name}\n```")
+		}
+	}
+}
+
+/// Formats a hover string for a symbol that we don't yet know how to handle yet
+fn format_unknown_symbol(symbol_name: &str) -> String {
+	format!("```wing\n{symbol_name}\n```")
+}
+
+/// Builds the entire Hover response for a nested identifier, which are handled differently than other "loose" symbols
+fn build_nested_identifier_hover(property: &Symbol, expr: &Expr) -> Option<Hover> {
+	let symbol_name = &property.name;
+
+	let expression_type = expr
+		.evaluated_type
+		.borrow()
+		.expect("All expressions should have a type");
+
+	return Some(Hover {
+		contents: HoverContents::Markup(MarkupContent {
+			kind: MarkupKind::Markdown,
+			value: format!("```wing\n{symbol_name}: {expression_type}\n```"),
+		}),
+		// When hovering over a reference, we want to highlight the entire relevant expression
+		// e.g. Hovering over `b` in `a.b.c` will highlight `a.b`
+		range: Some(expr.span.range()),
+	});
 }
