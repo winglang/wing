@@ -22,18 +22,20 @@ test("schedule behavior with rate", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_event_rule", // main schedule event
+    "aws_cloudwatch_event_target", // schedule target
     "aws_iam_role", // role for function
     "aws_iam_role_policy", // policy for role
     "aws_iam_role_policy_attachment", // execution policy for role
     "aws_lambda_function", // processor function
+    "aws_lambda_permission", // function permission
     "aws_s3_bucket", // S3 bucket for code
     "aws_s3_object", // S3 object for code
-    "aws_scheduler_schedule", // main schedule
   ]);
   expect(
     cdktf.Testing.toHaveResourceWithProperties(
       output,
-      "aws_scheduler_schedule",
+      "aws_cloudwatch_event_rule",
       {
         schedule_expression: "rate(2 minutes)",
       }
@@ -59,18 +61,20 @@ test("schedule behavior with cron", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_event_rule", // main schedule event
+    "aws_cloudwatch_event_target", // schedule target
     "aws_iam_role", // role for function
     "aws_iam_role_policy", // policy for role
     "aws_iam_role_policy_attachment", // execution policy for role
     "aws_lambda_function", // processor function
+    "aws_lambda_permission", // function permission
     "aws_s3_bucket", // S3 bucket for code
     "aws_s3_object", // S3 object for code
-    "aws_scheduler_schedule", // main schedule
   ]);
   expect(
     cdktf.Testing.toHaveResourceWithProperties(
       output,
-      "aws_scheduler_schedule",
+      "aws_cloudwatch_event_rule",
       {
         schedule_expression: "cron(0/1 * ? * * *)",
       }
@@ -102,13 +106,15 @@ test("schedule with two functions", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
+    "aws_cloudwatch_event_rule", // main schedule event
+    "aws_cloudwatch_event_target", // schedule target
     "aws_iam_role", // role for function
     "aws_iam_role_policy", // policy for role
     "aws_iam_role_policy_attachment", // execution policy for role
     "aws_lambda_function", // processor function
+    "aws_lambda_permission", // function permission
     "aws_s3_bucket", // S3 bucket for code
     "aws_s3_object", // S3 object for code
-    "aws_scheduler_schedule", // main schedule
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
