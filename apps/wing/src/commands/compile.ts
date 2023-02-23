@@ -8,6 +8,10 @@ import debug from "debug";
 import * as wingCompiler from "../wingc";
 import { normalPath } from "../util";
 
+// increase the stack trace limit to 50, useful for debugging Rust panics
+// (not setting the limit too high in case of infinite recursion)
+Error.stackTraceLimit = 50;
+
 const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
 const WINGC_PREFLIGHT = "preflight.js";
@@ -90,8 +94,19 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
 
   const arg = `${normalPath(wingFile)};${normalPath(workDir)}`;
   log(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
-  const compileResult = wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
+  let compileResult;
+  try {
+    compileResult = wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
+  } catch (e) {
+    // This is a bug in Wing, not the user's code.
+    console.error(e);
+    console.log("  " + chalk.bold.red("error:") + " An internal error occurred while Wing was compiling. Please report this bug by creating an issue on GitHub (github.com/winglang/wing) with your Wing code.");
+    process.exit(1);
+  }
   if (compileResult !== 0) {
+    // This is a bug in the user's code. Print the compiler diagnostics.
+    // TODO: change wingc to output diagnostics in a structured format,
+    // so we can format and print them in a more user-friendly way.
     throw new Error(compileResult.toString());
   }
 
