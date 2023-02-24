@@ -14,11 +14,9 @@ test("function with a bucket binding requiring read_write", () => {
     "Handler",
     `async handle(event) { await this.bucket.put("hello.txt", event); }`,
     {
-      resources: {
-        bucket: {
-          resource: bucket,
-          ops: [cloud.BucketInflightMethods.PUT],
-        },
+      bucket: {
+        obj: bucket,
+        ops: [cloud.BucketInflightMethods.PUT],
       },
     }
   );
@@ -59,11 +57,9 @@ test("function with a bucket binding requiring only read", () => {
     "Handler",
     `async handle(event) { await this.bucket.get("hello.txt"); }`,
     {
-      resources: {
-        bucket: {
-          resource: bucket,
-          ops: [cloud.BucketInflightMethods.GET],
-        },
+      bucket: {
+        obj: bucket,
+        ops: [cloud.BucketInflightMethods.GET],
       },
     }
   );

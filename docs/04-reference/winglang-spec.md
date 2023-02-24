@@ -2205,6 +2205,7 @@ Ternary or conditional operators are not supported.
 | Operator             | Notes                                             |
 | -------------------- | ------------------------------------------------- |
 | ()                   | Parentheses                                       |
+| ^                    | Exponentiation                                    |
 | -x                   | Unary minus                                       |
 | \*, /, \\, %         | Multiplication, Division, Floor division, Modulus |
 | +, -                 | Addition, Subtraction                             |
