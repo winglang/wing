@@ -28,7 +28,7 @@ export class ImmutableMap {
    * If the value that is associated to the provided key is an object, then you will get a reference
    * to that object and any change made to that object will effectively modify it inside the map.
    *
-   * @macro $self$[$args$]
+   * @macro ($self$)[$args$]
    *
    * @param key The key of the element to return.
    * @returns The element associated with the specified key, or undefined if the key can't be found
@@ -41,7 +41,7 @@ export class ImmutableMap {
   /**
    * Returns a boolean indicating whether an element with the specified key exists or not.
    *
-   * @macro ($args$ in $self$)
+   * @macro ($args$ in ($self$))
    *
    * @param key The key of the element to test for presence
    * @returns true if an element with the specified key exists in the map; otherwise false.
@@ -54,7 +54,7 @@ export class ImmutableMap {
   /**
    * Create a mutable shallow copy of this map
    *
-   * @macro {...$self$}
+   * @macro {...($self$)}
    *
    * @returns a MutableMap with the same values as this map
    */
@@ -65,7 +65,7 @@ export class ImmutableMap {
   /**
    * Create an immutable shallow copy of this map
    *
-   * @macro Object.freeze({...$self$})
+   * @macro Object.freeze({...($self$)})
    *
    * @returns an ImmutableMap with the same values as this map
    */
@@ -92,10 +92,10 @@ export class MutableMap extends ImmutableMap {
   /**
    * Removes the specified element from a map.
    *
-   * @macro (delete $self$[$args$])
+   * @macro (delete ($self$)[$args$])
    *
    * @param key The key
-   * @returns true if the element was in the map
+   * @returns true if the given key is no longer present
    */
   public delete(key: string): boolean {
     key;

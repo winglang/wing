@@ -753,9 +753,9 @@ exports[`capture_containers.w > wing compile --target tf-aws > index.js 1`] = `
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr.length === 2)'\`)})((arr.length === 2))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await my_set.has(\\"my\\"))'\`)})((await my_set.has(\\"my\\")))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(my_set.size === 2)'\`)})((my_set.size === 2))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"world\\" in my_map)'\`)})((\\"world\\" in my_map))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"world\\" in (my_map))'\`)})((\\"world\\" in (my_map)))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(my_map).length === 2)'\`)})((Object.keys(my_map).length === 2))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"bang\\" in (await arr_of_map.at(0)))'\`)})((\\"bang\\" in (await arr_of_map.at(0))))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"bang\\" in ((await arr_of_map.at(0))))'\`)})((\\"bang\\" in ((await arr_of_map.at(0)))))};
 } };"
 `;
 
@@ -891,7 +891,7 @@ constructor() {
   const my_map = Object.freeze({\\"hello\\":123,\\"world\\":999});
   const arr_of_map = Object.freeze([Object.freeze({\\"bang\\":123})]);
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.098c1f5b2e864de8e921b89166d37b892ce987e98ef99c4b905aa7652e5544a9/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.726c4811538fdd9613cd65b3442a4805b0dc89d09ee3d42119284d95f79533a6/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       arr: {
         obj: arr,
@@ -921,7 +921,7 @@ exports[`capture_containers_of_resources.w > wing compile --target tf-aws > inde
 "async handle(s) { const { arr, map, set } = this; {
   const b1 = (await arr.at(0));
   const b2 = (await arr.at(1));
-  const q = map[\\"my_queue\\"];
+  const q = (map)[\\"my_queue\\"];
   (await b1.put(\\"file1.txt\\",\\"boom\\"));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b2.list()).length === 0)'\`)})(((await b2.list()).length === 0))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b1.get(\\"file1.txt\\")) === \\"boom\\")'\`)})(((await b1.get(\\"file1.txt\\")) === \\"boom\\"))};
@@ -1145,7 +1145,7 @@ constructor() {
   const map = Object.freeze({\\"my_queue\\":new cloud.Queue(this,\\"cloud.Queue\\")});
   const set = Object.freeze(new Set([\\"foo\\", \\"foo\\", \\"bar\\"]));
   new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.fe518870d9a38f862f33e352134a8cbf5b6a94201b661239643334fd5b55258a/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.e204fa6fba10aa68396c0fe4d920796b1ec739609b648739fe4ae94d0621db6d/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       arr: {
         obj: arr,
@@ -2553,27 +2553,27 @@ constructor() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(empty_map2).length === 0)'\`)})((Object.keys(empty_map2).length === 0))};
   const m1 = Object.freeze({\\"a\\":1,\\"b\\":2,\\"c\\":3});
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m1).length === 3)'\`)})((Object.keys(m1).length === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m1[\\"b\\"] === 2)'\`)})((m1[\\"b\\"] === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m1)[\\"b\\"] === 2)'\`)})(((m1)[\\"b\\"] === 2))};
   const m2 = Object.freeze({\\"a\\":1,\\"b\\":2,\\"c\\":3});
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m2).length === 3)'\`)})((Object.keys(m2).length === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m2[\\"b\\"] === 2)'\`)})((m2[\\"b\\"] === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m2)[\\"b\\"] === 2)'\`)})(((m2)[\\"b\\"] === 2))};
   const m3 = Object.freeze({\\"a\\":1,\\"b\\":2,\\"c\\":3});
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m3).length === 3)'\`)})((Object.keys(m3).length === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m3[\\"b\\"] === 2)'\`)})((m3[\\"b\\"] === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m3)[\\"b\\"] === 2)'\`)})(((m3)[\\"b\\"] === 2))};
   const m4 = Object.freeze({\\"a\\":1,\\"b\\":2,\\"c\\":3});
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m4).length === 3)'\`)})((Object.keys(m4).length === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m4[\\"b\\"] === 2)'\`)})((m4[\\"b\\"] === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m4)[\\"b\\"] === 2)'\`)})(((m4)[\\"b\\"] === 2))};
   const m5 = Object.freeze({\\"a\\":bucket1,\\"b\\":bucket2,\\"c\\":bucket3});
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m5).length === 3)'\`)})((Object.keys(m5).length === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m5[\\"b\\"] === bucket2)'\`)})((m5[\\"b\\"] === bucket2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m5)[\\"b\\"] === bucket2)'\`)})(((m5)[\\"b\\"] === bucket2))};
   const m6 = Object.freeze({\\"a\\":bucket1,\\"b\\":bucket2,\\"c\\":bucket3});
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m6).length === 3)'\`)})((Object.keys(m6).length === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m6[\\"b\\"] === bucket2)'\`)})((m6[\\"b\\"] === bucket2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m6)[\\"b\\"] === bucket2)'\`)})(((m6)[\\"b\\"] === bucket2))};
   const m7 = m1;
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m7).length === 3)'\`)})((Object.keys(m7).length === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m7[\\"b\\"] === 2)'\`)})((m7[\\"b\\"] === 2))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"b\\" in m7)'\`)})((\\"b\\" in m7))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((\\"boom\\" in m4) === false)'\`)})(((\\"boom\\" in m4) === false))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m7)[\\"b\\"] === 2)'\`)})(((m7)[\\"b\\"] === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"b\\" in (m7))'\`)})((\\"b\\" in (m7)))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((\\"boom\\" in (m4)) === false)'\`)})(((\\"boom\\" in (m4)) === false))};
   const empty_set = Object.freeze(new Set([]));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(empty_set.size === 0)'\`)})((empty_set.size === 0))};
   const empty_set2 = new Set([]);
@@ -3599,17 +3599,17 @@ constructor() {
   const m4 = m1;
   const m5 = {\\"goodbye\\":\\"world\\"};
   const m6 = {\\"a\\":m1,\\"b\\":m5};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"hello\\" in m1)'\`)})((\\"hello\\" in m1))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"hello\\" in (m1))'\`)})((\\"hello\\" in (m1)))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m2).length === 1)'\`)})((Object.keys(m2).length === 1))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m3[\\"b1\\"] === bucket1)'\`)})((m3[\\"b1\\"] === bucket1))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m3)[\\"b1\\"] === bucket1)'\`)})(((m3)[\\"b1\\"] === bucket1))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m4).length === 1)'\`)})((Object.keys(m4).length === 1))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m6[\\"a\\"][\\"hello\\"] === \\"world\\")'\`)})((m6[\\"a\\"][\\"hello\\"] === \\"world\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((m6)[\\"a\\"])[\\"hello\\"] === \\"world\\")'\`)})((((m6)[\\"a\\"])[\\"hello\\"] === \\"world\\"))};
   ((obj, args) => { obj[args[0]] = args[1]; })(m1, [\\"hello\\",\\"goodbye\\"]);
   ((obj, args) => { obj[args[0]] = args[1]; })(m6, [\\"a\\",{\\"foo\\":\\"bar\\"}]);
   ((map) => { for(const k in map){delete map[k]}; })(m2);
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m2).length === 0)'\`)})((Object.keys(m2).length === 0))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m1[\\"hello\\"] === \\"goodbye\\")'\`)})((m1[\\"hello\\"] === \\"goodbye\\"))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m6[\\"a\\"][\\"foo\\"] === \\"bar\\")'\`)})((m6[\\"a\\"][\\"foo\\"] === \\"bar\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m1)[\\"hello\\"] === \\"goodbye\\")'\`)})(((m1)[\\"hello\\"] === \\"goodbye\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((m6)[\\"a\\"])[\\"foo\\"] === \\"bar\\")'\`)})((((m6)[\\"a\\"])[\\"foo\\"] === \\"bar\\"))};
 }
 }
 new MyApp().synth();"
@@ -4541,9 +4541,9 @@ constructor() {
   const immut_set = Object.freeze(new Set(mut_set));
   const s_map = Object.freeze({\\"one\\":1,\\"two\\":2});
   const nested_map = Object.freeze({\\"a\\":Object.freeze({\\"b\\":Object.freeze({\\"c\\":\\"hello\\"})})});
-  const mut_map = {...s_map};
+  const mut_map = {...(s_map)};
   ((obj, args) => { obj[args[0]] = args[1]; })(mut_map, [\\"five\\",5]);
-  const immut_map = Object.freeze({...mut_map});
+  const immut_map = Object.freeze({...(mut_map)});
   const s = (s_array.at(1));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s === \\"two\\")'\`)})((s === \\"two\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s_array.at(1)) === \\"two\\")'\`)})(((s_array.at(1)) === \\"two\\"))};
@@ -4552,10 +4552,10 @@ constructor() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_set.has(\\"one\\"))'\`)})((s_set.has(\\"one\\")))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_set.size === 2)'\`)})((s_set.size === 2))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_set.size === 3)'\`)})((immut_set.size === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_map[\\"one\\"] === 1)'\`)})((s_map[\\"one\\"] === 1))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s_map)[\\"one\\"] === 1)'\`)})(((s_map)[\\"one\\"] === 1))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(s_map).length === 2)'\`)})((Object.keys(s_map).length === 2))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(immut_map).length === 3)'\`)})((Object.keys(immut_map).length === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(nested_map[\\"a\\"][\\"b\\"][\\"c\\"] === \\"hello\\")'\`)})((nested_map[\\"a\\"][\\"b\\"][\\"c\\"] === \\"hello\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((((nested_map)[\\"a\\"])[\\"b\\"])[\\"c\\"] === \\"hello\\")'\`)})(((((nested_map)[\\"a\\"])[\\"b\\"])[\\"c\\"] === \\"hello\\"))};
 }
 }
 new MyApp().synth();"
@@ -5213,8 +5213,8 @@ async capture_array() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.array_of_str.at(1)) === \\"s2\\")'\`)})(((await this.array_of_str.at(1)) === \\"s2\\"))};
 }
 async capture_map() {
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.map_of_num[\\"k1\\"] === 11)'\`)})((this.map_of_num[\\"k1\\"] === 11))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.map_of_num[\\"k2\\"] === 22)'\`)})((this.map_of_num[\\"k2\\"] === 22))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((this.map_of_num)[\\"k1\\"] === 11)'\`)})(((this.map_of_num)[\\"k1\\"] === 11))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((this.map_of_num)[\\"k2\\"] === 22)'\`)})(((this.map_of_num)[\\"k2\\"] === 22))};
 }
 async capture_set() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await this.set_of_str.has(\\"s1\\"))'\`)})((await this.set_of_str.has(\\"s1\\")))};
