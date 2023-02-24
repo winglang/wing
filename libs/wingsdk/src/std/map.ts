@@ -12,12 +12,14 @@ import { T1 } from "./util";
 export class ImmutableMap {
   /**
    * Returns the number of elements in the map.
+   * 
    * TODO: For now this has to be a method rather than a getter as macros only work on methods (for now)
    * @macro Object.keys($self$).length
+   * 
    * @returns The number of elements in map
    */
   public size(): number {
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
@@ -33,20 +35,20 @@ export class ImmutableMap {
    */
   public get(key: string): T1 {
     key;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
    * Returns a boolean indicating whether an element with the specified key exists or not.
    * 
-   * @macro $self$[$args$] !== undefined
+   * @macro ($args$ in $self$)
    * 
    * @param key The key of the element to test for presence
    * @returns true if an element with the specified key exists in the map; otherwise false.
    */ 
   public has(key: string): boolean {
     key;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
@@ -83,7 +85,7 @@ export class MutableMap extends ImmutableMap {
    * @macro $self$={}
    */
   public clear(): void {
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
@@ -96,7 +98,7 @@ export class MutableMap extends ImmutableMap {
    */
   public delete(key: string): boolean {
     key;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
@@ -111,6 +113,6 @@ export class MutableMap extends ImmutableMap {
   public set(key: string, value: T1): void {
     key;
     value;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 }

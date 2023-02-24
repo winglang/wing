@@ -753,9 +753,9 @@ exports[`capture_containers.w > wing compile --target tf-aws > index.js 1`] = `
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr.length === 2)'\`)})((arr.length === 2))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await my_set.has(\\"my\\"))'\`)})((await my_set.has(\\"my\\")))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(my_set.size === 2)'\`)})((my_set.size === 2))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: 'my_map[\\"world\\"] !== undefined'\`)})(my_map[\\"world\\"] !== undefined)};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"world\\" in my_map)'\`)})((\\"world\\" in my_map))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(my_map).length === 2)'\`)})((Object.keys(my_map).length === 2))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await arr_of_map.at(0))[\\"bang\\"] !== undefined'\`)})((await arr_of_map.at(0))[\\"bang\\"] !== undefined)};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"bang\\" in (await arr_of_map.at(0)))'\`)})((\\"bang\\" in (await arr_of_map.at(0))))};
 } };"
 `;
 
@@ -891,7 +891,7 @@ constructor() {
   const my_map = Object.freeze({\\"hello\\":123,\\"world\\":999});
   const arr_of_map = Object.freeze([Object.freeze({\\"bang\\":123})]);
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.f95661f683ac65b2959bbc40071eb933c57402d8229449f740d40f55d051e522/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.098c1f5b2e864de8e921b89166d37b892ce987e98ef99c4b905aa7652e5544a9/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       arr: {
         obj: arr,
@@ -2572,8 +2572,8 @@ constructor() {
   const m7 = m1;
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m7).length === 3)'\`)})((Object.keys(m7).length === 3))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m7[\\"b\\"] === 2)'\`)})((m7[\\"b\\"] === 2))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: 'm7[\\"b\\"] !== undefined'\`)})(m7[\\"b\\"] !== undefined)};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m4[\\"boom\\"] !== undefined === false)'\`)})((m4[\\"boom\\"] !== undefined === false))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"b\\" in m7)'\`)})((\\"b\\" in m7))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((\\"boom\\" in m4) === false)'\`)})(((\\"boom\\" in m4) === false))};
   const empty_set = Object.freeze(new Set([]));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(empty_set.size === 0)'\`)})((empty_set.size === 0))};
   const empty_set2 = new Set([]);
@@ -3595,7 +3595,7 @@ constructor() {
   const m2 = {\\"hello\\":123};
   const m3 = {\\"b1\\":bucket1,\\"b2\\":bucket2};
   const m4 = m1;
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: 'm1[\\"hello\\"] !== undefined'\`)})(m1[\\"hello\\"] !== undefined)};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"hello\\" in m1)'\`)})((\\"hello\\" in m1))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m2).length === 1)'\`)})((Object.keys(m2).length === 1))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m3[\\"b1\\"] === bucket1)'\`)})((m3[\\"b1\\"] === bucket1))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m4).length === 1)'\`)})((Object.keys(m4).length === 1))};
