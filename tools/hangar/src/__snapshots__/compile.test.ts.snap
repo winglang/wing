@@ -2704,6 +2704,8 @@ constructor() {
   const xf = 1;
   const yf = ((-20.22) * xf);
   const zf = ((xf + yf) - (-0.01));
+  const fxzy = (5 ** (1 ** 5));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(fxzy === 5)'\`)})((fxzy === 5))};
 }
 }
 new MyApp().synth();"
