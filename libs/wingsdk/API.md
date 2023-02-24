@@ -3013,6 +3013,7 @@ new std.ImmutableMap()
 | <code><a href="#@winglang/sdk.std.ImmutableMap.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this map. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.get">get</a></code> | Returns a specified element from the map. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
+| <code><a href="#@winglang/sdk.std.ImmutableMap.size">size</a></code> | Returns the number of elements in the map. |
 
 ---
 
@@ -3067,26 +3068,17 @@ The key of the element to test for presence.
 
 ---
 
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.ImmutableMap.property.size">size</a></code> | <code>num</code> | Returns the number of elements in the map. |
-
----
-
-##### `size`<sup>Required</sup> <a name="size" id="@winglang/sdk.std.ImmutableMap.property.size"></a>
+##### `size` <a name="size" id="@winglang/sdk.std.ImmutableMap.size"></a>
 
 ```wing
-size: num;
+size(): num
 ```
-
-- *Type:* num
 
 Returns the number of elements in the map.
 
----
+TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
+
+
 
 
 ### ImmutableSet <a name="ImmutableSet" id="@winglang/sdk.std.ImmutableSet"></a>
@@ -3345,6 +3337,7 @@ new std.MutableMap()
 | <code><a href="#@winglang/sdk.std.MutableMap.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this map. |
 | <code><a href="#@winglang/sdk.std.MutableMap.get">get</a></code> | Returns a specified element from the map. |
 | <code><a href="#@winglang/sdk.std.MutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
+| <code><a href="#@winglang/sdk.std.MutableMap.size">size</a></code> | Returns the number of elements in the map. |
 | <code><a href="#@winglang/sdk.std.MutableMap.clear">clear</a></code> | Removes all elements. |
 | <code><a href="#@winglang/sdk.std.MutableMap.delete">delete</a></code> | Removes the specified element from a map. |
 | <code><a href="#@winglang/sdk.std.MutableMap.set">set</a></code> | Adds or updates an entry in a Map object with a specified key and a value. |
@@ -3402,6 +3395,16 @@ The key of the element to test for presence.
 
 ---
 
+##### `size` <a name="size" id="@winglang/sdk.std.MutableMap.size"></a>
+
+```wing
+size(): num
+```
+
+Returns the number of elements in the map.
+
+TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
+
 ##### `clear` <a name="clear" id="@winglang/sdk.std.MutableMap.clear"></a>
 
 ```wing
@@ -3434,6 +3437,8 @@ set(key: str, value: T1): void
 
 Adds or updates an entry in a Map object with a specified key and a value.
 
+TODO: revisit this macro after we support indexed args https://github.com/winglang/wing/issues/1659
+
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.set.parameter.key"></a>
 
 - *Type:* str
@@ -3451,25 +3456,6 @@ The value of the element to add.
 ---
 
 
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.MutableMap.property.size">size</a></code> | <code>num</code> | Returns the number of elements in the map. |
-
----
-
-##### `size`<sup>Required</sup> <a name="size" id="@winglang/sdk.std.MutableMap.property.size"></a>
-
-```wing
-size: num;
-```
-
-- *Type:* num
-
-Returns the number of elements in the map.
-
----
 
 
 ### MutableSet <a name="MutableSet" id="@winglang/sdk.std.MutableSet"></a>

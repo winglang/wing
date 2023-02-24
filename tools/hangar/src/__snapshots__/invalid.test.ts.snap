@@ -67,6 +67,11 @@ exports[`for_loop.w > wing test (--target sim) - invalid > stderr 1`] = `
 Error at ../../../../examples/tests/invalid/for_loop.w:5:13 | Unable to iterate over \\"Bucket\\""
 `;
 
+exports[`immutable_container_types.w > wing test (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 1 error(s)
+Error at ../../../../examples/tests/invalid/immutable_container_types.w:3:4 | Unknown symbol \\"set\\""
+`;
+
 exports[`missing_semicolon.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 4 error(s)
 Error at ../../../../examples/tests/invalid/missing_semicolon.w:7:1 | Expected expression
