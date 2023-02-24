@@ -164,7 +164,7 @@ pub struct FunctionDefinition {
 	pub signature: FunctionSignature,
 	#[derivative(Debug = "ignore")]
 	pub captures: RefCell<Option<Captures>>,
-	pub _static: bool,
+	pub is_static: bool,
 }
 
 #[derive(Debug)]
@@ -281,7 +281,7 @@ pub struct ClassField {
 	pub member_type: TypeAnnotation,
 	pub reassignable: bool,
 	pub flight: Phase,
-	pub _static: bool,
+	pub is_static: bool,
 }
 
 #[derive(Debug)]

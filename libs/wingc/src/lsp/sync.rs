@@ -106,7 +106,12 @@ fn partial_compile(source_file: &str, text: &[u8]) -> FileData {
 	let mut capture_visitor = CaptureVisitor::new();
 	capture_visitor.visit_scope(&scope);
 
-	let diagnostics = vec![parse_diag, type_diag, capture_visitor.diagnostics].concat();
+	let mut diagnostics = Diagnostics::new();
+	for diags in [parse_diag, type_diag, capture_visitor.diagnostics].iter() {
+		for diag in diags.iter() {
+			diagnostics.insert(diag.clone());
+		}
+	}
 
 	return FileData {
 		contents: String::from_utf8(text.to_vec()).unwrap(),

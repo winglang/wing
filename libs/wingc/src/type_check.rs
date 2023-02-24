@@ -71,7 +71,7 @@ pub struct VariableInfo {
 	/// The phase in which this variable exists
 	pub flight: Phase,
 	/// Is this a static or instance variable?
-	pub _static: bool,
+	pub is_static: bool,
 }
 
 impl SymbolKind {
@@ -80,7 +80,7 @@ impl SymbolKind {
 			_type,
 			reassignable,
 			flight,
-			_static: true,
+			is_static: true,
 		})
 	}
 
@@ -89,7 +89,7 @@ impl SymbolKind {
 			_type,
 			reassignable,
 			flight,
-			_static: false,
+			is_static: false,
 		})
 	}
 
@@ -353,7 +353,7 @@ pub struct FunctionSignature {
 	pub parameters: Vec<TypeRef>,
 	pub return_type: TypeRef,
 	pub flight: Phase,
-	pub _static: bool,
+	pub is_static: bool,
 
 	/// During jsify, calls to this function will be replaced with this string
 	/// In JSII imports, this is denoted by the `@macro` attribute
@@ -743,7 +743,7 @@ impl<'a> TypeChecker<'a> {
 			_type: self.types.anything(),
 			reassignable: false,
 			flight: Phase::Independent,
-			_static: true,
+			is_static: true,
 		}
 	}
 
@@ -788,7 +788,7 @@ impl<'a> TypeChecker<'a> {
 			_type: self.types.anything(),
 			reassignable: false,
 			flight: Phase::Independent,
-			_static: false,
+			is_static: false,
 		}
 	}
 
@@ -978,7 +978,7 @@ impl<'a> TypeChecker<'a> {
 				let this_args = match &function.kind {
 					ExprKind::Reference(_ref) => {
 						// If this is a static method then there's no `this` arg
-						if self.resolve_reference(_ref, env, statement_idx)._static {
+						if self.resolve_reference(_ref, env, statement_idx).is_static {
 							0
 						} else {
 							1
@@ -1325,7 +1325,7 @@ impl<'a> TypeChecker<'a> {
 					flight: ast_sig.flight,
 					// TODO: for now function types are always static. In cases where we want to run an instance method we should require and object/interface type
 					// and run the method in that interface, not a function type. This is probably the best desing, but, perhaps, worth a discussion.
-					_static: true,
+					is_static: true,
 					js_override: None,
 				};
 				// TODO: avoid creating a new type for each function_sig resolution
@@ -1675,7 +1675,7 @@ impl<'a> TypeChecker<'a> {
 					let field_type = self.resolve_type_annotation(&field.member_type, env, stmt.idx);
 					match class_env.define(
 						&field.name,
-						if field._static {
+						if field.is_static {
 							SymbolKind::make_variable(field_type, field.reassignable, field.flight)
 						} else {
 							SymbolKind::make_instance_variable(field_type, field.reassignable, field.flight)
@@ -1693,7 +1693,7 @@ impl<'a> TypeChecker<'a> {
 					let mut sig = method_def.signature.clone();
 
 					// Add myself as first parameter to all non static class methods (self)
-					if !method_def._static {
+					if !method_def.is_static {
 						sig.parameters.insert(
 							0,
 							TypeAnnotation::UserDefined(UserDefinedType {
@@ -1706,7 +1706,7 @@ impl<'a> TypeChecker<'a> {
 					let method_type = self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(sig), env, stmt.idx);
 					match class_env.define(
 						method_name,
-						if method_def._static {
+						if method_def.is_static {
 							SymbolKind::make_variable(method_type, false, method_def.signature.flight)
 						} else {
 							SymbolKind::make_instance_variable(method_type, false, method_def.signature.flight)
@@ -1806,7 +1806,7 @@ impl<'a> TypeChecker<'a> {
 					);
 					// Add `this` as first argument
 					let mut actual_parameters = vec![];
-					if !method_def._static {
+					if !method_def.is_static {
 						actual_parameters.push((
 							Symbol {
 								name: "this".into(),
@@ -2092,7 +2092,7 @@ impl<'a> TypeChecker<'a> {
 						_type: v,
 						reassignable,
 						flight,
-						_static,
+						is_static: _static,
 					}) => {
 						// Replace type params in function signatures
 						if let Some(sig) = v.as_function_sig() {
@@ -2137,7 +2137,7 @@ impl<'a> TypeChecker<'a> {
 								parameters: new_args,
 								return_type: new_return_type,
 								flight: sig.flight.clone(),
-								_static: sig._static,
+								is_static: sig.is_static,
 								js_override: sig.js_override.clone(),
 							};
 
@@ -2147,7 +2147,7 @@ impl<'a> TypeChecker<'a> {
 									name: name.clone(),
 									span: WingSpan::global(),
 								},
-								if new_sig._static {
+								if new_sig.is_static {
 									SymbolKind::make_variable(self.types.add_type(Type::Function(new_sig)), *reassignable, *flight)
 								} else {
 									SymbolKind::make_instance_variable(
@@ -2167,7 +2167,7 @@ impl<'a> TypeChecker<'a> {
 							_type: var,
 							reassignable,
 							flight,
-							_static,
+							is_static: _static,
 						}) = symbol.as_variable()
 						{
 							let new_var_type = if var.is_same_type_as(original_type_param) {
@@ -2294,7 +2294,7 @@ impl<'a> TypeChecker<'a> {
 						_type: instance_type,
 						reassignable: false,
 						flight: env.flight,
-						_static: false,
+						is_static: false,
 					},
 
 					// Lookup wingsdk std types, hydrating generics if necessary
@@ -2353,7 +2353,7 @@ impl<'a> TypeChecker<'a> {
 						),
 						reassignable: false,
 						flight: Phase::Independent,
-						_static: false,
+						is_static: false,
 					},
 				};
 
@@ -2375,7 +2375,7 @@ impl<'a> TypeChecker<'a> {
 								_type,
 								reassignable: false,
 								flight: Phase::Independent,
-								_static: true,
+								is_static: true,
 							}
 						} else {
 							self.resolve_static_error(
@@ -2388,7 +2388,7 @@ impl<'a> TypeChecker<'a> {
 						let member = c.env.lookup(property, None);
 						match member {
 							Ok(SymbolKind::Variable(v)) => {
-								if v._static {
+								if v.is_static {
 									v.clone()
 								} else {
 									self.resolve_static_error(

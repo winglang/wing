@@ -382,7 +382,7 @@ impl Parser<'_> {
 					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
 					member_type: self.build_type_annotation(&class_element.child_by_field_name("type").unwrap())?,
 					reassignable: class_element.child_by_field_name("reassignable").is_some(),
-					_static: class_element.child_by_field_name("static").is_some(),
+					is_static: class_element.child_by_field_name("static").is_some(),
 					flight: match class_element.child_by_field_name("phase_modifier") {
 						Some(n) => {
 							if !is_resource {
@@ -487,7 +487,7 @@ impl Parser<'_> {
 				},
 				flight,
 			},
-			_static: func_def_node.child_by_field_name("static").is_some(),
+			is_static: func_def_node.child_by_field_name("static").is_some(),
 			captures: RefCell::new(None),
 		})
 	}

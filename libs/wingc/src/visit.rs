@@ -316,6 +316,9 @@ where
 		Reference::Identifier(s) => {
 			v.visit_symbol(s);
 		}
+		Reference::TypeProperty { _type: _, property } => {
+			v.visit_symbol(property);
+		}
 	}
 }
 
