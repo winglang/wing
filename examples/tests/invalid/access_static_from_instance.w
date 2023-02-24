@@ -17,4 +17,4 @@ resource Foo {
 let foo = new Foo();
 
 foo.f; // Can't access static fields through instances
-foo.m(); // Can't access static mehthod through instances
+foo.m(); // Can't access static methods through instances
