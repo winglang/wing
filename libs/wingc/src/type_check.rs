@@ -352,7 +352,6 @@ pub struct FunctionSignature {
 	pub parameters: Vec<TypeRef>,
 	pub return_type: TypeRef,
 	pub flight: Phase,
-	pub is_static: bool,
 
 	/// During jsify, calls to this function will be replaced with this string
 	/// In JSII imports, this is denoted by the `@macro` attribute
@@ -1322,9 +1321,6 @@ impl<'a> TypeChecker<'a> {
 						self.resolve_type_annotation(t, env, statement_idx)
 					}),
 					flight: ast_sig.flight,
-					// TODO: for now function types are always static. In cases where we want to run an instance method we should require and object/interface type
-					// and run the method in that interface, not a function type. This is probably the best desing, but, perhaps, worth a discussion.
-					is_static: true,
 					js_override: None,
 				};
 				// TODO: avoid creating a new type for each function_sig resolution
@@ -2091,7 +2087,6 @@ impl<'a> TypeChecker<'a> {
 						_type: v,
 						reassignable,
 						flight,
-						is_static: _static,
 					}) => {
 						// Replace type params in function signatures
 						if let Some(sig) = v.as_function_sig() {
@@ -2136,7 +2131,6 @@ impl<'a> TypeChecker<'a> {
 								parameters: new_args,
 								return_type: new_return_type,
 								flight: sig.flight.clone(),
-								is_static: sig.is_static,
 								js_override: sig.js_override.clone(),
 							};
 
@@ -2146,7 +2140,7 @@ impl<'a> TypeChecker<'a> {
 									name: name.clone(),
 									span: WingSpan::global(),
 								},
-								if new_sig.is_static {
+								if *is_static {
 									SymbolKind::make_variable(self.types.add_type(Type::Function(new_sig)), *reassignable, *flight)
 								} else {
 									SymbolKind::make_instance_variable(
@@ -2190,7 +2184,9 @@ impl<'a> TypeChecker<'a> {
 							}
 						}
 					}
-					_ => {}
+					_ => {
+						panic!("Unexpected symbol kind: {:?} in class env", symbol)
+					}
 				}
 			}
 		}

@@ -104,7 +104,6 @@ impl<'a> JsiiImporter<'a> {
 						parameters: vec![self.wing_types.anything()],
 						return_type: self.wing_types.anything(),
 						flight: Phase::Inflight,
-						is_static: true,
 						js_override: None,
 					}))
 				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION) {
@@ -474,7 +473,6 @@ impl<'a> JsiiImporter<'a> {
 					parameters: arg_types,
 					return_type,
 					flight,
-					is_static,
 					js_override: m
 						.docs
 						.as_ref()
@@ -704,7 +702,6 @@ impl<'a> JsiiImporter<'a> {
 				parameters: arg_types,
 				return_type: new_type,
 				flight: phase,
-				is_static: true,
 				js_override: None,
 			}));
 			if let Err(e) = class_env.define(
