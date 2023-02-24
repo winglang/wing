@@ -95,6 +95,7 @@ fn partial_compile(source_file: &str, text: &[u8]) -> FileData {
 		source_name: source_file.to_string(),
 		error_nodes: RefCell::new(HashSet::new()),
 		diagnostics: RefCell::new(Diagnostics::new()),
+    in_json: RefCell::new(false),
 	};
 
 	let mut scope = wing_parser.wingit(&tree.root_node());

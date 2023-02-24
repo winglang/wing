@@ -143,6 +143,8 @@ pub enum Type {
 	Duration,
 	Boolean,
 	Void,
+  Json,
+  MutJson,
 	Optional(TypeRef),
 	Array(TypeRef),
 	MutArray(TypeRef),
@@ -394,6 +396,8 @@ impl Display for Type {
 			Type::Duration => write!(f, "duration"),
 			Type::Boolean => write!(f, "bool"),
 			Type::Void => write!(f, "void"),
+      Type::Json => write!(f, "Json"),
+      Type::MutJson => write!(f, "MutJson"),
 			Type::Optional(v) => write!(f, "{}?", v),
 			Type::Function(sig) => write!(f, "{}", sig),
 			Type::Class(class) => write!(f, "{}", class.name.name),
@@ -517,6 +521,14 @@ impl TypeRef {
 		}
 	}
 
+  pub fn is_json(&self) -> bool {
+    if let Type::Json | Type::MutJson = **self {
+      true
+    } else {
+      false
+    }
+  }
+
 	pub fn is_mutable_collection(&self) -> bool {
 		if let Type::MutArray(_) | Type::MutSet(_) | Type::MutMap(_) = **self {
 			true
@@ -582,6 +594,8 @@ pub struct Types {
 	duration_idx: usize,
 	anything_idx: usize,
 	void_idx: usize,
+  json_idx: usize,
+  mut_json_idx: usize
 }
 
 impl Types {
@@ -599,6 +613,10 @@ impl Types {
 		let anything_idx = types.len() - 1;
 		types.push(Box::new(Type::Void));
 		let void_idx = types.len() - 1;
+    types.push(Box::new(Type::Json));
+    let json_idx = types.len() -1;
+    types.push(Box::new(Type::MutJson));
+    let mut_json_idx = types.len() -1;
 
 		// TODO: this is hack to create the top-level mapping from lib names to symbols
 		// We construct a void ref by hand since we can't call self.void() while constructing the Types struct
@@ -615,6 +633,8 @@ impl Types {
 			duration_idx,
 			anything_idx,
 			void_idx,
+      json_idx,
+      mut_json_idx
 		}
 	}
 
@@ -652,10 +672,18 @@ impl Types {
 		UnsafeRef::<Type>(&**t as *const Type)
 	}
 
+  pub fn json(&self) -> TypeRef {
+    self.get_typeref(self.json_idx)
+  }
+
+  pub fn mut_json(&self) -> TypeRef {
+    self.get_typeref(self.mut_json_idx)
+  }
+
 	pub fn stringables(&self) -> Vec<TypeRef> {
 		// TODO: This should be more complex and return all types that have some stringification facility
 		// see: https://github.com/winglang/wing/issues/741
-		vec![self.string(), self.number()]
+		vec![self.string(), self.number(), self.json(), self.mut_json()]
 	}
 
 	pub fn add_namespace(&mut self, n: Namespace) -> NamespaceRef {
@@ -686,6 +714,9 @@ pub struct TypeChecker<'a> {
 	source_path: &'a Path,
 
 	pub diagnostics: RefCell<Diagnostics>,
+
+  // Allow for alternate behavior while in Json expression
+  pub in_json: RefCell<bool>,
 }
 
 impl<'a> TypeChecker<'a> {
@@ -695,6 +726,7 @@ impl<'a> TypeChecker<'a> {
 			inner_scopes: vec![],
 			source_path,
 			diagnostics: RefCell::new(Diagnostics::new()),
+      in_json: RefCell::new(false),
 		}
 	}
 
@@ -722,6 +754,10 @@ impl<'a> TypeChecker<'a> {
 
 		return Some(Type::Anything);
 	}
+
+  fn set_json(&self, state: bool) {
+    *self.in_json.borrow_mut() = state;
+  }
 
 	fn general_type_error(&self, message: String) -> TypeRef {
 		self.diagnostics.borrow_mut().insert(Diagnostic {
@@ -1045,7 +1081,12 @@ impl<'a> TypeChecker<'a> {
 
 				for (arg_type, param_exp) in params.zip(args) {
 					let param_type = self.type_check_exp(param_exp, env, statement_idx);
-					self.validate_type(param_type, *arg_type, param_exp);
+          if arg_type.is_json() {
+            //B4PR: change the allowed types to jsonables
+            self.validate_type(param_type, self.types.anything(), param_exp)
+          } else {
+            self.validate_type(param_type, *arg_type, param_exp);
+          }
 				}
 
 				func_sig.return_type
@@ -1112,6 +1153,20 @@ impl<'a> TypeChecker<'a> {
 
 				struct_type
 			}
+      ExprKind::JsonLiteral { is_mut, element } => {
+        match is_mut {
+          true => self.types.mut_json(),
+          false => self.types.json()
+        }
+        // B4PR: might be able to delete this
+        // self.set_json(true);
+        // let json_type = match is_mut {
+        //   true => self.types.mut_json(),
+        //   false => self.types.json()
+        // };
+        // self.set_json(false);
+        // json_type
+      }
 			ExprKind::MapLiteral { fields, type_ } => {
 				// Infer type based on either the explicit type or the value in one of the fields
 				let container_type = if let Some(type_) = type_ {

@@ -246,6 +246,7 @@ module.exports = grammar({
         $._collection_literal,
         $.parenthesized_expression,
         $.structured_access_expression,
+        $.json_literal,
         $.struct_literal,
       ),
 
@@ -537,6 +538,19 @@ module.exports = grammar({
       seq($.identifier, ":", $.expression),
     structured_access_expression: ($) =>
       prec.right(seq($.expression, "[", $.expression, "]")),
+
+    json_literal: ($) => seq(field("type", $.json_container_type), field("element", $.json_element)),
+
+    json_element: ($) => choice(
+      $._literal,
+      $.map_literal,
+      $.array_literal
+    ),
+
+    json_container_type: ($) => choice(
+      "Json",
+      "MutJson"
+    ),
   },
 });
 

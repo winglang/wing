@@ -330,6 +330,10 @@ pub enum ExprKind {
 		type_: Option<TypeAnnotation>,
 		items: Vec<Expr>,
 	},
+  JsonLiteral {
+    is_mut: bool,
+    element: Box<Expr> 
+  },
 	FunctionClosure(FunctionDefinition),
 }
 

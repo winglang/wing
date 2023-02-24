@@ -18,6 +18,8 @@ pub struct Parser<'a> {
 	pub source_name: String,
 	pub error_nodes: RefCell<HashSet<usize>>,
 	pub diagnostics: RefCell<Diagnostics>,
+  // Allow for alternate behavior while in Json
+  pub in_json: RefCell<bool>,
 }
 
 // A custom struct could be used to better maintain metadata and issue tracking, though ideally
@@ -53,6 +55,10 @@ impl Parser<'_> {
 
 		scope
 	}
+
+  fn set_json(&self, state: bool) {
+    *self.in_json.borrow_mut() = state;
+  }
 
 	fn add_error<T>(&self, message: String, node: &Node) -> Result<T, ()> {
 		let diag = Diagnostic {
@@ -904,6 +910,21 @@ impl Parser<'_> {
 					expression_span,
 				))
 			}
+      "json_element" => self.build_expression(&expression_node.child(0).unwrap()), //B4PR: try to remove unwrap
+      "json_literal" => {
+        let type_node = expression_node.child_by_field_name("type").expect("Should always be a type node");
+        let is_mut = match self.node_text(&type_node) {
+          "MutJson" => true,
+          _=> false
+        };
+
+        self.set_json(true);
+        let element_node = expression_node.child_by_field_name("element").expect("Should always have element");
+        let element = Box::new(self.build_expression(&element_node)?);
+        self.set_json(false);
+
+        Ok(Expr::new(ExprKind::JsonLiteral { is_mut, element }, expression_span))
+      }
 			"set_literal" => self.build_set_literal(expression_node),
 			"struct_literal" => {
 				let type_ = self.build_type_annotation(&expression_node.child_by_field_name("type").unwrap());

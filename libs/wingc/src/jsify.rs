@@ -457,6 +457,18 @@ impl<'a> JSifier<'a> {
 						.join("\n")
 				)
 			}
+      ExprKind::JsonLiteral { is_mut, element } => {
+        match &element.kind {
+          ExprKind::MapLiteral { .. } => {
+            if *is_mut {
+              format!("{{{}}}", self.jsify_expression(element, phase))
+            } else {
+              format!("Object.freeze({{{}}})", self.jsify_expression(element, phase)  )
+            }
+          }
+          _ => format!("{}", self.jsify_expression(element, phase)  )
+        }
+      }
 			ExprKind::MapLiteral { fields, .. } => {
 				let f = fields
 					.iter()

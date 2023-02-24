@@ -134,6 +134,7 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 		source_name: source_path.to_str().unwrap().to_string(),
 		error_nodes: RefCell::new(HashSet::new()),
 		diagnostics: RefCell::new(Diagnostics::new()),
+    in_json: RefCell::new(false),
 	};
 
 	let scope = wing_parser.wingit(&tree.root_node());
