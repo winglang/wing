@@ -2354,9 +2354,10 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				if force_reassignable {
-					let mut res = res.clone();
-					res.reassignable = true;
-					res
+					VariableInfo {
+					  reassignable: true
+					  ..res.clone(),
+					}
 				} else {
 					res
 				}
