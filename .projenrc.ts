@@ -73,6 +73,7 @@ const project = new TypeScriptProject({
     "framer-motion",
     "lodash.uniqby",
     "@types/lodash.uniqby",
+    "emittery",
   ],
 });
 

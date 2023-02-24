@@ -1,11 +1,11 @@
 import { z } from "zod";
 
-import { publicProcedure, router } from "../utils/createRouter.js";
+import { createProcedure, createRouter } from "../utils/createRouter.js";
 import { IQueueClient } from "../wingsdk.js";
 
 export const createQueueRouter = () => {
-  return router({
-    "queue.push": publicProcedure
+  return createRouter({
+    "queue.push": createProcedure
       .input(
         z.object({
           resourcePath: z.string(),

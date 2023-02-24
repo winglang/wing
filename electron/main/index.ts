@@ -4,12 +4,14 @@ import { config } from "dotenv";
 import { app, BrowserWindow, dialog, Menu, screen, shell } from "electron";
 import log from "electron-log";
 import { autoUpdater } from "electron-updater";
+import Emittery from "emittery";
 
 import { ConsoleLogger, createConsoleLogger } from "./consoleLogger.js";
 import { createConsoleServer } from "./consoleServer.js";
 import { WING_PROTOCOL_SCHEME } from "./protocol.js";
 import { SegmentAnalytics } from "./segmentAnalytics.js";
 import { createCloudAppState } from "./utils/cloudAppState.js";
+import { RouterEvents } from "./utils/createRouter.js";
 import { createWingApp } from "./utils/createWingApp.js";
 
 config();
@@ -55,10 +57,6 @@ async function createWindow(options: { title?: string; port: number }) {
     icon: path.join(ROOT_PATH.public, "icon.ico"),
     width: Math.round(screen.getPrimaryDisplay().workAreaSize.width * 0.9),
     height: Math.round(screen.getPrimaryDisplay().workAreaSize.height * 0.9),
-    webPreferences: {
-      preload: path.join(__dirname, "../preload/index.js"),
-      nodeIntegration: true,
-    },
   });
 
   if (import.meta.env.DEV) {
@@ -118,26 +116,35 @@ function createWindowManager() {
       let newWindow: BrowserWindow | undefined;
       let lastErrorMessage: string = "";
 
+      const emitter = new Emittery<RouterEvents>();
+
       const consoleLogger: ConsoleLogger = createConsoleLogger(
         (level, message) => {
           lastErrorMessage = "";
           if (level === "error") {
             lastErrorMessage = message;
-            newWindow?.webContents.send("trpc.invalidate", "app.error");
+            void emitter.emit("invalidateQuery", {
+              query: "app.error",
+            });
           }
-          newWindow?.webContents.send("trpc.invalidate", "app.logs");
+          void emitter.emit("invalidateQuery", {
+            query: "app.logs",
+          });
         },
       );
 
       const cloudAppStateService = createCloudAppState((state) => {
         log.info("cloud app new state was sent to renderer process", state);
-        newWindow?.webContents.send("app.cloudAppState", state);
+        void emitter.emit("invalidateQuery", {
+          query: "app.state",
+        });
         if (state === "success") {
           log.info("simulator loaded, invalidate trpc queries");
           // Clear the logs.
           consoleLogger.messages = [];
-          // TODO: Use TRPC websockets.
-          newWindow?.webContents.send("trpc.invalidate");
+          void emitter.emit("invalidateQuery", {
+            query: undefined,
+          });
         }
       });
 
@@ -158,30 +165,13 @@ function createWindowManager() {
         errorMessage() {
           return lastErrorMessage;
         },
+        emitter,
       });
 
       newWindow = await createWindow({
         title: path.basename(simfile),
         port: server.port,
       });
-
-      newWindow.webContents.on(
-        "ipc-message",
-        async (event, channel, message) => {
-          log.verbose("ipc-message", { channel, message });
-          if (channel === "open-external-url") {
-            await shell.openExternal(message);
-            return;
-          }
-          if (channel === "webapp.ready") {
-            log.verbose("webapp ready event sending current state");
-            newWindow?.webContents.send(
-              "app.cloudAppState",
-              cloudAppStateService.getSnapshot().value,
-            );
-          }
-        },
-      );
 
       newWindow.setRepresentedFilename(simfile);
       windows.set(simfile, newWindow);

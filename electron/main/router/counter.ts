@@ -1,11 +1,11 @@
 import { z } from "zod";
 
-import { publicProcedure, router } from "../utils/createRouter.js";
+import { createProcedure, createRouter } from "../utils/createRouter.js";
 import { ICounterClient } from "../wingsdk.js";
 
 export const createCounterRouter = () => {
-  return router({
-    "counter.inc": publicProcedure
+  return createRouter({
+    "counter.inc": createProcedure
       .input(
         z.object({
           resourcePath: z.string(),
@@ -20,7 +20,7 @@ export const createCounterRouter = () => {
         const response = await client.inc(input.amount);
         return response;
       }),
-    "counter.dec": publicProcedure
+    "counter.dec": createProcedure
       .input(
         z.object({
           resourcePath: z.string(),
@@ -35,7 +35,7 @@ export const createCounterRouter = () => {
         const response = await client.dec(input.amount);
         return response;
       }),
-    "counter.peek": publicProcedure
+    "counter.peek": createProcedure
       .input(
         z.object({
           resourcePath: z.string(),

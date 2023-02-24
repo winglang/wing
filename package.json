@@ -72,6 +72,7 @@
     "electron-trpc": "*",
     "electron-updater": "^5.3.0",
     "elkjs": "^0.8.2",
+    "emittery": "*",
     "esbuild": "^0.16.0",
     "eslint": "^8",
     "eslint-config-prettier": "^8.6.0",

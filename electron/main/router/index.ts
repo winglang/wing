@@ -6,14 +6,18 @@ import { createCounterRouter } from "./counter.js";
 import { createFunctionRouter } from "./function.js";
 import { createQueueRouter } from "./queue.js";
 
-export const mergeAppRouters = () => {
-  return mergeRouters(
-    createAppRouter(),
+export const mergeAllRouters = () => {
+  const app = createAppRouter();
+
+  const router = mergeRouters(
+    app.router,
     createBucketRouter(),
     createQueueRouter(),
     createFunctionRouter(),
     createCounterRouter(),
   );
+
+  return { router };
 };
 
-export type Router = ReturnType<typeof mergeAppRouters>;
+export type Router = ReturnType<typeof mergeAllRouters>["router"];

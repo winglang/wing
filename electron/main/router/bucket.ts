@@ -2,12 +2,12 @@ import fs from "node:fs";
 
 import { z } from "zod";
 
-import { publicProcedure, router } from "../utils/createRouter.js";
+import { createProcedure, createRouter } from "../utils/createRouter.js";
 import { IBucketClient } from "../wingsdk.js";
 
 export const createBucketRouter = () => {
-  return router({
-    "bucket.put": publicProcedure
+  return createRouter({
+    "bucket.put": createProcedure
       .input(
         z.object({
           resourcePath: z.string(),
@@ -24,7 +24,7 @@ export const createBucketRouter = () => {
         const response = await client.put(input.fileName, fileContent);
         return response;
       }),
-    "bucket.get": publicProcedure
+    "bucket.get": createProcedure
       .input(
         z.object({
           resourcePath: z.string(),
@@ -39,7 +39,7 @@ export const createBucketRouter = () => {
         const response = await client.get(input.fileName);
         return response;
       }),
-    "bucket.list": publicProcedure
+    "bucket.list": createProcedure
       .input(
         z.object({
           resourcePath: z.string(),

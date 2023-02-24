@@ -1,15 +1,17 @@
 import { TRPCError } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
+import { shell } from "electron";
 import uniqby from "lodash.uniqby";
 import { z } from "zod";
 
+import { AppStates } from "../utils/cloudAppState.js";
 import {
   Node,
   NodeDisplay,
   buildConstructTreeNodeMap,
   NodeConnection,
 } from "../utils/constructTreeNodeMap.js";
-import { publicProcedure, router } from "../utils/createRouter.js";
+import { createProcedure, createRouter } from "../utils/createRouter.js";
 import { ConstructTreeNode } from "../utils/createSimulator.js";
 import { BaseResourceSchema, Simulator } from "../wingsdk.js";
 
@@ -22,11 +24,11 @@ export interface ExplorerItem {
 }
 
 export const createAppRouter = () => {
-  return router({
-    "app.details": publicProcedure.query(({ ctx }) => {
+  const router = createRouter({
+    "app.details": createProcedure.query(({ ctx }) => {
       return ctx.appDetails();
     }),
-    "app.logs": publicProcedure
+    "app.logs": createProcedure
       .input(
         z.object({
           filters: z.object({
@@ -61,15 +63,15 @@ export const createAppRouter = () => {
                   .includes(input.filters.text.toLowerCase())),
           );
       }),
-    "app.error": publicProcedure.query(({ ctx }) => {
+    "app.error": createProcedure.query(({ ctx }) => {
       return ctx.errorMessage();
     }),
-    "app.explorerTree": publicProcedure.query(async ({ ctx }) => {
+    "app.explorerTree": createProcedure.query(async ({ ctx }) => {
       const simulator = await ctx.simulator();
       const { tree } = await ctx.tree();
       return createExplorerItemFromConstructTreeNode(tree, simulator);
     }),
-    "app.childRelationships": publicProcedure
+    "app.childRelationships": createProcedure
       .input(
         z.object({
           path: z.string().optional(),
@@ -135,7 +137,7 @@ export const createAppRouter = () => {
                 }) ?? [],
           }));
       }),
-    "app.nodeBreadcrumbs": publicProcedure
+    "app.nodeBreadcrumbs": createProcedure
       .input(
         z.object({
           path: z.string().optional(),
@@ -163,7 +165,7 @@ export const createAppRouter = () => {
         });
         return breadcrumbs;
       }),
-    "app.node": publicProcedure
+    "app.node": createProcedure
       .input(
         z.object({
           path: z.string().optional(),
@@ -191,7 +193,7 @@ export const createAppRouter = () => {
           props: config?.props,
         };
       }),
-    "app.nodeMetadata": publicProcedure
+    "app.nodeMetadata": createProcedure
       .input(
         z.object({
           path: z.string().optional(),
@@ -266,18 +268,17 @@ export const createAppRouter = () => {
             }),
         };
       }),
-    // TODO: Implement and use this subscription to invalidate from the backend to the frontend.
-    "app.invalidateQueries": publicProcedure.subscription(() => {
-      return observable<{ randomNumber: number }>((emit) => {
-        // const timer = setInterval(() => {
-        //   emit.next({ randomNumber: Math.random() });
-        // }, 1000);
-        // return () => {
-        //   clearInterval(timer);
-        // };
+    "app.invalidateQuery": createProcedure.subscription(({ ctx }) => {
+      return observable<{
+        query: "app.error" | "app.logs" | "app.state" | undefined;
+      }>((emit) => {
+        ctx.emitter.on("invalidateQuery", emit.next);
+        return () => {
+          ctx.emitter.off("invalidateQuery", emit.next);
+        };
       });
     }),
-    "app.map": publicProcedure.query(async ({ ctx }) => {
+    "app.map": createProcedure.query(async ({ ctx }) => {
       const simulator = await ctx.simulator();
       const { tree } = await ctx.tree();
       const nodes = [createMapNodeFromConstructTreeNode(tree, simulator)];
@@ -291,7 +292,21 @@ export const createAppRouter = () => {
         edges,
       };
     }),
+    "app.state": createProcedure.query(async ({ ctx }) => {
+      return ctx.cloudAppStateService.getSnapshot().value as AppStates;
+    }),
+    "app.openExternal": createProcedure
+      .input(
+        z.object({
+          url: z.string(),
+        }),
+      )
+      .mutation(async ({ input }) => {
+        await shell.openExternal(input.url);
+      }),
   });
+
+  return { router };
 };
 
 function createExplorerItemFromConstructTreeNode(

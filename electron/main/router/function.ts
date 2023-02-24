@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { publicProcedure, router } from "../utils/createRouter.js";
+import { createProcedure, createRouter } from "../utils/createRouter.js";
 import { IFunctionClient } from "../wingsdk.js";
 
 type ResponseEnvelope =
@@ -30,8 +30,8 @@ const isErrorLike = (value: unknown): value is ErrorLike => {
 };
 
 export const createFunctionRouter = () => {
-  return router({
-    "function.invoke": publicProcedure
+  return createRouter({
+    "function.invoke": createProcedure
       .input(
         z.object({
           resourcePath: z.string(),

@@ -9,9 +9,20 @@ export type AppEvent =
   | "SIMULATOR_SUCCESS"
   | "SIMULATOR_LOADING";
 
-export const createCloudAppState = (onChange: (state: string) => void) => {
-  const cloudAppState = createMachine({
-    id: "cloudAppState",
+export type AppEvent2 =
+  | {
+      type: "COMPILER_ERROR";
+    }
+  | { type: "COMPILER_SUCCESS" }
+  | { type: "COMPILER_LOADING" }
+  | { type: "SIMULATOR_ERROR" }
+  | { type: "SIMULATOR_SUCCESS" }
+  | { type: "SIMULATOR_LOADING" };
+
+export type AppStates = "error" | "success" | "loading" | "compilerSuccess";
+
+export const createCloudAppState = (onChange: (state: AppStates) => void) => {
+  const cloudAppState = createMachine<undefined, AppEvent2>({
     initial: "loading",
     states: {
       error: {
@@ -52,9 +63,11 @@ export const createCloudAppState = (onChange: (state: string) => void) => {
   const cloudAppStateService = interpret(cloudAppState)
     .onTransition((state) => {
       log.verbose(`cloud app state: ${state.value}`);
-      onChange(state.value as string);
+      onChange(state.value as AppStates);
     })
     .start();
 
   return cloudAppStateService;
 };
+
+export type CloudAppStateService = ReturnType<typeof createCloudAppState>;

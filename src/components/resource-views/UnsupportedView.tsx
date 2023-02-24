@@ -1,22 +1,16 @@
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
 
 import { Button } from "../../design-system/Button.js";
-import { CustomResourceIcon } from "../../stories/utils.js";
+import { trpc } from "../../utils/trpc.js";
 
 export interface UnsupportedViewProps {
   resourceType: string;
   resourcePath: string;
 }
-export const UnsupportedView = ({
-  resourceType,
-  resourcePath,
-}: UnsupportedViewProps) => {
+export const UnsupportedView = ({ resourceType }: UnsupportedViewProps) => {
   const newIssueUrl = "https://github.com/winglang/wing/issues/new/choose";
 
-  const openExternalUrl = (url: string) => {
-    // TODO: Use TRPC directly.
-    window.electronTRPC?.ipcRenderer.send("open-external-url", url);
-  };
+  const openExternal = trpc["app.openExternal"].useMutation();
 
   return (
     <div className="flex flex-1 px-4 py-2">
@@ -42,7 +36,7 @@ export const UnsupportedView = ({
               </h3>
               <div className="mt-2">
                 <Button
-                  onClick={() => openExternalUrl(newIssueUrl)}
+                  onClick={() => openExternal.mutate({ url: newIssueUrl })}
                   label="Open an issue"
                 />
               </div>

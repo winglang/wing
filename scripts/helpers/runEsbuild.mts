@@ -11,8 +11,8 @@ export interface RunEsbuildOptions {
 
 export const runEsbuild = ({ port, watch, minify }: RunEsbuildOptions) => {
   return esbuild.build({
-    entryPoints: ["electron/main/index.ts", "electron/preload/index.ts"],
-    outdir: "dist/vite/electron",
+    entryPoints: ["electron/main/index.ts"],
+    outdir: "dist/vite/electron/main",
     target: "node16.17.1",
     platform: "node",
     format: "cjs",
