@@ -105,28 +105,15 @@ impl SymbolEnv {
 			});
 		}
 
-		// Avoid variable shadowing
-		if let Some(_parent_env) = self.parent {
-			if let Some(parent_kind) = self.try_lookup(&symbol.name, None) {
-				// If we're a class we allow "symbol shadowing" for methods
-				let is_function = if let SymbolKind::Variable(VariableInfo { _type: t, .. }) = kind {
-					matches!(*t, Type::Function(_))
-				} else {
-					false
-				};
-				let is_parent_function = if let SymbolKind::Variable(VariableInfo { _type: t, .. }) = *parent_kind {
-					matches!(*t, Type::Function(_))
-				} else {
-					false
-				};
-				if !(self.is_class && is_parent_function && is_function) {
-					return Err(TypeError {
-						span: symbol.span.clone(),
-						message: format!("Symbol \"{}\" already defined in parent scope.", symbol.name),
-					});
-				}
-			}
+		// Avoid symbol shadowing (unless we're in a class and then derived classes can shadow symbols
+		// from their parent class)
+		if self.parent.is_some() && self.try_lookup(&symbol.name, None).is_some() && !self.is_class {
+			return Err(TypeError {
+				span: symbol.span.clone(),
+				message: format!("Symbol \"{}\" already defined in parent scope.", symbol.name),
+			});
 		}
+
 		self.symbol_map.insert(symbol.name.clone(), (pos, kind));
 
 		Ok(())
@@ -211,48 +198,28 @@ impl SymbolEnv {
 		}
 	}
 
-	pub fn lookup_nested_str(
-		&self,
-		nested_str: &str,
-		include_hidden: bool,
-		statement_idx: Option<usize>,
-	) -> Result<&SymbolKind, TypeError> {
+	pub fn lookup_nested_str(&self, nested_str: &str, statement_idx: Option<usize>) -> Result<&SymbolKind, TypeError> {
 		let nested_vec = nested_str
 			.split('.')
 			.map(|s| Symbol::global(s))
 			.collect::<Vec<Symbol>>();
-		self.lookup_nested(
-			&nested_vec.iter().collect::<Vec<&Symbol>>(),
-			include_hidden,
-			statement_idx,
-		)
+		self.lookup_nested(&nested_vec.iter().collect::<Vec<&Symbol>>(), statement_idx)
 	}
 
 	// TODO: can we make this more generic to avoid code duplication with lookup_nested_str?
 	pub fn lookup_nested_mut_str(
 		&mut self,
 		nested_str: &str,
-		include_hidden: bool,
 		statement_idx: Option<usize>,
 	) -> Result<&mut SymbolKind, TypeError> {
 		let nested_vec = nested_str
 			.split('.')
 			.map(|s| Symbol::global(s))
 			.collect::<Vec<Symbol>>();
-		self.lookup_nested_mut(
-			&nested_vec.iter().collect::<Vec<&Symbol>>(),
-			include_hidden,
-			statement_idx,
-		)
+		self.lookup_nested_mut(&nested_vec.iter().collect::<Vec<&Symbol>>(), statement_idx)
 	}
 
-	/// Pass `include_hidden: true` if it's OK to return types that have only been imported implicitly (such as through an inheritance chain), and false otherwise
-	pub fn lookup_nested(
-		&self,
-		nested_vec: &[&Symbol],
-		include_hidden: bool,
-		statement_idx: Option<usize>,
-	) -> Result<&SymbolKind, TypeError> {
+	pub fn lookup_nested(&self, nested_vec: &[&Symbol], statement_idx: Option<usize>) -> Result<&SymbolKind, TypeError> {
 		let mut it = nested_vec.iter();
 
 		let mut symb = *it.next().unwrap();
@@ -276,12 +243,6 @@ impl SymbolEnv {
 				}
 			}
 			let ns = if let Some(ns) = t.as_namespace() {
-				if ns.hidden && !include_hidden {
-					return Err(TypeError {
-						message: format!("\"{}\" was not brought", symb.name),
-						span: symb.span.clone(),
-					});
-				}
 				ns
 			} else {
 				return Err(TypeError {
@@ -306,13 +267,10 @@ impl SymbolEnv {
 		Ok(t)
 	}
 
-	/// Pass `include_hidden: true` if it's OK to return types that have only been imported implicitly (such as through an inheritance chain), and false otherwise
-	///
 	/// TODO: can we make this more generic to avoid code duplication with lookup_nested?
 	fn lookup_nested_mut(
 		&mut self,
 		nested_vec: &[&Symbol],
-		include_hidden: bool,
 		statement_idx: Option<usize>,
 	) -> Result<&mut SymbolKind, TypeError> {
 		let mut it = nested_vec.iter();
@@ -339,12 +297,6 @@ impl SymbolEnv {
 			}
 
 			let ns = if let Some(ns) = t.as_mut_namespace_ref() {
-				if ns.hidden && !include_hidden {
-					return Err(TypeError {
-						message: format!("\"{}\" was not brought", symb.name),
-						span: symb.span.clone(),
-					});
-				}
 				ns
 			} else {
 				return Err(TypeError {

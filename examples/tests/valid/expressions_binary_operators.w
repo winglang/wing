@@ -6,3 +6,5 @@ let xyz = ((y * y) / (x * x)) * z;
 let xf = 1.0;
 let yf = (-20.22) * xf;
 let zf = (xf + (yf) - -0.01);
+let fxzy = 5 ^ (1^5);
+assert(fxzy == 5);
