@@ -1,7 +1,5 @@
 use std::fmt::{Display, Formatter};
 
-use crate::{CONSTRUCT_BASE, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE};
-
 /// Represents a fully-qualified name (FQN) of a type in a JSII library.
 /// For example, `@aws-cdk/aws-ec2.Vpc` is a FQN.
 /// The FQN uniquely identifies a type within the JSII ecosystem.
@@ -76,18 +74,6 @@ impl<'a> FQN<'a> {
 	}
 }
 
-/// Returns true if the FQN represents a "construct base class".
-///
-/// TODO: this is a temporary hack until we support interfaces.
-pub fn is_construct_base(fqn: &FQN) -> bool {
-	// We treat both CONSTRUCT_BASE and WINGSDK_RESOURCE, as base constructs because in wingsdk we currently have stuff directly derived
-	// from `construct.Construct` and stuff derived `core.Resource` (which itself is derived from `constructs.Construct`).
-	// But since we don't support interfaces yet we can't import `core.Resource` so we just treat it as a base class.
-	// I'm also not sure we should ever import `core.Resource` because we might want to keep its internals hidden to the user:
-	// after all it's an abstract class representing our `resource` primitive. See https://github.com/winglang/wing/issues/261.
-	fqn.as_str() == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE) || fqn.as_str() == CONSTRUCT_BASE
-}
-
 impl Display for FQN<'_> {
 	fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
 		write!(f, "{}", self.0)
@@ -140,15 +126,5 @@ mod tests {
 		assert_eq!(fqn.is_in_namespace(&vec!["blah"]), false);
 		assert_eq!(fqn.is_in_namespace(&vec!["ns1", "blah"]), false);
 		assert_eq!(fqn.is_in_namespace(&vec!["ns1", "ns2", "ns3"]), false);
-	}
-
-	#[test]
-	fn test_fqn_is_construct_base() {
-		assert_eq!(is_construct_base(&FQN(CONSTRUCT_BASE)), true);
-		assert_eq!(
-			is_construct_base(&FQN(&format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE))),
-			true
-		);
-		assert_eq!(is_construct_base(&FQN("@winglang/sdk.cloud.Bucket")), false);
 	}
 }

@@ -746,6 +746,56 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`bring_projen.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+}
+`;
+
+exports[`bring_projen.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const projen = require(\\"projen\\");
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"bring_projen\\", plugins: $plugins });
+  
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(projen.LogLevel.OFF !== projen.LogLevel.VERBOSE)'\`)})((projen.LogLevel.OFF !== projen.LogLevel.VERBOSE))};
+}
+}
+new MyApp().synth();"
+`;
+
 exports[`capture_containers.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(s) { const { arr, arr_of_map, my_map, my_set } = this; {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(0)) === \\"hello\\")'\`)})(((await arr.at(0)) === \\"hello\\"))};
