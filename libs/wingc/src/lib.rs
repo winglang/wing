@@ -47,6 +47,8 @@ const WINGSDK_MUT_ARRAY: &'static str = "std.MutableArray";
 const WINGSDK_SET: &'static str = "std.ImmutableSet";
 const WINGSDK_MUT_SET: &'static str = "std.MutableSet";
 const WINGSDK_STRING: &'static str = "std.String";
+const WINGSDK_JSON: &'static str = "std.Json";
+const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
 const WINGSDK_RESOURCE: &'static str = "core.Resource";
 const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
 
@@ -134,7 +136,7 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 		source_name: source_path.to_str().unwrap().to_string(),
 		error_nodes: RefCell::new(HashSet::new()),
 		diagnostics: RefCell::new(Diagnostics::new()),
-    in_json: RefCell::new(false),
+		in_json: RefCell::new(false),
 	};
 
 	let scope = wing_parser.wingit(&tree.root_node());

@@ -480,6 +480,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -756,6 +760,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -876,6 +884,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -936,6 +948,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -963,6 +979,10 @@
           },
           {
             "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
             "named": true
           },
           {
@@ -1056,6 +1076,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -1093,6 +1117,10 @@
           },
           {
             "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
             "named": true
           },
           {
@@ -1312,6 +1340,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -1349,6 +1381,10 @@
           },
           {
             "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
             "named": true
           },
           {
@@ -1419,6 +1455,10 @@
           },
           {
             "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
             "named": true
           },
           {
@@ -1569,6 +1609,10 @@
           "named": true
         },
         {
+          "type": "json_container_type",
+          "named": true
+        },
+        {
           "type": "mutable_container_type",
           "named": true
         },
@@ -1624,6 +1668,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -1672,6 +1720,10 @@
         },
         {
           "type": "immutable_container_type",
+          "named": true
+        },
+        {
+          "type": "json_container_type",
           "named": true
         },
         {
@@ -1764,6 +1816,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -1791,6 +1847,10 @@
           },
           {
             "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
             "named": true
           },
           {
@@ -2122,6 +2182,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -2360,6 +2424,10 @@
           },
           {
             "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
             "named": true
           },
           {

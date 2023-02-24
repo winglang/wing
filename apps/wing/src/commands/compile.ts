@@ -140,7 +140,6 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     __dirname: workDir,
     __filename: artifactPath,
     $plugins: resolvePluginPaths(options.plugins ?? []),
-    console, //B4PR: Remove debug code
     // since the SDK is loaded in the outer VM, we need these to be the same class instance,
     // otherwise "instanceof" won't work between preflight code and the SDK. this is needed e.g. in
     // `serializeImmutableData` which has special cases for serializing these types.

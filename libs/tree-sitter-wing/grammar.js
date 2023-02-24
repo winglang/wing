@@ -343,6 +343,7 @@ module.exports = grammar({
         $.custom_type,
         $.builtin_type,
         $._builtin_container_type,
+        $.json_container_type,
         $.function_type,
         $.optional
       ),

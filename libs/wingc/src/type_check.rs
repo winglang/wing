@@ -6,8 +6,9 @@ use crate::ast::{
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
 use crate::{
-	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_MAP,
-	WINGSDK_MUT_ARRAY, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING,
+	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_JSON,
+	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_SET, WINGSDK_STD_MODULE,
+	WINGSDK_STRING,
 };
 use derivative::Derivative;
 use indexmap::IndexSet;
@@ -143,8 +144,8 @@ pub enum Type {
 	Duration,
 	Boolean,
 	Void,
-  Json,
-  MutJson,
+	Json,
+	MutJson,
 	Optional(TypeRef),
 	Array(TypeRef),
 	MutArray(TypeRef),
@@ -341,6 +342,9 @@ impl Subtype for Type {
 				let r: &Type = &*r0;
 				self.is_subtype_of(r)
 			}
+			// This allows us for assignment from native types without allowing assignment to native types
+			// e.g. assert("hello" == x.world) but NOT assert(x.world == "hello")
+			(_, Self::Json) | (_, Self::MutJson) => true,
 			(Self::Number, Self::Number) => true,
 			(Self::String, Self::String) => true,
 			(Self::Boolean, Self::Boolean) => true,
@@ -396,8 +400,8 @@ impl Display for Type {
 			Type::Duration => write!(f, "duration"),
 			Type::Boolean => write!(f, "bool"),
 			Type::Void => write!(f, "void"),
-      Type::Json => write!(f, "Json"),
-      Type::MutJson => write!(f, "MutJson"),
+			Type::Json => write!(f, "Json"),
+			Type::MutJson => write!(f, "MutJson"),
 			Type::Optional(v) => write!(f, "{}?", v),
 			Type::Function(sig) => write!(f, "{}", sig),
 			Type::Class(class) => write!(f, "{}", class.name.name),
@@ -521,13 +525,13 @@ impl TypeRef {
 		}
 	}
 
-  pub fn is_json(&self) -> bool {
-    if let Type::Json | Type::MutJson = **self {
-      true
-    } else {
-      false
-    }
-  }
+	pub fn is_json(&self) -> bool {
+		if let Type::Json | Type::MutJson = **self {
+			true
+		} else {
+			false
+		}
+	}
 
 	pub fn is_mutable_collection(&self) -> bool {
 		if let Type::MutArray(_) | Type::MutSet(_) | Type::MutMap(_) = **self {
@@ -594,8 +598,8 @@ pub struct Types {
 	duration_idx: usize,
 	anything_idx: usize,
 	void_idx: usize,
-  json_idx: usize,
-  mut_json_idx: usize
+	json_idx: usize,
+	mut_json_idx: usize,
 }
 
 impl Types {
@@ -613,10 +617,10 @@ impl Types {
 		let anything_idx = types.len() - 1;
 		types.push(Box::new(Type::Void));
 		let void_idx = types.len() - 1;
-    types.push(Box::new(Type::Json));
-    let json_idx = types.len() -1;
-    types.push(Box::new(Type::MutJson));
-    let mut_json_idx = types.len() -1;
+		types.push(Box::new(Type::Json));
+		let json_idx = types.len() - 1;
+		types.push(Box::new(Type::MutJson));
+		let mut_json_idx = types.len() - 1;
 
 		// TODO: this is hack to create the top-level mapping from lib names to symbols
 		// We construct a void ref by hand since we can't call self.void() while constructing the Types struct
@@ -633,8 +637,8 @@ impl Types {
 			duration_idx,
 			anything_idx,
 			void_idx,
-      json_idx,
-      mut_json_idx
+			json_idx,
+			mut_json_idx,
 		}
 	}
 
@@ -672,13 +676,17 @@ impl Types {
 		UnsafeRef::<Type>(&**t as *const Type)
 	}
 
-  pub fn json(&self) -> TypeRef {
-    self.get_typeref(self.json_idx)
-  }
+	pub fn json(&self) -> TypeRef {
+		self.get_typeref(self.json_idx)
+	}
 
-  pub fn mut_json(&self) -> TypeRef {
-    self.get_typeref(self.mut_json_idx)
-  }
+	pub fn mut_json(&self) -> TypeRef {
+		self.get_typeref(self.mut_json_idx)
+	}
+
+	pub fn jsonables(&self) -> Vec<TypeRef> {
+		vec![self.string(), self.number(), self.json(), self.mut_json(), self.bool()]
+	}
 
 	pub fn stringables(&self) -> Vec<TypeRef> {
 		// TODO: This should be more complex and return all types that have some stringification facility
@@ -715,8 +723,8 @@ pub struct TypeChecker<'a> {
 
 	pub diagnostics: RefCell<Diagnostics>,
 
-  // Allow for alternate behavior while in Json expression
-  pub in_json: RefCell<bool>,
+	// Allow for alternate behavior while in Json expression
+	pub in_json: RefCell<bool>,
 }
 
 impl<'a> TypeChecker<'a> {
@@ -726,7 +734,7 @@ impl<'a> TypeChecker<'a> {
 			inner_scopes: vec![],
 			source_path,
 			diagnostics: RefCell::new(Diagnostics::new()),
-      in_json: RefCell::new(false),
+			in_json: RefCell::new(false),
 		}
 	}
 
@@ -755,9 +763,9 @@ impl<'a> TypeChecker<'a> {
 		return Some(Type::Anything);
 	}
 
-  fn set_json(&self, state: bool) {
-    *self.in_json.borrow_mut() = state;
-  }
+	fn set_json(&self, state: bool) {
+		*self.in_json.borrow_mut() = state;
+	}
 
 	fn general_type_error(&self, message: String) -> TypeRef {
 		self.diagnostics.borrow_mut().insert(Diagnostic {
@@ -1081,12 +1089,7 @@ impl<'a> TypeChecker<'a> {
 
 				for (arg_type, param_exp) in params.zip(args) {
 					let param_type = self.type_check_exp(param_exp, env, statement_idx);
-          if arg_type.is_json() {
-            //B4PR: change the allowed types to jsonables
-            self.validate_type(param_type, self.types.anything(), param_exp)
-          } else {
-            self.validate_type(param_type, *arg_type, param_exp);
-          }
+					self.validate_type(param_type, *arg_type, param_exp);
 				}
 
 				func_sig.return_type
@@ -1153,20 +1156,13 @@ impl<'a> TypeChecker<'a> {
 
 				struct_type
 			}
-      ExprKind::JsonLiteral { is_mut, element } => {
-        match is_mut {
-          true => self.types.mut_json(),
-          false => self.types.json()
-        }
-        // B4PR: might be able to delete this
-        // self.set_json(true);
-        // let json_type = match is_mut {
-        //   true => self.types.mut_json(),
-        //   false => self.types.json()
-        // };
-        // self.set_json(false);
-        // json_type
-      }
+			ExprKind::JsonLiteral { is_mut, .. } => {
+				if *is_mut {
+					self.types.mut_json()
+				} else {
+					self.types.json()
+				}
+			}
 			ExprKind::MapLiteral { fields, type_ } => {
 				// Infer type based on either the explicit type or the value in one of the fields
 				let container_type = if let Some(type_) = type_ {
@@ -1363,6 +1359,8 @@ impl<'a> TypeChecker<'a> {
 			TypeAnnotation::String => self.types.string(),
 			TypeAnnotation::Bool => self.types.bool(),
 			TypeAnnotation::Duration => self.types.duration(),
+			TypeAnnotation::Json => self.types.json(),
+			TypeAnnotation::MutJson => self.types.mut_json(),
 			TypeAnnotation::Optional(v) => {
 				let value_type = self.resolve_type_annotation(v, env, statement_idx);
 				self.types.add_type(Type::Optional(value_type))
@@ -2167,6 +2165,8 @@ impl<'a> TypeChecker<'a> {
 											WINGSDK_MUT_MAP => self.types.add_type(Type::MutMap(new_type_arg)),
 											WINGSDK_SET => self.types.add_type(Type::Set(new_type_arg)),
 											WINGSDK_MUT_SET => self.types.add_type(Type::MutSet(new_type_arg)),
+											WINGSDK_JSON => self.types.json(),
+											WINGSDK_MUT_JSON => self.types.mut_json(),
 											_ => self.general_type_error(format!("\"{}\" is not a supported generic return type", fqn)),
 										}
 									} else {
@@ -2374,6 +2374,14 @@ impl<'a> TypeChecker<'a> {
 					}
 					Type::MutMap(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_MAP, vec![t]);
+						self.get_property_from_class(new_class.as_class().unwrap(), property)
+					}
+					Type::Json => {
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_JSON, vec![self.types.json()]);
+						self.get_property_from_class(new_class.as_class().unwrap(), property)
+					}
+					Type::MutJson => {
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_JSON, vec![self.types.mut_json()]);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
 					Type::String => self.get_property_from_class(

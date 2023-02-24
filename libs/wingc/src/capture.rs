@@ -288,9 +288,9 @@ fn scan_captures_in_expression(
 				res.extend(scan_captures_in_expression(&v, env, statement_idx, diagnostics));
 			}
 		}
-    ExprKind::JsonLiteral { element, .. } => {
-      res.extend(scan_captures_in_expression(&element, env, statement_idx, diagnostics));
-    }
+		ExprKind::JsonLiteral { element, .. } => {
+			res.extend(scan_captures_in_expression(&element, env, statement_idx, diagnostics));
+		}
 		ExprKind::StructLiteral { fields, .. } => {
 			for v in fields.values() {
 				res.extend(scan_captures_in_expression(&v, env, statement_idx, diagnostics));

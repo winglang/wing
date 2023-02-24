@@ -11,7 +11,7 @@ use crate::{
 		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator,
 		UserDefinedType,
 	},
-	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, TypeRef},
+	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, Type, TypeRef},
 	utilities::snake_case_to_camel_case,
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
 };
@@ -47,6 +47,7 @@ pub struct JSifier<'a> {
 	shim: bool,
 	app_name: String,
 	inflight_counter: RefCell<usize>,
+	in_json: RefCell<bool>,
 }
 
 impl<'a> JSifier<'a> {
@@ -56,7 +57,12 @@ impl<'a> JSifier<'a> {
 			shim,
 			app_name: app_name.to_string(),
 			inflight_counter: RefCell::new(0),
+			in_json: RefCell::new(false),
 		}
+	}
+
+	fn set_json(&self, state: bool) {
+		*self.in_json.borrow_mut() = state;
 	}
 
 	fn js_resolve_path(path_name: &str) -> String {
@@ -340,7 +346,14 @@ impl<'a> JSifier<'a> {
 						.iter()
 						.map(|p| match p {
 							InterpolatedStringPart::Static(l) => format!("{}", l),
-							InterpolatedStringPart::Expr(e) => format!("${{{}}}", self.jsify_expression(e, phase)),
+							InterpolatedStringPart::Expr(e) => {
+								match *e.evaluated_type.borrow().expect("Should have type") {
+									Type::Json | Type::MutJson => {
+										format!("${{JSON.stringify({}, null, 2)}}", self.jsify_expression(e, phase))
+									}
+									_ => format!("${{{}}}", self.jsify_expression(e, phase)),
+								}
+							}
 						})
 						.collect::<Vec<String>>()
 						.join("")
@@ -441,7 +454,8 @@ impl<'a> JSifier<'a> {
 					.collect::<Vec<String>>()
 					.join(", ");
 
-				if is_mutable_collection(expression) {
+				if is_mutable_collection(expression) || *self.in_json.borrow() {
+					// json arrays dont need frozen at nested level
 					format!("[{}]", item_list)
 				} else {
 					format!("Object.freeze([{}])", item_list)
@@ -457,18 +471,21 @@ impl<'a> JSifier<'a> {
 						.join("\n")
 				)
 			}
-      ExprKind::JsonLiteral { is_mut, element } => {
-        match &element.kind {
-          ExprKind::MapLiteral { .. } => {
-            if *is_mut {
-              format!("{{{}}}", self.jsify_expression(element, phase))
-            } else {
-              format!("Object.freeze({{{}}})", self.jsify_expression(element, phase)  )
-            }
-          }
-          _ => format!("{}", self.jsify_expression(element, phase)  )
-        }
-      }
+			ExprKind::JsonLiteral { is_mut, element } => {
+				self.set_json(true);
+				let js_out = match &element.kind {
+					ExprKind::MapLiteral { .. } => {
+						if *is_mut {
+							format!("{}", self.jsify_expression(element, phase))
+						} else {
+							format!("Object.freeze({})", self.jsify_expression(element, phase))
+						}
+					}
+					_ => format!("{}", self.jsify_expression(element, phase)),
+				};
+				self.set_json(false);
+				js_out
+			}
 			ExprKind::MapLiteral { fields, .. } => {
 				let f = fields
 					.iter()
@@ -476,7 +493,8 @@ impl<'a> JSifier<'a> {
 					.collect::<Vec<String>>()
 					.join(",");
 
-				if is_mutable_collection(expression) {
+				if is_mutable_collection(expression) || *self.in_json.borrow() {
+					// json maps dont need frozen in the nested level
 					format!("{{{}}}", f)
 				} else {
 					format!("Object.freeze({{{}}})", f)
