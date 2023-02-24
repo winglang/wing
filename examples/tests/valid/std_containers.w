@@ -24,5 +24,5 @@ assert(s_set.size == 2);
 assert(immut_set.size == 3);
 
 assert(s_map.get("one") == 1);
-assert(s_map.size == 2);
-assert(immut_map.size == 3);
+assert(s_map.size() == 2);
+assert(immut_map.size() == 3);

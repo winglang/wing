@@ -505,7 +505,7 @@ impl TypeRef {
 	}
 
 	pub fn is_mutable_collection(&self) -> bool {
-		if let Type::MutArray(_) | Type::MutSet(_) = **self {
+		if let Type::MutArray(_) | Type::MutSet(_) | Type::MutMap(_) = **self {
 			true
 		} else {
 			false

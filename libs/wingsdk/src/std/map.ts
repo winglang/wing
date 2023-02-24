@@ -12,8 +12,10 @@ import { T1 } from "./util";
 export class ImmutableMap {
   /**
    * Returns the number of elements in the map.
+   * @returns The number of elements in map
+   * @macro Object.keys($self$).length
    */
-  public get size(): number {
+  public size(): number {
     throw new Error("Abstract");
   }
 
@@ -25,6 +27,7 @@ export class ImmutableMap {
    *
    * @param key The key of the element to return.
    * @returns The element associated with the specified key, or undefined if the key can't be found
+   * @macro $self$[$args$]
    */
   public get(key: string): T1 {
     key;
@@ -35,7 +38,8 @@ export class ImmutableMap {
    * Returns a boolean indicating whether an element with the specified key exists or not.
    * @param key The key of the element to test for presence
    * @returns true if an element with the specified key exists in the map; otherwise false.
-   */
+   * @macro $self$[$args$] !== undefined
+   */ 
   public has(key: string): boolean {
     key;
     throw new Error("Abstract");
@@ -44,7 +48,7 @@ export class ImmutableMap {
   /**
    * Create a mutable shallow copy of this map
    *
-   * @macro new Map($self$)
+   * @macro {...$self$}
    *
    * @returns a MutableMap with the same values as this map
    */
@@ -55,7 +59,7 @@ export class ImmutableMap {
   /**
    * Create an immutable shallow copy of this map
    *
-   * @macro Object.freeze(new Map($self$))
+   * @macro Object.freeze({...$self$})
    *
    * @returns an ImmutableMap with the same values as this map
    */
@@ -72,6 +76,7 @@ export class ImmutableMap {
 export class MutableMap extends ImmutableMap {
   /**
    * Removes all elements
+   * @macro $self$={}
    */
   public clear(): void {
     throw new Error("Abstract");
@@ -81,6 +86,7 @@ export class MutableMap extends ImmutableMap {
    * Removes the specified element from a map.
    * @param key The key
    * @returns true if the element was in the map
+   * @macro delete $self$[$args$]
    */
   public delete(key: string): boolean {
     key;
@@ -91,6 +97,7 @@ export class MutableMap extends ImmutableMap {
    * Adds or updates an entry in a Map object with a specified key and a value.
    * @param key The key of the element to add
    * @param value The value of the element to add
+   * @macro ((obj, args) => { obj[args[0]] = args[1]; })($self$, [$args$])
    */
   public set(key: string, value: T1): void {
     key;

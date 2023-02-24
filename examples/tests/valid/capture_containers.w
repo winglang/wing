@@ -14,7 +14,7 @@ let handler = inflight (s: str): str => {
   assert(my_set.size == 2);
 
   assert(my_map.has("world"));
-  assert(my_map.size == 2);
+  assert(my_map.size() == 2);
 
   assert(arr_of_map.at(0).has("bang"));
 };

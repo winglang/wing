@@ -17,10 +17,11 @@ Error at ../../../../examples/tests/invalid/bring_jsii.w:4:1 | Cannot find modul
 `;
 
 exports[`capture_mutables.w > wing test (--target sim) - invalid > stderr 1`] = `
-"Compilation failed with 5 error(s)
+"Compilation failed with 6 error(s)
 Error at ../../../../examples/tests/invalid/capture_mutables.w:8:10 | Cannot reference 'a' of type 'MutArray<str>' from an inflight context
 Error at ../../../../examples/tests/invalid/capture_mutables.w:10:10 | Cannot reference 's' of type 'MutSet<num>' from an inflight context
 Error at ../../../../examples/tests/invalid/capture_mutables.w:12:10 | Cannot reference 'm' of type 'MutMap<bool>' from an inflight context
+Error at ../../../../examples/tests/invalid/capture_mutables.w:12:20 | Expected type to be \\"num\\", but got \\"(ImmutableMap): num\\" instead
 Error at ../../../../examples/tests/invalid/capture_mutables.w:14:10 | Cannot reference 'a_cloned' of type 'MutArray<str>' from an inflight context
 Error at ../../../../examples/tests/invalid/capture_mutables.w:14:19 | Unknown symbol \\"size\\""
 `;
