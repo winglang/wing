@@ -12,10 +12,10 @@ import { T1 } from "./util";
 export class ImmutableMap {
   /**
    * Returns the number of elements in the map.
-   * 
+   *
    * TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
    * @macro Object.keys($self$).length
-   * 
+   *
    * @returns The number of elements in map
    */
   public size(): number {
@@ -29,7 +29,7 @@ export class ImmutableMap {
    * to that object and any change made to that object will effectively modify it inside the map.
    *
    * @macro $self$[$args$]
-   * 
+   *
    * @param key The key of the element to return.
    * @returns The element associated with the specified key, or undefined if the key can't be found
    */
@@ -40,12 +40,12 @@ export class ImmutableMap {
 
   /**
    * Returns a boolean indicating whether an element with the specified key exists or not.
-   * 
+   *
    * @macro ($args$ in $self$)
-   * 
+   *
    * @param key The key of the element to test for presence
    * @returns true if an element with the specified key exists in the map; otherwise false.
-   */ 
+   */
   public has(key: string): boolean {
     key;
     throw new Error("Macro");
@@ -82,7 +82,7 @@ export class ImmutableMap {
 export class MutableMap extends ImmutableMap {
   /**
    * Removes all elements
-   * 
+   *
    * @macro ((map) => { for(const k in map){delete map[k]}; })($self$)
    */
   public clear(): void {
@@ -91,9 +91,9 @@ export class MutableMap extends ImmutableMap {
 
   /**
    * Removes the specified element from a map.
-   * 
+   *
    * @macro (delete $self$[$args$])
-   * 
+   *
    * @param key The key
    * @returns true if the element was in the map
    */
@@ -104,10 +104,10 @@ export class MutableMap extends ImmutableMap {
 
   /**
    * Adds or updates an entry in a Map object with a specified key and a value.
-   * 
+   *
    * TODO: revisit this macro after we support indexed args https://github.com/winglang/wing/issues/1659
    * @macro ((obj, args) => { obj[args[0]] = args[1]; })($self$, [$args$])
-   * 
+   *
    * @param key The key of the element to add
    * @param value The value of the element to add
    */
