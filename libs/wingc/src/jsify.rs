@@ -411,17 +411,17 @@ impl<'a> JSifier<'a> {
 				)
 			}
 			ExprKind::MapLiteral { fields, .. } => {
-        let f = fields
-          .iter()
-          .map(|(key, expr)| format!("\"{}\":{}", key, self.jsify_expression(expr, phase)))
-          .collect::<Vec<String>>()
-          .join(",");
+				let f = fields
+					.iter()
+					.map(|(key, expr)| format!("\"{}\":{}", key, self.jsify_expression(expr, phase)))
+					.collect::<Vec<String>>()
+					.join(",");
 
 				if is_mutable_collection(expression) {
-          format!("{{{}}}", f)
-        } else {
-          format!("Object.freeze({{{}}})", f)
-        }
+					format!("{{{}}}", f)
+				} else {
+					format!("Object.freeze({{{}}})", f)
+				}
 			}
 			ExprKind::SetLiteral { items, .. } => {
 				let item_list = items

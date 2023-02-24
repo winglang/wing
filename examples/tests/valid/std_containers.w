@@ -9,6 +9,7 @@ mut_set.add("three");
 let immut_set = mut_set.copy();
 
 let s_map = {"one": 1, "two": 2};
+let nested_map = {"a": {"b": {"c": "hello"}}};
 let mut_map = s_map.copy_mut();
 mut_map.set("five", 5);
 let immut_map = mut_map.copy();
@@ -26,3 +27,4 @@ assert(immut_set.size == 3);
 assert(s_map.get("one") == 1);
 assert(s_map.size() == 2);
 assert(immut_map.size() == 3);
+assert(nested_map.get("a").get("b").get("c") == "hello");

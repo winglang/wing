@@ -13,7 +13,7 @@ export class ImmutableMap {
   /**
    * Returns the number of elements in the map.
    * 
-   * TODO: For now this has to be a method rather than a getter as macros only work on methods (for now)
+   * TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
    * @macro Object.keys($self$).length
    * 
    * @returns The number of elements in map
@@ -82,7 +82,8 @@ export class ImmutableMap {
 export class MutableMap extends ImmutableMap {
   /**
    * Removes all elements
-   * @macro $self$={}
+   * 
+   * @macro ((map) => { for(const k in map){delete map[k]}; })($self$)
    */
   public clear(): void {
     throw new Error("Macro");
@@ -91,7 +92,7 @@ export class MutableMap extends ImmutableMap {
   /**
    * Removes the specified element from a map.
    * 
-   * @macro delete $self$[$args$]
+   * @macro (delete $self$[$args$])
    * 
    * @param key The key
    * @returns true if the element was in the map
@@ -104,7 +105,7 @@ export class MutableMap extends ImmutableMap {
   /**
    * Adds or updates an entry in a Map object with a specified key and a value.
    * 
-   * TODO: revisit this macro after we support indexed params
+   * TODO: revisit this macro after we support indexed args https://github.com/winglang/wing/issues/1659
    * @macro ((obj, args) => { obj[args[0]] = args[1]; })($self$, [$args$])
    * 
    * @param key The key of the element to add
