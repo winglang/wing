@@ -7,7 +7,12 @@ use crate::debug;
 pub type FileId = String;
 pub type CharacterLocation = Point;
 pub type ByteIndex = usize;
+
+// We use an IndexSet for Diagnostics to achieve the following two goals:
+// 1. We want to preserve the order in which diagnostics are added, because it's related to the order of statements in the source.
+// 2. We want to avoid adding duplicate diagnostics.
 pub type Diagnostics = IndexSet<Diagnostic>;
+
 pub type DiagnosticResult<T> = Result<T, ()>;
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
