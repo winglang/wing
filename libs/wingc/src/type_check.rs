@@ -2264,7 +2264,7 @@ impl<'a> TypeChecker<'a> {
 					let const_ptr = reference as *const Reference;
 					let mut_ptr = const_ptr as *mut Reference;
 					unsafe {
-						// We dont' use the return value but need to call replace so it'll drop the old value
+						// We don't use the return value but need to call replace so it'll drop the old value
 						_ = std::mem::replace(&mut *mut_ptr, new_ref);
 					}
 					return self.resolve_reference(reference, env, statement_idx);
