@@ -127,7 +127,7 @@
     },
     "nested_identifier": {
       "type": "PREC",
-      "value": 13,
+      "value": 14,
       "content": {
         "type": "SEQ",
         "members": [
@@ -1452,7 +1452,7 @@
     },
     "call": {
       "type": "PREC_LEFT",
-      "value": 14,
+      "value": 15,
       "content": {
         "type": "SEQ",
         "members": [
@@ -1989,6 +1989,10 @@
         {
           "type": "STRING",
           "value": "void"
+        },
+        {
+          "type": "STRING",
+          "value": "duration"
         }
       ]
     },
@@ -2660,6 +2664,39 @@
         },
         {
           "type": "PREC_LEFT",
+          "value": 12,
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "left",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "expression"
+                }
+              },
+              {
+                "type": "FIELD",
+                "name": "op",
+                "content": {
+                  "type": "STRING",
+                  "value": "^"
+                }
+              },
+              {
+                "type": "FIELD",
+                "name": "right",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "expression"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "PREC_LEFT",
           "value": 1,
           "content": {
             "type": "SEQ",
@@ -2924,7 +2961,7 @@
         },
         {
           "type": "PREC_LEFT",
-          "value": 12,
+          "value": 13,
           "content": {
             "type": "SEQ",
             "members": [

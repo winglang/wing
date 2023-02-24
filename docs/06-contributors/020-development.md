@@ -161,11 +161,19 @@ Make sure to also run `build-wasm` before each time the grammar changes
 
 ## 🔨 How do I build the VSCode extension?
 
-The VSCode extension is located in `apps/vscode-wing`. Most of the logic is in the language server, which
-is located in `apps/vscode-wing`. Running `npx nx build vscode-wing` will ensure the
-language server is built first and the binary is available. This creates an installable VSIX file.
+The VSCode extension is located in `apps/vscode-wing`. Most of the "logic" is in the language server, which
+is located in the Wing CLI at `apps/wing/src/commands/lsp.ts`. 
 
-A VSCode launch configuration is available to open a VSCode with a development version of the
-extension.
+To build the extension (also creates an installable `.vsix` file):
 
-To modify the package.json, please edit `.projenrc.ts` and run `npx projen`.
+```sh
+npx nx build vscode-wing
+```
+
+To run a new isolated VSCode instance with the extension installed:
+
+```sh
+npx nx dev vscode-wing
+```
+
+To modify the package.json, make sure to edit `.projenrc.ts` and rebuild.

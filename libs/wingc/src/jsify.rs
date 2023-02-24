@@ -11,7 +11,6 @@ use crate::{
 		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator,
 		UserDefinedType,
 	},
-	capture::CaptureKind,
 	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, TypeRef},
 	utilities::snake_case_to_camel_case,
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
@@ -375,6 +374,7 @@ impl<'a> JSifier<'a> {
 					BinaryOperator::Mul => "*",
 					BinaryOperator::Div => "/",
 					BinaryOperator::Mod => "%",
+					BinaryOperator::Exponent => "**",
 					BinaryOperator::Greater => ">",
 					BinaryOperator::GreaterOrEqual => ">=",
 					BinaryOperator::Less => "<",
@@ -415,14 +415,17 @@ impl<'a> JSifier<'a> {
 				)
 			}
 			ExprKind::MapLiteral { fields, .. } => {
-				format!(
-					"Object.freeze(new Map([{}]))",
-					fields
-						.iter()
-						.map(|(key, expr)| format!("[ \"{}\", {} ]", key, self.jsify_expression(expr, phase)))
-						.collect::<Vec<String>>()
-						.join(", ")
-				)
+				let f = fields
+					.iter()
+					.map(|(key, expr)| format!("\"{}\":{}", key, self.jsify_expression(expr, phase)))
+					.collect::<Vec<String>>()
+					.join(",");
+
+				if is_mutable_collection(expression) {
+					format!("{{{}}}", f)
+				} else {
+					format!("Object.freeze({{{}}})", f)
+				}
 			}
 			ExprKind::SetLiteral { items, .. } => {
 				let item_list = items
@@ -634,35 +637,23 @@ impl<'a> JSifier<'a> {
 		}
 		let block = self.jsify_scope(&func_def.statements, Phase::Inflight);
 		let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
-		let mut resource_bindings = vec![];
-		let mut data_bindings = vec![];
+		let mut bindings = vec![];
 		let mut capture_names = vec![];
 
-		for (symbol, cap_kind) in func_def.captures.borrow().as_ref().unwrap().iter() {
-			capture_names.push(symbol.clone());
-			let mut methods: Vec<String> = vec![];
+		for capture in func_def.captures.borrow().as_ref().unwrap().iter() {
+			capture_names.push(capture.symbol.name.clone());
 
-			for kind in cap_kind.iter() {
-				match kind {
-					CaptureKind::ImmutableData => {
-						data_bindings.push(format!("{}: {},", symbol, symbol,));
-					}
-					CaptureKind::Resource(def) => {
-						methods.push(def.method.clone());
-					}
-				}
-			}
-
-			if !methods.is_empty() {
-				resource_bindings.push(format!(
-					"{}: {},",
-					symbol,
-					Self::render_block([
-						format!("resource: {},", symbol),
-						format!("ops: [{}]", methods.iter().map(|x| format!("\"{}\"", x)).join(","))
-					])
-				));
-			}
+			bindings.push(format!(
+				"{}: {},",
+				capture.symbol.name,
+				Self::render_block([
+					format!("obj: {},", capture.symbol.name),
+					format!(
+						"ops: [{}]",
+						capture.ops.iter().map(|x| format!("\"{}\"", x.member)).join(",")
+					)
+				])
+			));
 		}
 		let mut proc_source = vec![];
 		let body = format!("{{ const {{ {} }} = this; {} }}", capture_names.join(", "), block);
@@ -678,21 +669,7 @@ impl<'a> JSifier<'a> {
 				STDLIB,
 				Self::js_resolve_path(&relative_file_path)
 			),
-			format!(
-				"bindings: {}",
-				Self::render_block([
-					if !resource_bindings.is_empty() {
-						format!("resources: {},", Self::render_block(&resource_bindings))
-					} else {
-						"".to_string()
-					},
-					if !data_bindings.is_empty() {
-						format!("data: {},", Self::render_block(&data_bindings))
-					} else {
-						"".to_string()
-					},
-				])
-			),
+			format!("bindings: {}", Self::render_block(&bindings)),
 		]);
 		let mut inflight_counter = self.inflight_counter.borrow_mut();
 		*inflight_counter += 1;

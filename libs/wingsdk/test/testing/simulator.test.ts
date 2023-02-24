@@ -95,11 +95,9 @@ describe("run all tests", () => {
         "assert(keys.length === 5);",
       ],
       {
-        resources: {
-          bucket: {
-            resource: bucket,
-            ops: ["put"],
-          },
+        bucket: {
+          obj: bucket,
+          ops: ["put"],
         },
       }
     );
@@ -114,11 +112,9 @@ describe("run all tests", () => {
         "assert(keys.length === 1);",
       ],
       {
-        resources: {
-          bucket: {
-            resource: bucket,
-            ops: ["put", "list"],
-          },
+        bucket: {
+          obj: bucket,
+          ops: ["put", "list"],
         },
       }
     );
@@ -145,7 +141,7 @@ class Test extends Function {
     scope: Construct,
     id: string,
     code: string[],
-    bindings?: InflightBindings
+    bindings: InflightBindings = {}
   ) {
     super(
       scope,

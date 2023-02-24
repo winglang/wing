@@ -3,22 +3,27 @@
 exports[`schedule behavior with cron 1`] = `
 "{
   \\"resource\\": {
+    \\"aws_cloudwatch_event_rule\\": {
+      \\"root_Schedule_85A4458B\\": {
+        \\"is_enabled\\": true,
+        \\"schedule_expression\\": \\"cron(0/1 * ? * * *)\\"
+      }
+    },
+    \\"aws_cloudwatch_event_target\\": {
+      \\"root_Schedule_ScheduleTargetc5395e41_EB088B9D\\": {
+        \\"arn\\": \\"\${aws_lambda_function.root_ScheduleOnTickc5395e41_49F0E4B8.qualified_arn}\\",
+        \\"rule\\": \\"\${aws_cloudwatch_event_rule.root_Schedule_85A4458B.name}\\"
+      }
+    },
     \\"aws_iam_role\\": {
       \\"root_ScheduleOnTickc5395e41_IamRole_D42951B2\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      },
-      \\"root_Schedule_ScheduleScheduleRolec5395e41_62F32A36\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"sts:AssumeRole\\\\\\"],\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"scheduler.amazonaws.com\\\\\\"}}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
       \\"root_ScheduleOnTickc5395e41_IamRolePolicy_A7C7B01B\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
         \\"role\\": \\"\${aws_iam_role.root_ScheduleOnTickc5395e41_IamRole_D42951B2.name}\\"
-      },
-      \\"root_Schedule_ScheduleSchedulePolicyc5395e41_00999568\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"lambda:InvokeFunction\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"\${aws_lambda_function.root_ScheduleOnTickc5395e41_49F0E4B8.arn}\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Schedule_ScheduleScheduleRolec5395e41_62F32A36.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
@@ -36,11 +41,21 @@ exports[`schedule behavior with cron 1`] = `
         },
         \\"function_name\\": \\"Schedule-OnTick-c5395e41-c861b8f8\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_ScheduleOnTickc5395e41_IamRole_D42951B2.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_ScheduleOnTickc5395e41_Code_C7AC6B0A.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_ScheduleOnTickc5395e41_S3Object_DE498BA0.key}\\",
         \\"timeout\\": 30
+      }
+    },
+    \\"aws_lambda_permission\\": {
+      \\"root_ScheduleOnTickc5395e41_InvokePermissionc8b3fc394731d07e61c00e422c6b234372c09bc3b3_F99D1602\\": {
+        \\"action\\": \\"lambda:InvokeFunction\\",
+        \\"function_name\\": \\"\${aws_lambda_function.root_ScheduleOnTickc5395e41_49F0E4B8.function_name}\\",
+        \\"principal\\": \\"events.amazonaws.com\\",
+        \\"qualifier\\": \\"\${aws_lambda_function.root_ScheduleOnTickc5395e41_49F0E4B8.version}\\",
+        \\"source_arn\\": \\"\${aws_cloudwatch_event_rule.root_Schedule_85A4458B.arn}\\"
       }
     },
     \\"aws_s3_bucket\\": {
@@ -53,18 +68,6 @@ exports[`schedule behavior with cron 1`] = `
         \\"bucket\\": \\"\${aws_s3_bucket.root_ScheduleOnTickc5395e41_Code_C7AC6B0A.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
-      }
-    },
-    \\"aws_scheduler_schedule\\": {
-      \\"root_Schedule_ScheduleScheduleEventc5395e41_2DABECCC\\": {
-        \\"flexible_time_window\\": {
-          \\"mode\\": \\"OFF\\"
-        },
-        \\"schedule_expression\\": \\"cron(0/1 * ? * * *)\\",
-        \\"target\\": {
-          \\"arn\\": \\"\${aws_lambda_function.root_ScheduleOnTickc5395e41_49F0E4B8.arn}\\",
-          \\"role_arn\\": \\"\${aws_iam_role.root_Schedule_ScheduleScheduleRolec5395e41_62F32A36.arn}\\"
-        }
       }
     }
   }
@@ -93,7 +96,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "An inflight resource",
@@ -116,34 +119,26 @@ Object {
                   "wing:resource:stateful": true,
                 },
                 "children": Object {
-                  "Schedule-ScheduleEvent-c5395e41": Object {
+                  "Schedule": Object {
                     "constructInfo": Object {
-                      "fqn": "@cdktf/provider-aws.schedulerSchedule.SchedulerSchedule",
-                      "version": "12.0.1",
+                      "fqn": "@cdktf/provider-aws.cloudwatchEventRule.CloudwatchEventRule",
+                      "version": "12.0.2",
                     },
-                    "id": "Schedule-ScheduleEvent-c5395e41",
-                    "path": "root/Default/Schedule/Schedule-ScheduleEvent-c5395e41",
+                    "id": "Schedule",
+                    "path": "root/Default/Schedule/Schedule",
                   },
-                  "Schedule-SchedulePolicy-c5395e41": Object {
+                  "ScheduleTarget-c5395e41": Object {
                     "constructInfo": Object {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "fqn": "@cdktf/provider-aws.cloudwatchEventTarget.CloudwatchEventTarget",
+                      "version": "12.0.2",
                     },
-                    "id": "Schedule-SchedulePolicy-c5395e41",
-                    "path": "root/Default/Schedule/Schedule-SchedulePolicy-c5395e41",
-                  },
-                  "Schedule-ScheduleRole-c5395e41": Object {
-                    "constructInfo": Object {
-                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
-                    },
-                    "id": "Schedule-ScheduleRole-c5395e41",
-                    "path": "root/Default/Schedule/Schedule-ScheduleRole-c5395e41",
+                    "id": "ScheduleTarget-c5395e41",
+                    "path": "root/Default/Schedule/ScheduleTarget-c5395e41",
                   },
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud schedule to trigger events at regular intervals",
@@ -188,7 +183,7 @@ Object {
                   "Code": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Code",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Code",
@@ -196,7 +191,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Default",
@@ -204,7 +199,7 @@ Object {
                   "IamRole": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Schedule-OnTick-c5395e41/IamRole",
@@ -212,7 +207,7 @@ Object {
                   "IamRolePolicy": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Schedule-OnTick-c5395e41/IamRolePolicy",
@@ -220,15 +215,23 @@ Object {
                   "IamRolePolicyAttachment": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Schedule-OnTick-c5395e41/IamRolePolicyAttachment",
                   },
+                  "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
+                      "version": "12.0.2",
+                    },
+                    "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
+                    "path": "root/Default/Schedule-OnTick-c5395e41/InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
+                  },
                   "S3Object": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Schedule-OnTick-c5395e41/S3Object",
@@ -236,7 +239,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud function (FaaS)",
@@ -252,7 +255,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "id": "Schedule-OnTickHandler-c5395e41",
                 "path": "root/Default/Schedule-OnTickHandler-c5395e41",
@@ -271,7 +274,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -284,7 +287,7 @@ Object {
               "aws": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -292,7 +295,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
@@ -328,22 +331,27 @@ Object {
 exports[`schedule behavior with rate 1`] = `
 "{
   \\"resource\\": {
+    \\"aws_cloudwatch_event_rule\\": {
+      \\"root_Schedule_85A4458B\\": {
+        \\"is_enabled\\": true,
+        \\"schedule_expression\\": \\"rate(2 minutes)\\"
+      }
+    },
+    \\"aws_cloudwatch_event_target\\": {
+      \\"root_Schedule_ScheduleTargetc5395e41_EB088B9D\\": {
+        \\"arn\\": \\"\${aws_lambda_function.root_ScheduleOnTickc5395e41_49F0E4B8.qualified_arn}\\",
+        \\"rule\\": \\"\${aws_cloudwatch_event_rule.root_Schedule_85A4458B.name}\\"
+      }
+    },
     \\"aws_iam_role\\": {
       \\"root_ScheduleOnTickc5395e41_IamRole_D42951B2\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      },
-      \\"root_Schedule_ScheduleScheduleRolec5395e41_62F32A36\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"sts:AssumeRole\\\\\\"],\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"scheduler.amazonaws.com\\\\\\"}}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
       \\"root_ScheduleOnTickc5395e41_IamRolePolicy_A7C7B01B\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
         \\"role\\": \\"\${aws_iam_role.root_ScheduleOnTickc5395e41_IamRole_D42951B2.name}\\"
-      },
-      \\"root_Schedule_ScheduleSchedulePolicyc5395e41_00999568\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"lambda:InvokeFunction\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"\${aws_lambda_function.root_ScheduleOnTickc5395e41_49F0E4B8.arn}\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Schedule_ScheduleScheduleRolec5395e41_62F32A36.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
@@ -361,11 +369,21 @@ exports[`schedule behavior with rate 1`] = `
         },
         \\"function_name\\": \\"Schedule-OnTick-c5395e41-c861b8f8\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_ScheduleOnTickc5395e41_IamRole_D42951B2.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_ScheduleOnTickc5395e41_Code_C7AC6B0A.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_ScheduleOnTickc5395e41_S3Object_DE498BA0.key}\\",
         \\"timeout\\": 30
+      }
+    },
+    \\"aws_lambda_permission\\": {
+      \\"root_ScheduleOnTickc5395e41_InvokePermissionc8b3fc394731d07e61c00e422c6b234372c09bc3b3_F99D1602\\": {
+        \\"action\\": \\"lambda:InvokeFunction\\",
+        \\"function_name\\": \\"\${aws_lambda_function.root_ScheduleOnTickc5395e41_49F0E4B8.function_name}\\",
+        \\"principal\\": \\"events.amazonaws.com\\",
+        \\"qualifier\\": \\"\${aws_lambda_function.root_ScheduleOnTickc5395e41_49F0E4B8.version}\\",
+        \\"source_arn\\": \\"\${aws_cloudwatch_event_rule.root_Schedule_85A4458B.arn}\\"
       }
     },
     \\"aws_s3_bucket\\": {
@@ -378,18 +396,6 @@ exports[`schedule behavior with rate 1`] = `
         \\"bucket\\": \\"\${aws_s3_bucket.root_ScheduleOnTickc5395e41_Code_C7AC6B0A.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
-      }
-    },
-    \\"aws_scheduler_schedule\\": {
-      \\"root_Schedule_ScheduleScheduleEventc5395e41_2DABECCC\\": {
-        \\"flexible_time_window\\": {
-          \\"mode\\": \\"OFF\\"
-        },
-        \\"schedule_expression\\": \\"rate(2 minutes)\\",
-        \\"target\\": {
-          \\"arn\\": \\"\${aws_lambda_function.root_ScheduleOnTickc5395e41_49F0E4B8.arn}\\",
-          \\"role_arn\\": \\"\${aws_iam_role.root_Schedule_ScheduleScheduleRolec5395e41_62F32A36.arn}\\"
-        }
       }
     }
   }
@@ -418,7 +424,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "An inflight resource",
@@ -441,34 +447,26 @@ Object {
                   "wing:resource:stateful": true,
                 },
                 "children": Object {
-                  "Schedule-ScheduleEvent-c5395e41": Object {
+                  "Schedule": Object {
                     "constructInfo": Object {
-                      "fqn": "@cdktf/provider-aws.schedulerSchedule.SchedulerSchedule",
-                      "version": "12.0.1",
+                      "fqn": "@cdktf/provider-aws.cloudwatchEventRule.CloudwatchEventRule",
+                      "version": "12.0.2",
                     },
-                    "id": "Schedule-ScheduleEvent-c5395e41",
-                    "path": "root/Default/Schedule/Schedule-ScheduleEvent-c5395e41",
+                    "id": "Schedule",
+                    "path": "root/Default/Schedule/Schedule",
                   },
-                  "Schedule-SchedulePolicy-c5395e41": Object {
+                  "ScheduleTarget-c5395e41": Object {
                     "constructInfo": Object {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "fqn": "@cdktf/provider-aws.cloudwatchEventTarget.CloudwatchEventTarget",
+                      "version": "12.0.2",
                     },
-                    "id": "Schedule-SchedulePolicy-c5395e41",
-                    "path": "root/Default/Schedule/Schedule-SchedulePolicy-c5395e41",
-                  },
-                  "Schedule-ScheduleRole-c5395e41": Object {
-                    "constructInfo": Object {
-                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
-                    },
-                    "id": "Schedule-ScheduleRole-c5395e41",
-                    "path": "root/Default/Schedule/Schedule-ScheduleRole-c5395e41",
+                    "id": "ScheduleTarget-c5395e41",
+                    "path": "root/Default/Schedule/ScheduleTarget-c5395e41",
                   },
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud schedule to trigger events at regular intervals",
@@ -513,7 +511,7 @@ Object {
                   "Code": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Code",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Code",
@@ -521,7 +519,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Default",
@@ -529,7 +527,7 @@ Object {
                   "IamRole": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Schedule-OnTick-c5395e41/IamRole",
@@ -537,7 +535,7 @@ Object {
                   "IamRolePolicy": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Schedule-OnTick-c5395e41/IamRolePolicy",
@@ -545,15 +543,23 @@ Object {
                   "IamRolePolicyAttachment": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Schedule-OnTick-c5395e41/IamRolePolicyAttachment",
                   },
+                  "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
+                      "version": "12.0.2",
+                    },
+                    "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
+                    "path": "root/Default/Schedule-OnTick-c5395e41/InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
+                  },
                   "S3Object": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Schedule-OnTick-c5395e41/S3Object",
@@ -561,7 +567,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud function (FaaS)",
@@ -577,7 +583,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "id": "Schedule-OnTickHandler-c5395e41",
                 "path": "root/Default/Schedule-OnTickHandler-c5395e41",
@@ -596,7 +602,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -609,7 +615,7 @@ Object {
               "aws": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -617,7 +623,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
@@ -653,18 +659,28 @@ Object {
 exports[`schedule with two functions 1`] = `
 "{
   \\"resource\\": {
+    \\"aws_cloudwatch_event_rule\\": {
+      \\"root_Schedule_85A4458B\\": {
+        \\"is_enabled\\": true,
+        \\"schedule_expression\\": \\"cron(0/1 * ? * * *)\\"
+      }
+    },
+    \\"aws_cloudwatch_event_target\\": {
+      \\"root_Schedule_ScheduleTarget0a615500_EF87C5A1\\": {
+        \\"arn\\": \\"\${aws_lambda_function.root_ScheduleOnTick0a615500_9EB460BE.qualified_arn}\\",
+        \\"rule\\": \\"\${aws_cloudwatch_event_rule.root_Schedule_85A4458B.name}\\"
+      },
+      \\"root_Schedule_ScheduleTarget7b33bcba_603EC18D\\": {
+        \\"arn\\": \\"\${aws_lambda_function.root_ScheduleOnTick7b33bcba_F513E6E2.qualified_arn}\\",
+        \\"rule\\": \\"\${aws_cloudwatch_event_rule.root_Schedule_85A4458B.name}\\"
+      }
+    },
     \\"aws_iam_role\\": {
       \\"root_ScheduleOnTick0a615500_IamRole_CDDD9C52\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       },
       \\"root_ScheduleOnTick7b33bcba_IamRole_02FDC318\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      },
-      \\"root_Schedule_ScheduleScheduleRole0a615500_8BB9F0F4\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"sts:AssumeRole\\\\\\"],\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"scheduler.amazonaws.com\\\\\\"}}]}\\"
-      },
-      \\"root_Schedule_ScheduleScheduleRole7b33bcba_5C7B08AB\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"sts:AssumeRole\\\\\\"],\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"scheduler.amazonaws.com\\\\\\"}}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
@@ -675,14 +691,6 @@ exports[`schedule with two functions 1`] = `
       \\"root_ScheduleOnTick7b33bcba_IamRolePolicy_DB491429\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
         \\"role\\": \\"\${aws_iam_role.root_ScheduleOnTick7b33bcba_IamRole_02FDC318.name}\\"
-      },
-      \\"root_Schedule_ScheduleSchedulePolicy0a615500_FFA78F15\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"lambda:InvokeFunction\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"\${aws_lambda_function.root_ScheduleOnTick0a615500_9EB460BE.arn}\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Schedule_ScheduleScheduleRole0a615500_8BB9F0F4.name}\\"
-      },
-      \\"root_Schedule_ScheduleSchedulePolicy7b33bcba_EDC9A1D8\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"lambda:InvokeFunction\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"\${aws_lambda_function.root_ScheduleOnTick7b33bcba_F513E6E2.arn}\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Schedule_ScheduleScheduleRole7b33bcba_5C7B08AB.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
@@ -704,6 +712,7 @@ exports[`schedule with two functions 1`] = `
         },
         \\"function_name\\": \\"Schedule-OnTick-0a615500-c8fd8480\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_ScheduleOnTick0a615500_IamRole_CDDD9C52.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_ScheduleOnTick0a615500_Code_12A9FE62.bucket}\\",
@@ -718,11 +727,28 @@ exports[`schedule with two functions 1`] = `
         },
         \\"function_name\\": \\"Schedule-OnTick-7b33bcba-c86000d7\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_ScheduleOnTick7b33bcba_IamRole_02FDC318.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_ScheduleOnTick7b33bcba_Code_4537EF5B.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_ScheduleOnTick7b33bcba_S3Object_4D569B28.key}\\",
         \\"timeout\\": 30
+      }
+    },
+    \\"aws_lambda_permission\\": {
+      \\"root_ScheduleOnTick0a615500_InvokePermissionc8b3fc394731d07e61c00e422c6b234372c09bc3b3_736F0312\\": {
+        \\"action\\": \\"lambda:InvokeFunction\\",
+        \\"function_name\\": \\"\${aws_lambda_function.root_ScheduleOnTick0a615500_9EB460BE.function_name}\\",
+        \\"principal\\": \\"events.amazonaws.com\\",
+        \\"qualifier\\": \\"\${aws_lambda_function.root_ScheduleOnTick0a615500_9EB460BE.version}\\",
+        \\"source_arn\\": \\"\${aws_cloudwatch_event_rule.root_Schedule_85A4458B.arn}\\"
+      },
+      \\"root_ScheduleOnTick7b33bcba_InvokePermissionc8b3fc394731d07e61c00e422c6b234372c09bc3b3_AF955746\\": {
+        \\"action\\": \\"lambda:InvokeFunction\\",
+        \\"function_name\\": \\"\${aws_lambda_function.root_ScheduleOnTick7b33bcba_F513E6E2.function_name}\\",
+        \\"principal\\": \\"events.amazonaws.com\\",
+        \\"qualifier\\": \\"\${aws_lambda_function.root_ScheduleOnTick7b33bcba_F513E6E2.version}\\",
+        \\"source_arn\\": \\"\${aws_cloudwatch_event_rule.root_Schedule_85A4458B.arn}\\"
       }
     },
     \\"aws_s3_bucket\\": {
@@ -743,28 +769,6 @@ exports[`schedule with two functions 1`] = `
         \\"bucket\\": \\"\${aws_s3_bucket.root_ScheduleOnTick7b33bcba_Code_4537EF5B.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
-      }
-    },
-    \\"aws_scheduler_schedule\\": {
-      \\"root_Schedule_ScheduleScheduleEvent0a615500_E01C2109\\": {
-        \\"flexible_time_window\\": {
-          \\"mode\\": \\"OFF\\"
-        },
-        \\"schedule_expression\\": \\"cron(0/1 * ? * * *)\\",
-        \\"target\\": {
-          \\"arn\\": \\"\${aws_lambda_function.root_ScheduleOnTick0a615500_9EB460BE.arn}\\",
-          \\"role_arn\\": \\"\${aws_iam_role.root_Schedule_ScheduleScheduleRole0a615500_8BB9F0F4.arn}\\"
-        }
-      },
-      \\"root_Schedule_ScheduleScheduleEvent7b33bcba_94CFF628\\": {
-        \\"flexible_time_window\\": {
-          \\"mode\\": \\"OFF\\"
-        },
-        \\"schedule_expression\\": \\"cron(0/1 * ? * * *)\\",
-        \\"target\\": {
-          \\"arn\\": \\"\${aws_lambda_function.root_ScheduleOnTick7b33bcba_F513E6E2.arn}\\",
-          \\"role_arn\\": \\"\${aws_iam_role.root_Schedule_ScheduleScheduleRole7b33bcba_5C7B08AB.arn}\\"
-        }
       }
     }
   }
@@ -793,7 +797,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "An inflight resource",
@@ -817,7 +821,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "An inflight resource",
@@ -846,58 +850,34 @@ Object {
                   "wing:resource:stateful": true,
                 },
                 "children": Object {
-                  "Schedule-ScheduleEvent-0a615500": Object {
+                  "Schedule": Object {
                     "constructInfo": Object {
-                      "fqn": "@cdktf/provider-aws.schedulerSchedule.SchedulerSchedule",
-                      "version": "12.0.1",
+                      "fqn": "@cdktf/provider-aws.cloudwatchEventRule.CloudwatchEventRule",
+                      "version": "12.0.2",
                     },
-                    "id": "Schedule-ScheduleEvent-0a615500",
-                    "path": "root/Default/Schedule/Schedule-ScheduleEvent-0a615500",
+                    "id": "Schedule",
+                    "path": "root/Default/Schedule/Schedule",
                   },
-                  "Schedule-ScheduleEvent-7b33bcba": Object {
+                  "ScheduleTarget-0a615500": Object {
                     "constructInfo": Object {
-                      "fqn": "@cdktf/provider-aws.schedulerSchedule.SchedulerSchedule",
-                      "version": "12.0.1",
+                      "fqn": "@cdktf/provider-aws.cloudwatchEventTarget.CloudwatchEventTarget",
+                      "version": "12.0.2",
                     },
-                    "id": "Schedule-ScheduleEvent-7b33bcba",
-                    "path": "root/Default/Schedule/Schedule-ScheduleEvent-7b33bcba",
+                    "id": "ScheduleTarget-0a615500",
+                    "path": "root/Default/Schedule/ScheduleTarget-0a615500",
                   },
-                  "Schedule-SchedulePolicy-0a615500": Object {
+                  "ScheduleTarget-7b33bcba": Object {
                     "constructInfo": Object {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "fqn": "@cdktf/provider-aws.cloudwatchEventTarget.CloudwatchEventTarget",
+                      "version": "12.0.2",
                     },
-                    "id": "Schedule-SchedulePolicy-0a615500",
-                    "path": "root/Default/Schedule/Schedule-SchedulePolicy-0a615500",
-                  },
-                  "Schedule-SchedulePolicy-7b33bcba": Object {
-                    "constructInfo": Object {
-                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
-                    },
-                    "id": "Schedule-SchedulePolicy-7b33bcba",
-                    "path": "root/Default/Schedule/Schedule-SchedulePolicy-7b33bcba",
-                  },
-                  "Schedule-ScheduleRole-0a615500": Object {
-                    "constructInfo": Object {
-                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
-                    },
-                    "id": "Schedule-ScheduleRole-0a615500",
-                    "path": "root/Default/Schedule/Schedule-ScheduleRole-0a615500",
-                  },
-                  "Schedule-ScheduleRole-7b33bcba": Object {
-                    "constructInfo": Object {
-                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
-                    },
-                    "id": "Schedule-ScheduleRole-7b33bcba",
-                    "path": "root/Default/Schedule/Schedule-ScheduleRole-7b33bcba",
+                    "id": "ScheduleTarget-7b33bcba",
+                    "path": "root/Default/Schedule/ScheduleTarget-7b33bcba",
                   },
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud schedule to trigger events at regular intervals",
@@ -942,7 +922,7 @@ Object {
                   "Code": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Code",
                     "path": "root/Default/Schedule-OnTick-0a615500/Code",
@@ -950,7 +930,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Schedule-OnTick-0a615500/Default",
@@ -958,7 +938,7 @@ Object {
                   "IamRole": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Schedule-OnTick-0a615500/IamRole",
@@ -966,7 +946,7 @@ Object {
                   "IamRolePolicy": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Schedule-OnTick-0a615500/IamRolePolicy",
@@ -974,15 +954,23 @@ Object {
                   "IamRolePolicyAttachment": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Schedule-OnTick-0a615500/IamRolePolicyAttachment",
                   },
+                  "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
+                      "version": "12.0.2",
+                    },
+                    "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
+                    "path": "root/Default/Schedule-OnTick-0a615500/InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
+                  },
                   "S3Object": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Schedule-OnTick-0a615500/S3Object",
@@ -990,7 +978,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud function (FaaS)",
@@ -1035,7 +1023,7 @@ Object {
                   "Code": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Code",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/Code",
@@ -1043,7 +1031,7 @@ Object {
                   "Default": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/Default",
@@ -1051,7 +1039,7 @@ Object {
                   "IamRole": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/IamRole",
@@ -1059,7 +1047,7 @@ Object {
                   "IamRolePolicy": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/IamRolePolicy",
@@ -1067,15 +1055,23 @@ Object {
                   "IamRolePolicyAttachment": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/IamRolePolicyAttachment",
                   },
+                  "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
+                      "version": "12.0.2",
+                    },
+                    "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
+                    "path": "root/Default/Schedule-OnTick-7b33bcba/InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
+                  },
                   "S3Object": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/S3Object",
@@ -1083,7 +1079,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud function (FaaS)",
@@ -1099,7 +1095,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "id": "Schedule-OnTickHandler-0a615500",
                 "path": "root/Default/Schedule-OnTickHandler-0a615500",
@@ -1111,7 +1107,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "id": "Schedule-OnTickHandler-7b33bcba",
                 "path": "root/Default/Schedule-OnTickHandler-7b33bcba",
@@ -1136,7 +1132,7 @@ Object {
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
                 "display": Object {
                   "description": "A cloud logging facility",
@@ -1149,7 +1145,7 @@ Object {
               "aws": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1157,7 +1153,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",

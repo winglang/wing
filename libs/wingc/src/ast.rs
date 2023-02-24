@@ -1,5 +1,5 @@
 use std::cell::RefCell;
-use std::collections::{BTreeMap, HashMap};
+use std::collections::BTreeMap;
 use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 
@@ -350,14 +350,14 @@ impl Expr {
 #[derive(Debug)]
 pub struct ArgList {
 	pub pos_args: Vec<Expr>,
-	pub named_args: HashMap<Symbol, Expr>,
+	pub named_args: BTreeMap<Symbol, Expr>,
 }
 
 impl ArgList {
 	pub fn new() -> Self {
 		ArgList {
 			pos_args: vec![],
-			named_args: HashMap::new(),
+			named_args: BTreeMap::new(),
 		}
 	}
 }
@@ -411,6 +411,7 @@ pub enum BinaryOperator {
 	Mul,
 	Div,
 	Mod,
+	Exponent,
 	Greater,
 	GreaterOrEqual,
 	Less,
@@ -441,7 +442,7 @@ impl BinaryOperator {
 	pub fn numerical_args(&self) -> bool {
 		use BinaryOperator::*;
 		match self {
-			Add | Sub | Mul | Div | Mod | Greater | GreaterOrEqual | Less | LessOrEqual => true,
+			Add | Sub | Mul | Div | Mod | Exponent | Greater | GreaterOrEqual | Less | LessOrEqual => true,
 			_ => false,
 		}
 	}

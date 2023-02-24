@@ -5,6 +5,7 @@ import { IamRole } from "@cdktf/provider-aws/lib/iam-role";
 import { IamRolePolicy } from "@cdktf/provider-aws/lib/iam-role-policy";
 import { IamRolePolicyAttachment } from "@cdktf/provider-aws/lib/iam-role-policy-attachment";
 import { LambdaFunction } from "@cdktf/provider-aws/lib/lambda-function";
+import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
 import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
@@ -33,8 +34,16 @@ export class Function extends cloud.FunctionBase {
   private readonly function: LambdaFunction;
   private readonly role: IamRole;
   private policyStatements?: any[];
-  /** Function ARN */
+  /**
+   * Unqualified Function ARN
+   * @returns Unqualified ARN of the function
+   */
   public readonly arn: string;
+  /**
+   * Qualified Function ARN
+   * @returns Qualified ARN of the function
+   */
+  public readonly qualifiedArn: string;
 
   constructor(
     scope: Construct,
@@ -130,6 +139,13 @@ export class Function extends cloud.FunctionBase {
 
     const name = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
 
+    // validate memory size
+    if (props.memory && (props.memory < 128 || props.memory > 10240)) {
+      throw new Error(
+        "Memory for AWS Lambda function should be in between 128 and 10240"
+      );
+    }
+
     // Create Lambda function
     this.function = new LambdaFunction(this, "Default", {
       functionName: name,
@@ -138,15 +154,18 @@ export class Function extends cloud.FunctionBase {
       handler: "index.handler",
       runtime: "nodejs16.x",
       role: this.role.arn,
+      publish: true,
       environment: {
         variables: Lazy.anyValue({ produce: () => this.env }) as any,
       },
       timeout: props.timeout
         ? props.timeout.seconds
         : Duration.fromMinutes(0.5).seconds,
+      memorySize: props.memory ? props.memory : undefined,
     });
 
     this.arn = this.function.arn;
+    this.qualifiedArn = this.function.qualifiedArn;
 
     // terraform rejects templates with zero environment variables
     this.addEnvironment("WING_FUNCTION_NAME", name);
@@ -198,6 +217,24 @@ export class Function extends cloud.FunctionBase {
         Effect: s.effect ?? "Allow",
       }))
     );
+  }
+
+  /**
+   * Grants the given identity permissions to invoke this function.
+   * @param principal The AWS principal to grant invoke permissions to (e.g. "s3.amazonaws.com", "events.amazonaws.com", "sns.amazonaws.com")
+   */
+  public addPermissionToInvoke(
+    source: core.Resource,
+    principal: string,
+    sourceArn: string
+  ) {
+    new LambdaPermission(this, `InvokePermission-${source.node.addr}`, {
+      functionName: this._functionName,
+      qualifier: this.function.version,
+      action: "lambda:InvokeFunction",
+      principal: principal,
+      sourceArn: sourceArn,
+    });
   }
 
   /** @internal */

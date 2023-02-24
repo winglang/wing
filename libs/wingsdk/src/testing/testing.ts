@@ -22,7 +22,7 @@ export class Testing {
     scope: IConstruct,
     id: string,
     code: string,
-    bindings?: InflightBindings
+    bindings: InflightBindings = {}
   ): IResource {
     return new Inflight(scope, id, {
       code: NodeJsCode.fromInline(code),

@@ -1,5 +1,6 @@
 import { join } from "path";
 import { JsonFile, cdk, javascript } from "projen";
+import rootPackageJson from "../../package.json";
 
 const JSII_DEPS = [
   "constructs@~10.1.228",
@@ -58,6 +59,7 @@ const project = new cdk.JsiiProject({
     "patch-package",
   ],
   prettier: true,
+  npmignoreEnabled: false,
   minNodeVersion: "16.16.0",
   packageManager: javascript.NodePackageManager.NPM,
   codeCov: true,
@@ -237,5 +239,13 @@ project.testTask.reset(
   "jest --passWithNoTests --all --updateSnapshot --coverageProvider=v8 --testTimeout=30000"
 );
 project.testTask.spawn(project.eslint?.eslintTask!);
+
+project.addFields({
+  volta: rootPackageJson.volta,
+});
+
+project.addFields({
+  files: ["lib", ".jsii", "API.md", "patches"],
+});
 
 project.synth();

@@ -231,6 +231,10 @@
             "named": false
           },
           {
+            "type": "^",
+            "named": false
+          },
+          {
             "type": "||",
             "named": false
           }
@@ -2493,6 +2497,10 @@
     "named": false
   },
   {
+    "type": "^",
+    "named": false
+  },
+  {
     "type": "any",
     "named": false
   },
@@ -2530,6 +2538,10 @@
   },
   {
     "type": "defer",
+    "named": false
+  },
+  {
+    "type": "duration",
     "named": false
   },
   {

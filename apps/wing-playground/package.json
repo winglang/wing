@@ -17,5 +17,9 @@
   "devDependencies": {
     "vite": "^4.1.1",
     "vite-plugin-node-polyfills": "^0.7.0"
+  },
+  "volta": {
+    "node": "18.12.1",
+    "npm": "8.19.3"
   }
 }
