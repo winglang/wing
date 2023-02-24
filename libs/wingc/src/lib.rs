@@ -4,7 +4,7 @@ extern crate lazy_static;
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use capture::CaptureVisitor;
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
-use indexmap::IndexSet;
+use indexmap::{indexset, IndexSet};
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
@@ -218,22 +218,22 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 
 pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOutput, Diagnostics> {
 	if !source_path.exists() {
-		return Err(IndexSet::from([Diagnostic {
+		return Err(indexset![Diagnostic {
 			message: format!("Source file cannot be found: {}", source_path.display()),
 			span: None,
 			level: DiagnosticLevel::Error,
-		}]));
+		}]);
 	}
 
 	if !source_path.is_file() {
-		return Err(IndexSet::from([Diagnostic {
+		return Err(indexset![Diagnostic {
 			message: format!(
 				"Source path must be a file (not a directory or symlink): {}",
 				source_path.display()
 			),
 			span: None,
 			level: DiagnosticLevel::Error,
-		}]));
+		}]);
 	}
 
 	let file_name = source_path.file_name().unwrap().to_str().unwrap();

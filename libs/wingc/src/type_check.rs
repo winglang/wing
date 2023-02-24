@@ -2087,6 +2087,7 @@ impl<'a> TypeChecker<'a> {
 						_type: v,
 						reassignable,
 						flight,
+						is_static,
 					}) => {
 						// Replace type params in function signatures
 						if let Some(sig) = v.as_function_sig() {
