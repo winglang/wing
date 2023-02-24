@@ -38,7 +38,7 @@ export const TreeMenu = ({
 }: TreeMenuProps) => {
   return (
     <div className={"w-full h-full flex flex-col"} data-testid="tree-menu">
-      <div className="h-9 flex-shrink-0 flex items-center justify-between gap-2 px-4">
+      <div className="h-9 flex-shrink-0 flex items-center justify-between gap-2 px-2">
         <div className="flex items-center min-w-0">
           <span className="text-slate-600 text-sm truncate uppercase">
             {title}
@@ -197,7 +197,7 @@ function MenuItem({
       >
         <button
           type={"button"}
-          className={classNames("pl-4 py-0.5 flex items-center", {
+          className={classNames("pl-2 py-0.5 flex items-center", {
             invisible: !hasChildren,
           })}
           style={{ marginLeft: `${8 * indentationLevel}px` }}

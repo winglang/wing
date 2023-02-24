@@ -182,20 +182,23 @@ function createWindowManager() {
       simulatorInstance.onTrace({
         callback(event) {
           // TODO: Refactor the whole logs and events so we support all of the fields that the simulator uses.
-          const message = `[${event.sourceType}] ${
+          const message = `${
             event.data.message ?? JSON.stringify(event.data, undefined, 2)
           }`;
           if (event.type === "log") {
             consoleLogger.log(message, "simulator", {
+              sourceType: event.sourceType,
               sourcePath: event.sourcePath,
             });
           } else {
             consoleLogger.verbose(message, "simulator", {
+              sourceType: event.sourceType,
               sourcePath: event.sourcePath,
             });
           }
           if (event.data.status === "failure") {
             consoleLogger.error(event.data.error.message, "user", {
+              sourceType: event.sourceType,
               sourcePath: event.sourcePath,
             });
           }

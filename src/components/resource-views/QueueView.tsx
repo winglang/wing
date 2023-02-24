@@ -37,12 +37,6 @@ export const QueueView = ({ resourcePath }: QueueViewProps) => {
     <div className="h-full w-full flex flex-col gap-4 px-4 py-2">
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-4">
-          <label
-            htmlFor={id}
-            className="block text-sm font-medium text-slate-700"
-          >
-            New Message
-          </label>
           <TextArea
             className={"flex flex-col gap-4"}
             id={id}

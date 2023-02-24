@@ -19,7 +19,7 @@ export const AttributeView = ({ attribute }: { attribute: Attribute }) => {
         </div>
       ) : (
         <input
-          className="w-full bg-slate-100 border border-slate-300 ease-in-out focus:border-sky-500 focus:ring-2 focus:ring-sky-500/50 items-center outline-none px-2.5 rounded select-text text-slate-600 text-sm transition truncate"
+          className="w-full bg-transparent ease-in-out focus:border-sky-500 focus:ring-2 focus:ring-sky-500/50 items-center outline-none px-2.5 select-text text-slate-600 text-sm transition truncate"
           value={attribute.value}
           disabled
         />

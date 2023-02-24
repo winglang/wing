@@ -67,12 +67,6 @@ export const VscodeLayout = ({
           warn: selectedLogTypeFilters.includes("warn"),
           error: selectedLogTypeFilters.includes("error"),
         },
-        source: {
-          compiler: true,
-          console: true,
-          simulator: true,
-          user: true,
-        },
         text: searchText,
         timestamp: logsTimeFilter,
       },
@@ -248,7 +242,7 @@ export const VscodeLayout = ({
               onSearch={setSearchText}
             />
             <div className="relative h-full">
-              <ScrollableArea ref={logsRef} overflowY className="px-4 pb-1.5">
+              <ScrollableArea ref={logsRef} overflowY className="pb-1.5">
                 <ConsoleLogs
                   logs={logs.data ?? []}
                   onResourceClick={onResourceClick}

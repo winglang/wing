@@ -7,6 +7,7 @@ export interface InspectorSectionProps {
   text: string;
   icon?: ForwardRefExoticComponent<SVGProps<SVGSVGElement>>;
   onClick?: () => void;
+  subection?: boolean;
 }
 
 export const InspectorSection = ({
@@ -15,6 +16,7 @@ export const InspectorSection = ({
   icon,
   onClick,
   children,
+  subection = false,
 }: PropsWithChildren<InspectorSectionProps>) => {
   return (
     <>
@@ -23,6 +25,7 @@ export const InspectorSection = ({
         icon={icon}
         open={open}
         onClick={onClick}
+        subection={subection}
       />
       {open && children}
     </>

@@ -1,7 +1,9 @@
+import classNames from "classnames";
 import { useContext, useId, useState } from "react";
 
 import { AppContext } from "../../AppContext.js";
 import { Button } from "../../design-system/Button.js";
+import { Modal } from "../../design-system/Modal.js";
 import { TextArea } from "../../design-system/TextArea.js";
 import { trpc } from "../../utils/trpc.js";
 
@@ -11,72 +13,94 @@ export interface FunctionViewProps {
 
 export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
   const { appMode } = useContext(AppContext);
-  const invoke = trpc["function.invoke"].useMutation();
-  const [input, setInput] = useState("");
-  const id = useId();
-  return (
-    <form
-      className="h-full w-full flex flex-col px-4 py-2"
-      method="POST"
-      aria-disabled={appMode === "webapp"}
-      onSubmit={(event) => {
-        event.preventDefault();
-        invoke.mutate({
-          resourcePath,
-          message: input,
-        });
-      }}
-    >
-      <div className="space-y-2">
-        <div>
-          <p className="mt-1 text-sm text-slate-500">
-            You can test the function by sending a JSON message.
-          </p>
-        </div>
+  const [response, setResponse] = useState("");
+  const inputId = useId();
 
-        <div>
-          <label
-            htmlFor={id}
-            className="block text-sm font-medium text-slate-500"
-          >
-            Payload (JSON)
-          </label>
-          <div className="mt-1">
-            <TextArea
-              rows={4}
-              id={id}
-              value={input}
-              className="text-sm"
-              onInput={(event) => setInput(event.currentTarget.value)}
+  const invoke = trpc["function.invoke"].useMutation({
+    onSuccess: (data) => {
+      setResponse(JSON.stringify(data, undefined, 2));
+    },
+  });
+
+  const [message, setMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
+  return (
+    <>
+      <div className="flex grow flex-col gap-y-1 gap-x-4 bg-slate-50">
+        <div className="flex flex-row">
+          <div className="text-slate-700 max-w-full min-w-0 grow space-x-2 items-end flex">
+            <Button
+              label="Invoke"
+              className="px-0.5 mt-2"
+              aria-disabled={appMode === "webapp"}
+              onClick={() => invoke.mutate({ resourcePath, message: "" })}
+            />
+            <Button
+              label="Invoke with..."
+              className="px-0.5 mt-2 truncate"
+              aria-disabled={appMode === "webapp"}
+              onClick={() => setShowModal(true)}
             />
           </div>
         </div>
-
-        <div className="flex gap-4 items-end">
-          <div>
-            <Button disabled={appMode === "webapp"} type="submit" primary>
-              Send
-            </Button>
+        <div className="mt-1">
+          <label className="block text-sm font-medium text-gray-700">
+            Response
+          </label>
+          <div className="text-slate-700 space-x-2 min-w-0 flex flex-1">
+            <textarea
+              rows={response ? response.split("\n").length : 1}
+              disabled
+              placeholder="No response"
+              className={classNames(
+                "mt-2 flex-1 font-mono max-h-[20rem] py-1 resize-none",
+                "bg-slate-100 border border-slate-300 ease-in-out focus:border-sky-500 focus:ring-2",
+                "focus:ring-sky-500/50 outline-none rounded select-text text-slate-600 text-sm transition",
+              )}
+              value={response}
+            />
           </div>
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col space-y-2 py-2 pb-4">
-        <div>
-          <span className="block text-sm font-medium text-slate-500">
-            Response
-          </span>
-        </div>
-        <TextArea
-          rows={4}
-          id={id}
-          className="text-sm"
-          value={
-            invoke.data ? JSON.stringify(invoke.data, undefined, 2) : undefined
-          }
-          disabled
-        />
-      </div>
-    </form>
+      <Modal visible={showModal} setVisible={setShowModal}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setShowModal(false);
+            invoke.mutate({ resourcePath, message });
+            setMessage("");
+          }}
+        >
+          <div className="mt-2 space-y-2">
+            <h3 className="text-base font-semibold leading-6 text-gray-900">
+              Invoke {resourcePath.split("/").pop()}
+            </h3>
+
+            <label
+              className="block text-sm font-medium text-gray-700"
+              htmlFor={inputId}
+            >
+              Payload (JSON)
+            </label>
+            <TextArea
+              id={inputId}
+              value={message}
+              rows={5}
+              onInput={(e) => setMessage(e.currentTarget.value)}
+              className="font-mono min-h-[40px] resize-none"
+            />
+            <p className="text-sm text-gray-500">
+              This payload will be sent to the function when you invoke it.
+            </p>
+          </div>
+          <div className="mt-2 space-x-2 justify-end flex">
+            <Button label="Cancel" onClick={() => setShowModal(false)} />
+            <Button primary label="Invoke" type="submit" />
+          </div>
+        </form>
+      </Modal>
+    </>
   );
 };

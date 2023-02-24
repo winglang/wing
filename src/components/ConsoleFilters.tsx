@@ -30,7 +30,7 @@ export const ConsoleFilters = ({
   }, [searchText]);
 
   return (
-    <div className="flex px-4 space-x-2 pt-1">
+    <div className="flex px-2 space-x-2 pt-1">
       <Button
         icon={NoSymbolIcon}
         className="px-1.5"

@@ -38,12 +38,6 @@ export const createAppRouter = () => {
               warn: z.boolean(),
               error: z.boolean(),
             }),
-            source: z.object({
-              compiler: z.boolean(),
-              console: z.boolean(),
-              simulator: z.boolean(),
-              user: z.boolean(),
-            }),
             timestamp: z.number(),
             text: z.string(),
           }),
@@ -55,7 +49,6 @@ export const createAppRouter = () => {
           .filter(
             (entry) =>
               input.filters.level[entry.level] &&
-              input.filters.source[entry.source] &&
               entry.timestamp >= input.filters.timestamp &&
               (!input.filters.text ||
                 `${entry.message}${entry.ctx?.sourcePath}`

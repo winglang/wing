@@ -7,6 +7,7 @@ export interface InspectorSectionHeadingProps {
   text: string;
   icon?: ForwardRefExoticComponent<SVGProps<SVGSVGElement>>;
   onClick?: () => void;
+  subection?: boolean;
 }
 
 export const InspectorSectionHeading = ({
@@ -14,13 +15,14 @@ export const InspectorSectionHeading = ({
   text,
   icon: Icon,
   onClick,
+  subection = false,
 }: InspectorSectionHeadingProps) => {
   const ChevronIcon = open ? ChevronDownIcon : ChevronRightIcon;
   return (
     <button
       className={classNames(
-        "w-full px-2 py-1 flex items-center gap-1 bg-slate-50 hover:bg-white group relative",
-        "border-t border-slate-300",
+        "w-full px-2 py-1 flex items-center gap-1 group relative",
+        !subection && "border-t border-slate-300 hover:bg-white bg-slate-50",
       )}
       onClick={onClick}
     >
@@ -28,7 +30,13 @@ export const InspectorSectionHeading = ({
       {Icon && (
         <Icon className="w-4 h-4 text-slate-600 group-hover:text-slate-600 mr-1" />
       )}
-      <div className="text-slate-600 font-medium group-hover:text-slate-600">
+      <div
+        className={classNames(
+          "font-medium",
+          !subection && "text-slate-600 group-hover:text-slate-600",
+          subection && "text-slate-500 group-hover:text-slate-600",
+        )}
+      >
         {text}
       </div>
     </button>

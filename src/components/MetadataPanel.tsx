@@ -8,19 +8,13 @@ import {
   CursorArrowRaysIcon,
 } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import {
-  ForwardRefExoticComponent,
-  PropsWithChildren,
-  SVGProps,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { ForwardRefExoticComponent, SVGProps, useMemo, useState } from "react";
 
 import { InspectorSection } from "../design-system/InspectorSection.js";
 import { Pill } from "../design-system/Pill.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
 import { getResourceIconComponent, ResourceIcon } from "../stories/utils.js";
+import { trpc } from "../utils/trpc.js";
 
 import { AttributeView } from "./AttributeView.js";
 import { ResourceView } from "./resource-views/ResourceView.js";
@@ -34,6 +28,7 @@ interface Attribute {
 
 interface AttributeGroup {
   groupName: string;
+  actionName: string;
   attributes: Attribute[];
   icon?: ForwardRefExoticComponent<SVGProps<SVGSVGElement>>;
 }
@@ -78,29 +73,18 @@ export const MetadataPanel = ({
 }: MetadataProps) => {
   const [openInspectorSections, setOpenInspectorSections] = useState(() => [
     "interact",
+    "interact-actions",
   ]);
 
-  const { attributeGroups, connectionsGroups } = useMemo(() => {
+  const { resourceGroup, connectionsGroups } = useMemo(() => {
     const connectionsGroupsArray: ConnectionsGroup[] = [];
-    let attrGroups: AttributeGroup[] = [
-      {
-        groupName: "Node",
-        icon: CubeTransparentIcon,
-        attributes: [
-          { key: "ID", value: node.id },
-          {
-            key: "Path",
-            value: node.path,
-          },
-          { key: "Type", value: node.type },
-        ],
-      },
-    ];
+    let resourceGroup: AttributeGroup | undefined;
     if (node.type.startsWith("wingsdk.cloud") && node.props) {
       switch (node.type) {
         case "wingsdk.cloud.Function": {
-          attrGroups.push({
+          resourceGroup = {
             groupName: "Function",
+            actionName: "Invoke",
             icon: getResourceIconComponent(node.type),
             attributes: [
               { key: "Entry", value: node.props.sourceCodeFile },
@@ -110,22 +94,24 @@ export const MetadataPanel = ({
                 value: JSON.stringify(node.props.environmentVariables),
               },
             ],
-          });
+          };
 
           break;
         }
         case "wingsdk.cloud.Queue": {
-          attrGroups.push({
+          resourceGroup = {
             groupName: "Queue",
+            actionName: "Send Message",
             icon: getResourceIconComponent(node.type),
             attributes: [{ key: "Timeout", value: `${node.props.timeout}s` }],
-          });
+          };
 
           break;
         }
         case "wingsdk.cloud.Bucket": {
-          attrGroups.push({
+          resourceGroup = {
             groupName: "Bucket",
+            actionName: "Manage",
             icon: getResourceIconComponent(node.type),
             attributes: [
               {
@@ -133,7 +119,7 @@ export const MetadataPanel = ({
                 value: node.props.public ? "True" : "False",
               },
             ],
-          });
+          };
 
           break;
         }
@@ -173,7 +159,7 @@ export const MetadataPanel = ({
       });
     }
     return {
-      attributeGroups: attrGroups,
+      resourceGroup,
       connectionsGroups: connectionsGroupsArray,
     };
   }, [node, inbound, outbound]);
@@ -208,35 +194,20 @@ export const MetadataPanel = ({
 
       {node && (
         <>
-          {attributeGroups?.map((attributeGroup) => {
-            return (
-              <div key={attributeGroup.groupName}>
-                <InspectorSection
-                  text={attributeGroup.groupName}
-                  icon={attributeGroup.icon}
-                  open={openInspectorSections.includes(
-                    attributeGroup.groupName,
-                  )}
-                  onClick={() =>
-                    toggleInspectorSection(attributeGroup.groupName)
-                  }
-                >
-                  <div className="border-t">
-                    <div className="px-2 py-1.5 flex flex-col gap-y-1 gap-x-4 bg-slate-50">
-                      {attributeGroup.attributes.map((attribute) => {
-                        return (
-                          <AttributeView
-                            key={attribute.key}
-                            attribute={attribute}
-                          />
-                        );
-                      })}
-                    </div>
-                  </div>
-                </InspectorSection>
+          <InspectorSection
+            text="Node"
+            icon={CubeTransparentIcon}
+            open={openInspectorSections.includes("node")}
+            onClick={() => toggleInspectorSection("node")}
+          >
+            <div className="border-t">
+              <div className="px-2 py-1.5 flex flex-col gap-y-1 gap-x-4 bg-slate-50">
+                <AttributeView attribute={{ key: "ID", value: node.id }} />
+                <AttributeView attribute={{ key: "Path", value: node.path }} />
+                <AttributeView attribute={{ key: "Type", value: node.type }} />
               </div>
-            );
-          })}
+            </div>
+          </InspectorSection>
 
           {connectionsGroups && connectionsGroups.length > 0 && (
             <InspectorSection
@@ -297,19 +268,55 @@ export const MetadataPanel = ({
           )}
 
           {node.type.startsWith("wingsdk.cloud") && (
-            <InspectorSection
-              text="Interact"
-              icon={CursorArrowRaysIcon}
-              open={openInspectorSections.includes("interact")}
-              onClick={() => toggleInspectorSection("interact")}
-            >
-              <div className="bg-slate-50 border-t border-slate-200">
-                <ResourceView
-                  resourceType={node.type}
-                  resourcePath={node.path}
-                />
-              </div>
-            </InspectorSection>
+            <>
+              <InspectorSection
+                text={resourceGroup?.groupName || "Interact"}
+                icon={resourceGroup?.icon || CursorArrowRaysIcon}
+                open={openInspectorSections.includes("interact")}
+                onClick={() => toggleInspectorSection("interact")}
+              >
+                <div className="bg-slate-50 border-t border-slate-200">
+                  {(resourceGroup?.attributes && (
+                    <>
+                      <div className="px-2 pt-1.5 flex flex-col gap-y-1 gap-x-4 bg-slate-50">
+                        {resourceGroup?.attributes.map((attribute) => {
+                          return (
+                            <AttributeView
+                              key={attribute.key}
+                              attribute={attribute}
+                            />
+                          );
+                        })}
+                      </div>
+                      <InspectorSection
+                        text={resourceGroup?.actionName || "Actions"}
+                        open={openInspectorSections.includes(
+                          "interact-actions",
+                        )}
+                        onClick={() =>
+                          toggleInspectorSection("interact-actions")
+                        }
+                        subection
+                      >
+                        <div className="pl-6 pr-2 pb-2">
+                          <ResourceView
+                            key={node.path}
+                            resourceType={node.type}
+                            resourcePath={node.path}
+                          />
+                        </div>
+                      </InspectorSection>
+                    </>
+                  )) || (
+                    <ResourceView
+                      key={node.path}
+                      resourceType={node.type}
+                      resourcePath={node.path}
+                    />
+                  )}
+                </div>
+              </InspectorSection>
+            </>
           )}
 
           <div className="border-t border-slate-300"></div>

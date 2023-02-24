@@ -8,6 +8,7 @@ import throttle from "lodash.throttle";
 import { Fragment, useEffect, useRef, useState } from "react";
 
 import { LogEntry } from "../../electron/main/consoleLogger.js";
+import { ResourceIcon } from "../stories/utils.js";
 
 const dateTimeFormat = new Intl.DateTimeFormat(undefined, {
   hour: "2-digit",
@@ -18,7 +19,7 @@ const dateTimeFormat = new Intl.DateTimeFormat(undefined, {
 
 interface LogEntryProps {
   log: LogEntry;
-  onResourceClick: (log: LogEntry) => void;
+  onResourceClick?: (log: LogEntry) => void;
 }
 
 export const formatAbsolutePaths = (
@@ -83,7 +84,7 @@ const LogEntryRow = ({ log, onResourceClick }: LogEntryProps) => {
           "group w-full flex",
           "flex min-w-0",
           "justify-between",
-          "border-t border-slate-200 text-2xs py-0.5",
+          "border-t border-slate-200 text-2xs py-0.5 px-2",
           {
             "text-blue-500": log.level === "verbose",
             "hover:text-blue-600": log.level === "verbose" && canBeExpanded,
@@ -138,17 +139,25 @@ const LogEntryRow = ({ log, onResourceClick }: LogEntryProps) => {
           <span ref={expandableRef} />
         </div>
 
-        <div className="justify-end ml-1">
-          <a
-            onClick={() => onResourceClick(log)}
-            className={classNames(
-              "flex cursor-pointer underline truncate",
-              "text-slate-500 hover:text-slate-600",
+        {onResourceClick && (
+          <div className="justify-end ml-1 flex space-x-1 items-center">
+            {log.ctx?.sourcePath && (
+              <ResourceIcon
+                resourceType={log.ctx.sourceType}
+                className="h-4 w-4"
+              />
             )}
-          >
-            {log.ctx?.sourcePath}
-          </a>
-        </div>
+            <a
+              onClick={() => onResourceClick(log)}
+              className={classNames(
+                "flex cursor-pointer underline truncate",
+                "text-slate-500 hover:text-slate-600",
+              )}
+            >
+              {log.ctx?.sourcePath}
+            </a>
+          </div>
+        )}
       </div>
     </Fragment>
   );
@@ -161,19 +170,17 @@ export interface ConsoleLogsProps {
 
 export const ConsoleLogs = ({ logs, onResourceClick }: ConsoleLogsProps) => {
   return (
-    <>
-      <div className="w-full gap-x-2 text-2xs font-mono">
-        {logs.map((log, logIndex) => (
-          <LogEntryRow
-            key={`${log.id}`}
-            log={log}
-            onResourceClick={(logEntry) => onResourceClick?.(logEntry)}
-          />
-        ))}
-        {logs.length === 0 && (
-          <div className="text-slate-400 text-2xs">No logs</div>
-        )}
-      </div>
-    </>
+    <div className="w-full gap-x-2 text-2xs font-mono">
+      {logs.map((log, logIndex) => (
+        <LogEntryRow
+          key={`${log.id}`}
+          log={log}
+          onResourceClick={(logEntry) => onResourceClick?.(logEntry)}
+        />
+      ))}
+      {logs.length === 0 && (
+        <div className="text-slate-400 text-2xs px-2">No logs</div>
+      )}
+    </div>
   );
 };

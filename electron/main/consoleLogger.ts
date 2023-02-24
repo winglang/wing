@@ -6,6 +6,7 @@ export type LogLevel = "verbose" | "info" | "warn" | "error";
 export type LogSource = "compiler" | "console" | "simulator" | "user";
 
 export interface TracingContext {
+  sourceType: string;
   sourcePath: string;
 }
 
