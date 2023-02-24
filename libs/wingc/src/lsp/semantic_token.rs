@@ -95,7 +95,7 @@ fn semantic_token_from_node(node: &Node) -> Option<AbsoluteSemanticToken> {
 			"identifier" => Some(new_absolute_token(node, &SemanticTokenType::PROPERTY)),
 			_ => None,
 		},
-		"class_member" => match node_kind {
+		"class_field" => match node_kind {
 			"identifier" => Some(new_absolute_token(node, &SemanticTokenType::PROPERTY)),
 			_ => None,
 		},

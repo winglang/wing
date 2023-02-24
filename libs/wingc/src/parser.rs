@@ -61,7 +61,7 @@ impl Parser<'_> {
 			level: DiagnosticLevel::Error,
 		};
 		// TODO terrible to clone here to avoid move
-		self.diagnostics.borrow_mut().push(diag);
+		self.diagnostics.borrow_mut().insert(diag);
 
 		// Track that we have produced a diagnostic for this node
 		// (note: it may not necessarily refer to a tree-sitter "ERROR" node)
@@ -362,7 +362,7 @@ impl Parser<'_> {
 				continue;
 			}
 			match (class_element.kind(), is_resource) {
-				("function_definition", true) => {
+				("method_definition", true) => {
 					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
 					let func_def = self.build_function_definition(&class_element, Phase::Preflight);
 					match (method_name, func_def) {
@@ -370,7 +370,7 @@ impl Parser<'_> {
 						_ => {}
 					}
 				}
-				("inflight_function_definition", _) => {
+				("inflight_method_definition", _) => {
 					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
 					let func_def = self.build_function_definition(&class_element, Phase::Inflight);
 					match (method_name, func_def) {
@@ -378,17 +378,22 @@ impl Parser<'_> {
 						_ => {}
 					}
 				}
-				("class_member", _) => fields.push(ClassField {
+				("class_field", _) => fields.push(ClassField {
 					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
 					member_type: self.build_type_annotation(&class_element.child_by_field_name("type").unwrap())?,
 					reassignable: class_element.child_by_field_name("reassignable").is_some(),
-					flight: Phase::Preflight,
-				}),
-				("inflight_class_member", _) => fields.push(ClassField {
-					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
-					member_type: self.build_type_annotation(&class_element.child_by_field_name("type").unwrap())?,
-					reassignable: class_element.child_by_field_name("reassignable").is_some(),
-					flight: Phase::Inflight,
+					_static: class_element.child_by_field_name("static").is_some(),
+					flight: match class_element.child_by_field_name("phase_modifier") {
+						Some(n) => {
+							if !is_resource {
+								self
+									.add_error::<Node>(format!("Class cannot have inflight fields"), &n)
+									.err();
+							}
+							Phase::Inflight
+						}
+						None => Phase::Preflight,
+					},
 				}),
 				("constructor", _) => {
 					if let Some(_) = constructor {
@@ -409,7 +414,7 @@ impl Parser<'_> {
 								root: name.clone(),
 								fields: vec![],
 							}))),
-							flight: if is_resource { Phase::Preflight } else { Phase::Inflight }, // TODO: for now classes can only be constructed inflight
+							flight: if is_resource { Phase::Preflight } else { Phase::Inflight },
 						},
 					})
 				}
@@ -482,6 +487,7 @@ impl Parser<'_> {
 				},
 				flight,
 			},
+			_static: func_def_node.child_by_field_name("static").is_some(),
 			captures: RefCell::new(None),
 		})
 	}

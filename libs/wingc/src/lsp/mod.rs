@@ -269,7 +269,7 @@ fn parse_text(source_file: &str, text: &[u8]) -> FileData {
 	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file));
 	let parse_diag = wing_parser.diagnostics.into_inner();
 
-	let diagnostics = vec![parse_diag, type_diag].concat();
+	let diagnostics = parse_diag.union(&type_diag).map(|x| x.clone()).collect();
 
 	return FileData {
 		contents: String::from_utf8(text.to_vec()).unwrap(),

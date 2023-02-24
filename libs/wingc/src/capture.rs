@@ -11,7 +11,6 @@ use crate::{
 		ArgList, Class, Constructor, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase, Reference,
 		Scope, StmtKind, Symbol,
 	},
-	debug,
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
 	type_check::symbol_env::SymbolEnv,
 	type_check::Type,
@@ -150,7 +149,7 @@ fn scan_captures_in_expression(
 					let (var, si) = x.unwrap();
 
 					if var.as_variable().is_none() {
-						diagnostics.push(Diagnostic {
+						diagnostics.insert(Diagnostic {
 							level: DiagnosticLevel::Error,
 							message: "Expected identifier to be a variable".to_string(),
 							span: Some(symbol.span.clone()),
@@ -161,7 +160,7 @@ fn scan_captures_in_expression(
 						// if the identifier represents a preflight value, then capture it
 						if si.flight == Phase::Preflight {
 							if var.is_reassignable() {
-								diagnostics.push(Diagnostic {
+								diagnostics.insert(Diagnostic {
 									level: DiagnosticLevel::Error,
 									message: format!("Cannot capture a reassignable variable \"{}\"", symbol.name),
 									span: Some(symbol.span.clone()),
@@ -199,7 +198,7 @@ fn scan_captures_in_expression(
 								});
 							} else {
 								// unsupported capture
-								diagnostics.push(Diagnostic {
+								diagnostics.insert(Diagnostic {
 									level: DiagnosticLevel::Error,
 									message: format!(
 										"Cannot reference '{}' of type '{}' from an inflight context",
@@ -239,6 +238,9 @@ fn scan_captures_in_expression(
 						);
 					}
 				}
+			}
+			Reference::TypeProperty { .. } => {
+				// TODO: handle access to static preflight memebers from inflight
 			}
 		},
 		ExprKind::Call { function, arg_list } => res.extend(scan_captures_in_call(

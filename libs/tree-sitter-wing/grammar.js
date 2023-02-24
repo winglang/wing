@@ -121,6 +121,8 @@ module.exports = grammar({
 
     reassignable: ($) => "var",
 
+    static: ($) => "static",
+
     variable_definition_statement: ($) =>
       seq(
         "let",
@@ -148,29 +150,22 @@ module.exports = grammar({
         repeat(
           choice(
             $.constructor,
-            $.function_definition,
-            $.inflight_function_definition,
-            $.class_member,
-            $.inflight_class_member
+            $.method_definition,
+            $.inflight_method_definition,
+            $.class_field,
           )
         ),
         "}"
       ),
-    class_member: ($) =>
+    class_field: ($) =>
       seq(
         optional(field("access_modifier", $.access_modifier)),
+        optional(field("static", $.static)),
+        optional(field("phase_modifier", $._inflight_specifier)),
         optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
         $._type_annotation,
-        ";"
-      ),
-    inflight_class_member: ($) =>
-      seq(
-        optional(field("access_modifier", $.access_modifier)),
-        field("phase_modifier", $._inflight_specifier),
-        optional(field("reassignable", $.reassignable)),
-        field("name", $.identifier),
-        $._type_annotation,
+        optional(seq("=", field("initializer", $.expression))),
         ";"
       ),
 
@@ -187,10 +182,9 @@ module.exports = grammar({
         repeat(
           choice(
             $.constructor,
-            $.function_definition,
-            $.inflight_function_definition,
-            $.class_member,
-            $.inflight_class_member
+            $.method_definition,
+            $.inflight_method_definition,
+            $.class_field,
           )
         ),
         "}"
@@ -373,9 +367,10 @@ module.exports = grammar({
         field("block", $.block)
       ),
 
-    function_definition: ($) =>
+    method_definition: ($) =>
       seq(
         optional(field("access_modifier", $.access_modifier)),
+        optional(field("static", $.static)),
         optional(field("async", $.async_modifier)),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
@@ -383,9 +378,10 @@ module.exports = grammar({
         field("block", $.block)
       ),
 
-    inflight_function_definition: ($) =>
+    inflight_method_definition: ($) =>
       seq(
         optional(field("access_modifier", $.access_modifier)),
+        optional(field("static", $.static)),
         field("phase_modifier", $._inflight_specifier),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),

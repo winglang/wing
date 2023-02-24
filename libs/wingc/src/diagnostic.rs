@@ -1,3 +1,4 @@
+use indexmap::IndexSet;
 use tree_sitter::Point;
 
 use crate::debug;
@@ -5,7 +6,7 @@ use crate::debug;
 pub type FileId = String;
 pub type CharacterLocation = Point;
 pub type ByteIndex = usize;
-pub type Diagnostics = Vec<Diagnostic>;
+pub type Diagnostics = IndexSet<Diagnostic>;
 pub type DiagnosticResult<T> = Result<T, ()>;
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
@@ -60,14 +61,14 @@ impl PartialOrd for WingSpan {
 	}
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum DiagnosticLevel {
 	Error,
 	Warning,
 	Note,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Diagnostic {
 	pub message: String,
 	pub span: Option<WingSpan>,

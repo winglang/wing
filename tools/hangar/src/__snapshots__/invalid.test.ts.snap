@@ -5,6 +5,14 @@ exports[`access_hidden_namespace.w > wing test (--target sim) - invalid > stderr
 Error at ../../../../examples/tests/invalid/access_hidden_namespace.w:8:5 | Unknown symbol \\"core\\""
 `;
 
+exports[`access_static_from_instance.w > wing test (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 4 error(s)
+Error at ../../../../examples/tests/invalid/access_static_from_instance.w:7:5 | Unknown symbol \\"this\\"
+Error at ../../../../examples/tests/invalid/access_static_from_instance.w:7:5 | Variable this.instance_field is not reassignable 
+Error at ../../../../examples/tests/invalid/access_static_from_instance.w:8:5 | Unknown symbol \\"this\\"
+Error at ../../../../examples/tests/invalid/access_static_from_instance.w:8:5 | Variable this.f is not reassignable "
+`;
+
 exports[`bring.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 1 error(s)
 Error at ../../../../examples/tests/invalid/bring.w:1:1 | Redundant bring of \\"std\\""
@@ -58,13 +66,18 @@ Error at ../../../../examples/tests/invalid/container_types.w:20:4 | Unknown sym
 
 exports[`enums.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 2 error(s)
-Error | Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
+Error at ../../../../examples/tests/invalid/enums.w:5:21 | Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
 Error at ../../../../examples/tests/invalid/enums.w:8:11 | Expression must be a class or resource instance to access property \\"TWO\\", instead found type \\"SomeEnum\\""
 `;
 
 exports[`for_loop.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 1 error(s)
 Error at ../../../../examples/tests/invalid/for_loop.w:5:13 | Unable to iterate over \\"Bucket\\""
+`;
+
+exports[`inflight_in_class.w > wing test (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 1 error(s)
+Error at ../../../../examples/tests/invalid/inflight_in_class.w:3:3 | Class cannot have inflight fields"
 `;
 
 exports[`missing_semicolon.w > wing test (--target sim) - invalid > stderr 1`] = `
@@ -176,12 +189,9 @@ Error at ../../../../examples/tests/invalid/types_string_interpolation.w:6:12 | 
 `;
 
 exports[`types_strings_arithmetic.w > wing test (--target sim) - invalid > stderr 1`] = `
-"Compilation failed with 6 error(s)
-Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:1:16 | Expected type to be \\"num\\", but got \\"str\\" instead
-Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:1:16 | Expected type to be \\"num\\", but got \\"str\\" instead
+"Compilation failed with 3 error(s)
 Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:1:16 | Expected type to be \\"num\\", but got \\"str\\" instead
 Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:4:14 | Expected type to be \\"num\\", but got \\"str\\" instead
-Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:10:30 | Expected type to be \\"num\\", but got \\"str\\" instead
 Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:10:30 | Expected type to be \\"num\\", but got \\"str\\" instead"
 `;
 

@@ -164,6 +164,7 @@ pub struct FunctionDefinition {
 	pub signature: FunctionSignature,
 	#[derivative(Debug = "ignore")]
 	pub captures: RefCell<Option<Captures>>,
+	pub _static: bool,
 }
 
 #[derive(Debug)]
@@ -280,6 +281,7 @@ pub struct ClassField {
 	pub member_type: TypeAnnotation,
 	pub reassignable: bool,
 	pub flight: Phase,
+	pub _static: bool,
 }
 
 #[derive(Debug)]
@@ -449,6 +451,7 @@ impl BinaryOperator {
 pub enum Reference {
 	Identifier(Symbol),
 	NestedIdentifier { object: Box<Expr>, property: Symbol },
+	TypeProperty { _type: UserDefinedType, property: Symbol },
 }
 
 impl Display for Reference {
@@ -461,6 +464,9 @@ impl Display for Reference {
 					_ => "object".to_string(), // TODO!
 				};
 				write!(f, "{}.{}", obj_str, property.name)
+			}
+			Reference::TypeProperty { _type, property } => {
+				write!(f, "{}.{}", TypeAnnotation::UserDefined(_type.clone()), property.name)
 			}
 		}
 	}

@@ -72,6 +72,8 @@ pub struct VariableInfo {
 	pub reassignable: bool,
 	/// The phase in which this variable exists
 	pub flight: Phase,
+	/// Is this a static or instance variable?
+	pub _static: bool,
 }
 
 impl SymbolKind {
@@ -80,6 +82,16 @@ impl SymbolKind {
 			_type,
 			reassignable,
 			flight,
+			_static: true,
+		})
+	}
+
+	pub fn make_instance_variable(_type: TypeRef, reassignable: bool, flight: Phase) -> Self {
+		SymbolKind::Variable(VariableInfo {
+			_type,
+			reassignable,
+			flight,
+			_static: false,
 		})
 	}
 
@@ -351,6 +363,7 @@ pub struct FunctionSignature {
 	pub parameters: Vec<TypeRef>,
 	pub return_type: TypeRef,
 	pub flight: Phase,
+	pub _static: bool,
 
 	/// During jsify, calls to this function will be replaced with this string
 	/// In JSII imports, this is denoted by the `@macro` attribute
@@ -563,7 +576,7 @@ impl Subtype for TypeRef {
 
 impl Debug for TypeRef {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "{}", &**self)
+		write!(f, "{:?}", &**self)
 	}
 }
 
@@ -711,7 +724,7 @@ impl<'a> TypeChecker<'a> {
 	// TODO: All calls to this should be removed and we should make sure type checks are done
 	// for unimplemented types
 	pub fn unimplemented_type(&self, type_name: &str) -> Option<Type> {
-		self.diagnostics.borrow_mut().push(Diagnostic {
+		self.diagnostics.borrow_mut().insert(Diagnostic {
 			level: DiagnosticLevel::Warning,
 			message: format!("Unimplemented type: {}", type_name),
 			span: None,
@@ -721,7 +734,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn general_type_error(&self, message: String) -> TypeRef {
-		self.diagnostics.borrow_mut().push(Diagnostic {
+		self.diagnostics.borrow_mut().insert(Diagnostic {
 			level: DiagnosticLevel::Error,
 			message,
 			span: None,
@@ -730,8 +743,22 @@ impl<'a> TypeChecker<'a> {
 		self.types.anything()
 	}
 
+	fn resolve_static_error(&self, property: &Symbol, message: String) -> VariableInfo {
+		self.diagnostics.borrow_mut().insert(Diagnostic {
+			level: DiagnosticLevel::Error,
+			message,
+			span: Some(property.span.clone()),
+		});
+		VariableInfo {
+			_type: self.types.anything(),
+			reassignable: false,
+			flight: Phase::Independent,
+			_static: true,
+		}
+	}
+
 	fn expr_error(&self, expr: &Expr, message: String) -> TypeRef {
-		self.diagnostics.borrow_mut().push(Diagnostic {
+		self.diagnostics.borrow_mut().insert(Diagnostic {
 			level: DiagnosticLevel::Error,
 			message,
 			span: Some(expr.span.clone()),
@@ -741,7 +768,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn stmt_error(&self, stmt: &Stmt, message: String) {
-		self.diagnostics.borrow_mut().push(Diagnostic {
+		self.diagnostics.borrow_mut().insert(Diagnostic {
 			level: DiagnosticLevel::Error,
 			message,
 			span: Some(stmt.span.clone()),
@@ -750,7 +777,7 @@ impl<'a> TypeChecker<'a> {
 
 	fn type_error(&self, type_error: TypeError) -> TypeRef {
 		let TypeError { message, span } = type_error;
-		self.diagnostics.borrow_mut().push(Diagnostic {
+		self.diagnostics.borrow_mut().insert(Diagnostic {
 			level: DiagnosticLevel::Error,
 			message,
 			span: Some(span),
@@ -761,7 +788,7 @@ impl<'a> TypeChecker<'a> {
 
 	fn variable_error(&self, type_error: TypeError) -> VariableInfo {
 		let TypeError { message, span } = type_error;
-		self.diagnostics.borrow_mut().push(Diagnostic {
+		self.diagnostics.borrow_mut().insert(Diagnostic {
 			level: DiagnosticLevel::Error,
 			message,
 			span: Some(span),
@@ -771,6 +798,7 @@ impl<'a> TypeChecker<'a> {
 			_type: self.types.anything(),
 			reassignable: false,
 			flight: Phase::Independent,
+			_static: false,
 		}
 	}
 
@@ -957,10 +985,16 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::Call { function, arg_list } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
 				let func_type = self.type_check_exp(function, env, statement_idx);
-				let this_args = if matches!(function.kind, ExprKind::Reference(Reference::NestedIdentifier { .. })) {
-					1
-				} else {
-					0
+				let this_args = match &function.kind {
+					ExprKind::Reference(_ref) => {
+						// If this is a static method then there's no `this` arg
+						if self.resolve_reference(_ref, env, statement_idx)._static {
+							0
+						} else {
+							1
+						}
+					}
+					_ => 0,
 				};
 
 				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud.Bucket().upload())
@@ -1244,7 +1278,7 @@ impl<'a> TypeChecker<'a> {
 				.iter()
 				.any(|expected| actual_type.is_subtype_of(&expected))
 		{
-			self.diagnostics.borrow_mut().push(Diagnostic {
+			self.diagnostics.borrow_mut().insert(Diagnostic {
 				message: if expected_types.len() > 1 {
 					let expected_types_list = expected_types
 						.iter()
@@ -1299,6 +1333,9 @@ impl<'a> TypeChecker<'a> {
 						self.resolve_type_annotation(t, env, statement_idx)
 					}),
 					flight: ast_sig.flight,
+					// TODO: for now function types are always static. In cases where we want to run an instance method we should require and object/interface type
+					// and run the method in that interface, not a function type. This is probably the best desing, but, perhaps, worth a discussion.
+					_static: true,
 					js_override: None,
 				};
 				// TODO: avoid creating a new type for each function_sig resolution
@@ -1648,7 +1685,11 @@ impl<'a> TypeChecker<'a> {
 					let field_type = self.resolve_type_annotation(&field.member_type, env, stmt.idx);
 					match class_env.define(
 						&field.name,
-						SymbolKind::make_variable(field_type, field.reassignable, field.flight),
+						if field._static {
+							SymbolKind::make_variable(field_type, field.reassignable, field.flight)
+						} else {
+							SymbolKind::make_instance_variable(field_type, field.reassignable, field.flight)
+						},
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -1661,19 +1702,25 @@ impl<'a> TypeChecker<'a> {
 				for (method_name, method_def) in methods.iter() {
 					let mut sig = method_def.signature.clone();
 
-					// Add myself as first parameter to all class methods (self)
-					sig.parameters.insert(
-						0,
-						TypeAnnotation::UserDefined(UserDefinedType {
-							root: name.clone(),
-							fields: vec![],
-						}),
-					);
+					// Add myself as first parameter to all non static class methods (self)
+					if !method_def._static {
+						sig.parameters.insert(
+							0,
+							TypeAnnotation::UserDefined(UserDefinedType {
+								root: name.clone(),
+								fields: vec![],
+							}),
+						);
+					}
 
 					let method_type = self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(sig), env, stmt.idx);
 					match class_env.define(
 						method_name,
-						SymbolKind::make_variable(method_type, false, method_def.signature.flight),
+						if method_def._static {
+							SymbolKind::make_variable(method_type, false, method_def.signature.flight)
+						} else {
+							SymbolKind::make_instance_variable(method_type, false, method_def.signature.flight)
+						},
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -1768,13 +1815,16 @@ impl<'a> TypeChecker<'a> {
 						stmt.idx,
 					);
 					// Add `this` as first argument
-					let mut actual_parameters = vec![(
-						Symbol {
-							name: "this".into(),
-							span: method_name.span.clone(),
-						},
-						false,
-					)];
+					let mut actual_parameters = vec![];
+					if !method_def._static {
+						actual_parameters.push((
+							Symbol {
+								name: "this".into(),
+								span: method_name.span.clone(),
+							},
+							false,
+						));
+					}
 					actual_parameters.extend(method_def.parameters.clone());
 					self.add_arguments_to_env(&actual_parameters, method_sig, &mut method_env);
 					method_def.statements.set_env(method_env);
@@ -2056,6 +2106,7 @@ impl<'a> TypeChecker<'a> {
 						_type: v,
 						reassignable,
 						flight,
+						_static,
 					}) => {
 						// Replace type params in function signatures
 						if let Some(sig) = v.as_function_sig() {
@@ -2100,6 +2151,7 @@ impl<'a> TypeChecker<'a> {
 								parameters: new_args,
 								return_type: new_return_type,
 								flight: sig.flight.clone(),
+								_static: sig._static,
 								js_override: sig.js_override.clone(),
 							};
 
@@ -2109,7 +2161,15 @@ impl<'a> TypeChecker<'a> {
 									name: name.clone(),
 									span: WingSpan::global(),
 								},
-								SymbolKind::make_variable(self.types.add_type(Type::Function(new_sig)), *reassignable, *flight),
+								if new_sig._static {
+									SymbolKind::make_variable(self.types.add_type(Type::Function(new_sig)), *reassignable, *flight)
+								} else {
+									SymbolKind::make_instance_variable(
+										self.types.add_type(Type::Function(new_sig)),
+										*reassignable,
+										*flight,
+									)
+								},
 								StatementIdx::Top,
 							) {
 								Err(type_error) => {
@@ -2121,6 +2181,7 @@ impl<'a> TypeChecker<'a> {
 							_type: var,
 							reassignable,
 							flight,
+							_static,
 						}) = symbol.as_variable()
 						{
 							let new_var_type = if var.is_same_type_as(original_type_param) {
@@ -2152,7 +2213,12 @@ impl<'a> TypeChecker<'a> {
 		return new_type;
 	}
 
-	fn expr_maybe_type(&mut self, expr: &Expr, env: &SymbolEnv, statement_idx: usize) -> Option<TypeRef> {
+	fn expr_maybe_type(
+		&mut self,
+		expr: &Expr,
+		env: &SymbolEnv,
+		statement_idx: usize,
+	) -> Option<(TypeRef, UserDefinedType)> {
 		// TODO: we currently don't handle parenthesized expressions correctly so something like `(MyEnum).A` or `std.(namespace.submodule).A` will return true, is this a problem?
 		let mut path = vec![];
 		let mut curr_expr = expr;
@@ -2160,22 +2226,27 @@ impl<'a> TypeChecker<'a> {
 			match &curr_expr.kind {
 				ExprKind::Reference(reference) => match reference {
 					Reference::Identifier(symbol) => {
-						path.push(symbol);
+						path.push(symbol.clone());
 						break;
 					}
 					Reference::NestedIdentifier { object, property } => {
-						path.push(property);
+						path.push(property.clone());
 						curr_expr = &object;
+					}
+					Reference::TypeProperty { .. } => {
+						panic!("Type property references cannot be a type name because they have a property");
 					}
 				},
 				_ => return None,
 			}
 		}
+		let root = path.pop().unwrap();
 		path.reverse();
-		match env.lookup_nested(&path, false, Some(statement_idx)) {
-			Ok(SymbolKind::Type(type_ref)) => Some(*type_ref),
-			_ => None,
-		}
+		let user_type_annotation = UserDefinedType { root, fields: path };
+
+		resolve_user_defined_type(&user_type_annotation, env, statement_idx)
+			.ok()
+			.map(|t| (t, user_type_annotation))
 	}
 
 	fn resolve_reference(&mut self, reference: &Reference, env: &SymbolEnv, statement_idx: usize) -> VariableInfo {
@@ -2194,30 +2265,27 @@ impl<'a> TypeChecker<'a> {
 				Err(type_error) => self.variable_error(type_error),
 			},
 			Reference::NestedIdentifier { object, property } => {
-				// There's a special case where the object is actually a type and the property is either a static method or an enum variant.
-				// In this case the type might even be namespaced (recursive nested reference). We need to detect this and treat the entire
-				// object as a single reference to the type
-				if let Some(_type) = self.expr_maybe_type(object, env, statement_idx) {
-					// Currently we only support enum field access (no static methods)
-					let _type = match *_type {
-						Type::Enum(ref e) => {
-							if e.values.contains(property) {
-								_type
-							} else {
-								self.general_type_error(format!(
-									"Enum \"{}\" does not contain value \"{}\"",
-									_type, property.name
-								))
-							}
-						}
-						_ => self.general_type_error(format!("Type {} not valid in expression", _type)),
+				// There's a special case where the object is actually a type and the property is either a static member or an enum variant.
+				// In this case the type might even be namespaced (recursive nested reference). We need to detect this and transform this
+				// reference into a type reference.
+				if let Some((_type, user_type_annotation)) = self.expr_maybe_type(object, env, statement_idx) {
+					// We can't get here twice, we can safely assume that if we're here the `object` part of the reference doesn't have and evaluated type yet.
+					assert!(object.evaluated_type.borrow().is_none());
+
+					// Create a type reference out of this nested reference and call ourselves again
+					let new_ref = Reference::TypeProperty {
+						_type: user_type_annotation,
+						property: property.clone(),
 					};
-					return VariableInfo {
-						_type,
-						reassignable: false,
-						// Since we only support enum variants here we assume they are phase independent, for static methods this should be fixed
-						flight: Phase::Independent,
-					};
+					// Replace the reference with the new one, this is unsafe because `reference` isn't mutable and theoretically someone may
+					// hold anoter reference to it. But our AST doesn't hold up/cross references so this is safe as long as we return right.
+					let const_ptr = reference as *const Reference;
+					let mut_ptr = const_ptr as *mut Reference;
+					unsafe {
+						// We dont' use the return value but need to call replace so it'll drop the old value
+						_ = std::mem::replace(&mut *mut_ptr, new_ref);
+					}
+					return self.resolve_reference(reference, env, statement_idx);
 				}
 
 				// Special case: if the object expression is a simple reference to `this` and we're inside the init function then
@@ -2240,6 +2308,7 @@ impl<'a> TypeChecker<'a> {
 						_type: instance_type,
 						reassignable: false,
 						flight: env.flight,
+						_static: false,
 					},
 
 					// Lookup wingsdk std types, hydrating generics if necessary
@@ -2298,18 +2367,61 @@ impl<'a> TypeChecker<'a> {
 						),
 						reassignable: false,
 						flight: Phase::Independent,
+						_static: false,
 					},
 				};
 
 				if force_reassignable {
-					VariableInfo {
-						_type: res._type,
-						reassignable: true,
-						flight: res.flight,
-					}
+					let mut res = res.clone();
+					res.reassignable = true;
+					res
 				} else {
 					res
 				}
+			}
+			Reference::TypeProperty { _type, property } => {
+				let _type = resolve_user_defined_type(_type, env, statement_idx)
+					.expect("Type annotation should have been verified by `expr_maybe_type`");
+				return match *_type {
+					Type::Enum(ref e) => {
+						if e.values.contains(property) {
+							VariableInfo {
+								_type,
+								reassignable: false,
+								flight: Phase::Independent,
+								_static: true,
+							}
+						} else {
+							self.resolve_static_error(
+								property,
+								format!("Enum \"{}\" does not contain value \"{}\"", _type, property.name),
+							)
+						}
+					}
+					Type::Class(ref c) | Type::Resource(ref c) => {
+						let member = c.env.lookup(property, None);
+						match member {
+							Ok(SymbolKind::Variable(v)) => {
+								if v._static {
+									v.clone()
+								} else {
+									self.resolve_static_error(
+										property,
+										format!(
+											"Class \"{}\" contains a member \"{}\" but it is not static",
+											_type, property.name
+										),
+									)
+								}
+							}
+							_ => self.resolve_static_error(
+								property,
+								format!("No member \"{}\" in class \"{}\"", property.name, _type),
+							),
+						}
+					}
+					_ => self.resolve_static_error(property, format!("\"{}\" not a valid reference", reference)),
+				};
 			}
 		}
 	}

@@ -256,6 +256,7 @@ where
 			v.visit_expr(object);
 		}
 		Reference::Identifier(_) => {}
+		Reference::TypeProperty { .. } => {}
 	}
 }
 

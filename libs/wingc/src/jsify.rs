@@ -166,6 +166,9 @@ impl<'a> JSifier<'a> {
 			Reference::NestedIdentifier { object, property } => {
 				self.jsify_expression(object, phase) + "." + &symbolize(self, property)
 			}
+			Reference::TypeProperty { _type, property } => {
+				self.jsify_type(&TypeAnnotation::UserDefined(_type.clone())) + "." + &symbolize(self, property)
+			}
 		}
 	}
 
