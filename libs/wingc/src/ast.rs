@@ -450,8 +450,11 @@ impl BinaryOperator {
 
 #[derive(Debug)]
 pub enum Reference {
+	/// A simple identifier: `x`
 	Identifier(Symbol),
+	/// A reference to a member nested inside some object `expression.x`
 	NestedIdentifier { object: Box<Expr>, property: Symbol },
+	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
 	TypeProperty { _type: UserDefinedType, property: Symbol },
 }
 
