@@ -3597,10 +3597,19 @@ constructor() {
   const m2 = {\\"hello\\":123};
   const m3 = {\\"b1\\":bucket1,\\"b2\\":bucket2};
   const m4 = m1;
+  const m5 = {\\"goodbye\\":\\"world\\"};
+  const m6 = {\\"a\\":m1,\\"b\\":m5};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"hello\\" in m1)'\`)})((\\"hello\\" in m1))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m2).length === 1)'\`)})((Object.keys(m2).length === 1))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m3[\\"b1\\"] === bucket1)'\`)})((m3[\\"b1\\"] === bucket1))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m4).length === 1)'\`)})((Object.keys(m4).length === 1))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m6[\\"a\\"][\\"hello\\"] === \\"world\\")'\`)})((m6[\\"a\\"][\\"hello\\"] === \\"world\\"))};
+  ((obj, args) => { obj[args[0]] = args[1]; })(m1, [\\"hello\\",\\"goodbye\\"]);
+  ((obj, args) => { obj[args[0]] = args[1]; })(m6, [\\"a\\",{\\"foo\\":\\"bar\\"}]);
+  ((map) => { for(const k in map){delete map[k]}; })(m2);
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m2).length === 0)'\`)})((Object.keys(m2).length === 0))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m1[\\"hello\\"] === \\"goodbye\\")'\`)})((m1[\\"hello\\"] === \\"goodbye\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m6[\\"a\\"][\\"foo\\"] === \\"bar\\")'\`)})((m6[\\"a\\"][\\"foo\\"] === \\"bar\\"))};
 }
 }
 new MyApp().synth();"
@@ -4531,6 +4540,7 @@ constructor() {
   (mut_set.add(\\"three\\"));
   const immut_set = Object.freeze(new Set(mut_set));
   const s_map = Object.freeze({\\"one\\":1,\\"two\\":2});
+  const nested_map = Object.freeze({\\"a\\":Object.freeze({\\"b\\":Object.freeze({\\"c\\":\\"hello\\"})})});
   const mut_map = {...s_map};
   ((obj, args) => { obj[args[0]] = args[1]; })(mut_map, [\\"five\\",5]);
   const immut_map = Object.freeze({...mut_map});
@@ -4545,6 +4555,7 @@ constructor() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_map[\\"one\\"] === 1)'\`)})((s_map[\\"one\\"] === 1))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(s_map).length === 2)'\`)})((Object.keys(s_map).length === 2))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(immut_map).length === 3)'\`)})((Object.keys(immut_map).length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(nested_map[\\"a\\"][\\"b\\"][\\"c\\"] === \\"hello\\")'\`)})((nested_map[\\"a\\"][\\"b\\"][\\"c\\"] === \\"hello\\"))};
 }
 }
 new MyApp().synth();"
