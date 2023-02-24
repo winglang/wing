@@ -1,4 +1,3 @@
-mod fqn;
 mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{

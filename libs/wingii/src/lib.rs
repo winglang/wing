@@ -6,6 +6,7 @@ extern crate serde_json;
 #[cfg(test)]
 mod test;
 
+pub mod fqn;
 // this is public temporarily until reflection API is finalized
 pub mod jsii;
 
@@ -74,6 +75,7 @@ pub mod spec {
 pub mod type_system {
 	type AssemblyName = String;
 
+	use crate::fqn::FQN;
 	use crate::jsii;
 	use crate::jsii::Assembly;
 	use crate::spec;
@@ -117,27 +119,24 @@ pub mod type_system {
 		pub fn find_assembly(&self, name: &str) -> Option<&Assembly> {
 			self.assemblies.get(name)
 		}
-		fn find_type<T: QueryableType + for<'de> serde::Deserialize<'de>>(&self, fqn: &str, kind: &str) -> Option<T> {
-			for (_, assembly) in self.assemblies.iter() {
-				if let Some(types) = &assembly.types {
-					if let Some(class) = types.get(fqn) {
-						if let Some(class_kind) = class.get("kind") {
-							if class_kind.as_str().unwrap() == kind {
-								return serde_json::from_value(class.clone()).ok();
-							}
-						}
-					}
+		fn find_type<T: QueryableType + for<'de> serde::Deserialize<'de>>(&self, fqn: &FQN, kind: &str) -> Option<T> {
+			let assembly = self.assemblies.get(fqn.assembly())?;
+			if let Some(types) = &assembly.types {
+				let class = types.get(fqn.as_str())?;
+				let class_kind = class.get("kind")?.as_str()?;
+				if class_kind == kind {
+					return serde_json::from_value(class.clone()).ok()?;
 				}
 			}
 			None
 		}
-		pub fn find_class(&self, fqn: &str) -> Option<jsii::ClassType> {
+		pub fn find_class(&self, fqn: &FQN) -> Option<jsii::ClassType> {
 			self.find_type(fqn, "class")
 		}
-		pub fn find_interface(&self, fqn: &str) -> Option<jsii::InterfaceType> {
+		pub fn find_interface(&self, fqn: &FQN) -> Option<jsii::InterfaceType> {
 			self.find_type(fqn, "interface")
 		}
-		pub fn find_enum(&self, fqn: &str) -> Option<jsii::EnumType> {
+		pub fn find_enum(&self, fqn: &FQN) -> Option<jsii::EnumType> {
 			self.find_type(fqn, "enum")
 		}
 
