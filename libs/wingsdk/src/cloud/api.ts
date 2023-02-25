@@ -96,8 +96,7 @@ export abstract class ApiBase extends Resource {
         });
       });
     }
-
-    this.apiSpec.paths[route] = {
+    const methodSpec = {
       [method.toLowerCase()]: {
         operationId: operationId,
         responses: {
@@ -109,6 +108,10 @@ export abstract class ApiBase extends Resource {
         parameters: pathParameters,
         ...apiSpecExtension,
       },
+    };
+    this.apiSpec.paths[route] = {
+      ...this.apiSpec.paths[route],
+      ...methodSpec,
     };
   }
 
@@ -129,6 +132,36 @@ export interface ApiGetProps {}
  * Options for Api post endpoint.
  */
 export interface ApiPostProps {}
+
+/**
+ * Options for Api put endpoint.
+ */
+export interface ApiPutProps {}
+
+/**
+ * Options for Api put endpoint.
+ */
+export interface ApiDeleteProps {}
+
+/**
+ * Options for Api patch endpoint.
+ */
+export interface ApiPatchProps {}
+
+/**
+ * Options for Api patch endpoint.
+ */
+export interface ApiOptionsProps {}
+
+/**
+ * Options for Api patch endpoint.
+ */
+export interface ApiHeadProps {}
+
+/**
+ * Options for Api patch endpoint.
+ */
+export interface ApiConnectProps {}
 
 /**
  * Base implementation of `cloud.Api`.
@@ -166,6 +199,98 @@ export class Api extends ApiBase {
    * @param props
    */
   public post(route: string, inflight: Inflight, props?: ApiPostProps): void {
+    route;
+    inflight;
+    props;
+    throw new Error("Method not implemented.");
+  }
+
+  /**
+   *  Add a inflight to handle PUT requests to a route.
+   *
+   * @param route
+   * @param inflight
+   * @param props
+   */
+  public put(route: string, inflight: Inflight, props?: ApiPostProps): void {
+    route;
+    inflight;
+    props;
+    throw new Error("Method not implemented.");
+  }
+
+  /**
+   *  Add a inflight to handle POST requests to a route.
+   *
+   * @param route
+   * @param inflight
+   * @param props
+   */
+  public delete(route: string, inflight: Inflight, props?: ApiPostProps): void {
+    route;
+    inflight;
+    props;
+    throw new Error("Method not implemented.");
+  }
+
+  /**
+   *  Add a inflight to handle POST requests to a route.
+   *
+   * @param route
+   * @param inflight
+   * @param props
+   */
+  public patch(route: string, inflight: Inflight, props?: ApiPostProps): void {
+    route;
+    inflight;
+    props;
+    throw new Error("Method not implemented.");
+  }
+
+  /**
+   *  Add a inflight to handle POST requests to a route.
+   *
+   * @param route
+   * @param inflight
+   * @param props
+   */
+  public options(
+    route: string,
+    inflight: Inflight,
+    props?: ApiPostProps
+  ): void {
+    route;
+    inflight;
+    props;
+    throw new Error("Method not implemented.");
+  }
+
+  /**
+   *  Add a inflight to handle POST requests to a route.
+   *
+   * @param route
+   * @param inflight
+   * @param props
+   */
+  public head(route: string, inflight: Inflight, props?: ApiPostProps): void {
+    route;
+    inflight;
+    props;
+    throw new Error("Method not implemented.");
+  }
+
+  /**
+   *  Add a inflight to handle POST requests to a route.
+   *
+   * @param route
+   * @param inflight
+   * @param props
+   */
+  public connect(
+    route: string,
+    inflight: Inflight,
+    props?: ApiPostProps
+  ): void {
     route;
     inflight;
     props;

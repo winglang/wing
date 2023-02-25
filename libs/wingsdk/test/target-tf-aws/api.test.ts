@@ -25,10 +25,33 @@ test("api with GET route at root", () => {
   const output = app.synth();
 
   // THEN
+  const apiSpec = extractApiSpec(output);
   expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
   expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
-  expect(extractApiSpec(output)).toMatchSnapshot();
+  expect(Object.keys(apiSpec.paths["/"])).toStrictEqual(["get"]);
+  expect(apiSpec).toMatchSnapshot();
 });
+
+test("api with multiple methods on same route", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const api = new Api(app, "Api");
+
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+
+  api.get("/", inflight);
+  api.put("/", inflight);
+
+  const output = app.synth();
+
+  // THEN
+  const apiSpec = extractApiSpec(output);
+  expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
+  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
+  expect(apiSpec).toMatchSnapshot();
+  expect(Object.keys(apiSpec.paths["/"])).toStrictEqual(["get", "put"]);
+});
+
 test("api with GET routes with common prefix", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
@@ -138,4 +161,137 @@ test("api with path parameter", () => {
   expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
   expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
   expect(extractApiSpec(output)).toMatchSnapshot();
+});
+
+test("api with POST route", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const api = new Api(app, "Api");
+
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+
+  api.post("/", inflight);
+
+  const output = app.synth();
+
+  // THEN
+  const apiSpec = extractApiSpec(output);
+  expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
+  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
+  expect(Object.keys(apiSpec.paths["/"])).toStrictEqual(["post"]);
+  expect(apiSpec).toMatchSnapshot();
+});
+
+test("api with PUT route", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const api = new Api(app, "Api");
+
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+
+  api.put("/", inflight);
+
+  const output = app.synth();
+
+  // THEN
+  const apiSpec = extractApiSpec(output);
+  expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
+  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
+  expect(Object.keys(apiSpec.paths["/"])).toStrictEqual(["put"]);
+  expect(apiSpec).toMatchSnapshot();
+});
+
+test("api with PATCH route", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const api = new Api(app, "Api");
+
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+
+  api.patch("/", inflight);
+
+  const output = app.synth();
+
+  // THEN
+  const apiSpec = extractApiSpec(output);
+  expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
+  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
+  expect(Object.keys(apiSpec.paths["/"])).toStrictEqual(["patch"]);
+  expect(apiSpec).toMatchSnapshot();
+});
+
+test("api with DELETE route", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const api = new Api(app, "Api");
+
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+
+  api.delete("/", inflight);
+
+  const output = app.synth();
+
+  // THEN
+  const apiSpec = extractApiSpec(output);
+  expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
+  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
+  expect(Object.keys(apiSpec.paths["/"])).toStrictEqual(["delete"]);
+  expect(apiSpec).toMatchSnapshot();
+});
+
+test("api with OPTIONS route", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const api = new Api(app, "Api");
+
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+
+  api.options("/", inflight);
+
+  const output = app.synth();
+
+  // THEN
+  const apiSpec = extractApiSpec(output);
+  expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
+  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
+  expect(Object.keys(apiSpec.paths["/"])).toStrictEqual(["options"]);
+  expect(apiSpec).toMatchSnapshot();
+});
+
+test("api with HEAD route", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const api = new Api(app, "Api");
+
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+
+  api.head("/", inflight);
+
+  const output = app.synth();
+
+  // THEN
+  const apiSpec = extractApiSpec(output);
+  expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
+  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
+  expect(Object.keys(apiSpec.paths["/"])).toStrictEqual(["head"]);
+  expect(apiSpec).toMatchSnapshot();
+});
+
+test("api with CONNECT route", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const api = new Api(app, "Api");
+
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+
+  api.connect("/", inflight);
+
+  const output = app.synth();
+
+  // THEN
+  const apiSpec = extractApiSpec(output);
+  expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
+  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
+  expect(Object.keys(apiSpec.paths["/"])).toStrictEqual(["connect"]);
+  expect(apiSpec).toMatchSnapshot();
 });

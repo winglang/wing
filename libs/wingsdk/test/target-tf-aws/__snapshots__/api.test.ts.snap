@@ -1,5 +1,69 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`api with CONNECT route 1`] = `
+Object {
+  "openapi": "3.0.3",
+  "paths": Object {
+    "/": Object {
+      "connect": Object {
+        "operationId": "connect",
+        "parameters": Array [],
+        "responses": Object {
+          "200": Object {
+            "content": Object {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": Object {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": Object {
+            "default": Object {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with DELETE route 1`] = `
+Object {
+  "openapi": "3.0.3",
+  "paths": Object {
+    "/": Object {
+      "delete": Object {
+        "operationId": "delete",
+        "parameters": Array [],
+        "responses": Object {
+          "200": Object {
+            "content": Object {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": Object {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": Object {
+            "default": Object {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
 exports[`api with GET route at root 1`] = `
 Object {
   "openapi": "3.0.3",
@@ -119,6 +183,166 @@ Object {
     "/hello/foo": Object {
       "get": Object {
         "operationId": "get-hello/foo",
+        "parameters": Array [],
+        "responses": Object {
+          "200": Object {
+            "content": Object {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": Object {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": Object {
+            "default": Object {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with HEAD route 1`] = `
+Object {
+  "openapi": "3.0.3",
+  "paths": Object {
+    "/": Object {
+      "head": Object {
+        "operationId": "head",
+        "parameters": Array [],
+        "responses": Object {
+          "200": Object {
+            "content": Object {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": Object {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": Object {
+            "default": Object {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with OPTIONS route 1`] = `
+Object {
+  "openapi": "3.0.3",
+  "paths": Object {
+    "/": Object {
+      "options": Object {
+        "operationId": "options",
+        "parameters": Array [],
+        "responses": Object {
+          "200": Object {
+            "content": Object {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": Object {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": Object {
+            "default": Object {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with PATCH route 1`] = `
+Object {
+  "openapi": "3.0.3",
+  "paths": Object {
+    "/": Object {
+      "patch": Object {
+        "operationId": "patch",
+        "parameters": Array [],
+        "responses": Object {
+          "200": Object {
+            "content": Object {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": Object {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": Object {
+            "default": Object {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with POST route 1`] = `
+Object {
+  "openapi": "3.0.3",
+  "paths": Object {
+    "/": Object {
+      "post": Object {
+        "operationId": "post",
+        "parameters": Array [],
+        "responses": Object {
+          "200": Object {
+            "content": Object {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": Object {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": Object {
+            "default": Object {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with PUT route 1`] = `
+Object {
+  "openapi": "3.0.3",
+  "paths": Object {
+    "/": Object {
+      "put": Object {
+        "operationId": "put",
         "parameters": Array [],
         "responses": Object {
           "200": Object {
@@ -287,6 +511,60 @@ Object {
     "/hello/foo": Object {
       "get": Object {
         "operationId": "get-hello/foo",
+        "parameters": Array [],
+        "responses": Object {
+          "200": Object {
+            "content": Object {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": Object {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": Object {
+            "default": Object {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with multiple methods on same route 1`] = `
+Object {
+  "openapi": "3.0.3",
+  "paths": Object {
+    "/": Object {
+      "get": Object {
+        "operationId": "get",
+        "parameters": Array [],
+        "responses": Object {
+          "200": Object {
+            "content": Object {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": Object {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": Object {
+            "default": Object {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+      "put": Object {
+        "operationId": "put",
         "parameters": Array [],
         "responses": Object {
           "200": Object {

@@ -985,107 +985,189 @@ Whether the bucket's objects should be publicly accessible.
 
 ---
 
-### CounterProps <a name="CounterProps" id="@winglang/sdk.cloud.CounterProps"></a>
+### ApiConnectProps <a name="ApiConnectProps" id="@winglang/sdk.cloud.ApiConnectProps"></a>
 
-Properties for `Counter`.
+Options for Api patch endpoint.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.CounterProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiConnectProps.Initializer"></a>
 
 ```wing
 bring cloud;
 
-let counter_props = cloud.CounterProps{ ... }
+let api_connect_props = cloud.ApiConnectProps{ ... }
 ```
 
-#### Properties <a name="Properties" id="Properties"></a>
+### ApiDeleteProps <a name="ApiDeleteProps" id="@winglang/sdk.cloud.ApiDeleteProps"></a>
 
-| **Name**                                                                              | **Type**         | **Description**                   |
-| ------------------------------------------------------------------------------------- | ---------------- | --------------------------------- |
-| <code><a href="#@winglang/sdk.cloud.CounterProps.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
+Options for Api put endpoint.
 
----
-
-##### `initial`<sup>Optional</sup> <a name="initial" id="@winglang/sdk.cloud.CounterProps.property.initial"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiDeleteProps.Initializer"></a>
 
 ```wing
-initial: num;
+bring cloud;
+
+let api_delete_props = cloud.ApiDeleteProps{ ... }
+```
+
+### ApiGetProps <a name="ApiGetProps" id="@winglang/sdk.cloud.ApiGetProps"></a>
+
+Options for Api get endpoint.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiGetProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let api_get_props = cloud.ApiGetProps{ ... }
+```
+
+### ApiHeadProps <a name="ApiHeadProps" id="@winglang/sdk.cloud.ApiHeadProps"></a>
+
+Options for Api patch endpoint.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiHeadProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let api_head_props = cloud.ApiHeadProps{ ... }
+```
+
+### ApiOptionsProps <a name="ApiOptionsProps" id="@winglang/sdk.cloud.ApiOptionsProps"></a>
+
+Options for Api patch endpoint.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiOptionsProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let api_options_props = cloud.ApiOptionsProps{ ... }
+```
+
+### ApiPatchProps <a name="ApiPatchProps" id="@winglang/sdk.cloud.ApiPatchProps"></a>
+
+Options for Api patch endpoint.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiPatchProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let api_patch_props = cloud.ApiPatchProps{ ... }
+```
+
+### ApiPostProps <a name="ApiPostProps" id="@winglang/sdk.cloud.ApiPostProps"></a>
+
+Options for Api post endpoint.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiPostProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let api_post_props = cloud.ApiPostProps{ ... }
+```
+
+### ApiProps <a name="ApiProps" id="@winglang/sdk.cloud.ApiProps"></a>
+
+Properties for `Api`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let api_props = cloud.ApiProps{ ... }
+```
+
+### ApiPutProps <a name="ApiPutProps" id="@winglang/sdk.cloud.ApiPutProps"></a>
+
+Options for Api put endpoint.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiPutProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let api_put_props = cloud.ApiPutProps{ ... }
+```
+
+### ApiRequest <a name="ApiRequest" id="@winglang/sdk.cloud.ApiRequest"></a>
+
+Shape of a request to an inflight handler.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiRequest.Initializer"></a>
+
+```wing
+bring cloud;
+
+let api_request = cloud.ApiRequest{ ... }
 ```
 
 - _Type:_ num
 - _Default:_ 0
 
-The initial value of the counter.
+| **Name**                                                                            | **Type**                       | **Description**             |
+| ----------------------------------------------------------------------------------- | ------------------------------ | --------------------------- |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The request's headers.      |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.method">method</a></code>   | <code>str</code>               | The request's HTTP method.  |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.path">path</a></code>       | <code>str</code>               | The request's path.         |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.body">body</a></code>       | <code>cloud.Json</code>        | The request's body.         |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.query">query</a></code>     | <code>str</code>               | The request's query string. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.vars">vars</a></code>       | <code>MutMap&lt;str&gt;</code> | The path variables.         |
 
 ---
 
-### FunctionProps <a name="FunctionProps" id="@winglang/sdk.cloud.FunctionProps"></a>
-
-Properties for `Function`.
-
-This is the type users see when constructing a cloud.Function instance.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.FunctionProps.Initializer"></a>
+##### `headers`<sup>Required</sup> <a name="headers" id="@winglang/sdk.cloud.ApiRequest.property.headers"></a>
 
 ```wing
-bring cloud;
-
-let function_props = cloud.FunctionProps{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name**                                                                               | **Type**                                                        | **Description**                                          |
-| -------------------------------------------------------------------------------------- | --------------------------------------------------------------- | -------------------------------------------------------- |
-| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.env">env</a></code>         | <code>MutMap&lt;str&gt;</code>                                  | Environment variables to pass to the function.           |
-| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.memory">memory</a></code>   | <code>num</code>                                                | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run.         |
-
----
-
-##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.FunctionProps.property.env"></a>
-
-```wing
-env: MutMap<str>;
+headers: MutMap<str>;
 ```
 
 - _Type:_ MutMap&lt;str&gt;
-- _Default:_ No environment variables.
 
-Environment variables to pass to the function.
+The request's headers.
 
 ---
 
-##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.FunctionProps.property.memory"></a>
+##### `method`<sup>Required</sup> <a name="method" id="@winglang/sdk.cloud.ApiRequest.property.method"></a>
 
 ```wing
-memory: num;
+method: str;
 ```
 
-- _Type:_ num
-- _Default:_ 128
+- _Type:_ str
 
-The amount of memory to allocate to the function, in MB.
+The request's HTTP method.
 
 ---
 
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.FunctionProps.property.timeout"></a>
+##### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.ApiRequest.property.path"></a>
 
 ```wing
-timeout: Duration;
+path: str;
 ```
 
-- _Type:_ <a href="#@winglang/sdk.std.Duration">Duration</a>
-- _Default:_ 1m
+- _Type:_ str
 
-The maximum amount of time the function can run.
+The request's path.
 
 ---
 
-### JsonFileProps <a name="JsonFileProps" id="@winglang/sdk.fs.JsonFileProps"></a>
+##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.cloud.ApiRequest.property.body"></a>
 
-Props for `JsonFile`.
+```wing
+body: Json;
+```
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.fs.JsonFileProps.Initializer"></a>
+- _Type:_ cloud.Json
+
+The request's body.
+
+---
+
+##### `query`<sup>Optional</sup> <a name="query" id="@winglang/sdk.cloud.ApiRequest.property.query"></a>
 
 ```wing
 bring fs;
@@ -1129,22 +1211,9 @@ let queue_on_message_props = cloud.QueueOnMessageProps{ ... }
 
 | **Name**                                                                             | **Type**                       | **Description**             |
 | ------------------------------------------------------------------------------------ | ------------------------------ | --------------------------- |
-| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The response's headers.     |
 | <code><a href="#@winglang/sdk.cloud.ApiResponse.property.status">status</a></code>   | <code>num</code>               | The response's status code. |
-| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.body">body</a></code>       | <code>cloud.Json</code>        | The response's body.        |
-
----
-
-##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.QueueOnMessageProps.property.env"></a>
-
-```wing
-env: MutMap<str>;
-```
-
-- _Type:_ MutMap&lt;str&gt;
-- _Default:_ No environment variables.
-
-Environment variables to pass to the function.
+| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.body">body</a></code>       | <code>any</code>               | The response's body.        |
+| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The response's headers.     |
 
 ---
 
@@ -1169,7 +1238,19 @@ body: Json;
 
 - _Type:_ cloud.Json
 
-The maximum amount of time the function can run.
+The response's body.
+
+---
+
+##### `headers`<sup>Optional</sup> <a name="headers" id="@winglang/sdk.cloud.ApiResponse.property.headers"></a>
+
+```wing
+headers: MutMap<str>;
+```
+
+- _Type:_ MutMap&lt;str&gt;
+
+The response's headers.
 
 ---
 

@@ -86,6 +86,156 @@ export class Api extends cloud.ApiBase {
   }
 
   /**
+   * Add a inflight to handle PUT requests to a route.
+   * @param route Route to add
+   * @param inflight Inflight to handle request
+   * @param props Additional props
+   */
+  public put(
+    route: string,
+    inflight: core.Inflight,
+    props?: cloud.ApiPutProps
+  ): void {
+    if (props) {
+      console.warn("Api.put does not support props yet");
+    }
+    const fn = this.addHandler(inflight);
+    const apiSpecEndpoint = this.api.addEndpoint(route, "PUT", fn);
+    this._addToSpec(route, "PUT", apiSpecEndpoint);
+
+    core.Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: "on_put_request",
+    });
+  }
+
+  /**
+   * Add a inflight to handle DELETE requests to a route.
+   * @param route Route to add
+   * @param inflight Inflight to handle request
+   * @param props Additional props
+   */
+  public delete(
+    route: string,
+    inflight: core.Inflight,
+    props?: cloud.ApiDeleteProps
+  ): void {
+    if (props) {
+      console.warn("Api.delete does not support props yet");
+    }
+    const fn = this.addHandler(inflight);
+    const apiSpecEndpoint = this.api.addEndpoint(route, "DELETE", fn);
+    this._addToSpec(route, "DELETE", apiSpecEndpoint);
+
+    core.Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: "on_delete_request",
+    });
+  }
+
+  /**
+   * Add a inflight to handle PATCH requests to a route.
+   * @param route Route to add
+   * @param inflight Inflight to handle request
+   * @param props Additional props
+   */
+  public patch(
+    route: string,
+    inflight: core.Inflight,
+    props?: cloud.ApiPatchProps
+  ): void {
+    if (props) {
+      console.warn("Api.patch does not support props yet");
+    }
+    const fn = this.addHandler(inflight);
+    const apiSpecEndpoint = this.api.addEndpoint(route, "PATCH", fn);
+    this._addToSpec(route, "PATCH", apiSpecEndpoint);
+
+    core.Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: "on_patch_request",
+    });
+  }
+
+  /**
+   * Add a inflight to handle OPTIONS requests to a route.
+   * @param route Route to add
+   * @param inflight Inflight to handle request
+   * @param props Additional props
+   */
+  public options(
+    route: string,
+    inflight: core.Inflight,
+    props?: cloud.ApiOptionsProps
+  ): void {
+    if (props) {
+      console.warn("Api.options does not support props yet");
+    }
+    const fn = this.addHandler(inflight);
+    const apiSpecEndpoint = this.api.addEndpoint(route, "OPTIONS", fn);
+    this._addToSpec(route, "OPTIONS", apiSpecEndpoint);
+
+    core.Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: "on_options_request",
+    });
+  }
+
+  /**
+   * Add a inflight to handle HEAD requests to a route.
+   * @param route Route to add
+   * @param inflight Inflight to handle request
+   * @param props Additional props
+   */
+  public head(
+    route: string,
+    inflight: core.Inflight,
+    props?: cloud.ApiHeadProps
+  ): void {
+    if (props) {
+      console.warn("Api.head does not support props yet");
+    }
+    const fn = this.addHandler(inflight);
+    const apiSpecEndpoint = this.api.addEndpoint(route, "HEAD", fn);
+    this._addToSpec(route, "HEAD", apiSpecEndpoint);
+
+    core.Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: "on_head_request",
+    });
+  }
+
+  /**
+   * Add a inflight to handle CONNECT requests to a route.
+   * @param route Route to add
+   * @param inflight Inflight to handle request
+   * @param props Additional props
+   */
+  public connect(
+    route: string,
+    inflight: core.Inflight,
+    props?: cloud.ApiConnectProps
+  ): void {
+    if (props) {
+      console.warn("Api.connect does not support props yet");
+    }
+    const fn = this.addHandler(inflight);
+    const apiSpecEndpoint = this.api.addEndpoint(route, "CONNECT", fn);
+    this._addToSpec(route, "CONNECT", apiSpecEndpoint);
+
+    core.Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: "on_connect_request",
+    });
+  }
+
+  /**
    * Add a inflight handler to the stack
    * @param inflight Inflight to add to the API
    * @param props Endpoint props
