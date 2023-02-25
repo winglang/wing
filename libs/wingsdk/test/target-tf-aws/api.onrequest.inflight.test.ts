@@ -197,6 +197,15 @@ describe("ApiRequest", () => {
       },
       path: "/",
       httpMethod: "GET",
+      pathParameters: {
+        "path-param-1": "value-1",
+      },
+      queryStringParameters: {
+        key: "value",
+      },
+      multiValueQueryStringParameters: {
+        multi: ["value"],
+      },
     };
 
     const handlerMock = jest.fn().mockResolvedValue({
@@ -217,6 +226,8 @@ describe("ApiRequest", () => {
       headers: { "header-1": "value-1" },
       method: "GET",
       path: "/",
+      vars: { "path-param-1": "value-1" },
+      query: JSON.stringify({ key: "value", multi: ["value"] }),
     });
   });
 

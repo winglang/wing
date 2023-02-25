@@ -56,11 +56,21 @@ function convertMapToObject(map: Json | undefined) {
  * @param request API Gateway event
  * @returns Cloud API request
  */
-function mapApigatewayEventToCloudApiRequest(request: APIGatewayProxyEvent) {
+function mapApigatewayEventToCloudApiRequest(
+  request: APIGatewayProxyEvent
+): ApiRequest {
+  const query = {
+    ...request.queryStringParameters,
+    ...request.multiValueQueryStringParameters,
+  };
   return {
     path: request.path,
     body: request.body ? JSON.parse(request.body) : "",
     headers: request.headers as Record<string, string>,
     method: request.httpMethod.toUpperCase(),
+    query: Object.keys(query).length > 0 ? JSON.stringify(query) : undefined,
+    vars: request.pathParameters
+      ? (request.pathParameters as Record<string, string>)
+      : undefined,
   };
 }
