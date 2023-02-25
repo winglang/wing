@@ -1205,7 +1205,7 @@ let queue_on_message_props = cloud.QueueOnMessageProps{ ... }
 | **Name**                                                                             | **Type**                       | **Description**             |
 | ------------------------------------------------------------------------------------ | ------------------------------ | --------------------------- |
 | <code><a href="#@winglang/sdk.cloud.ApiResponse.property.status">status</a></code>   | <code>num</code>               | The response's status code. |
-| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.body">body</a></code>       | <code>any</code>               | The response's body.        |
+| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.body">body</a></code>       | <code>cloud.Json</code>        | The response's body.        |
 | <code><a href="#@winglang/sdk.cloud.ApiResponse.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The response's headers.     |
 
 ---
@@ -1226,10 +1226,10 @@ The amount of memory to allocate to the function, in MB.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueOnMessageProps.property.timeout"></a>
 
 ```wing
-body: any;
+body: Json;
 ```
 
-- _Type:_ any
+- _Type:_ cloud.Json
 
 The response's body.
 

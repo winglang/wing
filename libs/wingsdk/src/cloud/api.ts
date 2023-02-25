@@ -347,6 +347,8 @@ export interface ApiRequest {
   readonly headers: Record<string, string>;
 }
 
+export type Body = Map<string, string | number> | Map<string, Body>;
+
 /**
  * Shape of a response from a inflight handler.
  */
@@ -354,7 +356,7 @@ export interface ApiResponse {
   /** The response's status code. */
   readonly status: number;
   /** The response's body. */
-  readonly body?: any;
+  readonly body?: Json;
   /** The response's headers. */
   readonly headers?: Record<string, string>;
 }
