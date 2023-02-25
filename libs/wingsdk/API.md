@@ -1722,6 +1722,1065 @@ at(index: num): T1
 
 Get the value at the given index.
 
+Whether the resource should be hidden from the UI.
+
+---
+
+##### `title`<sup>Optional</sup> <a name="title" id="@winglang/sdk.core.DisplayProps.property.title"></a>
+
+```wing
+title: str;
+```
+
+- _Type:_ str
+- _Default:_ No title.
+
+Title of the resource.
+
+---
+
+### FilesProps <a name="FilesProps" id="@winglang/sdk.core.FilesProps"></a>
+
+Props for `Files`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.core.FilesProps.Initializer"></a>
+
+```wing
+bring core;
+
+let files_props = core.FilesProps{ ... }
+```
+
+Create a mutable shallow copy of this array.
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name**                                                                                | **Type**               | **Description**                                                  |
+| --------------------------------------------------------------------------------------- | ---------------------- | ---------------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.core.FilesProps.property.app">app</a></code>              | <code>core.IApp</code> | The app with files to synthesize.                                |
+| <code><a href="#@winglang/sdk.core.FilesProps.property.stateFile">state_file</a></code> | <code>str</code>       | The path to a state file which will track all synthesized files. |
+
+---
+
+##### `app`<sup>Required</sup> <a name="app" id="@winglang/sdk.core.FilesProps.property.app"></a>
+
+```wing
+app: IApp;
+```
+
+- _Type:_ core.IApp
+
+The app with files to synthesize.
+
+---
+
+##### `state_file`<sup>Optional</sup> <a name="state_file" id="@winglang/sdk.core.FilesProps.property.stateFile"></a>
+
+```wing
+state_file: str;
+```
+
+- _Type:_ str
+- _Default:_ no state file
+
+The path to a state file which will track all synthesized files.
+
+If a
+statefile is not specified, we won't be able to remove extrenous files.
+
+---
+
+### FunctionProps <a name="FunctionProps" id="@winglang/sdk.cloud.FunctionProps"></a>
+
+Properties for `Function`.
+
+This is the type users see when constructing a cloud.Function instance.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.FunctionProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let function_props = cloud.FunctionProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name**                                                                               | **Type**                       | **Description**                                          |
+| -------------------------------------------------------------------------------------- | ------------------------------ | -------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.env">env</a></code>         | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function.           |
+| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.memory">memory</a></code>   | <code>num</code>               | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code>std.Duration</code>      | The maximum amount of time the function can run.         |
+
+```wing
+copy_mut(): MutableMap
+```
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.FunctionProps.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- _Type:_ MutMap&lt;str&gt;
+- _Default:_ No environment variables.
+
+Environment variables to pass to the function.
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.FunctionProps.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- _Type:_ num
+- _Default:_ 128
+
+The amount of memory to allocate to the function, in MB.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.FunctionProps.property.timeout"></a>
+
+```wing
+timeout: Duration;
+```
+
+- _Type:_ std.Duration
+- _Default:_ 1m
+
+The maximum amount of time the function can run.
+
+---
+
+### InflightBinding <a name="InflightBinding" id="@winglang/sdk.core.InflightBinding"></a>
+
+An inflight binding.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.core.InflightBinding.Initializer"></a>
+
+```wing
+bring core;
+
+let inflight_binding = core.InflightBinding{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name**                                                                        | **Type**                         | **Description**                              |
+| ------------------------------------------------------------------------------- | -------------------------------- | -------------------------------------------- |
+| <code><a href="#@winglang/sdk.core.InflightBinding.property.obj">obj</a></code> | <code>any</code>                 | The resource or capturable value.            |
+| <code><a href="#@winglang/sdk.core.InflightBinding.property.ops">ops</a></code> | <code>MutArray&lt;str&gt;</code> | The list of operations used on the resource. |
+
+---
+
+##### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.core.InflightBinding.property.obj"></a>
+
+```wing
+obj: any;
+```
+
+- _Type:_ any
+
+The resource or capturable value.
+
+---
+
+##### `ops`<sup>Optional</sup> <a name="ops" id="@winglang/sdk.core.InflightBinding.property.ops"></a>
+
+```wing
+ops: MutArray<str>;
+```
+
+- _Type:_ MutArray&lt;str&gt;
+
+The list of operations used on the resource.
+
+---
+
+### InflightProps <a name="InflightProps" id="@winglang/sdk.core.InflightProps"></a>
+
+Props for `Inflight`.
+
+```wing
+bring core;
+
+let inflight_props = core.InflightProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name**                                                                                | **Type**                                        | **Description**                                                              |
+| --------------------------------------------------------------------------------------- | ----------------------------------------------- | ---------------------------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.core.InflightProps.property.code">code</a></code>         | <code>core.Code</code>                          | Reference to the inflight code. Only JavaScript code is currently supported. |
+| <code><a href="#@winglang/sdk.core.InflightProps.property.bindings">bindings</a></code> | <code>MutMap&lt;core.InflightBinding&gt;</code> | Data and resource binding information.                                       |
+
+- _Type:_ <a href="#@winglang/sdk.std.T1">T1</a>
+
+##### `code`<sup>Required</sup> <a name="code" id="@winglang/sdk.core.InflightProps.property.code"></a>
+
+```wing
+code: Code;
+```
+
+- _Type:_ core.Code
+
+Reference to the inflight code. Only JavaScript code is currently supported.
+
+The JavaScript code needs be in the form `async handle(event) { ... }`, and
+all references to resources must be made through `this.<resource>`.
+
+---
+
+##### `bindings`<sup>Optional</sup> <a name="bindings" id="@winglang/sdk.core.InflightProps.property.bindings"></a>
+
+```wing
+bindings: MutMap<InflightBinding>;
+```
+
+- _Type:_ MutMap&lt;core.InflightBinding&gt;
+- _Default:_ no bindings
+
+Data and resource binding information.
+
+---
+
+### Json <a name="Json" id="@winglang/sdk.cloud.Json"></a>
+
+Json type representation.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.Json.Initializer"></a>
+
+```wing
+bring cloud;
+
+let json = cloud.Json{ ... }
+```
+
+### JsonFileProps <a name="JsonFileProps" id="@winglang/sdk.fs.JsonFileProps"></a>
+
+Props for `JsonFile`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.fs.JsonFileProps.Initializer"></a>
+
+```wing
+bring fs;
+
+let json_file_props = fs.JsonFileProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name**                                                                    | **Type**         | **Description**                                                    |
+| --------------------------------------------------------------------------- | ---------------- | ------------------------------------------------------------------ |
+| <code><a href="#@winglang/sdk.fs.JsonFileProps.property.obj">obj</a></code> | <code>any</code> | The object that will be serialized into the file during synthesis. |
+
+---
+
+##### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.fs.JsonFileProps.property.obj"></a>
+
+```wing
+obj: any;
+```
+
+- _Type:_ any
+
+The object that will be serialized into the file during synthesis.
+
+- _Type:_ str
+
+### OperationAnnotation <a name="OperationAnnotation" id="@winglang/sdk.core.OperationAnnotation"></a>
+
+Annotations about what resources an inflight operation may access.
+
+The following example says that the operation may call "put" on a resource
+at "this.inner", or it may call "get" on a resource passed as an argument named
+"other".
+
+```wing
+{ "this.inner": { ops: ["put"] }, "other": { ops: ["get"] } }
+```
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.core.OperationAnnotation.Initializer"></a>
+
+```wing
+bring core;
+
+let operation_annotation = core.OperationAnnotation{ ... }
+```
+
+### QueueOnMessageProps <a name="QueueOnMessageProps" id="@winglang/sdk.cloud.QueueOnMessageProps"></a>
+
+Options for Queue.onMessage.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.QueueOnMessageProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let queue_on_message_props = cloud.QueueOnMessageProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| -------- | -------- | --------------- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.QueueOnMessageProps.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- _Type:_ num
+- _Default:_ 128
+
+The amount of memory to allocate to the function, in MB.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueOnMessageProps.property.timeout"></a>
+
+```wing
+timeout: Duration;
+```
+
+- _Type:_ std.Duration
+- _Default:_ 1m
+
+The maximum amount of time the function can run.
+
+---
+
+##### `batch_size`<sup>Optional</sup> <a name="batch_size" id="@winglang/sdk.cloud.QueueOnMessageProps.property.batchSize"></a>
+
+```wing
+batch_size: num;
+```
+
+- _Type:_ num
+- _Default:_ 1
+
+The maximum number of messages to send to subscribers at once.
+
+```wing
+pop(): T1
+```
+
+### QueueProps <a name="QueueProps" id="@winglang/sdk.cloud.QueueProps"></a>
+
+Properties for `Queue`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.QueueProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let queue_props = cloud.QueueProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name**                                                                                             | **Type**                         | **Description**                                         |
+| ---------------------------------------------------------------------------------------------------- | -------------------------------- | ------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.cloud.QueueProps.property.initialMessages">initial_messages</a></code> | <code>MutArray&lt;str&gt;</code> | Initialize the queue with a set of messages.            |
+| <code><a href="#@winglang/sdk.cloud.QueueProps.property.timeout">timeout</a></code>                  | <code>std.Duration</code>        | How long a queue's consumers have to process a message. |
+
+- _Type:_ <a href="#@winglang/sdk.std.T1">T1</a>
+
+##### `initial_messages`<sup>Optional</sup> <a name="initial_messages" id="@winglang/sdk.cloud.QueueProps.property.initialMessages"></a>
+
+```wing
+initial_messages: MutArray<str>;
+```
+
+- _Type:_ MutArray&lt;str&gt;
+- _Default:_ []
+
+Initialize the queue with a set of messages.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueProps.property.timeout"></a>
+
+```wing
+timeout: Duration;
+```
+
+- _Type:_ std.Duration
+- _Default:_ Duration.fromSeconds(10)
+
+How long a queue's consumers have to process a message.
+
+---
+
+### ScheduleOnTickProps <a name="ScheduleOnTickProps" id="@winglang/sdk.cloud.ScheduleOnTickProps"></a>
+
+Options for Schedule.onTick.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ScheduleOnTickProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let schedule_on_tick_props = cloud.ScheduleOnTickProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name**                                                                                     | **Type**                       | **Description**                                          |
+| -------------------------------------------------------------------------------------------- | ------------------------------ | -------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.env">env</a></code>         | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function.           |
+| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.memory">memory</a></code>   | <code>num</code>               | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout">timeout</a></code> | <code>std.Duration</code>      | The maximum amount of time the function can run.         |
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.ScheduleOnTickProps.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- _Type:_ MutMap&lt;str&gt;
+- _Default:_ No environment variables.
+
+Environment variables to pass to the function.
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.ScheduleOnTickProps.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- _Type:_ num
+- _Default:_ 128
+
+The amount of memory to allocate to the function, in MB.
+
+```wing
+copy_mut(): MutableMap
+```
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout"></a>
+
+```wing
+timeout: Duration;
+```
+
+- _Type:_ std.Duration
+- _Default:_ 1m
+
+The maximum amount of time the function can run.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.get.parameter.key"></a>
+
+### ScheduleProps <a name="ScheduleProps" id="@winglang/sdk.cloud.ScheduleProps"></a>
+
+Properties for `Schedule`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ScheduleProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let schedule_props = cloud.ScheduleProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name**                                                                         | **Type**                  | **Description**                                                         |
+| -------------------------------------------------------------------------------- | ------------------------- | ----------------------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.cron">cron</a></code> | <code>str</code>          | Trigger events according to a cron schedule using the UNIX cron format. |
+| <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.rate">rate</a></code> | <code>std.Duration</code> | Trigger events at a periodic rate.                                      |
+
+---
+
+##### `cron`<sup>Optional</sup> <a name="cron" id="@winglang/sdk.cloud.ScheduleProps.property.cron"></a>
+
+```wing
+cron: str;
+```
+
+- _Type:_ str
+- _Default:_ undefined
+
+Trigger events according to a cron schedule using the UNIX cron format.
+
+[minute] [hour] [day of month] [month] [day of week]
+
+---
+
+_Example_
+
+```wing
+"0/1 * ? * *"
+```
+
+##### `rate`<sup>Optional</sup> <a name="rate" id="@winglang/sdk.cloud.ScheduleProps.property.rate"></a>
+
+```wing
+rate: Duration;
+```
+
+- _Type:_ std.Duration
+- _Default:_ undefined
+
+Trigger events at a periodic rate.
+
+---
+
+_Example_
+
+```wing
+1m
+```
+
+### TextFileProps <a name="TextFileProps" id="@winglang/sdk.fs.TextFileProps"></a>
+
+Props for `TextFile`.
+
+- _Type:_ str
+
+```wing
+bring fs;
+
+let text_file_props = fs.TextFileProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name**                                                                        | **Type**                         | **Description**                                                           |
+| ------------------------------------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.fs.TextFileProps.property.lines">lines</a></code> | <code>MutArray&lt;str&gt;</code> | The lines of text that will be serialized into the file during synthesis. |
+
+---
+
+##### `lines`<sup>Optional</sup> <a name="lines" id="@winglang/sdk.fs.TextFileProps.property.lines"></a>
+
+```wing
+lines: MutArray<str>;
+```
+
+- _Type:_ MutArray&lt;str&gt;
+- _Default:_ []
+
+The lines of text that will be serialized into the file during synthesis.
+
+They will be joined with newline characters.
+
+---
+
+### TopicOnMessageProps <a name="TopicOnMessageProps" id="@winglang/sdk.cloud.TopicOnMessageProps"></a>
+
+Options for `Topic.onMessage`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.TopicOnMessageProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let topic_on_message_props = cloud.TopicOnMessageProps{ ... }
+```
+
+### TopicProps <a name="TopicProps" id="@winglang/sdk.cloud.TopicProps"></a>
+
+Properties for `Topic`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.TopicProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let topic_props = cloud.TopicProps{ ... }
+```
+
+## Classes <a name="Classes" id="Classes"></a>
+
+### DependencyGraph <a name="DependencyGraph" id="@winglang/sdk.core.DependencyGraph"></a>
+
+Represents the dependency graph for a given Node.
+
+This graph includes the dependency relationships between all nodes in the
+node (construct) sub-tree who's root is this Node.
+
+Note that this means that lonely nodes (no dependencies and no dependants) are also included in this graph as
+childless children of the root node of the graph.
+
+The graph does not include cross-scope dependencies. That is, if a child on the current scope depends on a node
+from a different scope, that relationship is not represented in this graph.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.core.DependencyGraph.Initializer"></a>
+
+```wing
+bring core;
+
+new core.DependencyGraph(node: Node)
+```
+
+| **Name**                                                                                       | **Type**                     | **Description**   |
+| ---------------------------------------------------------------------------------------------- | ---------------------------- | ----------------- |
+| <code><a href="#@winglang/sdk.core.DependencyGraph.Initializer.parameter.node">node</a></code> | <code>constructs.Node</code> | _No description._ |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.core.DependencyGraph.Initializer.parameter.node"></a>
+
+- _Type:_ constructs.Node
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name**                                                                         | **Description**                                                          |
+| -------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| <code><a href="#@winglang/sdk.core.DependencyGraph.topology">topology</a></code> | Returns a topologically sorted array of the constructs in the sub-graph. |
+
+---
+
+##### `topology` <a name="topology" id="@winglang/sdk.core.DependencyGraph.topology"></a>
+
+```wing
+topology(): MutArray<IConstruct>
+```
+
+Returns a topologically sorted array of the constructs in the sub-graph.
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name**                                                                          | **Type**                           | **Description**                |
+| --------------------------------------------------------------------------------- | ---------------------------------- | ------------------------------ |
+| <code><a href="#@winglang/sdk.core.DependencyGraph.property.root">root</a></code> | <code>core.DependencyVertex</code> | Returns the root of the graph. |
+
+---
+
+##### `root`<sup>Required</sup> <a name="root" id="@winglang/sdk.core.DependencyGraph.property.root"></a>
+
+```wing
+root: DependencyVertex;
+```
+
+- _Type:_ core.DependencyVertex
+
+Returns the root of the graph.
+
+Note that this vertex will always have `null` as its `.value` since it is an artifical root
+that binds all the connected spaces of the graph.
+
+---
+
+### DependencyVertex <a name="DependencyVertex" id="@winglang/sdk.core.DependencyVertex"></a>
+
+Represents a vertex in the graph.
+
+```wing
+bring std;
+
+new core.DependencyVertex(value?: IConstruct)
+```
+
+| **Name** | **Type** | **Description** |
+| -------- | -------- | --------------- |
+
+---
+
+##### `value`<sup>Optional</sup> <a name="value" id="@winglang/sdk.core.DependencyVertex.Initializer.parameter.value"></a>
+
+- _Type:_ constructs.IConstruct
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name**                                                                           | **Description**                                                          |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| <code><a href="#@winglang/sdk.core.DependencyVertex.addChild">add_child</a></code> | Adds a vertex as a dependency of the current node.                       |
+| <code><a href="#@winglang/sdk.core.DependencyVertex.topology">topology</a></code>  | Returns a topologically sorted array of the constructs in the sub-graph. |
+
+---
+
+##### `add_child` <a name="add_child" id="@winglang/sdk.core.DependencyVertex.addChild"></a>
+
+```wing
+add_child(dep: DependencyVertex): void
+```
+
+Adds a vertex as a dependency of the current node.
+
+Also updates the parents of `dep`, so that it contains this node as a parent.
+
+This operation will fail in case it creates a cycle in the graph.
+
+###### `dep`<sup>Required</sup> <a name="dep" id="@winglang/sdk.core.DependencyVertex.addChild.parameter.dep"></a>
+
+- _Type:_ core.DependencyVertex
+
+The dependency.
+
+---
+
+##### `topology` <a name="topology" id="@winglang/sdk.core.DependencyVertex.topology"></a>
+
+```wing
+topology(): MutArray<IConstruct>
+```
+
+Returns a topologically sorted array of the constructs in the sub-graph.
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name**                                                                                   | **Type**                                           | **Description**                                        |
+| ------------------------------------------------------------------------------------------ | -------------------------------------------------- | ------------------------------------------------------ |
+| <code><a href="#@winglang/sdk.core.DependencyVertex.property.inbound">inbound</a></code>   | <code>MutArray&lt;core.DependencyVertex&gt;</code> | Returns the parents of the vertex (i.e dependants).    |
+| <code><a href="#@winglang/sdk.core.DependencyVertex.property.outbound">outbound</a></code> | <code>MutArray&lt;core.DependencyVertex&gt;</code> | Returns the children of the vertex (i.e dependencies). |
+| <code><a href="#@winglang/sdk.core.DependencyVertex.property.value">value</a></code>       | <code>constructs.IConstruct</code>                 | Returns the IConstruct this graph vertex represents.   |
+
+---
+
+##### `inbound`<sup>Required</sup> <a name="inbound" id="@winglang/sdk.core.DependencyVertex.property.inbound"></a>
+
+```wing
+inbound: MutArray<DependencyVertex>;
+```
+
+- _Type:_ MutArray&lt;core.DependencyVertex&gt;
+
+Returns the parents of the vertex (i.e dependants).
+
+---
+
+##### `outbound`<sup>Required</sup> <a name="outbound" id="@winglang/sdk.core.DependencyVertex.property.outbound"></a>
+
+```wing
+outbound: MutArray<DependencyVertex>;
+```
+
+- _Type:_ MutArray&lt;core.DependencyVertex&gt;
+
+Returns the children of the vertex (i.e dependencies).
+
+---
+
+##### `value`<sup>Optional</sup> <a name="value" id="@winglang/sdk.core.DependencyVertex.property.value"></a>
+
+```wing
+value: IConstruct;
+```
+
+- _Type:_ constructs.IConstruct
+
+Returns the IConstruct this graph vertex represents.
+
+`null` in case this is the root of the graph.
+
+---
+
+### Display <a name="Display" id="@winglang/sdk.core.Display"></a>
+
+Information on how to display a resource in the UI.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.core.Display.Initializer"></a>
+
+```wing
+bring core;
+
+new core.Display(props?: DisplayProps)
+```
+
+| **Name**                                                                                 | **Type**                       | **Description**   |
+| ---------------------------------------------------------------------------------------- | ------------------------------ | ----------------- |
+| <code><a href="#@winglang/sdk.core.Display.Initializer.parameter.props">props</a></code> | <code>core.DisplayProps</code> | _No description._ |
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.core.Display.Initializer.parameter.props"></a>
+
+- _Type:_ core.DisplayProps
+
+---
+
+Returns the character at the specified index.
+
+| **Name**                                                                                | **Type**          | **Description**                                    |
+| --------------------------------------------------------------------------------------- | ----------------- | -------------------------------------------------- |
+| <code><a href="#@winglang/sdk.core.Display.property.description">description</a></code> | <code>str</code>  | Description of the resource.                       |
+| <code><a href="#@winglang/sdk.core.Display.property.hidden">hidden</a></code>           | <code>bool</code> | Whether the resource should be hidden from the UI. |
+| <code><a href="#@winglang/sdk.core.Display.property.title">title</a></code>             | <code>str</code>  | Title of the resource.                             |
+
+---
+
+##### `description`<sup>Optional</sup> <a name="description" id="@winglang/sdk.core.Display.property.description"></a>
+
+```wing
+description: str;
+```
+
+- _Type:_ str
+
+Description of the resource.
+
+---
+
+##### `hidden`<sup>Optional</sup> <a name="hidden" id="@winglang/sdk.core.Display.property.hidden"></a>
+
+```wing
+hidden: bool;
+```
+
+- _Type:_ bool
+
+Whether the resource should be hidden from the UI.
+
+---
+
+##### `title`<sup>Optional</sup> <a name="title" id="@winglang/sdk.core.Display.property.title"></a>
+
+```wing
+title: str;
+```
+
+- _Type:_ str
+
+Title of the resource.
+
+---
+
+### Duration <a name="Duration" id="@winglang/sdk.std.Duration"></a>
+
+Represents a length of time.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name**                                                                        | **Description**                                      |
+| ------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| <code><a href="#@winglang/sdk.std.Duration.fromHours">from_hours</a></code>     | Create a Duration representing an amount of hours.   |
+| <code><a href="#@winglang/sdk.std.Duration.fromMinutes">from_minutes</a></code> | Create a Duration representing an amount of minutes. |
+| <code><a href="#@winglang/sdk.std.Duration.fromSeconds">from_seconds</a></code> | Create a Duration representing an amount of seconds. |
+
+---
+
+##### `from_hours` <a name="from_hours" id="@winglang/sdk.std.Duration.fromHours"></a>
+
+```wing
+bring std;
+
+std.Duration.from_hours(amount: num)
+```
+
+Create a Duration representing an amount of hours.
+
+###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/sdk.std.Duration.fromHours.parameter.amount"></a>
+
+- _Type:_ num
+
+the amount of Hours the `Duration` will represent.
+
+---
+
+##### `from_minutes` <a name="from_minutes" id="@winglang/sdk.std.Duration.fromMinutes"></a>
+
+```wing
+bring std;
+
+std.Duration.from_minutes(amount: num)
+```
+
+Create a Duration representing an amount of minutes.
+
+###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/sdk.std.Duration.fromMinutes.parameter.amount"></a>
+
+- _Type:_ num
+
+the amount of Minutes the `Duration` will represent.
+
+---
+
+##### `from_seconds` <a name="from_seconds" id="@winglang/sdk.std.Duration.fromSeconds"></a>
+
+```wing
+bring std;
+
+std.Duration.from_seconds(amount: num)
+```
+
+Create a Duration representing an amount of seconds.
+
+###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/sdk.std.Duration.fromSeconds.parameter.amount"></a>
+
+- _Type:_ num
+
+the amount of Seconds the `Duration` will represent.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name**                                                                        | **Type**         | **Description**                                      |
+| ------------------------------------------------------------------------------- | ---------------- | ---------------------------------------------------- |
+| <code><a href="#@winglang/sdk.std.Duration.property.hours">hours</a></code>     | <code>num</code> | Return the total number of hours in this Duration.   |
+| <code><a href="#@winglang/sdk.std.Duration.property.minutes">minutes</a></code> | <code>num</code> | Return the total number of minutes in this Duration. |
+| <code><a href="#@winglang/sdk.std.Duration.property.seconds">seconds</a></code> | <code>num</code> | Return the total number of seconds in this Duration. |
+
+---
+
+##### `hours`<sup>Required</sup> <a name="hours" id="@winglang/sdk.std.Duration.property.hours"></a>
+
+```wing
+hours: num;
+```
+
+- _Type:_ num
+
+Return the total number of hours in this Duration.
+
+---
+
+##### `minutes`<sup>Required</sup> <a name="minutes" id="@winglang/sdk.std.Duration.property.minutes"></a>
+
+```wing
+minutes: num;
+```
+
+- _Type:_ num
+
+Return the total number of minutes in this Duration.
+
+---
+
+##### `seconds`<sup>Required</sup> <a name="seconds" id="@winglang/sdk.std.Duration.property.seconds"></a>
+
+```wing
+seconds: num;
+```
+
+- _Type:_ num
+
+Return the total number of seconds in this Duration.
+
+---
+
+### Files <a name="Files" id="@winglang/sdk.core.Files"></a>
+
+Handles the synthesis of files.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.core.Files.Initializer"></a>
+
+```wing
+bring core;
+
+new core.Files(props: FilesProps)
+```
+
+| **Name**                                                                               | **Type**                     | **Description**   |
+| -------------------------------------------------------------------------------------- | ---------------------------- | ----------------- |
+| <code><a href="#@winglang/sdk.core.Files.Initializer.parameter.props">props</a></code> | <code>core.FilesProps</code> | _No description._ |
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.core.Files.Initializer.parameter.props"></a>
+
+- _Type:_ core.FilesProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name**                                                         | **Description**                               |
+| ---------------------------------------------------------------- | --------------------------------------------- |
+| <code><a href="#@winglang/sdk.core.Files.synth">synth</a></code> | Synthesize the app into the output directory. |
+
+---
+
+##### `synth` <a name="synth" id="@winglang/sdk.core.Files.synth"></a>
+
+```wing
+synth(outdir?: str): void
+```
+
+Synthesize the app into the output directory.
+
+The artifact produced
+depends on what synthesizer was used.
+
+###### `outdir`<sup>Optional</sup> <a name="outdir" id="@winglang/sdk.core.Files.synth.parameter.outdir"></a>
+
+- _Type:_ str
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name**                                                                           | **Type**         | **Description**                                                  |
+| ---------------------------------------------------------------------------------- | ---------------- | ---------------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.core.Files.property.stateFile">state_file</a></code> | <code>str</code> | The path to a state file which will track all synthesized files. |
+
+---
+
+##### `state_file`<sup>Optional</sup> <a name="state_file" id="@winglang/sdk.core.Files.property.stateFile"></a>
+
+```wing
+state_file: str;
+```
+
+Checks if string includes substring.
+
+###### `search_string`<sup>Required</sup> <a name="search_string" id="@winglang/sdk.std.String.contains.parameter.searchString"></a>
+
+- _Type:_ str
+
+The path to a state file which will track all synthesized files.
+
+---
+
+### ImmutableArray <a name="ImmutableArray" id="@winglang/sdk.std.ImmutableArray"></a>
+
+Immutable Array.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.ImmutableArray.Initializer"></a>
+
+```wing
+bring std;
+
+new std.ImmutableArray()
+```
+
+| **Name** | **Type** | **Description** |
+| -------- | -------- | --------------- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name**                                                                      | **Description**                                 |
+| ----------------------------------------------------------------------------- | ----------------------------------------------- |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.at">at</a></code>            | Get the value at the given index.               |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.copy">copy</a></code>        | Create an immutable shallow copy of this array. |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this array.    |
+
+---
+
+##### `at` <a name="at" id="@winglang/sdk.std.ImmutableArray.at"></a>
+
+```wing
+at(index: num): T1
+```
+
+Get the value at the given index.
+
 ###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.ImmutableArray.at.parameter.index"></a>
 
 - _Type:_ num
@@ -1909,7 +2968,7 @@ Returns a boolean indicating whether an element with the specified value exists 
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.ImmutableSet.has.parameter.value"></a>
 
-- _Type:_ <a href="#@winglang/sdk.std.T1">T1</a>
+- _Type:_ std.T1
 
 The value to test for presence in the Set object.
 
@@ -1935,61 +2994,43 @@ The length of the set.
 
 ---
 
-### Json <a name="Json" id="@winglang/sdk.std.Json"></a>
+### InflightClient <a name="InflightClient" id="@winglang/sdk.core.InflightClient"></a>
 
-Immutable Json.
+Utility class with functions about inflight clients.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.Json.Initializer"></a>
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
-```wing
-bring std;
-
-new std.Json()
-```
-
-| **Name** | **Type** | **Description** |
-| -------- | -------- | --------------- |
+| **Name**                                                              | **Description**                                                      |
+| --------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.core.InflightClient.for">for</a></code> | Creates a `Code` instance with code for creating an inflight client. |
 
 ---
 
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name**                                                        | **Description**                                               |
-| --------------------------------------------------------------- | ------------------------------------------------------------- |
-| <code><a href="#@winglang/sdk.std.Json.get">get</a></code>      | Returns a specified element from the Json.                    |
-| <code><a href="#@winglang/sdk.std.Json.getAt">get_at</a></code> | Returns a specified element at a given index from Json Array. |
-
----
-
-##### `get` <a name="get" id="@winglang/sdk.std.Json.get"></a>
+##### `for` <a name="for" id="@winglang/sdk.core.InflightClient.for"></a>
 
 ```wing
-get(key: str): Json
+bring core;
+
+core.InflightClient.for(filename: str, client_class: str, args: MutArray<str>)
 ```
 
-Returns a specified element from the Json.
+Creates a `Code` instance with code for creating an inflight client.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.get.parameter.key"></a>
+###### `filename`<sup>Required</sup> <a name="filename" id="@winglang/sdk.core.InflightClient.for.parameter.filename"></a>
 
 - _Type:_ str
 
-The key of the element to return.
+substring to search for.
+
+###### `client_class`<sup>Required</sup> <a name="client_class" id="@winglang/sdk.core.InflightClient.for.parameter.clientClass"></a>
+
+- _Type:_ str
 
 ---
 
-##### `get_at` <a name="get_at" id="@winglang/sdk.std.Json.getAt"></a>
+###### `args`<sup>Required</sup> <a name="args" id="@winglang/sdk.core.InflightClient.for.parameter.args"></a>
 
-```wing
-get_at(index: num): Json
-```
-
-Returns a specified element at a given index from Json Array.
-
-###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.Json.getAt.parameter.index"></a>
-
-- _Type:_ num
-
-The index of the element in the Json Array to return.
+- _Type:_ MutArray&lt;str&gt;
 
 ---
 
@@ -2072,7 +3113,7 @@ Add value to end of array.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableArray.push.parameter.value"></a>
 
-- _Type:_ <a href="#@winglang/sdk.std.T1">T1</a>
+- _Type:_ std.T1
 
 value to add.
 
@@ -2235,7 +3276,7 @@ The key of the element to add.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableMap.set.parameter.value"></a>
 
-- _Type:_ <a href="#@winglang/sdk.std.T1">T1</a>
+- _Type:_ std.T1
 
 The value of the element to add.
 
@@ -2297,7 +3338,7 @@ Returns a boolean indicating whether an element with the specified value exists 
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.has.parameter.value"></a>
 
-- _Type:_ <a href="#@winglang/sdk.std.T1">T1</a>
+- _Type:_ std.T1
 
 The value to test for presence in the Set object.
 
@@ -2313,7 +3354,7 @@ Add value to set.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.add.parameter.value"></a>
 
-- _Type:_ <a href="#@winglang/sdk.std.T1">T1</a>
+- _Type:_ std.T1
 
 value to add.
 
@@ -2337,7 +3378,7 @@ Removes a specified value from a set, if it is in the set.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.delete.parameter.value"></a>
 
-- _Type:_ <a href="#@winglang/sdk.std.T1">T1</a>
+- _Type:_ std.T1
 
 The value to remove from the set.
 
@@ -2363,109 +3404,93 @@ The length of the set.
 
 ---
 
-### MutJson <a name="MutJson" id="@winglang/sdk.std.MutJson"></a>
+### NodeJsCode <a name="NodeJsCode" id="@winglang/sdk.core.NodeJsCode"></a>
 
-Mutable Json.
+Reference to a piece of Node.js code.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.std.MutJson.Initializer"></a>
-
-```wing
-bring std;
-
-new std.MutJson()
-```
-
-| **Name** | **Type** | **Description** |
-| -------- | -------- | --------------- |
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 ---
 
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name**                                                           | **Description**                                                      |
-| ------------------------------------------------------------------ | -------------------------------------------------------------------- |
-| <code><a href="#@winglang/sdk.std.MutJson.get">get</a></code>      | Returns a specified element from the Json.                           |
-| <code><a href="#@winglang/sdk.std.MutJson.getAt">get_at</a></code> | Returns a specified element at a given index from MutJson Array.     |
-| <code><a href="#@winglang/sdk.std.MutJson.set">set</a></code>      | Adds or updates an element in MutJson with a specific key and value. |
-| <code><a href="#@winglang/sdk.std.MutJson.setAt">set_at</a></code> | Set element in MutJson Array with a specific key and value.          |
-
----
-
-##### `get` <a name="get" id="@winglang/sdk.std.MutJson.get"></a>
+##### `from_file` <a name="from_file" id="@winglang/sdk.core.NodeJsCode.fromFile"></a>
 
 ```wing
-get(key: str): MutJson
+bring core;
+
+core.NodeJsCode.from_file(path: str)
 ```
 
-Returns a specified element from the Json.
+Reference code from a file path.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.get.parameter.key"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.core.NodeJsCode.fromFile.parameter.path"></a>
 
 - _Type:_ str
 
-The key of the element to return.
-
 ---
 
-##### `get_at` <a name="get_at" id="@winglang/sdk.std.MutJson.getAt"></a>
+##### `from_inline` <a name="from_inline" id="@winglang/sdk.core.NodeJsCode.fromInline"></a>
 
 ```wing
-get_at(index: num): MutJson
+bring core;
+
+core.NodeJsCode.from_inline(text: str)
 ```
 
-Returns a specified element at a given index from MutJson Array.
+Reference code directly from a string.
 
-###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutJson.getAt.parameter.index"></a>
-
-- _Type:_ num
-
-The index of the element in the MutJson Array to return.
-
----
-
-##### `set` <a name="set" id="@winglang/sdk.std.MutJson.set"></a>
-
-```wing
-set(key: str, value: any): void
-```
-
-Adds or updates an element in MutJson with a specific key and value.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.set.parameter.key"></a>
+###### `text`<sup>Required</sup> <a name="text" id="@winglang/sdk.core.NodeJsCode.fromInline.parameter.text"></a>
 
 - _Type:_ str
 
-The key of the element to add.
+---
 
 ---
 
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutJson.set.parameter.value"></a>
-
-- _Type:_ any
-
-The value of the element to add.
-
----
-
-##### `set_at` <a name="set_at" id="@winglang/sdk.std.MutJson.setAt"></a>
+##### `hash`<sup>Required</sup> <a name="hash" id="@winglang/sdk.core.NodeJsCode.property.hash"></a>
 
 ```wing
-set_at(index: num, value: any): void
+hash: str;
 ```
 
-Set element in MutJson Array with a specific key and value.
+- _Type:_ str
 
-###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutJson.setAt.parameter.index"></a>
-
-- _Type:_ num
+Generate a hash of the code contents.
 
 ---
 
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutJson.setAt.parameter.value"></a>
+##### `language`<sup>Required</sup> <a name="language" id="@winglang/sdk.core.NodeJsCode.property.language"></a>
 
-- _Type:_ any
+```wing
+language: Language;
+```
 
-The value of the element to set.
+- _Type:_ core.Language
+
+The language of the code.
+
+---
+
+##### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.core.NodeJsCode.property.path"></a>
+
+```wing
+path: str;
+```
+
+- _Type:_ str
+
+A path to the code in the user's file system that can be referenced for bundling purposes.
+
+---
+
+##### `text`<sup>Required</sup> <a name="text" id="@winglang/sdk.core.NodeJsCode.property.text"></a>
+
+```wing
+text: str;
+```
+
+- _Type:_ str
+
+The code contents.
 
 ---
 
@@ -2621,6 +3646,168 @@ Does this string start with the given searchString?
 - _Type:_ str
 
 substring to search for.
+
+---
+
+##### `substring` <a name="substring" id="@winglang/sdk.std.String.substring"></a>
+
+```wing
+substring(index_start: num, index_end?: num): str
+```
+
+Returns a string between indexStart, indexEnd.
+
+###### `index_start`<sup>Required</sup> <a name="index_start" id="@winglang/sdk.std.String.substring.parameter.indexStart"></a>
+
+- _Type:_ num
+
+index of the character we slice at.
+
+---
+
+###### `index_end`<sup>Optional</sup> <a name="index_end" id="@winglang/sdk.std.String.substring.parameter.indexEnd"></a>
+
+- _Type:_ num
+
+optional - index of the character we end slicing at.
+
+---
+
+##### `trim` <a name="trim" id="@winglang/sdk.std.String.trim"></a>
+
+```wing
+trim(): str
+```
+
+Removes white spaces from start and end of this string.
+
+##### `uppercase` <a name="uppercase" id="@winglang/sdk.std.String.uppercase"></a>
+
+```wing
+uppercase(): str
+```
+
+Returns this string in upper case.
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name**                                                                    | **Type**         | **Description**           |
+| --------------------------------------------------------------------------- | ---------------- | ------------------------- |
+| <code><a href="#@winglang/sdk.std.String.property.length">length</a></code> | <code>num</code> | The length of the string. |
+
+---
+
+##### `length`<sup>Required</sup> <a name="length" id="@winglang/sdk.std.String.property.length"></a>
+
+```wing
+length: num;
+```
+
+- _Type:_ num
+
+The length of the string.
+
+---
+
+### T1 <a name="T1" id="@winglang/sdk.std.T1"></a>
+
+Generic type argument.
+
+This type is replaced at compile time.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.T1.Initializer"></a>
+
+```wing
+bring std;
+
+new std.T1()
+```
+
+| **Name** | **Type** | **Description** |
+| -------- | -------- | --------------- |
+
+---
+
+### TreeInspector <a name="TreeInspector" id="@winglang/sdk.core.TreeInspector"></a>
+
+Inspector that maintains an attribute bag.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.core.TreeInspector.Initializer"></a>
+
+```wing
+bring core;
+
+new core.TreeInspector()
+```
+
+| **Name** | **Type** | **Description** |
+| -------- | -------- | --------------- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name**                                                                                | **Description**        |
+| --------------------------------------------------------------------------------------- | ---------------------- |
+| <code><a href="#@winglang/sdk.core.TreeInspector.addAttribute">add_attribute</a></code> | Adds attribute to bag. |
+
+##### `add_attribute` <a name="add_attribute" id="@winglang/sdk.core.TreeInspector.addAttribute"></a>
+
+```wing
+add_attribute(key: str, value: any): void
+```
+
+Adds attribute to bag.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.core.TreeInspector.addAttribute.parameter.key"></a>
+
+- _Type:_ str
+
+key for metadata.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.core.TreeInspector.addAttribute.parameter.value"></a>
+
+- _Type:_ any
+
+value of metadata.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name**                                                                                    | **Type**                       | **Description**                                      |
+| ------------------------------------------------------------------------------------------- | ------------------------------ | ---------------------------------------------------- |
+| <code><a href="#@winglang/sdk.core.TreeInspector.property.attributes">attributes</a></code> | <code>MutMap&lt;any&gt;</code> | Represents the bag of attributes as key-value pairs. |
+
+---
+
+##### `attributes`<sup>Required</sup> <a name="attributes" id="@winglang/sdk.core.TreeInspector.property.attributes"></a>
+
+```wing
+attributes: MutMap<any>;
+```
+
+- _Type:_ MutMap&lt;any&gt;
+
+Represents the bag of attributes as key-value pairs.
+
+- _Type:_ str
+
+## Protocols <a name="Protocols" id="Protocols"></a>
+
+### IApiEndpointHandlerClient <a name="IApiEndpointHandlerClient" id="@winglang/sdk.cloud.IApiEndpointHandlerClient"></a>
+
+- _Implemented By:_ cloud.IApiEndpointHandlerClient
+
+Inflight client for `IApiEndpointHandler`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name**                                                                                | **Description**                                                      |
+| --------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| <code><a href="#@winglang/sdk.cloud.IApiEndpointHandlerClient.handle">handle</a></code> | Inflight that will be called when a request is made to the endpoint. |
 
 ---
 
