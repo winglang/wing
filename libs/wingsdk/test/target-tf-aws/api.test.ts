@@ -122,3 +122,20 @@ test("api with multiple methods and one lambda", () => {
   expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
   expect(extractApiSpec(output)).toMatchSnapshot();
 });
+
+test("api with path parameter", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const api = new Api(app, "Api");
+
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+
+  api.get("/hello/{world}", inflight);
+
+  const output = app.synth();
+
+  // THEN
+  expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
+  expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
+  expect(extractApiSpec(output)).toMatchSnapshot();
+});

@@ -7,6 +7,7 @@ Object {
     "/": Object {
       "get": Object {
         "operationId": "get",
+        "parameters": Array [],
         "responses": Object {
           "200": Object {
             "content": Object {},
@@ -38,6 +39,7 @@ Object {
     "/hello/bat": Object {
       "get": Object {
         "operationId": "get-hello/bat",
+        "parameters": Array [],
         "responses": Object {
           "200": Object {
             "content": Object {},
@@ -61,6 +63,7 @@ Object {
     "/hello/foo": Object {
       "get": Object {
         "operationId": "get-hello/foo",
+        "parameters": Array [],
         "responses": Object {
           "200": Object {
             "content": Object {},
@@ -92,6 +95,7 @@ Object {
     "/foo/bar": Object {
       "get": Object {
         "operationId": "get-foo/bar",
+        "parameters": Array [],
         "responses": Object {
           "200": Object {
             "content": Object {},
@@ -115,6 +119,7 @@ Object {
     "/hello/foo": Object {
       "get": Object {
         "operationId": "get-hello/foo",
+        "parameters": Array [],
         "responses": Object {
           "200": Object {
             "content": Object {},
@@ -146,6 +151,7 @@ Object {
     "/hello/bat": Object {
       "get": Object {
         "operationId": "get-hello/bat",
+        "parameters": Array [],
         "responses": Object {
           "200": Object {
             "content": Object {},
@@ -169,6 +175,7 @@ Object {
     "/hello/foo": Object {
       "get": Object {
         "operationId": "get-hello/foo",
+        "parameters": Array [],
         "responses": Object {
           "200": Object {
             "content": Object {},
@@ -200,6 +207,7 @@ Object {
     "/hello/bat": Object {
       "post": Object {
         "operationId": "post-hello/bat",
+        "parameters": Array [],
         "responses": Object {
           "200": Object {
             "content": Object {},
@@ -223,6 +231,7 @@ Object {
     "/hello/foo": Object {
       "get": Object {
         "operationId": "get-hello/foo",
+        "parameters": Array [],
         "responses": Object {
           "200": Object {
             "content": Object {},
@@ -254,6 +263,7 @@ Object {
     "/hello/bat": Object {
       "post": Object {
         "operationId": "post-hello/bat",
+        "parameters": Array [],
         "responses": Object {
           "200": Object {
             "content": Object {},
@@ -277,6 +287,48 @@ Object {
     "/hello/foo": Object {
       "get": Object {
         "operationId": "get-hello/foo",
+        "parameters": Array [],
+        "responses": Object {
+          "200": Object {
+            "content": Object {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": Object {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": Object {
+            "default": Object {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with path parameter 1`] = `
+Object {
+  "openapi": "3.0.3",
+  "paths": Object {
+    "/hello/{world}": Object {
+      "get": Object {
+        "operationId": "get-hello/{world}",
+        "parameters": Array [
+          Object {
+            "in": "path",
+            "name": "world",
+            "required": true,
+            "schema": Object {
+              "type": "string",
+            },
+          },
+        ],
         "responses": Object {
           "200": Object {
             "content": Object {},

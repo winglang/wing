@@ -128,7 +128,7 @@ export class Api extends cloud.ApiBase {
   }
 
   /**
-   * Add a inflight handler to the stack
+   * Add an inflight handler to the stack
    * @param inflight Inflight to add to the API
    * @returns Inflight handler as a AWS Lambda Function
    */
@@ -178,7 +178,7 @@ class WingRestApi extends Construct {
     this.region = App.of(scope).region;
     this.api = new ApiGatewayRestApi(this, "api", {
       name: ResourceNames.generateName(this, NAME_OPTS),
-      // Lazy generation of the api spec because the routes are added after the API is created
+      // Lazy generation of the api spec because routes can be added after the API is created
       body: Lazy.stringValue({
         produce: () => {
           return JSON.stringify(props.apiSpec);

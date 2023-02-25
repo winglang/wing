@@ -81,6 +81,22 @@ export abstract class ApiBase extends Resource {
     const operationId = `${method.toLowerCase()}${
       route === "/" ? "" : route.replace("/", "-")
     }`;
+    const pathParams = route.match(/{(.*?)}/g);
+    const pathParameters: any[] = [];
+    if (pathParams) {
+      pathParams.forEach((param) => {
+        const paramName = param.replace("{", "").replace("}", "");
+        pathParameters.push({
+          name: paramName,
+          in: "path",
+          required: true,
+          schema: {
+            type: "string",
+          },
+        });
+      });
+    }
+
     this.apiSpec.paths[route] = {
       [method.toLowerCase()]: {
         operationId: operationId,
@@ -90,6 +106,7 @@ export abstract class ApiBase extends Resource {
             content: {},
           },
         },
+        parameters: pathParameters,
         ...apiSpecExtension,
       },
     };
@@ -214,7 +231,7 @@ export interface ApiResponse {
   /** The response's body. */
   readonly body?: any;
   /** The response's headers. */
-  readonly headers: Record<string, string>;
+  readonly headers?: Record<string, string>;
 }
 
 /**
