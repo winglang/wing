@@ -325,9 +325,10 @@ export class Api extends ApiBase {
  * Json type representation.
  */
 // TODO: this should come from a shared package
-export interface Json {
-  [key: string]: Json | Json[] | string | number | boolean | null;
-}
+export type Json = any;
+//  {
+//   [key: string]: Json | Json[] | string | number | boolean | null;
+// }
 
 /**
  * Shape of a request to an inflight handler.

@@ -1106,7 +1106,7 @@ let api_request = cloud.ApiRequest{ ... }
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The request's headers.      |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.method">method</a></code>   | <code>str</code>               | The request's HTTP method.  |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.path">path</a></code>       | <code>str</code>               | The request's path.         |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.body">body</a></code>       | <code>cloud.Json</code>        | The request's body.         |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.body">body</a></code>       | <code>any</code>               | The request's body.         |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.query">query</a></code>     | <code>str</code>               | The request's query string. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.vars">vars</a></code>       | <code>MutMap&lt;str&gt;</code> | The path variables.         |
 
@@ -1151,10 +1151,10 @@ The request's path.
 ##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.cloud.ApiRequest.property.body"></a>
 
 ```wing
-body: Json;
+body: any;
 ```
 
-- _Type:_ cloud.Json
+- _Type:_ any
 
 The request's body.
 
@@ -1205,7 +1205,7 @@ let queue_on_message_props = cloud.QueueOnMessageProps{ ... }
 | **Name**                                                                             | **Type**                       | **Description**             |
 | ------------------------------------------------------------------------------------ | ------------------------------ | --------------------------- |
 | <code><a href="#@winglang/sdk.cloud.ApiResponse.property.status">status</a></code>   | <code>num</code>               | The response's status code. |
-| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.body">body</a></code>       | <code>cloud.Json</code>        | The response's body.        |
+| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.body">body</a></code>       | <code>any</code>               | The response's body.        |
 | <code><a href="#@winglang/sdk.cloud.ApiResponse.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The response's headers.     |
 
 ---
@@ -1226,10 +1226,10 @@ The amount of memory to allocate to the function, in MB.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueOnMessageProps.property.timeout"></a>
 
 ```wing
-body: Json;
+body: any;
 ```
 
-- _Type:_ cloud.Json
+- _Type:_ any
 
 The response's body.
 
@@ -1946,18 +1946,6 @@ bindings: MutMap<InflightBinding>;
 Data and resource binding information.
 
 ---
-
-### Json <a name="Json" id="@winglang/sdk.cloud.Json"></a>
-
-Json type representation.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.Json.Initializer"></a>
-
-```wing
-bring cloud;
-
-let json = cloud.Json{ ... }
-```
 
 ### JsonFileProps <a name="JsonFileProps" id="@winglang/sdk.fs.JsonFileProps"></a>
 
