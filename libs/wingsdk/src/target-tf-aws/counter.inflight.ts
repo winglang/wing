@@ -69,11 +69,7 @@ export class CounterClient extends CounterClientBase {
       ReturnValues: "UPDATED_NEW",
     });
 
-    const result = await this.client.send(command);
-    let newValue = result.Attributes?.[VALUE_ATTRIBUTE].N;
-    if (!newValue) {
-      throw new Error(`${VALUE_ATTRIBUTE} attribute not found on table.`);
-    }
+    await this.client.send(command);
 
     return;
   }

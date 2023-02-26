@@ -54,7 +54,7 @@ test("inc(5)", async () => {
   expect(response).toEqual(prevValue); // returns previous value
 });
 
-test("reset", async () => {
+test("reset(0)", async () => {
   // GIVEN
   setupResetMock({
     expectedTableName: MOCK_TABLE_NAME,

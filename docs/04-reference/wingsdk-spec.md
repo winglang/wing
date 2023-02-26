@@ -615,9 +615,9 @@ resource Counter {
 
   /**
    * Reset a counter to a given value.
-   * @default - key: "default"
+   * @default - value: 0, key: "default"
    */
-  inflight reset(value: num, key: string?): void;
+  inflight reset(value?: num, key: string?): void;
 }
 ```
 
