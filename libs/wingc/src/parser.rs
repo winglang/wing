@@ -378,23 +378,36 @@ impl Parser<'_> {
 						_ => {}
 					}
 				}
-				("class_field", _) => fields.push(ClassField {
-					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
-					member_type: self.build_type_annotation(&class_element.child_by_field_name("type").unwrap())?,
-					reassignable: class_element.child_by_field_name("reassignable").is_some(),
-					is_static: class_element.child_by_field_name("static").is_some(),
-					flight: match class_element.child_by_field_name("phase_modifier") {
-						Some(n) => {
-							if !is_resource {
-								self
-									.add_error::<Node>(format!("Class cannot have inflight fields"), &n)
-									.err();
+				("class_field", _) => {
+					let is_static = class_element.child_by_field_name("static").is_some();
+					if is_static {
+						self.diagnostics.borrow_mut().insert(Diagnostic {
+							level: DiagnosticLevel::Warning,
+							message: format!(
+								"Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668",
+							),
+							span: Some(self.node_span(&class_element)),
+						});
+					}
+
+					fields.push(ClassField {
+						name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
+						member_type: self.build_type_annotation(&class_element.child_by_field_name("type").unwrap())?,
+						reassignable: class_element.child_by_field_name("reassignable").is_some(),
+						is_static,
+						flight: match class_element.child_by_field_name("phase_modifier") {
+							Some(n) => {
+								if !is_resource {
+									self
+										.add_error::<Node>(format!("Class cannot have inflight fields"), &n)
+										.err();
+								}
+								Phase::Inflight
 							}
-							Phase::Inflight
-						}
-						None => Phase::Preflight,
-					},
-				}),
+							None => Phase::Preflight,
+						},
+					})
+				}
 				("constructor", _) => {
 					if let Some(_) = constructor {
 						self

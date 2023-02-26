@@ -3,9 +3,8 @@ bring cloud;
 resource Foo {
   instance_field: num;
 
-  // TODO: Static field initialization not supported yet
-  //static static_field: str = "Static value"; 
-  //static inflight inflight_static_field: str = "Inflight static value";
+  static static_field: str = "Static resource value"; 
+  static inflight inflight_static_field: str = "Inflight static resource value";
   static m(): num { return 99; }
 
   init() {
@@ -19,8 +18,8 @@ resource Foo {
 
 let foo = new Foo();
 assert(foo.instance_field == 100);
-// TODO: Static field initialization not supported yet
-// assert(Foo.static_field == "Static value"); 
+// TODO: Static field initialization not supported yet (https://github.com/winglang/wing/issues/1668)
+// assert(Foo.static_field == "Static resource value"); 
 assert(Foo.m() == 99);
 
 new cloud.Function(inflight (s:str): str => {
@@ -32,14 +31,17 @@ new cloud.Function(inflight (s:str): str => {
     static inflight static_inflight_method(): str {
       return "Static inflight method";
     }
+    static static_inflight_field: str = "Static inflight value";
   }
 
-  // TODO: we don't have access to the preflight type Foo here.
+  // TODO: acess to preflight types (`Foo`) not supported yet (https://github.com/winglang/wing/issues/1669)
   // assert(Foo.get_123() == 123);
-  // TODO: Static field initialization not supported yet
-  // assert(Foo.inflight_static_field == "Inflight static value");
+  // TODO: Static field initialization not supported yet (https://github.com/winglang/wing/issues/1668)
+  // assert(Foo.inflight_static_field == "Inflight static resource value");
 
   let inflight_class = new InflightClass();
   assert(inflight_class.inflight_method() == "Inflight method");
   assert(InflightClass.static_inflight_method() == "Static inflight method");
+  // TODO: Static field initialization not supported yet (https://github.com/winglang/wing/issues/1668)
+  // assert(InflightClass.static_inflight_field == "Static inflight value");
 }) as "test";
