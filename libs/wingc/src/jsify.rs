@@ -418,13 +418,7 @@ impl<'a> JSifier<'a> {
 			ExprKind::MapLiteral { fields, .. } => {
 				let f = fields
 					.iter()
-					.map(|(key, expr)| {
-						format!(
-							"\"{}\":{}",
-							snake_case_to_camel_case(key),
-							self.jsify_expression(expr, phase)
-						)
-					})
+					.map(|(key, expr)| format!("\"{}\":{}", key, self.jsify_expression(expr, phase)))
 					.collect::<Vec<String>>()
 					.join(",");
 
