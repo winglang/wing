@@ -10,9 +10,10 @@ const PREC = {
   ADD: 9,
   MULTIPLY: 10,
   UNARY: 11,
-  NIL_COALESCING: 12,
-  MEMBER: 13,
-  CALL: 14,
+  EXPONENT: 12,
+  NIL_COALESCING: 13,
+  MEMBER: 14,
+  CALL: 15,
 };
 
 module.exports = grammar({
@@ -467,6 +468,7 @@ module.exports = grammar({
         ["/", PREC.MULTIPLY],
         ["\\", PREC.MULTIPLY],
         ["%", PREC.MULTIPLY],
+        ["^", PREC.EXPONENT],
         ["||", PREC.LOGICAL_OR],
         ["&&", PREC.LOGICAL_AND],
         //['|', PREC.INCLUSIVE_OR],

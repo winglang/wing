@@ -1,7 +1,6 @@
 import { join } from "path";
-import { IamRole } from "@cdktf/provider-aws/lib/iam-role";
-import { IamRolePolicy } from "@cdktf/provider-aws/lib/iam-role-policy";
-import { SchedulerSchedule } from "@cdktf/provider-aws/lib/scheduler-schedule";
+import { CloudwatchEventRule } from "@cdktf/provider-aws/lib/cloudwatch-event-rule";
+import { CloudwatchEventTarget } from "@cdktf/provider-aws/lib/cloudwatch-event-target";
 import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
@@ -15,6 +14,7 @@ import * as core from "../core";
  */
 export class Schedule extends cloud.ScheduleBase {
   private readonly scheduleExpression: string;
+  private readonly rule: CloudwatchEventRule;
 
   constructor(scope: Construct, id: string, props: cloud.ScheduleProps = {}) {
     super(scope, id, props);
@@ -44,8 +44,15 @@ export class Schedule extends cloud.ScheduleBase {
      * We append * to the cron string for year field.
      */
     this.scheduleExpression = rate
-      ? `rate(${rate.minutes} minutes)`
+      ? rate.minutes === 1
+        ? `rate(${rate.minutes} minute)`
+        : `rate(${rate.minutes} minutes)`
       : `cron(${cron} *)`;
+
+    this.rule = new CloudwatchEventRule(this, "Schedule", {
+      isEnabled: true,
+      scheduleExpression: this.scheduleExpression,
+    });
   }
 
   public onTick(
@@ -75,47 +82,17 @@ export class Schedule extends cloud.ScheduleBase {
       );
     }
 
+    fn.addPermissionToInvoke(this, "events.amazonaws.com", this.rule.arn);
+
+    new CloudwatchEventTarget(this, `ScheduleTarget-${hash}`, {
+      arn: fn.qualifiedArn,
+      rule: this.rule.name,
+    });
+
     core.Resource.addConnection({
       from: this,
       to: fn,
       relationship: "on_tick",
-    });
-
-    const role = new IamRole(this, `${this.node.id}-ScheduleRole-${hash}`, {
-      assumeRolePolicy: JSON.stringify({
-        Version: "2012-10-17",
-        Statement: [
-          {
-            Effect: "Allow",
-            Action: ["sts:AssumeRole"],
-            Principal: {
-              Service: "scheduler.amazonaws.com",
-            },
-          },
-        ],
-      }),
-    });
-    new IamRolePolicy(this, `${this.node.id}-SchedulePolicy-${hash}`, {
-      role: role.name,
-      policy: JSON.stringify({
-        Version: "2012-10-17",
-        Statement: [
-          {
-            Effect: "Allow",
-            Action: "lambda:InvokeFunction",
-            Resource: fn.arn,
-          },
-        ],
-      }),
-    });
-
-    new SchedulerSchedule(this, `${this.node.id}-ScheduleEvent-${hash}`, {
-      flexibleTimeWindow: { mode: "OFF" },
-      scheduleExpression: this.scheduleExpression,
-      target: {
-        arn: fn.arn,
-        roleArn: role.arn,
-      },
     });
 
     return fn;

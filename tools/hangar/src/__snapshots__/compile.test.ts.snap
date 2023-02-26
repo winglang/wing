@@ -263,21 +263,14 @@ constructor() {
   const str_to_str = new cloud.Function(this,\\"str_to_str\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      
-      
     }
   }));
   const func = new cloud.Function(this,\\"func\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2241fd974faa47c8b8d27f5a3e172f473ca36c6b44cb328a58655fd2d0aac7d7/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      resources: {
-        str_to_str: {
-          resource: str_to_str,
-          ops: [\\"invoke\\"]
-        },
-      },
-      data: {
-        str_to_str: str_to_str,
+      str_to_str: {
+        obj: str_to_str,
+        ops: [\\"invoke\\"]
       },
     }
   }));
@@ -592,9 +585,9 @@ constructor() {
   new cloud.Function(this,\\"test:say_hello\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5d209e0c3acca40c825662cab73c204803d9dd9f7903de90d0da6dc99ea7fa35/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      
-      data: {
-        greeting: greeting,
+      greeting: {
+        obj: greeting,
+        ops: []
       },
     }
   }));
@@ -742,12 +735,62 @@ constructor() {
   new cloud.Function(this,\\"test:say_hello\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5d209e0c3acca40c825662cab73c204803d9dd9f7903de90d0da6dc99ea7fa35/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      
-      data: {
-        greeting: greeting,
+      greeting: {
+        obj: greeting,
+        ops: []
       },
     }
   }));
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`bring_projen.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+}
+`;
+
+exports[`bring_projen.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const projen = require(\\"projen\\");
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"bring_projen\\", plugins: $plugins });
+  
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(projen.LogLevel.OFF !== projen.LogLevel.VERBOSE)'\`)})((projen.LogLevel.OFF !== projen.LogLevel.VERBOSE))};
 }
 }
 new MyApp().synth();"
@@ -760,9 +803,9 @@ exports[`capture_containers.w > wing compile --target tf-aws > index.js 1`] = `
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr.length === 2)'\`)})((arr.length === 2))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await my_set.has(\\"my\\"))'\`)})((await my_set.has(\\"my\\")))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(my_set.size === 2)'\`)})((my_set.size === 2))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await my_map.has(\\"world\\"))'\`)})((await my_map.has(\\"world\\")))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(my_map.size === 2)'\`)})((my_map.size === 2))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await (await arr_of_map.at(0)).has(\\"bang\\"))'\`)})((await (await arr_of_map.at(0)).has(\\"bang\\")))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"world\\" in (my_map))'\`)})((\\"world\\" in (my_map)))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(my_map).length === 2)'\`)})((Object.keys(my_map).length === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"bang\\" in ((await arr_of_map.at(0))))'\`)})((\\"bang\\" in ((await arr_of_map.at(0)))))};
 } };"
 `;
 
@@ -895,17 +938,26 @@ constructor() {
   
   const arr = Object.freeze([\\"hello\\", \\"world\\"]);
   const my_set = Object.freeze(new Set([\\"my\\", \\"my\\", \\"set\\"]));
-  const my_map = Object.freeze(new Map([[ \\"hello\\", 123 ], [ \\"world\\", 999 ]]));
-  const arr_of_map = Object.freeze([Object.freeze(new Map([[ \\"bang\\", 123 ]]))]);
+  const my_map = Object.freeze({\\"hello\\":123,\\"world\\":999});
+  const arr_of_map = Object.freeze([Object.freeze({\\"bang\\":123})]);
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2342d82d8096c3cfa44f12187d5dd9fb250167dc7ea113fbdfa095b6a80902fa/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.726c4811538fdd9613cd65b3442a4805b0dc89d09ee3d42119284d95f79533a6/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      
-      data: {
-        arr: arr,
-        arr_of_map: arr_of_map,
-        my_map: my_map,
-        my_set: my_set,
+      arr: {
+        obj: arr,
+        ops: []
+      },
+      arr_of_map: {
+        obj: arr_of_map,
+        ops: []
+      },
+      my_map: {
+        obj: my_map,
+        ops: []
+      },
+      my_set: {
+        obj: my_set,
+        ops: []
       },
     }
   });
@@ -919,7 +971,7 @@ exports[`capture_containers_of_resources.w > wing compile --target tf-aws > inde
 "async handle(s) { const { arr, map, set } = this; {
   const b1 = (await arr.at(0));
   const b2 = (await arr.at(1));
-  const q = (await map.get(\\"my_queue\\"));
+  const q = (map)[\\"my_queue\\"];
   (await b1.put(\\"file1.txt\\",\\"boom\\"));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b2.list()).length === 0)'\`)})(((await b2.list()).length === 0))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b1.get(\\"file1.txt\\")) === \\"boom\\")'\`)})(((await b1.get(\\"file1.txt\\")) === \\"boom\\"))};
@@ -1140,16 +1192,22 @@ constructor() {
   super({ outdir: $outdir, name: \\"capture_containers_of_resources\\", plugins: $plugins });
   
   const arr = Object.freeze([new cloud.Bucket(this,\\"b1\\"), new cloud.Bucket(this,\\"b2\\")]);
-  const map = Object.freeze(new Map([[ \\"my_queue\\", new cloud.Queue(this,\\"cloud.Queue\\") ]]));
+  const map = Object.freeze({\\"my_queue\\":new cloud.Queue(this,\\"cloud.Queue\\")});
   const set = Object.freeze(new Set([\\"foo\\", \\"foo\\", \\"bar\\"]));
   new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.68b5dd7ab9b303083af8250f1fcc5b7e7d61eedba1aafbd12082e1b4bb22ea03/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.e204fa6fba10aa68396c0fe4d920796b1ec739609b648739fe4ae94d0621db6d/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      
-      data: {
-        arr: arr,
-        map: map,
-        set: set,
+      arr: {
+        obj: arr,
+        ops: []
+      },
+      map: {
+        obj: map,
+        ops: []
+      },
+      set: {
+        obj: set,
+        ops: []
       },
     }
   }));
@@ -1341,15 +1399,13 @@ constructor() {
   const handler2 = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.d3cc1deae5ea8972097ff15c11d688f395bd17117453789488a005b829eea245/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      resources: {
-        b: {
-          resource: b,
-          ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
-        },
+      b: {
+        obj: b,
+        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
       },
-      data: {
-        b: b,
-        x: x,
+      x: {
+        obj: x,
+        ops: []
       },
     }
   });
@@ -1513,13 +1569,25 @@ constructor() {
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.275873c041545c7a2de55149fb73b77f5b75da61d16914ceadd71c3445173d97/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      
-      data: {
-        my_bool: my_bool,
-        my_dur: my_dur,
-        my_num: my_num,
-        my_second_bool: my_second_bool,
-        my_str: my_str,
+      my_bool: {
+        obj: my_bool,
+        ops: []
+      },
+      my_dur: {
+        obj: my_dur,
+        ops: []
+      },
+      my_num: {
+        obj: my_num,
+        ops: []
+      },
+      my_second_bool: {
+        obj: my_second_bool,
+        ops: []
+      },
+      my_str: {
+        obj: my_str,
+        ops: []
       },
     }
   });
@@ -1715,20 +1783,17 @@ constructor() {
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.10149a479ee5940e90f4621a2bca78dda7429636b1f235fcd785b3e33c131537/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      resources: {
-        queue: {
-          resource: queue,
-          ops: [\\"approx_size\\",\\"purge\\",\\"push\\"]
-        },
-        res: {
-          resource: res,
-          ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
-        },
-      },
       data: {
-        data: data,
-        queue: queue,
-        res: res,
+        obj: data,
+        ops: []
+      },
+      queue: {
+        obj: queue,
+        ops: [\\"approx_size\\",\\"purge\\",\\"push\\"]
+      },
+      res: {
+        obj: res,
+        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
       },
     }
   });
@@ -1899,9 +1964,9 @@ constructor() {
   new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.b771192b636450edefdc8f4b596a6372d5b2520efa1fcdb75c51589c12a10c59/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      
-      data: {
-        a: a,
+      a: {
+        obj: a,
+        ops: []
       },
     }
   }));
@@ -2315,30 +2380,23 @@ constructor() {
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5f0e4e25898a72c973f063e92444f7572d58a18cdd38b3fb3a575af6adf7440f/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      resources: {
-        bucket1: {
-          resource: bucket1,
-          ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
-        },
-        bucket2: {
-          resource: bucket2,
-          ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
-        },
-        bucket3: {
-          resource: bucket3,
-          ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
-        },
+      bucket1: {
+        obj: bucket1,
+        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
       },
-      data: {
-        bucket1: bucket1,
-        bucket2: bucket2,
-        bucket3: bucket3,
+      bucket2: {
+        obj: bucket2,
+        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+      },
+      bucket3: {
+        obj: bucket3,
+        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
       },
     }
   });
   (queue.onMessage(handler,{ batchSize: 5 }));
-  new cloud.Function(this,\\"cloud.Function\\",handler,{ env: Object.freeze(new Map([])) });
-  const empty_env = Object.freeze(new Map([]));
+  new cloud.Function(this,\\"cloud.Function\\",handler,{ env: Object.freeze({}) });
+  const empty_env = Object.freeze({});
   new cloud.Function(this,\\"AnotherFunction\\",handler,{ env: empty_env });
 }
 }
@@ -2539,33 +2597,33 @@ constructor() {
   const arr7 = arr4;
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr7.length === 3)'\`)})((arr7.length === 3))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr7.at(1)) === 2)'\`)})(((arr7.at(1)) === 2))};
-  const empty_map = Object.freeze(new Map([]));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(empty_map.size === 0)'\`)})((empty_map.size === 0))};
-  const empty_map2 = Object.freeze(new Map([]));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(empty_map2.size === 0)'\`)})((empty_map2.size === 0))};
-  const m1 = Object.freeze(new Map([[ \\"a\\", 1 ], [ \\"b\\", 2 ], [ \\"c\\", 3 ]]));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m1.size === 3)'\`)})((m1.size === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m1.get(\\"b\\")) === 2)'\`)})(((m1.get(\\"b\\")) === 2))};
-  const m2 = Object.freeze(new Map([[ \\"a\\", 1 ], [ \\"b\\", 2 ], [ \\"c\\", 3 ]]));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m2.size === 3)'\`)})((m2.size === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m2.get(\\"b\\")) === 2)'\`)})(((m2.get(\\"b\\")) === 2))};
-  const m3 = Object.freeze(new Map([[ \\"a\\", 1 ], [ \\"b\\", 2 ], [ \\"c\\", 3 ]]));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m3.size === 3)'\`)})((m3.size === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m3.get(\\"b\\")) === 2)'\`)})(((m3.get(\\"b\\")) === 2))};
-  const m4 = Object.freeze(new Map([[ \\"a\\", 1 ], [ \\"b\\", 2 ], [ \\"c\\", 3 ]]));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m4.size === 3)'\`)})((m4.size === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m4.get(\\"b\\")) === 2)'\`)})(((m4.get(\\"b\\")) === 2))};
-  const m5 = Object.freeze(new Map([[ \\"a\\", bucket1 ], [ \\"b\\", bucket2 ], [ \\"c\\", bucket3 ]]));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m5.size === 3)'\`)})((m5.size === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m5.get(\\"b\\")) === bucket2)'\`)})(((m5.get(\\"b\\")) === bucket2))};
-  const m6 = Object.freeze(new Map([[ \\"a\\", bucket1 ], [ \\"b\\", bucket2 ], [ \\"c\\", bucket3 ]]));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m6.size === 3)'\`)})((m6.size === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m6.get(\\"b\\")) === bucket2)'\`)})(((m6.get(\\"b\\")) === bucket2))};
+  const empty_map = Object.freeze({});
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(empty_map).length === 0)'\`)})((Object.keys(empty_map).length === 0))};
+  const empty_map2 = {};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(empty_map2).length === 0)'\`)})((Object.keys(empty_map2).length === 0))};
+  const m1 = Object.freeze({\\"a\\":1,\\"b\\":2,\\"c\\":3});
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m1).length === 3)'\`)})((Object.keys(m1).length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m1)[\\"b\\"] === 2)'\`)})(((m1)[\\"b\\"] === 2))};
+  const m2 = Object.freeze({\\"a\\":1,\\"b\\":2,\\"c\\":3});
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m2).length === 3)'\`)})((Object.keys(m2).length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m2)[\\"b\\"] === 2)'\`)})(((m2)[\\"b\\"] === 2))};
+  const m3 = Object.freeze({\\"a\\":1,\\"b\\":2,\\"c\\":3});
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m3).length === 3)'\`)})((Object.keys(m3).length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m3)[\\"b\\"] === 2)'\`)})(((m3)[\\"b\\"] === 2))};
+  const m4 = Object.freeze({\\"a\\":1,\\"b\\":2,\\"c\\":3});
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m4).length === 3)'\`)})((Object.keys(m4).length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m4)[\\"b\\"] === 2)'\`)})(((m4)[\\"b\\"] === 2))};
+  const m5 = Object.freeze({\\"a\\":bucket1,\\"b\\":bucket2,\\"c\\":bucket3});
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m5).length === 3)'\`)})((Object.keys(m5).length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m5)[\\"b\\"] === bucket2)'\`)})(((m5)[\\"b\\"] === bucket2))};
+  const m6 = Object.freeze({\\"a\\":bucket1,\\"b\\":bucket2,\\"c\\":bucket3});
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m6).length === 3)'\`)})((Object.keys(m6).length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m6)[\\"b\\"] === bucket2)'\`)})(((m6)[\\"b\\"] === bucket2))};
   const m7 = m1;
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m7.size === 3)'\`)})((m7.size === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m7.get(\\"b\\")) === 2)'\`)})(((m7.get(\\"b\\")) === 2))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m7.has(\\"b\\"))'\`)})((m7.has(\\"b\\")))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m4.has(\\"boom\\")) === false)'\`)})(((m4.has(\\"boom\\")) === false))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m7).length === 3)'\`)})((Object.keys(m7).length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m7)[\\"b\\"] === 2)'\`)})(((m7)[\\"b\\"] === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"b\\" in (m7))'\`)})((\\"b\\" in (m7)))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((\\"boom\\" in (m4)) === false)'\`)})(((\\"boom\\" in (m4)) === false))};
   const empty_set = Object.freeze(new Set([]));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(empty_set.size === 0)'\`)})((empty_set.size === 0))};
   const empty_set2 = new Set([]);
@@ -2696,6 +2754,8 @@ constructor() {
   const xf = 1;
   const yf = ((-20.22) * xf);
   const zf = ((xf + yf) - (-0.01));
+  const fxzy = (5 ** (1 ** 5));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(fxzy === 5)'\`)})((fxzy === 5))};
   const xyzf = Math.trunc(501 / (99 + 1));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(xyzf === 5)'\`)})((xyzf === 5))};
   const xyznf = Math.trunc((-501) / (99 + 1));
@@ -2981,19 +3041,13 @@ constructor() {
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1ece6a476239c44d64d8b687b9e4389715198c49564defb8766e8b85b0f54620/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      resources: {
-        bucket: {
-          resource: bucket,
-          ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
-        },
-        counter: {
-          resource: counter,
-          ops: [\\"dec\\",\\"inc\\",\\"peek\\"]
-        },
+      bucket: {
+        obj: bucket,
+        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
       },
-      data: {
-        bucket: bucket,
-        counter: counter,
+      counter: {
+        obj: counter,
+        ops: [\\"dec\\",\\"inc\\",\\"peek\\"]
       },
     }
   });
@@ -3143,8 +3197,7 @@ new MyApp().synth();"
 
 exports[`hello.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(message) { const { bucket } = this; {
-  (await bucket.put(\\"hello.txt\\",\`Hello, \${message}!\`));
-  return message;
+  (await bucket.put(\\"wing.txt\\",\`Hello, \${message}\`));
 } };"
 `;
 
@@ -3333,21 +3386,15 @@ constructor() {
   
   const bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
   const queue = new cloud.Queue(this,\\"cloud.Queue\\");
-  const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.a05c4d4842809464e34a3ca630f420646c038a9d145ef67e20f3f2fd3a937f94/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+  (queue.onMessage(new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.211d46e8ec3b5ce3e93872fcb29755356fb3566f5016eae5fcd6ec0f670ab580/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      resources: {
-        bucket: {
-          resource: bucket,
-          ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
-        },
-      },
-      data: {
-        bucket: bucket,
+      bucket: {
+        obj: bucket,
+        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
       },
     }
-  });
-  (queue.onMessage(handler));
+  })));
 }
 }
 new MyApp().synth();"
@@ -3404,15 +3451,11 @@ constructor() {
   const x = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      
-      
     }
   });
   const y = new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      
-      
     }
   });
 }
@@ -3608,14 +3651,23 @@ constructor() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s2.has(\\"bye\\"))'\`)})((s2.has(\\"bye\\")))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s2.has(\\"hello\\"))'\`)})((s2.has(\\"hello\\")))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s3.has(bucket2))'\`)})((s3.has(bucket2)))};
-  const m1 = Object.freeze(new Map([[ \\"hello\\", \\"world\\" ]]));
-  const m2 = Object.freeze(new Map([[ \\"hello\\", 123 ]]));
-  const m3 = Object.freeze(new Map([[ \\"b1\\", bucket1 ], [ \\"b2\\", bucket2 ]]));
+  const m1 = {\\"hello\\":\\"world\\"};
+  const m2 = {\\"hello\\":123};
+  const m3 = {\\"b1\\":bucket1,\\"b2\\":bucket2};
   const m4 = m1;
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m1.has(\\"hello\\"))'\`)})((m1.has(\\"hello\\")))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m2.size === 1)'\`)})((m2.size === 1))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m3.get(\\"b1\\")) === bucket1)'\`)})(((m3.get(\\"b1\\")) === bucket1))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m4.size === 1)'\`)})((m4.size === 1))};
+  const m5 = {\\"goodbye\\":\\"world\\"};
+  const m6 = {\\"a\\":m1,\\"b\\":m5};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"hello\\" in (m1))'\`)})((\\"hello\\" in (m1)))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m2).length === 1)'\`)})((Object.keys(m2).length === 1))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m3)[\\"b1\\"] === bucket1)'\`)})(((m3)[\\"b1\\"] === bucket1))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m4).length === 1)'\`)})((Object.keys(m4).length === 1))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((m6)[\\"a\\"])[\\"hello\\"] === \\"world\\")'\`)})((((m6)[\\"a\\"])[\\"hello\\"] === \\"world\\"))};
+  ((obj, args) => { obj[args[0]] = args[1]; })(m1, [\\"hello\\",\\"goodbye\\"]);
+  ((obj, args) => { obj[args[0]] = args[1]; })(m6, [\\"a\\",{\\"foo\\":\\"bar\\"}]);
+  ((map) => { for(const k in map){delete map[k]}; })(m2);
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(m2).length === 0)'\`)})((Object.keys(m2).length === 0))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m1)[\\"hello\\"] === \\"goodbye\\")'\`)})(((m1)[\\"hello\\"] === \\"goodbye\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((m6)[\\"a\\"])[\\"foo\\"] === \\"bar\\")'\`)})((((m6)[\\"a\\"])[\\"foo\\"] === \\"bar\\"))};
 }
 }
 new MyApp().synth();"
@@ -3882,15 +3934,11 @@ constructor() {
   new cloud.Function(this,\\"test:print1\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5d5065e7d4d5abb68575b6b618fc014e76b4159c3240fef327354a5900bb9fa6/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      
-      
     }
   }));
   new cloud.Function(this,\\"test:print2\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.44e74a6db41cb5fd5b35696592c6a747e9831b228b4d1ce62b6e65f43dee835d/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      
-      
     }
   }));
 }
@@ -4256,19 +4304,13 @@ constructor() {
   new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.e50bc85b13df379286b4aa72aa88788422e26d9146adbc9bba989a8a59253a73/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      resources: {
-        bucket: {
-          resource: bucket,
-          ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
-        },
-        res: {
-          resource: res,
-          ops: [\\"my_method\\"]
-        },
+      bucket: {
+        obj: bucket,
+        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
       },
-      data: {
-        bucket: bucket,
-        res: res,
+      res: {
+        obj: res,
+        ops: [\\"my_method\\"]
       },
     }
   }));
@@ -4447,8 +4489,6 @@ constructor() {
   new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.09c5e24751d9ba1246f91518f2f7f5c5d1102a09d0b1acff479ae27ad134090f/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      
-      
     }
   }));
 }
@@ -4506,21 +4546,6 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`std_containers.w > wing compile --target tf-aws > index.js 1`] = `
-"async handle(body) { const { immut_array, immut_map, immut_set, s, s_array, s_map, s_set } = this; {
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s === \\"two\\")'\`)})((s === \\"two\\"))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await s_array.at(1)) === \\"two\\")'\`)})(((await s_array.at(1)) === \\"two\\"))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_array.length === 2)'\`)})((s_array.length === 2))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_array.length === 3)'\`)})((immut_array.length === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await s_set.has(\\"one\\"))'\`)})((await s_set.has(\\"one\\")))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_set.size === 2)'\`)})((s_set.size === 2))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_set.size === 3)'\`)})((immut_set.size === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await s_map.get(\\"one\\")) === 1)'\`)})(((await s_map.get(\\"one\\")) === 1))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_map.size === 2)'\`)})((s_map.size === 2))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_map.size === 3)'\`)})((immut_map.size === 3))};
-} };"
-`;
-
 exports[`std_containers.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
@@ -4572,26 +4597,192 @@ constructor() {
   const mut_set = new Set(s_set);
   (mut_set.add(\\"three\\"));
   const immut_set = Object.freeze(new Set(mut_set));
-  const s_map = Object.freeze(new Map([[ \\"one\\", 1 ], [ \\"two\\", 2 ]]));
-  const mut_map = new Map(s_map);
-  (mut_map.set(\\"five\\",5));
-  const immut_map = Object.freeze(new Map(mut_map));
+  const s_map = Object.freeze({\\"one\\":1,\\"two\\":2});
+  const nested_map = Object.freeze({\\"a\\":Object.freeze({\\"b\\":Object.freeze({\\"c\\":\\"hello\\"})})});
+  const mut_map = {...(s_map)};
+  ((obj, args) => { obj[args[0]] = args[1]; })(mut_map, [\\"five\\",5]);
+  const immut_map = Object.freeze({...(mut_map)});
   const s = (s_array.at(1));
-  const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2bccfc7c5a6cf0ff8a0697876fd0e9b788b71a4288792fab940ebf8241e8689b/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s === \\"two\\")'\`)})((s === \\"two\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s_array.at(1)) === \\"two\\")'\`)})(((s_array.at(1)) === \\"two\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_array.length === 2)'\`)})((s_array.length === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_array.length === 3)'\`)})((immut_array.length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_set.has(\\"one\\"))'\`)})((s_set.has(\\"one\\")))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_set.size === 2)'\`)})((s_set.size === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_set.size === 3)'\`)})((immut_set.size === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s_map)[\\"one\\"] === 1)'\`)})(((s_map)[\\"one\\"] === 1))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(s_map).length === 2)'\`)})((Object.keys(s_map).length === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(immut_map).length === 3)'\`)})((Object.keys(immut_map).length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((((nested_map)[\\"a\\"])[\\"b\\"])[\\"c\\"] === \\"hello\\")'\`)})(((((nested_map)[\\"a\\"])[\\"b\\"])[\\"c\\"] === \\"hello\\"))};
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`std_string.w > wing compile --target tf-aws > index.js 1`] = `
+"async handle() { const { s1, s2 } = this; {
+  {console.log(\`index of \\\\\\"s\\\\\\" in s1 is \${s1.indexOf(\\"s\\")}\`)};
+  {console.log((await (await s1.split(\\" \\")).at(1)))};
+  {console.log((await s1.concat(s2)))};
+} };"
+`;
+
+exports[`std_string.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_teststring_IamRole_A23B11BC": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:string/IamRole",
+            "uniqueId": "root_teststring_IamRole_A23B11BC",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_teststring_IamRolePolicy_E68C254E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:string/IamRolePolicy",
+            "uniqueId": "root_teststring_IamRolePolicy_E68C254E",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_teststring_IamRole_A23B11BC.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_teststring_IamRolePolicyAttachment_CF9D26FE": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:string/IamRolePolicyAttachment",
+            "uniqueId": "root_teststring_IamRolePolicyAttachment_CF9D26FE",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_teststring_IamRole_A23B11BC.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_teststring_0FD8A9C3": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:string/Default",
+            "uniqueId": "root_teststring_0FD8A9C3",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "test-string-c8b12930",
+          },
+        },
+        "function_name": "test-string-c8b12930",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_teststring_IamRole_A23B11BC.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_teststring_Code_042172E8.bucket}",
+        "s3_key": "\${aws_s3_object.root_teststring_S3Object_9049C921.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_teststring_Code_042172E8": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:string/Code",
+            "uniqueId": "root_teststring_Code_042172E8",
+          },
+        },
+        "bucket_prefix": "code-c8c4d274-",
+      },
+    },
+    "aws_s3_object": {
+      "root_teststring_S3Object_9049C921": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:string/S3Object",
+            "uniqueId": "root_teststring_S3Object_9049C921",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_teststring_Code_042172E8.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`std_string.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"std_string\\", plugins: $plugins });
+  
+  const s1 = \\"some string\\";
+  const s2 = \\"s are immutable\\";
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s1.length === 11)'\`)})((s1.length === 11))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s1.at(7)) === \\"r\\")'\`)})(((s1.at(7)) === \\"r\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s1.concat(s2)) === \\"some strings are immutable\\")'\`)})(((s1.concat(s2)) === \\"some strings are immutable\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: 's1.includes(\\"some\\")'\`)})(s1.includes(\\"some\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(!\\"some\\".includes(s1))'\`)})((!\\"some\\".includes(s1)))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: 's1.endsWith(\\"string\\")'\`)})(s1.endsWith(\\"string\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s1.indexOf(\\"s\\") === 0)'\`)})((s1.indexOf(\\"s\\") === 0))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"Some String\\".toLocaleLowerCase() === \\"some string\\")'\`)})((\\"Some String\\".toLocaleLowerCase() === \\"some string\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((s1.split(\\" \\")).at(0)) === \\"some\\")'\`)})((((s1.split(\\" \\")).at(0)) === \\"some\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: 's1.startsWith(\\"some\\")'\`)})(s1.startsWith(\\"some\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s1.substring(5)) === \\"string\\")'\`)})(((s1.substring(5)) === \\"string\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s1.substring(5,7)) === \\"st\\")'\`)})(((s1.substring(5,7)) === \\"st\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((\\"   some string   \\".trim()) === \\"some string\\")'\`)})(((\\"   some string   \\".trim()) === \\"some string\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"Some String\\".toLocaleUpperCase() === \\"SOME STRING\\")'\`)})((\\"Some String\\".toLocaleUpperCase() === \\"SOME STRING\\"))};
+  new cloud.Function(this,\\"test:string\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.0fb01e81c63b003d77d6245e36ba84561e3e2d3268e69a7c975f81cfe7565fac/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      
-      data: {
-        immut_array: immut_array,
-        immut_map: immut_map,
-        immut_set: immut_set,
-        s: s,
-        s_array: s_array,
-        s_map: s_map,
-        s_set: s_set,
+      s1: {
+        obj: s1,
+        ops: []
+      },
+      s2: {
+        obj: s2,
+        ops: []
       },
     }
-  });
+  }));
 }
 }
 new MyApp().synth();"
@@ -4846,28 +5037,18 @@ constructor() {
   new cloud.Function(this,\\"test:put\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.9f10a129b90bc1328dcb1e6194e3902931d1011d95e46825362ef5b06ec17380/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      resources: {
-        b: {
-          resource: b,
-          ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
-        },
-      },
-      data: {
-        b: b,
+      b: {
+        obj: b,
+        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
       },
     }
   }));
   new cloud.Function(this,\\"test:get\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1b9abefaef8ce4230db863000273d2c12bacb97e33ac10e6c8b50341e415fdac/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      resources: {
-        b: {
-          resource: b,
-          ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
-        },
-      },
-      data: {
-        b: b,
+      b: {
+        obj: b,
+        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
       },
     }
   }));
@@ -5090,8 +5271,8 @@ async capture_array() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.array_of_str.at(1)) === \\"s2\\")'\`)})(((await this.array_of_str.at(1)) === \\"s2\\"))};
 }
 async capture_map() {
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.map_of_num.get(\\"k1\\")) === 11)'\`)})(((await this.map_of_num.get(\\"k1\\")) === 11))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.map_of_num.get(\\"k2\\")) === 22)'\`)})(((await this.map_of_num.get(\\"k2\\")) === 22))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((this.map_of_num)[\\"k1\\"] === 11)'\`)})(((this.map_of_num)[\\"k1\\"] === 11))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((this.map_of_num)[\\"k2\\"] === 22)'\`)})(((this.map_of_num)[\\"k2\\"] === 22))};
 }
 async capture_set() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await this.set_of_str.has(\\"s1\\"))'\`)})((await this.set_of_str.has(\\"s1\\")))};
@@ -5631,7 +5812,7 @@ constructor() {
     this.my_num = 42;
     this.my_bool = true;
     this.array_of_str = Object.freeze([\\"s1\\", \\"s2\\"]);
-    this.map_of_num = Object.freeze(new Map([[ \\"k1\\", 11 ], [ \\"k2\\", 22 ]]));
+    this.map_of_num = Object.freeze({\\"k1\\":11,\\"k2\\":22});
     this.set_of_str = Object.freeze(new Set([\\"s1\\", \\"s2\\", \\"s1\\"]));
     this.array_of_queues = Object.freeze([new cloud.Queue(this,\\"q1\\"), new cloud.Queue(this,\\"q2\\")]);
   }
@@ -5660,84 +5841,54 @@ constructor() {
   new cloud.Function(this,\\"test:capture_resource\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.b5e7bd6cc9f6c741c4f0afa8adc0208ccee08e6297495b1fbe29db8afb6ee789/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      resources: {
-        r: {
-          resource: r,
-          ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
-        },
-      },
-      data: {
-        r: r,
+      r: {
+        obj: r,
+        ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
       },
     }
   }));
   new cloud.Function(this,\\"test:capture_primitives\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1814d20e284e4a33aff014ce4391d7da7998b0cd7db8ebee477a5400763bbe7b/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      resources: {
-        r: {
-          resource: r,
-          ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
-        },
-      },
-      data: {
-        r: r,
+      r: {
+        obj: r,
+        ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
       },
     }
   }));
   new cloud.Function(this,\\"test:capture_array\\",new $stdlib.core.Inflight(this, \\"$Inflight3\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.c341832069b7b13603626bc26227d936f0a7d7b7da45751e3666d6f4e7fa599a/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      resources: {
-        r: {
-          resource: r,
-          ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
-        },
-      },
-      data: {
-        r: r,
+      r: {
+        obj: r,
+        ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
       },
     }
   }));
   new cloud.Function(this,\\"test:capture_map\\",new $stdlib.core.Inflight(this, \\"$Inflight4\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.7235e8fbf10f106318ff9c22489e4e955483c8de6b39df0dbf143fdfa4691109/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      resources: {
-        r: {
-          resource: r,
-          ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
-        },
-      },
-      data: {
-        r: r,
+      r: {
+        obj: r,
+        ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
       },
     }
   }));
   new cloud.Function(this,\\"test:capture_set\\",new $stdlib.core.Inflight(this, \\"$Inflight5\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.b7df534fba155b498841a75f4610f6bb576ee00e2fbe6869317adf3718597864/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      resources: {
-        r: {
-          resource: r,
-          ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
-        },
-      },
-      data: {
-        r: r,
+      r: {
+        obj: r,
+        ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
       },
     }
   }));
   new cloud.Function(this,\\"test:capture_array_of_queues\\",new $stdlib.core.Inflight(this, \\"$Inflight6\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.179eef1ca19aa2bf908a3113209c3d8b96c23bac7bc35f1d6381c0f5cd2ec603/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      resources: {
-        r: {
-          resource: r,
-          ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
-        },
-      },
-      data: {
-        r: r,
+      r: {
+        obj: r,
+        ops: [\\"capture_array\\",\\"capture_array_of_queues\\",\\"capture_map\\",\\"capture_primitives\\",\\"capture_resource\\",\\"capture_set\\"]
       },
     }
   }));
@@ -5960,15 +6111,11 @@ constructor() {
   const iterator = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.82d0059fdbaebaab6d1be68f497052f9d5b8662f4333952a6e9ad55f564e0c97/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      
-      
     }
   });
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.f259e8d1edc5d47946ec1a1f3aa23e59fe550255ec12b899cffb307ecf525df6/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
-      
-      
     }
   });
   (queue.onMessage(handler));

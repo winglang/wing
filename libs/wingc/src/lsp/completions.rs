@@ -105,7 +105,6 @@ pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
 pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse {
 	FILES.with(|files| {
 		let files = files.borrow();
-		let files = files.read().unwrap();
 		let uri = params.text_document_position.text_document.uri;
 		let result = files.get(&uri).unwrap();
 

@@ -3,17 +3,17 @@ use crate::{
 	debug,
 	diagnostic::{CharacterLocation, WingSpan},
 	type_check::{
-		self, fqn::is_construct_base, symbol_env::StatementIdx, Class, FunctionSignature, Struct, SymbolKind, Type,
-		TypeRef, Types, WING_CONSTRUCTOR_NAME,
+		self, symbol_env::StatementIdx, Class, FunctionSignature, Struct, SymbolKind, Type, TypeRef, Types,
+		WING_CONSTRUCTOR_NAME,
 	},
 	utilities::camel_case_to_snake_case,
-	WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT,
+	CONSTRUCT_BASE, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT, WINGSDK_RESOURCE,
 };
 use colored::Colorize;
 use serde_json::Value;
-use wingii::jsii;
+use wingii::{fqn::FQN, jsii};
 
-use super::{fqn::FQN, symbol_env::SymbolEnv, Namespace};
+use super::{symbol_env::SymbolEnv, Enum, Namespace};
 
 trait JsiiInterface {
 	fn methods<'a>(&'a self) -> &'a Option<Vec<jsii::Method>>;
@@ -48,7 +48,7 @@ pub struct JsiiImporter<'a> {
 	/// - ["cloud"] will only (publicly) import types prefixed with `cloud.` from the assembly
 	/// - ["ns1", "ns2"] will only import types prefixed with `ns1.ns2.` from the assembly
 	/// - [] will import all types from the assembly
-	/// Note that other types might be implicitly imported into hidden namespaces
+	/// Note that other types might be still get implicitly imported
 	/// if they are referenced from a type in the specified `module_name`.
 	namespace_filter: &'a [String],
 	/// The name to assign to the module in the Wing type system.
@@ -94,6 +94,8 @@ impl<'a> JsiiImporter<'a> {
 					"number" => self.wing_types.number(),
 					"boolean" => self.wing_types.bool(),
 					"any" => self.wing_types.anything(),
+					// TODO JSON primitive https://github.com/winglang/wing/pull/1524
+					"json" => self.wing_types.anything(),
 					_ => panic!("TODO: handle primitive type {}", primitive_name),
 				}
 			} else if let Some(Value::String(type_fqn)) = obj.get("fqn") {
@@ -149,11 +151,7 @@ impl<'a> JsiiImporter<'a> {
 
 	fn lookup_or_create_type(&mut self, type_fqn: &FQN) -> TypeRef {
 		// Check if this type is already imported
-		if let Ok(t) = self
-			.wing_types
-			.libraries
-			.lookup_nested_str(type_fqn.as_str(), true, None)
-		{
+		if let Ok(t) = self.wing_types.libraries.lookup_nested_str(type_fqn.as_str(), None) {
 			return t.as_type().expect(&format!("Expected {} to be a type", type_fqn));
 		}
 		// Define new type and return it
@@ -161,7 +159,7 @@ impl<'a> JsiiImporter<'a> {
 		self
 			.wing_types
 			.libraries
-			.lookup_nested_str(type_fqn.as_str(), true, None)
+			.lookup_nested_str(type_fqn.as_str(), None)
 			.expect(&format!("Expected {} to be defined", type_fqn))
 			.as_type()
 			.unwrap()
@@ -176,16 +174,23 @@ impl<'a> JsiiImporter<'a> {
 		self.setup_namespaces_for(&type_fqn);
 
 		// Check if this is a JSII interface and import it if it is
-		let jsii_interface = self.jsii_types.find_interface(type_fqn.as_str());
+		let jsii_interface = self.jsii_types.find_interface(type_fqn);
 		if let Some(jsii_interface) = jsii_interface {
 			self.import_interface(jsii_interface);
 			return;
 		}
 
 		// Check if this is a JSII class and import it if it is
-		let jsii_class = self.jsii_types.find_class(type_fqn.as_str());
+		let jsii_class = self.jsii_types.find_class(type_fqn);
 		if let Some(jsii_class) = jsii_class {
 			self.import_class(jsii_class);
+			return;
+		}
+
+		// Check if this is a JSII enum and import it if it is
+		let jsii_enum = self.jsii_types.find_enum(type_fqn);
+		if let Some(jsii_enum) = jsii_enum {
+			self.import_enum(jsii_enum);
 			return;
 		}
 
@@ -200,25 +205,9 @@ impl<'a> JsiiImporter<'a> {
 		// the type belongs to.
 		debug!("Setting up namespaces for {}", type_name);
 
-		// Track whether the current namespace should be made visible. A compiler namespace should be made visible if it's
-		// the same-as or contained-within the corresponding jsii namespace the JsiiImporter is importing.
-		//
-		// For example, if self.assembly_name is libA and self.namespace_filter is ["ns1"] then that means a compiler
-		// namespace corresponding to libA.ns1 should be visible, as well as any namespaces that have to be created inside
-		// of it (like libA.ns1.ns2). All other compiler namespaces, like the namespace corresponding to libA, or namespaces
-		// corresponding to other libraries (like libB) can be hidden by default.
-		//
-		// TODO: this can probably be removed (https://github.com/winglang/wing/issues/1487)
-		let type_name_matches_filter =
-			type_name.assembly() == self.assembly_name && type_name.is_in_namespace(&self.namespace_filter);
-		let mut should_be_visible = type_name_matches_filter && self.namespace_filter.len() == 0;
-
 		if let Some(symb) = self.wing_types.libraries.try_lookup_mut(type_name.assembly(), None) {
-			if let SymbolKind::Namespace(ns) = symb {
-				// If this namespace is already imported but hidden then unhide it if it's being explicitly imported
-				if ns.hidden && should_be_visible {
-					ns.hidden = false;
-				}
+			if let SymbolKind::Namespace(_) = symb {
+				// do nothing
 			} else {
 				// TODO: make this a proper error
 				panic!(
@@ -231,7 +220,6 @@ impl<'a> JsiiImporter<'a> {
 		} else {
 			let ns = self.wing_types.add_namespace(Namespace {
 				name: type_name.assembly().to_string(),
-				hidden: !should_be_visible,
 				env: SymbolEnv::new(None, self.wing_types.void(), false, false, self.env.flight, 0),
 			});
 			self
@@ -256,19 +244,14 @@ impl<'a> JsiiImporter<'a> {
 			let mut parent_ns = self
 				.wing_types
 				.libraries
-				.lookup_nested_mut_str(&lookup_str, false, None)
+				.lookup_nested_mut_str(&lookup_str, None)
 				.unwrap()
 				.as_namespace_ref()
 				.unwrap();
 
-			should_be_visible =
-				type_name_matches_filter && (should_be_visible | (ns_idx + 1 == self.namespace_filter.len()) as bool);
 			if let Some(symb) = parent_ns.env.try_lookup_mut(namespace_name, None) {
-				if let SymbolKind::Namespace(ns) = symb {
-					// If this namespace is already imported but hidden then unhide it if it's being explicitly imported
-					if ns.hidden && should_be_visible {
-						ns.hidden = false;
-					}
+				if let SymbolKind::Namespace(_) = symb {
+					// do nothing
 				} else {
 					// TODO: make this a proper error
 					panic!(
@@ -279,7 +262,6 @@ impl<'a> JsiiImporter<'a> {
 			} else {
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: namespace_name.to_string(),
-					hidden: !should_be_visible,
 					env: SymbolEnv::new(
 						Some(parent_ns.env.get_ref()),
 						self.wing_types.void(),
@@ -302,6 +284,36 @@ impl<'a> JsiiImporter<'a> {
 					.unwrap();
 			}
 		}
+	}
+
+	pub fn import_enum(&mut self, jsii_enum: jsii::EnumType) {
+		let enum_name = jsii_enum.name;
+		let enum_fqn = FQN::from(jsii_enum.fqn.as_str());
+		let enum_symbol = Self::jsii_name_to_symbol(&enum_name, &jsii_enum.location_in_module);
+
+		let enum_type_ref = self.wing_types.add_type(Type::Enum(Enum {
+			name: enum_symbol.clone(),
+			values: jsii_enum
+				.members
+				.iter()
+				.map(|m| Self::jsii_name_to_symbol(&m.name, &jsii_enum.location_in_module))
+				.collect(),
+		}));
+
+		let mut ns = self
+			.wing_types
+			.libraries
+			.lookup_nested_mut_str(enum_fqn.as_str_without_type_name(), None)
+			.expect("Namespace should have been created")
+			.as_namespace_ref()
+			.expect("Should be a namespace");
+		ns.env
+			.define(
+				&enum_symbol,
+				SymbolKind::Type(enum_type_ref),
+				StatementIdx::Index(self.import_statement_idx),
+			)
+			.expect("Should be able to define enum");
 	}
 
 	/// Import a JSII interface into the Wing type system.
@@ -329,7 +341,7 @@ impl<'a> JsiiImporter<'a> {
 				let mut ns = self
 					.wing_types
 					.libraries
-					.lookup_nested_mut_str(jsii_interface_fqn.as_str_without_type_name(), true, None)
+					.lookup_nested_mut_str(jsii_interface_fqn.as_str_without_type_name(), None)
 					.unwrap()
 					.as_namespace_ref()
 					.unwrap();
@@ -395,7 +407,7 @@ impl<'a> JsiiImporter<'a> {
 		let mut ns = self
 			.wing_types
 			.libraries
-			.lookup_nested_mut_str(jsii_interface_fqn.as_str_without_type_name(), true, None)
+			.lookup_nested_mut_str(jsii_interface_fqn.as_str_without_type_name(), None)
 			.unwrap()
 			.as_namespace_ref()
 			.unwrap();
@@ -547,11 +559,10 @@ impl<'a> JsiiImporter<'a> {
 				None
 			} else {
 				let base_class_name = base_class_fqn.type_name();
-				let base_class_type = if let Ok(base_class_type) =
-					self
-						.wing_types
-						.libraries
-						.lookup_nested_str(base_class_fqn.as_str(), true, None)
+				let base_class_type = if let Ok(base_class_type) = self
+					.wing_types
+					.libraries
+					.lookup_nested_str(base_class_fqn.as_str(), None)
 				{
 					base_class_type
 						.as_type()
@@ -562,7 +573,7 @@ impl<'a> JsiiImporter<'a> {
 					self
 						.wing_types
 						.libraries
-						.lookup_nested_str(&base_class_fqn.as_str(), true, None)
+						.lookup_nested_str(&base_class_fqn.as_str(), None)
 						.expect(&format!(
 							"Failed to define base class {} of {}",
 							base_class_name, type_name
@@ -642,7 +653,7 @@ impl<'a> JsiiImporter<'a> {
 		let mut ns = self
 			.wing_types
 			.libraries
-			.lookup_nested_mut_str(ns_str, true, None)
+			.lookup_nested_mut_str(ns_str, None)
 			.expect(&format!("Failed to find namespace \"{}\"", &ns_str))
 			.as_namespace_ref()
 			.expect("Symbol was not a namespace");
@@ -709,7 +720,7 @@ impl<'a> JsiiImporter<'a> {
 								fqn
 							}
 						})
-						.and_then(|fqn| self.jsii_types.find_interface(fqn))
+						.and_then(|fqn| self.jsii_types.find_interface(&FQN::from(fqn)))
 				});
 			if let Some(client_interface) = client_interface {
 				// Add client interface's methods to the class environment
@@ -774,7 +785,7 @@ impl<'a> JsiiImporter<'a> {
 			if self
 				.wing_types
 				.libraries
-				.lookup_nested_str(type_fqn.as_str(), true, None)
+				.lookup_nested_str(type_fqn.as_str(), None)
 				.is_ok()
 			{
 				debug!("Already imported {}.", type_fqn.as_str().blue());
@@ -799,7 +810,7 @@ impl<'a> JsiiImporter<'a> {
 		let ns = self
 			.wing_types
 			.libraries
-			.lookup_nested_mut_str(&lookup_str, true, None)
+			.lookup_nested_mut_str(&lookup_str, None)
 			.unwrap()
 			.as_namespace_ref()
 			.unwrap();
@@ -812,4 +823,28 @@ impl<'a> JsiiImporter<'a> {
 			)
 			.unwrap();
 	}
+}
+
+/// Returns true if the FQN represents a "construct base class".
+///
+/// TODO: this is a temporary hack until we support interfaces.
+pub fn is_construct_base(fqn: &FQN) -> bool {
+	// We treat both CONSTRUCT_BASE and WINGSDK_RESOURCE, as base constructs because in wingsdk we currently have stuff directly derived
+	// from `construct.Construct` and stuff derived `core.Resource` (which itself is derived from `constructs.Construct`).
+	// But since we don't support interfaces yet we can't import `core.Resource` so we just treat it as a base class.
+	// I'm also not sure we should ever import `core.Resource` because we might want to keep its internals hidden to the user:
+	// after all it's an abstract class representing our `resource` primitive. See https://github.com/winglang/wing/issues/261.
+	fqn.as_str() == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE) || fqn.as_str() == CONSTRUCT_BASE
+}
+
+#[test]
+fn test_fqn_is_construct_base() {
+	assert_eq!(is_construct_base(&FQN::from(CONSTRUCT_BASE)), true);
+	assert_eq!(
+		is_construct_base(&FQN::from(
+			format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE).as_str()
+		)),
+		true
+	);
+	assert_eq!(is_construct_base(&FQN::from("@winglang/sdk.cloud.Bucket")), false);
 }
