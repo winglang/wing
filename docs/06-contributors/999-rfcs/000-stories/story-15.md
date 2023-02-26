@@ -3,7 +3,15 @@ Initial feedback for TaskListApi Resource that usese cloud.Api
 ```ts (wing)
 
 bring cloud;
-resource TaskListModel {
+
+interface ITaskListModel {
+  inflight get(id: str): str;
+  inflight add(title: str): str;
+  inflight remove(id: str);
+  inflight find(r: str): Set<str>;
+}
+
+resource TaskListModel implementes ITaskListModel {
 
   init() {
 
@@ -28,8 +36,8 @@ resource TaskListModel {
 resource TaskListApi {
   api: cloud.Api;
   model: TaskListModel;
-  init() {
-    this.model = new TaskListModel();
+  init(model: ITaskListModel) {
+    this.model = model;
     this.api = new cloud.Api();
     
     this.api.post("/tasks", inflight (req: cloud.Api.ApiRequest): cloud.Api.ApiResponse => {
@@ -66,5 +74,6 @@ resource TaskListApi {
   }
 }
 
-let t = new TaskListApi();
+let model = new TaskListModel();
+let t = new TaskListApi(model);
 ```
