@@ -316,7 +316,7 @@ where
 		Reference::Identifier(s) => {
 			v.visit_symbol(s);
 		}
-		Reference::TypeMember { _type: _, property } => {
+		Reference::TypeMember { type_: _, property } => {
 			v.visit_symbol(property);
 		}
 	}

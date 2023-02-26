@@ -165,8 +165,8 @@ impl<'a> JSifier<'a> {
 			Reference::InstanceMember { object, property } => {
 				self.jsify_expression(object, phase) + "." + &symbolize(self, property)
 			}
-			Reference::TypeMember { _type, property } => {
-				self.jsify_type(&TypeAnnotation::UserDefined(_type.clone())) + "." + &symbolize(self, property)
+			Reference::TypeMember { type_, property } => {
+				self.jsify_type(&TypeAnnotation::UserDefined(type_.clone())) + "." + &symbolize(self, property)
 			}
 		}
 	}
@@ -1011,10 +1011,10 @@ impl<'a> JSifier<'a> {
 			.filter(|(_, kind, _)| {
 				let var = kind.as_variable().unwrap();
 				// We capture preflight non-reassignable fields
-				var.flight != Phase::Inflight && !var.reassignable && var._type.is_capturable()
+				var.flight != Phase::Inflight && !var.reassignable && var.type_.is_capturable()
 			})
 			.map(|(name, kind, _)| {
-				let _type = kind.as_variable().unwrap()._type;
+				let _type = kind.as_variable().unwrap().type_;
 				// TODO: For now we collect all the inflight methods in the resource (in the future we
 				// we'll need to analyze each inflight method to see what it does with the captured resource)
 				let methods = if _type.as_resource().is_some() {

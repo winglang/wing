@@ -159,12 +159,15 @@ pub struct FunctionSignature {
 pub struct FunctionDefinition {
 	/// List of names of function parameters and whether they are reassignable (`var`) or not.
 	pub parameters: Vec<(Symbol, bool)>, // TODO: move into FunctionSignature and make optional
-
+	/// The function implementation (body).
 	pub statements: Scope,
+	/// The function signature, including the return type.
 	pub signature: FunctionSignature,
+	/// Whether this function is static or not. In case of a closure, this is always true.
+	pub is_static: bool,
+
 	#[derivative(Debug = "ignore")]
 	pub captures: RefCell<Option<Captures>>,
-	pub is_static: bool,
 }
 
 #[derive(Debug)]
@@ -455,7 +458,7 @@ pub enum Reference {
 	/// A reference to a member nested inside some object `expression.x`
 	InstanceMember { object: Box<Expr>, property: Symbol },
 	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
-	TypeMember { _type: UserDefinedType, property: Symbol },
+	TypeMember { type_: UserDefinedType, property: Symbol },
 }
 
 impl Display for Reference {
@@ -469,8 +472,8 @@ impl Display for Reference {
 				};
 				write!(f, "{}.{}", obj_str, property.name)
 			}
-			Reference::TypeMember { _type, property } => {
-				write!(f, "{}.{}", TypeAnnotation::UserDefined(_type.clone()), property.name)
+			Reference::TypeMember { type_, property } => {
+				write!(f, "{}.{}", TypeAnnotation::UserDefined(type_.clone()), property.name)
 			}
 		}
 	}

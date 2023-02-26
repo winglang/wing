@@ -237,7 +237,7 @@ impl SymbolEnv {
 			// This is because we currently allow unknown stuff to be referenced under an anything which will
 			// be resolved only in runtime.
 			// TODO: do we still need this? Why?
-			if let SymbolKind::Variable(VariableInfo { _type: t, .. }) = *t {
+			if let SymbolKind::Variable(VariableInfo { type_: t, .. }) = *t {
 				if matches!(*t, Type::Anything) {
 					break;
 				}
@@ -290,7 +290,7 @@ impl SymbolEnv {
 			// This is because we currently allow unknown stuff to be referenced under an anything which will
 			// be resolved only in runtime.
 			// TODO: do we still need this? Why?
-			if let SymbolKind::Variable(VariableInfo { _type: t, .. }) = *t {
+			if let SymbolKind::Variable(VariableInfo { type_: t, .. }) = *t {
 				if matches!(*t, Type::Anything) {
 					break;
 				}

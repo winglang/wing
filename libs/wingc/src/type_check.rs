@@ -64,7 +64,7 @@ pub enum SymbolKind {
 #[derive(Debug, Clone)]
 pub struct VariableInfo {
 	/// Type of the variable
-	pub _type: TypeRef,
+	pub type_: TypeRef,
 	/// Can the variable be reassigned?
 	pub reassignable: bool,
 	/// The phase in which this variable exists
@@ -74,18 +74,18 @@ pub struct VariableInfo {
 }
 
 impl SymbolKind {
-	pub fn make_variable(_type: TypeRef, reassignable: bool, flight: Phase) -> Self {
+	pub fn make_variable(type_: TypeRef, reassignable: bool, flight: Phase) -> Self {
 		SymbolKind::Variable(VariableInfo {
-			_type,
+			type_,
 			reassignable,
 			flight,
 			is_static: true,
 		})
 	}
 
-	pub fn make_instance_variable(_type: TypeRef, reassignable: bool, flight: Phase) -> Self {
+	pub fn make_instance_variable(type_: TypeRef, reassignable: bool, flight: Phase) -> Self {
 		SymbolKind::Variable(VariableInfo {
-			_type,
+			type_,
 			reassignable,
 			flight,
 			is_static: false,
@@ -192,16 +192,16 @@ impl Class {
 		self
 			.env
 			.iter(with_ancestry)
-			.filter(|(_, t, _)| t.as_variable().unwrap()._type.as_function_sig().is_some())
-			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap()._type.clone()))
+			.filter(|(_, t, _)| t.as_variable().unwrap().type_.as_function_sig().is_some())
+			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap().type_.clone()))
 	}
 
 	pub fn fields(&self, with_ancestry: bool) -> impl Iterator<Item = (String, TypeRef)> + '_ {
 		self
 			.env
 			.iter(with_ancestry)
-			.filter(|(_, t, _)| t.as_variable().unwrap()._type.as_function_sig().is_none())
-			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap()._type.clone()))
+			.filter(|(_, t, _)| t.as_variable().unwrap().type_.as_function_sig().is_none())
+			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap().type_.clone()))
 	}
 }
 
@@ -738,7 +738,7 @@ impl<'a> TypeChecker<'a> {
 			span: Some(property.span.clone()),
 		});
 		VariableInfo {
-			_type: self.types.anything(),
+			type_: self.types.anything(),
 			reassignable: false,
 			flight: Phase::Independent,
 			is_static: true,
@@ -783,7 +783,7 @@ impl<'a> TypeChecker<'a> {
 		});
 
 		VariableInfo {
-			_type: self.types.anything(),
+			type_: self.types.anything(),
 			reassignable: false,
 			flight: Phase::Independent,
 			is_static: false,
@@ -849,7 +849,7 @@ impl<'a> TypeChecker<'a> {
 
 				_type
 			}
-			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env, statement_idx)._type,
+			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env, statement_idx).type_,
 			ExprKind::New {
 				class,
 				obj_id: _, // TODO
@@ -889,7 +889,7 @@ impl<'a> TypeChecker<'a> {
 					},
 					None,
 				) {
-					Ok(v) => v.as_variable().expect("Expected constructor to be a variable")._type,
+					Ok(v) => v.as_variable().expect("Expected constructor to be a variable").type_,
 					Err(type_error) => {
 						self.type_error(type_error);
 						return self.types.anything();
@@ -950,7 +950,7 @@ impl<'a> TypeChecker<'a> {
 						// If this returns None, this means we're instantiating a resource object in the global scope, which is valid
 						env
 							.try_lookup("this".into(), Some(statement_idx))
-							.map(|v| v.as_variable().expect("Expected \"this\" to be a variable")._type)
+							.map(|v| v.as_variable().expect("Expected \"this\" to be a variable").type_)
 					};
 
 					// Verify the object scope is an actually resource
@@ -1100,7 +1100,7 @@ impl<'a> TypeChecker<'a> {
 							field
 								.as_variable()
 								.expect("Expected struct field to be a variable in the struct env")
-								._type,
+								.type_,
 							v,
 						);
 					} else {
@@ -1223,7 +1223,7 @@ impl<'a> TypeChecker<'a> {
 				let field_type = field
 					.as_variable()
 					.expect("Expected struct field to be a variable in the struct env")
-					._type;
+					.type_;
 				field_map.insert(k.name.clone(), (k, field_type));
 			} else {
 				self.expr_error(value, format!("\"{}\" is not a field of \"{}\"", k.name, expected_type));
@@ -1236,7 +1236,7 @@ impl<'a> TypeChecker<'a> {
 				k,
 				v.as_variable()
 					.expect("Expected struct field to be a variable in the struct env")
-					._type,
+					.type_,
 			)
 		}) {
 			if let Some((symb, expected_field_type)) = field_map.get(&k) {
@@ -1513,7 +1513,7 @@ impl<'a> TypeChecker<'a> {
 				if !var_info.reassignable {
 					self.stmt_error(stmt, format!("Variable {} is not reassignable ", variable));
 				}
-				self.validate_type(exp_type, var_info._type, value);
+				self.validate_type(exp_type, var_info.type_, value);
 			}
 			StmtKind::Bring {
 				module_name,
@@ -1784,7 +1784,7 @@ impl<'a> TypeChecker<'a> {
 						.expect("Expected method to be in class env")
 						.as_variable()
 						.expect("Expected method to be a variable")
-						._type;
+						.type_;
 
 					let method_sig = method_type
 						.as_function_sig()
@@ -2084,7 +2084,7 @@ impl<'a> TypeChecker<'a> {
 			for (name, symbol, _) in original_type_class.env.iter(true) {
 				match symbol {
 					SymbolKind::Variable(VariableInfo {
-						_type: v,
+						type_: v,
 						reassignable,
 						flight,
 						is_static,
@@ -2158,7 +2158,7 @@ impl<'a> TypeChecker<'a> {
 								_ => {}
 							}
 						} else if let Some(VariableInfo {
-							_type: var,
+							type_: var,
 							reassignable,
 							flight,
 							is_static: _static,
@@ -2197,12 +2197,7 @@ impl<'a> TypeChecker<'a> {
 
 	/// Check if this expression is actually a reference to a type. The parser doesn't distinguish between a `some_expression.field` and `SomeType.field`.
 	/// This function checks if the expression is a reference to a user define type and if it is it returns it. If not it returns `None`.
-	fn expr_maybe_type(
-		&mut self,
-		expr: &Expr,
-		env: &SymbolEnv,
-		statement_idx: usize,
-	) -> Option<(TypeRef, UserDefinedType)> {
+	fn expr_maybe_type(&mut self, expr: &Expr, env: &SymbolEnv, statement_idx: usize) -> Option<UserDefinedType> {
 		// TODO: we currently don't handle parenthesized expressions correctly so something like `(MyEnum).A` or `std.(namespace.submodule).A` will return true, is this a problem?
 		let mut path = vec![];
 		let mut curr_expr = expr;
@@ -2230,7 +2225,7 @@ impl<'a> TypeChecker<'a> {
 
 		resolve_user_defined_type(&user_type_annotation, env, statement_idx)
 			.ok()
-			.map(|t| (t, user_type_annotation))
+			.map(|_| user_type_annotation)
 	}
 
 	fn resolve_reference(&mut self, reference: &Reference, env: &SymbolEnv, statement_idx: usize) -> VariableInfo {
@@ -2252,13 +2247,13 @@ impl<'a> TypeChecker<'a> {
 				// There's a special case where the object is actually a type and the property is either a static member or an enum variant.
 				// In this case the type might even be namespaced (recursive nested reference). We need to detect this and transform this
 				// reference into a type reference.
-				if let Some((_type, user_type_annotation)) = self.expr_maybe_type(object, env, statement_idx) {
+				if let Some(user_type_annotation) = self.expr_maybe_type(object, env, statement_idx) {
 					// We can't get here twice, we can safely assume that if we're here the `object` part of the reference doesn't have and evaluated type yet.
 					assert!(object.evaluated_type.borrow().is_none());
 
 					// Create a type reference out of this nested reference and call ourselves again
 					let new_ref = Reference::TypeMember {
-						_type: user_type_annotation,
+						type_: user_type_annotation,
 						property: property.clone(),
 					};
 					// Replace the reference with the new one, this is unsafe because `reference` isn't mutable and theoretically someone may
@@ -2289,7 +2284,7 @@ impl<'a> TypeChecker<'a> {
 				let res = match *instance_type {
 					Type::Class(ref class) | Type::Resource(ref class) => self.get_property_from_class(class, property),
 					Type::Anything => VariableInfo {
-						_type: instance_type,
+						type_: instance_type,
 						reassignable: false,
 						flight: env.flight,
 						is_static: false,
@@ -2342,7 +2337,7 @@ impl<'a> TypeChecker<'a> {
 					),
 
 					_ => VariableInfo {
-						_type: self.expr_error(
+						type_: self.expr_error(
 							object,
 							format!(
 								"Expression must be a class or resource instance to access property \"{}\", instead found type \"{}\"",
@@ -2357,20 +2352,21 @@ impl<'a> TypeChecker<'a> {
 
 				if force_reassignable {
 					VariableInfo {
-						reassignable: true..res.clone(),
+						reassignable: true,
+						..res.clone()
 					}
 				} else {
 					res
 				}
 			}
-			Reference::TypeMember { _type, property } => {
-				let _type = resolve_user_defined_type(_type, env, statement_idx)
+			Reference::TypeMember { type_, property } => {
+				let type_ = resolve_user_defined_type(type_, env, statement_idx)
 					.expect("Type annotation should have been verified by `expr_maybe_type`");
-				return match *_type {
+				return match *type_ {
 					Type::Enum(ref e) => {
 						if e.values.contains(property) {
 							VariableInfo {
-								_type,
+								type_,
 								reassignable: false,
 								flight: Phase::Independent,
 								is_static: true,
@@ -2378,7 +2374,7 @@ impl<'a> TypeChecker<'a> {
 						} else {
 							self.resolve_static_error(
 								property,
-								format!("Enum \"{}\" does not contain value \"{}\"", _type, property.name),
+								format!("Enum \"{}\" does not contain value \"{}\"", type_, property.name),
 							)
 						}
 					}
@@ -2393,14 +2389,14 @@ impl<'a> TypeChecker<'a> {
 										property,
 										format!(
 											"Class \"{}\" contains a member \"{}\" but it is not static",
-											_type, property.name
+											type_, property.name
 										),
 									)
 								}
 							}
 							_ => self.resolve_static_error(
 								property,
-								format!("No member \"{}\" in class \"{}\"", property.name, _type),
+								format!("No member \"{}\" in class \"{}\"", property.name, type_),
 							),
 						}
 					}
@@ -2454,7 +2450,7 @@ fn add_parent_members_to_struct_env(
 			let member_type = parent_member
 				.as_variable()
 				.expect("Expected struct member to be a variable")
-				._type;
+				.type_;
 			if let Some(existing_type) = struct_env.try_lookup(&parent_member_name, None) {
 				// We compare types in both directions to make sure they are exactly the same type and not inheriting from each other
 				// TODO: does this make sense? We should add an `is_a()` methdod to `Type` to check if a type is a subtype and use that
@@ -2462,7 +2458,7 @@ fn add_parent_members_to_struct_env(
 				let existing_type = existing_type
 					.as_variable()
 					.expect("Expected struct member to be a variable")
-					._type;
+					.type_;
 				if !existing_type.is_same_type_as(&member_type) {
 					return Err(TypeError {
 						span: name.span.clone(),

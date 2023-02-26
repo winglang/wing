@@ -282,7 +282,7 @@ fn format_symbol_with_lookup(symbol_name: &str, symbol_lookup: (&SymbolKind, Sym
 				Phase::Independent => "",
 			};
 			let reassignable = if variable_info.reassignable { "var " } else { "" };
-			let _type = &variable_info._type;
+			let _type = &variable_info.type_;
 
 			format!("```wing\n{flight}{reassignable}{symbol_name}: {_type}\n```")
 		}
