@@ -306,6 +306,7 @@ exports[`bring_cdktf.w > wing compile --target tf-aws > main.tf.json 1`] = `
         "bucket_prefix": "hello",
         "versioning": {
           "enabled": true,
+          "mfa_delete": true,
         },
       },
     },
@@ -341,7 +342,7 @@ constructor() {
   
   new aws.s3Bucket.S3Bucket(this,\\"Bucket\\",{ bucketPrefix: \\"hello\\", versioning: {
   \\"enabled\\": true,
-  \\"mfa_delete\\": true,}
+  \\"mfaDelete\\": true,}
    });
 }
 }
