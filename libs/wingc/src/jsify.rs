@@ -162,10 +162,10 @@ impl<'a> JSifier<'a> {
 		};
 		match reference {
 			Reference::Identifier(identifier) => symbolize(self, identifier),
-			Reference::NestedIdentifier { object, property } => {
+			Reference::InstanceMember { object, property } => {
 				self.jsify_expression(object, phase) + "." + &symbolize(self, property)
 			}
-			Reference::TypeProperty { _type, property } => {
+			Reference::TypeMember { _type, property } => {
 				self.jsify_type(&TypeAnnotation::UserDefined(_type.clone())) + "." + &symbolize(self, property)
 			}
 		}
@@ -326,7 +326,7 @@ impl<'a> JSifier<'a> {
 
 				let expr_string = match &function.kind {
 					ExprKind::Reference(reference) => {
-						if let Reference::NestedIdentifier { object, .. } = reference {
+						if let Reference::InstanceMember { object, .. } = reference {
 							let object_type = object.evaluated_type.borrow().unwrap();
 							if let Some(class) = object_type.as_class_or_resource() {
 								needs_case_conversion = class.should_case_convert_jsii;
@@ -346,7 +346,7 @@ impl<'a> JSifier<'a> {
 					let self_string = &match &function.kind {
 						// for "loose" macros, e.g. `print()`, $self$ is the global object
 						ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
-						ExprKind::Reference(Reference::NestedIdentifier { object, .. }) => {
+						ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
 							self.jsify_expression(object, phase).clone()
 						}
 

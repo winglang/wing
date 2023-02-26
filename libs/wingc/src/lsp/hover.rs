@@ -224,7 +224,7 @@ pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
 		if let Some(symbol) = hover_visitor.found_symbol {
 			// If the given symbol is in a nested identifier, we can skip looking it up in the symbol environment
 			if let Some(expr) = hover_visitor.current_expr {
-				if let ExprKind::Reference(Reference::NestedIdentifier { property, .. }) = &expr.kind {
+				if let ExprKind::Reference(Reference::InstanceMember { property, .. }) = &expr.kind {
 					return build_nested_identifier_hover(&property, &expr);
 				}
 			}

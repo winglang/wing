@@ -218,7 +218,7 @@ fn scan_captures_in_expression(
 					}
 				}
 			}
-			Reference::NestedIdentifier { object, property } => {
+			Reference::InstanceMember { object, property } => {
 				res.extend(scan_captures_in_expression(object, env, statement_idx, diagnostics));
 
 				// If the expression evaluates to a resource we should check what method of the resource we're accessing
@@ -246,7 +246,7 @@ fn scan_captures_in_expression(
 					}
 				}
 			}
-			Reference::TypeProperty { .. } => {
+			Reference::TypeMember { .. } => {
 				// TODO: handle access to static preflight memebers from inflight
 			}
 		},

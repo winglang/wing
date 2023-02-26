@@ -2195,6 +2195,8 @@ impl<'a> TypeChecker<'a> {
 		return new_type;
 	}
 
+	/// Check if this expression is actually a reference to a type. The parser doesn't distinguish between a `some_expression.field` and `SomeType.field`.
+	/// This function checks if the expression is a reference to a user define type and if it is it returns it. If not it returns `None`.
 	fn expr_maybe_type(
 		&mut self,
 		expr: &Expr,
@@ -2211,11 +2213,11 @@ impl<'a> TypeChecker<'a> {
 						path.push(symbol.clone());
 						break;
 					}
-					Reference::NestedIdentifier { object, property } => {
+					Reference::InstanceMember { object, property } => {
 						path.push(property.clone());
 						curr_expr = &object;
 					}
-					Reference::TypeProperty { .. } => {
+					Reference::TypeMember { .. } => {
 						panic!("Type property references cannot be a type name because they have a property");
 					}
 				},
@@ -2246,7 +2248,7 @@ impl<'a> TypeChecker<'a> {
 				}
 				Err(type_error) => self.variable_error(type_error),
 			},
-			Reference::NestedIdentifier { object, property } => {
+			Reference::InstanceMember { object, property } => {
 				// There's a special case where the object is actually a type and the property is either a static member or an enum variant.
 				// In this case the type might even be namespaced (recursive nested reference). We need to detect this and transform this
 				// reference into a type reference.
@@ -2255,7 +2257,7 @@ impl<'a> TypeChecker<'a> {
 					assert!(object.evaluated_type.borrow().is_none());
 
 					// Create a type reference out of this nested reference and call ourselves again
-					let new_ref = Reference::TypeProperty {
+					let new_ref = Reference::TypeMember {
 						_type: user_type_annotation,
 						property: property.clone(),
 					};
@@ -2355,14 +2357,13 @@ impl<'a> TypeChecker<'a> {
 
 				if force_reassignable {
 					VariableInfo {
-					  reassignable: true
-					  ..res.clone(),
+						reassignable: true..res.clone(),
 					}
 				} else {
 					res
 				}
 			}
-			Reference::TypeProperty { _type, property } => {
+			Reference::TypeMember { _type, property } => {
 				let _type = resolve_user_defined_type(_type, env, statement_idx)
 					.expect("Type annotation should have been verified by `expr_maybe_type`");
 				return match *_type {

@@ -309,14 +309,14 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match node {
-		Reference::NestedIdentifier { property, object } => {
+		Reference::InstanceMember { property, object } => {
 			v.visit_expr(object);
 			v.visit_symbol(property);
 		}
 		Reference::Identifier(s) => {
 			v.visit_symbol(s);
 		}
-		Reference::TypeProperty { _type: _, property } => {
+		Reference::TypeMember { _type: _, property } => {
 			v.visit_symbol(property);
 		}
 	}

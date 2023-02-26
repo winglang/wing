@@ -585,7 +585,7 @@ impl Parser<'_> {
 		if nested_node.has_error() {
 			return self.add_error(format!("Syntax error"), &nested_node);
 		}
-		Ok(Reference::NestedIdentifier {
+		Ok(Reference::InstanceMember {
 			object: Box::new(self.build_expression(&nested_node.child_by_field_name("object").unwrap())?),
 			property: self.node_symbol(&nested_node.child_by_field_name("property").unwrap())?,
 		})
