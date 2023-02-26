@@ -32,13 +32,13 @@ resource TaskListApi {
     this.model = new TaskListModel();
     this.api = new cloud.Api();
     
-    this.api.post("/tasks", (req: cloud.Api.ApiRequest): cloud.Api.ApiResponse => {
+    this.api.post("/tasks", inflight (req: cloud.Api.ApiRequest): cloud.Api.ApiResponse => {
       let title = Str.from_json(req.body.title);
       let id = this.model.add(title);
       return new cloud.Api.ApiResponse(status:202, body: Json.format(id));
     });
 
-    this.api.get("/tasks/:id", (req: cloud.Api.ApiRequest): cloud.Api.ApiResponse => {
+    this.api.get("/tasks/:id", inflight (req: cloud.Api.ApiRequest): cloud.Api.ApiResponse => {
       let id = Str.from_json(req.params.id);
       try {
         let title = this.model.get(id);
@@ -48,7 +48,7 @@ resource TaskListApi {
       }
     });
     
-    this.api.delete("/tasks/:id", (req: cloud.Api.ApiRequest): cloud.Api.ApiResponse => {
+    this.api.delete("/tasks/:id", inflight (req: cloud.Api.ApiRequest): cloud.Api.ApiResponse => {
       let id = Str.from_json(req.params.id);
       try {
         this.model.delete(id);
@@ -58,7 +58,7 @@ resource TaskListApi {
       }
     });
 
-    this.api.get("/tasks", (req: cloud.Api.ApiRequest): cloud.Api.ApiResponse => {
+    this.api.get("/tasks", inflight (req: cloud.Api.ApiRequest): cloud.Api.ApiResponse => {
       let search = Str.try_from_json(req.query.search) ?? ".*"; // Do we want a regex primitive? Regex.from_str(".*")
       let results = this.model.find(search);
       return new cloud.Api.ApiResponse(status:202, body: Json.format(results));
