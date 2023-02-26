@@ -3039,7 +3039,7 @@ constructor() {
       },
       counter: {
         obj: counter,
-        ops: [\\"dec\\",\\"inc\\",\\"peek\\"]
+        ops: [\\"dec\\",\\"inc\\",\\"peek\\",\\"reset\\"]
       },
     }
   });
@@ -4270,8 +4270,8 @@ constructor() {
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo_inflight({c: \${c_client}}))\`);
   }
   }
-  Foo._annotateInflight(\\"foo_inc\\", {\\"this.c\\": { ops: [\\"dec\\", \\"inc\\", \\"peek\\"]}});
-  Foo._annotateInflight(\\"foo_get\\", {\\"this.c\\": { ops: [\\"dec\\", \\"inc\\", \\"peek\\"]}});
+  Foo._annotateInflight(\\"foo_inc\\", {\\"this.c\\": { ops: [\\"dec\\", \\"inc\\", \\"peek\\", \\"reset\\"]}});
+  Foo._annotateInflight(\\"foo_get\\", {\\"this.c\\": { ops: [\\"dec\\", \\"inc\\", \\"peek\\", \\"reset\\"]}});
   class Bar extends $stdlib.core.Resource {
   	constructor(scope, id, name, b) {
   	super(scope, id);

@@ -89,6 +89,13 @@ export interface ICounterClient {
    * @inflight
    */
   peek(): Promise<number>;
+
+  /**
+   * Reset a counter to a given value.
+   * @param value value to reset (default is 0)
+   * @inflight
+   */
+  reset(value?: number): Promise<void>;
 }
 
 /**
@@ -105,6 +112,10 @@ export abstract class CounterClientBase implements ICounterClient {
   peek(): Promise<number> {
     throw new Error("Method not implemented.");
   }
+  reset(value?: number): Promise<void> {
+    value;
+    throw new Error("Method not implemented.");
+  }
 }
 
 /**
@@ -118,4 +129,6 @@ export enum CounterInflightMethods {
   DEC = "dec",
   /** `Counter.peek` */
   PEEK = "peek",
+  /** `Counter.reset` */
+  RESET = "reset",
 }

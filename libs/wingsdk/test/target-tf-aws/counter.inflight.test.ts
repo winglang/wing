@@ -54,6 +54,26 @@ test("inc(5)", async () => {
   expect(response).toEqual(prevValue); // returns previous value
 });
 
+test("reset", async () => {
+  // GIVEN
+  setupResetMock({
+    expectedTableName: MOCK_TABLE_NAME,
+    resetValue: 0,
+  });
+  setupPeekMock({
+    expectedTableName: MOCK_TABLE_NAME,
+    responseValue: 0,
+  });
+
+  // WHEN
+  const client = new CounterClient(MOCK_TABLE_NAME);
+  await client.reset(0);
+  const response = await client.peek();
+
+  // THEN
+  expect(response).toEqual(0);
+});
+
 test("peek with initial value", async () => {
   setupPeekMock({
     expectedTableName: MOCK_TABLE_NAME,
@@ -84,6 +104,7 @@ interface MockOptions {
   readonly expectedAmount?: number;
   readonly initial?: number;
   readonly responseValue?: number;
+  readonly resetValue?: number;
 }
 
 function setupIncMock(opts: MockOptions) {
@@ -126,4 +147,27 @@ function setupPeekMock(opts: MockOptions) {
   };
 
   dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
+}
+
+function setupResetMock(opts: MockOptions) {
+  const expectedRequest: UpdateItemCommandInput = {
+    TableName: opts.expectedTableName,
+    Key: { id: { S: "counter" } },
+    UpdateExpression: `SET counter_value = :reset_value`,
+    ExpressionAttributeValues: {
+      ":reset_value": { N: `${opts.resetValue}` },
+    },
+    ReturnValues: "UPDATED_NEW",
+  };
+  const mockResponse: UpdateItemCommandOutput = {
+    $metadata: {},
+    Attributes:
+      opts.resetValue === undefined
+        ? undefined
+        : {
+            counter_value: { N: `${opts.resetValue}` },
+          },
+  };
+
+  dynamoMock.on(UpdateItemCommand, expectedRequest).resolves(mockResponse);
 }
