@@ -443,7 +443,13 @@ impl<'a> JSifier<'a> {
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
 				Phase::Inflight => self.jsify_inflight_function(func_def),
 				Phase::Independent => unimplemented!(),
-				Phase::Preflight => self.jsify_function(None, &func_def.parameters, &func_def.statements, phase),
+				Phase::Preflight => self.jsify_function(
+					None,
+					&func_def.parameters,
+					&func_def.statements,
+					func_def.is_static,
+					phase,
+				),
 			},
 		}
 	}
@@ -680,7 +686,14 @@ impl<'a> JSifier<'a> {
 		)
 	}
 
-	fn jsify_function(&self, name: Option<&str>, parameters: &[(Symbol, bool)], body: &Scope, phase: Phase) -> String {
+	fn jsify_function(
+		&self,
+		name: Option<&str>,
+		parameters: &[(Symbol, bool)],
+		body: &Scope,
+		is_static: bool,
+		phase: Phase,
+	) -> String {
 		let mut parameter_list = vec![];
 		for p in parameters.iter() {
 			parameter_list.push(self.jsify_symbol(&p.0));
@@ -691,12 +704,15 @@ impl<'a> JSifier<'a> {
 			None => ("", "=> "),
 		};
 
-		format!(
-			"{}({}) {}{}",
-			name,
-			parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", "),
-			arrow,
-			self.jsify_scope(body, phase)
+		let parameters = parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ");
+		let body = self.jsify_scope(body, phase);
+		let static_modifier = if is_static { "static" } else { "" };
+
+		formatdoc!(
+			"
+			{static_modifier} {name}({parameters}) {arrow} {{
+				{body}
+			}}"
 		)
 	}
 
@@ -798,11 +814,7 @@ impl<'a> JSifier<'a> {
 			self.jsify_resource_constructor(&class.constructor, class.parent.is_none()),
 			preflight_methods
 				.iter()
-				.map(|(n, m)| format!(
-					"{} = {}",
-					n.name,
-					self.jsify_function(None, &m.parameters, &m.statements, phase)
-				))
+				.map(|(n, m)| self.jsify_function(Some(&n.name), &m.parameters, &m.statements, m.is_static, phase))
 				.collect::<Vec<String>>()
 				.join("\n"),
 		);
@@ -939,7 +951,13 @@ impl<'a> JSifier<'a> {
 			.map(|(name, def)| {
 				format!(
 					"async {}",
-					self.jsify_function(Some(&name.name), &def.parameters, &def.statements, def.signature.flight)
+					self.jsify_function(
+						Some(&name.name),
+						&def.parameters,
+						&def.statements,
+						def.is_static,
+						def.signature.flight
+					)
 				)
 			})
 			.collect_vec();
@@ -980,6 +998,7 @@ impl<'a> JSifier<'a> {
 				Some("constructor"),
 				&class.constructor.parameters,
 				&class.constructor.statements,
+				false, // Constructors are are kind of static, but we don't add the `static` modifier to ctors in js so we pass false here
 				phase
 			),
 			class
@@ -991,11 +1010,7 @@ impl<'a> JSifier<'a> {
 			class
 				.methods
 				.iter()
-				.map(|(n, m)| format!(
-					"{} = {}",
-					n.name,
-					self.jsify_function(None, &m.parameters, &m.statements, phase)
-				))
+				.map(|(n, m)| self.jsify_function(Some(&n.name), &m.parameters, &m.statements, m.is_static, phase))
 				.collect::<Vec<String>>()
 				.join("\n")
 		)
