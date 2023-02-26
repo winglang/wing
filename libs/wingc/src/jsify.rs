@@ -406,7 +406,11 @@ impl<'a> JSifier<'a> {
 					"{{\n{}}}\n",
 					fields
 						.iter()
-						.map(|(name, expr)| format!("\"{}\": {},", name.name, self.jsify_expression(expr, phase)))
+						.map(|(name, expr)| format!(
+							"\"{}\": {},",
+							snake_case_to_camel_case(&name.name),
+							self.jsify_expression(expr, phase)
+						))
 						.collect::<Vec<String>>()
 						.join("\n")
 				)
@@ -414,7 +418,13 @@ impl<'a> JSifier<'a> {
 			ExprKind::MapLiteral { fields, .. } => {
 				let f = fields
 					.iter()
-					.map(|(key, expr)| format!("\"{}\":{}", key, self.jsify_expression(expr, phase)))
+					.map(|(key, expr)| {
+						format!(
+							"\"{}\":{}",
+							snake_case_to_camel_case(key),
+							self.jsify_expression(expr, phase)
+						)
+					})
 					.collect::<Vec<String>>()
 					.join(",");
 
