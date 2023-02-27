@@ -1,22 +1,25 @@
-The following code is an inital (not completed) implementation of TaskList with api gateway and a redis db 
+User Story 15 - Task List with Api Gateway and Redis
+Status: Draft, Expected released on 2023/03/16
 
-It includes the following items:
-- bring untyped
-  - bring external npm package (axios)
-  - bring an internal nodejs stdlib (RegEx)
-- Enum & Duration that can be included inside json
-- It leverages explicit permissions setting (using the `this.inflight` API)
+The following code is an inital implementation of TaskList with api gateway and a redis db 
 
-Still missing:
-- bring cdktf
-- use redis instead of bucket
-- code that updates estimation and duration
+## New landuage and SDK features it introduces
 
-Other things I noticed: 
+- [x] bring untyped
+  - [x] bring external npm package (axios)
+  - [x] bring an internal nodejs stdlib (RegEx)
+- [x] Enum & Duration that can be included inside json
+- [x] It leverages explicit permissions setting (using the `this.inflight` API)
+- [ ] bring cdktf
+- [ ] use redis instead of bucket
+- [ ] code that updates estimation and duration
+
+## Other things I noticed: 
 - Should the `cloud.api` API have the `on_` prefix to match `cloud.bucket` API and also to allow calling
 the api get/post/delete/put commands (`api.get(url)` vs `api.on_get(path, 
 - I have used express's column `get("/task/:id"`, is this the right syntax?
 
+## Code 
 ```ts (wing)
 
 bring cloud;
