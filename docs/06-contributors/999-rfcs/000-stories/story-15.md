@@ -10,10 +10,11 @@ The following code is an inital implementation of TaskList with api gateway and 
 - [x] bring untyped
   - [x] bring external npm package (axios)
   - [x] bring an internal nodejs stdlib (RegEx)
-- [x] Enum & Duration that can be included inside json
+- [x] enum & duration that can be included inside json
 - [x] It leverages setting explicit permissions (using the `this.inflight` API, described [here](https://github.com/winglang/wing/pull/1610))
 - [x] Using interface 
 - [x] uuid as standard type (missing spec)
+- [x] Using await when calling a untyped function that returns a promise
 - [ ] bring cdktf
 - [ ] use redis instead of bucket
 - [ ] code that updates estimation and duration from REST post command
@@ -25,6 +26,8 @@ the api get/post/delete/put commands (`api.get(url)` vs `api.on_get(path, inflig
 but then I noticed that [aws](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-api-step-by-step.html) 
 uses the `{id}` syntax. What should be the the right syntax?
 - Bring internal nodejs types - how do we bring somethink that we can't require, like `RegEx`
+- From anything to Json - can I cast something from bring untyped to Json? 
+- Calling await 
 
 ## Code 
 ```ts (wing)
@@ -57,7 +60,7 @@ resource TaskListModel implementes ITaskListModel {
     this._bucket = new cloud.Bucket();
     this.inflights.add("get", ref: "this._bucket", op: "get");
     this.inflights.add("_add", ref: "this._bucket", op: "put");
-    // notice I am calling on this
+    // notice I am setting explicit permissions on this
     this.inflights.add("add", ref: "this", op: "_add");
     // is this the right synatx for multiple ops? 
     this.inflights.add("set_status", ref: "this", op: ["_add", "get"]); 
