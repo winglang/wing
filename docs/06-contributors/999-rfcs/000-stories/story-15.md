@@ -122,7 +122,7 @@ resource TaskListApi {
         let title = this.model.get(id);
         return new cloud.Api.ApiResponse(status:200, body: Json.format(title));
       } catch {
-        return new cloud.Api.ApiResponse(status:404);
+        return new cloud.Api.ApiResponse(status:400);
       }
     });
     
@@ -132,7 +132,7 @@ resource TaskListApi {
         this.model.delete(id);
         return new cloud.Api.ApiResponse(status:204);
       } catch {
-        return new cloud.Api.ApiResponse(status:404);
+        return new cloud.Api.ApiResponse(status:400);
       }
     });
 
