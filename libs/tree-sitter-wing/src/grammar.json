@@ -2690,7 +2690,7 @@
                 "name": "op",
                 "content": {
                   "type": "STRING",
-                  "value": "^"
+                  "value": "**"
                 }
               },
               {

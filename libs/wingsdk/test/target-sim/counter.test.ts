@@ -130,6 +130,60 @@ test("peek with initial value", async () => {
   expect(peek).toEqual(123);
 });
 
+test("reset with initial value", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Counter(app, "my_counter", {
+    initial: 123,
+  });
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_counter") as ICounterClient;
+
+  await client.reset(0);
+  const peek = await client.peek();
+  expect(peek).toEqual(0);
+
+  await s.stop();
+
+  expect(listMessages(s)).toEqual([
+    "wingsdk.cloud.Logger created.",
+    "wingsdk.cloud.Counter created.",
+    "Reset (value=123).",
+    "Peek (value=0).",
+    "wingsdk.cloud.Counter deleted.",
+    "wingsdk.cloud.Logger deleted.",
+  ]);
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("reset without initial value", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Counter(app, "my_counter", {});
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_counter") as ICounterClient;
+
+  await client.reset(5);
+  const peek = await client.peek();
+  expect(peek).toEqual(5);
+
+  await s.stop();
+
+  expect(listMessages(s)).toEqual([
+    "wingsdk.cloud.Logger created.",
+    "wingsdk.cloud.Counter created.",
+    "Reset (value=0).",
+    "Peek (value=5).",
+    "wingsdk.cloud.Counter deleted.",
+    "wingsdk.cloud.Logger deleted.",
+  ]);
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
 test("counter has no display hidden property", async () => {
   // GIVEN
   const app = new SimApp();
