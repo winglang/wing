@@ -16,7 +16,7 @@ The following code is an inital implementation of TaskList with api gateway and 
 - [ ] use redis instead of bucket
 - [ ] code that updates estimation and duration from REST post command
 
-## Discussion points
+## Discussion topics
 - Review the code and 
 - Should the `cloud.api` API have the `on_` prefix to match `cloud.bucket` API and also to allow calling
 the api get/post/delete/put commands (`api.get(url)` vs `api.on_get(path, 
