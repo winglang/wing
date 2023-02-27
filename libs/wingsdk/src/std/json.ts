@@ -1,8 +1,3 @@
-import  { T1 } from "./util";
-
-/**
- * @typeparam T1 
- */
 export class Json {
   /**
    * Returns a specified element from the Json.
@@ -12,16 +7,26 @@ export class Json {
    * @param key The key of the element to return
    * @returns The element associated with the specified key, or undefined if the key can't be found
    */
-  public get(key: string): T1 {
+  public get(key: string): Json {
     key;
     throw new Error("Macro");
   }
 }
 
-/**
- * @typeparam T1
- */
-export class MutJson extends Json {
+export class MutJson {
+  /**
+   * Returns a specified element from the Json.
+   * 
+   * @macro ($self$)[$args$]
+   * 
+   * @param key The key of the element to return
+   * @returns The element associated with the specified key, or undefined if the key can't be found
+   */
+  public get(key: string): MutJson {
+    key;
+    throw new Error("Macro");
+  }
+
   /**
    * Adds or updates an element in MutJson with a specific key and value
    * 
@@ -30,7 +35,7 @@ export class MutJson extends Json {
    * @param key The key of the element to add
    * @param value The value of the element to add
    */
-  public set(key: string, value: T1): void {
+  public set(key: string, value: any): void {
     key;
     value;
     throw new Error("Macro")

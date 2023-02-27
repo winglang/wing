@@ -685,10 +685,6 @@ impl Types {
 		self.get_typeref(self.mut_json_idx)
 	}
 
-	pub fn jsonables(&self) -> Vec<TypeRef> {
-		vec![self.string(), self.number(), self.json(), self.mut_json(), self.bool()]
-	}
-
 	pub fn stringables(&self) -> Vec<TypeRef> {
 		// TODO: This should be more complex and return all types that have some stringification facility
 		// see: https://github.com/winglang/wing/issues/741
@@ -837,12 +833,22 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	pub fn requires_primitive_type_replacement(&self, name: &str) -> bool {
+		if let "Json" | "MutJson" = name {
+			true
+		} else {
+			false
+		}
+	}
+
 	pub fn get_primitive_type_by_name(&self, name: &str) -> TypeRef {
 		match name {
 			"number" => self.types.number(),
 			"string" => self.types.string(),
 			"bool" => self.types.bool(),
 			"duration" => self.types.duration(),
+			"Json" => self.types.json(),
+			"MutJson" => self.types.mut_json(),
 			other => self.general_type_error(format!("Type \"{}\" is not a primitive type", other)),
 		}
 	}
@@ -1093,7 +1099,11 @@ impl<'a> TypeChecker<'a> {
 					self.validate_type(param_type, *arg_type, param_exp);
 				}
 
-				func_sig.return_type
+				if self.requires_primitive_type_replacement(func_sig.return_type.to_string().as_str()) {
+					self.get_primitive_type_by_name(func_sig.return_type.to_string().as_str())
+				} else {
+					func_sig.return_type
+				}
 			}
 			ExprKind::ArrayLiteral { type_, items } => {
 				// Infer type based on either the explicit type or the value in one of the items
@@ -2133,6 +2143,7 @@ impl<'a> TypeChecker<'a> {
 			is_abstract: original_type_class.is_abstract,
 			type_parameters: Some(type_params.clone()),
 		});
+
 		// TODO: here we add a new type regardless whether we already "hydrated" `original_type` with these `type_params`. Cache!
 		let mut new_type = self.types.add_type(tt);
 		let new_type_class = new_type.as_mut_class_or_resource().unwrap();
@@ -2377,14 +2388,26 @@ impl<'a> TypeChecker<'a> {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_MAP, vec![t]);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
-					Type::Json => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_JSON, vec![self.types.json()]);
-						self.get_property_from_class(new_class.as_class().unwrap(), property)
-					}
-					Type::MutJson => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_JSON, vec![self.types.mut_json()]);
-						self.get_property_from_class(new_class.as_class().unwrap(), property)
-					}
+					Type::Json => self.get_property_from_class(
+						env
+							.lookup_nested_str(WINGSDK_JSON, None)
+							.unwrap()
+							.as_type()
+							.unwrap()
+							.as_class()
+							.unwrap(),
+						property,
+					),
+					Type::MutJson => self.get_property_from_class(
+						env
+							.lookup_nested_str(WINGSDK_MUT_JSON, None)
+							.unwrap()
+							.as_type()
+							.unwrap()
+							.as_class()
+							.unwrap(),
+						property,
+					),
 					Type::String => self.get_property_from_class(
 						env
 							.lookup_nested_str(WINGSDK_STRING, None)
