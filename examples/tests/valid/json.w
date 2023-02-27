@@ -14,6 +14,9 @@ let message = "Coolness";
 json_mut_obj.set("hello", message);
 
 assert(message == json_mut_obj.get("hello"));
+// Support `dot` and `[]` Access https://github.com/winglang/wing/issues/1680
+// assert(message == json_mut_obj.hello)
+// assert(message == json_mut_obj["hello"])
 
 // Assignment from natives
 let some_number: num = 999;
