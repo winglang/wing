@@ -371,7 +371,7 @@ impl<'a> JSifier<'a> {
 					BinaryOperator::Mul => "*",
 					BinaryOperator::Div => "/",
 					BinaryOperator::Mod => "%",
-					BinaryOperator::Exponent => "**",
+					BinaryOperator::Power => "**",
 					BinaryOperator::Greater => ">",
 					BinaryOperator::GreaterOrEqual => ">=",
 					BinaryOperator::Less => "<",
