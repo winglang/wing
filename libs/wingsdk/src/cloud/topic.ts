@@ -1,9 +1,9 @@
 import { Construct } from "constructs";
-import { Polycons } from "polycons";
 import { Function } from "./function";
-import { Code, IResource, Inflight, Resource } from "../core";
+import { fqnForType } from "../constants";
+import { IResource, Inflight, Resource, App } from "../core";
 
-export const TOPIC_TYPE = "wingsdk.cloud.Topic";
+export const TOPIC_FQN = fqnForType("cloud.Topic");
 
 /**
  * Properties for `Topic`.
@@ -11,19 +11,29 @@ export const TOPIC_TYPE = "wingsdk.cloud.Topic";
 export interface TopicProps {}
 
 /**
- * Topic base class
+ * Represents a topic.
+ *
+ * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
-export abstract class TopicBase extends Resource {
+export abstract class Topic extends Resource {
+  /**
+   * Create a new topic.
+   */
+  public static newTopic(
+    scope: Construct,
+    id: string,
+    props: TopicProps = {}
+  ): Topic {
+    return App.of(scope).new(TOPIC_FQN, undefined, scope, id, props);
+  }
+
   public readonly stateful = true;
+
   constructor(scope: Construct, id: string, props: TopicProps = {}) {
     super(scope, id);
 
     this.display.title = "Topic";
     this.display.description = "A pub/sub notification topic";
-
-    if (!scope) {
-      return;
-    }
 
     props;
   }
@@ -41,32 +51,6 @@ export abstract class TopicBase extends Resource {
  * Options for `Topic.onMessage`.
  */
 export interface TopicOnMessageProps {}
-
-/**
- * Represents a topic.
- *
- * @inflight `@winglang/sdk.cloud.ITopicClient`
- */
-export class Topic extends TopicBase {
-  constructor(scope: Construct, id: string, props: TopicProps = {}) {
-    super(null as any, id, props);
-    return Polycons.newInstance(TOPIC_TYPE, scope, id, props) as Topic;
-  }
-
-  public onMessage(
-    inflight: Inflight,
-    props: TopicOnMessageProps = {}
-  ): Function {
-    inflight;
-    props;
-    throw new Error("Method not implemented.");
-  }
-
-  /** @internal */
-  public _toInflight(): Code {
-    throw new Error("Method not implemented.");
-  }
-}
 
 /**
  * Inflight interface for `Topic`.

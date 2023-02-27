@@ -14,7 +14,7 @@ test("schedule behavior with rate", () => {
     "Handler",
     `async handle(event) { console.log("Received: ", event); }`
   );
-  const schedule = new cloud.Schedule(app, "Schedule", {
+  const schedule = cloud.Schedule.newSchedule(app, "Schedule", {
     rate: std.Duration.fromMinutes(2),
   });
   schedule.onTick(fn);
@@ -53,7 +53,7 @@ test("schedule behavior with cron", () => {
     "Handler",
     `async handle(event) { console.log("Received: ", event); }`
   );
-  const schedule = new cloud.Schedule(app, "Schedule", {
+  const schedule = cloud.Schedule.newSchedule(app, "Schedule", {
     cron: "0/1 * ? * *",
   });
   schedule.onTick(fn);
@@ -97,7 +97,7 @@ test("schedule with two functions", () => {
     "Handler2",
     `async handle(event) { console.log("Received: ", event); }`
   );
-  const schedule = new cloud.Schedule(app, "Schedule", {
+  const schedule = cloud.Schedule.newSchedule(app, "Schedule", {
     cron: "0/1 * ? * *",
   });
   schedule.onTick(fn1);
@@ -125,12 +125,11 @@ test("schedule with rate and cron simultaneously", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
 
   // THEN
-  expect(
-    () =>
-      new cloud.Schedule(app, "Schedule", {
-        rate: std.Duration.fromSeconds(30),
-        cron: "0/1 * ? * *",
-      })
+  expect(() =>
+    cloud.Schedule.newSchedule(app, "Schedule", {
+      rate: std.Duration.fromSeconds(30),
+      cron: "0/1 * ? * *",
+    })
   ).toThrow("rate and cron cannot be configured simultaneously.");
 });
 
@@ -139,11 +138,10 @@ test("cron with more than five values", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
 
   // THEN
-  expect(
-    () =>
-      new cloud.Schedule(app, "Schedule", {
-        cron: "0/1 * ? * * *",
-      })
+  expect(() =>
+    cloud.Schedule.newSchedule(app, "Schedule", {
+      cron: "0/1 * ? * * *",
+    })
   ).toThrow(
     "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
   );
@@ -154,7 +152,7 @@ test("schedule without rate or cron", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
 
   // THEN
-  expect(() => new cloud.Schedule(app, "Schedule")).toThrow(
+  expect(() => cloud.Schedule.newSchedule(app, "Schedule")).toThrow(
     "rate or cron need to be filled."
   );
 });
@@ -164,10 +162,9 @@ test("schedule with rate less than 1 minute", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
 
   // THEN
-  expect(
-    () =>
-      new cloud.Schedule(app, "Schedule", {
-        rate: std.Duration.fromSeconds(30),
-      })
+  expect(() =>
+    cloud.Schedule.newSchedule(app, "Schedule", {
+      rate: std.Duration.fromSeconds(30),
+    })
   ).toThrow("rate can not be set to less than 1 minute.");
 });

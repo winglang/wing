@@ -2,16 +2,16 @@ import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import * as esbuild from "esbuild-wasm";
-import { Polycons } from "polycons";
 import { Logger } from "./logger";
-import { Code, IInflightHost, IResource, Inflight, Resource } from "../core";
+import { fqnForType } from "../constants";
+import { IInflightHost, IResource, Inflight, Resource, App } from "../core";
 import { Duration } from "../std";
 import { mkdtemp } from "../util";
 
 /**
  * Global identifier for `Function`.
  */
-export const FUNCTION_TYPE = "wingsdk.cloud.Function";
+export const FUNCTION_FQN = fqnForType("cloud.Function");
 
 /**
  * Properties for `Function`.
@@ -39,9 +39,30 @@ export interface FunctionProps {
 }
 
 /**
- * Functionality shared between all `Function` implementations.
+ * Represents a function.
+ *
+ * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
-export abstract class FunctionBase extends Resource implements IInflightHost {
+export abstract class Function extends Resource implements IInflightHost {
+  /**
+   * Creates a new cloud.Function instance through the app.
+   */
+  public static newFunction(
+    scope: Construct,
+    id: string,
+    inflight: Inflight,
+    props: FunctionProps = {}
+  ): Function {
+    return App.of(scope).new(
+      FUNCTION_FQN,
+      undefined,
+      scope,
+      id,
+      inflight,
+      props
+    );
+  }
+
   private readonly _env: Record<string, string> = {};
 
   public readonly stateful = false;
@@ -55,17 +76,12 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
     scope: Construct,
     id: string,
     inflight: Inflight,
-    props: FunctionProps
+    props: FunctionProps = {}
   ) {
     super(scope, id);
 
     this.display.title = "Function";
     this.display.description = "A cloud function (FaaS)";
-
-    if (!scope) {
-      this.assetPath = undefined as any;
-      return;
-    }
 
     for (const [key, value] of Object.entries(props.env ?? {})) {
       this.addEnvironment(key, value);
@@ -148,38 +164,6 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
    */
   public get env(): Record<string, string> {
     return { ...this._env };
-  }
-}
-
-/**
- * Represents a function.
- *
- * @inflight `@winglang/sdk.cloud.IFunctionClient`
- */
-export class Function extends FunctionBase {
-  constructor(
-    scope: Construct,
-    id: string,
-    inflight: Inflight,
-    props: FunctionProps = {}
-  ) {
-    super(null as any, id, inflight, props);
-    return Polycons.newInstance(
-      FUNCTION_TYPE,
-      scope,
-      id,
-      inflight,
-      props
-    ) as Function;
-  }
-
-  public addEnvironment(_key: string, _value: string): void {
-    throw new Error("Method not implemented.");
-  }
-
-  /** @internal */
-  public _toInflight(): Code {
-    throw new Error("Method not implemented.");
   }
 }
 

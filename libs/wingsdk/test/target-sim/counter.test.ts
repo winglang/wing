@@ -6,7 +6,7 @@ import { SimApp } from "../../src/testing";
 test("create a counter", async () => {
   // GIVEN
   const app = new SimApp();
-  const c = new cloud.Counter(app, "my_counter", {
+  const c = cloud.Counter.newCounter(app, "my_counter", {
     initial: 123,
   });
 
@@ -31,7 +31,7 @@ test("create a counter", async () => {
 test("inc", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Counter(app, "my_counter", {
+  cloud.Counter.newCounter(app, "my_counter", {
     initial: 123,
   });
 
@@ -68,7 +68,7 @@ test("inc", async () => {
 test("dec", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Counter(app, "my_counter", {
+  cloud.Counter.newCounter(app, "my_counter", {
     initial: 123,
   });
 
@@ -105,7 +105,7 @@ test("dec", async () => {
 test("peek without initial value", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Counter(app, "my_counter");
+  cloud.Counter.newCounter(app, "my_counter");
 
   const s = await app.startSimulator();
 
@@ -118,7 +118,7 @@ test("peek without initial value", async () => {
 test("peek with initial value", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Counter(app, "my_counter", {
+  cloud.Counter.newCounter(app, "my_counter", {
     initial: 123,
   });
 
@@ -133,7 +133,7 @@ test("peek with initial value", async () => {
 test("reset with initial value", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Counter(app, "my_counter", {
+  cloud.Counter.newCounter(app, "my_counter", {
     initial: 123,
   });
 
@@ -161,7 +161,7 @@ test("reset with initial value", async () => {
 test("reset without initial value", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Counter(app, "my_counter", {});
+  cloud.Counter.newCounter(app, "my_counter", {});
 
   const s = await app.startSimulator();
 
@@ -187,7 +187,7 @@ test("reset without initial value", async () => {
 test("counter has no display hidden property", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Counter(app, "my_counter");
+  cloud.Counter.newCounter(app, "my_counter");
 
   const treeJson = treeJsonOf(app.synth());
   const counter = app.node.tryFindChild("my_counter") as cloud.Counter;
@@ -207,7 +207,7 @@ test("counter has no display hidden property", async () => {
 test("counter has display title and description properties", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Counter(app, "my_counter");
+  cloud.Counter.newCounter(app, "my_counter");
 
   // WHEN
   const treeJson = treeJsonOf(app.synth());

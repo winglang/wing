@@ -1,6 +1,6 @@
 import { ISimulatorResourceInstance } from "./resource";
-import { QueueSchema, QueueSubscriber } from "./schema-resources";
-import { IFunctionClient, IQueueClient, QUEUE_TYPE } from "../cloud";
+import { QueueSchema, QueueSubscriber, QUEUE_TYPE } from "./schema-resources";
+import { IFunctionClient, IQueueClient } from "../cloud";
 import { ISimulatorContext, TraceType } from "../testing/simulator";
 
 export class Queue implements IQueueClient, ISimulatorResourceInstance {

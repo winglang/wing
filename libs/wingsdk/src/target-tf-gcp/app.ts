@@ -1,8 +1,10 @@
 import { GoogleProvider } from "@cdktf/provider-google/lib/provider";
 import { RandomProvider } from "@cdktf/provider-random/lib/provider";
-import { IConstruct } from "constructs";
-import { PolyconFactory } from "./factory";
-import { AppProps as CdktfAppProps, CdktfApp, IApp } from "../core";
+import { Construct } from "constructs";
+import { Bucket } from "./bucket";
+import { Logger } from "./logger";
+import { BUCKET_FQN, LOGGER_FQN } from "../cloud";
+import { AppProps as CdktfAppProps, CdktfApp } from "../core";
 
 /**
  * GCP App props.
@@ -24,23 +26,7 @@ export interface AppProps extends CdktfAppProps {
  * An app that knows how to synthesize constructs into a Terraform configuration
  * for GCP resources.
  */
-export class App extends CdktfApp implements IApp {
-  /**
-   * Returns the App a construct belongs to.
-   */
-  public static of(construct: IConstruct): App {
-    if (construct instanceof App) {
-      return construct;
-    }
-
-    const parent = construct.node.scope;
-    if (!parent) {
-      throw new Error("Cannot find a parent App");
-    }
-
-    return App.of(parent);
-  }
-
+export class App extends CdktfApp {
   /**
    * The Google Cloud project ID.
    */
@@ -52,10 +38,7 @@ export class App extends CdktfApp implements IApp {
   public readonly storageLocation: string;
 
   constructor(props: AppProps) {
-    super({
-      ...props,
-      customFactory: props.customFactory ?? new PolyconFactory(),
-    });
+    super(props);
 
     this.projectId = props.projectId ?? process.env.GOOGLE_PROJECT_ID;
     // Using env variable for location is work around until we are
@@ -80,5 +63,23 @@ export class App extends CdktfApp implements IApp {
       project: this.projectId,
     });
     new RandomProvider(this, "random");
+  }
+
+  public new(
+    fqn: string,
+    ctor: any,
+    scope: Construct,
+    id: string,
+    ...args: any[]
+  ): any {
+    switch (fqn) {
+      case BUCKET_FQN:
+        return new Bucket(scope, id, args[0]);
+
+      case LOGGER_FQN:
+        return new Logger(scope, id);
+    }
+
+    return super.new(fqn, ctor, scope, id, ...args);
   }
 }

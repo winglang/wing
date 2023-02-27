@@ -12,7 +12,7 @@ import * as core from "../core";
  *
  * @inflight `@winglang/sdk.cloud.IScheduleClient`
  */
-export class Schedule extends cloud.ScheduleBase {
+export class Schedule extends cloud.Schedule {
   private readonly scheduleExpression: string;
   private readonly rule: CloudwatchEventRule;
 
@@ -68,7 +68,7 @@ export class Schedule extends cloud.ScheduleBase {
       "ScheduleOnTickHandlerClient"
     );
 
-    const fn = new cloud.Function(
+    const fn = Function.newFunction(
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnTick-${hash}`,
       functionHandler,

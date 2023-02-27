@@ -1,5 +1,5 @@
 import * as cdktf from "cdktf";
-import * as cloud from "../../src/cloud";
+import { Bucket } from "../../src/cloud";
 import * as tfazure from "../../src/target-tf-azure";
 import { mkdtemp } from "../../src/util";
 import {
@@ -12,7 +12,7 @@ import {
 test("create a bucket", () => {
   // GIVEN
   const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  new cloud.Bucket(app, "my_bucket");
+  Bucket.newBucket(app, "my_bucket");
   const output = app.synth();
 
   // THEN
@@ -29,8 +29,8 @@ test("create a bucket", () => {
 test("create multiple buckets", () => {
   // GIVEN
   const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  new cloud.Bucket(app, "my_bucket");
-  new cloud.Bucket(app, "my_bucket2");
+  Bucket.newBucket(app, "my_bucket");
+  Bucket.newBucket(app, "my_bucket2");
   const output = app.synth();
 
   // THEN
@@ -47,7 +47,7 @@ test("create multiple buckets", () => {
 test("bucket is public", () => {
   // GIVEN
   const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  new cloud.Bucket(app, "my_bucket", { public: true });
+  Bucket.newBucket(app, "my_bucket", { public: true });
   const output = app.synth();
 
   // THEN
@@ -64,7 +64,7 @@ test("bucket is public", () => {
 test("bucket with two preflight objects", () => {
   // GIVEN
   const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  const bucket = new cloud.Bucket(app, "my_bucket", { public: true });
+  const bucket = Bucket.newBucket(app, "my_bucket", { public: true });
   bucket.addObject("file1.txt", "hello world");
   bucket.addObject("file2.txt", "boom bam");
   const output = app.synth();
@@ -84,7 +84,7 @@ test("bucket with two preflight objects", () => {
 test("bucket name valid", () => {
   // GIVEN
   const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  const bucket = new cloud.Bucket(app, "The-Uncanny-Bucket");
+  const bucket = Bucket.newBucket(app, "The-Uncanny-Bucket");
   const output = app.synth();
 
   expect(
