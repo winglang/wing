@@ -35,9 +35,11 @@ uses the `{id}` syntax. What should be the the right syntax?
 bring cloud;
 
 // TODO discuss how we bring untyped something like RegEx from JavaScript 
+// PLACEHOLER for bringing something from Javascript stdlib
 bring untyped RegExp from_js("RegExp"); 
 
-// npm install axios
+// prerequisite: npm install axios
+// PALCEHOLDER for bringing some external module
 bring untyped axios require_from_js("axios"); 
 
 enum Status {
