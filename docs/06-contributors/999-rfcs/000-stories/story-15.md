@@ -1,4 +1,21 @@
-Initial feedback for TaskListApi Resource that uses cloud.Api 
+The following code is an inital (not completed) implementation of TaskList with api gateway and a redis db 
+
+It includes the following items:
+- bring untyped
+  - bring external npm package (axios)
+  - bring an internal nodejs stdlib (RegEx)
+- Enum & Duration that can be included inside json
+- It leverages explicit permissions setting (using the `this.inflight` API)
+
+Still missing:
+- bring cdktf
+- use redis instead of bucket
+- code that updates estimation and duration
+
+Other things I noticed: 
+- Should the `cloud.api` API have the `on_` prefix to match `cloud.bucket` API and also to allow calling
+the api get/post/delete/put commands (`api.get(url)` vs `api.on_get(path, 
+- I have used express's column `get("/task/:id"`, is this the right syntax?
 
 ```ts (wing)
 
@@ -36,7 +53,7 @@ resource TaskListModel implementes ITaskListModel {
   }
 
   inflight get(id: str): Json {
-    // TODO  implementd
+     return this._bucket.get_json(id);
   }
 
   inflight add(title: str): str {
@@ -53,7 +70,9 @@ resource TaskListModel implementes ITaskListModel {
   }
 
   inflight remove(id: str) {
-    //TODO add implementation
+    print("removing task ${id}");
+    this._bucket.delete(id);
+    return id;
   }
 
   inflight find(r: RegExp): Array<str> { 
