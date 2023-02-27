@@ -2,7 +2,6 @@ let json_number  = Json 123;
 let json_bool    = Json true;
 let json_array   = Json [ 1, 2, 3 ];
 let json_obj     = Json { boom: 123 };
-
 let json_mut_obj = MutJson {
   hello: 123,
   world: [ 1, "cat", 3 ],

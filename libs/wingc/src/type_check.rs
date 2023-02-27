@@ -525,14 +525,6 @@ impl TypeRef {
 		}
 	}
 
-	pub fn is_json(&self) -> bool {
-		if let Type::Json | Type::MutJson = **self {
-			true
-		} else {
-			false
-		}
-	}
-
 	pub fn is_mutable_collection(&self) -> bool {
 		if let Type::MutArray(_) | Type::MutSet(_) | Type::MutMap(_) = **self {
 			true
@@ -1123,10 +1115,13 @@ impl<'a> TypeChecker<'a> {
 					_ => self.expr_error(exp, format!("Expected \"Array\" type, found \"{}\"", container_type)),
 				};
 
-				// Verify all types are the same as the inferred type
-				for v in items.iter() {
-					let t = self.type_check_exp(v, env, statement_idx);
-					self.validate_type(t, element_type, v);
+				// Skip validate type if in Json
+				if !*self.in_json.borrow() {
+					// Verify all types are the same as the inferred type
+					for v in items.iter() {
+						let t = self.type_check_exp(v, env, statement_idx);
+						self.validate_type(t, element_type, v);
+					}
 				}
 
 				container_type
@@ -1167,7 +1162,10 @@ impl<'a> TypeChecker<'a> {
 
 				struct_type
 			}
-			ExprKind::JsonLiteral { is_mut, .. } => {
+			ExprKind::JsonLiteral { is_mut, element } => {
+				self.set_json(true);
+				self.type_check_exp(&element, env, statement_idx);
+				self.set_json(false);
 				if *is_mut {
 					self.types.mut_json()
 				} else {
@@ -1192,10 +1190,13 @@ impl<'a> TypeChecker<'a> {
 					_ => self.expr_error(exp, format!("Expected \"Map\" type, found \"{}\"", container_type)),
 				};
 
-				// Verify all types are the same as the inferred type
-				for (_, v) in fields.iter() {
-					let t = self.type_check_exp(v, env, statement_idx);
-					self.validate_type(t, value_type, v);
+				// Skip validate if in Json
+				if !*self.in_json.borrow() {
+					// Verify all types are the same as the inferred type
+					for (_, v) in fields.iter() {
+						let t = self.type_check_exp(v, env, statement_idx);
+						self.validate_type(t, value_type, v);
+					}
 				}
 
 				container_type
@@ -2177,8 +2178,6 @@ impl<'a> TypeChecker<'a> {
 											WINGSDK_MUT_MAP => self.types.add_type(Type::MutMap(new_type_arg)),
 											WINGSDK_SET => self.types.add_type(Type::Set(new_type_arg)),
 											WINGSDK_MUT_SET => self.types.add_type(Type::MutSet(new_type_arg)),
-											WINGSDK_JSON => self.types.json(),
-											WINGSDK_MUT_JSON => self.types.mut_json(),
 											_ => self.general_type_error(format!("\"{}\" is not a supported generic return type", fqn)),
 										}
 									} else {

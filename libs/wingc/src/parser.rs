@@ -56,10 +56,6 @@ impl Parser<'_> {
 		scope
 	}
 
-	fn set_json(&self, state: bool) {
-		*self.in_json.borrow_mut() = state;
-	}
-
 	fn add_error<T>(&self, message: String, node: &Node) -> Result<T, ()> {
 		let diag = Diagnostic {
 			message,
@@ -932,12 +928,10 @@ impl Parser<'_> {
 					_ => false,
 				};
 
-				self.set_json(true);
 				let element_node = expression_node
 					.child_by_field_name("element")
 					.expect("Should always have element");
 				let element = Box::new(self.build_expression(&element_node)?);
-				self.set_json(false);
 
 				Ok(Expr::new(ExprKind::JsonLiteral { is_mut, element }, expression_span))
 			}
