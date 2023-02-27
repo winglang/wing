@@ -9,15 +9,18 @@ The following code is an inital implementation of TaskList with api gateway and 
   - [x] bring external npm package (axios)
   - [x] bring an internal nodejs stdlib (RegEx)
 - [x] Enum & Duration that can be included inside json
-- [x] It leverages explicit permissions setting (using the `this.inflight` API)
+- [x] It leverages setting explicit permissions (using the `this.inflight` API, described [here](https://github.com/winglang/wing/pull/1610))
 - [ ] bring cdktf
 - [ ] use redis instead of bucket
-- [ ] code that updates estimation and duration
+- [ ] code that updates estimation and duration from REST post command
 
-## Other things I noticed: 
+## Discussion points
+- Review the code and 
 - Should the `cloud.api` API have the `on_` prefix to match `cloud.bucket` API and also to allow calling
 the api get/post/delete/put commands (`api.get(url)` vs `api.on_get(path, 
-- I have used express's column `get("/task/:id"`, is this the right syntax?
+- I have used express's synatx for dynamic parts of the path for the api gateway `get("/task/:id"`, 
+but then I noticed that [aws](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-api-step-by-step.html) 
+uses the `{id}` syntax. What should be the the right syntax?
 
 ## Code 
 ```ts (wing)
@@ -29,7 +32,6 @@ bring untyped from_js("RegExp");
 
 // npm install axios
 bring untyped axios from_js("axios"); 
-
 
 enum Status {
   Uncompleted,
@@ -51,7 +53,8 @@ resource TaskListModel implementes ITaskListModel {
     this._bucket = new cloud.Bucket();
     this.inflights.add("get", ref: "this._bucket", op: "get");
     this.inflights.add("add", ref: "this._bucket", op: "put");
-    this.inflights.add("set_status", ref: "this._bucket", op: ["get", "put"]);
+    // is this the right synatx for multiple ops? 
+    this.inflights.add("set_status", ref: "this._bucket", op: ["get", "put"]); 
     // TODO add more permissions
   }
 
@@ -87,7 +90,10 @@ resource TaskListModel implementes ITaskListModel {
   }
 
   inflight set_estimation(id: str, estimation: duration): str {
-    //TODO add implementation
+    let j = Json.clone_mut(this.get_task(id));
+    j.effort_estimation = effort_estimation;
+    this._bucket.put_json(id, j);
+    return id;
   }
 }
 
@@ -144,5 +150,5 @@ let t = new TaskListApi(model);
 // More TODO
 // - Add post to update estimation and status
 // - Add Redis instead of bucket 
-// - bring CDKTF not sure where
+// - bring CDKTF
 ```
