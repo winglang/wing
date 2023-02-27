@@ -1,4 +1,4 @@
-Initial feedback for TaskListApi Resource that usese cloud.Api 
+Initial feedback for TaskListApi Resource that uses cloud.Api 
 
 ```ts (wing)
 
