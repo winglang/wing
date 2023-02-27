@@ -45,8 +45,8 @@ enum Status {
 interface ITaskListModel {
   inflight get(id: str): Json;
   inflight add(title: str): str;
-  inflight remove(id: str); 
-  inflight find(r: RegExp): Array<str> ;
+  inflight remove(id: str): void; 
+  inflight find(r: RegExp): Array<str>;
   inflight set_status(id: str, status: Status): str;
   inflight set_estimation(id: str, estimation: duration): str;
 }
