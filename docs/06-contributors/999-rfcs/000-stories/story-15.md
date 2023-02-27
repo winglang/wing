@@ -43,7 +43,7 @@ enum Status {
 }
 
 interface ITaskListModel {
-  inflight get(id: str): Json}
+  inflight get(id: str): Json;
   inflight add(title: str): str;
   inflight remove(id: str); 
   inflight find(r: RegExp): Array<str> ;
