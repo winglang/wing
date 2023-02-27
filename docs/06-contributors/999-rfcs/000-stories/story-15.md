@@ -19,7 +19,7 @@ The following code is an inital implementation of TaskList with api gateway and 
 ## Discussion topics
 - Review the code and 
 - Should the `cloud.api` API have the `on_` prefix to match `cloud.bucket` API and also to allow calling
-the api get/post/delete/put commands (`api.get(url)` vs `api.on_get(path, 
+the api get/post/delete/put commands (`api.get(url)` vs `api.on_get(path, inflight ())`
 - I have used express's synatx for dynamic parts of the path for the api gateway `get("/task/:id"`, 
 but then I noticed that [aws](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-api-step-by-step.html) 
 uses the `{id}` syntax. What should be the the right syntax?
