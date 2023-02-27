@@ -330,34 +330,48 @@ impl<'a> JsiiImporter<'a> {
 			Some(true) => {
 				// If this datatype has methods something is unexpected in this JSII type definition, skip it.
 				if jsii_interface.methods.is_some() && !jsii_interface.methods.as_ref().unwrap().is_empty() {
-					debug!("JSII datatype interface {} has methods, skipping", type_name);
-					return;
+					panic!("Unexpected - JSII datatype interface {} has methods", type_name);
 				}
+				self.import_struct(jsii_interface);
 			}
 			_ => {
-				// We import the interface as an any type
-				// TODO: fix once the compiler supports interfaces (https://github.com/winglang/wing/issues/123)
-				let new_type_symbol = Self::jsii_name_to_symbol(&type_name, &jsii_interface.location_in_module);
-				let mut ns = self
-					.wing_types
-					.libraries
-					.lookup_nested_mut_str(jsii_interface_fqn.as_str_without_type_name(), None)
-					.unwrap()
-					.as_namespace_ref()
-					.unwrap();
-				ns.env
-					.define(
-						&new_type_symbol,
-						SymbolKind::Type(self.wing_types.anything()),
-						StatementIdx::Top,
-					)
-					.expect(&format!(
-						"Invalid JSII library: failed to define struct type {}",
-						type_name
-					));
-				return;
+				self.import_behavioral_interface(jsii_interface);
 			}
 		}
+	}
+
+	fn import_behavioral_interface(&mut self, jsii_interface: wingii::jsii::InterfaceType) {
+		let jsii_interface_fqn = FQN::from(jsii_interface.fqn.as_str());
+		debug!("Importing interface {}", jsii_interface_fqn.as_str().green());
+		let type_name = jsii_interface_fqn.type_name();
+
+		// We import the interface as an any type
+		// TODO: fix once the compiler supports interfaces (https://github.com/winglang/wing/issues/123)
+		let new_type_symbol = Self::jsii_name_to_symbol(&type_name, &jsii_interface.location_in_module);
+		let mut ns = self
+			.wing_types
+			.libraries
+			.lookup_nested_mut_str(jsii_interface_fqn.as_str_without_type_name(), None)
+			.unwrap()
+			.as_namespace_ref()
+			.unwrap();
+		ns.env
+			.define(
+				&new_type_symbol,
+				SymbolKind::Type(self.wing_types.anything()),
+				StatementIdx::Top,
+			)
+			.expect(&format!(
+				"Invalid JSII library: failed to define struct type {}",
+				type_name
+			));
+		return;
+	}
+
+	fn import_struct(&mut self, jsii_interface: wingii::jsii::InterfaceType) {
+		let jsii_interface_fqn = FQN::from(jsii_interface.fqn.as_str());
+		debug!("Importing struct {}", jsii_interface_fqn.as_str().green());
+		let type_name = jsii_interface_fqn.type_name();
 
 		let extends = if let Some(interfaces) = &jsii_interface.interfaces {
 			interfaces

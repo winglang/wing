@@ -141,6 +141,7 @@ pub enum Type {
 	Function(FunctionSignature),
 	Class(Class),
 	Resource(Class),
+	Interface(Interface),
 	Struct(Struct),
 	Enum(Enum),
 }
@@ -176,6 +177,33 @@ pub struct Class {
 }
 
 impl Class {
+	pub fn methods(&self, with_ancestry: bool) -> impl Iterator<Item = (String, TypeRef)> + '_ {
+		self
+			.env
+			.iter(with_ancestry)
+			.filter(|(_, t, _)| t.as_variable().unwrap()._type.as_function_sig().is_some())
+			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap()._type.clone()))
+	}
+
+	pub fn fields(&self, with_ancestry: bool) -> impl Iterator<Item = (String, TypeRef)> + '_ {
+		self
+			.env
+			.iter(with_ancestry)
+			.filter(|(_, t, _)| t.as_variable().unwrap()._type.as_function_sig().is_none())
+			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap()._type.clone()))
+	}
+}
+
+#[derive(Derivative)]
+#[derivative(Debug)]
+pub struct Interface {
+	pub name: Symbol,
+	parent: Option<TypeRef>, // Must be a Type::Interface type
+	#[derivative(Debug = "ignore")]
+	pub env: SymbolEnv,
+}
+
+impl Interface {
 	pub fn methods(&self, with_ancestry: bool) -> impl Iterator<Item = (String, TypeRef)> + '_ {
 		self
 			.env
@@ -246,6 +274,7 @@ impl Subtype for Type {
 				// TODO: Hack to make anything's compatible with all other types, specifically useful for handling core.Inflight handlers
 				true
 			}
+			// TODO: implement function subtyping - https://github.com/winglang/wing/issues/1677
 			(Self::Function(l0), Self::Function(r0)) => l0 == r0,
 			(Self::Class(l0), Self::Class(_)) => {
 				// If we extend from `other` than I'm a subtype of it (inheritance)
@@ -261,6 +290,34 @@ impl Subtype for Type {
 					let parent_type: &Type = &*parent;
 					return parent_type.is_subtype_of(other);
 				}
+				false
+			}
+			(Self::Interface(l0), Self::Interface(_)) => {
+				// If we extend from `other` then I'm a subtype of it (inheritance)
+				if let Some(parent) = l0.parent.as_ref() {
+					let parent_type: &Type = &*parent;
+					return parent_type.is_subtype_of(other);
+				}
+				false
+			}
+			(Self::Resource(res), Self::Interface(iface)) => {
+				// If I'm a resource and I implement the interface then I'm a subtype of it
+				for iface_method in iface.methods(true) {
+					let iface_method_name = iface_method.0;
+					let iface_method_type = iface_method.1;
+					if let Some(res_method) = res.env.try_lookup(&iface_method_name, None) {
+						let res_method_type = res_method.as_variable().unwrap()._type.clone();
+						if !res_method_type.is_subtype_of(&iface_method_type) {
+							return false;
+						}
+					} else {
+						return false;
+					}
+				}
+				return true;
+			}
+			(_, Self::Interface(_)) => {
+				// TODO - for now only resources can implement interfaces
 				false
 			}
 			(Self::Struct(l0), Self::Struct(_)) => {
@@ -384,6 +441,7 @@ impl Display for Type {
 			Type::Function(sig) => write!(f, "{}", sig),
 			Type::Class(class) => write!(f, "{}", class.name.name),
 			Type::Resource(class) => write!(f, "{}", class.name.name),
+			Type::Interface(iface) => write!(f, "{}", iface.name.name),
 			Type::Struct(s) => write!(f, "{}", s.name.name),
 			Type::Array(v) => write!(f, "Array<{}>", v),
 			Type::MutArray(v) => write!(f, "MutArray<{}>", v),
