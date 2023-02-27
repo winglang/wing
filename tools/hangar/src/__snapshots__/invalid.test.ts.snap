@@ -189,9 +189,8 @@ Error at ../../../../examples/tests/invalid/try_no_catch_or_finally.w:1:1 | Miss
 `;
 
 exports[`types_string_interpolation.w > wing test (--target sim) - invalid > stderr 1`] = `
-"Compilation failed with 2 error(s)
-Error at ../../../../examples/tests/invalid/types_string_interpolation.w:3:12 | Expected type to be one of \\"str,num\\", but got \\"bool\\" instead
-Error at ../../../../examples/tests/invalid/types_string_interpolation.w:6:12 | Expected type to be one of \\"str,num\\", but got \\"bool\\" instead"
+"Compilation failed with 1 error(s)
+Error at ../../../../examples/tests/invalid/types_string_interpolation.w:7:62 | ';' expected."
 `;
 
 exports[`types_strings_arithmetic.w > wing test (--target sim) - invalid > stderr 1`] = `
@@ -229,9 +228,8 @@ Error at ../../../../examples/tests/invalid/variable_scoping.w:6:11 | Unknown sy
 `;
 
 exports[`void_in_expression_position.w > wing test (--target sim) - invalid > stderr 1`] = `
-"Compilation failed with 4 error(s)
+"Compilation failed with 3 error(s)
 Error at ../../../../examples/tests/invalid/void_in_expression_position.w:1:1 | Expression must be a class or resource instance to access property \\"get\\", instead found type \\"void\\"
-Error at ../../../../examples/tests/invalid/void_in_expression_position.w:4:23 | Expected type to be one of \\"str,num\\", but got \\"void\\" instead
 Error at ../../../../examples/tests/invalid/void_in_expression_position.w:7:13 | Expected type to be \\"num\\", but got \\"void\\" instead
 Error at ../../../../examples/tests/invalid/void_in_expression_position.w:11:5 | Cannot assign expression of type \\"void\\" to a variable"
 `;

@@ -46,6 +46,8 @@ exports[`hello.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <
 
 exports[`identical_inflights.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> identical_inflights.w <gray>(no tests)</color>"`;
 
+exports[`json.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> json.w <gray>(no tests)</color>"`;
+
 exports[`mut_container_types.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> mut_container_types.w <gray>(no tests)</color>"`;
 
 exports[`primitive_methods.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> primitive_methods.w <gray>(no tests)</color>"`;
