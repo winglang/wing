@@ -22,6 +22,8 @@ the api get/post/delete/put commands (`api.get(url)` vs `api.on_get(path, inflig
 - Routing params - I have used express's synatx for dynamic parts of the path for the api gateway `get("/task/:id"`, 
 but then I noticed that [aws](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-api-step-by-step.html) 
 uses the `{id}` syntax. What should be the the right syntax?
+- Bring internal nodejs types - how do we bring somethink that we can't require, like `RegEx`
+- calling new 
 
 ## Code 
 ```ts (wing)
@@ -106,7 +108,7 @@ resource TaskListApi {
     this.api = new cloud.Api();
     
     // Should this be on_post, on_get
-    this.api.post("/tasks", inflight (req: cloud. Api.ApiRequest): cloud.Api.ApiResponse => {
+    this.api.post("/tasks", inflight (req: cloud. Api.ApiRequest): cloud.ApiResponse => {
       let var title = str.from_json(req.body.title);
       if title == random {
         // can I cast an untyped ?
@@ -114,33 +116,33 @@ resource TaskListApi {
         title = str.from_json(random_task.data.activity); 
       } 
       let id = this.model.add(title);
-      return new cloud.Api.ApiResponse(status:201, body: Json.format(id));
+      return new cloud.ApiResponse(status:201, body: Json.format(id));
     });
 
-    this.api.get("/tasks/:id", inflight (req: cloud.Api.ApiRequest): cloud.Api.ApiResponse => {
+    this.api.get("/tasks/:id", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let id = str.from_json(req.params.id);
       try {
         let title = this.model.get(id);
-        return new cloud.Api.ApiResponse(status:200, body: Json.format(title));
+        return new cloud.ApiResponse(status:200, body: Json.format(title));
       } catch {
-        return new cloud.Api.ApiResponse(status:400);
+        return new cloud.ApiResponse(status:400);
       }
     });
     
-    this.api.delete("/tasks/:id", inflight (req: cloud.Api.ApiRequest): cloud.Api.ApiResponse => {
+    this.api.delete("/tasks/:id", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let id = str.from_json(req.params.id);
       try {
         this.model.delete(id);
-        return new cloud.Api.ApiResponse(status:204);
+        return new cloud.ApiResponse(status:204);
       } catch {
-        return new cloud.Api.ApiResponse(status:400);
+        return new cloud.ApiResponse(status:400);
       }
     });
 
-    this.api.get("/tasks", inflight (req: cloud.Api.ApiRequest): cloud.Api.ApiResponse => {
+    this.api.get("/tasks", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let search = new Regex(str.from_json(req.query.search ?? Json ".*")); 
       let results = this.model.find(search);
-      return new cloud.Api.ApiResponse(status:200, body: Json.format(results));
+      return new cloud.ApiResponse(status:200, body: Json.format(results));
     });
   }
 }
