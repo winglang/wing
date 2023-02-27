@@ -4049,7 +4049,7 @@ static const TSLexMode ts_lex_modes[STATE_COUNT] = {
   [218] = {.lex_state = 1},
   [219] = {.lex_state = 1},
   [220] = {.lex_state = 1},
-  [221] = {.lex_state = 1},
+  [221] = {.lex_state = 22},
   [222] = {.lex_state = 1},
   [223] = {.lex_state = 1},
   [224] = {.lex_state = 1},

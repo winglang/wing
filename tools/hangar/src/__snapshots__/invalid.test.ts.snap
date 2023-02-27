@@ -188,11 +188,6 @@ exports[`try_no_catch_or_finally.w > wing test (--target sim) - invalid > stderr
 Error at ../../../../examples/tests/invalid/try_no_catch_or_finally.w:1:1 | Missing \`catch\` or \`finally\` blocks for this try statement"
 `;
 
-exports[`types_string_interpolation.w > wing test (--target sim) - invalid > stderr 1`] = `
-"Compilation failed with 1 error(s)
-Error at ../../../../examples/tests/invalid/types_string_interpolation.w:7:62 | ';' expected."
-`;
-
 exports[`types_strings_arithmetic.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 3 error(s)
 Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:1:16 | Expected type to be \\"num\\", but got \\"str\\" instead
