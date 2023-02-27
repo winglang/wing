@@ -1,8 +1,9 @@
 import { join } from "path";
 import { Construct } from "constructs";
+import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
-import { TopicSchema, TopicSubscriber } from "./schema-resources";
+import { TopicSchema, TopicSubscriber, TOPIC_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../convert";
@@ -13,7 +14,7 @@ import * as core from "../core";
  *
  * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
-export class Topic extends cloud.TopicBase implements ISimulatorResource {
+export class Topic extends cloud.Topic implements ISimulatorResource {
   private readonly subscribers: TopicSubscriber[];
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
     super(scope, id, props);
@@ -34,7 +35,7 @@ export class Topic extends cloud.TopicBase implements ISimulatorResource {
       "TopicOnMessageHandlerClient"
     );
 
-    const fn = new cloud.Function(
+    const fn = Function.newFunction(
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnMessage-${hash}`,
       functionHandler,
@@ -70,7 +71,7 @@ export class Topic extends cloud.TopicBase implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: TopicSchema = {
-      type: cloud.TOPIC_TYPE,
+      type: TOPIC_TYPE,
       path: this.node.path,
       props: {
         subscribers: this.subscribers,

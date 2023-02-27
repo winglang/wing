@@ -7,7 +7,7 @@ import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 test("default counter behavior", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
-  new cloud.Counter(app, "Counter");
+  cloud.Counter.newCounter(app, "Counter");
   const output = app.synth();
 
   expect(tfResourcesOf(output)).toEqual(["aws_dynamodb_table"]);
@@ -16,7 +16,7 @@ test("default counter behavior", () => {
 
 test("counter with initial value", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
-  new cloud.Counter(app, "Counter", {
+  cloud.Counter.newCounter(app, "Counter", {
     initial: 9991,
   });
   const output = app.synth();
@@ -28,7 +28,7 @@ test("counter with initial value", () => {
 
 test("function with a counter binding", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const counter = new cloud.Counter(app, "Counter");
+  const counter = cloud.Counter.newCounter(app, "Counter");
   const inflight = Testing.makeHandler(
     app,
     "Handler",
@@ -43,7 +43,7 @@ test("function with a counter binding", () => {
       },
     }
   );
-  new cloud.Function(app, "Function", inflight);
+  cloud.Function.newFunction(app, "Function", inflight);
   const output = app.synth();
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
@@ -62,7 +62,7 @@ test("function with a counter binding", () => {
 
 test("inc() policy statement", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const counter = new cloud.Counter(app, "Counter");
+  const counter = cloud.Counter.newCounter(app, "Counter");
   const inflight = Testing.makeHandler(
     app,
     "Handler",
@@ -77,7 +77,7 @@ test("inc() policy statement", () => {
       },
     }
   );
-  new cloud.Function(app, "Function", inflight);
+  cloud.Function.newFunction(app, "Function", inflight);
   const output = app.synth();
 
   expect(tfSanitize(output)).toContain("dynamodb:UpdateItem");
@@ -87,7 +87,7 @@ test("inc() policy statement", () => {
 
 test("dec() policy statement", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const counter = new cloud.Counter(app, "Counter");
+  const counter = cloud.Counter.newCounter(app, "Counter");
   const inflight = Testing.makeHandler(
     app,
     "Handler",
@@ -102,7 +102,7 @@ test("dec() policy statement", () => {
       },
     }
   );
-  new cloud.Function(app, "Function", inflight);
+  cloud.Function.newFunction(app, "Function", inflight);
   const output = app.synth();
 
   expect(tfSanitize(output)).toContain("dynamodb:UpdateItem");
@@ -112,7 +112,7 @@ test("dec() policy statement", () => {
 
 test("peek() policy statement", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const counter = new cloud.Counter(app, "Counter");
+  const counter = cloud.Counter.newCounter(app, "Counter");
   const inflight = Testing.makeHandler(
     app,
     "Handler",
@@ -127,7 +127,7 @@ test("peek() policy statement", () => {
       },
     }
   );
-  new cloud.Function(app, "Function", inflight);
+  cloud.Function.newFunction(app, "Function", inflight);
   const output = app.synth();
 
   expect(tfSanitize(output)).toContain("dynamodb:GetItem");
@@ -137,7 +137,7 @@ test("peek() policy statement", () => {
 
 test("reset() policy statement", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const counter = new cloud.Counter(app, "Counter");
+  const counter = cloud.Counter.newCounter(app, "Counter");
   const inflight = Testing.makeHandler(
     app,
     "Handler",
@@ -152,7 +152,7 @@ test("reset() policy statement", () => {
       },
     }
   );
-  new cloud.Function(app, "Function", inflight);
+  cloud.Function.newFunction(app, "Function", inflight);
   const output = app.synth();
 
   expect(tfSanitize(output)).toContain("dynamodb:UpdateItem");
@@ -163,7 +163,7 @@ test("reset() policy statement", () => {
 test("counter name valid", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const counter = new cloud.Counter(app, "The.Amazing-Counter_01");
+  const counter = cloud.Counter.newCounter(app, "The.Amazing-Counter_01");
   const output = app.synth();
 
   // THEN
@@ -182,7 +182,7 @@ test("counter name valid", () => {
 test("replace invalid character from counter name", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const counter = new cloud.Counter(app, "The*Amazing%Counter@01");
+  const counter = cloud.Counter.newCounter(app, "The*Amazing%Counter@01");
   const output = app.synth();
 
   // THEN

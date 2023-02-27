@@ -23,7 +23,7 @@ const NAME_OPTS: NameOptions = {
  *
  * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
-export class Topic extends cloud.TopicBase {
+export class Topic extends cloud.Topic {
   private readonly topic: SnsTopic;
 
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
@@ -47,7 +47,7 @@ export class Topic extends cloud.TopicBase {
       "TopicOnMessageHandlerClient"
     );
 
-    const fn = new cloud.Function(
+    const fn = Function.newFunction(
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnMessage-${hash}`,
       functionHandler,

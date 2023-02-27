@@ -1,5 +1,5 @@
 import * as cdktf from "cdktf";
-import * as cloud from "../../src/cloud";
+import { Function } from "../../src/cloud";
 import * as tfazure from "../../src/target-tf-azure";
 import { Testing } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
@@ -13,7 +13,7 @@ test("basic function", () => {
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
   // WHEN
-  new cloud.Function(app, "Function", inflight);
+  Function.newFunction(app, "Function", inflight);
   const output = app.synth();
 
   // THEN
@@ -36,7 +36,7 @@ test("basic function with environment variables", () => {
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
   // WHEN
-  new cloud.Function(app, "Function", inflight, {
+  Function.newFunction(app, "Function", inflight, {
     env: {
       FOO: "BAR",
       BOOM: "BAM",
@@ -92,7 +92,7 @@ test("replace invalid character from function name", () => {
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
   // WHEN
-  const func = new cloud.Function(app, "someFunction01", inflight);
+  const func = Function.newFunction(app, "someFunction01", inflight);
   const output = app.synth();
 
   // THEN

@@ -1,13 +1,13 @@
 import { Construct } from "constructs";
-import { Polycons } from "polycons";
 import { Function, FunctionProps } from "./function";
-import { Code, IResource, Inflight, Resource } from "../core";
+import { fqnForType } from "../constants";
+import { IResource, Inflight, Resource, App } from "../core";
 import { Duration } from "../std";
 
 /**
  * Global identifier for `Queue`.
  */
-export const QUEUE_TYPE = "wingsdk.cloud.Queue";
+export const QUEUE_FQN = fqnForType("cloud.Queue");
 
 /**
  * Properties for `Queue`.
@@ -27,19 +27,28 @@ export interface QueueProps {
 }
 
 /**
- * Functionality shared between all `Queue` implementations.
+ * Represents a queue.
+ *
+ * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
-export abstract class QueueBase extends Resource {
+export abstract class Queue extends Resource {
+  /**
+   * Create a new `Queue` instance.
+   */
+  public static newQueue(
+    scope: Construct,
+    id: string,
+    props: QueueProps = {}
+  ): Queue {
+    return App.of(scope).new(QUEUE_FQN, undefined, scope, id, props);
+  }
+
   public readonly stateful = true;
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
     super(scope, id);
 
     this.display.title = "Queue";
     this.display.description = "A distributed message queue";
-
-    if (!scope) {
-      return;
-    }
 
     props;
   }
@@ -62,32 +71,6 @@ export interface QueueOnMessageProps extends FunctionProps {
    * @default 1
    */
   readonly batchSize?: number;
-}
-
-/**
- * Represents a queue.
- *
- * @inflight `@winglang/sdk.cloud.IQueueClient`
- */
-export class Queue extends QueueBase {
-  constructor(scope: Construct, id: string, props: QueueProps = {}) {
-    super(null as any, id, props);
-    return Polycons.newInstance(QUEUE_TYPE, scope, id, props) as Queue;
-  }
-
-  public onMessage(
-    inflight: Inflight,
-    props: QueueOnMessageProps = {}
-  ): Function {
-    inflight;
-    props;
-    throw new Error("Method not implemented.");
-  }
-
-  /** @internal */
-  public _toInflight(): Code {
-    throw new Error("Method not implemented.");
-  }
 }
 
 /**

@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 import { join } from "path";
-import { IApp } from "../src/core";
+import { App } from "../src/core";
 import { directorySnapshot } from "../src/util";
 
 export function treeJsonOf(outdir: string): any {
@@ -46,7 +46,7 @@ export function tfSanitize(templateStr: string): string {
   );
 }
 
-export function appSnapshot(app: IApp): Record<string, any> {
+export function appSnapshot(app: App): Record<string, any> {
   app.synth();
   return directorySnapshot(app.outdir);
 }

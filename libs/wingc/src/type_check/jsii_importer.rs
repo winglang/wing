@@ -654,6 +654,7 @@ impl<'a> JsiiImporter<'a> {
 			should_case_convert_jsii: true,
 			name: new_type_symbol.clone(),
 			env: dummy_env,
+			fqn: Some(jsii_class_fqn.to_string()),
 			parent: base_class_type,
 			type_parameters: type_params,
 		};

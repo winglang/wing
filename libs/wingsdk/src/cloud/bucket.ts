@@ -1,11 +1,11 @@
 import { Construct } from "constructs";
-import { Polycons } from "polycons";
-import { Code, Resource } from "../core";
+import { fqnForType } from "../constants";
+import { App, Resource } from "../core";
 
 /**
  * Global identifier for `Bucket`.
  */
-export const BUCKET_TYPE = "wingsdk.cloud.Bucket";
+export const BUCKET_FQN = fqnForType("cloud.Bucket");
 
 /**
  * Properties for `Bucket`.
@@ -19,19 +19,29 @@ export interface BucketProps {
 }
 
 /**
- * Functionality shared between all `Bucket` implementations.
+ * Represents a cloud object store.
+ *
+ * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
-export abstract class BucketBase extends Resource {
+export abstract class Bucket extends Resource {
+  /**
+   * Create a new bucket.
+   */
+  public static newBucket(
+    scope: Construct,
+    id: string,
+    props: BucketProps = {}
+  ): Bucket {
+    return App.of(scope).new(BUCKET_FQN, undefined, scope, id, props);
+  }
+
   public readonly stateful = true;
-  constructor(scope: Construct, id: string, props: BucketProps) {
+
+  constructor(scope: Construct, id: string, props: BucketProps = {}) {
     super(scope, id);
 
     this.display.title = "Bucket";
     this.display.description = "A cloud object store";
-
-    if (!scope) {
-      return;
-    }
 
     props;
   }
@@ -43,29 +53,6 @@ export abstract class BucketBase extends Resource {
    * referencing a file from the local filesystem.
    */
   public abstract addObject(key: string, body: string): void;
-}
-
-/**
- * Represents a cloud object store.
- *
- * @inflight `@winglang/sdk.cloud.IBucketClient`
- */
-export class Bucket extends BucketBase {
-  constructor(scope: Construct, id: string, props: BucketProps = {}) {
-    super(null as any, id, props);
-    return Polycons.newInstance(BUCKET_TYPE, scope, id, props) as Bucket;
-  }
-
-  /** @internal */
-  public _toInflight(): Code {
-    throw new Error("Method not implemented.");
-  }
-
-  public addObject(key: string, body: string): void {
-    key;
-    body;
-    throw new Error("Method not implemented.");
-  }
 }
 
 /** Interface for delete method inside `Bucket` */

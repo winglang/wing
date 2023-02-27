@@ -1,13 +1,13 @@
 import { Construct } from "constructs";
-import { Polycons } from "polycons";
 import { Function, FunctionProps } from "./function";
-import { Code, IResource, Inflight, Resource } from "../core";
+import { fqnForType } from "../constants";
+import { IResource, Inflight, Resource, App } from "../core";
 import { Duration } from "../std";
 
 /**
  * Global identifier for `Schedule`.
  */
-export const SCHEDULE_TYPE = "wingsdk.cloud.Schedule";
+export const SCHEDULE_FQN = fqnForType("cloud.Schedule");
 
 /**
  * Properties for `Schedule`.
@@ -30,9 +30,22 @@ export interface ScheduleProps {
 }
 
 /**
- * Functionality shared between all `Schedule` implementations.
+ * Represents a schedule.
+ *
+ * @inflight `@winglang/sdk.cloud.IScheduleClient`
  */
-export abstract class ScheduleBase extends Resource {
+export abstract class Schedule extends Resource {
+  /**
+   * Create a new schedule.
+   */
+  public static newSchedule(
+    scope: Construct,
+    id: string,
+    props: ScheduleProps = {}
+  ): Schedule {
+    return App.of(scope).new(SCHEDULE_FQN, undefined, scope, id, props);
+  }
+
   public readonly stateful = true;
   constructor(scope: Construct, id: string, props: ScheduleProps = {}) {
     super(scope, id);
@@ -40,10 +53,6 @@ export abstract class ScheduleBase extends Resource {
     this.display.title = "Schedule";
     this.display.description =
       "A cloud schedule to trigger events at regular intervals";
-
-    if (!scope) {
-      return;
-    }
 
     props;
   }
@@ -61,29 +70,6 @@ export abstract class ScheduleBase extends Resource {
  * Options for Schedule.onTick.
  */
 export interface ScheduleOnTickProps extends FunctionProps {}
-
-/**
- * Represents a schedule.
- *
- * @inflight `@winglang/sdk.cloud.IScheduleClient`
- */
-export class Schedule extends ScheduleBase {
-  constructor(scope: Construct, id: string, props: ScheduleProps = {}) {
-    super(null as any, id, props);
-    return Polycons.newInstance(SCHEDULE_TYPE, scope, id, props) as Schedule;
-  }
-
-  public onTick(inflight: Inflight, props: ScheduleOnTickProps = {}): Function {
-    inflight;
-    props;
-    throw new Error("Method not implemented.");
-  }
-
-  /** @internal */
-  public _toInflight(): Code {
-    throw new Error("Method not implemented.");
-  }
-}
 
 /**
  * Represents a resource with an inflight "handle" method that can be passed to

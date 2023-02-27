@@ -184,6 +184,7 @@ pub struct Class {
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
 	pub should_case_convert_jsii: bool,
+	pub fqn: Option<String>,
 	pub type_parameters: Option<Vec<TypeRef>>,
 }
 
@@ -1646,6 +1647,7 @@ impl<'a> TypeChecker<'a> {
 				let class_spec = Class {
 					should_case_convert_jsii: false,
 					name: name.clone(),
+					fqn: None,
 					env: dummy_env,
 					parent: parent_class,
 					type_parameters: None, // TODO no way to have generic args in wing yet
@@ -2069,6 +2071,7 @@ impl<'a> TypeChecker<'a> {
 		let tt = Type::Class(Class {
 			name: original_type_class.name.clone(),
 			env: new_env,
+			fqn: Some(original_fqn.to_string()),
 			parent: original_type_class.parent,
 			should_case_convert_jsii: original_type_class.should_case_convert_jsii,
 			type_parameters: Some(type_params.clone()),

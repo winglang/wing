@@ -1,8 +1,9 @@
 import { join } from "path";
 import { Construct } from "constructs";
+import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
-import { QueueSchema, QueueSubscriber } from "./schema-resources";
+import { QueueSchema, QueueSubscriber, QUEUE_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../convert";
@@ -14,7 +15,7 @@ import * as std from "../std";
  *
  * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
-export class Queue extends cloud.QueueBase implements ISimulatorResource {
+export class Queue extends cloud.Queue implements ISimulatorResource {
   private readonly timeout: std.Duration;
   private readonly subscribers: QueueSubscriber[];
   private readonly initialMessages: string[] = [];
@@ -62,7 +63,7 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
       "QueueOnMessageHandlerClient"
     );
 
-    const fn = new cloud.Function(
+    const fn = Function.newFunction(
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnMessage-${hash}`,
       functionHandler,
@@ -90,7 +91,7 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: QueueSchema = {
-      type: cloud.QUEUE_TYPE,
+      type: QUEUE_TYPE,
       path: this.node.path,
       props: {
         timeout: this.timeout.seconds,

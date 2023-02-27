@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
-import { Bucket, Function } from "../../src/cloud";
-import { InflightBindings } from "../../src/core";
+import { Bucket } from "../../src/cloud";
+import { Code, InflightBindings } from "../../src/core";
+import { Function } from "../../src/target-sim/function";
 import { SimApp, Testing, TestResult } from "../../src/testing";
 
 describe("run single test", () => {
@@ -34,7 +35,7 @@ describe("run single test", () => {
 
   test("not a function", async () => {
     const app = new SimApp();
-    new Bucket(app, "test");
+    Bucket.newBucket(app, "test");
 
     const sim = await app.startSimulator();
     await expect(sim.runTest("root/test")).rejects.toThrowError(
@@ -65,7 +66,7 @@ describe("run all tests", () => {
     new Test(app, "test", ["console.log('hi');"]);
     new Test(app, "test:bla", ["console.log('hi');"]);
     new Test(app, "test:blue", ["console.log('hi');"]);
-    new Bucket(app, "mytestbucket");
+    Bucket.newBucket(app, "mytestbucket");
 
     const sim = await app.startSimulator();
     const results = await sim.runAllTests();
@@ -79,7 +80,7 @@ describe("run all tests", () => {
 
   test("each test runs in a separate simulator instance", async () => {
     const app = new SimApp();
-    const bucket = new Bucket(app, "bucket");
+    const bucket = Bucket.newBucket(app, "bucket");
 
     new Test(
       app,
@@ -153,6 +154,10 @@ class Test extends Function {
         bindings
       )
     );
+  }
+
+  public _toInflight(): Code {
+    throw new Error("Method not implemented.");
   }
 }
 

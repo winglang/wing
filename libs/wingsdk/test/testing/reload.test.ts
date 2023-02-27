@@ -1,4 +1,4 @@
-import * as cloud from "../../src/cloud";
+import { Bucket } from "../../src/cloud";
 import * as sim from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
@@ -8,7 +8,7 @@ test("reloading the simulator updates the state of the tree", async () => {
 
   // Create a .wsim file
   const app = new sim.App({ outdir: workdir });
-  const bucket1 = new cloud.Bucket(app, "my_bucket", { public: false });
+  const bucket1 = Bucket.newBucket(app, "my_bucket", { public: false });
   bucket1.display.hidden = false;
   const simfile = app.synth();
 
@@ -22,7 +22,7 @@ test("reloading the simulator updates the state of the tree", async () => {
 
   // Update the .wsim file in-place
   const app2 = new sim.App({ outdir: workdir });
-  const bucket2 = new cloud.Bucket(app2, "my_bucket", { public: true });
+  const bucket2 = Bucket.newBucket(app2, "my_bucket", { public: true });
   bucket2.display.hidden = true;
   app2.synth();
 

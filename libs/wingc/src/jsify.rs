@@ -278,23 +278,34 @@ impl<'a> JSifier<'a> {
 					true
 				};
 
+				let ctor = self.jsify_type(class);
+
 				// If this is a resource then add the scope and id to the arg list
 				if is_resource {
-					format!(
-						"new {}({})",
-						self.jsify_type(class),
-						self.jsify_arg_list(
-							&arg_list,
-							Some("this"),
-							Some(&format!("{}", obj_id.as_ref().unwrap_or(&self.jsify_type(class)))),
-							should_case_convert,
-							phase
-						)
-					)
+					let args = self.jsify_arg_list(
+						&arg_list,
+						Some("this"),
+						Some(&format!("{}", obj_id.as_ref().unwrap_or(&self.jsify_type(class)))),
+						should_case_convert,
+						phase
+					);
+
+					let fqn = expression_type
+						.expect("expected expression ")
+						.as_class_or_resource()
+						.expect("expected resource")
+						.fqn
+						.clone();
+
+					if let Some(fqn) = fqn {
+						format!("this.node.root.new(\"{}\",{},{})", fqn, ctor, args)
+					} else {
+						format!("new {}({})", ctor, args)
+					}
 				} else {
 					format!(
 						"new {}({})",
-						self.jsify_type(&class),
+						ctor,
 						self.jsify_arg_list(&arg_list, None, None, should_case_convert, phase)
 					)
 				}
