@@ -262,7 +262,7 @@ impl<'a> JSifier<'a> {
 				obj_scope: _, // TODO
 			} => {
 				let expression_type = expression.evaluated_type.borrow();
-				let is_resource = if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
+				let is_resource = if let Some(evaluated_type) = expression_type.as_ref() {
 					evaluated_type.as_resource().is_some()
 				} else {
 					// TODO Hack: This object type is not known. How can we tell if it's a resource or not?
@@ -274,8 +274,19 @@ impl<'a> JSifier<'a> {
 					// This should only happen in the case of `any`, which are almost certainly JSII imports.
 					true
 				};
+				let is_abstract = if let Some(cls) = expression_type.unwrap().as_class_or_resource() {
+					cls.is_abstract
+				} else {
+					false
+				};
 
-				let ctor = self.jsify_type(class);
+				// if the type is abstract we are not allowed to instantiate it directly (only through the
+				// "new" factory method)
+				let ctor = (if is_abstract {
+					None
+				} else {
+					Some(self.jsify_type(class))
+				}).unwrap_or("undefined".to_string());
 
 				// If this is a resource then add the scope and id to the arg list
 				if is_resource {
@@ -289,7 +300,7 @@ impl<'a> JSifier<'a> {
 
 					let fqn = expression_type
 						.expect("expected expression ")
-						.as_class_or_resource()
+						.as_resource()
 						.expect("expected resource")
 						.fqn
 						.clone();

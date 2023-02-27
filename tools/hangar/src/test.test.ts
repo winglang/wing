@@ -21,7 +21,7 @@ describe.each(validWingFiles)("%s", (wingFile) => {
         true
       );
 
-      expect(out.stdout).toMatchSnapshot("stdout");
+      expect(out.all ?? out.stdout).toMatchSnapshot("stdout");
 
       // TODO snapshot .wsim contents
     },

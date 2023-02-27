@@ -173,6 +173,7 @@ pub struct Class {
 	pub env: SymbolEnv,
 	pub should_case_convert_jsii: bool,
 	pub fqn: Option<String>,
+	pub is_abstract: bool,
 	pub type_parameters: Option<Vec<TypeRef>>,
 }
 
@@ -1617,6 +1618,7 @@ impl<'a> TypeChecker<'a> {
 					fqn: None,
 					env: dummy_env,
 					parent: parent_class,
+					is_abstract: false,
 					type_parameters: None, // TODO no way to have generic args in wing yet
 				};
 				let mut class_type = self.types.add_type(if *is_resource {
@@ -2028,6 +2030,7 @@ impl<'a> TypeChecker<'a> {
 			fqn: Some(original_fqn.to_string()),
 			parent: original_type_class.parent,
 			should_case_convert_jsii: original_type_class.should_case_convert_jsii,
+			is_abstract: original_type_class.is_abstract,
 			type_parameters: Some(type_params.clone()),
 		});
 		// TODO: here we add a new type regardless whether we already "hydrated" `original_type` with these `type_params`. Cache!

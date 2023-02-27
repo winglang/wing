@@ -1,6 +1,5 @@
 import { readdirSync, writeFileSync } from "fs";
 import { join } from "path";
-import { Construct } from "constructs";
 import * as core from "../../src/core";
 import { JsonFile, TextFile } from "../../src/fs";
 import { mkdtemp } from "../../src/util";

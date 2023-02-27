@@ -95,7 +95,9 @@ export abstract class App extends Construct {
   ): any {
     fqn;
     if (!ctor) {
-      throw new Error(`Unable to resolve class for ${fqn}`);
+      throw new Error(
+        `Unable to create an instance of abstract type "${fqn}" for this target`
+      );
     }
 
     return new ctor(scope, id, ...args);
