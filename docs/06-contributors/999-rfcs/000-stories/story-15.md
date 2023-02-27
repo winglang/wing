@@ -1,5 +1,7 @@
-User Story 15 - Task List with Api Gateway and Redis
-Status: Draft, Expected released on 2023/03/16
+# User Story 15 - Task List with Api Gateway and Redis
+
+> **Status**: Draft, Expected released on 2023/03/16
+
 
 The following code is an inital implementation of TaskList with api gateway and a redis db 
 
