@@ -1,3 +1,4 @@
+import { MarkdownDocument } from "./markdown-doc";
 import {
   ApiReferenceSchema,
   AssemblyMetadataSchema,
@@ -17,7 +18,6 @@ import {
   TypeSchema,
 } from "../schema";
 import { Language } from "../transpile/transpile";
-import { MarkdownDocument } from "./markdown-doc";
 
 export interface MarkdownFormattingOptions {
   /**
@@ -758,10 +758,7 @@ export const defaultLinkFormatter = (
   type: JsiiEntity,
   metadata: AssemblyMetadataSchema
 ) => {
-  if (
-    type.packageName === metadata.packageName &&
-    type.submodule === metadata.submodule
-  ) {
+  if (type.packageName === metadata.packageName) {
     return `<a href="#${sanitize(type.id)}">${type.displayName}</a>`;
   } else {
     // do not display a link if the type isn't in this document

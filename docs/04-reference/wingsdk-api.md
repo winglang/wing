@@ -25,13 +25,13 @@ new cloud.Bucket(props?: BucketProps)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Bucket.Initializer.parameter.props">props</a></code> | <code>cloud.BucketProps</code> | *No description.* |
+| <code><a href="#@winglang/sdk.cloud.Bucket.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.BucketProps">BucketProps</a></code> | *No description.* |
 
 ---
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Bucket.Initializer.parameter.props"></a>
 
-- *Type:* cloud.BucketProps
+- *Type:* <a href="#@winglang/sdk.cloud.BucketProps">BucketProps</a>
 
 ---
 
@@ -66,40 +66,13 @@ referencing a file from the local filesystem.
 
 ---
 
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Bucket.addConnection">add_connection</a></code> | Adds a connection between two resources. |
-
----
-
-##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Bucket.addConnection"></a>
-
-```wing
-bring cloud;
-
-cloud.Bucket.add_connection(props: AddConnectionProps)
-```
-
-Adds a connection between two resources.
-
-A connection is a piece of
-metadata describing how one resource is related to another resource. This
-metadata is recorded in the tree.json file.
-
-###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Bucket.addConnection.parameter.props"></a>
-
-- *Type:* core.AddConnectionProps
-
----
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Bucket.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Bucket.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Bucket.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Bucket.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -122,7 +95,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* core.Display
+- *Type:* <a href="#@winglang/sdk.core.Display">Display</a>
 
 Information on how to display a resource in the UI.
 
@@ -161,51 +134,24 @@ new cloud.Counter(props?: CounterProps)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Counter.Initializer.parameter.props">props</a></code> | <code>cloud.CounterProps</code> | *No description.* |
+| <code><a href="#@winglang/sdk.cloud.Counter.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.CounterProps">CounterProps</a></code> | *No description.* |
 
 ---
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Counter.Initializer.parameter.props"></a>
 
-- *Type:* cloud.CounterProps
+- *Type:* <a href="#@winglang/sdk.cloud.CounterProps">CounterProps</a>
 
 ---
 
 
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Counter.addConnection">add_connection</a></code> | Adds a connection between two resources. |
-
----
-
-##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Counter.addConnection"></a>
-
-```wing
-bring cloud;
-
-cloud.Counter.add_connection(props: AddConnectionProps)
-```
-
-Adds a connection between two resources.
-
-A connection is a piece of
-metadata describing how one resource is related to another resource. This
-metadata is recorded in the tree.json file.
-
-###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Counter.addConnection.parameter.props"></a>
-
-- *Type:* core.AddConnectionProps
-
----
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Counter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Counter.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Counter.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Counter.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 | <code><a href="#@winglang/sdk.cloud.Counter.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
 
@@ -229,7 +175,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* core.Display
+- *Type:* <a href="#@winglang/sdk.core.Display">Display</a>
 
 Information on how to display a resource in the UI.
 
@@ -266,7 +212,7 @@ The initial value of the counter.
 
 ### Function <a name="Function" id="@winglang/sdk.cloud.Function"></a>
 
-- *Implements:* core.IInflightHost
+- *Implements:* <a href="#@winglang/sdk.core.IInflightHost">IInflightHost</a>
 
 **Inflight client:** [@winglang/sdk.cloud.IFunctionClient](#@winglang/sdk.cloud.IFunctionClient)
 
@@ -282,20 +228,20 @@ new cloud.Function(inflight: ~Inflight, props?: FunctionProps)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Function.Initializer.parameter.inflight">inflight</a></code> | <code>core.Inflight</code> | *No description.* |
-| <code><a href="#@winglang/sdk.cloud.Function.Initializer.parameter.props">props</a></code> | <code>cloud.FunctionProps</code> | *No description.* |
+| <code><a href="#@winglang/sdk.cloud.Function.Initializer.parameter.inflight">inflight</a></code> | <code><a href="#@winglang/sdk.core.Inflight">Inflight</a></code> | *No description.* |
+| <code><a href="#@winglang/sdk.cloud.Function.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.FunctionProps">FunctionProps</a></code> | *No description.* |
 
 ---
 
 ##### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Function.Initializer.parameter.inflight"></a>
 
-- *Type:* core.Inflight
+- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
 
 ---
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Function.Initializer.parameter.props"></a>
 
-- *Type:* cloud.FunctionProps
+- *Type:* <a href="#@winglang/sdk.cloud.FunctionProps">FunctionProps</a>
 
 ---
 
@@ -327,40 +273,13 @@ Add an environment variable to the function.
 
 ---
 
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Function.addConnection">add_connection</a></code> | Adds a connection between two resources. |
-
----
-
-##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Function.addConnection"></a>
-
-```wing
-bring cloud;
-
-cloud.Function.add_connection(props: AddConnectionProps)
-```
-
-Adds a connection between two resources.
-
-A connection is a piece of
-metadata describing how one resource is related to another resource. This
-metadata is recorded in the tree.json file.
-
-###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Function.addConnection.parameter.props"></a>
-
-- *Type:* core.AddConnectionProps
-
----
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Function.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Function.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Function.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 | <code><a href="#@winglang/sdk.cloud.Function.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Returns the set of environment variables for this function. |
 
@@ -384,7 +303,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* core.Display
+- *Type:* <a href="#@winglang/sdk.core.Display">Display</a>
 
 Information on how to display a resource in the UI.
 
@@ -434,7 +353,7 @@ new fs.JsonFile(file_path: str, props: JsonFileProps)
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.fs.JsonFile.Initializer.parameter.filePath">file_path</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#@winglang/sdk.fs.JsonFile.Initializer.parameter.props">props</a></code> | <code>fs.JsonFileProps</code> | *No description.* |
+| <code><a href="#@winglang/sdk.fs.JsonFile.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.fs.JsonFileProps">JsonFileProps</a></code> | *No description.* |
 
 ---
 
@@ -446,7 +365,7 @@ new fs.JsonFile(file_path: str, props: JsonFileProps)
 
 ##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.fs.JsonFile.Initializer.parameter.props"></a>
 
-- *Type:* fs.JsonFileProps
+- *Type:* <a href="#@winglang/sdk.fs.JsonFileProps">JsonFileProps</a>
 
 ---
 
@@ -531,28 +450,7 @@ new cloud.Logger()
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Logger.addConnection">add_connection</a></code> | Adds a connection between two resources. |
 | <code><a href="#@winglang/sdk.cloud.Logger.register">register</a></code> | Create a logger and register it to the given scope. |
-
----
-
-##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Logger.addConnection"></a>
-
-```wing
-bring cloud;
-
-cloud.Logger.add_connection(props: AddConnectionProps)
-```
-
-Adds a connection between two resources.
-
-A connection is a piece of
-metadata describing how one resource is related to another resource. This
-metadata is recorded in the tree.json file.
-
-###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Logger.addConnection.parameter.props"></a>
-
-- *Type:* core.AddConnectionProps
 
 ---
 
@@ -571,7 +469,7 @@ Create a logger and register it to the given scope.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Logger.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Logger.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Logger.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Logger.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -594,7 +492,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* core.Display
+- *Type:* <a href="#@winglang/sdk.core.Display">Display</a>
 
 Information on how to display a resource in the UI.
 
@@ -633,13 +531,13 @@ new cloud.Queue(props?: QueueProps)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Queue.Initializer.parameter.props">props</a></code> | <code>cloud.QueueProps</code> | *No description.* |
+| <code><a href="#@winglang/sdk.cloud.Queue.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.QueueProps">QueueProps</a></code> | *No description.* |
 
 ---
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.Initializer.parameter.props"></a>
 
-- *Type:* cloud.QueueProps
+- *Type:* <a href="#@winglang/sdk.cloud.QueueProps">QueueProps</a>
 
 ---
 
@@ -661,50 +559,23 @@ Create a function to consume messages from this queue.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Queue.onMessage.parameter.inflight"></a>
 
-- *Type:* core.Inflight
+- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
 
 ---
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.onMessage.parameter.props"></a>
 
-- *Type:* cloud.QueueOnMessageProps
+- *Type:* <a href="#@winglang/sdk.cloud.QueueOnMessageProps">QueueOnMessageProps</a>
 
 ---
 
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Queue.addConnection">add_connection</a></code> | Adds a connection between two resources. |
-
----
-
-##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Queue.addConnection"></a>
-
-```wing
-bring cloud;
-
-cloud.Queue.add_connection(props: AddConnectionProps)
-```
-
-Adds a connection between two resources.
-
-A connection is a piece of
-metadata describing how one resource is related to another resource. This
-metadata is recorded in the tree.json file.
-
-###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Queue.addConnection.parameter.props"></a>
-
-- *Type:* core.AddConnectionProps
-
----
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Queue.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Queue.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Queue.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -727,7 +598,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* core.Display
+- *Type:* <a href="#@winglang/sdk.core.Display">Display</a>
 
 Information on how to display a resource in the UI.
 
@@ -766,13 +637,13 @@ new cloud.Schedule(props?: ScheduleProps)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Schedule.Initializer.parameter.props">props</a></code> | <code>cloud.ScheduleProps</code> | *No description.* |
+| <code><a href="#@winglang/sdk.cloud.Schedule.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.ScheduleProps">ScheduleProps</a></code> | *No description.* |
 
 ---
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Schedule.Initializer.parameter.props"></a>
 
-- *Type:* cloud.ScheduleProps
+- *Type:* <a href="#@winglang/sdk.cloud.ScheduleProps">ScheduleProps</a>
 
 ---
 
@@ -794,50 +665,23 @@ Create a function that runs when receiving the scheduled event.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Schedule.onTick.parameter.inflight"></a>
 
-- *Type:* core.Inflight
+- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
 
 ---
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Schedule.onTick.parameter.props"></a>
 
-- *Type:* cloud.ScheduleOnTickProps
+- *Type:* <a href="#@winglang/sdk.cloud.ScheduleOnTickProps">ScheduleOnTickProps</a>
 
 ---
 
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Schedule.addConnection">add_connection</a></code> | Adds a connection between two resources. |
-
----
-
-##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Schedule.addConnection"></a>
-
-```wing
-bring cloud;
-
-cloud.Schedule.add_connection(props: AddConnectionProps)
-```
-
-Adds a connection between two resources.
-
-A connection is a piece of
-metadata describing how one resource is related to another resource. This
-metadata is recorded in the tree.json file.
-
-###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Schedule.addConnection.parameter.props"></a>
-
-- *Type:* core.AddConnectionProps
-
----
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Schedule.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Schedule.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Schedule.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Schedule.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -860,7 +704,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* core.Display
+- *Type:* <a href="#@winglang/sdk.core.Display">Display</a>
 
 Information on how to display a resource in the UI.
 
@@ -898,7 +742,7 @@ new fs.TextFile(file_path: str, props?: TextFileProps)
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.fs.TextFile.Initializer.parameter.filePath">file_path</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#@winglang/sdk.fs.TextFile.Initializer.parameter.props">props</a></code> | <code>fs.TextFileProps</code> | *No description.* |
+| <code><a href="#@winglang/sdk.fs.TextFile.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.fs.TextFileProps">TextFileProps</a></code> | *No description.* |
 
 ---
 
@@ -910,7 +754,7 @@ new fs.TextFile(file_path: str, props?: TextFileProps)
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.fs.TextFile.Initializer.parameter.props"></a>
 
-- *Type:* fs.TextFileProps
+- *Type:* <a href="#@winglang/sdk.fs.TextFileProps">TextFileProps</a>
 
 ---
 
@@ -1002,13 +846,13 @@ new cloud.Topic(props?: TopicProps)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Topic.Initializer.parameter.props">props</a></code> | <code>cloud.TopicProps</code> | *No description.* |
+| <code><a href="#@winglang/sdk.cloud.Topic.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.TopicProps">TopicProps</a></code> | *No description.* |
 
 ---
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Topic.Initializer.parameter.props"></a>
 
-- *Type:* cloud.TopicProps
+- *Type:* <a href="#@winglang/sdk.cloud.TopicProps">TopicProps</a>
 
 ---
 
@@ -1030,50 +874,23 @@ Run an inflight whenever an message is published to the topic.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Topic.onMessage.parameter.inflight"></a>
 
-- *Type:* core.Inflight
+- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
 
 ---
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Topic.onMessage.parameter.props"></a>
 
-- *Type:* cloud.TopicOnMessageProps
+- *Type:* <a href="#@winglang/sdk.cloud.TopicOnMessageProps">TopicOnMessageProps</a>
 
 ---
 
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Topic.addConnection">add_connection</a></code> | Adds a connection between two resources. |
-
----
-
-##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.Topic.addConnection"></a>
-
-```wing
-bring cloud;
-
-cloud.Topic.add_connection(props: AddConnectionProps)
-```
-
-Adds a connection between two resources.
-
-A connection is a piece of
-metadata describing how one resource is related to another resource. This
-metadata is recorded in the tree.json file.
-
-###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Topic.addConnection.parameter.props"></a>
-
-- *Type:* core.AddConnectionProps
-
----
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Topic.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Topic.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Topic.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Topic.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -1096,7 +913,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* core.Display
+- *Type:* <a href="#@winglang/sdk.core.Display">Display</a>
 
 Information on how to display a resource in the UI.
 
@@ -1240,7 +1057,7 @@ let function_props = cloud.FunctionProps{ ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code>std.Duration</code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
@@ -1276,7 +1093,7 @@ The amount of memory to allocate to the function, in MB.
 timeout: Duration;
 ```
 
-- *Type:* std.Duration
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -1333,7 +1150,7 @@ let queue_on_message_props = cloud.QueueOnMessageProps{ ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.timeout">timeout</a></code> | <code>std.Duration</code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
 | <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.batchSize">batch_size</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
 
 ---
@@ -1370,7 +1187,7 @@ The amount of memory to allocate to the function, in MB.
 timeout: Duration;
 ```
 
-- *Type:* std.Duration
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -1407,7 +1224,7 @@ let queue_props = cloud.QueueProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.QueueProps.property.initialMessages">initial_messages</a></code> | <code>MutArray&lt;str&gt;</code> | Initialize the queue with a set of messages. |
-| <code><a href="#@winglang/sdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code>std.Duration</code> | How long a queue's consumers have to process a message. |
+| <code><a href="#@winglang/sdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | How long a queue's consumers have to process a message. |
 
 ---
 
@@ -1430,7 +1247,7 @@ Initialize the queue with a set of messages.
 timeout: Duration;
 ```
 
-- *Type:* std.Duration
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
 - *Default:* Duration.fromSeconds(10)
 
 How long a queue's consumers have to process a message.
@@ -1455,7 +1272,7 @@ let schedule_on_tick_props = cloud.ScheduleOnTickProps{ ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout">timeout</a></code> | <code>std.Duration</code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
@@ -1491,7 +1308,7 @@ The amount of memory to allocate to the function, in MB.
 timeout: Duration;
 ```
 
-- *Type:* std.Duration
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -1515,7 +1332,7 @@ let schedule_props = cloud.ScheduleProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.cron">cron</a></code> | <code>str</code> | Trigger events according to a cron schedule using the UNIX cron format. |
-| <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.rate">rate</a></code> | <code>std.Duration</code> | Trigger events at a periodic rate. |
+| <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.rate">rate</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | Trigger events at a periodic rate. |
 
 ---
 
@@ -1547,7 +1364,7 @@ Trigger events according to a cron schedule using the UNIX cron format.
 rate: Duration;
 ```
 
-- *Type:* std.Duration
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
 - *Default:* undefined
 
 Trigger events at a periodic rate.
@@ -1626,7 +1443,7 @@ let topic_props = cloud.TopicProps{ ... }
 
 ### CounterClientBase <a name="CounterClientBase" id="@winglang/sdk.cloud.CounterClientBase"></a>
 
-- *Implements:* cloud.ICounterClient
+- *Implements:* <a href="#@winglang/sdk.cloud.ICounterClient">ICounterClient</a>
 
 Functionality shared between all `CounterClient` implementations regardless of the target.
 
@@ -2053,7 +1870,7 @@ Returns a boolean indicating whether an element with the specified value exists 
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.ImmutableSet.has.parameter.value"></a>
 
-- *Type:* std.T1
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
 
 The value to test for presence in the Set object.
 
@@ -2160,7 +1977,7 @@ Add value to end of array.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableArray.push.parameter.value"></a>
 
-- *Type:* std.T1
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
 
 value to add.
 
@@ -2325,7 +2142,7 @@ The key of the element to add.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableMap.set.parameter.value"></a>
 
-- *Type:* std.T1
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
 
 The value of the element to add.
 
@@ -2390,7 +2207,7 @@ Returns a boolean indicating whether an element with the specified value exists 
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.has.parameter.value"></a>
 
-- *Type:* std.T1
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
 
 The value to test for presence in the Set object.
 
@@ -2406,7 +2223,7 @@ Add value to set.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.add.parameter.value"></a>
 
-- *Type:* std.T1
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
 
 value to add.
 
@@ -2430,7 +2247,7 @@ Removes a specified value from a set, if it is in the set.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.delete.parameter.value"></a>
 
-- *Type:* std.T1
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
 
 The value to remove from the set.
 
@@ -2702,7 +2519,7 @@ new std.T1()
 
 ### IBucketClient <a name="IBucketClient" id="@winglang/sdk.cloud.IBucketClient"></a>
 
-- *Implemented By:* cloud.IBucketClient
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IBucketClient">IBucketClient</a>
 
 Inflight interface for `Bucket`.
 
@@ -2737,7 +2554,7 @@ Key of the object.
 
 ###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.IBucketClient.delete.parameter.opts"></a>
 
-- *Type:* cloud.BucketDeleteOptions
+- *Type:* <a href="#@winglang/sdk.cloud.BucketDeleteOptions">BucketDeleteOptions</a>
 
 Options available for delete an item from a bucket.
 
@@ -2808,7 +2625,7 @@ Content of the object we want to store into the bucket.
 
 ### ICounterClient <a name="ICounterClient" id="@winglang/sdk.cloud.ICounterClient"></a>
 
-- *Implemented By:* cloud.CounterClientBase, cloud.ICounterClient
+- *Implemented By:* <a href="#@winglang/sdk.cloud.CounterClientBase">CounterClientBase</a>, <a href="#@winglang/sdk.cloud.ICounterClient">ICounterClient</a>
 
 Inflight interface for `Counter`.
 
@@ -2893,7 +2710,7 @@ value to reset (default is 0).
 
 ### IFunctionClient <a name="IFunctionClient" id="@winglang/sdk.cloud.IFunctionClient"></a>
 
-- *Implemented By:* cloud.IFunctionClient
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IFunctionClient">IFunctionClient</a>
 
 Inflight interface for `Function`.
 
@@ -2924,9 +2741,9 @@ Invoke the function asynchronously with a given payload.
 
 ### IFunctionHandler <a name="IFunctionHandler" id="@winglang/sdk.cloud.IFunctionHandler"></a>
 
-- *Extends:* core.IResource
+- *Extends:* <a href="#@winglang/sdk.core.IResource">IResource</a>
 
-- *Implemented By:* cloud.IFunctionHandler
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>
 
 **Inflight client:** [wingsdk.cloud.IFunctionHandlerClient](#wingsdk.cloud.IFunctionHandlerClient)
 
@@ -2938,7 +2755,7 @@ Represents a resource with an inflight "handle" method that can be used to creat
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IFunctionHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.IFunctionHandler.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.IFunctionHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -2960,7 +2777,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* core.Display
+- *Type:* <a href="#@winglang/sdk.core.Display">Display</a>
 
 Information on how to display a resource in the UI.
 
@@ -2968,7 +2785,7 @@ Information on how to display a resource in the UI.
 
 ### IFunctionHandlerClient <a name="IFunctionHandlerClient" id="@winglang/sdk.cloud.IFunctionHandlerClient"></a>
 
-- *Implemented By:* cloud.IFunctionHandlerClient
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IFunctionHandlerClient">IFunctionHandlerClient</a>
 
 Inflight client for `IFunctionHandler`.
 
@@ -2999,7 +2816,7 @@ Entrypoint function that will be called when the cloud function is invoked.
 
 ### ILoggerClient <a name="ILoggerClient" id="@winglang/sdk.cloud.ILoggerClient"></a>
 
-- *Implemented By:* cloud.ILoggerClient
+- *Implemented By:* <a href="#@winglang/sdk.cloud.ILoggerClient">ILoggerClient</a>
 
 Inflight interface for `Logger`.
 
@@ -3034,7 +2851,7 @@ The message to print.
 
 ### IQueueClient <a name="IQueueClient" id="@winglang/sdk.cloud.IQueueClient"></a>
 
-- *Implemented By:* cloud.IQueueClient
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IQueueClient">IQueueClient</a>
 
 Inflight interface for `Queue`.
 
@@ -3089,9 +2906,9 @@ Payload to send to the queue.
 
 ### IQueueOnMessageHandler <a name="IQueueOnMessageHandler" id="@winglang/sdk.cloud.IQueueOnMessageHandler"></a>
 
-- *Extends:* core.IResource
+- *Extends:* <a href="#@winglang/sdk.core.IResource">IResource</a>
 
-- *Implemented By:* cloud.IQueueOnMessageHandler
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IQueueOnMessageHandler">IQueueOnMessageHandler</a>
 
 **Inflight client:** [wingsdk.cloud.IQueueOnMessageHandlerClient](#wingsdk.cloud.IQueueOnMessageHandlerClient)
 
@@ -3103,7 +2920,7 @@ Represents a resource with an inflight "handle" method that can be passed to `Qu
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IQueueOnMessageHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.IQueueOnMessageHandler.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.IQueueOnMessageHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -3125,7 +2942,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* core.Display
+- *Type:* <a href="#@winglang/sdk.core.Display">Display</a>
 
 Information on how to display a resource in the UI.
 
@@ -3133,7 +2950,7 @@ Information on how to display a resource in the UI.
 
 ### IQueueOnMessageHandlerClient <a name="IQueueOnMessageHandlerClient" id="@winglang/sdk.cloud.IQueueOnMessageHandlerClient"></a>
 
-- *Implemented By:* cloud.IQueueOnMessageHandlerClient
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IQueueOnMessageHandlerClient">IQueueOnMessageHandlerClient</a>
 
 Inflight client for `IQueueOnMessageHandler`.
 
@@ -3164,9 +2981,9 @@ Function that will be called when a message is received from the queue.
 
 ### IScheduleOnTickHandler <a name="IScheduleOnTickHandler" id="@winglang/sdk.cloud.IScheduleOnTickHandler"></a>
 
-- *Extends:* core.IResource
+- *Extends:* <a href="#@winglang/sdk.core.IResource">IResource</a>
 
-- *Implemented By:* cloud.IScheduleOnTickHandler
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>
 
 **Inflight client:** [wingsdk.cloud.IScheduleOnTickHandlerClient](#wingsdk.cloud.IScheduleOnTickHandlerClient)
 
@@ -3178,7 +2995,7 @@ Represents a resource with an inflight "handle" method that can be passed to `Sc
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IScheduleOnTickHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.IScheduleOnTickHandler.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.IScheduleOnTickHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -3200,7 +3017,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* core.Display
+- *Type:* <a href="#@winglang/sdk.core.Display">Display</a>
 
 Information on how to display a resource in the UI.
 
@@ -3208,7 +3025,7 @@ Information on how to display a resource in the UI.
 
 ### IScheduleOnTickHandlerClient <a name="IScheduleOnTickHandlerClient" id="@winglang/sdk.cloud.IScheduleOnTickHandlerClient"></a>
 
-- *Implemented By:* cloud.IScheduleOnTickHandlerClient
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IScheduleOnTickHandlerClient">IScheduleOnTickHandlerClient</a>
 
 Inflight client for `IScheduleOnTickHandler`.
 
@@ -3233,7 +3050,7 @@ Function that will be called when a message is received from the schedule.
 
 ### ITopicClient <a name="ITopicClient" id="@winglang/sdk.cloud.ITopicClient"></a>
 
-- *Implemented By:* cloud.ITopicClient
+- *Implemented By:* <a href="#@winglang/sdk.cloud.ITopicClient">ITopicClient</a>
 
 Inflight interface for `Topic`.
 
@@ -3266,9 +3083,9 @@ Payload to publish to Topic.
 
 ### ITopicOnMessageHandler <a name="ITopicOnMessageHandler" id="@winglang/sdk.cloud.ITopicOnMessageHandler"></a>
 
-- *Extends:* core.IResource
+- *Extends:* <a href="#@winglang/sdk.core.IResource">IResource</a>
 
-- *Implemented By:* cloud.ITopicOnMessageHandler
+- *Implemented By:* <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>
 
 **Inflight client:** [wingsdk.cloud.ITopicOnMessageHandlerClient](#wingsdk.cloud.ITopicOnMessageHandlerClient)
 
@@ -3280,7 +3097,7 @@ Represents a resource with an inflight "handle" method that can be passed to `To
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ITopicOnMessageHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.ITopicOnMessageHandler.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.ITopicOnMessageHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -3302,7 +3119,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* core.Display
+- *Type:* <a href="#@winglang/sdk.core.Display">Display</a>
 
 Information on how to display a resource in the UI.
 
@@ -3310,7 +3127,7 @@ Information on how to display a resource in the UI.
 
 ### ITopicOnMessageHandlerClient <a name="ITopicOnMessageHandlerClient" id="@winglang/sdk.cloud.ITopicOnMessageHandlerClient"></a>
 
-- *Implemented By:* cloud.ITopicOnMessageHandlerClient
+- *Implemented By:* <a href="#@winglang/sdk.cloud.ITopicOnMessageHandlerClient">ITopicOnMessageHandlerClient</a>
 
 Inflight client for `ITopicOnMessageHandler`.
 
