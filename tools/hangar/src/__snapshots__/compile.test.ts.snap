@@ -3530,14 +3530,18 @@ constructor() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(message === (json_mut_obj)[\\"hello\\"])'\`)})((message === (json_mut_obj)[\\"hello\\"]))};
   const some_number = 999;
   const some_json = {\\"x\\":some_number};
-  const x = Object.freeze({\\"cool\\":\\"beans\\"});
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(some_number === (some_json)[\\"x\\"])'\`)})((some_number === (some_json)[\\"x\\"]))};
   ((obj, args) => { obj[args[0]] = args[1]; })(some_json, [\\"x\\",111]);
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(111 === (some_json)[\\"x\\"])'\`)})((111 === (some_json)[\\"x\\"]))};
+  const x = Object.freeze({\\"cool\\":\\"beans\\"});
   const nested_json = {\\"a\\":\\"hello\\",\\"b\\":{\\"c\\":\\"world\\",\\"d\\":{\\"bar\\":123,\\"foo\\":\\"foo\\"}}};
   ((obj, args) => { obj[args[0]] = args[1]; })(((nested_json)[\\"b\\"])[\\"d\\"], [\\"foo\\",\\"tastic\\"]);
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"tastic\\" === (((nested_json)[\\"b\\"])[\\"d\\"])[\\"foo\\"])'\`)})((\\"tastic\\" === (((nested_json)[\\"b\\"])[\\"d\\"])[\\"foo\\"]))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(123 === (((nested_json)[\\"b\\"])[\\"d\\"])[\\"bar\\"])'\`)})((123 === (((nested_json)[\\"b\\"])[\\"d\\"])[\\"bar\\"]))};
+  const arr = [1, 2, \\"buckle\\", \\"my\\", \\"shoe\\", 3, 4, [\\"shut\\", \\"the\\", \\"door\\"]];
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(1 === (arr)[0])'\`)})((1 === (arr)[0]))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"buckle\\" === (arr)[2])'\`)})((\\"buckle\\" === (arr)[2]))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"shut\\" === ((arr)[7])[0])'\`)})((\\"shut\\" === ((arr)[7])[0]))};
 }
 }
 new MyApp().synth();"

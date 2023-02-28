@@ -18,8 +18,6 @@ pub struct Parser<'a> {
 	pub source_name: String,
 	pub error_nodes: RefCell<HashSet<usize>>,
 	pub diagnostics: RefCell<Diagnostics>,
-	// Allow for alternate behavior while in Json
-	pub in_json: RefCell<bool>,
 }
 
 // A custom struct could be used to better maintain metadata and issue tracking, though ideally
@@ -570,7 +568,7 @@ impl Parser<'_> {
 				match container_type {
 					"Json" => Ok(TypeAnnotation::Json),
 					"MutJson" => Ok(TypeAnnotation::MutJson),
-					other => self.report_unimplemented_grammar(other, "json container type", type_node),
+					other => self.add_error(format!("invalid json container type {}", other), &type_node),
 				}
 			}
 			"mutable_container_type" | "immutable_container_type" => {

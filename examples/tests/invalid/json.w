@@ -15,11 +15,12 @@ let s2: Set<str> = j;
 let a: Array<str> = j;
 //                  ^ Expected type to be "Array<str>", but got "Json" instead
 
-// Immutible Json
+// Immutable Json
 let forever_json = Json {a: "hello"};
 forever_json.set("a", "world!");
 //           ^^^ Unknown symbol "set" (TODO: better error message https://github.com/winglang/wing/issues/1660) 
 
-// Unallowed Json types
-let bkt = new cloud.Bucket();
-let j_arr = Json [bkt, bkt, bkt];
+// Unallowed Json types TODO: https://github.com/winglang/wing/issues/1683
+// let bkt = new cloud.Bucket();
+// let j_arr = Json [bkt];
+//                   ^^^ type cloud.bucket is not serializable 
