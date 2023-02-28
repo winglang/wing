@@ -313,9 +313,35 @@ impl Subtype for Type {
 					parent_type.is_subtype_of(other)
 				})
 			}
-			(Self::Resource(l0), Self::Interface(_)) => {
-				// If I'm a resource and I implement the interface then I'm a subtype of it (nominal subtyping)
-				l0.implements.iter().any(|parent| {
+			(Self::Resource(res), Self::Interface(iface)) => {
+				// Check that the resource implements all methods of the interface
+				for iface_method in iface.methods(true) {
+					let (iface_method_name, iface_method_type) = iface_method;
+					if let Some(res_method) = res.env.try_lookup(&iface_method_name, None) {
+						let res_method_type = res_method.as_variable().unwrap().type_.clone();
+						if !res_method_type.is_subtype_of(&iface_method_type) {
+							return false;
+						}
+					} else {
+						return false;
+					}
+				}
+
+				// Check that the resource has all fields of the interface
+				for iface_field in iface.fields(true) {
+					let (iface_field_name, iface_field_type) = iface_field;
+					if let Some(res_field) = res.env.try_lookup(&iface_field_name, None) {
+						let res_field_type = res_field.as_variable().unwrap().type_.clone();
+						if !res_field_type.is_subtype_of(&iface_field_type) {
+							return false;
+						}
+					} else {
+						return false;
+					}
+				}
+
+				// Check that the class says it implements the interface (nominal typing)
+				res.implements.iter().any(|parent| {
 					let parent_type: &Type = &*parent;
 					parent_type.is_subtype_of(other)
 				})

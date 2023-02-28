@@ -166,11 +166,6 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	fn import_type(&mut self, type_fqn: &FQN) {
-		// // Hack: if the class name is a construct base then we treat this class as a resource and don't need to define it
-		// if is_construct(&type_fqn, &self.jsii_types) {
-		// 	return;
-		// }
-
 		self.setup_namespaces_for(&type_fqn);
 
 		// Check if this is a JSII interface and import it if it is
