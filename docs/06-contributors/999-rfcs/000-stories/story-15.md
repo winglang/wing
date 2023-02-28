@@ -43,7 +43,7 @@ bring untyped Math from_js("Math");
 
 // prerequisite: npm install axios
 // PALCEHOLDER for bringing some external module
-bring untyped axios require_from_js("axios"); 
+bring untyped "axios" as axios; 
 
 enum Status {
   Uncompleted,
