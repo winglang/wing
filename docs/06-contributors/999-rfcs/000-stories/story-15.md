@@ -16,9 +16,9 @@ The following code is an inital implementation of TaskList with api gateway and 
 - [x] It leverages setting explicit permissions (using the `this.inflight` API, described [here](https://github.com/winglang/wing/pull/1610))
 - [x] Using interface 
 - [x] Using await when calling a untyped function that returns a promise
+- [x] use redis instead of bucket
 - [ ] bring cdktf
-- [ ] use redis instead of bucket
-- [ ] code that updates estimation and duration from REST post command
+- [ ] code that updates estimation and duration from REST put command
 
 ## Discussion topics
 - `get` vs `on_get` - Should the `cloud.api` API have the `on_` prefix to match `cloud.bucket` API and also to allow calling
