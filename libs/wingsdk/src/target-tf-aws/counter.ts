@@ -44,7 +44,8 @@ export class Counter extends cloud.CounterBase {
 
     if (
       ops.includes(cloud.CounterInflightMethods.INC) ||
-      ops.includes(cloud.CounterInflightMethods.DEC)
+      ops.includes(cloud.CounterInflightMethods.DEC) ||
+      ops.includes(cloud.CounterInflightMethods.RESET)
     ) {
       host.addPolicyStatements({
         effect: "Allow",
@@ -82,3 +83,4 @@ export class Counter extends cloud.CounterBase {
 Counter._annotateInflight("inc", {});
 Counter._annotateInflight("dec", {});
 Counter._annotateInflight("peek", {});
+Counter._annotateInflight("reset", {});

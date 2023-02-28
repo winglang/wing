@@ -2186,15 +2186,15 @@ Ternary or conditional operators are not supported.
 
 #### 6.3.3 Mathematics Operators
 
-| Operator | Description    | Example |
-| -------- | -------------- | ------- |
-| `*`      | Multiplication | `a * b` |
-| `/`      | Division       | `a / b` |
-| `\`      | Floor Division | `a \ b` |
-| `%`      | Modulus        | `a % b` |
-| `+`      | Addition       | `a + b` |
-| `-`      | Subtraction    | `a - b` |
-| `^`      | Exponent       | `a ^ b` |
+| Operator | Description    | Example  |
+| -------- | -------------- | -------- |
+| `*`      | Multiplication | `a * b`  |
+| `/`      | Division       | `a / b`  |
+| `\`      | Floor Division | `a \ b`  |
+| `%`      | Modulus        | `a % b`  |
+| `+`      | Addition       | `a + b`  |
+| `-`      | Subtraction    | `a - b`  |
+| `**`     | Power          | `a ** b` |
 
 [`▲ top`][top]
 
@@ -2205,7 +2205,7 @@ Ternary or conditional operators are not supported.
 | Operator             | Notes                                             |
 | -------------------- | ------------------------------------------------- |
 | ()                   | Parentheses                                       |
-| ^                    | Exponentiation                                    |
+| **                   | Power                                    |
 | -x                   | Unary minus                                       |
 | \*, /, \\, %         | Multiplication, Division, Floor division, Modulus |
 | +, -                 | Addition, Subtraction                             |

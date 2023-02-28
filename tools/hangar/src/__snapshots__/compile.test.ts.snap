@@ -2758,8 +2758,16 @@ constructor() {
   const xf = 1;
   const yf = ((-20.22) * xf);
   const zf = ((xf + yf) - (-0.01));
-  const fxzy = (5 ** (1 ** 5));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(fxzy === 5)'\`)})((fxzy === 5))};
+  const fxzy = (5 ** (2 ** 3));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(fxzy === 390625)'\`)})((fxzy === 390625))};
+  const xyzf = Math.trunc(501 / (99 + 1));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(xyzf === 5)'\`)})((xyzf === 5))};
+  const xyznf = Math.trunc((-501) / (99 + 1));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(xyznf === (-5))'\`)})((xyznf === (-5)))};
+  const xyznfj = Math.trunc(501.9 / ((-99.1) - 0.91));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(xyznfj === (-5))'\`)})((xyznfj === (-5)))};
+  const xynfj = Math.trunc((-501.9) / ((-99.1) - 0.91));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(xynfj === 5)'\`)})((xynfj === 5))};
 }
 }
 new MyApp().synth();"
@@ -3043,7 +3051,7 @@ constructor() {
       },
       counter: {
         obj: counter,
-        ops: [\\"dec\\",\\"inc\\",\\"peek\\"]
+        ops: [\\"dec\\",\\"inc\\",\\"peek\\",\\"reset\\"]
       },
     }
   });
@@ -4290,8 +4298,8 @@ constructor() {
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo_inflight({c: \${c_client}}))\`);
   }
   }
-  Foo._annotateInflight(\\"foo_inc\\", {\\"this.c\\": { ops: [\\"dec\\", \\"inc\\", \\"peek\\"]}});
-  Foo._annotateInflight(\\"foo_get\\", {\\"this.c\\": { ops: [\\"dec\\", \\"inc\\", \\"peek\\"]}});
+  Foo._annotateInflight(\\"foo_inc\\", {\\"this.c\\": { ops: [\\"dec\\", \\"inc\\", \\"peek\\", \\"reset\\"]}});
+  Foo._annotateInflight(\\"foo_get\\", {\\"this.c\\": { ops: [\\"dec\\", \\"inc\\", \\"peek\\", \\"reset\\"]}});
   class Bar extends $stdlib.core.Resource {
   	constructor(scope, id, name, b) {
   	super(scope, id);
