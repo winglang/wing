@@ -37,9 +37,7 @@ bring cloud;
 
 // TODO discuss how we bring untyped something like RegEx from JavaScript 
 // PLACEHOLER for bringing something from Javascript stdlib
-bring untyped RegExp from_js("RegExp"); 
-bring untyped Math from_js("Math"); 
-
+bring untyped js;
 
 // prerequisite: npm install axios
 // PALCEHOLDER for bringing some external module
@@ -54,7 +52,7 @@ interface ITaskListModel {
   inflight get(id: str): Json;
   inflight add(title: str): str;
   inflight remove(id: str): void; 
-  inflight find(r: RegExp): Array<str>;
+  inflight find(r: js.RegExp): Array<str>;
   inflight set_status(id: str, status: Status): str;
   inflight set_estimation(id: str, estimation: duration): str;
 }
@@ -85,7 +83,7 @@ resource TaskListModel implementes ITaskListModel {
   
   inflight add(title: str): str {
     // PLACEHOLDER - how does untyped works with numeric operations
-    let id = "${Math.floor(Math.random() * 100000000000)}";
+    let id = "${js.Math.floor(js.Math.random() * 100000000000)}";
     let j = Json { 
       title: title, 
       status: Status.Uncompleted
@@ -99,7 +97,8 @@ resource TaskListModel implementes ITaskListModel {
     this._bucket.delete(id);
   }
 
-  inflight find(r: RegExp): Array<str> { 
+  // PLACEHOLDER - having an untyped type
+  inflight find(r: js.RegExp): Array<str> { 
     //TODO add implementation
   }
 
@@ -159,7 +158,7 @@ resource TaskListApi {
     });
 
     this.api.get("/tasks", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-      let search = new Regex(str.from_json(req.query.search ?? Json ".*")); 
+      let search = new js.RegExp(str.from_json(req.query.search ?? Json ".*")); 
       let results = this.model.find(search);
       return new cloud.ApiResponse(status:200, body: Json.format(results));
     });
