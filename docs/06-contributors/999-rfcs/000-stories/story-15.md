@@ -5,7 +5,7 @@
 
 The following code is an inital implementation of TaskList with api gateway and a redis db 
 
-## New landuage and SDK features it introduces
+## New language and SDK features it introduces
 
 - [x] bring untyped
   - [x] bring external npm package (axios)
