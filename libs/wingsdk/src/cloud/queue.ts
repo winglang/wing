@@ -41,7 +41,7 @@ export abstract class Queue extends Resource {
     id: string,
     props: QueueProps = {}
   ): Queue {
-    return App.of(scope).new(QUEUE_FQN, undefined, scope, id, props);
+    return App.of(scope).newAbstract(QUEUE_FQN, scope, id, props);
   }
 
   public readonly stateful = true;

@@ -54,14 +54,7 @@ export abstract class Function extends Resource implements IInflightHost {
     inflight: Inflight,
     props: FunctionProps = {}
   ): Function {
-    return App.of(scope).new(
-      FUNCTION_FQN,
-      undefined,
-      scope,
-      id,
-      inflight,
-      props
-    );
+    return App.of(scope).newAbstract(FUNCTION_FQN, scope, id, inflight, props);
   }
 
   private readonly _env: Record<string, string> = {};

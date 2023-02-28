@@ -280,42 +280,53 @@ impl<'a> JSifier<'a> {
 					false
 				};
 
-				// if the type is abstract we are not allowed to instantiate it directly (only through the
-				// "new" factory method)
-				let ctor = (if is_abstract {
-					None
+				// if we have an FQN, we emit a call to the "new" (or "newAbstract") factory method to allow
+				// targets and plugins to inject alternative implementations for types. otherwise (e.g.
+				// user-defined types), we simply instantiate the type directly (maybe in the future we will
+				// allow customizations of user-defined types as well, but for now we don't).
+
+				let ctor = self.jsify_type(class);
+
+				let scope = if is_resource {
+					Some("this")
 				} else {
-					Some(self.jsify_type(class))
-				}).unwrap_or("undefined".to_string());
+					None
+				};
 
-				// If this is a resource then add the scope and id to the arg list
-				if is_resource {
-					let args = self.jsify_arg_list(
-						&arg_list,
-						Some("this"),
-						Some(&format!("{}", obj_id.as_ref().unwrap_or(&self.jsify_type(class)))),
-						should_case_convert,
-						phase
-					);
+				let id = if is_resource {
+					Some(obj_id.as_ref().unwrap_or(&ctor).as_str())
+				} else {
+					None
+				};
 
-					let fqn = expression_type
-						.expect("expected expression ")
+				let args = self.jsify_arg_list(
+					&arg_list,
+					scope,
+					id,
+					should_case_convert,
+					phase
+				);
+
+				let fqn = if is_resource {
+					expression_type
+						.expect("expected expression")
 						.as_resource()
 						.expect("expected resource")
 						.fqn
-						.clone();
-
-					if let Some(fqn) = fqn {
-						format!("this.node.root.new(\"{}\",{},{})", fqn, ctor, args)
-					} else {
-						format!("new {}({})", ctor, args)
-					}
+						.clone()
 				} else {
-					format!(
-						"new {}({})",
-						ctor,
-						self.jsify_arg_list(&arg_list, None, None, should_case_convert, phase)
-					)
+					None
+				};
+
+				if ! is_resource || fqn.is_none() {
+					format!("new {}({})", ctor, args)
+				} else {
+					let fqn = fqn.expect("expecting fqn to be defined");
+					if is_abstract {
+						format!("this.node.root.newAbstract(\"{}\",{})", fqn, args)
+					} else {
+						format!("this.node.root.new(\"{}\",{},{})", fqn, ctor, args)
+					}
 				}
 			}
 			ExprKind::Literal(lit) => match lit {

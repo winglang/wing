@@ -25,7 +25,7 @@ export abstract class Topic extends Resource {
     id: string,
     props: TopicProps = {}
   ): Topic {
-    return App.of(scope).new(TOPIC_FQN, undefined, scope, id, props);
+    return App.of(scope).newAbstract(TOPIC_FQN, scope, id, props);
   }
 
   public readonly stateful = true;

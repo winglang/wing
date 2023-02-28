@@ -131,9 +131,8 @@ export class App extends CdktfApp {
     return this._servicePlan;
   }
 
-  public new(
+  protected tryNew(
     fqn: string,
-    ctor: any,
     scope: Construct,
     id: string,
     ...args: any[]
@@ -149,6 +148,6 @@ export class App extends CdktfApp {
         return new Logger(scope, id);
     }
 
-    return super.new(fqn, ctor, scope, id, ...args);
+    return undefined;
   }
 }

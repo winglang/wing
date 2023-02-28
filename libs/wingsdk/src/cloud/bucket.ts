@@ -33,7 +33,7 @@ export abstract class Bucket extends Resource {
     id: string,
     props: BucketProps = {}
   ): Bucket {
-    return App.of(scope).new(BUCKET_FQN, undefined, scope, id, props);
+    return App.of(scope).newAbstract(BUCKET_FQN, scope, id, props);
   }
 
   public readonly stateful = true;

@@ -46,9 +46,8 @@ export class App extends core.App {
     this.simfile = path.join(this.outdir, `${this.name}.wsim`);
   }
 
-  public new(
+  protected tryNew(
     fqn: string,
-    ctor: any,
     scope: Construct,
     id: string,
     ...args: any[]
@@ -76,7 +75,7 @@ export class App extends core.App {
         return new Topic(scope, id, args[0]);
     }
 
-    return super.new(fqn, ctor, scope, id, ...args);
+    return undefined;
   }
 
   /**

@@ -88,19 +88,60 @@ export abstract class App extends Construct {
    */
   public new(
     fqn: string,
-    ctor: any | undefined,
+    ctor: any,
+    scope: Construct,
+    id: string,
+    ...args: any[]
+  ): any {
+    // delegate to "tryNew" first, which will allow derived classes to inject
+    const instance = this.tryNew(fqn, scope, id, ...args);
+    if (instance) {
+      return instance;
+    }
+
+    // no injection, so we'll just create a new instance
+    return new ctor(scope, id, ...args);
+  }
+
+  /**
+   * Creates a new object of the given abstract class FQN.
+   */
+  public newAbstract(
+    fqn: string,
+    scope: Construct,
+    id: string,
+    ...args: any[]
+  ): any {
+    // delegate to "tryNew" first, which will allow derived classes to inject
+    const instance = this.tryNew(fqn, scope, id, ...args);
+    if (!instance) {
+      throw new Error(
+        `Unable to create an instance of abstract type \"${fqn}\" for this target`
+      );
+    }
+
+    return instance;
+  }
+
+  /**
+   * Can be overridden by derived classes to inject dependencies.
+   *
+   * @param fqn The fully qualified name of the class to instantiate (jsii).
+   * @param scope The construct scope.
+   * @param id The construct id.
+   * @param args The arguments to pass to the constructor.
+   */
+  protected tryNew(
+    fqn: string,
     scope: Construct,
     id: string,
     ...args: any[]
   ): any {
     fqn;
-    if (!ctor) {
-      throw new Error(
-        `Unable to create an instance of abstract type "${fqn}" for this target`
-      );
-    }
-
-    return new ctor(scope, id, ...args);
+    scope;
+    id;
+    args;
+    return undefined;
   }
 }
 
@@ -143,9 +184,14 @@ export abstract class CdktfApp extends App {
       scope: Construct,
       id: string,
       ...args: any[]
-    ) => {
-      return this.new(fqn, ctor, scope, id, ...args);
-    };
+    ) => this.new(fqn, ctor, scope, id, ...args);
+
+    (cdktfApp as any).newAbstract = (
+      fqn: string,
+      scope: Construct,
+      id: string,
+      ...args: any[]
+    ) => this.newAbstract(fqn, scope, id, ...args);
 
     this.pluginManager = new PluginManager(props.plugins ?? []);
 

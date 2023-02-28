@@ -32,7 +32,7 @@ export abstract class Counter extends Resource {
     id: string,
     props: CounterProps = {}
   ): Counter {
-    return App.of(scope).new(COUNTER_FQN, undefined, scope, id, props);
+    return App.of(scope).newAbstract(COUNTER_FQN, scope, id, props);
   }
 
   public readonly stateful = true;

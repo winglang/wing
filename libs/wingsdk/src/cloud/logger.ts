@@ -39,9 +39,8 @@ export abstract class Logger extends Resource {
       throw new Error("There is already a logger registered to this scope.");
     }
 
-    const logger = App.of(scope).new(
+    const logger = App.of(scope).newAbstract(
       LOGGER_FQN,
-      undefined,
       scope,
       "WingLogger"
     ) as Logger;

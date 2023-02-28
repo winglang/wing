@@ -268,7 +268,10 @@ captureTest("struct with resources", (scope) => ({
           ])
         ),
         arry: {
-          boom: [Bucket._newBucket(scope, "B4"), Bucket._newBucket(scope, "B5")],
+          boom: [
+            Bucket._newBucket(scope, "B4"),
+            Bucket._newBucket(scope, "B5"),
+          ],
         },
       },
     },

@@ -28,9 +28,8 @@ export class App extends CdktfApp {
     new AwsProvider(this, "aws", {});
   }
 
-  public new(
+  protected tryNew(
     fqn: string,
-    ctor: any,
     scope: Construct,
     id: string,
     ...args: any[]
@@ -61,6 +60,6 @@ export class App extends CdktfApp {
         return new Topic(scope, id, args[0]);
     }
 
-    return super.new(fqn, ctor, scope, id, ...args);
+    return undefined;
   }
 }
