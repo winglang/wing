@@ -26,7 +26,7 @@ the api get/post/delete/put commands (`api.get(url)` vs `api.on_get(path, inflig
 - Routing params - I have used express's synatx for dynamic parts of the path for the api gateway `get("/task/:id"`, 
 but then I noticed that [aws](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-api-step-by-step.html) 
 uses the `{id}` syntax. What should be the the right syntax?
-- Bring internal nodejs types - how do we bring somethink that we can't require, like `RegEx`
+- Bring internal nodejs types - how do we bring something that we can't require, like `RegEx`
 - From anything to Json - can I cast something from bring untyped to Json? 
 - Calling await 
 
