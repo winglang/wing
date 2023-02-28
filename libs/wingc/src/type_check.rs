@@ -327,7 +327,7 @@ impl Subtype for Type {
 					}
 				}
 
-				// Check that the resource has all fields of the interface
+				// // Check that the resource has all fields of the interface
 				for iface_field in iface.fields(true) {
 					let (iface_field_name, iface_field_type) = iface_field;
 					if let Some(res_field) = res.env.try_lookup(&iface_field_name, None) {
@@ -340,7 +340,7 @@ impl Subtype for Type {
 					}
 				}
 
-				// Check that the class says it implements the interface (nominal typing)
+				// Check that the resource declares it implements the interface (nominal typing)
 				res.implements.iter().any(|parent| {
 					let parent_type: &Type = &*parent;
 					parent_type.is_subtype_of(other)

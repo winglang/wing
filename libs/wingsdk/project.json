@@ -9,7 +9,8 @@
         "commands": [
           "npm run projen",
           "npm run pre-compile",
-          "npm run compile"
+          "npm run compile",
+          "npm run post-compile"
         ],
         "cwd": "libs/wingsdk",
         "parallel": false
@@ -19,7 +20,7 @@
       "dependsOn": ["build"],
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["npm run post-compile", "npm run test"],
+        "commands": ["npm run test"],
         "cwd": "libs/wingsdk",
         "parallel": false
       }
