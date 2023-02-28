@@ -4568,10 +4568,9 @@ new MyApp().synth();"
 
 exports[`static_members.w > wing compile --target tf-aws > Foo.inflight.js 1`] = `
 "export class Foo_inflight  {
-constructor({ instance_field, static_field }) {
+constructor({ instance_field }) {
 
   this.instance_field = instance_field;
-  this.static_field = static_field;
 }
 async static get_123()  {
 	{
@@ -4588,7 +4587,7 @@ exports[`static_members.w > wing compile --target tf-aws > index.js 1`] = `
   	{
   }
   }
-  static_inflight_field;
+  
    inflight_method()  {
   	{
     return \\"Inflight method\\";
@@ -4747,17 +4746,16 @@ constructor() {
   }
   	_toInflight() {
   	const instance_field_client = this._lift(this.instance_field);
-  const static_field_client = this._lift(this.static_field);
   	const self_client_path = require('path').resolve(__dirname, \\"clients/Foo.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo_inflight({instance_field: \${instance_field_client}, static_field: \${static_field_client}}))\`);
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo_inflight({instance_field: \${instance_field_client}}))\`);
   }
   }
-  Foo._annotateInflight(\\"get_123\\", {\\"this.instance_field\\": { ops: []}, \\"this.static_field\\": { ops: []}});
+  Foo._annotateInflight(\\"get_123\\", {\\"this.instance_field\\": { ops: []}});
   const foo = new Foo(this,\\"Foo\\");
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(foo.instance_field === 100)'\`)})((foo.instance_field === 100))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((Foo.m()) === 99)'\`)})(((Foo.m()) === 99))};
   new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.aee4a795aeb440afb100a892362409b07dde29394fdab5b81a5123790733775b/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.8b58045c72709175549d51937a233ff65ac5e5aa12e83837daf5ea7baf9f224b/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
     }
   }));

@@ -6,7 +6,8 @@ Error at ../../../../examples/tests/invalid/access_hidden_namespace.w:8:5 | Unkn
 `;
 
 exports[`access_static_from_instance.w > wing test (--target sim) - invalid > stderr 1`] = `
-"Compilation failed with 4 error(s)
+"Compilation failed with 5 error(s)
+Error at ../../../../examples/tests/invalid/access_static_from_instance.w:4:3 | Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
 Error at ../../../../examples/tests/invalid/access_static_from_instance.w:7:5 | Unknown symbol \\"this\\"
 Error at ../../../../examples/tests/invalid/access_static_from_instance.w:7:5 | Variable this.instance_field is not reassignable 
 Error at ../../../../examples/tests/invalid/access_static_from_instance.w:8:5 | Unknown symbol \\"this\\"
