@@ -107,11 +107,11 @@ impl<'a> JSifier<'a> {
 			(_, StmtKind::Class(AstClass { .. })) => Ordering::Greater,
 			_ => Ordering::Equal,
 		}) {
-			let jsify_context = &mut JSifyContext {
+			let jsify_context = JSifyContext {
 				in_json: false,
 				phase: Phase::Preflight,
 			};
-			let line = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, jsify_context); // top level statements are always preflight
+			let line = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, &jsify_context); // top level statements are always preflight
 			if line.is_empty() {
 				continue;
 			}
@@ -156,7 +156,7 @@ impl<'a> JSifier<'a> {
 		output.join("\n")
 	}
 
-	fn jsify_scope(&self, scope: &Scope, context: &mut JSifyContext) -> String {
+	fn jsify_scope(&self, scope: &Scope, context: &JSifyContext) -> String {
 		let mut lines = vec![];
 		lines.push("{".to_string());
 
@@ -172,7 +172,7 @@ impl<'a> JSifier<'a> {
 		lines.join("\n")
 	}
 
-	fn jsify_reference(&self, reference: &Reference, case_convert: Option<bool>, context: &mut JSifyContext) -> String {
+	fn jsify_reference(&self, reference: &Reference, case_convert: Option<bool>, context: &JSifyContext) -> String {
 		let symbolize = if case_convert.unwrap_or(false) {
 			Self::jsify_symbol_case_converted
 		} else {
@@ -205,7 +205,7 @@ impl<'a> JSifier<'a> {
 		scope: Option<&str>,
 		id: Option<&str>,
 		case_convert: bool,
-		context: &mut JSifyContext,
+		context: &JSifyContext,
 	) -> String {
 		let mut args = vec![];
 		let mut structure_args = vec![];
@@ -219,12 +219,11 @@ impl<'a> JSifier<'a> {
 		}
 
 		for arg in arg_list.pos_args.iter() {
-			args.push(self.jsify_expression(arg, context));
+			args.push(self.jsify_expression(arg, &context));
 		}
 
 		for arg in arg_list.named_args.iter() {
 			// convert snake to camel case
-			context.set_phase(Phase::Independent);
 			structure_args.push(format!(
 				"{}: {}",
 				if case_convert {
@@ -232,7 +231,13 @@ impl<'a> JSifier<'a> {
 				} else {
 					arg.0.name.clone()
 				},
-				self.jsify_expression(arg.1, context)
+				self.jsify_expression(
+					arg.1,
+					&JSifyContext {
+						in_json: context.in_json.clone(),
+						phase: Phase::Independent
+					}
+				)
 			));
 		}
 
@@ -271,7 +276,7 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_expression(&self, expression: &Expr, context: &mut JSifyContext) -> String {
+	fn jsify_expression(&self, expression: &Expr, context: &JSifyContext) -> String {
 		let auto_await = match context.phase {
 			Phase::Inflight => "await ",
 			_ => "",
@@ -476,18 +481,20 @@ impl<'a> JSifier<'a> {
 				)
 			}
 			ExprKind::JsonLiteral { is_mut, element } => {
-				context.set_json(true);
+				let json_context = &JSifyContext {
+					in_json: true,
+					phase: context.phase.clone(),
+				};
 				let js_out = match &element.kind {
 					ExprKind::MapLiteral { .. } => {
 						if *is_mut {
-							format!("{}", self.jsify_expression(element, context))
+							format!("{}", self.jsify_expression(element, json_context))
 						} else {
-							format!("Object.freeze({})", self.jsify_expression(element, context))
+							format!("Object.freeze({})", self.jsify_expression(element, json_context))
 						}
 					}
-					_ => format!("{}", self.jsify_expression(element, context)),
+					_ => format!("{}", self.jsify_expression(element, json_context)),
 				};
-				context.set_json(false);
 				js_out
 			}
 			ExprKind::MapLiteral { fields, .. } => {
@@ -531,7 +538,7 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_statement(&self, env: &SymbolEnv, statement: &Stmt, context: &mut JSifyContext) -> String {
+	fn jsify_statement(&self, env: &SymbolEnv, statement: &Stmt, context: &JSifyContext) -> String {
 		match &statement.kind {
 			StmtKind::Bring {
 				module_name,
@@ -713,13 +720,18 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_inflight_function(&self, func_def: &FunctionDefinition, context: &mut JSifyContext) -> String {
+	fn jsify_inflight_function(&self, func_def: &FunctionDefinition, context: &JSifyContext) -> String {
 		let mut parameter_list = vec![];
 		for p in func_def.parameters.iter() {
 			parameter_list.push(p.0.name.clone());
 		}
-		context.set_phase(Phase::Inflight);
-		let block = self.jsify_scope(&func_def.statements, context);
+		let block = self.jsify_scope(
+			&func_def.statements,
+			&JSifyContext {
+				in_json: context.in_json.clone(),
+				phase: Phase::Inflight,
+			},
+		);
 		let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
 		let mut bindings = vec![];
 		let mut capture_names = vec![];
@@ -849,7 +861,7 @@ impl<'a> JSifier<'a> {
 	///   }
 	/// }
 	/// ```
-	fn jsify_resource(&self, env: &SymbolEnv, class: &AstClass, context: &mut JSifyContext) -> String {
+	fn jsify_resource(&self, env: &SymbolEnv, class: &AstClass, context: &JSifyContext) -> String {
 		assert!(context.phase == Phase::Preflight);
 
 		// Lookup the resource type
@@ -932,13 +944,7 @@ impl<'a> JSifier<'a> {
 		return format!("{}\n{}", resource_class, inflight_annotations.join("\n"));
 	}
 
-	fn jsify_resource_constructor(
-		&self,
-		constructor: &Constructor,
-		no_parent: bool,
-		context: &mut JSifyContext,
-	) -> String {
-		context.set_phase(Phase::Preflight);
+	fn jsify_resource_constructor(&self, constructor: &Constructor, no_parent: bool, context: &JSifyContext) -> String {
 		format!(
 			"constructor(scope, id, {}) {{\n{}\n{}\n}}",
 			constructor
@@ -950,7 +956,13 @@ impl<'a> JSifier<'a> {
 			// If there's no parent then this resource is derived from the base resource class (core.Resource) and we need
 			// to manually call its super
 			if no_parent { "	super(scope, id);" } else { "" },
-			self.jsify_scope(&constructor.statements, context)
+			self.jsify_scope(
+				&constructor.statements,
+				&JSifyContext {
+					in_json: context.in_json.clone(),
+					phase: Phase::Preflight
+				}
+			)
 		)
 	}
 
@@ -993,7 +1005,7 @@ impl<'a> JSifier<'a> {
 		captured_fields: &[(String, TypeRef, Vec<String>)],
 		inflight_methods: &[&(Symbol, FunctionDefinition)],
 		parent: &Option<UserDefinedType>,
-		context: &mut JSifyContext,
+		context: &JSifyContext,
 	) {
 		// Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
 		let mut parent_captures = vec![];
@@ -1073,7 +1085,7 @@ impl<'a> JSifier<'a> {
 		fs::write(&relative_file_path, client_source).expect("Writing client inflight source");
 	}
 
-	fn jsify_class(&self, env: &SymbolEnv, class: &AstClass, context: &mut JSifyContext) -> String {
+	fn jsify_class(&self, env: &SymbolEnv, class: &AstClass, context: &JSifyContext) -> String {
 		if class.is_resource {
 			return self.jsify_resource(env, class, context);
 		}

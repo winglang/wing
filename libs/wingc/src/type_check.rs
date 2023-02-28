@@ -853,7 +853,7 @@ impl<'a> TypeChecker<'a> {
 		exp: &Expr,
 		env: &SymbolEnv,
 		statement_idx: usize,
-		context: &mut TypeCheckerContext,
+		context: &TypeCheckerContext,
 	) -> TypeRef {
 		let t = match &exp.kind {
 			ExprKind::Literal(lit) => match lit {
@@ -1175,9 +1175,7 @@ impl<'a> TypeChecker<'a> {
 				struct_type
 			}
 			ExprKind::JsonLiteral { is_mut, element } => {
-				context.set_json(true);
-				self.type_check_exp(&element, env, statement_idx, context);
-				context.set_json(false);
+				self.type_check_exp(&element, env, statement_idx, &TypeCheckerContext { in_json: true });
 				if *is_mut {
 					self.types.mut_json()
 				} else {
@@ -1283,7 +1281,7 @@ impl<'a> TypeChecker<'a> {
 		value: &Expr,
 		env: &SymbolEnv,
 		statement_idx: usize,
-		context: &mut TypeCheckerContext,
+		context: &TypeCheckerContext,
 	) {
 		let expected_struct = if let Some(expected_struct) = expected_type.as_struct() {
 			expected_struct
@@ -1369,9 +1367,9 @@ impl<'a> TypeChecker<'a> {
 
 	pub fn type_check_scope(&mut self, scope: &Scope) {
 		assert!(self.inner_scopes.is_empty());
-		let context = &mut TypeCheckerContext { in_json: false };
+		let context = TypeCheckerContext { in_json: false };
 		for statement in scope.statements.iter() {
-			self.type_check_statement(statement, scope.env.borrow_mut().as_mut().unwrap(), context);
+			self.type_check_statement(statement, scope.env.borrow_mut().as_mut().unwrap(), &context);
 		}
 		let inner_scopes = self.inner_scopes.drain(..).collect::<Vec<_>>();
 		for inner_scope in inner_scopes {
@@ -1443,7 +1441,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_statement(&mut self, stmt: &Stmt, env: &mut SymbolEnv, context: &mut TypeCheckerContext) {
+	fn type_check_statement(&mut self, stmt: &Stmt, env: &mut SymbolEnv, context: &TypeCheckerContext) {
 		match &stmt.kind {
 			StmtKind::VariableDef {
 				reassignable,
@@ -2319,7 +2317,7 @@ impl<'a> TypeChecker<'a> {
 		reference: &Reference,
 		env: &SymbolEnv,
 		statement_idx: usize,
-		context: &mut TypeCheckerContext,
+		context: &TypeCheckerContext,
 	) -> VariableInfo {
 		match reference {
 			Reference::Identifier(symbol) => match env.lookup(symbol, Some(statement_idx)) {
