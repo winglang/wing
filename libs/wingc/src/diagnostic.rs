@@ -1,3 +1,4 @@
+use indexmap::IndexSet;
 use lsp_types::{Position, Range};
 use tree_sitter::Point;
 
@@ -6,7 +7,12 @@ use crate::debug;
 pub type FileId = String;
 pub type CharacterLocation = Point;
 pub type ByteIndex = usize;
-pub type Diagnostics = Vec<Diagnostic>;
+
+// We use an IndexSet for Diagnostics to achieve the following two goals:
+// 1. We want to preserve the order in which diagnostics are added, because it's related to the order of statements in the source.
+// 2. We want to avoid adding duplicate diagnostics.
+pub type Diagnostics = IndexSet<Diagnostic>;
+
 pub type DiagnosticResult<T> = Result<T, ()>;
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
@@ -95,14 +101,14 @@ impl PartialOrd for WingSpan {
 	}
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum DiagnosticLevel {
 	Error,
 	Warning,
 	Note,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Diagnostic {
 	pub message: String,
 	pub span: Option<WingSpan>,

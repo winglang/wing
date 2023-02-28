@@ -438,6 +438,8 @@ impl<'a> JsiiImporter<'a> {
 					continue;
 				}
 
+				let is_static = if let Some(true) = m.static_ { true } else { false };
+
 				debug!("Adding method {} to class", m.name.green());
 
 				let return_type = if let Some(jsii_return_type) = &m.returns {
@@ -447,8 +449,10 @@ impl<'a> JsiiImporter<'a> {
 				};
 
 				let mut arg_types = vec![];
-				// Add my type as the first argument to all methods (this)
-				arg_types.push(wing_type);
+				// Add my type (this) as the first argument to all instance (non static) methods
+				if !is_static {
+					arg_types.push(wing_type);
+				}
 				// Define the rest of the arguments and create the method signature
 				if let Some(params) = &m.parameters {
 					if self.has_variadic_parameters(params) {
@@ -480,7 +484,11 @@ impl<'a> JsiiImporter<'a> {
 				class_env
 					.define(
 						&Self::jsii_name_to_symbol(&name, &m.location_in_module),
-						SymbolKind::make_variable(method_sig, false, flight),
+						if is_static {
+							SymbolKind::make_variable(method_sig, false, flight)
+						} else {
+							SymbolKind::make_instance_variable(method_sig, false, flight)
+						},
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -498,6 +506,7 @@ impl<'a> JsiiImporter<'a> {
 				}
 				let base_wing_type = self.type_ref_to_wing_type(&p.type_);
 				let is_optional = if let Some(true) = p.optional { true } else { false };
+				let is_static = if let Some(true) = p.static_ { true } else { false };
 
 				let wing_type = if is_optional {
 					// TODO Will this create a bunch of duplicate types?
@@ -509,7 +518,11 @@ impl<'a> JsiiImporter<'a> {
 				class_env
 					.define(
 						&Self::jsii_name_to_symbol(&camel_case_to_snake_case(&p.name), &p.location_in_module),
-						SymbolKind::make_variable(wing_type, matches!(p.immutable, Some(true)), flight),
+						if is_static {
+							SymbolKind::make_variable(wing_type, matches!(p.immutable, Some(true)), flight)
+						} else {
+							SymbolKind::make_instance_variable(wing_type, matches!(p.immutable, Some(true)), flight)
+						},
 						StatementIdx::Top,
 					)
 					.expect(&format!(
