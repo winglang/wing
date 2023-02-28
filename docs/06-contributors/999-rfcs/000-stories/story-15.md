@@ -143,7 +143,7 @@ resource TaskListApi {
       let id = str.from_json(req.params.id);
       try {
         let title = this.model.get(id);
-        return new cloud.ApiResponse(status:200, body: Json.format(title));
+        return cloud.ApiResponse {status:200, body: Json.format(title)};
       } catch {
         return new cloud.ApiResponse(status:400);
       }
