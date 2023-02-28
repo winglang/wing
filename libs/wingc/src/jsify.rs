@@ -46,16 +46,6 @@ pub struct JSifyContext {
 	pub phase: Phase,
 }
 
-impl JSifyContext {
-	pub fn set_json(&mut self, status: bool) {
-		self.in_json = status;
-	}
-
-	pub fn set_phase(&mut self, phase: Phase) {
-		self.phase = phase;
-	}
-}
-
 pub struct JSifier<'a> {
 	pub out_dir: &'a Path,
 	shim: bool,

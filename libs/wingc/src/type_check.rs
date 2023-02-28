@@ -698,12 +698,6 @@ pub struct TypeCheckerContext {
 	in_json: bool,
 }
 
-impl TypeCheckerContext {
-	pub fn set_json(&mut self, status: bool) {
-		self.in_json = status;
-	}
-}
-
 pub struct TypeChecker<'a> {
 	types: &'a mut Types,
 
