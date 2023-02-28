@@ -956,8 +956,6 @@ impl<'a> TypeChecker<'a> {
 					.as_function_sig()
 					.expect("Expected constructor to be a function signature");
 
-				dbg!(constructor_sig);
-
 				// Verify return type (This should never fail since we define the constructors return type during AST building)
 				self.validate_type(constructor_sig.return_type, type_, exp);
 

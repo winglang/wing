@@ -387,6 +387,21 @@ impl<'a> JsiiImporter<'a> {
 				), // Dummy env, will be replaced below
 			})),
 		};
+
+		let mut ns = self
+			.wing_types
+			.libraries
+			.lookup_nested_mut_str(jsii_interface_fqn.as_str_without_type_name(), None)
+			.unwrap()
+			.as_namespace_ref()
+			.unwrap();
+		ns.env
+			.define(&new_type_symbol, SymbolKind::Type(wing_type), StatementIdx::Top)
+			.expect(&format!(
+				"Invalid JSII library: failed to define interface or struct type {}",
+				type_name
+			));
+
 		self.add_members_to_class_env(&jsii_interface, false, iface_env.flight, &mut iface_env, wing_type);
 
 		// Add properties from our parents to the new structs env
@@ -403,21 +418,6 @@ impl<'a> JsiiImporter<'a> {
 			Type::Interface(ref mut iface) => iface.env = iface_env,
 			_ => panic!("Expected {} to be an interface or struct", type_name),
 		};
-
-		// TODO: don't we need to add this to the namespace earlier in case there's a self reference in the struct?
-		let mut ns = self
-			.wing_types
-			.libraries
-			.lookup_nested_mut_str(jsii_interface_fqn.as_str_without_type_name(), None)
-			.unwrap()
-			.as_namespace_ref()
-			.unwrap();
-		ns.env
-			.define(&new_type_symbol, SymbolKind::Type(wing_type), StatementIdx::Top)
-			.expect(&format!(
-				"Invalid JSII library: failed to define interface or struct type {}",
-				type_name
-			));
 	}
 
 	fn add_members_to_class_env<T: JsiiInterface>(
@@ -607,7 +607,6 @@ impl<'a> JsiiImporter<'a> {
 				"Base class {} of {} is not a class or resource",
 				base_class_type, type_name
 			));
-			is_resource = base_class_type.as_resource().is_some();
 			Some(base_class.env.get_ref())
 		} else {
 			None
