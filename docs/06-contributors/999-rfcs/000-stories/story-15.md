@@ -19,6 +19,7 @@ The following code is an initial implementation of TaskList with api gateway and
 - [x] use redis instead of bucket
 - [ ] bring cdktf
 - [ ] code that updates estimation and duration from REST put command
+- [ ] console requirements
 
 ## Discussion topics
 - `get` vs `on_get` - Should the `cloud.api` API have the `on_` prefix to match `cloud.bucket` API and also to allow calling
