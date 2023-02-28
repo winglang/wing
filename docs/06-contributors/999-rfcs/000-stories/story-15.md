@@ -97,7 +97,6 @@ resource TaskListModel implementes ITaskListModel {
   inflight remove(id: str) {
     print("removing task ${id}");
     this._bucket.delete(id);
-    return id;
   }
 
   inflight find(r: RegExp): Array<str> { 
