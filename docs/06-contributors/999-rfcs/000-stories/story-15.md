@@ -49,7 +49,7 @@ enum Status {
   Completed
 }
 
-interface ITaskListModel {
+interface ITaskList {
   inflight get(id: str): Json;
   inflight add(title: str): str;
   inflight remove(id: str): void; 
@@ -58,7 +58,7 @@ interface ITaskListModel {
   inflight set_estimation(id: str, estimation: duration): str;
 }
 
-resource TaskListModel implementes ITaskListModel {
+resource TaskList implementes ITaskList {
   _redis: redis.Redis;
   init() {
     this._redis = new redis.Redis();
@@ -130,9 +130,9 @@ resource TaskListModel implementes ITaskListModel {
 
 resource TaskListApi {
   api: cloud.Api;
-  model: TaskListModel;
-  init(model: ITaskListModel) {
-    this.model = model;
+  task_list: ITaskList;
+  init(task_list: ITaskList) {
+    this.task_list = task_list;
     this.api = new cloud.Api();
     
     // TODO add this.put
@@ -146,14 +146,14 @@ resource TaskListApi {
         let random_task: Json = await axios.get('https://www.boredapi.com/api/activity');
         title = str.from_json(random_task.data.activity); 
       } 
-      let id = this.model.add(title);
+      let id = this.task_list.add(title);
       return cloud.ApiResponse { status:201, body: Json.format(id) };
     });
 
     this.api.get("/tasks/:id", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let id = str.from_json(req.params.id);
       try {
-        let title = this.model.get(id);
+        let title = this.task_list.get(id);
         return cloud.ApiResponse {status:200, body: Json.format(title)};
       } catch {
         return cloud.ApiResponse(status:400);
@@ -163,7 +163,7 @@ resource TaskListApi {
     this.api.delete("/tasks/:id", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let id = str.from_json(req.params.id);
       try {
-        this.model.delete(id);
+        this.task_list.delete(id);
         return cloud.ApiResponse(status:204);
       } catch {
         return cloud.ApiResponse(status:400);
@@ -172,13 +172,13 @@ resource TaskListApi {
 
     this.api.get("/tasks", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let search = new js.RegExp(str.from_json(req.query.search ?? Json ".*")); 
-      let results = this.model.find(search);
+      let results = this.task_list.find(search);
       return cloud.ApiResponse(status:200, body: Json.format(results));
     });
   }
 }
 
-let model = new TaskListModel();
-let t = new TaskListApi(model);
+let task_list = new TaskList();
+let t = new TaskListApi(task_list);
 
 ```
