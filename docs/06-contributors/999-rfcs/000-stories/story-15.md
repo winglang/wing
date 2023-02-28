@@ -32,8 +32,8 @@ uses the `{id}` syntax. What should be the the right syntax?
 
 ## Code 
 ```ts (wing)
-
 bring cloud;
+bring redis;
 
 // TODO discuss how we bring untyped something like RegEx from JavaScript 
 // PLACEHOLER for bringing something from Javascript stdlib
@@ -42,6 +42,7 @@ bring untyped js;
 // prerequisite: npm install axios
 // PALCEHOLDER for bringing some external module
 bring untyped "axios" as axios; 
+
 
 enum Status {
   Uncompleted,
@@ -58,11 +59,11 @@ interface ITaskListModel {
 }
 
 resource TaskListModel implementes ITaskListModel {
-  _bucket: cloud.Bucket;
+  _redis: redis.Redis;
   init() {
-    this._bucket = new cloud.Bucket();
-    this.inflights.add("get", ref: "this._bucket", op: "get");
-    this.inflights.add("_add", ref: "this._bucket", op: "put");
+    this._redis = new redis.Redis();
+    this.inflights.add("get", ref: "this._redis", op: "GET" );
+    this.inflights.add("_add", ref: "this._redis", op: ["SET", "SADD"]);
     // notice I am setting explicit permissions on this
     this.inflights.add("add", ref: "this", op: "_add");
     // is this the right synatx for multiple ops? 
@@ -73,11 +74,12 @@ resource TaskListModel implementes ITaskListModel {
   }
 
   inflight get(id: str): Json {
-     return this._bucket.get_json(id);
+     return Json.parse(this._redis.GET(id));
   }
   
   inflight _add(id: str, j: Json): str {
-    this._bucket.put_json(id, j);
+    this._redis.SET(id , JSON.format(j));
+    this._redis.SADD("todo", id);
     return id;
   } 
   
@@ -94,12 +96,21 @@ resource TaskListModel implementes ITaskListModel {
 
   inflight remove(id: str) {
     print("removing task ${id}");
-    this._bucket.delete(id);
+    this._redis.DEL(id);
   }
 
   // PLACEHOLDER - having an untyped type
   inflight find(r: js.RegExp): Array<str> { 
-    //TODO add implementation
+    let result = MutArray<str>[]; 
+    let ids = this._redis.SMEMBERS("todo");
+    for id in ids {
+      let j = Json.parse(this._redis.GET(id));
+      // Notice that there is autocasting from untyped to bool here 
+      if r.test(j.title) {
+        result.push(id);
+      }
+    }
+    return result.copy();
   }
 
   inflight set_status(id: str, status: Status): str {
