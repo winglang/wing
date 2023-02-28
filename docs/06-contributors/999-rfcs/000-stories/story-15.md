@@ -84,7 +84,7 @@ resource TaskListModel implementes ITaskListModel {
   } 
   
   inflight add(title: str): str {
-     // how does untyped works with numeric operations
+    // PLACEHOLDER - how does untyped works with numeric operations
     let id = "${Math.floor(Math.random() * 100000000000)}";
     let j = Json { 
       title: title, 
@@ -131,7 +131,7 @@ resource TaskListApi {
     this.api.post("/tasks", inflight (req: cloud. Api.ApiRequest): cloud.ApiResponse => {
       let var title = str.from_json(req.body.title);
       if title == random {
-        // can I cast an untyped ?
+        // PLACEHOLDER - can I cast an untyped ?
         let random_task: Json = await axios.get('https://www.boredapi.com/api/activity');
         title = str.from_json(random_task.data.activity); 
       } 
