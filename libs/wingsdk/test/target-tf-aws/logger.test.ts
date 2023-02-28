@@ -15,7 +15,7 @@ test("inflight function uses a logger", () => {
     }`
   );
 
-  Function.newFunction(app, "Function", inflight);
+  Function._newFunction(app, "Function", inflight);
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
 

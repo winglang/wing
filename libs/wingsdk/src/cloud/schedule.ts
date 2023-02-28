@@ -37,8 +37,9 @@ export interface ScheduleProps {
 export abstract class Schedule extends Resource {
   /**
    * Create a new schedule.
+   * @internal
    */
-  public static newSchedule(
+  public static _newSchedule(
     scope: Construct,
     id: string,
     props: ScheduleProps = {}

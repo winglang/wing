@@ -53,7 +53,7 @@ export class Queue extends cloud.Queue {
       "QueueOnMessageHandlerClient"
     );
 
-    const fn = Function.newFunction(
+    const fn = Function._newFunction(
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnMessage-${hash}`,
       functionHandler,

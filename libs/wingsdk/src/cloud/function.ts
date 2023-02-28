@@ -46,8 +46,9 @@ export interface FunctionProps {
 export abstract class Function extends Resource implements IInflightHost {
   /**
    * Creates a new cloud.Function instance through the app.
+   * @internal
    */
-  public static newFunction(
+  public static _newFunction(
     scope: Construct,
     id: string,
     inflight: Inflight,

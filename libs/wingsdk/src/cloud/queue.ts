@@ -34,8 +34,9 @@ export interface QueueProps {
 export abstract class Queue extends Resource {
   /**
    * Create a new `Queue` instance.
+   * @internal
    */
-  public static newQueue(
+  public static _newQueue(
     scope: Construct,
     id: string,
     props: QueueProps = {}

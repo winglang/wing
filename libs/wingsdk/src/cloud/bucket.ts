@@ -26,8 +26,9 @@ export interface BucketProps {
 export abstract class Bucket extends Resource {
   /**
    * Create a new bucket.
+   * @internal
    */
-  public static newBucket(
+  public static _newBucket(
     scope: Construct,
     id: string,
     props: BucketProps = {}

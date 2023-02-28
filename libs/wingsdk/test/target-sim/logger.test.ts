@@ -17,7 +17,7 @@ test("inflight uses a logger", async () => {
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
-  cloud.Function.newFunction(app, "my_function", handler);
+  cloud.Function._newFunction(app, "my_function", handler);
 
   const s = await app.startSimulator();
 

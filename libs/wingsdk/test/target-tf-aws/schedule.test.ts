@@ -14,7 +14,7 @@ test("schedule behavior with rate", () => {
     "Handler",
     `async handle(event) { console.log("Received: ", event); }`
   );
-  const schedule = cloud.Schedule.newSchedule(app, "Schedule", {
+  const schedule = cloud.Schedule._newSchedule(app, "Schedule", {
     rate: std.Duration.fromMinutes(2),
   });
   schedule.onTick(fn);
@@ -53,7 +53,7 @@ test("schedule behavior with cron", () => {
     "Handler",
     `async handle(event) { console.log("Received: ", event); }`
   );
-  const schedule = cloud.Schedule.newSchedule(app, "Schedule", {
+  const schedule = cloud.Schedule._newSchedule(app, "Schedule", {
     cron: "0/1 * ? * *",
   });
   schedule.onTick(fn);
@@ -97,7 +97,7 @@ test("schedule with two functions", () => {
     "Handler2",
     `async handle(event) { console.log("Received: ", event); }`
   );
-  const schedule = cloud.Schedule.newSchedule(app, "Schedule", {
+  const schedule = cloud.Schedule._newSchedule(app, "Schedule", {
     cron: "0/1 * ? * *",
   });
   schedule.onTick(fn1);
@@ -126,7 +126,7 @@ test("schedule with rate and cron simultaneously", () => {
 
   // THEN
   expect(() =>
-    cloud.Schedule.newSchedule(app, "Schedule", {
+    cloud.Schedule._newSchedule(app, "Schedule", {
       rate: std.Duration.fromSeconds(30),
       cron: "0/1 * ? * *",
     })
@@ -139,7 +139,7 @@ test("cron with more than five values", () => {
 
   // THEN
   expect(() =>
-    cloud.Schedule.newSchedule(app, "Schedule", {
+    cloud.Schedule._newSchedule(app, "Schedule", {
       cron: "0/1 * ? * * *",
     })
   ).toThrow(
@@ -152,7 +152,7 @@ test("schedule without rate or cron", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
 
   // THEN
-  expect(() => cloud.Schedule.newSchedule(app, "Schedule")).toThrow(
+  expect(() => cloud.Schedule._newSchedule(app, "Schedule")).toThrow(
     "rate or cron need to be filled."
   );
 });
@@ -163,7 +163,7 @@ test("schedule with rate less than 1 minute", () => {
 
   // THEN
   expect(() =>
-    cloud.Schedule.newSchedule(app, "Schedule", {
+    cloud.Schedule._newSchedule(app, "Schedule", {
       rate: std.Duration.fromSeconds(30),
     })
   ).toThrow("rate can not be set to less than 1 minute.");

@@ -12,7 +12,7 @@ import {
 test("create a bucket", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  Bucket.newBucket(app, "my_bucket");
+  Bucket._newBucket(app, "my_bucket");
   const output = app.synth();
 
   // THEN
@@ -28,7 +28,7 @@ test("create a bucket", () => {
 test("bucket is public", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  Bucket.newBucket(app, "my_bucket", { public: true });
+  Bucket._newBucket(app, "my_bucket", { public: true });
   const output = app.synth();
 
   // THEN
@@ -44,7 +44,7 @@ test("bucket is public", () => {
 test("bucket with two preflight objects", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const bucket = Bucket.newBucket(app, "my_bucket", { public: true });
+  const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
   bucket.addObject("file1.txt", "hello world");
   bucket.addObject("file2.txt", "boom bam");
   const output = app.synth();
@@ -64,7 +64,7 @@ test("bucket with two preflight objects", () => {
 test("bucket prefix valid", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const bucket = Bucket.newBucket(app, "the-uncanny.bucket");
+  const bucket = Bucket._newBucket(app, "the-uncanny.bucket");
   const output = app.synth();
 
   // THEN
@@ -80,7 +80,7 @@ test("bucket prefix valid", () => {
 test("bucket prefix must be lowercase", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const bucket = Bucket.newBucket(app, "The-Uncanny.Bucket");
+  const bucket = Bucket._newBucket(app, "The-Uncanny.Bucket");
   const output = app.synth();
 
   // THEN
@@ -98,7 +98,7 @@ test("bucket prefix must begin with an alphanumeric character", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
 
   // THEN
-  expect(() => Bucket.newBucket(app, "(%?#$The-Uncanny-Bucket.*!@¨)")).toThrow(
+  expect(() => Bucket._newBucket(app, "(%?#$The-Uncanny-Bucket.*!@¨)")).toThrow(
     /AWS S3 bucket names must begin with a letter or number/
   );
 });
@@ -108,7 +108,7 @@ test("bucket prefix can not begining with 'xn--'", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
 
   // THEN
-  expect(() => Bucket.newBucket(app, "xn--The-Uncanny-Bucket")).toThrow(
+  expect(() => Bucket._newBucket(app, "xn--The-Uncanny-Bucket")).toThrow(
     /AWS S3 bucket names cannot begin with 'xn--'/
   );
 });

@@ -7,7 +7,7 @@ import { tfResourcesOf, tfSanitize } from "../util";
 test("function with a bucket binding", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const bucket = cloud.Bucket.newBucket(app, "Bucket");
+  const bucket = cloud.Bucket._newBucket(app, "Bucket");
   const inflight = Testing.makeHandler(
     app,
     "Handler",
@@ -19,7 +19,7 @@ test("function with a bucket binding", () => {
       },
     }
   );
-  cloud.Function.newFunction(app, "Function", inflight);
+  cloud.Function._newFunction(app, "Function", inflight);
   const output = app.synth();
 
   // THEN
@@ -46,7 +46,7 @@ test("function with a function binding", () => {
     "Handler1",
     `async handle(event) { console.log(event); }`
   );
-  const fn1 = cloud.Function.newFunction(app, "Function1", inflight1);
+  const fn1 = cloud.Function._newFunction(app, "Function1", inflight1);
   const inflight2 = Testing.makeHandler(
     app,
     "Handler2",
@@ -61,7 +61,7 @@ test("function with a function binding", () => {
       },
     }
   );
-  cloud.Function.newFunction(app, "Function2", inflight2);
+  cloud.Function._newFunction(app, "Function2", inflight2);
   const output = app.synth();
 
   // THEN
@@ -88,8 +88,8 @@ test("two functions reusing the same IFunctionHandler", () => {
     `async handle(event) { console.log(event); }`
   );
 
-  cloud.Function.newFunction(app, "Function1", inflight);
-  cloud.Function.newFunction(app, "Function2", inflight);
+  cloud.Function._newFunction(app, "Function1", inflight);
+  cloud.Function._newFunction(app, "Function2", inflight);
 
   // THEN
   const output = app.synth();
@@ -108,7 +108,7 @@ test("two functions reusing the same IFunctionHandler", () => {
 test("function with a queue binding", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const queue = cloud.Queue.newQueue(app, "Queue");
+  const queue = cloud.Queue._newQueue(app, "Queue");
   const pusher = Testing.makeHandler(
     app,
     "Pusher",
@@ -120,7 +120,7 @@ test("function with a queue binding", () => {
       },
     }
   );
-  cloud.Function.newFunction(app, "Function", pusher);
+  cloud.Function._newFunction(app, "Function", pusher);
 
   const processor = Testing.makeHandler(
     app,

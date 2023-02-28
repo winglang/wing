@@ -13,7 +13,7 @@ test("basic function", () => {
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
   // WHEN
-  Function.newFunction(app, "Function", inflight);
+  Function._newFunction(app, "Function", inflight);
   const output = app.synth();
 
   // THEN
@@ -36,7 +36,7 @@ test("basic function with environment variables", () => {
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
   // WHEN
-  Function.newFunction(app, "Function", inflight, {
+  Function._newFunction(app, "Function", inflight, {
     env: {
       FOO: "BAR",
       BOOM: "BAM",
@@ -92,7 +92,7 @@ test("replace invalid character from function name", () => {
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
   // WHEN
-  const func = Function.newFunction(app, "someFunction01", inflight);
+  const func = Function._newFunction(app, "someFunction01", inflight);
   const output = app.synth();
 
   // THEN

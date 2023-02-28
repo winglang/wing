@@ -35,7 +35,7 @@ describe("run single test", () => {
 
   test("not a function", async () => {
     const app = new SimApp();
-    Bucket.newBucket(app, "test");
+    Bucket._newBucket(app, "test");
 
     const sim = await app.startSimulator();
     await expect(sim.runTest("root/test")).rejects.toThrowError(
@@ -66,7 +66,7 @@ describe("run all tests", () => {
     new Test(app, "test", ["console.log('hi');"]);
     new Test(app, "test:bla", ["console.log('hi');"]);
     new Test(app, "test:blue", ["console.log('hi');"]);
-    Bucket.newBucket(app, "mytestbucket");
+    Bucket._newBucket(app, "mytestbucket");
 
     const sim = await app.startSimulator();
     const results = await sim.runAllTests();
@@ -80,7 +80,7 @@ describe("run all tests", () => {
 
   test("each test runs in a separate simulator instance", async () => {
     const app = new SimApp();
-    const bucket = Bucket.newBucket(app, "bucket");
+    const bucket = Bucket._newBucket(app, "bucket");
 
     new Test(
       app,

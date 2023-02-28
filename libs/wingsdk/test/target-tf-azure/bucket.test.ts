@@ -12,7 +12,7 @@ import {
 test("create a bucket", () => {
   // GIVEN
   const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  Bucket.newBucket(app, "my_bucket");
+  Bucket._newBucket(app, "my_bucket");
   const output = app.synth();
 
   // THEN
@@ -29,8 +29,8 @@ test("create a bucket", () => {
 test("create multiple buckets", () => {
   // GIVEN
   const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  Bucket.newBucket(app, "my_bucket");
-  Bucket.newBucket(app, "my_bucket2");
+  Bucket._newBucket(app, "my_bucket");
+  Bucket._newBucket(app, "my_bucket2");
   const output = app.synth();
 
   // THEN
@@ -47,7 +47,7 @@ test("create multiple buckets", () => {
 test("bucket is public", () => {
   // GIVEN
   const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  Bucket.newBucket(app, "my_bucket", { public: true });
+  Bucket._newBucket(app, "my_bucket", { public: true });
   const output = app.synth();
 
   // THEN
@@ -64,7 +64,7 @@ test("bucket is public", () => {
 test("bucket with two preflight objects", () => {
   // GIVEN
   const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  const bucket = Bucket.newBucket(app, "my_bucket", { public: true });
+  const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
   bucket.addObject("file1.txt", "hello world");
   bucket.addObject("file2.txt", "boom bam");
   const output = app.synth();
@@ -84,7 +84,7 @@ test("bucket with two preflight objects", () => {
 test("bucket name valid", () => {
   // GIVEN
   const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  const bucket = Bucket.newBucket(app, "The-Uncanny-Bucket");
+  const bucket = Bucket._newBucket(app, "The-Uncanny-Bucket");
   const output = app.synth();
 
   expect(

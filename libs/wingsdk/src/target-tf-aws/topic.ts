@@ -47,7 +47,7 @@ export class Topic extends cloud.Topic {
       "TopicOnMessageHandlerClient"
     );
 
-    const fn = Function.newFunction(
+    const fn = Function._newFunction(
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnMessage-${hash}`,
       functionHandler,

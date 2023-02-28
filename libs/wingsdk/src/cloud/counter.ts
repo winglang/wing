@@ -25,8 +25,9 @@ export interface CounterProps {
 export abstract class Counter extends Resource {
   /**
    * Create a new counter.
+   * @internal
    */
-  public static newCounter(
+  public static _newCounter(
     scope: Construct,
     id: string,
     props: CounterProps = {}

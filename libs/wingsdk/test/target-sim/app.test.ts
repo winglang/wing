@@ -10,7 +10,7 @@ test("app name can be customized", async () => {
 
   // WHEN
   const app = new sim.App({ outdir: mkdtemp(), name: APP_NAME });
-  Bucket.newBucket(app, "my_bucket");
+  Bucket._newBucket(app, "my_bucket");
   const simfile = app.synth();
 
   // THEN

@@ -10,11 +10,11 @@ test("can create sequential files in a bucket", async () => {
     constructor(scope: Construct, id: string) {
       super(scope, id);
 
-      const counter = cloud.Counter.newCounter(this, "Counter", {
+      const counter = cloud.Counter._newCounter(this, "Counter", {
         initial: 1000,
       });
-      const bucket = cloud.Bucket.newBucket(this, "Bucket");
-      const queue = cloud.Queue.newQueue(this, "Queue");
+      const bucket = cloud.Bucket._newBucket(this, "Bucket");
+      const queue = cloud.Queue._newQueue(this, "Queue");
       const processor = Testing.makeHandler(
         this,
         "Processor",

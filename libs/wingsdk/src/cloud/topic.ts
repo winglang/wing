@@ -18,8 +18,9 @@ export interface TopicProps {}
 export abstract class Topic extends Resource {
   /**
    * Create a new topic.
+   * @internal
    */
-  public static newTopic(
+  public static _newTopic(
     scope: Construct,
     id: string,
     props: TopicProps = {}
