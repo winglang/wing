@@ -181,7 +181,7 @@ impl<'a> JSifier<'a> {
 		match reference {
 			Reference::Identifier(identifier) => symbolize(self, identifier),
 			Reference::InstanceMember { object, property } => {
-				self.jsify_expression(object, phase) + "." + &symbolize(self, property)
+				self.jsify_expression(object, context) + "." + &symbolize(self, property)
 			}
 			Reference::TypeMember { type_, property } => {
 				self.jsify_type(&TypeAnnotation::UserDefined(type_.clone())) + "." + &symbolize(self, property)
@@ -411,7 +411,7 @@ impl<'a> JSifier<'a> {
 						// for "loose" macros, e.g. `print()`, $self$ is the global object
 						ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
 						ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
-							self.jsify_expression(object, phase).clone()
+							self.jsify_expression(object, context).clone()
 						}
 
 						_ => expr_string,
@@ -532,7 +532,7 @@ impl<'a> JSifier<'a> {
 					&func_def.parameters,
 					&func_def.statements,
 					func_def.is_static,
-					phase,
+					context,
 				),
 			},
 		}
@@ -782,7 +782,7 @@ impl<'a> JSifier<'a> {
 		parameters: &[(Symbol, bool)],
 		body: &Scope,
 		is_static: bool,
-		phase: Phase,
+		context: &JSifyContext,
 	) -> String {
 		let mut parameter_list = vec![];
 		for p in parameters.iter() {
@@ -795,7 +795,7 @@ impl<'a> JSifier<'a> {
 		};
 
 		let parameters = parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ");
-		let body = self.jsify_scope(body, phase);
+		let body = self.jsify_scope(body, context);
 		let static_modifier = if is_static { "static" } else { "" };
 
 		formatdoc!(
@@ -911,7 +911,7 @@ impl<'a> JSifier<'a> {
 			self.jsify_resource_constructor(&class.constructor, class.parent.is_none(), context),
 			preflight_methods
 				.iter()
-				.map(|(n, m)| self.jsify_function(Some(&n.name), &m.parameters, &m.statements, m.is_static, phase))
+				.map(|(n, m)| self.jsify_function(Some(&n.name), &m.parameters, &m.statements, m.is_static, context))
 				.collect::<Vec<String>>()
 				.join("\n"),
 		);
@@ -1060,7 +1060,10 @@ impl<'a> JSifier<'a> {
 						&def.parameters,
 						&def.statements,
 						def.is_static,
-						def.signature.flight
+						&JSifyContext {
+							in_json: context.in_json.clone(),
+							phase: def.signature.flight
+						}
 					)
 				)
 			})
@@ -1103,7 +1106,7 @@ impl<'a> JSifier<'a> {
 				&class.constructor.parameters,
 				&class.constructor.statements,
 				false, // Constructors are are kind of static, but we don't add the `static` modifier to ctors in js so we pass false here
-				phase
+				context
 			),
 			class
 				.fields
@@ -1114,7 +1117,7 @@ impl<'a> JSifier<'a> {
 			class
 				.methods
 				.iter()
-				.map(|(n, m)| self.jsify_function(Some(&n.name), &m.parameters, &m.statements, m.is_static, phase))
+				.map(|(n, m)| self.jsify_function(Some(&n.name), &m.parameters, &m.statements, m.is_static, context))
 				.collect::<Vec<String>>()
 				.join("\n")
 		)

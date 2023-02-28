@@ -902,7 +902,7 @@ impl<'a> TypeChecker<'a> {
 
 				_type
 			}
-			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env, statement_idx).type_,
+			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env, statement_idx, context).type_,
 			ExprKind::New {
 				class,
 				obj_id: _, // TODO
@@ -1025,11 +1025,11 @@ impl<'a> TypeChecker<'a> {
 			}
 			ExprKind::Call { function, arg_list } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
-				let func_type = self.type_check_exp(function, env, statement_idx);
+				let func_type = self.type_check_exp(function, env, statement_idx, context);
 				let this_args = match &function.kind {
 					ExprKind::Reference(_ref) => {
 						// If this is a static method then there's no `this` arg
-						if self.resolve_reference(_ref, env, statement_idx).is_static {
+						if self.resolve_reference(_ref, env, statement_idx, context).is_static {
 							0
 						} else {
 							1
@@ -2354,7 +2354,7 @@ impl<'a> TypeChecker<'a> {
 						// We don't use the return value but need to call replace so it'll drop the old value
 						_ = std::mem::replace(&mut *mut_ptr, new_ref);
 					}
-					return self.resolve_reference(reference, env, statement_idx);
+					return self.resolve_reference(reference, env, statement_idx, context);
 				}
 
 				// Special case: if the object expression is a simple reference to `this` and we're inside the init function then

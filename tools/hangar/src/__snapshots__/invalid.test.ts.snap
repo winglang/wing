@@ -86,6 +86,17 @@ exports[`inflight_in_class.w > wing test (--target sim) - invalid > stderr 1`] =
 Error at ../../../../examples/tests/invalid/inflight_in_class.w:3:3 | Class cannot have inflight fields"
 `;
 
+exports[`json.w > wing test (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 7 error(s)
+Error at ../../../../examples/tests/invalid/json.w:5:14 | Expected type to be \\"str\\", but got \\"Json\\" instead
+Error at ../../../../examples/tests/invalid/json.w:7:14 | Expected type to be \\"num\\", but got \\"Json\\" instead
+Error at ../../../../examples/tests/invalid/json.w:9:15 | Expected type to be \\"bool\\", but got \\"Json\\" instead
+Error at ../../../../examples/tests/invalid/json.w:11:19 | Expected type to be \\"Map<str>\\", but got \\"Json\\" instead
+Error at ../../../../examples/tests/invalid/json.w:13:20 | Expected type to be \\"Set<str>\\", but got \\"Json\\" instead
+Error at ../../../../examples/tests/invalid/json.w:15:21 | Expected type to be \\"Array<str>\\", but got \\"Json\\" instead
+Error at ../../../../examples/tests/invalid/json.w:20:14 | Unknown symbol \\"set\\""
+`;
+
 exports[`missing_semicolon.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 4 error(s)
 Error at ../../../../examples/tests/invalid/missing_semicolon.w:7:1 | Expected expression
