@@ -39,12 +39,11 @@ bring redis;
 
 // TODO discuss how we bring untyped something like RegEx from JavaScript 
 // PLACEHOLER for bringing something from Javascript stdlib
-bring untyped js;
+bring untyped js ;
 
 // prerequisite: npm install axios
 // PALCEHOLDER for bringing some external module
 bring untyped "axios" as axios; 
-
 
 enum Status {
   Uncompleted,
@@ -55,7 +54,7 @@ interface ITaskList {
   inflight get(id: str): Json;
   inflight add(title: str): str;
   inflight remove(id: str): void; 
-  inflight find(r: js.RegExp): Array<str>;
+  inflight find(r: str): Array<str>;
   inflight set_status(id: str, status: Status): str;
   inflight set_estimation(id: str, estimation: duration): str;
 }
@@ -80,7 +79,7 @@ resource TaskList implementes ITaskList {
   }
   
   inflight _add(id: str, j: Json): str {
-    this._redis.SET(id , JSON.format(j));
+    this._redis.SET(id , Json.format(j));
     this._redis.SADD("todo", id);
     return id;
   } 
@@ -102,7 +101,8 @@ resource TaskList implementes ITaskList {
   }
 
   // PLACEHOLDER - having an untyped type
-  inflight find(r: js.RegExp): Array<str> { 
+  inflight find(term: str): Array<str> { 
+    let r = new js.RegExp(term);
     let result = MutArray<str>[]; 
     let ids = this._redis.SMEMBERS("todo");
     for id in ids {
@@ -145,7 +145,7 @@ resource TaskListApi {
       //              the system will fetch a random task from the internet
       if title == "random" {
         // PLACEHOLDER - can I cast an untyped ?
-        let random_task: Json = await axios.get('https://www.boredapi.com/api/activity');
+        let random_task = axios.get('https://www.boredapi.com/api/activity');
         title = str.from_json(random_task.data.activity); 
       } 
       let id = this.task_list.add(title);
@@ -173,7 +173,7 @@ resource TaskListApi {
     });
 
     this.api.get("/tasks", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-      let search = new js.RegExp(str.from_json(req.query.search ?? Json ".*")); 
+      let search = str.from_json(req.query.search ?? Json ".*"); 
       let results = this.task_list.find(search);
       return cloud.ApiResponse(status:200, body: Json.format(results));
     });
