@@ -645,11 +645,24 @@ impl<'a> JsiiImporter<'a> {
 			})
 		});
 
+		let implements = if let Some(interface_fqns) = &jsii_class.interfaces {
+			interface_fqns
+				.iter()
+				.map(|i| {
+					let fqn = FQN::from(i.as_str());
+					self.lookup_or_create_type(&fqn)
+				})
+				.collect::<Vec<_>>()
+		} else {
+			vec![]
+		};
+
 		let class_spec = Class {
 			should_case_convert_jsii: true,
 			name: new_type_symbol.clone(),
 			env: dummy_env,
 			parent: base_class_type,
+			implements,
 			type_parameters: type_params,
 		};
 		let mut new_type = self.wing_types.add_type(if is_resource {

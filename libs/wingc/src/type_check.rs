@@ -182,7 +182,8 @@ impl Debug for NamespaceRef {
 #[derivative(Debug)]
 pub struct Class {
 	pub name: Symbol,
-	parent: Option<TypeRef>, // Must be a Type::Class type
+	parent: Option<TypeRef>,  // Must be a Type::Class type
+	implements: Vec<TypeRef>, // Must be a Type::Interface type
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
 	pub should_case_convert_jsii: bool,
@@ -312,20 +313,12 @@ impl Subtype for Type {
 					parent_type.is_subtype_of(other)
 				})
 			}
-			(Self::Resource(res), Self::Interface(iface)) => {
-				// If I'm a resource and I implement the interface then I'm a subtype of it
-				for iface_method in iface.methods(true) {
-					let (iface_method_name, iface_method_type) = iface_method;
-					if let Some(res_method) = res.env.try_lookup(&iface_method_name, None) {
-						let res_method_type = res_method.as_variable().unwrap().type_.clone();
-						if !res_method_type.is_subtype_of(&iface_method_type) {
-							return false;
-						}
-					} else {
-						return false;
-					}
-				}
-				return true;
+			(Self::Resource(l0), Self::Interface(_)) => {
+				// If I'm a resource and I implement the interface then I'm a subtype of it (nominal subtyping)
+				l0.implements.iter().any(|parent| {
+					let parent_type: &Type = &*parent;
+					parent_type.is_subtype_of(other)
+				})
 			}
 			(_, Self::Interface(_)) => {
 				// TODO - for now only resources can implement interfaces
@@ -1705,6 +1698,7 @@ impl<'a> TypeChecker<'a> {
 					name: name.clone(),
 					env: dummy_env,
 					parent: parent_class,
+					implements: vec![],    // TODO parse AST information
 					type_parameters: None, // TODO no way to have generic args in wing yet
 				};
 				let mut class_type = self.types.add_type(if *is_resource {
@@ -2119,6 +2113,7 @@ impl<'a> TypeChecker<'a> {
 			name: original_type_class.name.clone(),
 			env: new_env,
 			parent: original_type_class.parent,
+			implements: original_type_class.implements.clone(),
 			should_case_convert_jsii: original_type_class.should_case_convert_jsii,
 			type_parameters: Some(type_params.clone()),
 		});
