@@ -162,8 +162,11 @@ impl<'a> JSifier<'a> {
 		};
 		match reference {
 			Reference::Identifier(identifier) => symbolize(self, identifier),
-			Reference::NestedIdentifier { object, property } => {
+			Reference::InstanceMember { object, property } => {
 				self.jsify_expression(object, phase) + "." + &symbolize(self, property)
+			}
+			Reference::TypeMember { type_, property } => {
+				self.jsify_type(&TypeAnnotation::UserDefined(type_.clone())) + "." + &symbolize(self, property)
 			}
 		}
 	}
@@ -323,7 +326,7 @@ impl<'a> JSifier<'a> {
 
 				let expr_string = match &function.kind {
 					ExprKind::Reference(reference) => {
-						if let Reference::NestedIdentifier { object, .. } = reference {
+						if let Reference::InstanceMember { object, .. } = reference {
 							let object_type = object.evaluated_type.borrow().unwrap();
 							if let Some(class) = object_type.as_class_or_resource() {
 								needs_case_conversion = class.should_case_convert_jsii;
@@ -343,7 +346,7 @@ impl<'a> JSifier<'a> {
 					let self_string = &match &function.kind {
 						// for "loose" macros, e.g. `print()`, $self$ is the global object
 						ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
-						ExprKind::Reference(Reference::NestedIdentifier { object, .. }) => {
+						ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
 							self.jsify_expression(object, phase).clone()
 						}
 
@@ -450,7 +453,13 @@ impl<'a> JSifier<'a> {
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
 				Phase::Inflight => self.jsify_inflight_function(func_def),
 				Phase::Independent => unimplemented!(),
-				Phase::Preflight => self.jsify_function(None, &func_def.parameters, &func_def.statements, phase),
+				Phase::Preflight => self.jsify_function(
+					None,
+					&func_def.parameters,
+					&func_def.statements,
+					func_def.is_static,
+					phase,
+				),
 			},
 		}
 	}
@@ -687,7 +696,14 @@ impl<'a> JSifier<'a> {
 		)
 	}
 
-	fn jsify_function(&self, name: Option<&str>, parameters: &[(Symbol, bool)], body: &Scope, phase: Phase) -> String {
+	fn jsify_function(
+		&self,
+		name: Option<&str>,
+		parameters: &[(Symbol, bool)],
+		body: &Scope,
+		is_static: bool,
+		phase: Phase,
+	) -> String {
 		let mut parameter_list = vec![];
 		for p in parameters.iter() {
 			parameter_list.push(self.jsify_symbol(&p.0));
@@ -698,12 +714,15 @@ impl<'a> JSifier<'a> {
 			None => ("", "=> "),
 		};
 
-		format!(
-			"{}({}) {}{}",
-			name,
-			parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", "),
-			arrow,
-			self.jsify_scope(body, phase)
+		let parameters = parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ");
+		let body = self.jsify_scope(body, phase);
+		let static_modifier = if is_static { "static" } else { "" };
+
+		formatdoc!(
+			"
+			{static_modifier} {name}({parameters}) {arrow} {{
+				{body}
+			}}"
 		)
 	}
 
@@ -805,11 +824,7 @@ impl<'a> JSifier<'a> {
 			self.jsify_resource_constructor(&class.constructor, class.parent.is_none()),
 			preflight_methods
 				.iter()
-				.map(|(n, m)| format!(
-					"{} = {}",
-					n.name,
-					self.jsify_function(None, &m.parameters, &m.statements, phase)
-				))
+				.map(|(n, m)| self.jsify_function(Some(&n.name), &m.parameters, &m.statements, m.is_static, phase))
 				.collect::<Vec<String>>()
 				.join("\n"),
 		);
@@ -946,7 +961,13 @@ impl<'a> JSifier<'a> {
 			.map(|(name, def)| {
 				format!(
 					"async {}",
-					self.jsify_function(Some(&name.name), &def.parameters, &def.statements, def.signature.flight)
+					self.jsify_function(
+						Some(&name.name),
+						&def.parameters,
+						&def.statements,
+						def.is_static,
+						def.signature.flight
+					)
 				)
 			})
 			.collect_vec();
@@ -987,6 +1008,7 @@ impl<'a> JSifier<'a> {
 				Some("constructor"),
 				&class.constructor.parameters,
 				&class.constructor.statements,
+				false, // Constructors are are kind of static, but we don't add the `static` modifier to ctors in js so we pass false here
 				phase
 			),
 			class
@@ -998,11 +1020,7 @@ impl<'a> JSifier<'a> {
 			class
 				.methods
 				.iter()
-				.map(|(n, m)| format!(
-					"{} = {}",
-					n.name,
-					self.jsify_function(None, &m.parameters, &m.statements, phase)
-				))
+				.map(|(n, m)| self.jsify_function(Some(&n.name), &m.parameters, &m.statements, m.is_static, phase))
 				.collect::<Vec<String>>()
 				.join("\n")
 		)
@@ -1018,10 +1036,10 @@ impl<'a> JSifier<'a> {
 			.filter(|(_, kind, _)| {
 				let var = kind.as_variable().unwrap();
 				// We capture preflight non-reassignable fields
-				var.flight != Phase::Inflight && !var.reassignable && var._type.is_capturable()
+				var.flight != Phase::Inflight && !var.reassignable && var.type_.is_capturable()
 			})
 			.map(|(name, kind, _)| {
-				let _type = kind.as_variable().unwrap()._type;
+				let _type = kind.as_variable().unwrap().type_;
 				// TODO: For now we collect all the inflight methods in the resource (in the future we
 				// we'll need to analyze each inflight method to see what it does with the captured resource)
 				let methods = if _type.as_resource().is_some() {

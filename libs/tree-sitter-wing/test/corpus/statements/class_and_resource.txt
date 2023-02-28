@@ -1,0 +1,173 @@
+==================================
+Class definition
+==================================
+
+class A {
+    init() {}
+    inflight do_something() {}
+    a_member: str;
+    var b_member: num;
+    static static_field: num;
+    static var static_var_field: num;
+    static static_method() {}
+}
+
+---
+(source
+    (class_definition
+        name: (identifier)
+        implementation: (class_implementation
+            (constructor
+                parameter_list: (parameter_list)
+                block: (block))
+            (inflight_method_definition
+                name: (identifier)
+                parameter_list: (parameter_list)
+                block: (block)
+            )
+            (class_field
+                name: (identifier)
+                type: (builtin_type)
+            )
+            (class_field
+                reassignable: (reassignable)
+                name: (identifier)
+                type: (builtin_type)
+            )
+            (class_field
+                static: (static)
+                name: (identifier)
+                type: (builtin_type)
+            )
+            (class_field
+                static: (static)
+                reassignable: (reassignable)
+                name: (identifier)
+                type: (builtin_type)
+            )
+            (method_definition
+              static: (static)
+              name: (identifier)
+              parameter_list: (parameter_list)
+              block: (block)
+            )
+        )
+    )
+)
+
+==================================
+Class inheritance
+==================================
+
+class A extends B {}
+
+---
+(source
+    (class_definition
+        name: (identifier)
+        parent: (custom_type 
+            object: (identifier)
+        )
+        implementation: (class_implementation)
+    )
+)
+
+==================================
+Resource definition
+==================================
+
+resource A {
+    init() {}
+    preflight_func() {}
+    async preflight_func() {}
+    public preflight_func2() {}
+    inflight inflight_func() {}
+    public inflight inflight_func2() {}
+    pf_member: str;
+    inflight if_member: str;
+    public inflight var if_member2: str;
+    static inflight inflight_field: num;
+    static inflight inflight_method() {}
+}
+
+---
+(source
+    (resource_definition
+        name: (identifier)
+        implementation: (resource_implementation
+            (constructor
+                parameter_list: (parameter_list)
+                block: (block))
+            (method_definition
+                name: (identifier)
+                parameter_list: (parameter_list)
+                block: (block)
+            )
+            (method_definition
+                async: (async_modifier)
+                name: (identifier)
+                parameter_list: (parameter_list)
+                block: (block)
+            )
+            (method_definition
+                access_modifier: (access_modifier)
+                name: (identifier)
+                parameter_list: (parameter_list)
+                block: (block)
+            )
+            (inflight_method_definition
+                name: (identifier)
+                parameter_list: (parameter_list)
+                block: (block)
+            )
+            (inflight_method_definition
+                access_modifier: (access_modifier)
+                name: (identifier)
+                parameter_list: (parameter_list)
+                block: (block)
+            )
+            (class_field
+                name: (identifier)
+                type: (builtin_type)
+            )
+            (class_field
+                name: (identifier)
+                type: (builtin_type)
+            )
+            (class_field
+                access_modifier: (access_modifier)
+                reassignable: (reassignable)
+                name: (identifier)
+                type: (builtin_type)
+            )
+            (class_field
+                static: (static)
+                name: (identifier)
+                type: (builtin_type)
+            )
+            (inflight_method_definition
+                static: (static)
+                name: (identifier)
+                parameter_list: (parameter_list)
+                block: (block)
+            )
+        )
+    )
+)
+
+==================================
+Resource inheritance
+==================================
+
+resource A extends B {}
+
+---
+(source
+    (resource_definition
+        name: (identifier)
+        parent: (custom_type 
+            object: (identifier)
+        )
+        implementation: (resource_implementation)
+    )
+)
