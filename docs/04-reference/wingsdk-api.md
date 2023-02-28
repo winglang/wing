@@ -7,7 +7,7 @@ keywords: [Wing sdk, sdk, Wing API Reference]
 
 # API Reference <a name="API Reference" id="api-reference"></a>
 
-## Constructs <a name="Constructs" id="Constructs"></a>
+## Resources <a name="Resources" id="Resources"></a>
 
 ### Bucket <a name="Bucket" id="@winglang/sdk.cloud.Bucket"></a>
 

@@ -175,7 +175,7 @@ export class MarkdownRenderer {
       return MarkdownDocument.EMPTY;
     }
 
-    const md = new MarkdownDocument({ header: { title: "Constructs" } });
+    const md = new MarkdownDocument({ header: { title: "Resources" } });
     for (const construct of constructs) {
       md.section(this.visitConstruct(construct));
     }
