@@ -136,7 +136,7 @@ resource TaskListApi {
         title = str.from_json(random_task.data.activity); 
       } 
       let id = this.model.add(title);
-      return new cloud.ApiResponse(status:201, body: Json.format(id));
+      return cloud.ApiResponse { status:201, body: Json.format(id) };
     });
 
     this.api.get("/tasks/:id", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
