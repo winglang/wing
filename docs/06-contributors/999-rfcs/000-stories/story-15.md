@@ -118,7 +118,7 @@ resource TaskList implementes ITaskList {
   inflight set_status(id: str, status: Status): str {
     let j = Json.clone_mut(this.get(id));
     j.status = status;
-    this._add(id, j);
+    this._add(id, Json.clone(j));
     return id;
   }
 
