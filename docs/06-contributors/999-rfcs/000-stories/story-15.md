@@ -10,10 +10,11 @@ The following code is an inital implementation of TaskList with api gateway and 
 - [x] bring untyped
   - [x] bring external npm package (axios)
   - [x] bring an internal nodejs stdlib (RegEx)
+  - [x] How does untyped works with numeric operations?
+  - [x] Do we cast untyped? 
 - [x] enum & duration that can be included inside json
 - [x] It leverages setting explicit permissions (using the `this.inflight` API, described [here](https://github.com/winglang/wing/pull/1610))
 - [x] Using interface 
-- [x] uuid as standard type (missing spec)
 - [x] Using await when calling a untyped function that returns a promise
 - [ ] bring cdktf
 - [ ] use redis instead of bucket
@@ -37,6 +38,8 @@ bring cloud;
 // TODO discuss how we bring untyped something like RegEx from JavaScript 
 // PLACEHOLER for bringing something from Javascript stdlib
 bring untyped RegExp from_js("RegExp"); 
+bring untyped Math from_js("Math"); 
+
 
 // prerequisite: npm install axios
 // PALCEHOLDER for bringing some external module
@@ -81,7 +84,8 @@ resource TaskListModel implementes ITaskListModel {
   } 
   
   inflight add(title: str): str {
-    let id = uuid.v4(); 
+     // how does untyped works with numeric operations
+    let id = "${Math.floor(Math.random() * 100000000000)}";
     let j = Json { 
       title: title, 
       status: Status.Uncompleted
