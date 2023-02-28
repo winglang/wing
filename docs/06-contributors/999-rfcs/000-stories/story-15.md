@@ -3,7 +3,7 @@
 > **Status**: Draft, Expected released on 2023/03/16
 
 
-The following code is an inital implementation of TaskList with api gateway and a redis db 
+The following code is an initial implementation of TaskList with api gateway and a redis db 
 
 ## New language and SDK features it introduces
 
