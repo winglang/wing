@@ -75,13 +75,8 @@
     "typescript": "^4.9.4"
   },
   "peerDependencies": {
-    "@cdktf/provider-aws": "^12.0.1",
-    "@cdktf/provider-azurerm": "^5.0.1",
-    "@cdktf/provider-google": "^5.0.2",
-    "@cdktf/provider-random": "^5.0.0",
-    "cdktf": "0.15.2",
     "constructs": "~10.1.228",
-    "polycons": "^0.1.1"
+    "polycons": "^0.1.9"
   },
   "dependencies": {
     "@aws-sdk/client-cloudwatch-logs": "3.256.0",

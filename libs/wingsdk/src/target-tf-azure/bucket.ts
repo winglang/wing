@@ -40,8 +40,8 @@ export enum StorageAccountPermissions {
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.BucketBase {
-  /** Storage container */
-  public readonly storageContainer: StorageContainer;
+  /** @internal Storage container */
+  public readonly _storageContainer: StorageContainer;
   private readonly public: boolean;
   private readonly storageAccount: StorageAccount;
 
@@ -51,7 +51,7 @@ export class Bucket extends cloud.BucketBase {
     this.public = props.public ?? false;
 
     const app = App.of(this);
-    this.storageAccount = app.storageAccount;
+    this.storageAccount = app._storageAccount;
 
     const storageContainerName = ResourceNames.generateName(
       this,
@@ -65,7 +65,7 @@ export class Bucket extends cloud.BucketBase {
       );
     }
 
-    this.storageContainer = new StorageContainer(this, "Bucket", {
+    this._storageContainer = new StorageContainer(this, "Bucket", {
       name: storageContainerName,
       storageAccountName: this.storageAccount.name,
       containerAccessType: this.public ? "public" : "private",
@@ -83,7 +83,7 @@ export class Bucket extends cloud.BucketBase {
     new StorageBlob(this, `Blob-${key}`, {
       name: blobName,
       storageAccountName: this.storageAccount.name,
-      storageContainerName: this.storageContainer.name,
+      storageContainerName: this._storageContainer.name,
       type: "Block",
       sourceContent: body,
     });
@@ -114,7 +114,7 @@ export class Bucket extends cloud.BucketBase {
       });
     }
 
-    host.addEnvironment(this.envName(), this.storageContainer.name);
+    host.addEnvironment(this.envName(), this._storageContainer.name);
     host.addEnvironment(this.envStorageAccountName(), this.storageAccount.name);
     super._bind(host, ops);
   }
@@ -128,11 +128,11 @@ export class Bucket extends cloud.BucketBase {
   }
 
   private envName(): string {
-    return `BUCKET_NAME_${this.storageContainer.node.addr.slice(-8)}`;
+    return `BUCKET_NAME_${this._storageContainer.node.addr.slice(-8)}`;
   }
 
   private envStorageAccountName(): string {
-    return `STORAGE_ACCOUNT_${this.storageContainer.node.addr.slice(-8)}`;
+    return `STORAGE_ACCOUNT_${this._storageContainer.node.addr.slice(-8)}`;
   }
 }
 

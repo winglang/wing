@@ -15,6 +15,7 @@ use itertools::Itertools;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
 use std::collections::BTreeMap;
+use std::error::Error;
 use std::fmt::{Debug, Display};
 use std::path::Path;
 use symbol_env::{StatementIdx, SymbolEnv};
@@ -198,7 +199,7 @@ impl Class {
 #[derivative(Debug)]
 pub struct Interface {
 	pub name: Symbol,
-	parent: Option<TypeRef>, // Must be a Type::Interface type
+	extends: Vec<TypeRef>, // Must be a Type::Interface type
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
 }
@@ -294,17 +295,15 @@ impl Subtype for Type {
 			}
 			(Self::Interface(l0), Self::Interface(_)) => {
 				// If we extend from `other` then I'm a subtype of it (inheritance)
-				if let Some(parent) = l0.parent.as_ref() {
+				l0.extends.iter().any(|parent| {
 					let parent_type: &Type = &*parent;
-					return parent_type.is_subtype_of(other);
-				}
-				false
+					parent_type.is_subtype_of(other)
+				})
 			}
 			(Self::Resource(res), Self::Interface(iface)) => {
 				// If I'm a resource and I implement the interface then I'm a subtype of it
 				for iface_method in iface.methods(true) {
-					let iface_method_name = iface_method.0;
-					let iface_method_type = iface_method.1;
+					let (iface_method_name, iface_method_type) = iface_method;
 					if let Some(res_method) = res.env.try_lookup(&iface_method_name, None) {
 						let res_method_type = res_method.as_variable().unwrap()._type.clone();
 						if !res_method_type.is_subtype_of(&iface_method_type) {
@@ -929,6 +928,8 @@ impl<'a> TypeChecker<'a> {
 				let constructor_sig = constructor_type
 					.as_function_sig()
 					.expect("Expected constructor to be a function signature");
+
+				dbg!(constructor_sig);
 
 				// Verify return type (This should never fail since we define the constructors return type during AST building)
 				self.validate_type(constructor_sig.return_type, type_, exp);
@@ -1958,25 +1959,17 @@ impl<'a> TypeChecker<'a> {
 		// Loading the SDK is handled different from loading any other jsii modules because with the SDK we provide an exact
 		// location to locate the SDK, whereas for the other modules we need to search for them from the source directory.
 		let assembly_name = if library_name == WINGSDK_ASSEMBLY_NAME {
-			// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
-			let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
-			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
-				root: true,
-				deps: false,
-			};
-			let assembly_name = match wingii_types.load(manifest_root.as_str(), Some(wingii_loader_options)) {
-				Ok(name) => name,
-				Err(type_error) => {
+			match load_sdk(&mut wingii_types) {
+				Ok(value) => value,
+				Err(err) => {
 					self.type_error(TypeError {
-						message: format!("Cannot locate Wing standard library (checking \"{}\"", manifest_root),
+						message: format!("Cannot locate Wing standard library"),
 						span: stmt.map(|s| s.span.clone()).unwrap_or(WingSpan::global()),
 					});
-					debug!("{:?}", type_error);
+					debug!("{:?}", err);
 					return;
 				}
-			};
-
-			assembly_name
+			}
 		} else {
 			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions { root: true, deps: true };
 			let source_dir = self.source_path.parent().unwrap().to_str().unwrap();
@@ -2471,4 +2464,11 @@ pub fn resolve_user_defined_type_by_fqn(
 	let root = fields.remove(0);
 	let user_defined_type = UserDefinedType { root, fields };
 	resolve_user_defined_type(&user_defined_type, env, statement_idx)
+}
+
+pub fn load_sdk(wingii_types: &mut wingii::type_system::TypeSystem) -> Result<String, Box<dyn Error>> {
+	// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
+	let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
+	let wingii_loader_options = wingii::type_system::AssemblyLoadOptions { root: true, deps: true };
+	wingii_types.load(manifest_root.as_str(), Some(wingii_loader_options))
 }
