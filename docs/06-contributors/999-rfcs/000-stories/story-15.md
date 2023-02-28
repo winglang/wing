@@ -24,9 +24,10 @@ The following code is an initial implementation of TaskList with api gateway and
 ## Discussion topics
 - `get` vs `on_get` - Should the `cloud.api` API have the `on_` prefix to match `cloud.bucket` API and also to allow calling
 the api get/post/delete/put commands (`api.get(url)` vs `api.on_get(path, inflight ())`
-- Routing params - I have used express's synatx for dynamic parts of the path for the api gateway `get("/task/:id"`, 
+- [x] Routing params - I have used express's synatx for dynamic parts of the path for the api gateway `get("/task/:id"`, 
 but then I noticed that [aws](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-api-step-by-step.html) 
 uses the `{id}` syntax. What should be the the right syntax?
+  - We will go with the [openapi spec](https://swagger.io/docs/specification/paths-and-operations/) that uses the `/tasks/{id}` syntax 
 - Bring internal nodejs types - how do we bring something that we can't require, like `RegEx`
 - From anything to Json - can I cast something from bring untyped to Json? 
 - Calling await 
@@ -151,7 +152,7 @@ resource TaskListApi {
       return cloud.ApiResponse { status:201, body: Json.format(id) };
     });
 
-    this.api.get("/tasks/:id", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+    this.api.get("/tasks/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let id = str.from_json(req.params.id);
       try {
         let title = this.task_list.get(id);
@@ -161,7 +162,7 @@ resource TaskListApi {
       }
     });
     
-    this.api.delete("/tasks/:id", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+    this.api.delete("/tasks/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let id = str.from_json(req.params.id);
       try {
         this.task_list.delete(id);
