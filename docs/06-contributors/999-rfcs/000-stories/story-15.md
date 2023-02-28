@@ -139,7 +139,9 @@ resource TaskListApi {
     
     this.api.post("/tasks", inflight (req: cloud. Api.ApiRequest): cloud.ApiResponse => {
       let var title = str.from_json(req.body.title);
-      if title == random {
+      // Easter Egg - if you add a todo with the single word "random" as the title, 
+      //              the system will fetch a random task from the internet
+      if title == "random" {
         // PLACEHOLDER - can I cast an untyped ?
         let random_task: Json = await axios.get('https://www.boredapi.com/api/activity');
         title = str.from_json(random_task.data.activity); 
