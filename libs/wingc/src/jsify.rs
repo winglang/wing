@@ -1,7 +1,7 @@
 use aho_corasick::AhoCorasick;
 use indoc::formatdoc;
 use itertools::Itertools;
-use std::{cell::RefCell, cmp::Ordering, fs, path::Path, vec};
+use std::{cell::RefCell, cmp::Ordering, fs, path::Path, vec, collections::BTreeMap};
 
 use sha2::{Digest, Sha256};
 
@@ -13,7 +13,7 @@ use crate::{
 	},
 	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, TypeRef},
 	utilities::snake_case_to_camel_case,
-	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
+	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE, visit::{Visit, self},
 };
 
 const STDLIB: &str = "$stdlib";
@@ -47,6 +47,59 @@ pub struct JSifier<'a> {
 	shim: bool,
 	app_name: String,
 	inflight_counter: RefCell<usize>,
+}
+
+struct FieldReferenceVisitor {
+	/// key is field name, value is a list of operations performed on this field
+	references: BTreeMap<String, Vec<String>>,
+	_path: Vec<String>,
+}
+
+impl<'ast> Visit<'ast> for FieldReferenceVisitor {
+	fn visit_reference(&mut self, node: &'ast Reference) {
+		match node {
+    	Reference::InstanceMember { object, property } => {
+				match &object.kind {
+        	ExprKind::Reference(r) => {
+						match r {
+							Reference::Identifier(s) => {
+								if s.name == "this" {
+									let field_name = &property.name;
+									let mut ops = if let Some(ops) = self.references.get(field_name) {
+										ops.clone()
+									} else {
+										vec![]
+									};
+
+									ops.push(self._path.join("."));
+
+									self.references.insert(field_name.to_string(), ops.clone());
+									self._path.clear();
+									return; // no need to visit recursively
+								}
+							}
+							_ => {}
+						}
+					}
+					_ => {}
+    		}
+
+				self._path.insert(0, property.name.clone());
+			},
+			_ => {}
+		}
+
+		visit::visit_reference(self, node);
+	}
+}
+
+impl FieldReferenceVisitor {
+	pub fn new() -> Self {
+		Self {
+			references: BTreeMap::new(),
+			_path: vec![],
+		}
+	}
 }
 
 impl<'a> JSifier<'a> {
@@ -788,6 +841,8 @@ impl<'a> JSifier<'a> {
 		let resource_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
 		// Get fields to be captured by resource's client
+		let bindings = self.get_bindings(class);
+
 		let captured_fields = self.get_captures(resource_type);
 
 		// Jsify inflight client
@@ -829,29 +884,18 @@ impl<'a> JSifier<'a> {
 				.join("\n"),
 		);
 
-		// For each inflight methods generate an annotation which includes a list of all the captured
-		// fields and all the ops they provide.
-		// TODO: in the future we should only pass the relevant captured fields and ops to each method.
-		let default_annotation = captured_fields
-			.iter()
-			.map(|(name, _, ops)| {
-				format!(
-					"\"this.{}\": {{ ops: [{}]}}",
-					name,
-					ops.iter().map(|op| format!("\"{}\"", op)).collect_vec().join(", ")
-				)
-			})
-			.collect_vec()
-			.join(", ");
-		let inflight_annotations = inflight_methods
-			.iter()
-			.map(|(method_name, ..)| {
-				format!(
-					"{}._annotateInflight(\"{}\", {{{}}});",
-					class.name.name, method_name.name, default_annotation
-				)
-			})
-			.collect_vec();
+		// go over all bindings and produce inflight annotations
+		let mut inflight_annotations = vec![];
+		for (method_name, refs) in bindings {
+			inflight_annotations.push(format!("{}._annotateInflight(\"{}\", {{{}}});",
+				class.name.name,
+				method_name,
+				refs.iter().map(|(field, ops)| format!("\"this.{}\": {{ ops: [{}] }}", 
+					field,
+					ops.iter().map(|op| format!("\"{}\"", op)).join(",")
+				)).join(",")
+			));
+		}
 
 		// Return the preflight resource class
 		return format!("{}\n{}", resource_class, inflight_annotations.join("\n"));
@@ -1027,6 +1071,24 @@ impl<'a> JSifier<'a> {
 	}
 
 	// Get the type and capture info for fields that are captured in the client of the given resource
+	fn get_bindings(&self, resource_class: &AstClass) -> BTreeMap<String, BTreeMap<String, Vec<String>>> {
+		let inflight_methods = resource_class.methods
+			.iter()
+			.filter(|(_, m)| m.signature.flight == Phase::Inflight);
+
+		let mut result = BTreeMap::new();
+
+		for (method_name, function_def) in inflight_methods {			
+			// visit statements of method and find all references to fields ("this.xxx")
+			let mut visitor = FieldReferenceVisitor::new();
+			visitor.visit_scope(&function_def.statements);
+			result.insert(method_name.name.clone(), visitor.references);
+		}
+
+		return result;
+	}
+
+	// Get the type and capture info for fields that are captured in the client of the given resource
 	fn get_captures(&self, resource_type: TypeRef) -> Vec<(String, TypeRef, Vec<String>)> {
 		resource_type
 			.as_resource()
@@ -1062,7 +1124,7 @@ impl<'a> JSifier<'a> {
 				(name, _type, methods)
 			})
 			.collect_vec()
-	}
+	}	
 }
 
 fn is_mutable_collection(expression: &Expr) -> bool {
