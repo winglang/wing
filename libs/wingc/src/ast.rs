@@ -159,9 +159,13 @@ pub struct FunctionSignature {
 pub struct FunctionDefinition {
 	/// List of names of function parameters and whether they are reassignable (`var`) or not.
 	pub parameters: Vec<(Symbol, bool)>, // TODO: move into FunctionSignature and make optional
-
+	/// The function implementation (body).
 	pub statements: Scope,
+	/// The function signature, including the return type.
 	pub signature: FunctionSignature,
+	/// Whether this function is static or not. In case of a closure, this is always true.
+	pub is_static: bool,
+
 	#[derivative(Debug = "ignore")]
 	pub captures: RefCell<Option<Captures>>,
 }
@@ -280,6 +284,7 @@ pub struct ClassField {
 	pub member_type: TypeAnnotation,
 	pub reassignable: bool,
 	pub flight: Phase,
+	pub is_static: bool,
 }
 
 #[derive(Debug)]
@@ -449,20 +454,27 @@ impl BinaryOperator {
 
 #[derive(Debug)]
 pub enum Reference {
+	/// A simple identifier: `x`
 	Identifier(Symbol),
-	NestedIdentifier { object: Box<Expr>, property: Symbol },
+	/// A reference to a member nested inside some object `expression.x`
+	InstanceMember { object: Box<Expr>, property: Symbol },
+	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
+	TypeMember { type_: UserDefinedType, property: Symbol },
 }
 
 impl Display for Reference {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match &self {
 			Reference::Identifier(symb) => write!(f, "{}", symb.name),
-			Reference::NestedIdentifier { object, property } => {
+			Reference::InstanceMember { object, property } => {
 				let obj_str = match &object.kind {
 					ExprKind::Reference(r) => format!("{}", r),
 					_ => "object".to_string(), // TODO!
 				};
 				write!(f, "{}.{}", obj_str, property.name)
+			}
+			Reference::TypeMember { type_, property } => {
+				write!(f, "{}.{}", TypeAnnotation::UserDefined(type_.clone()), property.name)
 			}
 		}
 	}

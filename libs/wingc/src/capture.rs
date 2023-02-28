@@ -156,18 +156,18 @@ fn scan_captures_in_expression(
 					let (var, si) = x.unwrap();
 
 					if var.as_variable().is_none() {
-						diagnostics.push(Diagnostic {
+						diagnostics.insert(Diagnostic {
 							level: DiagnosticLevel::Error,
 							message: "Expected identifier to be a variable".to_string(),
 							span: Some(symbol.span.clone()),
 						});
 					} else {
-						let t = var.as_variable().unwrap()._type;
+						let t = var.as_variable().unwrap().type_;
 
 						// if the identifier represents a preflight value, then capture it
 						if si.flight == Phase::Preflight {
 							if var.is_reassignable() {
-								diagnostics.push(Diagnostic {
+								diagnostics.insert(Diagnostic {
 									level: DiagnosticLevel::Error,
 									message: format!("Cannot capture a reassignable variable \"{}\"", symbol.name),
 									span: Some(symbol.span.clone()),
@@ -205,7 +205,7 @@ fn scan_captures_in_expression(
 								});
 							} else {
 								// unsupported capture
-								diagnostics.push(Diagnostic {
+								diagnostics.insert(Diagnostic {
 									level: DiagnosticLevel::Error,
 									message: format!(
 										"Cannot reference '{}' of type '{}' from an inflight context",
@@ -218,7 +218,7 @@ fn scan_captures_in_expression(
 					}
 				}
 			}
-			Reference::NestedIdentifier { object, property } => {
+			Reference::InstanceMember { object, property } => {
 				res.extend(scan_captures_in_expression(object, env, statement_idx, diagnostics));
 
 				// If the expression evaluates to a resource we should check what method of the resource we're accessing
@@ -228,7 +228,7 @@ fn scan_captures_in_expression(
 							prop_type
 								.as_variable()
 								.expect("Expected resource property to be a variable")
-								._type,
+								.type_,
 							phase,
 						),
 						Err(_type_error) => {
@@ -245,6 +245,9 @@ fn scan_captures_in_expression(
 						);
 					}
 				}
+			}
+			Reference::TypeMember { .. } => {
+				// TODO: handle access to static preflight memebers from inflight (https://github.com/winglang/wing/issues/1669)
 			}
 		},
 		ExprKind::Call { function, arg_list } => res.extend(scan_captures_in_call(

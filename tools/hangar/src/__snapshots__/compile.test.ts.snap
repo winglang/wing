@@ -43,17 +43,21 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"anon_function\\", plugins: $plugins });
   
-  const myfunc = (x) => {
+  const myfunc =  (x) =>  {
+  	{
     {console.log(\`\${x}\`)};
     x = (x + 1);
     if ((x > 3.14)) {
       return;
     }
     (myfunc(x));
+  }
   };
   (myfunc(1));
-  (((x) => {
+  (( (x) =>  {
+  	{
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === 1)'\`)})((x === 1))};
+  }
   })(1));
 }
 }
@@ -3171,12 +3175,16 @@ constructor() {
   {
   }
   }
-  	method2 = () => {
+  	 method2()  {
+  	{
     (this.method1());
     {console.log(\`\${this.f}\`)};
     (this.method2());
   }
-  method1 = () => {
+  }
+   method1()  {
+  	{
+  }
   }
   	_toInflight() {
   	const f_client = this._lift(this.f);
@@ -3718,7 +3726,9 @@ constructor() {
   
   const dur = $stdlib.std.Duration.fromSeconds(60);
   const dur2 = $stdlib.std.Duration.fromSeconds(600);
-  const f = (d) => {
+  const f =  (d) =>  {
+  	{
+  }
   };
   const stringy = \`\${dur.minutes}:\${dur.seconds}\`;
   {console.log(stringy)};
@@ -4008,8 +4018,10 @@ constructor() {
     }
   }
   }
-  	inc = () => {
+  	 inc()  {
+  	{
     this.f = (this.f + 1);
+  }
   }
   	_toInflight() {
   	const f1_client = this._lift(this.f1);
@@ -4025,9 +4037,11 @@ constructor() {
   const r = new R(this,\\"R\\");
   (r.inc());
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(r.f === 2)'\`)})((r.f === 2))};
-  const f = (arg) => {
+  const f =  (arg) =>  {
+  	{
     arg = 0;
     return arg;
+  }
   };
   const y = 1;
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((f(y)) === 0)'\`)})(((f(y)) === 0))};
@@ -4045,10 +4059,12 @@ constructor({ b, foo, name }) {
   this.foo = foo;
   this.name = name;
 }
-async my_method() {
+async  my_method()  {
+	{
   (await this.foo.foo_inc());
   (await this.b.put(\\"foo\\",\`counter is: \${(await this.foo.foo_get())}\`));
   return (await this.b.get(\\"foo\\"));
+}
 }}"
 `;
 
@@ -4058,11 +4074,15 @@ constructor({ c }) {
 
   this.c = c;
 }
-async foo_inc() {
+async  foo_inc()  {
+	{
   (await this.c.inc());
 }
-async foo_get() {
+}
+async  foo_get()  {
+	{
   return (await this.c.peek());
+}
 }}"
 `;
 
@@ -4541,6 +4561,204 @@ constructor() {
   
   const x = 2;
   const y = x;
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`static_members.w > wing compile --target tf-aws > Foo.inflight.js 1`] = `
+"export class Foo_inflight  {
+constructor({ instance_field }) {
+
+  this.instance_field = instance_field;
+}
+async static get_123()  {
+	{
+  return 123;
+}
+}}"
+`;
+
+exports[`static_members.w > wing compile --target tf-aws > index.js 1`] = `
+"async handle(s) { const {  } = this; {
+  class InflightClass
+  {
+   constructor()  {
+  	{
+  }
+  }
+  
+   inflight_method()  {
+  	{
+    return \\"Inflight method\\";
+  }
+  }
+  static static_inflight_method()  {
+  	{
+    return \\"Static inflight method\\";
+  }
+  }
+  }
+  const inflight_class = new InflightClass();
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await inflight_class.inflight_method()) === \\"Inflight method\\")'\`)})(((await inflight_class.inflight_method()) === \\"Inflight method\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await InflightClass.static_inflight_method()) === \\"Static inflight method\\")'\`)})(((await InflightClass.static_inflight_method()) === \\"Static inflight method\\"))};
+} };"
+`;
+
+exports[`static_members.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_test_IamRole_6CDC2D16": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRole",
+            "uniqueId": "root_test_IamRole_6CDC2D16",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_test_IamRolePolicy_474A6820": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicy",
+            "uniqueId": "root_test_IamRolePolicy_474A6820",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_test_IamRolePolicyAttachment_1102A28A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicyAttachment",
+            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_test_AAE85061": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Default",
+            "uniqueId": "root_test_AAE85061",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "test-c8b6eece",
+          },
+        },
+        "function_name": "test-c8b6eece",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_test_Code_2D131EC2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Code",
+            "uniqueId": "root_test_Code_2D131EC2",
+          },
+        },
+        "bucket_prefix": "code-c883c33b-",
+      },
+    },
+    "aws_s3_object": {
+      "root_test_S3Object_A16CD789": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/S3Object",
+            "uniqueId": "root_test_S3Object_A16CD789",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`static_members.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"static_members\\", plugins: $plugins });
+  
+  class Foo extends $stdlib.core.Resource {
+  	constructor(scope, id, ) {
+  	super(scope, id);
+  {
+    this.instance_field = 100;
+  }
+  }
+  	static m()  {
+  	{
+    return 99;
+  }
+  }
+  	_toInflight() {
+  	const instance_field_client = this._lift(this.instance_field);
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/Foo.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo_inflight({instance_field: \${instance_field_client}}))\`);
+  }
+  }
+  Foo._annotateInflight(\\"get_123\\", {\\"this.instance_field\\": { ops: []}});
+  const foo = new Foo(this,\\"Foo\\");
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(foo.instance_field === 100)'\`)})((foo.instance_field === 100))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((Foo.m()) === 99)'\`)})(((Foo.m()) === 99))};
+  new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.8b58045c72709175549d51937a233ff65ac5e5aa12e83837daf5ea7baf9f224b/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+    }
+  }));
 }
 }
 new MyApp().synth();"
@@ -5160,7 +5378,8 @@ constructor() {
   };
   }
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === \\"finally with no catch and no exception\\")'\`)})((x === \\"finally with no catch and no exception\\"))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((() => {
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((( () =>  {
+  	{
     try {
     	{
     }
@@ -5172,7 +5391,9 @@ constructor() {
       return 1;
     };
     }
-  })()) === 1)'\`)})((((() => {
+  }
+  })()) === 1)'\`)})(((( () =>  {
+  	{
     try {
     	{
     }
@@ -5184,8 +5405,10 @@ constructor() {
       return 1;
     };
     }
+  }
   })()) === 1))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((() => {
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((( () =>  {
+  	{
     try {
     	{
       {((msg) => {throw new Error(msg)})(\\"\\")};
@@ -5198,7 +5421,9 @@ constructor() {
     } finally {
     	
     }
-  })()) === 2)'\`)})((((() => {
+  }
+  })()) === 2)'\`)})(((( () =>  {
+  	{
     try {
     	{
       {((msg) => {throw new Error(msg)})(\\"\\")};
@@ -5211,8 +5436,10 @@ constructor() {
     } finally {
     	
     }
+  }
   })()) === 2))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((() => {
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((( () =>  {
+  	{
     try {
     	{
       return 3;
@@ -5224,7 +5451,9 @@ constructor() {
     	{
     };
     }
-  })()) === 3)'\`)})((((() => {
+  }
+  })()) === 3)'\`)})(((( () =>  {
+  	{
     try {
     	{
       return 3;
@@ -5236,6 +5465,7 @@ constructor() {
     	{
     };
     }
+  }
   })()) === 3))};
 }
 }
@@ -5255,33 +5485,45 @@ constructor({ array_of_queues, array_of_str, map_of_num, my_bool, my_num, my_res
   this.my_str = my_str;
   this.set_of_str = set_of_str;
 }
-async capture_resource() {
+async  capture_resource()  {
+	{
   (await this.my_resource.put(\\"f1.txt\\",\\"f1\\"));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.my_resource.get(\\"f1.txt\\")) === \\"f1\\")'\`)})(((await this.my_resource.get(\\"f1.txt\\")) === \\"f1\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.my_resource.list()).length === 1)'\`)})(((await this.my_resource.list()).length === 1))};
 }
-async capture_primitives() {
+}
+async  capture_primitives()  {
+	{
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.my_str === \\"my_string\\")'\`)})((this.my_str === \\"my_string\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.my_num === 42)'\`)})((this.my_num === 42))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.my_bool === true)'\`)})((this.my_bool === true))};
 }
-async capture_array() {
+}
+async  capture_array()  {
+	{
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.array_of_str.length === 2)'\`)})((this.array_of_str.length === 2))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.array_of_str.at(0)) === \\"s1\\")'\`)})(((await this.array_of_str.at(0)) === \\"s1\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.array_of_str.at(1)) === \\"s2\\")'\`)})(((await this.array_of_str.at(1)) === \\"s2\\"))};
 }
-async capture_map() {
+}
+async  capture_map()  {
+	{
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((this.map_of_num)[\\"k1\\"] === 11)'\`)})(((this.map_of_num)[\\"k1\\"] === 11))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((this.map_of_num)[\\"k2\\"] === 22)'\`)})(((this.map_of_num)[\\"k2\\"] === 22))};
 }
-async capture_set() {
+}
+async  capture_set()  {
+	{
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await this.set_of_str.has(\\"s1\\"))'\`)})((await this.set_of_str.has(\\"s1\\")))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await this.set_of_str.has(\\"s2\\"))'\`)})((await this.set_of_str.has(\\"s2\\")))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(!(await this.set_of_str.has(\\"s3\\")))'\`)})((!(await this.set_of_str.has(\\"s3\\"))))};
 }
-async capture_array_of_queues() {
+}
+async  capture_array_of_queues()  {
+	{
   (await (await this.array_of_queues.at(0)).push(\\"q1\\"));
   (await (await this.array_of_queues.at(1)).push(\\"q2\\"));
+}
 }}"
 `;
 
