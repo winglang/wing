@@ -382,7 +382,7 @@ impl Parser<'_> {
 					let is_static = class_element.child_by_field_name("static").is_some();
 					if is_static {
 						self.diagnostics.borrow_mut().insert(Diagnostic {
-							level: DiagnosticLevel::Warning,
+							level: DiagnosticLevel::Error,
 							message: format!(
 								"Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668",
 							),

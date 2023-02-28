@@ -3,8 +3,10 @@ bring cloud;
 resource Foo {
   instance_field: num;
 
-  static static_field: str = "Static resource value"; 
-  static inflight inflight_static_field: str = "Inflight static resource value";
+  // TODO: Static field initialization not supported yet (https://github.com/winglang/wing/issues/1668)
+  // static static_field: str = "Static resource value"; 
+  // static inflight inflight_static_field: str = "Inflight static resource value";
+
   static m(): num { return 99; }
 
   init() {
@@ -31,7 +33,9 @@ new cloud.Function(inflight (s:str): str => {
     static inflight static_inflight_method(): str {
       return "Static inflight method";
     }
-    static static_inflight_field: str = "Static inflight value";
+
+    // TODO: Static field initialization not supported yet (https://github.com/winglang/wing/issues/1668)
+    // static static_inflight_field: str = "Static inflight value";
   }
 
   // TODO: acess to preflight types (`Foo`) not supported yet (https://github.com/winglang/wing/issues/1669)
