@@ -7,7 +7,7 @@ This is a test project to make sure the \`jsii-docgen\` cli property renders API
 for construct libraries.
 # API Reference <a name=\\"API Reference\\" id=\\"api-reference\\"></a>
 
-## Constructs <a name=\\"Constructs\\" id=\\"Constructs\\"></a>
+## Resources <a name=\\"Resources\\" id=\\"Resources\\"></a>
 
 ### GreeterBucket <a name=\\"GreeterBucket\\" id=\\"GreeterBucket\\"></a>
 
@@ -35,7 +35,6 @@ new GreeterBucket(props?: BucketProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.toString?lang=python\\">to_string</a></code> | Returns a string representation of this construct. |
 | <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.applyRemovalPolicy?lang=python\\">apply_removal_policy</a></code> | Apply the given removal policy to this resource. |
 | <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.addEventNotification?lang=python\\">add_event_notification</a></code> | Adds a bucket notification event destination. |
 | <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.addObjectCreatedNotification?lang=python\\">add_object_created_notification</a></code> | Subscribes a destination to receive notifications when an object is created in the bucket. |
@@ -63,14 +62,6 @@ new GreeterBucket(props?: BucketProps)
 | <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.greet?lang=python\\">greet</a></code> | *No description.* |
 
 ---
-
-##### \`to_string\` <a name=\\"to_string\\" id=\\"GreeterBucket.toString\\"></a>
-
-\`\`\`wing
-to_string(): str
-\`\`\`
-
-Returns a string representation of this construct.
 
 ##### \`apply_removal_policy\` <a name=\\"apply_removal_policy\\" id=\\"GreeterBucket.applyRemovalPolicy\\"></a>
 
@@ -698,28 +689,11 @@ greet(): void
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.isConstruct?lang=python\\">is_construct</a></code> | Return whether the given object is a Construct. |
 | <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.isResource?lang=python\\">is_resource</a></code> | Check whether the given construct is a Resource. |
 | <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.fromBucketArn?lang=python\\">from_bucket_arn</a></code> | *No description.* |
 | <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.fromBucketAttributes?lang=python\\">from_bucket_attributes</a></code> | Creates a Bucket construct that represents an external bucket. |
 | <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.fromBucketName?lang=python\\">from_bucket_name</a></code> | *No description.* |
 | <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.validateBucketName?lang=python\\">validate_bucket_name</a></code> | Thrown an exception if the given bucket name is not valid. |
-
----
-
-##### \`is_construct\` <a name=\\"is_construct\\" id=\\"GreeterBucket.isConstruct\\"></a>
-
-\`\`\`wing
-bring { GreeterBucket } from \\"construct-library\\"
-
-GreeterBucket.is_construct(x: any)
-\`\`\`
-
-Return whether the given object is a Construct.
-
-###### \`x\`<sup>Required</sup> <a name=\\"x\\" id=\\"GreeterBucket.isConstruct.parameter.x\\"></a>
-
-- *Type:* any
 
 ---
 
@@ -1006,7 +980,7 @@ This is a test project to make sure the \`jsii-docgen\` cli property renders API
 for construct libraries.
 # API Reference <a name=\\"API Reference\\" id=\\"api-reference\\"></a>
 
-## Constructs <a name=\\"Constructs\\" id=\\"Constructs\\"></a>
+## Resources <a name=\\"Resources\\" id=\\"Resources\\"></a>
 
 ### GreeterBucket <a name=\\"GreeterBucket\\" id=\\"construct-library.GreeterBucket\\"></a>
 
@@ -1034,7 +1008,6 @@ new GreeterBucket(props?: BucketProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#custom-construct-library.GreeterBucket.toString\\">to_string</a></code> | Returns a string representation of this construct. |
 | <code><a href=\\"#custom-construct-library.GreeterBucket.applyRemovalPolicy\\">apply_removal_policy</a></code> | Apply the given removal policy to this resource. |
 | <code><a href=\\"#custom-construct-library.GreeterBucket.addEventNotification\\">add_event_notification</a></code> | Adds a bucket notification event destination. |
 | <code><a href=\\"#custom-construct-library.GreeterBucket.addObjectCreatedNotification\\">add_object_created_notification</a></code> | Subscribes a destination to receive notifications when an object is created in the bucket. |
@@ -1062,14 +1035,6 @@ new GreeterBucket(props?: BucketProps)
 | <code><a href=\\"#custom-construct-library.GreeterBucket.greet\\">greet</a></code> | *No description.* |
 
 ---
-
-##### \`to_string\` <a name=\\"to_string\\" id=\\"construct-library.GreeterBucket.toString\\"></a>
-
-\`\`\`wing
-to_string(): str
-\`\`\`
-
-Returns a string representation of this construct.
 
 ##### \`apply_removal_policy\` <a name=\\"apply_removal_policy\\" id=\\"construct-library.GreeterBucket.applyRemovalPolicy\\"></a>
 
@@ -1697,28 +1662,11 @@ greet(): void
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#custom-construct-library.GreeterBucket.isConstruct\\">is_construct</a></code> | Return whether the given object is a Construct. |
 | <code><a href=\\"#custom-construct-library.GreeterBucket.isResource\\">is_resource</a></code> | Check whether the given construct is a Resource. |
 | <code><a href=\\"#custom-construct-library.GreeterBucket.fromBucketArn\\">from_bucket_arn</a></code> | *No description.* |
 | <code><a href=\\"#custom-construct-library.GreeterBucket.fromBucketAttributes\\">from_bucket_attributes</a></code> | Creates a Bucket construct that represents an external bucket. |
 | <code><a href=\\"#custom-construct-library.GreeterBucket.fromBucketName\\">from_bucket_name</a></code> | *No description.* |
 | <code><a href=\\"#custom-construct-library.GreeterBucket.validateBucketName\\">validate_bucket_name</a></code> | Thrown an exception if the given bucket name is not valid. |
-
----
-
-##### \`is_construct\` <a name=\\"is_construct\\" id=\\"construct-library.GreeterBucket.isConstruct\\"></a>
-
-\`\`\`wing
-bring { GreeterBucket } from \\"construct-library\\"
-
-GreeterBucket.is_construct(x: any)
-\`\`\`
-
-Return whether the given object is a Construct.
-
-###### \`x\`<sup>Required</sup> <a name=\\"x\\" id=\\"construct-library.GreeterBucket.isConstruct.parameter.x\\"></a>
-
-- *Type:* any
 
 ---
 
