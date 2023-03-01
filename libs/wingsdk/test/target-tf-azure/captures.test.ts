@@ -8,7 +8,7 @@ import { tfResourcesOf, tfSanitize } from "../util";
 test("function with a bucket binding requiring read_write", () => {
   // GIVEN
   const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  const bucket = new cloud.Bucket(app, "Bucket");
+  const bucket = cloud.Bucket._newBucket(app, "Bucket");
   const inflight = Testing.makeHandler(
     app,
     "Handler",
@@ -22,7 +22,7 @@ test("function with a bucket binding requiring read_write", () => {
   );
 
   // WHEN
-  new cloud.Function(app, "Function", inflight);
+  cloud.Function._newFunction(app, "Function", inflight);
   const output = app.synth();
 
   // THEN
@@ -51,7 +51,7 @@ test("function with a bucket binding requiring read_write", () => {
 test("function with a bucket binding requiring only read", () => {
   // GIVEN
   const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  const bucket = new cloud.Bucket(app, "Bucket");
+  const bucket = cloud.Bucket._newBucket(app, "Bucket");
   const inflight = Testing.makeHandler(
     app,
     "Handler",
@@ -65,7 +65,7 @@ test("function with a bucket binding requiring only read", () => {
   );
 
   // WHEN
-  new cloud.Function(app, "Function", inflight);
+  cloud.Function._newFunction(app, "Function", inflight);
   const output = app.synth();
 
   // THEN

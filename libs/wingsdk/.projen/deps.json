@@ -260,10 +260,6 @@
       "type": "peer"
     },
     {
-      "name": "polycons",
-      "type": "peer"
-    },
-    {
       "name": "@cdktf/provider-aws",
       "version": "^12.0.1",
       "type": "runtime"
@@ -291,10 +287,6 @@
     {
       "name": "constructs",
       "version": "~10.1.228",
-      "type": "runtime"
-    },
-    {
-      "name": "polycons",
       "type": "runtime"
     }
   ],

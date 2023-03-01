@@ -34,11 +34,11 @@ export const BUCKET_PREFIX_OPTS: NameOptions = {
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
-export class Bucket extends cloud.BucketBase {
+export class Bucket extends cloud.Bucket {
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
 
-  constructor(scope: Construct, id: string, props: cloud.BucketProps) {
+  constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
 
     this.public = props.public ?? false;

@@ -1,6 +1,6 @@
 import { basename } from "path";
 import { simulatorJsonOf } from "./util";
-import * as cloud from "../../src/cloud";
+import { Bucket } from "../../src/cloud";
 import * as sim from "../../src/target-sim";
 import { mkdtemp } from "../../src/util";
 
@@ -10,7 +10,7 @@ test("app name can be customized", async () => {
 
   // WHEN
   const app = new sim.App({ outdir: mkdtemp(), name: APP_NAME });
-  new cloud.Bucket(app, "my_bucket");
+  Bucket._newBucket(app, "my_bucket");
   const simfile = app.synth();
 
   // THEN

@@ -33,7 +33,7 @@ test("create a function", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  new cloud.Function(app, "my_function", handler, {
+  cloud.Function._newFunction(app, "my_function", handler, {
     env: {
       ENV_VAR1: "true",
     },
@@ -66,7 +66,7 @@ test("invoke function succeeds", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  new cloud.Function(app, "my_function", handler);
+  cloud.Function._newFunction(app, "my_function", handler);
 
   const s = await app.startSimulator();
 
@@ -88,7 +88,7 @@ test("invoke function with environment variables", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  new cloud.Function(app, "my_function", handler, {
+  cloud.Function._newFunction(app, "my_function", handler, {
     env: {
       PIG_LATIN: "true",
     },
@@ -118,7 +118,7 @@ test("invoke function fails", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  new cloud.Function(app, "my_function", handler);
+  cloud.Function._newFunction(app, "my_function", handler);
   const s = await app.startSimulator();
 
   const client = s.getResource("/my_function") as cloud.IFunctionClient;
@@ -143,7 +143,7 @@ test("function has no display hidden property", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  new cloud.Function(app, "my_function", handler);
+  cloud.Function._newFunction(app, "my_function", handler);
 
   const treeJson = treeJsonOf(app.synth());
   const func = app.node.tryFindChild("my_function") as cloud.Function;
@@ -164,7 +164,7 @@ test("function has display title and description properties", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  new cloud.Function(app, "my_function", handler);
+  cloud.Function._newFunction(app, "my_function", handler);
 
   // WHEN
   const treeJson = treeJsonOf(app.synth());
@@ -187,7 +187,7 @@ test("invoke function with process.exit(1)", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_PANIC);
-  new cloud.Function(app, "my_function", handler);
+  cloud.Function._newFunction(app, "my_function", handler);
   const s = await app.startSimulator();
   const client = s.getResource("/my_function") as cloud.IFunctionClient;
   // WHEN
@@ -208,7 +208,7 @@ test("invoke function exceeds timeout", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_TIMEOUT);
-  new cloud.Function(app, "my_function", handler, {
+  cloud.Function._newFunction(app, "my_function", handler, {
     timeout: Duration.fromSeconds(1),
   });
   const s = await app.startSimulator();

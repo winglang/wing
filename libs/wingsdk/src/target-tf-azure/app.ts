@@ -2,10 +2,13 @@ import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
 import { ResourceGroup } from "@cdktf/provider-azurerm/lib/resource-group";
 import { ServicePlan } from "@cdktf/provider-azurerm/lib/service-plan";
 import { StorageAccount } from "@cdktf/provider-azurerm/lib/storage-account";
-import { IConstruct } from "constructs";
-import { PolyconFactory } from "./factory";
+import { Construct } from "constructs";
+import { Bucket } from "./bucket";
+import { Function } from "./function";
 import { APP_AZURE_TF_SYMBOL } from "./internal";
-import { IApp, CdktfApp, AppProps } from "../core";
+import { Logger } from "./logger";
+import { BUCKET_FQN, FUNCTION_FQN, LOGGER_FQN } from "../cloud";
+import { CdktfApp, AppProps } from "../core";
 import {
   CaseConventions,
   NameOptions,
@@ -50,21 +53,7 @@ const SERVICEPLAN_NAME_OPTS: NameOptions = {
  * An app that knows how to synthesize constructs into a Terraform configuration
  * for Azure resources.
  */
-export class App extends CdktfApp implements IApp {
-  /**
-   * Recursively search scope of node to find nearest instance of App
-   *
-   * @param construct to consider as instance of App
-   * @returns App
-   */
-  public static of(construct?: IConstruct): App {
-    if (construct === undefined) {
-      throw new Error("Unable to find app in scope");
-    }
-
-    return construct instanceof App ? construct : App.of(construct.node.scope);
-  }
-
+export class App extends CdktfApp {
   /**
    * The location context of the App
    * @link https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group#location
@@ -75,10 +64,8 @@ export class App extends CdktfApp implements IApp {
   private _servicePlan?: ServicePlan;
 
   constructor(props: AzureAppProps) {
-    super({
-      ...props,
-      customFactory: props.customFactory ?? new PolyconFactory(),
-    });
+    super(props);
+
     this.location = props.location ?? process.env.AZURE_LOCATION;
     // Using env variable for location is work around until we are
     // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
@@ -142,5 +129,25 @@ export class App extends CdktfApp implements IApp {
       });
     }
     return this._servicePlan;
+  }
+
+  protected tryNew(
+    fqn: string,
+    scope: Construct,
+    id: string,
+    ...args: any[]
+  ): any {
+    switch (fqn) {
+      case FUNCTION_FQN:
+        return new Function(scope, id, args[0], args[1]);
+
+      case BUCKET_FQN:
+        return new Bucket(scope, id, args[0]);
+
+      case LOGGER_FQN:
+        return new Logger(scope, id);
+    }
+
+    return undefined;
   }
 }

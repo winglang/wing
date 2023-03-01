@@ -263,13 +263,13 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"asynchronous_model_implicit_await_in_functions\\", plugins: $plugins });
   
-  const q = new cloud.Queue(this,\\"cloud.Queue\\");
-  const str_to_str = new cloud.Function(this,\\"str_to_str\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  const q = this.node.root.new(\\"@winglang/sdk.cloud.Queue\\",undefined,this,\\"cloud.Queue\\");
+  const str_to_str = this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"str_to_str\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
     }
   }));
-  const func = new cloud.Function(this,\\"func\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
+  const func = this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"func\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2241fd974faa47c8b8d27f5a3e172f473ca36c6b44cb328a58655fd2d0aac7d7/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       str_to_str: {
@@ -343,7 +343,7 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"bring_cdktf\\", plugins: $plugins });
   
-  new aws.s3Bucket.S3Bucket(this,\\"Bucket\\",{ bucketPrefix: \\"hello\\", versioning: {
+  this.node.root.new(\\"@cdktf/provider-aws.s3Bucket.S3Bucket\\",aws.s3Bucket.S3Bucket,this,\\"Bucket\\",{ bucketPrefix: \\"hello\\", versioning: {
   \\"enabled\\": true,
   \\"mfa_delete\\": true,}
    });
@@ -443,8 +443,8 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"bring_fs\\", plugins: $plugins });
   
-  new cloud.Bucket(this,\\"cloud.Bucket\\");
-  new fs.TextFile(this,\\"fs.TextFile\\",\\"/tmp/test.txt\\");
+  this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",undefined,this,\\"cloud.Bucket\\");
+  this.node.root.new(\\"@winglang/sdk.fs.TextFile\\",fs.TextFile,this,\\"fs.TextFile\\",\\"/tmp/test.txt\\");
 }
 }
 new MyApp().synth();"
@@ -586,7 +586,7 @@ constructor() {
   
   const hello = new stuff.HelloWorld();
   const greeting = (hello.sayHello(\\"wingnuts\\"));
-  new cloud.Function(this,\\"test:say_hello\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test:say_hello\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5d209e0c3acca40c825662cab73c204803d9dd9f7903de90d0da6dc99ea7fa35/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       greeting: {
@@ -736,7 +736,7 @@ constructor() {
   
   const hello = new jsii_code_samples.HelloWorld();
   const greeting = (hello.sayHello(\\"wingnuts\\"));
-  new cloud.Function(this,\\"test:say_hello\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test:say_hello\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5d209e0c3acca40c825662cab73c204803d9dd9f7903de90d0da6dc99ea7fa35/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       greeting: {
@@ -965,7 +965,7 @@ constructor() {
       },
     }
   });
-  new cloud.Function(this,\\"test\\",handler);
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test\\",handler);
 }
 }
 new MyApp().synth();"
@@ -1195,10 +1195,10 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"capture_containers_of_resources\\", plugins: $plugins });
   
-  const arr = Object.freeze([new cloud.Bucket(this,\\"b1\\"), new cloud.Bucket(this,\\"b2\\")]);
-  const map = Object.freeze({\\"my_queue\\":new cloud.Queue(this,\\"cloud.Queue\\")});
+  const arr = Object.freeze([this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",undefined,this,\\"b1\\"), this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",undefined,this,\\"b2\\")]);
+  const map = Object.freeze({\\"my_queue\\":this.node.root.new(\\"@winglang/sdk.cloud.Queue\\",undefined,this,\\"cloud.Queue\\")});
   const set = Object.freeze(new Set([\\"foo\\", \\"foo\\", \\"bar\\"]));
-  new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.e204fa6fba10aa68396c0fe4d920796b1ec739609b648739fe4ae94d0621db6d/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       arr: {
@@ -1398,7 +1398,7 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"capture_in_binary\\", plugins: $plugins });
   
-  const b = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  const b = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",undefined,this,\\"cloud.Bucket\\");
   const x = 12;
   const handler2 = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.d3cc1deae5ea8972097ff15c11d688f395bd17117453789488a005b829eea245/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
@@ -1413,7 +1413,7 @@ constructor() {
       },
     }
   });
-  new cloud.Function(this,\\"test\\",handler2);
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test\\",handler2);
 }
 }
 new MyApp().synth();"
@@ -1595,7 +1595,7 @@ constructor() {
       },
     }
   });
-  new cloud.Function(this,\\"cloud.Function\\",handler);
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"cloud.Function\\",handler);
 }
 }
 new MyApp().synth();"
@@ -1782,8 +1782,8 @@ constructor() {
   super({ outdir: $outdir, name: \\"capture_resource_and_data\\", plugins: $plugins });
   
   const data = Object.freeze(new Set([1, 2, 3]));
-  const res = new cloud.Bucket(this,\\"cloud.Bucket\\");
-  const queue = new cloud.Queue(this,\\"cloud.Queue\\");
+  const res = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",undefined,this,\\"cloud.Bucket\\");
+  const queue = this.node.root.new(\\"@winglang/sdk.cloud.Queue\\",undefined,this,\\"cloud.Queue\\");
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.10149a479ee5940e90f4621a2bca78dda7429636b1f235fcd785b3e33c131537/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
@@ -1801,7 +1801,7 @@ constructor() {
       },
     }
   });
-  new cloud.Function(this,\\"test\\",handler);
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test\\",handler);
 }
 }
 new MyApp().synth();"
@@ -1965,7 +1965,7 @@ constructor() {
   }
   
   const a = new A(this,\\"A\\");
-  new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.b771192b636450edefdc8f4b596a6372d5b2520efa1fcdb75c51589c12a10c59/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       a: {
@@ -2375,12 +2375,12 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"captures\\", plugins: $plugins });
   
-  const bucket1 = new cloud.Bucket(this,\\"cloud.Bucket\\");
-  const bucket2 = new cloud.Bucket(this,\\"PublicBucket\\",{
+  const bucket1 = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",undefined,this,\\"cloud.Bucket\\");
+  const bucket2 = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",undefined,this,\\"PublicBucket\\",{
   \\"public\\": true,}
   );
-  const bucket3 = new cloud.Bucket(this,\\"PrivateBucket\\",{ public: false });
-  const queue = new cloud.Queue(this,\\"cloud.Queue\\");
+  const bucket3 = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",undefined,this,\\"PrivateBucket\\",{ public: false });
+  const queue = this.node.root.new(\\"@winglang/sdk.cloud.Queue\\",undefined,this,\\"cloud.Queue\\");
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5f0e4e25898a72c973f063e92444f7572d58a18cdd38b3fb3a575af6adf7440f/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
@@ -2399,9 +2399,9 @@ constructor() {
     }
   });
   (queue.onMessage(handler,{ batchSize: 5 }));
-  new cloud.Function(this,\\"cloud.Function\\",handler,{ env: Object.freeze({}) });
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"cloud.Function\\",handler,{ env: Object.freeze({}) });
   const empty_env = Object.freeze({});
-  new cloud.Function(this,\\"AnotherFunction\\",handler,{ env: empty_env });
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"AnotherFunction\\",handler,{ env: empty_env });
 }
 }
 new MyApp().synth();"
@@ -2573,9 +2573,9 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"container_types\\", plugins: $plugins });
   
-  const bucket1 = new cloud.Bucket(this,\\"bucket1\\");
-  const bucket2 = new cloud.Bucket(this,\\"bucket2\\");
-  const bucket3 = new cloud.Bucket(this,\\"bucket3\\");
+  const bucket1 = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",undefined,this,\\"bucket1\\");
+  const bucket2 = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",undefined,this,\\"bucket2\\");
+  const bucket3 = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",undefined,this,\\"bucket3\\");
   const empty_array = Object.freeze([]);
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(empty_array.length === 0)'\`)})((empty_array.length === 0))};
   const empty_array2 = [];
@@ -3039,9 +3039,9 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"file_counter\\", plugins: $plugins });
   
-  const bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
-  const counter = new cloud.Counter(this,\\"cloud.Counter\\",{ initial: 100 });
-  const queue = new cloud.Queue(this,\\"cloud.Queue\\",{ timeout: $stdlib.std.Duration.fromSeconds(10) });
+  const bucket = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",undefined,this,\\"cloud.Bucket\\");
+  const counter = this.node.root.new(\\"@winglang/sdk.cloud.Counter\\",undefined,this,\\"cloud.Counter\\",{ initial: 100 });
+  const queue = this.node.root.new(\\"@winglang/sdk.cloud.Queue\\",undefined,this,\\"cloud.Queue\\",{ timeout: $stdlib.std.Duration.fromSeconds(10) });
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1ece6a476239c44d64d8b687b9e4389715198c49564defb8766e8b85b0f54620/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
@@ -3392,8 +3392,8 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"hello\\", plugins: $plugins });
   
-  const bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
-  const queue = new cloud.Queue(this,\\"cloud.Queue\\");
+  const bucket = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",undefined,this,\\"cloud.Bucket\\");
+  const queue = this.node.root.new(\\"@winglang/sdk.cloud.Queue\\",undefined,this,\\"cloud.Queue\\");
   (queue.onMessage(new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.211d46e8ec3b5ce3e93872fcb29755356fb3566f5016eae5fcd6ec0f670ab580/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
@@ -3637,9 +3637,9 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"mut_container_types\\", plugins: $plugins });
   
-  const bucket1 = new cloud.Bucket(this,\\"bucket1\\");
-  const bucket2 = new cloud.Bucket(this,\\"bucket2\\");
-  const bucket3 = new cloud.Bucket(this,\\"bucket3\\");
+  const bucket1 = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",undefined,this,\\"bucket1\\");
+  const bucket2 = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",undefined,this,\\"bucket2\\");
+  const bucket3 = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",undefined,this,\\"bucket3\\");
   const arr1 = [\\"a\\", \\"b\\", \\"c\\"];
   const arr2 = [1, 2, 3];
   const arr3 = [bucket1, bucket2];
@@ -3941,12 +3941,12 @@ constructor() {
   super({ outdir: $outdir, name: \\"print\\", plugins: $plugins });
   
   {console.log(\\"preflight print\\")};
-  new cloud.Function(this,\\"test:print1\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test:print1\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5d5065e7d4d5abb68575b6b618fc014e76b4159c3240fef327354a5900bb9fa6/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
     }
   }));
-  new cloud.Function(this,\\"test:print2\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test:print2\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.44e74a6db41cb5fd5b35696592c6a747e9831b228b4d1ce62b6e65f43dee835d/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
     }
@@ -4288,7 +4288,7 @@ constructor() {
   	constructor(scope, id, ) {
   	super(scope, id);
   {
-    this.c = new cloud.Counter(this,\\"cloud.Counter\\");
+    this.c = this.node.root.new(\\"@winglang/sdk.cloud.Counter\\",undefined,this,\\"cloud.Counter\\");
   }
   }
   	
@@ -4319,9 +4319,9 @@ constructor() {
   }
   }
   Bar._annotateInflight(\\"my_method\\", {\\"this.b\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.foo\\": { ops: [\\"foo_get\\", \\"foo_inc\\"]}, \\"this.name\\": { ops: []}});
-  const bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  const bucket = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",undefined,this,\\"cloud.Bucket\\");
   const res = new Bar(this,\\"Bar\\",\\"Arr\\",bucket);
-  new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.e50bc85b13df379286b4aa72aa88788422e26d9146adbc9bba989a8a59253a73/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       bucket: {
@@ -4506,7 +4506,7 @@ constructor() {
       {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
     }
   }
-  new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.09c5e24751d9ba1246f91518f2f7f5c5d1102a09d0b1acff479ae27ad134090f/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
     }
@@ -4988,7 +4988,7 @@ constructor() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s1.substring(5,7)) === \\"st\\")'\`)})(((s1.substring(5,7)) === \\"st\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((\\"   some string   \\".trim()) === \\"some string\\")'\`)})(((\\"   some string   \\".trim()) === \\"some string\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"Some String\\".toLocaleUpperCase() === \\"SOME STRING\\")'\`)})((\\"Some String\\".toLocaleUpperCase() === \\"SOME STRING\\"))};
-  new cloud.Function(this,\\"test:string\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test:string\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.0fb01e81c63b003d77d6245e36ba84561e3e2d3268e69a7c975f81cfe7565fac/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       s1: {
@@ -5251,8 +5251,8 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"test_bucket\\", plugins: $plugins });
   
-  const b = new cloud.Bucket(this,\\"cloud.Bucket\\");
-  new cloud.Function(this,\\"test:put\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  const b = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",undefined,this,\\"cloud.Bucket\\");
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test:put\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.9f10a129b90bc1328dcb1e6194e3902931d1011d95e46825362ef5b06ec17380/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       b: {
@@ -5261,7 +5261,7 @@ constructor() {
       },
     }
   }));
-  new cloud.Function(this,\\"test:get\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test:get\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1b9abefaef8ce4230db863000273d2c12bacb97e33ac10e6c8b50341e415fdac/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       b: {
@@ -6049,14 +6049,14 @@ constructor() {
   	constructor(scope, id, ) {
   	super(scope, id);
   {
-    this.my_resource = new cloud.Bucket(this,\\"cloud.Bucket\\");
+    this.my_resource = this.node.root.new(\\"@winglang/sdk.cloud.Bucket\\",undefined,this,\\"cloud.Bucket\\");
     this.my_str = \\"my_string\\";
     this.my_num = 42;
     this.my_bool = true;
     this.array_of_str = Object.freeze([\\"s1\\", \\"s2\\"]);
     this.map_of_num = Object.freeze({\\"k1\\":11,\\"k2\\":22});
     this.set_of_str = Object.freeze(new Set([\\"s1\\", \\"s2\\", \\"s1\\"]));
-    this.array_of_queues = Object.freeze([new cloud.Queue(this,\\"q1\\"), new cloud.Queue(this,\\"q2\\")]);
+    this.array_of_queues = Object.freeze([this.node.root.new(\\"@winglang/sdk.cloud.Queue\\",undefined,this,\\"q1\\"), this.node.root.new(\\"@winglang/sdk.cloud.Queue\\",undefined,this,\\"q2\\")]);
   }
   }
   	
@@ -6080,7 +6080,7 @@ constructor() {
   MyResource._annotateInflight(\\"capture_set\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
   MyResource._annotateInflight(\\"capture_array_of_queues\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
   const r = new MyResource(this,\\"MyResource\\");
-  new cloud.Function(this,\\"test:capture_resource\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test:capture_resource\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.b5e7bd6cc9f6c741c4f0afa8adc0208ccee08e6297495b1fbe29db8afb6ee789/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       r: {
@@ -6089,7 +6089,7 @@ constructor() {
       },
     }
   }));
-  new cloud.Function(this,\\"test:capture_primitives\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test:capture_primitives\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1814d20e284e4a33aff014ce4391d7da7998b0cd7db8ebee477a5400763bbe7b/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       r: {
@@ -6098,7 +6098,7 @@ constructor() {
       },
     }
   }));
-  new cloud.Function(this,\\"test:capture_array\\",new $stdlib.core.Inflight(this, \\"$Inflight3\\", {
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test:capture_array\\",new $stdlib.core.Inflight(this, \\"$Inflight3\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.c341832069b7b13603626bc26227d936f0a7d7b7da45751e3666d6f4e7fa599a/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       r: {
@@ -6107,7 +6107,7 @@ constructor() {
       },
     }
   }));
-  new cloud.Function(this,\\"test:capture_map\\",new $stdlib.core.Inflight(this, \\"$Inflight4\\", {
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test:capture_map\\",new $stdlib.core.Inflight(this, \\"$Inflight4\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.7235e8fbf10f106318ff9c22489e4e955483c8de6b39df0dbf143fdfa4691109/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       r: {
@@ -6116,7 +6116,7 @@ constructor() {
       },
     }
   }));
-  new cloud.Function(this,\\"test:capture_set\\",new $stdlib.core.Inflight(this, \\"$Inflight5\\", {
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test:capture_set\\",new $stdlib.core.Inflight(this, \\"$Inflight5\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.b7df534fba155b498841a75f4610f6bb576ee00e2fbe6869317adf3718597864/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       r: {
@@ -6125,7 +6125,7 @@ constructor() {
       },
     }
   }));
-  new cloud.Function(this,\\"test:capture_array_of_queues\\",new $stdlib.core.Inflight(this, \\"$Inflight6\\", {
+  this.node.root.new(\\"@winglang/sdk.cloud.Function\\",undefined,this,\\"test:capture_array_of_queues\\",new $stdlib.core.Inflight(this, \\"$Inflight6\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.179eef1ca19aa2bf908a3113209c3d8b96c23bac7bc35f1d6381c0f5cd2ec603/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       r: {
@@ -6349,7 +6349,7 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"while_loop_await\\", plugins: $plugins });
   
-  const queue = new cloud.Queue(this,\\"cloud.Queue\\");
+  const queue = this.node.root.new(\\"@winglang/sdk.cloud.Queue\\",undefined,this,\\"cloud.Queue\\");
   const iterator = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.82d0059fdbaebaab6d1be68f497052f9d5b8662f4333952a6e9ad55f564e0c97/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
