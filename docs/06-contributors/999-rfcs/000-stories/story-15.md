@@ -30,7 +30,6 @@ uses the `{id}` syntax. What should be the the right syntax?
   - We will go with the [openapi spec](https://swagger.io/docs/specification/paths-and-operations/) that uses the `/tasks/{id}` syntax 
 - Bring internal nodejs types - how do we bring something that we can't require, like `RegEx`
 - From anything to Json - can I cast something from bring untyped to Json? 
-- Calling await 
 
 ## Code 
 ```ts (wing)
