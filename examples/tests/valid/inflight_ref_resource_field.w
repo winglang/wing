@@ -1,26 +1,14 @@
 bring cloud;
 
-resource Another {
+resource Test {
   my_field: str;
+  
   init () {
     this.my_field = "hello";
   }
 
-  inflight func(): str {
-    return this.my_field;
-  }
-}
-
-resource Test {
-  another: Another;
-
-  init() {
-    this.another = new Another();
-  }
-
-  inflight test() {
-    let res = this.another.func();
-    assert(res == "hello");
+  inflight test(): str {
+    assert(this.my_field == "hello");
   }
 }
 
