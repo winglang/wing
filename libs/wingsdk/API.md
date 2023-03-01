@@ -1891,6 +1891,67 @@ The length of the set.
 ---
 
 
+### Json <a name="Json" id="@winglang/sdk.std.Json"></a>
+
+Immutable Json.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.Json.Initializer"></a>
+
+```wing
+bring std;
+
+new std.Json()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Json.get">get</a></code> | Returns a specified element from the Json. |
+| <code><a href="#@winglang/sdk.std.Json.getAt">get_at</a></code> | Returns a specified element at a given index from Json Array. |
+
+---
+
+##### `get` <a name="get" id="@winglang/sdk.std.Json.get"></a>
+
+```wing
+get(key: str): Json
+```
+
+Returns a specified element from the Json.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.get.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to return.
+
+---
+
+##### `get_at` <a name="get_at" id="@winglang/sdk.std.Json.getAt"></a>
+
+```wing
+get_at(index: num): Json
+```
+
+Returns a specified element at a given index from Json Array.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.Json.getAt.parameter.index"></a>
+
+- *Type:* num
+
+The index of the element in the Json Array to return.
+
+---
+
+
+
+
 ### MutableArray <a name="MutableArray" id="@winglang/sdk.std.MutableArray"></a>
 
 Mutable Array.
@@ -2266,6 +2327,115 @@ size: num;
 The length of the set.
 
 ---
+
+
+### MutJson <a name="MutJson" id="@winglang/sdk.std.MutJson"></a>
+
+Mutable Json.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.MutJson.Initializer"></a>
+
+```wing
+bring std;
+
+new std.MutJson()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.MutJson.get">get</a></code> | Returns a specified element from the Json. |
+| <code><a href="#@winglang/sdk.std.MutJson.getAt">get_at</a></code> | Returns a specified element at a given index from MutJson Array. |
+| <code><a href="#@winglang/sdk.std.MutJson.set">set</a></code> | Adds or updates an element in MutJson with a specific key and value. |
+| <code><a href="#@winglang/sdk.std.MutJson.setAt">set_at</a></code> | Set element in MutJson Array with a specific key and value. |
+
+---
+
+##### `get` <a name="get" id="@winglang/sdk.std.MutJson.get"></a>
+
+```wing
+get(key: str): MutJson
+```
+
+Returns a specified element from the Json.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.get.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to return.
+
+---
+
+##### `get_at` <a name="get_at" id="@winglang/sdk.std.MutJson.getAt"></a>
+
+```wing
+get_at(index: num): MutJson
+```
+
+Returns a specified element at a given index from MutJson Array.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutJson.getAt.parameter.index"></a>
+
+- *Type:* num
+
+The index of the element in the MutJson Array to return.
+
+---
+
+##### `set` <a name="set" id="@winglang/sdk.std.MutJson.set"></a>
+
+```wing
+set(key: str, value: any): void
+```
+
+Adds or updates an element in MutJson with a specific key and value.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutJson.set.parameter.key"></a>
+
+- *Type:* str
+
+The key of the element to add.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutJson.set.parameter.value"></a>
+
+- *Type:* any
+
+The value of the element to add.
+
+---
+
+##### `set_at` <a name="set_at" id="@winglang/sdk.std.MutJson.setAt"></a>
+
+```wing
+set_at(index: num, value: any): void
+```
+
+Set element in MutJson Array with a specific key and value.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutJson.setAt.parameter.index"></a>
+
+- *Type:* num
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutJson.setAt.parameter.value"></a>
+
+- *Type:* any
+
+The value of the element to set.
+
+---
+
+
 
 
 ### String <a name="String" id="@winglang/sdk.std.String"></a>
