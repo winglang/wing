@@ -55,7 +55,7 @@ bring redis;
 
 // TODO discuss how we bring untyped something like RegEx from JavaScript 
 // PLACEHOLER for bringing something from Javascript stdlib
-bring untyped js ;
+bring untyped js;
 
 // prerequisite: npm install axios
 // PALCEHOLDER for bringing some external module
@@ -108,7 +108,7 @@ resource TaskList implementes ITaskList {
       status: Status.Uncompleted
     };
     print("adding task ${id} with data: ${j}"); 
-    return this_add(id, js);
+    return this._add(id, js);
   }
 
   inflight remove(id: str) {
