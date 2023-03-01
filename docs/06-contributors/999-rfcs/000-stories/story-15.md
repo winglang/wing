@@ -42,7 +42,7 @@ We want to allow develope to interact with the API internally inside the console
 When @yoav-steinberg was asked about which Redis GUI is the most common one, he answered: 
 > I think 99% of users just use command line.
 
-We would like to allow the developer to interact with REDIS inside the console, if possible and feasible in a timely manner 
+Considering that is the case, it would be nice to allow developers to interact with REDIS inside the console, if possible and feasible in a timely manner 
 A good example on how this may look like is Redis embedded prompt inside their docs (see the [examples section](https://redis.io/commands/set/#examples))
 
 ![image](https://user-images.githubusercontent.com/1727147/222132089-c679b5dd-04e1-42c1-b9d0-83aa4a0cf47b.png)
