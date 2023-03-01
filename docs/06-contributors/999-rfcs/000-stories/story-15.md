@@ -116,7 +116,6 @@ resource TaskList implementes ITaskList {
     this._redis.DEL(id);
   }
 
-  // PLACEHOLDER - having an untyped type
   inflight find(term: str): Array<str> { 
     let r = new js.RegExp(term);
     let result = MutArray<str>[]; 
