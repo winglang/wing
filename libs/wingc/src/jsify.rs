@@ -51,6 +51,8 @@ pub struct JSifier<'a> {
 	inflight_counter: RefCell<usize>,
 }
 
+/// Analysizes a resource inflight method and returns a list of fields that are referenced from the
+/// method and which operations are performed on them.
 struct FieldReferenceVisitor<'a> {
 	/// The key is field name, value is a list of operations performed on this field
 	references: BTreeMap<String, IndexSet<String>>,
@@ -58,7 +60,7 @@ struct FieldReferenceVisitor<'a> {
 	/// Used internally by the visitor to keep track of the path to the field
 	path: Vec<String>,
 
-  /// The resource type's symbol env (used to resolve field types)
+	/// The resource type's symbol env (used to resolve field types)
 	function_def: &'a FunctionDefinition,
 	method_name: &'a Symbol,
 
@@ -1215,7 +1217,7 @@ impl<'a> JSifier<'a> {
 				(name, _type, methods)
 			})
 			.collect_vec()
-	}	
+	}
 }
 
 fn is_mutable_collection(expression: &Expr) -> bool {
