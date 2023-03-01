@@ -61,9 +61,9 @@ export class Function extends cloud.Function {
     super(scope, id, inflight, props);
 
     const app = App.of(this) as App;
-    this.storageAccount = app.storageAccount;
-    this.resourceGroup = app.resourceGroup;
-    this.servicePlan = app.servicePlan;
+    this.storageAccount = app._storageAccount;
+    this.resourceGroup = app._resourceGroup;
+    this.servicePlan = app._servicePlan;
 
     const functionName = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
     const functionIdentityType = "SystemAssigned";
@@ -135,7 +135,7 @@ export class Function extends cloud.Function {
     const functionCodeBlob = new StorageBlob(this, "CodeBlob", {
       name: `${functionName}.zip`,
       storageAccountName: this.storageAccount.name,
-      storageContainerName: functionCodeBucket.storageContainer.name,
+      storageContainerName: functionCodeBucket._storageContainer.name,
       type: "Block",
       source: asset.path,
     });
@@ -160,7 +160,7 @@ export class Function extends cloud.Function {
       appSettings: Lazy.anyValue({
         produce: () => ({
           ...this.env,
-          WEBSITE_RUN_FROM_PACKAGE: `https://${this.storageAccount.name}.blob.core.windows.net/${functionCodeBucket.storageContainer.name}/${functionCodeBlob.name}`,
+          WEBSITE_RUN_FROM_PACKAGE: `https://${this.storageAccount.name}.blob.core.windows.net/${functionCodeBucket._storageContainer.name}/${functionCodeBlob.name}`,
           FUNCTIONS_WORKER_RUNTIME: functionRuntime,
         }),
       }) as any,
