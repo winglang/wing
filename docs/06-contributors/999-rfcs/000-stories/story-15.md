@@ -37,6 +37,7 @@ Another option approach is taking the do-it-yourself approach that require the d
 
 ### Api Gateway in Console
 We want to allow develope to interact with the API internally inside the console and/or externally with curl, postman, etc...
+Wing Console will query the Api Gateway resource for all available endpoints
 
 ### Redis in console
 When @yoav-steinberg was asked about which Redis GUI is the most common one, he answered: 
