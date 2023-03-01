@@ -257,6 +257,9 @@ where
 				v.visit_expr(item);
 			}
 		}
+		ExprKind::JsonLiteral { is_mut: _, element } => {
+			v.visit_expr(element);
+		}
 		ExprKind::StructLiteral { type_, fields } => {
 			v.visit_type_annotation(type_);
 			for val in fields.values() {
@@ -361,6 +364,8 @@ where
 		TypeAnnotation::String => {}
 		TypeAnnotation::Bool => {}
 		TypeAnnotation::Duration => {}
+		TypeAnnotation::Json => {}
+		TypeAnnotation::MutJson => {}
 		TypeAnnotation::Optional(t) => v.visit_type_annotation(t),
 		TypeAnnotation::Array(t) => v.visit_type_annotation(t),
 		TypeAnnotation::MutArray(t) => v.visit_type_annotation(t),
