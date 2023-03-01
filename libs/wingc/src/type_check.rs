@@ -1698,7 +1698,7 @@ impl<'a> TypeChecker<'a> {
 					name: name.clone(),
 					env: dummy_env,
 					parent: parent_class,
-					implements: vec![],    // TODO parse AST information
+					implements: vec![],    // TODO parse AST information - https://github.com/winglang/wing/issues/1697
 					type_parameters: None, // TODO no way to have generic args in wing yet
 				};
 				let mut class_type = self.types.add_type(if *is_resource {
@@ -1867,7 +1867,7 @@ impl<'a> TypeChecker<'a> {
 					self.inner_scopes.push(&method_def.statements);
 				}
 
-				// TODO: type check interfaces
+				// TODO: type check interfaces - https://github.com/winglang/wing/issues/1697
 			}
 			StmtKind::Struct { name, extends, members } => {
 				// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
