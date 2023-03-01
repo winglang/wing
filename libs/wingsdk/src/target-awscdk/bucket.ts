@@ -30,7 +30,6 @@ export class Bucket extends cloud.BucketBase {
       blockPublicAccess: this.public ? undefined : BlockPublicAccess.BLOCK_ALL,
       publicReadAccess: this.public ? true : false,
       removalPolicy: RemovalPolicy.DESTROY,
-      autoDeleteObjects: true,
     });
   }
 

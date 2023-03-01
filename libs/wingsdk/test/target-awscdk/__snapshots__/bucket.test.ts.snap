@@ -10,83 +10,6 @@ Object {
     },
   },
   "Resources": Object {
-    "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": Object {
-      "DependsOn": Array [
-        "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": Object {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "2332a8953f2d92ebffdc01cf20d5a2fb5bf2ef29764cda4186f01c55edee8c73.zip",
-        },
-        "Description": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "Lambda function for auto-deleting objects in ",
-              Object {
-                "Ref": "mybucketD601CBAA",
-              },
-              " S3 bucket.",
-            ],
-          ],
-        },
-        "Handler": "__entrypoint__.handler",
-        "MemorySize": 128,
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs14.x",
-        "Timeout": 900,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Sub": "arn:\${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "mybucketAutoDeleteObjectsCustomResource73B2A268": Object {
-      "DeletionPolicy": "Delete",
-      "DependsOn": Array [
-        "mybucketPolicy41B6C0F4",
-      ],
-      "Properties": Object {
-        "BucketName": Object {
-          "Ref": "mybucketD601CBAA",
-        },
-        "ServiceToken": Object {
-          "Fn::GetAtt": Array [
-            "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::S3AutoDeleteObjects",
-      "UpdateReplacePolicy": "Delete",
-    },
     "mybucketD601CBAA": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
@@ -99,12 +22,6 @@ Object {
             },
           ],
         },
-        "Tags": Array [
-          Object {
-            "Key": "aws-cdk:auto-delete-objects",
-            "Value": "true",
-          },
-        ],
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Delete",
@@ -136,44 +53,6 @@ Object {
                   ],
                 ],
               },
-            },
-            Object {
-              "Action": Array [
-                "s3:GetBucket*",
-                "s3:List*",
-                "s3:DeleteObject*",
-              ],
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::GetAtt": Array [
-                    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
-                    "Arn",
-                  ],
-                },
-              },
-              "Resource": Array [
-                Object {
-                  "Fn::GetAtt": Array [
-                    "mybucketD601CBAA",
-                    "Arn",
-                  ],
-                },
-                Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      Object {
-                        "Fn::GetAtt": Array [
-                          "mybucketD601CBAA",
-                          "Arn",
-                        ],
-                      },
-                      "/*",
-                    ],
-                  ],
-                },
-              ],
             },
           ],
           "Version": "2012-10-17",
@@ -376,83 +255,6 @@ Object {
       },
       "Type": "AWS::IAM::Policy",
     },
-    "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": Object {
-      "DependsOn": Array [
-        "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": Object {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "2332a8953f2d92ebffdc01cf20d5a2fb5bf2ef29764cda4186f01c55edee8c73.zip",
-        },
-        "Description": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "Lambda function for auto-deleting objects in ",
-              Object {
-                "Ref": "mybucketD601CBAA",
-              },
-              " S3 bucket.",
-            ],
-          ],
-        },
-        "Handler": "__entrypoint__.handler",
-        "MemorySize": 128,
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs14.x",
-        "Timeout": 900,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Sub": "arn:\${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "mybucketAutoDeleteObjectsCustomResource73B2A268": Object {
-      "DeletionPolicy": "Delete",
-      "DependsOn": Array [
-        "mybucketPolicy41B6C0F4",
-      ],
-      "Properties": Object {
-        "BucketName": Object {
-          "Ref": "mybucketD601CBAA",
-        },
-        "ServiceToken": Object {
-          "Fn::GetAtt": Array [
-            "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::S3AutoDeleteObjects",
-      "UpdateReplacePolicy": "Delete",
-    },
     "mybucketD601CBAA": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
@@ -466,10 +268,6 @@ Object {
           ],
         },
         "Tags": Array [
-          Object {
-            "Key": "aws-cdk:auto-delete-objects",
-            "Value": "true",
-          },
           Object {
             "Key": "aws-cdk:cr-owned:573ee45c",
             "Value": "true",
@@ -510,44 +308,6 @@ Object {
                   ],
                 ],
               },
-            },
-            Object {
-              "Action": Array [
-                "s3:GetBucket*",
-                "s3:List*",
-                "s3:DeleteObject*",
-              ],
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::GetAtt": Array [
-                    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
-                    "Arn",
-                  ],
-                },
-              },
-              "Resource": Array [
-                Object {
-                  "Fn::GetAtt": Array [
-                    "mybucketD601CBAA",
-                    "Arn",
-                  ],
-                },
-                Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      Object {
-                        "Fn::GetAtt": Array [
-                          "mybucketD601CBAA",
-                          "Arn",
-                        ],
-                      },
-                      "/*",
-                    ],
-                  ],
-                },
-              ],
             },
           ],
           "Version": "2012-10-17",
@@ -676,83 +436,6 @@ Object {
     },
   },
   "Resources": Object {
-    "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": Object {
-      "DependsOn": Array [
-        "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": Object {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "2332a8953f2d92ebffdc01cf20d5a2fb5bf2ef29764cda4186f01c55edee8c73.zip",
-        },
-        "Description": Object {
-          "Fn::Join": Array [
-            "",
-            Array [
-              "Lambda function for auto-deleting objects in ",
-              Object {
-                "Ref": "mybucketD601CBAA",
-              },
-              " S3 bucket.",
-            ],
-          ],
-        },
-        "Handler": "__entrypoint__.handler",
-        "MemorySize": 128,
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs14.x",
-        "Timeout": 900,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": Object {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Sub": "arn:\${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "mybucketAutoDeleteObjectsCustomResource73B2A268": Object {
-      "DeletionPolicy": "Delete",
-      "DependsOn": Array [
-        "mybucketPolicy41B6C0F4",
-      ],
-      "Properties": Object {
-        "BucketName": Object {
-          "Ref": "mybucketD601CBAA",
-        },
-        "ServiceToken": Object {
-          "Fn::GetAtt": Array [
-            "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::S3AutoDeleteObjects",
-      "UpdateReplacePolicy": "Delete",
-    },
     "mybucketD601CBAA": Object {
       "DeletionPolicy": "Delete",
       "Properties": Object {
@@ -771,66 +454,9 @@ Object {
           "IgnorePublicAcls": true,
           "RestrictPublicBuckets": true,
         },
-        "Tags": Array [
-          Object {
-            "Key": "aws-cdk:auto-delete-objects",
-            "Value": "true",
-          },
-        ],
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Delete",
-    },
-    "mybucketPolicy41B6C0F4": Object {
-      "Properties": Object {
-        "Bucket": Object {
-          "Ref": "mybucketD601CBAA",
-        },
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "s3:GetBucket*",
-                "s3:List*",
-                "s3:DeleteObject*",
-              ],
-              "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::GetAtt": Array [
-                    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
-                    "Arn",
-                  ],
-                },
-              },
-              "Resource": Array [
-                Object {
-                  "Fn::GetAtt": Array [
-                    "mybucketD601CBAA",
-                    "Arn",
-                  ],
-                },
-                Object {
-                  "Fn::Join": Array [
-                    "",
-                    Array [
-                      Object {
-                        "Fn::GetAtt": Array [
-                          "mybucketD601CBAA",
-                          "Arn",
-                        ],
-                      },
-                      "/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::S3::BucketPolicy",
     },
   },
   "Rules": Object {
