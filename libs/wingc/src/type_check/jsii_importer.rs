@@ -409,8 +409,7 @@ impl<'a> JsiiImporter<'a> {
 
 		// Replace the dummy struct environment with the real one after adding all properties
 		match *wing_type {
-			Type::Struct(ref mut struct_) => struct_.env = iface_env,
-			Type::Interface(ref mut iface) => iface.env = iface_env,
+			Type::Struct(Struct { ref mut env, .. }) | Type::Interface(Interface { ref mut env, .. }) => *env = iface_env,
 			_ => panic!("Expected {} to be an interface or struct", type_name),
 		};
 	}
@@ -588,7 +587,7 @@ impl<'a> JsiiImporter<'a> {
 			};
 
 			// Validate the base class is either a class or a resource
-			if base_class_type.as_resource().is_none() && base_class_type.as_class().is_none() {
+			if base_class_type.as_class_or_resource().is_none() {
 				panic!("Base class {} of {} is not a resource", base_class_name, type_name);
 			}
 			Some(base_class_type)

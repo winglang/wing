@@ -305,7 +305,9 @@ pub mod type_system {
 			let mut interfaces = HashSet::new();
 			if let Some(ifaces) = &self.interfaces {
 				for iface in ifaces {
-					let iface_type = system.find_interface(&FQN::from(iface.as_str())).unwrap();
+					let iface_type = system
+						.find_interface(&FQN::from(iface.as_str()))
+						.expect(&format!("Unable to find interface {}", iface));
 					if inherited {
 						for iface in iface_type.all_interfaces(inherited, system) {
 							interfaces.insert(iface);
