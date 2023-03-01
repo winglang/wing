@@ -6,6 +6,6 @@ test("binding throws if a method is unsupported", () => {
   const handler = Testing.makeHandler(app, "Handler", "async handle() {}");
   const host = new cloud.Function(app, "Function", handler);
   expect(() => handler._registerBind(host, ["foo", "bar"])).toThrow(
-    /Resource root\/Handler does not support operation foo/
+    /Unable to reference \"root\/Handler\" from \"root\/Function\" because it does not support operation \"foo\"/
   );
 });
