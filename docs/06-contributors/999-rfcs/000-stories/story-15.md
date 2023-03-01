@@ -158,7 +158,7 @@ resource TaskListApi {
         let title = this.task_list.get(id);
         return cloud.ApiResponse {status:200, body: Json.format(title)};
       } catch {
-        return cloud.ApiResponse(status:400);
+        return cloud.ApiResponse { status: 400 };
       }
     });
     
