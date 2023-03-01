@@ -1,4 +1,5 @@
 import * as path from "path";
+import * as walk from "walkdir";
 import * as fs from "fs-extra";
 
 export const repoRoot = path.resolve(__dirname, "../../..");
@@ -18,9 +19,9 @@ export const targetWingSDKSpec =
   process.env.HANGAR_WINGSDK_SPEC ??
   `file:${path.join(repoRoot, `libs/wingsdk`)}`;
 
-export const validWingFiles = fs
-  .readdirSync(validTestDir)
+export const validWingFiles = walk
+  .sync(validTestDir)
   .filter((f) => f.endsWith(".w"));
-export const invalidWingFiles = fs
-  .readdirSync(invalidTestDir)
+export const invalidWingFiles = walk
+  .sync(invalidTestDir)
   .filter((f) => f.endsWith(".w"));
