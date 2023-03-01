@@ -39,7 +39,7 @@ export enum StorageAccountPermissions {
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
-export class Bucket extends cloud.BucketBase {
+export class Bucket extends cloud.Bucket {
   /** Storage container */
   public readonly storageContainer: StorageContainer;
   private readonly public: boolean;
@@ -50,7 +50,7 @@ export class Bucket extends cloud.BucketBase {
 
     this.public = props.public ?? false;
 
-    const app = App.of(this);
+    const app = App.of(this) as App;
     this.storageAccount = app.storageAccount;
 
     const storageContainerName = ResourceNames.generateName(

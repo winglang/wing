@@ -404,8 +404,8 @@ impl<'a> JSifier<'a> {
 				arg_list,
 				obj_scope: _, // TODO
 			} => {
-				let expression_type = expression.evaluated_type.borrow();			
-				let is_resource = if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
+				let expression_type = expression.evaluated_type.borrow();
+				let is_resource = if let Some(evaluated_type) = expression_type.as_ref() {
 					evaluated_type.as_resource().is_some()
 				} else {
 					// TODO Hack: This object type is not known. How can we tell if it's a resource or not?
@@ -417,26 +417,59 @@ impl<'a> JSifier<'a> {
 					// This should only happen in the case of `any`, which are almost certainly JSII imports.
 					true
 				};
-
-				// If this is a resource then add the scope and id to the arg list
-				if is_resource {
-					format!(
-						"new {}({})",
-						self.jsify_type(class),
-						self.jsify_arg_list(
-							&arg_list,
-							Some("this"),
-							Some(&format!("{}", obj_id.as_ref().unwrap_or(&self.jsify_type(class)))),
-							should_case_convert,
-							phase
-						)
-					)
+				let is_abstract = if let Some(cls) = expression_type.unwrap().as_class_or_resource() {
+					cls.is_abstract
 				} else {
-					format!(
-						"new {}({})",
-						self.jsify_type(&class),
-						self.jsify_arg_list(&arg_list, None, None, should_case_convert, phase)
-					)
+					false
+				};
+
+				// if we have an FQN, we emit a call to the "new" (or "newAbstract") factory method to allow
+				// targets and plugins to inject alternative implementations for types. otherwise (e.g.
+				// user-defined types), we simply instantiate the type directly (maybe in the future we will
+				// allow customizations of user-defined types as well, but for now we don't).
+
+				let ctor = self.jsify_type(class);
+
+				let scope = if is_resource {
+					Some("this")
+				} else {
+					None
+				};
+
+				let id = if is_resource {
+					Some(obj_id.as_ref().unwrap_or(&ctor).as_str())
+				} else {
+					None
+				};
+
+				let args = self.jsify_arg_list(
+					&arg_list,
+					scope,
+					id,
+					should_case_convert,
+					phase
+				);
+
+				let fqn = if is_resource {
+					expression_type
+						.expect("expected expression")
+						.as_resource()
+						.expect("expected resource")
+						.fqn
+						.clone()
+				} else {
+					None
+				};
+
+				if ! is_resource || fqn.is_none() {
+					format!("new {}({})", ctor, args)
+				} else {
+					let fqn = fqn.expect("expecting fqn to be defined");
+					if is_abstract {
+						format!("this.node.root.newAbstract(\"{}\",{})", fqn, args)
+					} else {
+						format!("this.node.root.new(\"{}\",{},{})", fqn, ctor, args)
+					}
 				}
 			}
 			ExprKind::Literal(lit) => match lit {

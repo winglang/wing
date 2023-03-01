@@ -1,15 +1,16 @@
 import * as reflect from "jsii-reflect";
+import { Constants } from "./constants";
+import { Initializer } from "./initializer";
+import { InstanceMethods } from "./instance-methods";
+import { Properties } from "./properties";
+import { StaticFunctions } from "./static-functions";
+import { HIDDEN_METHODS, HIDDEN_STATIC } from "./wing-filters";
 import { ClassSchema, extractDocs } from "../schema";
 import {
   Transpile,
   TranspiledClass,
   TranspiledType,
 } from "../transpile/transpile";
-import { Constants } from "./constants";
-import { Initializer } from "./initializer";
-import { InstanceMethods } from "./instance-methods";
-import { Properties } from "./properties";
-import { StaticFunctions } from "./static-functions";
 
 const CONSTRUCT_CLASS = "constructs.Construct";
 
@@ -40,8 +41,14 @@ export class Class {
     if (klass.initializer) {
       this.initializer = new Initializer(transpile, klass.initializer);
     }
-    this.instanceMethods = new InstanceMethods(transpile, klass.allMethods);
-    this.staticFunctions = new StaticFunctions(transpile, klass.allMethods);
+    this.instanceMethods = new InstanceMethods(
+      transpile,
+      klass.allMethods.filter((m) => !HIDDEN_METHODS.includes(m.name))
+    );
+    this.staticFunctions = new StaticFunctions(
+      transpile,
+      klass.allMethods.filter((m) => !HIDDEN_STATIC.includes(m.name))
+    );
     this.constants = new Constants(transpile, klass.allProperties);
     this.properties = new Properties(transpile, klass.allProperties);
     this.interfaces = klass.interfaces.map((iface) =>
