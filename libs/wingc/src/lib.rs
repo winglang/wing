@@ -281,11 +281,17 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 	fs::create_dir_all(out_dir).expect("create output dir");
 
 	let app_name = source_path.file_stem().unwrap().to_str().unwrap();
-	let jsifier = JSifier::new(out_dir, app_name, true);
+	let mut jsifier = JSifier::new(out_dir, app_name, true);
+
 	let intermediate_js = jsifier.jsify(&scope);
 	let intermediate_name = std::env::var("WINGC_PREFLIGHT").unwrap_or("preflight.js".to_string());
 	let intermediate_file = jsifier.out_dir.join(intermediate_name);
 	fs::write(&intermediate_file, &intermediate_js).expect("Write intermediate JS to disk");
+
+	// Filter diagnostics to only errors
+	if jsifier.diagnostics.len() > 0 {
+		return Err(jsifier.diagnostics);
+	}
 
 	return Ok(CompilerOutput {
 		preflight: intermediate_js,

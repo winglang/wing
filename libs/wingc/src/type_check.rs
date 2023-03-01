@@ -1956,7 +1956,7 @@ impl<'a> TypeChecker<'a> {
 				Ok(name) => name,
 				Err(type_error) => {
 					self.type_error(TypeError {
-						message: format!("Cannot locate Wing standard library (checking \"{}\"", manifest_root),
+						message: format!("Cannot locate Wing standard library (checking \"{}\")", manifest_root),
 						span: stmt.map(|s| s.span.clone()).unwrap_or(WingSpan::global()),
 					});
 					debug!("{:?}", type_error);

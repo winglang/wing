@@ -86,6 +86,17 @@ exports[`inflight_in_class.w > wing test (--target sim) - invalid > stderr 1`] =
 Error at ../../../../examples/tests/invalid/inflight_in_class.w:3:3 | Class cannot have inflight fields"
 `;
 
+exports[`inflight_ref_invalid.w > wing test (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 2 error(s)
+Error at ../../../../examples/tests/invalid/inflight_ref_invalid.w:12:19 | Unable to reference \\"this.reassignable\\" from inflight method \\"test\\" because it is reassignable (\\"var\\")
+Error at ../../../../examples/tests/invalid/inflight_ref_invalid.w:14:16 | Unable to reference \\"this.mut_array\\" from inflight method \\"test\\" because type MutArray<str> is not capturable"
+`;
+
+exports[`inflight_ref_resource_sub_field.w > wing test (--target sim) - invalid > stderr 1`] = `
+"[1m[31mpreflight error:[39m[22m Resource root/Test/Another does not support operation my_queue
+no .wsim file found in output directory"
+`;
+
 exports[`missing_semicolon.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 4 error(s)
 Error at ../../../../examples/tests/invalid/missing_semicolon.w:7:1 | Expected expression
