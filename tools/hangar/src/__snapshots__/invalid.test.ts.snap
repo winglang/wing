@@ -86,6 +86,17 @@ exports[`inflight_in_class.w > wing test (--target sim) - invalid > stderr 1`] =
 Error at ../../../../examples/tests/invalid/inflight_in_class.w:3:3 | Class cannot have inflight fields"
 `;
 
+exports[`json.w > wing test (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 7 error(s)
+Error at ../../../../examples/tests/invalid/json.w:5:14 | Expected type to be \\"str\\", but got \\"Json\\" instead
+Error at ../../../../examples/tests/invalid/json.w:7:14 | Expected type to be \\"num\\", but got \\"Json\\" instead
+Error at ../../../../examples/tests/invalid/json.w:9:15 | Expected type to be \\"bool\\", but got \\"Json\\" instead
+Error at ../../../../examples/tests/invalid/json.w:11:19 | Expected type to be \\"Map<str>\\", but got \\"Json\\" instead
+Error at ../../../../examples/tests/invalid/json.w:13:20 | Expected type to be \\"Set<str>\\", but got \\"Json\\" instead
+Error at ../../../../examples/tests/invalid/json.w:15:21 | Expected type to be \\"Array<str>\\", but got \\"Json\\" instead
+Error at ../../../../examples/tests/invalid/json.w:20:14 | Unknown symbol \\"set\\""
+`;
+
 exports[`missing_semicolon.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 4 error(s)
 Error at ../../../../examples/tests/invalid/missing_semicolon.w:7:1 | Expected expression
@@ -188,12 +199,6 @@ exports[`try_no_catch_or_finally.w > wing test (--target sim) - invalid > stderr
 Error at ../../../../examples/tests/invalid/try_no_catch_or_finally.w:1:1 | Missing \`catch\` or \`finally\` blocks for this try statement"
 `;
 
-exports[`types_string_interpolation.w > wing test (--target sim) - invalid > stderr 1`] = `
-"Compilation failed with 2 error(s)
-Error at ../../../../examples/tests/invalid/types_string_interpolation.w:3:12 | Expected type to be one of \\"str,num\\", but got \\"bool\\" instead
-Error at ../../../../examples/tests/invalid/types_string_interpolation.w:6:12 | Expected type to be one of \\"str,num\\", but got \\"bool\\" instead"
-`;
-
 exports[`types_strings_arithmetic.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 3 error(s)
 Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:1:16 | Expected type to be \\"num\\", but got \\"str\\" instead
@@ -229,9 +234,8 @@ Error at ../../../../examples/tests/invalid/variable_scoping.w:6:11 | Unknown sy
 `;
 
 exports[`void_in_expression_position.w > wing test (--target sim) - invalid > stderr 1`] = `
-"Compilation failed with 4 error(s)
+"Compilation failed with 3 error(s)
 Error at ../../../../examples/tests/invalid/void_in_expression_position.w:1:1 | Expression must be a class or resource instance to access property \\"get\\", instead found type \\"void\\"
-Error at ../../../../examples/tests/invalid/void_in_expression_position.w:4:23 | Expected type to be one of \\"str,num\\", but got \\"void\\" instead
 Error at ../../../../examples/tests/invalid/void_in_expression_position.w:7:13 | Expected type to be \\"num\\", but got \\"void\\" instead
 Error at ../../../../examples/tests/invalid/void_in_expression_position.w:11:5 | Cannot assign expression of type \\"void\\" to a variable"
 `;
