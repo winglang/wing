@@ -8,7 +8,7 @@ use std::path::PathBuf;
 
 #[cfg(test)]
 mod tests {
-	use crate::type_system::TypeSystem;
+	use crate::{fqn::FQN, type_system::TypeSystem};
 
 	use super::*;
 	use std::fs;
@@ -67,16 +67,16 @@ mod tests {
 		let name = type_system.load(fixture_path.to_str().unwrap(), None).unwrap();
 		assert_eq!(name, "constructs");
 		// find class with fqn "constructs.Construct"
-		let construct = type_system.find_class("constructs.Construct").unwrap();
+		let construct = type_system.find_class(&FQN::from("constructs.Construct")).unwrap();
 		assert_eq!(construct.name, "Construct");
 		// find enum with fqn "constructs.ConstructOrder"
-		let construct_order = type_system.find_enum("constructs.ConstructOrder").unwrap();
+		let construct_order = type_system.find_enum(&FQN::from("constructs.ConstructOrder")).unwrap();
 		assert_eq!(construct_order.name, "ConstructOrder");
 		// find interface with fqn "constructs.IConstruct"
-		let i_construct = type_system.find_interface("constructs.IConstruct").unwrap();
+		let i_construct = type_system.find_interface(&FQN::from("constructs.IConstruct")).unwrap();
 		assert_eq!(i_construct.name, "IConstruct");
 		// make sure incorrect fqn type query by kind returns None
-		let i_construct = type_system.find_class("constructs.IConstruct");
+		let i_construct = type_system.find_class(&FQN::from("constructs.IConstruct"));
 		assert_eq!(i_construct, None);
 	}
 }

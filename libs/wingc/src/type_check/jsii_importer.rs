@@ -3,17 +3,17 @@ use crate::{
 	debug,
 	diagnostic::{CharacterLocation, WingSpan},
 	type_check::{
-		self, fqn::is_construct_base, symbol_env::StatementIdx, Class, FunctionSignature, Struct, SymbolKind, Type,
-		TypeRef, Types, WING_CONSTRUCTOR_NAME,
+		self, symbol_env::StatementIdx, Class, FunctionSignature, Struct, SymbolKind, Type, TypeRef, Types,
+		WING_CONSTRUCTOR_NAME,
 	},
 	utilities::camel_case_to_snake_case,
-	WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT,
+	CONSTRUCT_BASE, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT, WINGSDK_RESOURCE,
 };
 use colored::Colorize;
 use serde_json::Value;
-use wingii::jsii;
+use wingii::{fqn::FQN, jsii};
 
-use super::{fqn::FQN, symbol_env::SymbolEnv, Namespace};
+use super::{symbol_env::SymbolEnv, Enum, Namespace};
 
 trait JsiiInterface {
 	fn methods<'a>(&'a self) -> &'a Option<Vec<jsii::Method>>;
@@ -94,6 +94,8 @@ impl<'a> JsiiImporter<'a> {
 					"number" => self.wing_types.number(),
 					"boolean" => self.wing_types.bool(),
 					"any" => self.wing_types.anything(),
+					// TODO JSON primitive https://github.com/winglang/wing/pull/1524
+					"json" => self.wing_types.anything(),
 					_ => panic!("TODO: handle primitive type {}", primitive_name),
 				}
 			} else if let Some(Value::String(type_fqn)) = obj.get("fqn") {
@@ -172,16 +174,23 @@ impl<'a> JsiiImporter<'a> {
 		self.setup_namespaces_for(&type_fqn);
 
 		// Check if this is a JSII interface and import it if it is
-		let jsii_interface = self.jsii_types.find_interface(type_fqn.as_str());
+		let jsii_interface = self.jsii_types.find_interface(type_fqn);
 		if let Some(jsii_interface) = jsii_interface {
 			self.import_interface(jsii_interface);
 			return;
 		}
 
 		// Check if this is a JSII class and import it if it is
-		let jsii_class = self.jsii_types.find_class(type_fqn.as_str());
+		let jsii_class = self.jsii_types.find_class(type_fqn);
 		if let Some(jsii_class) = jsii_class {
 			self.import_class(jsii_class);
+			return;
+		}
+
+		// Check if this is a JSII enum and import it if it is
+		let jsii_enum = self.jsii_types.find_enum(type_fqn);
+		if let Some(jsii_enum) = jsii_enum {
+			self.import_enum(jsii_enum);
 			return;
 		}
 
@@ -275,6 +284,36 @@ impl<'a> JsiiImporter<'a> {
 					.unwrap();
 			}
 		}
+	}
+
+	pub fn import_enum(&mut self, jsii_enum: jsii::EnumType) {
+		let enum_name = jsii_enum.name;
+		let enum_fqn = FQN::from(jsii_enum.fqn.as_str());
+		let enum_symbol = Self::jsii_name_to_symbol(&enum_name, &jsii_enum.location_in_module);
+
+		let enum_type_ref = self.wing_types.add_type(Type::Enum(Enum {
+			name: enum_symbol.clone(),
+			values: jsii_enum
+				.members
+				.iter()
+				.map(|m| Self::jsii_name_to_symbol(&m.name, &jsii_enum.location_in_module))
+				.collect(),
+		}));
+
+		let mut ns = self
+			.wing_types
+			.libraries
+			.lookup_nested_mut_str(enum_fqn.as_str_without_type_name(), None)
+			.expect("Namespace should have been created")
+			.as_namespace_ref()
+			.expect("Should be a namespace");
+		ns.env
+			.define(
+				&enum_symbol,
+				SymbolKind::Type(enum_type_ref),
+				StatementIdx::Index(self.import_statement_idx),
+			)
+			.expect("Should be able to define enum");
 	}
 
 	/// Import a JSII interface into the Wing type system.
@@ -399,6 +438,8 @@ impl<'a> JsiiImporter<'a> {
 					continue;
 				}
 
+				let is_static = if let Some(true) = m.static_ { true } else { false };
+
 				debug!("Adding method {} to class", m.name.green());
 
 				let return_type = if let Some(jsii_return_type) = &m.returns {
@@ -408,8 +449,10 @@ impl<'a> JsiiImporter<'a> {
 				};
 
 				let mut arg_types = vec![];
-				// Add my type as the first argument to all methods (this)
-				arg_types.push(wing_type);
+				// Add my type (this) as the first argument to all instance (non static) methods
+				if !is_static {
+					arg_types.push(wing_type);
+				}
 				// Define the rest of the arguments and create the method signature
 				if let Some(params) = &m.parameters {
 					if self.has_variadic_parameters(params) {
@@ -441,7 +484,11 @@ impl<'a> JsiiImporter<'a> {
 				class_env
 					.define(
 						&Self::jsii_name_to_symbol(&name, &m.location_in_module),
-						SymbolKind::make_variable(method_sig, false, flight),
+						if is_static {
+							SymbolKind::make_variable(method_sig, false, flight)
+						} else {
+							SymbolKind::make_instance_variable(method_sig, false, flight)
+						},
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -459,6 +506,7 @@ impl<'a> JsiiImporter<'a> {
 				}
 				let base_wing_type = self.type_ref_to_wing_type(&p.type_);
 				let is_optional = if let Some(true) = p.optional { true } else { false };
+				let is_static = if let Some(true) = p.static_ { true } else { false };
 
 				let wing_type = if is_optional {
 					// TODO Will this create a bunch of duplicate types?
@@ -470,7 +518,11 @@ impl<'a> JsiiImporter<'a> {
 				class_env
 					.define(
 						&Self::jsii_name_to_symbol(&camel_case_to_snake_case(&p.name), &p.location_in_module),
-						SymbolKind::make_variable(wing_type, matches!(p.immutable, Some(true)), flight),
+						if is_static {
+							SymbolKind::make_variable(wing_type, matches!(p.immutable, Some(true)), flight)
+						} else {
+							SymbolKind::make_instance_variable(wing_type, matches!(p.immutable, Some(true)), flight)
+						},
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -681,7 +733,7 @@ impl<'a> JsiiImporter<'a> {
 								fqn
 							}
 						})
-						.and_then(|fqn| self.jsii_types.find_interface(fqn))
+						.and_then(|fqn| self.jsii_types.find_interface(&FQN::from(fqn)))
 				});
 			if let Some(client_interface) = client_interface {
 				// Add client interface's methods to the class environment
@@ -784,4 +836,28 @@ impl<'a> JsiiImporter<'a> {
 			)
 			.unwrap();
 	}
+}
+
+/// Returns true if the FQN represents a "construct base class".
+///
+/// TODO: this is a temporary hack until we support interfaces.
+pub fn is_construct_base(fqn: &FQN) -> bool {
+	// We treat both CONSTRUCT_BASE and WINGSDK_RESOURCE, as base constructs because in wingsdk we currently have stuff directly derived
+	// from `construct.Construct` and stuff derived `core.Resource` (which itself is derived from `constructs.Construct`).
+	// But since we don't support interfaces yet we can't import `core.Resource` so we just treat it as a base class.
+	// I'm also not sure we should ever import `core.Resource` because we might want to keep its internals hidden to the user:
+	// after all it's an abstract class representing our `resource` primitive. See https://github.com/winglang/wing/issues/261.
+	fqn.as_str() == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE) || fqn.as_str() == CONSTRUCT_BASE
+}
+
+#[test]
+fn test_fqn_is_construct_base() {
+	assert_eq!(is_construct_base(&FQN::from(CONSTRUCT_BASE)), true);
+	assert_eq!(
+		is_construct_base(&FQN::from(
+			format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE).as_str()
+		)),
+		true
+	);
+	assert_eq!(is_construct_base(&FQN::from("@winglang/sdk.cloud.Bucket")), false);
 }

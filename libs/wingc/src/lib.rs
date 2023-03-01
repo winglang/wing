@@ -4,6 +4,7 @@ extern crate lazy_static;
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use capture::CaptureVisitor;
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
+use indexmap::{indexset, IndexSet};
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
@@ -106,7 +107,7 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 		Err(err) => {
 			let mut diagnostics = Diagnostics::new();
 
-			diagnostics.push(Diagnostic {
+			diagnostics.insert(Diagnostic {
 				message: format!("Error reading source file: {}: {:?}", source_path.display(), err),
 				span: None,
 				level: DiagnosticLevel::Error,
@@ -217,7 +218,7 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 
 pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOutput, Diagnostics> {
 	if !source_path.exists() {
-		return Err(vec![Diagnostic {
+		return Err(indexset![Diagnostic {
 			message: format!("Source file cannot be found: {}", source_path.display()),
 			span: None,
 			level: DiagnosticLevel::Error,
@@ -225,7 +226,7 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 	}
 
 	if !source_path.is_file() {
-		return Err(vec![Diagnostic {
+		return Err(indexset![Diagnostic {
 			message: format!(
 				"Source path must be a file (not a directory or symlink): {}",
 				source_path.display()
@@ -270,7 +271,7 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 		.iter()
 		.filter(|d| matches!(d.level, DiagnosticLevel::Error))
 		.cloned()
-		.collect::<Vec<_>>();
+		.collect::<IndexSet<_>>();
 
 	if errors.len() > 0 {
 		return Err(errors);

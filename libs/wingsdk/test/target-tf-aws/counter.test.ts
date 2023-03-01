@@ -135,6 +135,31 @@ test("peek() policy statement", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
+test("reset() policy statement", () => {
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const counter = new cloud.Counter(app, "Counter");
+  const inflight = Testing.makeHandler(
+    app,
+    "Handler",
+    `async handle(event) {
+  const val = await this.my_counter.reset();
+  console.log(val);
+}`,
+    {
+      my_counter: {
+        obj: counter,
+        ops: [cloud.CounterInflightMethods.RESET],
+      },
+    }
+  );
+  new cloud.Function(app, "Function", inflight);
+  const output = app.synth();
+
+  expect(tfSanitize(output)).toContain("dynamodb:UpdateItem");
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
 test("counter name valid", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });

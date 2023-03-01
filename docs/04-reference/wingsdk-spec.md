@@ -615,9 +615,9 @@ resource Counter {
 
   /**
    * Reset a counter to a given value.
-   * @default - key: "default"
+   * @default - value: 0, key: "default"
    */
-  inflight reset(value: num, key: string?): void;
+  inflight reset(value?: num, key: string?): void;
 }
 ```
 
@@ -1262,9 +1262,9 @@ resource Table {
   inflight update(row: Map<str, Json>): void;
 
   /**
-   * Delete a row from the table.
+   * Delete a row from the table, by primary key.
    */
-  inflight delete(row: Map<str, Json>): void;
+  inflight delete(key: str): void;
 
   /**
    * Get a row from the table, by primary key.
