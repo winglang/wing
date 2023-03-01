@@ -4,6 +4,9 @@ let e0 = "2" + "2";
 let e1 = 2 + "2";
 // ERR   ^^^^^^^ Cannot add a string to a number
 
+let e2 = 2 == "2";
+// ERR   ^^^^^^^ Cannot add a string to a number
+
 let str_example = "Hello World";
 let num_example = 2;
 
