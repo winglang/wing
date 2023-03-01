@@ -22,14 +22,29 @@ The following code is an initial implementation of TaskList with api gateway and
 - [ ] console requirements
 
 ## Discussion topics
-- `get` vs `on_get` - Should the `cloud.api` API have the `on_` prefix to match `cloud.bucket` API and also to allow calling
-the api get/post/delete/put commands (`api.get(url)` vs `api.on_get(path, inflight ())`
-- [x] Routing params - I have used express's synatx for dynamic parts of the path for the api gateway `get("/task/:id"`, 
-but then I noticed that [aws](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-api-step-by-step.html) 
-uses the `{id}` syntax. What should be the the right syntax?
-  - We will go with the [openapi spec](https://swagger.io/docs/specification/paths-and-operations/) that uses the `/tasks/{id}` syntax 
-- Bring internal nodejs types - how do we bring something that we can't require, like `RegEx`
-- From anything to Json - can I cast something from bring untyped to Json? 
+- [ ] How is the redis package distributed (currently inside wing, we don't have npm yet)
+
+## Developer Experience
+
+This section focuses on the develoepr experience 
+
+### Redis on localhost 
+
+There is a range of posibilities here:
+
+One option is to have a a complete battery included solution that handle installing and running redis instance w/wo docker
+Another option approach is taking the do-it-yourself approach that require the developer to setup the instance listening on a configured port.
+
+### Api Gateway in Console
+We want to allow develope to interact with the API internally inside the console and/or externally with curl, postman, etc...
+
+### Redis in console
+When @yoav-steinberg was asked about which Redis GUI is the most common one, he answered: 
+> I think 99% of users just use command line.
+
+We would like to allow the developer to interact with REDIS inside the console, if possible and feasible in a timely manner 
+A good example on how this may look like is Redis embedded prompt inside their docs (see the [examples section](https://redis.io/commands/set/#examples))
+
 
 ## Code 
 ```ts (wing)
