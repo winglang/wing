@@ -273,6 +273,7 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 		.cloned()
 		.collect::<IndexSet<_>>();
 
+	// bail out now (before jsification) if there are errors (no point in jsifying)
 	if errors.len() > 0 {
 		return Err(errors);
 	}
