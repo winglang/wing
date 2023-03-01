@@ -1,11 +1,11 @@
 import * as fs from "fs";
 import * as os from "os";
-import { join } from "path";
-import { ISimulatorResourceInstance } from "./resource";
-import { BucketSchema } from "./schema-resources";
-import { exists } from "./util";
-import { BucketDeleteOptions, IBucketClient } from "../cloud";
-import { ISimulatorContext } from "../testing/simulator";
+import {dirname, join} from "path";
+import {ISimulatorResourceInstance} from "./resource";
+import {BucketSchema} from "./schema-resources";
+import {exists} from "./util";
+import {BucketDeleteOptions, IBucketClient} from "../cloud";
+import {ISimulatorContext} from "../testing/simulator";
 
 export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private readonly fileDir: string;
@@ -38,7 +38,10 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       message: `Put (key=${key}).`,
       activity: async () => {
         const filename = join(this.fileDir, key);
+        const dirName = dirname(filename);
+        await fs.promises.mkdir(dirName, {recursive: true});
         await fs.promises.writeFile(filename, value);
+
       },
     });
   }
@@ -57,10 +60,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `List (prefix=${prefix ?? "null"}).`,
       activity: async () => {
-        const fileNames = await fs.promises.readdir(this.fileDir);
-        return prefix
-          ? fileNames.filter((fileName) => fileName.startsWith(prefix))
-          : fileNames;
+        return await fs.promises.readdir(`${this.fileDir}/${prefix ?? ""}`);
       },
     });
   }
