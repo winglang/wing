@@ -7,7 +7,7 @@ import * as core from "../core";
  *
  * @inflight `@winglang/sdk.cloud.ILoggerClient`
  */
-export class Logger extends cloud.LoggerBase {
+export class Logger extends cloud.Logger {
   constructor(scope: Construct, id: string) {
     super(scope, id);
   }

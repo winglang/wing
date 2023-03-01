@@ -7,8 +7,8 @@ import {
   ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE,
 } from "./function";
 import { ISimulatorResourceInstance } from "./resource";
-import { FunctionSchema } from "./schema-resources";
-import { FUNCTION_TYPE, IFunctionClient } from "../cloud";
+import { FunctionSchema, FUNCTION_TYPE } from "./schema-resources";
+import { IFunctionClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
 
 export class Function implements IFunctionClient, ISimulatorResourceInstance {

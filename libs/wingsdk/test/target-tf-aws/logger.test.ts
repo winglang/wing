@@ -1,29 +1,25 @@
-import * as cdktf from "cdktf";
-import { Polycons } from "polycons";
-import * as cloud from "../../src/cloud";
-import { Logger } from "../../src/cloud";
+import { Function } from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
-import { sanitizeCode } from "../../src/util";
+import { mkdtemp, sanitizeCode } from "../../src/util";
 import { tfResourcesOf, tfSanitize } from "../util";
 
 test("inflight function uses a logger", () => {
-  const output = cdktf.Testing.synthScope((scope) => {
-    const factory = new tfaws.PolyconFactory();
-    Polycons.register(scope, factory);
-    Logger.register(scope);
+  const app = new tfaws.App({ outdir: mkdtemp() });
 
-    const inflight = Testing.makeHandler(
-      scope,
-      "Handler",
-      `async handle() {
-        console.log("hello world!");
-      }`
-    );
-    new cloud.Function(scope, "Function", inflight);
+  const inflight = Testing.makeHandler(
+    app,
+    "Handler",
+    `async handle() {
+      console.log("hello world!");
+    }`
+  );
 
-    expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
-  });
+  Function._newFunction(app, "Function", inflight);
+
+  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
+
+  const output = app.synth();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role",

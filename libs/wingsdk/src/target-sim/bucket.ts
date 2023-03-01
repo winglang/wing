@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
-import { BucketSchema } from "./schema-resources";
+import { BucketSchema, BUCKET_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
@@ -11,10 +11,10 @@ import * as core from "../core";
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
-export class Bucket extends cloud.BucketBase implements ISimulatorResource {
+export class Bucket extends cloud.Bucket implements ISimulatorResource {
   private readonly public: boolean;
   private readonly initialObjects: Record<string, string> = {};
-  constructor(scope: Construct, id: string, props: cloud.BucketProps) {
+  constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
 
     this.public = props.public ?? false;
@@ -26,7 +26,7 @@ export class Bucket extends cloud.BucketBase implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: BucketSchema = {
-      type: cloud.BUCKET_TYPE,
+      type: BUCKET_TYPE,
       path: this.node.path,
       props: {
         public: this.public,

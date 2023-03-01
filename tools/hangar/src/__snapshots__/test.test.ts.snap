@@ -1,6 +1,11 @@
 // Vitest Snapshot v1
 
-exports[`anon_function.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> anon_function.w <gray>(no tests)</color>"`;
+exports[`anon_function.w > wing test --target sim > stdout 1`] = `
+"1
+2
+3
+<green>pass</color> <gray>─</color> anon_function.w <gray>(no tests)</color>"
+`;
 
 exports[`asynchronous_model_implicit_await_in_functions.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> asynchronous_model_implicit_await_in_functions.w <gray>(no tests)</color>"`;
 
@@ -38,20 +43,40 @@ exports[`expressions_string_interpolation.w > wing test --target sim > stdout 1`
 
 exports[`file_counter.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> file_counter.w <gray>(no tests)</color>"`;
 
-exports[`for_loop.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> for_loop.w <gray>(no tests)</color>"`;
+exports[`for_loop.w > wing test --target sim > stdout 1`] = `
+"wing: 1
+wing: 2
+wing: 3
+lang: 1
+lang: 2
+lang: 3
+dang: 1
+dang: 2
+dang: 3
+<green>pass</color> <gray>─</color> for_loop.w <gray>(no tests)</color>"
+`;
 
-exports[`forward_decl.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> forward_decl.w <gray>(no tests)</color>"`;
+exports[`forward_decl.w > wing test --target sim > stdout 1`] = `
+"hi
+<green>pass</color> <gray>─</color> forward_decl.w <gray>(no tests)</color>"
+`;
 
 exports[`hello.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> hello.w <gray>(no tests)</color>"`;
 
 exports[`identical_inflights.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> identical_inflights.w <gray>(no tests)</color>"`;
 
+exports[`json.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> json.w <gray>(no tests)</color>"`;
+
 exports[`mut_container_types.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> mut_container_types.w <gray>(no tests)</color>"`;
 
-exports[`primitive_methods.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> primitive_methods.w <gray>(no tests)</color>"`;
+exports[`primitive_methods.w > wing test --target sim > stdout 1`] = `
+"1:60
+<green>pass</color> <gray>─</color> primitive_methods.w <gray>(no tests)</color>"
+`;
 
 exports[`print.w > wing test --target sim > stdout 1`] = `
-"<green>pass</color> <gray>┌</color> print.w <gray>»</color> <brightWhite>root/test:print1</color>
+"preflight print
+<green>pass</color> <gray>┌</color> print.w <gray>»</color> <brightWhite>root/test:print1</color>
     <gray> │ </color><gray>inflight print 1.1</color>
     <gray> └ </color><gray>inflight print 1.2</color>
 <green>pass</color> <gray>┌</color> print.w <gray>»</color> <brightWhite>root/test:print2</color>

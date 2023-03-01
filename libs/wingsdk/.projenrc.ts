@@ -2,7 +2,7 @@ import { join } from "path";
 import { JsonFile, cdk, javascript } from "projen";
 import rootPackageJson from "../../package.json";
 
-const PUBLIC_JSII_DEPS = ["constructs@~10.1.228", "polycons"];
+const PUBLIC_JSII_DEPS = ["constructs@~10.1.228"];
 
 const PRIVATE_JSII_DEPS = [
   "cdktf@0.15.2",

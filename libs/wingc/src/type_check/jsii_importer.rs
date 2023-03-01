@@ -655,8 +655,10 @@ impl<'a> JsiiImporter<'a> {
 			should_case_convert_jsii: true,
 			name: new_type_symbol.clone(),
 			env: dummy_env,
+			fqn: Some(jsii_class_fqn.to_string()),
 			parent: base_class_type,
 			implements,
+			is_abstract: jsii_class.abstract_.unwrap_or(false),
 			type_parameters: type_params,
 		};
 		let mut new_type = self.wing_types.add_type(if is_resource {
