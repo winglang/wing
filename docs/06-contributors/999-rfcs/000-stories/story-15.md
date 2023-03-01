@@ -171,7 +171,7 @@ resource TaskListApi {
       let id = str.from_json(req.params.id);
       try {
         let title = this.task_list.get(id);
-        return cloud.ApiResponse {status:200, body: Json.format(title)};
+        return cloud.ApiResponse { status:200, body: Json.format(title) };
       } catch {
         return cloud.ApiResponse { status: 400 };
       }
@@ -181,16 +181,16 @@ resource TaskListApi {
       let id = str.from_json(req.params.id);
       try {
         this.task_list.delete(id);
-        return cloud.ApiResponse(status:204);
+        return cloud.ApiResponse { status: 204 };
       } catch {
-        return cloud.ApiResponse(status:400);
+        return cloud.ApiResponse { status: 400 };
       }
     });
 
     this.api.get("/tasks", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let search = str.from_json(req.query.search ?? Json ".*"); 
       let results = this.task_list.find(search);
-      return cloud.ApiResponse(status:200, body: Json.format(results));
+      return cloud.ApiResponse { status: 200, body: Json.format(results) };
     });
   }
 }
