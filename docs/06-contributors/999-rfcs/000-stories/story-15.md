@@ -31,8 +31,8 @@ This section focuses on the develoepr experience
 
 There is a range of posibilities here:
 
-One option is to have a a complete battery included solution that handle installing and running redis instance w/wo docker
-Another option approach is taking the do-it-yourself approach that require the developer to setup the instance listening on a configured port.
+One option is to have a a complete battery included solution that handle installing and running redis instance w/wo docker.<br/>
+Another option is taking the do-it-yourself approach that require the developer to setup the instance listening on a configured port.
 
 ### Api Gateway in Console
 We want to allow develope to interact with the API internally inside the console and/or externally with curl, postman, etc...
