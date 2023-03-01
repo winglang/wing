@@ -11,7 +11,7 @@
     "nx": "15.6.3"
   },
   "scripts": {
-    "build": "nx build winglang",
+    "build": "nx run-many --all --targets build,test,package",
     "contributors:add": "all-contributors add",
     "contributors:check": "all-contributors check",
     "contributors:update": "all-contributors check | grep \"Missing contributors\" -A 1 | tail -n1 | sed -e \"s/,//g\" | xargs -n1 | grep -v \"\\[bot\\]\" | xargs -n1 -I{} all-contributors add {} code",
