@@ -93,7 +93,7 @@ Error at ../../../../examples/tests/invalid/inflight_ref_invalid.w:14:16 | Unabl
 `;
 
 exports[`inflight_ref_resource_sub_field.w > wing test (--target sim) - invalid > stderr 1`] = `
-"[1m[31mpreflight error:[39m[22m Resource root/Test/Another does not support operation my_queue
+"[1m[31mpreflight error:[39m[22m Unable to reference \\"root/Test/Another\\" from \\"root/test\\" because it does not support operation \\"my_queue\\"
 no .wsim file found in output directory"
 `;
 
