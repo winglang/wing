@@ -18,7 +18,7 @@ The following code is an initial implementation of TaskList with api gateway and
 - [x] use redis instead of bucket
 - [ ] bring cdktf
 - [ ] code that updates estimation and duration from REST put command
-- [ ] console requirements
+- [x] console requirements
 
 ## Discussion topics
 - [ ] How is the redis package distributed (currently inside wing, we don't have npm yet)
