@@ -137,6 +137,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
         WING_TARGET: options.target,
       },
     },
+    console,
     __dirname: workDir,
     __filename: artifactPath,
     $plugins: resolvePluginPaths(options.plugins ?? []),
