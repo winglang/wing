@@ -107,6 +107,9 @@
         },
         {
           "exec": "tsc -p tsconfig.nonjsii.json"
+        },
+        {
+          "exec": "node scripts/remove-peers.js"
         }
       ]
     },
@@ -186,9 +189,6 @@
       "name": "post-compile",
       "description": "Runs after successful compilation",
       "steps": [
-        {
-          "exec": "node scripts/remove-peers.js"
-        },
         {
           "spawn": "api-check"
         },

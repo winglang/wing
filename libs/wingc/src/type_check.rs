@@ -299,7 +299,7 @@ impl Subtype for Type {
 				false
 			}
 			(Self::Resource(l0), Self::Resource(_)) => {
-				// If we extend from `other` than I'm a subtype of it (inheritance)
+				// If we extend from `other` then I'm a subtype of it (inheritance)
 				if let Some(parent) = l0.parent.as_ref() {
 					let parent_type: &Type = &*parent;
 					return parent_type.is_subtype_of(other);
@@ -313,34 +313,8 @@ impl Subtype for Type {
 					parent_type.is_subtype_of(other)
 				})
 			}
-			(Self::Resource(res), Self::Interface(iface)) => {
-				// Check that the resource implements all methods of the interface
-				for iface_method in iface.methods(true) {
-					let (iface_method_name, iface_method_type) = iface_method;
-					if let Some(res_method) = res.env.try_lookup(&iface_method_name, None) {
-						let res_method_type = res_method.as_variable().unwrap().type_.clone();
-						if !res_method_type.is_subtype_of(&iface_method_type) {
-							return false;
-						}
-					} else {
-						return false;
-					}
-				}
-
-				// // Check that the resource has all fields of the interface
-				for iface_field in iface.fields(true) {
-					let (iface_field_name, iface_field_type) = iface_field;
-					if let Some(res_field) = res.env.try_lookup(&iface_field_name, None) {
-						let res_field_type = res_field.as_variable().unwrap().type_.clone();
-						if !res_field_type.is_subtype_of(&iface_field_type) {
-							return false;
-						}
-					} else {
-						return false;
-					}
-				}
-
-				// Check that the resource declares it implements the interface (nominal typing)
+			(Self::Resource(res), Self::Interface(_)) => {
+				// If a resource implements the interface then it's a subtype of it (nominal typing)
 				res.implements.iter().any(|parent| {
 					let parent_type: &Type = &*parent;
 					parent_type.is_subtype_of(other)
@@ -1892,6 +1866,8 @@ impl<'a> TypeChecker<'a> {
 					method_def.statements.set_env(method_env);
 					self.inner_scopes.push(&method_def.statements);
 				}
+
+				// TODO: type check interfaces
 			}
 			StmtKind::Struct { name, extends, members } => {
 				// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.

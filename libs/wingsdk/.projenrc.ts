@@ -248,6 +248,6 @@ project.addFields({
   files: ["lib", ".jsii", "API.md", "patches"],
 });
 
-project.postCompileTask.prependExec("node scripts/remove-peers.js");
+project.compileTask.exec("node scripts/remove-peers.js");
 
 project.synth();
