@@ -304,11 +304,7 @@ impl<'a> JSifier<'a> {
 
 				let ctor = self.jsify_type(class);
 
-				let scope = if is_resource {
-					Some("this")
-				} else {
-					None
-				};
+				let scope = if is_resource { Some("this") } else { None };
 
 				let id = if is_resource {
 					Some(obj_id.as_ref().unwrap_or(&ctor).as_str())
@@ -316,13 +312,7 @@ impl<'a> JSifier<'a> {
 					None
 				};
 
-				let args = self.jsify_arg_list(
-					&arg_list,
-					scope,
-					id,
-					should_case_convert,
-					phase
-				);
+				let args = self.jsify_arg_list(&arg_list, scope, id, should_case_convert, context);
 
 				let fqn = if is_resource {
 					expression_type
@@ -335,7 +325,7 @@ impl<'a> JSifier<'a> {
 					None
 				};
 
-				if ! is_resource || fqn.is_none() {
+				if !is_resource || fqn.is_none() {
 					format!("new {}({})", ctor, args)
 				} else {
 					let fqn = fqn.expect("expecting fqn to be defined");
