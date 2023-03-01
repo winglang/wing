@@ -24,6 +24,8 @@ resource Test {
   inflight test() {
     let res = this.another.func();
     this.another.my_queue.push("message");
+//       ^^^^^^^ Unable to reference "my_queue" from inflight method "test" because it is not an inflight method
+
     assert(res == "hello");
   }
 }

@@ -335,11 +335,12 @@ mod sanity {
 			if result.is_err() {
 				assert!(
 					expect_failure,
-					"Expected compilation success, but failed: {:#?}",
+					"{}: Expected compilation success, but failed: {:#?}",
+					test_file.display(),
 					result.err().unwrap()
 				);
 			} else {
-				assert!(!expect_failure, "Expected compilation failure, but succeeded");
+				assert!(!expect_failure, "{}: Expected compilation failure, but succeeded", test_file.display());
 			}
 		}
 	}

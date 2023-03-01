@@ -143,9 +143,7 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'_> {
 
 												debug!("field \"this.{}\" is referenced from inflight method {}", property.name, self.method_name.name);
 
-												// at the moment, we only support two use cases: (1) call an inflight method on a resource field; and (2) access a property on the field
-												
-
+												// get/create an "ops" set for this field
 												let mut ops = if let Some(ops) = self.references.get(&property.name) {
 													ops.clone()
 												} else {
@@ -154,14 +152,48 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'_> {
 
 												if ! self.path.is_empty() {
 													let op = self.path[0].clone();
+
+													// if we are referencing a resource, verify that the operation is an inflight method
+													if let Some(r) = field_kind.type_.as_resource() {
+														println!("checking if {} is an inflight method of resource of type {}", op, r.name);
+
+														let mut found_method = false;
+
+														for (name, typeref) in r.methods(true) {
+															if name == op {
+																match &*typeref {
+																	Type::Function(f) => {
+																		if f.flight == Phase::Inflight {
+																			found_method = true;
+																		}
+																	}
+																	_ => {}
+																}
+	
+															}
+														}
+
+														if !found_method {
+															self.diagnostics.insert(Diagnostic {
+																level: DiagnosticLevel::Error,
+																message: format!(
+																	"Unable to reference \"{}\" from inflight method \"{}\" because it is not an inflight method",
+																	self.path.join("."), 
+																	self.method_name.name,
+																),
+																span: Some(property.span.clone()),
+															});
+														}
+													}
+
 													ops.insert(op);
 												}
 			
 												self.references.insert(property.name.clone(), ops.clone());
 												self.path.clear();
-			
-												return; // no need to visit recursively
-		
+
+												// no need to visit recursively
+												return;
 											} else {
 												debug!("skipping field: {:?} because it is not in preflight", property.name)
 											}
