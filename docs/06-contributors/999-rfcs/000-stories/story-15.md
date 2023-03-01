@@ -15,7 +15,6 @@ The following code is an initial implementation of TaskList with api gateway and
 - [x] enum & duration that can be included inside json
 - [x] It leverages setting explicit permissions (using the `this.inflight` API, described [here](https://github.com/winglang/wing/pull/1610))
 - [x] Using interface 
-- [x] Using await when calling an untyped function that returns a promise
 - [x] use redis instead of bucket
 - [ ] bring cdktf
 - [ ] code that updates estimation and duration from REST put command
