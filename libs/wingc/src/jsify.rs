@@ -1,4 +1,5 @@
 use aho_corasick::AhoCorasick;
+use indexmap::IndexSet;
 use indoc::formatdoc;
 use itertools::Itertools;
 use std::{cell::RefCell, cmp::Ordering, fs, path::Path, vec, collections::BTreeMap};
@@ -52,7 +53,7 @@ pub struct JSifier<'a> {
 
 struct FieldReferenceVisitor<'a> {
 	/// The key is field name, value is a list of operations performed on this field
-	references: BTreeMap<String, Vec<String>>,
+	references: BTreeMap<String, IndexSet<String>>,
 
 	/// Used internally by the visitor to keep track of the path to the field
 	path: Vec<String>,
@@ -62,7 +63,6 @@ struct FieldReferenceVisitor<'a> {
 	method_name: &'a Symbol,
 
 	env: SymbolEnvRef,
-
 	diagnostics: Diagnostics,
 }
 
@@ -78,7 +78,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 		}
 	}
 
-	pub fn find_refs(mut self) -> (BTreeMap<String, Vec<String>>, Diagnostics) {
+	pub fn find_refs(mut self) -> (BTreeMap<String, IndexSet<String>>, Diagnostics) {
 		self.visit_scope(&self.function_def.statements);
 		(self.references, self.diagnostics)
 	}
@@ -147,12 +147,12 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'_> {
 												let mut ops = if let Some(ops) = self.references.get(&property.name) {
 													ops.clone()
 												} else {
-													vec![]
+													IndexSet::new()
 												};
 
 												if ! self.path.is_empty() {
 													let op = self.path[0].clone();
-													ops.push(op);
+													ops.insert(op);
 												}
 			
 												self.references.insert(property.name.clone(), ops.clone());
@@ -402,14 +402,14 @@ impl<'a> JSifier<'a> {
 				arg_list,
 				obj_scope: _, // TODO
 			} => {
-				let expression_type = expression.evaluated_type.borrow();
+				let expression_type = expression.evaluated_type.borrow();			
 				let is_resource = if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
 					evaluated_type.as_resource().is_some()
 				} else {
 					// TODO Hack: This object type is not known. How can we tell if it's a resource or not?
 					true
 				};
-				let should_case_convert = if let Some(cls) = expression_type.expect("expression type").as_class_or_resource() {
+ 				let should_case_convert = if let Some(cls) = expression_type.expect("expression type").as_class_or_resource() {
 					cls.should_case_convert_jsii
 				} else {
 					// This should only happen in the case of `any`, which are almost certainly JSII imports.
@@ -925,9 +925,10 @@ impl<'a> JSifier<'a> {
 		// Lookup the resource type
 		let resource_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
-		// Get fields to be captured by resource's client
-		let bindings = self.get_bindings(class);
+		// Get all references between inflight methods and preflight fields
+		let refs = self.find_inflight_references(class);
 
+		// Get fields to be captured by resource's client
 		let captured_fields = self.get_captures(resource_type);
 
 		// Jsify inflight client
@@ -971,7 +972,7 @@ impl<'a> JSifier<'a> {
 
 		// go over all bindings and produce inflight annotations
 		let mut inflight_annotations = vec![];
-		for (method_name, refs) in bindings {
+		for (method_name, refs) in refs {
 			inflight_annotations.push(format!("{}._annotateInflight(\"{}\", {{{}}});",
 				class.name.name,
 				method_name,
@@ -1155,9 +1156,9 @@ impl<'a> JSifier<'a> {
 		)
 	}
 
-	// Get the type and capture info for fields that are captured in the client of the given resource
-	fn get_bindings(&mut self, resource_class: &AstClass) -> BTreeMap<String, BTreeMap<String, Vec<String>>> {
-
+	/// Get the type and capture info for fields that are captured in the client of the given resource
+	/// Returns a map from method name to a map from field name to a set of operations
+	fn find_inflight_references(&mut self, resource_class: &AstClass) -> BTreeMap<String, BTreeMap<String, IndexSet<String>>> {
 		let inflight_methods = resource_class.methods
 			.iter()
 			.filter(|(_, m)| m.signature.flight == Phase::Inflight);
