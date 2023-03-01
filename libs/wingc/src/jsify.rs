@@ -377,12 +377,8 @@ impl<'a> JSifier<'a> {
 					BinaryOperator::Mul => "*",
 					BinaryOperator::Div => "/",
 					BinaryOperator::FloorDiv => {
-						return format!(
-							"Math.trunc({} / {})",
-							js_left,
-							js_right
-						);
-					},
+						return format!("Math.trunc({} / {})", js_left, js_right);
+					}
 					BinaryOperator::Mod => "%",
 					BinaryOperator::Power => "**",
 					BinaryOperator::Greater => ">",
@@ -394,12 +390,7 @@ impl<'a> JSifier<'a> {
 					BinaryOperator::LogicalAnd => "&&",
 					BinaryOperator::LogicalOr => "||",
 				};
-				format!(
-					"({} {} {})",
-					js_left,
-					js_op,
-					js_right
-				)
+				format!("({} {} {})", js_left, js_op, js_right)
 			}
 			ExprKind::ArrayLiteral { items, .. } => {
 				let item_list = items

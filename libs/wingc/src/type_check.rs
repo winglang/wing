@@ -823,13 +823,13 @@ impl<'a> TypeChecker<'a> {
 				let rtype = self.type_check_exp(right, env, statement_idx);
 
 				if op.boolean_args() {
-					self.validate_type(ltype, self.types.bool(), right);
+					self.validate_type(ltype, self.types.bool(), left);
 					self.validate_type(rtype, self.types.bool(), right);
 				} else if op.numerical_args() {
-					self.validate_type(ltype, self.types.number(), right);
+					self.validate_type(ltype, self.types.number(), left);
 					self.validate_type(rtype, self.types.number(), right);
 				} else {
-					self.validate_type(ltype, rtype, right);
+					self.validate_type(rtype, ltype, exp);
 				}
 
 				if op.boolean_result() {
