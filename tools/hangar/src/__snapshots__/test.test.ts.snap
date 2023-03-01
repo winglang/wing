@@ -48,21 +48,17 @@ exports[`identical_inflights.w > wing test --target sim > stdout 1`] = `"<green>
 
 exports[`inflight_ref_primitive.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> inflight_ref_primitive.w <gray>»</color> <brightWhite>root/test</color>"`;
 
-exports[`inflight_ref_resource.w > wing test --target sim > stdout 1`] = `
-"checking if put is an inflight method of resource of type Bucket (at src/cloud/bucket.ts:26:1)
-<green>pass</color> <gray>─</color> inflight_ref_resource.w <gray>»</color> <brightWhite>root/test</color>"
-`;
+exports[`inflight_ref_resource.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> inflight_ref_resource.w <gray>»</color> <brightWhite>root/test</color>"`;
 
 exports[`inflight_ref_resource_collection.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> inflight_ref_resource_collection.w <gray>»</color> <brightWhite>root/test</color>"`;
 
 exports[`inflight_ref_resource_field.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> inflight_ref_resource_field.w <gray>»</color> <brightWhite>root/test</color>"`;
 
-exports[`inflight_ref_resource_userdefined.w > wing test --target sim > stdout 1`] = `
-"checking if func is an inflight method of resource of type Another (at /Users/eladb/code/wing4/examples/tests/valid/inflight_ref_resource_userdefined.w:3:10)
-<green>pass</color> <gray>─</color> inflight_ref_resource_userdefined.w <gray>»</color> <brightWhite>root/test</color>"
-`;
+exports[`inflight_ref_resource_userdefined.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> inflight_ref_resource_userdefined.w <gray>»</color> <brightWhite>root/test</color>"`;
 
 exports[`inflight_ref_unknown_op.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> inflight_ref_unknown_op.w <gray>»</color> <brightWhite>root/test</color>"`;
+
+exports[`json.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> json.w <gray>(no tests)</color>"`;
 
 exports[`mut_container_types.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> mut_container_types.w <gray>(no tests)</color>"`;
 
@@ -79,15 +75,7 @@ exports[`print.w > wing test --target sim > stdout 1`] = `
 
 exports[`reassignment.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> reassignment.w <gray>(no tests)</color>"`;
 
-exports[`resource.w > wing test --target sim > stdout 1`] = `
-"checking if inc is an inflight method of resource of type Counter (at src/cloud/counter.ts:25:1)
-checking if peek is an inflight method of resource of type Counter (at src/cloud/counter.ts:25:1)
-checking if foo_inc is an inflight method of resource of type Foo (at /Users/eladb/code/wing4/examples/tests/valid/resource.w:4:10)
-checking if put is an inflight method of resource of type Bucket (at src/cloud/bucket.ts:26:1)
-checking if foo_get is an inflight method of resource of type Foo (at /Users/eladb/code/wing4/examples/tests/valid/resource.w:4:10)
-checking if get is an inflight method of resource of type Bucket (at src/cloud/bucket.ts:26:1)
-<green>pass</color> <gray>─</color> resource.w <gray>»</color> <brightWhite>root/test</color>"
-`;
+exports[`resource.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> resource.w <gray>»</color> <brightWhite>root/test</color>"`;
 
 exports[`statements_if.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> statements_if.w <gray>»</color> <brightWhite>root/test</color>"`;
 
@@ -112,10 +100,7 @@ exports[`test_bucket.w > wing test --target sim > stdout 1`] = `
 exports[`try_catch.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> try_catch.w <gray>(no tests)</color>"`;
 
 exports[`user-defined-resources-captures.w > wing test --target sim > stdout 1`] = `
-"checking if put is an inflight method of resource of type Bucket (at src/cloud/bucket.ts:26:1)
-checking if get is an inflight method of resource of type Bucket (at src/cloud/bucket.ts:26:1)
-checking if list is an inflight method of resource of type Bucket (at src/cloud/bucket.ts:26:1)
-<green>pass</color> <gray>─</color> user-defined-resources-captures.w <gray>»</color> <brightWhite>root/test:capture_array          </color>
+"<green>pass</color> <gray>─</color> user-defined-resources-captures.w <gray>»</color> <brightWhite>root/test:capture_array          </color>
 <green>pass</color> <gray>─</color> user-defined-resources-captures.w <gray>»</color> <brightWhite>root/test:capture_array_of_queues</color>
 <green>pass</color> <gray>─</color> user-defined-resources-captures.w <gray>»</color> <brightWhite>root/test:capture_map            </color>
 <green>pass</color> <gray>─</color> user-defined-resources-captures.w <gray>»</color> <brightWhite>root/test:capture_primitives     </color>

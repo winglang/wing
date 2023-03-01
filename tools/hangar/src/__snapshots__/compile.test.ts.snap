@@ -801,7 +801,7 @@ new MyApp().synth();"
 `;
 
 exports[`capture_containers.w > wing compile --target tf-aws > index.js 1`] = `
-"async handle(s) { const { arr, arr_of_map, my_map, my_set } = this; {
+"async handle(s) { const { arr, arr_of_map, j, my_map, my_set } = this; {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(0)) === \\"hello\\")'\`)})(((await arr.at(0)) === \\"hello\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(1)) === \\"world\\")'\`)})(((await arr.at(1)) === \\"world\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr.length === 2)'\`)})((arr.length === 2))};
@@ -810,6 +810,7 @@ exports[`capture_containers.w > wing compile --target tf-aws > index.js 1`] = `
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"world\\" in (my_map))'\`)})((\\"world\\" in (my_map)))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(my_map).length === 2)'\`)})((Object.keys(my_map).length === 2))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"bang\\" in ((await arr_of_map.at(0))))'\`)})((\\"bang\\" in ((await arr_of_map.at(0)))))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"world\\" === (j)[\\"b\\"])'\`)})((\\"world\\" === (j)[\\"b\\"]))};
 } };"
 `;
 
@@ -944,8 +945,9 @@ constructor() {
   const my_set = Object.freeze(new Set([\\"my\\", \\"my\\", \\"set\\"]));
   const my_map = Object.freeze({\\"hello\\":123,\\"world\\":999});
   const arr_of_map = Object.freeze([Object.freeze({\\"bang\\":123})]);
+  const j = Object.freeze({\\"a\\":\\"hello\\",\\"b\\":\\"world\\"});
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.726c4811538fdd9613cd65b3442a4805b0dc89d09ee3d42119284d95f79533a6/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.17f759dd7637c0dd33a1645fc36f57f250d749e43ad3007842ad6cd5daecc82b/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       arr: {
         obj: arr,
@@ -953,6 +955,10 @@ constructor() {
       },
       arr_of_map: {
         obj: arr_of_map,
+        ops: []
+      },
+      j: {
+        obj: j,
         ops: []
       },
       my_map: {
@@ -4690,6 +4696,76 @@ constructor() {
       },
     }
   }));
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`json.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+}
+`;
+
+exports[`json.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"json\\", plugins: $plugins });
+  
+  const json_number = 123;
+  const json_bool = true;
+  const json_array = [1, 2, 3];
+  const json_obj = Object.freeze({\\"boom\\":123});
+  const json_mut_obj = {\\"boom boom\\":{\\"hello\\":1233},\\"hello\\":123,\\"world\\":[1, \\"cat\\", 3]};
+  const message = \\"Coolness\\";
+  ((obj, args) => { obj[args[0]] = args[1]; })(json_mut_obj, [\\"hello\\",message]);
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(message === (json_mut_obj)[\\"hello\\"])'\`)})((message === (json_mut_obj)[\\"hello\\"]))};
+  const some_number = 999;
+  const some_json = {\\"x\\":some_number};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(some_number === (some_json)[\\"x\\"])'\`)})((some_number === (some_json)[\\"x\\"]))};
+  ((obj, args) => { obj[args[0]] = args[1]; })(some_json, [\\"x\\",111]);
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(111 === (some_json)[\\"x\\"])'\`)})((111 === (some_json)[\\"x\\"]))};
+  const x = Object.freeze({\\"cool\\":\\"beans\\"});
+  const nested_json = {\\"a\\":\\"hello\\",\\"b\\":{\\"c\\":\\"world\\",\\"d\\":{\\"bar\\":123,\\"foo\\":\\"foo\\"}}};
+  ((obj, args) => { obj[args[0]] = args[1]; })(((nested_json)[\\"b\\"])[\\"d\\"], [\\"foo\\",\\"tastic\\"]);
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"tastic\\" === (((nested_json)[\\"b\\"])[\\"d\\"])[\\"foo\\"])'\`)})((\\"tastic\\" === (((nested_json)[\\"b\\"])[\\"d\\"])[\\"foo\\"]))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(123 === (((nested_json)[\\"b\\"])[\\"d\\"])[\\"bar\\"])'\`)})((123 === (((nested_json)[\\"b\\"])[\\"d\\"])[\\"bar\\"]))};
+  const arr = [1, 2, \\"buckle\\", \\"my\\", \\"shoe\\", 3, 4, [\\"shut\\", \\"the\\", \\"door\\"]];
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(1 === (arr)[0])'\`)})((1 === (arr)[0]))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"buckle\\" === (arr)[2])'\`)})((\\"buckle\\" === (arr)[2]))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"shut\\" === ((arr)[7])[0])'\`)})((\\"shut\\" === ((arr)[7])[0]))};
 }
 }
 new MyApp().synth();"
