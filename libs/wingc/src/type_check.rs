@@ -2566,7 +2566,6 @@ impl<'a> TypeChecker<'a> {
 			Ok(field) => {
 				let var = field.as_variable().expect("Expected property to be a variable");
 				if var.is_static {
-					println!("access static var {:#?} of {class:#?}", var);
 					self.variable_error(TypeError {
 						message: format!("Cannot access static property \"{}\" from instance", property.name),
 						span: property.span.clone(),
