@@ -94,9 +94,9 @@ impl<'a> FieldReferenceVisitor<'a> {
 impl<'ast> Visit<'ast> for FieldReferenceVisitor<'_> {
 	fn visit_reference(&mut self, node: &'ast Reference) {
 		match node {
-    	Reference::InstanceMember { object, property } => {
+			Reference::InstanceMember { object, property } => {
 				match &object.kind {
-        	ExprKind::Reference(r) => {
+					ExprKind::Reference(r) => {
 						match r {
 							Reference::Identifier(s) => {
 								if s.name == "this" {
@@ -108,7 +108,7 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'_> {
 
 									// lookup our field in the class environment
 									match &*resource_type {
-            				Type::Resource(r) => {
+										Type::Resource(r) => {
 											let field_kind = r.env
 												.lookup(property, None).expect("unable to find field in resource env")
 												.as_variable().expect("field is not a variable");
@@ -202,7 +202,7 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'_> {
 											}
 										}
 										_ => panic!("'this' is not a resource"),
-        					}
+									}
 
 								}
 							}
@@ -210,7 +210,7 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'_> {
 						}
 					}
 					_ => {}
-    		}
+				}
 
 				self.path.insert(0, property.name.clone());
 			},
