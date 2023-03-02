@@ -7,7 +7,7 @@ import { mkdtemp } from "../../src/util";
 test("onTrace", async () => {
   // GIVEN
   const app = new sim.App({ outdir: mkdtemp() });
-  new cloud.Bucket(app, "my_bucket", { public: false });
+  cloud.Bucket._newBucket(app, "my_bucket", { public: false });
   const simfile = app.synth();
 
   let numTraces = 0;

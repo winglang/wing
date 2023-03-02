@@ -47,10 +47,12 @@ const WINGSDK_MUT_ARRAY: &'static str = "std.MutableArray";
 const WINGSDK_SET: &'static str = "std.ImmutableSet";
 const WINGSDK_MUT_SET: &'static str = "std.MutableSet";
 const WINGSDK_STRING: &'static str = "std.String";
+const WINGSDK_JSON: &'static str = "std.Json";
+const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
 const WINGSDK_RESOURCE: &'static str = "core.Resource";
 const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
 
-const CONSTRUCT_BASE: &'static str = "constructs.Construct";
+const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
 
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";

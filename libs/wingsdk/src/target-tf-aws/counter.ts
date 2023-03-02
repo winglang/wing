@@ -22,7 +22,7 @@ const NAME_OPTS: NameOptions = {
  *
  * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
-export class Counter extends cloud.CounterBase {
+export class Counter extends cloud.Counter {
   private readonly table: DynamodbTable;
 
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {

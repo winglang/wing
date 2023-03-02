@@ -1203,6 +1203,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "json_literal"
+        },
+        {
+          "type": "SYMBOL",
           "name": "struct_literal"
         }
       ]
@@ -1827,6 +1831,10 @@
         {
           "type": "SYMBOL",
           "name": "_builtin_container_type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "json_container_type"
         },
         {
           "type": "SYMBOL",
@@ -3564,6 +3572,57 @@
           }
         ]
       }
+    },
+    "json_literal": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "type",
+          "content": {
+            "type": "SYMBOL",
+            "name": "json_container_type"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "element",
+          "content": {
+            "type": "SYMBOL",
+            "name": "json_element"
+          }
+        }
+      ]
+    },
+    "json_element": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "map_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "array_literal"
+        }
+      ]
+    },
+    "json_container_type": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "Json"
+        },
+        {
+          "type": "STRING",
+          "value": "MutJson"
+        }
+      ]
     }
   },
   "extras": [

@@ -2,9 +2,9 @@ import { join } from "path";
 import { JsonFile, cdk, javascript } from "projen";
 import rootPackageJson from "../../package.json";
 
-const JSII_DEPS = [
-  "constructs@~10.1.228",
-  "polycons",
+const PUBLIC_JSII_DEPS = ["constructs@~10.1.228"];
+
+const PRIVATE_JSII_DEPS = [
   "cdktf@0.15.2",
   "@cdktf/provider-random@^5.0.0",
   "@cdktf/provider-aws@^12.0.1",
@@ -21,8 +21,8 @@ const project = new cdk.JsiiProject({
   repositoryDirectory: "libs/wingsdk",
   stability: "experimental",
   defaultReleaseBranch: "main",
-  peerDeps: [...JSII_DEPS],
-  deps: [...JSII_DEPS],
+  peerDeps: [...PUBLIC_JSII_DEPS],
+  deps: [...PUBLIC_JSII_DEPS, ...PRIVATE_JSII_DEPS],
   bundledDeps: [
     // preflight dependencies
     "debug",
@@ -247,5 +247,7 @@ project.addFields({
 project.addFields({
   files: ["lib", ".jsii", "API.md", "patches"],
 });
+
+project.compileTask.exec("node scripts/remove-peers.js");
 
 project.synth();

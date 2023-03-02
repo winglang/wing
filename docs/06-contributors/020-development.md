@@ -54,6 +54,17 @@ npx nx <target> <project> -- <args>
 [Docker]: https://docs.docker.com/get-docker/
 [emscripten]: https://emscripten.org/docs/getting_started/downloads.html
 
+## Full build
+
+If you wish to perform a full build (similar to the one CI is running), just run this from the root:
+
+```sh
+npm run build
+```
+
+It will run the `build`, `test` and `package` targets on all modules.
+
+
 ## 🏠 What's the recommended development workflow?
 
 The `npx nx wing` command can be executed from the root of the repository in order to build and run the

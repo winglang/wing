@@ -2,10 +2,13 @@ import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
 import { ResourceGroup } from "@cdktf/provider-azurerm/lib/resource-group";
 import { ServicePlan } from "@cdktf/provider-azurerm/lib/service-plan";
 import { StorageAccount } from "@cdktf/provider-azurerm/lib/storage-account";
-import { IConstruct } from "constructs";
-import { PolyconFactory } from "./factory";
+import { Construct } from "constructs";
+import { Bucket } from "./bucket";
+import { Function } from "./function";
 import { APP_AZURE_TF_SYMBOL } from "./internal";
-import { IApp, CdktfApp, AppProps } from "../core";
+import { Logger } from "./logger";
+import { BUCKET_FQN, FUNCTION_FQN, LOGGER_FQN } from "../cloud";
+import { CdktfApp, AppProps } from "../core";
 import {
   CaseConventions,
   NameOptions,
@@ -50,35 +53,19 @@ const SERVICEPLAN_NAME_OPTS: NameOptions = {
  * An app that knows how to synthesize constructs into a Terraform configuration
  * for Azure resources.
  */
-export class App extends CdktfApp implements IApp {
-  /**
-   * Recursively search scope of node to find nearest instance of App
-   *
-   * @param construct to consider as instance of App
-   * @returns App
-   */
-  public static of(construct?: IConstruct): App {
-    if (construct === undefined) {
-      throw new Error("Unable to find app in scope");
-    }
-
-    return construct instanceof App ? construct : App.of(construct.node.scope);
-  }
-
+export class App extends CdktfApp {
   /**
    * The location context of the App
    * @link https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group#location
    * */
   public readonly location: string;
-  private _resourceGroup?: ResourceGroup;
-  private _storageAccount?: StorageAccount;
-  private _servicePlan?: ServicePlan;
+  private _resourceGroupValue?: ResourceGroup;
+  private _storageAccountValue?: StorageAccount;
+  private _servicePlanValue?: ServicePlan;
 
   constructor(props: AzureAppProps) {
-    super({
-      ...props,
-      customFactory: props.customFactory ?? new PolyconFactory(),
-    });
+    super(props);
+
     this.location = props.location ?? process.env.AZURE_LOCATION;
     // Using env variable for location is work around until we are
     // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
@@ -99,48 +86,71 @@ export class App extends CdktfApp implements IApp {
 
   /**
    * Get resource group using lazy initialization
+   * @internal
    */
-  public get resourceGroup() {
-    if (!this._resourceGroup) {
-      this._resourceGroup = new ResourceGroup(this, "ResourceGroup", {
+  public get _resourceGroup() {
+    if (!this._resourceGroupValue) {
+      this._resourceGroupValue = new ResourceGroup(this, "ResourceGroup", {
         location: this.location,
         name: ResourceNames.generateName(this, RESOURCEGROUP_NAME_OPTS),
       });
     }
-    return this._resourceGroup;
+    return this._resourceGroupValue;
   }
 
   /**
    * Get storage account using lazy initialization
+   * @internal
    */
-  public get storageAccount() {
-    if (!this._storageAccount) {
-      this._storageAccount = new StorageAccount(this, "StorageAccount", {
+  public get _storageAccount() {
+    if (!this._storageAccountValue) {
+      this._storageAccountValue = new StorageAccount(this, "StorageAccount", {
         name: ResourceNames.generateName(this, STORAGEACCOUNT_NAME_OPTS),
-        resourceGroupName: this.resourceGroup.name,
-        location: this.resourceGroup.location,
+        resourceGroupName: this._resourceGroup.name,
+        location: this._resourceGroup.location,
         accountTier: "Standard",
         accountReplicationType: "LRS",
       });
     }
-    return this._storageAccount;
+    return this._storageAccountValue;
   }
 
   /**
    * Get service plan using lazy initialization
+   * @internal
    */
-  public get servicePlan() {
-    if (!this._servicePlan) {
-      this._servicePlan = new ServicePlan(this, "ServicePlan", {
+  public get _servicePlan() {
+    if (!this._servicePlanValue) {
+      this._servicePlanValue = new ServicePlan(this, "ServicePlan", {
         name: ResourceNames.generateName(this, SERVICEPLAN_NAME_OPTS),
-        resourceGroupName: this.resourceGroup.name,
-        location: this.resourceGroup.location,
+        resourceGroupName: this._resourceGroup.name,
+        location: this._resourceGroup.location,
         osType: "Linux",
         // Dynamic Stock Keeping Unit (SKU)
         // https://learn.microsoft.com/en-us/partner-center/developer/product-resources#sku
         skuName: "Y1",
       });
     }
-    return this._servicePlan;
+    return this._servicePlanValue;
+  }
+
+  protected tryNew(
+    fqn: string,
+    scope: Construct,
+    id: string,
+    ...args: any[]
+  ): any {
+    switch (fqn) {
+      case FUNCTION_FQN:
+        return new Function(scope, id, args[0], args[1]);
+
+      case BUCKET_FQN:
+        return new Bucket(scope, id, args[0]);
+
+      case LOGGER_FQN:
+        return new Logger(scope, id);
+    }
+
+    return undefined;
   }
 }
