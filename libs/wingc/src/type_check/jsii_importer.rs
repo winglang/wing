@@ -11,7 +11,7 @@ use crate::{
 };
 use colored::Colorize;
 use serde_json::Value;
-use wingii::{fqn::FQN, jsii};
+use wingii::{fqn::FQN, jsii, type_system::JsiiTypeWithInterfaces};
 
 use super::{symbol_env::SymbolEnv, Enum, Namespace};
 
