@@ -228,6 +228,10 @@
       "type": "build"
     },
     {
+      "name": "jszip",
+      "type": "build"
+    },
+    {
       "name": "lodash.throttle",
       "type": "build"
     },

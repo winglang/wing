@@ -11,6 +11,7 @@ interface ButtonProps {
   icon?: React.ForwardRefExoticComponent<React.SVGProps<SVGSVGElement>>;
   onClick?: (event: React.MouseEvent<HTMLElement>) => void;
   small?: boolean;
+  transparent?: boolean;
 }
 
 export const Button = forwardRef<
@@ -29,6 +30,7 @@ export const Button = forwardRef<
       icon: Icon,
       children,
       small = false,
+      transparent = false,
     },
     ref,
   ) => {
@@ -37,17 +39,20 @@ export const Button = forwardRef<
         ref={ref}
         type={type}
         className={classNames(
-          "inline-flex gap-2 items-center border text-xs font-medium rounded shadow-sm outline-none focus:ring-2 focus:ring-sky-500/50 transition ease-in-out",
-          (label || children) && "px-2.5",
-          !small && "py-1.5",
-          className,
+          "inline-flex gap-2 items-center  text-xs font-medium outline-none  transition ease-in-out",
           {
+            "px-2.5": label || children,
+            "py-1.5": !small,
             "cursor-not-allowed opacity-50": disabled,
             "border-transparent text-white bg-sky-600 hover:bg-sky-700 focus:ring-offset-2":
-              primary,
+              primary && !transparent,
             "border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:border-sky-500":
-              !primary,
+              !primary && !transparent,
+            "border rounded shadow-sm focus:ring-2 focus:ring-sky-500/50":
+              !transparent,
+            "text-slate-700 hover:text-slate-900": transparent,
           },
+          className,
         )}
         title={title}
         disabled={disabled}

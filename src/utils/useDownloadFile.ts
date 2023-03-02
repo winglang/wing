@@ -1,6 +1,13 @@
+import JSZip from "jszip";
+
+export interface File {
+  filename: string;
+  content: any;
+}
+
 export const useDownloadFile = () => {
-  const download = (file: string, content: any) => {
-    const url = window.URL.createObjectURL(new Blob([content]));
+  const saveAs = (file: string, blob: Blob) => {
+    const url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
     link.setAttribute("download", file);
@@ -12,7 +19,23 @@ export const useDownloadFile = () => {
     link.parentNode?.removeChild(link);
   };
 
+  const download = (file: string, content: any) => {
+    saveAs(file, new Blob([content]));
+  };
+
+  const downloadFiles = async (files: File[]) => {
+    const zip = new JSZip();
+
+    for (const file of files) {
+      zip.file(file.filename, file.content);
+    }
+
+    const content = await zip.generateAsync({ type: "blob" });
+    saveAs("download.zip", content);
+  };
+
   return {
     download,
+    downloadFiles,
   };
 };

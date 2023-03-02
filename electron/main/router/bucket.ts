@@ -53,5 +53,24 @@ export const createBucketRouter = () => {
         const response = await client.list();
         return response;
       }),
+    "bucket.delete": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string(),
+          fileNames: z.array(z.string()),
+        }),
+      )
+      .mutation(async ({ input, ctx }) => {
+        const simulator = await ctx.simulator();
+        const client = simulator.getResource(
+          input.resourcePath,
+        ) as IBucketClient;
+
+        let promises = [];
+        for (const fileName of input.fileNames) {
+          promises.push(client.delete(fileName));
+        }
+        await Promise.all(promises);
+      }),
   });
 };

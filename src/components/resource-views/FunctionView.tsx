@@ -70,7 +70,6 @@ export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
             e.preventDefault();
             setShowModal(false);
             invoke.mutate({ resourcePath, message });
-            setMessage("");
           }}
         >
           <div className="mt-2 space-y-2">

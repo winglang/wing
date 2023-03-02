@@ -111,7 +111,7 @@ export const MetadataPanel = ({
         case "wingsdk.cloud.Bucket": {
           resourceGroup = {
             groupName: "Bucket",
-            actionName: "Manage",
+            actionName: "Files",
             icon: getResourceIconComponent(node.type),
             attributes: [
               {

@@ -74,6 +74,7 @@ const project = new TypeScriptProject({
     "lodash.uniqby",
     "@types/lodash.uniqby",
     "emittery",
+    "jszip",
   ],
 });
 
