@@ -851,11 +851,11 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	pub fn requires_primitive_type_replacement(&self, name: &str) -> bool {
+	pub fn replace_with_builtin_type(&self, name: &str) -> Option<TypeRef> {
 		if let "Json" | "MutJson" = name {
-			true
+			Some(self.get_primitive_type_by_name(name))
 		} else {
-			false
+			None
 		}
 	}
 
@@ -1111,15 +1111,19 @@ impl<'a> TypeChecker<'a> {
 
 				for (arg_type, param_exp) in params.zip(args) {
 					let param_type = self.type_check_exp(param_exp, env, statement_idx, context);
-					self.validate_type(param_type, *arg_type, param_exp);
+					if let Some(t) = self.replace_with_builtin_type(arg_type.to_string().as_str()) {
+						self.validate_type(param_type, t, param_exp)
+					} else {
+						self.validate_type(param_type, *arg_type, param_exp);
+					};
 				}
 
 				// This replaces function signatures with valid TypeRefs if necessary. This step is also done in
 				// the hydration process for generics where we map std lib types like ImmutableMap to
 				// Type::Map(some_type). However for types like Json and MutJson which do
 				// not require hydration, we still need to Map the std `Json` type to type-checker's Json type
-				if self.requires_primitive_type_replacement(func_sig.return_type.to_string().as_str()) {
-					self.get_primitive_type_by_name(func_sig.return_type.to_string().as_str())
+				if let Some(t) = self.replace_with_builtin_type(func_sig.return_type.to_string().as_str()) {
+					t
 				} else {
 					func_sig.return_type
 				}

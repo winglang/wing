@@ -53,3 +53,4 @@ Bucket._annotateInflight("put", {});
 Bucket._annotateInflight("get", {});
 Bucket._annotateInflight("delete", {});
 Bucket._annotateInflight("list", {});
+Bucket._annotateInflight("put_json", {});

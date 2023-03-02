@@ -6,6 +6,7 @@ import { BucketSchema } from "./schema-resources";
 import { exists } from "./util";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
+import { Json } from "../std";
 
 export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private readonly fileDir: string;
@@ -41,6 +42,16 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         const dirName = dirname(filename);
         await fs.promises.mkdir(dirName, { recursive: true });
         await fs.promises.writeFile(filename, value);
+      },
+    });
+  }
+
+  public async putJson(key: string, body: Json): Promise<void> {
+    return this.context.withTrace({
+      message: `Put Json (key=${key}).`,
+      activity: async () => {
+        const filename = join(this.fileDir, key);
+        await fs.promises.writeFile(filename, JSON.stringify(body, null, 2));
       },
     });
   }

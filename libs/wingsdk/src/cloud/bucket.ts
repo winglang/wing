@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App, Resource } from "../core";
+import { Json } from "../std";
 
 /**
  * Global identifier for `Bucket`.
@@ -79,6 +80,14 @@ export interface IBucketClient {
   put(key: string, body: string): Promise<void>;
 
   /**
+   * Put a Json object in the bucket.
+   * @param key Key of the object.
+   * @param body Json object that we want to store into the bucket.
+   * @inflight
+   */
+  putJson(key: string, body: Json): Promise<void>;
+
+  /**
    * Retrieve an object from the bucket.
    * @param key Key of the object.
    * @Throws if no object with the given key exists.
@@ -117,4 +126,6 @@ export enum BucketInflightMethods {
   LIST = "list",
   /** `Bucket.delete` */
   DELETE = "delete",
+  /** `Bucket.putJson */
+  PUT_JSON = "putJson"
 }

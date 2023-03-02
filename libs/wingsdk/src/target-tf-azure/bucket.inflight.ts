@@ -1,6 +1,7 @@
 import { DefaultAzureCredential } from "@azure/identity";
 import { BlobServiceClient, ContainerClient } from "@azure/storage-blob";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
+import { Json } from "../std";
 
 export class BucketClient implements IBucketClient {
   private readonly bucketName: string;
@@ -36,6 +37,16 @@ export class BucketClient implements IBucketClient {
     await this.containerClient
       .getBlockBlobClient(key)
       .upload(body, body.length);
+  }
+
+  /**
+   * Put Json object into bucket with given body contents
+   *
+   * @param key Key of the object
+   * @param body Json object
+   */
+  public async putJson(key: string, body: Json): Promise<void> {
+    await this.put(key, JSON.stringify(body, null, 2));
   }
 
   /**

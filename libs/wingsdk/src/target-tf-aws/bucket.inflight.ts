@@ -9,6 +9,7 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
+import { Json } from "../std";
 
 export class BucketClient implements IBucketClient {
   constructor(
@@ -23,6 +24,10 @@ export class BucketClient implements IBucketClient {
       Body: body,
     });
     await this.s3Client.send(command);
+  }
+
+  public async putJson(key: string, body: Json): Promise<void> {
+    await this.put(key, JSON.stringify(body, null, 2));
   }
 
   public async get(key: string): Promise<string> {
