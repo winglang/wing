@@ -80,7 +80,7 @@ test("put multiple objects and list all from bucket", async () => {
 test("put when directory does not exist", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Bucket(app, "my_bucket");
+  cloud.Bucket._newBucket(app, "my_bucket");
 
   const s = await app.startSimulator();
 
