@@ -156,7 +156,7 @@ fn scan_captures_in_expression(
 					let (var, si) = x.unwrap();
 
 					if var.as_variable().is_none() {
-						diagnostics.insert(Diagnostic {
+						diagnostics.push(Diagnostic {
 							level: DiagnosticLevel::Error,
 							message: "Expected identifier to be a variable".to_string(),
 							span: Some(symbol.span.clone()),
@@ -167,7 +167,7 @@ fn scan_captures_in_expression(
 						// if the identifier represents a preflight value, then capture it
 						if si.flight == Phase::Preflight {
 							if var.is_reassignable() {
-								diagnostics.insert(Diagnostic {
+								diagnostics.push(Diagnostic {
 									level: DiagnosticLevel::Error,
 									message: format!("Cannot capture a reassignable variable \"{}\"", symbol.name),
 									span: Some(symbol.span.clone()),
@@ -205,7 +205,7 @@ fn scan_captures_in_expression(
 								});
 							} else {
 								// unsupported capture
-								diagnostics.insert(Diagnostic {
+								diagnostics.push(Diagnostic {
 									level: DiagnosticLevel::Error,
 									message: format!(
 										"Cannot reference '{}' of type '{}' from an inflight context",

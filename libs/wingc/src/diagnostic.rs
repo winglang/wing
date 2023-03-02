@@ -1,4 +1,6 @@
-use indexmap::IndexSet;
+use colored::Colorize;
+use std::fmt::Display;
+
 use lsp_types::{Position, Range};
 use tree_sitter::Point;
 
@@ -8,10 +10,7 @@ pub type FileId = String;
 pub type CharacterLocation = Point;
 pub type ByteIndex = usize;
 
-// We use an IndexSet for Diagnostics to achieve the following two goals:
-// 1. We want to preserve the order in which diagnostics are added, because it's related to the order of statements in the source.
-// 2. We want to avoid adding duplicate diagnostics.
-pub type Diagnostics = IndexSet<Diagnostic>;
+pub type Diagnostics = Vec<Diagnostic>;
 
 pub type DiagnosticResult<T> = Result<T, ()>;
 
@@ -108,20 +107,30 @@ pub enum DiagnosticLevel {
 	Note,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Clone, PartialEq, Eq, Hash)]
 pub struct Diagnostic {
 	pub message: String,
 	pub span: Option<WingSpan>,
 	pub level: DiagnosticLevel,
 }
 
+impl Display for DiagnosticLevel {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			DiagnosticLevel::Error => write!(f, "{}", "Error".bold().red()),
+			DiagnosticLevel::Warning => write!(f, "{}", "Warning".bold().yellow()),
+			DiagnosticLevel::Note => write!(f, "{}", "Note".bold().blue()),
+		}
+	}
+}
+
 impl std::fmt::Display for Diagnostic {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		// TODO: implement a Display for DiagnosticLevel (instead of Debug formatting)
 		if let Some(span) = &self.span {
-			write!(f, "{:?} at {} | {}", self.level, span, self.message)
+			write!(f, "{} at {} | {}", self.level, span, self.message.bold().white())
 		} else {
-			write!(f, "{:?} | {}", self.level, self.message)
+			write!(f, "{} | {}", self.level, self.message.bold().white())
 		}
 	}
 }
