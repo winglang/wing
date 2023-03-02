@@ -282,28 +282,34 @@ pub mod type_system {
 					}
 				}
 			}
-			if let Some(ifaces) = &self.interfaces {
-				for iface in ifaces {
-					let iface_type = system
-						.find_interface(&FQN::from(iface.as_str()))
-						.expect(&format!("Unable to find interface {}", iface));
-					if inherited {
-						for iface in iface_type.all_interfaces(inherited, system) {
-							interfaces.insert(iface);
-						}
-					}
-					interfaces.insert(iface_type);
-				}
-			}
+
+			interfaces.extend(
+				JsiiTypeWithInterfaces::all_interfaces(self, inherited, system)
+					.iter()
+					.cloned(),
+			);
 			interfaces.into_iter().collect()
 		}
 	}
 
-	impl jsii::InterfaceType {
-		// Returns all of the interfaces this interface extends
-		pub fn all_interfaces(&self, inherited: bool, system: &TypeSystem) -> Vec<jsii::InterfaceType> {
+	impl JsiiTypeWithInterfaces for jsii::ClassType {
+		fn interfaces(&self) -> Option<&Vec<String>> {
+			self.interfaces.as_ref()
+		}
+	}
+
+	impl JsiiTypeWithInterfaces for jsii::InterfaceType {
+		fn interfaces(&self) -> Option<&Vec<String>> {
+			self.interfaces.as_ref()
+		}
+	}
+
+	pub trait JsiiTypeWithInterfaces {
+		fn interfaces(&self) -> Option<&Vec<String>>;
+
+		fn all_interfaces(&self, inherited: bool, system: &TypeSystem) -> Vec<jsii::InterfaceType> {
 			let mut interfaces = HashSet::new();
-			if let Some(ifaces) = &self.interfaces {
+			if let Some(ifaces) = self.interfaces() {
 				for iface in ifaces {
 					let iface_type = system
 						.find_interface(&FQN::from(iface.as_str()))
