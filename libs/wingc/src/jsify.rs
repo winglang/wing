@@ -12,7 +12,7 @@ use crate::{
 		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator,
 		UserDefinedType,
 	},
-	type_check::{resolve_user_defined_type, symbol_env::{SymbolEnv, SymbolEnvRef}, TypeRef, Type},
+	type_check::{resolve_user_defined_type, symbol_env::{SymbolEnv, SymbolEnvRef}, TypeRef, Type, Class},
 	utilities::snake_case_to_camel_case,
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE, visit::{Visit, self}, debug, diagnostic::{Diagnostics, Diagnostic, DiagnosticLevel}
 };
@@ -55,172 +55,6 @@ pub struct JSifier<'a> {
 	app_name: String,
 	inflight_counter: RefCell<usize>,
 }
-
-/// Analysizes a resource inflight method and returns a list of fields that are referenced from the
-/// method and which operations are performed on them.
-struct FieldReferenceVisitor<'a> {
-	/// The key is field name, value is a list of operations performed on this field
-	references: BTreeMap<String, IndexSet<String>>,
-
-	/// Used internally by the visitor to keep track of the path to the field
-	path: Vec<String>,
-
-	/// The resource type's symbol env (used to resolve field types)
-	function_def: &'a FunctionDefinition,
-	method_name: &'a Symbol,
-
-	env: SymbolEnvRef,
-	diagnostics: Diagnostics,
-}
-
-impl<'a> FieldReferenceVisitor<'a> {
-	pub fn new(method_name: &'a Symbol, function_def: &'a FunctionDefinition) -> Self {
-		Self {
-			references: BTreeMap::new(),
-			diagnostics: Diagnostics::new(),
-			method_name,
-			path: vec![],
-			function_def,
-			env: function_def.statements.env.borrow().as_ref().unwrap().get_ref(),
-		}
-	}
-
-	pub fn find_refs(mut self) -> (BTreeMap<String, IndexSet<String>>, Diagnostics) {
-		self.visit_scope(&self.function_def.statements);
-		(self.references, self.diagnostics)
-	}
-}
-
-impl<'ast> Visit<'ast> for FieldReferenceVisitor<'_> {
-	fn visit_reference(&mut self, node: &'ast Reference) {
-		match node {
-			Reference::InstanceMember { object, property } => {
-				match &object.kind {
-					ExprKind::Reference(r) => {
-						match r {
-							Reference::Identifier(s) => {
-								if s.name == "this" {
-									// resolve the type of the resource by looking up "this" in our environment
-									let resource_type = self.env
-										.lookup(s, None).expect("'this' to be found")
-										.as_variable().expect("'this' to be a variable")
-										.type_;
-
-									// lookup our field in the class environment
-									match &*resource_type {
-										Type::Resource(r) => {
-											let field_kind = r.env
-												.lookup(property, None).expect("unable to find field in resource env")
-												.as_variable().expect("field is not a variable");
-
-											// we only care about preflight fields (inflight fields are normal references)
-											if field_kind.flight == Phase::Preflight {
-
-												// don't allow capturing reassignable (`var`) fields.
-												if field_kind.reassignable {
-													self.diagnostics.insert(Diagnostic {
-														level: DiagnosticLevel::Error,
-														message: format!(
-															"Unable to reference \"this.{}\" from inflight method \"{}\" because it is reassignable (\"var\")",
-															property.name, 
-															self.method_name.name,
-														),
-														span: Some(property.span.clone()),
-													});
-													return;
-												}
-
-												// check if the type is capturable (resource, primitive or immutable collection)
-												if ! field_kind.type_.is_capturable() {
-													self.diagnostics.insert(Diagnostic {
-														level: DiagnosticLevel::Error,
-														message: format!(
-															"Unable to reference \"this.{}\" from inflight method \"{}\" because type {} is not capturable",
-															property.name, 
-															self.method_name.name,
-															field_kind.type_,
-														),
-														span: Some(property.span.clone()),
-													});
-
-													return;
-												}
-
-												debug!("field \"this.{}\" is referenced from inflight method {}", property.name, self.method_name.name);
-
-												// get/create an "ops" set for this field
-												let mut ops = if let Some(ops) = self.references.get(&property.name) {
-													ops.clone()
-												} else {
-													IndexSet::new()
-												};
-
-												if ! self.path.is_empty() {
-													let op = self.path[0].clone();
-
-													// if we are referencing a resource, verify that the operation is an inflight method
-													if let Some(r) = field_kind.type_.as_resource() {
-														let mut found_method = false;
-
-														for (name, typeref) in r.methods(true) {
-															if name == op {
-																match &*typeref {
-																	Type::Function(f) => {
-																		if f.flight == Phase::Inflight {
-																			found_method = true;
-																		}
-																	}
-																	_ => {}
-																}
-	
-															}
-														}
-
-														if !found_method {
-															self.diagnostics.insert(Diagnostic {
-																level: DiagnosticLevel::Error,
-																message: format!(
-																	"Unable to reference \"{}\" from inflight method \"{}\" because it is not an inflight method",
-																	self.path.join("."), 
-																	self.method_name.name,
-																),
-																span: Some(property.span.clone()),
-															});
-														}
-													}
-
-													ops.insert(op);
-												}
-			
-												self.references.insert(property.name.clone(), ops.clone());
-												self.path.clear();
-
-												// no need to visit recursively
-												return;
-											} else {
-												debug!("skipping field: {:?} because it is not in preflight", property.name)
-											}
-										}
-										_ => panic!("'this' is not a resource"),
-									}
-
-								}
-							}
-							_ => {}
-						}
-					}
-					_ => {}
-				}
-
-				self.path.insert(0, property.name.clone());
-			},
-			_ => {}
-		}
-
-		visit::visit_reference(self, node);
-	}
-}
-
 
 impl<'a> JSifier<'a> {
 	pub fn new(out_dir: &'a Path, app_name: &str, shim: bool) -> Self {
@@ -1334,4 +1168,177 @@ fn is_mutable_collection(expression: &Expr) -> bool {
 	} else {
 		false
 	}
+}
+
+
+/// Analysizes a resource inflight method and returns a list of fields that are referenced from the
+/// method and which operations are performed on them.
+struct FieldReferenceVisitor<'a> {
+	/// The key is field name, value is a list of operations performed on this field
+	references: BTreeMap<String, IndexSet<String>>,
+
+	/// Used internally by the visitor to keep track of the path to the field
+	path: Vec<String>,
+
+	/// The resource type's symbol env (used to resolve field types)
+	function_def: &'a FunctionDefinition,
+	method_name: &'a Symbol,
+
+	env: SymbolEnvRef,
+	diagnostics: Diagnostics,
+}
+
+impl<'a> FieldReferenceVisitor<'a> {
+	pub fn new(method_name: &'a Symbol, function_def: &'a FunctionDefinition) -> Self {
+		Self {
+			references: BTreeMap::new(),
+			diagnostics: Diagnostics::new(),
+			method_name,
+			path: vec![],
+			function_def,
+			env: function_def.statements.env.borrow().as_ref().unwrap().get_ref(),
+		}
+	}
+
+	pub fn find_refs(mut self) -> (BTreeMap<String, IndexSet<String>>, Diagnostics) {
+		self.visit_scope(&self.function_def.statements);
+		(self.references, self.diagnostics)
+	}
+}
+
+impl<'ast> Visit<'ast> for FieldReferenceVisitor<'_> {
+	fn visit_reference(&mut self, node: &'ast Reference) {
+		if self.fun_name(node) {
+    	return;
+		}
+
+		visit::visit_reference(self, node);
+	}
+}
+
+impl<'a> FieldReferenceVisitor<'a> {
+	fn fun_name(&mut self, node: &Reference) -> bool {
+		let (object, property) = match node {
+			Reference::InstanceMember { object, property } => (object, property),
+			_ => return false,
+		};
+
+		let r = match &object.kind {
+			ExprKind::Reference(r) => r,
+			_ => return false
+		};
+
+		let s = match r {
+			Reference::Identifier(s) => s,
+			_ => {
+				self.path.insert(0, property.name.clone());
+				return false
+			}
+		};
+
+		if s.name != "this" {
+			return false
+		}
+
+		// resolve the type of the resource by looking up "this" in our environment
+		let resource_type = self.env
+			.lookup(s, None).expect("'this' to be found")
+			.as_variable().expect("'this' to be a variable")
+			.type_;
+
+		let r = match &*resource_type {
+			Type::Resource(r) => r,
+			_ => panic!("'this' is not a resource"),
+		};
+
+		// lookup our field in the class environment
+		let field_kind = r.env
+			.lookup(property, None).expect("unable to find field in resource env")
+			.as_variable().expect("field is not a variable");
+
+		// we only care about preflight fields (inflight fields are normal references)
+		if field_kind.flight == Phase::Preflight {
+
+			// don't allow capturing reassignable (`var`) fields.
+			if field_kind.reassignable {
+				self.diagnostics.insert(Diagnostic {
+					level: DiagnosticLevel::Error,
+					message: format!(
+						"Unable to reference \"this.{}\" from inflight method \"{}\" because it is reassignable (\"var\")",
+						property.name, 
+						self.method_name.name,
+					),
+					span: Some(property.span.clone()),
+				});
+
+				return true
+			}
+
+			// check if the type is capturable (resource, primitive or immutable collection)
+			if ! field_kind.type_.is_capturable() {
+				self.diagnostics.insert(Diagnostic {
+					level: DiagnosticLevel::Error,
+					message: format!(
+						"Unable to reference \"this.{}\" from inflight method \"{}\" because type {} is not capturable",
+						property.name, 
+						self.method_name.name,
+						field_kind.type_,
+					),
+					span: Some(property.span.clone()),
+				});
+
+				return true
+			}
+
+			debug!("field \"this.{}\" is referenced from inflight method {}", property.name, self.method_name.name);
+
+			// get/create an "ops" set for this field
+			let ops = self.references.entry(property.name.clone()).or_default();
+
+			if ! self.path.is_empty() {
+				let op = self.path[0].clone();
+
+				// if we are referencing a resource, verify that the operation is an inflight method
+				if let Some(r) = field_kind.type_.as_resource() {
+					if !has_inflight_method(r, &op) {
+						self.diagnostics.insert(Diagnostic {
+							level: DiagnosticLevel::Error,
+							message: format!(
+								"Unable to reference \"{}\" from inflight method \"{}\" because it is not an inflight method",
+								self.path.join("."), 
+								self.method_name.name,
+							),
+							span: Some(property.span.clone()),
+						});
+
+						return true
+					}
+				}
+
+				ops.insert(op);
+			}
+
+			self.path.clear();
+
+			// no need to visit recursively
+			return true
+		}
+
+		return false
+	}
+}
+
+/// Checks if a resource class has an inflight method with the given name
+fn has_inflight_method(resource_class: &Class, method_name: &String) -> bool {
+	for (name, typeref) in resource_class.methods(true) {
+		if name != *method_name { continue }
+
+		if let Type::Function(f) = &*typeref {
+			if f.flight == Phase::Inflight {
+				return true
+			}
+		}
+	}
+
+	false
 }
