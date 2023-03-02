@@ -184,3 +184,81 @@ pass | test_bucket.w | root/test:put
 ```
 
 We will see that both functions were invoked and that the tests passed.
+
+## CLI Architecture
+
+### CLI - compile explained
+
+The Wing CLI command `compile` is responsible for translating the Wing application from a `*.w` to a target that then can be run and either deploy resources to the cloud or run in the simulator or console.
+
+The `compile` command has three phases.
+
+```mermaid
+flowchart LR
+direction LR
+	Cli --> CompilerGraph --> GeneratePreflightGraph
+subgraph Cli["Prepare"]
+	validate_input["Validate cli arguments"] --> create_work_dir["Create working directories for assets"] --> create_wing_compiler_instance["Create instance of Wing compiler"]
+end
+
+subgraph CompilerGraph["Compile"]
+	direction TB
+    verify_input["Load files and create target folder"] --> wing_file_to_ast["Translate wing file to AST"]--> wing_it["Wing it: Translate Wing-AST to generic AST"] --> type_check_ast["Run type checking"] --> transpile_ast_to_preflight["Transpile AST to preflight program"] --> generate_preflight_program["Write preflight program to disk"]
+end
+
+subgraph GeneratePreflightGraph["Generate target"]
+	direction TB
+    read_preflight_program["Read the preflight program"] --> execute_preflight_program["Execute the preflight program"]
+end
+
+```
+
+**Prepare**
+
+The first one is the `prepare` phase. Here the input arguments of the user are validated and folders for the generated target assets are created. Once this is done an instance of the Wing compiler ist created.
+The Wing compiler is a Rust application that is compiled to a WebAssembly file (`wingc.wasm`). The WebAssembly expose methods that can be invoked from the Wing Cli nodeJS program.
+After the Compiler instance is initialised the Wing application file is parsed to the compiler `compile` method.
+
+**Compile**
+
+The Wing compile itself is a Rust application that reads the Wing application file and generates a nodeJs application that is called `pfreflight.js` which contains a program that generates the asset for the target.
+
+```mermaid
+flowchart
+subgraph CompilerBlackboxGraph["Compiler Input-Output"]
+	compiler_file([compiled 'wingc.wasm' file]) -- input --> Compiler
+	wing_file([wing 'app.w' file]) -- input --> Compiler
+
+
+	Compiler --> compile{{run compile}} -- output--> preflight_file(['preflight.js' file])
+end
+```
+
+The compile process begins with making sure the target folder exist and create if not.
+After the validation phase the Wing application file is loaded and translated into a AST.
+For this translation the `tree-sitter` library is used which uses a Wing implementation that contains the Wing language.
+Once the AST is created the `wingit`command is invoked which does the following:
+It traverses the AST nodes and filter out unnecessary nodes like comment lines in the Wing application file. The remaining nodes are then converted into generic `statements`.
+The result is a `Scope` object that is the input for Type checking.
+If no errors are found in the type checking phase the actual `preflight` program is generated.
+
+To generate the preflight code the `.jsify` function is called that contains a mapping for all the statements into `javascript`.
+The final step is writing the preflight code to the disk.
+
+**Generate target**
+
+Final step in the `compile` command of the Wing CLI is the generation of the actual target code generation.
+Therefore the `preflight.js` file is executed with a provided target.
+The preflight code then uses the Wing SDK to resolve the target specific implementation.
+
+```mermaid
+flowchart
+subgraph PreflightProgramBlackboxGraph["Preflight program input-output"]
+	preflight_file([compiled 'preflight.js' file]) -- input --> compile
+	sdk([SDK]) -- input --> compile
+	target_input([Requested target e.g. 'sim']) -- input --> compile
+	compile{{run program}} -- output--> target_output["Target output folder"]
+end
+```
+
+The final result are assets in the `target` folder. These assets can be for example the terraform code.
