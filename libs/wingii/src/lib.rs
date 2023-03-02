@@ -81,7 +81,8 @@ pub mod type_system {
 	use crate::spec;
 	use crate::util::package_json;
 	use crate::Result;
-	use std::collections::HashMap;
+	use std::collections::{HashMap, HashSet};
+	use std::hash::{Hash, Hasher};
 	use std::path::Path;
 
 	pub struct TypeSystem {
@@ -218,8 +219,16 @@ pub mod type_system {
 				return Ok(asm.name);
 			}
 			let root = self.add_assembly(asm, is_root)?;
-			let bundled = package_json::bundled_dependencies_of(&package);
-			let deps = package_json::dependencies_of(&package);
+
+			let bundled = self
+				.find_assembly(&root)
+				.expect("root assembly could not be found")
+				.bundled();
+			let deps = self
+				.find_assembly(&root)
+				.expect("root assembly could not be found")
+				.dependencies();
+
 			if opts.deps {
 				for dep in deps {
 					if !bundled.contains(&dep) {
@@ -229,6 +238,91 @@ pub mod type_system {
 				}
 			}
 			Ok(root)
+		}
+	}
+
+	impl Assembly {
+		fn dependencies(&self) -> Vec<String> {
+			self
+				.dependencies
+				.as_ref()
+				.map(|b| b.iter().map(|b| b.0).cloned().collect::<Vec<_>>())
+				.unwrap_or_default()
+		}
+
+		fn bundled(&self) -> Vec<String> {
+			self
+				.bundled
+				.as_ref()
+				.map(|b| b.iter().map(|b| b.0).cloned().collect::<Vec<_>>())
+				.unwrap_or_default()
+		}
+	}
+
+	// It would be preferable to customize the types in `jsii.rs` so that PartialEq is calculated based on the FQN and
+	// not any other fields, but we can't do that because the types are code-generated, so this will have to do.
+	impl Eq for jsii::InterfaceType {}
+	impl Hash for jsii::InterfaceType {
+		fn hash<H: Hasher>(&self, state: &mut H) {
+			self.fqn.hash(state);
+		}
+	}
+
+	impl jsii::ClassType {
+		// Returns all of the interfaces this class implements
+		pub fn all_interfaces(&self, inherited: bool, system: &TypeSystem) -> Vec<jsii::InterfaceType> {
+			let mut interfaces = HashSet::new();
+			if inherited {
+				if let Some(base) = &self.base {
+					let base_type = system
+						.find_class(&FQN::from(base.as_str()))
+						.expect(&format!("Unable to find base class {}", base));
+					for iface in base_type.all_interfaces(inherited, system) {
+						interfaces.insert(iface);
+					}
+				}
+			}
+
+			interfaces.extend(
+				JsiiTypeWithInterfaces::all_interfaces(self, inherited, system)
+					.iter()
+					.cloned(),
+			);
+			interfaces.into_iter().collect()
+		}
+	}
+
+	impl JsiiTypeWithInterfaces for jsii::ClassType {
+		fn interfaces(&self) -> Option<&Vec<String>> {
+			self.interfaces.as_ref()
+		}
+	}
+
+	impl JsiiTypeWithInterfaces for jsii::InterfaceType {
+		fn interfaces(&self) -> Option<&Vec<String>> {
+			self.interfaces.as_ref()
+		}
+	}
+
+	pub trait JsiiTypeWithInterfaces {
+		fn interfaces(&self) -> Option<&Vec<String>>;
+
+		fn all_interfaces(&self, inherited: bool, system: &TypeSystem) -> Vec<jsii::InterfaceType> {
+			let mut interfaces = HashSet::new();
+			if let Some(ifaces) = self.interfaces() {
+				for iface in ifaces {
+					let iface_type = system
+						.find_interface(&FQN::from(iface.as_str()))
+						.expect(&format!("Unable to find interface {}", iface));
+					if inherited {
+						for iface in iface_type.all_interfaces(inherited, system) {
+							interfaces.insert(iface);
+						}
+					}
+					interfaces.insert(iface_type);
+				}
+			}
+			interfaces.into_iter().collect()
 		}
 	}
 }

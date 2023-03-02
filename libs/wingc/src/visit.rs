@@ -257,7 +257,7 @@ where
 				v.visit_expr(item);
 			}
 		}
-		ExprKind::JsonLiteral { is_mut: _, element } => {
+		ExprKind::JsonLiteral { element, .. } => {
 			v.visit_expr(element);
 		}
 		ExprKind::StructLiteral { type_, fields } => {
