@@ -1333,8 +1333,8 @@ fn has_inflight_method(resource_class: &Class, method_name: &String) -> bool {
 	for (name, typeref) in resource_class.methods(true) {
 		if name != *method_name { continue }
 
-		if let Type::Function(f) = &*typeref {
-			if f.flight == Phase::Inflight {
+		if let Some(sig) = typeref.as_function_sig() {
+			if sig.flight == Phase::Inflight {
 				return true
 			}
 		}
