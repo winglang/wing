@@ -232,7 +232,10 @@ pub mod type_system {
 			if opts.deps {
 				for dep in deps {
 					if !bundled.contains(&dep) {
-						let dep_dir = package_json::find_dependency_directory(&dep, &module_directory).unwrap();
+						let dep_dir = package_json::find_dependency_directory(&dep, &module_directory).ok_or(format!(
+							"Unable to load \"{}\": Module not found from \"{}\"",
+							dep, module_directory
+						))?;
 						self.load_module(&dep_dir, opts)?;
 					}
 				}
