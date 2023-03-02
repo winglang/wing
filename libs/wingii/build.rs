@@ -10,9 +10,7 @@ const JSII_SPEC_OUT: &'static str = "node_modules/@jsii/spec/schema/jsii-spec.sc
 /// date and available to the rest of the Rust codebase. It's invoked by Cargo
 /// during compilation of this crate.
 fn main() {
-	// make sure if anyone touches the generated files, they're rewritten over
-	println!("{}", format!("cargo:rerun-if-changed={}", JSII_SPEC_OUT));
-	println!("{}", format!("cargo:rerun-if-changed={}", JSII_RUST_OUT));
+	println!("{}", format!("cargo:rerun-if-changed={}", "package.json"));
 
 	// delete node_modules in the root of the project if it exists
 	let node_modules_path = Path::new(env!("CARGO_MANIFEST_DIR")).join("node_modules");
