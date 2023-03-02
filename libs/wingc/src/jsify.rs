@@ -1208,7 +1208,8 @@ impl<'a> FieldReferenceVisitor<'a> {
 
 impl<'ast> Visit<'ast> for FieldReferenceVisitor<'_> {
 	fn visit_reference(&mut self, node: &'ast Reference) {
-		if self.fun_name(node) {
+
+		if self.collect_inflight_refs(node) {
     	return;
 		}
 
@@ -1217,7 +1218,11 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'_> {
 }
 
 impl<'a> FieldReferenceVisitor<'a> {
-	fn fun_name(&mut self, node: &Reference) -> bool {
+
+	/// If node is a reference to a field of "this", check that it references a legal field and add it
+	/// to the list of references. Returns true if no additional processing is needed or false if we
+	/// need to visit the node's children.
+	fn collect_inflight_refs(&mut self, node: &Reference) -> bool {
 		let (object, property) = match node {
 			Reference::InstanceMember { object, property } => (object, property),
 			_ => return false,
