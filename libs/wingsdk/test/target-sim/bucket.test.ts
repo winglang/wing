@@ -5,7 +5,7 @@ import { SimApp } from "../../src/testing";
 test("create a bucket", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Bucket(app, "my_bucket");
+  cloud.Bucket._newBucket(app, "my_bucket");
 
   // THEN
   const s = await app.startSimulator();
@@ -28,7 +28,7 @@ test("create a bucket", async () => {
 test("put and get objects from bucket", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Bucket(app, "my_bucket");
+  cloud.Bucket._newBucket(app, "my_bucket");
 
   const s = await app.startSimulator();
   const client = s.getResource("/my_bucket") as cloud.IBucketClient;
@@ -51,7 +51,7 @@ test("put and get objects from bucket", async () => {
 test("put multiple objects and list all from bucket", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Bucket(app, "my_bucket");
+  cloud.Bucket._newBucket(app, "my_bucket");
 
   const s = await app.startSimulator();
 
@@ -77,10 +77,47 @@ test("put multiple objects and list all from bucket", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
+test("put when directory does not exist", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+  const ROOT_DIR = "path";
+  const DIR1 = "dir1";
+  const DIR2 = "dir2";
+  const filename1 = "file1.txt";
+  const filename2 = "file2.txt";
+  const KEY1 = `${ROOT_DIR}/${DIR1}/${filename1}`;
+  const KEY2 = `${ROOT_DIR}/${DIR2}/${filename2}`;
+  const VALUE1 = JSON.stringify({ msg: "Hello world!" });
+  const VALUE2 = JSON.stringify({ msg: "Hello world!" });
+
+  // WHEN
+  await client.put(KEY1, VALUE1);
+  await client.put(KEY2, VALUE2);
+  const responseRoot = await client.list();
+  const responsePath = await client.list(ROOT_DIR);
+  const responseDir1 = await client.list(`${ROOT_DIR}/${DIR1}`);
+  const responseDir2 = await client.list(`${ROOT_DIR}/${DIR2}`);
+
+  // THEN
+  await s.stop();
+
+  expect(responseRoot).toEqual([ROOT_DIR]);
+  expect(responsePath).toEqual([DIR1, DIR2]);
+  expect(responseDir1).toEqual([filename1]);
+  expect(responseDir2).toEqual([filename2]);
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
 test("get invalid object throws an error", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Bucket(app, "my_bucket");
+  cloud.Bucket._newBucket(app, "my_bucket");
 
   const s = await app.startSimulator();
 
@@ -101,7 +138,7 @@ test("remove object from a bucket with mustExist as option", async () => {
 
   // GIVEN
   const app = new SimApp();
-  new cloud.Bucket(app, bucketName);
+  cloud.Bucket._newBucket(app, bucketName);
 
   const s = await app.startSimulator();
 
@@ -128,7 +165,7 @@ test("remove object from a bucket", async () => {
 
   // GIVEN
   const app = new SimApp();
-  new cloud.Bucket(app, bucketName);
+  cloud.Bucket._newBucket(app, bucketName);
 
   const s = await app.startSimulator();
 
@@ -155,7 +192,7 @@ test("remove non-existent object from a bucket", async () => {
 
   // GIVEN
   const app = new SimApp();
-  new cloud.Bucket(app, bucketName);
+  cloud.Bucket._newBucket(app, bucketName);
 
   const s = await app.startSimulator();
 
@@ -174,7 +211,7 @@ test("remove non-existent object from a bucket with mustExist option", async () 
 
   // GIVEN
   const app = new SimApp();
-  new cloud.Bucket(app, bucketName);
+  cloud.Bucket._newBucket(app, bucketName);
 
   const s = await app.startSimulator();
 
@@ -191,7 +228,7 @@ test("remove non-existent object from a bucket with mustExist option", async () 
 test("bucket has no display hidden property", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Bucket(app, "my_bucket");
+  cloud.Bucket._newBucket(app, "my_bucket");
 
   const treeJson = treeJsonOf(app.synth());
   const bucket = app.node.tryFindChild("my_bucket") as cloud.Bucket;
@@ -211,7 +248,7 @@ test("bucket has no display hidden property", async () => {
 test("bucket has display title and description properties", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Bucket(app, "my_bucket");
+  cloud.Bucket._newBucket(app, "my_bucket");
 
   // WHEN
   const treeJson = treeJsonOf(app.synth());
@@ -236,7 +273,7 @@ test("can add object in preflight", async () => {
   const VALUE = "Hello world!";
 
   const app = new SimApp();
-  const bucket = new cloud.Bucket(app, "my_bucket");
+  const bucket = cloud.Bucket._newBucket(app, "my_bucket");
   bucket.addObject(KEY, VALUE);
 
   const s = await app.startSimulator();

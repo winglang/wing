@@ -223,7 +223,7 @@ captureTest("struct of maps", () => ({
 captureTest("array of buckets", (scope) => ({
   bindings: {
     my_buckets: {
-      obj: [new Bucket(scope, "B1"), new Bucket(scope, "B2")],
+      obj: [Bucket._newBucket(scope, "B1"), Bucket._newBucket(scope, "B2")],
     },
   },
   inflightCode: [
@@ -242,8 +242,8 @@ captureTest("map of buckets", (scope) => ({
     my_map: {
       obj: Object.freeze(
         new Map([
-          ["foo", new Bucket(scope, "B1")],
-          ["bar", new Bucket(scope, "B2")],
+          ["foo", Bucket._newBucket(scope, "B1")],
+          ["bar", Bucket._newBucket(scope, "B2")],
         ])
       ),
     },
@@ -260,15 +260,18 @@ captureTest("struct with resources", (scope) => ({
   bindings: {
     my_struct: {
       obj: {
-        bucky: new Bucket(scope, "B1"),
+        bucky: Bucket._newBucket(scope, "B1"),
         mapy: Object.freeze(
           new Map([
-            ["foo", new Bucket(scope, "B2")],
-            ["bar", new Bucket(scope, "B3")],
+            ["foo", Bucket._newBucket(scope, "B2")],
+            ["bar", Bucket._newBucket(scope, "B3")],
           ])
         ),
         arry: {
-          boom: [new Bucket(scope, "B4"), new Bucket(scope, "B5")],
+          boom: [
+            Bucket._newBucket(scope, "B4"),
+            Bucket._newBucket(scope, "B5"),
+          ],
         },
       },
     },
@@ -314,7 +317,7 @@ function captureTest(name: string, t: (scope: Construct) => CaptureTest) {
       return lines;
     };
 
-    new Function(
+    Function._newFunction(
       app,
       "Function",
       new Inflight(app, "foo", {

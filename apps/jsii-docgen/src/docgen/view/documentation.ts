@@ -4,8 +4,10 @@ import { loadAssemblyFromFile, SPEC_FILE_NAME } from "@jsii/spec";
 import * as fs from "fs-extra";
 import * as glob from "glob-promise";
 import * as reflect from "jsii-reflect";
-import { TargetLanguage, UnknownSnippetMode } from "jsii-rosetta";
-import { transliterateAssembly } from "jsii-rosetta/lib/commands/transliterate";
+import { TargetLanguage } from "jsii-rosetta";
+import { Npm } from "./_npm";
+import { ApiReference } from "./api-reference";
+import { Readme } from "./readme";
 import { CorruptedAssemblyError, LanguageNotSupportedError } from "../..";
 import { Json } from "../render/json";
 import { MarkdownDocument } from "../render/markdown-doc";
@@ -21,9 +23,6 @@ import { PythonTranspile } from "../transpile/python";
 import { Transpile, Language } from "../transpile/transpile";
 import { TypeScriptTranspile } from "../transpile/typescript";
 import { WingTranspile } from "../transpile/wing";
-import { Npm } from "./_npm";
-import { ApiReference } from "./api-reference";
-import { Readme } from "./readme";
 
 // https://github.com/aws/jsii/blob/main/packages/jsii-reflect/lib/assembly.ts#L175
 const NOT_FOUND_IN_ASSEMBLY_REGEX =
@@ -367,8 +366,11 @@ export class Documentation {
     }
 
     const created = await withTempDir(async (workdir: string) => {
-      // always better not to pollute an externally provided directory
-      await fs.copy(this.assembliesDir, workdir);
+      // HACK - skip copying assemblies because we are not transliterating them
+      // copying node_modules from one place to another adds a lot of time to the build process
+
+      // await fs.copy(this.assembliesDir, workdir);
+      workdir = this.assembliesDir;
 
       const ts = new reflect.TypeSystem();
       for (let dotJsii of await glob.promise(
@@ -382,16 +384,18 @@ export class Documentation {
         const spec = loadAssemblyFromFile(dotJsii);
         if (language && spec.name === this.assemblyName) {
           const packageDir = path.dirname(dotJsii);
-          try {
-            await transliterateAssembly([packageDir], [language], {
-              loose: options.loose,
-              unknownSnippets: UnknownSnippetMode.FAIL,
-            });
-            dotJsii = path.join(packageDir, `${SPEC_FILE_NAME}.${language}`);
-          } catch (e: any) {
-            dotJsii = path.join(packageDir, SPEC_FILE_NAME);
-            // throw new LanguageNotSupportedError(`Laguage ${language} is not supported for package ${this.assemblyFqn} (cause: ${e.message})`);
-          }
+
+          // try {
+          //   await transliterateAssembly([packageDir], [language], {
+          //     loose: options.loose,
+          //     unknownSnippets: UnknownSnippetMode.FAIL,
+          //   });
+          //   dotJsii = path.join(packageDir, `${SPEC_FILE_NAME}.${language}`);
+          // } catch (e: any) {
+          //   dotJsii = path.join(packageDir, SPEC_FILE_NAME);
+          //   // throw new LanguageNotSupportedError(`Laguage ${language} is not supported for package ${this.assemblyFqn} (cause: ${e.message})`);
+          // }
+          dotJsii = path.join(packageDir, SPEC_FILE_NAME);
         }
         await ts.load(dotJsii, { validate: options.validate });
       }

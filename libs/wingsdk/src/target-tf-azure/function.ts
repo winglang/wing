@@ -45,7 +45,7 @@ export interface ScopedRoleAssignment {
  *
  * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
  */
-export class Function extends cloud.FunctionBase {
+export class Function extends cloud.Function {
   private readonly function: LinuxFunctionApp;
   private readonly servicePlan: ServicePlan;
   private readonly storageAccount: StorageAccount;
@@ -56,14 +56,14 @@ export class Function extends cloud.FunctionBase {
     scope: Construct,
     id: string,
     inflight: cloud.IFunctionHandler,
-    props: cloud.FunctionProps
+    props: cloud.FunctionProps = {}
   ) {
     super(scope, id, inflight, props);
 
-    const app = App.of(this);
-    this.storageAccount = app.storageAccount;
-    this.resourceGroup = app.resourceGroup;
-    this.servicePlan = app.servicePlan;
+    const app = App.of(this) as App;
+    this.storageAccount = app._storageAccount;
+    this.resourceGroup = app._resourceGroup;
+    this.servicePlan = app._servicePlan;
 
     const functionName = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
     const functionIdentityType = "SystemAssigned";
@@ -135,7 +135,7 @@ export class Function extends cloud.FunctionBase {
     const functionCodeBlob = new StorageBlob(this, "CodeBlob", {
       name: `${functionName}.zip`,
       storageAccountName: this.storageAccount.name,
-      storageContainerName: functionCodeBucket.storageContainer.name,
+      storageContainerName: functionCodeBucket._storageContainer.name,
       type: "Block",
       source: asset.path,
     });
@@ -160,7 +160,7 @@ export class Function extends cloud.FunctionBase {
       appSettings: Lazy.anyValue({
         produce: () => ({
           ...this.env,
-          WEBSITE_RUN_FROM_PACKAGE: `https://${this.storageAccount.name}.blob.core.windows.net/${functionCodeBucket.storageContainer.name}/${functionCodeBlob.name}`,
+          WEBSITE_RUN_FROM_PACKAGE: `https://${this.storageAccount.name}.blob.core.windows.net/${functionCodeBucket._storageContainer.name}/${functionCodeBlob.name}`,
           FUNCTIONS_WORKER_RUNTIME: functionRuntime,
         }),
       }) as any,
