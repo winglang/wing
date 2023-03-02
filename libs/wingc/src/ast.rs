@@ -333,11 +333,13 @@ pub enum ExprKind {
 	FunctionClosure(FunctionDefinition),
 }
 
-#[derive(Debug)]
+#[derive(Derivative)]
+#[derivative(Debug)]
 pub struct Expr {
 	pub kind: ExprKind,
-	pub evaluated_type: RefCell<Option<TypeRef>>,
 	pub span: WingSpan,
+	#[derivative(Debug = "ignore")]
+	pub evaluated_type: RefCell<Option<TypeRef>>,
 }
 
 impl Expr {
