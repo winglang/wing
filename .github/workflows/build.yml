@@ -165,7 +165,7 @@ jobs:
 
   e2e:
     name: "E2E Testing"
-    if: github.event_name == 'push'
+    # if: github.event_name == 'push'
     needs:
       - build
       - prepare
@@ -174,7 +174,7 @@ jobs:
       matrix:
         runner:
           - ubuntu-latest
-          # - windows-latest
+          - windows-latest
           - macos-latest
         node: [18, 19]
     runs-on: ${{ matrix.runner }}
