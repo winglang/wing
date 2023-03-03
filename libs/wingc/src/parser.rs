@@ -61,7 +61,7 @@ impl Parser<'_> {
 			level: DiagnosticLevel::Error,
 		};
 		// TODO terrible to clone here to avoid move
-		self.diagnostics.borrow_mut().insert(diag);
+		self.diagnostics.borrow_mut().push(diag);
 
 		// Track that we have produced a diagnostic for this node
 		// (note: it may not necessarily refer to a tree-sitter "ERROR" node)
@@ -381,7 +381,7 @@ impl Parser<'_> {
 				("class_field", _) => {
 					let is_static = class_element.child_by_field_name("static").is_some();
 					if is_static {
-						self.diagnostics.borrow_mut().insert(Diagnostic {
+						self.diagnostics.borrow_mut().push(Diagnostic {
 							level: DiagnosticLevel::Error,
 							message: format!(
 								"Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668",
