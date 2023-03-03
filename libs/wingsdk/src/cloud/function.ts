@@ -114,8 +114,10 @@ export abstract class Function extends Resource implements IInflightHost {
     const outfile = join(tempdir, "index.js");
     writeFileSync(infile, lines.join("\n"));
 
-    // Run esbuild in a child process to bundle the handler code.
-    // A workaround for https://github.com/evanw/esbuild/issues/2927
+    // We would invoke esbuild directly here, but there is a bug where esbuild
+    // mangles the stdout/stderr of the process that invokes it.
+    // https://github.com/evanw/esbuild/issues/2927
+    // To workaround the issue, spawn a new process and invoke esbuild inside it.
     try {
       let esbuildScript = [
         `const esbuild = require("${require.resolve("esbuild-wasm")}");`,
