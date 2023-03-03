@@ -17,11 +17,6 @@ target/
 ## MSVC Windows builds of rustc generate these, which store debugging information
 *.pdb
 
-
-# wingii
-libs/wingii/src/jsii-spec.json
-libs/wingii/src/jsii.rs
-
 # tree-sitter-wing
 libs/tree-sitter-wing/log.html
 libs/tree-sitter-wing/*.wasm
