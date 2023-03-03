@@ -1,3 +1,5 @@
+// NOTE: this test is supposed to fail once https://github.com/winglang/wing/pull/1610 is complete
+
 bring cloud;
 
 resource Test {
