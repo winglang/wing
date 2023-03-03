@@ -6,6 +6,7 @@ import { Function } from "./function";
 import { Logger } from "./logger";
 import { Queue } from "./queue";
 import { Schedule } from "./schedule";
+import { Table } from "./table";
 import { Topic } from "./topic";
 import {
   BUCKET_FQN,
@@ -14,6 +15,7 @@ import {
   LOGGER_FQN,
   QUEUE_FQN,
   SCHEDULE_FQN,
+  TABLE_FQN,
   TOPIC_FQN,
 } from "../cloud";
 import { CdktfApp, AppProps } from "../core";
@@ -55,6 +57,9 @@ export class App extends CdktfApp {
 
       case SCHEDULE_FQN:
         return new Schedule(scope, id, args[0]);
+
+      case TABLE_FQN:
+        return new Table(scope, id, args[0]);
 
       case TOPIC_FQN:
         return new Topic(scope, id, args[0]);
