@@ -773,7 +773,7 @@ impl<'a> TypeChecker<'a> {
 	// TODO: All calls to this should be removed and we should make sure type checks are done
 	// for unimplemented types
 	pub fn unimplemented_type(&self, type_name: &str) -> Option<Type> {
-		self.diagnostics.borrow_mut().insert(Diagnostic {
+		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Warning,
 			message: format!("Unimplemented type: {}", type_name),
 			span: None,
@@ -783,7 +783,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn general_type_error(&self, message: String) -> TypeRef {
-		self.diagnostics.borrow_mut().insert(Diagnostic {
+		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
 			message,
 			span: None,
@@ -793,7 +793,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn resolve_static_error(&self, property: &Symbol, message: String) -> VariableInfo {
-		self.diagnostics.borrow_mut().insert(Diagnostic {
+		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
 			message,
 			span: Some(property.span.clone()),
@@ -807,7 +807,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn expr_error(&self, expr: &Expr, message: String) -> TypeRef {
-		self.diagnostics.borrow_mut().insert(Diagnostic {
+		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
 			message,
 			span: Some(expr.span.clone()),
@@ -817,7 +817,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn stmt_error(&self, stmt: &Stmt, message: String) {
-		self.diagnostics.borrow_mut().insert(Diagnostic {
+		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
 			message,
 			span: Some(stmt.span.clone()),
@@ -826,7 +826,7 @@ impl<'a> TypeChecker<'a> {
 
 	fn type_error(&self, type_error: TypeError) -> TypeRef {
 		let TypeError { message, span } = type_error;
-		self.diagnostics.borrow_mut().insert(Diagnostic {
+		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
 			message,
 			span: Some(span),
@@ -837,7 +837,7 @@ impl<'a> TypeChecker<'a> {
 
 	fn variable_error(&self, type_error: TypeError) -> VariableInfo {
 		let TypeError { message, span } = type_error;
-		self.diagnostics.borrow_mut().insert(Diagnostic {
+		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
 			message,
 			span: Some(span),
@@ -900,19 +900,18 @@ impl<'a> TypeChecker<'a> {
 				let rtype = self.type_check_exp(right, env, statement_idx, context);
 
 				if op.boolean_args() {
-					self.validate_type(ltype, self.types.bool(), right);
+					self.validate_type(ltype, self.types.bool(), left);
 					self.validate_type(rtype, self.types.bool(), right);
 				} else if op.numerical_args() {
-					self.validate_type(ltype, self.types.number(), right);
+					self.validate_type(ltype, self.types.number(), left);
 					self.validate_type(rtype, self.types.number(), right);
 				} else {
-					self.validate_type(ltype, rtype, right);
+					self.validate_type(rtype, ltype, exp);
 				}
 
 				if op.boolean_result() {
 					self.types.bool()
 				} else {
-					self.validate_type(ltype, self.types.number(), right);
 					ltype
 				}
 			}
@@ -922,9 +921,7 @@ impl<'a> TypeChecker<'a> {
 				match op {
 					UnaryOperator::Not => self.validate_type(_type, self.types.bool(), unary_exp),
 					UnaryOperator::Minus => self.validate_type(_type, self.types.number(), unary_exp),
-				};
-
-				_type
+				}
 			}
 			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env, statement_idx, context).type_,
 			ExprKind::New {
@@ -1051,14 +1048,8 @@ impl<'a> TypeChecker<'a> {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
 				let func_type = self.type_check_exp(function, env, statement_idx, context);
 				let this_args = match &function.kind {
-					ExprKind::Reference(_ref) => {
-						// If this is a static method then there's no `this` arg
-						if self.resolve_reference(_ref, env, statement_idx, context).is_static {
-							0
-						} else {
-							1
-						}
-					}
+					// If this is an instance method then there's a `this` arg
+					ExprKind::Reference(Reference::InstanceMember { .. }) => 1,
 					_ => 0,
 				};
 
@@ -1355,18 +1346,24 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn validate_type(&mut self, actual_type: TypeRef, expected_type: TypeRef, value: &Expr) {
+	/// Validate that the given type is a subtype (or same) as the expected type. If not, add an error
+	/// to the diagnostics.
+	/// Returns the given type on success, otherwise returns the expected type.
+	fn validate_type(&mut self, actual_type: TypeRef, expected_type: TypeRef, value: &Expr) -> TypeRef {
 		self.validate_type_in(actual_type, &[expected_type], value)
 	}
 
-	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], value: &Expr) {
+	/// Validate that the given type is a subtype (or same) as the on of the expected types. If not, add
+	/// an error to the diagnostics.
+	/// Returns the given type on success, otherwise returns one of the expected types.
+	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], value: &Expr) -> TypeRef {
 		assert!(expected_types.len() > 0);
 		if !actual_type.is_anything()
 			&& !expected_types
 				.iter()
 				.any(|expected| actual_type.is_subtype_of(&expected))
 		{
-			self.diagnostics.borrow_mut().insert(Diagnostic {
+			self.diagnostics.borrow_mut().push(Diagnostic {
 				message: if expected_types.len() > 1 {
 					let expected_types_list = expected_types
 						.iter()
@@ -1386,6 +1383,9 @@ impl<'a> TypeChecker<'a> {
 				span: Some(value.span.clone()),
 				level: DiagnosticLevel::Error,
 			});
+			expected_types[0]
+		} else {
+			actual_type
 		}
 	}
 
@@ -2283,7 +2283,11 @@ impl<'a> TypeChecker<'a> {
 									name: name.clone(),
 									span: WingSpan::global(),
 								},
-								SymbolKind::make_variable(new_var_type, reassignable, flight),
+								if *is_static {
+									SymbolKind::make_variable(new_var_type, reassignable, flight)
+								} else {
+									SymbolKind::make_instance_variable(new_var_type, reassignable, flight)
+								},
 								StatementIdx::Top,
 							) {
 								Err(type_error) => {
@@ -2540,9 +2544,20 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	/// Get's the type of an instance variable in a class
 	fn get_property_from_class(&mut self, class: &Class, property: &Symbol) -> VariableInfo {
 		match class.env.lookup(property, None) {
-			Ok(field) => field.as_variable().expect("Expected property to be a variable"),
+			Ok(field) => {
+				let var = field.as_variable().expect("Expected property to be a variable");
+				if var.is_static {
+					self.variable_error(TypeError {
+						message: format!("Cannot access static property \"{}\" from instance", property.name),
+						span: property.span.clone(),
+					})
+				} else {
+					var
+				}
+			}
 			Err(type_error) => self.variable_error(type_error),
 		}
 	}

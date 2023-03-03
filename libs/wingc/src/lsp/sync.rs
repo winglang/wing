@@ -109,7 +109,7 @@ fn partial_compile(source_file: &str, text: &[u8]) -> FileData {
 	let mut diagnostics = Diagnostics::new();
 	for diags in [parse_diag, type_diag, capture_visitor.diagnostics].iter() {
 		for diag in diags.iter() {
-			diagnostics.insert(diag.clone());
+			diagnostics.push(diag.clone());
 		}
 	}
 
