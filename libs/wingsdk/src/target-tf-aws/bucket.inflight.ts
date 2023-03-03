@@ -40,6 +40,10 @@ export class BucketClient implements IBucketClient {
     return consumers.text(resp.Body as Readable);
   }
 
+  public async getJson(key: string): Promise<Json> {
+    return JSON.parse(await this.get(key));
+  }
+
   /**
    * List all keys in the bucket.
    * @param prefix Limits the response to keys that begin with the specified prefix

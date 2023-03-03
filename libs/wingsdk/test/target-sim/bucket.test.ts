@@ -25,6 +25,29 @@ test("create a bucket", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
+test("put json objects from bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const KEY = "greeting.json";
+  const VALUE = { msg: "Hello world!" };
+
+  // WHEN
+  await client.putJson(KEY, VALUE as any);
+  const response = await client.getJson("greeting.json");
+
+  // THEN
+  await s.stop();
+
+  expect(response).toEqual(VALUE);
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
 test("put and get objects from bucket", async () => {
   // GIVEN
   const app = new SimApp();

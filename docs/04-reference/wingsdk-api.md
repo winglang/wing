@@ -2699,6 +2699,7 @@ Inflight interface for `Bucket`.
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.delete">delete</a></code> | Delete an existing object using a key from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.getJson">get_json</a></code> | Retrieve a Json object from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">put_json</a></code> | Put a Json object in the bucket. |
@@ -2742,6 +2743,24 @@ get(key: str): str
 Retrieve an object from the bucket.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.get.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
+
+---
+
+##### `get_json` <a name="get_json" id="@winglang/sdk.cloud.IBucketClient.getJson"></a>
+
+```wing
+get_json(key: str): Json
+```
+
+**Inflight client:** [true](#true)
+
+Retrieve a Json object from the bucket.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.getJson.parameter.key"></a>
 
 - *Type:* str
 

@@ -71,6 +71,16 @@ export class BucketClient implements IBucketClient {
   }
 
   /**
+   * Get object content from bucket as Json
+   *
+   * @param key Key of the object
+   * @returns Json content of the object
+   */
+  public async getJson(key: string): Promise<Json> {
+    return JSON.parse(await this.get(key));
+  }
+
+  /**
    * List all keys in the bucket
    *
    * @param prefix Limits the response to keys that begin with the specified prefix

@@ -97,6 +97,15 @@ export interface IBucketClient {
   get(key: string): Promise<string>;
 
   /**
+   * Retrieve a Json object from the bucket.
+   * @param key Key of the object.
+   * @Throws if no object with the given key exists.
+   * @Returns the object's parsed Json.
+   * @inflight
+   */
+  getJson(key: string): Promise<Json>;
+
+  /**
    * Retrieve existing objects keys from the bucket.
    * @param prefix Limits the response to keys that begin with the specified prefix.
    * @returns a list of keys or an empty array if the bucket is empty.
@@ -127,5 +136,7 @@ export enum BucketInflightMethods {
   /** `Bucket.delete` */
   DELETE = "delete",
   /** `Bucket.putJson */
-  PUT_JSON = "putJson"
+  PUT_JSON = "putJson",
+  /** `Bucket.getJson */
+  GET_JSON = "getJson",
 }
