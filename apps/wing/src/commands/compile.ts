@@ -173,7 +173,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
         "  " +
           chalk.bold.white("note:") +
           " " +
-          chalk.white("intermediate javascript code:")
+          chalk.white(`intermediate javascript code (${artifactPath}):`)
       );
       const lineNumber =
         Number.parseInt(
