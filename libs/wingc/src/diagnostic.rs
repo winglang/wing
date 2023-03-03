@@ -126,7 +126,6 @@ impl Display for DiagnosticLevel {
 
 impl std::fmt::Display for Diagnostic {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		// TODO: implement a Display for DiagnosticLevel (instead of Debug formatting)
 		if let Some(span) = &self.span {
 			write!(f, "{} at {} | {}", self.level, span, self.message.bold().white())
 		} else {
