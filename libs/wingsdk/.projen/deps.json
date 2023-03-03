@@ -145,6 +145,10 @@
       "type": "build"
     },
     {
+      "name": "vitest",
+      "type": "build"
+    },
+    {
       "name": "@aws-sdk/client-cloudwatch-logs",
       "version": "3.256.0",
       "type": "bundled"

@@ -3,6 +3,7 @@ import * as sim from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { Trace } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
+import {test, expect} from "vitest";
 
 test("onTrace", async () => {
   // GIVEN

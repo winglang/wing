@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`default queue behavior 1`] = `
 "{
@@ -13,21 +13,21 @@ exports[`default queue behavior 1`] = `
 `;
 
 exports[`default queue behavior 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "Default": Object {
-            "children": Object {
-              "Queue": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Queue": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": true,
                 },
-                "children": Object {
-                  "Default": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
                       "version": "12.0.2",
                     },
@@ -35,27 +35,27 @@ Object {
                     "path": "root/Default/Queue/Default",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A distributed message queue",
                   "title": "Queue",
                 },
                 "id": "Queue",
                 "path": "root/Default/Queue",
               },
-              "WingLogger": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+              "WingLogger": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": true,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud logging facility",
                   "hidden": true,
                   "title": "Logger",
@@ -63,8 +63,8 @@ Object {
                 "id": "WingLogger",
                 "path": "root/Default/WingLogger",
               },
-              "aws": Object {
-                "constructInfo": Object {
+              "aws": {
+                "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
                   "version": "12.0.2",
                 },
@@ -72,15 +72,15 @@ Object {
                 "path": "root/Default/aws",
               },
             },
-            "constructInfo": Object {
+            "constructInfo": {
               "fqn": "constructs.Construct",
               "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
           },
-          "backend": Object {
-            "constructInfo": Object {
+          "backend": {
+            "constructInfo": {
               "fqn": "cdktf.LocalBackend",
               "version": "0.15.2",
             },
@@ -88,7 +88,7 @@ Object {
             "path": "root/backend",
           },
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "cdktf.TerraformStack",
           "version": "0.15.2",
         },
@@ -96,7 +96,7 @@ Object {
         "path": "root",
       },
     },
-    "constructInfo": Object {
+    "constructInfo": {
       "fqn": "cdktf.App",
       "version": "0.15.2",
     },
@@ -120,21 +120,21 @@ exports[`queue name valid 1`] = `
 `;
 
 exports[`queue name valid 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "Default": Object {
-            "children": Object {
-              "The-Incredible_Queue-01": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "The-Incredible_Queue-01": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": true,
                 },
-                "children": Object {
-                  "Default": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
                       "version": "12.0.2",
                     },
@@ -142,27 +142,27 @@ Object {
                     "path": "root/Default/The-Incredible_Queue-01/Default",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A distributed message queue",
                   "title": "Queue",
                 },
                 "id": "The-Incredible_Queue-01",
                 "path": "root/Default/The-Incredible_Queue-01",
               },
-              "WingLogger": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+              "WingLogger": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": true,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud logging facility",
                   "hidden": true,
                   "title": "Logger",
@@ -170,8 +170,8 @@ Object {
                 "id": "WingLogger",
                 "path": "root/Default/WingLogger",
               },
-              "aws": Object {
-                "constructInfo": Object {
+              "aws": {
+                "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
                   "version": "12.0.2",
                 },
@@ -179,15 +179,15 @@ Object {
                 "path": "root/Default/aws",
               },
             },
-            "constructInfo": Object {
+            "constructInfo": {
               "fqn": "constructs.Construct",
               "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
           },
-          "backend": Object {
-            "constructInfo": Object {
+          "backend": {
+            "constructInfo": {
               "fqn": "cdktf.LocalBackend",
               "version": "0.15.2",
             },
@@ -195,7 +195,7 @@ Object {
             "path": "root/backend",
           },
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "cdktf.TerraformStack",
           "version": "0.15.2",
         },
@@ -542,21 +542,21 @@ exports[`queue with custom timeout 1`] = `
 `;
 
 exports[`queue with custom timeout 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "Default": Object {
-            "children": Object {
-              "Queue": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Queue": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": true,
                 },
-                "children": Object {
-                  "Default": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
                       "version": "12.0.2",
                     },
@@ -564,27 +564,27 @@ Object {
                     "path": "root/Default/Queue/Default",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A distributed message queue",
                   "title": "Queue",
                 },
                 "id": "Queue",
                 "path": "root/Default/Queue",
               },
-              "WingLogger": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+              "WingLogger": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": true,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud logging facility",
                   "hidden": true,
                   "title": "Logger",
@@ -592,8 +592,8 @@ Object {
                 "id": "WingLogger",
                 "path": "root/Default/WingLogger",
               },
-              "aws": Object {
-                "constructInfo": Object {
+              "aws": {
+                "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
                   "version": "12.0.2",
                 },
@@ -601,15 +601,15 @@ Object {
                 "path": "root/Default/aws",
               },
             },
-            "constructInfo": Object {
+            "constructInfo": {
               "fqn": "constructs.Construct",
               "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
           },
-          "backend": Object {
-            "constructInfo": Object {
+          "backend": {
+            "constructInfo": {
               "fqn": "cdktf.LocalBackend",
               "version": "0.15.2",
             },
@@ -617,7 +617,7 @@ Object {
             "path": "root/backend",
           },
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "cdktf.TerraformStack",
           "version": "0.15.2",
         },
@@ -625,7 +625,7 @@ Object {
         "path": "root",
       },
     },
-    "constructInfo": Object {
+    "constructInfo": {
       "fqn": "cdktf.App",
       "version": "0.15.2",
     },
@@ -649,21 +649,21 @@ exports[`replace invalid character from queue name 1`] = `
 `;
 
 exports[`replace invalid character from queue name 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "Default": Object {
-            "children": Object {
-              "The*Incredible$Queue": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "The*Incredible$Queue": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": true,
                 },
-                "children": Object {
-                  "Default": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
                       "version": "12.0.2",
                     },
@@ -671,27 +671,27 @@ Object {
                     "path": "root/Default/The*Incredible$Queue/Default",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A distributed message queue",
                   "title": "Queue",
                 },
                 "id": "The*Incredible$Queue",
                 "path": "root/Default/The*Incredible$Queue",
               },
-              "WingLogger": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+              "WingLogger": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": true,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud logging facility",
                   "hidden": true,
                   "title": "Logger",
@@ -699,8 +699,8 @@ Object {
                 "id": "WingLogger",
                 "path": "root/Default/WingLogger",
               },
-              "aws": Object {
-                "constructInfo": Object {
+              "aws": {
+                "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
                   "version": "12.0.2",
                 },
@@ -708,15 +708,15 @@ Object {
                 "path": "root/Default/aws",
               },
             },
-            "constructInfo": Object {
+            "constructInfo": {
               "fqn": "constructs.Construct",
               "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
           },
-          "backend": Object {
-            "constructInfo": Object {
+          "backend": {
+            "constructInfo": {
               "fqn": "cdktf.LocalBackend",
               "version": "0.15.2",
             },
@@ -724,7 +724,7 @@ Object {
             "path": "root/backend",
           },
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "cdktf.TerraformStack",
           "version": "0.15.2",
         },
@@ -732,7 +732,7 @@ Object {
         "path": "root",
       },
     },
-    "constructInfo": Object {
+    "constructInfo": {
       "fqn": "cdktf.App",
       "version": "0.15.2",
     },

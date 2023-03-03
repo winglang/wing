@@ -1,8 +1,9 @@
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
+import {test, expect, vi} from "vitest";
 
-jest.setTimeout(100_000); // 100 seconds
+// vi.(100_000); // 100 seconds
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 

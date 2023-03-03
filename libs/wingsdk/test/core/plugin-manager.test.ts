@@ -7,6 +7,7 @@ import { PluginManager } from "../../src/core/plugin-manager";
 import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp } from "../../src/util";
 import { tfResourcesOfCount } from "../util";
+import {test, expect, describe} from "vitest";
 
 const PLUGIN_CODE = `
 var s3_bucket = require("@cdktf/provider-aws/lib/s3-bucket");

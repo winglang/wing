@@ -56,6 +56,7 @@ const project = new cdk.JsiiProject({
     "aws-sdk-client-mock-jest",
     "eslint-plugin-sort-exports",
     "patch-package",
+    "vitest"
   ],
   prettier: true,
   npmignoreEnabled: false,

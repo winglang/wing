@@ -1,5 +1,6 @@
 import * as tfgcp from "../../src/target-tf-gcp";
 import { mkdtemp } from "../../src/util";
+import {test, expect} from "vitest";
 
 test("throw error when no projectId provided", () => {
   // GIVEN

@@ -8,6 +8,7 @@ import {
 } from "../../src/core/inflight";
 import { Duration } from "../../src/std";
 import { SimApp } from "../../src/testing";
+import {test, expect} from "vitest";
 
 interface CaptureTest {
   bindings: InflightBindings;

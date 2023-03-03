@@ -3,6 +3,7 @@ import { Function } from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
+import {test, expect} from "vitest";
 
 test("artifacts are located in app root level outdir", () => {
   // GIVEN

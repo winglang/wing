@@ -2,6 +2,7 @@ import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import * as testing from "../../src/testing";
 import { SimApp, Testing } from "../../src/testing";
+import {test, expect} from "vitest";
 
 test("create a topic", async () => {
   // GIVEN

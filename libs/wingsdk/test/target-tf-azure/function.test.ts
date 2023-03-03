@@ -4,6 +4,7 @@ import * as tfazure from "../../src/target-tf-azure";
 import { Testing } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
+import {test, expect} from "vitest";
 
 const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
 

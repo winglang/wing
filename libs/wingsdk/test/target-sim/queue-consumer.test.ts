@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing, TraceType } from "../../src/testing";
+import {test, expect} from "vitest";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 

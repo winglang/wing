@@ -3,6 +3,7 @@ import { Bucket } from "../../src/cloud";
 import { Code, InflightBindings } from "../../src/core";
 import { Function } from "../../src/target-sim/function";
 import { SimApp, Testing, TestResult } from "../../src/testing";
+import {test, expect, describe} from "vitest";
 
 describe("run single test", () => {
   test("test not found", async () => {

@@ -9,6 +9,7 @@ import {
   tfSanitize,
   treeJsonOf,
 } from "../util";
+import {test, expect} from "vitest";
 
 test("default topic behavior", () => {
   // GIVEN

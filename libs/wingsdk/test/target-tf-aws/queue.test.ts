@@ -5,6 +5,7 @@ import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
 import { mkdtemp, sanitizeCode } from "../../src/util";
 import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
+import {test, expect} from "vitest";
 
 test("default queue behavior", () => {
   // GIVEN

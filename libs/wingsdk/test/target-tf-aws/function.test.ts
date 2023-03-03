@@ -5,10 +5,11 @@ import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
+import {test, expect} from "vitest";
 
 const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
 
-test("basic function", () => {
+test("basic function", async () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   Function._newFunction(app, "Function", inflight);
@@ -100,7 +101,7 @@ test("basic function with timeout explicitly set", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
-test("basic function with memory size specified", () => {
+test("basic function with memory size specified", async () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   Function._newFunction(app, "Function", inflight, { memory: 512 });

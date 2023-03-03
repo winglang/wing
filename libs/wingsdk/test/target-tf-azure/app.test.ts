@@ -1,5 +1,6 @@
 import * as tfazure from "../../src/target-tf-azure";
 import { mkdtemp } from "../../src/util";
+import {test, expect} from "vitest";
 
 test("throw error when no location provided", () => {
   // GIVEN

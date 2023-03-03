@@ -4,6 +4,7 @@ import * as core from "../../src/core";
 import { JsonFile, TextFile } from "../../src/fs";
 import { mkdtemp } from "../../src/util";
 import { appSnapshot } from "../util";
+import {test, expect, describe} from "vitest";
 
 test("nothing in output directory if there are no files", () => {
   const app = new App({ outdir: mkdtemp() });

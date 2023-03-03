@@ -7,6 +7,7 @@ import {
   tfSanitize,
   treeJsonOf,
 } from "../util";
+import {test, expect} from "vitest";
 
 const GCP_APP_OPTS = {
   projectId: "my-project",

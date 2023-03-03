@@ -2,6 +2,7 @@ import { Bucket } from "../../src/cloud";
 import * as sim from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
+import {test, expect} from "vitest";
 
 test("reloading the simulator updates the state of the tree", async () => {
   let workdir = mkdtemp();

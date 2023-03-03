@@ -3,6 +3,7 @@ import { simulatorJsonOf } from "./util";
 import { Bucket } from "../../src/cloud";
 import * as sim from "../../src/target-sim";
 import { mkdtemp } from "../../src/util";
+import {test, expect} from "vitest";
 
 test("app name can be customized", async () => {
   // GIVEN
