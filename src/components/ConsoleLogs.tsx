@@ -7,7 +7,7 @@ import classNames from "classnames";
 import throttle from "lodash.throttle";
 import { Fragment, useEffect, useRef, useState } from "react";
 
-import { LogEntry } from "../../electron/main/consoleLogger.js";
+import { LogEntry } from "../../server/consoleLogger.js";
 import { ResourceIcon } from "../stories/utils.js";
 
 const dateTimeFormat = new Intl.DateTimeFormat(undefined, {

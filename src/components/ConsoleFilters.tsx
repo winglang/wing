@@ -2,7 +2,7 @@ import { MagnifyingGlassIcon, NoSymbolIcon } from "@heroicons/react/24/outline";
 import debounce from "lodash/debounce";
 import { useCallback, useEffect, useState } from "react";
 
-import { LogLevel } from "../../electron/main/consoleLogger.js";
+import { LogLevel } from "../../server/consoleLogger.js";
 import { Button } from "../design-system/Button.js";
 import { Input } from "../design-system/Input.js";
 

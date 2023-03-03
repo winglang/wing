@@ -4,15 +4,11 @@ import { config } from "dotenv";
 import { app, BrowserWindow, dialog, Menu, screen, shell } from "electron";
 import log from "electron-log";
 import { autoUpdater } from "electron-updater";
-import Emittery from "emittery";
 
-import { ConsoleLogger, createConsoleLogger } from "./consoleLogger.js";
-import { createConsoleServer } from "./consoleServer.js";
+import { createConsoleServer } from "../../server/index.js";
+
 import { WING_PROTOCOL_SCHEME } from "./protocol.js";
 import { SegmentAnalytics } from "./segmentAnalytics.js";
-import { createCloudAppState } from "./utils/cloudAppState.js";
-import { RouterEvents } from "./utils/createRouter.js";
-import { createWingApp } from "./utils/createWingApp.js";
 
 config();
 
@@ -114,58 +110,10 @@ function createWindowManager() {
       }
 
       let newWindow: BrowserWindow | undefined;
-      let lastErrorMessage: string = "";
-
-      const emitter = new Emittery<RouterEvents>();
-
-      const consoleLogger: ConsoleLogger = createConsoleLogger(
-        (level, message) => {
-          lastErrorMessage = "";
-          if (level === "error") {
-            lastErrorMessage = message;
-            void emitter.emit("invalidateQuery", {
-              query: "app.error",
-            });
-          }
-          void emitter.emit("invalidateQuery", {
-            query: "app.logs",
-          });
-        },
-      );
-
-      const cloudAppStateService = createCloudAppState((state) => {
-        log.info("cloud app new state was sent to renderer process", state);
-        void emitter.emit("invalidateQuery", {
-          query: "app.state",
-        });
-        if (state === "success") {
-          log.info("simulator loaded, invalidate trpc queries");
-          // Clear the logs.
-          consoleLogger.messages = [];
-          void emitter.emit("invalidateQuery", {
-            query: undefined,
-          });
-        }
-      });
-
-      const simulatorPromise = createWingApp({
-        inputFile: simfile,
-        sendCloudAppStateEvent: cloudAppStateService.send,
-        consoleLogger,
-      });
-
-      // Create the express server and router for the simulator. Start
-      // listening but don't wait for it, yet.
-      log.info("Starting the dev server...");
 
       const server = await createConsoleServer({
-        cloudAppStateService,
-        consoleLogger,
-        simulatorPromise,
-        errorMessage() {
-          return lastErrorMessage;
-        },
-        emitter,
+        inputFile: simfile,
+        log,
       });
 
       newWindow = await createWindow({
@@ -176,43 +124,10 @@ function createWindowManager() {
       newWindow.setRepresentedFilename(simfile);
       windows.set(simfile, newWindow);
 
-      const simulatorPromiseResolved = await simulatorPromise;
-      const simulatorInstance = await simulatorPromiseResolved.get();
-
-      simulatorInstance.onTrace({
-        callback(event) {
-          // TODO: Refactor the whole logs and events so we support all of the fields that the simulator uses.
-          const message = `${
-            event.data.message ?? JSON.stringify(event.data, undefined, 2)
-          }`;
-          if (event.type === "log") {
-            consoleLogger.log(message, "simulator", {
-              sourceType: event.sourceType,
-              sourcePath: event.sourcePath,
-            });
-          } else {
-            consoleLogger.verbose(message, "simulator", {
-              sourceType: event.sourceType,
-              sourcePath: event.sourcePath,
-            });
-          }
-          if (event.data.status === "failure") {
-            consoleLogger.error(event.data.error.message, "user", {
-              sourceType: event.sourceType,
-              sourcePath: event.sourcePath,
-            });
-          }
-        },
-      });
-
       newWindow.on("closed", async () => {
         log.info("window closed", simfile);
         windows.delete(simfile);
-        try {
-          await Promise.all([server.server.close(), simulatorInstance.stop()]);
-        } catch (error) {
-          consoleLogger.error(error);
-        }
+        await server.close();
       });
 
       return newWindow;

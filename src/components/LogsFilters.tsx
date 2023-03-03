@@ -4,7 +4,7 @@ import { Fragment, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { usePopper } from "react-popper";
 
-import { LogLevel } from "../../electron/main/consoleLogger.js";
+import { LogLevel } from "../../server/consoleLogger.js";
 import { Button } from "../design-system/Button.js";
 
 const logLevels = ["verbose", "info", "warn", "error"] as const;

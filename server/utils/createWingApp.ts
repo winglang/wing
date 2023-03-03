@@ -2,6 +2,7 @@ import { ConsoleLogger } from "../consoleLogger.js";
 
 import { AppEvent } from "./cloudAppState.js";
 import { createSimulator } from "./createSimulator.js";
+import { LogInterface } from "./LogInterface.js";
 import { runCompile } from "./runCompile.js";
 import { watchSimulatorFile } from "./watchSimulatorFile.js";
 
@@ -9,12 +10,14 @@ export interface CreateWingAppProps {
   inputFile: string;
   consoleLogger: ConsoleLogger;
   sendCloudAppStateEvent: (event: AppEvent) => void;
+  log: LogInterface;
 }
 
 export const createWingApp = async ({
   inputFile,
   sendCloudAppStateEvent,
   consoleLogger,
+  log,
 }: CreateWingAppProps): Promise<ReturnType<typeof createSimulator>> => {
   return new Promise<ReturnType<typeof createSimulator>>(
     async (resolve, reject) => {
@@ -43,6 +46,7 @@ export const createWingApp = async ({
             }
           },
           consoleLogger,
+          log,
         });
       } else {
         // loading wsim file
@@ -56,6 +60,7 @@ export const createWingApp = async ({
           simulatorFile: sim.getSimFile(),
           sendCloudAppStateEvent,
           consoleLogger,
+          log,
         });
         resolve(sim);
       }

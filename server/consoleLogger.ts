@@ -1,5 +1,6 @@
-import log from "electron-log";
 import { nanoid } from "nanoid";
+
+import { LogInterface } from "./utils/LogInterface.js";
 
 export type LogLevel = "verbose" | "info" | "warn" | "error";
 
@@ -26,11 +27,15 @@ export interface ConsoleLogger {
   error: (message: unknown, source?: LogSource, ctx?: TracingContext) => void;
 }
 
-export const createConsoleLogger = (
-  onLog: (logLevel: LogLevel, message: string) => void,
-): ConsoleLogger => {
-  log.transports.console.bind(process.stdout);
+export interface CreateConsoleLoggerOptions {
+  onLog: (logLevel: LogLevel, message: string) => void;
+  log: LogInterface;
+}
 
+export const createConsoleLogger = ({
+  onLog,
+  log,
+}: CreateConsoleLoggerOptions): ConsoleLogger => {
   return {
     messages: new Array<LogEntry>(),
     verbose(message, source, ctx) {

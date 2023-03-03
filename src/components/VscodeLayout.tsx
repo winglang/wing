@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { LogEntry, LogLevel } from "../../electron/main/consoleLogger.js";
-import { ExplorerItem } from "../../electron/main/router/app.js";
-import { State } from "../../electron/main/types.js";
+import { LogEntry, LogLevel } from "../../server/consoleLogger.js";
+import { ExplorerItem } from "../../server/router/app.js";
+import { State } from "../../server/types.js";
 import { BlueScreenOfDeath } from "../design-system/BlueScreenOfDeath.js";
 import { Breadcrumbs } from "../design-system/Breadcrumbs.js";
 import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";

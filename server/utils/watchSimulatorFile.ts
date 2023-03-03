@@ -1,10 +1,10 @@
 import { Simulator } from "@winglang/sdk/lib/testing";
 import { FSWatcher } from "chokidar";
-import log from "electron-log";
 
 import { ConsoleLogger } from "../consoleLogger.js";
 
 import { AppEvent } from "./cloudAppState.js";
+import { LogInterface } from "./LogInterface.js";
 
 // Chokidar is a CJS-only module and doesn't play well with ESM imports.
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -16,6 +16,7 @@ export interface WatchSimulatorFileProps {
   simulatorReload: () => Promise<Simulator>;
   consoleLogger: ConsoleLogger;
   sendCloudAppStateEvent: (event: AppEvent) => void;
+  log: LogInterface;
 }
 export const watchSimulatorFile = ({
   simulatorFile,
@@ -23,6 +24,7 @@ export const watchSimulatorFile = ({
   simulatorReload,
   consoleLogger,
   sendCloudAppStateEvent,
+  log,
 }: WatchSimulatorFileProps): FSWatcher => {
   // Watch and handle changes in the simulator file.
   const watcher = chokidar

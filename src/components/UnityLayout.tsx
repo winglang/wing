@@ -10,7 +10,7 @@ import { PropsWithChildren, useEffect } from "react";
 import {
   BaseResourceSchema,
   WingSimulatorSchema,
-} from "../../electron/main/wingsdk.js";
+} from "../../server/wingsdk.js";
 import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
 import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";

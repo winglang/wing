@@ -1,6 +1,6 @@
 import { createTRPCReact } from "@trpc/react-query";
 
-import { Router } from "../../electron/main/router/index.js";
+import { Router } from "../../server/router/index.js";
 
 export const trpc = createTRPCReact<Router>({
   unstable_overrides: {

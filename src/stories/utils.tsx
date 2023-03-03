@@ -25,7 +25,7 @@ import React from "react";
 import {
   BaseResourceSchema,
   WingSimulatorSchema,
-} from "../../electron/main/wingsdk.js";
+} from "../../server/wingsdk.js";
 import { TreeMenuItem } from "../design-system/TreeMenu.js";
 
 export const flattenTreeMenuItems = (items: TreeMenuItem[]): TreeMenuItem[] => {

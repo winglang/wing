@@ -4,12 +4,12 @@ import * as os from "node:os";
 import path from "node:path";
 
 import { FSWatcher } from "chokidar";
-import log from "electron-log";
 
 import { ConsoleLogger } from "../consoleLogger.js";
 import { State } from "../types.js";
 
 import { compile } from "./compile.js";
+import type { LogInterface } from "./LogInterface.js";
 
 // Chokidar is a CJS-only module and doesn't play well with ESM imports.
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -19,11 +19,13 @@ export interface CreateCompileRunnerProps {
   wingSrcFile: string;
   onCompilerStatusChange: (state: State, data?: unknown) => void;
   consoleLogger: ConsoleLogger;
+  log: LogInterface;
 }
 export const runCompile = async ({
   wingSrcFile,
   onCompilerStatusChange,
   consoleLogger,
+  log,
 }: CreateCompileRunnerProps): Promise<FSWatcher> => {
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "wing-app-target-dir-"));
   const fileName = path.basename(wingSrcFile, ".w");
@@ -37,6 +39,7 @@ export const runCompile = async ({
         wingSrcFile,
         outDir: tmpDir,
         consoleLogger,
+        log,
       });
       if (status === "error") {
         onCompilerStatusChange("error", "Compilation failed");

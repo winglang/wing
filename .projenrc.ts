@@ -264,6 +264,7 @@ for (const tsconfig of tsconfigFiles) {
         "./scripts/**/*",
         "./test/**/*",
         "./e2e/**/*",
+        "./server/**/*",
         "./vite.config.ts",
         "./vitest.config.ts",
         "./.projenrc.ts",

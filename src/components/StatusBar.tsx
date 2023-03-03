@@ -1,6 +1,6 @@
 import classNames from "classnames";
 
-import { State } from "../../electron/main/types.js";
+import { State } from "../../server/types.js";
 import { Loader } from "../design-system/Loader.js";
 
 export interface StatusBarProps {

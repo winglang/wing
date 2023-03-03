@@ -1,5 +1,6 @@
-import log from "electron-log";
 import { createMachine, interpret } from "xstate";
+
+import { LogInterface } from "./LogInterface.js";
 
 export type AppEvent =
   | "COMPILER_ERROR"
@@ -21,7 +22,15 @@ export type AppEvent2 =
 
 export type AppStates = "error" | "success" | "loading" | "compilerSuccess";
 
-export const createCloudAppState = (onChange: (state: AppStates) => void) => {
+export interface CreateCloudAppStateOptions {
+  onChange: (state: AppStates) => void;
+  log: LogInterface;
+}
+
+export const createCloudAppState = ({
+  onChange,
+  log,
+}: CreateCloudAppStateOptions) => {
   const cloudAppState = createMachine<undefined, AppEvent2>({
     initial: "loading",
     states: {

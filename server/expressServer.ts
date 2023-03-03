@@ -1,7 +1,6 @@
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { applyWSSHandler } from "@trpc/server/adapters/ws";
 import cors from "cors";
-import log from "electron-log";
 import Emittery from "emittery";
 import express from "express";
 import getPort from "get-port";
@@ -13,14 +12,25 @@ import { CloudAppStateService } from "./utils/cloudAppState.js";
 import { RouterContext, RouterEvents } from "./utils/createRouter.js";
 import { createSimulator } from "./utils/createSimulator.js";
 import { getWingVersion } from "./utils/getWingVersion.js";
+import { LogInterface } from "./utils/LogInterface.js";
 
-export const createConsoleServer = async (options: {
+export interface CreateExpressServerOptions {
   simulatorPromise: Promise<ReturnType<typeof createSimulator>>;
   consoleLogger: ConsoleLogger;
   cloudAppStateService: CloudAppStateService;
   errorMessage: () => string | undefined;
   emitter: Emittery<RouterEvents>;
-}) => {
+  log: LogInterface;
+}
+
+export const createExpressServer = async ({
+  simulatorPromise,
+  consoleLogger,
+  errorMessage,
+  emitter,
+  cloudAppStateService,
+  log,
+}: CreateExpressServerOptions) => {
   const app = express();
   app.use(cors());
 
@@ -28,15 +38,15 @@ export const createConsoleServer = async (options: {
   const createContext = (): RouterContext => {
     return {
       async simulator() {
-        const sim = await options.simulatorPromise;
+        const sim = await simulatorPromise;
         return sim.get();
       },
       async tree() {
-        const sim = await options.simulatorPromise;
+        const sim = await simulatorPromise;
         return sim.tree();
       },
       logs() {
-        return options.consoleLogger.messages;
+        return consoleLogger.messages;
       },
       async appDetails() {
         return {
@@ -44,10 +54,10 @@ export const createConsoleServer = async (options: {
         };
       },
       errorMessage() {
-        return options.errorMessage();
+        return errorMessage();
       },
-      emitter: options.emitter,
-      cloudAppStateService: options.cloudAppStateService,
+      emitter: emitter,
+      cloudAppStateService: cloudAppStateService,
     };
   };
   app.use(
@@ -73,8 +83,8 @@ export const createConsoleServer = async (options: {
     createContext,
   });
 
-  options.cloudAppStateService.subscribe(() => {
-    void options.emitter.emit("invalidateQuery", { query: "app.state" });
+  cloudAppStateService.subscribe(() => {
+    void emitter.emit("invalidateQuery", { query: "app.state" });
   });
 
   return { port, server };

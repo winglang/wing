@@ -1,10 +1,11 @@
 import { exec } from "node:child_process";
 import util from "node:util";
 
-import log from "electron-log";
 import fixPath from "fix-path";
 
 import { ConsoleLogger } from "../consoleLogger.js";
+
+import { LogInterface } from "./LogInterface.js";
 
 export type CompileStatusTypes = "success" | "error" | "compiling";
 
@@ -12,12 +13,14 @@ export interface ICompileOptions {
   outDir: string;
   wingSrcFile: string;
   consoleLogger: ConsoleLogger;
+  log: LogInterface;
 }
 
 export const compile = async ({
   wingSrcFile,
   consoleLogger,
   outDir,
+  log,
 }: ICompileOptions): Promise<CompileStatusTypes> => {
   log.info(
     `exec child process: wing compile ${wingSrcFile} -t sim -o ${outDir}`,

@@ -3,7 +3,7 @@ import { httpLink, wsLink, splitLink, createWSClient } from "@trpc/client";
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-import { WingSimulatorSchema } from "../electron/main/wingsdk.js";
+import { WingSimulatorSchema } from "../server/wingsdk.js";
 
 import { App } from "./App.js";
 import { AppContext, AppMode } from "./AppContext.js";

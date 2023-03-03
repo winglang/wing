@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { FunctionComponent, PropsWithChildren } from "react";
 
-import { BaseResourceSchema } from "../../electron/main/wingsdk.js";
+import { BaseResourceSchema } from "../../server/wingsdk.js";
 
 export interface IconComponent
   extends FunctionComponent<React.SVGProps<SVGSVGElement>> {}
