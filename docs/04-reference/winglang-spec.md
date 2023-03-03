@@ -779,10 +779,12 @@ deployed resource (lambda functions, docker, virtual machines etc).
 #### 1.3.1 Phase-independent code
 
 Code that is not dependent on the phase of execution can be designated as phase-independent using the `?inflight` modifier.
-This modifier can be read as "maybe-inflight".
+This keyword can be read as "maybe-inflight."
 
-Using this modifier means that it is safe to call the function or method from
+Using this modifier means that it is safe to call the function from
 either a preflight or inflight context.
+
+<!-- TODO: is it also safe to pass the maybe-flight function by value, or to capture it? -->
 
 ```TS
 let odd_numbers = ?inflight (arr: Array<num>): Array<num> => {
@@ -792,28 +794,29 @@ let odd_numbers = ?inflight (arr: Array<num>): Array<num> => {
       result.push(num);
     }
   }
-  return result.copy(); // convert to immutable array
+  return result.copy(); // convert from MutArray to Array (immutable)
 };
 
 // OK! We are calling a maybe-inflight function from a preflight context
-print(odd_numbers([1, 2, 3]));
+let odds = odd_numbers([1, 2, 3]);
 
 let handler = inflight () => {
   // OK! We are calling a maybe-inflight function from an inflight context
-  print(odd_numbers([1, 2, 3]));
+  let big_odds = odd_numbers([7, 8, 9]);
 }
 ```
 
-Phase-independent functions are useful for code that does not apply to a
-specific phase of execution, such as for data manipulation, utility functions,
-etc.
+Phase-independent functions are useful for code that is useful across both
+execution phases, such as for data manipulation, utility functions, etc.
 
 In order for a function to be phase-independent, it must not use any
 phase-specific features, like calling methods on resources that are only
 preflight or inflight. Since phase-independent functions can be used inflight,
-they inherit the same restrictions as inflight functions, like not being able to
-reference mutable data structures or reassignable variables from the outer
-scope, and not being able to instantiate new resources.
+they inherit the same restrictions as inflight functions, such as:
+
+- They cannot reference mutable data structures or reassignable variables from
+outer scopes.
+- They cannot instantiate new resources.
 
 Phase-independent methods can also be defined on resources:
 
@@ -829,6 +832,24 @@ resource AwsBucket {
     // This method references a preflight field (this.name) -- that is
     // possible in both phases so it is OK!
     return `s3://${this.name}/${key}`;
+  }
+}
+```
+
+Phase-independent methods take on the additional restriction that they
+cannot mutate fields of the resource. For example, the following is disallowed:
+
+```TS
+resource Bucket {
+  name: str; // preflight field
+
+  init() {
+    // initialize `name`
+  }
+
+  ?inflight set_name(name: str): void {
+    // ERROR: cannot mutate a preflight field from a phase-independent context
+    this.name = name;
   }
 }
 ```
