@@ -3866,8 +3866,8 @@ constructor() {
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo_inflight({}))\`);
   }
   }
-  Foo._annotateInflight(\\"get_field\\", {});
   Foo._annotateInflight(\\"set_field\\", {});
+  Foo._annotateInflight(\\"get_field\\", {});
   const f = new Foo(this,\\"Foo\\");
   this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.ef866f1d1f55245bd0673c32e84f0500ca60a72f43baa3d446a83445a7f65861/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
@@ -6004,8 +6004,8 @@ constructor() {
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo_inflight({c: \${c_client}}))\`);
   }
   }
-  Foo._annotateInflight(\\"foo_get\\", {\\"this.c\\": { ops: [\\"peek\\"] }});
   Foo._annotateInflight(\\"foo_inc\\", {\\"this.c\\": { ops: [\\"inc\\"] }});
+  Foo._annotateInflight(\\"foo_get\\", {\\"this.c\\": { ops: [\\"peek\\"] }});
   class Bar extends $stdlib.core.Resource {
   	constructor(scope, id, name, b) {
   	super(scope, id);
@@ -6024,7 +6024,7 @@ constructor() {
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Bar_inflight({b: \${b_client}, foo: \${foo_client}, name: \${name_client}}))\`);
   }
   }
-  Bar._annotateInflight(\\"my_method\\", {\\"this.b\\": { ops: [\\"put\\",\\"get\\"] },\\"this.foo\\": { ops: [\\"foo_inc\\",\\"foo_get\\"] }});
+  Bar._annotateInflight(\\"my_method\\", {\\"this.b\\": { ops: [\\"get\\",\\"put\\"] },\\"this.foo\\": { ops: [\\"foo_get\\",\\"foo_inc\\"] }});
   const bucket = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
   const res = new Bar(this,\\"Bar\\",\\"Arr\\",bucket);
   this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
@@ -7779,12 +7779,12 @@ constructor() {
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).MyResource_inflight({array_of_queues: \${array_of_queues_client}, array_of_str: \${array_of_str_client}, map_of_num: \${map_of_num_client}, my_bool: \${my_bool_client}, my_num: \${my_num_client}, my_resource: \${my_resource_client}, my_str: \${my_str_client}, set_of_str: \${set_of_str_client}}))\`);
   }
   }
-  MyResource._annotateInflight(\\"capture_array\\", {\\"this.array_of_str\\": { ops: [\\"length\\",\\"at\\"] }});
-  MyResource._annotateInflight(\\"capture_array_of_queues\\", {\\"this.array_of_queues\\": { ops: [\\"at\\"] }});
-  MyResource._annotateInflight(\\"capture_map\\", {\\"this.map_of_num\\": { ops: [\\"get\\"] }});
+  MyResource._annotateInflight(\\"capture_resource\\", {\\"this.my_resource\\": { ops: [\\"get\\",\\"list\\",\\"put\\"] }});
   MyResource._annotateInflight(\\"capture_primitives\\", {\\"this.my_bool\\": { ops: [] },\\"this.my_num\\": { ops: [] },\\"this.my_str\\": { ops: [] }});
-  MyResource._annotateInflight(\\"capture_resource\\", {\\"this.my_resource\\": { ops: [\\"put\\",\\"get\\",\\"list\\"] }});
+  MyResource._annotateInflight(\\"capture_array\\", {\\"this.array_of_str\\": { ops: [\\"at\\",\\"length\\"] }});
+  MyResource._annotateInflight(\\"capture_map\\", {\\"this.map_of_num\\": { ops: [\\"get\\"] }});
   MyResource._annotateInflight(\\"capture_set\\", {\\"this.set_of_str\\": { ops: [\\"has\\"] }});
+  MyResource._annotateInflight(\\"capture_array_of_queues\\", {\\"this.array_of_queues\\": { ops: [\\"at\\"] }});
   const r = new MyResource(this,\\"MyResource\\");
   this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:capture_resource\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.b5e7bd6cc9f6c741c4f0afa8adc0208ccee08e6297495b1fbe29db8afb6ee789/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
