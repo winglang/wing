@@ -1,0 +1,33 @@
+diff --git a/node_modules/esbuild/lib/main.js b/node_modules/esbuild/lib/main.js
+index 3e7a538..abbe61f 100644
+--- a/node_modules/esbuild/lib/main.js
++++ b/node_modules/esbuild/lib/main.js
+@@ -1949,15 +1949,11 @@ var esbuildCommandAndArgs = () => {
+ More information: The file containing the code for esbuild's JavaScript API (${__filename}) does not appear to be inside the esbuild package on the file system, which usually means that the esbuild package was bundled into another file. This is problematic because the API needs to run a binary executable inside the esbuild package which is located using a relative path from the API code to the executable. If the esbuild package is bundled, the relative path will be incorrect and the executable won't be found.`
+     );
+   }
+-  if (false) {
+-    return ["node", [path2.join(__dirname, "..", "bin", "esbuild")]];
++  const { binPath, isWASM } = generateBinPath();
++  if (isWASM) {
++    return ["node", [binPath]];
+   } else {
+-    const { binPath, isWASM } = generateBinPath();
+-    if (isWASM) {
+-      return ["node", [binPath]];
+-    } else {
+-      return [binPath, []];
+-    }
++    return [binPath, []];
+   }
+ };
+ var isTTY = () => tty.isatty(2);
+@@ -2119,7 +2115,7 @@ var ensureServiceIsRunning = () => {
+   let [command, args] = esbuildCommandAndArgs();
+   let child = child_process.spawn(command, args.concat(`--service=${"0.17.6"}`, "--ping"), {
+     windowsHide: true,
+-    stdio: ["pipe", "pipe", "inherit"],
++    stdio: ["pipe", "pipe", "pipe"],
+     cwd: defaultWD
+   });
+   let { readFromStdout, afterClose, service } = createChannel({
