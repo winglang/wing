@@ -19,8 +19,7 @@ pub struct SymbolEnv {
 	// down the scopes. Think of a nicer way to do this.
 	pub return_type: TypeRef,
 
-	/// Whether this is a class-like environment (e.g. a resource, class, interface)
-	is_class_like: bool,
+	is_class: bool,
 	pub is_init: bool,
 	pub flight: Phase,
 	statement_idx: usize,
@@ -69,7 +68,7 @@ impl SymbolEnv {
 	pub fn new(
 		parent: Option<SymbolEnvRef>,
 		return_type: TypeRef,
-		is_class_like: bool,
+		is_class: bool,
 		is_init: bool,
 		flight: Phase,
 		statement_idx: usize,
@@ -81,7 +80,7 @@ impl SymbolEnv {
 			symbol_map: BTreeMap::new(),
 			parent,
 			return_type,
-			is_class_like,
+			is_class,
 			is_init,
 			flight,
 			statement_idx,
@@ -108,7 +107,7 @@ impl SymbolEnv {
 
 		// Avoid symbol shadowing (unless we're in a class and then derived classes can shadow symbols
 		// from their parent class)
-		if self.parent.is_some() && self.try_lookup(&symbol.name, None).is_some() && !self.is_class_like {
+		if self.parent.is_some() && self.try_lookup(&symbol.name, None).is_some() && !self.is_class {
 			return Err(TypeError {
 				span: symbol.span.clone(),
 				message: format!("Symbol \"{}\" already defined in parent scope.", symbol.name),
