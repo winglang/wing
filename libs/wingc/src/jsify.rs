@@ -1,8 +1,7 @@
 use aho_corasick::AhoCorasick;
-use indexmap::IndexSet;
 use indoc::formatdoc;
 use itertools::Itertools;
-use std::{cell::RefCell, cmp::Ordering, fs, path::Path, vec, collections::BTreeMap};
+use std::{cell::RefCell, cmp::Ordering, fs, path::Path, vec, collections::{BTreeMap, BTreeSet}};
 
 use sha2::{Digest, Sha256};
 
@@ -1102,12 +1101,12 @@ impl<'a> JSifier<'a> {
 
 	/// Get the type and capture info for fields that are captured in the client of the given resource
 	/// Returns a map from method name to a map from field name to a set of operations
-	fn find_inflight_references(&mut self, resource_class: &AstClass) -> BTreeMap<String, BTreeMap<String, IndexSet<String>>> {
+	fn find_inflight_references(&mut self, resource_class: &AstClass) -> Vec<(String, BTreeMap<String, BTreeSet<String>>)> {
 		let inflight_methods = resource_class.methods
 			.iter()
 			.filter(|(_, m)| m.signature.flight == Phase::Inflight);
 
-		let mut result = BTreeMap::new();
+		let mut result = vec![];
 
 		for (method_name, function_def) in inflight_methods {			
 			// visit statements of method and find all references to fields ("this.xxx")
@@ -1117,7 +1116,7 @@ impl<'a> JSifier<'a> {
 			self.diagnostics.extend(find_diags);
 
 			// add the references to the result
-			result.insert(method_name.name.clone(), refs);
+			result.push((method_name.name.clone(), refs));
 		}
 
 		return result;
@@ -1175,7 +1174,7 @@ fn is_mutable_collection(expression: &Expr) -> bool {
 /// method and which operations are performed on them.
 struct FieldReferenceVisitor<'a> {
 	/// The key is field name, value is a list of operations performed on this field
-	references: BTreeMap<String, IndexSet<String>>,
+	references: BTreeMap<String, BTreeSet<String>>,
 
 	/// Used internally by the visitor to keep track of the path to the field
 	path: Vec<String>,
@@ -1200,7 +1199,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 		}
 	}
 
-	pub fn find_refs(mut self) -> (BTreeMap<String, IndexSet<String>>, Diagnostics) {
+	pub fn find_refs(mut self) -> (BTreeMap<String, BTreeSet<String>>, Diagnostics) {
 		self.visit_scope(&self.function_def.statements);
 		(self.references, self.diagnostics)
 	}
@@ -1210,7 +1209,7 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'_> {
 	fn visit_reference(&mut self, node: &'ast Reference) {
 
 		if self.collect_inflight_refs(node) {
-    	return;
+			return;
 		}
 
 		visit::visit_reference(self, node);
