@@ -107,7 +107,7 @@ pub enum DiagnosticLevel {
 	Note,
 }
 
-#[derive(Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Diagnostic {
 	pub message: String,
 	pub span: Option<WingSpan>,
