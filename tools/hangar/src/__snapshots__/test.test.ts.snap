@@ -19,6 +19,8 @@ exports[`bring_jsii_path.w > wing test --target sim > stdout 1`] = `"<green>pass
 
 exports[`bring_projen.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> bring_projen.w <gray>(no tests)</color>"`;
 
+exports[`bucket_keys.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> bucket_keys.w <gray>»</color> <brightWhite>root/test</color>"`;
+
 exports[`capture_containers.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> capture_containers.w <gray>»</color> <brightWhite>root/test</color>"`;
 
 exports[`capture_containers_of_resources.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> capture_containers_of_resources.w <gray>»</color> <brightWhite>root/test</color>"`;
