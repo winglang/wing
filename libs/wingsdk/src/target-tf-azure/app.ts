@@ -59,9 +59,9 @@ export class App extends CdktfApp {
    * @link https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group#location
    * */
   public readonly location: string;
-  private _resourceGroupValue?: ResourceGroup;
-  private _storageAccountValue?: StorageAccount;
-  private _servicePlanValue?: ServicePlan;
+  private _resourceGroup?: ResourceGroup;
+  private _storageAccount?: StorageAccount;
+  private _servicePlan?: ServicePlan;
 
   constructor(props: AzureAppProps) {
     super(props);
@@ -86,52 +86,49 @@ export class App extends CdktfApp {
 
   /**
    * Get resource group using lazy initialization
-   * @internal
    */
-  public get _resourceGroup() {
-    if (!this._resourceGroupValue) {
-      this._resourceGroupValue = new ResourceGroup(this, "ResourceGroup", {
+  public get resourceGroup() {
+    if (!this._resourceGroup) {
+      this._resourceGroup = new ResourceGroup(this, "ResourceGroup", {
         location: this.location,
         name: ResourceNames.generateName(this, RESOURCEGROUP_NAME_OPTS),
       });
     }
-    return this._resourceGroupValue;
+    return this._resourceGroup;
   }
 
   /**
    * Get storage account using lazy initialization
-   * @internal
    */
-  public get _storageAccount() {
-    if (!this._storageAccountValue) {
-      this._storageAccountValue = new StorageAccount(this, "StorageAccount", {
+  public get storageAccount() {
+    if (!this._storageAccount) {
+      this._storageAccount = new StorageAccount(this, "StorageAccount", {
         name: ResourceNames.generateName(this, STORAGEACCOUNT_NAME_OPTS),
-        resourceGroupName: this._resourceGroup.name,
-        location: this._resourceGroup.location,
+        resourceGroupName: this.resourceGroup.name,
+        location: this.resourceGroup.location,
         accountTier: "Standard",
         accountReplicationType: "LRS",
       });
     }
-    return this._storageAccountValue;
+    return this._storageAccount;
   }
 
   /**
    * Get service plan using lazy initialization
-   * @internal
    */
-  public get _servicePlan() {
-    if (!this._servicePlanValue) {
-      this._servicePlanValue = new ServicePlan(this, "ServicePlan", {
+  public get servicePlan() {
+    if (!this._servicePlan) {
+      this._servicePlan = new ServicePlan(this, "ServicePlan", {
         name: ResourceNames.generateName(this, SERVICEPLAN_NAME_OPTS),
-        resourceGroupName: this._resourceGroup.name,
-        location: this._resourceGroup.location,
+        resourceGroupName: this.resourceGroup.name,
+        location: this.resourceGroup.location,
         osType: "Linux",
         // Dynamic Stock Keeping Unit (SKU)
         // https://learn.microsoft.com/en-us/partner-center/developer/product-resources#sku
         skuName: "Y1",
       });
     }
-    return this._servicePlanValue;
+    return this._servicePlan;
   }
 
   protected tryNew(
