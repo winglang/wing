@@ -1,7 +1,7 @@
+import { spawnSync } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
-import * as esbuild from "esbuild-wasm";
 import { Logger } from "./logger";
 import { fqnForType } from "../constants";
 import { IInflightHost, IResource, Inflight, Resource, App } from "../core";
@@ -110,25 +110,18 @@ export abstract class Function extends Resource implements IInflightHost {
     });
 
     const tempdir = mkdtemp();
+    const infile = join(tempdir, "prebundle.js");
     const outfile = join(tempdir, "index.js");
+    writeFileSync(infile, lines.join("\n"));
 
+    // Run esbuild in a child process to bundle the handler code.
+    // A workaround for https://github.com/evanw/esbuild/issues/2927
     try {
-      esbuild.buildSync({
-        bundle: true,
-        stdin: {
-          contents: lines.join("\n"),
-          resolveDir: tempdir,
-          sourcefile: "inflight.js",
-        },
-        nodePaths: [join(__dirname, "..", "..", "node_modules")],
-        target: "node16",
-        platform: "node",
-        absWorkingDir: tempdir,
-        outfile,
-        minify: false,
-        logLevel: "silent",
-        external: ["aws-sdk"],
-      });
+      let esbuildScript = [
+        `const esbuild = require("${require.resolve("esbuild-wasm")}");`,
+        `esbuild.buildSync({ bundle: true, entryPoints: ["${infile}"], outfile: "${outfile}", minify: false, platform: "node", target: "node16", external: ["aws-sdk"] });`,
+      ].join("\n");
+      spawnSync(process.argv[0], ["-e", esbuildScript]);
     } catch (e) {
       throw new Error(`Failed to bundle function: ${e}`);
     }
