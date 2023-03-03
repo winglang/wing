@@ -815,6 +815,24 @@ they inherit the same restrictions as inflight functions, like not being able to
 reference mutable data structures or reassignable variables from the outer
 scope, and not being able to instantiate new resources.
 
+Phase-independent methods can also be defined on resources:
+
+```TS
+resource AwsBucket {
+  name: str; // preflight field
+
+  init() {
+    // initialize `name`
+  }
+
+  ?inflight object_url(key: str): str {
+    // This method references a preflight field (this.name) -- that is
+    // possible in both phases so it is OK!
+    return `s3://${this.name}/${key}`;
+  }
+}
+```
+
 [`▲ top`][top]
 
 ---
