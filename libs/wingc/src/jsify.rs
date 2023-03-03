@@ -11,7 +11,7 @@ use crate::{
 		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator,
 		UserDefinedType,
 	},
-	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, Type, TypeRef},
+	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, ClassLike, Type, TypeRef},
 	utilities::snake_case_to_camel_case,
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
 };

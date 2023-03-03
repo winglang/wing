@@ -12,8 +12,7 @@ use crate::{
 		Scope, StmtKind, Symbol,
 	},
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
-	type_check::symbol_env::SymbolEnv,
-	type_check::Type,
+	type_check::{symbol_env::SymbolEnv, ClassLike, Type},
 	visit::Visit,
 };
 use std::collections::{BTreeMap, BTreeSet};

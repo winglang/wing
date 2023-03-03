@@ -18,8 +18,11 @@ use std::cell::RefCell;
 use std::collections::BTreeMap;
 use std::error::Error;
 use std::fmt::{Debug, Display};
+use std::iter::FilterMap;
 use std::path::Path;
 use symbol_env::{StatementIdx, SymbolEnv};
+
+use self::symbol_env::SymbolEnvIter;
 
 pub struct UnsafeRef<T>(*const T);
 impl<T> Clone for UnsafeRef<T> {
@@ -195,21 +198,48 @@ pub struct Class {
 	pub type_parameters: Option<Vec<TypeRef>>,
 }
 
-impl Class {
-	pub fn methods(&self, with_ancestry: bool) -> impl Iterator<Item = (String, TypeRef)> + '_ {
-		self
-			.env
-			.iter(with_ancestry)
-			.filter(|(_, t, _)| t.as_variable().unwrap().type_.as_function_sig().is_some())
-			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap().type_.clone()))
+pub trait ClassLike {
+	fn get_env(&self) -> &SymbolEnv;
+
+	fn methods(
+		&self,
+		with_ancestry: bool,
+	) -> FilterMap<SymbolEnvIter<'_>, fn(<SymbolEnvIter as Iterator>::Item) -> Option<(String, TypeRef)>> {
+		self.get_env().iter(with_ancestry).filter_map(|(s, t, ..)| {
+			t.as_variable()
+				.unwrap()
+				.type_
+				.as_function_sig()
+				.map(|_| (s.clone(), t.as_variable().unwrap().type_.clone()))
+		})
 	}
 
-	pub fn fields(&self, with_ancestry: bool) -> impl Iterator<Item = (String, TypeRef)> + '_ {
-		self
-			.env
-			.iter(with_ancestry)
-			.filter(|(_, t, _)| t.as_variable().unwrap().type_.as_function_sig().is_none())
-			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap().type_.clone()))
+	fn fields(
+		&self,
+		with_ancestry: bool,
+	) -> FilterMap<SymbolEnvIter<'_>, fn(<SymbolEnvIter as Iterator>::Item) -> Option<(String, TypeRef)>> {
+		self.get_env().iter(with_ancestry).filter_map(|(s, t, ..)| {
+			if t.as_variable().unwrap().type_.as_function_sig().is_none() {
+				Some((s.clone(), t.as_variable().unwrap().type_.clone()))
+			} else {
+				None
+			}
+		})
+	}
+
+	fn get_method(&self, name: &str) -> Option<VariableInfo> {
+		let v = self
+			.get_env()
+			.try_lookup(name, None)?
+			.as_variable()
+			.expect("class env should only contain variables");
+		v.type_.as_function_sig().map(|_| v.clone())
+	}
+}
+
+impl ClassLike for Class {
+	fn get_env(&self) -> &SymbolEnv {
+		&self.env
 	}
 }
 
@@ -222,21 +252,9 @@ pub struct Interface {
 	pub env: SymbolEnv,
 }
 
-impl Interface {
-	pub fn methods(&self, with_ancestry: bool) -> impl Iterator<Item = (String, TypeRef)> + '_ {
-		self
-			.env
-			.iter(with_ancestry)
-			.filter(|(_, t, _)| t.as_variable().unwrap().type_.as_function_sig().is_some())
-			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap().type_.clone()))
-	}
-
-	pub fn fields(&self, with_ancestry: bool) -> impl Iterator<Item = (String, TypeRef)> + '_ {
-		self
-			.env
-			.iter(with_ancestry)
-			.filter(|(_, t, _)| t.as_variable().unwrap().type_.as_function_sig().is_none())
-			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap().type_.clone()))
+impl ClassLike for Interface {
+	fn get_env(&self) -> &SymbolEnv {
+		&self.env
 	}
 }
 
