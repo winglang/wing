@@ -84,6 +84,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
       RUST_BACKTRACE: "full",
       WINGSDK_SYNTH_DIR: normalPath(synthDir),
       WINGC_PREFLIGHT,
+      CLICOLOR_FORCE: chalk.supportsColor ? "1" : "0",
     },
     preopens: {
       [wingDir]: wingDir, // for Rust's access to the source file
