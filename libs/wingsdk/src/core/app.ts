@@ -7,6 +7,8 @@ import { PluginManager } from "./plugin-manager";
 import { IResource } from "./resource";
 import { synthesizeTree } from "./tree";
 import { Logger } from "../cloud/logger";
+import { DataAwsRegion } from "@cdktf/provider-aws/lib/data-aws-region";
+import { DataAwsCallerIdentity } from "@cdktf/provider-aws/lib/data-aws-caller-identity";
 
 const TERRAFORM_STACK_NAME = "root";
 
@@ -157,6 +159,8 @@ export abstract class CdktfApp extends App {
   private readonly pluginManager: PluginManager;
   private synthed: boolean;
   private synthedOutput: string | undefined;
+  private awsRegionProvider?: DataAwsRegion;
+  private awsAccountIdProvider?: DataAwsCallerIdentity;
 
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
@@ -196,6 +200,26 @@ export abstract class CdktfApp extends App {
 
     // register a logger for this app.
     Logger.register(this);
+  }
+
+  /**
+   * The AWS account ID of the App
+   */
+  public get accountId(): string {
+    if (!this.awsAccountIdProvider) {
+      this.awsAccountIdProvider = new DataAwsCallerIdentity(this, "account");
+    }
+    return this.awsAccountIdProvider.accountId;
+  }
+
+  /**
+   * The AWS region of the App
+   */
+  public get region(): string {
+    if (!this.awsRegionProvider) {
+      this.awsRegionProvider = new DataAwsRegion(this, "Region");
+    }
+    return this.awsRegionProvider.name;
   }
 
   /**

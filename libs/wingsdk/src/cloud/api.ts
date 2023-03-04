@@ -1,13 +1,12 @@
 import { Construct } from "constructs";
-import { Polycons } from "polycons";
-import { Inflight, Resource } from "../core";
-import { Code } from "../core/inflight";
+import { fqnForType } from "../constants";
+import { App, Inflight, Resource } from "../core";
 
 /**
  * Global identifier for `Api`.
  */
 
-export const API_TYPE = "wingsdk.cloud.Api";
+export const API_FQN = fqnForType("cloud.Api");
 
 /**
  * Properties for `Api`.
@@ -30,18 +29,26 @@ export type OpenApiSpecExtension = any;
  * Functionality shared between all `Api` implementations.
  */
 
-export abstract class ApiBase extends Resource {
+export abstract class Api extends Resource {
+  /**
+   * Creates a new cloud.Api instance through the app.
+   * @internal
+   */
+  public static _newApi(
+    scope: Construct,
+    id: string,
+    props: ApiProps = {}
+  ): Function {
+    return App.of(scope).newAbstract(API_FQN, scope, id, props);
+  }
+
   public readonly stateful = true;
   private apiSpec: any = {
     openapi: "3.0.3",
     paths: {},
   };
-  constructor(scope: Construct, id: string, props: ApiProps) {
+  constructor(scope: Construct, id: string, props: ApiProps = {}) {
     super(scope, id);
-
-    if (!scope) {
-      return;
-    }
 
     props;
 
@@ -162,141 +169,6 @@ export interface ApiHeadProps {}
  * Options for Api patch endpoint.
  */
 export interface ApiConnectProps {}
-
-/**
- * Base implementation of `cloud.Api`.
- */
-export class Api extends ApiBase {
-  constructor(scope: Construct, id: string, props: ApiProps = {}) {
-    super(null as any, id, props);
-    return Polycons.newInstance(API_TYPE, scope, id, props) as Api;
-  }
-
-  /** @internal */
-  public _toInflight(): Code {
-    throw new Error("Method not implemented.");
-  }
-
-  /**
-   *  Add a inflight to handle GET requests to a route.
-   *
-   * @param route
-   * @param inflight
-   * @param props
-   */
-  public get(route: string, inflight: Inflight, props?: ApiGetProps): void {
-    route;
-    inflight;
-    props;
-    throw new Error("Method not implemented.");
-  }
-
-  /**
-   *  Add a inflight to handle POST requests to a route.
-   *
-   * @param route
-   * @param inflight
-   * @param props
-   */
-  public post(route: string, inflight: Inflight, props?: ApiPostProps): void {
-    route;
-    inflight;
-    props;
-    throw new Error("Method not implemented.");
-  }
-
-  /**
-   *  Add a inflight to handle PUT requests to a route.
-   *
-   * @param route
-   * @param inflight
-   * @param props
-   */
-  public put(route: string, inflight: Inflight, props?: ApiPostProps): void {
-    route;
-    inflight;
-    props;
-    throw new Error("Method not implemented.");
-  }
-
-  /**
-   *  Add a inflight to handle POST requests to a route.
-   *
-   * @param route
-   * @param inflight
-   * @param props
-   */
-  public delete(route: string, inflight: Inflight, props?: ApiPostProps): void {
-    route;
-    inflight;
-    props;
-    throw new Error("Method not implemented.");
-  }
-
-  /**
-   *  Add a inflight to handle POST requests to a route.
-   *
-   * @param route
-   * @param inflight
-   * @param props
-   */
-  public patch(route: string, inflight: Inflight, props?: ApiPostProps): void {
-    route;
-    inflight;
-    props;
-    throw new Error("Method not implemented.");
-  }
-
-  /**
-   *  Add a inflight to handle POST requests to a route.
-   *
-   * @param route
-   * @param inflight
-   * @param props
-   */
-  public options(
-    route: string,
-    inflight: Inflight,
-    props?: ApiPostProps
-  ): void {
-    route;
-    inflight;
-    props;
-    throw new Error("Method not implemented.");
-  }
-
-  /**
-   *  Add a inflight to handle POST requests to a route.
-   *
-   * @param route
-   * @param inflight
-   * @param props
-   */
-  public head(route: string, inflight: Inflight, props?: ApiPostProps): void {
-    route;
-    inflight;
-    props;
-    throw new Error("Method not implemented.");
-  }
-
-  /**
-   *  Add a inflight to handle POST requests to a route.
-   *
-   * @param route
-   * @param inflight
-   * @param props
-   */
-  public connect(
-    route: string,
-    inflight: Inflight,
-    props?: ApiPostProps
-  ): void {
-    route;
-    inflight;
-    props;
-    throw new Error("Method not implemented.");
-  }
-}
 
 // TODO: this should be used once #1484 is fixed
 // /**

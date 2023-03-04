@@ -1,5 +1,5 @@
-import { Api } from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
+import { Api } from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { tfResourcesOfCount } from "../util";

@@ -7,12 +7,12 @@ import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
 
 import { Lazy } from "cdktf";
 import { Construct } from "constructs";
-import { App } from "./app";
 import { Function } from "./function";
 import { core } from "..";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
 import { convertBetweenHandlers } from "../convert";
+import { CdktfApp } from "../core";
 import { Code } from "../core/inflight";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
 
@@ -26,7 +26,7 @@ const NAME_OPTS: NameOptions = {
 /**
  * AWS Implementation of `cloud.Api`.
  */
-export class Api extends cloud.ApiBase {
+export class Api extends cloud.Api {
   private readonly api: WingRestApi;
   constructor(scope: Construct, id: string, props: cloud.ApiProps = {}) {
     super(scope, id, props);
@@ -292,7 +292,7 @@ export class Api extends cloud.ApiBase {
       join(__dirname, "api.onrequest.inflight.js"),
       "ApiOnRequestHandlerClient"
     );
-    return new cloud.Function(
+    return Function._newFunction(
       this,
       `${this.node.id}-OnRequest-${inflightNodeHash}`,
       functionHandler
@@ -325,7 +325,8 @@ class WingRestApi extends Construct {
     }
   ) {
     super(scope, id);
-    this.region = App.of(scope).region;
+    // @ts-ignore
+    this.region = CdktfApp.of(scope).region;
     this.api = new ApiGatewayRestApi(this, "api", {
       name: ResourceNames.generateName(this, NAME_OPTS),
       // Lazy generation of the api spec because routes can be added after the API is created
