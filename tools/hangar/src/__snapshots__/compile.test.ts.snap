@@ -267,13 +267,13 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"asynchronous_model_implicit_await_in_functions\\", plugins: $plugins });
   
-  const q = new cloud.Queue(this,\\"cloud.Queue\\");
-  const str_to_str = new cloud.Function(this,\\"str_to_str\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  const q = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Queue\\",this,\\"cloud.Queue\\");
+  const str_to_str = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"str_to_str\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
     }
   }));
-  const func = new cloud.Function(this,\\"func\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
+  const func = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"func\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2241fd974faa47c8b8d27f5a3e172f473ca36c6b44cb328a58655fd2d0aac7d7/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       str_to_str: {
@@ -349,7 +349,7 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"bring_cdktf\\", plugins: $plugins });
   
-  new aws.s3Bucket.S3Bucket(this,\\"Bucket\\",{ bucketPrefix: \\"hello\\", versioning: {
+  this.node.root.new(\\"@cdktf/provider-aws.s3Bucket.S3Bucket\\",aws.s3Bucket.S3Bucket,this,\\"Bucket\\",{ bucketPrefix: \\"hello\\", versioning: {
   \\"enabled\\": true,
   \\"mfa_delete\\": true,}
    });
@@ -451,8 +451,8 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"bring_fs\\", plugins: $plugins });
   
-  new cloud.Bucket(this,\\"cloud.Bucket\\");
-  new fs.TextFile(this,\\"fs.TextFile\\",\\"/tmp/test.txt\\");
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
+  this.node.root.new(\\"@winglang/sdk.fs.TextFile\\",fs.TextFile,this,\\"fs.TextFile\\",\\"/tmp/test.txt\\");
 }
 }
 new MyApp().synth();"
@@ -596,7 +596,7 @@ constructor() {
   
   const hello = new stuff.HelloWorld();
   const greeting = (hello.sayHello(\\"wingnuts\\"));
-  new cloud.Function(this,\\"test:say_hello\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:say_hello\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5d209e0c3acca40c825662cab73c204803d9dd9f7903de90d0da6dc99ea7fa35/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       greeting: {
@@ -748,7 +748,7 @@ constructor() {
   
   const hello = new jsii_code_samples.HelloWorld();
   const greeting = (hello.sayHello(\\"wingnuts\\"));
-  new cloud.Function(this,\\"test:say_hello\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:say_hello\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5d209e0c3acca40c825662cab73c204803d9dd9f7903de90d0da6dc99ea7fa35/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       greeting: {
@@ -815,7 +815,7 @@ new MyApp().synth();"
 `;
 
 exports[`capture_containers.w > wing compile --target tf-aws > index.js 1`] = `
-"async handle(s) { const { arr, arr_of_map, my_map, my_set } = this; {
+"async handle(s) { const { arr, arr_of_map, j, my_map, my_set } = this; {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(0)) === \\"hello\\")'\`)})(((await arr.at(0)) === \\"hello\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(1)) === \\"world\\")'\`)})(((await arr.at(1)) === \\"world\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr.length === 2)'\`)})((arr.length === 2))};
@@ -824,6 +824,7 @@ exports[`capture_containers.w > wing compile --target tf-aws > index.js 1`] = `
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"world\\" in (my_map))'\`)})((\\"world\\" in (my_map)))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(my_map).length === 2)'\`)})((Object.keys(my_map).length === 2))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"bang\\" in ((await arr_of_map.at(0))))'\`)})((\\"bang\\" in ((await arr_of_map.at(0)))))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((j)[\\"b\\"] === \\"world\\")'\`)})(((j)[\\"b\\"] === \\"world\\"))};
 } };"
 `;
 
@@ -960,8 +961,9 @@ constructor() {
   const my_set = Object.freeze(new Set([\\"my\\", \\"my\\", \\"set\\"]));
   const my_map = Object.freeze({\\"hello\\":123,\\"world\\":999});
   const arr_of_map = Object.freeze([Object.freeze({\\"bang\\":123})]);
+  const j = Object.freeze({\\"a\\":\\"hello\\",\\"b\\":\\"world\\"});
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.726c4811538fdd9613cd65b3442a4805b0dc89d09ee3d42119284d95f79533a6/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.dc7e5dc23da309970778fe7db4c795e3a6ae63c0d0ddc5e1780d4e2daadf67e1/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       arr: {
         obj: arr,
@@ -969,6 +971,10 @@ constructor() {
       },
       arr_of_map: {
         obj: arr_of_map,
+        ops: []
+      },
+      j: {
+        obj: j,
         ops: []
       },
       my_map: {
@@ -981,7 +987,7 @@ constructor() {
       },
     }
   });
-  new cloud.Function(this,\\"test\\",handler);
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",handler);
 }
 }
 new MyApp().synth();"
@@ -1213,10 +1219,10 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"capture_containers_of_resources\\", plugins: $plugins });
   
-  const arr = Object.freeze([new cloud.Bucket(this,\\"b1\\"), new cloud.Bucket(this,\\"b2\\")]);
-  const map = Object.freeze({\\"my_queue\\":new cloud.Queue(this,\\"cloud.Queue\\")});
+  const arr = Object.freeze([this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"b1\\"), this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"b2\\")]);
+  const map = Object.freeze({\\"my_queue\\":this.node.root.newAbstract(\\"@winglang/sdk.cloud.Queue\\",this,\\"cloud.Queue\\")});
   const set = Object.freeze(new Set([\\"foo\\", \\"foo\\", \\"bar\\"]));
-  new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.e204fa6fba10aa68396c0fe4d920796b1ec739609b648739fe4ae94d0621db6d/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       arr: {
@@ -1418,14 +1424,14 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"capture_in_binary\\", plugins: $plugins });
   
-  const b = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  const b = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
   const x = 12;
   const handler2 = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.d3cc1deae5ea8972097ff15c11d688f395bd17117453789488a005b829eea245/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       b: {
         obj: b,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
       x: {
         obj: x,
@@ -1433,7 +1439,7 @@ constructor() {
       },
     }
   });
-  new cloud.Function(this,\\"test\\",handler2);
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",handler2);
 }
 }
 new MyApp().synth();"
@@ -1617,7 +1623,7 @@ constructor() {
       },
     }
   });
-  new cloud.Function(this,\\"cloud.Function\\",handler);
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"cloud.Function\\",handler);
 }
 }
 new MyApp().synth();"
@@ -1806,8 +1812,8 @@ constructor() {
   super({ outdir: $outdir, name: \\"capture_resource_and_data\\", plugins: $plugins });
   
   const data = Object.freeze(new Set([1, 2, 3]));
-  const res = new cloud.Bucket(this,\\"cloud.Bucket\\");
-  const queue = new cloud.Queue(this,\\"cloud.Queue\\");
+  const res = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
+  const queue = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Queue\\",this,\\"cloud.Queue\\");
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.10149a479ee5940e90f4621a2bca78dda7429636b1f235fcd785b3e33c131537/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
@@ -1821,11 +1827,11 @@ constructor() {
       },
       res: {
         obj: res,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
     }
   });
-  new cloud.Function(this,\\"test\\",handler);
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",handler);
 }
 }
 new MyApp().synth();"
@@ -1991,7 +1997,7 @@ constructor() {
   }
   
   const a = new A(this,\\"A\\");
-  new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.b771192b636450edefdc8f4b596a6372d5b2520efa1fcdb75c51589c12a10c59/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       a: {
@@ -2403,33 +2409,33 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"captures\\", plugins: $plugins });
   
-  const bucket1 = new cloud.Bucket(this,\\"cloud.Bucket\\");
-  const bucket2 = new cloud.Bucket(this,\\"PublicBucket\\",{
+  const bucket1 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
+  const bucket2 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"PublicBucket\\",{
   \\"public\\": true,}
   );
-  const bucket3 = new cloud.Bucket(this,\\"PrivateBucket\\",{ public: false });
-  const queue = new cloud.Queue(this,\\"cloud.Queue\\");
+  const bucket3 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"PrivateBucket\\",{ public: false });
+  const queue = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Queue\\",this,\\"cloud.Queue\\");
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5f0e4e25898a72c973f063e92444f7572d58a18cdd38b3fb3a575af6adf7440f/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       bucket1: {
         obj: bucket1,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
       bucket2: {
         obj: bucket2,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
       bucket3: {
         obj: bucket3,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
     }
   });
   (queue.onMessage(handler,{ batchSize: 5 }));
-  new cloud.Function(this,\\"cloud.Function\\",handler,{ env: Object.freeze({}) });
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"cloud.Function\\",handler,{ env: Object.freeze({}) });
   const empty_env = Object.freeze({});
-  new cloud.Function(this,\\"AnotherFunction\\",handler,{ env: empty_env });
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"AnotherFunction\\",handler,{ env: empty_env });
 }
 }
 new MyApp().synth();"
@@ -2603,9 +2609,9 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"container_types\\", plugins: $plugins });
   
-  const bucket1 = new cloud.Bucket(this,\\"bucket1\\");
-  const bucket2 = new cloud.Bucket(this,\\"bucket2\\");
-  const bucket3 = new cloud.Bucket(this,\\"bucket3\\");
+  const bucket1 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"bucket1\\");
+  const bucket2 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"bucket2\\");
+  const bucket3 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"bucket3\\");
   const empty_array = Object.freeze([]);
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(empty_array.length === 0)'\`)})((empty_array.length === 0))};
   const empty_array2 = [];
@@ -3077,15 +3083,15 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"file_counter\\", plugins: $plugins });
   
-  const bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
-  const counter = new cloud.Counter(this,\\"cloud.Counter\\",{ initial: 100 });
-  const queue = new cloud.Queue(this,\\"cloud.Queue\\",{ timeout: $stdlib.std.Duration.fromSeconds(10) });
+  const bucket = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
+  const counter = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Counter\\",this,\\"cloud.Counter\\",{ initial: 100 });
+  const queue = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Queue\\",this,\\"cloud.Queue\\",{ timeout: $stdlib.std.Duration.fromSeconds(10) });
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1ece6a476239c44d64d8b687b9e4389715198c49564defb8766e8b85b0f54620/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       bucket: {
         obj: bucket,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
       counter: {
         obj: counter,
@@ -3436,14 +3442,14 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"hello\\", plugins: $plugins });
   
-  const bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
-  const queue = new cloud.Queue(this,\\"cloud.Queue\\");
+  const bucket = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
+  const queue = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Queue\\",this,\\"cloud.Queue\\");
   (queue.onMessage(new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.211d46e8ec3b5ce3e93872fcb29755356fb3566f5016eae5fcd6ec0f670ab580/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       bucket: {
         obj: bucket,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
     }
   })));
@@ -3512,6 +3518,363 @@ constructor() {
     bindings: {
     }
   });
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`json.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+}
+`;
+
+exports[`json.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"json\\", plugins: $plugins });
+  
+  const json_number = 123;
+  const json_bool = true;
+  const json_array = [1, 2, 3];
+  const json_obj = Object.freeze({\\"boom\\":123});
+  const json_mut_obj = {\\"boom boom\\":{\\"hello\\":1233},\\"hello\\":123,\\"world\\":[1, \\"cat\\", 3]};
+  const message = \\"Coolness\\";
+  ((obj, args) => { obj[args[0]] = args[1]; })(json_mut_obj, [\\"hello\\",message]);
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((json_mut_obj)[\\"hello\\"] === message)'\`)})(((json_mut_obj)[\\"hello\\"] === message))};
+  const some_number = 999;
+  const some_json = {\\"x\\":some_number};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((some_json)[\\"x\\"] === some_number)'\`)})(((some_json)[\\"x\\"] === some_number))};
+  ((obj, args) => { obj[args[0]] = args[1]; })(some_json, [\\"x\\",111]);
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((some_json)[\\"x\\"] === 111)'\`)})(((some_json)[\\"x\\"] === 111))};
+  const x = Object.freeze({\\"cool\\":\\"beans\\"});
+  const nested_json = {\\"a\\":\\"hello\\",\\"b\\":{\\"c\\":\\"world\\",\\"d\\":{\\"bar\\":123,\\"foo\\":\\"foo\\"}}};
+  ((obj, args) => { obj[args[0]] = args[1]; })(((nested_json)[\\"b\\"])[\\"d\\"], [\\"foo\\",\\"tastic\\"]);
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((((nested_json)[\\"b\\"])[\\"d\\"])[\\"foo\\"] === \\"tastic\\")'\`)})(((((nested_json)[\\"b\\"])[\\"d\\"])[\\"foo\\"] === \\"tastic\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((((nested_json)[\\"b\\"])[\\"d\\"])[\\"bar\\"] === 123)'\`)})(((((nested_json)[\\"b\\"])[\\"d\\"])[\\"bar\\"] === 123))};
+  const arr = [1, 2, \\"buckle\\", \\"my\\", \\"shoe\\", 3, 4, [\\"shut\\", \\"the\\", \\"door\\"]];
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr)[0] === 1)'\`)})(((arr)[0] === 1))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr)[2] === \\"buckle\\")'\`)})(((arr)[2] === \\"buckle\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((arr)[7])[0] === \\"shut\\")'\`)})((((arr)[7])[0] === \\"shut\\"))};
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`json_bucket.w > wing compile --target tf-aws > index.js 1`] = `
+"async handle(msg) { const { b, file_name } = this; {
+  const x = (await b.getJson(file_name));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((((x)[\\"persons\\"])[0])[\\"fears\\"])[1] === \\"failure\\")'\`)})((((((x)[\\"persons\\"])[0])[\\"fears\\"])[1] === \\"failure\\"))};
+} };"
+`;
+
+exports[`json_bucket.w > wing compile --target tf-aws > index.js 2`] = `
+"async handle(msg) { const { b, file_name, get_json, j } = this; {
+  (await b.putJson(file_name,j));
+  (await get_json.invoke(msg));
+} };"
+`;
+
+exports[`json_bucket.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_cloudFunction_IamRole_DAEC3578": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Function/IamRole",
+            "uniqueId": "root_cloudFunction_IamRole_DAEC3578",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+      "root_testput_IamRole_1BBF32A6": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:put/IamRole",
+            "uniqueId": "root_testput_IamRole_1BBF32A6",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_cloudFunction_IamRolePolicy_AAE6C0C0": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Function/IamRolePolicy",
+            "uniqueId": "root_cloudFunction_IamRolePolicy_AAE6C0C0",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.name}",
+      },
+      "root_testput_IamRolePolicy_98659F09": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:put/IamRolePolicy",
+            "uniqueId": "root_testput_IamRolePolicy_98659F09",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"lambda:InvokeFunction\\"],\\"Resource\\":[\\"\${aws_lambda_function.root_cloudFunction_6A57BA0A.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_testput_IamRole_1BBF32A6.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Function/IamRolePolicyAttachment",
+            "uniqueId": "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.name}",
+      },
+      "root_testput_IamRolePolicyAttachment_E73FB6BB": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:put/IamRolePolicyAttachment",
+            "uniqueId": "root_testput_IamRolePolicyAttachment_E73FB6BB",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_testput_IamRole_1BBF32A6.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_cloudFunction_6A57BA0A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Function/Default",
+            "uniqueId": "root_cloudFunction_6A57BA0A",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
+          },
+        },
+        "function_name": "cloud-Function-c8d2eca1",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
+        "s3_key": "\${aws_s3_object.root_cloudFunction_S3Object_C8435368.key}",
+        "timeout": 30,
+      },
+      "root_testput_449428F9": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:put/Default",
+            "uniqueId": "root_testput_449428F9",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "FUNCTION_NAME_5bb84dfa": "\${aws_lambda_function.root_cloudFunction_6A57BA0A.arn}",
+            "WING_FUNCTION_NAME": "test-put-c899ce9b",
+          },
+        },
+        "function_name": "test-put-c899ce9b",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_testput_IamRole_1BBF32A6.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_testput_Code_DE7653AD.bucket}",
+        "s3_key": "\${aws_s3_object.root_testput_S3Object_30BF1DDD.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_cloudBucket_4F3C4F53": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Bucket/Default",
+            "uniqueId": "root_cloudBucket_4F3C4F53",
+          },
+        },
+        "bucket_prefix": "cloud-bucket-c87175e7-",
+      },
+      "root_cloudFunction_Code_2F6A7948": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Function/Code",
+            "uniqueId": "root_cloudFunction_Code_2F6A7948",
+          },
+        },
+        "bucket_prefix": "code-c8d4206f-",
+      },
+      "root_testput_Code_DE7653AD": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:put/Code",
+            "uniqueId": "root_testput_Code_DE7653AD",
+          },
+        },
+        "bucket_prefix": "code-c8ab7128-",
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_cloudBucket_Encryption_8ED0CD9C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Bucket/Encryption",
+            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+    },
+    "aws_s3_object": {
+      "root_cloudFunction_S3Object_C8435368": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Function/S3Object",
+            "uniqueId": "root_cloudFunction_S3Object_C8435368",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`json_bucket.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"json_bucket\\", plugins: $plugins });
+  
+  const b = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
+  const file_name = \\"file.json\\";
+  const j = Object.freeze({\\"persons\\":[{\\"age\\":30,\\"fears\\":[\\"heights\\", \\"failure\\"],\\"name\\":\\"hasan\\"}]});
+  const get_json = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"cloud.Function\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1dabd42192b8d28a57f44a84b644a18eb6fedb868257af123181c0ecec2c2a70/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+      b: {
+        obj: b,
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
+      },
+      file_name: {
+        obj: file_name,
+        ops: []
+      },
+    }
+  }));
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:put\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.742d4f24b17fb7f7f831acbd15487b30d36ad90d44229b79672a09f910cb6619/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+      b: {
+        obj: b,
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
+      },
+      file_name: {
+        obj: file_name,
+        ops: []
+      },
+      get_json: {
+        obj: get_json,
+        ops: [\\"invoke\\"]
+      },
+      j: {
+        obj: j,
+        ops: []
+      },
+    }
+  }));
 }
 }
 new MyApp().synth();"
@@ -3685,9 +4048,9 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"mut_container_types\\", plugins: $plugins });
   
-  const bucket1 = new cloud.Bucket(this,\\"bucket1\\");
-  const bucket2 = new cloud.Bucket(this,\\"bucket2\\");
-  const bucket3 = new cloud.Bucket(this,\\"bucket3\\");
+  const bucket1 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"bucket1\\");
+  const bucket2 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"bucket2\\");
+  const bucket3 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"bucket3\\");
   const arr1 = [\\"a\\", \\"b\\", \\"c\\"];
   const arr2 = [1, 2, 3];
   const arr3 = [bucket1, bucket2];
@@ -3993,12 +4356,12 @@ constructor() {
   super({ outdir: $outdir, name: \\"print\\", plugins: $plugins });
   
   {console.log(\\"preflight print\\")};
-  new cloud.Function(this,\\"test:print1\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:print1\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5d5065e7d4d5abb68575b6b618fc014e76b4159c3240fef327354a5900bb9fa6/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
     }
   }));
-  new cloud.Function(this,\\"test:print2\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:print2\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.44e74a6db41cb5fd5b35696592c6a747e9831b228b4d1ce62b6e65f43dee835d/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
     }
@@ -4344,7 +4707,7 @@ constructor() {
   	constructor(scope, id, ) {
   	super(scope, id);
   {
-    this.c = new cloud.Counter(this,\\"cloud.Counter\\");
+    this.c = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Counter\\",this,\\"cloud.Counter\\");
   }
   }
   	
@@ -4374,15 +4737,15 @@ constructor() {
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Bar_inflight({b: \${b_client}, foo: \${foo_client}, name: \${name_client}}))\`);
   }
   }
-  Bar._annotateInflight(\\"my_method\\", {\\"this.b\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.foo\\": { ops: [\\"foo_get\\", \\"foo_inc\\"]}, \\"this.name\\": { ops: []}});
-  const bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  Bar._annotateInflight(\\"my_method\\", {\\"this.b\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.foo\\": { ops: [\\"foo_get\\", \\"foo_inc\\"]}, \\"this.name\\": { ops: []}});
+  const bucket = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
   const res = new Bar(this,\\"Bar\\",\\"Arr\\",bucket);
-  new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.e50bc85b13df379286b4aa72aa88788422e26d9146adbc9bba989a8a59253a73/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       bucket: {
         obj: bucket,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
       res: {
         obj: res,
@@ -4564,7 +4927,7 @@ constructor() {
       {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
     }
   }
-  new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.09c5e24751d9ba1246f91518f2f7f5c5d1102a09d0b1acff479ae27ad134090f/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
     }
@@ -4816,7 +5179,7 @@ constructor() {
   const foo = new Foo(this,\\"Foo\\");
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(foo.instance_field === 100)'\`)})((foo.instance_field === 100))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((Foo.m()) === 99)'\`)})(((Foo.m()) === 99))};
-  new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.8b58045c72709175549d51937a233ff65ac5e5aa12e83837daf5ea7baf9f224b/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
     }
@@ -5054,7 +5417,7 @@ constructor() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s1.substring(5,7)) === \\"st\\")'\`)})(((s1.substring(5,7)) === \\"st\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((\\"   some string   \\".trim()) === \\"some string\\")'\`)})(((\\"   some string   \\".trim()) === \\"some string\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"Some String\\".toLocaleUpperCase() === \\"SOME STRING\\")'\`)})((\\"Some String\\".toLocaleUpperCase() === \\"SOME STRING\\"))};
-  new cloud.Function(this,\\"test:string\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:string\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.0fb01e81c63b003d77d6245e36ba84561e3e2d3268e69a7c975f81cfe7565fac/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       s1: {
@@ -5319,22 +5682,22 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"test_bucket\\", plugins: $plugins });
   
-  const b = new cloud.Bucket(this,\\"cloud.Bucket\\");
-  new cloud.Function(this,\\"test:put\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  const b = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:put\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.9f10a129b90bc1328dcb1e6194e3902931d1011d95e46825362ef5b06ec17380/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       b: {
         obj: b,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
     }
   }));
-  new cloud.Function(this,\\"test:get\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:get\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1b9abefaef8ce4230db863000273d2c12bacb97e33ac10e6c8b50341e415fdac/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       b: {
         obj: b,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
     }
   }));
@@ -6121,14 +6484,14 @@ constructor() {
   	constructor(scope, id, ) {
   	super(scope, id);
   {
-    this.my_resource = new cloud.Bucket(this,\\"cloud.Bucket\\");
+    this.my_resource = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
     this.my_str = \\"my_string\\";
     this.my_num = 42;
     this.my_bool = true;
     this.array_of_str = Object.freeze([\\"s1\\", \\"s2\\"]);
     this.map_of_num = Object.freeze({\\"k1\\":11,\\"k2\\":22});
     this.set_of_str = Object.freeze(new Set([\\"s1\\", \\"s2\\", \\"s1\\"]));
-    this.array_of_queues = Object.freeze([new cloud.Queue(this,\\"q1\\"), new cloud.Queue(this,\\"q2\\")]);
+    this.array_of_queues = Object.freeze([this.node.root.newAbstract(\\"@winglang/sdk.cloud.Queue\\",this,\\"q1\\"), this.node.root.newAbstract(\\"@winglang/sdk.cloud.Queue\\",this,\\"q2\\")]);
   }
   }
   	
@@ -6145,14 +6508,14 @@ constructor() {
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).MyResource_inflight({array_of_queues: \${array_of_queues_client}, array_of_str: \${array_of_str_client}, map_of_num: \${map_of_num_client}, my_bool: \${my_bool_client}, my_num: \${my_num_client}, my_resource: \${my_resource_client}, my_str: \${my_str_client}, set_of_str: \${set_of_str_client}}))\`);
   }
   }
-  MyResource._annotateInflight(\\"capture_resource\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
-  MyResource._annotateInflight(\\"capture_primitives\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
-  MyResource._annotateInflight(\\"capture_array\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
-  MyResource._annotateInflight(\\"capture_map\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
-  MyResource._annotateInflight(\\"capture_set\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
-  MyResource._annotateInflight(\\"capture_array_of_queues\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
+  MyResource._annotateInflight(\\"capture_resource\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
+  MyResource._annotateInflight(\\"capture_primitives\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
+  MyResource._annotateInflight(\\"capture_array\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
+  MyResource._annotateInflight(\\"capture_map\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
+  MyResource._annotateInflight(\\"capture_set\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
+  MyResource._annotateInflight(\\"capture_array_of_queues\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
   const r = new MyResource(this,\\"MyResource\\");
-  new cloud.Function(this,\\"test:capture_resource\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:capture_resource\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.b5e7bd6cc9f6c741c4f0afa8adc0208ccee08e6297495b1fbe29db8afb6ee789/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       r: {
@@ -6161,7 +6524,7 @@ constructor() {
       },
     }
   }));
-  new cloud.Function(this,\\"test:capture_primitives\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:capture_primitives\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1814d20e284e4a33aff014ce4391d7da7998b0cd7db8ebee477a5400763bbe7b/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       r: {
@@ -6170,7 +6533,7 @@ constructor() {
       },
     }
   }));
-  new cloud.Function(this,\\"test:capture_array\\",new $stdlib.core.Inflight(this, \\"$Inflight3\\", {
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:capture_array\\",new $stdlib.core.Inflight(this, \\"$Inflight3\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.c341832069b7b13603626bc26227d936f0a7d7b7da45751e3666d6f4e7fa599a/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       r: {
@@ -6179,7 +6542,7 @@ constructor() {
       },
     }
   }));
-  new cloud.Function(this,\\"test:capture_map\\",new $stdlib.core.Inflight(this, \\"$Inflight4\\", {
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:capture_map\\",new $stdlib.core.Inflight(this, \\"$Inflight4\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.7235e8fbf10f106318ff9c22489e4e955483c8de6b39df0dbf143fdfa4691109/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       r: {
@@ -6188,7 +6551,7 @@ constructor() {
       },
     }
   }));
-  new cloud.Function(this,\\"test:capture_set\\",new $stdlib.core.Inflight(this, \\"$Inflight5\\", {
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:capture_set\\",new $stdlib.core.Inflight(this, \\"$Inflight5\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.b7df534fba155b498841a75f4610f6bb576ee00e2fbe6869317adf3718597864/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       r: {
@@ -6197,7 +6560,7 @@ constructor() {
       },
     }
   }));
-  new cloud.Function(this,\\"test:capture_array_of_queues\\",new $stdlib.core.Inflight(this, \\"$Inflight6\\", {
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:capture_array_of_queues\\",new $stdlib.core.Inflight(this, \\"$Inflight6\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.179eef1ca19aa2bf908a3113209c3d8b96c23bac7bc35f1d6381c0f5cd2ec603/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       r: {
@@ -6425,7 +6788,7 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"while_loop_await\\", plugins: $plugins });
   
-  const queue = new cloud.Queue(this,\\"cloud.Queue\\");
+  const queue = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Queue\\",this,\\"cloud.Queue\\");
   const iterator = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.82d0059fdbaebaab6d1be68f497052f9d5b8662f4333952a6e9ad55f564e0c97/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {

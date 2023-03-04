@@ -12,8 +12,7 @@ use crate::{
 		Scope, StmtKind, Symbol,
 	},
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
-	type_check::symbol_env::SymbolEnv,
-	type_check::Type,
+	type_check::{symbol_env::SymbolEnv, ClassLike, Type},
 	visit::Visit,
 };
 use std::collections::{BTreeMap, BTreeSet};
@@ -156,7 +155,7 @@ fn scan_captures_in_expression(
 					let (var, si) = x.unwrap();
 
 					if var.as_variable().is_none() {
-						diagnostics.insert(Diagnostic {
+						diagnostics.push(Diagnostic {
 							level: DiagnosticLevel::Error,
 							message: "Expected identifier to be a variable".to_string(),
 							span: Some(symbol.span.clone()),
@@ -167,7 +166,7 @@ fn scan_captures_in_expression(
 						// if the identifier represents a preflight value, then capture it
 						if si.flight == Phase::Preflight {
 							if var.is_reassignable() {
-								diagnostics.insert(Diagnostic {
+								diagnostics.push(Diagnostic {
 									level: DiagnosticLevel::Error,
 									message: format!("Cannot capture a reassignable variable \"{}\"", symbol.name),
 									span: Some(symbol.span.clone()),
@@ -205,7 +204,7 @@ fn scan_captures_in_expression(
 								});
 							} else {
 								// unsupported capture
-								diagnostics.insert(Diagnostic {
+								diagnostics.push(Diagnostic {
 									level: DiagnosticLevel::Error,
 									message: format!(
 										"Cannot reference '{}' of type '{}' from an inflight context",
@@ -287,6 +286,9 @@ fn scan_captures_in_expression(
 			for v in items {
 				res.extend(scan_captures_in_expression(&v, env, statement_idx, diagnostics));
 			}
+		}
+		ExprKind::JsonLiteral { element, .. } => {
+			res.extend(scan_captures_in_expression(&element, env, statement_idx, diagnostics));
 		}
 		ExprKind::StructLiteral { fields, .. } => {
 			for v in fields.values() {

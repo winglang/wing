@@ -84,6 +84,8 @@ pub enum TypeAnnotation {
 	String,
 	Bool,
 	Duration,
+	Json,
+	MutJson,
 	Optional(Box<TypeAnnotation>),
 	Array(Box<TypeAnnotation>),
 	MutArray(Box<TypeAnnotation>),
@@ -110,6 +112,8 @@ impl Display for TypeAnnotation {
 			TypeAnnotation::String => write!(f, "str"),
 			TypeAnnotation::Bool => write!(f, "bool"),
 			TypeAnnotation::Duration => write!(f, "duration"),
+			TypeAnnotation::Json => write!(f, "Json"),
+			TypeAnnotation::MutJson => write!(f, "MutJson"),
 			TypeAnnotation::Optional(t) => write!(f, "{}?", t),
 			TypeAnnotation::Array(t) => write!(f, "Array<{}>", t),
 			TypeAnnotation::MutArray(t) => write!(f, "MutArray<{}>", t),
@@ -330,14 +334,20 @@ pub enum ExprKind {
 		type_: Option<TypeAnnotation>,
 		items: Vec<Expr>,
 	},
+	JsonLiteral {
+		is_mut: bool,
+		element: Box<Expr>,
+	},
 	FunctionClosure(FunctionDefinition),
 }
 
-#[derive(Debug)]
+#[derive(Derivative)]
+#[derivative(Debug)]
 pub struct Expr {
 	pub kind: ExprKind,
-	pub evaluated_type: RefCell<Option<TypeRef>>,
 	pub span: WingSpan,
+	#[derivative(Debug = "ignore")]
+	pub evaluated_type: RefCell<Option<TypeRef>>,
 }
 
 impl Expr {

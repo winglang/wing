@@ -286,10 +286,10 @@ impl<'a> JsiiImporter<'a> {
 		}
 	}
 
-	pub fn import_enum(&mut self, jsii_enum: jsii::EnumType) {
-		let enum_name = jsii_enum.name;
+	pub fn import_enum(&mut self, jsii_enum: &jsii::EnumType) {
+		let enum_name = &jsii_enum.name;
 		let enum_fqn = FQN::from(jsii_enum.fqn.as_str());
-		let enum_symbol = Self::jsii_name_to_symbol(&enum_name, &jsii_enum.location_in_module);
+		let enum_symbol = Self::jsii_name_to_symbol(enum_name, &jsii_enum.location_in_module);
 
 		let enum_type_ref = self.wing_types.add_type(Type::Enum(Enum {
 			name: enum_symbol.clone(),
@@ -322,7 +322,7 @@ impl<'a> JsiiImporter<'a> {
 	/// Structs can be distinguished non-structs with the "datatype: true" property in `jsii::InterfaceType`.
 	///
 	/// See https://aws.github.io/jsii/specification/2-type-system/#interfaces-structs
-	fn import_interface(&mut self, jsii_interface: wingii::jsii::InterfaceType) {
+	fn import_interface(&mut self, jsii_interface: &wingii::jsii::InterfaceType) {
 		let jsii_interface_fqn = FQN::from(jsii_interface.fqn.as_str());
 		debug!("Importing interface {}", jsii_interface_fqn.as_str().green());
 		let type_name = jsii_interface_fqn.type_name();
@@ -389,7 +389,7 @@ impl<'a> JsiiImporter<'a> {
 				self.import_statement_idx,
 			), // Dummy env, will be replaced below
 		}));
-		self.add_members_to_class_env(&jsii_interface, false, struct_env.flight, &mut struct_env, wing_type);
+		self.add_members_to_class_env(jsii_interface, false, struct_env.flight, &mut struct_env, wing_type);
 
 		// Add properties from our parents to the new structs env
 		type_check::add_parent_members_to_struct_env(&extends, &new_type_symbol, &mut struct_env).expect(&format!(
@@ -557,7 +557,7 @@ impl<'a> JsiiImporter<'a> {
 		}
 	}
 
-	fn import_class(&mut self, jsii_class: wingii::jsii::ClassType) {
+	fn import_class(&mut self, jsii_class: &wingii::jsii::ClassType) {
 		let mut is_resource = false;
 		let jsii_class_fqn = FQN::from(jsii_class.fqn.as_str());
 		debug!("Importing class {}", jsii_class_fqn.as_str().green());
@@ -654,7 +654,9 @@ impl<'a> JsiiImporter<'a> {
 			should_case_convert_jsii: true,
 			name: new_type_symbol.clone(),
 			env: dummy_env,
+			fqn: Some(jsii_class_fqn.to_string()),
 			parent: base_class_type,
+			is_abstract: jsii_class.abstract_.unwrap_or(false),
 			type_parameters: type_params,
 		};
 		let mut new_type = self.wing_types.add_type(if is_resource {
@@ -714,7 +716,7 @@ impl<'a> JsiiImporter<'a> {
 		}
 
 		// Add methods and properties to the class environment
-		self.add_members_to_class_env(&jsii_class, is_resource, phase, &mut class_env, new_type);
+		self.add_members_to_class_env(jsii_class, is_resource, phase, &mut class_env, new_type);
 		if is_resource {
 			// Look for a client interface for this resource
 			let client_interface = jsii_class
@@ -737,7 +739,7 @@ impl<'a> JsiiImporter<'a> {
 				});
 			if let Some(client_interface) = client_interface {
 				// Add client interface's methods to the class environment
-				self.add_members_to_class_env(&client_interface, false, Phase::Inflight, &mut class_env, new_type);
+				self.add_members_to_class_env(client_interface, false, Phase::Inflight, &mut class_env, new_type);
 			} else {
 				debug!("Resource {} does not seem to have a client", type_name.green());
 			}

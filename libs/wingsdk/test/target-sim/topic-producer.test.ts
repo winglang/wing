@@ -9,7 +9,7 @@ test("publishing messages to topic", async () => {
     constructor(scope: Construct, id: string) {
       super(scope, id);
 
-      const topic = new cloud.Topic(this, "MyTopic");
+      const topic = cloud.Topic._newTopic(this, "MyTopic");
       const publisher = Testing.makeHandler(
         this,
         "Publisher",
@@ -23,7 +23,7 @@ test("publishing messages to topic", async () => {
           },
         }
       );
-      new cloud.Function(this, "Function", publisher);
+      cloud.Function._newFunction(this, "Function", publisher);
 
       const processor = Testing.makeHandler(
         this,

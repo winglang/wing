@@ -45,7 +45,7 @@ export interface ScopedRoleAssignment {
  *
  * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
  */
-export class Function extends cloud.FunctionBase {
+export class Function extends cloud.Function {
   private readonly function: LinuxFunctionApp;
   private readonly servicePlan: ServicePlan;
   private readonly storageAccount: StorageAccount;
@@ -56,11 +56,11 @@ export class Function extends cloud.FunctionBase {
     scope: Construct,
     id: string,
     inflight: cloud.IFunctionHandler,
-    props: cloud.FunctionProps
+    props: cloud.FunctionProps = {}
   ) {
     super(scope, id, inflight, props);
 
-    const app = App.of(this);
+    const app = App.of(this) as App;
     this.storageAccount = app.storageAccount;
     this.resourceGroup = app.resourceGroup;
     this.servicePlan = app.servicePlan;

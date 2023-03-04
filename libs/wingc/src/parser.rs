@@ -61,7 +61,7 @@ impl Parser<'_> {
 			level: DiagnosticLevel::Error,
 		};
 		// TODO terrible to clone here to avoid move
-		self.diagnostics.borrow_mut().insert(diag);
+		self.diagnostics.borrow_mut().push(diag);
 
 		// Track that we have produced a diagnostic for this node
 		// (note: it may not necessarily refer to a tree-sitter "ERROR" node)
@@ -381,7 +381,7 @@ impl Parser<'_> {
 				("class_field", _) => {
 					let is_static = class_element.child_by_field_name("static").is_some();
 					if is_static {
-						self.diagnostics.borrow_mut().insert(Diagnostic {
+						self.diagnostics.borrow_mut().push(Diagnostic {
 							level: DiagnosticLevel::Error,
 							message: format!(
 								"Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668",
@@ -562,6 +562,14 @@ impl Parser<'_> {
 						Phase::Preflight
 					},
 				}))
+			}
+			"json_container_type" => {
+				let container_type = self.node_text(&type_node);
+				match container_type {
+					"Json" => Ok(TypeAnnotation::Json),
+					"MutJson" => Ok(TypeAnnotation::MutJson),
+					other => self.add_error(format!("invalid json container type {}", other), &type_node),
+				}
 			}
 			"mutable_container_type" | "immutable_container_type" => {
 				let container_type = self.node_text(&type_node.child_by_field_name("collection_type").unwrap());
@@ -903,6 +911,27 @@ impl Parser<'_> {
 					},
 					expression_span,
 				))
+			}
+			"json_element" => self.build_expression(
+				&expression_node
+					.child(0)
+					.expect("Json element should always have child node"),
+			),
+			"json_literal" => {
+				let type_node = expression_node
+					.child_by_field_name("type")
+					.expect("Json literal should always have type node");
+				let is_mut = match self.node_text(&type_node) {
+					"MutJson" => true,
+					_ => false,
+				};
+
+				let element_node = expression_node
+					.child_by_field_name("element")
+					.expect("Should always have element");
+				let element = Box::new(self.build_expression(&element_node)?);
+
+				Ok(Expr::new(ExprKind::JsonLiteral { is_mut, element }, expression_span))
 			}
 			"set_literal" => self.build_set_literal(expression_node),
 			"struct_literal" => {

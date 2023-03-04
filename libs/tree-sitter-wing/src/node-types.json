@@ -54,6 +54,10 @@
         "named": true
       },
       {
+        "type": "json_literal",
+        "named": true
+      },
+      {
         "type": "map_literal",
         "named": true
       },
@@ -476,6 +480,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -752,6 +760,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -872,6 +884,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -932,6 +948,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -959,6 +979,10 @@
           },
           {
             "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
             "named": true
           },
           {
@@ -1052,6 +1076,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -1092,11 +1120,69 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
           {
             "type": "optional",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "json_container_type",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "json_element",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "_literal",
+          "named": true
+        },
+        {
+          "type": "array_literal",
+          "named": true
+        },
+        {
+          "type": "map_literal",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "json_literal",
+    "named": true,
+    "fields": {
+      "element": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "json_element",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "json_container_type",
             "named": true
           }
         ]
@@ -1254,6 +1340,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -1291,6 +1381,10 @@
           },
           {
             "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
             "named": true
           },
           {
@@ -1361,6 +1455,10 @@
           },
           {
             "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
             "named": true
           },
           {
@@ -1511,6 +1609,10 @@
           "named": true
         },
         {
+          "type": "json_container_type",
+          "named": true
+        },
+        {
           "type": "mutable_container_type",
           "named": true
         },
@@ -1566,6 +1668,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -1614,6 +1720,10 @@
         },
         {
           "type": "immutable_container_type",
+          "named": true
+        },
+        {
+          "type": "json_container_type",
           "named": true
         },
         {
@@ -1706,6 +1816,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -1733,6 +1847,10 @@
           },
           {
             "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
             "named": true
           },
           {
@@ -2064,6 +2182,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -2305,6 +2427,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -2473,11 +2599,19 @@
     "named": false
   },
   {
+    "type": "Json",
+    "named": false
+  },
+  {
     "type": "Map",
     "named": false
   },
   {
     "type": "MutArray",
+    "named": false
+  },
+  {
+    "type": "MutJson",
     "named": false
   },
   {

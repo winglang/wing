@@ -11,7 +11,7 @@ use crate::{
 		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator,
 		UserDefinedType,
 	},
-	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, TypeRef},
+	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, ClassLike, Type, TypeRef},
 	utilities::snake_case_to_camel_case,
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
 };
@@ -43,6 +43,10 @@ const $App = __app(process.env.WING_TARGET);
 const TARGET_APP: &str = "$App";
 
 const INFLIGHT_OBJ_PREFIX: &str = "$Inflight";
+pub struct JSifyContext {
+	pub in_json: bool,
+	pub phase: Phase,
+}
 
 pub struct JSifier<'a> {
 	pub out_dir: &'a Path,
@@ -95,7 +99,11 @@ impl<'a> JSifier<'a> {
 			(_, StmtKind::Class(AstClass { .. })) => Ordering::Greater,
 			_ => Ordering::Equal,
 		}) {
-			let line = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, Phase::Preflight); // top level statements are always preflight
+			let jsify_context = JSifyContext {
+				in_json: false,
+				phase: Phase::Preflight,
+			};
+			let line = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, &jsify_context); // top level statements are always preflight
 			if line.is_empty() {
 				continue;
 			}
@@ -140,12 +148,12 @@ impl<'a> JSifier<'a> {
 		output.join("\n")
 	}
 
-	fn jsify_scope(&self, scope: &Scope, phase: Phase) -> String {
+	fn jsify_scope(&self, scope: &Scope, context: &JSifyContext) -> String {
 		let mut lines = vec![];
 		lines.push("{".to_string());
 
 		for statement in scope.statements.iter() {
-			let statement_str = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, phase);
+			let statement_str = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, context);
 			let result = statement_str.split("\n");
 			for l in result {
 				lines.push(format!("  {}", l));
@@ -156,7 +164,7 @@ impl<'a> JSifier<'a> {
 		lines.join("\n")
 	}
 
-	fn jsify_reference(&self, reference: &Reference, case_convert: Option<bool>, phase: Phase) -> String {
+	fn jsify_reference(&self, reference: &Reference, case_convert: Option<bool>, context: &JSifyContext) -> String {
 		let symbolize = if case_convert.unwrap_or(false) {
 			Self::jsify_symbol_case_converted
 		} else {
@@ -165,7 +173,7 @@ impl<'a> JSifier<'a> {
 		match reference {
 			Reference::Identifier(identifier) => symbolize(self, identifier),
 			Reference::InstanceMember { object, property } => {
-				self.jsify_expression(object, phase) + "." + &symbolize(self, property)
+				self.jsify_expression(object, context) + "." + &symbolize(self, property)
 			}
 			Reference::TypeMember { type_, property } => {
 				self.jsify_type(&TypeAnnotation::UserDefined(type_.clone())) + "." + &symbolize(self, property)
@@ -189,7 +197,7 @@ impl<'a> JSifier<'a> {
 		scope: Option<&str>,
 		id: Option<&str>,
 		case_convert: bool,
-		phase: Phase,
+		context: &JSifyContext,
 	) -> String {
 		let mut args = vec![];
 		let mut structure_args = vec![];
@@ -203,7 +211,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		for arg in arg_list.pos_args.iter() {
-			args.push(self.jsify_expression(arg, phase));
+			args.push(self.jsify_expression(arg, &context));
 		}
 
 		for arg in arg_list.named_args.iter() {
@@ -215,7 +223,13 @@ impl<'a> JSifier<'a> {
 				} else {
 					arg.0.name.clone()
 				},
-				self.jsify_expression(arg.1, Phase::Independent)
+				self.jsify_expression(
+					arg.1,
+					&JSifyContext {
+						in_json: context.in_json.clone(),
+						phase: Phase::Independent
+					}
+				)
 			));
 		}
 
@@ -254,8 +268,8 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_expression(&self, expression: &Expr, phase: Phase) -> String {
-		let auto_await = match phase {
+	fn jsify_expression(&self, expression: &Expr, context: &JSifyContext) -> String {
+		let auto_await = match context.phase {
 			Phase::Inflight => "await ",
 			_ => "",
 		};
@@ -267,7 +281,7 @@ impl<'a> JSifier<'a> {
 				obj_scope: _, // TODO
 			} => {
 				let expression_type = expression.evaluated_type.borrow();
-				let is_resource = if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
+				let is_resource = if let Some(evaluated_type) = expression_type.as_ref() {
 					evaluated_type.as_resource().is_some()
 				} else {
 					// TODO Hack: This object type is not known. How can we tell if it's a resource or not?
@@ -279,26 +293,48 @@ impl<'a> JSifier<'a> {
 					// This should only happen in the case of `any`, which are almost certainly JSII imports.
 					true
 				};
-
-				// If this is a resource then add the scope and id to the arg list
-				if is_resource {
-					format!(
-						"new {}({})",
-						self.jsify_type(class),
-						self.jsify_arg_list(
-							&arg_list,
-							Some("this"),
-							Some(&format!("{}", obj_id.as_ref().unwrap_or(&self.jsify_type(class)))),
-							should_case_convert,
-							phase
-						)
-					)
+				let is_abstract = if let Some(cls) = expression_type.unwrap().as_class_or_resource() {
+					cls.is_abstract
 				} else {
-					format!(
-						"new {}({})",
-						self.jsify_type(&class),
-						self.jsify_arg_list(&arg_list, None, None, should_case_convert, phase)
-					)
+					false
+				};
+
+				// if we have an FQN, we emit a call to the "new" (or "newAbstract") factory method to allow
+				// targets and plugins to inject alternative implementations for types. otherwise (e.g.
+				// user-defined types), we simply instantiate the type directly (maybe in the future we will
+				// allow customizations of user-defined types as well, but for now we don't).
+
+				let ctor = self.jsify_type(class);
+
+				let scope = if is_resource { Some("this") } else { None };
+
+				let id = if is_resource {
+					Some(obj_id.as_ref().unwrap_or(&ctor).as_str())
+				} else {
+					None
+				};
+
+				let args = self.jsify_arg_list(&arg_list, scope, id, should_case_convert, context);
+
+				let fqn = if is_resource {
+					expression_type
+						.expect("expected expression")
+						.as_resource()
+						.expect("expected resource")
+						.fqn
+						.clone()
+				} else {
+					None
+				};
+
+				if let (true, Some(fqn)) = (is_resource, fqn) {
+					if is_abstract {
+						format!("this.node.root.newAbstract(\"{}\",{})", fqn, args)
+					} else {
+						format!("this.node.root.new(\"{}\",{},{})", fqn, ctor, args)
+					}
+				} else {
+					format!("new {}({})", ctor, args)
 				}
 			}
 			ExprKind::Literal(lit) => match lit {
@@ -309,7 +345,14 @@ impl<'a> JSifier<'a> {
 						.iter()
 						.map(|p| match p {
 							InterpolatedStringPart::Static(l) => format!("{}", l),
-							InterpolatedStringPart::Expr(e) => format!("${{{}}}", self.jsify_expression(e, phase)),
+							InterpolatedStringPart::Expr(e) => {
+								match *e.evaluated_type.borrow().expect("Should have type") {
+									Type::Json | Type::MutJson => {
+										format!("${{JSON.stringify({}, null, 2)}}", self.jsify_expression(e, context))
+									}
+									_ => format!("${{{}}}", self.jsify_expression(e, context)),
+								}
+							}
 						})
 						.collect::<Vec<String>>()
 						.join("")
@@ -318,7 +361,7 @@ impl<'a> JSifier<'a> {
 				Literal::Duration(sec) => format!("{}.std.Duration.fromSeconds({})", STDLIB, sec),
 				Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 			},
-			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None, phase),
+			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None, context),
 			ExprKind::Call { function, arg_list } => {
 				let function_type = function.evaluated_type.borrow().unwrap();
 				let function_sig = function_type
@@ -338,18 +381,18 @@ impl<'a> JSifier<'a> {
 								needs_case_conversion = false;
 							}
 						}
-						self.jsify_reference(reference, Some(needs_case_conversion), phase)
+						self.jsify_reference(reference, Some(needs_case_conversion), context)
 					}
-					_ => format!("({})", self.jsify_expression(function, phase)),
+					_ => format!("({})", self.jsify_expression(function, context)),
 				};
-				let arg_string = self.jsify_arg_list(&arg_list, None, None, needs_case_conversion, phase);
+				let arg_string = self.jsify_arg_list(&arg_list, None, None, needs_case_conversion, context);
 
 				if let Some(js_override) = &function_sig.js_override {
 					let self_string = &match &function.kind {
 						// for "loose" macros, e.g. `print()`, $self$ is the global object
 						ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
 						ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
-							self.jsify_expression(object, phase).clone()
+							self.jsify_expression(object, context).clone()
 						}
 
 						_ => expr_string,
@@ -367,11 +410,11 @@ impl<'a> JSifier<'a> {
 					UnaryOperator::Minus => "-",
 					UnaryOperator::Not => "!",
 				};
-				format!("({}{})", op, self.jsify_expression(exp, phase))
+				format!("({}{})", op, self.jsify_expression(exp, context))
 			}
 			ExprKind::Binary { op, left, right } => {
-				let js_left = self.jsify_expression(left, phase);
-				let js_right = self.jsify_expression(right, phase);
+				let js_left = self.jsify_expression(left, context);
+				let js_right = self.jsify_expression(right, context);
 
 				let js_op = match op {
 					BinaryOperator::Add => "+",
@@ -379,12 +422,8 @@ impl<'a> JSifier<'a> {
 					BinaryOperator::Mul => "*",
 					BinaryOperator::Div => "/",
 					BinaryOperator::FloorDiv => {
-						return format!(
-							"Math.trunc({} / {})",
-							js_left,
-							js_right
-						);
-					},
+						return format!("Math.trunc({} / {})", js_left, js_right);
+					}
 					BinaryOperator::Mod => "%",
 					BinaryOperator::Power => "**",
 					BinaryOperator::Greater => ">",
@@ -396,21 +435,17 @@ impl<'a> JSifier<'a> {
 					BinaryOperator::LogicalAnd => "&&",
 					BinaryOperator::LogicalOr => "||",
 				};
-				format!(
-					"({} {} {})",
-					js_left,
-					js_op,
-					js_right
-				)
+				format!("({} {} {})", js_left, js_op, js_right)
 			}
 			ExprKind::ArrayLiteral { items, .. } => {
 				let item_list = items
 					.iter()
-					.map(|expr| self.jsify_expression(expr, phase))
+					.map(|expr| self.jsify_expression(expr, context))
 					.collect::<Vec<String>>()
 					.join(", ");
 
-				if is_mutable_collection(expression) {
+				if is_mutable_collection(expression) || context.in_json {
+					// json arrays dont need frozen at nested level
 					format!("[{}]", item_list)
 				} else {
 					format!("Object.freeze([{}])", item_list)
@@ -421,19 +456,37 @@ impl<'a> JSifier<'a> {
 					"{{\n{}}}\n",
 					fields
 						.iter()
-						.map(|(name, expr)| format!("\"{}\": {},", name.name, self.jsify_expression(expr, phase)))
+						.map(|(name, expr)| format!("\"{}\": {},", name.name, self.jsify_expression(expr, context)))
 						.collect::<Vec<String>>()
 						.join("\n")
 				)
 			}
+			ExprKind::JsonLiteral { is_mut, element } => {
+				let json_context = &JSifyContext {
+					in_json: true,
+					phase: context.phase.clone(),
+				};
+				let js_out = match &element.kind {
+					ExprKind::MapLiteral { .. } => {
+						if *is_mut {
+							format!("{}", self.jsify_expression(element, json_context))
+						} else {
+							format!("Object.freeze({})", self.jsify_expression(element, json_context))
+						}
+					}
+					_ => format!("{}", self.jsify_expression(element, json_context)),
+				};
+				js_out
+			}
 			ExprKind::MapLiteral { fields, .. } => {
 				let f = fields
 					.iter()
-					.map(|(key, expr)| format!("\"{}\":{}", key, self.jsify_expression(expr, phase)))
+					.map(|(key, expr)| format!("\"{}\":{}", key, self.jsify_expression(expr, context)))
 					.collect::<Vec<String>>()
 					.join(",");
 
-				if is_mutable_collection(expression) {
+				if is_mutable_collection(expression) || context.in_json {
+					// json maps dont need frozen in the nested level
 					format!("{{{}}}", f)
 				} else {
 					format!("Object.freeze({{{}}})", f)
@@ -442,7 +495,7 @@ impl<'a> JSifier<'a> {
 			ExprKind::SetLiteral { items, .. } => {
 				let item_list = items
 					.iter()
-					.map(|expr| self.jsify_expression(expr, phase))
+					.map(|expr| self.jsify_expression(expr, context))
 					.collect::<Vec<String>>()
 					.join(", ");
 
@@ -453,20 +506,20 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
-				Phase::Inflight => self.jsify_inflight_function(func_def),
+				Phase::Inflight => self.jsify_inflight_function(func_def, context),
 				Phase::Independent => unimplemented!(),
 				Phase::Preflight => self.jsify_function(
 					None,
 					&func_def.parameters,
 					&func_def.statements,
 					func_def.is_static,
-					phase,
+					context,
 				),
 			},
 		}
 	}
 
-	fn jsify_statement(&self, env: &SymbolEnv, statement: &Stmt, phase: Phase) -> String {
+	fn jsify_statement(&self, env: &SymbolEnv, statement: &Stmt, context: &JSifyContext) -> String {
 		match &statement.kind {
 			StmtKind::Bring {
 				module_name,
@@ -497,7 +550,7 @@ impl<'a> JSifier<'a> {
 				initial_value,
 				type_: _,
 			} => {
-				let initial_value = self.jsify_expression(initial_value, phase);
+				let initial_value = self.jsify_expression(initial_value, context);
 				return if *reassignable {
 					format!("let {} = {};", self.jsify_symbol(var_name), initial_value)
 				} else {
@@ -511,14 +564,14 @@ impl<'a> JSifier<'a> {
 			} => format!(
 				"for (const {} of {}) {}",
 				self.jsify_symbol(iterator),
-				self.jsify_expression(iterable, phase),
-				self.jsify_scope(statements, phase)
+				self.jsify_expression(iterable, context),
+				self.jsify_scope(statements, context)
 			),
 			StmtKind::While { condition, statements } => {
 				format!(
 					"while ({}) {}",
-					self.jsify_expression(condition, phase),
-					self.jsify_scope(statements, phase),
+					self.jsify_expression(condition, context),
+					self.jsify_scope(statements, context),
 				)
 			}
 			StmtKind::If {
@@ -529,43 +582,43 @@ impl<'a> JSifier<'a> {
 			} => {
 				let mut if_statement = format!(
 					"if ({}) {}",
-					self.jsify_expression(condition, phase),
-					self.jsify_scope(statements, phase),
+					self.jsify_expression(condition, context),
+					self.jsify_scope(statements, context),
 				);
 
 				for elif_block in elif_statements {
 					let elif_statement = format!(
 						" else if ({}) {}",
-						self.jsify_expression(&elif_block.condition, phase),
-						self.jsify_scope(&elif_block.statements, phase),
+						self.jsify_expression(&elif_block.condition, context),
+						self.jsify_scope(&elif_block.statements, context),
 					);
 					if_statement.push_str(&elif_statement);
 				}
 
 				if let Some(else_scope) = else_statements {
-					let else_statement = format!(" else {}", self.jsify_scope(else_scope, phase));
+					let else_statement = format!(" else {}", self.jsify_scope(else_scope, context));
 					if_statement.push_str(&else_statement);
 				}
 
 				if_statement
 			}
-			StmtKind::Expression(e) => format!("{};", self.jsify_expression(e, phase)),
+			StmtKind::Expression(e) => format!("{};", self.jsify_expression(e, context)),
 			StmtKind::Assignment { variable, value } => {
 				format!(
 					"{} = {};",
-					self.jsify_reference(&variable, None, phase),
-					self.jsify_expression(value, phase)
+					self.jsify_reference(&variable, None, context),
+					self.jsify_expression(value, context)
 				)
 			}
-			StmtKind::Scope(scope) => self.jsify_scope(scope, phase),
+			StmtKind::Scope(scope) => self.jsify_scope(scope, context),
 			StmtKind::Return(exp) => {
 				if let Some(exp) = exp {
-					format!("return {};", self.jsify_expression(exp, phase))
+					format!("return {};", self.jsify_expression(exp, context))
 				} else {
 					"return;".into()
 				}
 			}
-			StmtKind::Class(class) => self.jsify_class(env, class, phase),
+			StmtKind::Class(class) => self.jsify_class(env, class, context),
 			StmtKind::Struct { name, extends, members } => {
 				format!(
 					"interface {}{} {{\n{}\n}}",
@@ -616,12 +669,12 @@ impl<'a> JSifier<'a> {
 				catch_block,
 				finally_statements,
 			} => {
-				let try_block = self.jsify_scope(try_statements, phase);
+				let try_block = self.jsify_scope(try_statements, context);
 				let mut catch_statements = "".to_string();
 				let mut js_exception_var = "".to_string();
 				let mut exception_var_conversion = "".to_string();
 				if let Some(catch_block) = catch_block {
-					catch_statements = self.jsify_scope(&catch_block.statements, phase);
+					catch_statements = self.jsify_scope(&catch_block.statements, context);
 					if let Some(exception_var_symbol) = &catch_block.exception_var {
 						let exception_var_str = self.jsify_symbol(exception_var_symbol);
 						js_exception_var = format!("($error_{exception_var_str})");
@@ -629,7 +682,7 @@ impl<'a> JSifier<'a> {
 					}
 				}
 				let finally_block = if let Some(finally_statements) = finally_statements {
-					format!("{};", self.jsify_scope(finally_statements, phase))
+					format!("{};", self.jsify_scope(finally_statements, context))
 				} else {
 					"".to_string()
 				};
@@ -648,12 +701,18 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_inflight_function(&self, func_def: &FunctionDefinition) -> String {
+	fn jsify_inflight_function(&self, func_def: &FunctionDefinition, context: &JSifyContext) -> String {
 		let mut parameter_list = vec![];
 		for p in func_def.parameters.iter() {
 			parameter_list.push(p.0.name.clone());
 		}
-		let block = self.jsify_scope(&func_def.statements, Phase::Inflight);
+		let block = self.jsify_scope(
+			&func_def.statements,
+			&JSifyContext {
+				in_json: context.in_json.clone(),
+				phase: Phase::Inflight,
+			},
+		);
 		let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
 		let mut bindings = vec![];
 		let mut capture_names = vec![];
@@ -704,7 +763,7 @@ impl<'a> JSifier<'a> {
 		parameters: &[(Symbol, bool)],
 		body: &Scope,
 		is_static: bool,
-		phase: Phase,
+		context: &JSifyContext,
 	) -> String {
 		let mut parameter_list = vec![];
 		for p in parameters.iter() {
@@ -717,7 +776,7 @@ impl<'a> JSifier<'a> {
 		};
 
 		let parameters = parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ");
-		let body = self.jsify_scope(body, phase);
+		let body = self.jsify_scope(body, context);
 		let static_modifier = if is_static { "static" } else { "" };
 
 		formatdoc!(
@@ -783,8 +842,8 @@ impl<'a> JSifier<'a> {
 	///   }
 	/// }
 	/// ```
-	fn jsify_resource(&self, env: &SymbolEnv, class: &AstClass, phase: Phase) -> String {
-		assert!(phase == Phase::Preflight);
+	fn jsify_resource(&self, env: &SymbolEnv, class: &AstClass, context: &JSifyContext) -> String {
+		assert!(context.phase == Phase::Preflight);
 
 		// Lookup the resource type
 		let resource_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
@@ -798,7 +857,14 @@ impl<'a> JSifier<'a> {
 			.iter()
 			.filter(|(_, m)| m.signature.flight == Phase::Inflight)
 			.collect::<Vec<_>>();
-		self.jsify_resource_client(env, &class.name, &captured_fields, &inflight_methods, &class.parent);
+		self.jsify_resource_client(
+			env,
+			&class.name,
+			&captured_fields,
+			&inflight_methods,
+			&class.parent,
+			context,
+		);
 
 		// Get all preflight methods to be jsified to the preflight class
 		let preflight_methods = class
@@ -823,10 +889,10 @@ impl<'a> JSifier<'a> {
 			} else {
 				format!(" extends {}.{}", STDLIB, WINGSDK_RESOURCE)
 			},
-			self.jsify_resource_constructor(&class.constructor, class.parent.is_none()),
+			self.jsify_resource_constructor(&class.constructor, class.parent.is_none(), context),
 			preflight_methods
 				.iter()
-				.map(|(n, m)| self.jsify_function(Some(&n.name), &m.parameters, &m.statements, m.is_static, phase))
+				.map(|(n, m)| self.jsify_function(Some(&n.name), &m.parameters, &m.statements, m.is_static, context))
 				.collect::<Vec<String>>()
 				.join("\n"),
 		);
@@ -859,7 +925,7 @@ impl<'a> JSifier<'a> {
 		return format!("{}\n{}", resource_class, inflight_annotations.join("\n"));
 	}
 
-	fn jsify_resource_constructor(&self, constructor: &Constructor, no_parent: bool) -> String {
+	fn jsify_resource_constructor(&self, constructor: &Constructor, no_parent: bool, context: &JSifyContext) -> String {
 		format!(
 			"constructor(scope, id, {}) {{\n{}\n{}\n}}",
 			constructor
@@ -871,7 +937,13 @@ impl<'a> JSifier<'a> {
 			// If there's no parent then this resource is derived from the base resource class (core.Resource) and we need
 			// to manually call its super
 			if no_parent { "	super(scope, id);" } else { "" },
-			self.jsify_scope(&constructor.statements, Phase::Preflight)
+			self.jsify_scope(
+				&constructor.statements,
+				&JSifyContext {
+					in_json: context.in_json.clone(),
+					phase: Phase::Preflight
+				}
+			)
 		)
 	}
 
@@ -914,6 +986,7 @@ impl<'a> JSifier<'a> {
 		captured_fields: &[(String, TypeRef, Vec<String>)],
 		inflight_methods: &[&(Symbol, FunctionDefinition)],
 		parent: &Option<UserDefinedType>,
+		context: &JSifyContext,
 	) {
 		// Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
 		let mut parent_captures = vec![];
@@ -968,7 +1041,10 @@ impl<'a> JSifier<'a> {
 						&def.parameters,
 						&def.statements,
 						def.is_static,
-						def.signature.flight
+						&JSifyContext {
+							in_json: context.in_json.clone(),
+							phase: def.signature.flight
+						}
 					)
 				)
 			})
@@ -993,9 +1069,9 @@ impl<'a> JSifier<'a> {
 		fs::write(&relative_file_path, client_source).expect("Writing client inflight source");
 	}
 
-	fn jsify_class(&self, env: &SymbolEnv, class: &AstClass, phase: Phase) -> String {
+	fn jsify_class(&self, env: &SymbolEnv, class: &AstClass, context: &JSifyContext) -> String {
 		if class.is_resource {
-			return self.jsify_resource(env, class, phase);
+			return self.jsify_resource(env, class, context);
 		}
 
 		format!(
@@ -1011,7 +1087,7 @@ impl<'a> JSifier<'a> {
 				&class.constructor.parameters,
 				&class.constructor.statements,
 				false, // Constructors are are kind of static, but we don't add the `static` modifier to ctors in js so we pass false here
-				phase
+				context
 			),
 			class
 				.fields
@@ -1022,7 +1098,7 @@ impl<'a> JSifier<'a> {
 			class
 				.methods
 				.iter()
-				.map(|(n, m)| self.jsify_function(Some(&n.name), &m.parameters, &m.statements, m.is_static, phase))
+				.map(|(n, m)| self.jsify_function(Some(&n.name), &m.parameters, &m.statements, m.is_static, context))
 				.collect::<Vec<String>>()
 				.join("\n")
 		)
