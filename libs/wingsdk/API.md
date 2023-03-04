@@ -1181,7 +1181,7 @@ let api_request = cloud.ApiRequest{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The request's headers. |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.method">method</a></code> | <code>str</code> | The request's HTTP method. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.method">method</a></code> | <code><a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a></code> | The request's HTTP method. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.path">path</a></code> | <code>str</code> | The request's path. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.body">body</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The request's body. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.query">query</a></code> | <code>str</code> | The request's query string. |
@@ -1204,10 +1204,10 @@ The request's headers.
 ##### `method`<sup>Required</sup> <a name="method" id="@winglang/sdk.cloud.ApiRequest.property.method"></a>
 
 ```wing
-method: str;
+method: HttpMethod;
 ```
 
-- *Type:* str
+- *Type:* <a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a>
 
 The request's HTTP method.
 
@@ -3783,4 +3783,80 @@ Function that will be called when a message is received from the topic.
 
 ---
 
+
+## Enums <a name="Enums" id="Enums"></a>
+
+### HttpMethod <a name="HttpMethod" id="@winglang/sdk.cloud.HttpMethod"></a>
+
+Allowed HTTP methods for a endpoint.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.GET">GET</a></code> | Get. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.HEAD">HEAD</a></code> | Head. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.POST">POST</a></code> | Post. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.PUT">PUT</a></code> | Put. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.DELETE">DELETE</a></code> | Delete. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.CONNECT">CONNECT</a></code> | Connect. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.OPTIONS">OPTIONS</a></code> | Options. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.PATCH">PATCH</a></code> | Patch. |
+
+---
+
+##### `GET` <a name="GET" id="@winglang/sdk.cloud.HttpMethod.GET"></a>
+
+Get.
+
+---
+
+
+##### `HEAD` <a name="HEAD" id="@winglang/sdk.cloud.HttpMethod.HEAD"></a>
+
+Head.
+
+---
+
+
+##### `POST` <a name="POST" id="@winglang/sdk.cloud.HttpMethod.POST"></a>
+
+Post.
+
+---
+
+
+##### `PUT` <a name="PUT" id="@winglang/sdk.cloud.HttpMethod.PUT"></a>
+
+Put.
+
+---
+
+
+##### `DELETE` <a name="DELETE" id="@winglang/sdk.cloud.HttpMethod.DELETE"></a>
+
+Delete.
+
+---
+
+
+##### `CONNECT` <a name="CONNECT" id="@winglang/sdk.cloud.HttpMethod.CONNECT"></a>
+
+Connect.
+
+---
+
+
+##### `OPTIONS` <a name="OPTIONS" id="@winglang/sdk.cloud.HttpMethod.OPTIONS"></a>
+
+Options.
+
+---
+
+
+##### `PATCH` <a name="PATCH" id="@winglang/sdk.cloud.HttpMethod.PATCH"></a>
+
+Patch.
+
+---
 
