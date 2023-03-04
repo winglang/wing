@@ -1,4 +1,11 @@
-import { DeleteItemCommand, GetItemCommand, UpdateItemCommand, PutItemCommand, ScanCommand, DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import {
+  DeleteItemCommand,
+  GetItemCommand,
+  UpdateItemCommand,
+  PutItemCommand,
+  ScanCommand,
+  DynamoDBClient,
+} from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { ColumnType, ITableClient } from "../cloud";
 import { Json } from "../std";
@@ -15,9 +22,7 @@ export class TableClient implements ITableClient {
     this.primaryKey = process.env.PRIMARY_KEY!;
     this.columns = JSON.parse(process.env.COLUMNS!);
     this.primaryKeyType =
-      this.columns[this.primaryKey] == ColumnType.STRING
-        ? "string"
-        : "number";
+      this.columns[this.primaryKey] == ColumnType.STRING ? "string" : "number";
   }
 
   public async insert(row: Json): Promise<void> {
@@ -57,7 +62,7 @@ export class TableClient implements ITableClient {
   public async delete(key: any): Promise<void> {
     const command = new DeleteItemCommand({
       TableName: this.tableName,
-      Key: marshall({ [this.primaryKey]: key })
+      Key: marshall({ [this.primaryKey]: key }),
     });
     await this.client.send(command);
   }
@@ -65,7 +70,7 @@ export class TableClient implements ITableClient {
   public async get(key: any): Promise<any> {
     const command = new GetItemCommand({
       TableName: this.tableName,
-      Key: marshall({ [this.primaryKey]: key })
+      Key: marshall({ [this.primaryKey]: key }),
     });
     const result = await this.client.send(command);
     if (result.Item) {
@@ -76,7 +81,7 @@ export class TableClient implements ITableClient {
 
   public async list(): Promise<any> {
     const command = new ScanCommand({
-      TableName: this.tableName
+      TableName: this.tableName,
     });
     const result = await this.client.send(command);
     const response: any = [];

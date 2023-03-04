@@ -19,14 +19,13 @@ import {
 import { marshall } from "@aws-sdk/util-dynamodb";
 
 import { mockClient } from "aws-sdk-client-mock";
-import { TableClient } from "../../src/target-tf-aws/table.inflight";
 import { ColumnType } from "../../src/cloud";
+import { TableClient } from "../../src/target-tf-aws/table.inflight";
 
 const MOCK_TABLE_NAME = "MyBeautifulTable";
 const dynamoMock = mockClient(DynamoDBClient);
 
-
-describe('inflight table tests', () => {
+describe("inflight table tests", () => {
   const OLD_ENV = process.env;
 
   beforeEach(() => {
@@ -35,7 +34,7 @@ describe('inflight table tests', () => {
       ...OLD_ENV,
       PRIMARY_KEY: "id",
       COLUMNS: `{ "id": ${ColumnType.STRING} }`,
-    }
+    };
   });
 
   afterAll(() => {
@@ -47,8 +46,8 @@ describe('inflight table tests', () => {
     const row = { id: "test" };
     setupInsertMock({
       expectedTableName: MOCK_TABLE_NAME,
-      row: row
-    })
+      row: row,
+    });
     // WHEN
     const client = new TableClient(MOCK_TABLE_NAME);
     const response = await client.insert(row as any);
@@ -64,7 +63,7 @@ describe('inflight table tests', () => {
       row: row,
       newValue: 123,
       primaryKeyValue: "test",
-    })
+    });
     // WHEN
     const client = new TableClient(MOCK_TABLE_NAME);
     const response = await client.update(row as any);
@@ -78,7 +77,7 @@ describe('inflight table tests', () => {
     setupDeleteMock({
       expectedTableName: MOCK_TABLE_NAME,
       primaryKeyValue: key,
-    })
+    });
     // WHEN
     const client = new TableClient(MOCK_TABLE_NAME);
     const response = await client.delete(key);
@@ -93,7 +92,7 @@ describe('inflight table tests', () => {
       expectedTableName: MOCK_TABLE_NAME,
       primaryKeyValue: key,
       emptyTable: false,
-    })
+    });
     // WHEN
     const client = new TableClient(MOCK_TABLE_NAME);
     const response = await client.get(key);
@@ -108,7 +107,7 @@ describe('inflight table tests', () => {
       expectedTableName: MOCK_TABLE_NAME,
       primaryKeyValue: key,
       emptyTable: true,
-    })
+    });
     // WHEN
     const client = new TableClient(MOCK_TABLE_NAME);
     const response = await client.get(key);
@@ -123,7 +122,7 @@ describe('inflight table tests', () => {
       expectedTableName: MOCK_TABLE_NAME,
       primaryKeyValue: key,
       emptyTable: false,
-    })
+    });
     // WHEN
     const client = new TableClient(MOCK_TABLE_NAME);
     const response = await client.get(key);
@@ -184,11 +183,11 @@ function setupUpdateMock(opts: MockOptions) {
     UpdateExpression: `SET somenumber = :somenumber`,
     ExpressionAttributeValues: {
       ":somenumber": { N: `${opts.newValue}` },
-    }
+    },
   };
   const mockResponse: UpdateItemCommandOutput = {
-    $metadata: {}
-  }
+    $metadata: {},
+  };
   dynamoMock.on(UpdateItemCommand, expectedRequest).resolves(mockResponse);
 }
 
@@ -212,7 +211,7 @@ function setupGetMock(opts: MockOptions) {
     $metadata: {},
   };
   if (!opts.emptyTable) {
-    mockResponse["Item"] = { id: { S: `${opts.primaryKeyValue}` } };
+    mockResponse.Item = { id: { S: `${opts.primaryKeyValue}` } };
   }
   dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
 }
@@ -220,13 +219,13 @@ function setupGetMock(opts: MockOptions) {
 function setupListMock(opts: MockOptions) {
   const expectedRequest: ScanCommandInput = {
     TableName: opts.expectedTableName,
-  }
+  };
   const mockResponse: ScanCommandOutput = {
     $metadata: {},
     Count: 0,
     Items: opts.emptyTable
       ? []
-      : [{ id: { S: "test1" } }, { id: { S: "test2" } }]
-  }
+      : [{ id: { S: "test1" } }, { id: { S: "test2" } }],
+  };
   dynamoMock.on(ScanCommand, expectedRequest).resolves(mockResponse);
 }
