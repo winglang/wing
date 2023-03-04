@@ -68,7 +68,10 @@ export class TableClient implements ITableClient {
       Key: marshall({ [this.primaryKey]: key })
     });
     const result = await this.client.send(command);
-    return unmarshall(result.Item!);
+    if (result.Item) {
+      return unmarshall(result.Item);
+    }
+    return null;
   }
 
   public async list(): Promise<any> {
