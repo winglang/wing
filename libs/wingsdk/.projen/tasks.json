@@ -269,7 +269,7 @@
       "description": "Run tests",
       "steps": [
         {
-          "exec": "vitest run --coverage --update"
+          "exec": "vitest run --coverage --update --passWithNoTests"
         },
         {
           "spawn": "eslint"
