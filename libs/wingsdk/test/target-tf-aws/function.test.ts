@@ -9,7 +9,7 @@ import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
 
-test("basic function", async () => {
+test("basic function", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   Function._newFunction(app, "Function", inflight);

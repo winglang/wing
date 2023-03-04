@@ -5,7 +5,7 @@ import { test, expect, beforeEach, vi } from "vitest";
 import { TopicClient } from "../../src/target-tf-aws/topic.inflight";
 
 const snsMock = mockClient(SNSClient);
-const spy = vi.spyOn(snsMock, "on");
+
 beforeEach(() => {
   snsMock.reset();
 });
@@ -14,11 +14,14 @@ test("publish - happy path", async () => {
   // GIVEN
   const TOPIC_ARN = "SOME:TOPIC_ARN:that-is/fake";
   const MESSAGE = "SOME MESSAGE";
+  snsMock.on(PublishCommand).resolves({ $metadata: { httpStatusCode: 200 } });
 
   // WHEN
   const client = new TopicClient(TOPIC_ARN);
-  const response = await client.publish(MESSAGE);
+  const publishSpy = vi.spyOn(client, "publish");
+  await client.publish(MESSAGE);
 
   // THEN
-  expect(response).toEqual(undefined);
+  expect(publishSpy).toBeCalledTimes(1);
+  expect(publishSpy).toBeCalledWith(MESSAGE);
 });
