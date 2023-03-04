@@ -2,12 +2,9 @@ import { mkdirSync } from "fs";
 import { join } from "path";
 import * as cdk from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
-import { Construct } from "constructs";
-import { Polycons } from "polycons";
 import stringify from "safe-stable-stringify";
-import { PolyconFactory } from "./factory";
 import { Logger } from "../cloud";
-import { IApp, AppProps, preSynthesizeAllConstructs } from "../core";
+import { App as CoreApp, AppProps, preSynthesizeAllConstructs } from "../core";
 
 /**
  * AWS-CDK App props
@@ -23,7 +20,7 @@ export interface CdkAppProps extends AppProps {
 /**
  * An app that knows how to synthesize constructs into CDK configuration.
  */
-export class App extends Construct implements IApp {
+export class App extends CoreApp {
   /**
    * Directory where artifacts are synthesized to.
    */
@@ -35,7 +32,6 @@ export class App extends Construct implements IApp {
   private synthedOutput: string | undefined;
 
   constructor(props: CdkAppProps) {
-    const customFactory = props.customFactory ?? new PolyconFactory();
 
     const stackName = props.stackName ?? process.env.CDK_STACK_NAME;
     if (stackName === undefined) {
@@ -51,13 +47,6 @@ export class App extends Construct implements IApp {
 
     const cdkApp = new cdk.App({ outdir: cdkOutdir });
     const cdkStack = new cdk.Stack(cdkApp, stackName);
-
-    if (!customFactory) {
-      throw new Error(
-        "A custom factory must be passed to the base CdkApp class."
-      );
-    }
-    Polycons.register(cdkStack, customFactory);
 
     super(cdkStack, "Default");
 

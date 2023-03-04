@@ -2680,63 +2680,6 @@ new std.T1()
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
-### IApp <a name="IApp" id="@winglang/sdk.core.IApp"></a>
-
-- *Extends:* constructs.IConstruct
-
-- *Implemented By:* awscdk.App, core.CdktfApp, sim.App, testing.SimApp, tfaws.App, tfazure.App, tfgcp.App, core.IApp
-
-A Wing application.
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.core.IApp.synth">synth</a></code> | Synthesize the app into an artifact. |
-
----
-
-##### `synth` <a name="synth" id="@winglang/sdk.core.IApp.synth"></a>
-
-```wing
-synth(): str
-```
-
-Synthesize the app into an artifact.
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.core.IApp.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.core.IApp.property.outdir">outdir</a></code> | <code>str</code> | Directory where artifacts are synthesized to. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.core.IApp.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `outdir`<sup>Required</sup> <a name="outdir" id="@winglang/sdk.core.IApp.property.outdir"></a>
-
-```wing
-outdir: str;
-```
-
-- *Type:* str
-
-Directory where artifacts are synthesized to.
-
----
-
 ### IBucketClient <a name="IBucketClient" id="@winglang/sdk.cloud.IBucketClient"></a>
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IBucketClient">IBucketClient</a>
@@ -3080,55 +3023,6 @@ Entrypoint function that will be called when the cloud function is invoked.
 ---
 
 
-### IInflightHost <a name="IInflightHost" id="@winglang/sdk.core.IInflightHost"></a>
-
-- *Extends:* core.IResource
-
-- *Implemented By:* awscdk.Function, cloud.Function, cloud.FunctionBase, sim.Function, tfaws.Function, tfazure.Function, core.IInflightHost
-
-A resource that can run inflight code.
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.core.IInflightHost.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.core.IInflightHost.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.core.IInflightHost.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.core.IInflightHost.property.display"></a>
-
-```wing
-display: Display;
-```
-
-- *Type:* core.Display
-
-Information on how to display a resource in the UI.
-
----
-
-### IInspectable <a name="IInspectable" id="@winglang/sdk.core.IInspectable"></a>
-
-- *Implemented By:* awscdk.Bucket, awscdk.Function, cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Schedule, cloud.ScheduleBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfaws.Schedule, tfazure.Bucket, tfazure.Function, tfgcp.Bucket, tfgcp.Logger, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.IScheduleOnTickHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IInspectable, core.IResource
-
-Interface for examining a construct and exposing metadata.
-
-
 ### ILoggerClient <a name="ILoggerClient" id="@winglang/sdk.cloud.ILoggerClient"></a>
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.ILoggerClient">ILoggerClient</a>
@@ -3293,48 +3187,6 @@ Function that will be called when a message is received from the queue.
 
 ---
 
-
-### IResource <a name="IResource" id="@winglang/sdk.core.IResource"></a>
-
-- *Extends:* core.IInspectable, constructs.IConstruct
-
-- *Implemented By:* awscdk.Bucket, awscdk.Function, cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Schedule, cloud.ScheduleBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfaws.Schedule, tfazure.Bucket, tfazure.Function, tfgcp.Bucket, tfgcp.Logger, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.IScheduleOnTickHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IResource
-
-Abstract interface for `Resource`.
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.core.IResource.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.core.IResource.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.core.IResource.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.core.IResource.property.display"></a>
-
-```wing
-display: Display;
-```
-
-- *Type:* core.Display
-
-Information on how to display a resource in the UI.
-
----
 
 ### IScheduleOnTickHandler <a name="IScheduleOnTickHandler" id="@winglang/sdk.cloud.IScheduleOnTickHandler"></a>
 

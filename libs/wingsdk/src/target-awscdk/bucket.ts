@@ -16,7 +16,7 @@ import * as core from "../core";
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
-export class Bucket extends cloud.BucketBase {
+export class Bucket extends cloud.Bucket {
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
 
@@ -88,6 +88,7 @@ export class Bucket extends cloud.BucketBase {
   /** @internal */
   public _toInflight(): core.Code {
     return core.InflightClient.for(
+      __dirname,
       __filename.replace("awscdk", "tf-aws"),
       "BucketClient",
       [`process.env["${this.envName()}"]`]

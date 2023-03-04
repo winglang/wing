@@ -15,7 +15,7 @@ import * as core from "../core";
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
-export class Function extends cloud.FunctionBase {
+export class Function extends cloud.Function {
   private readonly function: CdkFunction;
   /** Function ARN */
   public readonly arn: string;
@@ -52,6 +52,7 @@ export class Function extends cloud.FunctionBase {
   /** @internal */
   public _toInflight(): core.Code {
     return core.InflightClient.for(
+      __dirname,
       __filename.replace("awscdk", "tf-aws"),
       "FunctionClient",
       [`process.env["${this.envName()}"]`]
