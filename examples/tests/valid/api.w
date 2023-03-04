@@ -8,10 +8,12 @@ let handler = inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
 
   let count = counter.inc();
 
+  let bodyResponse = Json {
+    count: count,
+  };
+  
   let resp = cloud.ApiResponse {
-    body: {
-      count: count,
-    },
+    body: bodyResponse,
     status: 200,
     headers: {
       "Content-Type": "text/plain",

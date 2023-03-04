@@ -3,7 +3,6 @@ import type {
   ApiRequest,
   ApiResponse,
   IApiEndpointHandlerClient,
-  Json,
 } from "../cloud/api";
 
 export class ApiOnRequestHandlerClient {
@@ -27,28 +26,14 @@ export class ApiOnRequestHandlerClient {
  * @param resp Cloud API response
  * @returns API Gateway response
  */
-function mapCloudApiResponseToApigatewayResponse(resp: ApiResponse) {
+function mapCloudApiResponseToApigatewayResponse(
+  resp: ApiResponse
+): APIGatewayProxyResult {
   return {
     statusCode: resp.status,
-    body: resp.body ? JSON.stringify(convertMapToObject(resp.body)) : "",
-    headers: convertMapToObject(resp.headers),
+    body: JSON.stringify(resp.body),
+    headers: resp.headers,
   };
-}
-
-/**
- * Converts the inflight return value to a JSON object
- * @param map A map of key-value pairs
- * @returns An object with the same key-value pairs
- */
-function convertMapToObject(map: Json | undefined) {
-  if (!map) {
-    return undefined;
-  }
-  if (!(map instanceof Map)) {
-    // the inflight returns a Map instead of a plain object
-    throw new Error("Expected a Map");
-  }
-  return Object.fromEntries(map);
 }
 
 /**

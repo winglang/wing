@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App, Inflight, Resource } from "../core";
+import { Json } from "../std";
 
 /**
  * Global identifier for `Api`.
@@ -193,14 +194,14 @@ export interface ApiConnectProps {}
 //   PATCH = "PATCH",
 // }
 
-/**
- * Json type representation.
- */
-// TODO: this should come from a shared package
-export type Json = any;
-//  {
-//   [key: string]: Json | Json[] | string | number | boolean | null;
-// }
+// /**
+//  * Json type representation.
+//  */
+// // TODO: this should come from a shared package
+// export type Json = any;
+// //  {
+// //   [key: string]: Json | Json[] | string | number | boolean | null;
+// // }
 
 /**
  * Shape of a request to an inflight handler.
