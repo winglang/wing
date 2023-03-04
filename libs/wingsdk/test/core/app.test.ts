@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { test, expect } from "vitest";
 import { App } from "../../src/core/app";
 
 const FOO_FQN = "@lib/foo.Foo";
