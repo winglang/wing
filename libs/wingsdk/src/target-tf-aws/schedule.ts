@@ -100,7 +100,7 @@ export class Schedule extends cloud.Schedule {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename, "ScheduleClient", [
+    return core.InflightClient.for(__dirname, __filename, "ScheduleClient", [
       `process.env["${this.envName()}"]`,
     ]);
   }

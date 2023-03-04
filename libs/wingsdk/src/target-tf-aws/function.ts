@@ -194,7 +194,7 @@ export class Function extends cloud.Function {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename, "FunctionClient", [
+    return core.InflightClient.for(__dirname, __filename, "FunctionClient", [
       `process.env["${this.envName()}"]`,
     ]);
   }

@@ -1411,7 +1411,7 @@ constructor() {
     bindings: {
       b: {
         obj: b,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
       x: {
         obj: x,
@@ -1803,7 +1803,7 @@ constructor() {
       },
       res: {
         obj: res,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
     }
   });
@@ -2392,15 +2392,15 @@ constructor() {
     bindings: {
       bucket1: {
         obj: bucket1,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
       bucket2: {
         obj: bucket2,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
       bucket3: {
         obj: bucket3,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
     }
   });
@@ -3053,7 +3053,7 @@ constructor() {
     bindings: {
       bucket: {
         obj: bucket,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
       counter: {
         obj: counter,
@@ -3405,7 +3405,7 @@ constructor() {
     bindings: {
       bucket: {
         obj: bucket,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
     }
   })));
@@ -3542,6 +3542,293 @@ constructor() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr)[0] === 1)'\`)})(((arr)[0] === 1))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr)[2] === \\"buckle\\")'\`)})(((arr)[2] === \\"buckle\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((arr)[7])[0] === \\"shut\\")'\`)})((((arr)[7])[0] === \\"shut\\"))};
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`json_bucket.w > wing compile --target tf-aws > index.js 1`] = `
+"async handle(msg) { const { b, file_name } = this; {
+  const x = (await b.getJson(file_name));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((((x)[\\"persons\\"])[0])[\\"fears\\"])[1] === \\"failure\\")'\`)})((((((x)[\\"persons\\"])[0])[\\"fears\\"])[1] === \\"failure\\"))};
+} };"
+`;
+
+exports[`json_bucket.w > wing compile --target tf-aws > index.js 2`] = `
+"async handle(msg) { const { b, file_name, get_json, j } = this; {
+  (await b.putJson(file_name,j));
+  (await get_json.invoke(msg));
+} };"
+`;
+
+exports[`json_bucket.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_cloudFunction_IamRole_DAEC3578": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Function/IamRole",
+            "uniqueId": "root_cloudFunction_IamRole_DAEC3578",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+      "root_testput_IamRole_1BBF32A6": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:put/IamRole",
+            "uniqueId": "root_testput_IamRole_1BBF32A6",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_cloudFunction_IamRolePolicy_AAE6C0C0": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Function/IamRolePolicy",
+            "uniqueId": "root_cloudFunction_IamRolePolicy_AAE6C0C0",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.name}",
+      },
+      "root_testput_IamRolePolicy_98659F09": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:put/IamRolePolicy",
+            "uniqueId": "root_testput_IamRolePolicy_98659F09",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"lambda:InvokeFunction\\"],\\"Resource\\":[\\"\${aws_lambda_function.root_cloudFunction_6A57BA0A.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_testput_IamRole_1BBF32A6.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Function/IamRolePolicyAttachment",
+            "uniqueId": "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.name}",
+      },
+      "root_testput_IamRolePolicyAttachment_E73FB6BB": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:put/IamRolePolicyAttachment",
+            "uniqueId": "root_testput_IamRolePolicyAttachment_E73FB6BB",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_testput_IamRole_1BBF32A6.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_cloudFunction_6A57BA0A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Function/Default",
+            "uniqueId": "root_cloudFunction_6A57BA0A",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
+          },
+        },
+        "function_name": "cloud-Function-c8d2eca1",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
+        "s3_key": "\${aws_s3_object.root_cloudFunction_S3Object_C8435368.key}",
+        "timeout": 30,
+      },
+      "root_testput_449428F9": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:put/Default",
+            "uniqueId": "root_testput_449428F9",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "FUNCTION_NAME_5bb84dfa": "\${aws_lambda_function.root_cloudFunction_6A57BA0A.arn}",
+            "WING_FUNCTION_NAME": "test-put-c899ce9b",
+          },
+        },
+        "function_name": "test-put-c899ce9b",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_testput_IamRole_1BBF32A6.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_testput_Code_DE7653AD.bucket}",
+        "s3_key": "\${aws_s3_object.root_testput_S3Object_30BF1DDD.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_cloudBucket_4F3C4F53": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Bucket/Default",
+            "uniqueId": "root_cloudBucket_4F3C4F53",
+          },
+        },
+        "bucket_prefix": "cloud-bucket-c87175e7-",
+      },
+      "root_cloudFunction_Code_2F6A7948": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Function/Code",
+            "uniqueId": "root_cloudFunction_Code_2F6A7948",
+          },
+        },
+        "bucket_prefix": "code-c8d4206f-",
+      },
+      "root_testput_Code_DE7653AD": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:put/Code",
+            "uniqueId": "root_testput_Code_DE7653AD",
+          },
+        },
+        "bucket_prefix": "code-c8ab7128-",
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_cloudBucket_Encryption_8ED0CD9C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Bucket/Encryption",
+            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+    },
+    "aws_s3_object": {
+      "root_cloudFunction_S3Object_C8435368": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Function/S3Object",
+            "uniqueId": "root_cloudFunction_S3Object_C8435368",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`json_bucket.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"json_bucket\\", plugins: $plugins });
+  
+  const b = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
+  const file_name = \\"file.json\\";
+  const j = Object.freeze({\\"persons\\":[{\\"age\\":30,\\"fears\\":[\\"heights\\", \\"failure\\"],\\"name\\":\\"hasan\\"}]});
+  const get_json = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"cloud.Function\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1dabd42192b8d28a57f44a84b644a18eb6fedb868257af123181c0ecec2c2a70/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+      b: {
+        obj: b,
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
+      },
+      file_name: {
+        obj: file_name,
+        ops: []
+      },
+    }
+  }));
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:put\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.742d4f24b17fb7f7f831acbd15487b30d36ad90d44229b79672a09f910cb6619/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+      b: {
+        obj: b,
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
+      },
+      file_name: {
+        obj: file_name,
+        ops: []
+      },
+      get_json: {
+        obj: get_json,
+        ops: [\\"invoke\\"]
+      },
+      j: {
+        obj: j,
+        ops: []
+      },
+    }
+  }));
 }
 }
 new MyApp().synth();"
@@ -4394,7 +4681,7 @@ constructor() {
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Bar_inflight({b: \${b_client}, foo: \${foo_client}, name: \${name_client}}))\`);
   }
   }
-  Bar._annotateInflight(\\"my_method\\", {\\"this.b\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.foo\\": { ops: [\\"foo_get\\", \\"foo_inc\\"]}, \\"this.name\\": { ops: []}});
+  Bar._annotateInflight(\\"my_method\\", {\\"this.b\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.foo\\": { ops: [\\"foo_get\\", \\"foo_inc\\"]}, \\"this.name\\": { ops: []}});
   const bucket = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
   const res = new Bar(this,\\"Bar\\",\\"Arr\\",bucket);
   this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
@@ -4402,7 +4689,7 @@ constructor() {
     bindings: {
       bucket: {
         obj: bucket,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
       res: {
         obj: res,
@@ -5333,7 +5620,7 @@ constructor() {
     bindings: {
       b: {
         obj: b,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
     }
   }));
@@ -5342,7 +5629,7 @@ constructor() {
     bindings: {
       b: {
         obj: b,
-        ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
       },
     }
   }));
@@ -6149,12 +6436,12 @@ constructor() {
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).MyResource_inflight({array_of_queues: \${array_of_queues_client}, array_of_str: \${array_of_str_client}, map_of_num: \${map_of_num_client}, my_bool: \${my_bool_client}, my_num: \${my_num_client}, my_resource: \${my_resource_client}, my_str: \${my_str_client}, set_of_str: \${set_of_str_client}}))\`);
   }
   }
-  MyResource._annotateInflight(\\"capture_resource\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
-  MyResource._annotateInflight(\\"capture_primitives\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
-  MyResource._annotateInflight(\\"capture_array\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
-  MyResource._annotateInflight(\\"capture_map\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
-  MyResource._annotateInflight(\\"capture_set\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
-  MyResource._annotateInflight(\\"capture_array_of_queues\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"list\\", \\"put\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
+  MyResource._annotateInflight(\\"capture_resource\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
+  MyResource._annotateInflight(\\"capture_primitives\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
+  MyResource._annotateInflight(\\"capture_array\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
+  MyResource._annotateInflight(\\"capture_map\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
+  MyResource._annotateInflight(\\"capture_set\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
+  MyResource._annotateInflight(\\"capture_array_of_queues\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
   const r = new MyResource(this,\\"MyResource\\");
   this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:capture_resource\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.b5e7bd6cc9f6c741c4f0afa8adc0208ccee08e6297495b1fbe29db8afb6ee789/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
