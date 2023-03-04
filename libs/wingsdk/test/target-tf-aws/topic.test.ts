@@ -1,4 +1,5 @@
 import * as cdktf from "cdktf";
+import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
@@ -9,7 +10,6 @@ import {
   tfSanitize,
   treeJsonOf,
 } from "../util";
-import {test, expect} from "vitest";
 
 test("default topic behavior", () => {
   // GIVEN

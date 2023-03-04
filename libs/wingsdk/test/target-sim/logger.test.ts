@@ -1,7 +1,7 @@
+import { test, expect, vi } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
-import {test, expect, vi} from "vitest";
 
 // vi.(100_000); // 100 seconds
 

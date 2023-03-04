@@ -1,3 +1,4 @@
+import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
 import * as tfgcp from "../../src/target-tf-gcp";
 import { mkdtemp } from "../../src/util";
@@ -7,7 +8,6 @@ import {
   tfSanitize,
   treeJsonOf,
 } from "../util";
-import {test, expect} from "vitest";
 
 const GCP_APP_OPTS = {
   projectId: "my-project",

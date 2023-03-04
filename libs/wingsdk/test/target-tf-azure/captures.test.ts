@@ -1,10 +1,10 @@
 import * as cdktf from "cdktf";
+import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import * as tfazure from "../../src/target-tf-azure";
 import { Testing } from "../../src/testing";
 import { mkdtemp, sanitizeCode } from "../../src/util";
 import { tfResourcesOf, tfSanitize } from "../util";
-import {test, expect} from "vitest";
 
 test("function with a bucket binding requiring read_write", () => {
   // GIVEN

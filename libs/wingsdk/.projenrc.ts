@@ -56,7 +56,8 @@ const project = new cdk.JsiiProject({
     "aws-sdk-client-mock-jest",
     "eslint-plugin-sort-exports",
     "patch-package",
-    "vitest"
+    "vitest",
+    "@vitest/coverage-c8",
   ],
   prettier: true,
   npmignoreEnabled: false,
@@ -235,9 +236,7 @@ docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);
 docgen.exec(`cat API.md >> ${docsPath}`);
 
 // override default test timeout from 5s to 30s
-project.testTask.reset(
-  "jest --passWithNoTests --all --updateSnapshot --coverageProvider=v8 --testTimeout=30000"
-);
+project.testTask.reset("vitest run --coverage --update --passWithNoTests");
 project.testTask.spawn(project.eslint?.eslintTask!);
 
 project.addFields({

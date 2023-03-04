@@ -1,8 +1,8 @@
 import { SNSClient, PublishCommand } from "@aws-sdk/client-sns";
 import { mockClient } from "aws-sdk-client-mock";
 import "aws-sdk-client-mock-jest";
+import { test, expect, beforeEach, vi } from "vitest";
 import { TopicClient } from "../../src/target-tf-aws/topic.inflight";
-import {test, expect, beforeEach, vi} from "vitest";
 
 const snsMock = mockClient(SNSClient);
 const spy = vi.spyOn(snsMock, "on");
@@ -19,7 +19,7 @@ test("publish - happy path", async () => {
 
   // WHEN
   const client = new TopicClient(TOPIC_ARN);
-  const response  = await client.publish(MESSAGE);
+  const response = await client.publish(MESSAGE);
 
   // THEN
   expect(response).toEqual(undefined);

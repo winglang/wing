@@ -1,8 +1,8 @@
 import { InvokeCommand, LambdaClient } from "@aws-sdk/client-lambda";
 import { fromUtf8 } from "@aws-sdk/util-utf8-node";
 import { mockClient } from "aws-sdk-client-mock";
+import { test, expect, beforeEach } from "vitest";
 import { FunctionClient } from "../../src/target-tf-aws/function.inflight";
-import {test, expect, beforeEach} from "vitest";
 
 const lambdaMock = mockClient(LambdaClient);
 

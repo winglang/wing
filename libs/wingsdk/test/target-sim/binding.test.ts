@@ -1,6 +1,6 @@
+import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
-import {test, expect} from "vitest";
 
 test("binding throws if a method is unsupported", () => {
   const app = new SimApp();

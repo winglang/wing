@@ -1,4 +1,5 @@
 import * as cdktf from "cdktf";
+import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp } from "../../src/util";
@@ -8,7 +9,6 @@ import {
   tfSanitize,
   treeJsonOf,
 } from "../util";
-import {test, expect} from "vitest";
 
 test("create a bucket", () => {
   // GIVEN

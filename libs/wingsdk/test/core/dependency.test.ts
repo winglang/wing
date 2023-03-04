@@ -1,6 +1,6 @@
 import { Node, IConstruct, Construct } from "constructs";
+import { test, expect } from "vitest";
 import { DependencyGraph } from "../../src/core/dependency";
-import {test, expect} from "vitest";
 
 test("topology returns correct order", () => {
   const root = new Construct(undefined as any, "App");

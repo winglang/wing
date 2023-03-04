@@ -12,8 +12,8 @@ import {
   ContainerListBlobFlatSegmentResponse,
   ContainerListBlobsOptions,
 } from "@azure/storage-blob";
+import { test, expect, beforeEach, vi } from "vitest";
 import { BucketClient } from "../../src/target-tf-azure/bucket.inflight";
-import {test, expect, beforeEach, vi} from "vitest";
 
 vi.mock("@azure/storage-blob");
 

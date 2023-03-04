@@ -1,11 +1,11 @@
 import * as cdktf from "cdktf";
+import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import * as std from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
-import {test, expect} from "vitest";
 
 test("schedule behavior with rate", () => {
   // GIVEN

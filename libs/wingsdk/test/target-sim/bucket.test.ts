@@ -1,7 +1,7 @@
+import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { SimApp } from "../../src/testing";
-import {test, expect} from "vitest";
 
 test("create a bucket", async () => {
   // GIVEN

@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
 import { Function, IFunctionClient } from "../../src/cloud/function";
 import {
@@ -8,7 +9,6 @@ import {
 } from "../../src/core/inflight";
 import { Duration } from "../../src/std";
 import { SimApp } from "../../src/testing";
-import {test, expect} from "vitest";
 
 interface CaptureTest {
   bindings: InflightBindings;
