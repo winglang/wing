@@ -3548,16 +3548,16 @@ new MyApp().synth();"
 `;
 
 exports[`json_bucket.w > wing compile --target tf-aws > index.js 1`] = `
-"async handle(msg) { const { b, file_name, get_json, j } = this; {
-  (await b.putJson(file_name,j));
-  (await get_json.invoke(msg));
+"async handle(msg) { const { b, file_name } = this; {
+  const x = (await b.getJson(file_name));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((((x)[\\"persons\\"])[0])[\\"fears\\"])[1] === \\"failure\\")'\`)})((((((x)[\\"persons\\"])[0])[\\"fears\\"])[1] === \\"failure\\"))};
 } };"
 `;
 
 exports[`json_bucket.w > wing compile --target tf-aws > index.js 2`] = `
-"async handle(msg) { const { b, file_name } = this; {
-  const x = (await b.getJson(file_name));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"failure\\" === ((((x)[\\"persons\\"])[0])[\\"fears\\"])[1])'\`)})((\\"failure\\" === ((((x)[\\"persons\\"])[0])[\\"fears\\"])[1]))};
+"async handle(msg) { const { b, file_name, get_json, j } = this; {
+  (await b.putJson(file_name,j));
+  (await get_json.invoke(msg));
 } };"
 `;
 
@@ -3796,7 +3796,7 @@ constructor() {
   const file_name = \\"file.json\\";
   const j = Object.freeze({\\"persons\\":[{\\"age\\":30,\\"fears\\":[\\"heights\\", \\"failure\\"],\\"name\\":\\"hasan\\"}]});
   const get_json = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"cloud.Function\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.ca0353352677e10488415b2f2e6a24ce72771dade545d26a1d52cbe97befee94/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1dabd42192b8d28a57f44a84b644a18eb6fedb868257af123181c0ecec2c2a70/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       b: {
         obj: b,
