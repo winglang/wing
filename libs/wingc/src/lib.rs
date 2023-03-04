@@ -4,7 +4,6 @@ extern crate lazy_static;
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use capture::CaptureVisitor;
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
-use indexmap::{indexset, IndexSet};
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
@@ -52,7 +51,7 @@ const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
 const WINGSDK_RESOURCE: &'static str = "core.Resource";
 const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
 
-const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
+const CONSTRUCT_BASE: &'static str = "constructs.Construct";
 
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
@@ -109,7 +108,7 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 		Err(err) => {
 			let mut diagnostics = Diagnostics::new();
 
-			diagnostics.insert(Diagnostic {
+			diagnostics.push(Diagnostic {
 				message: format!("Error reading source file: {}: {:?}", source_path.display(), err),
 				span: None,
 				level: DiagnosticLevel::Error,
@@ -220,7 +219,7 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 
 pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOutput, Diagnostics> {
 	if !source_path.exists() {
-		return Err(indexset![Diagnostic {
+		return Err(vec![Diagnostic {
 			message: format!("Source file cannot be found: {}", source_path.display()),
 			span: None,
 			level: DiagnosticLevel::Error,
@@ -228,7 +227,7 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 	}
 
 	if !source_path.is_file() {
-		return Err(indexset![Diagnostic {
+		return Err(vec![Diagnostic {
 			message: format!(
 				"Source path must be a file (not a directory or symlink): {}",
 				source_path.display()
@@ -273,7 +272,7 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 		.iter()
 		.filter(|d| matches!(d.level, DiagnosticLevel::Error))
 		.cloned()
-		.collect::<IndexSet<_>>();
+		.collect::<Vec<_>>();
 
 	if errors.len() > 0 {
 		return Err(errors);

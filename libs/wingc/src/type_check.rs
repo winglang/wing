@@ -16,10 +16,12 @@ use itertools::Itertools;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
 use std::collections::BTreeMap;
-use std::error::Error;
 use std::fmt::{Debug, Display};
+use std::iter::FilterMap;
 use std::path::Path;
 use symbol_env::{StatementIdx, SymbolEnv};
+
+use self::symbol_env::SymbolEnvIter;
 
 pub struct UnsafeRef<T>(*const T);
 impl<T> Clone for UnsafeRef<T> {
@@ -157,7 +159,6 @@ pub enum Type {
 	Function(FunctionSignature),
 	Class(Class),
 	Resource(Class),
-	Interface(Interface),
 	Struct(Struct),
 	Enum(Enum),
 }
@@ -185,8 +186,7 @@ impl Debug for NamespaceRef {
 #[derivative(Debug)]
 pub struct Class {
 	pub name: Symbol,
-	parent: Option<TypeRef>,  // Must be a Type::Class type
-	implements: Vec<TypeRef>, // Must be a Type::Interface type
+	parent: Option<TypeRef>, // Must be a Type::Class type
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
 	pub should_case_convert_jsii: bool,
@@ -195,48 +195,48 @@ pub struct Class {
 	pub type_parameters: Option<Vec<TypeRef>>,
 }
 
-impl Class {
-	pub fn methods(&self, with_ancestry: bool) -> impl Iterator<Item = (String, TypeRef)> + '_ {
-		self
-			.env
-			.iter(with_ancestry)
-			.filter(|(_, t, _)| t.as_variable().unwrap().type_.as_function_sig().is_some())
-			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap().type_.clone()))
+pub trait ClassLike {
+	fn get_env(&self) -> &SymbolEnv;
+
+	fn methods(
+		&self,
+		with_ancestry: bool,
+	) -> FilterMap<SymbolEnvIter<'_>, fn(<SymbolEnvIter as Iterator>::Item) -> Option<(String, TypeRef)>> {
+		self.get_env().iter(with_ancestry).filter_map(|(s, t, ..)| {
+			t.as_variable()
+				.unwrap()
+				.type_
+				.as_function_sig()
+				.map(|_| (s.clone(), t.as_variable().unwrap().type_.clone()))
+		})
 	}
 
-	pub fn fields(&self, with_ancestry: bool) -> impl Iterator<Item = (String, TypeRef)> + '_ {
-		self
-			.env
-			.iter(with_ancestry)
-			.filter(|(_, t, _)| t.as_variable().unwrap().type_.as_function_sig().is_none())
-			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap().type_.clone()))
+	fn fields(
+		&self,
+		with_ancestry: bool,
+	) -> FilterMap<SymbolEnvIter<'_>, fn(<SymbolEnvIter as Iterator>::Item) -> Option<(String, TypeRef)>> {
+		self.get_env().iter(with_ancestry).filter_map(|(s, t, ..)| {
+			if t.as_variable().unwrap().type_.as_function_sig().is_none() {
+				Some((s.clone(), t.as_variable().unwrap().type_.clone()))
+			} else {
+				None
+			}
+		})
+	}
+
+	fn get_method(&self, name: &str) -> Option<VariableInfo> {
+		let v = self
+			.get_env()
+			.try_lookup(name, None)?
+			.as_variable()
+			.expect("class env should only contain variables");
+		v.type_.as_function_sig().map(|_| v.clone())
 	}
 }
 
-#[derive(Derivative)]
-#[derivative(Debug)]
-pub struct Interface {
-	pub name: Symbol,
-	extends: Vec<TypeRef>, // Must be a Type::Interface type
-	#[derivative(Debug = "ignore")]
-	pub env: SymbolEnv,
-}
-
-impl Interface {
-	pub fn methods(&self, with_ancestry: bool) -> impl Iterator<Item = (String, TypeRef)> + '_ {
-		self
-			.env
-			.iter(with_ancestry)
-			.filter(|(_, t, _)| t.as_variable().unwrap().type_.as_function_sig().is_some())
-			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap().type_.clone()))
-	}
-
-	pub fn fields(&self, with_ancestry: bool) -> impl Iterator<Item = (String, TypeRef)> + '_ {
-		self
-			.env
-			.iter(with_ancestry)
-			.filter(|(_, t, _)| t.as_variable().unwrap().type_.as_function_sig().is_none())
-			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap().type_.clone()))
+impl ClassLike for Class {
+	fn get_env(&self) -> &SymbolEnv {
+		&self.env
 	}
 }
 
@@ -293,7 +293,6 @@ impl Subtype for Type {
 				// TODO: Hack to make anything's compatible with all other types, specifically useful for handling core.Inflight handlers
 				true
 			}
-			// TODO: implement function subtyping - https://github.com/winglang/wing/issues/1677
 			(Self::Function(l0), Self::Function(r0)) => l0 == r0,
 			(Self::Class(l0), Self::Class(_)) => {
 				// If we extend from `other` than I'm a subtype of it (inheritance)
@@ -304,29 +303,11 @@ impl Subtype for Type {
 				false
 			}
 			(Self::Resource(l0), Self::Resource(_)) => {
-				// If we extend from `other` then I'm a subtype of it (inheritance)
+				// If we extend from `other` than I'm a subtype of it (inheritance)
 				if let Some(parent) = l0.parent.as_ref() {
 					let parent_type: &Type = &*parent;
 					return parent_type.is_subtype_of(other);
 				}
-				false
-			}
-			(Self::Interface(l0), Self::Interface(_)) => {
-				// If we extend from `other` then I'm a subtype of it (inheritance)
-				l0.extends.iter().any(|parent| {
-					let parent_type: &Type = &*parent;
-					parent_type.is_subtype_of(other)
-				})
-			}
-			(Self::Resource(res), Self::Interface(_)) => {
-				// If a resource implements the interface then it's a subtype of it (nominal typing)
-				res.implements.iter().any(|parent| {
-					let parent_type: &Type = &*parent;
-					parent_type.is_subtype_of(other)
-				})
-			}
-			(_, Self::Interface(_)) => {
-				// TODO - for now only resources can implement interfaces
 				false
 			}
 			(Self::Struct(l0), Self::Struct(_)) => {
@@ -455,7 +436,6 @@ impl Display for Type {
 			Type::Function(sig) => write!(f, "{}", sig),
 			Type::Class(class) => write!(f, "{}", class.name.name),
 			Type::Resource(class) => write!(f, "{}", class.name.name),
-			Type::Interface(iface) => write!(f, "{}", iface.name.name),
 			Type::Struct(s) => write!(f, "{}", s.name.name),
 			Type::Array(v) => write!(f, "Array<{}>", v),
 			Type::MutArray(v) => write!(f, "MutArray<{}>", v),
@@ -793,7 +773,7 @@ impl<'a> TypeChecker<'a> {
 	// TODO: All calls to this should be removed and we should make sure type checks are done
 	// for unimplemented types
 	pub fn unimplemented_type(&self, type_name: &str) -> Option<Type> {
-		self.diagnostics.borrow_mut().insert(Diagnostic {
+		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Warning,
 			message: format!("Unimplemented type: {}", type_name),
 			span: None,
@@ -803,7 +783,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn general_type_error(&self, message: String) -> TypeRef {
-		self.diagnostics.borrow_mut().insert(Diagnostic {
+		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
 			message,
 			span: None,
@@ -813,7 +793,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn resolve_static_error(&self, property: &Symbol, message: String) -> VariableInfo {
-		self.diagnostics.borrow_mut().insert(Diagnostic {
+		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
 			message,
 			span: Some(property.span.clone()),
@@ -827,7 +807,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn expr_error(&self, expr: &Expr, message: String) -> TypeRef {
-		self.diagnostics.borrow_mut().insert(Diagnostic {
+		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
 			message,
 			span: Some(expr.span.clone()),
@@ -837,7 +817,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn stmt_error(&self, stmt: &Stmt, message: String) {
-		self.diagnostics.borrow_mut().insert(Diagnostic {
+		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
 			message,
 			span: Some(stmt.span.clone()),
@@ -846,7 +826,7 @@ impl<'a> TypeChecker<'a> {
 
 	fn type_error(&self, type_error: TypeError) -> TypeRef {
 		let TypeError { message, span } = type_error;
-		self.diagnostics.borrow_mut().insert(Diagnostic {
+		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
 			message,
 			span: Some(span),
@@ -857,7 +837,7 @@ impl<'a> TypeChecker<'a> {
 
 	fn variable_error(&self, type_error: TypeError) -> VariableInfo {
 		let TypeError { message, span } = type_error;
-		self.diagnostics.borrow_mut().insert(Diagnostic {
+		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
 			message,
 			span: Some(span),
@@ -871,11 +851,11 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	pub fn requires_primitive_type_replacement(&self, name: &str) -> bool {
+	pub fn replace_with_builtin_type(&self, name: &str) -> Option<TypeRef> {
 		if let "Json" | "MutJson" = name {
-			true
+			Some(self.get_primitive_type_by_name(name))
 		} else {
-			false
+			None
 		}
 	}
 
@@ -920,19 +900,18 @@ impl<'a> TypeChecker<'a> {
 				let rtype = self.type_check_exp(right, env, statement_idx, context);
 
 				if op.boolean_args() {
-					self.validate_type(ltype, self.types.bool(), right);
+					self.validate_type(ltype, self.types.bool(), left);
 					self.validate_type(rtype, self.types.bool(), right);
 				} else if op.numerical_args() {
-					self.validate_type(ltype, self.types.number(), right);
+					self.validate_type(ltype, self.types.number(), left);
 					self.validate_type(rtype, self.types.number(), right);
 				} else {
-					self.validate_type(ltype, rtype, right);
+					self.validate_type(rtype, ltype, exp);
 				}
 
 				if op.boolean_result() {
 					self.types.bool()
 				} else {
-					self.validate_type(ltype, self.types.number(), right);
 					ltype
 				}
 			}
@@ -942,9 +921,7 @@ impl<'a> TypeChecker<'a> {
 				match op {
 					UnaryOperator::Not => self.validate_type(_type, self.types.bool(), unary_exp),
 					UnaryOperator::Minus => self.validate_type(_type, self.types.number(), unary_exp),
-				};
-
-				_type
+				}
 			}
 			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env, statement_idx, context).type_,
 			ExprKind::New {
@@ -1071,14 +1048,8 @@ impl<'a> TypeChecker<'a> {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
 				let func_type = self.type_check_exp(function, env, statement_idx, context);
 				let this_args = match &function.kind {
-					ExprKind::Reference(_ref) => {
-						// If this is a static method then there's no `this` arg
-						if self.resolve_reference(_ref, env, statement_idx, context).is_static {
-							0
-						} else {
-							1
-						}
-					}
+					// If this is an instance method then there's a `this` arg
+					ExprKind::Reference(Reference::InstanceMember { .. }) => 1,
 					_ => 0,
 				};
 
@@ -1140,15 +1111,19 @@ impl<'a> TypeChecker<'a> {
 
 				for (arg_type, param_exp) in params.zip(args) {
 					let param_type = self.type_check_exp(param_exp, env, statement_idx, context);
-					self.validate_type(param_type, *arg_type, param_exp);
+					if let Some(t) = self.replace_with_builtin_type(arg_type.to_string().as_str()) {
+						self.validate_type(param_type, t, param_exp)
+					} else {
+						self.validate_type(param_type, *arg_type, param_exp)
+					};
 				}
 
 				// This replaces function signatures with valid TypeRefs if necessary. This step is also done in
 				// the hydration process for generics where we map std lib types like ImmutableMap to
 				// Type::Map(some_type). However for types like Json and MutJson which do
 				// not require hydration, we still need to Map the std `Json` type to type-checker's Json type
-				if self.requires_primitive_type_replacement(func_sig.return_type.to_string().as_str()) {
-					self.get_primitive_type_by_name(func_sig.return_type.to_string().as_str())
+				if let Some(t) = self.replace_with_builtin_type(func_sig.return_type.to_string().as_str()) {
+					t
 				} else {
 					func_sig.return_type
 				}
@@ -1375,18 +1350,24 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn validate_type(&mut self, actual_type: TypeRef, expected_type: TypeRef, value: &Expr) {
+	/// Validate that the given type is a subtype (or same) as the expected type. If not, add an error
+	/// to the diagnostics.
+	/// Returns the given type on success, otherwise returns the expected type.
+	fn validate_type(&mut self, actual_type: TypeRef, expected_type: TypeRef, value: &Expr) -> TypeRef {
 		self.validate_type_in(actual_type, &[expected_type], value)
 	}
 
-	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], value: &Expr) {
+	/// Validate that the given type is a subtype (or same) as the on of the expected types. If not, add
+	/// an error to the diagnostics.
+	/// Returns the given type on success, otherwise returns one of the expected types.
+	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], value: &Expr) -> TypeRef {
 		assert!(expected_types.len() > 0);
 		if !actual_type.is_anything()
 			&& !expected_types
 				.iter()
 				.any(|expected| actual_type.is_subtype_of(&expected))
 		{
-			self.diagnostics.borrow_mut().insert(Diagnostic {
+			self.diagnostics.borrow_mut().push(Diagnostic {
 				message: if expected_types.len() > 1 {
 					let expected_types_list = expected_types
 						.iter()
@@ -1406,6 +1387,9 @@ impl<'a> TypeChecker<'a> {
 				span: Some(value.span.clone()),
 				level: DiagnosticLevel::Error,
 			});
+			expected_types[0]
+		} else {
+			actual_type
 		}
 	}
 
@@ -1772,7 +1756,6 @@ impl<'a> TypeChecker<'a> {
 					fqn: None,
 					env: dummy_env,
 					parent: parent_class,
-					implements: vec![], // TODO parse AST information - https://github.com/winglang/wing/issues/1697
 					is_abstract: false,
 					type_parameters: None, // TODO no way to have generic args in wing yet
 				};
@@ -1941,8 +1924,6 @@ impl<'a> TypeChecker<'a> {
 					method_def.statements.set_env(method_env);
 					self.inner_scopes.push(&method_def.statements);
 				}
-
-				// TODO: type check interfaces - https://github.com/winglang/wing/issues/1697
 			}
 			StmtKind::Struct { name, extends, members } => {
 				// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
@@ -2074,17 +2055,25 @@ impl<'a> TypeChecker<'a> {
 		// Loading the SDK is handled different from loading any other jsii modules because with the SDK we provide an exact
 		// location to locate the SDK, whereas for the other modules we need to search for them from the source directory.
 		let assembly_name = if library_name == WINGSDK_ASSEMBLY_NAME {
-			match load_sdk(&mut wingii_types) {
-				Ok(value) => value,
-				Err(err) => {
+			// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
+			let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
+			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
+				root: true,
+				deps: false,
+			};
+			let assembly_name = match wingii_types.load(manifest_root.as_str(), Some(wingii_loader_options)) {
+				Ok(name) => name,
+				Err(type_error) => {
 					self.type_error(TypeError {
-						message: format!("Cannot locate Wing standard library"),
+						message: format!("Cannot locate Wing standard library (checking \"{}\"", manifest_root),
 						span: stmt.map(|s| s.span.clone()).unwrap_or(WingSpan::global()),
 					});
-					debug!("{:?}", err);
+					debug!("{:?}", type_error);
 					return;
 				}
-			}
+			};
+
+			assembly_name
 		} else {
 			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions { root: true, deps: true };
 			let source_dir = self.source_path.parent().unwrap().to_str().unwrap();
@@ -2191,7 +2180,6 @@ impl<'a> TypeChecker<'a> {
 			env: new_env,
 			fqn: Some(original_fqn.to_string()),
 			parent: original_type_class.parent,
-			implements: original_type_class.implements.clone(),
 			should_case_convert_jsii: original_type_class.should_case_convert_jsii,
 			is_abstract: original_type_class.is_abstract,
 			type_parameters: Some(type_params.clone()),
@@ -2299,7 +2287,11 @@ impl<'a> TypeChecker<'a> {
 									name: name.clone(),
 									span: WingSpan::global(),
 								},
-								SymbolKind::make_variable(new_var_type, reassignable, flight),
+								if *is_static {
+									SymbolKind::make_variable(new_var_type, reassignable, flight)
+								} else {
+									SymbolKind::make_instance_variable(new_var_type, reassignable, flight)
+								},
 								StatementIdx::Top,
 							) {
 								Err(type_error) => {
@@ -2556,9 +2548,20 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	/// Get's the type of an instance variable in a class
 	fn get_property_from_class(&mut self, class: &Class, property: &Symbol) -> VariableInfo {
 		match class.env.lookup(property, None) {
-			Ok(field) => field.as_variable().expect("Expected property to be a variable"),
+			Ok(field) => {
+				let var = field.as_variable().expect("Expected property to be a variable");
+				if var.is_static {
+					self.variable_error(TypeError {
+						message: format!("Cannot access static property \"{}\" from instance", property.name),
+						span: property.span.clone(),
+					})
+				} else {
+					var
+				}
+			}
 			Err(type_error) => self.variable_error(type_error),
 		}
 	}
@@ -2670,11 +2673,4 @@ pub fn resolve_user_defined_type_by_fqn(
 	let root = fields.remove(0);
 	let user_defined_type = UserDefinedType { root, fields };
 	resolve_user_defined_type(&user_defined_type, env, statement_idx)
-}
-
-pub fn load_sdk(wingii_types: &mut wingii::type_system::TypeSystem) -> Result<String, Box<dyn Error>> {
-	// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
-	let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
-	let wingii_loader_options = wingii::type_system::AssemblyLoadOptions { root: true, deps: true };
-	wingii_types.load(manifest_root.as_str(), Some(wingii_loader_options))
 }
