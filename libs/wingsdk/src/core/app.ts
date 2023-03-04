@@ -1,5 +1,7 @@
 import { mkdirSync, readdirSync, renameSync, rmSync, existsSync } from "fs";
 import { join } from "path";
+import { DataAwsCallerIdentity } from "@cdktf/provider-aws/lib/data-aws-caller-identity";
+import { DataAwsRegion } from "@cdktf/provider-aws/lib/data-aws-region";
 import * as cdktf from "cdktf";
 import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
@@ -7,8 +9,6 @@ import { PluginManager } from "./plugin-manager";
 import { IResource } from "./resource";
 import { synthesizeTree } from "./tree";
 import { Logger } from "../cloud/logger";
-import { DataAwsRegion } from "@cdktf/provider-aws/lib/data-aws-region";
-import { DataAwsCallerIdentity } from "@cdktf/provider-aws/lib/data-aws-caller-identity";
 
 const TERRAFORM_STACK_NAME = "root";
 

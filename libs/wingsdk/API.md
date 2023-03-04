@@ -11,7 +11,7 @@ Functionality shared between all `Api` implementations.
 ```wing
 bring cloud;
 
-new cloud.Api(props: ApiProps)
+new cloud.Api(props?: ApiProps)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -20,7 +20,7 @@ new cloud.Api(props: ApiProps)
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.Api.Initializer.parameter.props"></a>
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.Initializer.parameter.props"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.ApiProps">ApiProps</a>
 
