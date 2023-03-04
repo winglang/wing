@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { ApiResponse } from "../../src/cloud";
+import { Json } from "../../src/std";
 import { ApiOnRequestHandlerClient } from "../../src/target-tf-aws/api.onrequest.inflight";
 
 beforeEach(() => {
@@ -15,11 +16,11 @@ describe("ApiResponseMapper", () => {
       httpMethod: "GET",
     };
 
-    const handlerResponse = {
+    const handlerResponse: ApiResponse = {
       status: 200,
-      body: new Map().set("key", "value"),
-      headers: new Map().set("header-1", "value-1"),
-    } as unknown as ApiResponse; // typecast because the actual inflight implementation returns a Map instead of a plain object
+      body: { key: "value" } as unknown as Json,
+      headers: { "header-1": "value-1" },
+    };
     const requestHandlerClient = new ApiOnRequestHandlerClient({
       handler: {
         handle: async () => {
@@ -53,10 +54,10 @@ describe("ApiResponseMapper", () => {
       httpMethod: "GET",
     };
 
-    const handlerResponse = {
+    const handlerResponse: ApiResponse = {
       status: 200,
-      body: new Map().set("key", "value"),
-    } as unknown as ApiResponse; // typecast because the actual inflight implementation returns a Map instead of a plain object
+      body: { key: "value" } as unknown as Json,
+    };
     const requestHandlerClient = new ApiOnRequestHandlerClient({
       handler: {
         handle: async () => {
@@ -110,80 +111,6 @@ describe("ApiResponseMapper", () => {
       statusCode: 200,
       body: "",
     });
-  });
-
-  test("throw error if handler does return invalid body", async () => {
-    // GIVEN
-    const apiRequestEvent: Partial<APIGatewayProxyEvent> = {
-      body: JSON.stringify({}),
-      headers: {},
-      path: "/",
-      httpMethod: "GET",
-    };
-
-    const handlerResponse = {
-      status: 200,
-      body: {},
-    };
-    const requestHandlerClient = new ApiOnRequestHandlerClient({
-      handler: {
-        // @ts-ignore - we want to test the error handling and 'body' is not a Map
-        handle: async () => {
-          return handlerResponse;
-        },
-      },
-    });
-
-    // WHEN
-    let error;
-    try {
-      await requestHandlerClient.handle(
-        apiRequestEvent as APIGatewayProxyEvent
-      );
-    } catch (e) {
-      error = e;
-    }
-
-    // THEN
-
-    expect(error).toEqual(new Error("Expected a Map"));
-  });
-
-  test("throw error if handler does return invalid headers", async () => {
-    // GIVEN
-    const apiRequestEvent: Partial<APIGatewayProxyEvent> = {
-      body: JSON.stringify({}),
-      headers: {},
-      path: "/",
-      httpMethod: "GET",
-    };
-
-    const handlerResponse = {
-      status: 200,
-      headers: {},
-    };
-    const requestHandlerClient = new ApiOnRequestHandlerClient({
-      handler: {
-        // @ts-ignore - we want to test the error handling and 'body' is not a Map
-        handle: async () => {
-          return handlerResponse;
-        },
-      },
-    });
-
-    // WHEN
-    let error;
-    try {
-      await requestHandlerClient.handle(
-        apiRequestEvent as APIGatewayProxyEvent
-      );
-    } catch (e) {
-      error = e;
-    }
-
-    // THEN
-
-    expect(error).toEqual(new Error("Expected a Map"));
   });
 });
 
