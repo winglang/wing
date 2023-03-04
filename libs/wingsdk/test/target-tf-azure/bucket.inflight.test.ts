@@ -12,19 +12,20 @@ import {
   ContainerListBlobFlatSegmentResponse,
   ContainerListBlobsOptions,
 } from "@azure/storage-blob";
+import { test, expect, beforeEach, vi } from "vitest";
 import { BucketClient } from "../../src/target-tf-azure/bucket.inflight";
 
-jest.mock("@azure/storage-blob");
+vi.mock("@azure/storage-blob");
 
 const mockBlobServiceClient = new BlobServiceClient(
   "https://some-fake-url.com"
 );
-mockBlobServiceClient.getContainerClient = jest.fn(() => {
+mockBlobServiceClient.getContainerClient = vi.fn(() => {
   return new MockContainerClient("");
 });
 
 beforeEach(() => {
-  jest.clearAllMocks;
+  vi.clearAllMocks;
 });
 
 test("get object from a bucket", async () => {

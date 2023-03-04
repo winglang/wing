@@ -1,4 +1,5 @@
 import * as cdktf from "cdktf";
+import { test, expect } from "vitest";
 import { Queue } from "../../src/cloud";
 import * as std from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
