@@ -1,6 +1,5 @@
 import { DeleteItemCommand, GetItemCommand, UpdateItemCommand, PutItemCommand, ScanCommand, DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { ColumnType, ITableClient } from "../cloud";
 import { Json } from "../std";
 
@@ -73,16 +72,15 @@ export class TableClient implements ITableClient {
   }
 
   public async list(): Promise<any> {
-    const docClient = DynamoDBDocumentClient.from(this.client, {
-      unmarshallOptions: {
-        wrapNumbers: false,
-      }
-    });
     const command = new ScanCommand({
       TableName: this.tableName
     });
-    const result = await docClient.send(command);
-    return result.Items;
+    const result = await this.client.send(command);
+    const response: any = [];
+    for (const item of result.Items!) {
+      response.push(unmarshall(item));
+    }
+    return response;
   }
 
   private validateRow(row: any) {

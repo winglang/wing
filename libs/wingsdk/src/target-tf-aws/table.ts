@@ -93,7 +93,7 @@ export class Table extends cloud.Table {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename, "TableClient", [
+    return core.InflightClient.for(__dirname, __filename, "TableClient", [
       `process.env["${this.envName()}"]`,
     ]);
   }
