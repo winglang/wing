@@ -852,8 +852,11 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	pub fn replace_with_builtin_type(&self, name: &str) -> Option<TypeRef> {
-		if let "Json" | "MutJson" = name {
-			Some(self.get_primitive_type_by_name(name))
+		// This is a hack to allow optional Json from the SDK to be used in type checker
+		let n = name.replace("?", "");
+
+		if let "Json" | "MutJson" = n.as_str() {
+			Some(self.get_primitive_type_by_name(n.as_str()))
 		} else {
 			None
 		}
