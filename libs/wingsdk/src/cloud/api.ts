@@ -22,7 +22,7 @@ export type OpenApiSpec = any;
 
 /**
  * The OpenAPI spec extension for a route.
- * TODO: Unsure how to type this.
+ * see https://spec.openapis.org/oas/v3.0.3
  * */
 export type OpenApiSpecExtension = any;
 
@@ -44,6 +44,7 @@ export abstract class Api extends Resource {
   }
 
   public readonly stateful = true;
+  // https://spec.openapis.org/oas/v3.0.3
   private apiSpec: any = {
     openapi: "3.0.3",
     paths: {},
@@ -172,27 +173,27 @@ export interface ApiHeadProps {}
 export interface ApiConnectProps {}
 
 // TODO: this should be used once #1484 is fixed
-// /**
-//  * Allowed HTTP methods for a endpoint.
-//  */
-// export enum HttpMethod {
-//   /** Get */
-//   GET = "GET",
-//   /** Head */
-//   HEAD = "HEAD",
-//   /** Post */
-//   POST = "POST",
-//   /** Put */
-//   PUT = "PUT",
-//   /** Delete */
-//   DELETE = "DELETE",
-//   /** Connect */
-//   CONNECT = "Connect",
-//   /** Options */
-//   OPTIONS = "OPTIONS",
-//   /** Patch */
-//   PATCH = "PATCH",
-// }
+/**
+ * Allowed HTTP methods for a endpoint.
+ */
+export enum HttpMethod {
+  /** Get */
+  GET = "GET",
+  /** Head */
+  HEAD = "HEAD",
+  /** Post */
+  POST = "POST",
+  /** Put */
+  PUT = "PUT",
+  /** Delete */
+  DELETE = "DELETE",
+  /** Connect */
+  CONNECT = "Connect",
+  /** Options */
+  OPTIONS = "OPTIONS",
+  /** Patch */
+  PATCH = "PATCH",
+}
 
 // /**
 //  * Json type representation.
@@ -208,7 +209,7 @@ export interface ApiConnectProps {}
  */
 export interface ApiRequest {
   /** The request's HTTP method. */
-  readonly method: string;
+  readonly method: HttpMethod;
   /** The request's path. */
   readonly path: string;
   /** The request's query string. */

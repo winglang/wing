@@ -1,7 +1,8 @@
 import type { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import type {
+import {
   ApiRequest,
   ApiResponse,
+  HttpMethod,
   IApiEndpointHandlerClient,
 } from "../cloud/api";
 
@@ -52,10 +53,37 @@ function mapApigatewayEventToCloudApiRequest(
     path: request.path,
     body: request.body ? JSON.parse(request.body) : "",
     headers: request.headers as Record<string, string>,
-    method: request.httpMethod.toUpperCase(),
+    method: parseHttpMethod(request.httpMethod),
     query: Object.keys(query).length > 0 ? JSON.stringify(query) : undefined,
     vars: request.pathParameters
       ? (request.pathParameters as Record<string, string>)
       : undefined,
   };
+}
+
+/**
+ * Parse an HTTP method string to an HttpMethod enum
+ * @param method HTTP method string
+ * @returns HttpMethod enum
+ * @throws Error if the method is not supported
+ */
+function parseHttpMethod(method: string): HttpMethod {
+  switch (method) {
+    case "GET":
+      return HttpMethod.GET;
+    case "POST":
+      return HttpMethod.POST;
+    case "PUT":
+      return HttpMethod.PUT;
+    case "DELETE":
+      return HttpMethod.DELETE;
+    case "CONNECT":
+      return HttpMethod.CONNECT;
+    case "OPTIONS":
+      return HttpMethod.OPTIONS;
+    case "PATCH":
+      return HttpMethod.PATCH;
+    default:
+      throw new Error(`Unsupported HTTP method: ${method}`);
+  }
 }
