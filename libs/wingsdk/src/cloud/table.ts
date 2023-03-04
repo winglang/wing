@@ -89,6 +89,31 @@ export interface ITableClient {
    * @inflight
    */
   insert(row: Json): void;
+  /**
+   * Update a row in the table.
+   * @param row data to be updated.
+   * @inflight
+   */
+  update(row: Json): void;
+  /**
+   * Delete a row from the table.
+   * @param key primary key to delete the row.
+   * @inflight
+   */
+  delete(key: any): void;
+  /**
+   * Increments the counter atomically by a certain amount and returns the previous value.
+   * @param key primary key to search.
+   * @returns get the row from table.
+   * @inflight
+   */
+  get(key: any): any;
+  /**
+   * Increments the counter atomically by a certain amount and returns the previous value.
+   * @returns list all row.
+   * @inflight
+   */
+  list(): any;
 }
 
 /**
@@ -98,12 +123,12 @@ export interface ITableClient {
 export enum TableInflightMethods {
   /** `Table.insert` */
   INSERT = "insert",
-  // /** `Table.update` */
-  // UPDATE = "update",
-  // /** `Table.delete` */
-  // DELETE = "delete",
-  // /** `Table.get` */
-  // GET = "get",
-  // /** `Table.list` */
-  // LIST = "list",
+  /** `Table.update` */
+  UPDATE = "update",
+  /** `Table.delete` */
+  DELETE = "delete",
+  /** `Table.get` */
+  GET = "get",
+  /** `Table.list` */
+  LIST = "list",
 }

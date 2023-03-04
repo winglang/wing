@@ -34,6 +34,7 @@ export class Table extends cloud.Table {
     this.table = new DynamodbTable(this, "Default", {
       name: ResourceNames.generateName(this, NAME_OPTS),
       attribute: [{ name: this.primaryKey, type: primaryKeyType }],
+      hashKey: this.primaryKey,
       billingMode: "PAY_PER_REQUEST",
     });
   }
@@ -51,9 +52,40 @@ export class Table extends cloud.Table {
         resource: this.table.arn,
       });
     }
+    if (ops.includes(cloud.TableInflightMethods.UPDATE)) {
+      host.addPolicyStatements({
+        effect: "Allow",
+        action: ["dynamodb:UpdateItem"],
+        resource: this.table.arn,
+      });
+    }
+
+    if (ops.includes(cloud.TableInflightMethods.DELETE)) {
+      host.addPolicyStatements({
+        effect: "Allow",
+        action: ["dynamodb:DeleteItem"],
+        resource: this.table.arn,
+      });
+    }
+
+    if (ops.includes(cloud.TableInflightMethods.GET)) {
+      host.addPolicyStatements({
+        effect: "Allow",
+        action: ["dynamodb:GetItem"],
+        resource: this.table.arn,
+      });
+    }
+
+    if (ops.includes(cloud.TableInflightMethods.LIST)) {
+      host.addPolicyStatements({
+        effect: "Allow",
+        action: ["dynamodb:Scan"],
+        resource: this.table.arn,
+      });
+    }
 
     host.addEnvironment(this.envName(), this.table.name);
-    host.addEnvironment("PARTITION_KEY", this.primaryKey);
+    host.addEnvironment("PRIMARY_KEY", this.primaryKey);
     host.addEnvironment("COLUMNS", JSON.stringify(this.columns));
 
     super._bind(host, ops);
@@ -61,7 +93,7 @@ export class Table extends cloud.Table {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename, "CounterClient", [
+    return core.InflightClient.for(__filename, "TableClient", [
       `process.env["${this.envName()}"]`,
     ]);
   }
@@ -72,3 +104,7 @@ export class Table extends cloud.Table {
 }
 
 Table._annotateInflight("insert", {});
+Table._annotateInflight("update", {});
+Table._annotateInflight("delete", {});
+Table._annotateInflight("get", {});
+Table._annotateInflight("list", {});

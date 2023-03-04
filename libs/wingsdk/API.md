@@ -3376,7 +3376,47 @@ Inflight interface for `Table`.
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ITableClient.delete">delete</a></code> | Delete a row from the table. |
+| <code><a href="#@winglang/sdk.cloud.ITableClient.get">get</a></code> | Increments the counter atomically by a certain amount and returns the previous value. |
 | <code><a href="#@winglang/sdk.cloud.ITableClient.insert">insert</a></code> | Insert a row into the table. |
+| <code><a href="#@winglang/sdk.cloud.ITableClient.list">list</a></code> | Increments the counter atomically by a certain amount and returns the previous value. |
+| <code><a href="#@winglang/sdk.cloud.ITableClient.update">update</a></code> | Update a row in the table. |
+
+---
+
+##### `delete` <a name="delete" id="@winglang/sdk.cloud.ITableClient.delete"></a>
+
+```wing
+delete(key: any): void
+```
+
+**Inflight client:** [true](#true)
+
+Delete a row from the table.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.ITableClient.delete.parameter.key"></a>
+
+- *Type:* any
+
+primary key to delete the row.
+
+---
+
+##### `get` <a name="get" id="@winglang/sdk.cloud.ITableClient.get"></a>
+
+```wing
+get(key: any): any
+```
+
+**Inflight client:** [true](#true)
+
+Increments the counter atomically by a certain amount and returns the previous value.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.ITableClient.get.parameter.key"></a>
+
+- *Type:* any
+
+primary key to search.
 
 ---
 
@@ -3395,6 +3435,34 @@ Insert a row into the table.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 data to be inserted.
+
+---
+
+##### `list` <a name="list" id="@winglang/sdk.cloud.ITableClient.list"></a>
+
+```wing
+list(): any
+```
+
+**Inflight client:** [true](#true)
+
+Increments the counter atomically by a certain amount and returns the previous value.
+
+##### `update` <a name="update" id="@winglang/sdk.cloud.ITableClient.update"></a>
+
+```wing
+update(row: Json): void
+```
+
+**Inflight client:** [true](#true)
+
+Update a row in the table.
+
+###### `row`<sup>Required</sup> <a name="row" id="@winglang/sdk.cloud.ITableClient.update.parameter.row"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+data to be updated.
 
 ---
 
