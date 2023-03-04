@@ -101,7 +101,7 @@ test("basic function with timeout explicitly set", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
-test("basic function with memory size specified", async () => {
+test("basic function with memory size specified", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   Function._newFunction(app, "Function", inflight, { memory: 512 });

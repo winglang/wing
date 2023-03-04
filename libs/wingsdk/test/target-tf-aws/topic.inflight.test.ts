@@ -15,8 +15,6 @@ test("publish - happy path", async () => {
   const TOPIC_ARN = "SOME:TOPIC_ARN:that-is/fake";
   const MESSAGE = "SOME MESSAGE";
 
-  // snsMock.on(PublishCommand).resolves({ $metadata: { httpStatusCode: 200 } });
-
   // WHEN
   const client = new TopicClient(TOPIC_ARN);
   const response = await client.publish(MESSAGE);
