@@ -67,6 +67,8 @@ exports[`identical_inflights.w > wing test --target sim > stdout 1`] = `"pass �
 
 exports[`json.w > wing test --target sim > stdout 1`] = `"pass ─ json.w (no tests)"`;
 
+exports[`json_bucket.w > wing test --target sim > stdout 1`] = `"pass ─ json_bucket.w » root/test:put"`;
+
 exports[`mut_container_types.w > wing test --target sim > stdout 1`] = `"pass ─ mut_container_types.w (no tests)"`;
 
 exports[`primitive_methods.w > wing test --target sim > stdout 1`] = `

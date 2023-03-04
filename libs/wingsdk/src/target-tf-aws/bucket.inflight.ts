@@ -9,6 +9,7 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
+import { Json } from "../std";
 
 export class BucketClient implements IBucketClient {
   constructor(
@@ -25,6 +26,10 @@ export class BucketClient implements IBucketClient {
     await this.s3Client.send(command);
   }
 
+  public async putJson(key: string, body: Json): Promise<void> {
+    await this.put(key, JSON.stringify(body, null, 2));
+  }
+
   public async get(key: string): Promise<string> {
     // See https://github.com/aws/aws-sdk-js-v3/issues/1877
     const command = new GetObjectCommand({
@@ -33,6 +38,10 @@ export class BucketClient implements IBucketClient {
     });
     const resp = await this.s3Client.send(command);
     return consumers.text(resp.Body as Readable);
+  }
+
+  public async getJson(key: string): Promise<Json> {
+    return JSON.parse(await this.get(key));
   }
 
   /**
