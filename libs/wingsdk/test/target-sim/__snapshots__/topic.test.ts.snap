@@ -1,39 +1,39 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`create a topic 1`] = `
-Object {
-  "app.wsim/simulator.json": Object {
-    "resources": Array [
-      Object {
-        "attrs": Object {},
+{
+  "app.wsim/simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
         "path": "root/WingLogger",
-        "props": Object {},
+        "props": {},
         "type": "wingsdk.cloud.Logger",
       },
-      Object {
-        "attrs": Object {},
+      {
+        "attrs": {},
         "path": "root/my_topic",
-        "props": Object {
-          "subscribers": Array [],
+        "props": {
+          "subscribers": [],
         },
         "type": "wingsdk.cloud.Topic",
       },
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
+  "app.wsim/tree.json": {
+    "tree": {
+      "children": {
+        "WingLogger": {
+          "attributes": {
+            "wing:resource:connections": [],
             "wing:resource:stateful": true,
           },
-          "constructInfo": Object {
+          "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
           },
-          "display": Object {
+          "display": {
             "description": "A cloud logging facility",
             "hidden": true,
             "title": "Logger",
@@ -41,16 +41,16 @@ Object {
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
-        "my_topic": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
+        "my_topic": {
+          "attributes": {
+            "wing:resource:connections": [],
             "wing:resource:stateful": true,
           },
-          "constructInfo": Object {
+          "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
           },
-          "display": Object {
+          "display": {
             "description": "A pub/sub notification topic",
             "title": "Topic",
           },
@@ -58,7 +58,7 @@ Object {
           "path": "root/my_topic",
         },
       },
-      "constructInfo": Object {
+      "constructInfo": {
         "fqn": "constructs.Construct",
         "version": "10.1.245",
       },
@@ -67,19 +67,19 @@ Object {
     },
     "version": "tree-0.1",
   },
-  "tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
+  "tree.json": {
+    "tree": {
+      "children": {
+        "WingLogger": {
+          "attributes": {
+            "wing:resource:connections": [],
             "wing:resource:stateful": true,
           },
-          "constructInfo": Object {
+          "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
           },
-          "display": Object {
+          "display": {
             "description": "A cloud logging facility",
             "hidden": true,
             "title": "Logger",
@@ -87,16 +87,16 @@ Object {
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
-        "my_topic": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
+        "my_topic": {
+          "attributes": {
+            "wing:resource:connections": [],
             "wing:resource:stateful": true,
           },
-          "constructInfo": Object {
+          "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
           },
-          "display": Object {
+          "display": {
             "description": "A pub/sub notification topic",
             "title": "Topic",
           },
@@ -104,7 +104,7 @@ Object {
           "path": "root/my_topic",
         },
       },
-      "constructInfo": Object {
+      "constructInfo": {
         "fqn": "constructs.Construct",
         "version": "10.1.245",
       },
@@ -117,7 +117,7 @@ Object {
 `;
 
 exports[`topic publishes messages as they are received 1`] = `
-Array [
+[
   "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Topic created.",
@@ -136,7 +136,7 @@ Array [
 `;
 
 exports[`topic publishes messages to multiple subscribers 1`] = `
-Array [
+[
   "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Function created.",

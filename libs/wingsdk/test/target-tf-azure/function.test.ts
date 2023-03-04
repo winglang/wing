@@ -1,4 +1,5 @@
 import * as cdktf from "cdktf";
+import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
 import * as tfazure from "../../src/target-tf-azure";
 import { Testing } from "../../src/testing";

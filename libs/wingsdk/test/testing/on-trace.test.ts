@@ -1,3 +1,4 @@
+import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import * as sim from "../../src/target-sim";
 import * as testing from "../../src/testing";
