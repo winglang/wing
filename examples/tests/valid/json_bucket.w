@@ -19,7 +19,7 @@ let j = Json {
 
 let get_json = new cloud.Function(inflight(msg:str): str => {
   let x = b.get_json(file_name);
-  assert("failure" == x.get("persons").get_at(0).get("fears").get_at(1));
+  assert(x.get("persons").get_at(0).get("fears").get_at(1) == "failure");
 });
 
 new cloud.Function(inflight(msg:str): str => {

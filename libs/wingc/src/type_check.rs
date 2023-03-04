@@ -1114,7 +1114,7 @@ impl<'a> TypeChecker<'a> {
 					if let Some(t) = self.replace_with_builtin_type(arg_type.to_string().as_str()) {
 						self.validate_type(param_type, t, param_exp)
 					} else {
-						self.validate_type(param_type, *arg_type, param_exp);
+						self.validate_type(param_type, *arg_type, param_exp)
 					};
 				}
 
