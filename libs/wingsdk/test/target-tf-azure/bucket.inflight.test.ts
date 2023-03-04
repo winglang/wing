@@ -64,6 +64,25 @@ test("put an object into a bucket", async () => {
   expect(response).toEqual(undefined);
 });
 
+test("put an Json into a bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+  const KEY = "KEY";
+  const VALUE = { cool: "beans" };
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    mockBlobServiceClient
+  );
+  const response = await client.putJson(KEY, VALUE as any);
+
+  // THEN
+  expect(response).toEqual(undefined);
+});
+
 test("delete object from a bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
