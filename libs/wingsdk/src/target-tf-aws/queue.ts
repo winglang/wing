@@ -131,7 +131,7 @@ export class Queue extends cloud.Queue {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename, "QueueClient", [
+    return core.InflightClient.for(__dirname, __filename, "QueueClient", [
       `process.env["${this.envName()}"]`,
     ]);
   }

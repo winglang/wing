@@ -69,7 +69,7 @@ export class Counter extends cloud.Counter {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename, "CounterClient", [
+    return core.InflightClient.for(__dirname, __filename, "CounterClient", [
       `process.env["${this.envName()}"]`,
       `${this.initial}`,
     ]);
