@@ -68,7 +68,7 @@ pub mod package_json {
 				}
 				let package_json = fs::read_to_string(&package_json).unwrap();
 				let package_json: serde_json::Value = serde_json::from_str(&package_json).unwrap();
-				package_json.get("name").map(|x| x.as_str()).flatten() == Some(package_name)
+				package_json.get("name").and_then(|x| x.as_str()) == Some(package_name)
 			} else {
 				false
 			}

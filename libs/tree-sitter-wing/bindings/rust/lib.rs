@@ -1,3 +1,6 @@
+#![allow(clippy::all)]
+#![deny(clippy::correctness)]
+
 //! This crate provides wing language support for the [tree-sitter][] parsing library.
 //!
 //! Typically, you will use the [language][language func] function to add this language to a

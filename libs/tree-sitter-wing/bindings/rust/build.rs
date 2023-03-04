@@ -1,5 +1,4 @@
 use std::path::PathBuf;
-use tree_sitter;
 use tree_sitter_cli::generate::generate_parser_in_directory;
 
 fn main() {
@@ -9,7 +8,7 @@ fn main() {
 		.expect("Generating parser");
 
 	let mut c_config = cc::Build::new();
-	c_config.include(&src_dir);
+	c_config.include(src_dir);
 	c_config
 		.flag_if_supported("-Wno-unused-parameter")
 		.flag_if_supported("-Wno-unused-but-set-variable")
@@ -27,7 +26,7 @@ fn main() {
 	*/
 
 	c_config.compile("parser");
-	println!("cargo:rerun-if-changed={}", "grammar.js");
+	println!("cargo:rerun-if-changed=grammar.js");
 
 	// If your language uses an external scanner written in C++,
 	// then include this block of code:
