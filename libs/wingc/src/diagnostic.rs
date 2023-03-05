@@ -68,7 +68,7 @@ impl Display for WingPoint {
 pub struct WingSpan {
 	pub start: WingPoint,
 	pub end: WingPoint,
-	/// relative path to the file based on the working directory used to invoke the compiler
+	/// Relative path to the file based on the working directory used to invoke the compiler
 	pub file_id: String,
 }
 
