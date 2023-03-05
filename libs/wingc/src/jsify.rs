@@ -1264,7 +1264,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 
 			// don't allow capturing reassignable (`var`) fields.
 			if field_kind.reassignable {
-				self.diagnostics.insert(Diagnostic {
+				self.diagnostics.push(Diagnostic {
 					level: DiagnosticLevel::Error,
 					message: format!(
 						"Unable to reference \"this.{}\" from inflight method \"{}\" because it is reassignable (\"var\")",
@@ -1279,7 +1279,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 
 			// check if the type is capturable (resource, primitive or immutable collection)
 			if ! field_kind.type_.is_capturable() {
-				self.diagnostics.insert(Diagnostic {
+				self.diagnostics.push(Diagnostic {
 					level: DiagnosticLevel::Error,
 					message: format!(
 						"Unable to reference \"this.{}\" from inflight method \"{}\" because type {} is not capturable",
@@ -1304,7 +1304,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 				// if we are referencing a resource, verify that the operation is an inflight method
 				if let Some(r) = field_kind.type_.as_resource() {
 					if !has_inflight_method(r, &op) {
-						self.diagnostics.insert(Diagnostic {
+						self.diagnostics.push(Diagnostic {
 							level: DiagnosticLevel::Error,
 							message: format!(
 								"Unable to reference \"{}\" from inflight method \"{}\" because it is not an inflight method",
