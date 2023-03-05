@@ -6,12 +6,14 @@ Error at ../../../../examples/tests/invalid/access_hidden_namespace.w:8:5 | Unkn
 `;
 
 exports[`access_static_from_instance.w > wing test (--target sim) - invalid > stderr 1`] = `
-"Compilation failed with 5 error(s)
+"Compilation failed with 7 error(s)
 Error at ../../../../examples/tests/invalid/access_static_from_instance.w:4:3 | Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
 Error at ../../../../examples/tests/invalid/access_static_from_instance.w:7:5 | Unknown symbol \\"this\\"
 Error at ../../../../examples/tests/invalid/access_static_from_instance.w:7:5 | Variable this.instance_field is not reassignable 
 Error at ../../../../examples/tests/invalid/access_static_from_instance.w:8:5 | Unknown symbol \\"this\\"
-Error at ../../../../examples/tests/invalid/access_static_from_instance.w:8:5 | Variable this.f is not reassignable "
+Error at ../../../../examples/tests/invalid/access_static_from_instance.w:8:5 | Variable this.f is not reassignable 
+Error at ../../../../examples/tests/invalid/access_static_from_instance.w:19:5 | Cannot access static property \\"f\\" from instance
+Error at ../../../../examples/tests/invalid/access_static_from_instance.w:20:5 | Cannot access static property \\"m\\" from instance"
 `;
 
 exports[`bring.w > wing test (--target sim) - invalid > stderr 1`] = `
@@ -173,7 +175,7 @@ Error at ../../../../examples/tests/invalid/resource_access_field_as_method.w:8:
 
 exports[`resource_inflight.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 1 error(s)
-Error | Cannot create the resource \\"Bucket (at src/cloud/bucket.ts:26:1)\\" in inflight phase"
+Error | Cannot create the resource \\"Bucket (at src/cloud/bucket.ts:27:1)\\" in inflight phase"
 `;
 
 exports[`sorted_errors_no_span.w > wing test (--target sim) - invalid > stderr 1`] = `
@@ -187,12 +189,10 @@ Error at ../../../../examples/tests/invalid/sorted_errors_no_span.w:7:17 | Expec
 `;
 
 exports[`statements_if.w > wing test (--target sim) - invalid > stderr 1`] = `
-"Compilation failed with 5 error(s)
+"Compilation failed with 3 error(s)
 Error at ../../../../examples/tests/invalid/statements_if.w:2:1 | Unexpected unary operator \\"--\\"
-Error at ../../../../examples/tests/invalid/statements_if.w:5:4 | Expected type to be \\"bool\\", but got \\"num\\" instead
 Error at ../../../../examples/tests/invalid/statements_if.w:5:5 | Expected type to be \\"bool\\", but got \\"num\\" instead
-Error at ../../../../examples/tests/invalid/statements_if.w:8:5 | Expected type to be \\"bool\\", but got \\"num\\" instead
-Error at ../../../../examples/tests/invalid/statements_if.w:8:10 | Expected type to be \\"bool\\", but got \\"num\\" instead"
+Error at ../../../../examples/tests/invalid/statements_if.w:8:5 | Expected type to be \\"bool\\", but got \\"num\\" instead"
 `;
 
 exports[`struct_expansion.w > wing test (--target sim) - invalid > stderr 1`] = `
@@ -211,10 +211,12 @@ Error at ../../../../examples/tests/invalid/try_no_catch_or_finally.w:1:1 | Miss
 `;
 
 exports[`types_strings_arithmetic.w > wing test (--target sim) - invalid > stderr 1`] = `
-"Compilation failed with 3 error(s)
+"Compilation failed with 5 error(s)
+Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:1:10 | Expected type to be \\"num\\", but got \\"str\\" instead
 Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:1:16 | Expected type to be \\"num\\", but got \\"str\\" instead
 Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:4:14 | Expected type to be \\"num\\", but got \\"str\\" instead
-Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:10:30 | Expected type to be \\"num\\", but got \\"str\\" instead"
+Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:7:10 | Expected type to be \\"num\\", but got \\"str\\" instead
+Error at ../../../../examples/tests/invalid/types_strings_arithmetic.w:13:10 | Expected type to be \\"num\\", but got \\"str\\" instead"
 `;
 
 exports[`unimplemented_grammar.w > wing test (--target sim) - invalid > stderr 1`] = `

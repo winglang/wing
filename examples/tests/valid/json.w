@@ -13,10 +13,10 @@ let message = "Coolness";
 // Reassign
 json_mut_obj.set("hello", message);
 
-assert(message == json_mut_obj.get("hello"));
+assert(json_mut_obj.get("hello") == message);
 // Support `dot` and `[]` Access https://github.com/winglang/wing/issues/1680
-// assert(message == json_mut_obj.hello)
-// assert(message == json_mut_obj["hello"])
+// assert(json_mut_obj.hello == message)
+// assert(json_mut_obj["hello"] == message)
 
 // Assignment from natives
 let some_number: num = 999;
@@ -25,9 +25,9 @@ let some_json = MutJson {
   x: some_number
 };
 
-assert(some_number == some_json.get("x"));
+assert(some_json.get("x") == some_number);
 some_json.set("x", 111);
-assert(111 == some_json.get("x"));
+assert(some_json.get("x") == 111);
 
 // assign Map to Json
 let x: Json = {cool: "beans"};
@@ -45,11 +45,11 @@ let nested_json = MutJson {
 };
 
 nested_json.get("b").get("d").set("foo", "tastic");
-assert("tastic" == nested_json.get("b").get("d").get("foo"));
-assert(123 == nested_json.get("b").get("d").get("bar"));
+assert(nested_json.get("b").get("d").get("foo") == "tastic");
+assert(nested_json.get("b").get("d").get("bar") == 123);
 
 // Heterogenous Array
 let arr = Json [1, 2, "buckle", "my", "shoe", 3, 4, [ "shut", "the", "door"]];
-assert(1 == arr.get_at(0));
-assert("buckle" == arr.get_at(2));
-assert("shut" == arr.get_at(7).get_at(0));
+assert(arr.get_at(0) == 1);
+assert(arr.get_at(2) == "buckle");
+assert(arr.get_at(7).get_at(0) == "shut");

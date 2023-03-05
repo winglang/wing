@@ -1,3 +1,4 @@
+import { test, expect } from "vitest";
 import * as tfazure from "../../src/target-tf-azure";
 import { mkdtemp } from "../../src/util";
 

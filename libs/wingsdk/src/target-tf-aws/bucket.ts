@@ -159,7 +159,7 @@ export class Bucket extends cloud.Bucket {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename, "BucketClient", [
+    return core.InflightClient.for(__dirname, __filename, "BucketClient", [
       `process.env["${this.envName()}"]`,
     ]);
   }
@@ -173,3 +173,5 @@ Bucket._annotateInflight("put", {});
 Bucket._annotateInflight("get", {});
 Bucket._annotateInflight("delete", {});
 Bucket._annotateInflight("list", {});
+Bucket._annotateInflight("put_json", {});
+Bucket._annotateInflight("get_json", {});

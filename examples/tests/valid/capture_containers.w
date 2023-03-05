@@ -18,7 +18,7 @@ let handler = inflight (s: str): str => {
   assert(my_map.size() == 2);
 
   assert(arr_of_map.at(0).has("bang"));
-  assert("world" == j.get("b"));
+  assert(j.get("b") == "world");
 };
 
 new cloud.Function(handler) as "test";

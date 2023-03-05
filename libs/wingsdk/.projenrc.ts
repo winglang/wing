@@ -2,9 +2,8 @@ import { join } from "path";
 import { JsonFile, cdk, javascript } from "projen";
 import rootPackageJson from "../../package.json";
 
-const PUBLIC_JSII_DEPS = ["constructs@~10.1.228"];
-
-const PRIVATE_JSII_DEPS = [
+const JSII_DEPS = [
+  "constructs@~10.1.228",
   "cdktf@0.15.2",
   "@cdktf/provider-random@^5.0.0",
   "@cdktf/provider-aws@^12.0.1",
@@ -21,8 +20,8 @@ const project = new cdk.JsiiProject({
   repositoryDirectory: "libs/wingsdk",
   stability: "experimental",
   defaultReleaseBranch: "main",
-  peerDeps: [...PUBLIC_JSII_DEPS],
-  deps: [...PUBLIC_JSII_DEPS, ...PRIVATE_JSII_DEPS],
+  peerDeps: [...JSII_DEPS],
+  deps: [...JSII_DEPS],
   bundledDeps: [
     // preflight dependencies
     "debug",
@@ -57,6 +56,8 @@ const project = new cdk.JsiiProject({
     "aws-sdk-client-mock-jest",
     "eslint-plugin-sort-exports",
     "patch-package",
+    "vitest",
+    "@vitest/coverage-c8",
   ],
   prettier: true,
   npmignoreEnabled: false,
@@ -235,9 +236,11 @@ docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);
 docgen.exec(`cat API.md >> ${docsPath}`);
 
 // override default test timeout from 5s to 30s
-project.testTask.reset(
-  "jest --passWithNoTests --all --updateSnapshot --coverageProvider=v8 --testTimeout=30000"
-);
+project.testTask.reset("vitest run --coverage --update --passWithNoTests");
+const testWatch = project.tasks.tryFind("test:watch")!;
+testWatch.reset();
+testWatch.exec("vitest"); // Watch is default mode for vitest
+testWatch.description = "Run vitest in watch mode";
 project.testTask.spawn(project.eslint?.eslintTask!);
 
 project.addFields({
@@ -247,7 +250,5 @@ project.addFields({
 project.addFields({
   files: ["lib", ".jsii", "API.md", "patches"],
 });
-
-project.compileTask.exec("node scripts/remove-peers.js");
 
 project.synth();

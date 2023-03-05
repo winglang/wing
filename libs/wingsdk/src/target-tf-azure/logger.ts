@@ -9,7 +9,7 @@ import * as core from "../core";
 export class Logger extends cloud.Logger {
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename, "LoggerClient", []);
+    return core.InflightClient.for(__dirname, __filename, "LoggerClient", []);
   }
 }
 

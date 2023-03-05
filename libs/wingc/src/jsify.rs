@@ -329,15 +329,14 @@ impl<'a> JSifier<'a> {
 					None
 				};
 
-				if !is_resource || fqn.is_none() {
-					format!("new {}({})", ctor, args)
-				} else {
-					let fqn = fqn.expect("expecting fqn to be defined");
+				if let (true, Some(fqn)) = (is_resource, fqn) {
 					if is_abstract {
 						format!("this.node.root.newAbstract(\"{}\",{})", fqn, args)
 					} else {
 						format!("this.node.root.new(\"{}\",{},{})", fqn, ctor, args)
 					}
+				} else {
+					format!("new {}({})", ctor, args)
 				}
 			}
 			ExprKind::Literal(lit) => match lit {
