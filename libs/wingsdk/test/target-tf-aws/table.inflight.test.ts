@@ -17,6 +17,7 @@ import {
   ScanCommand,
 } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
+import { test, expect, describe, beforeEach, afterAll } from "vitest";
 
 import { mockClient } from "aws-sdk-client-mock";
 import { ColumnType } from "../../src/cloud";

@@ -1,10 +1,11 @@
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
+import { test, expect } from "vitest";
 import { Testing } from "../../src/testing";
 import { mkdtemp, sanitizeCode } from "../../src/util";
 import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
-test("deafult table behavior", () => {
+test("default table behavior", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
   cloud.Table._newTable(app, "Table", {
     columns: { id: cloud.ColumnType.STRING },
