@@ -1,5 +1,5 @@
 import { Match, Template } from "aws-cdk-lib/assertions";
-import * as cloud from "../../src/cloud";
+import { Bucket } from "../../src/cloud";
 import * as awscdk from "../../src/target-awscdk";
 import { mkdtemp } from "../../src/util";
 
@@ -10,7 +10,7 @@ const CDK_APP_OPTS = {
 test("create a bucket", async () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  new cloud.Bucket(app, "my_bucket");
+  Bucket._newBucket(app, "my_bucket");
   const output = app.synth();
 
   // THEN
@@ -32,7 +32,7 @@ test("create a bucket", async () => {
 test("bucket is public", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  new cloud.Bucket(app, "my_bucket", { public: true });
+  Bucket._newBucket(app, "my_bucket", { public: true });
   const output = app.synth();
 
   // THEN
@@ -44,7 +44,7 @@ test("bucket is public", () => {
 test("bucket with two preflight objects", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
-  const bucket = new cloud.Bucket(app, "my_bucket", { public: true });
+  const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
   bucket.addObject("file1.txt", "hello world");
   bucket.addObject("file2.txt", "boom bam");
   const output = app.synth();
