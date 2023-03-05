@@ -1,6 +1,6 @@
 import { Match, Template } from "aws-cdk-lib/assertions";
-import { Function } from "../../src/cloud";
 import { test, expect } from "vitest";
+import { Function } from "../../src/cloud";
 import { Duration } from "../../src/std";
 import * as awscdk from "../../src/target-awscdk";
 import { Testing } from "../../src/testing";

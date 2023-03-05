@@ -1,6 +1,6 @@
 import { Match, Template } from "aws-cdk-lib/assertions";
-import { Bucket } from "../../src/cloud";
 import { test, expect } from "vitest";
+import { Bucket } from "../../src/cloud";
 import * as awscdk from "../../src/target-awscdk";
 import { mkdtemp } from "../../src/util";
 

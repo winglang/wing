@@ -1,20 +1,16 @@
 import { mkdirSync } from "fs";
 import { join } from "path";
-import { Construct } from "constructs";
 import * as cdk from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
+import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
 import { Bucket } from "./bucket";
 import { Function } from "./function";
 import { Logger } from "./logger";
-import { PluginManager } from "../core/plugin-manager";
 
+import { BUCKET_FQN, FUNCTION_FQN, LOGGER_FQN } from "../cloud";
 import { App as CoreApp, AppProps, preSynthesizeAllConstructs } from "../core";
-import {
-  BUCKET_FQN,
-  FUNCTION_FQN,
-  LOGGER_FQN,
-} from "../cloud";
+import { PluginManager } from "../core/plugin-manager";
 
 /**
  * AWS-CDK App props
@@ -43,7 +39,6 @@ export class App extends CoreApp {
   private synthedOutput: string | undefined;
 
   constructor(props: CdkAppProps) {
-
     const stackName = props.stackName ?? process.env.CDK_STACK_NAME;
     if (stackName === undefined) {
       throw new Error(
