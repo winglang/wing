@@ -72,12 +72,10 @@ pub fn resolve_from(target: &str, basedir: &Path) -> Result<PathBuf, Box<dyn Err
 	// 3. If X begins with './' or '../' or '/'
 	if is_path_dependency(target) {
 		let path = basedir.join(target);
-		return resolve_as_file(&path)
-			.or_else(|_| resolve_as_directory(&path))
-			.and_then(|p| Ok(p));
+		return resolve_as_file(&path).or_else(|_| resolve_as_directory(&path));
 	}
 
-	resolve_node_modules(target, basedir).and_then(|p| Ok(p))
+	resolve_node_modules(target, basedir)
 }
 
 /// Resolve a path as a file. If `path` refers to a file, it is returned;
