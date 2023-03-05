@@ -14,8 +14,8 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "cargo clippy --fix --no-deps --target wasm32-wasi --release",
-          "cargo fmt"
+          "cargo fmt",
+          "cargo clippy --fix --no-deps --target wasm32-wasi --release"
         ],
         "cwd": "libs/wingii",
         "parallel": false
@@ -23,8 +23,8 @@
       "configurations": {
         "release": {
           "commands": [
-            "cargo clippy --no-deps --target wasm32-wasi --release",
-            "cargo fmt --check"
+            "cargo fmt --check",
+            "cargo clippy --no-deps --target wasm32-wasi --release"
           ]
         }
       }

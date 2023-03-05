@@ -14,13 +14,13 @@
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["cargo clippy --no-deps --fix --allow-dirty", "cargo fmt"],
+        "commands": ["cargo fmt", "cargo clippy --no-deps --fix --allow-dirty"],
         "cwd": "libs/wingc",
         "parallel": false
       },
       "configurations": {
         "release": {
-          "commands": ["cargo clippy --no-deps --release", "cargo fmt --check"]
+          "commands": ["cargo fmt --check", "cargo clippy --no-deps --release"]
         }
       }
     },
