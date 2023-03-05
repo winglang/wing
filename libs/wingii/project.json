@@ -13,8 +13,20 @@
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "cargo clippy",
-        "cwd": "libs/wingii"
+        "commands": [
+          "cargo clippy --fix --no-deps --target wasm32-wasi --release",
+          "cargo fmt"
+        ],
+        "cwd": "libs/wingii",
+        "parallel": false
+      },
+      "configurations": {
+        "release": {
+          "commands": [
+            "cargo clippy --no-deps --target wasm32-wasi --release",
+            "cargo fmt --check"
+          ]
+        }
       }
     },
     "build": {

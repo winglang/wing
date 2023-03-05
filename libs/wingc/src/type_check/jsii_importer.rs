@@ -1,7 +1,7 @@
 use crate::{
 	ast::{Phase, Symbol},
 	debug,
-	diagnostic::{CharacterLocation, WingSpan},
+	diagnostic::{WingPoint, WingSpan},
 	type_check::{
 		self, symbol_env::StatementIdx, Class, FunctionSignature, Struct, SymbolKind, Type, TypeRef, Types,
 		WING_CONSTRUCTOR_NAME,
@@ -276,7 +276,7 @@ impl<'a> JsiiImporter<'a> {
 					.define(
 						&Symbol {
 							name: namespace_name.to_string(),
-							span: WingSpan::global(),
+							span: WingSpan::default(),
 						},
 						SymbolKind::Namespace(ns),
 						StatementIdx::Top,
@@ -536,20 +536,18 @@ impl<'a> JsiiImporter<'a> {
 	fn jsii_name_to_symbol(name: &str, jsii_source_location: &Option<jsii::SourceLocation>) -> Symbol {
 		let span = if let Some(jsii_source_location) = jsii_source_location {
 			WingSpan {
-				start: CharacterLocation {
-					row: (jsii_source_location.line - 1.0) as usize,
-					column: 0,
+				start: WingPoint {
+					line: (jsii_source_location.line - 1.0) as u32,
+					character: 0,
 				},
-				end: CharacterLocation {
-					row: (jsii_source_location.line - 1.0) as usize,
-					column: 0,
+				end: WingPoint {
+					line: (jsii_source_location.line - 1.0) as u32,
+					character: 0,
 				},
-				start_byte: 0,
-				end_byte: 0,
 				file_id: (&jsii_source_location.filename).into(),
 			}
 		} else {
-			WingSpan::global()
+			WingSpan::default()
 		};
 		Symbol {
 			name: name.to_string(),

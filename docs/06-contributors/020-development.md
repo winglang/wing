@@ -105,7 +105,7 @@ separately).
 
 :::note
 
-The first time you run `npm install` you may be asked to enter your system password, this is because
+The first time you run `npm install` it may take a long time, this is because
 it's taking care of installing the [wasi-sdk](https://github.com/WebAssembly/wasi-sdk) for you.
 
 If you wish to install it manually, you may do so by running `scripts/setup_wasi.sh`

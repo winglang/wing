@@ -764,7 +764,7 @@ impl<'a> TypeChecker<'a> {
 			vec![WINGSDK_STD_MODULE.to_string()],
 			&Symbol {
 				name: WINGSDK_STD_MODULE.to_string(),
-				span: WingSpan::global(),
+				span: WingSpan::default(),
 			},
 			None,
 		);
@@ -2066,7 +2066,7 @@ impl<'a> TypeChecker<'a> {
 				Err(type_error) => {
 					self.type_error(TypeError {
 						message: format!("Cannot locate Wing standard library (checking \"{}\"", manifest_root),
-						span: stmt.map(|s| s.span.clone()).unwrap_or(WingSpan::global()),
+						span: stmt.map(|s| s.span.clone()).unwrap_or(WingSpan::default()),
 					});
 					debug!("{:?}", type_error);
 					return;
@@ -2082,7 +2082,7 @@ impl<'a> TypeChecker<'a> {
 				Err(type_error) => {
 					self.type_error(TypeError {
 						message: format!("Cannot find module \"{}\" in source directory", library_name),
-						span: stmt.map(|s| s.span.clone()).unwrap_or(WingSpan::global()),
+						span: stmt.map(|s| s.span.clone()).unwrap_or(WingSpan::default()),
 					});
 					debug!("{:?}", type_error);
 					return;
@@ -2251,7 +2251,7 @@ impl<'a> TypeChecker<'a> {
 								// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
 								&Symbol {
 									name: name.clone(),
-									span: WingSpan::global(),
+									span: WingSpan::default(),
 								},
 								if *is_static {
 									SymbolKind::make_variable(self.types.add_type(Type::Function(new_sig)), *reassignable, *flight)
@@ -2285,7 +2285,7 @@ impl<'a> TypeChecker<'a> {
 								// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
 								&Symbol {
 									name: name.clone(),
-									span: WingSpan::global(),
+									span: WingSpan::default(),
 								},
 								if *is_static {
 									SymbolKind::make_variable(new_var_type, reassignable, flight)

@@ -1,65 +1,107 @@
 use colored::Colorize;
 use std::fmt::Display;
+use tree_sitter::Point;
 
 use lsp_types::{Position, Range};
-use tree_sitter::Point;
 
 use crate::debug;
 
 pub type FileId = String;
-pub type CharacterLocation = Point;
-pub type ByteIndex = usize;
-
 pub type Diagnostics = Vec<Diagnostic>;
-
 pub type DiagnosticResult<T> = Result<T, ()>;
 
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+/// Line and character location in a UTF8 Wing source file
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub struct WingPoint {
+	pub line: u32,
+	pub character: u32,
+}
+
+/// tree-sitter-based Point => WingPoint
+impl From<Point> for WingPoint {
+	fn from(point: Point) -> Self {
+		Self {
+			line: point.row as u32,
+			character: point.column as u32,
+		}
+	}
+}
+
+/// LSP-based Position => WingPoint
+impl From<Position> for WingPoint {
+	fn from(position: Position) -> Self {
+		Self {
+			line: position.line,
+			character: position.character,
+		}
+	}
+}
+
+/// WingPoint => tree-sitter-based Point
+impl Into<Point> for WingPoint {
+	fn into(self) -> Point {
+		Point {
+			row: self.line as usize,
+			column: self.character as usize,
+		}
+	}
+}
+
+/// WingPoint => LSP-based Position
+impl Into<Position> for WingPoint {
+	fn into(self) -> Position {
+		Position {
+			line: self.line,
+			character: self.character,
+		}
+	}
+}
+
+impl Display for WingPoint {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		write!(f, "{}:{}", self.line, self.character)
+	}
+}
+
+#[derive(Debug, Default, PartialEq, Eq, Hash, Clone)]
 pub struct WingSpan {
-	pub start: CharacterLocation,
-	pub end: CharacterLocation,
-	pub start_byte: ByteIndex,
-	pub end_byte: ByteIndex,
-	pub file_id: FileId,
+	pub start: WingPoint,
+	pub end: WingPoint,
+	pub file_id: String,
+}
+
+impl Into<Range> for WingSpan {
+	fn into(self) -> Range {
+		Range {
+			start: self.start.into(),
+			end: self.end.into(),
+		}
+	}
+}
+
+impl Into<Range> for &WingSpan {
+	fn into(self) -> Range {
+		Range {
+			start: self.start.into(),
+			end: self.end.into(),
+		}
+	}
 }
 
 impl WingSpan {
-	pub fn global() -> Self {
-		Self {
-			start: Point { row: 0, column: 0 },
-			end: Point { row: 0, column: 0 },
-			start_byte: 0,
-			end_byte: 0,
-			file_id: String::from(""),
-		}
-	}
-
-	pub fn range(self: &Self) -> Range {
-		Range {
-			start: Position {
-				line: self.start.row as u32,
-				character: self.start.column as u32,
-			},
-			end: Position {
-				line: self.end.row as u32,
-				character: self.end.column as u32,
-			},
-		}
-	}
-
 	pub fn contains(self: &Self, position: &Position) -> bool {
-		let pos_line = position.line as usize;
-		let pos_char = position.character as usize;
+		let pos_line = position.line;
+		let pos_char = position.character;
 		let start = self.start;
 		let end = self.end;
 
-		if pos_line >= start.row && pos_line <= end.row {
-			if start.row == end.row && pos_line == start.row {
-				pos_char >= start.column && pos_char <= end.column
-			} else if pos_line == start.row {
-				pos_char >= start.column
-			} else if pos_line == end.row {
-				pos_char <= end.column
+		if pos_line >= start.line && pos_line <= end.line {
+			if start.line == end.line && pos_line == start.line {
+				pos_char >= start.character && pos_char <= end.character
+			} else if pos_line == start.line {
+				pos_char >= start.character
+			} else if pos_line == end.line {
+				pos_char <= end.character
 			} else {
 				true
 			}
@@ -71,7 +113,13 @@ impl WingSpan {
 
 impl std::fmt::Display for WingSpan {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "{}:{}:{}", self.file_id, self.start.row + 1, self.start.column + 1)
+		write!(
+			f,
+			"{}:{}:{}",
+			self.file_id,
+			self.start.line + 1,
+			self.start.character + 1
+		)
 	}
 }
 
