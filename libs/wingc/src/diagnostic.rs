@@ -14,7 +14,7 @@ pub type DiagnosticResult<T> = Result<T, ()>;
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub struct WingPoint {
 	pub line: u32,
-	pub character: u32,
+	pub col: u32,
 }
 
 /// tree-sitter-based Point => WingPoint
@@ -22,7 +22,7 @@ impl From<Point> for WingPoint {
 	fn from(point: Point) -> Self {
 		Self {
 			line: point.row as u32,
-			character: point.column as u32,
+			col: point.column as u32,
 		}
 	}
 }
@@ -32,7 +32,7 @@ impl From<Position> for WingPoint {
 	fn from(position: Position) -> Self {
 		Self {
 			line: position.line,
-			character: position.character,
+			col: position.character,
 		}
 	}
 }
@@ -42,7 +42,7 @@ impl Into<Point> for WingPoint {
 	fn into(self) -> Point {
 		Point {
 			row: self.line as usize,
-			column: self.character as usize,
+			column: self.col as usize,
 		}
 	}
 }
@@ -52,14 +52,14 @@ impl Into<Position> for WingPoint {
 	fn into(self) -> Position {
 		Position {
 			line: self.line,
-			character: self.character,
+			character: self.col,
 		}
 	}
 }
 
 impl Display for WingPoint {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "{}:{}", self.line, self.character)
+		write!(f, "{}:{}", self.line, self.col)
 	}
 }
 
@@ -97,11 +97,11 @@ impl WingSpan {
 
 		if pos_line >= start.line && pos_line <= end.line {
 			if start.line == end.line && pos_line == start.line {
-				pos_char >= start.character && pos_char <= end.character
+				pos_char >= start.col && pos_char <= end.col
 			} else if pos_line == start.line {
-				pos_char >= start.character
+				pos_char >= start.col
 			} else if pos_line == end.line {
-				pos_char <= end.character
+				pos_char <= end.col
 			} else {
 				true
 			}
@@ -113,13 +113,7 @@ impl WingSpan {
 
 impl std::fmt::Display for WingSpan {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(
-			f,
-			"{}:{}:{}",
-			self.file_id,
-			self.start.line + 1,
-			self.start.character + 1
-		)
+		write!(f, "{}:{}:{}", self.file_id, self.start.line + 1, self.start.col + 1)
 	}
 }
 

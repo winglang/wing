@@ -762,10 +762,7 @@ impl<'a> TypeChecker<'a> {
 			scope.env.borrow_mut().as_mut().unwrap(),
 			WINGSDK_ASSEMBLY_NAME.to_string(),
 			vec![WINGSDK_STD_MODULE.to_string()],
-			&Symbol {
-				name: WINGSDK_STD_MODULE.to_string(),
-				span: Default::default(),
-			},
+			&Symbol::global(WINGSDK_STD_MODULE),
 			None,
 		);
 	}
@@ -2249,10 +2246,7 @@ impl<'a> TypeChecker<'a> {
 
 							match new_type_class.env.define(
 								// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
-								&Symbol {
-									name: name.clone(),
-									span: Default::default(),
-								},
+								&Symbol::global(name),
 								if *is_static {
 									SymbolKind::make_variable(self.types.add_type(Type::Function(new_sig)), *reassignable, *flight)
 								} else {
@@ -2283,10 +2277,7 @@ impl<'a> TypeChecker<'a> {
 							};
 							match new_type_class.env.define(
 								// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
-								&Symbol {
-									name: name.clone(),
-									span: Default::default(),
-								},
+								&Symbol::global(name),
 								if *is_static {
 									SymbolKind::make_variable(new_var_type, reassignable, flight)
 								} else {

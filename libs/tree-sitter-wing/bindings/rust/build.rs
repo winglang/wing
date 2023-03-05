@@ -7,13 +7,18 @@ fn main() {
 	generate_parser_in_directory(&PathBuf::from("."), None, tree_sitter::LANGUAGE_VERSION, false, None)
 		.expect("Generating parser");
 
-	// get WASI_SDK env
-	let wasi_sdk = std::env::var("WASI_SDK").expect("WASI_SDK env not set");
-
 	let mut c_config = cc::Build::new();
 	c_config.include(src_dir);
 	c_config
-		.flag(format!("--sysroot={}/share/wasi-sysroot", wasi_sdk).as_str())
+		// This parser is used in a WASI context, so it needs to be compiled with
+		// the sysroot and other tools needed for WASI-compatible C
+		.flag(
+			format!(
+				"--sysroot={}/share/wasi-sysroot",
+				env!("WASI_SDK", "WASI_SDK env not set")
+			)
+			.as_str(),
+		)
 		.flag("-Wno-unused-parameter")
 		.flag("-Wno-unused-but-set-variable")
 		.flag("-Wno-trigraphs");

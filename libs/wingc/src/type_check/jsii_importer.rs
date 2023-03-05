@@ -274,10 +274,7 @@ impl<'a> JsiiImporter<'a> {
 				parent_ns
 					.env
 					.define(
-						&Symbol {
-							name: namespace_name.to_string(),
-							span: Default::default(),
-						},
+						&Symbol::global(namespace_name),
 						SymbolKind::Namespace(ns),
 						StatementIdx::Top,
 					)
@@ -538,11 +535,11 @@ impl<'a> JsiiImporter<'a> {
 			WingSpan {
 				start: WingPoint {
 					line: (jsii_source_location.line - 1.0) as u32,
-					character: 0,
+					col: 0,
 				},
 				end: WingPoint {
 					line: (jsii_source_location.line - 1.0) as u32,
-					character: 0,
+					col: 0,
 				},
 				file_id: (&jsii_source_location.filename).into(),
 			}

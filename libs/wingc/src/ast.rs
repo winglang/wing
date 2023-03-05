@@ -18,9 +18,9 @@ pub struct Symbol {
 }
 
 impl Symbol {
-	pub fn global(name: &str) -> Self {
+	pub fn global<S: Into<String>>(name: S) -> Self {
 		Self {
-			name: name.to_string(),
+			name: name.into(),
 			span: Default::default(),
 		}
 	}
