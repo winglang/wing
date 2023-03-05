@@ -4,9 +4,17 @@
   "implicitDependencies": ["sdk", "wingii", "tree-sitter-wing"],
   "targets": {
     "test": {
+      "dependsOn": ["lint"],
       "executor": "nx:run-commands",
       "options": {
         "command": "cargo test",
+        "cwd": "libs/wingc"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo clippy",
         "cwd": "libs/wingc"
       }
     },

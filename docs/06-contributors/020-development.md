@@ -138,7 +138,16 @@ The following command runs `wingc` on a file. This performs all the compilation 
 npx nx wing -- compile <path to a .w file (full path, or relative to the location of the apps/wing folder)>
 ```
 
-You can find the compilation artifacts in the apps/wing/targets folder
+You can find the compilation artifacts in the apps/wing/targets folder.
+
+To check that your code passes all the lints, run:
+
+```sh
+npx nx lint wingc
+```
+
+If you are using VS Code, you can show clippy errors in your IDE by installing the rust-analyzer extension and setting the option "Rust-analyzer › Check: Command" to "clippy" instead of "check".
+
 
 ## How do I make changes to the Wing grammar?
 
