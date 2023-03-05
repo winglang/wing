@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`deafult table behavior 1`] = `
+exports[`default table behavior 1`] = `
 "{
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
@@ -107,23 +107,23 @@ exports[`function with a table binding 2`] = `
 `;
 
 exports[`function with a table binding 3`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "Default": Object {
-            "children": Object {
-              "Function": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Function": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "outbound",
                       "implicit": false,
                       "relationship": "insert",
                       "resource": "root/Default/Table",
                     },
-                    Object {
+                    {
                       "direction": "outbound",
                       "implicit": true,
                       "relationship": "print",
@@ -132,57 +132,57 @@ Object {
                   ],
                   "wing:resource:stateful": false,
                 },
-                "children": Object {
-                  "Asset": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
                       "version": "0.15.2",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
-                  "Code": Object {
-                    "constructInfo": Object {
+                  "Code": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
                       "version": "12.0.2",
                     },
                     "id": "Code",
                     "path": "root/Default/Function/Code",
                   },
-                  "Default": Object {
-                    "constructInfo": Object {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
                       "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
-                  "IamRole": Object {
-                    "constructInfo": Object {
+                  "IamRole": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
                       "version": "12.0.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
-                  "IamRolePolicy": Object {
-                    "constructInfo": Object {
+                  "IamRolePolicy": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
                       "version": "12.0.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
-                  "IamRolePolicyAttachment": Object {
-                    "constructInfo": Object {
+                  "IamRolePolicyAttachment": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
                       "version": "12.0.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
-                  "S3Object": Object {
-                    "constructInfo": Object {
+                  "S3Object": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
                       "version": "12.0.2",
                     },
@@ -190,27 +190,27 @@ Object {
                     "path": "root/Default/Function/S3Object",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+              "Handler": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
@@ -218,10 +218,10 @@ Object {
                 "id": "Handler",
                 "path": "root/Default/Handler",
               },
-              "Table": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "Table": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "insert",
@@ -230,9 +230,9 @@ Object {
                   ],
                   "wing:resource:stateful": true,
                 },
-                "children": Object {
-                  "Default": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
                       "version": "12.0.2",
                     },
@@ -240,21 +240,21 @@ Object {
                     "path": "root/Default/Table/Default",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud NoSQL database table that can be used to store and query data",
                   "title": "Table",
                 },
                 "id": "Table",
                 "path": "root/Default/Table",
               },
-              "WingLogger": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "WingLogger": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "inbound",
                       "implicit": true,
                       "relationship": "print",
@@ -263,11 +263,11 @@ Object {
                   ],
                   "wing:resource:stateful": true,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud logging facility",
                   "hidden": true,
                   "title": "Logger",
@@ -275,8 +275,8 @@ Object {
                 "id": "WingLogger",
                 "path": "root/Default/WingLogger",
               },
-              "aws": Object {
-                "constructInfo": Object {
+              "aws": {
+                "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
                   "version": "12.0.2",
                 },
@@ -284,15 +284,15 @@ Object {
                 "path": "root/Default/aws",
               },
             },
-            "constructInfo": Object {
+            "constructInfo": {
               "fqn": "constructs.Construct",
               "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
           },
-          "backend": Object {
-            "constructInfo": Object {
+          "backend": {
+            "constructInfo": {
               "fqn": "cdktf.LocalBackend",
               "version": "0.15.2",
             },
@@ -300,7 +300,7 @@ Object {
             "path": "root/backend",
           },
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "cdktf.TerraformStack",
           "version": "0.15.2",
         },
@@ -308,7 +308,7 @@ Object {
         "path": "root",
       },
     },
-    "constructInfo": Object {
+    "constructInfo": {
       "fqn": "cdktf.App",
       "version": "0.15.2",
     },

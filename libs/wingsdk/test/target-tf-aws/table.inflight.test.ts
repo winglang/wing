@@ -17,9 +17,9 @@ import {
   ScanCommand,
 } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
+import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, describe, beforeEach, afterAll } from "vitest";
 
-import { mockClient } from "aws-sdk-client-mock";
 import { ColumnType } from "../../src/cloud";
 import { TableClient } from "../../src/target-tf-aws/table.inflight";
 
