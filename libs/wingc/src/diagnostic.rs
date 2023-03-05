@@ -207,3 +207,51 @@ impl std::fmt::Display for TypeError {
 		write!(f, "{} at {}", self.message, self.span)
 	}
 }
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+
+	#[test]
+	fn wingspan_contains() {
+		let span = WingSpan {
+			start: WingLocation { line: 0, col: 0 },
+			end: WingLocation { line: 1, col: 10 },
+			file_id: "test".to_string(),
+		};
+
+		let in_position = Position { line: 0, character: 5 };
+		let out_position = Position { line: 2, character: 5 };
+
+		assert!(span.contains(&in_position));
+		assert!(!span.contains(&out_position));
+	}
+
+	#[test]
+	fn wingspan_comparisons() {
+		let span1 = WingSpan {
+			start: WingLocation { line: 1, col: 5 },
+			end: WingLocation { line: 1, col: 10 },
+			file_id: "test".to_string(),
+		};
+
+		let like_span1 = span1.clone();
+
+		let sooner = WingSpan {
+			start: WingLocation { line: 0, col: 0 },
+			end: WingLocation { line: 1, col: 1 },
+			file_id: "test".to_string(),
+		};
+		let later = WingSpan {
+			start: WingLocation { line: 2, col: 0 },
+			end: WingLocation { line: 2, col: 5 },
+			file_id: "test".to_string(),
+		};
+
+		assert!(span1 == like_span1);
+		assert!(span1 < later);
+		assert!(!(span1 > later));
+		assert!(span1 > sooner);
+		assert!(!(span1 < sooner));
+	}
+}
