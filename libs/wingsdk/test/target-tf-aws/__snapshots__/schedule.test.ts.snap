@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`schedule behavior with cron 1`] = `
 "{
@@ -75,17 +75,17 @@ exports[`schedule behavior with cron 1`] = `
 `;
 
 exports[`schedule behavior with cron 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "Default": Object {
-            "children": Object {
-              "Handler": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Handler": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
@@ -94,11 +94,11 @@ Object {
                   ],
                   "wing:resource:stateful": false,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
@@ -106,10 +106,10 @@ Object {
                 "id": "Handler",
                 "path": "root/Default/Handler",
               },
-              "Schedule": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "Schedule": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "outbound",
                       "implicit": false,
                       "relationship": "on_tick",
@@ -118,17 +118,17 @@ Object {
                   ],
                   "wing:resource:stateful": true,
                 },
-                "children": Object {
-                  "Schedule": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Schedule": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.cloudwatchEventRule.CloudwatchEventRule",
                       "version": "12.0.2",
                     },
                     "id": "Schedule",
                     "path": "root/Default/Schedule/Schedule",
                   },
-                  "ScheduleTarget-c5395e41": Object {
-                    "constructInfo": Object {
+                  "ScheduleTarget-c5395e41": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.cloudwatchEventTarget.CloudwatchEventTarget",
                       "version": "12.0.2",
                     },
@@ -136,33 +136,33 @@ Object {
                     "path": "root/Default/Schedule/ScheduleTarget-c5395e41",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
                   "title": "Schedule",
                 },
                 "id": "Schedule",
                 "path": "root/Default/Schedule",
               },
-              "Schedule-OnTick-c5395e41": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "Schedule-OnTick-c5395e41": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "outbound",
                       "implicit": false,
                       "relationship": "handle",
                       "resource": "root/Default/Handler",
                     },
-                    Object {
+                    {
                       "direction": "outbound",
                       "implicit": true,
                       "relationship": "print",
                       "resource": "root/Default/WingLogger",
                     },
-                    Object {
+                    {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "on_tick",
@@ -171,65 +171,65 @@ Object {
                   ],
                   "wing:resource:stateful": false,
                 },
-                "children": Object {
-                  "Asset": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
                       "version": "0.15.2",
                     },
                     "id": "Asset",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Asset",
                   },
-                  "Code": Object {
-                    "constructInfo": Object {
+                  "Code": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
                       "version": "12.0.2",
                     },
                     "id": "Code",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Code",
                   },
-                  "Default": Object {
-                    "constructInfo": Object {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
                       "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Default",
                   },
-                  "IamRole": Object {
-                    "constructInfo": Object {
+                  "IamRole": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
                       "version": "12.0.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Schedule-OnTick-c5395e41/IamRole",
                   },
-                  "IamRolePolicy": Object {
-                    "constructInfo": Object {
+                  "IamRolePolicy": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
                       "version": "12.0.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Schedule-OnTick-c5395e41/IamRolePolicy",
                   },
-                  "IamRolePolicyAttachment": Object {
-                    "constructInfo": Object {
+                  "IamRolePolicyAttachment": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
                       "version": "12.0.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Schedule-OnTick-c5395e41/IamRolePolicyAttachment",
                   },
-                  "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": Object {
-                    "constructInfo": Object {
+                  "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
                       "version": "12.0.2",
                     },
                     "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
                     "path": "root/Default/Schedule-OnTick-c5395e41/InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
                   },
-                  "S3Object": Object {
-                    "constructInfo": Object {
+                  "S3Object": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
                       "version": "12.0.2",
                     },
@@ -237,33 +237,33 @@ Object {
                     "path": "root/Default/Schedule-OnTick-c5395e41/S3Object",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
                 },
                 "id": "Schedule-OnTick-c5395e41",
                 "path": "root/Default/Schedule-OnTick-c5395e41",
               },
-              "Schedule-OnTickHandler-c5395e41": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+              "Schedule-OnTickHandler-c5395e41": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
                 "id": "Schedule-OnTickHandler-c5395e41",
                 "path": "root/Default/Schedule-OnTickHandler-c5395e41",
               },
-              "WingLogger": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "WingLogger": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "inbound",
                       "implicit": true,
                       "relationship": "print",
@@ -272,11 +272,11 @@ Object {
                   ],
                   "wing:resource:stateful": true,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud logging facility",
                   "hidden": true,
                   "title": "Logger",
@@ -284,8 +284,8 @@ Object {
                 "id": "WingLogger",
                 "path": "root/Default/WingLogger",
               },
-              "aws": Object {
-                "constructInfo": Object {
+              "aws": {
+                "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
                   "version": "12.0.2",
                 },
@@ -293,15 +293,15 @@ Object {
                 "path": "root/Default/aws",
               },
             },
-            "constructInfo": Object {
+            "constructInfo": {
               "fqn": "constructs.Construct",
               "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
           },
-          "backend": Object {
-            "constructInfo": Object {
+          "backend": {
+            "constructInfo": {
               "fqn": "cdktf.LocalBackend",
               "version": "0.15.2",
             },
@@ -309,7 +309,7 @@ Object {
             "path": "root/backend",
           },
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "cdktf.TerraformStack",
           "version": "0.15.2",
         },
@@ -317,7 +317,7 @@ Object {
         "path": "root",
       },
     },
-    "constructInfo": Object {
+    "constructInfo": {
       "fqn": "cdktf.App",
       "version": "0.15.2",
     },
@@ -403,17 +403,17 @@ exports[`schedule behavior with rate 1`] = `
 `;
 
 exports[`schedule behavior with rate 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "Default": Object {
-            "children": Object {
-              "Handler": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Handler": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
@@ -422,11 +422,11 @@ Object {
                   ],
                   "wing:resource:stateful": false,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
@@ -434,10 +434,10 @@ Object {
                 "id": "Handler",
                 "path": "root/Default/Handler",
               },
-              "Schedule": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "Schedule": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "outbound",
                       "implicit": false,
                       "relationship": "on_tick",
@@ -446,17 +446,17 @@ Object {
                   ],
                   "wing:resource:stateful": true,
                 },
-                "children": Object {
-                  "Schedule": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Schedule": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.cloudwatchEventRule.CloudwatchEventRule",
                       "version": "12.0.2",
                     },
                     "id": "Schedule",
                     "path": "root/Default/Schedule/Schedule",
                   },
-                  "ScheduleTarget-c5395e41": Object {
-                    "constructInfo": Object {
+                  "ScheduleTarget-c5395e41": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.cloudwatchEventTarget.CloudwatchEventTarget",
                       "version": "12.0.2",
                     },
@@ -464,33 +464,33 @@ Object {
                     "path": "root/Default/Schedule/ScheduleTarget-c5395e41",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
                   "title": "Schedule",
                 },
                 "id": "Schedule",
                 "path": "root/Default/Schedule",
               },
-              "Schedule-OnTick-c5395e41": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "Schedule-OnTick-c5395e41": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "outbound",
                       "implicit": false,
                       "relationship": "handle",
                       "resource": "root/Default/Handler",
                     },
-                    Object {
+                    {
                       "direction": "outbound",
                       "implicit": true,
                       "relationship": "print",
                       "resource": "root/Default/WingLogger",
                     },
-                    Object {
+                    {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "on_tick",
@@ -499,65 +499,65 @@ Object {
                   ],
                   "wing:resource:stateful": false,
                 },
-                "children": Object {
-                  "Asset": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
                       "version": "0.15.2",
                     },
                     "id": "Asset",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Asset",
                   },
-                  "Code": Object {
-                    "constructInfo": Object {
+                  "Code": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
                       "version": "12.0.2",
                     },
                     "id": "Code",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Code",
                   },
-                  "Default": Object {
-                    "constructInfo": Object {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
                       "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Schedule-OnTick-c5395e41/Default",
                   },
-                  "IamRole": Object {
-                    "constructInfo": Object {
+                  "IamRole": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
                       "version": "12.0.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Schedule-OnTick-c5395e41/IamRole",
                   },
-                  "IamRolePolicy": Object {
-                    "constructInfo": Object {
+                  "IamRolePolicy": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
                       "version": "12.0.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Schedule-OnTick-c5395e41/IamRolePolicy",
                   },
-                  "IamRolePolicyAttachment": Object {
-                    "constructInfo": Object {
+                  "IamRolePolicyAttachment": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
                       "version": "12.0.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Schedule-OnTick-c5395e41/IamRolePolicyAttachment",
                   },
-                  "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": Object {
-                    "constructInfo": Object {
+                  "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
                       "version": "12.0.2",
                     },
                     "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
                     "path": "root/Default/Schedule-OnTick-c5395e41/InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
                   },
-                  "S3Object": Object {
-                    "constructInfo": Object {
+                  "S3Object": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
                       "version": "12.0.2",
                     },
@@ -565,33 +565,33 @@ Object {
                     "path": "root/Default/Schedule-OnTick-c5395e41/S3Object",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
                 },
                 "id": "Schedule-OnTick-c5395e41",
                 "path": "root/Default/Schedule-OnTick-c5395e41",
               },
-              "Schedule-OnTickHandler-c5395e41": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+              "Schedule-OnTickHandler-c5395e41": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
                 "id": "Schedule-OnTickHandler-c5395e41",
                 "path": "root/Default/Schedule-OnTickHandler-c5395e41",
               },
-              "WingLogger": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "WingLogger": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "inbound",
                       "implicit": true,
                       "relationship": "print",
@@ -600,11 +600,11 @@ Object {
                   ],
                   "wing:resource:stateful": true,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud logging facility",
                   "hidden": true,
                   "title": "Logger",
@@ -612,8 +612,8 @@ Object {
                 "id": "WingLogger",
                 "path": "root/Default/WingLogger",
               },
-              "aws": Object {
-                "constructInfo": Object {
+              "aws": {
+                "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
                   "version": "12.0.2",
                 },
@@ -621,15 +621,15 @@ Object {
                 "path": "root/Default/aws",
               },
             },
-            "constructInfo": Object {
+            "constructInfo": {
               "fqn": "constructs.Construct",
               "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
           },
-          "backend": Object {
-            "constructInfo": Object {
+          "backend": {
+            "constructInfo": {
               "fqn": "cdktf.LocalBackend",
               "version": "0.15.2",
             },
@@ -637,7 +637,7 @@ Object {
             "path": "root/backend",
           },
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "cdktf.TerraformStack",
           "version": "0.15.2",
         },
@@ -645,7 +645,7 @@ Object {
         "path": "root",
       },
     },
-    "constructInfo": Object {
+    "constructInfo": {
       "fqn": "cdktf.App",
       "version": "0.15.2",
     },
@@ -776,17 +776,17 @@ exports[`schedule with two functions 1`] = `
 `;
 
 exports[`schedule with two functions 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "Default": Object {
-            "children": Object {
-              "Handler1": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Handler1": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
@@ -795,11 +795,11 @@ Object {
                   ],
                   "wing:resource:stateful": false,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
@@ -807,10 +807,10 @@ Object {
                 "id": "Handler1",
                 "path": "root/Default/Handler1",
               },
-              "Handler2": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "Handler2": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
@@ -819,11 +819,11 @@ Object {
                   ],
                   "wing:resource:stateful": false,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
@@ -831,16 +831,16 @@ Object {
                 "id": "Handler2",
                 "path": "root/Default/Handler2",
               },
-              "Schedule": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "Schedule": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "outbound",
                       "implicit": false,
                       "relationship": "on_tick",
                       "resource": "root/Default/Schedule-OnTick-7b33bcba",
                     },
-                    Object {
+                    {
                       "direction": "outbound",
                       "implicit": false,
                       "relationship": "on_tick",
@@ -849,25 +849,25 @@ Object {
                   ],
                   "wing:resource:stateful": true,
                 },
-                "children": Object {
-                  "Schedule": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Schedule": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.cloudwatchEventRule.CloudwatchEventRule",
                       "version": "12.0.2",
                     },
                     "id": "Schedule",
                     "path": "root/Default/Schedule/Schedule",
                   },
-                  "ScheduleTarget-0a615500": Object {
-                    "constructInfo": Object {
+                  "ScheduleTarget-0a615500": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.cloudwatchEventTarget.CloudwatchEventTarget",
                       "version": "12.0.2",
                     },
                     "id": "ScheduleTarget-0a615500",
                     "path": "root/Default/Schedule/ScheduleTarget-0a615500",
                   },
-                  "ScheduleTarget-7b33bcba": Object {
-                    "constructInfo": Object {
+                  "ScheduleTarget-7b33bcba": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.cloudwatchEventTarget.CloudwatchEventTarget",
                       "version": "12.0.2",
                     },
@@ -875,33 +875,33 @@ Object {
                     "path": "root/Default/Schedule/ScheduleTarget-7b33bcba",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
                   "title": "Schedule",
                 },
                 "id": "Schedule",
                 "path": "root/Default/Schedule",
               },
-              "Schedule-OnTick-0a615500": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "Schedule-OnTick-0a615500": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "outbound",
                       "implicit": false,
                       "relationship": "handle",
                       "resource": "root/Default/Handler2",
                     },
-                    Object {
+                    {
                       "direction": "outbound",
                       "implicit": true,
                       "relationship": "print",
                       "resource": "root/Default/WingLogger",
                     },
-                    Object {
+                    {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "on_tick",
@@ -910,65 +910,65 @@ Object {
                   ],
                   "wing:resource:stateful": false,
                 },
-                "children": Object {
-                  "Asset": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
                       "version": "0.15.2",
                     },
                     "id": "Asset",
                     "path": "root/Default/Schedule-OnTick-0a615500/Asset",
                   },
-                  "Code": Object {
-                    "constructInfo": Object {
+                  "Code": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
                       "version": "12.0.2",
                     },
                     "id": "Code",
                     "path": "root/Default/Schedule-OnTick-0a615500/Code",
                   },
-                  "Default": Object {
-                    "constructInfo": Object {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
                       "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Schedule-OnTick-0a615500/Default",
                   },
-                  "IamRole": Object {
-                    "constructInfo": Object {
+                  "IamRole": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
                       "version": "12.0.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Schedule-OnTick-0a615500/IamRole",
                   },
-                  "IamRolePolicy": Object {
-                    "constructInfo": Object {
+                  "IamRolePolicy": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
                       "version": "12.0.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Schedule-OnTick-0a615500/IamRolePolicy",
                   },
-                  "IamRolePolicyAttachment": Object {
-                    "constructInfo": Object {
+                  "IamRolePolicyAttachment": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
                       "version": "12.0.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Schedule-OnTick-0a615500/IamRolePolicyAttachment",
                   },
-                  "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": Object {
-                    "constructInfo": Object {
+                  "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
                       "version": "12.0.2",
                     },
                     "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
                     "path": "root/Default/Schedule-OnTick-0a615500/InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
                   },
-                  "S3Object": Object {
-                    "constructInfo": Object {
+                  "S3Object": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
                       "version": "12.0.2",
                     },
@@ -976,33 +976,33 @@ Object {
                     "path": "root/Default/Schedule-OnTick-0a615500/S3Object",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
                 },
                 "id": "Schedule-OnTick-0a615500",
                 "path": "root/Default/Schedule-OnTick-0a615500",
               },
-              "Schedule-OnTick-7b33bcba": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "Schedule-OnTick-7b33bcba": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "outbound",
                       "implicit": false,
                       "relationship": "handle",
                       "resource": "root/Default/Handler1",
                     },
-                    Object {
+                    {
                       "direction": "outbound",
                       "implicit": true,
                       "relationship": "print",
                       "resource": "root/Default/WingLogger",
                     },
-                    Object {
+                    {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "on_tick",
@@ -1011,65 +1011,65 @@ Object {
                   ],
                   "wing:resource:stateful": false,
                 },
-                "children": Object {
-                  "Asset": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
                       "version": "0.15.2",
                     },
                     "id": "Asset",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/Asset",
                   },
-                  "Code": Object {
-                    "constructInfo": Object {
+                  "Code": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
                       "version": "12.0.2",
                     },
                     "id": "Code",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/Code",
                   },
-                  "Default": Object {
-                    "constructInfo": Object {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
                       "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/Default",
                   },
-                  "IamRole": Object {
-                    "constructInfo": Object {
+                  "IamRole": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
                       "version": "12.0.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/IamRole",
                   },
-                  "IamRolePolicy": Object {
-                    "constructInfo": Object {
+                  "IamRolePolicy": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
                       "version": "12.0.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/IamRolePolicy",
                   },
-                  "IamRolePolicyAttachment": Object {
-                    "constructInfo": Object {
+                  "IamRolePolicyAttachment": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
                       "version": "12.0.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/IamRolePolicyAttachment",
                   },
-                  "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": Object {
-                    "constructInfo": Object {
+                  "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
                       "version": "12.0.2",
                     },
                     "id": "InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
                     "path": "root/Default/Schedule-OnTick-7b33bcba/InvokePermission-c8b3fc394731d07e61c00e422c6b234372c09bc3b3",
                   },
-                  "S3Object": Object {
-                    "constructInfo": Object {
+                  "S3Object": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
                       "version": "12.0.2",
                     },
@@ -1077,51 +1077,51 @@ Object {
                     "path": "root/Default/Schedule-OnTick-7b33bcba/S3Object",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
                 },
                 "id": "Schedule-OnTick-7b33bcba",
                 "path": "root/Default/Schedule-OnTick-7b33bcba",
               },
-              "Schedule-OnTickHandler-0a615500": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+              "Schedule-OnTickHandler-0a615500": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
                 "id": "Schedule-OnTickHandler-0a615500",
                 "path": "root/Default/Schedule-OnTickHandler-0a615500",
               },
-              "Schedule-OnTickHandler-7b33bcba": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+              "Schedule-OnTickHandler-7b33bcba": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
                 "id": "Schedule-OnTickHandler-7b33bcba",
                 "path": "root/Default/Schedule-OnTickHandler-7b33bcba",
               },
-              "WingLogger": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "WingLogger": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "inbound",
                       "implicit": true,
                       "relationship": "print",
                       "resource": "root/Default/Schedule-OnTick-7b33bcba",
                     },
-                    Object {
+                    {
                       "direction": "inbound",
                       "implicit": true,
                       "relationship": "print",
@@ -1130,11 +1130,11 @@ Object {
                   ],
                   "wing:resource:stateful": true,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud logging facility",
                   "hidden": true,
                   "title": "Logger",
@@ -1142,8 +1142,8 @@ Object {
                 "id": "WingLogger",
                 "path": "root/Default/WingLogger",
               },
-              "aws": Object {
-                "constructInfo": Object {
+              "aws": {
+                "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
                   "version": "12.0.2",
                 },
@@ -1151,15 +1151,15 @@ Object {
                 "path": "root/Default/aws",
               },
             },
-            "constructInfo": Object {
+            "constructInfo": {
               "fqn": "constructs.Construct",
               "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
           },
-          "backend": Object {
-            "constructInfo": Object {
+          "backend": {
+            "constructInfo": {
               "fqn": "cdktf.LocalBackend",
               "version": "0.15.2",
             },
@@ -1167,7 +1167,7 @@ Object {
             "path": "root/backend",
           },
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "cdktf.TerraformStack",
           "version": "0.15.2",
         },
@@ -1175,7 +1175,7 @@ Object {
         "path": "root",
       },
     },
-    "constructInfo": Object {
+    "constructInfo": {
       "fqn": "cdktf.App",
       "version": "0.15.2",
     },

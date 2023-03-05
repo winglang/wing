@@ -37,6 +37,10 @@
       "type": "build"
     },
     {
+      "name": "@vitest/coverage-c8",
+      "type": "build"
+    },
+    {
       "name": "@winglang/jsii-docgen",
       "version": "file:../../apps/jsii-docgen",
       "type": "build"
@@ -142,6 +146,10 @@
     },
     {
       "name": "typescript",
+      "type": "build"
+    },
+    {
+      "name": "vitest",
       "type": "build"
     },
     {
