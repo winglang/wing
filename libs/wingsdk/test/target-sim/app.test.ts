@@ -1,4 +1,5 @@
 import { basename } from "path";
+import { test, expect } from "vitest";
 import { simulatorJsonOf } from "./util";
 import { Bucket } from "../../src/cloud";
 import * as sim from "../../src/target-sim";

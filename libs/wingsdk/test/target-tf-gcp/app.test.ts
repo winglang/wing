@@ -1,3 +1,4 @@
+import { test, expect } from "vitest";
 import * as tfgcp from "../../src/target-tf-gcp";
 import { mkdtemp } from "../../src/util";
 
