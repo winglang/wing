@@ -1334,8 +1334,8 @@ impl<'a> FieldReferenceVisitor<'a> {
 /// Checks if a resource class has an inflight method with the given name
 fn has_inflight_method(resource_class: &Class, method_name: &String) -> bool {
 	if let Some(method_var) = resource_class.get_method(method_name) {
-	  method_var.flight == Phase::Inflight && !method_var.is_static
+		method_var.flight == Phase::Inflight && !method_var.is_static
 	} else {
-    false
-  }
+		false
+	}
 }
