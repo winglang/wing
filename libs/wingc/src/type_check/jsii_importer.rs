@@ -276,7 +276,7 @@ impl<'a> JsiiImporter<'a> {
 					.define(
 						&Symbol {
 							name: namespace_name.to_string(),
-							span: WingSpan::default(),
+							span: Default::default(),
 						},
 						SymbolKind::Namespace(ns),
 						StatementIdx::Top,
@@ -547,7 +547,7 @@ impl<'a> JsiiImporter<'a> {
 				file_id: (&jsii_source_location.filename).into(),
 			}
 		} else {
-			WingSpan::default()
+			Default::default()
 		};
 		Symbol {
 			name: name.to_string(),

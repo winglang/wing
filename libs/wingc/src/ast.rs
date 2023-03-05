@@ -21,7 +21,7 @@ impl Symbol {
 	pub fn global(name: &str) -> Self {
 		Self {
 			name: name.to_string(),
-			span: WingSpan::default(),
+			span: Default::default(),
 		}
 	}
 }
