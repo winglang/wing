@@ -20,7 +20,7 @@ export class Bucket extends cloud.Bucket {
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
 
-  constructor(scope: Construct, id: string, props: cloud.BucketProps) {
+  constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
 
     this.public = props.public ?? false;
@@ -88,8 +88,8 @@ export class Bucket extends cloud.Bucket {
   /** @internal */
   public _toInflight(): core.Code {
     return core.InflightClient.for(
-      __dirname,
-      __filename.replace("awscdk", "tf-aws"),
+      __dirname.replace("awscdk", "tf-aws"),
+      __filename,
       "BucketClient",
       [`process.env["${this.envName()}"]`]
     );
@@ -104,3 +104,5 @@ Bucket._annotateInflight("put", {});
 Bucket._annotateInflight("get", {});
 Bucket._annotateInflight("delete", {});
 Bucket._annotateInflight("list", {});
+Bucket._annotateInflight("put_json", {});
+Bucket._annotateInflight("get_json", {});

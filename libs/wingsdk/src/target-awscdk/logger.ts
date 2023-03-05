@@ -20,8 +20,8 @@ export class Logger extends cloud.Logger {
   /** @internal */
   public _toInflight(): core.Code {
     return core.InflightClient.for(
-      __dirname,
-      __filename.replace("awscdk", "tf-aws"),
+      __dirname.replace("awscdk", "tf-aws"),
+      __filename,
       "LoggerClient",
       []
     );

@@ -24,7 +24,7 @@ export class Function extends cloud.Function {
     scope: Construct,
     id: string,
     inflight: cloud.IFunctionHandler,
-    props: cloud.FunctionProps
+    props: cloud.FunctionProps = {}
   ) {
     super(scope, id, inflight, props);
 
@@ -52,8 +52,8 @@ export class Function extends cloud.Function {
   /** @internal */
   public _toInflight(): core.Code {
     return core.InflightClient.for(
-      __dirname,
-      __filename.replace("awscdk", "tf-aws"),
+      __dirname.replace("awscdk", "tf-aws"),
+      __filename,
       "FunctionClient",
       [`process.env["${this.envName()}"]`]
     );
