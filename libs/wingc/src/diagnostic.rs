@@ -12,13 +12,13 @@ pub type DiagnosticResult<T> = Result<T, ()>;
 
 /// Line and character location in a UTF8 Wing source file
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub struct WingPoint {
+pub struct WingLocation {
 	pub line: u32,
 	pub col: u32,
 }
 
-/// tree-sitter-based Point => WingPoint
-impl From<Point> for WingPoint {
+/// tree-sitter-based Point => WingLocation
+impl From<Point> for WingLocation {
 	fn from(point: Point) -> Self {
 		Self {
 			line: point.row as u32,
@@ -27,8 +27,8 @@ impl From<Point> for WingPoint {
 	}
 }
 
-/// LSP-based Position => WingPoint
-impl From<Position> for WingPoint {
+/// LSP-based Position => WingLocation
+impl From<Position> for WingLocation {
 	fn from(position: Position) -> Self {
 		Self {
 			line: position.line,
@@ -37,8 +37,8 @@ impl From<Position> for WingPoint {
 	}
 }
 
-/// WingPoint => tree-sitter-based Point
-impl Into<Point> for WingPoint {
+/// WingLocation => tree-sitter-based Point
+impl Into<Point> for WingLocation {
 	fn into(self) -> Point {
 		Point {
 			row: self.line as usize,
@@ -47,8 +47,8 @@ impl Into<Point> for WingPoint {
 	}
 }
 
-/// WingPoint => LSP-based Position
-impl Into<Position> for WingPoint {
+/// WingLocation => LSP-based Position
+impl Into<Position> for WingLocation {
 	fn into(self) -> Position {
 		Position {
 			line: self.line,
@@ -57,7 +57,7 @@ impl Into<Position> for WingPoint {
 	}
 }
 
-impl Display for WingPoint {
+impl Display for WingLocation {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		write!(f, "{}:{}", self.line, self.col)
 	}
@@ -66,8 +66,8 @@ impl Display for WingPoint {
 /// A span of text in a Wing source file
 #[derive(Debug, Default, PartialEq, Eq, Hash, Clone)]
 pub struct WingSpan {
-	pub start: WingPoint,
-	pub end: WingPoint,
+	pub start: WingLocation,
+	pub end: WingLocation,
 	/// Relative path to the file based on the working directory used to invoke the compiler
 	pub file_id: String,
 }
