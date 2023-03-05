@@ -63,10 +63,12 @@ impl Display for WingPoint {
 	}
 }
 
+/// A span of text in a Wing source file
 #[derive(Debug, Default, PartialEq, Eq, Hash, Clone)]
 pub struct WingSpan {
 	pub start: WingPoint,
 	pub end: WingPoint,
+	/// relative path to the file based on the working directory used to invoke the compiler
 	pub file_id: String,
 }
 
