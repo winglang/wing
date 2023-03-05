@@ -39,7 +39,6 @@
         "cacheableOperations": [
           "build",
           "copy",
-          "lint",
           "test",
           "package"
         ]

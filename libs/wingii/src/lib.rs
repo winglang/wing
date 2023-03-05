@@ -1,3 +1,6 @@
+#![allow(clippy::all)]
+#![deny(clippy::correctness)]
+
 use std::error::Error;
 
 extern crate serde;
@@ -161,7 +164,7 @@ pub mod type_system {
 		}
 
 		fn load_assembly(&mut self, path: &str) -> Result<Assembly> {
-			Ok(spec::load_assembly_from_file(path)?)
+			spec::load_assembly_from_file(path)
 		}
 
 		fn add_root(&mut self, assembly: &Assembly) -> Result<()> {
