@@ -105,8 +105,8 @@ separately).
 
 :::note
 
-The first time you run `npm install` you may be asked to enter your system password, this is because
-it's taking care of installing the [wasi-sdk](https://github.com/WebAssembly/wasi-sdk) for you.
+The first time you run `npm install` it may take extra time to install the
+ [wasi-sdk](https://github.com/WebAssembly/wasi-sdk) for you. This is needed to compile Wing for WASM.
 
 If you wish to install it manually, you may do so by running `scripts/setup_wasi.sh`
 
@@ -138,7 +138,16 @@ The following command runs `wingc` on a file. This performs all the compilation 
 npx nx wing -- compile <path to a .w file (full path, or relative to the location of the apps/wing folder)>
 ```
 
-You can find the compilation artifacts in the apps/wing/targets folder
+You can find the compilation artifacts in the apps/wing/targets folder.
+
+To check that your code passes all the lints, run:
+
+```sh
+npx nx lint wingc
+```
+
+If you are using VS Code, you can show clippy errors in your IDE by installing the rust-analyzer extension and setting the option "Rust-analyzer › Check: Command" to "clippy" instead of "check".
+
 
 ## How do I make changes to the Wing grammar?
 

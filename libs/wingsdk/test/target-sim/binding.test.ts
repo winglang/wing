@@ -1,3 +1,4 @@
+import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
 

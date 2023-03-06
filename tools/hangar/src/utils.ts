@@ -14,16 +14,15 @@ export async function runWingCommand(
     cwd,
     reject: false,
     stdin: "ignore",
-    all: true,
     env: env,
   });
   if (shouldSucceed) {
     if (out.exitCode !== 0) {
-      throw out.all;
+      expect.fail(out.stderr);
     }
   } else {
     expect(out.exitCode).not.toBe(0);
-    expect(out.all).not.toBe("");
+    expect(out.stderr).not.toBe("");
   }
   return out;
 }

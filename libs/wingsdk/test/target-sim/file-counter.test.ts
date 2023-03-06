@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
 

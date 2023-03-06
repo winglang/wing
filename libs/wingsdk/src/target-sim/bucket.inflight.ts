@@ -5,6 +5,7 @@ import { dirname, join } from "path";
 import { ISimulatorResourceInstance } from "./resource";
 import { BucketSchema } from "./schema-resources";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
+import { Json } from "../std";
 import { ISimulatorContext } from "../testing/simulator";
 
 export class Bucket implements IBucketClient, ISimulatorResourceInstance {
@@ -44,6 +45,16 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
+  public async putJson(key: string, body: Json): Promise<void> {
+    return this.context.withTrace({
+      message: `Put Json (key=${key}).`,
+      activity: async () => {
+        const filename = join(this.fileDir, key);
+        await fs.promises.writeFile(filename, JSON.stringify(body, null, 2));
+      },
+    });
+  }
+
   public async get(key: string): Promise<string> {
     return this.context.withTrace({
       message: `Get (key=${key}).`,
@@ -51,6 +62,16 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         const hash = this.hashKey(key);
         const filename = join(this.fileDir, hash);
         return fs.promises.readFile(filename, "utf8");
+      },
+    });
+  }
+
+  public async getJson(key: string): Promise<Json> {
+    return this.context.withTrace({
+      message: `Get Json (key=${key}).`,
+      activity: async () => {
+        const filename = join(this.fileDir, key);
+        return JSON.parse(await fs.promises.readFile(filename, "utf8"));
       },
     });
   }

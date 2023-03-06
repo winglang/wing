@@ -1,5 +1,6 @@
 import { readdirSync, writeFileSync } from "fs";
 import { join } from "path";
+import { test, expect, describe } from "vitest";
 import * as core from "../../src/core";
 import { JsonFile, TextFile } from "../../src/fs";
 import { mkdtemp } from "../../src/util";

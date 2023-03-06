@@ -9,6 +9,7 @@ import {
 } from "@aws-sdk/client-dynamodb";
 
 import { mockClient } from "aws-sdk-client-mock";
+import { test, expect, beforeEach } from "vitest";
 import { CounterClient } from "../../src/target-tf-aws/counter.inflight";
 
 const MOCK_TABLE_NAME = "MyBeautifulCounter";

@@ -4,46 +4,46 @@ exports[`anon_function.w > wing test --target sim > stdout 1`] = `
 "1
 2
 3
-<green>pass</color> <gray>─</color> anon_function.w <gray>(no tests)</color>"
+pass ─ anon_function.w (no tests)"
 `;
 
-exports[`asynchronous_model_implicit_await_in_functions.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> asynchronous_model_implicit_await_in_functions.w <gray>(no tests)</color>"`;
+exports[`asynchronous_model_implicit_await_in_functions.w > wing test --target sim > stdout 1`] = `"pass ─ asynchronous_model_implicit_await_in_functions.w (no tests)"`;
 
-exports[`bring_cdktf.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> bring_cdktf.w <gray>(no tests)</color>"`;
+exports[`bring_cdktf.w > wing test --target sim > stdout 1`] = `"pass ─ bring_cdktf.w (no tests)"`;
 
-exports[`bring_fs.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> bring_fs.w <gray>(no tests)</color>"`;
+exports[`bring_fs.w > wing test --target sim > stdout 1`] = `"pass ─ bring_fs.w (no tests)"`;
 
-exports[`bring_jsii.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> bring_jsii.w <gray>»</color> <brightWhite>root/test:say_hello</color>"`;
+exports[`bring_jsii.w > wing test --target sim > stdout 1`] = `"pass ─ bring_jsii.w » root/test:say_hello"`;
 
-exports[`bring_jsii_path.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> bring_jsii_path.w <gray>»</color> <brightWhite>root/test:say_hello</color>"`;
+exports[`bring_jsii_path.w > wing test --target sim > stdout 1`] = `"pass ─ bring_jsii_path.w » root/test:say_hello"`;
 
-exports[`bring_projen.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> bring_projen.w <gray>(no tests)</color>"`;
+exports[`bring_projen.w > wing test --target sim > stdout 1`] = `"pass ─ bring_projen.w (no tests)"`;
 
-exports[`bucket_keys.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> bucket_keys.w <gray>»</color> <brightWhite>root/test</color>"`;
+exports[`bucket_keys.w > wing test --target sim > stdout 1`] = `"pass ─ bucket_keys.w » root/test"`;
 
-exports[`capture_containers.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> capture_containers.w <gray>»</color> <brightWhite>root/test</color>"`;
+exports[`capture_containers.w > wing test --target sim > stdout 1`] = `"pass ─ capture_containers.w » root/test"`;
 
-exports[`capture_containers_of_resources.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> capture_containers_of_resources.w <gray>»</color> <brightWhite>root/test</color>"`;
+exports[`capture_containers_of_resources.w > wing test --target sim > stdout 1`] = `"pass ─ capture_containers_of_resources.w » root/test"`;
 
-exports[`capture_in_binary.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> capture_in_binary.w <gray>»</color> <brightWhite>root/test</color>"`;
+exports[`capture_in_binary.w > wing test --target sim > stdout 1`] = `"pass ─ capture_in_binary.w » root/test"`;
 
-exports[`capture_primitives.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> capture_primitives.w <gray>(no tests)</color>"`;
+exports[`capture_primitives.w > wing test --target sim > stdout 1`] = `"pass ─ capture_primitives.w (no tests)"`;
 
-exports[`capture_resource_and_data.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> capture_resource_and_data.w <gray>»</color> <brightWhite>root/test</color>"`;
+exports[`capture_resource_and_data.w > wing test --target sim > stdout 1`] = `"pass ─ capture_resource_and_data.w » root/test"`;
 
-exports[`capture_resource_with_no_inflight.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> capture_resource_with_no_inflight.w <gray>»</color> <brightWhite>root/test</color>"`;
+exports[`capture_resource_with_no_inflight.w > wing test --target sim > stdout 1`] = `"pass ─ capture_resource_with_no_inflight.w » root/test"`;
 
-exports[`captures.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> captures.w <gray>(no tests)</color>"`;
+exports[`captures.w > wing test --target sim > stdout 1`] = `"pass ─ captures.w (no tests)"`;
 
-exports[`container_types.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> container_types.w <gray>(no tests)</color>"`;
+exports[`container_types.w > wing test --target sim > stdout 1`] = `"pass ─ container_types.w (no tests)"`;
 
-exports[`enums.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> enums.w <gray>(no tests)</color>"`;
+exports[`enums.w > wing test --target sim > stdout 1`] = `"pass ─ enums.w (no tests)"`;
 
-exports[`expressions_binary_operators.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> expressions_binary_operators.w <gray>(no tests)</color>"`;
+exports[`expressions_binary_operators.w > wing test --target sim > stdout 1`] = `"pass ─ expressions_binary_operators.w (no tests)"`;
 
-exports[`expressions_string_interpolation.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> expressions_string_interpolation.w <gray>(no tests)</color>"`;
+exports[`expressions_string_interpolation.w > wing test --target sim > stdout 1`] = `"pass ─ expressions_string_interpolation.w (no tests)"`;
 
-exports[`file_counter.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> file_counter.w <gray>(no tests)</color>"`;
+exports[`file_counter.w > wing test --target sim > stdout 1`] = `"pass ─ file_counter.w (no tests)"`;
 
 exports[`for_loop.w > wing test --target sim > stdout 1`] = `
 "wing: 1
@@ -55,72 +55,74 @@ lang: 3
 dang: 1
 dang: 2
 dang: 3
-<green>pass</color> <gray>─</color> for_loop.w <gray>(no tests)</color>"
+pass ─ for_loop.w (no tests)"
 `;
 
 exports[`forward_decl.w > wing test --target sim > stdout 1`] = `
 "hi
-<green>pass</color> <gray>─</color> forward_decl.w <gray>(no tests)</color>"
+pass ─ forward_decl.w (no tests)"
 `;
 
-exports[`hello.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> hello.w <gray>(no tests)</color>"`;
+exports[`hello.w > wing test --target sim > stdout 1`] = `"pass ─ hello.w (no tests)"`;
 
-exports[`identical_inflights.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> identical_inflights.w <gray>(no tests)</color>"`;
+exports[`identical_inflights.w > wing test --target sim > stdout 1`] = `"pass ─ identical_inflights.w (no tests)"`;
 
-exports[`json.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> json.w <gray>(no tests)</color>"`;
+exports[`json.w > wing test --target sim > stdout 1`] = `"pass ─ json.w (no tests)"`;
 
-exports[`mut_container_types.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> mut_container_types.w <gray>(no tests)</color>"`;
+exports[`json_bucket.w > wing test --target sim > stdout 1`] = `"pass ─ json_bucket.w » root/test:put"`;
+
+exports[`mut_container_types.w > wing test --target sim > stdout 1`] = `"pass ─ mut_container_types.w (no tests)"`;
 
 exports[`primitive_methods.w > wing test --target sim > stdout 1`] = `
 "1:60
-<green>pass</color> <gray>─</color> primitive_methods.w <gray>(no tests)</color>"
+pass ─ primitive_methods.w (no tests)"
 `;
 
 exports[`print.w > wing test --target sim > stdout 1`] = `
 "preflight print
-<green>pass</color> <gray>┌</color> print.w <gray>»</color> <brightWhite>root/test:print1</color>
-    <gray> │ </color><gray>inflight print 1.1</color>
-    <gray> └ </color><gray>inflight print 1.2</color>
-<green>pass</color> <gray>┌</color> print.w <gray>»</color> <brightWhite>root/test:print2</color>
-    <gray> │ </color><gray>inflight print 2.1</color>
-    <gray> └ </color><gray>inflight print 2.2</color>"
+pass ┌ print.w » root/test:print1
+     │ inflight print 1.1
+     └ inflight print 1.2
+pass ┌ print.w » root/test:print2
+     │ inflight print 2.1
+     └ inflight print 2.2"
 `;
 
-exports[`reassignment.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> reassignment.w <gray>(no tests)</color>"`;
+exports[`reassignment.w > wing test --target sim > stdout 1`] = `"pass ─ reassignment.w (no tests)"`;
 
-exports[`resource.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> resource.w <gray>»</color> <brightWhite>root/test</color>"`;
+exports[`resource.w > wing test --target sim > stdout 1`] = `"pass ─ resource.w » root/test"`;
 
-exports[`statements_if.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> statements_if.w <gray>»</color> <brightWhite>root/test</color>"`;
+exports[`statements_if.w > wing test --target sim > stdout 1`] = `"pass ─ statements_if.w » root/test"`;
 
-exports[`statements_variable_declarations.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> statements_variable_declarations.w <gray>(no tests)</color>"`;
+exports[`statements_variable_declarations.w > wing test --target sim > stdout 1`] = `"pass ─ statements_variable_declarations.w (no tests)"`;
 
-exports[`static_members.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> static_members.w <gray>»</color> <brightWhite>root/test</color>"`;
+exports[`static_members.w > wing test --target sim > stdout 1`] = `"pass ─ static_members.w » root/test"`;
 
-exports[`std_containers.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> std_containers.w <gray>(no tests)</color>"`;
+exports[`std_containers.w > wing test --target sim > stdout 1`] = `"pass ─ std_containers.w (no tests)"`;
 
 exports[`std_string.w > wing test --target sim > stdout 1`] = `
-"<green>pass</color> <gray>┌</color> std_string.w <gray>»</color> <brightWhite>root/test:string</color>
-    <gray> │ </color><gray>index of \\"s\\" in s1 is 0</color>
-    <gray> │ </color><gray>string</color>
-    <gray> └ </color><gray>some strings are immutable</color>"
+"pass ┌ std_string.w » root/test:string
+     │ index of \\"s\\" in s1 is 0
+     │ string
+     └ some strings are immutable"
 `;
 
 exports[`test_bucket.w > wing test --target sim > stdout 1`] = `
-"<green>pass</color> <gray>─</color> test_bucket.w <gray>»</color> <brightWhite>root/test:get</color>
-<green>pass</color> <gray>─</color> test_bucket.w <gray>»</color> <brightWhite>root/test:put</color>"
+"pass ─ test_bucket.w » root/test:get
+pass ─ test_bucket.w » root/test:put"
 `;
 
-exports[`try_catch.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> try_catch.w <gray>(no tests)</color>"`;
+exports[`try_catch.w > wing test --target sim > stdout 1`] = `"pass ─ try_catch.w (no tests)"`;
 
 exports[`user-defined-resources-captures.w > wing test --target sim > stdout 1`] = `
-"<green>pass</color> <gray>─</color> user-defined-resources-captures.w <gray>»</color> <brightWhite>root/test:capture_array          </color>
-<green>pass</color> <gray>─</color> user-defined-resources-captures.w <gray>»</color> <brightWhite>root/test:capture_array_of_queues</color>
-<green>pass</color> <gray>─</color> user-defined-resources-captures.w <gray>»</color> <brightWhite>root/test:capture_map            </color>
-<green>pass</color> <gray>─</color> user-defined-resources-captures.w <gray>»</color> <brightWhite>root/test:capture_primitives     </color>
-<green>pass</color> <gray>─</color> user-defined-resources-captures.w <gray>»</color> <brightWhite>root/test:capture_resource       </color>
-<green>pass</color> <gray>─</color> user-defined-resources-captures.w <gray>»</color> <brightWhite>root/test:capture_set            </color>"
+"pass ─ user-defined-resources-captures.w » root/test:capture_array          
+pass ─ user-defined-resources-captures.w » root/test:capture_array_of_queues
+pass ─ user-defined-resources-captures.w » root/test:capture_map            
+pass ─ user-defined-resources-captures.w » root/test:capture_primitives     
+pass ─ user-defined-resources-captures.w » root/test:capture_resource       
+pass ─ user-defined-resources-captures.w » root/test:capture_set            "
 `;
 
-exports[`while.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> while.w <gray>(no tests)</color>"`;
+exports[`while.w > wing test --target sim > stdout 1`] = `"pass ─ while.w (no tests)"`;
 
-exports[`while_loop_await.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> while_loop_await.w <gray>(no tests)</color>"`;
+exports[`while_loop_await.w > wing test --target sim > stdout 1`] = `"pass ─ while_loop_await.w (no tests)"`;
