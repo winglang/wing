@@ -23,7 +23,7 @@ use crate::{
 	type_check::{
 		resolve_user_defined_type,
 		symbol_env::{SymbolEnv, SymbolEnvRef},
-		Class, ClassLike, Type, TypeRef,
+		ClassLike, Type, TypeRef,
 	},
 	utilities::snake_case_to_camel_case,
 	visit::{self, Visit},
@@ -1291,76 +1291,76 @@ impl<'a> FieldReferenceVisitor<'a> {
 			.expect("field is not a variable");
 
 		// we only care about preflight fields (inflight fields are normal references)
-		if field_kind.flight == Phase::Preflight {
-			// don't allow capturing reassignable (`var`) fields.
-			if field_kind.reassignable {
-				self.diagnostics.push(Diagnostic {
-					level: DiagnosticLevel::Error,
-					message: format!(
-						"Unable to reference \"this.{}\" from inflight method \"{}\" because it is reassignable (\"var\")",
-						property.name, self.method_name.name,
-					),
-					span: Some(property.span.clone()),
-				});
+		if field_kind.flight != Phase::Preflight {
+			return false;
+		}
 
-				return true;
-			}
+		// don't allow capturing reassignable (`var`) fields.
+		if field_kind.reassignable {
+			self.diagnostics.push(Diagnostic {
+				level: DiagnosticLevel::Error,
+				message: format!(
+					"Unable to reference \"this.{}\" from inflight method \"{}\" because it is reassignable (\"var\")",
+					property.name, self.method_name.name,
+				),
+				span: Some(property.span.clone()),
+			});
 
-			// check if the type is capturable (resource, primitive or immutable collection)
-			if !field_kind.type_.is_capturable() {
-				self.diagnostics.push(Diagnostic {
-					level: DiagnosticLevel::Error,
-					message: format!(
-						"Unable to reference \"this.{}\" from inflight method \"{}\" because type {} is not capturable",
-						property.name, self.method_name.name, field_kind.type_,
-					),
-					span: Some(property.span.clone()),
-				});
-
-				return true;
-			}
-
-			debug!(
-				"field \"this.{}\" is referenced from inflight method {}",
-				property.name, self.method_name.name
-			);
-
-			// get/create an "ops" set for this field
-			let ops = self.references.entry(property.name.clone()).or_default();
-
-			if !self.path.is_empty() {
-				let op = self.path[0].clone();
-
-				// if we are referencing a resource, verify that the operation is an inflight method
-				if let Some(r) = field_kind.type_.as_resource() {
-					if r
-						.get_method(&op)
-						.filter(|v| v.flight == Phase::Inflight && !v.is_static)
-						.is_none()
-					{
-						self.diagnostics.push(Diagnostic {
-							level: DiagnosticLevel::Error,
-							message: format!(
-								"Unable to reference \"{}\" from inflight method \"{}\" because it is not an inflight method",
-								self.path.join("."),
-								self.method_name.name,
-							),
-							span: Some(property.span.clone()),
-						});
-
-						return true;
-					}
-				}
-
-				ops.insert(op);
-			}
-
-			self.path.clear();
-
-			// no need to visit recursively
 			return true;
 		}
 
-		return false;
+		// check if the type is capturable (resource, primitive or immutable collection)
+		if !field_kind.type_.is_capturable() {
+			self.diagnostics.push(Diagnostic {
+				level: DiagnosticLevel::Error,
+				message: format!(
+					"Unable to reference \"this.{}\" from inflight method \"{}\" because type {} is not capturable",
+					property.name, self.method_name.name, field_kind.type_,
+				),
+				span: Some(property.span.clone()),
+			});
+
+			return true;
+		}
+
+		debug!(
+			"field \"this.{}\" is referenced from inflight method {}",
+			property.name, self.method_name.name
+		);
+
+		// get/create an "ops" set for this field
+		let ops = self.references.entry(property.name.clone()).or_default();
+
+		if !self.path.is_empty() {
+			let op = self.path[0].clone();
+
+			// if we are referencing a resource, verify that the operation is an inflight method
+			if let Some(r) = field_kind.type_.as_resource() {
+				if r
+					.get_method(&op)
+					.filter(|v| v.flight == Phase::Inflight && !v.is_static)
+					.is_none()
+				{
+					self.diagnostics.push(Diagnostic {
+						level: DiagnosticLevel::Error,
+						message: format!(
+							"Unable to reference \"{}\" from inflight method \"{}\" because it is not an inflight method",
+							self.path.join("."),
+							self.method_name.name,
+						),
+						span: Some(property.span.clone()),
+					});
+
+					return true;
+				}
+			}
+
+			ops.insert(op);
+		}
+
+		self.path.clear();
+
+		// no need to visit recursively
+		return true;
 	}
 }
