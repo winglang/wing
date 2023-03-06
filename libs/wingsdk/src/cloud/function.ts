@@ -6,7 +6,7 @@ import { Logger } from "./logger";
 import { fqnForType } from "../constants";
 import { IInflightHost, IResource, Inflight, Resource, App } from "../core";
 import { Duration } from "../std";
-import { mkdtemp } from "../util";
+import { mkdtemp, normalPath } from "../util";
 
 /**
  * Global identifier for `Function`.
@@ -118,14 +118,18 @@ export abstract class Function extends Resource implements IInflightHost {
     // mangles the stdout/stderr of the process that invokes it.
     // https://github.com/evanw/esbuild/issues/2927
     // To workaround the issue, spawn a new process and invoke esbuild inside it.
-    try {
-      let esbuildScript = [
-        `const esbuild = require("${require.resolve("esbuild-wasm")}");`,
-        `esbuild.buildSync({ bundle: true, entryPoints: ["${infile}"], outfile: "${outfile}", minify: false, platform: "node", target: "node16", external: ["aws-sdk"] });`,
-      ].join("\n");
-      spawnSync(process.argv[0], ["-e", esbuildScript]);
-    } catch (e) {
-      throw new Error(`Failed to bundle function: ${e}`);
+
+    let esbuildScript = [
+      `const esbuild = require("${normalPath(
+        require.resolve("esbuild-wasm")
+      )}");`,
+      `esbuild.buildSync({ bundle: true, entryPoints: ["${infile}"], outfile: "${outfile}", minify: false, platform: "node", target: "node16", external: ["aws-sdk"] });`,
+    ].join("\n");
+    let result = spawnSync(process.argv[0], ["-e", esbuildScript]);
+    if (result.status !== 0) {
+      throw new Error(
+        `Failed to bundle function: ${result.stderr.toString("utf-8")}`
+      );
     }
 
     // the bundled contains line comments with file paths, which are not useful for us, especially
