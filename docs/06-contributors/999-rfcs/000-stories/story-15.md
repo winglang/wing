@@ -59,8 +59,6 @@ bring "./tasklist_helper.js" {
   inflight uuid() => str; 
 };
 
-// inflight
-let title = get_random_activity();
 enum Status {
   Uncompleted,
   Completed
