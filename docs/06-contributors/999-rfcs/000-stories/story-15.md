@@ -97,7 +97,7 @@ resource TaskList implementes ITaskList {
   }
   
   inflight _add(id: str, j: Json): str {
-    this._redis.SET(id , Json.format(j));
+    this._redis.SET(id , Json.to_str(j));
     this._redis.SADD("todo", id);
     return id;
   } 
@@ -165,14 +165,14 @@ resource TaskListApi {
         title = str.from_json(data.activity); 
       } 
       let id = this.task_list.add(title);
-      return cloud.ApiResponse { status:201, body: Json.format(id) };
+      return cloud.ApiResponse { status:201, body: Json.to_str(id) };
     });
 
     this.api.get("/tasks/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let id = str.from_json(req.params.id);
       try {
         let title = this.task_list.get(id);
-        return cloud.ApiResponse { status:200, body: Json.format(title) };
+        return cloud.ApiResponse { status:200, body: Json.to_str(title) };
       } catch {
         return cloud.ApiResponse { status: 400 };
       }
@@ -191,7 +191,7 @@ resource TaskListApi {
     this.api.get("/tasks", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let search = str.from_json(req.query.search ?? Json ".*"); 
       let results = this.task_list.find(search);
-      return cloud.ApiResponse { status: 200, body: Json.format(results) };
+      return cloud.ApiResponse { status: 200, body: Json.to_str(results) };
     });
   }
 }
