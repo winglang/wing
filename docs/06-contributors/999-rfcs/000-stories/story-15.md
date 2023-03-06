@@ -53,7 +53,7 @@ A good example on how this may look like is Redis embedded prompt inside their d
 bring cloud;
 bring redis;
 
-bring "./tasklist_helper.js" {
+extern "./tasklist_helper.js" {
   inflight get_data: (url: str) => Json;
   inflight create_regex: (s: str) => IMyRegExp;
   inflight uuid() => str; 
