@@ -144,7 +144,7 @@ resource TaskList implementes ITaskList {
 
   inflight set_estimation(id: str, estimation: duration): str {
     let j = Json.clone_mut(this.get(id));
-    j.effort_estimation = estimation;
+    j.estimated_in_seconds = estimation.seconds;
     this._add(id, Json.clone(j));
     return id;
   }
