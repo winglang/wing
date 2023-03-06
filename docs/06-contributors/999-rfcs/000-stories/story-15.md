@@ -16,8 +16,7 @@ The following code is an initial implementation of TaskList with api gateway and
 - [x] It leverages setting explicit permissions (using the `this.inflight` API, described [here](https://github.com/winglang/wing/pull/1610))
 - [x] Using interface 
 - [x] use redis instead of bucket
-- [ ] bring cdktf
-- [ ] code that updates estimation and duration from REST put command
+- [x] code that updates estimation and duration from REST put command
 - [x] console requirements
 
 ## Discussion topics
@@ -84,15 +83,6 @@ resource TaskList implementes ITaskList {
   _redis: redis.Redis;
   init() {
     this._redis = new redis.Redis();
-    this.inflights.add("get", ref: "this._redis", op: "GET" );
-    this.inflights.add("_add", ref: "this._redis", op: ["SET", "SADD"]);
-    // notice I am setting explicit permissions on this
-    this.inflights.add("add", ref: "this", op: "_add");
-    // is this the right synatx for multiple ops? 
-    this.inflights.add("set_status", ref: "this", op: ["_add", "get"]); 
-    this.inflights.add("set_estimation", ref: "this", op: ["_add", "get"]); 
-
-    // TODO add more permissions for remove, find
   }
 
   inflight get(id: str): Json {
@@ -127,7 +117,6 @@ resource TaskList implementes ITaskList {
     let ids = this._redis.SMEMBERS("todo");
     for id in ids {
       let j = Json.parse(this._redis.GET(id));
-      // Notice that there is autocasting from untyped to bool here 
       if r.test(j.title) {
         result.push(id);
       }
@@ -169,6 +158,27 @@ resource TaskListApi {
       } 
       let id = this.task_list.add(title);
       return cloud.ApiResponse { status:201, body: Json.to_str(id) };
+    });
+    
+    this.api.put("/tasks/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+      let id = str.from_json(req.params.id);
+      if req.body.estimation_in_days? { 
+         this.task_list.set_estimation(id, num.from_str(req.body.estimation_in_days));
+      }
+      if req.body.completed? {
+        if bool.from_json(req.body.completed) {
+          this.task_list.set_status(id, Status.Completed);
+        } else {
+          this.task_list.set_status(id, Status.Uncompleted);
+        }
+
+      }
+      try {
+        let title = this.task_list.get(id);
+        return cloud.ApiResponse { status:200, body: Json.to_str(title) };
+      } catch {
+        return cloud.ApiResponse { status: 400 };
+      }
     });
 
     this.api.get("/tasks/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
