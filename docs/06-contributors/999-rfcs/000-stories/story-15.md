@@ -56,8 +56,7 @@ bring redis;
 
 bring "./tasklist_helper.js" {
   inflight get_data: (url: str) => Json;
-  inflight create_regex: (s: str) => Unknown;
-  inflight regex_test(r: Unknown, s: str) => bool; 
+  inflight create_regex: (s: str) => IMyRegExp;
   inflight uuid() => str; 
 };
 
@@ -66,6 +65,10 @@ let title = get_random_activity();
 enum Status {
   Uncompleted,
   Completed
+}
+
+interface IMyRegExp {
+  inflight test(s: str): bool
 }
 
 interface ITaskList {
@@ -125,7 +128,7 @@ resource TaskList implementes ITaskList {
     for id in ids {
       let j = Json.parse(this._redis.GET(id));
       // Notice that there is autocasting from untyped to bool here 
-      if regex_test(r, j.title) {
+      if r.test(j.title) {
         result.push(id);
       }
     }
@@ -211,10 +214,6 @@ exports.get_data = async function(url) {
 
 exports.create_regex = function (s) {
   return new RegExp(s);
-};
-
-exports.regex_test = function (r, s) {
-  return r.test(s);
 };
 
 exports.uuid = function () {
