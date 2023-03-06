@@ -1,7 +1,7 @@
 import { createHash } from "crypto";
 import { mkdtempSync, readFileSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
-import { basename, dirname, join } from "path";
+import { basename, join } from "path";
 import { Construct } from "constructs";
 import { makeHandler } from "./internal";
 import { Connection, Display, IInflightHost, IResource } from "./resource";
@@ -177,15 +177,16 @@ export class InflightClient {
    * Creates a `Code` instance with code for creating an inflight client.
    */
   public static for(
+    dirname: string,
     filename: string,
     clientClass: string,
     args: string[]
   ): Code {
-    const inflightDir = dirname(filename);
+    const inflightDir = dirname;
     const inflightFile = basename(filename).split(".")[0] + ".inflight";
     return NodeJsCode.fromInline(
       `new (require("${normalPath(
-        require.resolve(`${inflightDir}/${inflightFile}`)
+        `${inflightDir}/${inflightFile}`
       )}")).${clientClass}(${args.join(", ")})`
     );
   }

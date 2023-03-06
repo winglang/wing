@@ -1,11 +1,11 @@
 import { Construct } from "constructs";
-import { Polycons } from "polycons";
-import { Code, Resource } from "../core";
+import { fqnForType } from "../constants";
+import { App, Resource } from "../core";
 
 /**
  * Global identifier for `Counter`.
  */
-export const COUNTER_TYPE = "wingsdk.cloud.Counter";
+export const COUNTER_FQN = fqnForType("cloud.Counter");
 
 /**
  * Properties for `Counter`.
@@ -19,9 +19,22 @@ export interface CounterProps {
 }
 
 /**
- * Functionality shared between all `Counter` implementations.
+ * Represents a distributed atomic counter.
+ * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
-export abstract class CounterBase extends Resource {
+export abstract class Counter extends Resource {
+  /**
+   * Create a new counter.
+   * @internal
+   */
+  public static _newCounter(
+    scope: Construct,
+    id: string,
+    props: CounterProps = {}
+  ): Counter {
+    return App.of(scope).newAbstract(COUNTER_FQN, scope, id, props);
+  }
+
   public readonly stateful = true;
 
   /**
@@ -35,29 +48,7 @@ export abstract class CounterBase extends Resource {
     this.display.title = "Counter";
     this.display.description = "A distributed atomic counter";
 
-    if (!scope) {
-      this.initial = -1; // not used
-      return;
-    }
-
     this.initial = props.initial ?? 0;
-  }
-}
-
-/**
- * Represents a distributed atomic counter.
- *
- * @inflight `@winglang/sdk.cloud.ICounterClient`
- */
-export class Counter extends CounterBase {
-  constructor(scope: Construct, id: string, props: CounterProps = {}) {
-    super(null as any, id, props);
-    return Polycons.newInstance(COUNTER_TYPE, scope, id, props) as Counter;
-  }
-
-  /** @internal */
-  public _toInflight(): Code {
-    throw new Error("Method not implemented.");
   }
 }
 
@@ -89,6 +80,13 @@ export interface ICounterClient {
    * @inflight
    */
   peek(): Promise<number>;
+
+  /**
+   * Reset a counter to a given value.
+   * @param value value to reset (default is 0)
+   * @inflight
+   */
+  reset(value?: number): Promise<void>;
 }
 
 /**
@@ -105,6 +103,10 @@ export abstract class CounterClientBase implements ICounterClient {
   peek(): Promise<number> {
     throw new Error("Method not implemented.");
   }
+  reset(value?: number): Promise<void> {
+    value;
+    throw new Error("Method not implemented.");
+  }
 }
 
 /**
@@ -118,4 +120,6 @@ export enum CounterInflightMethods {
   DEC = "dec",
   /** `Counter.peek` */
   PEEK = "peek",
+  /** `Counter.reset` */
+  RESET = "reset",
 }

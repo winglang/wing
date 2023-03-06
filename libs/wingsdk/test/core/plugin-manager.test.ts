@@ -3,6 +3,7 @@ import { join, resolve } from "path";
 import { IamRole } from "@cdktf/provider-aws/lib/iam-role";
 import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import * as cdktf from "cdktf";
+import { test, expect, describe } from "vitest";
 import { PluginManager } from "../../src/core/plugin-manager";
 import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp } from "../../src/util";

@@ -1,15 +1,7 @@
-import {
-  mkdirSync,
-  readdirSync,
-  renameSync,
-  rmSync,
-  rmdirSync,
-  existsSync,
-} from "fs";
+import { mkdirSync, readdirSync, renameSync, rmSync, existsSync } from "fs";
 import { join } from "path";
 import * as cdktf from "cdktf";
-import { Construct, IConstruct } from "constructs";
-import { IPolyconFactory, Polycons } from "polycons";
+import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
 import { PluginManager } from "./plugin-manager";
 import { IResource } from "./resource";
@@ -17,20 +9,6 @@ import { synthesizeTree } from "./tree";
 import { Logger } from "../cloud/logger";
 
 const TERRAFORM_STACK_NAME = "root";
-
-/**
- * A Wing application.
- */
-export interface IApp extends IConstruct {
-  /**
-   * Directory where artifacts are synthesized to.
-   */
-  readonly outdir: string;
-  /**
-   * Synthesize the app into an artifact.
-   */
-  synth(): string;
-}
 
 /**
  * Props for all `App` classes.
@@ -56,12 +34,6 @@ export interface AppProps {
   readonly stateFile?: string;
 
   /**
-   * A custom factory to resolve polycons.
-   * @default - use the default polycon factory included in the Wing SDK
-   */
-  readonly customFactory?: IPolyconFactory;
-
-  /**
    * Absolute paths to plugin javascript files.
    * @default - [] no plugins
    */
@@ -69,10 +41,108 @@ export interface AppProps {
 }
 
 /**
+ * A Wing application.
+ */
+export abstract class App extends Construct {
+  /**
+   * Returns the root app.
+   */
+  public static of(scope: Construct): App {
+    if (scope instanceof App) {
+      return scope;
+    }
+
+    if (!scope.node.scope) {
+      throw new Error("Cannot find root app");
+    }
+
+    return App.of(scope.node.scope);
+  }
+
+  /**
+   * Directory where artifacts are synthesized to.
+   */
+  public abstract readonly outdir: string;
+
+  /**
+   * Synthesize the app into an artifact.
+   */
+  public abstract synth(): string;
+
+  /**
+   * Creates a new object of the given FQN.
+   * @param fqn the fqn of the class to instantiate
+   * @param ctor the constructor of the class to instantiate (undefined for abstract classes)
+   * @param scope the scope of the resource
+   * @param id the id of the resource
+   * @param args the arguments to pass to the resource
+   * @returns the new instance
+   * @throws if the FQN is not supported
+   */
+  public new(
+    fqn: string,
+    ctor: any,
+    scope: Construct,
+    id: string,
+    ...args: any[]
+  ): any {
+    // delegate to "tryNew" first, which will allow derived classes to inject
+    const instance = this.tryNew(fqn, scope, id, ...args);
+    if (instance) {
+      return instance;
+    }
+
+    // no injection, so we'll just create a new instance
+    return new ctor(scope, id, ...args);
+  }
+
+  /**
+   * Creates a new object of the given abstract class FQN.
+   */
+  public newAbstract(
+    fqn: string,
+    scope: Construct,
+    id: string,
+    ...args: any[]
+  ): any {
+    // delegate to "tryNew" first, which will allow derived classes to inject
+    const instance = this.tryNew(fqn, scope, id, ...args);
+    if (!instance) {
+      throw new Error(
+        `Unable to create an instance of abstract type \"${fqn}\" for this target`
+      );
+    }
+
+    return instance;
+  }
+
+  /**
+   * Can be overridden by derived classes to inject dependencies.
+   *
+   * @param fqn The fully qualified name of the class to instantiate (jsii).
+   * @param scope The construct scope.
+   * @param id The construct id.
+   * @param args The arguments to pass to the constructor.
+   */
+  protected tryNew(
+    fqn: string,
+    scope: Construct,
+    id: string,
+    ...args: any[]
+  ): any {
+    fqn;
+    scope;
+    id;
+    args;
+    return undefined;
+  }
+}
+
+/**
  * An app that knows how to synthesize constructs into Terraform configuration
  * using cdktf. No polycon factory or Terraform providers are included.
  */
-export class CdktfApp extends Construct implements IApp {
+export abstract class CdktfApp extends App {
   /**
    * Directory where artifacts are synthesized to.
    */
@@ -97,14 +167,24 @@ export class CdktfApp extends Construct implements IApp {
     const cdktfApp = new cdktf.App({ outdir: cdktfOutdir });
     const cdktfStack = new cdktf.TerraformStack(cdktfApp, TERRAFORM_STACK_NAME);
 
-    if (!props.customFactory) {
-      throw new Error(
-        "A custom factory must be passed to the base CdktfApp class."
-      );
-    }
-    Polycons.register(cdktfStack, props.customFactory);
-
     super(cdktfStack, "Default");
+
+    // HACK: monkey patch the `new` method on the cdktf app (which is the root of the tree) so that
+    // we can intercept the creation of resources and replace them with our own.
+    (cdktfApp as any).new = (
+      fqn: string,
+      ctor: any,
+      scope: Construct,
+      id: string,
+      ...args: any[]
+    ) => this.new(fqn, ctor, scope, id, ...args);
+
+    (cdktfApp as any).newAbstract = (
+      fqn: string,
+      scope: Construct,
+      id: string,
+      ...args: any[]
+    ) => this.newAbstract(fqn, scope, id, ...args);
 
     this.pluginManager = new PluginManager(props.plugins ?? []);
 
@@ -185,7 +265,7 @@ export class CdktfApp extends Construct implements IApp {
         // If the file is a directory we need to delete contents of previous synthesis
         // or rename will fail
         if (existsSync(destination)) {
-          rmdirSync(destination, { recursive: true });
+          rmSync(destination, { recursive: true });
         }
 
         renameSync(source, destination);
@@ -229,7 +309,7 @@ function cleanTerraformConfig(template: any): any {
   return cleaned;
 }
 
-export function preSynthesizeAllConstructs(app: IApp): void {
+export function preSynthesizeAllConstructs(app: App): void {
   for (const c of app.node.findAll()) {
     if (typeof (c as IResource)._preSynthesize === "function") {
       (c as IResource)._preSynthesize();

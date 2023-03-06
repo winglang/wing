@@ -36,6 +36,7 @@ jobs:
             docs
             chore
             rfc
+            revert
           subjectPattern: ^[^A-Z]+[^.]$
           subjectPatternError: Subject must be all lowercase and should not end with a period
           requireScope: false

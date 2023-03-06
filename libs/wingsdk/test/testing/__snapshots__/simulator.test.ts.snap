@@ -1,13 +1,13 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`provides raw tree data 1`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "WingLogger": Object {
-        "attributes": Object {
-          "wing:resource:connections": Array [
-            Object {
+{
+  "tree": {
+    "children": {
+      "WingLogger": {
+        "attributes": {
+          "wing:resource:connections": [
+            {
               "direction": "inbound",
               "implicit": true,
               "relationship": "print",
@@ -16,11 +16,11 @@ Object {
           ],
           "wing:resource:stateful": true,
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "constructs.Construct",
           "version": "10.1.245",
         },
-        "display": Object {
+        "display": {
           "description": "A cloud logging facility",
           "hidden": true,
           "title": "Logger",
@@ -28,10 +28,10 @@ Object {
         "id": "WingLogger",
         "path": "root/WingLogger",
       },
-      "test": Object {
-        "attributes": Object {
-          "wing:resource:connections": Array [
-            Object {
+      "test": {
+        "attributes": {
+          "wing:resource:connections": [
+            {
               "direction": "outbound",
               "implicit": true,
               "relationship": "print",
@@ -40,9 +40,9 @@ Object {
           ],
           "wing:resource:stateful": false,
         },
-        "children": Object {
-          "Code": Object {
-            "constructInfo": Object {
+        "children": {
+          "Code": {
+            "constructInfo": {
               "fqn": "constructs.Construct",
               "version": "10.1.245",
             },
@@ -50,27 +50,27 @@ Object {
             "path": "root/test/Code",
           },
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "constructs.Construct",
           "version": "10.1.245",
         },
-        "display": Object {
+        "display": {
           "description": "A cloud function (FaaS)",
           "title": "Function",
         },
         "id": "test",
         "path": "root/test",
       },
-      "test.handler": Object {
-        "attributes": Object {
-          "wing:resource:connections": Array [],
+      "test.handler": {
+        "attributes": {
+          "wing:resource:connections": [],
           "wing:resource:stateful": false,
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "constructs.Construct",
           "version": "10.1.245",
         },
-        "display": Object {
+        "display": {
           "description": "An inflight resource",
           "hidden": true,
           "title": "Inflight",
@@ -79,7 +79,7 @@ Object {
         "path": "root/test.handler",
       },
     },
-    "constructInfo": Object {
+    "constructInfo": {
       "fqn": "constructs.Construct",
       "version": "10.1.245",
     },
@@ -90,15 +90,15 @@ Object {
 }
 `;
 
-exports[`run all tests single test 1`] = `
-Array [
-  Object {
+exports[`run all tests > single test 1`] = `
+[
+  {
     "error": undefined,
     "pass": true,
     "path": "root/test",
-    "traces": Array [
-      Object {
-        "data": Object {
+    "traces": [
+      {
+        "data": {
           "message": "wingsdk.cloud.Logger created.",
         },
         "sourcePath": "root/WingLogger",
@@ -106,8 +106,8 @@ Array [
         "timestamp": "<TIMESTAMP>",
         "type": "resource",
       },
-      Object {
-        "data": Object {
+      {
+        "data": {
           "message": "wingsdk.cloud.Function created.",
         },
         "sourcePath": "root/test",
@@ -115,8 +115,8 @@ Array [
         "timestamp": "<TIMESTAMP>",
         "type": "resource",
       },
-      Object {
-        "data": Object {
+      {
+        "data": {
           "message": "hi",
         },
         "sourcePath": "root/test",
@@ -124,8 +124,8 @@ Array [
         "timestamp": "<TIMESTAMP>",
         "type": "log",
       },
-      Object {
-        "data": Object {
+      {
+        "data": {
           "message": "Invoke (payload=\\"\\"\\"\\").",
           "result": undefined,
           "status": "success",
@@ -135,8 +135,8 @@ Array [
         "timestamp": "<TIMESTAMP>",
         "type": "resource",
       },
-      Object {
-        "data": Object {
+      {
+        "data": {
           "message": "wingsdk.cloud.Function deleted.",
         },
         "sourcePath": "root/test",
@@ -144,8 +144,8 @@ Array [
         "timestamp": "<TIMESTAMP>",
         "type": "resource",
       },
-      Object {
-        "data": Object {
+      {
+        "data": {
           "message": "wingsdk.cloud.Logger deleted.",
         },
         "sourcePath": "root/WingLogger",
@@ -158,14 +158,14 @@ Array [
 ]
 `;
 
-exports[`run single test happy path 1`] = `
-Object {
+exports[`run single test > happy path 1`] = `
+{
   "error": undefined,
   "pass": true,
   "path": "root/test",
-  "traces": Array [
-    Object {
-      "data": Object {
+  "traces": [
+    {
+      "data": {
         "message": "wingsdk.cloud.Logger created.",
       },
       "sourcePath": "root/WingLogger",
@@ -173,8 +173,8 @@ Object {
       "timestamp": "<TIMESTAMP>",
       "type": "resource",
     },
-    Object {
-      "data": Object {
+    {
+      "data": {
         "message": "wingsdk.cloud.Function created.",
       },
       "sourcePath": "root/test",
@@ -182,8 +182,8 @@ Object {
       "timestamp": "<TIMESTAMP>",
       "type": "resource",
     },
-    Object {
-      "data": Object {
+    {
+      "data": {
         "message": "hi",
       },
       "sourcePath": "root/test",
@@ -191,8 +191,8 @@ Object {
       "timestamp": "<TIMESTAMP>",
       "type": "log",
     },
-    Object {
-      "data": Object {
+    {
+      "data": {
         "message": "Invoke (payload=\\"\\"\\"\\").",
         "result": undefined,
         "status": "success",
@@ -202,8 +202,8 @@ Object {
       "timestamp": "<TIMESTAMP>",
       "type": "resource",
     },
-    Object {
-      "data": Object {
+    {
+      "data": {
         "message": "wingsdk.cloud.Function deleted.",
       },
       "sourcePath": "root/test",
@@ -211,8 +211,8 @@ Object {
       "timestamp": "<TIMESTAMP>",
       "type": "resource",
     },
-    Object {
-      "data": Object {
+    {
+      "data": {
         "message": "wingsdk.cloud.Logger deleted.",
       },
       "sourcePath": "root/WingLogger",
@@ -224,23 +224,23 @@ Object {
 }
 `;
 
-exports[`run single test test failure 1`] = `
-Object {
+exports[`run single test > test failure 1`] = `
+{
   "error": "Error: test failed
     at Handler.handle 
     at Object.exports.handler 
     at evalmachine.<anonymous>:27:9
     at Script.runInContext 
-    at Object.runInContext 
+    at Proxy.runInContext 
     at Object.activity 
     at Object.withTrace 
     at Function.invoke 
     at Simulator.runTest ",
   "pass": false,
   "path": "root/test",
-  "traces": Array [
-    Object {
-      "data": Object {
+  "traces": [
+    {
+      "data": {
         "message": "wingsdk.cloud.Logger created.",
       },
       "sourcePath": "root/WingLogger",
@@ -248,8 +248,8 @@ Object {
       "timestamp": "<TIMESTAMP>",
       "type": "resource",
     },
-    Object {
-      "data": Object {
+    {
+      "data": {
         "message": "wingsdk.cloud.Function created.",
       },
       "sourcePath": "root/test",
@@ -257,8 +257,8 @@ Object {
       "timestamp": "<TIMESTAMP>",
       "type": "resource",
     },
-    Object {
-      "data": Object {
+    {
+      "data": {
         "message": "I am about to fail",
       },
       "sourcePath": "root/test",
@@ -266,8 +266,8 @@ Object {
       "timestamp": "<TIMESTAMP>",
       "type": "log",
     },
-    Object {
-      "data": Object {
+    {
+      "data": {
         "error": [Error: test failed],
         "message": "Invoke (payload=\\"\\"\\"\\").",
         "status": "failure",
@@ -277,8 +277,8 @@ Object {
       "timestamp": "<TIMESTAMP>",
       "type": "resource",
     },
-    Object {
-      "data": Object {
+    {
+      "data": {
         "message": "wingsdk.cloud.Function deleted.",
       },
       "sourcePath": "root/test",
@@ -286,8 +286,8 @@ Object {
       "timestamp": "<TIMESTAMP>",
       "type": "resource",
     },
-    Object {
-      "data": Object {
+    {
+      "data": {
         "message": "wingsdk.cloud.Logger deleted.",
       },
       "sourcePath": "root/WingLogger",

@@ -30,7 +30,7 @@ const FUNCTION_NAME_OPTS: NameOptions = {
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
-export class Function extends cloud.FunctionBase {
+export class Function extends cloud.Function {
   private readonly function: LambdaFunction;
   private readonly role: IamRole;
   private policyStatements?: any[];
@@ -49,7 +49,7 @@ export class Function extends cloud.FunctionBase {
     scope: Construct,
     id: string,
     inflight: cloud.IFunctionHandler,
-    props: cloud.FunctionProps
+    props: cloud.FunctionProps = {}
   ) {
     super(scope, id, inflight, props);
 
@@ -194,7 +194,7 @@ export class Function extends cloud.FunctionBase {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename, "FunctionClient", [
+    return core.InflightClient.for(__dirname, __filename, "FunctionClient", [
       `process.env["${this.envName()}"]`,
     ]);
   }

@@ -22,7 +22,7 @@ const NAME_OPTS: NameOptions = {
  *
  * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
-export class Queue extends cloud.QueueBase {
+export class Queue extends cloud.Queue {
   private readonly queue: SqsQueue;
 
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
@@ -53,7 +53,7 @@ export class Queue extends cloud.QueueBase {
       "QueueOnMessageHandlerClient"
     );
 
-    const fn = new cloud.Function(
+    const fn = Function._newFunction(
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnMessage-${hash}`,
       functionHandler,
@@ -131,7 +131,7 @@ export class Queue extends cloud.QueueBase {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename, "QueueClient", [
+    return core.InflightClient.for(__dirname, __filename, "QueueClient", [
       `process.env["${this.envName()}"]`,
     ]);
   }

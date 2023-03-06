@@ -1,3 +1,4 @@
+import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
@@ -14,7 +15,7 @@ async handle(message) {
 test("create a queue", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Queue(app, "my_queue");
+  cloud.Queue._newQueue(app, "my_queue");
   const s = await app.startSimulator();
 
   // THEN
@@ -39,7 +40,7 @@ test("queue with one subscriber, default batch size of 1", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  const queue = new cloud.Queue(app, "my_queue");
+  const queue = cloud.Queue._newQueue(app, "my_queue");
   queue.onMessage(handler);
   const s = await app.startSimulator();
 
@@ -64,7 +65,7 @@ test("queue batch size of 2, purge the queue", async () => {
   const QUEUE_SIZE = 2;
   const QUEUE_EMPTY_SIZE = 0;
   const app = new SimApp();
-  new cloud.Queue(app, "my_queue");
+  cloud.Queue._newQueue(app, "my_queue");
   const s = await app.startSimulator();
 
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
@@ -93,7 +94,7 @@ test("queue with one subscriber, batch size of 5", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  const queue = new cloud.Queue(app, "my_queue", {
+  const queue = cloud.Queue._newQueue(app, "my_queue", {
     initialMessages: ["A", "B", "C", "D", "E", "F"],
   });
   queue.onMessage(handler, { batchSize: 5 });
@@ -113,7 +114,7 @@ test("messages are requeued if the function fails", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  const queue = new cloud.Queue(app, "my_queue");
+  const queue = cloud.Queue._newQueue(app, "my_queue");
   queue.onMessage(handler);
   const s = await app.startSimulator();
 
@@ -133,7 +134,7 @@ test("messages are requeued if the function fails", async () => {
 test("queue has no display hidden property", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Queue(app, "my_queue");
+  cloud.Queue._newQueue(app, "my_queue");
 
   const treeJson = treeJsonOf(app.synth());
   const queue = app.node.tryFindChild("my_queue") as cloud.Queue;
@@ -153,7 +154,7 @@ test("queue has no display hidden property", async () => {
 test("queue has display title and description properties", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Queue(app, "my_queue");
+  cloud.Queue._newQueue(app, "my_queue");
 
   // WHEN
   const treeJson = treeJsonOf(app.synth());

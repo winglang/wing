@@ -1,6 +1,6 @@
 import { ISimulatorResourceInstance } from "./resource";
-import { TopicSchema, TopicSubscriber } from "./schema-resources";
-import { IFunctionClient, ITopicClient, TOPIC_TYPE } from "../cloud";
+import { TopicSchema, TopicSubscriber, TOPIC_TYPE } from "./schema-resources";
+import { IFunctionClient, ITopicClient } from "../cloud";
 import { ISimulatorContext, TraceType } from "../testing/simulator";
 
 export class Topic implements ITopicClient, ISimulatorResourceInstance {

@@ -48,6 +48,7 @@
     "@types/tar": "^6.1.3",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
+    "@vitest/coverage-c8": "^0.29.2",
     "@winglang/jsii-docgen": "file:../../apps/jsii-docgen",
     "@winglang/wing-api-checker": "file:../../apps/wing-api-checker",
     "aws-sdk-client-mock": "^2.0.1",
@@ -72,7 +73,8 @@
     "ts-jest": "^27",
     "ts-node": "^10.9.1",
     "tsx": "^3.12.2",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "vitest": "^0.29.2"
   },
   "peerDependencies": {
     "@cdktf/provider-aws": "^12.0.1",
@@ -80,8 +82,7 @@
     "@cdktf/provider-google": "^5.0.2",
     "@cdktf/provider-random": "^5.0.0",
     "cdktf": "0.15.2",
-    "constructs": "~10.1.228",
-    "polycons": "^0.1.1"
+    "constructs": "~10.1.228"
   },
   "dependencies": {
     "@aws-sdk/client-cloudwatch-logs": "3.256.0",
@@ -104,7 +105,6 @@
     "constructs": "~10.1.228",
     "debug": "^4.3.4",
     "esbuild-wasm": "^0.17.4",
-    "polycons": "^0.1.8",
     "safe-stable-stringify": "*",
     "tar": "^6.1.13"
   },

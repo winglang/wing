@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
-import { CounterSchema } from "./schema-resources";
+import { CounterSchema, COUNTER_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
@@ -11,7 +11,7 @@ import * as core from "../core";
  *
  * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
-export class Counter extends cloud.CounterBase implements ISimulatorResource {
+export class Counter extends cloud.Counter implements ISimulatorResource {
   public readonly initial: number;
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
     super(scope, id, props);
@@ -21,7 +21,7 @@ export class Counter extends cloud.CounterBase implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: CounterSchema = {
-      type: cloud.COUNTER_TYPE,
+      type: COUNTER_TYPE,
       path: this.node.path,
       props: {
         initial: this.initial,
@@ -46,3 +46,4 @@ export class Counter extends cloud.CounterBase implements ISimulatorResource {
 Counter._annotateInflight("inc", {});
 Counter._annotateInflight("dec", {});
 Counter._annotateInflight("peek", {});
+Counter._annotateInflight("reset", {});

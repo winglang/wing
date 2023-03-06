@@ -1,5 +1,6 @@
 import * as cdktf from "cdktf";
-import * as cloud from "../../src/cloud";
+import { test, expect } from "vitest";
+import { Queue } from "../../src/cloud";
 import * as std from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
@@ -9,7 +10,7 @@ import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 test("default queue behavior", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  new cloud.Queue(app, "Queue");
+  Queue._newQueue(app, "Queue");
   const output = app.synth();
 
   // THEN
@@ -21,7 +22,7 @@ test("default queue behavior", () => {
 test("queue with custom timeout", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  new cloud.Queue(app, "Queue", {
+  Queue._newQueue(app, "Queue", {
     timeout: std.Duration.fromSeconds(30),
   });
   const output = app.synth();
@@ -35,7 +36,7 @@ test("queue with custom timeout", () => {
 test("queue with a consumer function", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const queue = new cloud.Queue(app, "Queue", {
+  const queue = Queue._newQueue(app, "Queue", {
     timeout: std.Duration.fromSeconds(30),
   });
   const processor = Testing.makeHandler(
@@ -68,7 +69,7 @@ test("queue with a consumer function", () => {
 test("queue name valid", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const queue = new cloud.Queue(app, "The-Incredible_Queue-01");
+  const queue = Queue._newQueue(app, "The-Incredible_Queue-01");
   const output = app.synth();
 
   // THEN
@@ -84,7 +85,7 @@ test("queue name valid", () => {
 test("replace invalid character from queue name", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const queue = new cloud.Queue(app, "The*Incredible$Queue");
+  const queue = Queue._newQueue(app, "The*Incredible$Queue");
   const output = app.synth();
 
   // THEN
