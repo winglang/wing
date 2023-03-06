@@ -368,7 +368,11 @@ mod sanity {
 					result.err().unwrap()
 				);
 			} else {
-				assert!(!expect_failure, "{}: Expected compilation failure, but succeeded", test_file.display());
+				assert!(
+					!expect_failure,
+					"{}: Expected compilation failure, but succeeded",
+					test_file.display()
+				);
 			}
 		}
 	}
