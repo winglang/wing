@@ -2,8 +2,7 @@ use crate::ast::*;
 use crate::lsp::sync::FILES;
 use crate::visit::Visit;
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
-use lsp_types::DocumentSymbol;
-use lsp_types::SymbolKind;
+use lsp_types::{DocumentSymbol, SymbolKind};
 
 pub struct DocumentSymbolVisitor {
 	pub document_symbols: Vec<DocumentSymbol>,
@@ -25,123 +24,46 @@ impl Visit<'_> for DocumentSymbolVisitor {
 				identifier,
 			} => {
 				let mod_symbol = module_name;
-				let mod_symbol_range = mod_symbol.span.range();
-				self.document_symbols.push(
-					#[allow(deprecated)]
-					DocumentSymbol {
-						name: mod_symbol.name.clone(),
-						detail: None,
-						kind: SymbolKind::NAMESPACE,
-						range: mod_symbol_range,
-						selection_range: mod_symbol_range,
-						children: None,
-						tags: None,
-						deprecated: None,
-					},
-				);
+				self
+					.document_symbols
+					.push(create_document_symbol(mod_symbol, SymbolKind::MODULE));
 
 				if let Some(identifier) = identifier {
 					let symbol = identifier;
-					let symbol_range = symbol.span.range();
-					self.document_symbols.push(
-						#[allow(deprecated)]
-						DocumentSymbol {
-							name: symbol.name.clone(),
-							detail: None,
-							kind: SymbolKind::VARIABLE,
-							range: symbol_range,
-							selection_range: symbol_range,
-							children: None,
-							tags: None,
-							deprecated: None,
-						},
-					);
+					self
+						.document_symbols
+						.push(create_document_symbol(symbol, SymbolKind::VARIABLE));
 				}
 			}
 			StmtKind::VariableDef { var_name, .. } => {
 				let symbol = var_name;
-				let symbol_range = symbol.span.range();
-				self.document_symbols.push(
-					#[allow(deprecated)]
-					DocumentSymbol {
-						name: symbol.name.clone(),
-						detail: None,
-						kind: SymbolKind::VARIABLE,
-						range: symbol_range,
-						selection_range: symbol_range,
-						children: None,
-						tags: None,
-						deprecated: None,
-					},
-				);
+				self
+					.document_symbols
+					.push(create_document_symbol(symbol, SymbolKind::VARIABLE));
 			}
 			StmtKind::ForLoop { iterator, .. } => {
 				let symbol = iterator;
-				let symbol_range = symbol.span.range();
-				self.document_symbols.push(
-					#[allow(deprecated)]
-					DocumentSymbol {
-						name: symbol.name.clone(),
-						detail: None,
-						kind: SymbolKind::VARIABLE,
-						range: symbol_range,
-						selection_range: symbol_range,
-						children: None,
-						tags: None,
-						deprecated: None,
-					},
-				);
+				self
+					.document_symbols
+					.push(create_document_symbol(symbol, SymbolKind::VARIABLE));
 			}
 			StmtKind::Class(c) => {
 				let symbol = &c.name;
-				let symbol_range = symbol.span.range();
-				self.document_symbols.push(
-					#[allow(deprecated)]
-					DocumentSymbol {
-						name: symbol.name.clone(),
-						detail: None,
-						kind: SymbolKind::CLASS,
-						range: symbol_range,
-						selection_range: symbol_range,
-						children: None,
-						tags: None,
-						deprecated: None,
-					},
-				);
+				self
+					.document_symbols
+					.push(create_document_symbol(symbol, SymbolKind::CLASS));
 			}
 			StmtKind::Struct { name, .. } => {
 				let symbol = name;
-				let symbol_range = symbol.span.range();
-				self.document_symbols.push(
-					#[allow(deprecated)]
-					DocumentSymbol {
-						name: symbol.name.clone(),
-						detail: None,
-						kind: SymbolKind::STRUCT,
-						range: symbol_range,
-						selection_range: symbol_range,
-						children: None,
-						tags: None,
-						deprecated: None,
-					},
-				);
+				self
+					.document_symbols
+					.push(create_document_symbol(symbol, SymbolKind::STRUCT));
 			}
 			StmtKind::Enum { name, .. } => {
 				let symbol = name;
-				let symbol_range = symbol.span.range();
-				self.document_symbols.push(
-					#[allow(deprecated)]
-					DocumentSymbol {
-						name: symbol.name.clone(),
-						detail: None,
-						kind: SymbolKind::ENUM,
-						range: symbol_range,
-						selection_range: symbol_range,
-						children: None,
-						tags: None,
-						deprecated: None,
-					},
-				);
+				self
+					.document_symbols
+					.push(create_document_symbol(symbol, SymbolKind::ENUM));
 			}
 			_ => {}
 		};
@@ -174,4 +96,19 @@ pub fn on_document_symbols<'a>(params: lsp_types::DocumentSymbolParams) -> Vec<D
 
 		visitor.document_symbols
 	})
+}
+
+fn create_document_symbol(symbol: &Symbol, kind: SymbolKind) -> DocumentSymbol {
+	let span = &symbol.span;
+	#[allow(deprecated)]
+	DocumentSymbol {
+		name: symbol.name.clone(),
+		detail: None,
+		kind,
+		range: span.into(),
+		selection_range: span.into(),
+		children: None,
+		tags: None,
+		deprecated: None,
+	}
 }

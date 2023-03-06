@@ -18,7 +18,7 @@ env:
   # Testing runs out of memory without this
   NODE_OPTIONS: "--max-old-space-size=4096"
   PROJEN_BUMP_VERSION: "0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}"
-  RUST_VERSION: "1.66.0"
+  RUST_VERSION: "1.67.1"
 
 jobs:
   prepare:
@@ -107,7 +107,7 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: ${{ env.RUST_VERSION }}
-          components: rustfmt
+          components: rustfmt,clippy
           override: true
 
       - name: Setup Cargo Cache
