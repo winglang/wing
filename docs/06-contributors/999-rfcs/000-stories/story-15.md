@@ -49,18 +49,20 @@ A good example on how this may look like is Redis embedded prompt inside their d
 
 
 ## Code 
+#### `tasklist.w`
 ```ts (wing)
 bring cloud;
 bring redis;
 
-// TODO discuss how we bring untyped something like RegEx from JavaScript 
-// PLACEHOLER for bringing something from Javascript stdlib
-bring untyped js;
+bring "./tasklist_helper.js" {
+  inflight get_data: (url: str) => Json;
+  inflight create_regex: (s: str) => Unknown;
+  inflight regex_test(r: Unknown, s: str) => bool; 
+  inflight uuid() => str; 
+};
 
-// prerequisite: npm install axios
-// PALCEHOLDER for bringing some external module
-bring untyped "axios" as axios; 
-
+// inflight
+let title = get_random_activity();
 enum Status {
   Uncompleted,
   Completed
@@ -102,13 +104,13 @@ resource TaskList implementes ITaskList {
   
   inflight add(title: str): str {
     // PLACEHOLDER - how does untyped works with numeric operations
-    let id = "${js.Math.floor(js.Math.random() * 100000000000)}";
+    let id = uuid();
     let j = Json { 
       title: title, 
       status: Status.Uncompleted
     };
     print("adding task ${id} with data: ${j}"); 
-    return this._add(id, js);
+    return this._add(id, j);
   }
 
   inflight remove(id: str) {
@@ -117,13 +119,13 @@ resource TaskList implementes ITaskList {
   }
 
   inflight find(term: str): Array<str> { 
-    let r = new js.RegExp(term);
+    let r = create_regex(term);
     let result = MutArray<str>[]; 
     let ids = this._redis.SMEMBERS("todo");
     for id in ids {
       let j = Json.parse(this._redis.GET(id));
       // Notice that there is autocasting from untyped to bool here 
-      if r.test(j.title) {
+      if regex_test(r, j.title) {
         result.push(id);
       }
     }
@@ -159,9 +161,8 @@ resource TaskListApi {
       // Easter Egg - if you add a todo with the single word "random" as the title, 
       //              the system will fetch a random task from the internet
       if title == "random" {
-        // PLACEHOLDER - can I cast an untyped ?
-        let random_task = axios.get('https://www.boredapi.com/api/activity');
-        title = str.from_json(random_task.data.activity); 
+        let data: Json = get_data('https://www.boredapi.com/api/activity');
+        title = str.from_json(data.activity); 
       } 
       let id = this.task_list.add(title);
       return cloud.ApiResponse { status:201, body: Json.format(id) };
@@ -197,5 +198,26 @@ resource TaskListApi {
 
 let task_list = new TaskList();
 let t = new TaskListApi(task_list);
+```
+#### `tasklist_helper.js`
 
+```js
+const axios = require('axios');
+
+exports.get_data = async function(url) {
+  const response = await axios.get(url);
+  return response.data; // returns a JSON
+};
+
+exports.create_regex = function (s) {
+  return new RegExp(s);
+};
+
+exports.regex_test = function (r, s) {
+  return r.test(s);
+};
+
+exports.uuid = function () {
+  return "" + Math.floor(Math.random() * 100000000000);
+};
 ```
