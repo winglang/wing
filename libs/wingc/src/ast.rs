@@ -222,6 +222,7 @@ pub struct Class {
 	pub methods: Vec<(Symbol, FunctionDefinition)>,
 	pub constructor: Constructor,
 	pub parent: Option<UserDefinedType>,
+	pub implements: Vec<UserDefinedType>,
 	pub is_resource: bool,
 }
 
@@ -487,5 +488,21 @@ impl Display for Reference {
 				write!(f, "{}.{}", TypeAnnotation::UserDefined(type_.clone()), property.name)
 			}
 		}
+	}
+}
+
+trait HasSpan {
+	fn span(&self) -> WingSpan;
+}
+
+impl HasSpan for Stmt {
+	fn span(&self) -> WingSpan {
+		self.span
+	}
+}
+
+impl HasSpan for Expr {
+	fn span(&self) -> WingSpan {
+		self.span
 	}
 }

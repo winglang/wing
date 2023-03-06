@@ -544,6 +544,14 @@ impl TypeRef {
 		}
 	}
 
+	fn as_interface(&self) -> Option<&Interface> {
+		if let Type::Interface(ref iface) = **self {
+			Some(iface)
+		} else {
+			None
+		}
+	}
+
 	fn maybe_unwrap_option(&self) -> TypeRef {
 		if let Type::Optional(ref t) = **self {
 			*t
@@ -1371,7 +1379,7 @@ impl<'a> TypeChecker<'a> {
 		self.validate_type_in(actual_type, &[expected_type], value)
 	}
 
-	/// Validate that the given type is a subtype (or same) as the on of the expected types. If not, add
+	/// Validate that the given type is a subtype (or same) as the one of the expected types. If not, add
 	/// an error to the diagnostics.
 	/// Returns the given type on success, otherwise returns one of the expected types.
 	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], value: &Expr) -> TypeRef {
@@ -1729,6 +1737,7 @@ impl<'a> TypeChecker<'a> {
 				fields,
 				methods,
 				parent,
+				implements,
 				constructor,
 				is_resource,
 			}) => {
@@ -1940,7 +1949,22 @@ impl<'a> TypeChecker<'a> {
 					self.inner_scopes.push(&method_def.statements);
 				}
 
-				// TODO: type check that class satisfies interfaces - https://github.com/winglang/wing/issues/1697
+				// Check that the class satisfies all of its interfaces
+				for interface in implements.iter() {
+					let interface_type =
+						resolve_user_defined_type(interface, env, stmt.idx).unwrap_or_else(|e| self.type_error(e));
+					let interface_type = interface_type.as_interface().expect("Expected interface type");
+					for (method_name, method_type) in interface_type.methods(true) {
+						let class_method_type = class_env
+							.lookup_nested_str(&method_name, None)
+							.expect("Expected method to be in class env") // TODO: raise type error instead
+							.as_variable()
+							.expect("Expected method to be a variable")
+							.type_;
+						// TODO: pass span of the class name
+						self.validate_type(class_method_type, method_type, value);
+					}
+				}
 			}
 			StmtKind::Struct { name, extends, members } => {
 				// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.

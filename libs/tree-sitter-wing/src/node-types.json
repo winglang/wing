@@ -289,6 +289,10 @@
           "named": true
         },
         {
+          "type": "interface_definition",
+          "named": true
+        },
+        {
           "type": "resource_definition",
           "named": true
         },
@@ -369,6 +373,20 @@
         "types": [
           {
             "type": "class_implementation",
+            "named": true
+          }
+        ]
+      },
+      "implements": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ",",
+            "named": false
+          },
+          {
+            "type": "custom_type",
             "named": true
           }
         ]
@@ -1136,6 +1154,197 @@
     }
   },
   {
+    "type": "inflight_method_signature",
+    "named": true,
+    "fields": {
+      "access_modifier": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "access_modifier",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "parameter_list": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "parameter_list",
+            "named": true
+          }
+        ]
+      },
+      "phase_modifier": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "inflight",
+            "named": false
+          }
+        ]
+      },
+      "return_type": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ":",
+            "named": false
+          },
+          {
+            "type": "builtin_type",
+            "named": true
+          },
+          {
+            "type": "custom_type",
+            "named": true
+          },
+          {
+            "type": "function_type",
+            "named": true
+          },
+          {
+            "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
+            "type": "mutable_container_type",
+            "named": true
+          },
+          {
+            "type": "optional",
+            "named": true
+          }
+        ]
+      },
+      "static": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "static",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "builtin_type",
+            "named": true
+          },
+          {
+            "type": "custom_type",
+            "named": true
+          },
+          {
+            "type": "function_type",
+            "named": true
+          },
+          {
+            "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
+            "type": "mutable_container_type",
+            "named": true
+          },
+          {
+            "type": "optional",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "interface_definition",
+    "named": true,
+    "fields": {
+      "implementation": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "interface_implementation",
+            "named": true
+          }
+        ]
+      },
+      "implements": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ",",
+            "named": false
+          },
+          {
+            "type": "custom_type",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "interface_implementation",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "class_field",
+          "named": true
+        },
+        {
+          "type": "inflight_method_signature",
+          "named": true
+        },
+        {
+          "type": "method_signature",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "json_container_type",
     "named": true,
     "fields": {}
@@ -1291,6 +1500,134 @@
         "types": [
           {
             "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "parameter_list": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "parameter_list",
+            "named": true
+          }
+        ]
+      },
+      "return_type": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ":",
+            "named": false
+          },
+          {
+            "type": "builtin_type",
+            "named": true
+          },
+          {
+            "type": "custom_type",
+            "named": true
+          },
+          {
+            "type": "function_type",
+            "named": true
+          },
+          {
+            "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
+            "type": "mutable_container_type",
+            "named": true
+          },
+          {
+            "type": "optional",
+            "named": true
+          }
+        ]
+      },
+      "static": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "static",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "builtin_type",
+            "named": true
+          },
+          {
+            "type": "custom_type",
+            "named": true
+          },
+          {
+            "type": "function_type",
+            "named": true
+          },
+          {
+            "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
+            "type": "mutable_container_type",
+            "named": true
+          },
+          {
+            "type": "optional",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "method_signature",
+    "named": true,
+    "fields": {
+      "access_modifier": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "access_modifier",
+            "named": true
+          }
+        ]
+      },
+      "async": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "async_modifier",
             "named": true
           }
         ]
@@ -1898,6 +2235,20 @@
           }
         ]
       },
+      "implements": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ",",
+            "named": false
+          },
+          {
+            "type": "custom_type",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
@@ -2065,6 +2416,10 @@
         },
         {
           "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "interface_definition",
           "named": true
         },
         {
@@ -2731,6 +3086,10 @@
     "named": false
   },
   {
+    "type": "impl",
+    "named": false
+  },
+  {
     "type": "in",
     "named": false
   },
@@ -2740,6 +3099,10 @@
   },
   {
     "type": "init",
+    "named": false
+  },
+  {
+    "type": "interface",
     "named": false
   },
   {

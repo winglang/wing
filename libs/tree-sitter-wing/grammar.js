@@ -74,6 +74,7 @@ module.exports = grammar({
         $.return_statement,
         $.class_definition,
         $.resource_definition,
+        $.interface_definition,
         $.for_in_loop,
         $.while_statement,
         $.if_statement,
@@ -94,7 +95,7 @@ module.exports = grammar({
       seq(
         "struct",
         field("name", $.identifier),
-        optional(seq("extends", commaSep($.identifier))),
+        optional(seq("extends", commaSepZeroOrMore($.identifier, false))),
         "{",
         repeat($.struct_field),
         "}"
@@ -108,7 +109,7 @@ module.exports = grammar({
         "enum",
         field("enum_name", $.identifier),
         "{",
-        commaSep(alias($.identifier, $.enum_field)),
+        commaSepZeroOrMore(alias($.identifier, $.enum_field)),
         "}"
       ),
 
@@ -143,6 +144,7 @@ module.exports = grammar({
         "class",
         field("name", $.identifier),
         optional(seq("extends", field("parent", $.custom_type))),
+        optional(seq("impl", field("implements", commaSepOneOrMore($.custom_type, false)))),
         field("implementation", $.class_implementation)
       ),
     class_implementation: ($) =>
@@ -175,6 +177,7 @@ module.exports = grammar({
         "resource",
         field("name", $.identifier),
         optional(seq("extends", field("parent", $.custom_type))),
+        optional(seq("impl", field("implements", commaSepOneOrMore($.custom_type, false)))),
         field("implementation", $.resource_implementation)
       ),
     resource_implementation: ($) =>
@@ -185,6 +188,26 @@ module.exports = grammar({
             $.constructor,
             $.method_definition,
             $.inflight_method_definition,
+            $.class_field,
+          )
+        ),
+        "}"
+      ),
+
+    interface_definition: ($) =>
+      seq(
+        "interface",
+        field("name", $.identifier),
+        optional(seq("extends", field("implements", commaSepOneOrMore($.custom_type, false)))),
+        field("implementation", $.interface_implementation)
+      ),
+    interface_implementation: ($) =>
+      seq(
+        "{",
+        repeat(
+          choice(
+            $.method_signature,
+            $.inflight_method_signature,
             $.class_field,
           )
         ),
@@ -302,12 +325,12 @@ module.exports = grammar({
       seq(
         "(",
         choice(
-          commaSep($.positional_argument),
-          commaSep($.keyword_argument),
+          commaSepZeroOrMore($.positional_argument),
+          commaSepZeroOrMore($.keyword_argument),
           seq(
-            commaSep($.positional_argument),
+            commaSepZeroOrMore($.positional_argument),
             ",",
-            commaSep($.keyword_argument)
+            commaSepZeroOrMore($.keyword_argument)
           )
         ),
         ")"
@@ -359,7 +382,7 @@ module.exports = grammar({
         )
       ),
 
-    parameter_type_list: ($) => seq("(", commaSep($._type), ")"),
+    parameter_type_list: ($) => seq("(", commaSepZeroOrMore($._type), ")"),
 
     builtin_type: ($) => choice("num", "bool", "any", "str", "void", "duration"),
 
@@ -368,6 +391,17 @@ module.exports = grammar({
         "init",
         field("parameter_list", $.parameter_list),
         field("block", $.block)
+      ),
+
+    method_signature: ($) =>
+      seq(
+        optional(field("access_modifier", $.access_modifier)),
+        optional(field("static", $.static)),
+        optional(field("async", $.async_modifier)),
+        field("name", $.identifier),
+        field("parameter_list", $.parameter_list),
+        optional(field("return_type", $._type_annotation)),
+        ";"
       ),
 
     method_definition: ($) =>
@@ -379,6 +413,17 @@ module.exports = grammar({
         field("parameter_list", $.parameter_list),
         optional(field("return_type", $._type_annotation)),
         field("block", $.block)
+      ),
+
+    inflight_method_signature: ($) =>
+      seq(
+        optional(field("access_modifier", $.access_modifier)),
+        optional(field("static", $.static)),
+        field("phase_modifier", $._inflight_specifier),
+        field("name", $.identifier),
+        field("parameter_list", $.parameter_list),
+        optional(field("return_type", $._type_annotation)),
+        ";"
       ),
 
     inflight_method_definition: ($) =>
@@ -403,7 +448,7 @@ module.exports = grammar({
         $._type_annotation
       ),
 
-    parameter_list: ($) => seq("(", commaSep($.parameter_definition), ")"),
+    parameter_list: ($) => seq("(", commaSepZeroOrMore($.parameter_definition), ")"),
 
     immutable_container_type: ($) =>
       seq(
@@ -521,17 +566,17 @@ module.exports = grammar({
       choice($.array_literal, $.set_literal, $.map_literal),
     array_literal: ($) => seq(
       optional(field("type", $._builtin_container_type)),
-      "[", commaSep(field("element", $.expression)), "]"
+      "[", commaSepZeroOrMore(field("element", $.expression)), "]"
     ),
     set_literal: ($) => seq(
       optional(field("type", $._builtin_container_type)),
-      "{", commaSep(field("element", $.expression)), "}"
+      "{", commaSepZeroOrMore(field("element", $.expression)), "}"
     ),
     map_literal: ($) => seq(
       optional(field("type", $._builtin_container_type)),
-      "{", commaSep(field("member", $.map_literal_member)), "}"
+      "{", commaSepZeroOrMore(field("member", $.map_literal_member)), "}"
     ),
-    struct_literal: ($) => seq(field("type", $.custom_type), "{", field("fields", commaSep($.struct_literal_member)), "}"),
+    struct_literal: ($) => seq(field("type", $.custom_type), "{", field("fields", commaSepZeroOrMore($.struct_literal_member)), "}"),
 
     map_literal_member: ($) =>
       seq(choice($.identifier, $.string), ":", $.expression),
@@ -558,13 +603,17 @@ module.exports = grammar({
 /**
  * @param {Rule} rule
  */
-function commaSep1(rule) {
-  return seq(rule, repeat(seq(",", rule)), optional(","));
+function commaSepOneOrMore(rule, allowTrailing = true) {
+  if (allowTrailing) {
+    return seq(rule, repeat(seq(",", rule)), optional(","));
+  } else {
+    return seq(rule, repeat(seq(",", rule)));
+  }
 }
 
 /**
  * @param {Rule} rule
  */
-function commaSep(rule) {
-  return optional(commaSep1(rule));
+function commaSepZeroOrMore(rule, allowTrailing = true) {
+  return optional(commaSepOneOrMore(rule, allowTrailing));
 }
