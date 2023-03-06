@@ -97,12 +97,12 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       activity: async () => {
         const mustExist = opts?.mustExist ?? false;
 
+        if (!this.objectKeys.has(key) && mustExist) {
+          throw new Error(`Object does not exist (key=${key}).`);
+        }
+
         if (!this.objectKeys.has(key)) {
-          if (mustExist) {
-            throw new Error(`Object does not exist (key=${key}).`);
-          } else {
-            return;
-          }
+          return;
         }
 
         const hash = this.hashKey(key);
