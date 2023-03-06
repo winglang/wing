@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
 import { Function, IFunctionClient } from "../../src/cloud/function";
 import {

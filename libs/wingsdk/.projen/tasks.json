@@ -269,7 +269,7 @@
       "description": "Run tests",
       "steps": [
         {
-          "exec": "jest --passWithNoTests --all --updateSnapshot --coverageProvider=v8 --testTimeout=30000"
+          "exec": "vitest run --coverage --update --passWithNoTests"
         },
         {
           "spawn": "eslint"
@@ -278,10 +278,10 @@
     },
     "test:watch": {
       "name": "test:watch",
-      "description": "Run jest in watch mode",
+      "description": "Run vitest in watch mode",
       "steps": [
         {
-          "exec": "jest --watch"
+          "exec": "vitest"
         }
       ]
     },

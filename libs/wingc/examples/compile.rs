@@ -16,7 +16,7 @@ pub fn main() {
 	let results = compile(Path::new(source_path), None);
 	if let Err(mut err) = results {
 		// Sort error messages by line number (ascending)
-		err.sort_by(|a, b| a.cmp(&b));
+		err.sort();
 		eprintln!(
 			"Compilation failed with {} errors\n{}",
 			err.len(),

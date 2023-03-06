@@ -4,7 +4,7 @@ use crate::ast::{
 	Class as AstClass, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
 	TypeAnnotation, UnaryOperator, UserDefinedType,
 };
-use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
+use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{
 	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_JSON,
 	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_SET, WINGSDK_STD_MODULE,
@@ -762,10 +762,7 @@ impl<'a> TypeChecker<'a> {
 			scope.env.borrow_mut().as_mut().unwrap(),
 			WINGSDK_ASSEMBLY_NAME.to_string(),
 			vec![WINGSDK_STD_MODULE.to_string()],
-			&Symbol {
-				name: WINGSDK_STD_MODULE.to_string(),
-				span: WingSpan::global(),
-			},
+			&Symbol::global(WINGSDK_STD_MODULE),
 			None,
 		);
 	}
@@ -2072,7 +2069,7 @@ impl<'a> TypeChecker<'a> {
 				Err(type_error) => {
 					self.type_error(TypeError {
 						message: format!("Cannot locate Wing standard library (checking \"{}\"", manifest_root),
-						span: stmt.map(|s| s.span.clone()).unwrap_or(WingSpan::global()),
+						span: stmt.map(|s| s.span.clone()).unwrap_or_default(),
 					});
 					debug!("{:?}", type_error);
 					return;
@@ -2088,7 +2085,7 @@ impl<'a> TypeChecker<'a> {
 				Err(type_error) => {
 					self.type_error(TypeError {
 						message: format!("Cannot find module \"{}\" in source directory", library_name),
-						span: stmt.map(|s| s.span.clone()).unwrap_or(WingSpan::global()),
+						span: stmt.map(|s| s.span.clone()).unwrap_or_default(),
 					});
 					debug!("{:?}", type_error);
 					return;
@@ -2255,10 +2252,7 @@ impl<'a> TypeChecker<'a> {
 
 							match new_type_class.env.define(
 								// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
-								&Symbol {
-									name: name.clone(),
-									span: WingSpan::global(),
-								},
+								&Symbol::global(name),
 								if *is_static {
 									SymbolKind::make_variable(self.types.add_type(Type::Function(new_sig)), *reassignable, *flight)
 								} else {
@@ -2289,10 +2283,7 @@ impl<'a> TypeChecker<'a> {
 							};
 							match new_type_class.env.define(
 								// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
-								&Symbol {
-									name: name.clone(),
-									span: WingSpan::global(),
-								},
+								&Symbol::global(name),
 								if *is_static {
 									SymbolKind::make_variable(new_var_type, reassignable, flight)
 								} else {
