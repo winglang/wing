@@ -203,7 +203,7 @@ impl<'a> JsiiImporter<'a> {
 			return;
 		}
 
-		panic!("Type {} was not found in the type system, skipping", type_fqn);
+		panic!("Type {} was not found in the type system", type_fqn);
 	}
 
 	fn setup_namespaces_for(&mut self, type_name: &FQN) {
