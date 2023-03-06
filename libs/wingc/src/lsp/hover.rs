@@ -258,7 +258,7 @@ pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
 					kind: MarkupKind::Markdown,
 					value: hover_string,
 				}),
-				range: Some(symbol.span.range()),
+				range: Some((&symbol.span).into()),
 			});
 		}
 
@@ -315,6 +315,6 @@ fn build_nested_identifier_hover(property: &Symbol, expr: &Expr) -> Option<Hover
 		}),
 		// When hovering over a reference, we want to highlight the entire relevant expression
 		// e.g. Hovering over `b` in `a.b.c` will highlight `a.b`
-		range: Some(expr.span.range()),
+		range: Some((&expr.span).into()),
 	});
 }

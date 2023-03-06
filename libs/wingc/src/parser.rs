@@ -140,11 +140,10 @@ impl Parser<'_> {
 	}
 
 	fn node_span(&self, node: &Node) -> WingSpan {
+		let node_range = node.range();
 		WingSpan {
-			start: node.range().start_point,
-			end: node.range().end_point,
-			start_byte: node.byte_range().start,
-			end_byte: node.byte_range().end,
+			start: node_range.start_point.into(),
+			end: node_range.end_point.into(),
 			// TODO: Implement multi-file support
 			file_id: self.source_name.to_string(),
 		}

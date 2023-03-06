@@ -14,9 +14,11 @@ use visit::Visit;
 use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
 use crate::parser::Parser;
+use std::alloc::{alloc, dealloc, Layout};
 use std::cell::RefCell;
 use std::collections::HashSet;
 use std::fs;
+use std::mem;
 use std::path::{Path, PathBuf};
 
 use crate::ast::Phase;
@@ -65,16 +67,38 @@ pub struct CompilerOutput {
 	pub diagnostics: Diagnostics,
 }
 
+/// Exposes an allocation function to the WASM host
+///
+/// _This implementation is copied from wasm-bindgen_
 #[no_mangle]
-pub unsafe extern "C" fn wingc_malloc(size: u32) -> *mut u8 {
-	let layout = core::alloc::Layout::from_size_align_unchecked(size as usize, 0);
-	std::alloc::alloc(layout)
+pub unsafe extern "C" fn wingc_malloc(size: usize) -> *mut u8 {
+	let align = mem::align_of::<usize>();
+	let layout = Layout::from_size_align(size, align).expect("Invalid layout");
+	if layout.size() > 0 {
+		let ptr = alloc(layout);
+		if !ptr.is_null() {
+			return ptr;
+		} else {
+			std::alloc::handle_alloc_error(layout);
+		}
+	} else {
+		return align as *mut u8;
+	}
 }
 
+/// Expose a deallocation function to the WASM host
+///
+/// _This implementation is copied from wasm-bindgen_
 #[no_mangle]
-pub unsafe extern "C" fn wingc_free(ptr: u32, size: u32) {
-	let layout = core::alloc::Layout::from_size_align_unchecked(size as usize, 0);
-	std::alloc::dealloc(ptr as *mut u8, layout);
+pub unsafe extern "C" fn wingc_free(ptr: *mut u8, size: usize) {
+	// This happens for zero-length slices, and in that case `ptr` is
+	// likely bogus so don't actually send this to the system allocator
+	if size == 0 {
+		return;
+	}
+	let align = mem::align_of::<usize>();
+	let layout = Layout::from_size_align_unchecked(size, align);
+	dealloc(ptr, layout);
 }
 
 #[no_mangle]
