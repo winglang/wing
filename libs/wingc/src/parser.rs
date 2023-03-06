@@ -175,6 +175,7 @@ impl Parser<'_> {
 			"if_statement" => self.build_if_statement(statement_node)?,
 			"for_in_loop" => self.build_for_statement(statement_node)?,
 			"while_statement" => self.build_while_statement(statement_node)?,
+			"break_statement" => self.build_break_statement(statement_node)?,
 			"return_statement" => self.build_return_statement(statement_node)?,
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
@@ -250,6 +251,17 @@ impl Parser<'_> {
 			iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
 			statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
 		})
+	}
+
+	fn build_break_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		let mut cursor = statement_node.walk();
+		while let Some(parent) = cursor.node().parent() {
+			if parent.kind() == "while_statement" || parent.kind() == "for_in_loop" {
+				return Ok(StmtKind::Break { is_in_loop: true });
+			}
+			cursor.reset(parent);
+		}
+		return Ok(StmtKind::Break { is_in_loop: false });
 	}
 
 	fn build_if_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {

@@ -1562,6 +1562,14 @@ impl<'a> TypeChecker<'a> {
 
 				self.inner_scopes.push(statements);
 			}
+			StmtKind::Break { is_in_loop } => {
+				if !*is_in_loop {
+					self.stmt_error(
+						stmt,
+						format!("Expected break statement to be inside of a loop (while/for)"),
+					);
+				}
+			}
 			StmtKind::If {
 				condition,
 				statements,

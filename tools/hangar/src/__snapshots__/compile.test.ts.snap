@@ -3319,6 +3319,15 @@ constructor() {
       {console.log(\`\${word}: \${number}\`)};
     }
   }
+  for (const word of words) {
+    for (const number of unique_numbers) {
+      {((cond) => {if (!cond) throw new Error(\`assertion failed: '(number > 0)'\`)})((number > 0))};
+      {console.log(\`\${word}: \${number}\`)};
+      if ((number === 2)) {
+        break;
+      }
+    }
+  }
 }
 }
 new MyApp().synth();"
@@ -8588,6 +8597,16 @@ constructor() {
   const y = 123;
   while ((y < 0)) {
     const x = 1;
+  }
+  let z = 0;
+  while (true) {
+    z = (z + 1);
+    if ((z > 2)) {
+      break;
+    }
+  }
+  while (true) {
+    break;
   }
 }
 }
