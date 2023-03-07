@@ -9,6 +9,7 @@ import {
 import { SdkStream } from "@aws-sdk/types";
 import { sdkStreamMixin } from "@aws-sdk/util-stream-node";
 import { mockClient } from "aws-sdk-client-mock";
+import { test, expect, beforeEach } from "vitest";
 import { BucketClient } from "../../src/target-tf-aws/bucket.inflight";
 
 const s3Mock = mockClient(S3Client);
@@ -44,6 +45,23 @@ test("get object from a bucket", async () => {
   expect(response).toEqual(VALUE);
 });
 
+test("get Json object from a bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = { msg: "Hello, World!" };
+  s3Mock.on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
+    Body: createMockStream(JSON.stringify(VALUE)),
+  });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response = await client.getJson(KEY);
+
+  // THEN
+  expect(response).toEqual(VALUE);
+});
+
 test("put an object into a bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
@@ -56,6 +74,27 @@ test("put an object into a bucket", async () => {
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
   const response = await client.put(KEY, VALUE);
+
+  // THEN
+  expect(response).toEqual(undefined);
+});
+
+test("put a Json object into a bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = { cool: "beans" };
+  s3Mock
+    .on(PutObjectCommand, {
+      Bucket: BUCKET_NAME,
+      Key: KEY,
+      Body: JSON.stringify(VALUE),
+    })
+    .resolves({});
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response = await client.putJson(KEY, VALUE as any);
 
   // THEN
   expect(response).toEqual(undefined);

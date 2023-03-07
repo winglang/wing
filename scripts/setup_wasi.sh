@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-WASI_VERSION="16"
+WASI_VERSION="19"
+WASI_VERSION_FULL="$WASI_VERSION.0"
+WASI_INSTALL_PARENT_DIR="./.cargo"
+WASI_INSTALL_DIR="$WASI_INSTALL_PARENT_DIR/wasi-sdk-$WASI_VERSION_FULL"
 
 # Check if mac or linux
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
@@ -18,10 +21,9 @@ if ! command -v cargo-wasi &> /dev/null; then
     cargo install cargo-wasi
 fi
 
-if [ ! -d "/opt/wasi-sdk" ]; then
-    echo "Installing WASI SDK $WASI_VERSION to /opt/wasi-sdk..."
-    wasi_sdk_url="https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-$WASI_VERSION/wasi-sdk-$WASI_VERSION.0-$WASI_OS.tar.gz"
-    curl --retry 2 -L $wasi_sdk_url | tar zxf - -C /tmp
-    sudo mv /tmp/wasi-sdk-$WASI_VERSION.0 /opt/wasi-sdk
+if [ ! -d $WASI_INSTALL_DIR ]; then
+    WASI_INSTALL_URL="https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-$WASI_VERSION/wasi-sdk-$WASI_VERSION_FULL-$WASI_OS.tar.gz"
+    echo "Installing WASI SDK $WASI_VERSION_FULL to $WASI_INSTALL_DIR..."
+    curl --retry 2 -L $WASI_INSTALL_URL | tar zxf - -C $WASI_INSTALL_PARENT_DIR
 fi
 

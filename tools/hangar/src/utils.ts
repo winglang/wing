@@ -7,21 +7,22 @@ export async function runWingCommand(
   cwd: string,
   wingFile: string,
   args: string[],
-  shouldSucceed: boolean
+  shouldSucceed: boolean,
+  env?: Record<string, string>,
 ) {
   const out = await execa(wingBin, [...args, wingFile], {
     cwd,
     reject: false,
     stdin: "ignore",
-    all: true,
+    env: env,
   });
   if (shouldSucceed) {
     if (out.exitCode !== 0) {
-      throw out.all;
+      expect.fail(out.stderr);
     }
   } else {
     expect(out.exitCode).not.toBe(0);
-    expect(out.all).not.toBe("");
+    expect(out.stderr).not.toBe("");
   }
   return out;
 }

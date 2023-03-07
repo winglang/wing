@@ -39,7 +39,7 @@ export enum StorageAccountPermissions {
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
-export class Bucket extends cloud.BucketBase {
+export class Bucket extends cloud.Bucket {
   /** Storage container */
   public readonly storageContainer: StorageContainer;
   private readonly public: boolean;
@@ -50,7 +50,7 @@ export class Bucket extends cloud.BucketBase {
 
     this.public = props.public ?? false;
 
-    const app = App.of(this);
+    const app = App.of(this) as App;
     this.storageAccount = app.storageAccount;
 
     const storageContainerName = ResourceNames.generateName(
@@ -121,7 +121,7 @@ export class Bucket extends cloud.BucketBase {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename, "BucketClient", [
+    return core.InflightClient.for(__dirname, __filename, "BucketClient", [
       `process.env["${this.envName()}"]`,
       `process.env["${this.envStorageAccountName()}"]`,
     ]);
@@ -140,3 +140,5 @@ Bucket._annotateInflight("put", {});
 Bucket._annotateInflight("get", {});
 Bucket._annotateInflight("delete", {});
 Bucket._annotateInflight("list", {});
+Bucket._annotateInflight("put_json", {});
+Bucket._annotateInflight("get_json", {});

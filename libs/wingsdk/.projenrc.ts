@@ -4,7 +4,6 @@ import rootPackageJson from "../../package.json";
 
 const JSII_DEPS = [
   "constructs@~10.1.228",
-  "polycons",
   "cdktf@0.15.2",
   "@cdktf/provider-random@^5.0.0",
   "@cdktf/provider-aws@^12.0.1",
@@ -57,6 +56,8 @@ const project = new cdk.JsiiProject({
     "aws-sdk-client-mock-jest",
     "eslint-plugin-sort-exports",
     "patch-package",
+    "vitest",
+    "@vitest/coverage-c8",
   ],
   prettier: true,
   npmignoreEnabled: false,
@@ -235,9 +236,11 @@ docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);
 docgen.exec(`cat API.md >> ${docsPath}`);
 
 // override default test timeout from 5s to 30s
-project.testTask.reset(
-  "jest --passWithNoTests --all --updateSnapshot --coverageProvider=v8 --testTimeout=30000"
-);
+project.testTask.reset("vitest run --coverage --update --passWithNoTests");
+const testWatch = project.tasks.tryFind("test:watch")!;
+testWatch.reset();
+testWatch.exec("vitest"); // Watch is default mode for vitest
+testWatch.description = "Run vitest in watch mode";
 project.testTask.spawn(project.eslint?.eslintTask!);
 
 project.addFields({

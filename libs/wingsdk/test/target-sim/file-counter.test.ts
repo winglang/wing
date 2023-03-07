@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
 
@@ -10,11 +11,11 @@ test("can create sequential files in a bucket", async () => {
     constructor(scope: Construct, id: string) {
       super(scope, id);
 
-      const counter = new cloud.Counter(this, "Counter", {
+      const counter = cloud.Counter._newCounter(this, "Counter", {
         initial: 1000,
       });
-      const bucket = new cloud.Bucket(this, "Bucket");
-      const queue = new cloud.Queue(this, "Queue");
+      const bucket = cloud.Bucket._newBucket(this, "Bucket");
+      const queue = cloud.Queue._newQueue(this, "Queue");
       const processor = Testing.makeHandler(
         this,
         "Processor",

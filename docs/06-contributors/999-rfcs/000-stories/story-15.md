@@ -16,8 +16,7 @@ The following code is an initial implementation of TaskList with api gateway and
 - [x] It leverages setting explicit permissions (using the `this.inflight` API, described [here](https://github.com/winglang/wing/pull/1610))
 - [x] Using interface 
 - [x] use redis instead of bucket
-- [ ] bring cdktf
-- [ ] code that updates estimation and duration from REST put command
+- [x] code that updates estimation and duration from REST put command
 - [x] console requirements
 
 ## Discussion topics
@@ -49,21 +48,25 @@ A good example on how this may look like is Redis embedded prompt inside their d
 
 
 ## Code 
+#### `tasklist.w`
 ```ts (wing)
 bring cloud;
 bring redis;
 
-// TODO discuss how we bring untyped something like RegEx from JavaScript 
-// PLACEHOLER for bringing something from Javascript stdlib
-bring untyped js;
+extern "./tasklist_helper.js" {
+  inflight get_data: (url: str) => Json;
+  inflight create_regex: (s: str) => IMyRegExp;
+  inflight uuid() => str; 
+};
 
-// prerequisite: npm install axios
-// PALCEHOLDER for bringing some external module
-bring untyped "axios" as axios; 
 
 enum Status {
   Uncompleted,
   Completed
+}
+
+interface IMyRegExp {
+  inflight test(s: str): bool
 }
 
 interface ITaskList {
@@ -79,15 +82,6 @@ resource TaskList implementes ITaskList {
   _redis: redis.Redis;
   init() {
     this._redis = new redis.Redis();
-    this.inflights.add("get", ref: "this._redis", op: "GET" );
-    this.inflights.add("_add", ref: "this._redis", op: ["SET", "SADD"]);
-    // notice I am setting explicit permissions on this
-    this.inflights.add("add", ref: "this", op: "_add");
-    // is this the right synatx for multiple ops? 
-    this.inflights.add("set_status", ref: "this", op: ["_add", "get"]); 
-    this.inflights.add("set_estimation", ref: "this", op: ["_add", "get"]); 
-
-    // TODO add more permissions for remove, find
   }
 
   inflight get(id: str): Json {
@@ -95,20 +89,20 @@ resource TaskList implementes ITaskList {
   }
   
   inflight _add(id: str, j: Json): str {
-    this._redis.SET(id , Json.format(j));
+    this._redis.SET(id , Json.to_str(j));
     this._redis.SADD("todo", id);
     return id;
   } 
   
   inflight add(title: str): str {
     // PLACEHOLDER - how does untyped works with numeric operations
-    let id = "${js.Math.floor(js.Math.random() * 100000000000)}";
+    let id = uuid();
     let j = Json { 
       title: title, 
       status: Status.Uncompleted
     };
     print("adding task ${id} with data: ${j}"); 
-    return this._add(id, js);
+    return this._add(id, j);
   }
 
   inflight remove(id: str) {
@@ -117,12 +111,11 @@ resource TaskList implementes ITaskList {
   }
 
   inflight find(term: str): Array<str> { 
-    let r = new js.RegExp(term);
+    let r = create_regex(term);
     let result = MutArray<str>[]; 
     let ids = this._redis.SMEMBERS("todo");
     for id in ids {
       let j = Json.parse(this._redis.GET(id));
-      // Notice that there is autocasting from untyped to bool here 
       if r.test(j.title) {
         result.push(id);
       }
@@ -139,7 +132,7 @@ resource TaskList implementes ITaskList {
 
   inflight set_estimation(id: str, estimation: duration): str {
     let j = Json.clone_mut(this.get(id));
-    j.effort_estimation = estimation;
+    j.estimated_in_seconds = estimation.seconds;
     this._add(id, Json.clone(j));
     return id;
   }
@@ -159,19 +152,39 @@ resource TaskListApi {
       // Easter Egg - if you add a todo with the single word "random" as the title, 
       //              the system will fetch a random task from the internet
       if title == "random" {
-        // PLACEHOLDER - can I cast an untyped ?
-        let random_task = axios.get('https://www.boredapi.com/api/activity');
-        title = str.from_json(random_task.data.activity); 
+        let data: Json = get_data('https://www.boredapi.com/api/activity');
+        title = str.from_json(data.activity); 
       } 
       let id = this.task_list.add(title);
-      return cloud.ApiResponse { status:201, body: Json.format(id) };
+      return cloud.ApiResponse { status:201, body: Json.to_str(id) };
+    });
+    
+    this.api.put("/tasks/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+      let id = str.from_json(req.params.id);
+      if req.body.estimation_in_days? { 
+         this.task_list.set_estimation(id, num.from_str(req.body.estimation_in_days));
+      }
+      if req.body.completed? {
+        if bool.from_json(req.body.completed) {
+          this.task_list.set_status(id, Status.Completed);
+        } else {
+          this.task_list.set_status(id, Status.Uncompleted);
+        }
+
+      }
+      try {
+        let title = this.task_list.get(id);
+        return cloud.ApiResponse { status:200, body: Json.to_str(title) };
+      } catch {
+        return cloud.ApiResponse { status: 400 };
+      }
     });
 
     this.api.get("/tasks/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let id = str.from_json(req.params.id);
       try {
         let title = this.task_list.get(id);
-        return cloud.ApiResponse { status:200, body: Json.format(title) };
+        return cloud.ApiResponse { status:200, body: Json.to_str(title) };
       } catch {
         return cloud.ApiResponse { status: 400 };
       }
@@ -190,12 +203,29 @@ resource TaskListApi {
     this.api.get("/tasks", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let search = str.from_json(req.query.search ?? Json ".*"); 
       let results = this.task_list.find(search);
-      return cloud.ApiResponse { status: 200, body: Json.format(results) };
+      return cloud.ApiResponse { status: 200, body: Json.to_str(results) };
     });
   }
 }
 
 let task_list = new TaskList();
 let t = new TaskListApi(task_list);
+```
+#### `tasklist_helper.js`
 
+```js
+const axios = require('axios');
+
+exports.get_data = async function(url) {
+  const response = await axios.get(url);
+  return response.data; // returns a JSON
+};
+
+exports.create_regex = function (s) {
+  return new RegExp(s);
+};
+
+exports.uuid = function () {
+  return "" + Math.floor(Math.random() * 100000000000);
+};
 ```

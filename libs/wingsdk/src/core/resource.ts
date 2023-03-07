@@ -176,21 +176,21 @@ export abstract class Resource extends Construct implements IResource {
     if (!this.bindMap.has(host)) {
       this.bindMap.set(host, new Set());
     }
-    for (let op of ops) {
+    for (const op of ops) {
       this.bindMap.get(host)!.add(op);
     }
 
     // Collect a list of all immediate child bindings
     const resources: Record<string, string[]> = {};
-    for (let op of ops) {
+    for (const op of ops) {
       const sym = Symbol.for(BIND_METADATA_PREFIX + op);
       const bindAnnotation: OperationAnnotation = (this as any)[sym];
       if (!bindAnnotation) {
         throw new Error(
-          `Resource ${this.node.path} does not support operation ${op}`
+          `Unable to reference "${this.node.path}" from "${host.node.path}" because it does not support operation "${op}"`
         );
       }
-      for (let resource of Object.keys(bindAnnotation)) {
+      for (const resource of Object.keys(bindAnnotation)) {
         resources[resource] = resources[resource] ?? [];
         resources[resource].push(...bindAnnotation[resource].ops);
       }
@@ -235,7 +235,7 @@ export abstract class Resource extends Construct implements IResource {
   private registerBindObject(
     obj: any,
     host: IResource,
-    ops: string[] = ["?"]
+    ops: string[] = []
   ): void {
     switch (typeof obj) {
       case "string":
@@ -245,7 +245,7 @@ export abstract class Resource extends Construct implements IResource {
 
       case "object":
         if (Array.isArray(obj)) {
-          obj.forEach((item) => this.registerBindObject(item, host, ops));
+          obj.forEach((item) => this.registerBindObject(item, host));
           return;
         }
 
@@ -255,13 +255,13 @@ export abstract class Resource extends Construct implements IResource {
 
         if (obj instanceof Set) {
           return Array.from(obj).forEach((item) =>
-            this.registerBindObject(item, host, ops)
+            this.registerBindObject(item, host)
           );
         }
 
         if (obj instanceof Map) {
           Array.from(obj.values()).forEach((item) =>
-            this.registerBindObject(item, host, ops)
+            this.registerBindObject(item, host)
           );
           return;
         }

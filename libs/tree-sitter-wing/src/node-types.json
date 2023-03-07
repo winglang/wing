@@ -54,6 +54,10 @@
         "named": true
       },
       {
+        "type": "json_literal",
+        "named": true
+      },
+      {
         "type": "map_literal",
         "named": true
       },
@@ -195,6 +199,10 @@
             "named": false
           },
           {
+            "type": "**",
+            "named": false
+          },
+          {
             "type": "+",
             "named": false
           },
@@ -231,7 +239,7 @@
             "named": false
           },
           {
-            "type": "^",
+            "type": "\\",
             "named": false
           },
           {
@@ -388,38 +396,7 @@
     }
   },
   {
-    "type": "class_implementation",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "class_member",
-          "named": true
-        },
-        {
-          "type": "constructor",
-          "named": true
-        },
-        {
-          "type": "function_definition",
-          "named": true
-        },
-        {
-          "type": "inflight_class_member",
-          "named": true
-        },
-        {
-          "type": "inflight_function_definition",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "class_member",
+    "type": "class_field",
     "named": true,
     "fields": {
       "access_modifier": {
@@ -428,6 +405,16 @@
         "types": [
           {
             "type": "access_modifier",
+            "named": true
+          }
+        ]
+      },
+      "initializer": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "expression",
             "named": true
           }
         ]
@@ -442,12 +429,32 @@
           }
         ]
       },
+      "phase_modifier": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "inflight",
+            "named": false
+          }
+        ]
+      },
       "reassignable": {
         "multiple": false,
         "required": false,
         "types": [
           {
             "type": "reassignable",
+            "named": true
+          }
+        ]
+      },
+      "static": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "static",
             "named": true
           }
         ]
@@ -473,6 +480,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -482,6 +493,33 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "class_implementation",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "class_field",
+          "named": true
+        },
+        {
+          "type": "constructor",
+          "named": true
+        },
+        {
+          "type": "inflight_method_definition",
+          "named": true
+        },
+        {
+          "type": "method_definition",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -678,126 +716,6 @@
     }
   },
   {
-    "type": "function_definition",
-    "named": true,
-    "fields": {
-      "access_modifier": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "access_modifier",
-            "named": true
-          }
-        ]
-      },
-      "async": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "async_modifier",
-            "named": true
-          }
-        ]
-      },
-      "block": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "block",
-            "named": true
-          }
-        ]
-      },
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      },
-      "parameter_list": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "parameter_list",
-            "named": true
-          }
-        ]
-      },
-      "return_type": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": ":",
-            "named": false
-          },
-          {
-            "type": "builtin_type",
-            "named": true
-          },
-          {
-            "type": "custom_type",
-            "named": true
-          },
-          {
-            "type": "function_type",
-            "named": true
-          },
-          {
-            "type": "immutable_container_type",
-            "named": true
-          },
-          {
-            "type": "mutable_container_type",
-            "named": true
-          },
-          {
-            "type": "optional",
-            "named": true
-          }
-        ]
-      },
-      "type": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "builtin_type",
-            "named": true
-          },
-          {
-            "type": "custom_type",
-            "named": true
-          },
-          {
-            "type": "function_type",
-            "named": true
-          },
-          {
-            "type": "immutable_container_type",
-            "named": true
-          },
-          {
-            "type": "mutable_container_type",
-            "named": true
-          },
-          {
-            "type": "optional",
-            "named": true
-          }
-        ]
-      }
-    }
-  },
-  {
     "type": "function_type",
     "named": true,
     "fields": {
@@ -839,6 +757,10 @@
           },
           {
             "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
             "named": true
           },
           {
@@ -962,79 +884,7 @@
             "named": true
           },
           {
-            "type": "mutable_container_type",
-            "named": true
-          },
-          {
-            "type": "optional",
-            "named": true
-          }
-        ]
-      }
-    }
-  },
-  {
-    "type": "inflight_class_member",
-    "named": true,
-    "fields": {
-      "access_modifier": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "access_modifier",
-            "named": true
-          }
-        ]
-      },
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      },
-      "phase_modifier": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "inflight",
-            "named": false
-          }
-        ]
-      },
-      "reassignable": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "reassignable",
-            "named": true
-          }
-        ]
-      },
-      "type": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "builtin_type",
-            "named": true
-          },
-          {
-            "type": "custom_type",
-            "named": true
-          },
-          {
-            "type": "function_type",
-            "named": true
-          },
-          {
-            "type": "immutable_container_type",
+            "type": "json_container_type",
             "named": true
           },
           {
@@ -1098,6 +948,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -1128,6 +982,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -1140,7 +998,7 @@
     }
   },
   {
-    "type": "inflight_function_definition",
+    "type": "inflight_method_definition",
     "named": true,
     "fields": {
       "access_modifier": {
@@ -1218,11 +1076,25 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
           {
             "type": "optional",
+            "named": true
+          }
+        ]
+      },
+      "static": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "static",
             "named": true
           }
         ]
@@ -1248,11 +1120,69 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
           {
             "type": "optional",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "json_container_type",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "json_element",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "_literal",
+          "named": true
+        },
+        {
+          "type": "array_literal",
+          "named": true
+        },
+        {
+          "type": "map_literal",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "json_literal",
+    "named": true,
+    "fields": {
+      "element": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "json_element",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "json_container_type",
             "named": true
           }
         ]
@@ -1332,6 +1262,144 @@
     }
   },
   {
+    "type": "method_definition",
+    "named": true,
+    "fields": {
+      "access_modifier": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "access_modifier",
+            "named": true
+          }
+        ]
+      },
+      "async": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "async_modifier",
+            "named": true
+          }
+        ]
+      },
+      "block": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "parameter_list": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "parameter_list",
+            "named": true
+          }
+        ]
+      },
+      "return_type": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ":",
+            "named": false
+          },
+          {
+            "type": "builtin_type",
+            "named": true
+          },
+          {
+            "type": "custom_type",
+            "named": true
+          },
+          {
+            "type": "function_type",
+            "named": true
+          },
+          {
+            "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
+            "type": "mutable_container_type",
+            "named": true
+          },
+          {
+            "type": "optional",
+            "named": true
+          }
+        ]
+      },
+      "static": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "static",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "builtin_type",
+            "named": true
+          },
+          {
+            "type": "custom_type",
+            "named": true
+          },
+          {
+            "type": "function_type",
+            "named": true
+          },
+          {
+            "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
+            "type": "mutable_container_type",
+            "named": true
+          },
+          {
+            "type": "optional",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "minutes",
     "named": true,
     "fields": {
@@ -1387,6 +1455,10 @@
           },
           {
             "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
             "named": true
           },
           {
@@ -1537,6 +1609,10 @@
           "named": true
         },
         {
+          "type": "json_container_type",
+          "named": true
+        },
+        {
           "type": "mutable_container_type",
           "named": true
         },
@@ -1592,6 +1668,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -1640,6 +1720,10 @@
         },
         {
           "type": "immutable_container_type",
+          "named": true
+        },
+        {
+          "type": "json_container_type",
           "named": true
         },
         {
@@ -1732,6 +1816,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -1759,6 +1847,10 @@
           },
           {
             "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
             "named": true
           },
           {
@@ -1837,7 +1929,7 @@
       "required": false,
       "types": [
         {
-          "type": "class_member",
+          "type": "class_field",
           "named": true
         },
         {
@@ -1845,15 +1937,11 @@
           "named": true
         },
         {
-          "type": "function_definition",
+          "type": "inflight_method_definition",
           "named": true
         },
         {
-          "type": "inflight_class_member",
-          "named": true
-        },
-        {
-          "type": "inflight_function_definition",
+          "type": "method_definition",
           "named": true
         }
       ]
@@ -2091,6 +2179,10 @@
           },
           {
             "type": "immutable_container_type",
+            "named": true
+          },
+          {
+            "type": "json_container_type",
             "named": true
           },
           {
@@ -2335,6 +2427,10 @@
             "named": true
           },
           {
+            "type": "json_container_type",
+            "named": true
+          },
+          {
             "type": "mutable_container_type",
             "named": true
           },
@@ -2419,6 +2515,10 @@
     "named": false
   },
   {
+    "type": "**",
+    "named": false
+  },
+  {
     "type": "+",
     "named": false
   },
@@ -2499,11 +2599,19 @@
     "named": false
   },
   {
+    "type": "Json",
+    "named": false
+  },
+  {
     "type": "Map",
     "named": false
   },
   {
     "type": "MutArray",
+    "named": false
+  },
+  {
+    "type": "MutJson",
     "named": false
   },
   {
@@ -2527,11 +2635,11 @@
     "named": false
   },
   {
-    "type": "]",
+    "type": "\\",
     "named": false
   },
   {
-    "type": "^",
+    "type": "]",
     "named": false
   },
   {
@@ -2681,6 +2789,10 @@
   {
     "type": "s",
     "named": false
+  },
+  {
+    "type": "static",
+    "named": true
   },
   {
     "type": "str",

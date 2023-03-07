@@ -1,4 +1,5 @@
 import * as cdktf from "cdktf";
+import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
@@ -13,7 +14,7 @@ import {
 test("default topic behavior", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  new cloud.Topic(app, "Topic");
+  cloud.Topic._newTopic(app, "Topic");
   const output = app.synth();
 
   // THEN
@@ -25,7 +26,7 @@ test("default topic behavior", () => {
 test("topic with subscriber function", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const topic = new cloud.Topic(app, "Topic");
+  const topic = cloud.Topic._newTopic(app, "Topic");
   const subscriber = Testing.makeHandler(
     app,
     "Handler",
@@ -55,7 +56,7 @@ test("topic with subscriber function", () => {
 test("topic with multiple subscribers", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const topic = new cloud.Topic(app, "Topic");
+  const topic = cloud.Topic._newTopic(app, "Topic");
   const subOne = Testing.makeHandler(
     app,
     "Handler1",
@@ -91,7 +92,7 @@ test("topic with multiple subscribers", () => {
 test("topic name valid", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const topic = new cloud.Topic(app, "The-Spectacular_Topic-01");
+  const topic = cloud.Topic._newTopic(app, "The-Spectacular_Topic-01");
   const output = app.synth();
 
   // THEN
@@ -107,7 +108,7 @@ test("topic name valid", () => {
 test("replace invalid character from queue name", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const topic = new cloud.Topic(app, "The%Spectacular@Topic");
+  const topic = cloud.Topic._newTopic(app, "The%Spectacular@Topic");
   const output = app.synth();
 
   // THEN

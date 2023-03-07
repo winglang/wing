@@ -224,7 +224,7 @@ pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
 		if let Some(symbol) = hover_visitor.found_symbol {
 			// If the given symbol is in a nested identifier, we can skip looking it up in the symbol environment
 			if let Some(expr) = hover_visitor.current_expr {
-				if let ExprKind::Reference(Reference::NestedIdentifier { property, .. }) = &expr.kind {
+				if let ExprKind::Reference(Reference::InstanceMember { property, .. }) = &expr.kind {
 					return build_nested_identifier_hover(&property, &expr);
 				}
 			}
@@ -258,7 +258,7 @@ pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
 					kind: MarkupKind::Markdown,
 					value: hover_string,
 				}),
-				range: Some(symbol.span.range()),
+				range: Some((&symbol.span).into()),
 			});
 		}
 
@@ -282,7 +282,7 @@ fn format_symbol_with_lookup(symbol_name: &str, symbol_lookup: (&SymbolKind, Sym
 				Phase::Independent => "",
 			};
 			let reassignable = if variable_info.reassignable { "var " } else { "" };
-			let _type = &variable_info._type;
+			let _type = &variable_info.type_;
 
 			format!("```wing\n{flight}{reassignable}{symbol_name}: {_type}\n```")
 		}
@@ -315,6 +315,6 @@ fn build_nested_identifier_hover(property: &Symbol, expr: &Expr) -> Option<Hover
 		}),
 		// When hovering over a reference, we want to highlight the entire relevant expression
 		// e.g. Hovering over `b` in `a.b.c` will highlight `a.b`
-		range: Some(expr.span.range()),
+		range: Some((&expr.span).into()),
 	});
 }

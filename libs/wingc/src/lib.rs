@@ -1,3 +1,6 @@
+#![allow(clippy::all)]
+#![deny(clippy::correctness)]
+
 #[macro_use]
 extern crate lazy_static;
 
@@ -11,9 +14,11 @@ use visit::Visit;
 use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
 use crate::parser::Parser;
+use std::alloc::{alloc, dealloc, Layout};
 use std::cell::RefCell;
 use std::collections::HashSet;
 use std::fs;
+use std::mem;
 use std::path::{Path, PathBuf};
 
 use crate::ast::Phase;
@@ -46,6 +51,8 @@ const WINGSDK_MUT_ARRAY: &'static str = "std.MutableArray";
 const WINGSDK_SET: &'static str = "std.ImmutableSet";
 const WINGSDK_MUT_SET: &'static str = "std.MutableSet";
 const WINGSDK_STRING: &'static str = "std.String";
+const WINGSDK_JSON: &'static str = "std.Json";
+const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
 const WINGSDK_RESOURCE: &'static str = "core.Resource";
 const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
 
@@ -60,16 +67,38 @@ pub struct CompilerOutput {
 	pub diagnostics: Diagnostics,
 }
 
+/// Exposes an allocation function to the WASM host
+///
+/// _This implementation is copied from wasm-bindgen_
 #[no_mangle]
-pub unsafe extern "C" fn wingc_malloc(size: u32) -> *mut u8 {
-	let layout = core::alloc::Layout::from_size_align_unchecked(size as usize, 0);
-	std::alloc::alloc(layout)
+pub unsafe extern "C" fn wingc_malloc(size: usize) -> *mut u8 {
+	let align = mem::align_of::<usize>();
+	let layout = Layout::from_size_align(size, align).expect("Invalid layout");
+	if layout.size() > 0 {
+		let ptr = alloc(layout);
+		if !ptr.is_null() {
+			return ptr;
+		} else {
+			std::alloc::handle_alloc_error(layout);
+		}
+	} else {
+		return align as *mut u8;
+	}
 }
 
+/// Expose a deallocation function to the WASM host
+///
+/// _This implementation is copied from wasm-bindgen_
 #[no_mangle]
-pub unsafe extern "C" fn wingc_free(ptr: u32, size: u32) {
-	let layout = core::alloc::Layout::from_size_align_unchecked(size as usize, 0);
-	std::alloc::dealloc(ptr as *mut u8, layout);
+pub unsafe extern "C" fn wingc_free(ptr: *mut u8, size: usize) {
+	// This happens for zero-length slices, and in that case `ptr` is
+	// likely bogus so don't actually send this to the system allocator
+	if size == 0 {
+		return;
+	}
+	let align = mem::align_of::<usize>();
+	let layout = Layout::from_size_align_unchecked(size, align);
+	dealloc(ptr, layout);
 }
 
 #[no_mangle]
@@ -272,6 +301,7 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 		.cloned()
 		.collect::<Vec<_>>();
 
+	// bail out now (before jsification) if there are errors (no point in jsifying)
 	if errors.len() > 0 {
 		return Err(errors);
 	}
@@ -280,11 +310,17 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 	fs::create_dir_all(out_dir).expect("create output dir");
 
 	let app_name = source_path.file_stem().unwrap().to_str().unwrap();
-	let jsifier = JSifier::new(out_dir, app_name, true);
+	let mut jsifier = JSifier::new(out_dir, app_name, true);
+
 	let intermediate_js = jsifier.jsify(&scope);
 	let intermediate_name = std::env::var("WINGC_PREFLIGHT").unwrap_or("preflight.js".to_string());
 	let intermediate_file = jsifier.out_dir.join(intermediate_name);
 	fs::write(&intermediate_file, &intermediate_js).expect("Write intermediate JS to disk");
+
+	// Filter diagnostics to only errors
+	if jsifier.diagnostics.len() > 0 {
+		return Err(jsifier.diagnostics);
+	}
 
 	return Ok(CompilerOutput {
 		preflight: intermediate_js,
@@ -327,11 +363,16 @@ mod sanity {
 			if result.is_err() {
 				assert!(
 					expect_failure,
-					"Expected compilation success, but failed: {:#?}",
+					"{}: Expected compilation success, but failed: {:#?}",
+					test_file.display(),
 					result.err().unwrap()
 				);
 			} else {
-				assert!(!expect_failure, "Expected compilation failure, but succeeded");
+				assert!(
+					!expect_failure,
+					"{}: Expected compilation failure, but succeeded",
+					test_file.display()
+				);
 			}
 		}
 	}
