@@ -48,6 +48,9 @@ const project = new cdk.JsiiProject({
     // simulator dependencies
     "tar",
     "express",
+    "dockerode",
+    // shared client dependencies
+    "ioredis",
   ],
   devDeps: [
     "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
@@ -64,6 +67,7 @@ const project = new cdk.JsiiProject({
     "patch-package",
     "vitest",
     "@vitest/coverage-c8",
+    "@types/dockerode",
   ],
   prettier: true,
   npmignoreEnabled: false,

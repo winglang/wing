@@ -9,13 +9,7 @@
       "type": "build"
     },
     {
-      "name": "@types/express-serve-static-core",
-      "version": "4.17.28",
-      "type": "build"
-    },
-    {
-      "name": "@types/express",
-      "version": "4.17.13",
+      "name": "@types/dockerode",
       "type": "build"
     },
     {
@@ -228,6 +222,10 @@
     },
     {
       "name": "debug",
+      "type": "bundled"
+    },
+    {
+      "name": "dockerode",
       "type": "bundled"
     },
     {
