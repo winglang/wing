@@ -1,0 +1,12 @@
+diff --git a/node_modules/wasi-js/package.json b/node_modules/wasi-js/package.json
+index ce44e6c..b97bc38 100644
+--- a/node_modules/wasi-js/package.json
++++ b/node_modules/wasi-js/package.json
+@@ -54,7 +54,6 @@
+     "typescript": "^4.8.4"
+   },
+   "scripts": {
+-    "preinstall": "npx only-allow pnpm",
+     "clean": "rm -rf dist",
+     "build": "tsc -b",
+     "tsc": "tsc -w",

@@ -1,6 +1,8 @@
 import { Construct } from "constructs";
-import { Bucket, Function } from "../../src/cloud";
-import { InflightBindings } from "../../src/core";
+import { test, expect, describe } from "vitest";
+import { Bucket } from "../../src/cloud";
+import { Code, InflightBindings } from "../../src/core";
+import { Function } from "../../src/target-sim/function";
 import { SimApp, Testing, TestResult } from "../../src/testing";
 
 describe("run single test", () => {
@@ -34,7 +36,7 @@ describe("run single test", () => {
 
   test("not a function", async () => {
     const app = new SimApp();
-    new Bucket(app, "test");
+    Bucket._newBucket(app, "test");
 
     const sim = await app.startSimulator();
     await expect(sim.runTest("root/test")).rejects.toThrowError(
@@ -65,7 +67,7 @@ describe("run all tests", () => {
     new Test(app, "test", ["console.log('hi');"]);
     new Test(app, "test:bla", ["console.log('hi');"]);
     new Test(app, "test:blue", ["console.log('hi');"]);
-    new Bucket(app, "mytestbucket");
+    Bucket._newBucket(app, "mytestbucket");
 
     const sim = await app.startSimulator();
     const results = await sim.runAllTests();
@@ -79,7 +81,7 @@ describe("run all tests", () => {
 
   test("each test runs in a separate simulator instance", async () => {
     const app = new SimApp();
-    const bucket = new Bucket(app, "bucket");
+    const bucket = Bucket._newBucket(app, "bucket");
 
     new Test(
       app,
@@ -95,11 +97,9 @@ describe("run all tests", () => {
         "assert(keys.length === 5);",
       ],
       {
-        resources: {
-          bucket: {
-            resource: bucket,
-            ops: ["put"],
-          },
+        bucket: {
+          obj: bucket,
+          ops: ["put"],
         },
       }
     );
@@ -114,11 +114,9 @@ describe("run all tests", () => {
         "assert(keys.length === 1);",
       ],
       {
-        resources: {
-          bucket: {
-            resource: bucket,
-            ops: ["put", "list"],
-          },
+        bucket: {
+          obj: bucket,
+          ops: ["put", "list"],
         },
       }
     );
@@ -131,12 +129,21 @@ describe("run all tests", () => {
   });
 });
 
+test("provides raw tree data", async () => {
+  const app = new SimApp();
+  new Test(app, "test", ["console.log('hi');"]);
+  const sim = await app.startSimulator();
+  const treeData = sim.tree().rawData();
+  expect(treeData).toBeDefined();
+  expect(treeData).toMatchSnapshot();
+});
+
 class Test extends Function {
   constructor(
     scope: Construct,
     id: string,
     code: string[],
-    bindings?: InflightBindings
+    bindings: InflightBindings = {}
   ) {
     super(
       scope,
@@ -148,6 +155,10 @@ class Test extends Function {
         bindings
       )
     );
+  }
+
+  public _toInflight(): Code {
+    throw new Error("Method not implemented.");
   }
 }
 

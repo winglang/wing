@@ -1,7 +1,9 @@
 import { existsSync } from "fs";
 import { join } from "path";
 import * as tar from "tar";
+import { Tree } from "./tree";
 import { SDK_VERSION } from "../constants";
+import { ConstructTree } from "../core";
 import { ISimulatorResourceInstance } from "../target-sim";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
@@ -166,12 +168,14 @@ export class Simulator {
   private readonly _handles: HandleManager;
   private _traces: Array<Trace>;
   private readonly _traceSubscribers: Array<ITraceSubscriber>;
+  private _tree: Tree;
 
   constructor(props: SimulatorProps) {
     this._simfile = props.simfile;
-    const { assetsDir, config } = this._loadApp(props.simfile);
+    const { assetsDir, config, treeData } = this._loadApp(props.simfile);
     this._config = config;
     this._assetsDir = assetsDir;
+    this._tree = new Tree(treeData);
 
     this._running = false;
     this._factory = props.factory ?? new DefaultSimulatorFactory();
@@ -180,7 +184,11 @@ export class Simulator {
     this._traceSubscribers = new Array();
   }
 
-  private _loadApp(simfile: string): { assetsDir: string; config: any } {
+  private _loadApp(simfile: string): {
+    assetsDir: string;
+    config: any;
+    treeData: ConstructTree;
+  } {
     // create a temporary directory to store extracted files
     const workdir = mkdtemp();
     tar.extract({
@@ -211,7 +219,13 @@ export class Simulator {
       );
     }
 
-    return { assetsDir: workdir, config };
+    const treeJson = join(workdir, "tree.json");
+    if (!existsSync(treeJson)) {
+      throw new Error(`Invalid Wing app (${simfile}) - tree.json not found.`);
+    }
+    const treeData = readJsonSync(treeJson);
+
+    return { assetsDir: workdir, config, treeData };
   }
 
   /**
@@ -333,9 +347,10 @@ export class Simulator {
   public async reload(): Promise<void> {
     await this.stop();
 
-    const { assetsDir, config } = this._loadApp(this._simfile);
+    const { assetsDir, config, treeData } = this._loadApp(this._simfile);
     this._config = config;
     this._assetsDir = assetsDir;
+    this._tree = new Tree(treeData);
 
     await this.start();
   }
@@ -477,6 +492,13 @@ export class Simulator {
       pass: !error,
       error: error,
     };
+  }
+
+  /**
+   * Obtain information about the application's resource tree.
+   */
+  public tree(): Tree {
+    return this._tree;
   }
 
   private _addTrace(event: Trace) {

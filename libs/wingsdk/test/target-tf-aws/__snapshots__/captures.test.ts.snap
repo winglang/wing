@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`function with a bucket binding 1`] = `
 "new ((function(){
@@ -11,7 +11,7 @@ return class Handler {
   async handle(event) { await this.bucket.put(\\"hello.txt\\", event); }
 };
 })())({
-bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME_1357ca3a\\"])
+bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_1357ca3a\\"])
 })"
 `;
 
@@ -45,6 +45,7 @@ exports[`function with a bucket binding 2`] = `
         },
         \\"function_name\\": \\"Function-c852aba6\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
@@ -121,7 +122,7 @@ return class Handler {
     }
 };
 })())({
-function: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/function.inflight.ts\\")).FunctionClient(process.env[\\"FUNCTION_NAME_50735b21\\"])
+function: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_50735b21\\"])
 })"
 `;
 
@@ -165,6 +166,7 @@ exports[`function with a function binding 3`] = `
         },
         \\"function_name\\": \\"Function1-c87c16f1\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function1_IamRole_7017166A.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function1_Code_9E57A288.bucket}\\",
@@ -180,6 +182,7 @@ exports[`function with a function binding 3`] = `
         },
         \\"function_name\\": \\"Function2-c827e998\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function2_IamRole_1D1C491F.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function2_Code_F5825D80.bucket}\\",
@@ -222,7 +225,7 @@ return class Handler {
   async handle(event) { await this.queue.push(\\"info\\"); }
 };
 })())({
-queue: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/queue.inflight.ts\\")).QueueClient(process.env[\\"QUEUE_URL_1cfcc997\\"])
+queue: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/queue.inflight\\")).QueueClient(process.env[\\"QUEUE_URL_1cfcc997\\"])
 })"
 `;
 
@@ -289,6 +292,7 @@ exports[`function with a queue binding 3`] = `
         },
         \\"function_name\\": \\"Function-c852aba6\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
@@ -303,6 +307,7 @@ exports[`function with a queue binding 3`] = `
         },
         \\"function_name\\": \\"Queue-OnMessage-5cb7e554-c8452af1\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_QueueOnMessage5cb7e554_IamRole_6907C7E4.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessage5cb7e554_Code_8F59E986.bucket}\\",
@@ -379,6 +384,7 @@ exports[`two functions reusing the same IFunctionHandler 1`] = `
         },
         \\"function_name\\": \\"Function1-c87c16f1\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function1_IamRole_7017166A.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function1_Code_9E57A288.bucket}\\",
@@ -393,6 +399,7 @@ exports[`two functions reusing the same IFunctionHandler 1`] = `
         },
         \\"function_name\\": \\"Function2-c827e998\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function2_IamRole_1D1C491F.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function2_Code_F5825D80.bucket}\\",

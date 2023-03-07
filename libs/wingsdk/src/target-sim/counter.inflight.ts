@@ -42,9 +42,18 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
 
   public async peek(): Promise<number> {
     return this.context.withTrace({
-      message: `Peek (value=${this.value})`,
+      message: `Peek (value=${this.value}).`,
       activity: async () => {
         return this.value;
+      },
+    });
+  }
+
+  public async reset(reset_value: number = 0): Promise<void> {
+    return this.context.withTrace({
+      message: `Reset (value=${this.value}).`,
+      activity: async () => {
+        this.value = reset_value;
       },
     });
   }

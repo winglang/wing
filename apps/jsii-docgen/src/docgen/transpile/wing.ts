@@ -1,7 +1,7 @@
 import * as reflect from "jsii-reflect";
-import { submodulePath } from "../schema";
 import * as transpile from "./transpile";
 import { TranspiledTypeReferenceToStringOptions } from "./transpile";
+import { submodulePath } from "../schema";
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const Case = require("case");
 
@@ -107,12 +107,11 @@ export class WingTranspile extends transpile.TranspileBase {
   }
 
   public date(): string {
-    // TODO duration?
-    return "duration";
+    return "datetime";
   }
 
   public json(): string {
-    return "any";
+    return "json";
   }
 
   public enum(enu: reflect.EnumType): transpile.TranspiledEnum {

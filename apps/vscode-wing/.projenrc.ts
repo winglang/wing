@@ -2,6 +2,7 @@ import { IgnoreFile } from "projen";
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptAppProject } from "projen/lib/typescript";
 import { VSCodeExtensionContributions } from "./src/project/vscode_types";
+import rootPackageJson from "../../package.json";
 
 const VSCODE_BASE_VERSION = "1.70.0";
 
@@ -40,8 +41,12 @@ const project = new TypeScriptAppProject({
     },
   },
 
-  deps: [`@types/vscode@^${VSCODE_BASE_VERSION}`, "vscode-languageclient"],
-  devDeps: ["@types/node", "esbuild", "@vscode/vsce"],
+  deps: [
+    `@types/vscode@^${VSCODE_BASE_VERSION}`,
+    "vscode-languageclient",
+    "which",
+  ],
+  devDeps: ["@types/node", "@types/which", "esbuild", "@vscode/vsce"],
 });
 
 project.addGitIgnore("*.vsix");
@@ -90,6 +95,19 @@ const contributes: VSCodeExtensionContributions = {
       },
     },
   ],
+  configuration: [
+    {
+      title: "Wing",
+      properties: {
+        "wing.bin": {
+          type: "string",
+          default: "wing",
+          description:
+            "Path to the Wing binary. Will be `wing` from PATH by default.\nSet to `npx` to automatically retrieve the version that matches this extension",
+        },
+      },
+    },
+  ],
 };
 
 project.addFields({
@@ -116,5 +134,9 @@ project.packageTask.reset(
   "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
 );
 project.packageTask.exec("vsce package -o vscode-wing.vsix");
+
+project.addFields({
+  volta: rootPackageJson.volta,
+});
 
 project.synth();

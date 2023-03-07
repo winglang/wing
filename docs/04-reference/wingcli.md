@@ -1,5 +1,5 @@
 ---
-title: CLI Reference
+title: CLI User Manual
 id: cli
 description: Wing CLI Reference
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language, cli]
@@ -132,6 +132,16 @@ The output includes both a Terraform configuration file (under `target/cdktf.out
 JavaScript bundles that include inflight code that executes on compute platform such as Google Cloud Functions.
 
 You can deploy your stack to GCP using Terraform ([example](/getting-started/aws)).
+
+### Plugins
+
+Additionally the `compile` command can be provided an optional list of plugins to use during the compilation process.
+
+```sh
+$ wing compile --target tf-aws ENTRYPOINT.w --plugins PLUGIN1 PLUGIN2
+```
+Each plugin can be an absolute paths or relative path to a JavaScript file. For more 
+on how to create a plugin, see [Compiler Plugins](/reference/compiler-plugins).
 
 ## Test: `wing test`
 

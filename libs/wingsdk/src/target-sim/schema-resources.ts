@@ -1,12 +1,12 @@
 import { BaseResourceSchema } from "./schema";
-import {
-  BUCKET_TYPE,
-  COUNTER_TYPE,
-  FUNCTION_TYPE,
-  LOGGER_TYPE,
-  QUEUE_TYPE,
-  TOPIC_TYPE,
-} from "../cloud";
+
+export const QUEUE_TYPE = "wingsdk.cloud.Queue";
+export const FUNCTION_TYPE = "wingsdk.cloud.Function";
+export const BUCKET_TYPE = "wingsdk.cloud.Bucket";
+export const TOPIC_TYPE = "wingsdk.cloud.Topic";
+export const COUNTER_TYPE = "wingsdk.cloud.Counter";
+export const SCHEDULE_TYPE = "wingsdk.cloud.Schedule";
+export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 
 export type FunctionHandle = string;
 

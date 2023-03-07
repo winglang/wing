@@ -1,7 +1,7 @@
 import { createHash } from "crypto";
 import { mkdtempSync, readFileSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
-import { basename, dirname, join } from "path";
+import { basename, join } from "path";
 import { Construct } from "constructs";
 import { makeHandler } from "./internal";
 import { Connection, Display, IInflightHost, IResource } from "./resource";
@@ -79,6 +79,8 @@ export class NodeJsCode extends Code {
   }
 }
 
+export type InflightBindings = Record<string, InflightBinding>;
+
 /**
  * Props for `Inflight`.
  */
@@ -124,7 +126,7 @@ export class Inflight extends Construct implements IResource {
       throw new Error("Only Node.js code is supported");
     }
 
-    return makeHandler(scope, id, props.code.text, props.bindings ?? {}, {
+    return makeHandler(scope, id, props.code.text, props.bindings, {
       hidden: this.display.hidden,
       title: this.display.title,
       description: this.display.description,
@@ -135,7 +137,15 @@ export class Inflight extends Construct implements IResource {
     throw new Error("Method not implemented.");
   }
   /** @internal */
+  public _registerBind(_host: IInflightHost, _ops: string[]): void {
+    throw new Error("Method not implemented.");
+  }
+  /** @internal */
   public _toInflight(): Code {
+    throw new Error("Method not implemented.");
+  }
+  /** @internal */
+  public _preSynthesize(): void {
     throw new Error("Method not implemented.");
   }
   /** @internal */
@@ -145,33 +155,18 @@ export class Inflight extends Construct implements IResource {
 }
 
 /**
- * A resource binding.
+ * An inflight binding.
  */
-export interface InflightResourceBinding {
+export interface InflightBinding {
   /**
-   * The resource.
+   * The resource or capturable value.
    */
-  readonly resource: IResource;
+  readonly obj: any;
 
   /**
    * The list of operations used on the resource.
    */
-  readonly ops: string[];
-}
-
-/**
- * Inflight bindings.
- */
-export interface InflightBindings {
-  /**
-   * Resources being referenced by the inflight (key is the symbol).
-   */
-  readonly resources?: Record<string, InflightResourceBinding>;
-
-  /**
-   * Immutable data being referenced by the inflight (key is the symbol);
-   */
-  readonly data?: Record<string, any>;
+  readonly ops?: string[];
 }
 
 /**
@@ -182,15 +177,16 @@ export class InflightClient {
    * Creates a `Code` instance with code for creating an inflight client.
    */
   public static for(
+    dirname: string,
     filename: string,
     clientClass: string,
     args: string[]
   ): Code {
-    const inflightDir = dirname(filename);
+    const inflightDir = dirname;
     const inflightFile = basename(filename).split(".")[0] + ".inflight";
     return NodeJsCode.fromInline(
       `new (require("${normalPath(
-        require.resolve(`${inflightDir}/${inflightFile}`)
+        `${inflightDir}/${inflightFile}`
       )}")).${clientClass}(${args.join(", ")})`
     );
   }

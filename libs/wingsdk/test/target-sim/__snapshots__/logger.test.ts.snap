@@ -1,7 +1,7 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`inflight uses a logger 1`] = `
-Array [
+[
   "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "Hello, Alice",
@@ -13,20 +13,20 @@ Array [
 `;
 
 exports[`inflight uses a logger 2`] = `
-Object {
-  "app.wsim/simulator.json": Object {
-    "resources": Array [
-      Object {
-        "attrs": Object {},
+{
+  "app.wsim/simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
         "path": "root/WingLogger",
-        "props": Object {},
+        "props": {},
         "type": "wingsdk.cloud.Logger",
       },
-      Object {
-        "attrs": Object {},
+      {
+        "attrs": {},
         "path": "root/my_function",
-        "props": Object {
-          "environmentVariables": Object {
+        "props": {
+          "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
           "sourceCodeFile": "assets/my_function_c85c4e0e/index.js",
@@ -38,19 +38,19 @@ Object {
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "Handler": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
+  "app.wsim/tree.json": {
+    "tree": {
+      "children": {
+        "Handler": {
+          "attributes": {
+            "wing:resource:connections": [],
             "wing:resource:stateful": false,
           },
-          "constructInfo": Object {
+          "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.245",
           },
-          "display": Object {
+          "display": {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
@@ -58,10 +58,10 @@ Object {
           "id": "Handler",
           "path": "root/Handler",
         },
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
+        "WingLogger": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
                 "direction": "inbound",
                 "implicit": true,
                 "relationship": "print",
@@ -70,11 +70,11 @@ Object {
             ],
             "wing:resource:stateful": true,
           },
-          "constructInfo": Object {
+          "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.245",
           },
-          "display": Object {
+          "display": {
             "description": "A cloud logging facility",
             "hidden": true,
             "title": "Logger",
@@ -82,10 +82,10 @@ Object {
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
-        "my_function": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
+        "my_function": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
                 "direction": "outbound",
                 "implicit": true,
                 "relationship": "print",
@@ -94,21 +94,21 @@ Object {
             ],
             "wing:resource:stateful": false,
           },
-          "children": Object {
-            "Code": Object {
-              "constructInfo": Object {
+          "children": {
+            "Code": {
+              "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.228",
+                "version": "10.1.245",
               },
               "id": "Code",
               "path": "root/my_function/Code",
             },
           },
-          "constructInfo": Object {
+          "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.245",
           },
-          "display": Object {
+          "display": {
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
@@ -116,9 +116,9 @@ Object {
           "path": "root/my_function",
         },
       },
-      "constructInfo": Object {
+      "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.245",
       },
       "id": "root",
       "path": "root",
@@ -149,19 +149,19 @@ exports.handler = async function(event) {
   }())({}).handle(event);
 };
 ",
-  "tree.json": Object {
-    "tree": Object {
-      "children": Object {
-        "Handler": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
+  "tree.json": {
+    "tree": {
+      "children": {
+        "Handler": {
+          "attributes": {
+            "wing:resource:connections": [],
             "wing:resource:stateful": false,
           },
-          "constructInfo": Object {
+          "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.245",
           },
-          "display": Object {
+          "display": {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
@@ -169,10 +169,10 @@ exports.handler = async function(event) {
           "id": "Handler",
           "path": "root/Handler",
         },
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
+        "WingLogger": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
                 "direction": "inbound",
                 "implicit": true,
                 "relationship": "print",
@@ -181,11 +181,11 @@ exports.handler = async function(event) {
             ],
             "wing:resource:stateful": true,
           },
-          "constructInfo": Object {
+          "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.245",
           },
-          "display": Object {
+          "display": {
             "description": "A cloud logging facility",
             "hidden": true,
             "title": "Logger",
@@ -193,10 +193,10 @@ exports.handler = async function(event) {
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
-        "my_function": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
+        "my_function": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
                 "direction": "outbound",
                 "implicit": true,
                 "relationship": "print",
@@ -205,21 +205,21 @@ exports.handler = async function(event) {
             ],
             "wing:resource:stateful": false,
           },
-          "children": Object {
-            "Code": Object {
-              "constructInfo": Object {
+          "children": {
+            "Code": {
+              "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.228",
+                "version": "10.1.245",
               },
               "id": "Code",
               "path": "root/my_function/Code",
             },
           },
-          "constructInfo": Object {
+          "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.228",
+            "version": "10.1.245",
           },
-          "display": Object {
+          "display": {
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
@@ -227,9 +227,9 @@ exports.handler = async function(event) {
           "path": "root/my_function",
         },
       },
-      "constructInfo": Object {
+      "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.228",
+        "version": "10.1.245",
       },
       "id": "root",
       "path": "root",

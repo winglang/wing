@@ -1,4 +1,5 @@
 import { Node, IConstruct, Construct } from "constructs";
+import { test, expect } from "vitest";
 import { DependencyGraph } from "../../src/core/dependency";
 
 test("topology returns correct order", () => {

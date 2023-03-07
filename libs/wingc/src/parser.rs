@@ -1,15 +1,15 @@
 use indexmap::IndexSet;
 use phf::phf_map;
 use std::cell::RefCell;
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::collections::{BTreeMap, HashSet};
 use std::{str, vec};
 use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionDefinition,
+	ArgList, BinaryOperator, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionDefinition,
 	FunctionSignature, InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind,
-	Symbol, Type, UnaryOperator, UserDefinedType,
+	Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 
@@ -140,11 +140,10 @@ impl Parser<'_> {
 	}
 
 	fn node_span(&self, node: &Node) -> WingSpan {
+		let node_range = node.range();
 		WingSpan {
-			start: node.range().start_point,
-			end: node.range().end_point,
-			start_byte: node.byte_range().start,
-			end_byte: node.byte_range().end,
+			start: node_range.start_point.into(),
+			end: node_range.end_point.into(),
 			// TODO: Implement multi-file support
 			file_id: self.source_name.to_string(),
 		}
@@ -166,83 +165,21 @@ impl Parser<'_> {
 
 	fn build_statement(&self, statement_node: &Node, idx: usize) -> DiagnosticResult<Stmt> {
 		let stmt_kind = match statement_node.kind() {
-			"short_import_statement" => StmtKind::Use {
-				module_name: self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?,
-				identifier: if let Some(identifier) = statement_node.child_by_field_name("alias") {
-					Some(self.node_symbol(&identifier)?)
-				} else {
-					None
-				},
-			},
+			"short_import_statement" => self.build_bring_statement(statement_node)?,
 
-			"variable_definition_statement" => {
-				let type_ = if let Some(type_node) = statement_node.child_by_field_name("type") {
-					Some(self.build_type(&type_node)?)
-				} else {
-					None
-				};
-
-				StmtKind::VariableDef {
-					reassignable: statement_node.child_by_field_name("reassignable").is_some(),
-					var_name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?,
-					initial_value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
-					type_,
-				}
-			}
-			"variable_assignment_statement" => StmtKind::Assignment {
-				variable: self.build_reference(&statement_node.child_by_field_name("name").unwrap())?,
-				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
-			},
+			"variable_definition_statement" => self.build_variable_def_statement(statement_node)?,
+			"variable_assignment_statement" => self.build_assignment_statement(statement_node)?,
 
 			"expression_statement" => StmtKind::Expression(self.build_expression(&statement_node.named_child(0).unwrap())?),
 			"block" => StmtKind::Scope(self.build_scope(statement_node)),
-			"if_statement" => {
-				let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
-
-				let mut elif_vec = vec![];
-				let mut cursor = statement_node.walk();
-				for node in statement_node.children_by_field_name("elif_block", &mut cursor) {
-					let conditions = self.build_expression(&node.child_by_field_name("condition").unwrap());
-					let statements = self.build_scope(&node.child_by_field_name("block").unwrap());
-					let elif = ElifBlock {
-						condition: conditions.unwrap(),
-						statements: statements,
-					};
-					elif_vec.push(elif);
-				}
-
-				let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
-					Some(self.build_scope(&else_block))
-				} else {
-					None
-				};
-
-				StmtKind::If {
-					condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
-					statements: if_block,
-					elif_statements: elif_vec,
-					else_statements: else_block,
-				}
-			}
-			"for_in_loop" => StmtKind::ForLoop {
-				iterator: self.node_symbol(&statement_node.child_by_field_name("iterator").unwrap())?,
-				iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
-				statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
-			},
-			"while_statement" => StmtKind::While {
-				condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
-				statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
-			},
-			"return_statement" => StmtKind::Return(
-				if let Some(return_expression_node) = statement_node.child_by_field_name("expression") {
-					Some(self.build_expression(&return_expression_node)?)
-				} else {
-					None
-				},
-			),
+			"if_statement" => self.build_if_statement(statement_node)?,
+			"for_in_loop" => self.build_for_statement(statement_node)?,
+			"while_statement" => self.build_while_statement(statement_node)?,
+			"return_statement" => self.build_return_statement(statement_node)?,
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
 			"enum_definition" => self.build_enum_statement(statement_node)?,
+			"try_catch_statement" => self.build_try_catch_statement(statement_node)?,
 			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -251,6 +188,125 @@ impl Parser<'_> {
 			kind: stmt_kind,
 			span: self.node_span(statement_node),
 			idx,
+		})
+	}
+
+	fn build_try_catch_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		let try_statements = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
+		let catch_block = if let Some(catch_block) = statement_node.child_by_field_name("catch_block") {
+			Some(CatchBlock {
+				statements: self.build_scope(&catch_block),
+				exception_var: if let Some(exception_var_node) = statement_node.child_by_field_name("exception_identifier") {
+					Some(self.node_symbol(&exception_var_node)?)
+				} else {
+					None
+				},
+			})
+		} else {
+			None
+		};
+
+		let finally_statements = if let Some(finally_node) = statement_node.child_by_field_name("finally_block") {
+			Some(self.build_scope(&finally_node))
+		} else {
+			None
+		};
+
+		// If both catch and finally are missing, report an error
+		if catch_block.is_none() && finally_statements.is_none() {
+			return self.add_error::<StmtKind>(
+				String::from("Missing `catch` or `finally` blocks for this try statement"),
+				&statement_node,
+			);
+		}
+
+		Ok(StmtKind::TryCatch {
+			try_statements,
+			catch_block,
+			finally_statements,
+		})
+	}
+
+	fn build_return_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		Ok(StmtKind::Return(
+			if let Some(return_expression_node) = statement_node.child_by_field_name("expression") {
+				Some(self.build_expression(&return_expression_node)?)
+			} else {
+				None
+			},
+		))
+	}
+
+	fn build_while_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		Ok(StmtKind::While {
+			condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
+			statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
+		})
+	}
+
+	fn build_for_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		Ok(StmtKind::ForLoop {
+			iterator: self.node_symbol(&statement_node.child_by_field_name("iterator").unwrap())?,
+			iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
+			statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
+		})
+	}
+
+	fn build_if_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
+		let mut elif_vec = vec![];
+		let mut cursor = statement_node.walk();
+		for node in statement_node.children_by_field_name("elif_block", &mut cursor) {
+			let conditions = self.build_expression(&node.child_by_field_name("condition").unwrap());
+			let statements = self.build_scope(&node.child_by_field_name("block").unwrap());
+			let elif = ElifBlock {
+				condition: conditions.unwrap(),
+				statements: statements,
+			};
+			elif_vec.push(elif);
+		}
+		let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
+			Some(self.build_scope(&else_block))
+		} else {
+			None
+		};
+		Ok(StmtKind::If {
+			condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
+			statements: if_block,
+			elif_statements: elif_vec,
+			else_statements: else_block,
+		})
+	}
+
+	fn build_assignment_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		Ok(StmtKind::Assignment {
+			variable: self.build_reference(&statement_node.child_by_field_name("name").unwrap())?,
+			value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
+		})
+	}
+
+	fn build_variable_def_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		let type_ = if let Some(type_node) = statement_node.child_by_field_name("type") {
+			Some(self.build_type_annotation(&type_node)?)
+		} else {
+			None
+		};
+		Ok(StmtKind::VariableDef {
+			reassignable: statement_node.child_by_field_name("reassignable").is_some(),
+			var_name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?,
+			initial_value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
+			type_,
+		})
+	}
+
+	fn build_bring_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		Ok(StmtKind::Bring {
+			module_name: self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?,
+			identifier: if let Some(identifier) = statement_node.child_by_field_name("alias") {
+				Some(self.node_symbol(&identifier)?)
+			} else {
+				None
+			},
 		})
 	}
 
@@ -305,7 +361,7 @@ impl Parser<'_> {
 				continue;
 			}
 			match (class_element.kind(), is_resource) {
-				("function_definition", true) => {
+				("method_definition", true) => {
 					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
 					let func_def = self.build_function_definition(&class_element, Phase::Preflight);
 					match (method_name, func_def) {
@@ -313,7 +369,7 @@ impl Parser<'_> {
 						_ => {}
 					}
 				}
-				("inflight_function_definition", _) => {
+				("inflight_method_definition", _) => {
 					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
 					let func_def = self.build_function_definition(&class_element, Phase::Inflight);
 					match (method_name, func_def) {
@@ -321,18 +377,36 @@ impl Parser<'_> {
 						_ => {}
 					}
 				}
-				("class_member", _) => fields.push(ClassField {
-					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
-					member_type: self.build_type(&class_element.child_by_field_name("type").unwrap())?,
-					reassignable: class_element.child_by_field_name("reassignable").is_some(),
-					flight: Phase::Preflight,
-				}),
-				("inflight_class_member", _) => fields.push(ClassField {
-					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
-					member_type: self.build_type(&class_element.child_by_field_name("type").unwrap())?,
-					reassignable: class_element.child_by_field_name("reassignable").is_some(),
-					flight: Phase::Inflight,
-				}),
+				("class_field", _) => {
+					let is_static = class_element.child_by_field_name("static").is_some();
+					if is_static {
+						self.diagnostics.borrow_mut().push(Diagnostic {
+							level: DiagnosticLevel::Error,
+							message: format!(
+								"Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668",
+							),
+							span: Some(self.node_span(&class_element)),
+						});
+					}
+
+					fields.push(ClassField {
+						name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
+						member_type: self.build_type_annotation(&class_element.child_by_field_name("type").unwrap())?,
+						reassignable: class_element.child_by_field_name("reassignable").is_some(),
+						is_static,
+						flight: match class_element.child_by_field_name("phase_modifier") {
+							Some(n) => {
+								if !is_resource {
+									self
+										.add_error::<Node>(format!("Class cannot have inflight fields"), &n)
+										.err();
+								}
+								Phase::Inflight
+							}
+							None => Phase::Preflight,
+						},
+					})
+				}
 				("constructor", _) => {
 					if let Some(_) = constructor {
 						self
@@ -348,11 +422,11 @@ impl Parser<'_> {
 						statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
 						signature: FunctionSignature {
 							parameters: parameters.iter().map(|p| p.1.clone()).collect(),
-							return_type: Some(Box::new(Type::UserDefined(UserDefinedType {
+							return_type: Some(Box::new(TypeAnnotation::UserDefined(UserDefinedType {
 								root: name.clone(),
 								fields: vec![],
 							}))),
-							flight: if is_resource { Phase::Preflight } else { Phase::Inflight }, // TODO: for now classes can only be constructed inflight
+							flight: if is_resource { Phase::Preflight } else { Phase::Inflight },
 						},
 					})
 				}
@@ -383,9 +457,9 @@ impl Parser<'_> {
 		}
 
 		let parent = if let Some(parent_node) = statement_node.child_by_field_name("parent") {
-			let parent_type = self.build_type(&parent_node)?;
+			let parent_type = self.build_type_annotation(&parent_node)?;
 			match parent_type {
-				Type::UserDefined(parent_type) => Some(parent_type),
+				TypeAnnotation::UserDefined(parent_type) => Some(parent_type),
 				_ => {
 					self.add_error::<Node>(
 						format!("Parent type must be a user defined type, found {}", parent_type),
@@ -419,12 +493,13 @@ impl Parser<'_> {
 			signature: FunctionSignature {
 				parameters: parameters.iter().map(|p| p.1.clone()).collect(),
 				return_type: if let Some(rt) = func_def_node.child_by_field_name("type") {
-					Some(Box::new(self.build_type(&rt)?))
+					Some(Box::new(self.build_type_annotation(&rt)?))
 				} else {
 					None
 				},
 				flight,
 			},
+			is_static: func_def_node.child_by_field_name("static").is_some(),
 			captures: RefCell::new(None),
 		})
 	}
@@ -434,7 +509,7 @@ impl Parser<'_> {
 	/// # Returns
 	/// A vector of tuples for each parameter in the list. The tuples are the name, type and a bool letting
 	/// us know whether the parameter is reassignable or not respectively.
-	fn build_parameter_list(&self, parameter_list_node: &Node) -> DiagnosticResult<Vec<(Symbol, Type, bool)>> {
+	fn build_parameter_list(&self, parameter_list_node: &Node) -> DiagnosticResult<Vec<(Symbol, TypeAnnotation, bool)>> {
 		let mut res = vec![];
 		let mut cursor = parameter_list_node.walk();
 		for parameter_definition_node in parameter_list_node.named_children(&mut cursor) {
@@ -444,7 +519,7 @@ impl Parser<'_> {
 
 			res.push((
 				self.node_symbol(&parameter_definition_node.child_by_field_name("name").unwrap())?,
-				self.build_type(&parameter_definition_node.child_by_field_name("type").unwrap())?,
+				self.build_type_annotation(&parameter_definition_node.child_by_field_name("type").unwrap())?,
 				parameter_definition_node.child_by_field_name("reassignable").is_some(),
 			))
 		}
@@ -452,32 +527,32 @@ impl Parser<'_> {
 		Ok(res)
 	}
 
-	fn build_type(&self, type_node: &Node) -> DiagnosticResult<Type> {
+	fn build_type_annotation(&self, type_node: &Node) -> DiagnosticResult<TypeAnnotation> {
 		match type_node.kind() {
 			"builtin_type" => match self.node_text(type_node) {
-				"num" => Ok(Type::Number),
-				"str" => Ok(Type::String),
-				"bool" => Ok(Type::Bool),
-				"duration" => Ok(Type::Duration),
+				"num" => Ok(TypeAnnotation::Number),
+				"str" => Ok(TypeAnnotation::String),
+				"bool" => Ok(TypeAnnotation::Bool),
+				"duration" => Ok(TypeAnnotation::Duration),
 				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
 				other => return self.report_unimplemented_grammar(other, "builtin", type_node),
 			},
 			"optional" => {
-				let inner_type = self.build_type(&type_node.named_child(0).unwrap()).unwrap();
-				Ok(Type::Optional(Box::new(inner_type)))
+				let inner_type = self.build_type_annotation(&type_node.named_child(0).unwrap()).unwrap();
+				Ok(TypeAnnotation::Optional(Box::new(inner_type)))
 			}
-			"custom_type" => Ok(self.build_user_defined_type(&type_node)?),
+			"custom_type" => Ok(self.build_udt_annotation(&type_node)?),
 			"function_type" => {
 				let param_type_list_node = type_node.child_by_field_name("parameter_types").unwrap();
 				let mut cursor = param_type_list_node.walk();
 				let parameters = param_type_list_node
 					.named_children(&mut cursor)
-					.filter_map(|param_type| self.build_type(&param_type).ok())
-					.collect::<Vec<Type>>();
+					.filter_map(|param_type| self.build_type_annotation(&param_type).ok())
+					.collect::<Vec<TypeAnnotation>>();
 				let return_type = type_node
 					.child_by_field_name("return_type")
-					.map(|n| Box::new(self.build_type(&n).unwrap()));
-				Ok(Type::FunctionSignature(FunctionSignature {
+					.map(|n| Box::new(self.build_type_annotation(&n).unwrap()));
+				Ok(TypeAnnotation::FunctionSignature(FunctionSignature {
 					parameters,
 					return_type,
 					flight: if type_node.child_by_field_name("inflight").is_some() {
@@ -487,16 +562,36 @@ impl Parser<'_> {
 					},
 				}))
 			}
+			"json_container_type" => {
+				let container_type = self.node_text(&type_node);
+				match container_type {
+					"Json" => Ok(TypeAnnotation::Json),
+					"MutJson" => Ok(TypeAnnotation::MutJson),
+					other => self.add_error(format!("invalid json container type {}", other), &type_node),
+				}
+			}
 			"mutable_container_type" | "immutable_container_type" => {
 				let container_type = self.node_text(&type_node.child_by_field_name("collection_type").unwrap());
 				let element_type = type_node.child_by_field_name("type_parameter").unwrap();
 				match container_type {
-					"Map" => Ok(Type::Map(Box::new(self.build_type(&element_type)?))),
-					"MutMap" => Ok(Type::MutMap(Box::new(self.build_type(&element_type)?))),
-					"Array" => Ok(Type::Array(Box::new(self.build_type(&element_type)?))),
-					"MutArray" => Ok(Type::MutArray(Box::new(self.build_type(&element_type)?))),
-					"Set" => Ok(Type::Set(Box::new(self.build_type(&element_type)?))),
-					"MutSet" => Ok(Type::MutSet(Box::new(self.build_type(&element_type)?))),
+					"Map" => Ok(TypeAnnotation::Map(Box::new(
+						self.build_type_annotation(&element_type)?,
+					))),
+					"MutMap" => Ok(TypeAnnotation::MutMap(Box::new(
+						self.build_type_annotation(&element_type)?,
+					))),
+					"Array" => Ok(TypeAnnotation::Array(Box::new(
+						self.build_type_annotation(&element_type)?,
+					))),
+					"MutArray" => Ok(TypeAnnotation::MutArray(Box::new(
+						self.build_type_annotation(&element_type)?,
+					))),
+					"Set" => Ok(TypeAnnotation::Set(Box::new(
+						self.build_type_annotation(&element_type)?,
+					))),
+					"MutSet" => Ok(TypeAnnotation::MutSet(Box::new(
+						self.build_type_annotation(&element_type)?,
+					))),
 					"ERROR" => self.add_error(format!("Expected builtin container type"), type_node)?,
 					other => self.report_unimplemented_grammar(other, "builtin container type", type_node),
 				}
@@ -510,15 +605,15 @@ impl Parser<'_> {
 		if nested_node.has_error() {
 			return self.add_error(format!("Syntax error"), &nested_node);
 		}
-		Ok(Reference::NestedIdentifier {
+		Ok(Reference::InstanceMember {
 			object: Box::new(self.build_expression(&nested_node.child_by_field_name("object").unwrap())?),
 			property: self.node_symbol(&nested_node.child_by_field_name("property").unwrap())?,
 		})
 	}
 
-	fn build_user_defined_type(&self, nested_node: &Node) -> DiagnosticResult<Type> {
+	fn build_udt_annotation(&self, nested_node: &Node) -> DiagnosticResult<TypeAnnotation> {
 		let mut cursor = nested_node.walk();
-		Ok(Type::UserDefined(UserDefinedType {
+		Ok(TypeAnnotation::UserDefined(UserDefinedType {
 			root: self.node_symbol(&nested_node.child_by_field_name("object").unwrap())?,
 			fields: nested_node
 				.children_by_field_name("fields", &mut cursor)
@@ -539,7 +634,7 @@ impl Parser<'_> {
 
 	fn build_arg_list(&self, arg_list_node: &Node) -> DiagnosticResult<ArgList> {
 		let mut pos_args = vec![];
-		let mut named_args = HashMap::new();
+		let mut named_args = BTreeMap::new();
 
 		let mut cursor = arg_list_node.walk();
 		let mut seen_keyword_args = false;
@@ -579,7 +674,7 @@ impl Parser<'_> {
 		let expression_span = self.node_span(expression_node);
 		match expression_node.kind() {
 			"new_expression" => {
-				let class = self.build_type(&expression_node.child_by_field_name("class").unwrap())?;
+				let class = self.build_type_annotation(&expression_node.child_by_field_name("class").unwrap())?;
 
 				let arg_list = if let Some(args_node) = expression_node.child_by_field_name("args") {
 					self.build_arg_list(&args_node)
@@ -608,8 +703,8 @@ impl Parser<'_> {
 			}
 			"binary_expression" => Ok(Expr::new(
 				ExprKind::Binary {
-					lexp: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())?),
-					rexp: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap())?),
+					left: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())?),
+					right: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap())?),
 					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
 						"+" => BinaryOperator::Add,
 						"-" => BinaryOperator::Sub,
@@ -624,6 +719,8 @@ impl Parser<'_> {
 						"%" => BinaryOperator::Mod,
 						"*" => BinaryOperator::Mul,
 						"/" => BinaryOperator::Div,
+						"\\" => BinaryOperator::FloorDiv,
+						"**" => BinaryOperator::Power,
 						"ERROR" => self.add_error::<BinaryOperator>(format!("Expected binary operator"), expression_node)?,
 						other => return self.report_unimplemented_grammar(other, "binary operator", expression_node),
 					},
@@ -729,7 +826,7 @@ impl Parser<'_> {
 			"call" => Ok(Expr::new(
 				ExprKind::Call {
 					function: Box::new(self.build_expression(&expression_node.child_by_field_name("caller").unwrap())?),
-					args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
+					arg_list: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
 				},
 				expression_span,
 			)),
@@ -748,7 +845,7 @@ impl Parser<'_> {
 			),
 			"array_literal" => {
 				let array_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
-					Some(self.build_type(&type_node)?)
+					Some(self.build_type_annotation(&type_node)?)
 				} else {
 					None
 				};
@@ -769,7 +866,7 @@ impl Parser<'_> {
 			}
 			"map_literal" => {
 				let map_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
-					Some(self.build_type(&type_node)?)
+					Some(self.build_type_annotation(&type_node)?)
 				} else {
 					None
 				};
@@ -800,7 +897,7 @@ impl Parser<'_> {
 
 				// Special case: empty {} (which is detected as map by tree-sitter) -
 				// if it is annotated as a Set/MutSet we should treat it as a set literal
-				if let Some(Type::Set(_)) | Some(Type::MutSet(_)) = map_type {
+				if let Some(TypeAnnotation::Set(_)) | Some(TypeAnnotation::MutSet(_)) = map_type {
 					if fields.is_empty() {
 						return self.build_set_literal(expression_node);
 					}
@@ -814,9 +911,30 @@ impl Parser<'_> {
 					expression_span,
 				))
 			}
+			"json_element" => self.build_expression(
+				&expression_node
+					.child(0)
+					.expect("Json element should always have child node"),
+			),
+			"json_literal" => {
+				let type_node = expression_node
+					.child_by_field_name("type")
+					.expect("Json literal should always have type node");
+				let is_mut = match self.node_text(&type_node) {
+					"MutJson" => true,
+					_ => false,
+				};
+
+				let element_node = expression_node
+					.child_by_field_name("element")
+					.expect("Should always have element");
+				let element = Box::new(self.build_expression(&element_node)?);
+
+				Ok(Expr::new(ExprKind::JsonLiteral { is_mut, element }, expression_span))
+			}
 			"set_literal" => self.build_set_literal(expression_node),
 			"struct_literal" => {
-				let type_ = self.build_type(&expression_node.child_by_field_name("type").unwrap());
+				let type_ = self.build_type_annotation(&expression_node.child_by_field_name("type").unwrap());
 				let mut fields = BTreeMap::new();
 				let mut cursor = expression_node.walk();
 				for field in expression_node.children_by_field_name("fields", &mut cursor) {
@@ -847,7 +965,7 @@ impl Parser<'_> {
 	fn build_set_literal(&self, expression_node: &Node) -> Result<Expr, ()> {
 		let expression_span = self.node_span(expression_node);
 		let set_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
-			Some(self.build_type(&type_node)?)
+			Some(self.build_type_annotation(&type_node)?)
 		} else {
 			None
 		};

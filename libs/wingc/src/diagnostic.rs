@@ -1,37 +1,121 @@
+use colored::Colorize;
+use std::fmt::Display;
 use tree_sitter::Point;
+
+use lsp_types::{Position, Range};
 
 use crate::debug;
 
 pub type FileId = String;
-pub type CharacterLocation = Point;
-pub type ByteIndex = usize;
 pub type Diagnostics = Vec<Diagnostic>;
 pub type DiagnosticResult<T> = Result<T, ()>;
 
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+/// Line and character location in a UTF8 Wing source file
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub struct WingLocation {
+	pub line: u32,
+	pub col: u32,
+}
+
+/// tree-sitter-based Point => WingLocation
+impl From<Point> for WingLocation {
+	fn from(point: Point) -> Self {
+		Self {
+			line: point.row as u32,
+			col: point.column as u32,
+		}
+	}
+}
+
+/// LSP-based Position => WingLocation
+impl From<Position> for WingLocation {
+	fn from(position: Position) -> Self {
+		Self {
+			line: position.line,
+			col: position.character,
+		}
+	}
+}
+
+/// WingLocation => tree-sitter-based Point
+impl Into<Point> for WingLocation {
+	fn into(self) -> Point {
+		Point {
+			row: self.line as usize,
+			column: self.col as usize,
+		}
+	}
+}
+
+/// WingLocation => LSP-based Position
+impl Into<Position> for WingLocation {
+	fn into(self) -> Position {
+		Position {
+			line: self.line,
+			character: self.col,
+		}
+	}
+}
+
+impl Display for WingLocation {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		write!(f, "{}:{}", self.line, self.col)
+	}
+}
+
+/// A span of text in a Wing source file
+#[derive(Debug, Default, PartialEq, Eq, Hash, Clone)]
 pub struct WingSpan {
-	pub start: CharacterLocation,
-	pub end: CharacterLocation,
-	pub start_byte: ByteIndex,
-	pub end_byte: ByteIndex,
-	pub file_id: FileId,
+	pub start: WingLocation,
+	pub end: WingLocation,
+	/// Relative path to the file based on the working directory used to invoke the compiler
+	pub file_id: String,
+}
+
+impl Into<Range> for WingSpan {
+	fn into(self) -> Range {
+		Range {
+			start: self.start.into(),
+			end: self.end.into(),
+		}
+	}
+}
+
+impl Into<Range> for &WingSpan {
+	fn into(self) -> Range {
+		Range {
+			start: self.start.into(),
+			end: self.end.into(),
+		}
+	}
 }
 
 impl WingSpan {
-	pub fn global() -> Self {
-		Self {
-			start: Point { row: 0, column: 0 },
-			end: Point { row: 0, column: 0 },
-			start_byte: 0,
-			end_byte: 0,
-			file_id: String::from(""),
+	pub fn contains(self: &Self, position: &Position) -> bool {
+		let pos_line = position.line;
+		let pos_char = position.character;
+		let start = self.start;
+		let end = self.end;
+
+		if pos_line >= start.line && pos_line <= end.line {
+			if start.line == end.line && pos_line == start.line {
+				pos_char >= start.col && pos_char <= end.col
+			} else if pos_line == start.line {
+				pos_char >= start.col
+			} else if pos_line == end.line {
+				pos_char <= end.col
+			} else {
+				true
+			}
+		} else {
+			false
 		}
 	}
 }
 
 impl std::fmt::Display for WingSpan {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "{}:{}:{}", self.file_id, self.start.row + 1, self.start.column + 1)
+		write!(f, "{}:{}:{}", self.file_id, self.start.line + 1, self.start.col + 1)
 	}
 }
 
@@ -60,27 +144,36 @@ impl PartialOrd for WingSpan {
 	}
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum DiagnosticLevel {
 	Error,
 	Warning,
 	Note,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct Diagnostic {
 	pub message: String,
 	pub span: Option<WingSpan>,
 	pub level: DiagnosticLevel,
 }
 
+impl Display for DiagnosticLevel {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			DiagnosticLevel::Error => write!(f, "{}", "Error".bold().red()),
+			DiagnosticLevel::Warning => write!(f, "{}", "Warning".bold().yellow()),
+			DiagnosticLevel::Note => write!(f, "{}", "Note".bold().blue()),
+		}
+	}
+}
+
 impl std::fmt::Display for Diagnostic {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		// TODO: implement a Display for DiagnosticLevel (instead of Debug formatting)
 		if let Some(span) = &self.span {
-			write!(f, "{:?} at {} | {}", self.level, span, self.message)
+			write!(f, "{} at {} | {}", self.level, span, self.message.bold().white())
 		} else {
-			write!(f, "{:?} | {}", self.level, self.message)
+			write!(f, "{} | {}", self.level, self.message.bold().white())
 		}
 	}
 }
@@ -112,5 +205,53 @@ pub struct TypeError {
 impl std::fmt::Display for TypeError {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		write!(f, "{} at {}", self.message, self.span)
+	}
+}
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+
+	#[test]
+	fn wingspan_contains() {
+		let span = WingSpan {
+			start: WingLocation { line: 0, col: 0 },
+			end: WingLocation { line: 1, col: 10 },
+			file_id: "test".to_string(),
+		};
+
+		let in_position = Position { line: 0, character: 5 };
+		let out_position = Position { line: 2, character: 5 };
+
+		assert!(span.contains(&in_position));
+		assert!(!span.contains(&out_position));
+	}
+
+	#[test]
+	fn wingspan_comparisons() {
+		let span1 = WingSpan {
+			start: WingLocation { line: 1, col: 5 },
+			end: WingLocation { line: 1, col: 10 },
+			file_id: "test".to_string(),
+		};
+
+		let like_span1 = span1.clone();
+
+		let sooner = WingSpan {
+			start: WingLocation { line: 0, col: 0 },
+			end: WingLocation { line: 1, col: 1 },
+			file_id: "test".to_string(),
+		};
+		let later = WingSpan {
+			start: WingLocation { line: 2, col: 0 },
+			end: WingLocation { line: 2, col: 5 },
+			file_id: "test".to_string(),
+		};
+
+		assert!(span1 == like_span1);
+		assert!(span1 < later);
+		assert!(!(span1 > later));
+		assert!(span1 > sooner);
+		assert!(!(span1 < sooner));
 	}
 }

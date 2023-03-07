@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`counter name valid 1`] = `
 "{
@@ -21,49 +21,49 @@ exports[`counter name valid 1`] = `
 `;
 
 exports[`counter name valid 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "Default": Object {
-            "children": Object {
-              "The.Amazing-Counter_01": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "The.Amazing-Counter_01": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": true,
                 },
-                "children": Object {
-                  "Default": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/The.Amazing-Counter_01/Default",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
                 },
                 "id": "The.Amazing-Counter_01",
                 "path": "root/Default/The.Amazing-Counter_01",
               },
-              "WingLogger": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+              "WingLogger": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": true,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud logging facility",
                   "hidden": true,
                   "title": "Logger",
@@ -71,24 +71,24 @@ Object {
                 "id": "WingLogger",
                 "path": "root/Default/WingLogger",
               },
-              "aws": Object {
-                "constructInfo": Object {
+              "aws": {
+                "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
               },
             },
-            "constructInfo": Object {
+            "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
           },
-          "backend": Object {
-            "constructInfo": Object {
+          "backend": {
+            "constructInfo": {
               "fqn": "cdktf.LocalBackend",
               "version": "0.15.2",
             },
@@ -96,7 +96,7 @@ Object {
             "path": "root/backend",
           },
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "cdktf.TerraformStack",
           "version": "0.15.2",
         },
@@ -104,7 +104,7 @@ Object {
         "path": "root",
       },
     },
-    "constructInfo": Object {
+    "constructInfo": {
       "fqn": "cdktf.App",
       "version": "0.15.2",
     },
@@ -136,49 +136,49 @@ exports[`counter with initial value 1`] = `
 `;
 
 exports[`counter with initial value 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "Default": Object {
-            "children": Object {
-              "Counter": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Counter": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": true,
                 },
-                "children": Object {
-                  "Default": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
                 },
                 "id": "Counter",
                 "path": "root/Default/Counter",
               },
-              "WingLogger": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+              "WingLogger": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": true,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud logging facility",
                   "hidden": true,
                   "title": "Logger",
@@ -186,24 +186,24 @@ Object {
                 "id": "WingLogger",
                 "path": "root/Default/WingLogger",
               },
-              "aws": Object {
-                "constructInfo": Object {
+              "aws": {
+                "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
               },
             },
-            "constructInfo": Object {
+            "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
           },
-          "backend": Object {
-            "constructInfo": Object {
+          "backend": {
+            "constructInfo": {
               "fqn": "cdktf.LocalBackend",
               "version": "0.15.2",
             },
@@ -211,7 +211,7 @@ Object {
             "path": "root/backend",
           },
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "cdktf.TerraformStack",
           "version": "0.15.2",
         },
@@ -219,7 +219,7 @@ Object {
         "path": "root",
       },
     },
-    "constructInfo": Object {
+    "constructInfo": {
       "fqn": "cdktf.App",
       "version": "0.15.2",
     },
@@ -273,6 +273,7 @@ exports[`dec() policy statement 1`] = `
         },
         \\"function_name\\": \\"Function-c852aba6\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
@@ -297,17 +298,17 @@ exports[`dec() policy statement 1`] = `
 `;
 
 exports[`dec() policy statement 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "Default": Object {
-            "children": Object {
-              "Counter": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Counter": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "dec",
@@ -316,37 +317,37 @@ Object {
                   ],
                   "wing:resource:stateful": true,
                 },
-                "children": Object {
-                  "Default": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
                 },
                 "id": "Counter",
                 "path": "root/Default/Counter",
               },
-              "Function": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "Function": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "outbound",
                       "implicit": false,
                       "relationship": "dec",
                       "resource": "root/Default/Counter",
                     },
-                    Object {
+                    {
                       "direction": "outbound",
                       "implicit": true,
                       "relationship": "print",
@@ -355,85 +356,85 @@ Object {
                   ],
                   "wing:resource:stateful": false,
                 },
-                "children": Object {
-                  "Asset": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
                       "version": "0.15.2",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
-                  "Code": Object {
-                    "constructInfo": Object {
+                  "Code": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Code",
                     "path": "root/Default/Function/Code",
                   },
-                  "Default": Object {
-                    "constructInfo": Object {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
-                  "IamRole": Object {
-                    "constructInfo": Object {
+                  "IamRole": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
-                  "IamRolePolicy": Object {
-                    "constructInfo": Object {
+                  "IamRolePolicy": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
-                  "IamRolePolicyAttachment": Object {
-                    "constructInfo": Object {
+                  "IamRolePolicyAttachment": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
-                  "S3Object": Object {
-                    "constructInfo": Object {
+                  "S3Object": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+              "Handler": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
@@ -441,10 +442,10 @@ Object {
                 "id": "Handler",
                 "path": "root/Default/Handler",
               },
-              "WingLogger": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "WingLogger": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "inbound",
                       "implicit": true,
                       "relationship": "print",
@@ -453,11 +454,11 @@ Object {
                   ],
                   "wing:resource:stateful": true,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud logging facility",
                   "hidden": true,
                   "title": "Logger",
@@ -465,24 +466,24 @@ Object {
                 "id": "WingLogger",
                 "path": "root/Default/WingLogger",
               },
-              "aws": Object {
-                "constructInfo": Object {
+              "aws": {
+                "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
               },
             },
-            "constructInfo": Object {
+            "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
           },
-          "backend": Object {
-            "constructInfo": Object {
+          "backend": {
+            "constructInfo": {
               "fqn": "cdktf.LocalBackend",
               "version": "0.15.2",
             },
@@ -490,7 +491,7 @@ Object {
             "path": "root/backend",
           },
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "cdktf.TerraformStack",
           "version": "0.15.2",
         },
@@ -498,7 +499,7 @@ Object {
         "path": "root",
       },
     },
-    "constructInfo": Object {
+    "constructInfo": {
       "fqn": "cdktf.App",
       "version": "0.15.2",
     },
@@ -543,7 +544,7 @@ return class Handler {
 }
 };
 })())({
-my_counter: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/counter.inflight.ts\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_6cb5a3a4\\"], 0)
+my_counter: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_6cb5a3a4\\"], 0)
 })"
 `;
 
@@ -590,6 +591,7 @@ exports[`function with a counter binding 2`] = `
         },
         \\"function_name\\": \\"Function-c852aba6\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
@@ -614,17 +616,17 @@ exports[`function with a counter binding 2`] = `
 `;
 
 exports[`function with a counter binding 3`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "Default": Object {
-            "children": Object {
-              "Counter": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Counter": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "inc",
@@ -633,37 +635,37 @@ Object {
                   ],
                   "wing:resource:stateful": true,
                 },
-                "children": Object {
-                  "Default": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
                 },
                 "id": "Counter",
                 "path": "root/Default/Counter",
               },
-              "Function": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "Function": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "outbound",
                       "implicit": false,
                       "relationship": "inc",
                       "resource": "root/Default/Counter",
                     },
-                    Object {
+                    {
                       "direction": "outbound",
                       "implicit": true,
                       "relationship": "print",
@@ -672,85 +674,85 @@ Object {
                   ],
                   "wing:resource:stateful": false,
                 },
-                "children": Object {
-                  "Asset": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
                       "version": "0.15.2",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
-                  "Code": Object {
-                    "constructInfo": Object {
+                  "Code": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Code",
                     "path": "root/Default/Function/Code",
                   },
-                  "Default": Object {
-                    "constructInfo": Object {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
-                  "IamRole": Object {
-                    "constructInfo": Object {
+                  "IamRole": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
-                  "IamRolePolicy": Object {
-                    "constructInfo": Object {
+                  "IamRolePolicy": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
-                  "IamRolePolicyAttachment": Object {
-                    "constructInfo": Object {
+                  "IamRolePolicyAttachment": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
-                  "S3Object": Object {
-                    "constructInfo": Object {
+                  "S3Object": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+              "Handler": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
@@ -758,10 +760,10 @@ Object {
                 "id": "Handler",
                 "path": "root/Default/Handler",
               },
-              "WingLogger": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "WingLogger": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "inbound",
                       "implicit": true,
                       "relationship": "print",
@@ -770,11 +772,11 @@ Object {
                   ],
                   "wing:resource:stateful": true,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud logging facility",
                   "hidden": true,
                   "title": "Logger",
@@ -782,24 +784,24 @@ Object {
                 "id": "WingLogger",
                 "path": "root/Default/WingLogger",
               },
-              "aws": Object {
-                "constructInfo": Object {
+              "aws": {
+                "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
               },
             },
-            "constructInfo": Object {
+            "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
           },
-          "backend": Object {
-            "constructInfo": Object {
+          "backend": {
+            "constructInfo": {
               "fqn": "cdktf.LocalBackend",
               "version": "0.15.2",
             },
@@ -807,7 +809,7 @@ Object {
             "path": "root/backend",
           },
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "cdktf.TerraformStack",
           "version": "0.15.2",
         },
@@ -815,7 +817,7 @@ Object {
         "path": "root",
       },
     },
-    "constructInfo": Object {
+    "constructInfo": {
       "fqn": "cdktf.App",
       "version": "0.15.2",
     },
@@ -869,6 +871,7 @@ exports[`inc() policy statement 1`] = `
         },
         \\"function_name\\": \\"Function-c852aba6\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
@@ -893,17 +896,17 @@ exports[`inc() policy statement 1`] = `
 `;
 
 exports[`inc() policy statement 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "Default": Object {
-            "children": Object {
-              "Counter": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Counter": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "inc",
@@ -912,37 +915,37 @@ Object {
                   ],
                   "wing:resource:stateful": true,
                 },
-                "children": Object {
-                  "Default": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
                 },
                 "id": "Counter",
                 "path": "root/Default/Counter",
               },
-              "Function": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "Function": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "outbound",
                       "implicit": false,
                       "relationship": "inc",
                       "resource": "root/Default/Counter",
                     },
-                    Object {
+                    {
                       "direction": "outbound",
                       "implicit": true,
                       "relationship": "print",
@@ -951,85 +954,85 @@ Object {
                   ],
                   "wing:resource:stateful": false,
                 },
-                "children": Object {
-                  "Asset": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
                       "version": "0.15.2",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
-                  "Code": Object {
-                    "constructInfo": Object {
+                  "Code": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Code",
                     "path": "root/Default/Function/Code",
                   },
-                  "Default": Object {
-                    "constructInfo": Object {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
-                  "IamRole": Object {
-                    "constructInfo": Object {
+                  "IamRole": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
-                  "IamRolePolicy": Object {
-                    "constructInfo": Object {
+                  "IamRolePolicy": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
-                  "IamRolePolicyAttachment": Object {
-                    "constructInfo": Object {
+                  "IamRolePolicyAttachment": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
-                  "S3Object": Object {
-                    "constructInfo": Object {
+                  "S3Object": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+              "Handler": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
@@ -1037,10 +1040,10 @@ Object {
                 "id": "Handler",
                 "path": "root/Default/Handler",
               },
-              "WingLogger": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "WingLogger": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "inbound",
                       "implicit": true,
                       "relationship": "print",
@@ -1049,11 +1052,11 @@ Object {
                   ],
                   "wing:resource:stateful": true,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud logging facility",
                   "hidden": true,
                   "title": "Logger",
@@ -1061,24 +1064,24 @@ Object {
                 "id": "WingLogger",
                 "path": "root/Default/WingLogger",
               },
-              "aws": Object {
-                "constructInfo": Object {
+              "aws": {
+                "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
               },
             },
-            "constructInfo": Object {
+            "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
           },
-          "backend": Object {
-            "constructInfo": Object {
+          "backend": {
+            "constructInfo": {
               "fqn": "cdktf.LocalBackend",
               "version": "0.15.2",
             },
@@ -1086,7 +1089,7 @@ Object {
             "path": "root/backend",
           },
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "cdktf.TerraformStack",
           "version": "0.15.2",
         },
@@ -1094,7 +1097,7 @@ Object {
         "path": "root",
       },
     },
-    "constructInfo": Object {
+    "constructInfo": {
       "fqn": "cdktf.App",
       "version": "0.15.2",
     },
@@ -1148,6 +1151,7 @@ exports[`peek() policy statement 1`] = `
         },
         \\"function_name\\": \\"Function-c852aba6\\",
         \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
@@ -1172,17 +1176,17 @@ exports[`peek() policy statement 1`] = `
 `;
 
 exports[`peek() policy statement 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "Default": Object {
-            "children": Object {
-              "Counter": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Counter": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "peek",
@@ -1191,37 +1195,37 @@ Object {
                   ],
                   "wing:resource:stateful": true,
                 },
-                "children": Object {
-                  "Default": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
                 },
                 "id": "Counter",
                 "path": "root/Default/Counter",
               },
-              "Function": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "Function": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "outbound",
                       "implicit": false,
                       "relationship": "peek",
                       "resource": "root/Default/Counter",
                     },
-                    Object {
+                    {
                       "direction": "outbound",
                       "implicit": true,
                       "relationship": "print",
@@ -1230,85 +1234,85 @@ Object {
                   ],
                   "wing:resource:stateful": false,
                 },
-                "children": Object {
-                  "Asset": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
                       "version": "0.15.2",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
                   },
-                  "Code": Object {
-                    "constructInfo": Object {
+                  "Code": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Code",
                     "path": "root/Default/Function/Code",
                   },
-                  "Default": Object {
-                    "constructInfo": Object {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
                   },
-                  "IamRole": Object {
-                    "constructInfo": Object {
+                  "IamRole": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
                   },
-                  "IamRolePolicy": Object {
-                    "constructInfo": Object {
+                  "IamRolePolicy": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
                   },
-                  "IamRolePolicyAttachment": Object {
-                    "constructInfo": Object {
+                  "IamRolePolicyAttachment": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
-                  "S3Object": Object {
-                    "constructInfo": Object {
+                  "S3Object": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
               },
-              "Handler": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+              "Handler": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
@@ -1316,10 +1320,10 @@ Object {
                 "id": "Handler",
                 "path": "root/Default/Handler",
               },
-              "WingLogger": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [
-                    Object {
+              "WingLogger": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
                       "direction": "inbound",
                       "implicit": true,
                       "relationship": "print",
@@ -1328,11 +1332,11 @@ Object {
                   ],
                   "wing:resource:stateful": true,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud logging facility",
                   "hidden": true,
                   "title": "Logger",
@@ -1340,24 +1344,24 @@ Object {
                 "id": "WingLogger",
                 "path": "root/Default/WingLogger",
               },
-              "aws": Object {
-                "constructInfo": Object {
+              "aws": {
+                "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
               },
             },
-            "constructInfo": Object {
+            "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
           },
-          "backend": Object {
-            "constructInfo": Object {
+          "backend": {
+            "constructInfo": {
               "fqn": "cdktf.LocalBackend",
               "version": "0.15.2",
             },
@@ -1365,7 +1369,7 @@ Object {
             "path": "root/backend",
           },
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "cdktf.TerraformStack",
           "version": "0.15.2",
         },
@@ -1373,7 +1377,7 @@ Object {
         "path": "root",
       },
     },
-    "constructInfo": Object {
+    "constructInfo": {
       "fqn": "cdktf.App",
       "version": "0.15.2",
     },
@@ -1405,49 +1409,49 @@ exports[`replace invalid character from counter name 1`] = `
 `;
 
 exports[`replace invalid character from counter name 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "Default": Object {
-            "children": Object {
-              "The*Amazing%Counter@01": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "The*Amazing%Counter@01": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": true,
                 },
-                "children": Object {
-                  "Default": Object {
-                    "constructInfo": Object {
+                "children": {
+                  "Default": {
+                    "constructInfo": {
                       "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
-                      "version": "12.0.1",
+                      "version": "12.0.2",
                     },
                     "id": "Default",
                     "path": "root/Default/The*Amazing%Counter@01/Default",
                   },
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A distributed atomic counter",
                   "title": "Counter",
                 },
                 "id": "The*Amazing%Counter@01",
                 "path": "root/Default/The*Amazing%Counter@01",
               },
-              "WingLogger": Object {
-                "attributes": Object {
-                  "wing:resource:connections": Array [],
+              "WingLogger": {
+                "attributes": {
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": true,
                 },
-                "constructInfo": Object {
+                "constructInfo": {
                   "fqn": "constructs.Construct",
-                  "version": "10.1.228",
+                  "version": "10.1.245",
                 },
-                "display": Object {
+                "display": {
                   "description": "A cloud logging facility",
                   "hidden": true,
                   "title": "Logger",
@@ -1455,24 +1459,24 @@ Object {
                 "id": "WingLogger",
                 "path": "root/Default/WingLogger",
               },
-              "aws": Object {
-                "constructInfo": Object {
+              "aws": {
+                "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-                  "version": "12.0.1",
+                  "version": "12.0.2",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
               },
             },
-            "constructInfo": Object {
+            "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.228",
+              "version": "10.1.245",
             },
             "id": "Default",
             "path": "root/Default",
           },
-          "backend": Object {
-            "constructInfo": Object {
+          "backend": {
+            "constructInfo": {
               "fqn": "cdktf.LocalBackend",
               "version": "0.15.2",
             },
@@ -1480,7 +1484,7 @@ Object {
             "path": "root/backend",
           },
         },
-        "constructInfo": Object {
+        "constructInfo": {
           "fqn": "cdktf.TerraformStack",
           "version": "0.15.2",
         },
@@ -1488,7 +1492,287 @@ Object {
         "path": "root",
       },
     },
-    "constructInfo": Object {
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.15.2",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`reset() policy statement 1`] = `
+"{
+  \\"resource\\": {
+    \\"aws_dynamodb_table\\": {
+      \\"root_Counter_2358A01E\\": {
+        \\"attribute\\": [
+          {
+            \\"name\\": \\"id\\",
+            \\"type\\": \\"S\\"
+          }
+        ],
+        \\"billing_mode\\": \\"PAY_PER_REQUEST\\",
+        \\"hash_key\\": \\"id\\",
+        \\"name\\": \\"wing-counter-Counter-c824ef62\\"
+      }
+    },
+    \\"aws_iam_role\\": {
+      \\"root_Function_IamRole_88AD864C\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      }
+    },
+    \\"aws_iam_role_policy\\": {
+      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:UpdateItem\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_dynamodb_table.root_Counter_2358A01E.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+      }
+    },
+    \\"aws_iam_role_policy_attachment\\": {
+      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+      }
+    },
+    \\"aws_lambda_function\\": {
+      \\"root_Function_9F694E40\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"DYNAMODB_TABLE_NAME_6cb5a3a4\\": \\"\${aws_dynamodb_table.root_Counter_2358A01E.name}\\",
+            \\"WING_FUNCTION_NAME\\": \\"Function-c852aba6\\"
+          }
+        },
+        \\"function_name\\": \\"Function-c852aba6\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
+        \\"timeout\\": 30
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"root_Function_Code_794C2A8A\\": {
+        \\"bucket_prefix\\": \\"code-c87cd513-\\"
+      }
+    },
+    \\"aws_s3_object\\": {
+      \\"root_Function_S3Object_A62722D8\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`reset() policy statement 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Counter": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
+                      "relationship": "reset",
+                      "resource": "root/Default/Function",
+                    },
+                  ],
+                  "wing:resource:stateful": true,
+                },
+                "children": {
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
+                      "version": "12.0.2",
+                    },
+                    "id": "Default",
+                    "path": "root/Default/Counter/Default",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A distributed atomic counter",
+                  "title": "Counter",
+                },
+                "id": "Counter",
+                "path": "root/Default/Counter",
+              },
+              "Function": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
+                      "direction": "outbound",
+                      "implicit": false,
+                      "relationship": "reset",
+                      "resource": "root/Default/Counter",
+                    },
+                    {
+                      "direction": "outbound",
+                      "implicit": true,
+                      "relationship": "print",
+                      "resource": "root/Default/WingLogger",
+                    },
+                  ],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "Asset": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.15.2",
+                    },
+                    "id": "Asset",
+                    "path": "root/Default/Function/Asset",
+                  },
+                  "Code": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                      "version": "12.0.2",
+                    },
+                    "id": "Code",
+                    "path": "root/Default/Function/Code",
+                  },
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                      "version": "12.0.2",
+                    },
+                    "id": "Default",
+                    "path": "root/Default/Function/Default",
+                  },
+                  "IamRole": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                      "version": "12.0.2",
+                    },
+                    "id": "IamRole",
+                    "path": "root/Default/Function/IamRole",
+                  },
+                  "IamRolePolicy": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                      "version": "12.0.2",
+                    },
+                    "id": "IamRolePolicy",
+                    "path": "root/Default/Function/IamRolePolicy",
+                  },
+                  "IamRolePolicyAttachment": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                      "version": "12.0.2",
+                    },
+                    "id": "IamRolePolicyAttachment",
+                    "path": "root/Default/Function/IamRolePolicyAttachment",
+                  },
+                  "S3Object": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                      "version": "12.0.2",
+                    },
+                    "id": "S3Object",
+                    "path": "root/Default/Function/S3Object",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A cloud function (FaaS)",
+                  "title": "Function",
+                },
+                "id": "Function",
+                "path": "root/Default/Function",
+              },
+              "Handler": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "An inflight resource",
+                  "hidden": true,
+                  "title": "Inflight",
+                },
+                "id": "Handler",
+                "path": "root/Default/Handler",
+              },
+              "WingLogger": {
+                "attributes": {
+                  "wing:resource:connections": [
+                    {
+                      "direction": "inbound",
+                      "implicit": true,
+                      "relationship": "print",
+                      "resource": "root/Default/Function",
+                    },
+                  ],
+                  "wing:resource:stateful": true,
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A cloud logging facility",
+                  "hidden": true,
+                  "title": "Logger",
+                },
+                "id": "WingLogger",
+                "path": "root/Default/WingLogger",
+              },
+              "aws": {
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+                  "version": "12.0.2",
+                },
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.245",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.2",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.2",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
       "fqn": "cdktf.App",
       "version": "0.15.2",
     },

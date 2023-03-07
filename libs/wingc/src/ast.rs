@@ -1,5 +1,5 @@
 use std::cell::RefCell;
-use std::collections::{BTreeMap, HashMap};
+use std::collections::BTreeMap;
 use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 
@@ -18,10 +18,10 @@ pub struct Symbol {
 }
 
 impl Symbol {
-	pub fn global(name: &str) -> Self {
+	pub fn global<S: Into<String>>(name: S) -> Self {
 		Self {
-			name: name.to_string(),
-			span: WingSpan::global(),
+			name: name.into(),
+			span: Default::default(),
 		}
 	}
 }
@@ -79,18 +79,20 @@ impl Display for Phase {
 }
 
 #[derive(Debug, Clone)]
-pub enum Type {
+pub enum TypeAnnotation {
 	Number,
 	String,
 	Bool,
 	Duration,
-	Optional(Box<Type>),
-	Array(Box<Type>),
-	MutArray(Box<Type>),
-	Map(Box<Type>),
-	MutMap(Box<Type>),
-	Set(Box<Type>),
-	MutSet(Box<Type>),
+	Json,
+	MutJson,
+	Optional(Box<TypeAnnotation>),
+	Array(Box<TypeAnnotation>),
+	MutArray(Box<TypeAnnotation>),
+	Map(Box<TypeAnnotation>),
+	MutMap(Box<TypeAnnotation>),
+	Set(Box<TypeAnnotation>),
+	MutSet(Box<TypeAnnotation>),
 	FunctionSignature(FunctionSignature),
 	UserDefined(UserDefinedType),
 }
@@ -103,68 +105,78 @@ pub struct UserDefinedType {
 	pub fields: Vec<Symbol>,
 }
 
-impl Display for Type {
+impl Display for TypeAnnotation {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
-			Type::Number => write!(f, "num"),
-			Type::String => write!(f, "str"),
-			Type::Bool => write!(f, "bool"),
-			Type::Duration => write!(f, "duration"),
-			Type::Optional(t) => write!(f, "{}?", t),
-			Type::Array(t) => write!(f, "Array<{}>", t),
-			Type::MutArray(t) => write!(f, "MutArray<{}>", t),
-			Type::Map(t) => write!(f, "Map<{}>", t),
-			Type::MutMap(t) => write!(f, "MutMap<{}>", t),
-			Type::Set(t) => write!(f, "Set<{}>", t),
-			Type::MutSet(t) => write!(f, "MutSet<{}>", t),
-			Type::FunctionSignature(sig) => {
-				let phase_str = match sig.flight {
-					Phase::Inflight => "inflight ",
-					Phase::Preflight => "preflight ",
-					Phase::Independent => "",
-				};
-				let params_str = sig
-					.parameters
-					.iter()
-					.map(|a| format!("{}", a))
-					.collect::<Vec<String>>()
-					.join(", ");
-				let ret_type_str = if let Some(ret_val) = &sig.return_type {
-					format!("{}", ret_val)
-				} else {
-					"void".to_string()
-				};
-				write!(f, "{phase_str}({params_str}): {ret_type_str}",)
-			}
-			Type::UserDefined(user_defined_type) => {
-				write!(f, "{}", user_defined_type.root)
+			TypeAnnotation::Number => write!(f, "num"),
+			TypeAnnotation::String => write!(f, "str"),
+			TypeAnnotation::Bool => write!(f, "bool"),
+			TypeAnnotation::Duration => write!(f, "duration"),
+			TypeAnnotation::Json => write!(f, "Json"),
+			TypeAnnotation::MutJson => write!(f, "MutJson"),
+			TypeAnnotation::Optional(t) => write!(f, "{}?", t),
+			TypeAnnotation::Array(t) => write!(f, "Array<{}>", t),
+			TypeAnnotation::MutArray(t) => write!(f, "MutArray<{}>", t),
+			TypeAnnotation::Map(t) => write!(f, "Map<{}>", t),
+			TypeAnnotation::MutMap(t) => write!(f, "MutMap<{}>", t),
+			TypeAnnotation::Set(t) => write!(f, "Set<{}>", t),
+			TypeAnnotation::MutSet(t) => write!(f, "MutSet<{}>", t),
+			TypeAnnotation::FunctionSignature(sig) => write!(f, "{}", sig),
+			TypeAnnotation::UserDefined(user_defined_type) => {
+				write!(f, "{}", user_defined_type.root.name)
 			}
 		}
 	}
 }
 
+impl Display for FunctionSignature {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let phase_str = match self.flight {
+			Phase::Inflight => "inflight ",
+			Phase::Preflight => "preflight ",
+			Phase::Independent => "",
+		};
+		let params_str = self
+			.parameters
+			.iter()
+			.map(|a| format!("{}", a))
+			.collect::<Vec<String>>()
+			.join(", ");
+		let ret_type_str = if let Some(ret_val) = &self.return_type {
+			format!("{}", ret_val)
+		} else {
+			"void".to_string()
+		};
+		write!(f, "{phase_str}({params_str}): {ret_type_str}")
+	}
+}
+
 #[derive(Debug, Clone)]
 pub struct FunctionSignature {
-	pub parameters: Vec<Type>,
-	pub return_type: Option<Box<Type>>,
+	pub parameters: Vec<TypeAnnotation>,
+	pub return_type: Option<Box<TypeAnnotation>>,
 	pub flight: Phase,
 }
 
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct FunctionDefinition {
-	// List of names of function parameters and whether they are reassignable (`var`) or not.
+	/// List of names of function parameters and whether they are reassignable (`var`) or not.
 	pub parameters: Vec<(Symbol, bool)>, // TODO: move into FunctionSignature and make optional
-
+	/// The function implementation (body).
 	pub statements: Scope,
+	/// The function signature, including the return type.
 	pub signature: FunctionSignature,
+	/// Whether this function is static or not. In case of a closure, this is always true.
+	pub is_static: bool,
+
 	#[derivative(Debug = "ignore")]
 	pub captures: RefCell<Option<Captures>>,
 }
 
 #[derive(Debug)]
 pub struct Constructor {
-	// List of names of constructor parameters and whether they are reassignable (`var`) or not.
+	/// List of names of constructor parameters and whether they are reassignable (`var`) or not.
 	pub parameters: Vec<(Symbol, bool)>,
 
 	pub statements: Scope,
@@ -215,7 +227,7 @@ pub struct Class {
 
 #[derive(Debug)]
 pub enum StmtKind {
-	Use {
+	Bring {
 		module_name: Symbol, // Reference?
 		identifier: Option<Symbol>,
 	},
@@ -223,7 +235,7 @@ pub enum StmtKind {
 		reassignable: bool,
 		var_name: Symbol,
 		initial_value: Expr,
-		type_: Option<Type>,
+		type_: Option<TypeAnnotation>,
 	},
 	ForLoop {
 		iterator: Symbol,
@@ -257,20 +269,32 @@ pub enum StmtKind {
 		name: Symbol,
 		values: IndexSet<Symbol>,
 	},
+	TryCatch {
+		try_statements: Scope,
+		catch_block: Option<CatchBlock>,
+		finally_statements: Option<Scope>,
+	},
+}
+
+#[derive(Debug)]
+pub struct CatchBlock {
+	pub statements: Scope,
+	pub exception_var: Option<Symbol>,
 }
 
 #[derive(Debug)]
 pub struct ClassField {
 	pub name: Symbol,
-	pub member_type: Type,
+	pub member_type: TypeAnnotation,
 	pub reassignable: bool,
 	pub flight: Phase,
+	pub is_static: bool,
 }
 
 #[derive(Debug)]
 pub enum ExprKind {
 	New {
-		class: Type,
+		class: TypeAnnotation,
 		obj_id: Option<String>,
 		obj_scope: Option<Box<Expr>>,
 		arg_list: ArgList,
@@ -279,7 +303,7 @@ pub enum ExprKind {
 	Reference(Reference),
 	Call {
 		function: Box<Expr>,
-		args: ArgList,
+		arg_list: ArgList,
 	},
 	Unary {
 		// TODO: Split to LogicalUnary, NumericUnary
@@ -289,35 +313,41 @@ pub enum ExprKind {
 	Binary {
 		// TODO: Split to LogicalBinary, NumericBinary, Bit/String??
 		op: BinaryOperator,
-		lexp: Box<Expr>,
-		rexp: Box<Expr>,
+		left: Box<Expr>,
+		right: Box<Expr>,
 	},
 	ArrayLiteral {
-		type_: Option<Type>,
+		type_: Option<TypeAnnotation>,
 		items: Vec<Expr>,
 	},
 	StructLiteral {
-		type_: Type,
+		type_: TypeAnnotation,
 		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
 		fields: BTreeMap<Symbol, Expr>,
 	},
 	MapLiteral {
-		type_: Option<Type>,
+		type_: Option<TypeAnnotation>,
 		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
 		fields: BTreeMap<String, Expr>,
 	},
 	SetLiteral {
-		type_: Option<Type>,
+		type_: Option<TypeAnnotation>,
 		items: Vec<Expr>,
+	},
+	JsonLiteral {
+		is_mut: bool,
+		element: Box<Expr>,
 	},
 	FunctionClosure(FunctionDefinition),
 }
 
-#[derive(Debug)]
+#[derive(Derivative)]
+#[derivative(Debug)]
 pub struct Expr {
 	pub kind: ExprKind,
-	pub evaluated_type: RefCell<Option<TypeRef>>,
 	pub span: WingSpan,
+	#[derivative(Debug = "ignore")]
+	pub evaluated_type: RefCell<Option<TypeRef>>,
 }
 
 impl Expr {
@@ -333,14 +363,14 @@ impl Expr {
 #[derive(Debug)]
 pub struct ArgList {
 	pub pos_args: Vec<Expr>,
-	pub named_args: HashMap<Symbol, Expr>,
+	pub named_args: BTreeMap<Symbol, Expr>,
 }
 
 impl ArgList {
 	pub fn new() -> Self {
 		ArgList {
 			pos_args: vec![],
-			named_args: HashMap::new(),
+			named_args: BTreeMap::new(),
 		}
 	}
 }
@@ -393,7 +423,9 @@ pub enum BinaryOperator {
 	Sub,
 	Mul,
 	Div,
+	FloorDiv,
 	Mod,
+	Power,
 	Greater,
 	GreaterOrEqual,
 	Less,
@@ -424,7 +456,7 @@ impl BinaryOperator {
 	pub fn numerical_args(&self) -> bool {
 		use BinaryOperator::*;
 		match self {
-			Add | Sub | Mul | Div | Mod | Greater | GreaterOrEqual | Less | LessOrEqual => true,
+			Add | Sub | Mul | Div | FloorDiv | Mod | Power | Greater | GreaterOrEqual | Less | LessOrEqual => true,
 			_ => false,
 		}
 	}
@@ -432,20 +464,27 @@ impl BinaryOperator {
 
 #[derive(Debug)]
 pub enum Reference {
+	/// A simple identifier: `x`
 	Identifier(Symbol),
-	NestedIdentifier { object: Box<Expr>, property: Symbol },
+	/// A reference to a member nested inside some object `expression.x`
+	InstanceMember { object: Box<Expr>, property: Symbol },
+	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
+	TypeMember { type_: UserDefinedType, property: Symbol },
 }
 
 impl Display for Reference {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match &self {
 			Reference::Identifier(symb) => write!(f, "{}", symb.name),
-			Reference::NestedIdentifier { object, property } => {
+			Reference::InstanceMember { object, property } => {
 				let obj_str = match &object.kind {
 					ExprKind::Reference(r) => format!("{}", r),
 					_ => "object".to_string(), // TODO!
 				};
 				write!(f, "{}.{}", obj_str, property.name)
+			}
+			Reference::TypeMember { type_, property } => {
+				write!(f, "{}.{}", TypeAnnotation::UserDefined(type_.clone()), property.name)
 			}
 		}
 	}
