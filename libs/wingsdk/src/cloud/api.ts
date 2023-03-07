@@ -1,7 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App, Inflight, Resource } from "../core";
-import { Json } from "../std";
 
 /**
  * Global identifier for `Api`.
@@ -172,7 +171,6 @@ export interface ApiHeadProps {}
  */
 export interface ApiConnectProps {}
 
-// TODO: this should be used once #1484 is fixed
 /**
  * Allowed HTTP methods for a endpoint.
  */
@@ -217,12 +215,10 @@ export interface ApiRequest {
   /** The path variables. */
   readonly vars?: Record<string, string>;
   /** The request's body. */
-  readonly body?: Json;
+  readonly body?: object; // JSII sees this as "json" type
   /** The request's headers. */
   readonly headers: Record<string, string>;
 }
-
-export type Body = Map<string, string | number> | Map<string, Body>;
 
 /**
  * Shape of a response from a inflight handler.
@@ -231,7 +227,7 @@ export interface ApiResponse {
   /** The response's status code. */
   readonly status: number;
   /** The response's body. */
-  readonly body?: Json;
+  readonly body?: object; // JSII sees this as "json" type
   /** The response's headers. */
   readonly headers?: Record<string, string>;
 }

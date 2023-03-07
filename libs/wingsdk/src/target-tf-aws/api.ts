@@ -325,8 +325,8 @@ class WingRestApi extends Construct {
     }
   ) {
     super(scope, id);
-    // @ts-ignore
-    this.region = CdktfApp.of(scope).region;
+
+    this.region = (CdktfApp.of(scope) as CdktfApp).region;
     this.api = new ApiGatewayRestApi(this, "api", {
       name: ResourceNames.generateName(this, NAME_OPTS),
       // Lazy generation of the api spec because routes can be added after the API is created

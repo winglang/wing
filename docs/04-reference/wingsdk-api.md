@@ -1190,7 +1190,7 @@ let api_request = cloud.ApiRequest{ ... }
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The request's headers. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.method">method</a></code> | <code><a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a></code> | The request's HTTP method. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.path">path</a></code> | <code>str</code> | The request's path. |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.body">body</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The request's body. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.body">body</a></code> | <code>json</code> | The request's body. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.query">query</a></code> | <code>str</code> | The request's query string. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.vars">vars</a></code> | <code>MutMap&lt;str&gt;</code> | The path variables. |
 
@@ -1235,10 +1235,10 @@ The request's path.
 ##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.cloud.ApiRequest.property.body"></a>
 
 ```wing
-body: Json;
+body: json;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- *Type:* json
 
 The request's body.
 
@@ -1285,7 +1285,7 @@ let api_response = cloud.ApiResponse{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ApiResponse.property.status">status</a></code> | <code>num</code> | The response's status code. |
-| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.body">body</a></code> | <code><a href="#@winglang/sdk.std.Json">Json</a></code> | The response's body. |
+| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.body">body</a></code> | <code>json</code> | The response's body. |
 | <code><a href="#@winglang/sdk.cloud.ApiResponse.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The response's headers. |
 
 ---
@@ -1305,10 +1305,10 @@ The response's status code.
 ##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.cloud.ApiResponse.property.body"></a>
 
 ```wing
-body: Json;
+body: json;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+- *Type:* json
 
 The response's body.
 

@@ -1,7 +1,6 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { test, expect, beforeEach, describe, vi } from "vitest";
 import { ApiResponse } from "../../src/cloud";
-import { Json } from "../../src/std";
 import { ApiOnRequestHandlerClient } from "../../src/target-tf-aws/api.onrequest.inflight";
 
 beforeEach(() => {
@@ -19,7 +18,7 @@ describe("ApiResponseMapper", () => {
 
     const handlerResponse: ApiResponse = {
       status: 200,
-      body: { key: "value" } as unknown as Json,
+      body: { key: "value" },
       headers: { "header-1": "value-1" },
     };
     const requestHandlerClient = new ApiOnRequestHandlerClient({
@@ -57,7 +56,7 @@ describe("ApiResponseMapper", () => {
 
     const handlerResponse: ApiResponse = {
       status: 200,
-      body: { key: "value" } as unknown as Json,
+      body: { key: "value" },
     };
     const requestHandlerClient = new ApiOnRequestHandlerClient({
       handler: {

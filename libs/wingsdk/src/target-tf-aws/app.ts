@@ -4,7 +4,6 @@ import { Api } from "./api";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Function } from "./function";
-import { APP_AWS_TF_SYMBOL } from "./internal";
 import { Logger } from "./logger";
 import { Queue } from "./queue";
 import { Schedule } from "./schedule";
@@ -29,12 +28,6 @@ export class App extends CdktfApp {
   constructor(props: AppProps = {}) {
     super(props);
     new AwsProvider(this, "aws", {});
-
-    Object.defineProperty(this, APP_AWS_TF_SYMBOL, {
-      value: this,
-      enumerable: false,
-      writable: false,
-    });
   }
 
   protected tryNew(
