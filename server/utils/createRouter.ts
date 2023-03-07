@@ -7,10 +7,17 @@ import { Simulator } from "../wingsdk.js";
 import { CloudAppStateService } from "./cloudAppState.js";
 import { ConstructTree } from "./createSimulator.js";
 
+export type QueryNames = {
+  query:
+    | "app.error"
+    | "app.logs"
+    | "app.state"
+    | "queue.approxSize"
+    | undefined;
+};
+
 export type RouterEvents = {
-  invalidateQuery: {
-    query: "app.error" | "app.logs" | "app.state" | undefined;
-  };
+  invalidateQuery: QueryNames;
 };
 
 export interface RouterContext {

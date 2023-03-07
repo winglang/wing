@@ -160,7 +160,7 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
   }, [bucketList.data]);
 
   return (
-    <div className="h-full flex-1 py-2 flex flex-col text-sm">
+    <div className="h-full flex-1 flex flex-col text-sm space-y-1.5">
       <div className="flex justify-between items-center gap-1">
         <div className="flex items-center gap-1">
           <Button
@@ -192,7 +192,7 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
         </div>
       </div>
 
-      <div className="flex-1 bg-white rounded border border-slate-200 h-96 mt-2">
+      <div className="flex-1 bg-white rounded border border-slate-200 h-96">
         <table className="w-full bg-white rounded table-fixed">
           <tbody className="relative max-h-[10rem] block overflow-y-auto">
             {tableLoading && (
@@ -247,17 +247,17 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
       </div>
 
       {currentFile && (
-        <div className="mt-4 space-y-1">
-          <span className="flex items-center justify-between pb-1 font-semibold text-slate-600">
+        <div>
+          <span className="text-sm text-slate-500">
             {currentFile.entry.name}
           </span>
 
           <TextHighlight
             className={classNames(
-              "max-h-[30rem]",
+              "mt-1 max-h-[30rem]",
               "flex-1 font-mono w-full",
               "rounded border-slate-200 bg-white",
-              "select-text text-slate-600 text-sm",
+              "select-text text-slate-600 text-xs",
               "break-words whitespace-pre-wrap",
               "overflow-y-auto p-2 border",
             )}

@@ -11,7 +11,11 @@ import {
   buildConstructTreeNodeMap,
   NodeConnection,
 } from "../utils/constructTreeNodeMap.js";
-import { createProcedure, createRouter } from "../utils/createRouter.js";
+import {
+  QueryNames,
+  createProcedure,
+  createRouter,
+} from "../utils/createRouter.js";
 import { ConstructTreeNode } from "../utils/createSimulator.js";
 import { BaseResourceSchema, Simulator } from "../wingsdk.js";
 
@@ -262,9 +266,7 @@ export const createAppRouter = () => {
         };
       }),
     "app.invalidateQuery": createProcedure.subscription(({ ctx }) => {
-      return observable<{
-        query: "app.error" | "app.logs" | "app.state" | undefined;
-      }>((emit) => {
+      return observable<QueryNames>((emit) => {
         ctx.emitter.on("invalidateQuery", emit.next);
         return () => {
           ctx.emitter.off("invalidateQuery", emit.next);

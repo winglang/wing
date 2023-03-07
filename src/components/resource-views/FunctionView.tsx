@@ -27,34 +27,32 @@ export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
 
   return (
     <>
-      <div className="flex grow flex-col gap-y-1 gap-x-4 bg-slate-50">
+      <div className="flex-col space-y-1 bg-slate-50">
         <div className="flex flex-row">
           <div className="text-slate-700 max-w-full min-w-0 grow space-x-2 items-end flex">
             <Button
               label="Invoke"
-              className="px-0.5 mt-2"
+              className="px-0.5"
               aria-disabled={appMode === "webapp"}
               onClick={() => invoke.mutate({ resourcePath, message: "" })}
             />
             <Button
               label="Invoke with..."
-              className="px-0.5 mt-2 truncate"
+              className="px-0.5 truncate"
               aria-disabled={appMode === "webapp"}
               onClick={() => setShowModal(true)}
             />
           </div>
         </div>
-        <div className="mt-1">
-          <label className="block text-sm font-medium text-gray-700">
-            Response
-          </label>
+        <div>
+          <label className="text-sm text-gray-500">Response</label>
           <div className="text-slate-700 space-x-2 min-w-0 flex flex-1">
             <textarea
               rows={response ? response.split("\n").length : 1}
               disabled
               placeholder="No response"
               className={classNames(
-                "mt-2 flex-1 font-mono max-h-[20rem] py-1 resize-none",
+                "flex-1 font-mono max-h-[20rem] py-1 resize-none",
                 "bg-slate-100 border border-slate-300 ease-in-out focus:border-sky-500 focus:ring-2",
                 "focus:ring-sky-500/50 outline-none rounded select-text text-slate-600 text-sm transition",
               )}

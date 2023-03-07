@@ -13,8 +13,8 @@ export const CounterView = ({ resourcePath }: CounterViewProps) => {
   const counterValue = trpc["counter.peek"].useQuery({ resourcePath });
 
   return (
-    <div className="px-2 py-1.5 flex flex-col gap-y-1 gap-x-4 bg-slate-50">
-      <div className="pl-4 flex flex-row items-center">
+    <div className="flex-col bg-slate-50">
+      <div className="flex flex-row items-center">
         <div className="text-slate-500 min-w-[100px]">Counter value</div>
         <div className="text-slate-700 ml-2.5 max-w-full flex space-x-2 min-w-0 text-right">
           <span className="text-right truncate min-w-[25px]">

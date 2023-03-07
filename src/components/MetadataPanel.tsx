@@ -17,19 +17,14 @@ import { getResourceIconComponent, ResourceIcon } from "../stories/utils.js";
 import { trpc } from "../utils/trpc.js";
 
 import { AttributeView } from "./AttributeView.js";
+import { BucketMetadata } from "./resource-metadata/BucketMetadata.js";
+import { FunctionMetadata } from "./resource-metadata/FunctionMetadata.js";
+import { QueueMetadata } from "./resource-metadata/QueueMetadata.js";
 import { ResourceView } from "./resource-views/ResourceView.js";
-
-interface Attribute {
-  key: string;
-  value: string;
-  type?: "url";
-  url?: string;
-}
 
 interface AttributeGroup {
   groupName: string;
   actionName: string;
-  attributes: Attribute[];
   icon?: ForwardRefExoticComponent<SVGProps<SVGSVGElement>>;
 }
 
@@ -49,17 +44,19 @@ interface Relationship {
   type: string;
 }
 
+export interface MetadataNode {
+  id: string;
+  path: string;
+  type: string;
+  props?:
+    | {
+        [key: string]: any;
+      }
+    | undefined;
+}
+
 export interface MetadataProps {
-  node: {
-    id: string;
-    path: string;
-    type: string;
-    props?:
-      | {
-          [key: string]: any;
-        }
-      | undefined;
-  };
+  node: MetadataNode;
   inbound?: Relationship[];
   outbound?: Relationship[];
   onConnectionNodeClick?: (path: string) => void;
@@ -75,7 +72,6 @@ export const MetadataPanel = ({
     "interact",
     "interact-actions",
   ]);
-
   const { resourceGroup, connectionsGroups } = useMemo(() => {
     const connectionsGroupsArray: ConnectionsGroup[] = [];
     let resourceGroup: AttributeGroup | undefined;
@@ -86,14 +82,6 @@ export const MetadataPanel = ({
             groupName: "Function",
             actionName: "Invoke",
             icon: getResourceIconComponent(node.type),
-            attributes: [
-              { key: "Entry", value: node.props.sourceCodeFile },
-              { key: "Language", value: node.props.sourceCodeLanguage },
-              {
-                key: "Environment",
-                value: JSON.stringify(node.props.environmentVariables),
-              },
-            ],
           };
 
           break;
@@ -103,7 +91,6 @@ export const MetadataPanel = ({
             groupName: "Queue",
             actionName: "Send Message",
             icon: getResourceIconComponent(node.type),
-            attributes: [{ key: "Timeout", value: `${node.props.timeout}s` }],
           };
 
           break;
@@ -113,12 +100,6 @@ export const MetadataPanel = ({
             groupName: "Bucket",
             actionName: "Files",
             icon: getResourceIconComponent(node.type),
-            attributes: [
-              {
-                key: "Public",
-                value: node.props.public ? "True" : "False",
-              },
-            ],
           };
 
           break;
@@ -202,9 +183,9 @@ export const MetadataPanel = ({
           >
             <div className="border-t">
               <div className="px-2 py-1.5 flex flex-col gap-y-1 gap-x-4 bg-slate-50">
-                <AttributeView attribute={{ key: "ID", value: node.id }} />
-                <AttributeView attribute={{ key: "Path", value: node.path }} />
-                <AttributeView attribute={{ key: "Type", value: node.type }} />
+                <AttributeView name="ID" value={node.id} />
+                <AttributeView name="Path" value={node.path} />
+                <AttributeView name="Type" value={node.type} />
               </div>
             </div>
           </InspectorSection>
@@ -276,17 +257,18 @@ export const MetadataPanel = ({
                 onClick={() => toggleInspectorSection("interact")}
               >
                 <div className="bg-slate-50 border-t border-slate-200">
-                  {(resourceGroup?.attributes && (
+                  {(resourceGroup?.groupName && (
                     <>
                       <div className="px-2 pt-1.5 flex flex-col gap-y-1 gap-x-4 bg-slate-50">
-                        {resourceGroup?.attributes.map((attribute) => {
-                          return (
-                            <AttributeView
-                              key={attribute.key}
-                              attribute={attribute}
-                            />
-                          );
-                        })}
+                        {node.type === "wingsdk.cloud.Function" && (
+                          <FunctionMetadata node={node} />
+                        )}
+                        {node.type === "wingsdk.cloud.Queue" && (
+                          <QueueMetadata node={node} />
+                        )}
+                        {node.type === "wingsdk.cloud.Bucket" && (
+                          <BucketMetadata node={node} />
+                        )}
                       </div>
                       <InspectorSection
                         text={resourceGroup?.actionName || "Actions"}
@@ -298,7 +280,7 @@ export const MetadataPanel = ({
                         }
                         subection
                       >
-                        <div className="pl-6 pr-2 pb-2">
+                        <div className="pl-6 pr-2 pb-1.5">
                           <ResourceView
                             key={node.path}
                             resourceType={node.type}
@@ -308,11 +290,13 @@ export const MetadataPanel = ({
                       </InspectorSection>
                     </>
                   )) || (
-                    <ResourceView
-                      key={node.path}
-                      resourceType={node.type}
-                      resourcePath={node.path}
-                    />
+                    <div className="pl-6 pr-2 py-1">
+                      <ResourceView
+                        key={node.path}
+                        resourceType={node.type}
+                        resourcePath={node.path}
+                      />
+                    </div>
                   )}
                 </div>
               </InspectorSection>

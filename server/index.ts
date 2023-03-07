@@ -102,6 +102,16 @@ export const createConsoleServer = async ({
           sourcePath: event.sourcePath,
         });
       }
+
+      if (
+        event.sourceType === "wingsdk.cloud.Queue" &&
+        // TODO: Change implementation after https://github.com/winglang/wing/issues/1713 is done
+        event.data.message?.includes("Sending messages")
+      ) {
+        void emitter.emit("invalidateQuery", {
+          query: "queue.approxSize",
+        });
+      }
     },
   });
 

@@ -14,6 +14,7 @@ export interface QueueViewProps {
 export const QueueView = ({ resourcePath }: QueueViewProps) => {
   const { appMode } = useContext(AppContext);
   const pushMessage = trpc["queue.push"].useMutation();
+
   const [message, setMessage] = useState("");
   const { showNotification } = useNotifications();
 
@@ -34,21 +35,16 @@ export const QueueView = ({ resourcePath }: QueueViewProps) => {
   const id = useId();
 
   return (
-    <div className="h-full w-full flex flex-col gap-4 px-4 py-2">
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-4">
-          <TextArea
-            className={"flex flex-col gap-4"}
-            id={id}
-            value={message}
-            onInput={(e) => setMessage((e.target as HTMLTextAreaElement).value)}
-          />
-        </div>
-        <div className="flex gap-4 justify-end">
+    <div className="h-full flex-1 flex flex-col text-sm">
+      <div className="flex flex-col gap-2">
+        <TextArea
+          id={id}
+          value={message}
+          onInput={(e) => setMessage((e.target as HTMLTextAreaElement).value)}
+        />
+        <div className="flex gap-2 justify-end">
           <Button
-            icon={PaperAirplaneIcon}
-            label="Send Message"
-            primary
+            label="Send"
             disabled={appMode === "webapp"}
             onClick={() => sendMessage()}
           />
