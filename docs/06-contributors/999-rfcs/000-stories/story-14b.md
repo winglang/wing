@@ -2,6 +2,13 @@
 
 > **Status**: Expected released on 2023/03/02
 
+This story focuses on opening winglang to the existing terrafrom ecosystem.
+This specific milestone allows you to use cdktf provider in preflight wing code. 
+
+The following milestones will be:
+- [x] bring cdktf modules
+- [ ] Using `extern` keyword to actually interact with the resource in inflight
+- [ ] Being able to run code that brings cdktf in the simulator 
 
 
 ```ts (wing)
