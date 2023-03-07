@@ -109,6 +109,10 @@ impl<'a> JsiiImporter<'a> {
 					}))
 				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION) {
 					self.wing_types.duration()
+				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_JSON) {
+					self.wing_types.json()
+				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_MUT_JSON) {
+					self.wing_types.mut_json()
 				} else if type_fqn == "constructs.IConstruct" || type_fqn == "constructs.Construct" {
 					// TODO: this should be a special type that represents "any resource" https://github.com/winglang/wing/issues/261
 					self.wing_types.anything()
