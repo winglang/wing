@@ -1,10 +1,11 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
+import { test, expect, beforeEach, describe, vi } from "vitest";
 import { ApiResponse } from "../../src/cloud";
 import { Json } from "../../src/std";
 import { ApiOnRequestHandlerClient } from "../../src/target-tf-aws/api.onrequest.inflight";
 
 beforeEach(() => {
-  jest.restoreAllMocks();
+  vi.restoreAllMocks();
 });
 describe("ApiResponseMapper", () => {
   test("map'cloud.ApiResponse' response to 'APIGatewayProxyResult", async () => {
@@ -135,7 +136,7 @@ describe("ApiRequest", () => {
       },
     };
 
-    const handlerMock = jest.fn().mockResolvedValue({
+    const handlerMock = vi.fn().mockResolvedValue({
       status: 200,
     });
     const requestHandlerClient = new ApiOnRequestHandlerClient({
@@ -166,7 +167,7 @@ describe("ApiRequest", () => {
       httpMethod: "GET",
     };
 
-    const handlerMock = jest.fn().mockResolvedValue({
+    const handlerMock = vi.fn().mockResolvedValue({
       status: 200,
     });
     const requestHandlerClient = new ApiOnRequestHandlerClient({
@@ -193,7 +194,7 @@ describe("ApiRequest", () => {
       httpMethod: "GET",
     };
 
-    const handlerMock = jest.fn().mockResolvedValue({
+    const handlerMock = vi.fn().mockResolvedValue({
       status: 200,
     });
     const requestHandlerClient = new ApiOnRequestHandlerClient({

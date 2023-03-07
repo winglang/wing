@@ -1,25 +1,25 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`api with CONNECT route 1`] = `
-Object {
+{
   "openapi": "3.0.3",
-  "paths": Object {
-    "/": Object {
-      "connect": Object {
+  "paths": {
+    "/": {
+      "connect": {
         "operationId": "connect",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -33,25 +33,25 @@ Object {
 `;
 
 exports[`api with DELETE route 1`] = `
-Object {
+{
   "openapi": "3.0.3",
-  "paths": Object {
-    "/": Object {
-      "delete": Object {
+  "paths": {
+    "/": {
+      "delete": {
         "operationId": "delete",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -65,25 +65,25 @@ Object {
 `;
 
 exports[`api with GET route at root 1`] = `
-Object {
+{
   "openapi": "3.0.3",
-  "paths": Object {
-    "/": Object {
-      "get": Object {
+  "paths": {
+    "/": {
+      "get": {
         "operationId": "get",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -97,25 +97,25 @@ Object {
 `;
 
 exports[`api with GET routes with common prefix 1`] = `
-Object {
+{
   "openapi": "3.0.3",
-  "paths": Object {
-    "/hello/bat": Object {
-      "get": Object {
+  "paths": {
+    "/hello/bat": {
+      "get": {
         "operationId": "get-hello/bat",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -124,22 +124,22 @@ Object {
         },
       },
     },
-    "/hello/foo": Object {
-      "get": Object {
+    "/hello/foo": {
+      "get": {
         "operationId": "get-hello/foo",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -153,25 +153,25 @@ Object {
 `;
 
 exports[`api with GET routes with different prefix 1`] = `
-Object {
+{
   "openapi": "3.0.3",
-  "paths": Object {
-    "/foo/bar": Object {
-      "get": Object {
+  "paths": {
+    "/foo/bar": {
+      "get": {
         "operationId": "get-foo/bar",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -180,22 +180,22 @@ Object {
         },
       },
     },
-    "/hello/foo": Object {
-      "get": Object {
+    "/hello/foo": {
+      "get": {
         "operationId": "get-hello/foo",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -209,25 +209,25 @@ Object {
 `;
 
 exports[`api with HEAD route 1`] = `
-Object {
+{
   "openapi": "3.0.3",
-  "paths": Object {
-    "/": Object {
-      "head": Object {
+  "paths": {
+    "/": {
+      "head": {
         "operationId": "head",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -241,25 +241,25 @@ Object {
 `;
 
 exports[`api with OPTIONS route 1`] = `
-Object {
+{
   "openapi": "3.0.3",
-  "paths": Object {
-    "/": Object {
-      "options": Object {
+  "paths": {
+    "/": {
+      "options": {
         "operationId": "options",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -273,25 +273,25 @@ Object {
 `;
 
 exports[`api with PATCH route 1`] = `
-Object {
+{
   "openapi": "3.0.3",
-  "paths": Object {
-    "/": Object {
-      "patch": Object {
+  "paths": {
+    "/": {
+      "patch": {
         "operationId": "patch",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -305,25 +305,25 @@ Object {
 `;
 
 exports[`api with POST route 1`] = `
-Object {
+{
   "openapi": "3.0.3",
-  "paths": Object {
-    "/": Object {
-      "post": Object {
+  "paths": {
+    "/": {
+      "post": {
         "operationId": "post",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -337,25 +337,25 @@ Object {
 `;
 
 exports[`api with PUT route 1`] = `
-Object {
+{
   "openapi": "3.0.3",
-  "paths": Object {
-    "/": Object {
-      "put": Object {
+  "paths": {
+    "/": {
+      "put": {
         "operationId": "put",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -369,25 +369,25 @@ Object {
 `;
 
 exports[`api with multiple GET route and one lambda 1`] = `
-Object {
+{
   "openapi": "3.0.3",
-  "paths": Object {
-    "/hello/bat": Object {
-      "get": Object {
+  "paths": {
+    "/hello/bat": {
+      "get": {
         "operationId": "get-hello/bat",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -396,22 +396,22 @@ Object {
         },
       },
     },
-    "/hello/foo": Object {
-      "get": Object {
+    "/hello/foo": {
+      "get": {
         "operationId": "get-hello/foo",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -425,25 +425,25 @@ Object {
 `;
 
 exports[`api with multiple methods and multiple lambda 1`] = `
-Object {
+{
   "openapi": "3.0.3",
-  "paths": Object {
-    "/hello/bat": Object {
-      "post": Object {
+  "paths": {
+    "/hello/bat": {
+      "post": {
         "operationId": "post-hello/bat",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -452,22 +452,22 @@ Object {
         },
       },
     },
-    "/hello/foo": Object {
-      "get": Object {
+    "/hello/foo": {
+      "get": {
         "operationId": "get-hello/foo",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -481,25 +481,25 @@ Object {
 `;
 
 exports[`api with multiple methods and one lambda 1`] = `
-Object {
+{
   "openapi": "3.0.3",
-  "paths": Object {
-    "/hello/bat": Object {
-      "post": Object {
+  "paths": {
+    "/hello/bat": {
+      "post": {
         "operationId": "post-hello/bat",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -508,22 +508,22 @@ Object {
         },
       },
     },
-    "/hello/foo": Object {
-      "get": Object {
+    "/hello/foo": {
+      "get": {
         "operationId": "get-hello/foo",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -537,25 +537,25 @@ Object {
 `;
 
 exports[`api with multiple methods on same route 1`] = `
-Object {
+{
   "openapi": "3.0.3",
-  "paths": Object {
-    "/": Object {
-      "get": Object {
+  "paths": {
+    "/": {
+      "get": {
         "operationId": "get",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -563,21 +563,21 @@ Object {
           "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
         },
       },
-      "put": Object {
+      "put": {
         "operationId": "put",
-        "parameters": Array [],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
@@ -591,34 +591,34 @@ Object {
 `;
 
 exports[`api with path parameter 1`] = `
-Object {
+{
   "openapi": "3.0.3",
-  "paths": Object {
-    "/hello/{world}": Object {
-      "get": Object {
+  "paths": {
+    "/hello/{world}": {
+      "get": {
         "operationId": "get-hello/{world}",
-        "parameters": Array [
-          Object {
+        "parameters": [
+          {
             "in": "path",
             "name": "world",
             "required": true,
-            "schema": Object {
+            "schema": {
               "type": "string",
             },
           },
         ],
-        "responses": Object {
-          "200": Object {
-            "content": Object {},
+        "responses": {
+          "200": {
+            "content": {},
             "description": "200 response",
           },
         },
-        "x-amazon-apigateway-integration": Object {
+        "x-amazon-apigateway-integration": {
           "contentHandling": "CONVERT_TO_TEXT",
           "httpMethod": "POST",
           "passthroughBehavior": "when_no_match",
-          "responses": Object {
-            "default": Object {
+          "responses": {
+            "default": {
               "statusCode": "200",
             },
           },
