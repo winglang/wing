@@ -59,7 +59,6 @@ extern "./tasklist_helper.js" {
   inflight uuid() => str; 
 };
 
-
 enum Status {
   Uncompleted,
   Completed
