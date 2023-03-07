@@ -63,14 +63,15 @@ export default function LogsFilters({
   }, []);
 
   return (
-    <Listbox value={selected} onChange={(types) => onChange?.(types)} multiple>
+    <Listbox
+      value={selected}
+      onChange={(types) => onChange?.(types)}
+      multiple
+      disabled={disabled}
+    >
       <div className="relative inline-block">
         <div ref={setReferenceElement}>
-          <Listbox.Button
-            as={Button}
-            className="relative pr-8 min-w-[8rem]"
-            disabled={disabled}
-          >
+          <Listbox.Button as={Button} className="relative pr-8 min-w-[8rem]">
             <span className="block truncate">{combinationName}</span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1.5">
               <ChevronUpDownIcon
