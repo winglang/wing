@@ -76,7 +76,7 @@ export interface ScheduleOnTickProps extends FunctionProps {}
  * Represents a resource with an inflight "handle" method that can be passed to
  * `Schedule.on_tick`.
  *
- * @inflight `wingsdk.cloud.IScheduleOnTickHandlerClient`
+ * @inflight `@winglang/sdk.cloud.IScheduleOnTickHandlerClient`
  */
 export interface IScheduleOnTickHandler extends IResource {}
 

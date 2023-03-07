@@ -69,7 +69,7 @@ export interface ITopicClient {
  * Represents a resource with an inflight "handle" method that can be passed to
  * `Topic.on_message`.
  *
- * @inflight `wingsdk.cloud.ITopicOnMessageHandlerClient`
+ * @inflight `@winglang/sdk.cloud.ITopicOnMessageHandlerClient`
  */
 export interface ITopicOnMessageHandler extends IResource {}
 

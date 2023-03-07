@@ -102,7 +102,7 @@ export interface IQueueClient {
  * Represents a resource with an inflight "handle" method that can be passed to
  * `Queue.on_message`.
  *
- * @inflight `wingsdk.cloud.IQueueOnMessageHandlerClient`
+ * @inflight `@winglang/sdk.cloud.IQueueOnMessageHandlerClient`
  */
 export interface IQueueOnMessageHandler extends IResource {}
 

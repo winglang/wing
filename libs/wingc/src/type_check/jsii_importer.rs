@@ -390,6 +390,37 @@ impl<'a> JsiiImporter<'a> {
 			));
 		}
 
+		// Add inflight methods from any docstring-linked interfaces to the new interface's env
+		// For example, `IBucket` could contain all of the preflight methods of a bucket, and
+		// contain docstring tag of "@inflight IBucketClient" where `IBucketClient` is an interface
+		// that contains all of the inflight methods of a bucket.
+		if !is_struct {
+			// Look for a client interface for this resource
+			let inflight_tag: Option<&str> = extract_docstring_tag(&jsii_interface.docs, "inflight");
+
+			let client_interface = inflight_tag
+				.map(|fqn| {
+					// Some fully qualified package names include "@" characters,
+					// so they have to be escaped in the original docstring.
+					if fqn.starts_with("`") && fqn.ends_with("`") {
+						&fqn[1..fqn.len() - 1]
+					} else {
+						fqn
+					}
+				})
+				.and_then(|fqn| self.jsii_types.find_interface(&FQN::from(fqn)));
+
+			if let Some(client_interface) = client_interface {
+				// Add client interface's methods to the class environment
+				self.add_members_to_class_env(client_interface, false, Phase::Inflight, &mut iface_env, wing_type);
+			} else {
+				debug!(
+					"Interface {} does not seem to have an inflight client",
+					type_name.green()
+				);
+			}
+		}
+
 		// Replace the dummy struct environment with the real one after adding all properties
 		match *wing_type {
 			Type::Struct(Struct { ref mut env, .. }) | Type::Interface(Interface { ref mut env, .. }) => *env = iface_env,
@@ -699,24 +730,20 @@ impl<'a> JsiiImporter<'a> {
 		self.add_members_to_class_env(jsii_class, is_resource, phase, &mut class_env, new_type);
 		if is_resource {
 			// Look for a client interface for this resource
-			let client_interface = jsii_class
-				.docs
-				.as_ref()
-				.and_then(|docs| docs.custom.as_ref())
-				.and_then(|custom| {
-					custom
-						.get("inflight")
-						.map(|fqn| {
-							// Some fully qualified package names include "@" characters,
-							// so they have to be escaped in the original docstring.
-							if fqn.starts_with("`") && fqn.ends_with("`") {
-								&fqn[1..fqn.len() - 1]
-							} else {
-								fqn
-							}
-						})
-						.and_then(|fqn| self.jsii_types.find_interface(&FQN::from(fqn)))
-				});
+			let inflight_tag: Option<&str> = extract_docstring_tag(&jsii_class.docs, "inflight");
+
+			let client_interface = inflight_tag
+				.map(|fqn| {
+					// Some fully qualified package names include "@" characters,
+					// so they have to be escaped in the original docstring.
+					if fqn.starts_with("`") && fqn.ends_with("`") {
+						&fqn[1..fqn.len() - 1]
+					} else {
+						fqn
+					}
+				})
+				.and_then(|fqn| self.jsii_types.find_interface(&FQN::from(fqn)));
+
 			if let Some(client_interface) = client_interface {
 				// Add client interface's methods to the class environment
 				self.add_members_to_class_env(client_interface, false, Phase::Inflight, &mut class_env, new_type);
@@ -831,6 +858,15 @@ impl<'a> JsiiImporter<'a> {
 			.define(&symbol, SymbolKind::Type(type_ref), StatementIdx::Top)
 			.expect(&format!("Invalid JSII library: failed to define type {}", fqn));
 	}
+}
+
+fn extract_docstring_tag<'a>(docs: &'a Option<jsii::Docs>, arg: &str) -> Option<&'a str> {
+	docs.as_ref().and_then(|docs| {
+		docs
+			.custom
+			.as_ref()
+			.and_then(|custom| custom.get(arg).map(|s| s.as_str()))
+	})
 }
 
 /// Returns true if the FQN represents a "construct base class".

@@ -2,7 +2,7 @@ mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{
 	Class as AstClass, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-	TypeAnnotation, UnaryOperator, UserDefinedType,
+	ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{
@@ -310,8 +310,45 @@ impl Subtype for Type {
 				// TODO: Hack to make anything's compatible with all other types, specifically useful for handling core.Inflight handlers
 				true
 			}
-			// TODO: implement function subtyping - https://github.com/winglang/wing/issues/1677
-			(Self::Function(l0), Self::Function(r0)) => l0 == r0,
+			(Self::Function(l0), Self::Function(r0)) => {
+				// If the return types are not subtypes of each other, then this is not a subtype
+				// exception: if function type we are assigning to returns void, then any return type is ok
+				if !l0.return_type.is_subtype_of(&r0.return_type) && !r0.return_type.is_void() {
+					return false;
+				}
+
+				// If the argument types are not subtypes of each other, then this is not a subtype
+				if l0.parameters.len() != r0.parameters.len() {
+					return false;
+				}
+
+				let mut lparams = l0.parameters.iter().peekable();
+				let mut rparams = r0.parameters.iter().peekable();
+
+				// If the first parameter is a class or resource, then we can ignore the first parameter
+				// because it is the `this` parameter
+				// TODO: remove this after https://github.com/winglang/wing/issues/1678
+				if matches!(
+					lparams.peek().map(|t| &***t),
+					Some(&Type::Class(_)) | Some(&Type::Resource(_)) | Some(&Type::Interface(_))
+				) {
+					lparams.next();
+				}
+
+				if matches!(
+					rparams.peek().map(|t| &***t),
+					Some(&Type::Class(_)) | Some(&Type::Resource(_)) | Some(&Type::Interface(_))
+				) {
+					rparams.next();
+				}
+
+				for (l, r) in lparams.zip(rparams) {
+					if !r.is_subtype_of(&l) {
+						return false;
+					}
+				}
+				true
+			}
 			(Self::Class(l0), Self::Class(_)) => {
 				// If we extend from `other` then I'm a subtype of it (inheritance)
 				if let Some(parent) = l0.parent.as_ref() {
@@ -1375,14 +1412,14 @@ impl<'a> TypeChecker<'a> {
 	/// Validate that the given type is a subtype (or same) as the expected type. If not, add an error
 	/// to the diagnostics.
 	/// Returns the given type on success, otherwise returns the expected type.
-	fn validate_type(&mut self, actual_type: TypeRef, expected_type: TypeRef, value: &Expr) -> TypeRef {
-		self.validate_type_in(actual_type, &[expected_type], value)
+	fn validate_type(&mut self, actual_type: TypeRef, expected_type: TypeRef, span: &impl ToSpan) -> TypeRef {
+		self.validate_type_in(actual_type, &[expected_type], span)
 	}
 
 	/// Validate that the given type is a subtype (or same) as the one of the expected types. If not, add
 	/// an error to the diagnostics.
 	/// Returns the given type on success, otherwise returns one of the expected types.
-	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], value: &Expr) -> TypeRef {
+	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], span: &impl ToSpan) -> TypeRef {
 		assert!(expected_types.len() > 0);
 		if !actual_type.is_anything()
 			&& !expected_types
@@ -1406,7 +1443,7 @@ impl<'a> TypeChecker<'a> {
 						expected_types[0], actual_type
 					)
 				},
-				span: Some(value.span.clone()),
+				span: Some(span.span()),
 				level: DiagnosticLevel::Error,
 			});
 			expected_types[0]
@@ -1961,8 +1998,7 @@ impl<'a> TypeChecker<'a> {
 							.as_variable()
 							.expect("Expected method to be a variable")
 							.type_;
-						// TODO: pass span of the class name
-						self.validate_type(class_method_type, method_type, value);
+						self.validate_type(class_method_type, method_type, name);
 					}
 				}
 			}

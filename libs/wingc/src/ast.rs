@@ -491,18 +491,33 @@ impl Display for Reference {
 	}
 }
 
-trait HasSpan {
+pub trait ToSpan {
 	fn span(&self) -> WingSpan;
 }
 
-impl HasSpan for Stmt {
+impl ToSpan for Stmt {
 	fn span(&self) -> WingSpan {
-		self.span
+		self.span.clone()
 	}
 }
 
-impl HasSpan for Expr {
+impl ToSpan for Expr {
 	fn span(&self) -> WingSpan {
-		self.span
+		self.span.clone()
+	}
+}
+
+impl ToSpan for Symbol {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
+}
+
+impl<T> ToSpan for Box<T>
+where
+	T: ToSpan,
+{
+	fn span(&self) -> WingSpan {
+		(&**self).span()
 	}
 }
