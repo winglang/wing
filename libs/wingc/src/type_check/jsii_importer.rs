@@ -8,7 +8,7 @@ use crate::{
 	},
 	utilities::camel_case_to_snake_case,
 	CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT,
-	WINGSDK_RESOURCE,
+	WINGSDK_JSON, WINGSDK_MUT_JSON, WINGSDK_RESOURCE,
 };
 use colored::Colorize;
 use serde_json::Value;
