@@ -10,6 +10,7 @@ import { Queue } from "./queue";
 import { isSimulatorResource } from "./resource";
 import { WingSimulatorSchema } from "./schema";
 import { Topic } from "./topic";
+import { Redis } from "./redis";
 import {
   BUCKET_FQN,
   COUNTER_FQN,
@@ -18,6 +19,7 @@ import {
   QUEUE_FQN,
   TOPIC_FQN,
 } from "../cloud";
+import { REDIS_FQN } from "../redis";
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
@@ -73,6 +75,9 @@ export class App extends core.App {
 
       case TOPIC_FQN:
         return new Topic(scope, id, args[0]);
+
+      case REDIS_FQN:
+        return new Redis(scope, id, args[0]);
     }
 
     return undefined;

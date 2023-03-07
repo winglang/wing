@@ -7,6 +7,7 @@ export const TOPIC_TYPE = "wingsdk.cloud.Topic";
 export const COUNTER_TYPE = "wingsdk.cloud.Counter";
 export const SCHEDULE_TYPE = "wingsdk.cloud.Schedule";
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
+export const REDIS_TYPE = "wingsdk.redis.Redis";
 
 export type FunctionHandle = string;
 
@@ -82,5 +83,14 @@ export interface CounterSchema extends BaseResourceSchema {
   readonly props: {
     /** The initial value of the counter. */
     readonly initial: number;
+  };
+}
+
+/** Schema for redis.Redis */
+export interface RedisSchema extends BaseResourceSchema {
+  readonly type: typeof REDIS_TYPE;
+  readonly props: {
+    /** Redis instance password. */
+    readonly password: string;
   };
 }

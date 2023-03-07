@@ -9,6 +9,10 @@
       "type": "build"
     },
     {
+      "name": "@types/dockerode",
+      "type": "build"
+    },
+    {
       "name": "@types/fs-extra",
       "type": "build"
     },
@@ -216,7 +220,15 @@
       "type": "bundled"
     },
     {
+      "name": "dockerode",
+      "type": "bundled"
+    },
+    {
       "name": "esbuild-wasm",
+      "type": "bundled"
+    },
+    {
+      "name": "ioredis",
       "type": "bundled"
     },
     {

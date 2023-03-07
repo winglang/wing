@@ -11,8 +11,10 @@ import {
   LOGGER_TYPE,
   QUEUE_TYPE,
   TOPIC_TYPE,
+  REDIS_TYPE,
 } from "./schema-resources";
 import { Topic } from "./topic.inflight";
+import { Redis } from "./redis.inflight";
 import { ISimulatorFactory, ISimulatorContext } from "../testing/simulator";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
@@ -41,6 +43,8 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return new Counter(props, context);
       case TOPIC_TYPE:
         return new Topic(props, context);
+      case REDIS_TYPE:
+        return new Redis(props, context);
       default:
         throw new Error(`Type ${type} not implemented.`);
     }
