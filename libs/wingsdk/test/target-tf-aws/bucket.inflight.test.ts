@@ -9,6 +9,7 @@ import {
 import { SdkStream } from "@aws-sdk/types";
 import { sdkStreamMixin } from "@aws-sdk/util-stream-node";
 import { mockClient } from "aws-sdk-client-mock";
+import { test, expect, beforeEach } from "vitest";
 import { BucketClient } from "../../src/target-tf-aws/bucket.inflight";
 
 const s3Mock = mockClient(S3Client);

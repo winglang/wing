@@ -1,7 +1,14 @@
 use aho_corasick::AhoCorasick;
 use indoc::formatdoc;
 use itertools::Itertools;
-use std::{cell::RefCell, cmp::Ordering, fs, path::Path, vec};
+use std::{
+	cell::RefCell,
+	cmp::Ordering,
+	collections::{BTreeMap, BTreeSet},
+	fs,
+	path::Path,
+	vec,
+};
 
 use sha2::{Digest, Sha256};
 
@@ -11,8 +18,15 @@ use crate::{
 		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator,
 		UserDefinedType,
 	},
-	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, ClassLike, Type, TypeRef},
+	debug,
+	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
+	type_check::{
+		resolve_user_defined_type,
+		symbol_env::{SymbolEnv, SymbolEnvRef},
+		ClassLike, Type, TypeRef,
+	},
 	utilities::snake_case_to_camel_case,
+	visit::{self, Visit},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
 };
 
@@ -41,12 +55,14 @@ const $App = __app(process.env.WING_TARGET);
 const TARGET_APP: &str = "$App";
 
 const INFLIGHT_OBJ_PREFIX: &str = "$Inflight";
+
 pub struct JSifyContext {
 	pub in_json: bool,
 	pub phase: Phase,
 }
 
 pub struct JSifier<'a> {
+	pub diagnostics: Diagnostics,
 	pub out_dir: &'a Path,
 	shim: bool,
 	app_name: String,
@@ -56,6 +72,7 @@ pub struct JSifier<'a> {
 impl<'a> JSifier<'a> {
 	pub fn new(out_dir: &'a Path, app_name: &str, shim: bool) -> Self {
 		Self {
+			diagnostics: Diagnostics::new(),
 			out_dir,
 			shim,
 			app_name: app_name.to_string(),
@@ -86,7 +103,7 @@ impl<'a> JSifier<'a> {
 		lines.join("\n")
 	}
 
-	pub fn jsify(&self, scope: &Scope) -> String {
+	pub fn jsify(&mut self, scope: &Scope) -> String {
 		let mut js = vec![];
 		let mut imports = vec![];
 
@@ -143,10 +160,11 @@ impl<'a> JSifier<'a> {
 		} else {
 			output.append(&mut js);
 		}
+
 		output.join("\n")
 	}
 
-	fn jsify_scope(&self, scope: &Scope, context: &JSifyContext) -> String {
+	fn jsify_scope(&mut self, scope: &Scope, context: &JSifyContext) -> String {
 		let mut lines = vec![];
 		lines.push("{".to_string());
 
@@ -162,7 +180,7 @@ impl<'a> JSifier<'a> {
 		lines.join("\n")
 	}
 
-	fn jsify_reference(&self, reference: &Reference, case_convert: Option<bool>, context: &JSifyContext) -> String {
+	fn jsify_reference(&mut self, reference: &Reference, case_convert: Option<bool>, context: &JSifyContext) -> String {
 		let symbolize = if case_convert.unwrap_or(false) {
 			Self::jsify_symbol_case_converted
 		} else {
@@ -190,7 +208,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_arg_list(
-		&self,
+		&mut self,
 		arg_list: &ArgList,
 		scope: Option<&str>,
 		id: Option<&str>,
@@ -225,7 +243,7 @@ impl<'a> JSifier<'a> {
 					arg.1,
 					&JSifyContext {
 						in_json: context.in_json.clone(),
-						phase: Phase::Independent
+						phase: Phase::Independent,
 					}
 				)
 			));
@@ -266,7 +284,7 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_expression(&self, expression: &Expr, context: &JSifyContext) -> String {
+	fn jsify_expression(&mut self, expression: &Expr, context: &JSifyContext) -> String {
 		let auto_await = match context.phase {
 			Phase::Inflight => "await ",
 			_ => "",
@@ -285,7 +303,7 @@ impl<'a> JSifier<'a> {
 					// TODO Hack: This object type is not known. How can we tell if it's a resource or not?
 					true
 				};
-				let should_case_convert = if let Some(cls) = expression_type.unwrap().as_class_or_resource() {
+				let should_case_convert = if let Some(cls) = expression_type.expect("expression type").as_class_or_resource() {
 					cls.should_case_convert_jsii
 				} else {
 					// This should only happen in the case of `any`, which are almost certainly JSII imports.
@@ -517,7 +535,7 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_statement(&self, env: &SymbolEnv, statement: &Stmt, context: &JSifyContext) -> String {
+	fn jsify_statement(&mut self, env: &SymbolEnv, statement: &Stmt, context: &JSifyContext) -> String {
 		match &statement.kind {
 			StmtKind::Bring {
 				module_name,
@@ -699,7 +717,7 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_inflight_function(&self, func_def: &FunctionDefinition, context: &JSifyContext) -> String {
+	fn jsify_inflight_function(&mut self, func_def: &FunctionDefinition, context: &JSifyContext) -> String {
 		let mut parameter_list = vec![];
 		for p in func_def.parameters.iter() {
 			parameter_list.push(p.0.name.clone());
@@ -756,7 +774,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_function(
-		&self,
+		&mut self,
 		name: Option<&str>,
 		parameters: &[(Symbol, bool)],
 		body: &Scope,
@@ -785,7 +803,7 @@ impl<'a> JSifier<'a> {
 		)
 	}
 
-	fn jsify_class_member(&self, member: &ClassField) -> String {
+	fn jsify_class_member(&mut self, member: &ClassField) -> String {
 		format!("{};", self.jsify_symbol(&member.name))
 	}
 
@@ -840,11 +858,14 @@ impl<'a> JSifier<'a> {
 	///   }
 	/// }
 	/// ```
-	fn jsify_resource(&self, env: &SymbolEnv, class: &AstClass, context: &JSifyContext) -> String {
+	fn jsify_resource(&mut self, env: &SymbolEnv, class: &AstClass, context: &JSifyContext) -> String {
 		assert!(context.phase == Phase::Preflight);
 
 		// Lookup the resource type
 		let resource_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
+
+		// Get all references between inflight methods and preflight fields
+		let refs = self.find_inflight_references(class);
 
 		// Get fields to be captured by resource's client
 		let captured_fields = self.get_captures(resource_type);
@@ -895,35 +916,34 @@ impl<'a> JSifier<'a> {
 				.join("\n"),
 		);
 
-		// For each inflight methods generate an annotation which includes a list of all the captured
-		// fields and all the ops they provide.
-		// TODO: in the future we should only pass the relevant captured fields and ops to each method.
-		let default_annotation = captured_fields
-			.iter()
-			.map(|(name, _, ops)| {
-				format!(
-					"\"this.{}\": {{ ops: [{}]}}",
-					name,
-					ops.iter().map(|op| format!("\"{}\"", op)).collect_vec().join(", ")
-				)
-			})
-			.collect_vec()
-			.join(", ");
-		let inflight_annotations = inflight_methods
-			.iter()
-			.map(|(method_name, ..)| {
-				format!(
-					"{}._annotateInflight(\"{}\", {{{}}});",
-					class.name.name, method_name.name, default_annotation
-				)
-			})
-			.collect_vec();
+		// go over all bindings and produce inflight annotations
+		let mut inflight_annotations = vec![];
+		for (method_name, refs) in refs {
+			inflight_annotations.push(format!(
+				"{}._annotateInflight(\"{}\", {{{}}});",
+				class.name.name,
+				method_name,
+				refs
+					.iter()
+					.map(|(field, ops)| format!(
+						"\"this.{}\": {{ ops: [{}] }}",
+						field,
+						ops.iter().map(|op| format!("\"{}\"", op)).join(",")
+					))
+					.join(",")
+			));
+		}
 
 		// Return the preflight resource class
 		return format!("{}\n{}", resource_class, inflight_annotations.join("\n"));
 	}
 
-	fn jsify_resource_constructor(&self, constructor: &Constructor, no_parent: bool, context: &JSifyContext) -> String {
+	fn jsify_resource_constructor(
+		&mut self,
+		constructor: &Constructor,
+		no_parent: bool,
+		context: &JSifyContext,
+	) -> String {
 		format!(
 			"constructor(scope, id, {}) {{\n{}\n{}\n}}",
 			constructor
@@ -939,14 +959,14 @@ impl<'a> JSifier<'a> {
 				&constructor.statements,
 				&JSifyContext {
 					in_json: context.in_json.clone(),
-					phase: Phase::Preflight
+					phase: Phase::Preflight,
 				}
 			)
 		)
 	}
 
 	fn jsify_toinflight_method(
-		&self,
+		&mut self,
 		resource_name: &Symbol,
 		captured_fields: &[(String, TypeRef, Vec<String>)],
 	) -> String {
@@ -978,7 +998,7 @@ impl<'a> JSifier<'a> {
 
 	// Write a client class for a file for the given resource
 	fn jsify_resource_client(
-		&self,
+		&mut self,
 		env: &SymbolEnv,
 		name: &Symbol,
 		captured_fields: &[(String, TypeRef, Vec<String>)],
@@ -1041,7 +1061,7 @@ impl<'a> JSifier<'a> {
 						def.is_static,
 						&JSifyContext {
 							in_json: context.in_json.clone(),
-							phase: def.signature.flight
+							phase: def.signature.flight,
 						}
 					)
 				)
@@ -1067,7 +1087,7 @@ impl<'a> JSifier<'a> {
 		fs::write(&relative_file_path, client_source).expect("Writing client inflight source");
 	}
 
-	fn jsify_class(&self, env: &SymbolEnv, class: &AstClass, context: &JSifyContext) -> String {
+	fn jsify_class(&mut self, env: &SymbolEnv, class: &AstClass, context: &JSifyContext) -> String {
 		if class.is_resource {
 			return self.jsify_resource(env, class, context);
 		}
@@ -1100,6 +1120,33 @@ impl<'a> JSifier<'a> {
 				.collect::<Vec<String>>()
 				.join("\n")
 		)
+	}
+
+	/// Get the type and capture info for fields that are captured in the client of the given resource
+	/// Returns a map from method name to a map from field name to a set of operations
+	fn find_inflight_references(
+		&mut self,
+		resource_class: &AstClass,
+	) -> Vec<(String, BTreeMap<String, BTreeSet<String>>)> {
+		let inflight_methods = resource_class
+			.methods
+			.iter()
+			.filter(|(_, m)| m.signature.flight == Phase::Inflight);
+
+		let mut result = vec![];
+
+		for (method_name, function_def) in inflight_methods {
+			// visit statements of method and find all references to fields ("this.xxx")
+			let visitor = FieldReferenceVisitor::new(method_name, &function_def);
+			let (refs, find_diags) = visitor.find_refs();
+
+			self.diagnostics.extend(find_diags);
+
+			// add the references to the result
+			result.push((method_name.name.clone(), refs));
+		}
+
+		return result;
 	}
 
 	// Get the type and capture info for fields that are captured in the client of the given resource
@@ -1146,5 +1193,174 @@ fn is_mutable_collection(expression: &Expr) -> bool {
 		evaluated_type.is_mutable_collection()
 	} else {
 		false
+	}
+}
+
+/// Analysizes a resource inflight method and returns a list of fields that are referenced from the
+/// method and which operations are performed on them.
+struct FieldReferenceVisitor<'a> {
+	/// The key is field name, value is a list of operations performed on this field
+	references: BTreeMap<String, BTreeSet<String>>,
+
+	/// Used internally by the visitor to keep track of the path to the field
+	path: Vec<String>,
+
+	/// The resource type's symbol env (used to resolve field types)
+	function_def: &'a FunctionDefinition,
+	method_name: &'a Symbol,
+
+	env: SymbolEnvRef,
+	diagnostics: Diagnostics,
+}
+
+impl<'a> FieldReferenceVisitor<'a> {
+	pub fn new(method_name: &'a Symbol, function_def: &'a FunctionDefinition) -> Self {
+		Self {
+			references: BTreeMap::new(),
+			diagnostics: Diagnostics::new(),
+			method_name,
+			path: vec![],
+			function_def,
+			env: function_def.statements.env.borrow().as_ref().unwrap().get_ref(),
+		}
+	}
+
+	pub fn find_refs(mut self) -> (BTreeMap<String, BTreeSet<String>>, Diagnostics) {
+		self.visit_scope(&self.function_def.statements);
+		(self.references, self.diagnostics)
+	}
+}
+
+impl<'ast> Visit<'ast> for FieldReferenceVisitor<'_> {
+	fn visit_reference(&mut self, node: &'ast Reference) {
+		if self.collect_inflight_refs(node) {
+			return;
+		}
+
+		visit::visit_reference(self, node);
+	}
+}
+
+impl<'a> FieldReferenceVisitor<'a> {
+	/// If node is a reference to a field of "this", check that it references a legal field and add it
+	/// to the list of references. Returns true if no additional processing is needed or false if we
+	/// need to visit the node's children.
+	fn collect_inflight_refs(&mut self, node: &Reference) -> bool {
+		let (object, property) = match node {
+			Reference::InstanceMember { object, property } => (object, property),
+			_ => return false,
+		};
+
+		let r = match &object.kind {
+			ExprKind::Reference(r) => r,
+			_ => return false,
+		};
+
+		let s = match r {
+			Reference::Identifier(s) => s,
+			_ => {
+				self.path.insert(0, property.name.clone());
+				return false;
+			}
+		};
+
+		if s.name != "this" {
+			return false;
+		}
+
+		// resolve the type of the resource by looking up "this" in our environment
+		let resource_type = self
+			.env
+			.lookup(s, None)
+			.expect("'this' to be found")
+			.as_variable()
+			.expect("'this' to be a variable")
+			.type_;
+
+		let r = match &*resource_type {
+			Type::Resource(r) => r,
+			_ => panic!("'this' is not a resource"),
+		};
+
+		// lookup our field in the class environment
+		let field_kind = r
+			.env
+			.lookup(property, None)
+			.expect("unable to find field in resource env")
+			.as_variable()
+			.expect("field is not a variable");
+
+		// we only care about preflight fields (inflight fields are normal references)
+		if field_kind.flight != Phase::Preflight {
+			return false;
+		}
+
+		// don't allow capturing reassignable (`var`) fields.
+		if field_kind.reassignable {
+			self.diagnostics.push(Diagnostic {
+				level: DiagnosticLevel::Error,
+				message: format!(
+					"Unable to reference \"this.{}\" from inflight method \"{}\" because it is reassignable (\"var\")",
+					property.name, self.method_name.name,
+				),
+				span: Some(property.span.clone()),
+			});
+
+			return true;
+		}
+
+		// check if the type is capturable (resource, primitive or immutable collection)
+		if !field_kind.type_.is_capturable() {
+			self.diagnostics.push(Diagnostic {
+				level: DiagnosticLevel::Error,
+				message: format!(
+					"Unable to reference \"this.{}\" from inflight method \"{}\" because type {} is not capturable",
+					property.name, self.method_name.name, field_kind.type_,
+				),
+				span: Some(property.span.clone()),
+			});
+
+			return true;
+		}
+
+		debug!(
+			"field \"this.{}\" is referenced from inflight method {}",
+			property.name, self.method_name.name
+		);
+
+		// get/create an "ops" set for this field
+		let ops = self.references.entry(property.name.clone()).or_default();
+
+		if !self.path.is_empty() {
+			let op = self.path[0].clone();
+
+			// if we are referencing a resource, verify that the operation is an inflight method
+			if let Some(r) = field_kind.type_.as_resource() {
+				if r
+					.get_method(&op)
+					.filter(|v| v.flight == Phase::Inflight && !v.is_static)
+					.is_none()
+				{
+					self.diagnostics.push(Diagnostic {
+						level: DiagnosticLevel::Error,
+						message: format!(
+							"Unable to reference \"{}\" from inflight method \"{}\" because it is not an inflight method",
+							self.path.join("."),
+							self.method_name.name,
+						),
+						span: Some(property.span.clone()),
+					});
+
+					return true;
+				}
+			}
+
+			ops.insert(op);
+		}
+
+		self.path.clear();
+
+		// no need to visit recursively
+		return true;
 	}
 }

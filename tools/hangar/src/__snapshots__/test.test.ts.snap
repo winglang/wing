@@ -21,6 +21,8 @@ exports[`bring_jsii_path.w > wing test --target sim > stdout 1`] = `"pass ─ br
 
 exports[`bring_projen.w > wing test --target sim > stdout 1`] = `"pass ─ bring_projen.w (no tests)"`;
 
+exports[`bucket_keys.w > wing test --target sim > stdout 1`] = `"pass ─ bucket_keys.w » root/test"`;
+
 exports[`capture_containers.w > wing test --target sim > stdout 1`] = `"pass ─ capture_containers.w » root/test"`;
 
 exports[`capture_containers_of_resources.w > wing test --target sim > stdout 1`] = `"pass ─ capture_containers_of_resources.w » root/test"`;
@@ -66,6 +68,24 @@ pass ─ forward_decl.w (no tests)"
 exports[`hello.w > wing test --target sim > stdout 1`] = `"pass ─ hello.w (no tests)"`;
 
 exports[`identical_inflights.w > wing test --target sim > stdout 1`] = `"pass ─ identical_inflights.w (no tests)"`;
+
+exports[`inflight_ref_external.w > wing test --target sim > stdout 1`] = `"pass ─ inflight_ref_external.w » root/test"`;
+
+exports[`inflight_ref_inflight_field.w > wing test --target sim > stdout 1`] = `"pass ─ inflight_ref_inflight_field.w » root/test"`;
+
+exports[`inflight_ref_primitive.w > wing test --target sim > stdout 1`] = `"pass ─ inflight_ref_primitive.w » root/test"`;
+
+exports[`inflight_ref_resource.w > wing test --target sim > stdout 1`] = `"pass ─ inflight_ref_resource.w » root/test"`;
+
+exports[`inflight_ref_resource_collection.w > wing test --target sim > stdout 1`] = `"pass ─ inflight_ref_resource_collection.w » root/test"`;
+
+exports[`inflight_ref_resource_field.w > wing test --target sim > stdout 1`] = `"pass ─ inflight_ref_resource_field.w » root/test"`;
+
+exports[`inflight_ref_resource_sub_method.w > wing test --target sim > stdout 1`] = `"pass ─ inflight_ref_resource_sub_method.w » root/test"`;
+
+exports[`inflight_ref_resource_userdefined.w > wing test --target sim > stdout 1`] = `"pass ─ inflight_ref_resource_userdefined.w » root/test"`;
+
+exports[`inflight_ref_unknown_op.w > wing test --target sim > stdout 1`] = `"pass ─ inflight_ref_unknown_op.w » root/test"`;
 
 exports[`json.w > wing test --target sim > stdout 1`] = `"pass ─ json.w (no tests)"`;
 

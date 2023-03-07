@@ -4,6 +4,9 @@ node_modules/
 *.tfstate
 *.tfstate.*
 
+# WASI SDK (insalled by "npm install")
+.cargo/wasi-sdk-*/
+
 # Generated wing output
 *.w.out/
 

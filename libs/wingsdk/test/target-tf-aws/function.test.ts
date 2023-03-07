@@ -1,4 +1,5 @@
 import * as cdktf from "cdktf";
+import { test, expect } from "vitest";
 import { Function } from "../../src/cloud";
 import { Duration } from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";

@@ -39,8 +39,8 @@
         "cacheableOperations": [
           "build",
           "copy",
-          "lint",
           "test",
+          "lint",
           "package"
         ]
       }
@@ -67,6 +67,14 @@
         "src",
         "test",
         "examples-tests"
+      ]
+    },
+    "lint": {
+      "inputs": [
+        "project-files",
+        "workspace-files",
+        "src",
+        "test"
       ]
     }
   }

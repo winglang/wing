@@ -1,13 +1,14 @@
 use crate::{
 	ast::{Phase, Symbol},
 	debug,
-	diagnostic::{CharacterLocation, WingSpan},
+	diagnostic::{WingLocation, WingSpan},
 	type_check::{
 		self, symbol_env::StatementIdx, Class, FunctionSignature, Struct, SymbolKind, Type, TypeRef, Types,
 		WING_CONSTRUCTOR_NAME,
 	},
 	utilities::camel_case_to_snake_case,
-	CONSTRUCT_BASE, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT, WINGSDK_RESOURCE,
+	CONSTRUCT_BASE, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT, WINGSDK_JSON, WINGSDK_MUT_JSON,
+	WINGSDK_RESOURCE,
 };
 use colored::Colorize;
 use serde_json::Value;
@@ -108,6 +109,10 @@ impl<'a> JsiiImporter<'a> {
 					}))
 				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION) {
 					self.wing_types.duration()
+				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_JSON) {
+					self.wing_types.json()
+				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_MUT_JSON) {
+					self.wing_types.mut_json()
 				} else if type_fqn == "constructs.IConstruct" || type_fqn == "constructs.Construct" {
 					// TODO: this should be a special type that represents "any resource" https://github.com/winglang/wing/issues/261
 					self.wing_types.anything()
@@ -274,10 +279,7 @@ impl<'a> JsiiImporter<'a> {
 				parent_ns
 					.env
 					.define(
-						&Symbol {
-							name: namespace_name.to_string(),
-							span: WingSpan::global(),
-						},
+						&Symbol::global(namespace_name),
 						SymbolKind::Namespace(ns),
 						StatementIdx::Top,
 					)
@@ -536,20 +538,18 @@ impl<'a> JsiiImporter<'a> {
 	fn jsii_name_to_symbol(name: &str, jsii_source_location: &Option<jsii::SourceLocation>) -> Symbol {
 		let span = if let Some(jsii_source_location) = jsii_source_location {
 			WingSpan {
-				start: CharacterLocation {
-					row: (jsii_source_location.line - 1.0) as usize,
-					column: 0,
+				start: WingLocation {
+					line: (jsii_source_location.line - 1.0) as u32,
+					col: 0,
 				},
-				end: CharacterLocation {
-					row: (jsii_source_location.line - 1.0) as usize,
-					column: 0,
+				end: WingLocation {
+					line: (jsii_source_location.line - 1.0) as u32,
+					col: 0,
 				},
-				start_byte: 0,
-				end_byte: 0,
 				file_id: (&jsii_source_location.filename).into(),
 			}
 		} else {
-			WingSpan::global()
+			Default::default()
 		};
 		Symbol {
 			name: name.to_string(),
