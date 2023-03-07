@@ -159,6 +159,7 @@ pub enum Type {
 	Function(FunctionSignature),
 	Class(Class),
 	Resource(Class),
+	Interface(Interface),
 	Struct(Struct),
 	Enum(Enum),
 }
@@ -186,13 +187,23 @@ impl Debug for NamespaceRef {
 #[derivative(Debug)]
 pub struct Class {
 	pub name: Symbol,
-	parent: Option<TypeRef>, // Must be a Type::Class type
+	parent: Option<TypeRef>,  // Must be a Type::Class type
+	implements: Vec<TypeRef>, // Must be a Type::Interface type
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
 	pub should_case_convert_jsii: bool,
 	pub fqn: Option<String>,
 	pub is_abstract: bool,
 	pub type_parameters: Option<Vec<TypeRef>>,
+}
+
+#[derive(Derivative)]
+#[derivative(Debug)]
+pub struct Interface {
+	pub name: Symbol,
+	extends: Vec<TypeRef>, // Must be a Type::Interface type
+	#[derivative(Debug = "ignore")]
+	pub env: SymbolEnv,
 }
 
 pub trait ClassLike {
@@ -231,6 +242,12 @@ pub trait ClassLike {
 			.as_variable()
 			.expect("class env should only contain variables");
 		v.type_.as_function_sig().map(|_| v.clone())
+	}
+}
+
+impl ClassLike for Interface {
+	fn get_env(&self) -> &SymbolEnv {
+		&self.env
 	}
 }
 
@@ -293,9 +310,10 @@ impl Subtype for Type {
 				// TODO: Hack to make anything's compatible with all other types, specifically useful for handling core.Inflight handlers
 				true
 			}
+			// TODO: implement function subtyping - https://github.com/winglang/wing/issues/1677
 			(Self::Function(l0), Self::Function(r0)) => l0 == r0,
 			(Self::Class(l0), Self::Class(_)) => {
-				// If we extend from `other` than I'm a subtype of it (inheritance)
+				// If we extend from `other` then I'm a subtype of it (inheritance)
 				if let Some(parent) = l0.parent.as_ref() {
 					let parent_type: &Type = &*parent;
 					return parent_type.is_subtype_of(other);
@@ -303,11 +321,29 @@ impl Subtype for Type {
 				false
 			}
 			(Self::Resource(l0), Self::Resource(_)) => {
-				// If we extend from `other` than I'm a subtype of it (inheritance)
+				// If we extend from `other` then I'm a subtype of it (inheritance)
 				if let Some(parent) = l0.parent.as_ref() {
 					let parent_type: &Type = &*parent;
 					return parent_type.is_subtype_of(other);
 				}
+				false
+			}
+			(Self::Interface(l0), Self::Interface(_)) => {
+				// If we extend from `other` then I'm a subtype of it (inheritance)
+				l0.extends.iter().any(|parent| {
+					let parent_type: &Type = &*parent;
+					parent_type.is_subtype_of(other)
+				})
+			}
+			(Self::Resource(res), Self::Interface(_)) => {
+				// If a resource implements the interface then it's a subtype of it (nominal typing)
+				res.implements.iter().any(|parent| {
+					let parent_type: &Type = &*parent;
+					parent_type.is_subtype_of(other)
+				})
+			}
+			(_, Self::Interface(_)) => {
+				// TODO - for now only resources can implement interfaces
 				false
 			}
 			(Self::Struct(l0), Self::Struct(_)) => {
@@ -436,6 +472,7 @@ impl Display for Type {
 			Type::Function(sig) => write!(f, "{}", sig),
 			Type::Class(class) => write!(f, "{}", class.name.name),
 			Type::Resource(class) => write!(f, "{}", class.name.name),
+			Type::Interface(iface) => write!(f, "{}", iface.name.name),
 			Type::Struct(s) => write!(f, "{}", s.name.name),
 			Type::Array(v) => write!(f, "Array<{}>", v),
 			Type::MutArray(v) => write!(f, "MutArray<{}>", v),
@@ -1733,6 +1770,7 @@ impl<'a> TypeChecker<'a> {
 					fqn: None,
 					env: dummy_env,
 					parent: parent_class,
+					implements: vec![], // TODO parse AST information - https://github.com/winglang/wing/issues/1697
 					is_abstract: false,
 					type_parameters: None, // TODO no way to have generic args in wing yet
 				};
@@ -1901,6 +1939,8 @@ impl<'a> TypeChecker<'a> {
 					method_def.statements.set_env(method_env);
 					self.inner_scopes.push(&method_def.statements);
 				}
+
+				// TODO: type check that class satisfies interfaces - https://github.com/winglang/wing/issues/1697
 			}
 			StmtKind::Struct { name, extends, members } => {
 				// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
@@ -2157,6 +2197,7 @@ impl<'a> TypeChecker<'a> {
 			env: new_env,
 			fqn: Some(original_fqn.to_string()),
 			parent: original_type_class.parent,
+			implements: original_type_class.implements.clone(),
 			should_case_convert_jsii: original_type_class.should_case_convert_jsii,
 			is_abstract: original_type_class.is_abstract,
 			type_parameters: Some(type_params.clone()),
