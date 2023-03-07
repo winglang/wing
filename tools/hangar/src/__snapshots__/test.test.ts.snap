@@ -11,8 +11,6 @@ exports[`asynchronous_model_implicit_await_in_functions.w > wing test --target s
 
 exports[`bring_cdktf.w > wing test --target sim > stdout 1`] = `"pass ─ bring_cdktf.w (no tests)"`;
 
-exports[`api.w > wing test --target sim > stdout 1`] = `"<green>pass</color> <gray>─</color> api.w <gray>(no tests)</color>"`;
-
 exports[`bring_fs.w > wing test --target sim > stdout 1`] = `"pass ─ bring_fs.w (no tests)"`;
 
 exports[`bring_jsii.w > wing test --target sim > stdout 1`] = `"pass ─ bring_jsii.w » root/test:say_hello"`;
