@@ -45,7 +45,7 @@ export class String {
    */
   public contains(searchString: string): boolean {
     searchString;
-    throw new Error("Macro");
+    throw new Error("Abstract");
   }
 
   /**
