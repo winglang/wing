@@ -95,8 +95,7 @@ impl<'a> JsiiImporter<'a> {
 					"number" => self.wing_types.number(),
 					"boolean" => self.wing_types.bool(),
 					"any" => self.wing_types.anything(),
-					// TODO JSON primitive https://github.com/winglang/wing/pull/1524
-					"json" => self.wing_types.anything(),
+					"json" => self.wing_types.json(),
 					_ => panic!("TODO: handle primitive type {}", primitive_name),
 				}
 			} else if let Some(Value::String(type_fqn)) = obj.get("fqn") {
