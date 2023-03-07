@@ -22,7 +22,8 @@ assert(json_mut_obj.get("hello") == message);
 let some_number: num = 999;
 
 let jj = Json some_number;
-assert(jj == some_number);
+let jj1 = Json {foo: some_number};
+let jj2 = Json [ some_number, {bar: some_number} ];
 
 let some_json = MutJson {
   x: some_number
