@@ -15,6 +15,7 @@ while true {
   }
 }
 
+assert(z == 3);
 while true {
   break;
 }
