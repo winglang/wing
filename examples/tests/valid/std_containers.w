@@ -12,14 +12,12 @@ let s_array3 = ["he", "will", "come", "for", "you"];
 //TODO: uncomment once we support concat
 //let merged_array = s_array2.concat(s_array3);
 let merged_array = ["if", "you", "build", "it", "he", "will", "come", "for", "you"];
-//assert(merged_array == ["if", "you", "build", "it", "he", "will", "come", "for", "you"]);
-/*assert(merged_array.contains("build"));
+assert(merged_array.contains("build"));
 assert(!merged_array.contains("bring"));
 assert(merged_array.index_of("you") == 1);
 assert(merged_array.join(" ") == "if you build it he will come for you");
 assert(merged_array.join() == "if,you,build,it,he,will,come,for,you");
 assert(merged_array.last_index_of("you") == 8);
-*/
 
 let s_set = {"one", "two"};
 let mut_set = s_set.copy_mut();

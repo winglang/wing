@@ -77,6 +77,8 @@ export class ImmutableArray {
   /**
    * Returns the index of the first occurrence of searchElement found.
    *
+   * @macro $self$.indexOf($args$)
+   *
    * @param searchElement to search for.
    * @returns the index of the first occurrence of searchElement found, or -1 if not found.
    */
@@ -100,6 +102,8 @@ export class ImmutableArray {
 
   /**
    * Returns the index of the last occurrence of searchElement found.
+   *
+   * @macro $self$.lastIndexOf($args$)
    *
    * @param searchElement to search for.
    * @returns the index of the last occurrence of searchElement found, or -1 if not found.
