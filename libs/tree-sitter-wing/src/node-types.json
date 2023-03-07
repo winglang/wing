@@ -1384,6 +1384,10 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
           "type": "map_literal",
           "named": true
         }

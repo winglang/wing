@@ -21,6 +21,9 @@ assert(json_mut_obj.get("hello") == message);
 // Assignment from natives
 let some_number: num = 999;
 
+let jj = Json some_number;
+assert(jj == some_number);
+
 let some_json = MutJson {
   x: some_number
 };

@@ -995,11 +995,18 @@ impl<'s> Parser<'s> {
 					expression_span,
 				))
 			}
-			"json_element" => self.build_expression(
-				&expression_node
+			"json_element" => {
+				let child_node = &expression_node
 					.child(0)
-					.expect("Json element should always have child node"),
-			),
+					.expect("Json element should always have child node");
+				match child_node.kind() {
+					"identifier" => Ok(Expr::new(
+						ExprKind::Reference(self.build_reference(&expression_node)?),
+						expression_span,
+					)),
+					_ => self.build_expression(child_node),
+				}
+			}
 			"json_literal" => {
 				let type_node = expression_node
 					.child_by_field_name("type")
