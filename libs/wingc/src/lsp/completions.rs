@@ -118,7 +118,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 					let text = item.text.as_str();
 					CompletionItem {
 						label: text.to_string(),
-						insert_text: None,
 						kind: Some(item.kind),
 						detail: item.detail.clone(),
 						preselect: Some(true),
