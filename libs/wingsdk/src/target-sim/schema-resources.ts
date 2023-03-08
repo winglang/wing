@@ -1,5 +1,6 @@
 import { BaseResourceSchema } from "./schema";
 
+export const API_TYPE = "wingsdk.cloud.Api";
 export const QUEUE_TYPE = "wingsdk.cloud.Queue";
 export const FUNCTION_TYPE = "wingsdk.cloud.Function";
 export const BUCKET_TYPE = "wingsdk.cloud.Bucket";
@@ -9,6 +10,12 @@ export const SCHEDULE_TYPE = "wingsdk.cloud.Schedule";
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 
 export type FunctionHandle = string;
+
+/** Schema for cloud.Api */
+export interface ApiSchema extends BaseResourceSchema {
+  readonly type: typeof API_TYPE;
+  readonly props: {};
+}
 
 /** Schema for cloud.Function */
 export interface FunctionSchema extends BaseResourceSchema {
