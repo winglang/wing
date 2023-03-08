@@ -66,7 +66,7 @@ export class BucketClient implements IBucketClient {
     }
     if (!(await this.exists(key))) {
       throw new Error(
-        `Cannot provide public url for an non-existant key (key=${key})`
+        `Cannot provide public url for an non-existent key (key=${key})`
       );
     }
     const command = new GetBucketLocationCommand({
