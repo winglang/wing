@@ -362,9 +362,8 @@ impl<'a> JSifier<'a> {
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None, context),
 			ExprKind::Call { function, arg_list } => {
 				let function_type = function.evaluated_type.borrow().unwrap();
-				let function_sig = function_type
-					.as_function_sig()
-					.expect("Expected expression to be callable");
+				let function_sig = function_type.as_function_sig();
+				assert!(function_sig.is_some() || function_type.is_anything());
 				let mut needs_case_conversion = false;
 
 				let expr_string = match &function.kind {
@@ -385,20 +384,22 @@ impl<'a> JSifier<'a> {
 				};
 				let arg_string = self.jsify_arg_list(&arg_list, None, None, needs_case_conversion, context);
 
-				if let Some(js_override) = &function_sig.js_override {
-					let self_string = &match &function.kind {
-						// for "loose" macros, e.g. `print()`, $self$ is the global object
-						ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
-						ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
-							self.jsify_expression(object, context).clone()
-						}
+				if let Some(function_sig) = function_sig {
+					if let Some(js_override) = &function_sig.js_override {
+						let self_string = &match &function.kind {
+							// for "loose" macros, e.g. `print()`, $self$ is the global object
+							ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
+							ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
+								self.jsify_expression(object, context).clone()
+							}
 
-						_ => expr_string,
-					};
-					let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS];
-					let replace_with = &[self_string, &arg_string];
-					let ac = AhoCorasick::new(patterns);
-					return ac.replace_all(js_override, replace_with);
+							_ => expr_string,
+						};
+						let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS];
+						let replace_with = &[self_string, &arg_string];
+						let ac = AhoCorasick::new(patterns);
+						return ac.replace_all(js_override, replace_with);
+					}
 				}
 
 				format!("({}{}({}))", auto_await, expr_string, arg_string)
