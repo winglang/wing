@@ -151,6 +151,7 @@ test("delete object from a bucket with mustExist option", async () => {
 
 test("Given a non public bucket when reaching to a key public url it should throw an error", async () => {
   // GIVEN
+  let error;
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
 
@@ -159,16 +160,22 @@ test("Given a non public bucket when reaching to a key public url it should thro
     .resolves({ LocationConstraint: "us-east-2" });
 
   // WHEN
+  const client = new BucketClient(BUCKET_NAME);
 
-  expect(async () => {
-    const client = new BucketClient(BUCKET_NAME);
+  try {
     await client.publicUrl(KEY);
-    // THEN
-  }).rejects.toThrow("Cannot provide public url for a non-public bucket");
+  } catch (err) {
+    error = err;
+  }
+  // THEN
+  expect(error?.message).toBe(
+    "Cannot provide public url for a non-public bucket"
+  );
 });
 
 test("Given a public bucket when reaching to a non existent key, public url it should throw an error", async () => {
   // GIVEN
+  let error;
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
 
@@ -179,12 +186,15 @@ test("Given a public bucket when reaching to a non existent key, public url it s
     .on(ListObjectsCommand, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
     .resolves({ Contents: [] });
 
-  // THEN
-  expect(async () => {
-    const client = new BucketClient(BUCKET_NAME, true);
+  //WHEN
+  const client = new BucketClient(BUCKET_NAME, true);
+  try {
     await client.publicUrl(KEY);
-    // THEN
-  }).rejects.toThrow(
+  } catch (err) {
+    error = err;
+  }
+  // THEN
+  expect(error?.message).toBe(
     "Cannot provide public url for an non-existant key (key=KEY)"
   );
 });

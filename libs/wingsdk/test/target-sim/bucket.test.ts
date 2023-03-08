@@ -351,43 +351,53 @@ test("can add object in preflight", async () => {
 });
 
 test("Given a non public bucket when reaching to a key public url it should throw an error", async () => {
-  expect(async () => {
-    //GIVEN
-    const app = new SimApp();
-    cloud.Bucket._newBucket(app, "my_bucket");
+  //GIVEN
+  let error;
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
 
-    const s = await app.startSimulator();
-    const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
 
-    const KEY = "KEY";
+  const KEY = "KEY";
 
-    // WHEN
+  // WHEN
+  try {
     await client.publicUrl(KEY);
+  } catch (err) {
+    error = err;
+  }
 
-    // THEN
-    await s.stop(); // THEN    // THEN
-  }).rejects.toThrow("Cannot provide public url for a non-public bucket");
+  // THEN
+  expect(error?.message).toBe(
+    "Cannot provide public url for a non-public bucket"
+  );
+  await s.stop();
 });
 
 test("Given a public bucket when reaching to a non existent key, public url it should throw an error", async () => {
-  expect(async () => {
-    //GIVEN
-    const app = new SimApp();
-    cloud.Bucket._newBucket(app, "my_bucket", { public: true });
+  //GIVEN
+  let error;
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket", { public: true });
 
-    const s = await app.startSimulator();
-    const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
 
-    const KEY = "KEY";
+  const KEY = "KEY";
 
-    // WHEN
+  // WHEN
+  try {
     await client.publicUrl(KEY);
+  } catch (err) {
+    error = err;
+  }
 
-    // THEN
-    await s.stop(); // THEN
-  }).rejects.toThrow(
+  expect(error?.message).toBe(
     "Cannot provide public url for an non-existant key (key=KEY)"
   );
+  // THEN
+  await s.stop();
 });
 
 test("Given a public bucket, when giving one of its keys, we should get it's public url", async () => {

@@ -2055,6 +2055,7 @@ new std.ImmutableArray()
 | <code><a href="#@winglang/sdk.std.ImmutableArray.at">at</a></code> | Get the value at the given index. |
 | <code><a href="#@winglang/sdk.std.ImmutableArray.copy">copy</a></code> | Create an immutable shallow copy of this array. |
 | <code><a href="#@winglang/sdk.std.ImmutableArray.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this array. |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.join">join</a></code> | Creates and returns a new string by concatenating all of the elements in an array, separated by commas or a specified separator string. |
 
 ---
 
@@ -2089,6 +2090,24 @@ copy_mut(): MutableArray
 ```
 
 Create a mutable shallow copy of this array.
+
+##### `join` <a name="join" id="@winglang/sdk.std.ImmutableArray.join"></a>
+
+```wing
+join(separator?: str): str
+```
+
+Creates and returns a new string by concatenating all of the elements in an array, separated by commas or a specified separator string.
+
+###### `separator`<sup>Optional</sup> <a name="separator" id="@winglang/sdk.std.ImmutableArray.join.parameter.separator"></a>
+
+- *Type:* str
+
+Specifies a string to separate each pair of adjacent elements of the array.
+
+The separator is converted to a string if necessary. If omitted, the array elements are separated with a comma (",").
+
+---
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2371,6 +2390,7 @@ new std.MutableArray()
 | <code><a href="#@winglang/sdk.std.MutableArray.at">at</a></code> | Get the value at the given index. |
 | <code><a href="#@winglang/sdk.std.MutableArray.copy">copy</a></code> | Create an immutable shallow copy of this array. |
 | <code><a href="#@winglang/sdk.std.MutableArray.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this array. |
+| <code><a href="#@winglang/sdk.std.MutableArray.join">join</a></code> | Creates and returns a new string by concatenating all of the elements in an array, separated by commas or a specified separator string. |
 | <code><a href="#@winglang/sdk.std.MutableArray.pop">pop</a></code> | Remove value from end of array. |
 | <code><a href="#@winglang/sdk.std.MutableArray.push">push</a></code> | Add value to end of array. |
 
@@ -2407,6 +2427,24 @@ copy_mut(): MutableArray
 ```
 
 Create a mutable shallow copy of this array.
+
+##### `join` <a name="join" id="@winglang/sdk.std.MutableArray.join"></a>
+
+```wing
+join(separator?: str): str
+```
+
+Creates and returns a new string by concatenating all of the elements in an array, separated by commas or a specified separator string.
+
+###### `separator`<sup>Optional</sup> <a name="separator" id="@winglang/sdk.std.MutableArray.join.parameter.separator"></a>
+
+- *Type:* str
+
+Specifies a string to separate each pair of adjacent elements of the array.
+
+The separator is converted to a string if necessary. If omitted, the array elements are separated with a comma (",").
+
+---
 
 ##### `pop` <a name="pop" id="@winglang/sdk.std.MutableArray.pop"></a>
 
@@ -3120,6 +3158,7 @@ Inflight interface for `Bucket`.
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.getJson">get_json</a></code> | Retrieve a Json object from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">public_url</a></code> | Returns a url to the given file. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">put_json</a></code> | Put a Json object in the bucket. |
 
@@ -3202,6 +3241,22 @@ Retrieve existing objects keys from the bucket.
 - *Type:* str
 
 Limits the response to keys that begin with the specified prefix.
+
+---
+
+##### `public_url` <a name="public_url" id="@winglang/sdk.cloud.IBucketClient.publicUrl"></a>
+
+```wing
+public_url(key: str): str
+```
+
+**Inflight client:** [true](#true)
+
+Returns a url to the given file.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.publicUrl.parameter.key"></a>
+
+- *Type:* str
 
 ---
 
