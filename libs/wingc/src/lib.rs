@@ -16,7 +16,7 @@ use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use crate::parser::Parser;
 use std::alloc::{alloc, dealloc, Layout};
 use std::cell::RefCell;
-use std::collections::HashSet;
+
 use std::fs;
 use std::mem;
 use std::path::{Path, PathBuf};
@@ -157,12 +157,7 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 		}
 	};
 
-	let wing_parser = Parser {
-		source: &source[..],
-		source_name: source_path.to_str().unwrap().to_string(),
-		error_nodes: RefCell::new(HashSet::new()),
-		diagnostics: RefCell::new(Diagnostics::new()),
-	};
+	let wing_parser = Parser::new(&source[..], source_path.to_str().unwrap().to_string());
 
 	let scope = wing_parser.wingit(&tree.root_node());
 
