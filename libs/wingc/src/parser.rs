@@ -605,10 +605,19 @@ impl Parser<'_> {
 		if nested_node.has_error() {
 			return self.add_error(format!("Syntax error"), &nested_node);
 		}
-		Ok(Reference::InstanceMember {
-			object: Box::new(self.build_expression(&nested_node.child_by_field_name("object").unwrap())?),
-			property: self.node_symbol(&nested_node.child_by_field_name("property").unwrap())?,
-		})
+		if let Some(property) = nested_node.child_by_field_name("property") {
+			Ok(Reference::InstanceMember {
+				object: Box::new(self.build_expression(&nested_node.child_by_field_name("object").unwrap())?),
+				property: self.node_symbol(&property)?,
+			})
+		} else {
+			self.add_error(
+				format!("Expected property"),
+				&nested_node
+					.child(nested_node.child_count() - 1)
+					.expect("Nested identifier should have at least one child"),
+			)
+		}
 	}
 
 	fn build_udt_annotation(&self, nested_node: &Node) -> DiagnosticResult<TypeAnnotation> {
