@@ -8605,6 +8605,7 @@ constructor() {
       break;
     }
   }
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(z === 3)'\`)})((z === 3))};
   while (true) {
     break;
   }
