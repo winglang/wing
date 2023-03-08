@@ -52,6 +52,18 @@ export interface TableProps {
  */
 export abstract class Table extends Resource {
   /**
+   * Create a new `Table` instance.
+   * @internal
+   */
+  public static _newTable(
+    scope: Construct,
+    id: string,
+    props: TableProps = {}
+  ): Table {
+    return App.of(scope).newAbstract(TABLE_FQN, scope, id, props);
+  }
+
+  /**
    * Table name
    */
   public readonly name: string;
@@ -64,17 +76,6 @@ export abstract class Table extends Resource {
    */
   public readonly columns: { [key: string]: ColumnType };
 
-  /**
-   * Create a new `Table` instance.
-   * @internal
-   */
-  public static _newTable(
-    scope: Construct,
-    id: string,
-    props: TableProps = {}
-  ): Table {
-    return App.of(scope).newAbstract(TABLE_FQN, scope, id, props);
-  }
   public readonly stateful = true;
   constructor(scope: Construct, id: string, props: TableProps) {
     super(scope, id);
