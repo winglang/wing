@@ -182,7 +182,7 @@ fn scan_captures_in_expression(
 								res.extend(
 									resource
 										.methods(true)
-										.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Phase::Inflight))
+										.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().phase, Phase::Inflight))
 										.map(|(name, _)| Capture {
 											symbol: symbol.clone(),
 											ops: vec![CaptureOperation { member: name.clone() }],
@@ -239,7 +239,7 @@ fn scan_captures_in_expression(
 					// TODO: handle accessing things other than function_sigs while recursively accessing Reference?
 					if let Some(func) = prop_type.as_function_sig() {
 						assert!(
-							func.flight != Phase::Preflight,
+							func.phase != Phase::Preflight,
 							"Can't access preflight method {property} inflight"
 						);
 					}
