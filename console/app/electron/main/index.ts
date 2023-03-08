@@ -270,7 +270,7 @@ async function main() {
       ...defaultMenuItems[0]!,
       submenu: defaultMenuItems[0]!.submenu!.items.map((item) => ({
         ...item,
-        label: item.label.replace("wing-console", "Wing Console"),
+        label: item.label.replace("@wingconsole/app", "Wing Console"),
       })) as any,
     },
     {
