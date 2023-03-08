@@ -83,8 +83,12 @@
           "name": "nested_identifier"
         },
         {
-          "type": "SYMBOL",
-          "name": "identifier"
+          "type": "PREC_LEFT",
+          "value": 0,
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
         }
       ]
     },
