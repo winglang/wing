@@ -106,7 +106,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       activity: async () => {
         const filePath = join(this.fileDir, key);
 
-        if (!(await exists(filePath))) {
+        if (!this.objectKeys.has(key)) {
           throw new Error(
             `Cannot provide public url for an non-existant key (key=${key})`
           );

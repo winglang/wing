@@ -401,7 +401,7 @@ test("Given a public bucket, when giving one of its keys, we should get it's pub
   const VALUE = "VALUE";
 
   // WHEN
-  await client.putJson(KEY, VALUE as any);
+  await client.put(KEY, VALUE);
   const response = await client.publicUrl(KEY);
 
   // THEN
