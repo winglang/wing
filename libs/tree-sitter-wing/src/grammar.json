@@ -565,11 +565,8 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "IMMEDIATE_TOKEN",
-          "content": {
-            "type": "STRING",
-            "value": "let"
-          }
+          "type": "STRING",
+          "value": "let"
         },
         {
           "type": "CHOICE",
