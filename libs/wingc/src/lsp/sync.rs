@@ -4,11 +4,9 @@ use std::path::Path;
 use std::{cell::RefCell, collections::HashMap};
 use tree_sitter::Tree;
 
-use crate::capture::CaptureVisitor;
 use crate::lsp::notifications::send_diagnostics;
 use crate::parser::Parser;
 use crate::type_check;
-use crate::visit::Visit;
 use crate::{ast::Scope, diagnostic::Diagnostics, type_check::Types, wasm_util::ptr_to_string};
 
 /// The result of running wingc on a file
@@ -101,16 +99,9 @@ fn partial_compile(source_file: &str, text: &[u8]) -> FileData {
 	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file));
 	let parse_diag = wing_parser.diagnostics.into_inner();
 
-	// Analyze inflight captures
-	let mut capture_visitor = CaptureVisitor::new();
-	capture_visitor.visit_scope(&scope);
-
 	let mut diagnostics = Diagnostics::new();
-	for diags in [parse_diag, type_diag, capture_visitor.diagnostics].iter() {
-		for diag in diags.iter() {
-			diagnostics.push(diag.clone());
-		}
-	}
+	diagnostics.extend(parse_diag.iter().cloned());
+	diagnostics.extend(type_diag.iter().cloned());
 
 	return FileData {
 		contents: String::from_utf8(text.to_vec()).unwrap(),
