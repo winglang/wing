@@ -45,7 +45,7 @@ module.exports = grammar({
       ),
 
     // Identifiers
-    reference: ($) => choice($.nested_identifier, prec.left($.identifier)),
+    reference: ($) => choice($.nested_identifier, $.identifier),
 
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
 
