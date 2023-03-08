@@ -29,9 +29,7 @@ module.exports = grammar({
     [$.map_literal, $.set_literal],
   ],
 
-  conflicts: ($) => [
-    [$.reference, $.custom_type],
-  ],
+  conflicts: ($) => [[$.reference, $.custom_type]],
 
   supertypes: ($) => [$.expression, $._literal],
 
@@ -56,11 +54,14 @@ module.exports = grammar({
       ),
 
     nested_identifier: ($) =>
-      prec(PREC.MEMBER, seq(
-        field("object", $.expression),
-        choice(".", "?."),
-        optional(field("property", $.identifier))
-      )),
+      prec(
+        PREC.MEMBER,
+        seq(
+          field("object", $.expression),
+          choice(".", "?."),
+          optional(field("property", $.identifier))
+        )
+      ),
 
     _inflight_specifier: ($) => "inflight",
 
@@ -124,7 +125,7 @@ module.exports = grammar({
 
     variable_definition_statement: ($) =>
       seq(
-        token.immediate("let"),
+        "let",
         optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
         optional($._type_annotation),
