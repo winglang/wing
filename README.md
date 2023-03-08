@@ -1,88 +1,31 @@
-# Wing Console
+# @wingconsole/monorepo
 
-## Download link
-
-[macOS latest](https://wing-console.s3.amazonaws.com/wing-console.dmg)
-
-[macOS (arm64)](https://wing-console.s3.amazonaws.com/wing-console-arm64.dmg)
-
-[windows](https://wing-console.s3.amazonaws.com/wing-console.exe)
+> This repository uses [pnpm](https://pnpm.io/), a fast, disk space efficient package manager. Instead of using `npm` in the command line, you can just use `pnpm`.
+>
+> If you want to always run the same package manager, you can use [ni](https://github.com/antfu/ni#readme). It reads your project configuration and uses npm, pnpm, yarn or bun automatically.
+>
+> Additionally, this repository uses [turborepo](https://turbo.build/repo) for cacheable and parallelizable job orchestration.
 
 ## Installation
 
 ```sh
-npm install
-
-npx projen
+pnpm install
 ```
 
-## Dev
+## Development
 
 ```sh
-npm run dev
-```
-
-In order to see the logs in real time:
-
-```sh
-tail -f ~/Library/Logs/wing-console/main.log
+pnpm run dev
 ```
 
 ## Testing
 
 ```sh
-npx projen test
+pnpm run test
 ```
 
-End to end:
+## Compile
 
 ```sh
-# Build the electron files
-npx tsx scripts/build.mts
-# Run Playwright tests and update snapshots
-PLAYWRIGHT_TEST=true npx playwright test -u
-```
-
-## Storybook
-
-```sh
-npm run storybook
-```
-
-## Build
-
-```sh
-# Build
-npm run release
-npm exec vite-node scripts/bundle.mts
-# Open the included demo/target/index.wsim
-open demo/target/index.wsim -a $(pwd)/release/mac-arm64/Wing\ Console.app
-```
-
-OR run:
-
-```sh
-wing run demo/index.w
-```
-
-The Console with auto compile on each change you make
-
-## Deeplinks
-
-Once installed, the Wing Console will be able to process deeplinks with the `wing-console://` protocol. It expects an absolute path to a `.wsim` file, as follows: `wing-console:///Users/winglang/app.wsim`
-
-## Build the Wing demo file
-
-```sh
-cd demo
-wing compile -t sim index.w
-# Extract the wsim, for debugging purposes
-cd target
-tar -xf index.wsim
-```
-
-## Build the Construct Hub demo file
-
-```sh
-npx vite-node scripts/generateConstructHubWsim.mts
+pnpm run compile
 ```

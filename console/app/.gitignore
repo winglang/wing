@@ -1,0 +1,5 @@
+/.env
+/coverage
+/dist
+/release
+/playwright-report
