@@ -53,7 +53,7 @@ export abstract class Table extends Resource {
   public static _newTable(
     scope: Construct,
     id: string,
-    props: TableProps
+    props: TableProps = {}
   ): Table {
     return App.of(scope).newAbstract(TABLE_FQN, scope, id, props);
   }
