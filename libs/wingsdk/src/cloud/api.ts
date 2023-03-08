@@ -69,6 +69,90 @@ export abstract class Api extends Resource {
   ): void;
 
   /**
+   * Add a inflight handler to the api for POST requests on the given route.
+   * @param route The route to handle POST requests for.
+   * @param inflight The function to handle the request.
+   * @param props Options for the route.
+   */
+  public abstract post(
+    route: string,
+    inflight: Inflight,
+    props?: ApiPostProps
+  ): void;
+
+  /**
+   * Add a inflight handler to the api for PUT requests on the given route.
+   * @param route The route to handle PUT requests for.
+   * @param inflight The function to handle the request.
+   * @param props Options for the route.
+   */
+  public abstract put(
+    route: string,
+    inflight: Inflight,
+    props?: ApiPutProps
+  ): void;
+
+  /**
+   * Add a inflight handler to the api for DELETE requests on the given route.
+   * @param route The route to handle DELETE requests for.
+   * @param inflight The function to handle the request.
+   * @param props Options for the route.
+   */
+  public abstract delete(
+    route: string,
+    inflight: Inflight,
+    props?: ApiDeleteProps
+  ): void;
+
+  /**
+   * Add a inflight handler to the api for PATCH requests on the given route.
+   * @param route The route to handle PATCH requests for.
+   * @param inflight The function to handle the request.
+   * @param props Options for the route.
+   */
+  public abstract patch(
+    route: string,
+    inflight: Inflight,
+    props?: ApiPatchProps
+  ): void;
+
+  /**
+   * Add a inflight handler to the api for OPTIONS requests on the given route.
+   * @param route The route to handle OPTIONS requests for.
+   * @param inflight The function to handle the request.
+   * @param props Options for the route.
+   */
+  public abstract options(
+    route: string,
+    inflight: Inflight,
+    props?: ApiOptionsProps
+  ): void;
+
+  /**
+   * Add a inflight handler to the api for HEAD requests on the given route.
+   * @param route The route to handle HEAD requests for.
+   * @param inflight The function to handle the request.
+   * @param props Options for the route.
+   */
+  public abstract head(
+    route: string,
+    inflight: Inflight,
+    props?: ApiHeadProps
+  ): void;
+
+  /**
+   * Add a inflight handler to the api for CONNECT requests on the given route.
+   * @param route The route to handle CONNECT requests for.
+   * @param inflight The function to handle the request.
+   * @param props Options for the route.
+   */
+  public abstract connect(
+    route: string,
+    inflight: Inflight,
+    props?: ApiConnectProps
+  ): void;
+
+  /**
    * Add a route to the api spec.
    * @param route The route to add.
    * @param method The method to add.
