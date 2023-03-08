@@ -58,10 +58,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		} else {
 			return vec![];
 		};
-		// let position = Position {
-		// 	line: point.row as u32,
-		// 	character: point.column as u32,
-		// };
+
 		let wing_location = WingLocation {
 			col: point.column as u32,
 			line: point.row as u32,
