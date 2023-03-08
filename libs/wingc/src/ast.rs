@@ -399,6 +399,7 @@ pub enum InterpolatedStringPart {
 #[derivative(Debug)]
 pub struct Scope {
 	pub statements: Vec<Stmt>,
+	pub span: WingSpan,
 	#[derivative(Debug = "ignore")]
 	pub env: RefCell<Option<SymbolEnv>>, // None after parsing, set to Some during type checking phase
 }

@@ -146,6 +146,7 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 			let empty_scope = Scope {
 				statements: Vec::<Stmt>::new(),
 				env: RefCell::new(None),
+				span: Default::default(),
 			};
 			return (empty_scope, diagnostics);
 		}

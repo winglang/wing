@@ -160,6 +160,7 @@ impl Parser<'_> {
 				.filter_map(|(i, st_node)| self.build_statement(&st_node, i).ok())
 				.collect(),
 			env: RefCell::new(None), // env should be set later when scope is type-checked
+			span: self.node_span(scope_node),
 		}
 	}
 
