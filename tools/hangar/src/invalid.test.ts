@@ -19,7 +19,7 @@ describe.each(invalidWingFiles)("%s", (wingFile) => {
 
       const out = await runWingCommand(testDir, relativeWingFile, args, false);
 
-      const stderr = out.all ?? out.stderr;
+      const stderr = out.stderr;
 
       const stderrSanitized = stderr
         // Remove absolute paths

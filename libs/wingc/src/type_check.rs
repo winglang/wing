@@ -4,7 +4,7 @@ use crate::ast::{
 	Class as AstClass, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
 	TypeAnnotation, UnaryOperator, UserDefinedType,
 };
-use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
+use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{
 	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_JSON,
 	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_SET, WINGSDK_STD_MODULE,
@@ -159,6 +159,7 @@ pub enum Type {
 	Function(FunctionSignature),
 	Class(Class),
 	Resource(Class),
+	Interface(Interface),
 	Struct(Struct),
 	Enum(Enum),
 }
@@ -186,13 +187,23 @@ impl Debug for NamespaceRef {
 #[derivative(Debug)]
 pub struct Class {
 	pub name: Symbol,
-	parent: Option<TypeRef>, // Must be a Type::Class type
+	parent: Option<TypeRef>,  // Must be a Type::Class type
+	implements: Vec<TypeRef>, // Must be a Type::Interface type
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
 	pub should_case_convert_jsii: bool,
 	pub fqn: Option<String>,
 	pub is_abstract: bool,
 	pub type_parameters: Option<Vec<TypeRef>>,
+}
+
+#[derive(Derivative)]
+#[derivative(Debug)]
+pub struct Interface {
+	pub name: Symbol,
+	extends: Vec<TypeRef>, // Must be a Type::Interface type
+	#[derivative(Debug = "ignore")]
+	pub env: SymbolEnv,
 }
 
 pub trait ClassLike {
@@ -231,6 +242,12 @@ pub trait ClassLike {
 			.as_variable()
 			.expect("class env should only contain variables");
 		v.type_.as_function_sig().map(|_| v.clone())
+	}
+}
+
+impl ClassLike for Interface {
+	fn get_env(&self) -> &SymbolEnv {
+		&self.env
 	}
 }
 
@@ -293,9 +310,10 @@ impl Subtype for Type {
 				// TODO: Hack to make anything's compatible with all other types, specifically useful for handling core.Inflight handlers
 				true
 			}
+			// TODO: implement function subtyping - https://github.com/winglang/wing/issues/1677
 			(Self::Function(l0), Self::Function(r0)) => l0 == r0,
 			(Self::Class(l0), Self::Class(_)) => {
-				// If we extend from `other` than I'm a subtype of it (inheritance)
+				// If we extend from `other` then I'm a subtype of it (inheritance)
 				if let Some(parent) = l0.parent.as_ref() {
 					let parent_type: &Type = &*parent;
 					return parent_type.is_subtype_of(other);
@@ -303,11 +321,29 @@ impl Subtype for Type {
 				false
 			}
 			(Self::Resource(l0), Self::Resource(_)) => {
-				// If we extend from `other` than I'm a subtype of it (inheritance)
+				// If we extend from `other` then I'm a subtype of it (inheritance)
 				if let Some(parent) = l0.parent.as_ref() {
 					let parent_type: &Type = &*parent;
 					return parent_type.is_subtype_of(other);
 				}
+				false
+			}
+			(Self::Interface(l0), Self::Interface(_)) => {
+				// If we extend from `other` then I'm a subtype of it (inheritance)
+				l0.extends.iter().any(|parent| {
+					let parent_type: &Type = &*parent;
+					parent_type.is_subtype_of(other)
+				})
+			}
+			(Self::Resource(res), Self::Interface(_)) => {
+				// If a resource implements the interface then it's a subtype of it (nominal typing)
+				res.implements.iter().any(|parent| {
+					let parent_type: &Type = &*parent;
+					parent_type.is_subtype_of(other)
+				})
+			}
+			(_, Self::Interface(_)) => {
+				// TODO - for now only resources can implement interfaces
 				false
 			}
 			(Self::Struct(l0), Self::Struct(_)) => {
@@ -436,6 +472,7 @@ impl Display for Type {
 			Type::Function(sig) => write!(f, "{}", sig),
 			Type::Class(class) => write!(f, "{}", class.name.name),
 			Type::Resource(class) => write!(f, "{}", class.name.name),
+			Type::Interface(iface) => write!(f, "{}", iface.name.name),
 			Type::Struct(s) => write!(f, "{}", s.name.name),
 			Type::Array(v) => write!(f, "Array<{}>", v),
 			Type::MutArray(v) => write!(f, "MutArray<{}>", v),
@@ -762,10 +799,7 @@ impl<'a> TypeChecker<'a> {
 			scope.env.borrow_mut().as_mut().unwrap(),
 			WINGSDK_ASSEMBLY_NAME.to_string(),
 			vec![WINGSDK_STD_MODULE.to_string()],
-			&Symbol {
-				name: WINGSDK_STD_MODULE.to_string(),
-				span: WingSpan::global(),
-			},
+			&Symbol::global(WINGSDK_STD_MODULE),
 			None,
 		);
 	}
@@ -848,14 +882,6 @@ impl<'a> TypeChecker<'a> {
 			reassignable: false,
 			flight: Phase::Independent,
 			is_static: false,
-		}
-	}
-
-	pub fn replace_with_builtin_type(&self, name: &str) -> Option<TypeRef> {
-		if let "Json" | "MutJson" = name {
-			Some(self.get_primitive_type_by_name(name))
-		} else {
-			None
 		}
 	}
 
@@ -1111,22 +1137,10 @@ impl<'a> TypeChecker<'a> {
 
 				for (arg_type, param_exp) in params.zip(args) {
 					let param_type = self.type_check_exp(param_exp, env, statement_idx, context);
-					if let Some(t) = self.replace_with_builtin_type(arg_type.to_string().as_str()) {
-						self.validate_type(param_type, t, param_exp)
-					} else {
-						self.validate_type(param_type, *arg_type, param_exp)
-					};
+					self.validate_type(param_type, *arg_type, param_exp);
 				}
 
-				// This replaces function signatures with valid TypeRefs if necessary. This step is also done in
-				// the hydration process for generics where we map std lib types like ImmutableMap to
-				// Type::Map(some_type). However for types like Json and MutJson which do
-				// not require hydration, we still need to Map the std `Json` type to type-checker's Json type
-				if let Some(t) = self.replace_with_builtin_type(func_sig.return_type.to_string().as_str()) {
-					t
-				} else {
-					func_sig.return_type
-				}
+				func_sig.return_type
 			}
 			ExprKind::ArrayLiteral { type_, items } => {
 				// Infer type based on either the explicit type or the value in one of the items
@@ -1756,6 +1770,7 @@ impl<'a> TypeChecker<'a> {
 					fqn: None,
 					env: dummy_env,
 					parent: parent_class,
+					implements: vec![], // TODO parse AST information - https://github.com/winglang/wing/issues/1697
 					is_abstract: false,
 					type_parameters: None, // TODO no way to have generic args in wing yet
 				};
@@ -1924,6 +1939,8 @@ impl<'a> TypeChecker<'a> {
 					method_def.statements.set_env(method_env);
 					self.inner_scopes.push(&method_def.statements);
 				}
+
+				// TODO: type check that class satisfies interfaces - https://github.com/winglang/wing/issues/1697
 			}
 			StmtKind::Struct { name, extends, members } => {
 				// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
@@ -2066,7 +2083,7 @@ impl<'a> TypeChecker<'a> {
 				Err(type_error) => {
 					self.type_error(TypeError {
 						message: format!("Cannot locate Wing standard library (checking \"{}\"", manifest_root),
-						span: stmt.map(|s| s.span.clone()).unwrap_or(WingSpan::global()),
+						span: stmt.map(|s| s.span.clone()).unwrap_or_default(),
 					});
 					debug!("{:?}", type_error);
 					return;
@@ -2082,7 +2099,7 @@ impl<'a> TypeChecker<'a> {
 				Err(type_error) => {
 					self.type_error(TypeError {
 						message: format!("Cannot find module \"{}\" in source directory", library_name),
-						span: stmt.map(|s| s.span.clone()).unwrap_or(WingSpan::global()),
+						span: stmt.map(|s| s.span.clone()).unwrap_or_default(),
 					});
 					debug!("{:?}", type_error);
 					return;
@@ -2180,6 +2197,7 @@ impl<'a> TypeChecker<'a> {
 			env: new_env,
 			fqn: Some(original_fqn.to_string()),
 			parent: original_type_class.parent,
+			implements: original_type_class.implements.clone(),
 			should_case_convert_jsii: original_type_class.should_case_convert_jsii,
 			is_abstract: original_type_class.is_abstract,
 			type_parameters: Some(type_params.clone()),
@@ -2249,10 +2267,7 @@ impl<'a> TypeChecker<'a> {
 
 							match new_type_class.env.define(
 								// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
-								&Symbol {
-									name: name.clone(),
-									span: WingSpan::global(),
-								},
+								&Symbol::global(name),
 								if *is_static {
 									SymbolKind::make_variable(self.types.add_type(Type::Function(new_sig)), *reassignable, *flight)
 								} else {
@@ -2283,10 +2298,7 @@ impl<'a> TypeChecker<'a> {
 							};
 							match new_type_class.env.define(
 								// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
-								&Symbol {
-									name: name.clone(),
-									span: WingSpan::global(),
-								},
+								&Symbol::global(name),
 								if *is_static {
 									SymbolKind::make_variable(new_var_type, reassignable, flight)
 								} else {
