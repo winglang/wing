@@ -195,7 +195,7 @@ test("Given a public bucket when reaching to a non existent key, public url it s
   }
   // THEN
   expect(error?.message).toBe(
-    "Cannot provide public url for an non-existant key (key=KEY)"
+    "Cannot provide public url for an non-existent key (key=KEY)"
   );
 });
 
