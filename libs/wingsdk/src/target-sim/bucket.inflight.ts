@@ -108,7 +108,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
         if (!this.objectKeys.has(key)) {
           throw new Error(
-            `Cannot provide public url for an non-existant key (key=${key})`
+            `Cannot provide public url for an non-existent key (key=${key})`
           );
         }
 
