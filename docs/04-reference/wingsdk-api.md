@@ -4084,6 +4084,47 @@ Table column types.
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ColumnType.STRING">STRING</a></code> | string type. |
+| <code><a href="#@winglang/sdk.cloud.ColumnType.NUMBER">NUMBER</a></code> | number type. |
+| <code><a href="#@winglang/sdk.cloud.ColumnType.BOOLEAN">BOOLEAN</a></code> | bool type. |
+| <code><a href="#@winglang/sdk.cloud.ColumnType.DATE">DATE</a></code> | date type. |
+| <code><a href="#@winglang/sdk.cloud.ColumnType.JSON">JSON</a></code> | json type. |
+
+---
+
+##### `STRING` <a name="STRING" id="@winglang/sdk.cloud.ColumnType.STRING"></a>
+
+string type.
+
+---
+
+
+##### `NUMBER` <a name="NUMBER" id="@winglang/sdk.cloud.ColumnType.NUMBER"></a>
+
+number type.
+
+---
+
+
+##### `BOOLEAN` <a name="BOOLEAN" id="@winglang/sdk.cloud.ColumnType.BOOLEAN"></a>
+
+bool type.
+
+---
+
+
+##### `DATE` <a name="DATE" id="@winglang/sdk.cloud.ColumnType.DATE"></a>
+
+date type.
+
+---
+
+
+##### `JSON` <a name="JSON" id="@winglang/sdk.cloud.ColumnType.JSON"></a>
+
+json type.
+
+---
 
 
 ### HttpMethod <a name="HttpMethod" id="@winglang/sdk.cloud.HttpMethod"></a>
@@ -4111,11 +4152,13 @@ Get.
 
 ---
 
+
 ##### `HEAD` <a name="HEAD" id="@winglang/sdk.cloud.HttpMethod.HEAD"></a>
 
 Head.
 
 ---
+
 
 ##### `POST` <a name="POST" id="@winglang/sdk.cloud.HttpMethod.POST"></a>
 
@@ -4123,11 +4166,13 @@ Post.
 
 ---
 
+
 ##### `PUT` <a name="PUT" id="@winglang/sdk.cloud.HttpMethod.PUT"></a>
 
 Put.
 
 ---
+
 
 ##### `DELETE` <a name="DELETE" id="@winglang/sdk.cloud.HttpMethod.DELETE"></a>
 
