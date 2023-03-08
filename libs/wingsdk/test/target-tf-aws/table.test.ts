@@ -10,6 +10,7 @@ test("default table behavior", () => {
   cloud.Table._newTable(app, "Table", {
     columns: { id: cloud.ColumnType.STRING },
     primaryKey: "id",
+    name: "my-wing-table",
   });
   const output = app.synth();
 
@@ -22,6 +23,7 @@ test("function with a table binding", () => {
   const table = cloud.Table._newTable(app, "Table", {
     columns: { id: cloud.ColumnType.STRING },
     primaryKey: "id",
+    name: "my-wing-table",
   });
   const inflight = Testing.makeHandler(
     app,

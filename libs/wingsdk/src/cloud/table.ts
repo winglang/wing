@@ -29,16 +29,21 @@ export enum ColumnType {
  */
 export interface TableProps {
   /**
+   * The table's name.
+   * @default undefined
+   */
+  readonly name?: string;
+  /**
    * The table's columns.
    * @default undefined
    */
-  readonly columns: { [key: string]: ColumnType };
+  readonly columns?: { [key: string]: ColumnType };
   /**
    * The table's primary key. No two rows can have the same value for the
    * primary key.
    * @default undefined
    */
-  readonly primaryKey: string;
+  readonly primaryKey?: string;
 }
 
 /**
@@ -46,6 +51,19 @@ export interface TableProps {
  * @inflight `@winglang/sdk.cloud.ITableClient`
  */
 export abstract class Table extends Resource {
+  /**
+   * Table name
+   */
+  public readonly name: string;
+  /**
+   * Table primary key name
+   */
+  public readonly primaryKey: string;
+  /**
+   * Table columns
+   */
+  public readonly columns: { [key: string]: ColumnType };
+
   /**
    * Create a new `Table` instance.
    * @internal
@@ -57,15 +75,6 @@ export abstract class Table extends Resource {
   ): Table {
     return App.of(scope).newAbstract(TABLE_FQN, scope, id, props);
   }
-
-  /**
-   * Table primary key name
-   */
-  public readonly primaryKey: string;
-  /**
-   * Table columns
-   */
-  public readonly columns: { [key: string]: ColumnType };
   public readonly stateful = true;
   constructor(scope: Construct, id: string, props: TableProps) {
     super(scope, id);
@@ -74,7 +83,18 @@ export abstract class Table extends Resource {
     this.display.description =
       "A cloud NoSQL database table that can be used to store and query data";
 
+    if (!props.name) {
+      throw new Error("Table name is not defined");
+    }
+    this.name = props.name;
+    if (!props.primaryKey) {
+      throw new Error("Primary Key is not defined");
+    }
     this.primaryKey = props.primaryKey;
+
+    if (!props.columns) {
+      throw new Error("No column is defined");
+    }
     this.columns = props.columns;
   }
 }
@@ -96,20 +116,20 @@ export interface ITableClient {
    */
   update(row: Json): void;
   /**
-   * Delete a row from the table.
+   * Delete a row from the table, by primary key.
    * @param key primary key to delete the row.
    * @inflight
    */
   delete(key: any): void;
   /**
-   * Increments the counter atomically by a certain amount and returns the previous value.
+   * Get a row from the table, by primary key.
    * @param key primary key to search.
    * @returns get the row from table.
    * @inflight
    */
   get(key: any): any;
   /**
-   * Increments the counter atomically by a certain amount and returns the previous value.
+   * List all rows in the table.
    * @returns list all row.
    * @inflight
    */

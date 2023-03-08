@@ -6,7 +6,7 @@ import * as core from "../core";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
- * Counter (Table) names must be between 3 and 255 characters.
+ * Table names must be between 3 and 255 characters.
  * You can use alphanumeric characters, dot (.), dash (-), and underscores (_).
  */
 const NAME_OPTS: NameOptions = {
@@ -22,7 +22,7 @@ const NAME_OPTS: NameOptions = {
 export class Table extends cloud.Table {
   private readonly table: DynamodbTable;
 
-  constructor(scope: Construct, id: string, props: cloud.TableProps) {
+  constructor(scope: Construct, id: string, props: cloud.TableProps = {}) {
     super(scope, id, props);
 
     if (this.columns[this.primaryKey] === undefined) {
@@ -32,7 +32,10 @@ export class Table extends cloud.Table {
     const primaryKeyType =
       this.columns[this.primaryKey] == cloud.ColumnType.NUMBER ? "N" : "S";
     this.table = new DynamodbTable(this, "Default", {
-      name: ResourceNames.generateName(this, NAME_OPTS),
+      name: ResourceNames.generateName(this, {
+        prefix: this.name,
+        ...NAME_OPTS,
+      }),
       attribute: [{ name: this.primaryKey, type: primaryKeyType }],
       hashKey: this.primaryKey,
       billingMode: "PAY_PER_REQUEST",

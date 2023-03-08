@@ -756,6 +756,7 @@ new cloud.Table(props: TableProps)
 | <code><a href="#@winglang/sdk.cloud.Table.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Table.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 | <code><a href="#@winglang/sdk.cloud.Table.property.columns">columns</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.cloud.ColumnType">ColumnType</a>&gt;</code> | Table columns. |
+| <code><a href="#@winglang/sdk.cloud.Table.property.name">name</a></code> | <code>str</code> | Table name. |
 | <code><a href="#@winglang/sdk.cloud.Table.property.primaryKey">primary_key</a></code> | <code>str</code> | Table primary key name. |
 
 ---
@@ -809,6 +810,18 @@ columns: MutMap<ColumnType>;
 - *Type:* MutMap&lt;<a href="#@winglang/sdk.cloud.ColumnType">ColumnType</a>&gt;
 
 Table columns.
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.cloud.Table.property.name"></a>
+
+```wing
+name: str;
+```
+
+- *Type:* str
+
+Table name.
 
 ---
 
@@ -1493,11 +1506,12 @@ let table_props = cloud.TableProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.TableProps.property.columns">columns</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.cloud.ColumnType">ColumnType</a>&gt;</code> | The table's columns. |
+| <code><a href="#@winglang/sdk.cloud.TableProps.property.name">name</a></code> | <code>str</code> | The table's name. |
 | <code><a href="#@winglang/sdk.cloud.TableProps.property.primaryKey">primary_key</a></code> | <code>str</code> | The table's primary key. |
 
 ---
 
-##### `columns`<sup>Required</sup> <a name="columns" id="@winglang/sdk.cloud.TableProps.property.columns"></a>
+##### `columns`<sup>Optional</sup> <a name="columns" id="@winglang/sdk.cloud.TableProps.property.columns"></a>
 
 ```wing
 columns: MutMap<ColumnType>;
@@ -1510,7 +1524,20 @@ The table's columns.
 
 ---
 
-##### `primary_key`<sup>Required</sup> <a name="primary_key" id="@winglang/sdk.cloud.TableProps.property.primaryKey"></a>
+##### `name`<sup>Optional</sup> <a name="name" id="@winglang/sdk.cloud.TableProps.property.name"></a>
+
+```wing
+name: str;
+```
+
+- *Type:* str
+- *Default:* undefined
+
+The table's name.
+
+---
+
+##### `primary_key`<sup>Optional</sup> <a name="primary_key" id="@winglang/sdk.cloud.TableProps.property.primaryKey"></a>
 
 ```wing
 primary_key: str;
@@ -3422,10 +3449,10 @@ Inflight interface for `Table`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ITableClient.delete">delete</a></code> | Delete a row from the table. |
-| <code><a href="#@winglang/sdk.cloud.ITableClient.get">get</a></code> | Increments the counter atomically by a certain amount and returns the previous value. |
+| <code><a href="#@winglang/sdk.cloud.ITableClient.delete">delete</a></code> | Delete a row from the table, by primary key. |
+| <code><a href="#@winglang/sdk.cloud.ITableClient.get">get</a></code> | Get a row from the table, by primary key. |
 | <code><a href="#@winglang/sdk.cloud.ITableClient.insert">insert</a></code> | Insert a row into the table. |
-| <code><a href="#@winglang/sdk.cloud.ITableClient.list">list</a></code> | Increments the counter atomically by a certain amount and returns the previous value. |
+| <code><a href="#@winglang/sdk.cloud.ITableClient.list">list</a></code> | List all rows in the table. |
 | <code><a href="#@winglang/sdk.cloud.ITableClient.update">update</a></code> | Update a row in the table. |
 
 ---
@@ -3438,7 +3465,7 @@ delete(key: any): void
 
 **Inflight client:** [true](#true)
 
-Delete a row from the table.
+Delete a row from the table, by primary key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.ITableClient.delete.parameter.key"></a>
 
@@ -3456,7 +3483,7 @@ get(key: any): any
 
 **Inflight client:** [true](#true)
 
-Increments the counter atomically by a certain amount and returns the previous value.
+Get a row from the table, by primary key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.ITableClient.get.parameter.key"></a>
 
@@ -3492,7 +3519,7 @@ list(): any
 
 **Inflight client:** [true](#true)
 
-Increments the counter atomically by a certain amount and returns the previous value.
+List all rows in the table.
 
 ##### `update` <a name="update" id="@winglang/sdk.cloud.ITableClient.update"></a>
 
