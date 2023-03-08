@@ -3,7 +3,8 @@ import { readFile } from "node:fs/promises";
 
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
-const version = await readFile("dist/version.txt", "utf8");
+const tag = await readFile("../../dist/releasetag.txt", "utf8");
+const version = tag.slice(1);
 const dmgFilename = `release/Wing Console-${version}.dmg`;
 const dmgArm64Filename = `release/Wing Console-${version}-arm64.dmg`;
 const exeFilename = `release/Wing Console Setup ${version}.exe`;

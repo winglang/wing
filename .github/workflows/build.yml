@@ -16,10 +16,6 @@ jobs:
     env:
       CI: "true"
       SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
-    # To use Remote Caching, uncomment the next lines and follow the steps below.
-    # env:
-    #  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-    #  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
     steps:
       - name: Checkout
@@ -36,7 +32,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install
