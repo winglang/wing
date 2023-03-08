@@ -49,7 +49,7 @@ export class ImmutableArray {
    */
   public contains(searchElement: T1): boolean {
     searchElement;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
@@ -84,7 +84,7 @@ export class ImmutableArray {
    */
   public indexOf(searchElement: T1): number {
     searchElement;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
@@ -110,7 +110,7 @@ export class ImmutableArray {
    */
   public lastIndexOf(searchElement: T1): number {
     searchElement;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 }
 
