@@ -9,8 +9,10 @@ jobs:
     name: Build
     timeout-minutes: 5
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     outputs:
-      latest_commit: ${{ steps.git_remote.outputs.latest_commit }}
+      self_mutation_happened: ${{ steps.self_mutation.outputs.self_mutation_happened }}
     env:
       CI: "true"
       SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}

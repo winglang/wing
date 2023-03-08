@@ -1,6 +1,5 @@
 import { bumpFiles } from "./bump-files.js";
-import { gitPush, gitTag } from "./git.js";
-import { turboCompile, turboRelease } from "./turbo.js";
+import { turboCompile } from "./turbo.js";
 import { unbumpFiles } from "./unbump-files.js";
 
 const filter = process.argv[2];
@@ -30,8 +29,3 @@ turboCompile({
 });
 
 await unbumpFiles({ filter, dryRun });
-
-// gitTag({ releaseTag, changelogFile, dryRun });
-// gitPush({ releaseTag, dryRun });
-
-// turboRelease({ filter, dryRun });

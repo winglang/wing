@@ -28,21 +28,3 @@ export const turboCompile = ({
     dryRun,
   );
 };
-
-export interface TurboReleaseOptions {
-  // filter: string;
-  dryRun: boolean;
-}
-
-export const turboRelease = ({
-  // filter,
-  dryRun,
-}: TurboReleaseOptions) => {
-  turbo(
-    [
-      "release",
-      // "--filter", filter
-    ],
-    dryRun,
-  );
-};
