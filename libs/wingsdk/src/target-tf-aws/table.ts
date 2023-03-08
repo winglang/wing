@@ -26,7 +26,7 @@ export class Table extends cloud.Table {
     super(scope, id, props);
 
     if (this.columns[this.primaryKey] === undefined) {
-      throw new Error(`${this.primaryKey} not found on columns`);
+      throw new Error(`${this.primaryKey} not found in columns`);
     }
     // The only data types allowed for primary key attributes are string, number, or binary (binary is not available).
     const primaryKeyType =
