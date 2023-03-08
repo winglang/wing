@@ -96,7 +96,7 @@ impl Parser<'_> {
 	}
 
 	fn check_error<'a>(&'a self, node: Node<'a>, expected: &str) -> DiagnosticResult<Node> {
-		if node.has_error() {
+		if node.is_error() {
 			self.add_error(format!("Expected {}", expected), &node)
 		} else {
 			Ok(node)
@@ -995,7 +995,15 @@ impl Parser<'_> {
 		for node in iter {
 			if !self.error_nodes.borrow().contains(&node.id()) {
 				if node.is_error() {
-					_ = self.add_error::<()>(String::from("Unknown parser error."), &node);
+					if node.named_child_count() == 0 {
+						_ = self.add_error::<()>(String::from("Unknown parser error."), &node);
+					} else {
+						let mut cursor = node.walk();
+						let children = node.named_children(&mut cursor);
+						for child in children {
+							_ = self.add_error::<()>(format!("Unexpected '{}'.", child.kind()), &child);
+						}
+					}
 				} else if node.is_missing() {
 					_ = self.add_error::<()>(format!("'{}' expected.", node.kind()), &node);
 				}
