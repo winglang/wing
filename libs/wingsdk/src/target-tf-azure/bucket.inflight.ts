@@ -103,6 +103,10 @@ export class BucketClient implements IBucketClient {
     return list;
   }
 
+  /**
+   * Returns a url to the given file.
+   * @Throws if the file is not public or if object does not exist.
+   */
   public async publicUrl(key: string): Promise<string> {
     throw new Error(`publicUrl is not supported yet. (key=${key})`);
   }
