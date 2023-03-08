@@ -118,7 +118,7 @@ export interface IBucketClient {
   list(prefix?: string): Promise<string[]>;
   /**
    * Returns a url to the given file.
-   * @throws Will throw if the file is not public.
+   * @Throws if the file is not public or if object does not exist.
    * @inflight
    */
   publicUrl(key: string): Promise<string>;
