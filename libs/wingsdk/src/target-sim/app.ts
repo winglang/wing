@@ -77,7 +77,7 @@ export class App extends core.App {
         return new Topic(scope, id, args[0]);
 
       case REDIS_FQN:
-        return new Redis(scope, id, args[0]);
+        return new Redis(scope, id);
     }
 
     return undefined;

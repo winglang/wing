@@ -1661,7 +1661,7 @@ impl<'a> TypeChecker<'a> {
 						// we use the module name as the identifier.
 						// For example, `bring fs` will import the `fs` namespace from @winglang/sdk and assign it
 						// to an identifier named `fs`.
-						WINGSDK_CLOUD_MODULE | WINGSDK_FS_MODULE => {
+						WINGSDK_CLOUD_MODULE | WINGSDK_FS_MODULE | "redis" => {
 							library_name = WINGSDK_ASSEMBLY_NAME.to_string();
 							namespace_filter = vec![module_name.name.clone()];
 							alias = identifier.as_ref().unwrap_or(&module_name);

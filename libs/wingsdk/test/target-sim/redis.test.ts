@@ -6,7 +6,7 @@ import { Redis as IoRedis } from "ioredis";
 test("create a Redis resource", async () => {
   // GIVEN
   const app = new SimApp();
-  redis.Redis._newRedis(app, "my_redis", { password: "123" });
+  redis.Redis._newRedis(app, "my_redis");
 
   // THEN
   const s = await app.startSimulator();
@@ -16,9 +16,7 @@ test("create a Redis resource", async () => {
         handle: expect.any(String),
       },
       path: "root/my_redis",
-      props: {
-        password: "123",
-      },
+      props: {},
       type: "wingsdk.redis.Redis",
     });
   } finally {
@@ -30,13 +28,13 @@ test("create a Redis resource", async () => {
 test("access a Redis resource", async () => {
   // GIVEN
   const app = new SimApp();
-  redis.Redis._newRedis(app, "my_redis", { password: "123" });
+  redis.Redis._newRedis(app, "my_redis");
 
   // THEN
   const s = await app.startSimulator();
   try {
     const client = s.getResource("/my_redis") as redis.IRedisClient;
-    const redisClient = (await client.get_c()) as IoRedis;
+    const redisClient = (await client.ioredis()) as IoRedis;
     await redisClient.set("foo", "bar");
     expect(await redisClient.get("foo")).toEqual("bar");
   } finally {

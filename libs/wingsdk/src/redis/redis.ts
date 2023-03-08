@@ -7,13 +7,6 @@ import { App, Resource } from "../core";
  */
 export const REDIS_FQN = fqnForType("redis.Redis");
 
-export interface RedisProps {
-  /**
-   * The redis server's password.
-   */
-  readonly password: string;
-}
-
 /**
  * Represents a cloud redis db.
  *
@@ -27,20 +20,17 @@ export abstract class Redis extends Resource {
   public static _newRedis(
     scope: Construct,
     id: string,
-    props: RedisProps
   ): Redis {
-    return App.of(scope).newAbstract(REDIS_FQN, scope, id, props);
+    return App.of(scope).newAbstract(REDIS_FQN, scope, id);
   }
 
   public readonly stateful = false; // TODO: redis persistence
 
-  constructor(scope: Construct, id: string, props: RedisProps) {
+  constructor(scope: Construct, id: string) {
     super(scope, id);
 
     this.display.title = "Redis";
     this.display.description = "A Redis server";
-
-    props;
   }
 }
 
@@ -52,5 +42,11 @@ export interface IRedisClient {
    * Get underlying redis client.
    * @inflight
    */
-  get_c(): Promise<any>;
+  ioredis(): Promise<any>;
+
+  /**
+   * Get url of redis server.
+   * @inflight
+   */
+  url(): Promise<string>;
 }
