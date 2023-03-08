@@ -220,8 +220,17 @@ fn scan_captures_in_expression(
 			Reference::InstanceMember { object, property } => {
 				res.extend(scan_captures_in_expression(object, env, statement_idx, diagnostics));
 
+				let resource_type = object.evaluated_type.borrow();
+				let resource_type = resource_type.as_ref();
+				let resource_type = if let Some(resource_type) = resource_type {
+					resource_type
+				} else {
+					// There is some sort of parser/type error, so we'll just return the empty capture list
+					return res;
+				};
+
 				// If the expression evaluates to a resource we should check what method of the resource we're accessing
-				if let Type::Resource(ref resource) = **object.evaluated_type.borrow().as_ref().unwrap() {
+				if let Type::Resource(ref resource) = **resource_type {
 					let (prop_type, _flight) = match resource.env.lookup_ext(property, None) {
 						Ok((prop_type, phase)) => (
 							prop_type
