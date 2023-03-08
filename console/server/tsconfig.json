@@ -1,8 +1,4 @@
 {
-	"extends": "@wingconsole/tsconfig",
-	"compilerOptions": {
-		"jsx": "react-jsx",
-		"lib": ["DOM"]
-	},
-	"include": ["src/**/*", "test/**/*"]
+  "extends": "@wingconsole/tsconfig",
+  "include": ["src/**/*", "test/**/*"]
 }

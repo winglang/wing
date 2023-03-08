@@ -7,7 +7,11 @@ const plugin = require("tailwindcss/plugin");
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: "class",
-  content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
+  content: [
+    "./index.html",
+    "./src/**/*.{vue,js,ts,jsx,tsx}",
+    "../ui/src/**/*.{vue,js,ts,jsx,tsx}",
+  ],
   theme: {
     fontFamily: {
       ...defaultTheme.fontFamily,

@@ -65,6 +65,8 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
       await putFile.mutateAsync({
         resourcePath,
         fileName: file.name,
+        // TODO: Fix the missing `file.path` declaration. Seems to come from electron.d.ts...
+        // @ts-ignore
         filePath: file.path,
       });
     }
