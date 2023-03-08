@@ -88,8 +88,8 @@ export class Table extends cloud.Table {
     }
 
     host.addEnvironment(this.envName(), this.table.name);
-    host.addEnvironment("PRIMARY_KEY", this.primaryKey);
-    host.addEnvironment("COLUMNS", JSON.stringify(this.columns));
+    host.addEnvironment(this.primaryKeyEnvName(), this.primaryKey);
+    host.addEnvironment(this.columnsEnvName(), JSON.stringify(this.columns));
 
     super._bind(host, ops);
   }
@@ -98,11 +98,21 @@ export class Table extends cloud.Table {
   public _toInflight(): core.Code {
     return core.InflightClient.for(__dirname, __filename, "TableClient", [
       `process.env["${this.envName()}"]`,
+      `process.env["${this.primaryKeyEnvName()}"]`,
+      `process.env["${this.columnsEnvName()}"]`,
     ]);
   }
 
   private envName(): string {
     return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
+  }
+
+  private primaryKeyEnvName(): string {
+    return `${this.envName()}_PRIMARY_KEY`;
+  }
+
+  private columnsEnvName(): string {
+    return `${this.envName()}_COLUMNS`;
   }
 }
 

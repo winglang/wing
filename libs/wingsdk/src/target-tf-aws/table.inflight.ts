@@ -11,16 +11,14 @@ import { ColumnType, ITableClient } from "../cloud";
 import { Json } from "../std";
 
 export class TableClient implements ITableClient {
-  private readonly primaryKey: string;
-  private readonly columns: { [key: string]: any };
   private readonly primaryKeyType: string;
 
   constructor(
     private readonly tableName: string,
+    private readonly primaryKey: string,
+    private readonly columns: string,
     private readonly client = new DynamoDBClient({})
   ) {
-    this.primaryKey = process.env.PRIMARY_KEY!;
-    this.columns = JSON.parse(process.env.COLUMNS!);
     this.primaryKeyType =
       this.columns[this.primaryKey] == ColumnType.STRING ? "string" : "number";
   }
