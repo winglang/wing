@@ -43,13 +43,12 @@ pub unsafe extern "C" fn wingc_on_did_open_text_document(ptr: u32, len: u32) {
 }
 pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
 	FILES.with(|files| {
-		let mut files = files.borrow_mut();
 		let uri = params.text_document.uri;
 		let uri_path = uri.to_file_path().unwrap();
 		let path = uri_path.to_str().unwrap();
 		let result = partial_compile(path, params.text_document.text.as_bytes());
 		send_diagnostics(&uri, &result.diagnostics);
-		files.insert(uri, result);
+		files.borrow_mut().insert(uri, result);
 	});
 }
 
@@ -64,14 +63,14 @@ pub unsafe extern "C" fn wingc_on_did_change_text_document(ptr: u32, len: u32) {
 }
 pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
 	FILES.with(|files| {
-		let mut files = files.borrow_mut();
 		let uri = params.text_document.uri;
 		let uri_path = uri.to_file_path().unwrap();
 		let path = uri_path.to_str().unwrap();
 
 		let result = partial_compile(path, params.content_changes[0].text.as_bytes());
+
 		send_diagnostics(&uri, &result.diagnostics);
-		files.insert(uri, result);
+		files.borrow_mut().insert(uri, result);
 	});
 }
 
