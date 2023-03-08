@@ -38,6 +38,7 @@ test("get object from a bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   const response = await client.get(KEY);
@@ -57,6 +58,7 @@ test("put an object into a bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   const response = await client.put(KEY, VALUE);
@@ -76,6 +78,7 @@ test("put an Json into a bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   const response = await client.putJson(KEY, VALUE as any);
@@ -94,6 +97,7 @@ test("delete object from a bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   const response = await client.delete(KEY);
@@ -111,6 +115,7 @@ test("List objects from bucket", async () => {
   const client = new BucketClient(
     BUCKET_NAME,
     STORAGE_NAME,
+    false,
     mockBlobServiceClient
   );
   const response = await client.list();

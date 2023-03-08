@@ -315,3 +315,65 @@ test("can add object in preflight", async () => {
   expect(listResponse).toEqual([KEY]);
   expect(listMessages(s)).toMatchSnapshot();
 });
+
+test("Given a non public bucket when reaching to a key public url it should throw an error", async () => {
+  expect(async () => {
+    //GIVEN
+    const app = new SimApp();
+    cloud.Bucket._newBucket(app, "my_bucket");
+
+    const s = await app.startSimulator();
+    const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+    const KEY = "KEY";
+
+    // WHEN
+    await client.publicUrl(KEY);
+
+    // THEN
+    await s.stop(); // THEN    // THEN
+  }).rejects.toThrow("Cannot provide public url for a non-public bucket");
+});
+
+test("Given a public bucket when reaching to a non existent key, public url it should throw an error", async () => {
+  expect(async () => {
+    //GIVEN
+    const app = new SimApp();
+    cloud.Bucket._newBucket(app, "my_bucket", { public: true });
+
+    const s = await app.startSimulator();
+    const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+    const KEY = "KEY";
+
+    // WHEN
+    await client.publicUrl(KEY);
+
+    // THEN
+    await s.stop(); // THEN
+  }).rejects.toThrow(
+    "Cannot provide public url for an non-existant key (key=KEY)"
+  );
+});
+
+test("Given a public bucket, when giving one of its keys, we should get it's public url", async () => {
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket", { public: true });
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+
+  // WHEN
+  await client.putJson(KEY, VALUE as any);
+  const response = await client.publicUrl(KEY);
+
+  // THEN
+  await s.stop();
+  expect(response).toEqual(
+    // @ts-expect-error (reaching into private property)
+    `${client.fileDir}/${KEY}`
+  );
+});

@@ -7,15 +7,18 @@ export class BucketClient implements IBucketClient {
   private readonly bucketName: string;
   private readonly blobServiceClient: BlobServiceClient;
   private readonly containerClient: ContainerClient;
+  private readonly _public: boolean;
   private readonly defaultAzureCredential: DefaultAzureCredential =
     new DefaultAzureCredential();
 
   constructor(
     bucketName: string,
     storageAccount: string,
+    isPublic: boolean = false,
     blobServiceClient?: BlobServiceClient
   ) {
     this.bucketName = bucketName;
+    this._public = isPublic;
     this.blobServiceClient =
       blobServiceClient ??
       new BlobServiceClient(
@@ -25,6 +28,10 @@ export class BucketClient implements IBucketClient {
     this.containerClient = this.blobServiceClient.getContainerClient(
       this.bucketName
     );
+  }
+
+  get public(): boolean {
+    return this._public;
   }
 
   /**
@@ -96,6 +103,9 @@ export class BucketClient implements IBucketClient {
     return list;
   }
 
+  public async publicUrl(key: string): Promise<string> {
+    throw new Error(`publicUrl is not supported yet. (key=${key})`);
+  }
   /**
    * Delete an existing object using a key from the bucket
    *

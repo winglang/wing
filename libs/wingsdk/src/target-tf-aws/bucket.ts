@@ -150,9 +150,17 @@ export class Bucket extends cloud.Bucket {
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
+    if (ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)) {
+      host.addPolicyStatements({
+        effect: "Allow",
+        action: ["s3:List*"],
+        resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
+      });
+    }
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucket);
+    host.addEnvironment(this.isPublicEnvName(), `${this.public}`);
 
     super._bind(host, ops);
   }
@@ -161,7 +169,12 @@ export class Bucket extends cloud.Bucket {
   public _toInflight(): core.Code {
     return core.InflightClient.for(__dirname, __filename, "BucketClient", [
       `process.env["${this.envName()}"]`,
+      `process.env["${this.isPublicEnvName()}"]`,
     ]);
+  }
+
+  private isPublicEnvName(): string {
+    return `${this.envName()}_IS_PUBLIC`;
   }
 
   private envName(): string {
@@ -175,3 +188,4 @@ Bucket._annotateInflight("delete", {});
 Bucket._annotateInflight("list", {});
 Bucket._annotateInflight("put_json", {});
 Bucket._annotateInflight("get_json", {});
+Bucket._annotateInflight("public_url", {});

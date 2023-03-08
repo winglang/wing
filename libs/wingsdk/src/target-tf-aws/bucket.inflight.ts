@@ -6,6 +6,7 @@ import {
   ListObjectsCommand,
   ListObjectsCommandOutput,
   PutObjectCommand,
+  GetBucketLocationCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
@@ -14,8 +15,13 @@ import { Json } from "../std";
 export class BucketClient implements IBucketClient {
   constructor(
     private readonly bucketName: string,
+    private readonly _public: boolean = false,
     private readonly s3Client = new S3Client({})
   ) {}
+
+  public get public(): boolean {
+    return this._public;
+  }
 
   public async put(key: string, body: string): Promise<void> {
     const command = new PutObjectCommand({
@@ -44,6 +50,37 @@ export class BucketClient implements IBucketClient {
     return JSON.parse(await this.get(key));
   }
 
+  private async exists(key: string): Promise<boolean> {
+    const command = new ListObjectsCommand({
+      Bucket: this.bucketName,
+      Prefix: key,
+      MaxKeys: 1,
+    });
+    const resp: ListObjectsCommandOutput = await this.s3Client.send(command);
+    return !!(resp.Contents && resp.Contents.length > 0);
+  }
+
+  public async publicUrl(key: string): Promise<string> {
+    if (!this._public) {
+      throw new Error("Cannot provide public url for a non-public bucket");
+    }
+    if (!(await this.exists(key))) {
+      throw new Error(
+        `Cannot provide public url for an non-existant key (key=${key})`
+      );
+    }
+    const command = new GetBucketLocationCommand({
+      Bucket: this.bucketName,
+    });
+    const { LocationConstraint: region = "us-east-1" } =
+      await this.s3Client.send(command);
+    //Buckets in Region us-east-1 have a LocationConstraint of null. https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLocation.html#API_GetBucketLocation_ResponseSyntax
+    return encodeURI(
+      `https://${this.bucketName}.s3.${region}.amazonaws.com/${key}`
+    );
+  }
+
+  // for signed_url take a look here: https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/s3-example-creating-buckets.html#s3-create-presigendurl-get
   /**
    * List all keys in the bucket.
    * @param prefix Limits the response to keys that begin with the specified prefix
