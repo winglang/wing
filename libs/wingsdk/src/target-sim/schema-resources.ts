@@ -148,8 +148,5 @@ export interface CounterAttributes {}
 /** Schema for redis.Redis */
 export interface RedisSchema extends BaseResourceSchema {
   readonly type: typeof REDIS_TYPE;
-  readonly props: {
-    /** Redis instance password. */
-    readonly password: string;
-  };
+  readonly props: {};
 }

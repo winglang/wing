@@ -12,21 +12,15 @@ import * as core from "../core";
  * @inflight `@winglang/sdk.redis.IRedisClient`
  */
 export class Redis extends redis.Redis implements ISimulatorResource {
-  private readonly password: string;
-
-  constructor(scope: Construct, id: string, props: redis.RedisProps) {
-    super(scope, id, props);
-
-    this.password = props.password;
+  constructor(scope: Construct, id: string) {
+    super(scope, id);
   }
 
   public toSimulator(): BaseResourceSchema {
     const schema: RedisSchema = {
       type: REDIS_TYPE,
       path: this.node.path,
-      props: {
-        password: this.password,
-      },
+      props: {},
       attrs: {} as any,
     };
     return schema;
@@ -46,4 +40,5 @@ export class Redis extends redis.Redis implements ISimulatorResource {
   // TODO: kill container on sim shutdown
 }
 
-Redis._annotateInflight("get_c", {});
+Redis._annotateInflight("ioredis", {});
+Redis._annotateInflight("url", {});

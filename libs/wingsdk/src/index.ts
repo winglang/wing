@@ -1,6 +1,7 @@
 export * as cloud from "./cloud";
 export * as core from "./core";
 export * as std from "./std";
+export * as redis from "./redis";
 export * as sim from "./target-sim";
 export * as tfaws from "./target-tf-aws";
 export * as tfazure from "./target-tf-azure";
