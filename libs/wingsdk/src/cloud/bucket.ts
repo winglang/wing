@@ -71,10 +71,6 @@ export interface BucketDeleteOptions {
  * Inflight interface for `Bucket`.
  */
 export interface IBucketClient {
-  // /** //TODO: [tsuf] to add when wing will support properties
-  //  * Whether the bucket is public.
-  //  */
-  // readonly public: boolean;
   /**
    * Put an object in the bucket.
    * @param key Key of the object.
@@ -116,12 +112,14 @@ export interface IBucketClient {
    * @inflight
    */
   list(prefix?: string): Promise<string[]>;
+
   /**
    * Returns a url to the given file.
    * @Throws if the file is not public or if object does not exist.
    * @inflight
    */
   publicUrl(key: string): Promise<string>;
+
   /**
    * Delete an existing object using a key from the bucket
    * @param key Key of the object.

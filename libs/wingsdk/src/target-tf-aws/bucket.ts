@@ -132,7 +132,10 @@ export class Bucket extends cloud.Bucket {
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (ops.includes(cloud.BucketInflightMethods.LIST)) {
+    if (
+      ops.includes(cloud.BucketInflightMethods.LIST) ||
+      ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)
+    ) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
@@ -147,13 +150,6 @@ export class Bucket extends cloud.Bucket {
           "s3:DeleteObjectVersion*",
           "s3:PutLifecycleConfiguration*",
         ],
-        resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
-      });
-    }
-    if (ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["s3:List*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }

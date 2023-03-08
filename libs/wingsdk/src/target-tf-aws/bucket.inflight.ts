@@ -10,7 +10,7 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
-import { Json } from "../std";
+import { Duration, Json } from "../std";
 
 export class BucketClient implements IBucketClient {
   constructor(
@@ -60,6 +60,21 @@ export class BucketClient implements IBucketClient {
     return !!(resp.Contents && resp.Contents.length > 0);
   }
 
+  private async getLocation(): Promise<string> {
+    const command = new GetBucketLocationCommand({
+      Bucket: this.bucketName,
+    });
+    //Buckets in Region us-east-1 have a LocationConstraint of null.
+    //https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLocation.html#API_GetBucketLocation_ResponseSyntax
+    const { LocationConstraint: region = "us-east-1" } =
+      await this.s3Client.send(command);
+    return region;
+  }
+
+  /**
+   * Returns a url to the given file.
+   * @Throws if the file is not public or if object does not exist.
+   */
   public async publicUrl(key: string): Promise<string> {
     if (!this._public) {
       throw new Error("Cannot provide public url for a non-public bucket");
@@ -69,18 +84,21 @@ export class BucketClient implements IBucketClient {
         `Cannot provide public url for an non-existent key (key=${key})`
       );
     }
-    const command = new GetBucketLocationCommand({
-      Bucket: this.bucketName,
-    });
-    const { LocationConstraint: region = "us-east-1" } =
-      await this.s3Client.send(command);
-    //Buckets in Region us-east-1 have a LocationConstraint of null. https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketLocation.html#API_GetBucketLocation_ResponseSyntax
+
+    const region = await this.getLocation();
+
     return encodeURI(
       `https://${this.bucketName}.s3.${region}.amazonaws.com/${key}`
     );
   }
 
-  // for signed_url take a look here: https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/s3-example-creating-buckets.html#s3-create-presigendurl-get
+  public async signed_url(key: string, duration?: Duration): Promise<string> {
+    // for signed_url take a look here: https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/s3-example-creating-buckets.html#s3-create-presigendurl-get
+    throw new Error(
+      `signed_url is now implemented yet (key=${key}, duration=${duration})`
+    );
+  }
+
   /**
    * List all keys in the bucket.
    * @param prefix Limits the response to keys that begin with the specified prefix
