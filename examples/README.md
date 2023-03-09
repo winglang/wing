@@ -34,6 +34,12 @@ _Add yours here!_
 **Description:** A Wing resource that helps access control for a common resource in a cloud environment.
 **Author:** [@flyingImer](https://github.com/flyingImer)
 
+## Replayable Queue
+
+**Source code:** [./proposed/replayable-queue.w](./proposed/replayable-queue.w)
+**Description:** A Wing Queue that saves all the messages sent to it on a bucket and allow you to replay all messages
+**Author:** [@ekeren](https://github.com/ekeren)
+
 <!--
 
 ### Tweet queue
