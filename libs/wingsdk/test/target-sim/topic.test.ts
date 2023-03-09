@@ -1,3 +1,4 @@
+import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import * as testing from "../../src/testing";
@@ -6,7 +7,7 @@ import { SimApp, Testing } from "../../src/testing";
 test("create a topic", async () => {
   // GIVEN
   const app = new testing.SimApp();
-  new cloud.Topic(app, "my_topic");
+  cloud.Topic._newTopic(app, "my_topic");
   const s = await app.startSimulator();
 
   // THEN
@@ -33,7 +34,7 @@ test("topic publishes messages as they are received", async () => {
     "Handler",
     `async handle(message) { console.log("Received " + message); }`
   );
-  const topic = new cloud.Topic(app, "my_topic");
+  const topic = cloud.Topic._newTopic(app, "my_topic");
   topic.onMessage(handler);
 
   const s = await app.startSimulator();
@@ -61,7 +62,7 @@ test("topic publishes messages to multiple subscribers", async () => {
     "Handler2",
     `async handle(message) { console.log("Also received " + message); }`
   );
-  const topic = new cloud.Topic(app, "my_topic");
+  const topic = cloud.Topic._newTopic(app, "my_topic");
   topic.onMessage(handler);
   topic.onMessage(otherHandler);
 
@@ -79,7 +80,7 @@ test("topic publishes messages to multiple subscribers", async () => {
 test("topic has no display hidden property", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Topic(app, "my_topic");
+  cloud.Topic._newTopic(app, "my_topic");
 
   const treeJson = treeJsonOf(app.synth());
   const topic = app.node.tryFindChild("my_topic") as cloud.Topic;
@@ -99,7 +100,7 @@ test("topic has no display hidden property", async () => {
 test("topic has display title and description properties", async () => {
   // GIVEN
   const app = new SimApp();
-  new cloud.Topic(app, "my_topic");
+  cloud.Topic._newTopic(app, "my_topic");
 
   // WHEN
   const treeJson = treeJsonOf(app.synth());

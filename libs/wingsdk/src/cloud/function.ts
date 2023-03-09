@@ -1,17 +1,17 @@
+import { spawnSync } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
-import * as esbuild from "esbuild-wasm";
-import { Polycons } from "polycons";
 import { Logger } from "./logger";
-import { Code, IInflightHost, IResource, Inflight, Resource } from "../core";
+import { fqnForType } from "../constants";
+import { IInflightHost, IResource, Inflight, Resource, App } from "../core";
 import { Duration } from "../std";
-import { mkdtemp } from "../util";
+import { mkdtemp, normalPath } from "../util";
 
 /**
  * Global identifier for `Function`.
  */
-export const FUNCTION_TYPE = "wingsdk.cloud.Function";
+export const FUNCTION_FQN = fqnForType("cloud.Function");
 
 /**
  * Properties for `Function`.
@@ -39,9 +39,24 @@ export interface FunctionProps {
 }
 
 /**
- * Functionality shared between all `Function` implementations.
+ * Represents a function.
+ *
+ * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
-export abstract class FunctionBase extends Resource implements IInflightHost {
+export abstract class Function extends Resource implements IInflightHost {
+  /**
+   * Creates a new cloud.Function instance through the app.
+   * @internal
+   */
+  public static _newFunction(
+    scope: Construct,
+    id: string,
+    inflight: Inflight,
+    props: FunctionProps = {}
+  ): Function {
+    return App.of(scope).newAbstract(FUNCTION_FQN, scope, id, inflight, props);
+  }
+
   private readonly _env: Record<string, string> = {};
 
   public readonly stateful = false;
@@ -55,17 +70,12 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
     scope: Construct,
     id: string,
     inflight: Inflight,
-    props: FunctionProps
+    props: FunctionProps = {}
   ) {
     super(scope, id);
 
     this.display.title = "Function";
     this.display.description = "A cloud function (FaaS)";
-
-    if (!scope) {
-      this.assetPath = undefined as any;
-      return;
-    }
 
     for (const [key, value] of Object.entries(props.env ?? {})) {
       this.addEnvironment(key, value);
@@ -100,27 +110,30 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
     });
 
     const tempdir = mkdtemp();
+    const infile = join(tempdir, "prebundle.js");
     const outfile = join(tempdir, "index.js");
+    writeFileSync(infile, lines.join("\n"));
 
-    try {
-      esbuild.buildSync({
-        bundle: true,
-        stdin: {
-          contents: lines.join("\n"),
-          resolveDir: tempdir,
-          sourcefile: "inflight.js",
-        },
-        nodePaths: [join(__dirname, "..", "..", "node_modules")],
-        target: "node16",
-        platform: "node",
-        absWorkingDir: tempdir,
-        outfile,
-        minify: false,
-        logLevel: "silent",
-        external: ["aws-sdk"],
-      });
-    } catch (e) {
-      throw new Error(`Failed to bundle function: ${e}`);
+    // We would invoke esbuild directly here, but there is a bug where esbuild
+    // mangles the stdout/stderr of the process that invokes it.
+    // https://github.com/evanw/esbuild/issues/2927
+    // To workaround the issue, spawn a new process and invoke esbuild inside it.
+
+    let esbuildScript = [
+      `const esbuild = require("${normalPath(
+        require.resolve("esbuild-wasm")
+      )}");`,
+      `esbuild.buildSync({ bundle: true, entryPoints: ["${normalPath(
+        infile
+      )}"], outfile: "${normalPath(
+        outfile
+      )}", minify: false, platform: "node", target: "node16", external: ["aws-sdk"] });`,
+    ].join("\n");
+    let result = spawnSync(process.argv[0], ["-e", esbuildScript]);
+    if (result.status !== 0) {
+      throw new Error(
+        `Failed to bundle function: ${result.stderr.toString("utf-8")}`
+      );
     }
 
     // the bundled contains line comments with file paths, which are not useful for us, especially
@@ -148,38 +161,6 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
    */
   public get env(): Record<string, string> {
     return { ...this._env };
-  }
-}
-
-/**
- * Represents a function.
- *
- * @inflight `@winglang/sdk.cloud.IFunctionClient`
- */
-export class Function extends FunctionBase {
-  constructor(
-    scope: Construct,
-    id: string,
-    inflight: Inflight,
-    props: FunctionProps = {}
-  ) {
-    super(null as any, id, inflight, props);
-    return Polycons.newInstance(
-      FUNCTION_TYPE,
-      scope,
-      id,
-      inflight,
-      props
-    ) as Function;
-  }
-
-  public addEnvironment(_key: string, _value: string): void {
-    throw new Error("Method not implemented.");
-  }
-
-  /** @internal */
-  public _toInflight(): Code {
-    throw new Error("Method not implemented.");
   }
 }
 

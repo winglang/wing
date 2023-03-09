@@ -1,11 +1,12 @@
 import { Construct } from "constructs";
-import { Polycons } from "polycons";
-import { Code, Resource } from "../core";
+import { fqnForType } from "../constants";
+import { App, Resource } from "../core";
+import { Json } from "../std";
 
 /**
  * Global identifier for `Bucket`.
  */
-export const BUCKET_TYPE = "wingsdk.cloud.Bucket";
+export const BUCKET_FQN = fqnForType("cloud.Bucket");
 
 /**
  * Properties for `Bucket`.
@@ -19,19 +20,30 @@ export interface BucketProps {
 }
 
 /**
- * Functionality shared between all `Bucket` implementations.
+ * Represents a cloud object store.
+ *
+ * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
-export abstract class BucketBase extends Resource {
+export abstract class Bucket extends Resource {
+  /**
+   * Create a new bucket.
+   * @internal
+   */
+  public static _newBucket(
+    scope: Construct,
+    id: string,
+    props: BucketProps = {}
+  ): Bucket {
+    return App.of(scope).newAbstract(BUCKET_FQN, scope, id, props);
+  }
+
   public readonly stateful = true;
-  constructor(scope: Construct, id: string, props: BucketProps) {
+
+  constructor(scope: Construct, id: string, props: BucketProps = {}) {
     super(scope, id);
 
     this.display.title = "Bucket";
     this.display.description = "A cloud object store";
-
-    if (!scope) {
-      return;
-    }
 
     props;
   }
@@ -43,29 +55,6 @@ export abstract class BucketBase extends Resource {
    * referencing a file from the local filesystem.
    */
   public abstract addObject(key: string, body: string): void;
-}
-
-/**
- * Represents a cloud object store.
- *
- * @inflight `@winglang/sdk.cloud.IBucketClient`
- */
-export class Bucket extends BucketBase {
-  constructor(scope: Construct, id: string, props: BucketProps = {}) {
-    super(null as any, id, props);
-    return Polycons.newInstance(BUCKET_TYPE, scope, id, props) as Bucket;
-  }
-
-  /** @internal */
-  public _toInflight(): Code {
-    throw new Error("Method not implemented.");
-  }
-
-  public addObject(key: string, body: string): void {
-    key;
-    body;
-    throw new Error("Method not implemented.");
-  }
 }
 
 /** Interface for delete method inside `Bucket` */
@@ -91,6 +80,14 @@ export interface IBucketClient {
   put(key: string, body: string): Promise<void>;
 
   /**
+   * Put a Json object in the bucket.
+   * @param key Key of the object.
+   * @param body Json object that we want to store into the bucket.
+   * @inflight
+   */
+  putJson(key: string, body: Json): Promise<void>;
+
+  /**
    * Retrieve an object from the bucket.
    * @param key Key of the object.
    * @Throws if no object with the given key exists.
@@ -98,6 +95,15 @@ export interface IBucketClient {
    * @inflight
    */
   get(key: string): Promise<string>;
+
+  /**
+   * Retrieve a Json object from the bucket.
+   * @param key Key of the object.
+   * @Throws if no object with the given key exists.
+   * @Returns the object's parsed Json.
+   * @inflight
+   */
+  getJson(key: string): Promise<Json>;
 
   /**
    * Retrieve existing objects keys from the bucket.
@@ -129,4 +135,8 @@ export enum BucketInflightMethods {
   LIST = "list",
   /** `Bucket.delete` */
   DELETE = "delete",
+  /** `Bucket.putJson */
+  PUT_JSON = "putJson",
+  /** `Bucket.getJson */
+  GET_JSON = "getJson",
 }

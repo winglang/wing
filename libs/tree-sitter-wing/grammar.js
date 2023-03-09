@@ -10,9 +10,10 @@ const PREC = {
   ADD: 9,
   MULTIPLY: 10,
   UNARY: 11,
-  NIL_COALESCING: 12,
-  MEMBER: 13,
-  CALL: 14,
+  POWER: 12,
+  NIL_COALESCING: 13,
+  MEMBER: 14,
+  CALL: 15,
 };
 
 module.exports = grammar({
@@ -121,6 +122,8 @@ module.exports = grammar({
 
     reassignable: ($) => "var",
 
+    static: ($) => "static",
+
     variable_definition_statement: ($) =>
       seq(
         "let",
@@ -148,29 +151,22 @@ module.exports = grammar({
         repeat(
           choice(
             $.constructor,
-            $.function_definition,
-            $.inflight_function_definition,
-            $.class_member,
-            $.inflight_class_member
+            $.method_definition,
+            $.inflight_method_definition,
+            $.class_field,
           )
         ),
         "}"
       ),
-    class_member: ($) =>
+    class_field: ($) =>
       seq(
         optional(field("access_modifier", $.access_modifier)),
+        optional(field("static", $.static)),
+        optional(field("phase_modifier", $._inflight_specifier)),
         optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
         $._type_annotation,
-        ";"
-      ),
-    inflight_class_member: ($) =>
-      seq(
-        optional(field("access_modifier", $.access_modifier)),
-        field("phase_modifier", $._inflight_specifier),
-        optional(field("reassignable", $.reassignable)),
-        field("name", $.identifier),
-        $._type_annotation,
+        optional(seq("=", field("initializer", $.expression))),
         ";"
       ),
 
@@ -187,10 +183,9 @@ module.exports = grammar({
         repeat(
           choice(
             $.constructor,
-            $.function_definition,
-            $.inflight_function_definition,
-            $.class_member,
-            $.inflight_class_member
+            $.method_definition,
+            $.inflight_method_definition,
+            $.class_field,
           )
         ),
         "}"
@@ -251,6 +246,7 @@ module.exports = grammar({
         $._collection_literal,
         $.parenthesized_expression,
         $.structured_access_expression,
+        $.json_literal,
         $.struct_literal,
       ),
 
@@ -347,6 +343,7 @@ module.exports = grammar({
         $.custom_type,
         $.builtin_type,
         $._builtin_container_type,
+        $.json_container_type,
         $.function_type,
         $.optional
       ),
@@ -373,9 +370,10 @@ module.exports = grammar({
         field("block", $.block)
       ),
 
-    function_definition: ($) =>
+    method_definition: ($) =>
       seq(
         optional(field("access_modifier", $.access_modifier)),
+        optional(field("static", $.static)),
         optional(field("async", $.async_modifier)),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
@@ -383,9 +381,10 @@ module.exports = grammar({
         field("block", $.block)
       ),
 
-    inflight_function_definition: ($) =>
+    inflight_method_definition: ($) =>
       seq(
         optional(field("access_modifier", $.access_modifier)),
+        optional(field("static", $.static)),
         field("phase_modifier", $._inflight_specifier),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
@@ -465,7 +464,9 @@ module.exports = grammar({
         ["-", PREC.ADD],
         ["*", PREC.MULTIPLY],
         ["/", PREC.MULTIPLY],
+        ["\\", PREC.MULTIPLY],
         ["%", PREC.MULTIPLY],
+        ["**", PREC.POWER],
         ["||", PREC.LOGICAL_OR],
         ["&&", PREC.LOGICAL_AND],
         //['|', PREC.INCLUSIVE_OR],
@@ -538,6 +539,19 @@ module.exports = grammar({
       seq($.identifier, ":", $.expression),
     structured_access_expression: ($) =>
       prec.right(seq($.expression, "[", $.expression, "]")),
+
+    json_literal: ($) => seq(field("type", $.json_container_type), field("element", $.json_element)),
+
+    json_element: ($) => choice(
+      $._literal,
+      $.map_literal,
+      $.array_literal
+    ),
+
+    json_container_type: ($) => choice(
+      "Json",
+      "MutJson"
+    ),
   },
 });
 

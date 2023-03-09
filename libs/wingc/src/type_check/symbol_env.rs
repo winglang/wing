@@ -198,48 +198,28 @@ impl SymbolEnv {
 		}
 	}
 
-	pub fn lookup_nested_str(
-		&self,
-		nested_str: &str,
-		include_hidden: bool,
-		statement_idx: Option<usize>,
-	) -> Result<&SymbolKind, TypeError> {
+	pub fn lookup_nested_str(&self, nested_str: &str, statement_idx: Option<usize>) -> Result<&SymbolKind, TypeError> {
 		let nested_vec = nested_str
 			.split('.')
 			.map(|s| Symbol::global(s))
 			.collect::<Vec<Symbol>>();
-		self.lookup_nested(
-			&nested_vec.iter().collect::<Vec<&Symbol>>(),
-			include_hidden,
-			statement_idx,
-		)
+		self.lookup_nested(&nested_vec.iter().collect::<Vec<&Symbol>>(), statement_idx)
 	}
 
 	// TODO: can we make this more generic to avoid code duplication with lookup_nested_str?
 	pub fn lookup_nested_mut_str(
 		&mut self,
 		nested_str: &str,
-		include_hidden: bool,
 		statement_idx: Option<usize>,
 	) -> Result<&mut SymbolKind, TypeError> {
 		let nested_vec = nested_str
 			.split('.')
 			.map(|s| Symbol::global(s))
 			.collect::<Vec<Symbol>>();
-		self.lookup_nested_mut(
-			&nested_vec.iter().collect::<Vec<&Symbol>>(),
-			include_hidden,
-			statement_idx,
-		)
+		self.lookup_nested_mut(&nested_vec.iter().collect::<Vec<&Symbol>>(), statement_idx)
 	}
 
-	/// Pass `include_hidden: true` if it's OK to return types that have only been imported implicitly (such as through an inheritance chain), and false otherwise
-	pub fn lookup_nested(
-		&self,
-		nested_vec: &[&Symbol],
-		include_hidden: bool,
-		statement_idx: Option<usize>,
-	) -> Result<&SymbolKind, TypeError> {
+	pub fn lookup_nested(&self, nested_vec: &[&Symbol], statement_idx: Option<usize>) -> Result<&SymbolKind, TypeError> {
 		let mut it = nested_vec.iter();
 
 		let mut symb = *it.next().unwrap();
@@ -257,18 +237,12 @@ impl SymbolEnv {
 			// This is because we currently allow unknown stuff to be referenced under an anything which will
 			// be resolved only in runtime.
 			// TODO: do we still need this? Why?
-			if let SymbolKind::Variable(VariableInfo { _type: t, .. }) = *t {
+			if let SymbolKind::Variable(VariableInfo { type_: t, .. }) = *t {
 				if matches!(*t, Type::Anything) {
 					break;
 				}
 			}
 			let ns = if let Some(ns) = t.as_namespace() {
-				if ns.hidden && !include_hidden {
-					return Err(TypeError {
-						message: format!("\"{}\" was not brought", symb.name),
-						span: symb.span.clone(),
-					});
-				}
 				ns
 			} else {
 				return Err(TypeError {
@@ -293,13 +267,10 @@ impl SymbolEnv {
 		Ok(t)
 	}
 
-	/// Pass `include_hidden: true` if it's OK to return types that have only been imported implicitly (such as through an inheritance chain), and false otherwise
-	///
 	/// TODO: can we make this more generic to avoid code duplication with lookup_nested?
 	fn lookup_nested_mut(
 		&mut self,
 		nested_vec: &[&Symbol],
-		include_hidden: bool,
 		statement_idx: Option<usize>,
 	) -> Result<&mut SymbolKind, TypeError> {
 		let mut it = nested_vec.iter();
@@ -319,19 +290,13 @@ impl SymbolEnv {
 			// This is because we currently allow unknown stuff to be referenced under an anything which will
 			// be resolved only in runtime.
 			// TODO: do we still need this? Why?
-			if let SymbolKind::Variable(VariableInfo { _type: t, .. }) = *t {
+			if let SymbolKind::Variable(VariableInfo { type_: t, .. }) = *t {
 				if matches!(*t, Type::Anything) {
 					break;
 				}
 			}
 
 			let ns = if let Some(ns) = t.as_mut_namespace_ref() {
-				if ns.hidden && !include_hidden {
-					return Err(TypeError {
-						message: format!("\"{}\" was not brought", symb.name),
-						span: symb.span.clone(),
-					});
-				}
 				ns
 			} else {
 				return Err(TypeError {

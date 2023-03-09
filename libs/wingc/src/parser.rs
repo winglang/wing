@@ -140,11 +140,10 @@ impl Parser<'_> {
 	}
 
 	fn node_span(&self, node: &Node) -> WingSpan {
+		let node_range = node.range();
 		WingSpan {
-			start: node.range().start_point,
-			end: node.range().end_point,
-			start_byte: node.byte_range().start,
-			end_byte: node.byte_range().end,
+			start: node_range.start_point.into(),
+			end: node_range.end_point.into(),
 			// TODO: Implement multi-file support
 			file_id: self.source_name.to_string(),
 		}
@@ -362,7 +361,7 @@ impl Parser<'_> {
 				continue;
 			}
 			match (class_element.kind(), is_resource) {
-				("function_definition", true) => {
+				("method_definition", true) => {
 					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
 					let func_def = self.build_function_definition(&class_element, Phase::Preflight);
 					match (method_name, func_def) {
@@ -370,7 +369,7 @@ impl Parser<'_> {
 						_ => {}
 					}
 				}
-				("inflight_function_definition", _) => {
+				("inflight_method_definition", _) => {
 					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
 					let func_def = self.build_function_definition(&class_element, Phase::Inflight);
 					match (method_name, func_def) {
@@ -378,18 +377,36 @@ impl Parser<'_> {
 						_ => {}
 					}
 				}
-				("class_member", _) => fields.push(ClassField {
-					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
-					member_type: self.build_type_annotation(&class_element.child_by_field_name("type").unwrap())?,
-					reassignable: class_element.child_by_field_name("reassignable").is_some(),
-					flight: Phase::Preflight,
-				}),
-				("inflight_class_member", _) => fields.push(ClassField {
-					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
-					member_type: self.build_type_annotation(&class_element.child_by_field_name("type").unwrap())?,
-					reassignable: class_element.child_by_field_name("reassignable").is_some(),
-					flight: Phase::Inflight,
-				}),
+				("class_field", _) => {
+					let is_static = class_element.child_by_field_name("static").is_some();
+					if is_static {
+						self.diagnostics.borrow_mut().push(Diagnostic {
+							level: DiagnosticLevel::Error,
+							message: format!(
+								"Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668",
+							),
+							span: Some(self.node_span(&class_element)),
+						});
+					}
+
+					fields.push(ClassField {
+						name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
+						member_type: self.build_type_annotation(&class_element.child_by_field_name("type").unwrap())?,
+						reassignable: class_element.child_by_field_name("reassignable").is_some(),
+						is_static,
+						flight: match class_element.child_by_field_name("phase_modifier") {
+							Some(n) => {
+								if !is_resource {
+									self
+										.add_error::<Node>(format!("Class cannot have inflight fields"), &n)
+										.err();
+								}
+								Phase::Inflight
+							}
+							None => Phase::Preflight,
+						},
+					})
+				}
 				("constructor", _) => {
 					if let Some(_) = constructor {
 						self
@@ -409,7 +426,7 @@ impl Parser<'_> {
 								root: name.clone(),
 								fields: vec![],
 							}))),
-							flight: if is_resource { Phase::Preflight } else { Phase::Inflight }, // TODO: for now classes can only be constructed inflight
+							flight: if is_resource { Phase::Preflight } else { Phase::Inflight },
 						},
 					})
 				}
@@ -482,6 +499,7 @@ impl Parser<'_> {
 				},
 				flight,
 			},
+			is_static: func_def_node.child_by_field_name("static").is_some(),
 			captures: RefCell::new(None),
 		})
 	}
@@ -544,6 +562,14 @@ impl Parser<'_> {
 					},
 				}))
 			}
+			"json_container_type" => {
+				let container_type = self.node_text(&type_node);
+				match container_type {
+					"Json" => Ok(TypeAnnotation::Json),
+					"MutJson" => Ok(TypeAnnotation::MutJson),
+					other => self.add_error(format!("invalid json container type {}", other), &type_node),
+				}
+			}
 			"mutable_container_type" | "immutable_container_type" => {
 				let container_type = self.node_text(&type_node.child_by_field_name("collection_type").unwrap());
 				let element_type = type_node.child_by_field_name("type_parameter").unwrap();
@@ -579,7 +605,7 @@ impl Parser<'_> {
 		if nested_node.has_error() {
 			return self.add_error(format!("Syntax error"), &nested_node);
 		}
-		Ok(Reference::NestedIdentifier {
+		Ok(Reference::InstanceMember {
 			object: Box::new(self.build_expression(&nested_node.child_by_field_name("object").unwrap())?),
 			property: self.node_symbol(&nested_node.child_by_field_name("property").unwrap())?,
 		})
@@ -693,6 +719,8 @@ impl Parser<'_> {
 						"%" => BinaryOperator::Mod,
 						"*" => BinaryOperator::Mul,
 						"/" => BinaryOperator::Div,
+						"\\" => BinaryOperator::FloorDiv,
+						"**" => BinaryOperator::Power,
 						"ERROR" => self.add_error::<BinaryOperator>(format!("Expected binary operator"), expression_node)?,
 						other => return self.report_unimplemented_grammar(other, "binary operator", expression_node),
 					},
@@ -882,6 +910,27 @@ impl Parser<'_> {
 					},
 					expression_span,
 				))
+			}
+			"json_element" => self.build_expression(
+				&expression_node
+					.child(0)
+					.expect("Json element should always have child node"),
+			),
+			"json_literal" => {
+				let type_node = expression_node
+					.child_by_field_name("type")
+					.expect("Json literal should always have type node");
+				let is_mut = match self.node_text(&type_node) {
+					"MutJson" => true,
+					_ => false,
+				};
+
+				let element_node = expression_node
+					.child_by_field_name("element")
+					.expect("Should always have element");
+				let element = Box::new(self.build_expression(&element_node)?);
+
+				Ok(Expr::new(ExprKind::JsonLiteral { is_mut, element }, expression_span))
 			}
 			"set_literal" => self.build_set_literal(expression_node),
 			"struct_literal" => {

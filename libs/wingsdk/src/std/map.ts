@@ -12,9 +12,14 @@ import { T1 } from "./util";
 export class ImmutableMap {
   /**
    * Returns the number of elements in the map.
+   *
+   * TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
+   * @macro Object.keys($self$).length
+   *
+   * @returns The number of elements in map
    */
-  public get size(): number {
-    throw new Error("Abstract");
+  public size(): number {
+    throw new Error("Macro");
   }
 
   /**
@@ -23,28 +28,33 @@ export class ImmutableMap {
    * If the value that is associated to the provided key is an object, then you will get a reference
    * to that object and any change made to that object will effectively modify it inside the map.
    *
+   * @macro ($self$)[$args$]
+   *
    * @param key The key of the element to return.
    * @returns The element associated with the specified key, or undefined if the key can't be found
    */
   public get(key: string): T1 {
     key;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
    * Returns a boolean indicating whether an element with the specified key exists or not.
+   *
+   * @macro ($args$ in ($self$))
+   *
    * @param key The key of the element to test for presence
    * @returns true if an element with the specified key exists in the map; otherwise false.
    */
   public has(key: string): boolean {
     key;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
    * Create a mutable shallow copy of this map
    *
-   * @macro new Map($self$)
+   * @macro {...($self$)}
    *
    * @returns a MutableMap with the same values as this map
    */
@@ -55,7 +65,7 @@ export class ImmutableMap {
   /**
    * Create an immutable shallow copy of this map
    *
-   * @macro Object.freeze(new Map($self$))
+   * @macro Object.freeze({...($self$)})
    *
    * @returns an ImmutableMap with the same values as this map
    */
@@ -72,29 +82,38 @@ export class ImmutableMap {
 export class MutableMap extends ImmutableMap {
   /**
    * Removes all elements
+   *
+   * @macro ((map) => { for(const k in map){delete map[k]}; })($self$)
    */
   public clear(): void {
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
    * Removes the specified element from a map.
+   *
+   * @macro (delete ($self$)[$args$])
+   *
    * @param key The key
-   * @returns true if the element was in the map
+   * @returns true if the given key is no longer present
    */
   public delete(key: string): boolean {
     key;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
    * Adds or updates an entry in a Map object with a specified key and a value.
+   *
+   * TODO: revisit this macro after we support indexed args https://github.com/winglang/wing/issues/1659
+   * @macro ((obj, args) => { obj[args[0]] = args[1]; })($self$, [$args$])
+   *
    * @param key The key of the element to add
    * @param value The value of the element to add
    */
   public set(key: string, value: T1): void {
     key;
     value;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 }

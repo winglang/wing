@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use lsp_types::{Position, Range, Url};
+use lsp_types::{Range, Url};
 
 use crate::diagnostic::{DiagnosticLevel, Diagnostics};
 
@@ -46,14 +46,8 @@ pub fn send_diagnostics(uri: &Url, diagnostics: &Diagnostics) {
 		.filter(|item| matches!(item.level, DiagnosticLevel::Error) && item.span.is_some())
 		.map(|item| {
 			let span = item.span.as_ref().unwrap();
-			let start_position = Position {
-				line: span.start.row as u32,
-				character: span.start.column as u32,
-			};
-			let end_position = Position {
-				line: span.end.row as u32,
-				character: span.end.column as u32,
-			};
+			let start_position = span.start.into();
+			let end_position = span.end.into();
 			lsp_types::Diagnostic::new_simple(Range::new(start_position, end_position), item.message.clone())
 		})
 		.collect_vec();

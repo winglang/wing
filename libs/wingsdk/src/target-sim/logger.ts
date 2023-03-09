@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
-import { LoggerSchema } from "./schema-resources";
+import { LoggerSchema, LOGGER_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
@@ -11,14 +11,14 @@ import * as core from "../core";
  *
  * @inflight `@winglang/sdk.cloud.ILoggerClient`
  */
-export class Logger extends cloud.LoggerBase implements ISimulatorResource {
+export class Logger extends cloud.Logger implements ISimulatorResource {
   constructor(scope: Construct, id: string) {
     super(scope, id);
   }
 
   public toSimulator(): BaseResourceSchema {
     const schema: LoggerSchema = {
-      type: cloud.LOGGER_TYPE,
+      type: LOGGER_TYPE,
       path: this.node.path,
       props: {},
       attrs: {} as any,

@@ -7,7 +7,7 @@ import {
 } from "fs";
 import { isAbsolute, join } from "path";
 import { IConstruct } from "constructs";
-import { IApp } from "./app";
+import { App } from "./app";
 import { FileBase } from "./file-base";
 
 /**
@@ -17,7 +17,7 @@ export interface FilesProps {
   /**
    * The app with files to synthesize.
    */
-  readonly app: IApp;
+  readonly app: App;
 
   /**
    * The path to a state file which will track all synthesized files. If a
@@ -35,7 +35,7 @@ export class Files {
    * The path to a state file which will track all synthesized files.
    */
   public readonly stateFile?: string;
-  private readonly app: IApp;
+  private readonly app: App;
   constructor(props: FilesProps) {
     this.app = props.app;
     if (props.stateFile) {

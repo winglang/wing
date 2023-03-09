@@ -12,43 +12,49 @@ use crate::{
 		Scope, StmtKind, Symbol,
 	},
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
-	type_check::symbol_env::SymbolEnv,
-	type_check::Type,
+	type_check::{symbol_env::SymbolEnv, ClassLike, Type},
 	visit::Visit,
 };
 use std::collections::{BTreeMap, BTreeSet};
 
-/// This is a definition of how a resource is captured. The most basic way to capture a resource
-/// is to use a subset of its client's methods. In that case we need to specify the name of the method
-/// used in the capture. Currently this is the only capture definition supported.
+/// This is a definition of how a resource or piece of data is captured. The most basic way to capture a resource
+/// is to use a subset of its client's members. In that case we need to specify the name of the members
+/// used in the capture. In the case of immutable data, an empty list of operations can be specified.
+/// Currently these are the only kinds of capture information supported.
 /// In the future we might want add more verbose capture definitions like regexes on method parameters etc.
 #[derive(Debug, PartialEq, Eq, Hash, Ord, PartialOrd)]
-pub struct CaptureDef {
-	pub method: String,
-}
-
-struct Capture {
-	pub object: Symbol,
-	pub kind: CaptureKind,
+pub struct CaptureOperation {
+	/// A field or method name
+	pub member: String,
 }
 
 #[derive(Debug, PartialEq, Eq, Hash, Ord, PartialOrd)]
-pub enum CaptureKind {
-	Resource(CaptureDef),
-	ImmutableData,
+pub struct Capture {
+	/// The symbol of the resource or data being captured
+	pub symbol: Symbol,
+	/// The operations performed on the resource or data, if any
+	pub ops: Vec<CaptureOperation>,
 }
 
-pub type Captures = BTreeMap<String, BTreeSet<CaptureKind>>;
+pub type Captures = BTreeSet<Capture>;
 
 fn collect_captures(capture_list: Vec<Capture>) -> Captures {
-	let mut captures: Captures = BTreeMap::new();
+	// Aggregate captures to the same symbol, and de-duplicate operations
+	let mut capture_map: BTreeMap<Symbol, BTreeSet<CaptureOperation>> = BTreeMap::new();
 	for capture in capture_list {
-		captures
-			.entry(capture.object.name)
+		capture_map
+			.entry(capture.symbol)
 			.or_insert(BTreeSet::new())
-			.insert(capture.kind);
+			.extend(capture.ops);
 	}
-	captures
+	// Convert to a set of captures
+	capture_map
+		.into_iter()
+		.map(|(object, ops)| Capture {
+			symbol: object,
+			ops: ops.into_iter().collect(),
+		})
+		.collect()
 }
 
 pub struct CaptureVisitor {
@@ -155,7 +161,7 @@ fn scan_captures_in_expression(
 							span: Some(symbol.span.clone()),
 						});
 					} else {
-						let t = var.as_variable().unwrap()._type;
+						let t = var.as_variable().unwrap().type_;
 
 						// if the identifier represents a preflight value, then capture it
 						if si.flight == Phase::Preflight {
@@ -178,23 +184,23 @@ fn scan_captures_in_expression(
 										.methods(true)
 										.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Phase::Inflight))
 										.map(|(name, _)| Capture {
-											object: symbol.clone(),
-											kind: CaptureKind::Resource(CaptureDef { method: name.clone() }),
+											symbol: symbol.clone(),
+											ops: vec![CaptureOperation { member: name.clone() }],
 										})
 										.collect::<Vec<Capture>>(),
 								);
 								// If there are any capturable fields in the resource then we'll create a capture definition for the resource as well
 								if resource.fields(true).any(|(_, t)| t.is_capturable()) {
 									res.push(Capture {
-										object: symbol.clone(),
-										kind: CaptureKind::ImmutableData,
+										symbol: symbol.clone(),
+										ops: vec![],
 									});
 								}
 							} else if t.is_capturable() {
 								// capture as an immutable data type (primitive/collection)
 								res.push(Capture {
-									object: symbol.clone(),
-									kind: CaptureKind::ImmutableData,
+									symbol: symbol.clone(),
+									ops: vec![],
 								});
 							} else {
 								// unsupported capture
@@ -211,7 +217,7 @@ fn scan_captures_in_expression(
 					}
 				}
 			}
-			Reference::NestedIdentifier { object, property } => {
+			Reference::InstanceMember { object, property } => {
 				res.extend(scan_captures_in_expression(object, env, statement_idx, diagnostics));
 
 				// If the expression evaluates to a resource we should check what method of the resource we're accessing
@@ -221,7 +227,7 @@ fn scan_captures_in_expression(
 							prop_type
 								.as_variable()
 								.expect("Expected resource property to be a variable")
-								._type,
+								.type_,
 							phase,
 						),
 						Err(_type_error) => {
@@ -238,6 +244,9 @@ fn scan_captures_in_expression(
 						);
 					}
 				}
+			}
+			Reference::TypeMember { .. } => {
+				// TODO: handle access to static preflight memebers from inflight (https://github.com/winglang/wing/issues/1669)
 			}
 		},
 		ExprKind::Call { function, arg_list } => res.extend(scan_captures_in_call(
@@ -277,6 +286,9 @@ fn scan_captures_in_expression(
 			for v in items {
 				res.extend(scan_captures_in_expression(&v, env, statement_idx, diagnostics));
 			}
+		}
+		ExprKind::JsonLiteral { element, .. } => {
+			res.extend(scan_captures_in_expression(&element, env, statement_idx, diagnostics));
 		}
 		ExprKind::StructLiteral { fields, .. } => {
 			for v in fields.values() {

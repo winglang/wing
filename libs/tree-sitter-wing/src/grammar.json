@@ -127,7 +127,7 @@
     },
     "nested_identifier": {
       "type": "PREC",
-      "value": 13,
+      "value": 14,
       "content": {
         "type": "SEQ",
         "members": [
@@ -549,6 +549,10 @@
       "type": "STRING",
       "value": "var"
     },
+    "static": {
+      "type": "STRING",
+      "value": "static"
+    },
     "variable_definition_statement": {
       "type": "SEQ",
       "members": [
@@ -695,19 +699,15 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "function_definition"
+                "name": "method_definition"
               },
               {
                 "type": "SYMBOL",
-                "name": "inflight_function_definition"
+                "name": "inflight_method_definition"
               },
               {
                 "type": "SYMBOL",
-                "name": "class_member"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "inflight_class_member"
+                "name": "class_field"
               }
             ]
           }
@@ -718,7 +718,7 @@
         }
       ]
     },
-    "class_member": {
+    "class_field": {
       "type": "SEQ",
       "members": [
         {
@@ -730,6 +730,38 @@
               "content": {
                 "type": "SYMBOL",
                 "name": "access_modifier"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "static",
+              "content": {
+                "type": "SYMBOL",
+                "name": "static"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "phase_modifier",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_inflight_specifier"
               }
             },
             {
@@ -766,65 +798,29 @@
           "name": "_type_annotation"
         },
         {
-          "type": "STRING",
-          "value": ";"
-        }
-      ]
-    },
-    "inflight_class_member": {
-      "type": "SEQ",
-      "members": [
-        {
           "type": "CHOICE",
           "members": [
             {
-              "type": "FIELD",
-              "name": "access_modifier",
-              "content": {
-                "type": "SYMBOL",
-                "name": "access_modifier"
-              }
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "="
+                },
+                {
+                  "type": "FIELD",
+                  "name": "initializer",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "expression"
+                  }
+                }
+              ]
             },
             {
               "type": "BLANK"
             }
           ]
-        },
-        {
-          "type": "FIELD",
-          "name": "phase_modifier",
-          "content": {
-            "type": "SYMBOL",
-            "name": "_inflight_specifier"
-          }
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "FIELD",
-              "name": "reassignable",
-              "content": {
-                "type": "SYMBOL",
-                "name": "reassignable"
-              }
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "FIELD",
-          "name": "name",
-          "content": {
-            "type": "SYMBOL",
-            "name": "identifier"
-          }
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_type_annotation"
         },
         {
           "type": "STRING",
@@ -900,19 +896,15 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "function_definition"
+                "name": "method_definition"
               },
               {
                 "type": "SYMBOL",
-                "name": "inflight_function_definition"
+                "name": "inflight_method_definition"
               },
               {
                 "type": "SYMBOL",
-                "name": "class_member"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "inflight_class_member"
+                "name": "class_field"
               }
             ]
           }
@@ -1211,6 +1203,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "json_literal"
+        },
+        {
+          "type": "SYMBOL",
           "name": "struct_literal"
         }
       ]
@@ -1460,7 +1456,7 @@
     },
     "call": {
       "type": "PREC_LEFT",
-      "value": 14,
+      "value": 15,
       "content": {
         "type": "SEQ",
         "members": [
@@ -1838,6 +1834,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "json_container_type"
+        },
+        {
+          "type": "SYMBOL",
           "name": "function_type"
         },
         {
@@ -2029,7 +2029,7 @@
         }
       ]
     },
-    "function_definition": {
+    "method_definition": {
       "type": "SEQ",
       "members": [
         {
@@ -2041,6 +2041,22 @@
               "content": {
                 "type": "SYMBOL",
                 "name": "access_modifier"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "static",
+              "content": {
+                "type": "SYMBOL",
+                "name": "static"
               }
             },
             {
@@ -2106,7 +2122,7 @@
         }
       ]
     },
-    "inflight_function_definition": {
+    "inflight_method_definition": {
       "type": "SEQ",
       "members": [
         {
@@ -2118,6 +2134,22 @@
               "content": {
                 "type": "SYMBOL",
                 "name": "access_modifier"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "static",
+              "content": {
+                "type": "SYMBOL",
+                "name": "static"
               }
             },
             {
@@ -2624,7 +2656,73 @@
                 "name": "op",
                 "content": {
                   "type": "STRING",
+                  "value": "\\"
+                }
+              },
+              {
+                "type": "FIELD",
+                "name": "right",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "expression"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "PREC_LEFT",
+          "value": 10,
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "left",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "expression"
+                }
+              },
+              {
+                "type": "FIELD",
+                "name": "op",
+                "content": {
+                  "type": "STRING",
                   "value": "%"
+                }
+              },
+              {
+                "type": "FIELD",
+                "name": "right",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "expression"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "PREC_LEFT",
+          "value": 12,
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "left",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "expression"
+                }
+              },
+              {
+                "type": "FIELD",
+                "name": "op",
+                "content": {
+                  "type": "STRING",
+                  "value": "**"
                 }
               },
               {
@@ -2904,7 +3002,7 @@
         },
         {
           "type": "PREC_LEFT",
-          "value": 12,
+          "value": 13,
           "content": {
             "type": "SEQ",
             "members": [
@@ -3474,6 +3572,57 @@
           }
         ]
       }
+    },
+    "json_literal": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "type",
+          "content": {
+            "type": "SYMBOL",
+            "name": "json_container_type"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "element",
+          "content": {
+            "type": "SYMBOL",
+            "name": "json_element"
+          }
+        }
+      ]
+    },
+    "json_element": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "map_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "array_literal"
+        }
+      ]
+    },
+    "json_container_type": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "Json"
+        },
+        {
+          "type": "STRING",
+          "value": "MutJson"
+        }
+      ]
     }
   },
   "extras": [

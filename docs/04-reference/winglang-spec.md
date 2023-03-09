@@ -477,13 +477,13 @@ j1.hello = a1;
 
 ##### 1.1.4.9 Serialization
 
-The `Json.format(j: Json): str` static method can be used to serialize a `Json` as a string
+The `Json.to_str(j: Json): str` static method can be used to serialize a `Json` as a string
 ([JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)):
 
 ```js
-assert(Json.format(json_string) == "\"hello\"");
-assert(Json.format(json_obj) == "{\"boom\":123}");
-assert(Json.format(json_mut_obj, indent: 2) == "{\n\"hello\": 123,\n"  \"world\": [\n    1,\n    2,\n    3\n  ],\n  \"boom\": {\n    \"hello\": 1233\n  }\n}");
+assert(Json.to_str(json_string) == "\"hello\"");
+assert(Json.to_str(json_obj) == "{\"boom\":123}");
+assert(Json.to_str(json_mut_obj, indent: 2) == "{\n\"hello\": 123,\n"  \"world\": [\n    1,\n    2,\n    3\n  ],\n  \"boom\": {\n    \"hello\": 1233\n  }\n}");
 ```
 
 The `Json.parse(s: str): Json` static method can be used to parse a string into a `Json`:
@@ -541,7 +541,7 @@ A `Json` value can be printed using `print()`, in which case it will be pretty-f
 ```js
 print("my object is: ${json_obj}");
 // is equivalent to
-print("my object is: ${Json.format(json_obj, indent: 2)}");
+print("my object is: ${Json.to_str(json_obj, indent: 2)}");
 ```
 
 This will output:
@@ -2075,6 +2075,7 @@ supported languages.
 
 ### 6.1 Strings
 
+String reference doc is available [here](https://docs.winglang.io/reference/sdk#string-).
 Type of string is UTF-16 internally.  
 All string declaration variants are multi-line.  
 
@@ -2185,15 +2186,15 @@ Ternary or conditional operators are not supported.
 
 #### 6.3.3 Mathematics Operators
 
-| Operator | Description    | Example |
-| -------- | -------------- | ------- |
-| `*`      | Multiplication | `a * b` |
-| `/`      | Division       | `a / b` |
-| `\`      | Floor Division | `a \ b` |
-| `%`      | Modulus        | `a % b` |
-| `+`      | Addition       | `a + b` |
-| `-`      | Subtraction    | `a - b` |
-| `^`      | Exponent       | `a ^ b` |
+| Operator | Description    | Example  |
+| -------- | -------------- | -------- |
+| `*`      | Multiplication | `a * b`  |
+| `/`      | Division       | `a / b`  |
+| `\`      | Floor Division | `a \ b`  |
+| `%`      | Modulus        | `a % b`  |
+| `+`      | Addition       | `a + b`  |
+| `-`      | Subtraction    | `a - b`  |
+| `**`     | Power          | `a ** b` |
 
 [`▲ top`][top]
 
@@ -2204,6 +2205,7 @@ Ternary or conditional operators are not supported.
 | Operator             | Notes                                             |
 | -------------------- | ------------------------------------------------- |
 | ()                   | Parentheses                                       |
+| **                   | Power                                    |
 | -x                   | Unary minus                                       |
 | \*, /, \\, %         | Multiplication, Division, Floor division, Modulus |
 | +, -                 | Addition, Subtraction                             |

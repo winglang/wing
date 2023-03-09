@@ -13,15 +13,19 @@ class HelloWorld extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    const bucket = new cloud.Bucket(this, "Bucket", { public: false });
-    bucket.addObject("test.txt", "yoyoyo");
+    const handler = testing.Testing.makeHandler(
+      this,
+      "Handler",
+      `async handle() { console.log("Hello, world!"); }`
+    );
+    // cloud.Function._newFunction(this, "Function", handler);
+    const queue = cloud.Queue._newQueue(this, "Queue");
+    queue.onMessage(handler);
   }
 }
 
-const app = new tfgcp.App({
+const app = new tfaws.App({
   outdir: join(__dirname, "target"),
-  projectId: "my-project",
-  storageLocation: "US",
 });
 new HelloWorld(app, "HelloWorld");
 app.synth();

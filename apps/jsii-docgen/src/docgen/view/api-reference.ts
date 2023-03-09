@@ -1,11 +1,12 @@
 import * as reflect from "jsii-reflect";
-import { ApiReferenceSchema } from "../schema";
-import { Transpile } from "../transpile/transpile";
 import { Classes } from "./classes";
 import { Constructs } from "./constructs";
 import { Enums } from "./enums";
 import { Interfaces } from "./interfaces";
 import { Structs } from "./structs";
+import { VISIBLE_SUBMODULES } from "./wing-filters";
+import { ApiReferenceSchema } from "../schema";
+import { Transpile } from "../transpile/transpile";
 
 /**
  * Render an API reference based on the jsii assembly.
@@ -31,8 +32,8 @@ export class ApiReference {
     // TODO WING SDK HACK
     const wingSdkHacks = assembly.name === "@winglang/sdk";
     if (wingSdkHacks) {
-      submodules = submodules.filter(
-        (s) => s.name === "cloud" || s.name === "core" || s.name === "fs"
+      submodules = submodules.filter((s) =>
+        VISIBLE_SUBMODULES.includes(s.name)
       );
     }
     if (allSubmodules ?? false) {
@@ -58,17 +59,7 @@ export class ApiReference {
       enums = this.sortByName(submodule ? submodule.enums : assembly.enums);
     }
 
-    // TODO WING HACK
-    // ignore certain abstract classes from wingsdk
-    let constructClasses = classes;
-    if (wingSdkHacks) {
-      classes = classes.filter((c) => !c.abstract);
-      constructClasses = classes.filter(
-        (c) => !c.abstract && c.docs.customTag("inflight")
-      );
-    }
-
-    this.constructs = new Constructs(transpile, constructClasses);
+    this.constructs = new Constructs(transpile, classes);
     this.classes = new Classes(transpile, classes);
     this.structs = new Structs(transpile, interfaces);
     this.interfaces = new Interfaces(transpile, interfaces);

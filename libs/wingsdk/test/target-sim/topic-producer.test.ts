@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { test, expect } from "vitest";
 import { listMessages } from "./util";
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
@@ -9,7 +10,7 @@ test("publishing messages to topic", async () => {
     constructor(scope: Construct, id: string) {
       super(scope, id);
 
-      const topic = new cloud.Topic(this, "MyTopic");
+      const topic = cloud.Topic._newTopic(this, "MyTopic");
       const publisher = Testing.makeHandler(
         this,
         "Publisher",
@@ -17,15 +18,13 @@ test("publishing messages to topic", async () => {
             await this.topic.publish(event);
         }`,
         {
-          resources: {
-            topic: {
-              resource: topic,
-              ops: [cloud.TopicInflightMethods.PUBLISH],
-            },
+          topic: {
+            obj: topic,
+            ops: [cloud.TopicInflightMethods.PUBLISH],
           },
         }
       );
-      new cloud.Function(this, "Function", publisher);
+      cloud.Function._newFunction(this, "Function", publisher);
 
       const processor = Testing.makeHandler(
         this,

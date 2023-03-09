@@ -1,17 +1,21 @@
+import * as crypto from "crypto";
 import * as fs from "fs";
 import * as os from "os";
-import { join } from "path";
+import { dirname, join } from "path";
 import { ISimulatorResourceInstance } from "./resource";
 import { BucketSchema } from "./schema-resources";
-import { exists } from "./util";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
+import { Json } from "../std";
 import { ISimulatorContext } from "../testing/simulator";
 
 export class Bucket implements IBucketClient, ISimulatorResourceInstance {
+  private readonly objectKeys: Set<string>;
   private readonly fileDir: string;
   private readonly context: ISimulatorContext;
   private readonly initialObjects: Record<string, string>;
+
   public constructor(props: BucketSchema["props"], context: ISimulatorContext) {
+    this.objectKeys = new Set();
     this.fileDir = fs.mkdtempSync(join(os.tmpdir(), "wing-sim-"));
     this.context = context;
     this.initialObjects = props.initialObjects ?? {};
@@ -22,8 +26,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       await this.context.withTrace({
         message: `Adding object from preflight (key=${key}).`,
         activity: async () => {
-          const filename = join(this.fileDir, key);
-          await fs.promises.writeFile(filename, value);
+          return this.addFile(key, value);
         },
       });
     }
@@ -37,8 +40,17 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Put (key=${key}).`,
       activity: async () => {
+        return this.addFile(key, value);
+      },
+    });
+  }
+
+  public async putJson(key: string, body: Json): Promise<void> {
+    return this.context.withTrace({
+      message: `Put Json (key=${key}).`,
+      activity: async () => {
         const filename = join(this.fileDir, key);
-        await fs.promises.writeFile(filename, value);
+        await fs.promises.writeFile(filename, JSON.stringify(body, null, 2));
       },
     });
   }
@@ -47,8 +59,19 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Get (key=${key}).`,
       activity: async () => {
-        const filename = join(this.fileDir, key);
+        const hash = this.hashKey(key);
+        const filename = join(this.fileDir, hash);
         return fs.promises.readFile(filename, "utf8");
+      },
+    });
+  }
+
+  public async getJson(key: string): Promise<Json> {
+    return this.context.withTrace({
+      message: `Get Json (key=${key}).`,
+      activity: async () => {
+        const filename = join(this.fileDir, key);
+        return JSON.parse(await fs.promises.readFile(filename, "utf8"));
       },
     });
   }
@@ -57,10 +80,13 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `List (prefix=${prefix ?? "null"}).`,
       activity: async () => {
-        const fileNames = await fs.promises.readdir(this.fileDir);
-        return prefix
-          ? fileNames.filter((fileName) => fileName.startsWith(prefix))
-          : fileNames;
+        return Array.from(this.objectKeys.values()).filter((key) => {
+          if (prefix) {
+            return key.startsWith(prefix);
+          } else {
+            return true;
+          }
+        });
       },
     });
   }
@@ -70,21 +96,33 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       message: `Delete (key=${key}).`,
       activity: async () => {
         const mustExist = opts?.mustExist ?? false;
-        const filePath = join(this.fileDir, key);
 
-        if (!mustExist) {
-          // check if the file exists
-          const fileExists = await exists(filePath);
-
-          if (!fileExists) {
-            // nothing to delete, return without throwing
-            return;
-          }
+        if (!this.objectKeys.has(key) && mustExist) {
+          throw new Error(`Object does not exist (key=${key}).`);
         }
 
-        // unlink file from the filesystem
-        return fs.promises.unlink(filePath);
+        if (!this.objectKeys.has(key)) {
+          return;
+        }
+
+        const hash = this.hashKey(key);
+        const filename = join(this.fileDir, hash);
+        await fs.promises.unlink(filename);
+        this.objectKeys.delete(key);
       },
     });
+  }
+
+  private async addFile(key: string, value: string): Promise<void> {
+    const hash = this.hashKey(key);
+    const filename = join(this.fileDir, hash);
+    const dirName = dirname(filename);
+    await fs.promises.mkdir(dirName, { recursive: true });
+    await fs.promises.writeFile(filename, value);
+    this.objectKeys.add(key);
+  }
+
+  private hashKey(key: string): string {
+    return crypto.createHash("sha512").update(key).digest("hex");
   }
 }

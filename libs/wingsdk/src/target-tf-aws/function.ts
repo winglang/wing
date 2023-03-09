@@ -5,6 +5,7 @@ import { IamRole } from "@cdktf/provider-aws/lib/iam-role";
 import { IamRolePolicy } from "@cdktf/provider-aws/lib/iam-role-policy";
 import { IamRolePolicyAttachment } from "@cdktf/provider-aws/lib/iam-role-policy-attachment";
 import { LambdaFunction } from "@cdktf/provider-aws/lib/lambda-function";
+import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
 import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
@@ -29,7 +30,7 @@ const FUNCTION_NAME_OPTS: NameOptions = {
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
-export class Function extends cloud.FunctionBase {
+export class Function extends cloud.Function {
   private readonly function: LambdaFunction;
   private readonly role: IamRole;
   private policyStatements?: any[];
@@ -43,12 +44,14 @@ export class Function extends cloud.FunctionBase {
    * @returns Qualified ARN of the function
    */
   public readonly qualifiedArn: string;
+  /** Function INVOKE_ARN */
+  public readonly invokeArn: string;
 
   constructor(
     scope: Construct,
     id: string,
     inflight: cloud.IFunctionHandler,
-    props: cloud.FunctionProps
+    props: cloud.FunctionProps = {}
   ) {
     super(scope, id, inflight, props);
 
@@ -165,6 +168,7 @@ export class Function extends cloud.FunctionBase {
 
     this.arn = this.function.arn;
     this.qualifiedArn = this.function.qualifiedArn;
+    this.invokeArn = this.function.invokeArn;
 
     // terraform rejects templates with zero environment variables
     this.addEnvironment("WING_FUNCTION_NAME", name);
@@ -193,7 +197,7 @@ export class Function extends cloud.FunctionBase {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__filename, "FunctionClient", [
+    return core.InflightClient.for(__dirname, __filename, "FunctionClient", [
       `process.env["${this.envName()}"]`,
     ]);
   }
@@ -216,6 +220,24 @@ export class Function extends cloud.FunctionBase {
         Effect: s.effect ?? "Allow",
       }))
     );
+  }
+
+  /**
+   * Grants the given identity permissions to invoke this function.
+   * @param principal The AWS principal to grant invoke permissions to (e.g. "s3.amazonaws.com", "events.amazonaws.com", "sns.amazonaws.com")
+   */
+  public addPermissionToInvoke(
+    source: core.Resource,
+    principal: string,
+    sourceArn: string
+  ) {
+    new LambdaPermission(this, `InvokePermission-${source.node.addr}`, {
+      functionName: this._functionName,
+      qualifier: this.function.version,
+      action: "lambda:InvokeFunction",
+      principal: principal,
+      sourceArn: sourceArn,
+    });
   }
 
   /** @internal */

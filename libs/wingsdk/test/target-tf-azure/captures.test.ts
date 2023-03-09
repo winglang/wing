@@ -1,4 +1,5 @@
 import * as cdktf from "cdktf";
+import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import * as tfazure from "../../src/target-tf-azure";
 import { Testing } from "../../src/testing";
@@ -8,23 +9,21 @@ import { tfResourcesOf, tfSanitize } from "../util";
 test("function with a bucket binding requiring read_write", () => {
   // GIVEN
   const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  const bucket = new cloud.Bucket(app, "Bucket");
+  const bucket = cloud.Bucket._newBucket(app, "Bucket");
   const inflight = Testing.makeHandler(
     app,
     "Handler",
     `async handle(event) { await this.bucket.put("hello.txt", event); }`,
     {
-      resources: {
-        bucket: {
-          resource: bucket,
-          ops: [cloud.BucketInflightMethods.PUT],
-        },
+      bucket: {
+        obj: bucket,
+        ops: [cloud.BucketInflightMethods.PUT],
       },
     }
   );
 
   // WHEN
-  new cloud.Function(app, "Function", inflight);
+  cloud.Function._newFunction(app, "Function", inflight);
   const output = app.synth();
 
   // THEN
@@ -53,23 +52,21 @@ test("function with a bucket binding requiring read_write", () => {
 test("function with a bucket binding requiring only read", () => {
   // GIVEN
   const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
-  const bucket = new cloud.Bucket(app, "Bucket");
+  const bucket = cloud.Bucket._newBucket(app, "Bucket");
   const inflight = Testing.makeHandler(
     app,
     "Handler",
     `async handle(event) { await this.bucket.get("hello.txt"); }`,
     {
-      resources: {
-        bucket: {
-          resource: bucket,
-          ops: [cloud.BucketInflightMethods.GET],
-        },
+      bucket: {
+        obj: bucket,
+        ops: [cloud.BucketInflightMethods.GET],
       },
     }
   );
 
   // WHEN
-  new cloud.Function(app, "Function", inflight);
+  cloud.Function._newFunction(app, "Function", inflight);
   const output = app.synth();
 
   // THEN

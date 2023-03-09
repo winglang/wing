@@ -1,5 +1,4 @@
 use std::path::PathBuf;
-use tree_sitter;
 use tree_sitter_cli::generate::generate_parser_in_directory;
 
 fn main() {
@@ -9,39 +8,26 @@ fn main() {
 		.expect("Generating parser");
 
 	let mut c_config = cc::Build::new();
-	c_config.include(&src_dir);
 	c_config
-		.flag_if_supported("-Wno-unused-parameter")
-		.flag_if_supported("-Wno-unused-but-set-variable")
-		.flag_if_supported("-Wno-trigraphs");
-	let parser_path = src_dir.join("parser.c");
-	c_config.file(&parser_path);
+		.include(src_dir)
+		.flag("-Wno-unused-parameter")
+		.flag("-Wno-unused-but-set-variable")
+		.flag("-Wno-trigraphs")
+		.file(&src_dir.join("parser.c"));
 
-	// If your language uses an external scanner written in C,
-	// then include this block of code:
-
-	/*
-	let scanner_path = src_dir.join("scanner.c");
-	c_config.file(&scanner_path);
-	println!("cargo:rerun-if-changed={}", scanner_path.to_str().unwrap());
-	*/
+	if cfg!(target_arch = "wasm32") {
+		// This parser is used in a WASI context, so it needs to be compiled with
+		// the sysroot and other tools needed for WASI-compatible C
+		c_config.flag(
+			format!(
+				"--sysroot={}/share/wasi-sysroot",
+				env!("WASI_SDK", "WASI_SDK env not set")
+			)
+			.as_str(),
+		);
+	}
 
 	c_config.compile("parser");
-	println!("cargo:rerun-if-changed={}", "grammar.js");
 
-	// If your language uses an external scanner written in C++,
-	// then include this block of code:
-
-	/*
-	let mut cpp_config = cc::Build::new();
-	cpp_config.cpp(true);
-	cpp_config.include(&src_dir);
-	cpp_config
-			.flag_if_supported("-Wno-unused-parameter")
-			.flag_if_supported("-Wno-unused-but-set-variable");
-	let scanner_path = src_dir.join("scanner.cc");
-	cpp_config.file(&scanner_path);
-	cpp_config.compile("scanner");
-	println!("cargo:rerun-if-changed={}", scanner_path.to_str().unwrap());
-	*/
+	println!("cargo:rerun-if-changed=grammar.js");
 }

@@ -1,8 +1,7 @@
+import { test, expect, vi } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
-
-jest.setTimeout(100_000); // 100 seconds
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -17,7 +16,7 @@ test("inflight uses a logger", async () => {
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
-  new cloud.Function(app, "my_function", handler);
+  cloud.Function._newFunction(app, "my_function", handler);
 
   const s = await app.startSimulator();
 
