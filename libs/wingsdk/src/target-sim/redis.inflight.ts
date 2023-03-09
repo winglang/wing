@@ -27,21 +27,24 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
   public async init(): Promise<void> {
     this.docker = new Dockerode();
 
-    var stack = new Error().stack
-    console.log("creating container");
-    console.log(stack);
     // Create a redis container
-    let container = await this.docker.createContainer({
-      Image: "redis",
-      name: this.container_name,
-    });
+    try {
+      let container = await this.docker.createContainer({
+        Image: "redis",
+        name: this.container_name,
+      });
 
-    // Start the redis container
-    await container.start();
+      // Start the redis container
+      await container.start();
 
-    // Generate the redis url based on the container ip address
-    let container_spec = await container.inspect();
-    this.connection_url = `redis://${container_spec.NetworkSettings.IPAddress}:6379`;
+      // Generate the redis url based on the container ip address
+      let container_spec = await container.inspect();
+      this.connection_url = `redis://${container_spec.NetworkSettings.IPAddress}:6379`;
+    } catch (e) {
+      throw Error(`Error setting up Redis resource simulation (${e})
+      - Make sure you have docker installed and running
+      - Make sure you have the redis image installed ('docker pull redis')`);
+    }
   }
 
   public async cleanup(): Promise<void> {
