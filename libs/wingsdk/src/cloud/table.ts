@@ -121,14 +121,14 @@ export interface ITableClient {
    * @param key primary key to delete the row.
    * @inflight
    */
-  delete(key: any): void;
+  delete(key: string): void;
   /**
    * Get a row from the table, by primary key.
    * @param key primary key to search.
    * @returns get the row from table.
    * @inflight
    */
-  get(key: any): any;
+  get(key: string): any;
   /**
    * List all rows in the table.
    * @returns list all row.

@@ -25,18 +25,12 @@ export class Table extends cloud.Table {
   constructor(scope: Construct, id: string, props: cloud.TableProps = {}) {
     super(scope, id, props);
 
-    if (this.columns[this.primaryKey] === undefined) {
-      throw new Error(`${this.primaryKey} not found in columns`);
-    }
-    // The only data types allowed for primary key attributes are string, number, or binary (binary is not available).
-    const primaryKeyType =
-      this.columns[this.primaryKey] == cloud.ColumnType.NUMBER ? "N" : "S";
     this.table = new DynamodbTable(this, "Default", {
       name: ResourceNames.generateName(this, {
         prefix: this.name,
         ...NAME_OPTS,
       }),
-      attribute: [{ name: this.primaryKey, type: primaryKeyType }],
+      attribute: [{ name: this.primaryKey, type: "S" }],
       hashKey: this.primaryKey,
       billingMode: "PAY_PER_REQUEST",
     });

@@ -8,7 +8,7 @@ import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 test("default table behavior", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
   cloud.Table._newTable(app, "Table", {
-    columns: { id: cloud.ColumnType.STRING },
+    columns: { name: cloud.ColumnType.STRING },
     primaryKey: "id",
     name: "my-wing-table",
   });
@@ -21,7 +21,7 @@ test("default table behavior", () => {
 test("function with a table binding", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
   const table = cloud.Table._newTable(app, "Table", {
-    columns: { id: cloud.ColumnType.STRING },
+    columns: { name: cloud.ColumnType.STRING },
     primaryKey: "id",
     name: "my-wing-table",
   });

@@ -7,7 +7,7 @@ import {
   DynamoDBClient,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { ColumnType, ITableClient } from "../cloud";
+import { ITableClient } from "../cloud";
 import { Json } from "../std";
 
 export class TableClient implements ITableClient {
@@ -18,14 +18,9 @@ export class TableClient implements ITableClient {
     private readonly primaryKey: string,
     private readonly columns: string,
     private readonly client = new DynamoDBClient({})
-  ) {
-    this.primaryKeyType =
-      this.columns[this.primaryKey] == ColumnType.STRING ? "string" : "number";
-  }
+  ) { }
 
   public async insert(row: Json): Promise<void> {
-    this.validateRow(row as any);
-
     const command = new PutItemCommand({
       TableName: this.tableName,
       Item: marshall(row),
@@ -34,8 +29,6 @@ export class TableClient implements ITableClient {
   }
 
   public async update(row: Json): Promise<void> {
-    this.validateRow(row as any);
-
     let itemKey = {};
     let updateExpression: string[] = [];
     let expressionAttributes: any = {};
@@ -57,7 +50,7 @@ export class TableClient implements ITableClient {
     await this.client.send(command);
   }
 
-  public async delete(key: any): Promise<void> {
+  public async delete(key: string): Promise<void> {
     const command = new DeleteItemCommand({
       TableName: this.tableName,
       Key: marshall({ [this.primaryKey]: key }),
@@ -65,7 +58,7 @@ export class TableClient implements ITableClient {
     await this.client.send(command);
   }
 
-  public async get(key: any): Promise<any> {
+  public async get(key: string): Promise<any> {
     const command = new GetItemCommand({
       TableName: this.tableName,
       Key: marshall({ [this.primaryKey]: key }),
@@ -87,14 +80,5 @@ export class TableClient implements ITableClient {
       response.push(unmarshall(item));
     }
     return response;
-  }
-
-  private validateRow(row: any) {
-    if (!row[this.primaryKey]) {
-      throw new Error(`${this.primaryKey} not found`);
-    }
-    if (typeof row[this.primaryKey] !== this.primaryKeyType) {
-      throw new Error(`${this.primaryKey} is not a ${this.primaryKeyType}.`);
-    }
   }
 }

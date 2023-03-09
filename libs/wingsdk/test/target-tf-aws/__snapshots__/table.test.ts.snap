@@ -33,7 +33,7 @@ return class Handler {
 }
 };
 })())({
-my_table: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/table.inflight\\")).TableClient(process.env[\\"DYNAMODB_TABLE_NAME_e7245baa\\"])
+my_table: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/table.inflight\\")).TableClient(process.env[\\"DYNAMODB_TABLE_NAME_e7245baa\\"], process.env[\\"DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY\\"], process.env[\\"DYNAMODB_TABLE_NAME_e7245baa_COLUMNS\\"])
 })"
 `;
 
@@ -74,9 +74,9 @@ exports[`function with a table binding 2`] = `
       \\"root_Function_9F694E40\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"COLUMNS\\": \\"{\\\\\\"id\\\\\\":0}\\",
             \\"DYNAMODB_TABLE_NAME_e7245baa\\": \\"\${aws_dynamodb_table.root_Table_C50359A8.name}\\",
-            \\"PRIMARY_KEY\\": \\"id\\",
+            \\"DYNAMODB_TABLE_NAME_e7245baa_COLUMNS\\": \\"{\\\\\\"name\\\\\\":0}\\",
+            \\"DYNAMODB_TABLE_NAME_e7245baa_PRIMARY_KEY\\": \\"id\\",
             \\"WING_FUNCTION_NAME\\": \\"Function-c852aba6\\"
           }
         },

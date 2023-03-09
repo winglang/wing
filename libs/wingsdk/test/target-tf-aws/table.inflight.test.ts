@@ -18,29 +18,29 @@ import {
 } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
 import { mockClient } from "aws-sdk-client-mock";
-import { test, expect, describe, beforeEach, afterAll } from "vitest";
+import { test, expect, describe } from "vitest";
 
-import { ColumnType } from "../../src/cloud";
 import { TableClient } from "../../src/target-tf-aws/table.inflight";
 
 const MOCK_TABLE_NAME = "MyBeautifulTable";
+const PRIMARY_KEY = "id";
 const dynamoMock = mockClient(DynamoDBClient);
 
 describe("inflight table tests", () => {
-  const OLD_ENV = process.env;
+  // const OLD_ENV = process.env;
 
-  beforeEach(() => {
-    dynamoMock.reset();
-    process.env = {
-      ...OLD_ENV,
-      PRIMARY_KEY: "id",
-      COLUMNS: `{ "id": ${ColumnType.STRING} }`,
-    };
-  });
+  // beforeAll(() => {
+  //   dynamoMock.reset();
+  //   process.env = {
+  //     ...OLD_ENV,
+  //     PRIMARY_KEY: "id",
+  //     COLUMNS: `{ "id": ${ColumnType.STRING} }`,
+  //   };
+  // });
 
-  afterAll(() => {
-    process.env = OLD_ENV; // Restore old environment
-  });
+  // afterAll(() => {
+  //   process.env = OLD_ENV; // Restore old environment
+  // });
 
   test("insert", async () => {
     // GIVEN
@@ -50,7 +50,7 @@ describe("inflight table tests", () => {
       row: row,
     });
     // WHEN
-    const client = new TableClient(MOCK_TABLE_NAME);
+    const client = new TableClient(MOCK_TABLE_NAME, PRIMARY_KEY, "");
     const response = await client.insert(row as any);
     // THEN
     expect(response).toEqual(undefined);
@@ -66,7 +66,7 @@ describe("inflight table tests", () => {
       primaryKeyValue: "test",
     });
     // WHEN
-    const client = new TableClient(MOCK_TABLE_NAME);
+    const client = new TableClient(MOCK_TABLE_NAME, PRIMARY_KEY, "");
     const response = await client.update(row as any);
     // THEN
     expect(response).toEqual(undefined);
@@ -80,7 +80,7 @@ describe("inflight table tests", () => {
       primaryKeyValue: key,
     });
     // WHEN
-    const client = new TableClient(MOCK_TABLE_NAME);
+    const client = new TableClient(MOCK_TABLE_NAME, PRIMARY_KEY, "");
     const response = await client.delete(key);
     // THEN
     expect(response).toEqual(undefined);
@@ -95,7 +95,7 @@ describe("inflight table tests", () => {
       emptyTable: false,
     });
     // WHEN
-    const client = new TableClient(MOCK_TABLE_NAME);
+    const client = new TableClient(MOCK_TABLE_NAME, PRIMARY_KEY, "");
     const response = await client.get(key);
     // THEN
     expect(response).toEqual({ id: "test" });
@@ -110,7 +110,7 @@ describe("inflight table tests", () => {
       emptyTable: true,
     });
     // WHEN
-    const client = new TableClient(MOCK_TABLE_NAME);
+    const client = new TableClient(MOCK_TABLE_NAME, PRIMARY_KEY, "");
     const response = await client.get(key);
     // THEN
     expect(response).toEqual(null);
@@ -125,7 +125,7 @@ describe("inflight table tests", () => {
       emptyTable: false,
     });
     // WHEN
-    const client = new TableClient(MOCK_TABLE_NAME);
+    const client = new TableClient(MOCK_TABLE_NAME, PRIMARY_KEY, "");
     const response = await client.get(key);
     // THEN
     expect(response).toEqual({ id: "test" });
@@ -138,7 +138,7 @@ describe("inflight table tests", () => {
       emptyTable: false,
     });
     // WHEN
-    const client = new TableClient(MOCK_TABLE_NAME);
+    const client = new TableClient(MOCK_TABLE_NAME, PRIMARY_KEY, "");
     const response = await client.list();
     // THEN
     expect(response).toEqual([{ id: "test1" }, { id: "test2" }]);
@@ -151,7 +151,7 @@ describe("inflight table tests", () => {
       emptyTable: true,
     });
     // WHEN
-    const client = new TableClient(MOCK_TABLE_NAME);
+    const client = new TableClient(MOCK_TABLE_NAME, PRIMARY_KEY, "");
     const response = await client.list();
     // THEN
     expect(response).toEqual([]);
