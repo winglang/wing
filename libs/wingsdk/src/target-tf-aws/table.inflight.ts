@@ -6,7 +6,6 @@ import {
   ScanCommand,
   DynamoDBClient,
 } from "@aws-sdk/client-dynamodb";
-import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { ColumnType, ITableClient } from "../cloud";
 import { Json } from "../std";
 
@@ -18,55 +17,10 @@ export class TableClient implements ITableClient {
     private readonly client = new DynamoDBClient({})
   ) { }
 
-  private marshallJson(item: any) {
-    let items: { [key: string]: any } = {};
-    for (const [key, value] of Object.entries(item)) {
-      switch (typeof value) {
-        case "string":
-          items[key] = { "S": value };
-          break;
-        case "number":
-          items[key] = { "N": String(value) };
-          break;
-        case "object":
-          items[key] = { "M": this.marshallJson(value) };
-          break;
-      }
-    }
-    return items;
-  }
-
-  private marshallItens(row: any) {
-    const columns = JSON.parse(this.columns);
-    let items: { [key: string]: any } = {};
-    for (const [key, value] of Object.entries(columns)) {
-      if (key == this.primaryKey) {
-        items[key] = { "S": row[key] };
-        continue;
-      }
-      switch (value) {
-        case ColumnType.DATE:
-        case ColumnType.STRING:
-          items[key] = { "S": row[key] };
-          break;
-        case ColumnType.NUMBER:
-          items[key] = { "N": String(row[key]) };
-          break;
-        case ColumnType.BOOLEAN:
-          items[key] = { "BOOL": row[key] };
-          break;
-        case ColumnType.JSON:
-          items[key] = { "M": this.marshallJson(row[key]) };
-          break;
-      }
-    }
-    return items;
-  }
-
   public async insert(row: Json): Promise<void> {
     const command = new PutItemCommand({
       TableName: this.tableName,
-      Item: this.marshallItens(row as any),
+      Item: this.marshallItems(row as any),
     });
     await this.client.send(command);
   }
@@ -75,7 +29,7 @@ export class TableClient implements ITableClient {
     let itemKey = {};
     let updateExpression: string[] = [];
     let expressionAttributes: any = {};
-    const item = this.marshallItens(row);
+    const item = this.marshallItems(row);
     for (const [key, value] of Object.entries(item)) {
       if (key === this.primaryKey) {
         itemKey = { [key]: value };
@@ -108,7 +62,7 @@ export class TableClient implements ITableClient {
     });
     const result = await this.client.send(command);
     if (result.Item) {
-      return unmarshall(result.Item);
+      return this.unmarshallItems(result.Item);
     }
     return null;
   }
@@ -120,8 +74,96 @@ export class TableClient implements ITableClient {
     const result = await this.client.send(command);
     const response: any = [];
     for (const item of result.Items!) {
-      response.push(unmarshall(item));
+      response.push(this.unmarshallItems(item));
     }
     return response;
+  }
+
+  private unmarshallJson(item: any) {
+    let items: { [key: string]: any } = {};
+    for (const [key, value] of Object.entries<any>(item)) {
+      if (value["S"]) {
+        items[key] = value["S"];
+      } else if (value["N"]) {
+        items[key] = Number(value["N"]);
+      } else if (value["BOOL"]) {
+        items[key] = value["BOOL"];
+      } else if (value["M"]) {
+        items[key] = this.unmarshallJson(value["M"]);
+      }
+    }
+    return items;
+  }
+
+  private unmarshallItems(row: any) {
+    const columns = JSON.parse(this.columns);
+    let items: { [key: string]: any } = {};
+    for (const [key, value] of Object.entries(columns)) {
+      if (key == this.primaryKey) {
+        items[key] = row[key].S;
+        continue;
+      }
+      switch (value) {
+        case ColumnType.DATE:
+        case ColumnType.STRING:
+          items[key] = row[key].S;
+          break;
+        case ColumnType.NUMBER:
+          items[key] = Number(row[key].N);
+          break;
+        case ColumnType.BOOLEAN:
+          items[key] = row[key].BOOL;
+          break;
+        case ColumnType.JSON:
+          items[key] = this.unmarshallJson(row[key].M);
+          break;
+      }
+    }
+    return items;
+  }
+
+  private marshallJson(item: any) {
+    let items: { [key: string]: any } = {};
+    for (const [key, value] of Object.entries(item)) {
+      switch (typeof value) {
+        case "string":
+          items[key] = { "S": value };
+          break;
+        case "number":
+          items[key] = { "N": String(value) };
+          break;
+        case "object":
+          items[key] = { "M": this.marshallJson(value) };
+          break;
+      }
+    }
+    return items;
+  }
+
+  private marshallItems(row: any) {
+    const columns = JSON.parse(this.columns);
+    let items: { [key: string]: any } = {};
+    for (const [key, value] of Object.entries(columns)) {
+      if (key == this.primaryKey) {
+        items[key] = { "S": row[key] };
+        continue;
+      }
+      switch (value) {
+        case ColumnType.DATE:
+        case ColumnType.STRING:
+          items[key] = { "S": row[key] };
+          break;
+        case ColumnType.NUMBER:
+          items[key] = { "N": String(row[key]) };
+          break;
+        case ColumnType.BOOLEAN:
+          items[key] = { "BOOL": row[key] };
+          break;
+        case ColumnType.JSON:
+          items[key] = { "M": this.marshallJson(row[key]) };
+          break;
+      }
+    }
+    return items;
   }
 }
