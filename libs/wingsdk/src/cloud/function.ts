@@ -123,7 +123,11 @@ export abstract class Function extends Resource implements IInflightHost {
       `const esbuild = require("${normalPath(
         require.resolve("esbuild-wasm")
       )}");`,
-      `esbuild.buildSync({ bundle: true, entryPoints: ["${normalPath(infile)}"], outfile: "${normalPath(outfile)}", minify: false, platform: "node", target: "node16", external: ["aws-sdk"] });`,
+      `esbuild.buildSync({ bundle: true, entryPoints: ["${normalPath(
+        infile
+      )}"], outfile: "${normalPath(
+        outfile
+      )}", minify: false, platform: "node", target: "node16", external: ["aws-sdk"] });`,
     ].join("\n");
     let result = spawnSync(process.argv[0], ["-e", esbuildScript]);
     if (result.status !== 0) {
