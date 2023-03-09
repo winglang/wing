@@ -54,6 +54,9 @@ async function createWindow(options: { title?: string; port: number }) {
     icon: path.join(ROOT_PATH.public, "icon.ico"),
     width: Math.round(screen.getPrimaryDisplay().workAreaSize.width * 0.9),
     height: Math.round(screen.getPrimaryDisplay().workAreaSize.height * 0.9),
+    webPreferences: {
+      devTools: import.meta.env.DEV,
+    },
   });
 
   if (import.meta.env.DEV) {
@@ -62,10 +65,17 @@ async function createWindow(options: { title?: string; port: number }) {
       "window.loadURL",
       `${import.meta.env.BASE_URL}?port=${options.port}`,
     );
-    void window.loadURL(`${import.meta.env.BASE_URL}?port=${options.port}`);
-    if (!process.env.PLAYWRIGHT_TEST && !process.env.CI) {
-      window.webContents.openDevTools();
-    }
+    void window
+      .loadURL(`${import.meta.env.BASE_URL}?port=${options.port}`)
+      .then(() => {
+        if (
+          !process.env.PLAYWRIGHT_TEST &&
+          !process.env.CI &&
+          process.env.OPEN_DEVTOOLS !== "0"
+        ) {
+          window.webContents.openDevTools();
+        }
+      });
   } else {
     log.info("creating window in PROD mode");
     log.info("window.loadFile", path.join(ROOT_PATH.dist, "index.html"));

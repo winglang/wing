@@ -1,32 +1,48 @@
 import { ChildProcess, spawn } from "node:child_process";
 import { AddressInfo } from "node:net";
 
-import { BuildResult } from "esbuild";
+import { BuildContext } from "esbuild";
 import * as vite from "vite";
 
-import { runEsbuild } from "./helpers/runEsbuild.mjs";
+import { createEsbuildContext } from "./helpers/create-esbuild-context.mjs";
 
 const createElectronPlugin = (): vite.Plugin => {
-  let esbuildProcess: Promise<BuildResult> | undefined;
+  let esbuildProcess: Promise<BuildContext> | undefined;
   const killEsbuildProcess = async () => {
-    const { stop } = (await esbuildProcess) ?? {};
-    stop?.();
+    const { dispose } = (await esbuildProcess) ?? {};
+    dispose?.();
   };
   const startEsbuildProcess = async (port: number) => {
     await killEsbuildProcess();
 
-    esbuildProcess = runEsbuild({
-      port,
-      watch: {
-        async onRebuild(error, result) {
-          if (!error) {
-            await startElectronProcess();
-          }
-        },
+    esbuildProcess = createEsbuildContext({
+      define: {
+        "process.env.PROD": "false",
+        "import.meta.env": JSON.stringify({
+          BASE_URL: port ? `http://localhost:${port}` : "",
+          MODE: "development",
+          DEV: true,
+          PROD: false,
+          SSR: false,
+        }),
+        "process.env.SEGMENT_WRITE_KEY": JSON.stringify(
+          process.env.SEGMENT_WRITE_KEY || "",
+        ),
       },
+      plugins: [
+        {
+          name: "electron",
+          setup(build) {
+            build.onEnd(async () => {
+              await startElectronProcess();
+            });
+          },
+        },
+      ],
     });
 
-    await esbuildProcess;
+    const { watch } = await esbuildProcess;
+    await watch();
   };
 
   let electronProcess: ChildProcess | undefined;
