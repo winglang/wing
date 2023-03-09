@@ -85,7 +85,7 @@ Error at ../../../../examples/tests/invalid/immutable_container_types.w:3:4 | Un
 
 exports[`impl_interface.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 2 error(s)
-Error at ../../../../examples/tests/invalid/impl_interface.w:3:10 | Resource \\"A (at ../../../../examples/tests/invalid/impl_interface.w:3:10)\\" does not implement method \\"handle\\" of interface \\"cloud\\"
+Error at ../../../../examples/tests/invalid/impl_interface.w:3:10 | Resource \\"A (at ../../../../examples/tests/invalid/impl_interface.w:3:10)\\" does not implement method \\"handle\\" of interface \\"cloud.IQueueOnMessageHandler\\"
 Error at ../../../../examples/tests/invalid/impl_interface.w:8:10 | Expected type to be \\"inflight (IQueueOnMessageHandler, str): void\\", but got \\"inflight (B): void\\" instead"
 `;
 
