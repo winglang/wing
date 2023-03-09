@@ -10,12 +10,18 @@ assert(immut_array.length == 3);
 let s_array2 = ["if", "you", "build", "it"];
 let s_array3 = ["he", "will", "come", "for", "you"];
 let merged_array = s_array2.concat(s_array3);
+assert(merged_array.length == 9);
+assert(merged_array.at(5) == "will");
 assert(merged_array.contains("build"));
 assert(!merged_array.contains("bring"));
 assert(merged_array.index_of("you") == 1);
 assert(merged_array.join(" ") == "if you build it he will come for you");
 assert(merged_array.join() == "if,you,build,it,he,will,come,for,you");
 assert(merged_array.last_index_of("you") == 8);
+let mut_array2 = MutArray<str> ["how", "does", "that", "look"];
+let merged_mut_array = mut_array.concat(mut_array2.copy());
+assert(merged_mut_array.length == 7);
+assert(merged_mut_array.at(5) == "that");
 
 let s_set = {"one", "two"};
 let mut_set = s_set.copy_mut();
