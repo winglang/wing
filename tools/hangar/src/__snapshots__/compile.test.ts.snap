@@ -7228,7 +7228,7 @@ constructor() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((merged_array.join()) === \\"if,you,build,it,he,will,come,for,you\\")'\`)})(((merged_array.join()) === \\"if,you,build,it,he,will,come,for,you\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(merged_array.lastIndexOf(\\"you\\") === 8)'\`)})((merged_array.lastIndexOf(\\"you\\") === 8))};
   const mut_array2 = [\\"how\\", \\"does\\", \\"that\\", \\"look\\"];
-  const merged_mut_array = (mut_array.concat(Object.freeze([...(mut_array2)])));
+  const merged_mut_array = (mut_array.concat(mut_array2));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(merged_mut_array.length === 7)'\`)})((merged_mut_array.length === 7))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((merged_mut_array.at(5)) === \\"that\\")'\`)})(((merged_mut_array.at(5)) === \\"that\\"))};
   const s_set = Object.freeze(new Set([\\"one\\", \\"two\\"]));
