@@ -165,13 +165,14 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 		let mut completions = vec![];
 
-		for symbol_data in found_env.symbol_map.iter() {
-			// within the found scope, we only want to show symbols that were defined before the current position
-			if let StatementIdx::Index(i) = symbol_data.1 .0 {
-				if i > found_stmt_index {
-					continue;
-				}
+		for symbol_data in found_env.symbol_map.iter().filter(|s| {
+			if let StatementIdx::Index(i) = s.1 .0 {
+				// within the found scope, we only want to show symbols that were defined before the current position
+				i <= found_stmt_index
+			} else {
+				true
 			}
+		}) {
 			let symbol_kind = &symbol_data.1 .1;
 
 			completions.push(format_symbol_kind_as_completion(symbol_data.0, symbol_kind));
