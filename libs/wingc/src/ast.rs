@@ -68,6 +68,37 @@ pub enum Phase {
 	Independent,
 }
 
+/**
+ *
+fn can_call_flight(fn_flight: Phase, scope_flight: Phase) -> bool {
+	if fn_flight == Phase::Independent {
+		// if the function we're trying to call is an "either-flight" function,
+		// then it can be called both in preflight, inflight, and in
+		// either-flight scopes
+		true
+	} else {
+		// otherwise, preflight functions can only be called in preflight scopes,
+		// and inflight functions can only be called in inflight scopes
+		fn_flight == scope_flight
+	}
+}
+ */
+
+impl Phase {
+	/// Returns true if the current phase can call into given phase.
+	/// Rules:
+	/// - Independent functions can be called from any phase.
+	/// - Preflight can call into preflight
+	/// - Inflight can call into inflight
+	///
+	pub fn can_call_to(&self, to: &Phase) -> bool {
+		match to {
+			Phase::Independent => true,
+			Phase::Inflight | Phase::Preflight => to == self,
+		}
+	}
+}
+
 impl Display for Phase {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {

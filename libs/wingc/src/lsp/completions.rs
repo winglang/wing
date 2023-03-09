@@ -1,3 +1,5 @@
+use std::cmp::max;
+
 use lsp_types::{CompletionItem, CompletionItemKind, CompletionResponse};
 use tree_sitter::Point;
 
@@ -5,7 +7,7 @@ use crate::ast::{Expr, ExprKind, Phase, Reference, Scope};
 use crate::diagnostic::{WingLocation, WingSpan};
 use crate::lsp::sync::FILES;
 use crate::type_check::symbol_env::StatementIdx;
-use crate::type_check::{Class, ClassLike, Namespace, SymbolKind, Type, Types, UnsafeRef};
+use crate::type_check::{ClassLike, Namespace, SymbolKind, Type, Types, UnsafeRef};
 use crate::visit::{visit_expr, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
@@ -22,12 +24,13 @@ pub unsafe extern "C" fn wingc_on_completion(ptr: u32, len: u32) -> u64 {
 		WASM_RETURN_ERROR
 	}
 }
+
 pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse {
 	CompletionResponse::Array(FILES.with(|files| {
 		let files = files.borrow();
 		let uri = params.text_document_position.text_document.uri;
 		let result = files.get(&uri).expect("File must be open to get completions");
-		let source = result.contents.as_bytes();
+		let wing_source = result.contents.as_bytes();
 
 		let types = &result.types;
 		let root_scope = &result.scope;
@@ -36,7 +39,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 		let mut point = Point::new(
 			params.text_document_position.position.line as usize,
-			(params.text_document_position.position.character as i32 - 1).abs() as usize,
+			max(params.text_document_position.position.character as i64 - 1, 0) as usize,
 		);
 		let mut node_to_complete = result
 			.tree
@@ -53,11 +56,8 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				.descendant_for_point_range(point, point)
 				.expect("There is always at-least one tree-sitter node");
 		}
-		let file = if let Some(file) = root_scope.statements.first().and_then(|s| Some(s.span.file_id.clone())) {
-			file
-		} else {
-			return vec![];
-		};
+
+		let file = uri.to_file_path().ok().expect("LSP only works on real filesystems");
 
 		let wing_location = WingLocation {
 			col: point.column as u32,
@@ -67,7 +67,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		let mut scope_visitor = ScopeVisitor::new(WingSpan {
 			start: wing_location,
 			end: wing_location,
-			file_id: file,
+			file_id: file.to_str().expect("File path must be valid utf8").to_string(),
 		});
 		scope_visitor.visit_scope(root_scope);
 
@@ -110,7 +110,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				if sibling_kind == "reference" || sibling_kind == "nested_identifier" || sibling_kind == "identifier" {
 					// collect all the text of the reference
 					let mut text = sibling
-						.utf8_text(source)
+						.utf8_text(wing_source)
 						.expect("The referenced text should be available")
 						.to_string();
 					if text.ends_with(".") {
@@ -119,7 +119,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 					if !text.contains(".") {
 						// Currently, we can only handle references that are just a single identifier
 						// In this code path, we are inside an error state so the type checker never resolved full references
-						let found_scope = scope_visitor.found_scope.unwrap_or(root_scope);
+						let found_scope = scope_visitor.found_scope.expect("Should have found a scope");
 						let found_env = found_scope.env.borrow();
 						let found_env = found_env.as_ref().expect("Scope should have an env");
 						let found_phase = Some(found_env.flight);
@@ -164,7 +164,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			.expect("Found scope should have a statement index");
 
 		let mut completions = vec![];
-		let parent_env = found_env.parent;
 
 		for symbol_data in found_env.symbol_map.iter() {
 			// within the found scope, we only want to show symbols that were defined before the current position
@@ -177,18 +176,24 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 			completions.push(format_symbol_kind_as_completion(symbol_data.0, symbol_kind));
 		}
-		if let Some(parent_env) = parent_env {
-			if parent_env.is_root() {
-				// Bug: the root environment is not properly accessible from .parent
-				// https://github.com/winglang/wing/issues/1644
+
+		// The following iteration logic is needed due to a bug:
+		// The root environment is not properly accessible from .parent
+		// https://github.com/winglang/wing/issues/1644
+		// So we can't use the normal iteration logic with ancestry
+		let mut parent_env = found_env.parent;
+		while let Some(current_env) = parent_env {
+			if current_env.is_root() {
 				for symbol_data in root_env.symbol_map.iter() {
 					completions.push(format_symbol_kind_as_completion(symbol_data.0, &symbol_data.1 .1));
 				}
+				break;
 			} else {
-				for data in parent_env.iter(true) {
+				for data in current_env.iter(false) {
 					completions.push(format_symbol_kind_as_completion(&data.0, &data.1));
 				}
 			}
+			parent_env = current_env.parent;
 		}
 
 		completions
@@ -197,14 +202,16 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 /// Gets accessible properties on a type as a list of CompletionItems
 fn get_completions_from_type(
-	_type: &UnsafeRef<Type>,
+	type_: &UnsafeRef<Type>,
 	types: &Types,
 	current_phase: Option<Phase>,
 	is_instance: bool,
 ) -> Vec<CompletionItem> {
-	match &**_type {
+	match &**type_ {
 		Type::Class(c) => get_completions_from_class(c, current_phase, is_instance),
 		Type::Resource(c) => get_completions_from_class(c, current_phase, is_instance),
+		Type::Interface(i) => get_completions_from_class(i, current_phase, is_instance),
+		Type::Struct(s) => get_completions_from_class(s, current_phase, is_instance),
 		Type::Enum(enum_) => {
 			let variants = &enum_.values;
 			variants
@@ -217,9 +224,27 @@ fn get_completions_from_type(
 				})
 				.collect()
 		}
-		_ => {
-			let type_name = _type.to_string();
-			// can't handle generics yet
+		Type::Optional(t) => get_completions_from_type(t, types, current_phase, is_instance),
+		Type::Void | Type::Function(_) | Type::Anything => vec![],
+		Type::Number
+		| Type::String
+		| Type::Duration
+		| Type::Boolean
+		| Type::Json
+		| Type::MutJson
+		| Type::Array(_)
+		| Type::MutArray(_)
+		| Type::Map(_)
+		| Type::MutMap(_)
+		| Type::Set(_)
+		| Type::MutSet(_) => {
+			// This section of the code is hacky
+			// This is needed because our builtin types have no API
+			// So we have to get the API from the std lib
+			// But the std lib sometimes doesn't have the same names as the builtin types
+
+			// Additionally, this doesn't handle for generics
+			let type_name = type_.to_string();
 			let type_name = if let Some((prefix, _)) = type_name.split_once("<") {
 				prefix
 			} else {
@@ -252,46 +277,50 @@ fn get_completions_from_namespace(namespace: &UnsafeRef<Namespace>) -> Vec<Compl
 		.symbol_map
 		.iter()
 		.map(|(name, symbol)| format_symbol_kind_as_completion(name, &symbol.1))
-		.filter(|item| item.label != "any")
 		.collect()
 }
 
 /// Gets accessible properties on a class as a list of CompletionItems
-fn get_completions_from_class(class: &Class, current_phase: Option<Phase>, is_instance: bool) -> Vec<CompletionItem> {
-	let mut items = vec![];
-	let allowed_phases = if let Some(current_phase) = current_phase {
-		vec![Phase::Independent, current_phase]
-	} else {
-		vec![Phase::Independent, Phase::Preflight, Phase::Inflight]
-	};
+fn get_completions_from_class(
+	class: &impl ClassLike,
+	current_phase: Option<Phase>,
+	is_instance: bool,
+) -> Vec<CompletionItem> {
+	class
+		.get_env()
+		.iter(true)
+		.map(|symbol_data| {
+			if symbol_data.0 == "init" {
+				return None;
+			}
+			let variable = symbol_data
+				.1
+				.as_variable()
+				.expect("Symbols in classes are always variables");
+			if variable.is_static == is_instance {
+				return None;
+			}
+			if let Some(current_phase) = current_phase {
+				if !current_phase.can_call_to(&variable.flight) {
+					return None;
+				}
+			}
 
-	for symbol_data in class.get_env().iter(true) {
-		if symbol_data.0 == "init" {
-			continue;
-		}
-		let variable = symbol_data
-			.1
-			.as_variable()
-			.expect("Symbols in classes are always variables");
-		if !allowed_phases.contains(&variable.flight) || variable.is_static == is_instance {
-			continue;
-		}
+			let kind = if variable.type_.as_function_sig().is_some() {
+				Some(CompletionItemKind::METHOD)
+			} else {
+				Some(CompletionItemKind::FIELD)
+			};
 
-		let kind = if variable.type_.as_function_sig().is_some() {
-			Some(CompletionItemKind::METHOD)
-		} else {
-			Some(CompletionItemKind::FIELD)
-		};
-
-		items.push(CompletionItem {
-			label: symbol_data.0.clone(),
-			detail: Some(variable.type_.to_string()),
-			kind,
-			..Default::default()
-		});
-	}
-
-	items
+			Some(CompletionItem {
+				label: symbol_data.0.clone(),
+				detail: Some(variable.type_.to_string()),
+				kind,
+				..Default::default()
+			})
+		})
+		.filter_map(|item| item)
+		.collect()
 }
 
 /// Formats a SymbolKind from a SymbolEnv as a CompletionItem
@@ -308,10 +337,19 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 				| Type::MutSet(_)
 				| Type::Class(_)
 				| Type::Resource(_) => CompletionItemKind::CLASS,
+				Type::Anything
+				| Type::Number
+				| Type::String
+				| Type::Duration
+				| Type::Boolean
+				| Type::Void
+				| Type::Json
+				| Type::MutJson
+				| Type::Optional(_) => CompletionItemKind::CONSTANT,
 				Type::Function(_) => CompletionItemKind::FUNCTION,
 				Type::Struct(_) => CompletionItemKind::STRUCT,
 				Type::Enum(_) => CompletionItemKind::ENUM,
-				_ => CompletionItemKind::CONSTANT,
+				Type::Interface(_) => CompletionItemKind::INTERFACE,
 			}),
 			detail: Some(
 				symbol_kind
@@ -344,10 +382,17 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 	}
 }
 
+/// This visitor is used to find the scope and relevant reference
+/// that contains a given location.
 pub struct ScopeVisitor<'a> {
+	/// The target location we're looking for
 	pub location: WingSpan,
+	/// The index of the statement that contains the target location
+	/// or, the last valid system before the target location
 	pub found_stmt_index: Option<usize>,
+	/// The scope that contains the target location
 	pub found_scope: Option<&'a Scope>,
+	/// The nearest reference before (or containing) to the target location
 	pub nearest_reference: Option<(&'a Expr, &'a Reference)>,
 }
 
@@ -371,12 +416,11 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 				if statement.span <= self.location {
 					self.visit_stmt(&statement);
 				} else if self.found_stmt_index.is_none() {
-					self.found_stmt_index = Some((i as i64 - 1).abs() as usize)
+					self.found_stmt_index = Some(max(i as i64 - 1, 0) as usize);
 				}
 			}
-
 			if self.found_stmt_index.is_none() {
-				self.found_stmt_index = Some(node.statements.len() - 1);
+				self.found_stmt_index = Some(node.statements.len());
 			}
 		}
 	}
