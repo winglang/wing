@@ -2480,9 +2480,13 @@ impl<'a> TypeChecker<'a> {
 				ExprKind::Reference(reference) => match reference {
 					Reference::Identifier(symbol) => {
 						path.push(symbol.clone());
-            if self.is_stdlib_symbol(symbol) {
-              path.push(Symbol { name: "std".to_string(), span: symbol.span.clone() });
-            }
+						// If the symbol is a stdlib symbol we need to add the stdlib to path
+						if self.is_stdlib_symbol(symbol) {
+							path.push(Symbol {
+								name: "std".to_string(),
+								span: symbol.span.clone(),
+							});
+						}
 						break;
 					}
 					Reference::InstanceMember { object, property } => {
@@ -2792,12 +2796,11 @@ pub fn resolve_user_defined_type(
 	// Resolve all types down the fields list and return the last one (which is likely to be a real type and not a namespace)
 	let mut nested_name = vec![&user_defined_type.root];
 	nested_name.extend(user_defined_type.fields.iter().collect_vec());
-  
-  // TODO: Prepend std to types
+
 	match env.lookup_nested(&nested_name, Some(statement_idx)) {
 		Ok(_type) => {
 			if let SymbolKind::Type(t) = *_type {
-        Ok(t)
+				Ok(t)
 			} else {
 				let symb = nested_name.last().unwrap();
 				Err(TypeError {

@@ -707,11 +707,7 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_reference(&self, reference_node: &Node) -> DiagnosticResult<Reference> {
-		let actual_node = if let Some(child) = reference_node.named_child(0) {
-      child
-    } else {
-      reference_node.next_named_sibling().unwrap()
-    };
+		let actual_node = reference_node.named_child(0).unwrap();
 		match actual_node.kind() {
 			"identifier" | "stdlib_identifier" => Ok(Reference::Identifier(self.node_symbol(&actual_node)?)),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node)?),
