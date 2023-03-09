@@ -58,7 +58,7 @@ export class String {
    */
   public ends(searchString: string): boolean {
     searchString;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
@@ -71,7 +71,7 @@ export class String {
    */
   public indexOf(searchString: string): number {
     searchString;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
@@ -82,7 +82,7 @@ export class String {
    * @returns a new lower case string.
    */
   public lowercase(): string {
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
@@ -106,7 +106,7 @@ export class String {
    */
   public starts(searchString: string): boolean {
     searchString;
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 
   /**
@@ -139,6 +139,6 @@ export class String {
    * @returns a new upper case string.
    */
   public uppercase(): string {
-    throw new Error("Abstract");
+    throw new Error("Macro");
   }
 }
