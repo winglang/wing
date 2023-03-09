@@ -155,7 +155,7 @@ Error at ../../../../examples/tests/invalid/optionals.w:6:1 | Unknown symbol \\"
 exports[`primitives.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 4 error(s)
 Error at ../../../../examples/tests/invalid/primitives.w:5:7 | Unexpected expression \\"structured_access_expression\\"
-Error at ../../../../examples/tests/invalid/primitives.w:9:16 | Unknown symbol \\"join\\"
+Error at ../../../../examples/tests/invalid/primitives.w:9:16 | Unknown symbol \\"blabla\\"
 Error at ../../../../examples/tests/invalid/primitives.w:11:5 | Unknown symbol \\"push\\"
 Error at ../../../../examples/tests/invalid/primitives.w:13:14 | Expected type to be \\"str\\", but got \\"num\\" instead"
 `;
