@@ -19,7 +19,7 @@ assert(merged_array.join(" ") == "if you build it he will come for you");
 assert(merged_array.join() == "if,you,build,it,he,will,come,for,you");
 assert(merged_array.last_index_of("you") == 8);
 let mut_array2 = MutArray<str> ["how", "does", "that", "look"];
-let merged_mut_array = mut_array.concat(mut_array2.copy());
+let merged_mut_array = mut_array.concat(mut_array2);
 assert(merged_mut_array.length == 7);
 assert(merged_mut_array.at(5) == "that");
 
