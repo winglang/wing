@@ -68,22 +68,6 @@ pub enum Phase {
 	Independent,
 }
 
-/**
- *
-fn can_call_flight(fn_flight: Phase, scope_flight: Phase) -> bool {
-	if fn_flight == Phase::Independent {
-		// if the function we're trying to call is an "either-flight" function,
-		// then it can be called both in preflight, inflight, and in
-		// either-flight scopes
-		true
-	} else {
-		// otherwise, preflight functions can only be called in preflight scopes,
-		// and inflight functions can only be called in inflight scopes
-		fn_flight == scope_flight
-	}
-}
- */
-
 impl Phase {
 	/// Returns true if the current phase can call into given phase.
 	/// Rules:
