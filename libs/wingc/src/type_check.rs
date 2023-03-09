@@ -340,16 +340,14 @@ impl Subtype for Type {
 				}
 
 				// If the return types are not subtypes of each other, then this is not a subtype
-				// exception: if function type we are assigning to returns void or any, then any return type is ok
+				// exception: if function type we are assigning to returns void, then any return type is ok
 				if !l0.return_type.is_subtype_of(&r0.return_type) && !(r0.return_type.is_void()) {
 					return false;
 				}
 
-				// In this section, we check if the argument types are not subtypes of each other, then this is not a subtype.
+				// In this section, we check if the parameter types are not subtypes of each other, then this is not a subtype.
 
 				// Check that this function has at least as many required parameters as the other function requires
-				// TODO: this is a hack to make it so that functions with fewer parameters are subtypes of functions with more parameters
-				// so () => {} can be passed to cloud.Function.
 				if l0.min_parameters() < r0.min_parameters() {
 					return false;
 				}
@@ -357,7 +355,8 @@ impl Subtype for Type {
 				let mut lparams = l0.parameters.iter().peekable();
 				let mut rparams = r0.parameters.iter().peekable();
 
-				// If the first parameter is a class or resource, then we can ignore the first parameter because it is the `this` parameter.
+				// If the first parameter is a class or resource, then we assume it refers to the `this` parameter
+				// in a class or resource, and skip it.
 				// TODO: remove this after https://github.com/winglang/wing/issues/1678
 				if matches!(
 					lparams.peek().map(|t| &***t),
@@ -377,7 +376,7 @@ impl Subtype for Type {
 					// parameter types are contravariant, which means even if Cat is a subtype of Animal,
 					// (Cat) => void is not a subtype of (Animal) => void
 					// but (Animal) => void is a subtype of (Cat) => void
-					// https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)
+					// see https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)
 					if l.is_strict_subtype_of(&r) {
 						return false;
 					}
@@ -516,6 +515,7 @@ impl FunctionSignature {
 			.parameters
 			.iter()
 			.rev()
+			// TODO - as a hack we treat `anything` arguments like optionals so that () => {} can be a subtype of (any) => {}
 			.take_while(|arg| arg.is_option() || arg.is_anything())
 			.count();
 

@@ -491,6 +491,7 @@ impl Display for Reference {
 	}
 }
 
+/// Represents any type that has a span.
 pub trait ToSpan {
 	fn span(&self) -> WingSpan;
 }
