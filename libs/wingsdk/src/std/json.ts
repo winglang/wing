@@ -2,6 +2,93 @@
  * Immutable Json
  */
 export class Json {
+
+  /**
+   * Returns the keys of the Json.
+   * 
+   * @macro Object.keys($args$)
+   * 
+   * @returns The keys of the Json
+   */
+  public static keys(json: Json): string[] {
+    json;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns the values from the Json.
+   *  
+   * @macro Object.values($args$)
+   * 
+   * @param Json values from Json
+   */
+  public static values(json: Json): Json[] {
+    json;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Creates a mutable deep clone of the Json.
+   * 
+   * @macro (JSON.parse(JSON.stringify($args$)))
+   * 
+   * @param json to clone
+   */
+  public static cloneMut(json: Json): MutJson {
+    json;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Creates a immutable deep clone of the Json.
+   * 
+   * @macro (JSON.parse(JSON.stringify($args$)))
+   * 
+   * @param json to clone
+   */
+  public static clone(json: Json): Json {
+    json;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Deletes key in given Json
+   * 
+   * @macro ((args) => { delete (args[0])[args[1]]; })([$args$])
+   * 
+   * @param json to delete key from
+   * @param key the key to delete
+   */
+  public static delete(json: Json, key: string): void {
+    json;
+    key;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Formats Json as string
+   * 
+   * @macro (JSON.stringify($args$))
+   * 
+   * @param json to format as string
+   */
+  public static toStr(json: Json): string {
+    json;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Parse a string into a Json
+   * 
+   * @macro (JSON.parse($args$))
+   * 
+   * @param str to parse as Json
+   */
+  public static parse(str: string): Json {
+    str;
+    throw new Error("Macro");
+  }
+
   /**
    * Returns a specified element from the Json.
    *

@@ -707,9 +707,13 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_reference(&self, reference_node: &Node) -> DiagnosticResult<Reference> {
-		let actual_node = reference_node.named_child(0).unwrap();
+		let actual_node = if let Some(child) = reference_node.named_child(0) {
+      child
+    } else {
+      reference_node.next_named_sibling().unwrap()
+    };
 		match actual_node.kind() {
-			"identifier" => Ok(Reference::Identifier(self.node_symbol(&actual_node)?)),
+			"identifier" | "stdlib_identifier" => Ok(Reference::Identifier(self.node_symbol(&actual_node)?)),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node)?),
 			"ERROR" => self.add_error(format!("Expected type || {:#?}", reference_node), &actual_node),
 			other => self.report_unimplemented_grammar(other, "type node", &actual_node),

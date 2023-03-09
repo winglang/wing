@@ -80,6 +80,10 @@
       "members": [
         {
           "type": "SYMBOL",
+          "name": "stdlib_identifier"
+        },
+        {
+          "type": "SYMBOL",
           "name": "nested_identifier"
         },
         {
@@ -122,6 +126,15 @@
               }
             ]
           }
+        }
+      ]
+    },
+    "stdlib_identifier": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_json_types"
         }
       ]
     },
@@ -4060,6 +4073,10 @@
       ]
     },
     "json_container_type": {
+      "type": "SYMBOL",
+      "name": "_json_types"
+    },
+    "_json_types": {
       "type": "CHOICE",
       "members": [
         {
@@ -4098,6 +4115,16 @@
       {
         "type": "SYMBOL",
         "name": "set_literal"
+      }
+    ],
+    [
+      {
+        "type": "SYMBOL",
+        "name": "stdlib_identifier"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "json_container_type"
       }
     ]
   ],
