@@ -6,13 +6,11 @@ import {
   ScanCommand,
   DynamoDBClient,
 } from "@aws-sdk/client-dynamodb";
-import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { ITableClient } from "../cloud";
+import { unmarshall } from "@aws-sdk/util-dynamodb";
+import { ColumnType, ITableClient } from "../cloud";
 import { Json } from "../std";
 
 export class TableClient implements ITableClient {
-  private readonly primaryKeyType: string;
-
   constructor(
     private readonly tableName: string,
     private readonly primaryKey: string,
@@ -20,10 +18,55 @@ export class TableClient implements ITableClient {
     private readonly client = new DynamoDBClient({})
   ) { }
 
+  private marshallJson(item: any) {
+    let items: { [key: string]: any } = {};
+    for (const [key, value] of Object.entries(item)) {
+      switch (typeof value) {
+        case "string":
+          items[key] = { "S": value };
+          break;
+        case "number":
+          items[key] = { "N": String(value) };
+          break;
+        case "object":
+          items[key] = { "M": this.marshallJson(value) };
+          break;
+      }
+    }
+    return items;
+  }
+
+  private marshallItens(row: any) {
+    const columns = JSON.parse(this.columns);
+    let items: { [key: string]: any } = {};
+    for (const [key, value] of Object.entries(columns)) {
+      if (key == this.primaryKey) {
+        items[key] = { "S": row[key] };
+        continue;
+      }
+      switch (value) {
+        case ColumnType.DATE:
+        case ColumnType.STRING:
+          items[key] = { "S": row[key] };
+          break;
+        case ColumnType.NUMBER:
+          items[key] = { "N": String(row[key]) };
+          break;
+        case ColumnType.BOOLEAN:
+          items[key] = { "BOOL": row[key] };
+          break;
+        case ColumnType.JSON:
+          items[key] = { "M": this.marshallJson(row[key]) };
+          break;
+      }
+    }
+    return items;
+  }
+
   public async insert(row: Json): Promise<void> {
     const command = new PutItemCommand({
       TableName: this.tableName,
-      Item: marshall(row),
+      Item: this.marshallItens(row as any),
     });
     await this.client.send(command);
   }
@@ -32,7 +75,7 @@ export class TableClient implements ITableClient {
     let itemKey = {};
     let updateExpression: string[] = [];
     let expressionAttributes: any = {};
-    const item = marshall(row);
+    const item = this.marshallItens(row);
     for (const [key, value] of Object.entries(item)) {
       if (key === this.primaryKey) {
         itemKey = { [key]: value };
@@ -53,7 +96,7 @@ export class TableClient implements ITableClient {
   public async delete(key: string): Promise<void> {
     const command = new DeleteItemCommand({
       TableName: this.tableName,
-      Key: marshall({ [this.primaryKey]: key }),
+      Key: { [this.primaryKey]: { "S": key } },
     });
     await this.client.send(command);
   }
@@ -61,7 +104,7 @@ export class TableClient implements ITableClient {
   public async get(key: string): Promise<any> {
     const command = new GetItemCommand({
       TableName: this.tableName,
-      Key: marshall({ [this.primaryKey]: key }),
+      Key: { [this.primaryKey]: { "S": key } },
     });
     const result = await this.client.send(command);
     if (result.Item) {

@@ -27,20 +27,6 @@ const PRIMARY_KEY = "id";
 const dynamoMock = mockClient(DynamoDBClient);
 
 describe("inflight table tests", () => {
-  // const OLD_ENV = process.env;
-
-  // beforeAll(() => {
-  //   dynamoMock.reset();
-  //   process.env = {
-  //     ...OLD_ENV,
-  //     PRIMARY_KEY: "id",
-  //     COLUMNS: `{ "id": ${ColumnType.STRING} }`,
-  //   };
-  // });
-
-  // afterAll(() => {
-  //   process.env = OLD_ENV; // Restore old environment
-  // });
 
   test("insert", async () => {
     // GIVEN
