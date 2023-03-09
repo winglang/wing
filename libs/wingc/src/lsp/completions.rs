@@ -289,7 +289,7 @@ fn get_completions_from_class(
 	class
 		.get_env()
 		.iter(true)
-		.map(|symbol_data| {
+		.filter_map(|symbol_data| {
 			if symbol_data.0 == "init" {
 				return None;
 			}
@@ -319,7 +319,6 @@ fn get_completions_from_class(
 				..Default::default()
 			})
 		})
-		.filter_map(|item| item)
 		.collect()
 }
 
@@ -388,7 +387,7 @@ pub struct ScopeVisitor<'a> {
 	/// The target location we're looking for
 	pub location: WingSpan,
 	/// The index of the statement that contains the target location
-	/// or, the last valid system before the target location
+	/// or, the last valid statement before the target location
 	pub found_stmt_index: Option<usize>,
 	/// The scope that contains the target location
 	pub found_scope: Option<&'a Scope>,
@@ -420,6 +419,7 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 				}
 			}
 			if self.found_stmt_index.is_none() {
+				// If we didn't find a statement, we're somewhere at the end of the scope
 				self.found_stmt_index = Some(node.statements.len());
 			}
 		}
@@ -438,7 +438,7 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 						self.nearest_reference = Some((node, r));
 					}
 				}
-				Reference::TypeMember { type_: _, property } => {
+				Reference::TypeMember { property, .. } => {
 					if property.span < self.location {
 						self.nearest_reference = Some((node, r));
 					}
