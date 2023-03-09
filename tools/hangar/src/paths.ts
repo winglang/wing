@@ -20,7 +20,9 @@ export const targetWingSDKSpec =
 
 export const validWingFiles = fs
   .readdirSync(validTestDir)
-  .filter((f) => f.endsWith(".w"));
+  .filter((f) => f.endsWith(".w"))
+  .filter((f) => !f.endsWith("skip.w"));
 export const invalidWingFiles = fs
   .readdirSync(invalidTestDir)
-  .filter((f) => f.endsWith(".w"));
+  .filter((f) => f.endsWith(".w"))
+  .filter((f) => !f.endsWith("skip.w"));

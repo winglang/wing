@@ -1,3 +1,4 @@
 [env]
-CC_wasm32_wasi = "/opt/wasi-sdk/bin/clang"
-AR_wasm32_wasi = "/opt/wasi-sdk/bin/ar"
+WASI_SDK = { value = ".cargo/wasi-sdk-19.0", relative = true }
+CC_wasm32_wasi = { value = ".cargo/wasi-sdk-19.0/bin/clang", relative = true }
+AR_wasm32_wasi = { value = ".cargo/wasi-sdk-19.0/bin/ar", relative = true }

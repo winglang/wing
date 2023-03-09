@@ -13,6 +13,125 @@ exports[`can add object in preflight 1`] = `
 ]
 `;
 
+exports[`can add object in preflight 2`] = `
+{
+  "app.wsim/simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/WingLogger",
+        "props": {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_bucket",
+        "props": {
+          "initialObjects": {
+            "greeting.txt": "Hello world!",
+          },
+          "public": false,
+        },
+        "type": "wingsdk.cloud.Bucket",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "app.wsim/tree.json": {
+    "tree": {
+      "children": {
+        "WingLogger": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+        "my_bucket": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A cloud object store",
+            "title": "Bucket",
+          },
+          "id": "my_bucket",
+          "path": "root/my_bucket",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.1.245",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+  "tree.json": {
+    "tree": {
+      "children": {
+        "WingLogger": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+        "my_bucket": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A cloud object store",
+            "title": "Bucket",
+          },
+          "id": "my_bucket",
+          "path": "root/my_bucket",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.1.245",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
 exports[`create a bucket 1`] = `
 {
   "app.wsim/simulator.json": {
@@ -257,6 +376,41 @@ exports[`get invalid object throws an error 2`] = `
 }
 `;
 
+exports[`list respects prefixes 1`] = `
+[
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Bucket created.",
+  "Put (key=path/dir1/file1.txt).",
+  "Put (key=path/dir2/file2.txt).",
+  "List (prefix=null).",
+  "List (prefix=path).",
+  "List (prefix=path/dir1).",
+  "List (prefix=path/dir2).",
+  "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`objects can have keys that look like directories 1`] = `
+[
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Bucket created.",
+  "Put (key=foo).",
+  "Put (key=foo/).",
+  "Put (key=foo/bar).",
+  "Put (key=foo/bar/).",
+  "Put (key=foo/bar/baz).",
+  "List (prefix=null).",
+  "List (prefix=foo).",
+  "List (prefix=foo/).",
+  "List (prefix=foo/bar).",
+  "List (prefix=foo/bar/).",
+  "List (prefix=foo/bar/baz).",
+  "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
 exports[`put and get objects from bucket 1`] = `
 [
   "wingsdk.cloud.Logger created.",
@@ -266,123 +420,6 @@ exports[`put and get objects from bucket 1`] = `
   "wingsdk.cloud.Bucket deleted.",
   "wingsdk.cloud.Logger deleted.",
 ]
-`;
-
-exports[`put and get objects from bucket 2`] = `
-{
-  "app.wsim/simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_bucket",
-        "props": {
-          "initialObjects": {},
-          "public": false,
-        },
-        "type": "wingsdk.cloud.Bucket",
-      },
-    ],
-    "sdkVersion": "0.0.0",
-  },
-  "app.wsim/tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_bucket": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "my_bucket",
-          "path": "root/my_bucket",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_bucket": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "my_bucket",
-          "path": "root/my_bucket",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-}
 `;
 
 exports[`put json objects from bucket 1`] = `
@@ -526,255 +563,6 @@ exports[`put multiple objects and list all from bucket 1`] = `
 ]
 `;
 
-exports[`put multiple objects and list all from bucket 2`] = `
-{
-  "app.wsim/simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_bucket",
-        "props": {
-          "initialObjects": {},
-          "public": false,
-        },
-        "type": "wingsdk.cloud.Bucket",
-      },
-    ],
-    "sdkVersion": "0.0.0",
-  },
-  "app.wsim/tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_bucket": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "my_bucket",
-          "path": "root/my_bucket",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_bucket": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "my_bucket",
-          "path": "root/my_bucket",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-}
-`;
-
-exports[`put when directory does not exist 1`] = `
-[
-  "wingsdk.cloud.Logger created.",
-  "wingsdk.cloud.Bucket created.",
-  "Put (key=path/dir1/file1.txt).",
-  "Put (key=path/dir2/file2.txt).",
-  "List (prefix=null).",
-  "List (prefix=path).",
-  "List (prefix=path/dir1).",
-  "List (prefix=path/dir2).",
-  "wingsdk.cloud.Bucket deleted.",
-  "wingsdk.cloud.Logger deleted.",
-]
-`;
-
-exports[`put when directory does not exist 2`] = `
-{
-  "app.wsim/simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_bucket",
-        "props": {
-          "initialObjects": {},
-          "public": false,
-        },
-        "type": "wingsdk.cloud.Bucket",
-      },
-    ],
-    "sdkVersion": "0.0.0",
-  },
-  "app.wsim/tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_bucket": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "my_bucket",
-          "path": "root/my_bucket",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_bucket": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "my_bucket",
-          "path": "root/my_bucket",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-}
-`;
-
 exports[`remove object from a bucket 1`] = `
 [
   "wingsdk.cloud.Logger created.",
@@ -786,123 +574,6 @@ exports[`remove object from a bucket 1`] = `
 ]
 `;
 
-exports[`remove object from a bucket 2`] = `
-{
-  "app.wsim/simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_bucket",
-        "props": {
-          "initialObjects": {},
-          "public": false,
-        },
-        "type": "wingsdk.cloud.Bucket",
-      },
-    ],
-    "sdkVersion": "0.0.0",
-  },
-  "app.wsim/tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_bucket": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "my_bucket",
-          "path": "root/my_bucket",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_bucket": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "my_bucket",
-          "path": "root/my_bucket",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-}
-`;
-
 exports[`remove object from a bucket with mustExist as option 1`] = `
 [
   "wingsdk.cloud.Logger created.",
@@ -912,121 +583,4 @@ exports[`remove object from a bucket with mustExist as option 1`] = `
   "wingsdk.cloud.Bucket deleted.",
   "wingsdk.cloud.Logger deleted.",
 ]
-`;
-
-exports[`remove object from a bucket with mustExist as option 2`] = `
-{
-  "app.wsim/simulator.json": {
-    "resources": [
-      {
-        "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_bucket",
-        "props": {
-          "initialObjects": {},
-          "public": false,
-        },
-        "type": "wingsdk.cloud.Bucket",
-      },
-    ],
-    "sdkVersion": "0.0.0",
-  },
-  "app.wsim/tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_bucket": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "my_bucket",
-          "path": "root/my_bucket",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_bucket": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "my_bucket",
-          "path": "root/my_bucket",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-}
 `;

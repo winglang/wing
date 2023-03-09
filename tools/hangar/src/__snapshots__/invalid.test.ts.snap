@@ -88,6 +88,17 @@ exports[`inflight_in_class.w > wing test (--target sim) - invalid > stderr 1`] =
 Error at ../../../../examples/tests/invalid/inflight_in_class.w:3:3 | Class cannot have inflight fields"
 `;
 
+exports[`inflight_ref_invalid.w > wing test (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 2 error(s)
+Error at ../../../../examples/tests/invalid/inflight_ref_invalid.w:12:19 | Unable to reference \\"this.reassignable\\" from inflight method \\"test\\" because it is reassignable (\\"var\\")
+Error at ../../../../examples/tests/invalid/inflight_ref_invalid.w:14:16 | Unable to reference \\"this.mut_array\\" from inflight method \\"test\\" because type MutArray<str> is not capturable"
+`;
+
+exports[`inflight_ref_resource_sub_field.w > wing test (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 1 error(s)
+Error at ../../../../examples/tests/invalid/inflight_ref_resource_sub_field.w:26:10 | Unable to reference \\"my_queue.push\\" from inflight method \\"test\\" because it is not an inflight method"
+`;
+
 exports[`json.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 7 error(s)
 Error at ../../../../examples/tests/invalid/json.w:5:14 | Expected type to be \\"str\\", but got \\"Json\\" instead
@@ -144,7 +155,7 @@ Error at ../../../../examples/tests/invalid/optionals.w:6:1 | Unknown symbol \\"
 exports[`primitives.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 4 error(s)
 Error at ../../../../examples/tests/invalid/primitives.w:5:7 | Unexpected expression \\"structured_access_expression\\"
-Error at ../../../../examples/tests/invalid/primitives.w:9:16 | Unknown symbol \\"join\\"
+Error at ../../../../examples/tests/invalid/primitives.w:9:16 | Unknown symbol \\"blabla\\"
 Error at ../../../../examples/tests/invalid/primitives.w:11:5 | Unknown symbol \\"push\\"
 Error at ../../../../examples/tests/invalid/primitives.w:13:14 | Expected type to be \\"str\\", but got \\"num\\" instead"
 `;

@@ -814,6 +814,207 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`bucket_keys.w > wing compile --target tf-aws > index.js 1`] = `
+"async handle() { const { b } = this; {
+  (await b.put(\\"foo\\",\\"text\\"));
+  (await b.put(\\"foo/\\",\\"text\\"));
+  (await b.put(\\"foo/bar\\",\\"text\\"));
+  (await b.put(\\"foo/bar/\\",\\"text\\"));
+  (await b.put(\\"foo/bar/baz\\",\\"text\\"));
+  const objs = (await b.list());
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await objs.at(0)) === \\"foo\\")'\`)})(((await objs.at(0)) === \\"foo\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await objs.at(1)) === \\"foo/\\")'\`)})(((await objs.at(1)) === \\"foo/\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await objs.at(2)) === \\"foo/bar\\")'\`)})(((await objs.at(2)) === \\"foo/bar\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await objs.at(3)) === \\"foo/bar/\\")'\`)})(((await objs.at(3)) === \\"foo/bar/\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await objs.at(4)) === \\"foo/bar/baz\\")'\`)})(((await objs.at(4)) === \\"foo/bar/baz\\"))};
+} };"
+`;
+
+exports[`bucket_keys.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_test_IamRole_6CDC2D16": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRole",
+            "uniqueId": "root_test_IamRole_6CDC2D16",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_test_IamRolePolicy_474A6820": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicy",
+            "uniqueId": "root_test_IamRolePolicy_474A6820",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_test_IamRolePolicyAttachment_1102A28A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicyAttachment",
+            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_test_AAE85061": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Default",
+            "uniqueId": "root_test_AAE85061",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "WING_FUNCTION_NAME": "test-c8b6eece",
+          },
+        },
+        "function_name": "test-c8b6eece",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_cloudBucket_4F3C4F53": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Bucket/Default",
+            "uniqueId": "root_cloudBucket_4F3C4F53",
+          },
+        },
+        "bucket_prefix": "cloud-bucket-c87175e7-",
+      },
+      "root_test_Code_2D131EC2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Code",
+            "uniqueId": "root_test_Code_2D131EC2",
+          },
+        },
+        "bucket_prefix": "code-c883c33b-",
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_cloudBucket_Encryption_8ED0CD9C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Bucket/Encryption",
+            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+    },
+    "aws_s3_object": {
+      "root_test_S3Object_A16CD789": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/S3Object",
+            "uniqueId": "root_test_S3Object_A16CD789",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`bucket_keys.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"bucket_keys\\", plugins: $plugins });
+  
+  const b = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.6228e26a5981501feaae450d2628c682bfebb15974f5cc021606bb6e273636e0/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+      b: {
+        obj: b,
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
+      },
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
 exports[`capture_containers.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(s) { const { arr, arr_of_map, j, my_map, my_set } = this; {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(0)) === \\"hello\\")'\`)})(((await arr.at(0)) === \\"hello\\"))};
@@ -3523,6 +3724,1842 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`inflight_ref_external.w > wing compile --target tf-aws > Test.inflight.js 1`] = `
+"export class Test_inflight  {
+constructor({ b, n }) {
+
+  this.b = b;
+  this.n = n;
+}
+async  test()  {
+	{
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.b.list()).length === 0)'\`)})(((await this.b.list()).length === 0))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.n === 12)'\`)})((this.n === 12))};
+}
+}}"
+`;
+
+exports[`inflight_ref_external.w > wing compile --target tf-aws > index.js 1`] = `
+"async handle() { const { f } = this; {
+  (await f.test());
+} };"
+`;
+
+exports[`inflight_ref_external.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_test_IamRole_6CDC2D16": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRole",
+            "uniqueId": "root_test_IamRole_6CDC2D16",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_test_IamRolePolicy_474A6820": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicy",
+            "uniqueId": "root_test_IamRolePolicy_474A6820",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_test_IamRolePolicyAttachment_1102A28A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicyAttachment",
+            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_test_AAE85061": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Default",
+            "uniqueId": "root_test_AAE85061",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "WING_FUNCTION_NAME": "test-c8b6eece",
+          },
+        },
+        "function_name": "test-c8b6eece",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_cloudBucket_4F3C4F53": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Bucket/Default",
+            "uniqueId": "root_cloudBucket_4F3C4F53",
+          },
+        },
+        "bucket_prefix": "cloud-bucket-c87175e7-",
+      },
+      "root_test_Code_2D131EC2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Code",
+            "uniqueId": "root_test_Code_2D131EC2",
+          },
+        },
+        "bucket_prefix": "code-c883c33b-",
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_cloudBucket_Encryption_8ED0CD9C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Bucket/Encryption",
+            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+    },
+    "aws_s3_object": {
+      "root_test_S3Object_A16CD789": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/S3Object",
+            "uniqueId": "root_test_S3Object_A16CD789",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`inflight_ref_external.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"inflight_ref_external\\", plugins: $plugins });
+  
+  class Test extends $stdlib.core.Resource {
+  	constructor(scope, id, b, n) {
+  	super(scope, id);
+  {
+    this.b = b;
+    this.n = n;
+  }
+  }
+  	
+  	_toInflight() {
+  	const b_client = this._lift(this.b);
+  const n_client = this._lift(this.n);
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/Test.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Test_inflight({b: \${b_client}, n: \${n_client}}))\`);
+  }
+  }
+  Test._annotateInflight(\\"test\\", {\\"this.b\\": { ops: [\\"list\\"] },\\"this.n\\": { ops: [] }});
+  const my = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
+  const f = new Test(this,\\"Test\\",my,12);
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.80a17b6f758da66f2a7690bf5a9478936a9921da3421819b7a8bf7e1cfde82ed/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+      f: {
+        obj: f,
+        ops: [\\"test\\"]
+      },
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`inflight_ref_inflight_field.w > wing compile --target tf-aws > Foo.inflight.js 1`] = `
+"export class Foo_inflight  {
+constructor({  }) {
+
+
+}
+async  set_field(v)  {
+	{
+  this.inflight_field = (v * 10);
+}
+}
+async  get_field()  {
+	{
+  return this.inflight_field;
+}
+}}"
+`;
+
+exports[`inflight_ref_inflight_field.w > wing compile --target tf-aws > index.js 1`] = `
+"async handle() { const { f } = this; {
+  (await f.set_field(123));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await f.get_field()) === 1230)'\`)})(((await f.get_field()) === 1230))};
+} };"
+`;
+
+exports[`inflight_ref_inflight_field.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_test_IamRole_6CDC2D16": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRole",
+            "uniqueId": "root_test_IamRole_6CDC2D16",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_test_IamRolePolicy_474A6820": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicy",
+            "uniqueId": "root_test_IamRolePolicy_474A6820",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_test_IamRolePolicyAttachment_1102A28A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicyAttachment",
+            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_test_AAE85061": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Default",
+            "uniqueId": "root_test_AAE85061",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "test-c8b6eece",
+          },
+        },
+        "function_name": "test-c8b6eece",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_test_Code_2D131EC2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Code",
+            "uniqueId": "root_test_Code_2D131EC2",
+          },
+        },
+        "bucket_prefix": "code-c883c33b-",
+      },
+    },
+    "aws_s3_object": {
+      "root_test_S3Object_A16CD789": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/S3Object",
+            "uniqueId": "root_test_S3Object_A16CD789",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`inflight_ref_inflight_field.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"inflight_ref_inflight_field\\", plugins: $plugins });
+  
+  class Foo extends $stdlib.core.Resource {
+  	constructor(scope, id, ) {
+  	super(scope, id);
+  {
+  }
+  }
+  	
+  	_toInflight() {
+  	
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/Foo.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo_inflight({}))\`);
+  }
+  }
+  Foo._annotateInflight(\\"set_field\\", {});
+  Foo._annotateInflight(\\"get_field\\", {});
+  const f = new Foo(this,\\"Foo\\");
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.ef866f1d1f55245bd0673c32e84f0500ca60a72f43baa3d446a83445a7f65861/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+      f: {
+        obj: f,
+        ops: [\\"get_field\\",\\"set_field\\"]
+      },
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`inflight_ref_primitive.w > wing compile --target tf-aws > Test.inflight.js 1`] = `
+"export class Test_inflight  {
+constructor({ my_arr, my_num, my_str }) {
+
+  this.my_arr = my_arr;
+  this.my_num = my_num;
+  this.my_str = my_str;
+}
+async  test()  {
+	{
+  const y = (this.my_num + 456);
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(y === 579)'\`)})((y === 579))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.my_str === \\"hello\\")'\`)})((this.my_str === \\"hello\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.my_arr.at(1)) === \\"bing\\")'\`)})(((await this.my_arr.at(1)) === \\"bing\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.my_arr.length === 2)'\`)})((this.my_arr.length === 2))};
+}
+}}"
+`;
+
+exports[`inflight_ref_primitive.w > wing compile --target tf-aws > index.js 1`] = `
+"async handle() { const { f } = this; {
+  (await f.test());
+} };"
+`;
+
+exports[`inflight_ref_primitive.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_test_IamRole_6CDC2D16": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRole",
+            "uniqueId": "root_test_IamRole_6CDC2D16",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_test_IamRolePolicy_474A6820": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicy",
+            "uniqueId": "root_test_IamRolePolicy_474A6820",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_test_IamRolePolicyAttachment_1102A28A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicyAttachment",
+            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_test_AAE85061": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Default",
+            "uniqueId": "root_test_AAE85061",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "test-c8b6eece",
+          },
+        },
+        "function_name": "test-c8b6eece",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_test_Code_2D131EC2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Code",
+            "uniqueId": "root_test_Code_2D131EC2",
+          },
+        },
+        "bucket_prefix": "code-c883c33b-",
+      },
+    },
+    "aws_s3_object": {
+      "root_test_S3Object_A16CD789": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/S3Object",
+            "uniqueId": "root_test_S3Object_A16CD789",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`inflight_ref_primitive.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"inflight_ref_primitive\\", plugins: $plugins });
+  
+  class Test extends $stdlib.core.Resource {
+  	constructor(scope, id, ) {
+  	super(scope, id);
+  {
+    this.my_str = \\"hello\\";
+    this.my_num = 123;
+    this.my_arr = Object.freeze([\\"bang\\", \\"bing\\"]);
+  }
+  }
+  	
+  	_toInflight() {
+  	const my_arr_client = this._lift(this.my_arr);
+  const my_num_client = this._lift(this.my_num);
+  const my_str_client = this._lift(this.my_str);
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/Test.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Test_inflight({my_arr: \${my_arr_client}, my_num: \${my_num_client}, my_str: \${my_str_client}}))\`);
+  }
+  }
+  Test._annotateInflight(\\"test\\", {\\"this.my_arr\\": { ops: [\\"at\\",\\"length\\"] },\\"this.my_num\\": { ops: [] },\\"this.my_str\\": { ops: [] }});
+  const f = new Test(this,\\"Test\\");
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.80a17b6f758da66f2a7690bf5a9478936a9921da3421819b7a8bf7e1cfde82ed/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+      f: {
+        obj: f,
+        ops: [\\"test\\"]
+      },
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`inflight_ref_resource.w > wing compile --target tf-aws > Test.inflight.js 1`] = `
+"export class Test_inflight  {
+constructor({ b }) {
+
+  this.b = b;
+}
+async  test()  {
+	{
+  (await this.b.put(\\"hello\\",\\"world\\"));
+}
+}}"
+`;
+
+exports[`inflight_ref_resource.w > wing compile --target tf-aws > index.js 1`] = `
+"async handle() { const { f } = this; {
+  (await f.test());
+} };"
+`;
+
+exports[`inflight_ref_resource.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_test_IamRole_6CDC2D16": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRole",
+            "uniqueId": "root_test_IamRole_6CDC2D16",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_test_IamRolePolicy_474A6820": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicy",
+            "uniqueId": "root_test_IamRolePolicy_474A6820",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_Test_cloudBucket_8208F150.arn}\\",\\"\${aws_s3_bucket.root_Test_cloudBucket_8208F150.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_test_IamRolePolicyAttachment_1102A28A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicyAttachment",
+            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_test_AAE85061": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Default",
+            "uniqueId": "root_test_AAE85061",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_7f08500e": "\${aws_s3_bucket.root_Test_cloudBucket_8208F150.bucket}",
+            "WING_FUNCTION_NAME": "test-c8b6eece",
+          },
+        },
+        "function_name": "test-c8b6eece",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_Test_cloudBucket_8208F150": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Test/cloud.Bucket/Default",
+            "uniqueId": "root_Test_cloudBucket_8208F150",
+          },
+        },
+        "bucket_prefix": "cloud-bucket-c88130da-",
+      },
+      "root_test_Code_2D131EC2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Code",
+            "uniqueId": "root_test_Code_2D131EC2",
+          },
+        },
+        "bucket_prefix": "code-c883c33b-",
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_Test_cloudBucket_PublicAccessBlock_94819ECF": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Test/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_Test_cloudBucket_PublicAccessBlock_94819ECF",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_Test_cloudBucket_8208F150.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_Test_cloudBucket_Encryption_CC613733": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Test/cloud.Bucket/Encryption",
+            "uniqueId": "root_Test_cloudBucket_Encryption_CC613733",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_Test_cloudBucket_8208F150.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+    },
+    "aws_s3_object": {
+      "root_test_S3Object_A16CD789": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/S3Object",
+            "uniqueId": "root_test_S3Object_A16CD789",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`inflight_ref_resource.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"inflight_ref_resource\\", plugins: $plugins });
+  
+  class Test extends $stdlib.core.Resource {
+  	constructor(scope, id, ) {
+  	super(scope, id);
+  {
+    this.b = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
+  }
+  }
+  	
+  	_toInflight() {
+  	const b_client = this._lift(this.b);
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/Test.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Test_inflight({b: \${b_client}}))\`);
+  }
+  }
+  Test._annotateInflight(\\"test\\", {\\"this.b\\": { ops: [\\"put\\"] }});
+  const f = new Test(this,\\"Test\\");
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.80a17b6f758da66f2a7690bf5a9478936a9921da3421819b7a8bf7e1cfde82ed/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+      f: {
+        obj: f,
+        ops: [\\"test\\"]
+      },
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`inflight_ref_resource_collection.w > wing compile --target tf-aws > Test.inflight.js 1`] = `
+"export class Test_inflight  {
+constructor({ array }) {
+
+  this.array = array;
+}
+async  test()  {
+	{
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await (await this.array.at(0)).list()).length === 0)'\`)})(((await (await this.array.at(0)).list()).length === 0))};
+}
+}}"
+`;
+
+exports[`inflight_ref_resource_collection.w > wing compile --target tf-aws > index.js 1`] = `
+"async handle() { const { f } = this; {
+  (await f.test());
+} };"
+`;
+
+exports[`inflight_ref_resource_collection.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_test_IamRole_6CDC2D16": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRole",
+            "uniqueId": "root_test_IamRole_6CDC2D16",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_test_IamRolePolicy_474A6820": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicy",
+            "uniqueId": "root_test_IamRolePolicy_474A6820",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_test_IamRolePolicyAttachment_1102A28A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicyAttachment",
+            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_test_AAE85061": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Default",
+            "uniqueId": "root_test_AAE85061",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_7f08500e": "\${aws_s3_bucket.root_Test_cloudBucket_8208F150.bucket}",
+            "WING_FUNCTION_NAME": "test-c8b6eece",
+          },
+        },
+        "function_name": "test-c8b6eece",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_Test_cloudBucket_8208F150": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Test/cloud.Bucket/Default",
+            "uniqueId": "root_Test_cloudBucket_8208F150",
+          },
+        },
+        "bucket_prefix": "cloud-bucket-c88130da-",
+      },
+      "root_test_Code_2D131EC2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Code",
+            "uniqueId": "root_test_Code_2D131EC2",
+          },
+        },
+        "bucket_prefix": "code-c883c33b-",
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_Test_cloudBucket_PublicAccessBlock_94819ECF": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Test/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_Test_cloudBucket_PublicAccessBlock_94819ECF",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_Test_cloudBucket_8208F150.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_Test_cloudBucket_Encryption_CC613733": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Test/cloud.Bucket/Encryption",
+            "uniqueId": "root_Test_cloudBucket_Encryption_CC613733",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_Test_cloudBucket_8208F150.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+    },
+    "aws_s3_object": {
+      "root_test_S3Object_A16CD789": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/S3Object",
+            "uniqueId": "root_test_S3Object_A16CD789",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`inflight_ref_resource_collection.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"inflight_ref_resource_collection\\", plugins: $plugins });
+  
+  class Test extends $stdlib.core.Resource {
+  	constructor(scope, id, ) {
+  	super(scope, id);
+  {
+    this.array = Object.freeze([this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\")]);
+  }
+  }
+  	
+  	_toInflight() {
+  	const array_client = this._lift(this.array);
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/Test.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Test_inflight({array: \${array_client}}))\`);
+  }
+  }
+  Test._annotateInflight(\\"test\\", {\\"this.array\\": { ops: [\\"at\\"] }});
+  const f = new Test(this,\\"Test\\");
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.80a17b6f758da66f2a7690bf5a9478936a9921da3421819b7a8bf7e1cfde82ed/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+      f: {
+        obj: f,
+        ops: [\\"test\\"]
+      },
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`inflight_ref_resource_field.w > wing compile --target tf-aws > Test.inflight.js 1`] = `
+"export class Test_inflight  {
+constructor({ my_field }) {
+
+  this.my_field = my_field;
+}
+async  test()  {
+	{
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.my_field === \\"hello\\")'\`)})((this.my_field === \\"hello\\"))};
+}
+}}"
+`;
+
+exports[`inflight_ref_resource_field.w > wing compile --target tf-aws > index.js 1`] = `
+"async handle() { const { f } = this; {
+  (await f.test());
+} };"
+`;
+
+exports[`inflight_ref_resource_field.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_test_IamRole_6CDC2D16": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRole",
+            "uniqueId": "root_test_IamRole_6CDC2D16",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_test_IamRolePolicy_474A6820": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicy",
+            "uniqueId": "root_test_IamRolePolicy_474A6820",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_test_IamRolePolicyAttachment_1102A28A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicyAttachment",
+            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_test_AAE85061": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Default",
+            "uniqueId": "root_test_AAE85061",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "test-c8b6eece",
+          },
+        },
+        "function_name": "test-c8b6eece",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_test_Code_2D131EC2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Code",
+            "uniqueId": "root_test_Code_2D131EC2",
+          },
+        },
+        "bucket_prefix": "code-c883c33b-",
+      },
+    },
+    "aws_s3_object": {
+      "root_test_S3Object_A16CD789": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/S3Object",
+            "uniqueId": "root_test_S3Object_A16CD789",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`inflight_ref_resource_field.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"inflight_ref_resource_field\\", plugins: $plugins });
+  
+  class Test extends $stdlib.core.Resource {
+  	constructor(scope, id, ) {
+  	super(scope, id);
+  {
+    this.my_field = \\"hello\\";
+  }
+  }
+  	
+  	_toInflight() {
+  	const my_field_client = this._lift(this.my_field);
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/Test.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Test_inflight({my_field: \${my_field_client}}))\`);
+  }
+  }
+  Test._annotateInflight(\\"test\\", {\\"this.my_field\\": { ops: [] }});
+  const f = new Test(this,\\"Test\\");
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.80a17b6f758da66f2a7690bf5a9478936a9921da3421819b7a8bf7e1cfde82ed/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+      f: {
+        obj: f,
+        ops: [\\"test\\"]
+      },
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`inflight_ref_resource_sub_method.w > wing compile --target tf-aws > Another.inflight.js 1`] = `
+"export class Another_inflight  {
+constructor({ my_queue }) {
+
+  this.my_queue = my_queue;
+}
+async  inflight_returns_resource()  {
+	{
+  return this.my_queue;
+}
+}}"
+`;
+
+exports[`inflight_ref_resource_sub_method.w > wing compile --target tf-aws > Test.inflight.js 1`] = `
+"export class Test_inflight  {
+constructor({ another }) {
+
+  this.another = another;
+}
+async  test()  {
+	{
+  const q = (await this.another.inflight_returns_resource());
+  (await q.push(\\"push!\\"));
+}
+}}"
+`;
+
+exports[`inflight_ref_resource_sub_method.w > wing compile --target tf-aws > index.js 1`] = `
+"async handle() { const { f } = this; {
+  (await f.test());
+} };"
+`;
+
+exports[`inflight_ref_resource_sub_method.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_test_IamRole_6CDC2D16": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRole",
+            "uniqueId": "root_test_IamRole_6CDC2D16",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_test_IamRolePolicy_474A6820": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicy",
+            "uniqueId": "root_test_IamRolePolicy_474A6820",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_test_IamRolePolicyAttachment_1102A28A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicyAttachment",
+            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_test_AAE85061": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Default",
+            "uniqueId": "root_test_AAE85061",
+          },
+        },
+        "environment": {
+          "variables": {
+            "QUEUE_URL_de2218c1": "\${aws_sqs_queue.root_Test_Another_cloudQueue_02574A51.url}",
+            "WING_FUNCTION_NAME": "test-c8b6eece",
+          },
+        },
+        "function_name": "test-c8b6eece",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_test_Code_2D131EC2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Code",
+            "uniqueId": "root_test_Code_2D131EC2",
+          },
+        },
+        "bucket_prefix": "code-c883c33b-",
+      },
+    },
+    "aws_s3_object": {
+      "root_test_S3Object_A16CD789": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/S3Object",
+            "uniqueId": "root_test_S3Object_A16CD789",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`inflight_ref_resource_sub_method.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"inflight_ref_resource_sub_method\\", plugins: $plugins });
+  
+  class Another extends $stdlib.core.Resource {
+  	constructor(scope, id, ) {
+  	super(scope, id);
+  {
+    this.my_queue = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Queue\\",this,\\"cloud.Queue\\");
+  }
+  }
+  	
+  	_toInflight() {
+  	const my_queue_client = this._lift(this.my_queue);
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/Another.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Another_inflight({my_queue: \${my_queue_client}}))\`);
+  }
+  }
+  Another._annotateInflight(\\"inflight_returns_resource\\", {\\"this.my_queue\\": { ops: [] }});
+  class Test extends $stdlib.core.Resource {
+  	constructor(scope, id, ) {
+  	super(scope, id);
+  {
+    this.another = new Another(this,\\"Another\\");
+  }
+  }
+  	
+  	_toInflight() {
+  	const another_client = this._lift(this.another);
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/Test.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Test_inflight({another: \${another_client}}))\`);
+  }
+  }
+  Test._annotateInflight(\\"test\\", {\\"this.another\\": { ops: [\\"inflight_returns_resource\\"] }});
+  const f = new Test(this,\\"Test\\");
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.80a17b6f758da66f2a7690bf5a9478936a9921da3421819b7a8bf7e1cfde82ed/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+      f: {
+        obj: f,
+        ops: [\\"test\\"]
+      },
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`inflight_ref_resource_userdefined.w > wing compile --target tf-aws > Another.inflight.js 1`] = `
+"export class Another_inflight  {
+constructor({  }) {
+
+
+}
+async  func()  {
+	{
+  return \\"hello\\";
+}
+}}"
+`;
+
+exports[`inflight_ref_resource_userdefined.w > wing compile --target tf-aws > Test.inflight.js 1`] = `
+"export class Test_inflight  {
+constructor({ another }) {
+
+  this.another = another;
+}
+async  test()  {
+	{
+  const res = (await this.another.func());
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(res === \\"hello\\")'\`)})((res === \\"hello\\"))};
+}
+}}"
+`;
+
+exports[`inflight_ref_resource_userdefined.w > wing compile --target tf-aws > index.js 1`] = `
+"async handle() { const { f } = this; {
+  (await f.test());
+} };"
+`;
+
+exports[`inflight_ref_resource_userdefined.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_test_IamRole_6CDC2D16": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRole",
+            "uniqueId": "root_test_IamRole_6CDC2D16",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_test_IamRolePolicy_474A6820": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicy",
+            "uniqueId": "root_test_IamRolePolicy_474A6820",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_test_IamRolePolicyAttachment_1102A28A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicyAttachment",
+            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_test_AAE85061": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Default",
+            "uniqueId": "root_test_AAE85061",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "test-c8b6eece",
+          },
+        },
+        "function_name": "test-c8b6eece",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_test_Code_2D131EC2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Code",
+            "uniqueId": "root_test_Code_2D131EC2",
+          },
+        },
+        "bucket_prefix": "code-c883c33b-",
+      },
+    },
+    "aws_s3_object": {
+      "root_test_S3Object_A16CD789": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/S3Object",
+            "uniqueId": "root_test_S3Object_A16CD789",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`inflight_ref_resource_userdefined.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"inflight_ref_resource_userdefined\\", plugins: $plugins });
+  
+  class Another extends $stdlib.core.Resource {
+  	constructor(scope, id, ) {
+  	super(scope, id);
+  {
+  }
+  }
+  	
+  	_toInflight() {
+  	
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/Another.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Another_inflight({}))\`);
+  }
+  }
+  Another._annotateInflight(\\"func\\", {});
+  class Test extends $stdlib.core.Resource {
+  	constructor(scope, id, ) {
+  	super(scope, id);
+  {
+    this.another = new Another(this,\\"Another\\");
+  }
+  }
+  	
+  	_toInflight() {
+  	const another_client = this._lift(this.another);
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/Test.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Test_inflight({another: \${another_client}}))\`);
+  }
+  }
+  Test._annotateInflight(\\"test\\", {\\"this.another\\": { ops: [\\"func\\"] }});
+  const f = new Test(this,\\"Test\\");
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.80a17b6f758da66f2a7690bf5a9478936a9921da3421819b7a8bf7e1cfde82ed/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+      f: {
+        obj: f,
+        ops: [\\"test\\"]
+      },
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`inflight_ref_unknown_op.w > wing compile --target tf-aws > Test.inflight.js 1`] = `
+"export class Test_inflight  {
+constructor({ b }) {
+
+  this.b = b;
+}
+async  test()  {
+	{
+  const x = this.b;
+  (await x.put(\\"hello\\",\\"world\\"));
+}
+}}"
+`;
+
+exports[`inflight_ref_unknown_op.w > wing compile --target tf-aws > index.js 1`] = `
+"async handle() { const { f } = this; {
+  (await f.test());
+} };"
+`;
+
+exports[`inflight_ref_unknown_op.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_test_IamRole_6CDC2D16": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRole",
+            "uniqueId": "root_test_IamRole_6CDC2D16",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_test_IamRolePolicy_474A6820": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicy",
+            "uniqueId": "root_test_IamRolePolicy_474A6820",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_test_IamRolePolicyAttachment_1102A28A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/IamRolePolicyAttachment",
+            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_test_AAE85061": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Default",
+            "uniqueId": "root_test_AAE85061",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_7f08500e": "\${aws_s3_bucket.root_Test_cloudBucket_8208F150.bucket}",
+            "WING_FUNCTION_NAME": "test-c8b6eece",
+          },
+        },
+        "function_name": "test-c8b6eece",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_Test_cloudBucket_8208F150": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Test/cloud.Bucket/Default",
+            "uniqueId": "root_Test_cloudBucket_8208F150",
+          },
+        },
+        "bucket_prefix": "cloud-bucket-c88130da-",
+      },
+      "root_test_Code_2D131EC2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/Code",
+            "uniqueId": "root_test_Code_2D131EC2",
+          },
+        },
+        "bucket_prefix": "code-c883c33b-",
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_Test_cloudBucket_PublicAccessBlock_94819ECF": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Test/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_Test_cloudBucket_PublicAccessBlock_94819ECF",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_Test_cloudBucket_8208F150.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_Test_cloudBucket_Encryption_CC613733": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Test/cloud.Bucket/Encryption",
+            "uniqueId": "root_Test_cloudBucket_Encryption_CC613733",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_Test_cloudBucket_8208F150.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+    },
+    "aws_s3_object": {
+      "root_test_S3Object_A16CD789": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test/S3Object",
+            "uniqueId": "root_test_S3Object_A16CD789",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`inflight_ref_unknown_op.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"inflight_ref_unknown_op\\", plugins: $plugins });
+  
+  class Test extends $stdlib.core.Resource {
+  	constructor(scope, id, ) {
+  	super(scope, id);
+  {
+    this.b = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
+  }
+  }
+  	
+  	_toInflight() {
+  	const b_client = this._lift(this.b);
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/Test.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Test_inflight({b: \${b_client}}))\`);
+  }
+  }
+  Test._annotateInflight(\\"test\\", {\\"this.b\\": { ops: [] }});
+  const f = new Test(this,\\"Test\\");
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.80a17b6f758da66f2a7690bf5a9478936a9921da3421819b7a8bf7e1cfde82ed/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+      f: {
+        obj: f,
+        ops: [\\"test\\"]
+      },
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
 exports[`json.w > wing compile --target tf-aws > main.tf.json 1`] = `
 {
   "//": {
@@ -4721,8 +6758,8 @@ constructor() {
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo_inflight({c: \${c_client}}))\`);
   }
   }
-  Foo._annotateInflight(\\"foo_inc\\", {\\"this.c\\": { ops: [\\"dec\\", \\"inc\\", \\"peek\\", \\"reset\\"]}});
-  Foo._annotateInflight(\\"foo_get\\", {\\"this.c\\": { ops: [\\"dec\\", \\"inc\\", \\"peek\\", \\"reset\\"]}});
+  Foo._annotateInflight(\\"foo_inc\\", {\\"this.c\\": { ops: [\\"inc\\"] }});
+  Foo._annotateInflight(\\"foo_get\\", {\\"this.c\\": { ops: [\\"peek\\"] }});
   class Bar extends $stdlib.core.Resource {
   	constructor(scope, id, name, b) {
   	super(scope, id);
@@ -4741,7 +6778,7 @@ constructor() {
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Bar_inflight({b: \${b_client}, foo: \${foo_client}, name: \${name_client}}))\`);
   }
   }
-  Bar._annotateInflight(\\"my_method\\", {\\"this.b\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.foo\\": { ops: [\\"foo_get\\", \\"foo_inc\\"]}, \\"this.name\\": { ops: []}});
+  Bar._annotateInflight(\\"my_method\\", {\\"this.b\\": { ops: [\\"get\\",\\"put\\"] },\\"this.foo\\": { ops: [\\"foo_get\\",\\"foo_inc\\"] }});
   const bucket = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
   const res = new Bar(this,\\"Bar\\",\\"Arr\\",bucket);
   this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
@@ -5179,7 +7216,7 @@ constructor() {
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo_inflight({instance_field: \${instance_field_client}}))\`);
   }
   }
-  Foo._annotateInflight(\\"get_123\\", {\\"this.instance_field\\": { ops: []}});
+  Foo._annotateInflight(\\"get_123\\", {});
   const foo = new Foo(this,\\"Foo\\");
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(foo.instance_field === 100)'\`)})((foo.instance_field === 100))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((Foo.m()) === 99)'\`)})(((Foo.m()) === 99))};
@@ -5242,23 +7279,38 @@ constructor() {
   const mut_array = [...(s_array)];
   (mut_array.push(\\"three\\"));
   const immut_array = Object.freeze([...(mut_array)]);
-  const s_set = Object.freeze(new Set([\\"one\\", \\"two\\"]));
-  const mut_set = new Set(s_set);
-  (mut_set.add(\\"three\\"));
-  const immut_set = Object.freeze(new Set(mut_set));
-  const s_map = Object.freeze({\\"one\\":1,\\"two\\":2});
-  const nested_map = Object.freeze({\\"a\\":Object.freeze({\\"b\\":Object.freeze({\\"c\\":\\"hello\\"})})});
-  const mut_map = {...(s_map)};
-  ((obj, args) => { obj[args[0]] = args[1]; })(mut_map, [\\"five\\",5]);
-  const immut_map = Object.freeze({...(mut_map)});
   const s = (s_array.at(1));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s === \\"two\\")'\`)})((s === \\"two\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s_array.at(1)) === \\"two\\")'\`)})(((s_array.at(1)) === \\"two\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_array.length === 2)'\`)})((s_array.length === 2))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_array.length === 3)'\`)})((immut_array.length === 3))};
+  const s_array2 = Object.freeze([\\"if\\", \\"you\\", \\"build\\", \\"it\\"]);
+  const s_array3 = Object.freeze([\\"he\\", \\"will\\", \\"come\\", \\"for\\", \\"you\\"]);
+  const merged_array = (s_array2.concat(s_array3));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(merged_array.length === 9)'\`)})((merged_array.length === 9))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((merged_array.at(5)) === \\"will\\")'\`)})(((merged_array.at(5)) === \\"will\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: 'merged_array.includes(\\"build\\")'\`)})(merged_array.includes(\\"build\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(!merged_array.includes(\\"bring\\"))'\`)})((!merged_array.includes(\\"bring\\")))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(merged_array.indexOf(\\"you\\") === 1)'\`)})((merged_array.indexOf(\\"you\\") === 1))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((merged_array.join(\\" \\")) === \\"if you build it he will come for you\\")'\`)})(((merged_array.join(\\" \\")) === \\"if you build it he will come for you\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((merged_array.join()) === \\"if,you,build,it,he,will,come,for,you\\")'\`)})(((merged_array.join()) === \\"if,you,build,it,he,will,come,for,you\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(merged_array.lastIndexOf(\\"you\\") === 8)'\`)})((merged_array.lastIndexOf(\\"you\\") === 8))};
+  const mut_array2 = [\\"how\\", \\"does\\", \\"that\\", \\"look\\"];
+  const merged_mut_array = (mut_array.concat(mut_array2));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(merged_mut_array.length === 7)'\`)})((merged_mut_array.length === 7))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((merged_mut_array.at(5)) === \\"that\\")'\`)})(((merged_mut_array.at(5)) === \\"that\\"))};
+  const s_set = Object.freeze(new Set([\\"one\\", \\"two\\"]));
+  const mut_set = new Set(s_set);
+  (mut_set.add(\\"three\\"));
+  const immut_set = Object.freeze(new Set(mut_set));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_set.has(\\"one\\"))'\`)})((s_set.has(\\"one\\")))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_set.size === 2)'\`)})((s_set.size === 2))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_set.size === 3)'\`)})((immut_set.size === 3))};
+  const s_map = Object.freeze({\\"one\\":1,\\"two\\":2});
+  const nested_map = Object.freeze({\\"a\\":Object.freeze({\\"b\\":Object.freeze({\\"c\\":\\"hello\\"})})});
+  const mut_map = {...(s_map)};
+  ((obj, args) => { obj[args[0]] = args[1]; })(mut_map, [\\"five\\",5]);
+  const immut_map = Object.freeze({...(mut_map)});
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s_map)[\\"one\\"] === 1)'\`)})(((s_map)[\\"one\\"] === 1))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(s_map).length === 2)'\`)})((Object.keys(s_map).length === 2))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(immut_map).length === 3)'\`)})((Object.keys(immut_map).length === 3))};
@@ -6080,7 +8132,7 @@ exports[`user-defined-resources-captures.w > wing compile --target tf-aws > main
             "uniqueId": "root_testcapturearray_IamRolePolicy_FBEBD531",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.root_testcapturearray_IamRole_0E03D456.name}",
       },
       "root_testcapturearrayofqueues_IamRolePolicy_C28D32CE": {
@@ -6090,7 +8142,7 @@ exports[`user-defined-resources-captures.w > wing compile --target tf-aws > main
             "uniqueId": "root_testcapturearrayofqueues_IamRolePolicy_C28D32CE",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.root_testcapturearrayofqueues_IamRole_223C9195.name}",
       },
       "root_testcapturemap_IamRolePolicy_8E51A860": {
@@ -6100,7 +8152,7 @@ exports[`user-defined-resources-captures.w > wing compile --target tf-aws > main
             "uniqueId": "root_testcapturemap_IamRolePolicy_8E51A860",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.root_testcapturemap_IamRole_1B5F9F5E.name}",
       },
       "root_testcaptureprimitives_IamRolePolicy_E3C1E921": {
@@ -6110,7 +8162,7 @@ exports[`user-defined-resources-captures.w > wing compile --target tf-aws > main
             "uniqueId": "root_testcaptureprimitives_IamRolePolicy_E3C1E921",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.root_testcaptureprimitives_IamRole_67F1EAC9.name}",
       },
       "root_testcaptureresource_IamRolePolicy_86C59E76": {
@@ -6120,7 +8172,7 @@ exports[`user-defined-resources-captures.w > wing compile --target tf-aws > main
             "uniqueId": "root_testcaptureresource_IamRolePolicy_86C59E76",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.root_testcaptureresource_IamRole_69F520A4.name}",
       },
       "root_testcaptureset_IamRolePolicy_D409E226": {
@@ -6130,7 +8182,7 @@ exports[`user-defined-resources-captures.w > wing compile --target tf-aws > main
             "uniqueId": "root_testcaptureset_IamRolePolicy_D409E226",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}\\",\\"\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.root_testcaptureset_IamRole_1FCDC76B.name}",
       },
     },
@@ -6512,12 +8564,12 @@ constructor() {
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).MyResource_inflight({array_of_queues: \${array_of_queues_client}, array_of_str: \${array_of_str_client}, map_of_num: \${map_of_num_client}, my_bool: \${my_bool_client}, my_num: \${my_num_client}, my_resource: \${my_resource_client}, my_str: \${my_str_client}, set_of_str: \${set_of_str_client}}))\`);
   }
   }
-  MyResource._annotateInflight(\\"capture_resource\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
-  MyResource._annotateInflight(\\"capture_primitives\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
-  MyResource._annotateInflight(\\"capture_array\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
-  MyResource._annotateInflight(\\"capture_map\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
-  MyResource._annotateInflight(\\"capture_set\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
-  MyResource._annotateInflight(\\"capture_array_of_queues\\", {\\"this.array_of_queues\\": { ops: []}, \\"this.array_of_str\\": { ops: []}, \\"this.map_of_num\\": { ops: []}, \\"this.my_bool\\": { ops: []}, \\"this.my_num\\": { ops: []}, \\"this.my_resource\\": { ops: [\\"delete\\", \\"get\\", \\"get_json\\", \\"list\\", \\"put\\", \\"put_json\\"]}, \\"this.my_str\\": { ops: []}, \\"this.set_of_str\\": { ops: []}});
+  MyResource._annotateInflight(\\"capture_resource\\", {\\"this.my_resource\\": { ops: [\\"get\\",\\"list\\",\\"put\\"] }});
+  MyResource._annotateInflight(\\"capture_primitives\\", {\\"this.my_bool\\": { ops: [] },\\"this.my_num\\": { ops: [] },\\"this.my_str\\": { ops: [] }});
+  MyResource._annotateInflight(\\"capture_array\\", {\\"this.array_of_str\\": { ops: [\\"at\\",\\"length\\"] }});
+  MyResource._annotateInflight(\\"capture_map\\", {\\"this.map_of_num\\": { ops: [\\"get\\"] }});
+  MyResource._annotateInflight(\\"capture_set\\", {\\"this.set_of_str\\": { ops: [\\"has\\"] }});
+  MyResource._annotateInflight(\\"capture_array_of_queues\\", {\\"this.array_of_queues\\": { ops: [\\"at\\"] }});
   const r = new MyResource(this,\\"MyResource\\");
   this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:capture_resource\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.b5e7bd6cc9f6c741c4f0afa8adc0208ccee08e6297495b1fbe29db8afb6ee789/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),

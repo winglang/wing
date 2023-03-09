@@ -7,7 +7,7 @@ edition = "2021"
 tree-sitter = "0.20.9"
 tree-sitter-traversal = "0.1.2"
 sha2 = "0.10.6"
-base16ct = { version = "0.1.1", features = ["alloc"] }
+base16ct = { version = "0.2.0", features = ["alloc"] }
 derivative = "2.2.0"
 tree-sitter-wing = { path = "../tree-sitter-wing" }
 wingii = { path = "../wingii" }
@@ -20,9 +20,8 @@ inflections = "1.1.1"
 phf = { version = "0.11", features = ["macros"] }
 indexmap = "1.9.1"
 aho-corasick = "0.7.20"
-lsp-types = "0.93.2"
+lsp-types = "0.94.0"
 indoc = "2.0.0"
 
 [lib]
-path = "src/lib.rs"
-crate-type = ["cdylib", "rlib"]
+crate-type = ["rlib", "cdylib"]

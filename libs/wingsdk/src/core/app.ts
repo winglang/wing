@@ -1,5 +1,7 @@
 import { mkdirSync, readdirSync, renameSync, rmSync, existsSync } from "fs";
 import { join } from "path";
+import { DataAwsCallerIdentity } from "@cdktf/provider-aws/lib/data-aws-caller-identity";
+import { DataAwsRegion } from "@cdktf/provider-aws/lib/data-aws-region";
 import * as cdktf from "cdktf";
 import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
@@ -157,6 +159,8 @@ export abstract class CdktfApp extends App {
   private readonly pluginManager: PluginManager;
   private synthed: boolean;
   private synthedOutput: string | undefined;
+  private awsRegionProvider?: DataAwsRegion;
+  private awsAccountIdProvider?: DataAwsCallerIdentity;
 
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
@@ -196,6 +200,26 @@ export abstract class CdktfApp extends App {
 
     // register a logger for this app.
     Logger.register(this);
+  }
+
+  /**
+   * The AWS account ID of the App
+   */
+  public get accountId(): string {
+    if (!this.awsAccountIdProvider) {
+      this.awsAccountIdProvider = new DataAwsCallerIdentity(this, "account");
+    }
+    return this.awsAccountIdProvider.accountId;
+  }
+
+  /**
+   * The AWS region of the App
+   */
+  public get region(): string {
+    if (!this.awsRegionProvider) {
+      this.awsRegionProvider = new DataAwsRegion(this, "Region");
+    }
+    return this.awsRegionProvider.name;
   }
 
   /**
