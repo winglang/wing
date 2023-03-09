@@ -7219,12 +7219,18 @@ constructor() {
   const s_array2 = Object.freeze([\\"if\\", \\"you\\", \\"build\\", \\"it\\"]);
   const s_array3 = Object.freeze([\\"he\\", \\"will\\", \\"come\\", \\"for\\", \\"you\\"]);
   const merged_array = (s_array2.concat(s_array3));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(merged_array.length === 9)'\`)})((merged_array.length === 9))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((merged_array.at(5)) === \\"will\\")'\`)})(((merged_array.at(5)) === \\"will\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: 'merged_array.includes(\\"build\\")'\`)})(merged_array.includes(\\"build\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(!merged_array.includes(\\"bring\\"))'\`)})((!merged_array.includes(\\"bring\\")))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(merged_array.indexOf(\\"you\\") === 1)'\`)})((merged_array.indexOf(\\"you\\") === 1))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((merged_array.join(\\" \\")) === \\"if you build it he will come for you\\")'\`)})(((merged_array.join(\\" \\")) === \\"if you build it he will come for you\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((merged_array.join()) === \\"if,you,build,it,he,will,come,for,you\\")'\`)})(((merged_array.join()) === \\"if,you,build,it,he,will,come,for,you\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(merged_array.lastIndexOf(\\"you\\") === 8)'\`)})((merged_array.lastIndexOf(\\"you\\") === 8))};
+  const mut_array2 = [\\"how\\", \\"does\\", \\"that\\", \\"look\\"];
+  const merged_mut_array = (mut_array.concat(Object.freeze([...(mut_array2)])));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(merged_mut_array.length === 7)'\`)})((merged_mut_array.length === 7))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((merged_mut_array.at(5)) === \\"that\\")'\`)})(((merged_mut_array.at(5)) === \\"that\\"))};
   const s_set = Object.freeze(new Set([\\"one\\", \\"two\\"]));
   const mut_set = new Set(s_set);
   (mut_set.add(\\"three\\"));
