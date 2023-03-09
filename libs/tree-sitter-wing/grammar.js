@@ -95,7 +95,7 @@ module.exports = grammar({
       seq(
         "struct",
         field("name", $.identifier),
-        optional(seq("extends", commaSepZeroOrMore($.identifier, false))),
+        optional(seq("extends", commaSep($.identifier))),
         "{",
         repeat($.struct_field),
         "}"
@@ -109,7 +109,7 @@ module.exports = grammar({
         "enum",
         field("enum_name", $.identifier),
         "{",
-        commaSepZeroOrMore(alias($.identifier, $.enum_field)),
+        commaSep(alias($.identifier, $.enum_field)),
         "}"
       ),
 
@@ -144,7 +144,7 @@ module.exports = grammar({
         "class",
         field("name", $.identifier),
         optional(seq("extends", field("parent", $.custom_type))),
-        optional(seq("impl", field("implements", commaSepOneOrMore($.custom_type, false)))),
+        optional(seq("impl", field("implements", commaSep1($.custom_type)))),
         field("implementation", $.class_implementation)
       ),
     class_implementation: ($) =>
@@ -177,7 +177,7 @@ module.exports = grammar({
         "resource",
         field("name", $.identifier),
         optional(seq("extends", field("parent", $.custom_type))),
-        optional(seq("impl", field("implements", commaSepOneOrMore($.custom_type, false)))),
+        optional(seq("impl", field("implements", commaSep1($.custom_type)))),
         field("implementation", $.resource_implementation)
       ),
     resource_implementation: ($) =>
@@ -198,7 +198,7 @@ module.exports = grammar({
       seq(
         "interface",
         field("name", $.identifier),
-        optional(seq("extends", field("implements", commaSepOneOrMore($.custom_type, false)))),
+        optional(seq("extends", field("implements", commaSep1($.custom_type)))),
         field("implementation", $.interface_implementation)
       ),
     interface_implementation: ($) =>
@@ -325,12 +325,12 @@ module.exports = grammar({
       seq(
         "(",
         choice(
-          commaSepZeroOrMore($.positional_argument),
-          commaSepZeroOrMore($.keyword_argument),
+          commaSep($.positional_argument),
+          commaSep($.keyword_argument),
           seq(
-            commaSepZeroOrMore($.positional_argument),
+            commaSep($.positional_argument),
             ",",
-            commaSepZeroOrMore($.keyword_argument)
+            commaSep($.keyword_argument)
           )
         ),
         ")"
@@ -382,7 +382,7 @@ module.exports = grammar({
         )
       ),
 
-    parameter_type_list: ($) => seq("(", commaSepZeroOrMore($._type), ")"),
+    parameter_type_list: ($) => seq("(", commaSep($._type), ")"),
 
     builtin_type: ($) => choice("num", "bool", "any", "str", "void", "duration"),
 
@@ -448,7 +448,7 @@ module.exports = grammar({
         $._type_annotation
       ),
 
-    parameter_list: ($) => seq("(", commaSepZeroOrMore($.parameter_definition), ")"),
+    parameter_list: ($) => seq("(", commaSep($.parameter_definition), ")"),
 
     immutable_container_type: ($) =>
       seq(
@@ -566,17 +566,17 @@ module.exports = grammar({
       choice($.array_literal, $.set_literal, $.map_literal),
     array_literal: ($) => seq(
       optional(field("type", $._builtin_container_type)),
-      "[", commaSepZeroOrMore(field("element", $.expression)), "]"
+      "[", commaSep(field("element", $.expression)), "]"
     ),
     set_literal: ($) => seq(
       optional(field("type", $._builtin_container_type)),
-      "{", commaSepZeroOrMore(field("element", $.expression)), "}"
+      "{", commaSep(field("element", $.expression)), "}"
     ),
     map_literal: ($) => seq(
       optional(field("type", $._builtin_container_type)),
-      "{", commaSepZeroOrMore(field("member", $.map_literal_member)), "}"
+      "{", commaSep(field("member", $.map_literal_member)), "}"
     ),
-    struct_literal: ($) => seq(field("type", $.custom_type), "{", field("fields", commaSepZeroOrMore($.struct_literal_member)), "}"),
+    struct_literal: ($) => seq(field("type", $.custom_type), "{", field("fields", commaSep($.struct_literal_member)), "}"),
 
     map_literal_member: ($) =>
       seq(choice($.identifier, $.string), ":", $.expression),
@@ -603,17 +603,13 @@ module.exports = grammar({
 /**
  * @param {Rule} rule
  */
-function commaSepOneOrMore(rule, allowTrailing = true) {
-  if (allowTrailing) {
-    return seq(rule, repeat(seq(",", rule)), optional(","));
-  } else {
-    return seq(rule, repeat(seq(",", rule)));
-  }
+function commaSep1(rule) {
+  return seq(rule, repeat(seq(",", rule)), optional(","));
 }
 
 /**
  * @param {Rule} rule
  */
-function commaSepZeroOrMore(rule, allowTrailing = true) {
-  return optional(commaSepOneOrMore(rule, allowTrailing));
+function commaSep(rule) {
+  return optional(commaSep1(rule));
 }
