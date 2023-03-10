@@ -165,14 +165,14 @@ jobs:
           vercel-args: "--prod "
 
   e2e:
-    name: "E2E Tests | ${{ matrix.runner}} node@${{ matrix.node }} (${{ matrix.shard }})"
+    name: "E2E | ${{ matrix.runner}} | Node@${{ matrix.node }} | ${{ matrix.shard }}"
     needs:
       - build
       - prepare
     strategy:
       fail-fast: true
       matrix:
-        runner: [ubuntu-latest, macos-latest, windows-latest]
+        runner: [ubuntu, macos, windows]
         node: [18, 19]
         shard: ["1/2", "2/2"]
         full_run: 
@@ -180,12 +180,12 @@ jobs:
           - ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'pr/e2e-full') }}
         exclude:
           # Only run full test suite on push
-          - runner: macos-latest
+          - runner: macos
             full_run: false
-          - runner: ubuntu-latest
+          - runner: ubuntu
             node: 19
             full_run: false
-    runs-on: ${{ matrix.runner }}
+    runs-on: "${{ matrix.runner }}-latest"
     env:
       HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.prepare.outputs.version }}.tgz"
       HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.prepare.outputs.version }}.tgz"
@@ -204,20 +204,11 @@ jobs:
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
         with:
-          working-directory: tools/hangar
+          working-directory: |
+            tools/hangar
+            examples/tests/valid
+            examples/tests/invalid
           install-command: npm ci --ignore-scripts
-
-      - name: Install Example Dependencies (1/2)
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: examples/tests/valid
-          install-command: npm ci
-
-      - name: Install Example Dependencies (2/2)
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: examples/tests/invalid
-          install-command: npm ci
 
       - name: Run E2E Tests
         working-directory: tools/hangar
