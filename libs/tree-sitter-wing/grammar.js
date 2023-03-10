@@ -54,7 +54,8 @@ module.exports = grammar({
         repeat(seq(".", field("fields", $.identifier)))
       ),
 
-    // TODO: add other standard library types
+    // This is required because of ambiguity with using Json keyword for both instantiation of Json
+    // and Identifier for static methods. Same issue exists for other types like Set, Map, etc.
     stdlib_identifier: ($) => choice($._json_types),
     nested_identifier: ($) =>
       prec(
