@@ -31,6 +31,21 @@ export const createBucketRouter = () => {
           fileName: z.string(),
         }),
       )
+      .query(async ({ input, ctx }) => {
+        const simulator = await ctx.simulator();
+        const client = simulator.getResource(
+          input.resourcePath,
+        ) as IBucketClient;
+        const response = await client.get(input.fileName);
+        return response;
+      }),
+    "bucket.download": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string(),
+          fileName: z.string(),
+        }),
+      )
       .mutation(async ({ input, ctx }) => {
         const simulator = await ctx.simulator();
         const client = simulator.getResource(

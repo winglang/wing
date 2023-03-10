@@ -1,28 +1,25 @@
-import { SpinnerLoader } from "./SpinnerLoader.js";
+import { useEffect, useState } from "react";
 
 export interface TextHighlightProps {
-  value: string;
+  text: string;
   className?: string;
-  format?: boolean;
-  children?: React.ReactNode;
+  json?: boolean;
 }
 
-export const TextHighlight = ({
-  value,
-  className = "",
-  format = true,
-  children,
-}: TextHighlightProps) => {
-  const palette = {
-    key: "text-slate-900",
-    string: "text-slate-600",
-    number: "text-lime-600",
-    boolean: "text-sky-600",
-    null: "text-red-600",
-  };
+const palette = {
+  key: "text-slate-900",
+  string: "text-orange-600",
+  number: "text-lime-600",
+  boolean: "text-sky-600",
+  null: "text-red-600",
+};
 
-  const highlight = (value: string) => {
-    return value.replace(
+const CHAR_LIMIT = 100_000;
+
+const highlightJson = (value: string) => {
+  return `${value
+    .slice(0, CHAR_LIMIT)
+    .replace(
       /("(\\u[\dA-Za-z]{4}|\\[^u]|[^"\\])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[Ee][+\-]?\d+)?)/g,
       (match) => {
         let className = palette.number;
@@ -35,17 +32,26 @@ export const TextHighlight = ({
         }
         return `<span class="${className}">${match}</span>`;
       },
-    );
-  };
+    )}${value.slice(CHAR_LIMIT)}`;
+};
+
+export const TextHighlight = ({
+  text,
+  className = "",
+  json = true,
+}: TextHighlightProps) => {
+  const [highlightedText, setHighlightedText] = useState(text);
+  useEffect(() => {
+    setHighlightedText(json ? highlightJson(text) : text);
+  }, [text, json]);
 
   return (
     <div className={className}>
-      {format ? (
-        <div dangerouslySetInnerHTML={{ __html: highlight(value) }}></div>
+      {json ? (
+        <div dangerouslySetInnerHTML={{ __html: highlightedText }}></div>
       ) : (
-        <div>{value}</div>
+        <div>{text}</div>
       )}
-      {children}
     </div>
   );
 };

@@ -8,22 +8,15 @@ import {
 } from "react";
 
 import { Button } from "../../design-system/Button.js";
-import { Checkbox } from "../../design-system/Checkbox.js";
 import { Popover } from "../../design-system/Popover.js";
 import { SpinnerLoader } from "../../design-system/SpinnerLoader.js";
 import { TextHighlight } from "../../design-system/TextHighlight.js";
+import { TreeEntry, Tree } from "../../design-system/Tree.js";
 import { trpc } from "../../utils/trpc.js";
 import { File, useDownloadFile } from "../../utils/useDownloadFile.js";
 
 export interface BucketViewProps {
   resourcePath: string;
-}
-
-export interface FileExplorerEntry {
-  type: "directory" | "file";
-  name: string;
-  updatedAt?: number;
-  fileSize?: number;
 }
 
 const getFileType = (fileName: string) => {
@@ -33,19 +26,30 @@ const getFileType = (fileName: string) => {
 const canBePreviewed = (fileName: string) => {
   const validFileTypes = ["txt", "json"];
   const fileType = getFileType(fileName);
-  return fileType && validFileTypes.includes(fileType);
+  if (!fileType) {
+    return false;
+  }
+  return validFileTypes.includes(fileType);
 };
 
 export const BucketView = ({ resourcePath }: BucketViewProps) => {
   const bucketList = trpc["bucket.list"].useQuery({ resourcePath });
   const putFile = trpc["bucket.put"].useMutation();
-  const getFile = trpc["bucket.get"].useMutation();
+  const [currentFile, setCurrentFile] = useState<string>();
+  const currentFileContents = trpc["bucket.get"].useQuery(
+    {
+      fileName: currentFile ?? "",
+      resourcePath,
+    },
+    {
+      enabled: currentFile !== undefined && canBePreviewed(currentFile),
+      keepPreviousData: false,
+    },
+  );
   const deleteFile = trpc["bucket.delete"].useMutation();
+  const downloadFile = trpc["bucket.download"].useMutation();
 
-  const [tableLoading, setTableLoading] = useState(false);
-  const [previewLoading, setPreviewLoading] = useState(false);
-
-  const [entries, setEntries] = useState<FileExplorerEntry[]>([]);
+  const [entries, setEntries] = useState<TreeEntry[]>([]);
   const [selectedEntries, setSelectedEntries] = useState<string[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -53,17 +57,11 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
 
   const { download, downloadFiles } = useDownloadFile();
 
-  const [currentFile, setCurrentFile] = useState<
-    | {
-        entry: FileExplorerEntry;
-        content: string;
-      }
-    | undefined
-  >();
-
-  const addNewEntries: FormEventHandler<HTMLInputElement> = async (event) => {
+  const uploadSelectedEntries: FormEventHandler<HTMLInputElement> = async (
+    event,
+  ) => {
     for (const file of event.currentTarget.files ?? []) {
-      await putFile.mutateAsync({
+      putFile.mutateAsync({
         resourcePath,
         fileName: file.name,
         // TODO: Fix the missing `file.path` declaration. Seems to come from electron.d.ts...
@@ -76,8 +74,7 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
   };
 
   const deleteSelectedEntries = async () => {
-    setTableLoading(true);
-    if (currentFile && selectedEntries.includes(currentFile.entry.name)) {
+    if (currentFile) {
       setCurrentFile(undefined);
     }
     await deleteFile.mutateAsync({
@@ -86,7 +83,6 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
     });
 
     setSelectedEntries([]);
-    setTableLoading(false);
   };
 
   const downloadSelectedEntries = useCallback(async () => {
@@ -94,84 +90,37 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
       return;
     }
 
-    setTableLoading(true);
     if (selectedEntries.length === 1 && selectedEntries[0]) {
-      const [fileName] = selectedEntries;
-      const content = await getFile.mutateAsync({
+      const entry = selectedEntries[0];
+      if (!entry) {
+        return;
+      }
+      const content = await downloadFile.mutateAsync({
         resourcePath,
-        fileName,
+        fileName: entry,
       });
-      download(fileName, content);
+      download(entry, content);
     }
     if (selectedEntries.length > 1) {
-      const files: File[] = [];
-      for (const entry of selectedEntries) {
-        const content = await getFile.mutateAsync({
+      const promises = selectedEntries.map(async (entry) => {
+        const content = await downloadFile.mutateAsync({
           resourcePath,
           fileName: entry,
         });
-        const file = { filename: entry, content };
-        files.push(file);
-      }
-      await downloadFiles(files);
+        return { filename: entry, content };
+      });
+
+      const files = await Promise.all(promises);
+      downloadFiles(files);
     }
-    setTableLoading(false);
     setSelectedEntries([]);
   }, [selectedEntries]);
-
-  const openPreviewFile = async (entry: FileExplorerEntry) => {
-    if (entry !== currentFile?.entry) {
-      setCurrentFile({ entry, content: "" });
-      if (canBePreviewed(entry.name)) {
-        setPreviewLoading(true);
-        const file = await getFile.mutateAsync({
-          resourcePath,
-          fileName: entry.name,
-        });
-        setCurrentFile({ entry, content: file });
-        setPreviewLoading(false);
-      }
-    }
-  };
-
-  const onEntrySelected = async (
-    entry: FileExplorerEntry,
-    checked: boolean,
-    previewFile: boolean = false,
-  ) => {
-    setSelectedEntries(([...checkedEntries]) => {
-      if (checked) {
-        if (checkedEntries.includes(entry.name)) {
-          return checkedEntries;
-        }
-        return [...checkedEntries, entry.name];
-      } else {
-        const index = checkedEntries.indexOf(entry.name);
-        if (index !== -1) {
-          checkedEntries.splice(index, 1);
-        }
-        return checkedEntries;
-      }
-    });
-    if (previewFile && entry !== currentFile?.entry) {
-      setCurrentFile({ entry, content: "" });
-      if (canBePreviewed(entry.name)) {
-        setPreviewLoading(true);
-        const file = await getFile.mutateAsync({
-          resourcePath,
-          fileName: entry.name,
-        });
-        setCurrentFile({ entry, content: file });
-        setPreviewLoading(false);
-      }
-    }
-  };
 
   // todo [sa] make it work better with actual file objects and not only keys
   useEffect(() => {
     setEntries(
       bucketList.data?.map((file) => ({
-        type: "file",
+        id: file,
         name: file,
       })) ?? [],
     );
@@ -190,19 +139,25 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
           />
           <div className="relative">
             <Popover label="Delete" disabled={selectedEntries.length === 0}>
-              <span>
-                Are you sure you want to delete {selectedEntries.length} file
-                {selectedEntries.length > 1 && "s"}?
-              </span>
-              <div className="flex justify-end gap-2 mt-4">
-                <Button label="Cancel" />
-                <Button
-                  label="Confirm"
-                  onClick={async () => {
-                    await deleteSelectedEntries();
-                  }}
-                />
-              </div>
+              {({ close }) => (
+                <>
+                  <span>
+                    Are you sure you want to delete {selectedEntries.length}{" "}
+                    file
+                    {selectedEntries.length > 1 && "s"}?
+                  </span>
+                  <div className="flex justify-end gap-2 mt-4">
+                    <Button label="Cancel" onClick={close} />
+                    <Button
+                      label="Confirm"
+                      onClick={async () => {
+                        close();
+                        await deleteSelectedEntries();
+                      }}
+                    />
+                  </div>
+                </>
+              )}
             </Popover>
           </div>
         </div>
@@ -213,7 +168,8 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
             ref={fileInputRef}
             type="file"
             className="hidden"
-            onInput={addNewEntries}
+            onInput={uploadSelectedEntries}
+            multiple
           />
           <Button
             label="Upload"
@@ -224,88 +180,55 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
         </div>
       </div>
 
-      <div className="flex-1 bg-white rounded border border-slate-200 h-96">
-        <table className="w-full bg-white rounded table-fixed">
-          <tbody className="relative max-h-[10rem] block overflow-y-auto">
-            {tableLoading && (
-              <tr className="w-full h-full absolute z-10 bg-opacity-50 bg-slate-50">
-                <td className="flex justify-center h-full items-center">
-                  <SpinnerLoader className="h-5 w-5" />
-                </td>
-              </tr>
-            )}
-            {entries.length === 0 && (
-              <tr className="table w-full">
-                <td className="px-2">
-                  <div className="text-center text-slate-400 inline-block w-full">
-                    {!tableLoading && "No files"}
-                  </div>
-                </td>
-              </tr>
-            )}
-            {entries.map((entry) => {
-              return (
-                <tr key={entry.name} className="table w-full table-fixed">
-                  <td
-                    className={classNames(
-                      "px-2 group hover:bg-slate-200/50 text-slate-600",
-                      currentFile?.entry.name === entry.name && "bg-slate-200",
-                    )}
-                  >
-                    <div className="flex items-center gap-1.5 w-full">
-                      <Checkbox
-                        checked={selectedEntries.includes(entry.name)}
-                        onChange={async (event) => {
-                          event.stopPropagation();
-                          await onEntrySelected(
-                            entry,
-                            event.currentTarget.checked,
-                          );
-                        }}
-                      />
-                      <button
-                        className="w-full text-left truncate outline-none"
-                        onClick={() => openPreviewFile(entry)}
-                      >
-                        {entry.name}
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+      {entries.length === 0 && (
+        <div className="bg-white outline-none rounded border border-slate-300 py-0.5 text-center text-slate-400 inline-block w-full">
+          No files
+        </div>
+      )}
+      {entries.length > 0 && (
+        <Tree
+          entries={entries}
+          selectedEntries={selectedEntries}
+          onCurrentChange={setCurrentFile}
+          onSelectionChange={setSelectedEntries}
+          className="min-h-[6rem] h-48 overflow-y-auto resize-y"
+        />
+      )}
 
       {currentFile && (
-        <div>
-          <span className="text-sm text-slate-500">
-            {currentFile.entry.name}
-          </span>
+        <div className="space-y-1 mt-1">
+          <div className="text-sm text-slate-500 truncate">{currentFile}</div>
 
-          <TextHighlight
-            className={classNames(
-              "mt-1 max-h-[30rem]",
-              "flex-1 font-mono w-full",
-              "rounded border-slate-200 bg-white",
-              "select-text text-slate-600 text-xs",
-              "break-words whitespace-pre-wrap",
-              "overflow-y-auto p-2 border",
-            )}
-            value={
-              currentFile.content ||
-              (!previewLoading && "No preview available") ||
-              ""
-            }
-            format={getFileType(currentFile.entry.name) === "json"}
-          >
-            {previewLoading && (
-              <div className="flex justify-center items-center h-20">
-                <SpinnerLoader className="h-5 w-5" />
-              </div>
-            )}
-          </TextHighlight>
+          {!canBePreviewed(currentFile) && (
+            <div
+              className={classNames(
+                "flex-1 text-center text-slate-600 text-xs",
+                "px-2 py-1 border rounded border-slate-200 bg-slate-100",
+              )}
+            >
+              No preview available
+            </div>
+          )}
+
+          {canBePreviewed(currentFile) && currentFileContents.isFetching && (
+            <div className="flex justify-center items-center h-20">
+              <SpinnerLoader className="h-5 w-5" />
+            </div>
+          )}
+
+          {canBePreviewed(currentFile) && currentFileContents.data && (
+            <TextHighlight
+              className={classNames(
+                "flex-1 font-mono w-full",
+                "p-2 border rounded border-slate-200 bg-white",
+                "select-text text-slate-600 text-xs",
+                "break-words whitespace-pre-wrap",
+                "min-h-[6rem] h-48 resize-y overflow-y-auto",
+              )}
+              text={currentFileContents.data}
+              json={getFileType(currentFile) === "json"}
+            />
+          )}
         </div>
       )}
     </div>
