@@ -261,6 +261,10 @@ fn scan_captures_in_expression(
 			res.extend(scan_captures_in_expression(left, env, statement_idx, diagnostics));
 			res.extend(scan_captures_in_expression(right, env, statement_idx, diagnostics));
 		}
+		ExprKind::NumberSequence { start, end } => {
+			res.extend(scan_captures_in_expression(start, env, statement_idx, diagnostics));
+			res.extend(scan_captures_in_expression(end, env, statement_idx, diagnostics));
+		}
 		ExprKind::Literal(lit) => match lit {
 			Literal::String(_) => {}
 			Literal::InterpolatedString(interpolated_str) => {

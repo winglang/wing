@@ -17,3 +17,15 @@ for word in words {
     }
   }
 }
+
+for x in 0..5 {
+  assert(x >= 0);
+  assert(x < 5);
+  print("0 >= x < 5: ${x}");
+}
+
+for x in 10..5 {
+  assert(x <= 100);
+  assert(x > 5);
+  print("10 <= x > 5: ${x}");
+}

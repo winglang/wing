@@ -1171,6 +1171,31 @@
         }
       ]
     },
+    "num_sequence": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "start",
+          "content": {
+            "type": "SYMBOL",
+            "name": "number"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": ".."
+        },
+        {
+          "type": "FIELD",
+          "name": "end",
+          "content": {
+            "type": "SYMBOL",
+            "name": "number"
+          }
+        }
+      ]
+    },
     "expression": {
       "type": "CHOICE",
       "members": [
@@ -1233,6 +1258,10 @@
         {
           "type": "SYMBOL",
           "name": "struct_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "num_sequence"
         }
       ]
     },

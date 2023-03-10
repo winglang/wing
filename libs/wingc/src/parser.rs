@@ -860,6 +860,13 @@ impl<'s> Parser<'s> {
 				ExprKind::Literal(self.build_duration(&expression_node)?),
 				expression_span,
 			)),
+			"num_sequence" => Ok(Expr::new(
+				ExprKind::NumberSequence {
+					start: Box::new(self.build_expression(&expression_node.child_by_field_name("start").unwrap())?),
+					end: Box::new(self.build_expression(&expression_node.child_by_field_name("end").unwrap())?),
+				},
+				expression_span,
+			)),
 			"reference" => Ok(Expr::new(
 				ExprKind::Reference(self.build_reference(&expression_node)?),
 				expression_span,

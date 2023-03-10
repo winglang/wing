@@ -231,6 +231,13 @@ module.exports = grammar({
         optional(seq("finally", field("finally_block", $.block)))
       ),
 
+    num_sequence: ($) =>
+      seq(
+        field("start", $.number),
+        "..",
+        field("end", $.number),
+      ),
+
     expression: ($) =>
       choice(
         $.binary_expression,
@@ -247,7 +254,8 @@ module.exports = grammar({
         $.parenthesized_expression,
         $.structured_access_expression,
         $.json_literal,
-        $.struct_literal
+        $.struct_literal,
+        $.num_sequence
       ),
 
     // Primitives

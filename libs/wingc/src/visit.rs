@@ -233,6 +233,10 @@ where
 			}
 			v.visit_args(arg_list);
 		}
+		ExprKind::NumberSequence { start, end } => {
+			v.visit_expr(start);
+			v.visit_expr(end);
+		}
 		ExprKind::Literal(lit) => {
 			v.visit_literal(lit);
 		}

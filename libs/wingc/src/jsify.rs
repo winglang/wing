@@ -428,6 +428,11 @@ impl<'a> JSifier<'a> {
 				};
 				format!("({}{})", op, self.jsify_expression(exp, context))
 			}
+			ExprKind::NumberSequence { start, end } => {
+				let js_start = self.jsify_expression(start, context);
+				let js_end = self.jsify_expression(end, context);
+				format!("{},{}", js_start, js_end)
+			}
 			ExprKind::Binary { op, left, right } => {
 				let js_left = self.jsify_expression(left, context);
 				let js_right = self.jsify_expression(right, context);
@@ -577,12 +582,7 @@ impl<'a> JSifier<'a> {
 				iterator,
 				iterable,
 				statements,
-			} => format!(
-				"for (const {} of {}) {}",
-				self.jsify_symbol(iterator),
-				self.jsify_expression(iterable, context),
-				self.jsify_scope(statements, context)
-			),
+			} => self.jsify_forloop(iterator, iterable, statements, context),
 			StmtKind::While { condition, statements } => {
 				format!(
 					"while ({}) {}",
@@ -715,6 +715,38 @@ impl<'a> JSifier<'a> {
 					}}"
 				)
 			}
+		}
+	}
+
+	fn jsify_forloop(
+		&mut self,
+		iterator: &Symbol,
+		iterable: &Expr,
+		statements: &Scope,
+		context: &JSifyContext,
+	) -> String {
+		match &iterable.kind {
+			ExprKind::Reference(_) => {
+				format!(
+					"for (const {} of {}) {}",
+					self.jsify_symbol(iterator),
+					self.jsify_expression(iterable, context),
+					self.jsify_scope(statements, context)
+				)
+			}
+			ExprKind::NumberSequence { start: _, end: _ } => {
+				format!(
+					"{{\n{}\n{}\n{}\n}}",
+					format!("function* iterator(start, end) {{\nlet i = start;\nwhile (i < end) yield i++;\nwhile (i > end) yield i--;}}"),
+					format!("const iter = iterator ({});", self.jsify_expression(iterable, context)),
+					format!(
+						"for (const {} of iter) {}",
+						self.jsify_symbol(iterator),
+						self.jsify_scope(statements, context)
+					)
+				)
+			}
+			_ => todo!(),
 		}
 	}
 

@@ -316,6 +316,10 @@ pub enum ExprKind {
 		arg_list: ArgList,
 	},
 	Literal(Literal),
+	NumberSequence {
+		start: Box<Expr>,
+		end: Box<Expr>,
+	},
 	Reference(Reference),
 	Call {
 		function: Box<Expr>,
