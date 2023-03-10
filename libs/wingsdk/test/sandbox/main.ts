@@ -24,7 +24,7 @@ class HelloWorld extends Construct {
   }
 }
 
-const app = new tfaws.App({
+const app = new sim.App({
   outdir: join(__dirname, "target"),
 });
 new HelloWorld(app, "HelloWorld");

@@ -1,4 +1,4 @@
-import { existsSync } from "fs";
+import { existsSync, readdirSync } from "fs";
 import { join } from "path";
 import * as tar from "tar";
 import { Tree } from "./tree";
