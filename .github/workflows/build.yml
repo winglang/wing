@@ -173,7 +173,8 @@ jobs:
         runner: [ubuntu-latest, macos-latest]
         node: [18, 19]
         shard: ["1/2", "2/2"]
-        full_run: ${{ github.event_name == 'push' }}
+        full_run: 
+          - ${{ github.event_name == 'push' }}
         exclude:
           # Only run full test suite on push
           - runner: macos-latest
