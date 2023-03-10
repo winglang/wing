@@ -123,13 +123,13 @@ jobs:
         run: npx nx workspace-lint
 
       - name: Build
-        run: npx nx run-many --target=build --all --configuration=release --output-style=stream --verbose
+        run: npm run build:ci
 
       - name: Package
-        run: npx nx run-many --target=package --all --configuration=release --output-style=stream --verbose
+        run: npm run package:ci
 
       - name: Test
-        run: npx nx run-many --target=test --exclude=hangar --all --configuration=release --output-style=stream --verbose
+        run: npm run test:ci
 
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v3
@@ -246,7 +246,7 @@ jobs:
           registryUrl: "https://marketplace.visualstudio.com"
           extensionFile: "vscode-wing/vscode-wing.vsix"
 
-      - name: Login to Private NPM registry
+      - name: Login to NPM registry
         run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
 
       - name: Check published Wing version
