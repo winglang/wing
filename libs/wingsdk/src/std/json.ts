@@ -5,7 +5,7 @@ export class Json {
   /**
    * Returns the keys of the Json.
    *
-   * @macro Object.keys($args$)
+   * @macro (Object.keys($args$))
    *
    * @param json to get keys from
    * @returns The keys of the Json
@@ -18,7 +18,7 @@ export class Json {
   /**
    * Returns the values from the Json.
    *
-   * @macro Object.values($args$)
+   * @macro (Object.values($args$))
    *
    * @param json to get values from
    * @returns The values from the Json as array of Json
