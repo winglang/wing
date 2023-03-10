@@ -2,7 +2,7 @@
 
 exports[`access_hidden_namespace.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 1 error(s)
-Error at ../../../../examples/tests/invalid/access_hidden_namespace.w:8:5 | Unknown symbol \\"core\\""
+Error at ../../../../examples/tests/invalid/access_hidden_namespace.w:7:5 | Unknown symbol \\"core\\""
 `;
 
 exports[`access_static_from_instance.w > wing test (--target sim) - invalid > stderr 1`] = `
