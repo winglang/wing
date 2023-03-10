@@ -116,15 +116,17 @@ jobs:
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
 
-      - name: Lint Nx
+      - name: Lint Nx Configuration
         run: npx nx workspace-lint
 
-      - name: Build, Test, and Package
-        uses: MansaGroup/nrwl-nx-action@v2
-        with:
-          targets: "build,test,package"
-          all: true
-          args: "--exclude=hangar --configuration=release --output-style=stream --verbose"
+      - name: Build
+        run: npx nx run-many --target=build --all --configuration=release --output-style=stream --verbose
+
+      - name: Package
+        run: npx nx run-many --target=package --all --configuration=release --output-style=stream --verbose
+
+      - name: Test
+        run: npx nx run-many --target=test --exclude=hangar --all --configuration=release --output-style=stream --verbose
 
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v2
@@ -144,13 +146,13 @@ jobs:
           name: wingc
           path: target/wasm32-wasi/release/wingc.wasm
 
-      - name: Upload extension
+      - name: Upload Rxtension
         uses: actions/upload-artifact@v2
         with:
           name: vscode-wing
           path: apps/vscode-wing/vscode-wing.vsix
 
-      - name: "Publish Wing Playground"
+      - name: Publish Playground
         if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
         uses: amondnet/vercel-action@v25.1.0
         with:
