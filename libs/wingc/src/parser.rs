@@ -187,6 +187,7 @@ impl<'s> Parser<'s> {
 			"for_in_loop" => self.build_for_statement(statement_node)?,
 			"while_statement" => self.build_while_statement(statement_node)?,
 			"break_statement" => self.build_break_statement(statement_node)?,
+			"continue_statement" => self.build_continue_statement(statement_node)?,
 			"return_statement" => self.build_return_statement(statement_node)?,
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
@@ -283,6 +284,16 @@ impl<'s> Parser<'s> {
 			);
 		}
 		Ok(StmtKind::Break)
+	}
+
+	fn build_continue_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		if !*self.is_in_loop.borrow() {
+			return self.add_error::<StmtKind>(
+				format!("Expected continue statement to be inside of a loop (while/for)"),
+				statement_node,
+			);
+		}
+		Ok(StmtKind::Continue)
 	}
 
 	fn build_if_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
