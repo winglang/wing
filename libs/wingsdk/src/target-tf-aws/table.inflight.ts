@@ -15,7 +15,7 @@ export class TableClient implements ITableClient {
     private readonly primaryKey: string,
     private readonly columns: string,
     private readonly client = new DynamoDBClient({})
-  ) { }
+  ) {}
 
   public async insert(row: Json): Promise<void> {
     const command = new PutItemCommand({
@@ -50,7 +50,7 @@ export class TableClient implements ITableClient {
   public async delete(key: string): Promise<void> {
     const command = new DeleteItemCommand({
       TableName: this.tableName,
-      Key: { [this.primaryKey]: { "S": key } },
+      Key: { [this.primaryKey]: { S: key } },
     });
     await this.client.send(command);
   }
@@ -58,7 +58,7 @@ export class TableClient implements ITableClient {
   public async get(key: string): Promise<any> {
     const command = new GetItemCommand({
       TableName: this.tableName,
-      Key: { [this.primaryKey]: { "S": key } },
+      Key: { [this.primaryKey]: { S: key } },
     });
     const result = await this.client.send(command);
     if (result.Item) {
@@ -82,14 +82,14 @@ export class TableClient implements ITableClient {
   private unmarshallJson(item: any) {
     let items: { [key: string]: any } = {};
     for (const [key, value] of Object.entries<any>(item)) {
-      if (value["S"]) {
-        items[key] = value["S"];
-      } else if (value["N"]) {
-        items[key] = Number(value["N"]);
-      } else if (value["BOOL"]) {
-        items[key] = value["BOOL"];
-      } else if (value["M"]) {
-        items[key] = this.unmarshallJson(value["M"]);
+      if (value.S) {
+        items[key] = value.S;
+      } else if (value.N) {
+        items[key] = Number(value.N);
+      } else if (value.BOOL) {
+        items[key] = value.BOOL;
+      } else if (value.M) {
+        items[key] = this.unmarshallJson(value.M);
       }
     }
     return items;

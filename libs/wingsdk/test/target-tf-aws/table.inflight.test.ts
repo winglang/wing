@@ -19,8 +19,8 @@ import {
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, describe, beforeEach } from "vitest";
 
-import { TableClient } from "../../src/target-tf-aws/table.inflight";
 import { ColumnType } from "../../src/cloud";
+import { TableClient } from "../../src/target-tf-aws/table.inflight";
 
 const MOCK_TABLE_NAME = "MyBeautifulTable";
 const PRIMARY_KEY = "id";
@@ -31,9 +31,13 @@ describe("inflight table tests", () => {
   beforeEach(() => {
     row = { id: "test", somenumber: 1 };
     const columns = {
-      somenumber: ColumnType.NUMBER
-    }
-    client = new TableClient(MOCK_TABLE_NAME, PRIMARY_KEY, JSON.stringify(columns));
+      somenumber: ColumnType.NUMBER,
+    };
+    client = new TableClient(
+      MOCK_TABLE_NAME,
+      PRIMARY_KEY,
+      JSON.stringify(columns)
+    );
   });
 
   test("insert", async () => {
@@ -42,7 +46,7 @@ describe("inflight table tests", () => {
       TableName: MOCK_TABLE_NAME,
       Item: {
         id: { S: row.id },
-        somenumber: { N: String(row.somenumber) }
+        somenumber: { N: String(row.somenumber) },
       },
     };
     const mockResponse: PutItemCommandOutput = {
@@ -112,15 +116,15 @@ describe("inflight table tests", () => {
     const expectedRequest: GetItemCommandInput = {
       TableName: MOCK_TABLE_NAME,
       Key: {
-        id: { S: row.id }
+        id: { S: row.id },
       },
     };
     const mockResponse: GetItemCommandOutput = {
       $metadata: {},
       Item: {
         id: { S: `${row.id}` },
-        somenumber: { N: `${row.somenumber}` }
-      }
+        somenumber: { N: `${row.somenumber}` },
+      },
     };
     dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
@@ -139,8 +143,8 @@ describe("inflight table tests", () => {
       Count: 0,
       Items: [
         { id: { S: "test1" }, somenumber: { N: "1" } },
-        { id: { S: "test2" }, somenumber: { N: "2" } }
-      ]
+        { id: { S: "test2" }, somenumber: { N: "2" } },
+      ],
     };
     dynamoMock.on(ScanCommand, expectedRequest).resolves(mockResponse);
     // WHEN
@@ -148,7 +152,7 @@ describe("inflight table tests", () => {
     // THEN
     expect(response).toEqual([
       { id: "test1", somenumber: 1 },
-      { id: "test2", somenumber: 2 }
+      { id: "test2", somenumber: 2 },
     ]);
   });
 
@@ -160,7 +164,7 @@ describe("inflight table tests", () => {
     const mockResponse: ScanCommandOutput = {
       $metadata: {},
       Count: 0,
-      Items: []
+      Items: [],
     };
     dynamoMock.on(ScanCommand, expectedRequest).resolves(mockResponse);
     // WHEN
