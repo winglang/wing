@@ -19,6 +19,7 @@ env:
   NODE_OPTIONS: "--max-old-space-size=4096"
   PROJEN_BUMP_VERSION: "0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}"
   RUST_VERSION: "1.67.1"
+  CARGO_TERM_COLOR: always
 
 jobs:
   prepare:
@@ -72,7 +73,7 @@ jobs:
           cat CHANGELOG.md >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Changelog
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: changelog
           path: CHANGELOG.md
@@ -83,7 +84,7 @@ jobs:
 
       - name: Upload Docs
         if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: docs
           path: docs.tgz
@@ -103,15 +104,17 @@ jobs:
       - name: Setup Node/NPM with pinned Volta version
         uses: volta-cli/action@v4.0.0
 
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: ${{ env.RUST_VERSION }}
-          components: rustfmt,clippy
-          override: true
-
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.RUST_VERSION }}
+          targets: |
+            x86_64-unknown-linux-gnu
+            wasm32-wasi
+          components: rustfmt,clippy,rust-std
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
@@ -129,25 +132,25 @@ jobs:
         run: npx nx run-many --target=test --exclude=hangar --all --configuration=release --output-style=stream --verbose
 
       - name: Upload Wing CLI
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: wing
           path: apps/wing/*.tgz
 
       - name: Upload WingSDK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: wingsdk
           path: libs/wingsdk/*.tgz
 
       - name: Upload WingC WASM
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: wingc
           path: target/wasm32-wasi/release/wingc.wasm
 
-      - name: Upload Rxtension
-        uses: actions/upload-artifact@v2
+      - name: Upload Extension
+        uses: actions/upload-artifact@v3
         with:
           name: vscode-wing
           path: apps/vscode-wing/vscode-wing.vsix
@@ -215,7 +218,7 @@ jobs:
         run: npm run test -- --shard=${{ matrix.shard }}
 
   publish:
-    name: Publish ${{ needs.prepare.outputs.version }}
+    name: Publish
     if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
     needs:
       - e2e
