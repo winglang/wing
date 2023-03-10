@@ -282,7 +282,7 @@ impl<'s> Parser<'s> {
 				statement_node,
 			);
 		}
-		Ok(StmtKind::Break())
+		Ok(StmtKind::Break)
 	}
 
 	fn build_if_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
