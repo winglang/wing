@@ -9,6 +9,7 @@ import {
 
 import { Button } from "../../design-system/Button.js";
 import { Checkbox } from "../../design-system/Checkbox.js";
+import { Popover } from "../../design-system/Popover.js";
 import { SpinnerLoader } from "../../design-system/SpinnerLoader.js";
 import { TextHighlight } from "../../design-system/TextHighlight.js";
 import { trpc } from "../../utils/trpc.js";
@@ -118,6 +119,21 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
     setSelectedEntries([]);
   }, [selectedEntries]);
 
+  const openPreviewFile = async (entry: FileExplorerEntry) => {
+    if (entry !== currentFile?.entry) {
+      setCurrentFile({ entry, content: "" });
+      if (canBePreviewed(entry.name)) {
+        setPreviewLoading(true);
+        const file = await getFile.mutateAsync({
+          resourcePath,
+          fileName: entry.name,
+        });
+        setCurrentFile({ entry, content: file });
+        setPreviewLoading(false);
+      }
+    }
+  };
+
   const onEntrySelected = async (
     entry: FileExplorerEntry,
     checked: boolean,
@@ -159,6 +175,8 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
         name: file,
       })) ?? [],
     );
+    setCurrentFile(undefined);
+    setSelectedEntries([]);
   }, [bucketList.data]);
 
   return (
@@ -170,11 +188,23 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
             disabled={selectedEntries.length === 0}
             onClick={downloadSelectedEntries}
           />
-          <Button
-            label="Delete"
-            disabled={selectedEntries.length === 0}
-            onClick={deleteSelectedEntries}
-          />
+          <div className="relative">
+            <Popover label="Delete" disabled={selectedEntries.length === 0}>
+              <span>
+                Are you sure you want to delete {selectedEntries.length} file
+                {selectedEntries.length > 1 && "s"}?
+              </span>
+              <div className="flex justify-end gap-2 mt-4">
+                <Button label="Cancel" />
+                <Button
+                  label="Confirm"
+                  onClick={async () => {
+                    await deleteSelectedEntries();
+                  }}
+                />
+              </div>
+            </Popover>
+          </div>
         </div>
 
         <div>
@@ -235,7 +265,7 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
                       />
                       <button
                         className="w-full text-left truncate outline-none"
-                        onClick={() => onEntrySelected(entry, true, true)}
+                        onClick={() => openPreviewFile(entry)}
                       >
                         {entry.name}
                       </button>

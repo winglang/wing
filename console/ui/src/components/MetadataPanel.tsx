@@ -280,7 +280,7 @@ export const MetadataPanel = ({
                         }
                         subection
                       >
-                        <div className="pl-6 pr-2 pb-1.5">
+                        <div className="pl-6 pr-2 pb-2">
                           <ResourceView
                             key={node.path}
                             resourceType={node.type}
