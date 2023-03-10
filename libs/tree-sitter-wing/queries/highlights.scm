@@ -3,8 +3,9 @@
 (variable_definition_statement 
   name: (identifier) @variable
 )
-(reference (identifier)) @variable
-(reference (nested_identifier property: (identifier))) @property
+(reference (identifier) @variable)
+(reference (nested_identifier property: (identifier) @property) ) 
+
 
 ; Classes
 
