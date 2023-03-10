@@ -7,3 +7,13 @@ for word in words {
     print("${word}: ${number}");
   }
 }
+
+for word in words {
+  for number in unique_numbers {
+    assert(number > 0);
+    print("${word}: ${number}");
+    if (number == 2) {
+      break;
+    }
+  }
+}
