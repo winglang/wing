@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`capture_primitives > wing compile -t tf-aws > index.js 1`] = `
+exports[`wing compile -t tf-aws > index.js 1`] = `
 "async handle(s) { const { my_bool, my_dur, my_num, my_second_bool, my_str } = this; {
   {console.log(my_str)};
   const n = my_num;
@@ -19,7 +19,7 @@ exports[`capture_primitives > wing compile -t tf-aws > index.js 1`] = `
 } };"
 `;
 
-exports[`capture_primitives > wing compile -t tf-aws > main.tf.json 1`] = `
+exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -120,7 +120,7 @@ exports[`capture_primitives > wing compile -t tf-aws > main.tf.json 1`] = `
 }
 `;
 
-exports[`capture_primitives > wing compile -t tf-aws > preflight.js 1`] = `
+exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -182,4 +182,4 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`capture_primitives > wing test > stdout 1`] = `"pass ─ capture_primitives.w (no tests)"`;
+exports[`wing test > stdout 1`] = `"pass ─ capture_primitives.w (no tests)"`;

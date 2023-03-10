@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`forward_decl > wing compile -t tf-aws > R.inflight.js 1`] = `
+exports[`wing compile -t tf-aws > R.inflight.js 1`] = `
 "export class R_inflight  {
 constructor({ f }) {
 
@@ -9,7 +9,7 @@ constructor({ f }) {
 }"
 `;
 
-exports[`forward_decl > wing compile -t tf-aws > main.tf.json 1`] = `
+exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -27,7 +27,7 @@ exports[`forward_decl > wing compile -t tf-aws > main.tf.json 1`] = `
 }
 `;
 
-exports[`forward_decl > wing compile -t tf-aws > preflight.js 1`] = `
+exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -86,7 +86,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`forward_decl > wing test > stdout 1`] = `
+exports[`wing test > stdout 1`] = `
 "hi
 pass ─ forward_decl.w (no tests)"
 `;

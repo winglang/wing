@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`while_loop_await > wing compile -t tf-aws > index.js 1`] = `
+exports[`wing compile -t tf-aws > index.js 1`] = `
 "async handle(body) { const {  } = this; {
   const i = 0;
   while (((await iterator(i)) < 3)) {
@@ -9,13 +9,13 @@ exports[`while_loop_await > wing compile -t tf-aws > index.js 1`] = `
 } };"
 `;
 
-exports[`while_loop_await > wing compile -t tf-aws > index.js 2`] = `
+exports[`wing compile -t tf-aws > index.js 2`] = `
 "async handle(j) { const {  } = this; {
   return (j + 1);
 } };"
 `;
 
-exports[`while_loop_await > wing compile -t tf-aws > main.tf.json 1`] = `
+exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -129,7 +129,7 @@ exports[`while_loop_await > wing compile -t tf-aws > main.tf.json 1`] = `
 }
 `;
 
-exports[`while_loop_await > wing compile -t tf-aws > preflight.js 1`] = `
+exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -172,4 +172,4 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`while_loop_await > wing test > stdout 1`] = `"pass ─ while_loop_await.w (no tests)"`;
+exports[`wing test > stdout 1`] = `"pass ─ while_loop_await.w (no tests)"`;

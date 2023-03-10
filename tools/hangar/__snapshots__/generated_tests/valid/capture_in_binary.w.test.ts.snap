@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`capture_in_binary > wing compile -t tf-aws > index.js 1`] = `
+exports[`wing compile -t tf-aws > index.js 1`] = `
 "async handle(e) { const { b, x } = this; {
   (await b.put(\\"file\\",\\"foo\\"));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b.get(\\"file\\")) === \\"foo\\")'\`)})(((await b.get(\\"file\\")) === \\"foo\\"))};
@@ -8,7 +8,7 @@ exports[`capture_in_binary > wing compile -t tf-aws > index.js 1`] = `
 } };"
 `;
 
-exports[`capture_in_binary > wing compile -t tf-aws > main.tf.json 1`] = `
+exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -152,7 +152,7 @@ exports[`capture_in_binary > wing compile -t tf-aws > main.tf.json 1`] = `
 }
 `;
 
-exports[`capture_in_binary > wing compile -t tf-aws > preflight.js 1`] = `
+exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -199,4 +199,4 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`capture_in_binary > wing test > stdout 1`] = `"pass ─ capture_in_binary.w » root/test"`;
+exports[`wing test > stdout 1`] = `"pass ─ capture_in_binary.w » root/test"`;

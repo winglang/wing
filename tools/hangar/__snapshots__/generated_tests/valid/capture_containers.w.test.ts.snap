@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`capture_containers > wing compile -t tf-aws > index.js 1`] = `
+exports[`wing compile -t tf-aws > index.js 1`] = `
 "async handle(s) { const { arr, arr_of_map, j, my_map, my_set } = this; {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(0)) === \\"hello\\")'\`)})(((await arr.at(0)) === \\"hello\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(1)) === \\"world\\")'\`)})(((await arr.at(1)) === \\"world\\"))};
@@ -14,7 +14,7 @@ exports[`capture_containers > wing compile -t tf-aws > index.js 1`] = `
 } };"
 `;
 
-exports[`capture_containers > wing compile -t tf-aws > main.tf.json 1`] = `
+exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -115,7 +115,7 @@ exports[`capture_containers > wing compile -t tf-aws > main.tf.json 1`] = `
 }
 `;
 
-exports[`capture_containers > wing compile -t tf-aws > preflight.js 1`] = `
+exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -177,4 +177,4 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`capture_containers > wing test > stdout 1`] = `"pass ─ capture_containers.w » root/test"`;
+exports[`wing test > stdout 1`] = `"pass ─ capture_containers.w » root/test"`;

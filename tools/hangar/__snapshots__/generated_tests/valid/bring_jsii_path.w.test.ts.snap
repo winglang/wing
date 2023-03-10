@@ -1,12 +1,12 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`bring_jsii_path > wing compile -t tf-aws > index.js 1`] = `
+exports[`wing compile -t tf-aws > index.js 1`] = `
 "async handle(m) { const { greeting } = this; {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(greeting === \\"Hello, wingnuts\\")'\`)})((greeting === \\"Hello, wingnuts\\"))};
 } };"
 `;
 
-exports[`bring_jsii_path > wing compile -t tf-aws > main.tf.json 1`] = `
+exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -107,7 +107,7 @@ exports[`bring_jsii_path > wing compile -t tf-aws > main.tf.json 1`] = `
 }
 `;
 
-exports[`bring_jsii_path > wing compile -t tf-aws > preflight.js 1`] = `
+exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -150,4 +150,4 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`bring_jsii_path > wing test > stdout 1`] = `"pass ─ bring_jsii_path.w » root/test:say_hello"`;
+exports[`wing test > stdout 1`] = `"pass ─ bring_jsii_path.w » root/test:say_hello"`;

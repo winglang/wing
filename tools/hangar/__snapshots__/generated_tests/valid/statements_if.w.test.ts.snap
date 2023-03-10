@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`statements_if > wing compile -t tf-aws > index.js 1`] = `
+exports[`wing compile -t tf-aws > index.js 1`] = `
 "async handle(s) { const {  } = this; {
   if (true) {
     const x = 2;
@@ -21,7 +21,7 @@ exports[`statements_if > wing compile -t tf-aws > index.js 1`] = `
 } };"
 `;
 
-exports[`statements_if > wing compile -t tf-aws > main.tf.json 1`] = `
+exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -122,7 +122,7 @@ exports[`statements_if > wing compile -t tf-aws > main.tf.json 1`] = `
 }
 `;
 
-exports[`statements_if > wing compile -t tf-aws > preflight.js 1`] = `
+exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -177,4 +177,4 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`statements_if > wing test > stdout 1`] = `"pass ─ statements_if.w » root/test"`;
+exports[`wing test > stdout 1`] = `"pass ─ statements_if.w » root/test"`;

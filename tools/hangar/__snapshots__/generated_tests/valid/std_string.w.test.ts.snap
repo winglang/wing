@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`std_string > wing compile -t tf-aws > index.js 1`] = `
+exports[`wing compile -t tf-aws > index.js 1`] = `
 "async handle() { const { s1, s2 } = this; {
   {console.log(\`index of \\\\\\"s\\\\\\" in s1 is \${s1.indexOf(\\"s\\")}\`)};
   {console.log((await (await s1.split(\\" \\")).at(1)))};
@@ -8,7 +8,7 @@ exports[`std_string > wing compile -t tf-aws > index.js 1`] = `
 } };"
 `;
 
-exports[`std_string > wing compile -t tf-aws > main.tf.json 1`] = `
+exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -109,7 +109,7 @@ exports[`std_string > wing compile -t tf-aws > main.tf.json 1`] = `
 }
 `;
 
-exports[`std_string > wing compile -t tf-aws > preflight.js 1`] = `
+exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -169,7 +169,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`std_string > wing test > stdout 1`] = `
+exports[`wing test > stdout 1`] = `
 "pass ┌ std_string.w » root/test:string
      │ index of \\"s\\" in s1 is 0
      │ string

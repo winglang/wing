@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`inflight_ref_resource_sub_method > wing compile -t tf-aws > Another.inflight.js 1`] = `
+exports[`wing compile -t tf-aws > Another.inflight.js 1`] = `
 "export class Another_inflight  {
 constructor({ my_queue }) {
 
@@ -13,7 +13,7 @@ async  inflight_returns_resource()  {
 }}"
 `;
 
-exports[`inflight_ref_resource_sub_method > wing compile -t tf-aws > Test.inflight.js 1`] = `
+exports[`wing compile -t tf-aws > Test.inflight.js 1`] = `
 "export class Test_inflight  {
 constructor({ another }) {
 
@@ -27,13 +27,13 @@ async  test()  {
 }}"
 `;
 
-exports[`inflight_ref_resource_sub_method > wing compile -t tf-aws > index.js 1`] = `
+exports[`wing compile -t tf-aws > index.js 1`] = `
 "async handle() { const { f } = this; {
   (await f.test());
 } };"
 `;
 
-exports[`inflight_ref_resource_sub_method > wing compile -t tf-aws > main.tf.json 1`] = `
+exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -135,7 +135,7 @@ exports[`inflight_ref_resource_sub_method > wing compile -t tf-aws > main.tf.jso
 }
 `;
 
-exports[`inflight_ref_resource_sub_method > wing compile -t tf-aws > preflight.js 1`] = `
+exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -206,4 +206,4 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`inflight_ref_resource_sub_method > wing test > stdout 1`] = `"pass ─ inflight_ref_resource_sub_method.w » root/test"`;
+exports[`wing test > stdout 1`] = `"pass ─ inflight_ref_resource_sub_method.w » root/test"`;

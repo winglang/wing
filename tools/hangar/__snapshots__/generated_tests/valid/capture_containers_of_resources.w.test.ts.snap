@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`capture_containers_of_resources > wing compile -t tf-aws > index.js 1`] = `
+exports[`wing compile -t tf-aws > index.js 1`] = `
 "async handle(s) { const { arr, map, set } = this; {
   const b1 = (await arr.at(0));
   const b2 = (await arr.at(1));
@@ -14,7 +14,7 @@ exports[`capture_containers_of_resources > wing compile -t tf-aws > index.js 1`]
 } };"
 `;
 
-exports[`capture_containers_of_resources > wing compile -t tf-aws > main.tf.json 1`] = `
+exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -198,7 +198,7 @@ exports[`capture_containers_of_resources > wing compile -t tf-aws > main.tf.json
 }
 `;
 
-exports[`capture_containers_of_resources > wing compile -t tf-aws > preflight.js 1`] = `
+exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -249,4 +249,4 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`capture_containers_of_resources > wing test > stdout 1`] = `"pass ─ capture_containers_of_resources.w » root/test"`;
+exports[`wing test > stdout 1`] = `"pass ─ capture_containers_of_resources.w » root/test"`;

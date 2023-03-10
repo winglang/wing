@@ -1,20 +1,20 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`json_bucket > wing compile -t tf-aws > index.js 1`] = `
+exports[`wing compile -t tf-aws > index.js 1`] = `
 "async handle(msg) { const { b, file_name } = this; {
   const x = (await b.getJson(file_name));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((((x)[\\"persons\\"])[0])[\\"fears\\"])[1] === \\"failure\\")'\`)})((((((x)[\\"persons\\"])[0])[\\"fears\\"])[1] === \\"failure\\"))};
 } };"
 `;
 
-exports[`json_bucket > wing compile -t tf-aws > index.js 2`] = `
+exports[`wing compile -t tf-aws > index.js 2`] = `
 "async handle(msg) { const { b, file_name, get_json, j } = this; {
   (await b.putJson(file_name,j));
   (await get_json.invoke(msg));
 } };"
 `;
 
-exports[`json_bucket > wing compile -t tf-aws > main.tf.json 1`] = `
+exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -219,7 +219,7 @@ exports[`json_bucket > wing compile -t tf-aws > main.tf.json 1`] = `
 }
 `;
 
-exports[`json_bucket > wing compile -t tf-aws > preflight.js 1`] = `
+exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -287,4 +287,4 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`json_bucket > wing test > stdout 1`] = `"pass ─ json_bucket.w » root/test:put"`;
+exports[`wing test > stdout 1`] = `"pass ─ json_bucket.w » root/test:put"`;

@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`try_catch > wing compile -t tf-aws > main.tf.json 1`] = `
+exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -18,7 +18,7 @@ exports[`try_catch > wing compile -t tf-aws > main.tf.json 1`] = `
 }
 `;
 
-exports[`try_catch > wing compile -t tf-aws > preflight.js 1`] = `
+exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -197,4 +197,4 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`try_catch > wing test > stdout 1`] = `"pass ─ try_catch.w (no tests)"`;
+exports[`wing test > stdout 1`] = `"pass ─ try_catch.w (no tests)"`;

@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`capture_resource_with_no_inflight > wing compile -t tf-aws > A.inflight.js 1`] = `
+exports[`wing compile -t tf-aws > A.inflight.js 1`] = `
 "export class A_inflight  {
 constructor({ field }) {
 
@@ -9,13 +9,13 @@ constructor({ field }) {
 }"
 `;
 
-exports[`capture_resource_with_no_inflight > wing compile -t tf-aws > index.js 1`] = `
+exports[`wing compile -t tf-aws > index.js 1`] = `
 "async handle() { const { a } = this; {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"hey\\" === a.field)'\`)})((\\"hey\\" === a.field))};
 } };"
 `;
 
-exports[`capture_resource_with_no_inflight > wing compile -t tf-aws > main.tf.json 1`] = `
+exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -116,7 +116,7 @@ exports[`capture_resource_with_no_inflight > wing compile -t tf-aws > main.tf.js
 }
 `;
 
-exports[`capture_resource_with_no_inflight > wing compile -t tf-aws > preflight.js 1`] = `
+exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -172,4 +172,4 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`capture_resource_with_no_inflight > wing test > stdout 1`] = `"pass ─ capture_resource_with_no_inflight.w » root/test"`;
+exports[`wing test > stdout 1`] = `"pass ─ capture_resource_with_no_inflight.w » root/test"`;

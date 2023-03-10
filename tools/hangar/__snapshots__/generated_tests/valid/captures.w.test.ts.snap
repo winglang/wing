@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`captures > wing compile -t tf-aws > index.js 1`] = `
+exports[`wing compile -t tf-aws > index.js 1`] = `
 "async handle(event) { const { bucket1, bucket2, bucket3 } = this; {
   (await bucket1.put(\\"file.txt\\",\\"data\\"));
   (await bucket2.get(\\"file.txt\\"));
@@ -12,7 +12,7 @@ exports[`captures > wing compile -t tf-aws > index.js 1`] = `
 } };"
 `;
 
-exports[`captures > wing compile -t tf-aws > main.tf.json 1`] = `
+exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -370,7 +370,7 @@ exports[`captures > wing compile -t tf-aws > main.tf.json 1`] = `
 }
 `;
 
-exports[`captures > wing compile -t tf-aws > preflight.js 1`] = `
+exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -428,4 +428,4 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`captures > wing test > stdout 1`] = `"pass ─ captures.w (no tests)"`;
+exports[`wing test > stdout 1`] = `"pass ─ captures.w (no tests)"`;

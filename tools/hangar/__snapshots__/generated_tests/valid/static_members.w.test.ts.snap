@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`static_members > wing compile -t tf-aws > Foo.inflight.js 1`] = `
+exports[`wing compile -t tf-aws > Foo.inflight.js 1`] = `
 "export class Foo_inflight  {
 constructor({ instance_field }) {
 
@@ -13,7 +13,7 @@ async static get_123()  {
 }}"
 `;
 
-exports[`static_members > wing compile -t tf-aws > index.js 1`] = `
+exports[`wing compile -t tf-aws > index.js 1`] = `
 "async handle(s) { const {  } = this; {
   class InflightClass
   {
@@ -39,7 +39,7 @@ exports[`static_members > wing compile -t tf-aws > index.js 1`] = `
 } };"
 `;
 
-exports[`static_members > wing compile -t tf-aws > main.tf.json 1`] = `
+exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -140,7 +140,7 @@ exports[`static_members > wing compile -t tf-aws > main.tf.json 1`] = `
 }
 `;
 
-exports[`static_members > wing compile -t tf-aws > preflight.js 1`] = `
+exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -198,4 +198,4 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`static_members > wing test > stdout 1`] = `"pass ─ static_members.w » root/test"`;
+exports[`wing test > stdout 1`] = `"pass ─ static_members.w » root/test"`;

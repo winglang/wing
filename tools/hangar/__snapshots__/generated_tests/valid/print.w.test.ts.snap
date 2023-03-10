@@ -1,20 +1,20 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`print > wing compile -t tf-aws > index.js 1`] = `
+exports[`wing compile -t tf-aws > index.js 1`] = `
 "async handle() { const {  } = this; {
   {console.log(\\"inflight print 1.1\\")};
   {console.log(\\"inflight print 1.2\\")};
 } };"
 `;
 
-exports[`print > wing compile -t tf-aws > index.js 2`] = `
+exports[`wing compile -t tf-aws > index.js 2`] = `
 "async handle() { const {  } = this; {
   {console.log(\\"inflight print 2.1\\")};
   {console.log(\\"inflight print 2.2\\")};
 } };"
 `;
 
-exports[`print > wing compile -t tf-aws > main.tf.json 1`] = `
+exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -174,7 +174,7 @@ exports[`print > wing compile -t tf-aws > main.tf.json 1`] = `
 }
 `;
 
-exports[`print > wing compile -t tf-aws > preflight.js 1`] = `
+exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -216,7 +216,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`print > wing test > stdout 1`] = `
+exports[`wing test > stdout 1`] = `
 "preflight print
 pass ┌ print.w » root/test:print1
      │ inflight print 1.1

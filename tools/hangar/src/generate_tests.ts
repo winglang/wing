@@ -11,20 +11,19 @@ for (const fileInfo of readdirSync(validTestDir, { withFileTypes: true })) {
   }
 
   const filename = fileInfo.name;
+  const skipText = filename.endsWith("skip.w") ? ".skip" : "";
 
   const fileContents = `\
-import { describe, test } from "vitest";
+import { test } from "vitest";
 import { compileTest, testTest } from "../../generated_test_targets";
 
-describe("${basename(fileInfo.name, ".w")}", () => {
-  test("wing compile -t tf-aws", async () => {
-    await compileTest("${filename}");
-  });
-  test("wing test", async () => {
-    await testTest("${filename}");
-  });
-})
-`;
+test${skipText}("wing compile -t tf-aws", async () => {
+  await compileTest("${filename}");
+});
+
+test${skipText}("wing test", async () => {
+  await testTest("${filename}");
+});`;
 
   writeFileSync(join(generatedTestDir, `${filename}.test.ts`), fileContents);
 }

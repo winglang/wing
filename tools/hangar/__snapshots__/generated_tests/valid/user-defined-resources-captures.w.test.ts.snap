@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`user-defined-resources-captures > wing compile -t tf-aws > MyResource.inflight.js 1`] = `
+exports[`wing compile -t tf-aws > MyResource.inflight.js 1`] = `
 "export class MyResource_inflight  {
 constructor({ array_of_queues, array_of_str, map_of_num, my_bool, my_num, my_resource, my_str, set_of_str }) {
 
@@ -55,43 +55,43 @@ async  capture_array_of_queues()  {
 }}"
 `;
 
-exports[`user-defined-resources-captures > wing compile -t tf-aws > index.js 1`] = `
+exports[`wing compile -t tf-aws > index.js 1`] = `
 "async handle() { const { r } = this; {
   (await r.capture_array_of_queues());
 } };"
 `;
 
-exports[`user-defined-resources-captures > wing compile -t tf-aws > index.js 2`] = `
+exports[`wing compile -t tf-aws > index.js 2`] = `
 "async handle() { const { r } = this; {
   (await r.capture_resource());
 } };"
 `;
 
-exports[`user-defined-resources-captures > wing compile -t tf-aws > index.js 3`] = `
+exports[`wing compile -t tf-aws > index.js 3`] = `
 "async handle() { const { r } = this; {
   (await r.capture_map());
 } };"
 `;
 
-exports[`user-defined-resources-captures > wing compile -t tf-aws > index.js 4`] = `
+exports[`wing compile -t tf-aws > index.js 4`] = `
 "async handle() { const { r } = this; {
   (await r.capture_set());
 } };"
 `;
 
-exports[`user-defined-resources-captures > wing compile -t tf-aws > index.js 5`] = `
+exports[`wing compile -t tf-aws > index.js 5`] = `
 "async handle() { const { r } = this; {
   (await r.capture_array());
 } };"
 `;
 
-exports[`user-defined-resources-captures > wing compile -t tf-aws > index.js 6`] = `
+exports[`wing compile -t tf-aws > index.js 6`] = `
 "async handle() { const { r } = this; {
   (await r.capture_primitives());
 } };"
 `;
 
-exports[`user-defined-resources-captures > wing compile -t tf-aws > main.tf.json 1`] = `
+exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -547,7 +547,7 @@ exports[`user-defined-resources-captures > wing compile -t tf-aws > main.tf.json
 }
 `;
 
-exports[`user-defined-resources-captures > wing compile -t tf-aws > preflight.js 1`] = `
+exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -667,7 +667,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`user-defined-resources-captures > wing test > stdout 1`] = `
+exports[`wing test > stdout 1`] = `
 "pass ─ user-defined-resources-captures.w » root/test:capture_array          
 pass ─ user-defined-resources-captures.w » root/test:capture_array_of_queues
 pass ─ user-defined-resources-captures.w » root/test:capture_map            
