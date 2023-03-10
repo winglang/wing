@@ -1,5 +1,4 @@
-import { readFileSync } from "fs";
-import { join } from "path";
+import { relative } from "path";
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
@@ -7,9 +6,8 @@ import { FunctionSchema, FUNCTION_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { TextFile } from "../fs";
+import { App } from "../core";
 import { Duration } from "../std/duration";
-import { CaseConventions, ResourceNames } from "../utils/resource-names";
 
 export const ENV_WING_SIM_INFLIGHT_RESOURCE_PATH =
   "WING_SIM_INFLIGHT_RESOURCE_PATH";
@@ -33,30 +31,17 @@ export class Function extends cloud.Function implements ISimulatorResource {
     super(scope, id, inflight, props);
 
     // props.memory is unused since we are not simulating it
-
     this.timeout = props.timeout ?? Duration.fromMinutes(1);
-    const assetPath = join(
-      "assets",
-      ResourceNames.generateName(this, {
-        // Avoid characters that may cause path issues
-        disallowedRegex: /[><:"/\\|?*]/g,
-        case: CaseConventions.LOWERCASE,
-        sep: "_",
-      }),
-      "index.js"
-    );
-    new TextFile(this, "Code", assetPath, {
-      lines: [readFileSync(this.assetPath, "utf-8")],
-    });
-    this.code = core.NodeJsCode.fromFile(assetPath);
+    this.code = core.NodeJsCode.fromFile(this.assetPath);
   }
 
   public toSimulator(): BaseResourceSchema {
+    const workdir = App.of(this).workdir;
     const schema: FunctionSchema = {
       type: FUNCTION_TYPE,
       path: this.node.path,
       props: {
-        sourceCodeFile: this.code.path,
+        sourceCodeFile: relative(workdir, this.code.path),
         sourceCodeLanguage: "javascript",
         environmentVariables: this.env,
         timeout: this.timeout.seconds * 1000,
