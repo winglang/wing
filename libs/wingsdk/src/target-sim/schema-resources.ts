@@ -1,4 +1,5 @@
 import { BaseResourceSchema } from "./schema";
+import { ColumnType } from "../cloud";
 
 export const QUEUE_TYPE = "wingsdk.cloud.Queue";
 export const FUNCTION_TYPE = "wingsdk.cloud.Function";
@@ -6,6 +7,7 @@ export const BUCKET_TYPE = "wingsdk.cloud.Bucket";
 export const TOPIC_TYPE = "wingsdk.cloud.Topic";
 export const COUNTER_TYPE = "wingsdk.cloud.Counter";
 export const SCHEDULE_TYPE = "wingsdk.cloud.Schedule";
+export const TABLE_TYPE = "wingsdk.cloud.Table";
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 
 export type FunctionHandle = string;
@@ -57,6 +59,16 @@ export interface TopicSchema extends BaseResourceSchema {
 export interface TopicSubscriber {
   /** Function that should be called */
   readonly functionHandle: FunctionHandle;
+}
+
+/** Schema for cloud.Table */
+export interface TableSchema extends BaseResourceSchema {
+  readonly type: typeof TABLE_TYPE;
+  readonly props: {
+    readonly name: string;
+    readonly columns: { [key: string]: ColumnType };
+    readonly primaryKey: string;
+  };
 }
 
 /** Schema for cloud.Bucket */
