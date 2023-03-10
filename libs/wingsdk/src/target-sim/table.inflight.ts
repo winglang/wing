@@ -19,13 +19,15 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
     this.context = context;
   }
 
-  public async init(): Promise<void> { }
-  public async cleanup(): Promise<void> { }
+  public async init(): Promise<void> {}
+  public async cleanup(): Promise<void> {}
 
   public async insert(row: Json): Promise<void> {
     const anyRow = row as any;
     return this.context.withTrace({
-      message: `insert row ${anyRow[this.primaryKey]} into the table ${this.name}.`,
+      message: `insert row ${anyRow[this.primaryKey]} into the table ${
+        this.name
+      }.`,
       activity: async () => {
         let item: Record<string, any> = {};
         const pk = anyRow[this.primaryKey];

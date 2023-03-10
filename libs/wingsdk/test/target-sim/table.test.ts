@@ -4,7 +4,7 @@ import * as cloud from "../../src/cloud";
 import { ITableClient } from "../../src/cloud";
 import { SimApp } from "../../src/testing";
 
-test('create a table', async () => {
+test("create a table", async () => {
   // GIVEN
   const app = new SimApp();
   const t = cloud.Table._newTable(app, "my_table", {
@@ -37,7 +37,7 @@ test('create a table', async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test('insert row', async () => {
+test("insert row", async () => {
   // GIVEN
   const app = new SimApp();
   const t = cloud.Table._newTable(app, "my_table", {
@@ -81,7 +81,7 @@ test('insert row', async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test('get row', async () => {
+test("get row", async () => {
   // GIVEN
   const app = new SimApp();
   const t = cloud.Table._newTable(app, "my_table", {
@@ -128,7 +128,7 @@ test('get row', async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test('update row', async () => {
+test("update row", async () => {
   // GIVEN
   const app = new SimApp();
   const t = cloud.Table._newTable(app, "my_table", {
@@ -181,7 +181,7 @@ test('update row', async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test('list table', async () => {
+test("list table", async () => {
   // GIVEN
   const app = new SimApp();
   const t = cloud.Table._newTable(app, "my_table", {
