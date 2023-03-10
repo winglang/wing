@@ -124,8 +124,7 @@ jobs:
         with:
           targets: "build,test,package"
           all: true
-          # If pushing, exclude hangar because we're going to run it in a separate job
-          args: "${{ github.event_name == 'push' && '--exclude=hangar ' || '' }}--configuration=release --output-style=stream --verbose"
+          args: "--exclude=hangar --configuration=release --output-style=stream --verbose"
 
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v2
@@ -165,18 +164,23 @@ jobs:
 
   e2e:
     name: "E2E Testing"
-    if: github.event_name == 'push'
     needs:
       - build
       - prepare
     strategy:
       fail-fast: true
       matrix:
-        runner:
-          - ubuntu-latest
-          # - windows-latest
-          - macos-latest
+        runner: [ubuntu-latest, macos-latest]
         node: [18, 19]
+        shard: ["1/2", "2/2"]
+        full_run: ${{ github.event_name == 'push' }}
+        exclude:
+          # Only run full test suite on push
+          - runner: macos-latest
+            full_run: false
+          - runner: ubuntu-latest
+            node: 19
+            full_run: false
     runs-on: ${{ matrix.runner }}
     env:
       HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.prepare.outputs.version }}.tgz"
@@ -213,7 +217,7 @@ jobs:
 
       - name: Run E2E Tests
         working-directory: tools/hangar
-        run: npm run test
+        run: npm run test -- --shard=${{ matrix.shard }}
 
   publish:
     name: Publish
