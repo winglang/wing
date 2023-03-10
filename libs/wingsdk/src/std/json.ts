@@ -3,12 +3,12 @@
  */
 export class Json {
   /**
-   * Returns the keys of the Json.
+   * Returns the keys from the Json object.
    *
    * @macro (Object.keys($args$))
    *
    * @param json to get keys from
-   * @returns The keys of the Json
+   * @returns the keys from the Json object as string array
    */
   public static keys(json: Json): string[] {
     json;
@@ -21,7 +21,7 @@ export class Json {
    * @macro (Object.values($args$))
    *
    * @param json to get values from
-   * @returns The values from the Json as array of Json
+   * @returns the values from the Json as array of Json
    */
   public static values(json: Json): Json[] {
     json;
@@ -34,7 +34,7 @@ export class Json {
    * @macro (JSON.parse(JSON.stringify($args$)))
    *
    * @param json to clone
-   * @returns The mutable clone of the Json
+   * @returns the mutable clone of the Json
    */
   public static cloneMut(json: Json): MutJson {
     json;
@@ -47,7 +47,7 @@ export class Json {
    * @macro (JSON.parse(JSON.stringify($args$)))
    *
    * @param json to clone
-   * @returns The immutable clone of the Json
+   * @returns the immutable clone of the Json
    */
   public static clone(json: Json): Json {
     json;
@@ -55,7 +55,7 @@ export class Json {
   }
 
   /**
-   * Deletes key in given Json
+   * Deletes a key in a given Json
    *
    * @macro ((args) => { delete (args[0])[args[1]]; })([$args$])
    *
