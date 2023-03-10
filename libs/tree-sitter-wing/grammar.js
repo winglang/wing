@@ -27,7 +27,7 @@ module.exports = grammar({
     // Handle ambiguity in case of empty literal: `a = {}`
     // In this case tree-sitter doesn't know if it's a set or a map literal so just assume its a map
     [$.map_literal, $.set_literal],
-    [$.stdlib_identifier, $.json_container_type]
+    [$.json_container_type, $.stdlib_identifier]
   ],
 
   conflicts: ($) => [[$.reference, $.custom_type]],

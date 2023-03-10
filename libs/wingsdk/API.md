@@ -2369,6 +2369,149 @@ The index of the element in the Json Array to return.
 
 ---
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Json.clone">clone</a></code> | Creates a immutable deep clone of the Json. |
+| <code><a href="#@winglang/sdk.std.Json.cloneMut">clone_mut</a></code> | Creates a mutable deep clone of the Json. |
+| <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes key in given Json. |
+| <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys of the Json. |
+| <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
+| <code><a href="#@winglang/sdk.std.Json.toStr">to_str</a></code> | Formats Json as string. |
+| <code><a href="#@winglang/sdk.std.Json.values">values</a></code> | Returns the values from the Json. |
+
+---
+
+##### `clone` <a name="clone" id="@winglang/sdk.std.Json.clone"></a>
+
+```wing
+bring std;
+
+std.Json.clone(json: Json)
+```
+
+Creates a immutable deep clone of the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.clone.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to clone.
+
+---
+
+##### `clone_mut` <a name="clone_mut" id="@winglang/sdk.std.Json.cloneMut"></a>
+
+```wing
+bring std;
+
+std.Json.clone_mut(json: Json)
+```
+
+Creates a mutable deep clone of the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.cloneMut.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to clone.
+
+---
+
+##### `delete` <a name="delete" id="@winglang/sdk.std.Json.delete"></a>
+
+```wing
+bring std;
+
+std.Json.delete(json: Json, key: str)
+```
+
+Deletes key in given Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.delete.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to delete key from.
+
+---
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.delete.parameter.key"></a>
+
+- *Type:* str
+
+the key to delete.
+
+---
+
+##### `keys` <a name="keys" id="@winglang/sdk.std.Json.keys"></a>
+
+```wing
+bring std;
+
+std.Json.keys(json: Json)
+```
+
+Returns the keys of the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.keys.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+---
+
+##### `parse` <a name="parse" id="@winglang/sdk.std.Json.parse"></a>
+
+```wing
+bring std;
+
+std.Json.parse(str: str)
+```
+
+Parse a string into a Json.
+
+###### `str`<sup>Required</sup> <a name="str" id="@winglang/sdk.std.Json.parse.parameter.str"></a>
+
+- *Type:* str
+
+to parse as Json.
+
+---
+
+##### `to_str` <a name="to_str" id="@winglang/sdk.std.Json.toStr"></a>
+
+```wing
+bring std;
+
+std.Json.to_str(json: Json)
+```
+
+Formats Json as string.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.toStr.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to format as string.
+
+---
+
+##### `values` <a name="values" id="@winglang/sdk.std.Json.values"></a>
+
+```wing
+bring std;
+
+std.Json.values(json: Json)
+```
+
+Returns the values from the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.values.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+---
 
 
 

@@ -4120,11 +4120,11 @@
     [
       {
         "type": "SYMBOL",
-        "name": "stdlib_identifier"
+        "name": "json_container_type"
       },
       {
         "type": "SYMBOL",
-        "name": "json_container_type"
+        "name": "stdlib_identifier"
       }
     ]
   ],

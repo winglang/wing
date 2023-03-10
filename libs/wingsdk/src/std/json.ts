@@ -2,12 +2,11 @@
  * Immutable Json
  */
 export class Json {
-
   /**
    * Returns the keys of the Json.
-   * 
+   *
    * @macro Object.keys($args$)
-   * 
+   *
    * @returns The keys of the Json
    */
   public static keys(json: Json): string[] {
@@ -17,9 +16,9 @@ export class Json {
 
   /**
    * Returns the values from the Json.
-   *  
+   *
    * @macro Object.values($args$)
-   * 
+   *
    * @param Json values from Json
    */
   public static values(json: Json): Json[] {
@@ -29,9 +28,9 @@ export class Json {
 
   /**
    * Creates a mutable deep clone of the Json.
-   * 
+   *
    * @macro (JSON.parse(JSON.stringify($args$)))
-   * 
+   *
    * @param json to clone
    */
   public static cloneMut(json: Json): MutJson {
@@ -41,9 +40,9 @@ export class Json {
 
   /**
    * Creates a immutable deep clone of the Json.
-   * 
+   *
    * @macro (JSON.parse(JSON.stringify($args$)))
-   * 
+   *
    * @param json to clone
    */
   public static clone(json: Json): Json {
@@ -53,9 +52,9 @@ export class Json {
 
   /**
    * Deletes key in given Json
-   * 
+   *
    * @macro ((args) => { delete (args[0])[args[1]]; })([$args$])
-   * 
+   *
    * @param json to delete key from
    * @param key the key to delete
    */
@@ -67,9 +66,9 @@ export class Json {
 
   /**
    * Formats Json as string
-   * 
+   *
    * @macro (JSON.stringify($args$))
-   * 
+   *
    * @param json to format as string
    */
   public static toStr(json: Json): string {
@@ -79,9 +78,9 @@ export class Json {
 
   /**
    * Parse a string into a Json
-   * 
+   *
    * @macro (JSON.parse($args$))
-   * 
+   *
    * @param str to parse as Json
    */
   public static parse(str: string): Json {
