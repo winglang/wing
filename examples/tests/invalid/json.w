@@ -20,7 +20,6 @@ let forever_json = Json {a: "hello"};
 forever_json.set("a", "world!");
 //           ^^^ Unknown symbol "set" (TODO: better error message https://github.com/winglang/wing/issues/1660) 
 
-// Unallowed Json types TODO: https://github.com/winglang/wing/issues/1683
-// let bkt = new cloud.Bucket();
-// let j_arr = Json [bkt];
-//                   ^^^ type cloud.bucket is not serializable 
+let bkt = new cloud.Bucket();
+let j_arr = Json [bkt];
+//                ^^^ Expected "Json" elements to be serializable, but got "Bucket" which is not serializable

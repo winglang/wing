@@ -740,6 +740,28 @@ impl TypeRef {
 			_ => false,
 		}
 	}
+
+	pub fn is_serializable(&self) -> bool {
+		match **self {
+			Type::Resource(_) => false,
+			Type::Enum(_) => true,
+			Type::Number => true,
+			Type::String => true,
+			Type::Duration => true,
+			Type::Boolean => true,
+			Type::Json => true,
+			Type::Array(v) => v.is_serializable(),
+			Type::Map(v) => v.is_serializable(),
+			Type::Set(v) => v.is_serializable(),
+			Type::Struct(_) => self.as_struct().unwrap().env.iter(true).all(|(_, v, _)| {
+				v.as_variable()
+					.expect("Expected struct field to be a variable in the struct env")
+					.type_
+					.is_serializable()
+			}),
+			_ => false,
+		}
+	}
 }
 
 impl Subtype for TypeRef {
@@ -1267,13 +1289,10 @@ impl<'a> TypeChecker<'a> {
 					_ => self.expr_error(exp, format!("Expected \"Array\" type, found \"{}\"", container_type)),
 				};
 
-				// Skip validate type if in Json
-				if !context.in_json {
-					// Verify all types are the same as the inferred type
-					for v in items.iter() {
-						let t = self.type_check_exp(v, env, statement_idx, context);
-						self.validate_type(t, element_type, v);
-					}
+				// Verify all types are the same as the inferred type
+				for v in items.iter() {
+					let t = self.type_check_exp(v, env, statement_idx, context);
+					self.check_json_serializable_or_validate_type(t, element_type, v, context);
 				}
 
 				container_type
@@ -1340,13 +1359,10 @@ impl<'a> TypeChecker<'a> {
 					_ => self.expr_error(exp, format!("Expected \"Map\" type, found \"{}\"", container_type)),
 				};
 
-				// Skip validate if in Json
-				if !context.in_json {
-					// Verify all types are the same as the inferred type
-					for (_, v) in fields.iter() {
-						let t = self.type_check_exp(v, env, statement_idx, context);
-						self.validate_type(t, value_type, v);
-					}
+				// Verify all types are the same as the inferred type
+				for (_, v) in fields.iter() {
+					let t = self.type_check_exp(v, env, statement_idx, context);
+					self.check_json_serializable_or_validate_type(t, value_type, v, context);
 				}
 
 				container_type
@@ -1469,6 +1485,31 @@ impl<'a> TypeChecker<'a> {
 				);
 			}
 		}
+	}
+
+	fn check_json_serializable_or_validate_type(
+		&mut self,
+		actual_type: TypeRef,
+		expected_type: TypeRef,
+		exp: &Expr,
+		context: &TypeCheckerContext,
+	) -> TypeRef {
+		// Skip validate if in Json
+		if context.in_json {
+			if !actual_type.is_serializable() {
+				self.expr_error(
+					exp,
+					format!(
+						"Expected \"Json\" elements to be serializable, but got \"{}\" which is not serializable",
+						actual_type
+					),
+				);
+			}
+
+			return actual_type;
+		}
+
+		self.validate_type(actual_type, expected_type, exp)
 	}
 
 	/// Validate that the given type is a subtype (or same) as the expected type. If not, add an error
