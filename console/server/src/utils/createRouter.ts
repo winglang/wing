@@ -22,7 +22,6 @@ export type RouterEvents = {
 
 export interface RouterContext {
   simulator: () => Promise<Simulator>;
-  tree: () => Promise<ConstructTree>;
   logs: () => LogEntry[];
   appDetails: () => Promise<{
     wingVersion: string | undefined;

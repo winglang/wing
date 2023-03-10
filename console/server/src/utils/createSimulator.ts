@@ -1,12 +1,7 @@
-import * as fs from "node:fs/promises";
-import * as path from "node:path";
-
 import { Simulator, SimulatorProps } from "@winglang/sdk/lib/testing";
 
 import { AppEvent } from "./cloudAppState.js";
 import { NodeDisplay } from "./constructTreeNodeMap.js";
-
-const TREE_FILE_PATH = "tree.json";
 
 /**
  * A node in the construct tree.
@@ -101,15 +96,6 @@ export function createSimulator({
     return simulatorProps.simfile;
   };
 
-  const treeJsonFilename = path.resolve(
-    path.dirname(simulatorProps.simfile),
-    TREE_FILE_PATH,
-  );
-  const tree = async () => {
-    const json = await fs.readFile(treeJsonFilename, "utf8");
-    return JSON.parse(json) as ConstructTree;
-  };
-
   void start();
 
   return {
@@ -118,6 +104,5 @@ export function createSimulator({
     reload,
     get,
     getSimFile,
-    tree,
   };
 }

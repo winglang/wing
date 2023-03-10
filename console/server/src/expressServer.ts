@@ -41,10 +41,6 @@ export const createExpressServer = async ({
         const sim = await simulatorPromise;
         return sim.get();
       },
-      async tree() {
-        const sim = await simulatorPromise;
-        return sim.tree();
-      },
       logs() {
         return consoleLogger.messages;
       },

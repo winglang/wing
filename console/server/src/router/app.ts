@@ -65,7 +65,7 @@ export const createAppRouter = () => {
     }),
     "app.explorerTree": createProcedure.query(async ({ ctx }) => {
       const simulator = await ctx.simulator();
-      const { tree } = await ctx.tree();
+      const { tree } = simulator.tree().rawData();
       return createExplorerItemFromConstructTreeNode(tree, simulator);
     }),
     "app.childRelationships": createProcedure
@@ -76,7 +76,7 @@ export const createAppRouter = () => {
       )
       .query(async ({ ctx, input }) => {
         const simulator = await ctx.simulator();
-        const { tree } = await ctx.tree();
+        const { tree } = simulator.tree().rawData();
         const nodeMap = buildConstructTreeNodeMap(tree);
 
         const node = nodeMap.get(input.path);
@@ -142,7 +142,7 @@ export const createAppRouter = () => {
       )
       .query(async ({ ctx, input }) => {
         const simulator = await ctx.simulator();
-        const { tree } = await ctx.tree();
+        const { tree } = simulator.tree().rawData();
         const nodeMap = buildConstructTreeNodeMap(tree);
 
         let breadcrumbs: Array<{
@@ -170,7 +170,7 @@ export const createAppRouter = () => {
       )
       .query(async ({ ctx, input }) => {
         const simulator = await ctx.simulator();
-        const { tree } = await ctx.tree();
+        const { tree } = simulator.tree().rawData();
         const nodeMap = buildConstructTreeNodeMap(tree);
         const node = nodeMap.get(input.path);
         if (!node) {
@@ -206,7 +206,7 @@ export const createAppRouter = () => {
         }
 
         const simulator = await ctx.simulator();
-        const { tree } = await ctx.tree();
+        const { tree } = simulator.tree().rawData();
         const nodeMap = buildConstructTreeNodeMap(tree);
         const node = nodeMap.get(path);
         if (!node) {
@@ -275,7 +275,7 @@ export const createAppRouter = () => {
     }),
     "app.map": createProcedure.query(async ({ ctx }) => {
       const simulator = await ctx.simulator();
-      const { tree } = await ctx.tree();
+      const { tree } = simulator.tree().rawData();
       const nodes = [createMapNodeFromConstructTreeNode(tree, simulator)];
       const edges = uniqby(
         createMapEdgeFromConstructTreeNode(tree),
