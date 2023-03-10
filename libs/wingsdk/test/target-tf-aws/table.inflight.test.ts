@@ -16,27 +16,40 @@ import {
   ScanCommandOutput,
   ScanCommand,
 } from "@aws-sdk/client-dynamodb";
-import { marshall } from "@aws-sdk/util-dynamodb";
 import { mockClient } from "aws-sdk-client-mock";
-import { test, expect, describe } from "vitest";
+import { test, expect, describe, beforeEach } from "vitest";
 
 import { TableClient } from "../../src/target-tf-aws/table.inflight";
+import { ColumnType } from "../../src/cloud";
 
 const MOCK_TABLE_NAME = "MyBeautifulTable";
 const PRIMARY_KEY = "id";
 const dynamoMock = mockClient(DynamoDBClient);
 
 describe("inflight table tests", () => {
+  let client, row;
+  beforeEach(() => {
+    row = { id: "test", somenumber: 1 };
+    const columns = {
+      somenumber: ColumnType.NUMBER
+    }
+    client = new TableClient(MOCK_TABLE_NAME, PRIMARY_KEY, JSON.stringify(columns));
+  });
 
   test("insert", async () => {
     // GIVEN
-    const row = { id: "test" };
-    setupInsertMock({
-      expectedTableName: MOCK_TABLE_NAME,
-      row: row,
-    });
+    const expectedRequest: PutItemCommandInput = {
+      TableName: MOCK_TABLE_NAME,
+      Item: {
+        id: { S: row.id },
+        somenumber: { N: String(row.somenumber) }
+      },
+    };
+    const mockResponse: PutItemCommandOutput = {
+      $metadata: {},
+    };
+    dynamoMock.on(PutItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const client = new TableClient(MOCK_TABLE_NAME, PRIMARY_KEY, "");
     const response = await client.insert(row as any);
     // THEN
     expect(response).toEqual(undefined);
@@ -44,15 +57,19 @@ describe("inflight table tests", () => {
 
   test("update", async () => {
     // GIVEN
-    const row = { id: "test" };
-    setupUpdateMock({
-      expectedTableName: MOCK_TABLE_NAME,
-      row: row,
-      newValue: 123,
-      primaryKeyValue: "test",
-    });
+    const expectedRequest: UpdateItemCommandInput = {
+      TableName: MOCK_TABLE_NAME,
+      Key: { id: { S: row.id } },
+      UpdateExpression: `SET somenumber = :somenumber`,
+      ExpressionAttributeValues: {
+        ":somenumber": { N: `${row.somenumber}` },
+      },
+    };
+    const mockResponse: UpdateItemCommandOutput = {
+      $metadata: {},
+    };
+    dynamoMock.on(UpdateItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const client = new TableClient(MOCK_TABLE_NAME, PRIMARY_KEY, "");
     const response = await client.update(row as any);
     // THEN
     expect(response).toEqual(undefined);
@@ -60,159 +77,95 @@ describe("inflight table tests", () => {
 
   test("delete", async () => {
     // GIVEN
-    const key = "test";
-    setupDeleteMock({
-      expectedTableName: MOCK_TABLE_NAME,
-      primaryKeyValue: key,
-    });
+    const expectedRequest: DeleteItemCommandInput = {
+      TableName: MOCK_TABLE_NAME,
+      Key: { id: { S: row.id } },
+    };
+    const mockResponse: DeleteItemCommandOutput = {
+      $metadata: {},
+    };
+    dynamoMock.on(DeleteItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const client = new TableClient(MOCK_TABLE_NAME, PRIMARY_KEY, "");
-    const response = await client.delete(key);
+    const response = await client.delete(row.id);
     // THEN
     expect(response).toEqual(undefined);
   });
 
-  test("get", async () => {
-    // GIVEN
-    const key = "test";
-    setupGetMock({
-      expectedTableName: MOCK_TABLE_NAME,
-      primaryKeyValue: key,
-      emptyTable: false,
-    });
-    // WHEN
-    const client = new TableClient(MOCK_TABLE_NAME, PRIMARY_KEY, "");
-    const response = await client.get(key);
-    // THEN
-    expect(response).toEqual({ id: "test" });
-  });
-
   test("get to a empty table", async () => {
     // GIVEN
-    const key = "test";
-    setupGetMock({
-      expectedTableName: MOCK_TABLE_NAME,
-      primaryKeyValue: key,
-      emptyTable: true,
-    });
+    const expectedRequest: GetItemCommandInput = {
+      TableName: MOCK_TABLE_NAME,
+      Key: { id: { S: row.id } },
+    };
+    const mockResponse: GetItemCommandOutput = {
+      $metadata: {},
+    };
+    dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const client = new TableClient(MOCK_TABLE_NAME, PRIMARY_KEY, "");
-    const response = await client.get(key);
+    const response = await client.get(row.id);
     // THEN
     expect(response).toEqual(null);
   });
 
   test("get", async () => {
     // GIVEN
-    const key = "test";
-    setupGetMock({
-      expectedTableName: MOCK_TABLE_NAME,
-      primaryKeyValue: key,
-      emptyTable: false,
-    });
+    const expectedRequest: GetItemCommandInput = {
+      TableName: MOCK_TABLE_NAME,
+      Key: {
+        id: { S: row.id }
+      },
+    };
+    const mockResponse: GetItemCommandOutput = {
+      $metadata: {},
+      Item: {
+        id: { S: `${row.id}` },
+        somenumber: { N: `${row.somenumber}` }
+      }
+    };
+    dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const client = new TableClient(MOCK_TABLE_NAME, PRIMARY_KEY, "");
-    const response = await client.get(key);
+    const response = await client.get(row.id);
     // THEN
-    expect(response).toEqual({ id: "test" });
+    expect(response).toEqual({ id: row.id, somenumber: row.somenumber });
   });
 
   test("list", async () => {
     // GIVEN
-    setupListMock({
-      expectedTableName: MOCK_TABLE_NAME,
-      emptyTable: false,
-    });
+    const expectedRequest: ScanCommandInput = {
+      TableName: MOCK_TABLE_NAME,
+    };
+    const mockResponse: ScanCommandOutput = {
+      $metadata: {},
+      Count: 0,
+      Items: [
+        { id: { S: "test1" }, somenumber: { N: "1" } },
+        { id: { S: "test2" }, somenumber: { N: "2" } }
+      ]
+    };
+    dynamoMock.on(ScanCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const client = new TableClient(MOCK_TABLE_NAME, PRIMARY_KEY, "");
     const response = await client.list();
     // THEN
-    expect(response).toEqual([{ id: "test1" }, { id: "test2" }]);
+    expect(response).toEqual([
+      { id: "test1", somenumber: 1 },
+      { id: "test2", somenumber: 2 }
+    ]);
   });
 
   test("empty list", async () => {
     // GIVEN
-    setupListMock({
-      expectedTableName: MOCK_TABLE_NAME,
-      emptyTable: true,
-    });
+    const expectedRequest: ScanCommandInput = {
+      TableName: MOCK_TABLE_NAME,
+    };
+    const mockResponse: ScanCommandOutput = {
+      $metadata: {},
+      Count: 0,
+      Items: []
+    };
+    dynamoMock.on(ScanCommand, expectedRequest).resolves(mockResponse);
     // WHEN
-    const client = new TableClient(MOCK_TABLE_NAME, PRIMARY_KEY, "");
     const response = await client.list();
     // THEN
     expect(response).toEqual([]);
   });
 });
-
-interface MockOptions {
-  readonly expectedTableName: string;
-  readonly row?: any;
-  readonly newValue?: number;
-  readonly primaryKeyValue?: string;
-  readonly emptyTable?: boolean;
-}
-
-function setupInsertMock(opts: MockOptions) {
-  const expectedRequest: PutItemCommandInput = {
-    TableName: opts.expectedTableName,
-    Item: marshall(opts.row),
-  };
-  const mockResponse: PutItemCommandOutput = {
-    $metadata: {},
-  };
-  dynamoMock.on(PutItemCommand, expectedRequest).resolves(mockResponse);
-}
-
-function setupUpdateMock(opts: MockOptions) {
-  const expectedRequest: UpdateItemCommandInput = {
-    TableName: opts.expectedTableName,
-    Key: marshall({ id: opts.primaryKeyValue }),
-    UpdateExpression: `SET somenumber = :somenumber`,
-    ExpressionAttributeValues: {
-      ":somenumber": { N: `${opts.newValue}` },
-    },
-  };
-  const mockResponse: UpdateItemCommandOutput = {
-    $metadata: {},
-  };
-  dynamoMock.on(UpdateItemCommand, expectedRequest).resolves(mockResponse);
-}
-
-function setupDeleteMock(opts: MockOptions) {
-  const expectedRequest: DeleteItemCommandInput = {
-    TableName: opts.expectedTableName,
-    Key: marshall({ id: opts.primaryKeyValue }),
-  };
-  const mockResponse: DeleteItemCommandOutput = {
-    $metadata: {},
-  };
-  dynamoMock.on(DeleteItemCommand, expectedRequest).resolves(mockResponse);
-}
-
-function setupGetMock(opts: MockOptions) {
-  const expectedRequest: GetItemCommandInput = {
-    TableName: opts.expectedTableName,
-    Key: { id: { S: opts.primaryKeyValue! } },
-  };
-  const mockResponse: GetItemCommandOutput = {
-    $metadata: {},
-  };
-  if (!opts.emptyTable) {
-    mockResponse.Item = { id: { S: `${opts.primaryKeyValue}` } };
-  }
-  dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
-}
-
-function setupListMock(opts: MockOptions) {
-  const expectedRequest: ScanCommandInput = {
-    TableName: opts.expectedTableName,
-  };
-  const mockResponse: ScanCommandOutput = {
-    $metadata: {},
-    Count: 0,
-    Items: opts.emptyTable
-      ? []
-      : [{ id: { S: "test1" } }, { id: { S: "test2" } }],
-  };
-  dynamoMock.on(ScanCommand, expectedRequest).resolves(mockResponse);
-}

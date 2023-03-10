@@ -98,11 +98,8 @@ export class TableClient implements ITableClient {
   private unmarshallItems(row: any) {
     const columns = JSON.parse(this.columns);
     let items: { [key: string]: any } = {};
+    items[this.primaryKey] = row[this.primaryKey].S;
     for (const [key, value] of Object.entries(columns)) {
-      if (key == this.primaryKey) {
-        items[key] = row[key].S;
-        continue;
-      }
       switch (value) {
         case ColumnType.DATE:
         case ColumnType.STRING:
@@ -127,13 +124,16 @@ export class TableClient implements ITableClient {
     for (const [key, value] of Object.entries(item)) {
       switch (typeof value) {
         case "string":
-          items[key] = { "S": value };
+          items[key] = { S: value };
           break;
         case "number":
-          items[key] = { "N": String(value) };
+          items[key] = { N: String(value) };
+          break;
+        case "boolean":
+          items[key] = { BOOL: value };
           break;
         case "object":
-          items[key] = { "M": this.marshallJson(value) };
+          items[key] = { M: this.marshallJson(value) };
           break;
       }
     }
@@ -143,24 +143,21 @@ export class TableClient implements ITableClient {
   private marshallItems(row: any) {
     const columns = JSON.parse(this.columns);
     let items: { [key: string]: any } = {};
+    items[this.primaryKey] = { S: row[this.primaryKey] };
     for (const [key, value] of Object.entries(columns)) {
-      if (key == this.primaryKey) {
-        items[key] = { "S": row[key] };
-        continue;
-      }
       switch (value) {
         case ColumnType.DATE:
         case ColumnType.STRING:
-          items[key] = { "S": row[key] };
+          items[key] = { S: row[key] };
           break;
         case ColumnType.NUMBER:
-          items[key] = { "N": String(row[key]) };
+          items[key] = { N: String(row[key]) };
           break;
         case ColumnType.BOOLEAN:
-          items[key] = { "BOOL": row[key] };
+          items[key] = { BOOL: row[key] };
           break;
         case ColumnType.JSON:
-          items[key] = { "M": this.marshallJson(row[key]) };
+          items[key] = { M: this.marshallJson(row[key]) };
           break;
       }
     }

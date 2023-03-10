@@ -4282,7 +4282,7 @@ Inflight interface for `Table`.
 ##### `delete` <a name="delete" id="@winglang/sdk.cloud.ITableClient.delete"></a>
 
 ```wing
-delete(key: any): void
+delete(key: str): void
 ```
 
 **Inflight client:** [true](#true)
@@ -4291,7 +4291,7 @@ Delete a row from the table, by primary key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.ITableClient.delete.parameter.key"></a>
 
-- *Type:* any
+- *Type:* str
 
 primary key to delete the row.
 
@@ -4300,7 +4300,7 @@ primary key to delete the row.
 ##### `get` <a name="get" id="@winglang/sdk.cloud.ITableClient.get"></a>
 
 ```wing
-get(key: any): any
+get(key: str): any
 ```
 
 **Inflight client:** [true](#true)
@@ -4309,7 +4309,7 @@ Get a row from the table, by primary key.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.ITableClient.get.parameter.key"></a>
 
-- *Type:* any
+- *Type:* str
 
 primary key to search.
 
