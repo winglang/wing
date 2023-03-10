@@ -1,26 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`wing compile -t tf-aws > index.js 1`] = `
-"async handle(s) { const {  } = this; {
-  if (true) {
-    const x = 2;
-    if ((true && ((x + 2) === 4))) {
-      if ((true && ((x + 3) === 4))) {
-        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
-      } else if ((true && ((x + 3) === 6))) {
-        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
-      } else if ((false || ((x + 3) === 5))) {
-        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'true'\`)})(true)};
-      } else {
-        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
-      }
-    } else {
-      {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
-    }
-  }
-} };"
-`;
-
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
@@ -175,6 +154,27 @@ constructor() {
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`wing compile -t tf-aws > proc.09c5e24751d9ba1246f91518f2f7f5c5d1102a09d0b1acff479ae27ad134090f/index.js 1`] = `
+"async handle(s) { const {  } = this; {
+  if (true) {
+    const x = 2;
+    if ((true && ((x + 2) === 4))) {
+      if ((true && ((x + 3) === 4))) {
+        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
+      } else if ((true && ((x + 3) === 6))) {
+        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
+      } else if ((false || ((x + 3) === 5))) {
+        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'true'\`)})(true)};
+      } else {
+        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
+      }
+    } else {
+      {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
+    }
+  }
+} };"
 `;
 
 exports[`wing test > stdout 1`] = `"pass ─ statements_if.w » root/test"`;

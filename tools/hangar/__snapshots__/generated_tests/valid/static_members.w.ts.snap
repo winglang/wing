@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`wing compile -t tf-aws > Foo.inflight.js 1`] = `
+exports[`wing compile -t tf-aws > clients/Foo.inflight.js 1`] = `
 "export class Foo_inflight  {
 constructor({ instance_field }) {
 
@@ -11,32 +11,6 @@ async static get_123()  {
   return 123;
 }
 }}"
-`;
-
-exports[`wing compile -t tf-aws > index.js 1`] = `
-"async handle(s) { const {  } = this; {
-  class InflightClass
-  {
-   constructor()  {
-  	{
-  }
-  }
-  
-   inflight_method()  {
-  	{
-    return \\"Inflight method\\";
-  }
-  }
-  static static_inflight_method()  {
-  	{
-    return \\"Static inflight method\\";
-  }
-  }
-  }
-  const inflight_class = new InflightClass();
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await inflight_class.inflight_method()) === \\"Inflight method\\")'\`)})(((await inflight_class.inflight_method()) === \\"Inflight method\\"))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await InflightClass.static_inflight_method()) === \\"Static inflight method\\")'\`)})(((await InflightClass.static_inflight_method()) === \\"Static inflight method\\"))};
-} };"
 `;
 
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
@@ -196,6 +170,32 @@ constructor() {
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`wing compile -t tf-aws > proc.8b58045c72709175549d51937a233ff65ac5e5aa12e83837daf5ea7baf9f224b/index.js 1`] = `
+"async handle(s) { const {  } = this; {
+  class InflightClass
+  {
+   constructor()  {
+  	{
+  }
+  }
+  
+   inflight_method()  {
+  	{
+    return \\"Inflight method\\";
+  }
+  }
+  static static_inflight_method()  {
+  	{
+    return \\"Static inflight method\\";
+  }
+  }
+  }
+  const inflight_class = new InflightClass();
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await inflight_class.inflight_method()) === \\"Inflight method\\")'\`)})(((await inflight_class.inflight_method()) === \\"Inflight method\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await InflightClass.static_inflight_method()) === \\"Static inflight method\\")'\`)})(((await InflightClass.static_inflight_method()) === \\"Static inflight method\\"))};
+} };"
 `;
 
 exports[`wing test > stdout 1`] = `"pass ─ static_members.w » root/test"`;

@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`wing compile -t tf-aws > Test.inflight.js 1`] = `
+exports[`wing compile -t tf-aws > clients/Test.inflight.js 1`] = `
 "export class Test_inflight  {
 constructor({ b }) {
 
@@ -12,12 +12,6 @@ async  test()  {
   (await x.put(\\"hello\\",\\"world\\"));
 }
 }}"
-`;
-
-exports[`wing compile -t tf-aws > index.js 1`] = `
-"async handle() { const { f } = this; {
-  (await f.test());
-} };"
 `;
 
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
@@ -218,6 +212,12 @@ constructor() {
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`wing compile -t tf-aws > proc.80a17b6f758da66f2a7690bf5a9478936a9921da3421819b7a8bf7e1cfde82ed/index.js 1`] = `
+"async handle() { const { f } = this; {
+  (await f.test());
+} };"
 `;
 
 exports[`wing test > stdout 1`] = `"pass ─ inflight_ref_unknown_op.w » root/test"`;

@@ -1,20 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`wing compile -t tf-aws > index.js 1`] = `
-"async handle(body) { const {  } = this; {
-  const i = 0;
-  while (((await iterator(i)) < 3)) {
-    {console.log(\`\${i}\`)};
-  }
-} };"
-`;
-
-exports[`wing compile -t tf-aws > index.js 2`] = `
-"async handle(j) { const {  } = this; {
-  return (j + 1);
-} };"
-`;
-
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
@@ -170,6 +155,21 @@ constructor() {
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`wing compile -t tf-aws > proc.82d0059fdbaebaab6d1be68f497052f9d5b8662f4333952a6e9ad55f564e0c97/index.js 1`] = `
+"async handle(j) { const {  } = this; {
+  return (j + 1);
+} };"
+`;
+
+exports[`wing compile -t tf-aws > proc.f259e8d1edc5d47946ec1a1f3aa23e59fe550255ec12b899cffb307ecf525df6/index.js 1`] = `
+"async handle(body) { const {  } = this; {
+  const i = 0;
+  while (((await iterator(i)) < 3)) {
+    {console.log(\`\${i}\`)};
+  }
+} };"
 `;
 
 exports[`wing test > stdout 1`] = `"pass ─ while_loop_await.w (no tests)"`;

@@ -1,6 +1,6 @@
-import { mkdirpSync, readFileSync } from "fs-extra";
+import { mkdir, readFile } from "fs-extra";
 import { tmpDir, validTestDir, walkdir } from "./paths";
-import { basename, join } from "path";
+import { basename, join, sep } from "path";
 import { runWingCommand, sanitize_json_paths } from "./utils";
 
 export async function compileTest(expect: Vi.ExpectStatic, wingFile: string) {
@@ -10,7 +10,7 @@ export async function compileTest(expect: Vi.ExpectStatic, wingFile: string) {
   const targetDir = join(testDir, "target", `${wingBasename.replace(".w", "")}.tfaws`);
   const tf_json = join(targetDir, "main.tf.json");
 
-  mkdirpSync(testDir);
+  await mkdir(testDir);
 
   await runWingCommand(testDir, join(validTestDir, wingBasename), args, true);
 
@@ -18,8 +18,9 @@ export async function compileTest(expect: Vi.ExpectStatic, wingFile: string) {
 
   expect(npx_tfJson).toMatchSnapshot("main.tf.json");
 
-  for await (const dotFile of walkdir(join(targetDir, ".wing"))) {
-    expect(readFileSync(dotFile, "utf8")).toMatchSnapshot(basename(dotFile));
+  const dotWing = join(targetDir, ".wing");
+  for await (const dotFile of walkdir(dotWing)) {
+    expect(await readFile(dotFile, "utf8")).toMatchSnapshot(dotFile.replace(dotWing + sep, ""));
   }
 }
 

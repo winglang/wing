@@ -1,10 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`wing compile -t tf-aws > index.js 1`] = `
-"async handle() { const {  } = this; {
-} };"
-`;
-
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
@@ -61,6 +56,11 @@ constructor() {
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`wing compile -t tf-aws > proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js 1`] = `
+"async handle() { const {  } = this; {
+} };"
 `;
 
 exports[`wing test > stdout 1`] = `"pass ─ identical_inflights.w (no tests)"`;

@@ -1,17 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`wing compile -t tf-aws > index.js 1`] = `
-"async handle(event) { const { bucket1, bucket2, bucket3 } = this; {
-  (await bucket1.put(\\"file.txt\\",\\"data\\"));
-  (await bucket2.get(\\"file.txt\\"));
-  (await bucket2.get(\\"file2.txt\\"));
-  (await bucket3.get(\\"file3.txt\\"));
-  for (const stuff of (await bucket1.list())) {
-    {console.log(stuff)};
-  }
-} };"
-`;
-
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
@@ -426,6 +414,18 @@ constructor() {
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`wing compile -t tf-aws > proc.5f0e4e25898a72c973f063e92444f7572d58a18cdd38b3fb3a575af6adf7440f/index.js 1`] = `
+"async handle(event) { const { bucket1, bucket2, bucket3 } = this; {
+  (await bucket1.put(\\"file.txt\\",\\"data\\"));
+  (await bucket2.get(\\"file.txt\\"));
+  (await bucket2.get(\\"file2.txt\\"));
+  (await bucket3.get(\\"file3.txt\\"));
+  for (const stuff of (await bucket1.list())) {
+    {console.log(stuff)};
+  }
+} };"
 `;
 
 exports[`wing test > stdout 1`] = `"pass ─ captures.w (no tests)"`;

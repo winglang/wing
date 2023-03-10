@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`wing compile -t tf-aws > MyResource.inflight.js 1`] = `
+exports[`wing compile -t tf-aws > clients/MyResource.inflight.js 1`] = `
 "export class MyResource_inflight  {
 constructor({ array_of_queues, array_of_str, map_of_num, my_bool, my_num, my_resource, my_str, set_of_str }) {
 
@@ -53,42 +53,6 @@ async  capture_array_of_queues()  {
   (await (await this.array_of_queues.at(1)).push(\\"q2\\"));
 }
 }}"
-`;
-
-exports[`wing compile -t tf-aws > index.js 1`] = `
-"async handle() { const { r } = this; {
-  (await r.capture_array_of_queues());
-} };"
-`;
-
-exports[`wing compile -t tf-aws > index.js 2`] = `
-"async handle() { const { r } = this; {
-  (await r.capture_resource());
-} };"
-`;
-
-exports[`wing compile -t tf-aws > index.js 3`] = `
-"async handle() { const { r } = this; {
-  (await r.capture_map());
-} };"
-`;
-
-exports[`wing compile -t tf-aws > index.js 4`] = `
-"async handle() { const { r } = this; {
-  (await r.capture_set());
-} };"
-`;
-
-exports[`wing compile -t tf-aws > index.js 5`] = `
-"async handle() { const { r } = this; {
-  (await r.capture_array());
-} };"
-`;
-
-exports[`wing compile -t tf-aws > index.js 6`] = `
-"async handle() { const { r } = this; {
-  (await r.capture_primitives());
-} };"
 `;
 
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
@@ -665,6 +629,42 @@ constructor() {
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`wing compile -t tf-aws > proc.179eef1ca19aa2bf908a3113209c3d8b96c23bac7bc35f1d6381c0f5cd2ec603/index.js 1`] = `
+"async handle() { const { r } = this; {
+  (await r.capture_array_of_queues());
+} };"
+`;
+
+exports[`wing compile -t tf-aws > proc.1814d20e284e4a33aff014ce4391d7da7998b0cd7db8ebee477a5400763bbe7b/index.js 1`] = `
+"async handle() { const { r } = this; {
+  (await r.capture_primitives());
+} };"
+`;
+
+exports[`wing compile -t tf-aws > proc.7235e8fbf10f106318ff9c22489e4e955483c8de6b39df0dbf143fdfa4691109/index.js 1`] = `
+"async handle() { const { r } = this; {
+  (await r.capture_map());
+} };"
+`;
+
+exports[`wing compile -t tf-aws > proc.b5e7bd6cc9f6c741c4f0afa8adc0208ccee08e6297495b1fbe29db8afb6ee789/index.js 1`] = `
+"async handle() { const { r } = this; {
+  (await r.capture_resource());
+} };"
+`;
+
+exports[`wing compile -t tf-aws > proc.b7df534fba155b498841a75f4610f6bb576ee00e2fbe6869317adf3718597864/index.js 1`] = `
+"async handle() { const { r } = this; {
+  (await r.capture_set());
+} };"
+`;
+
+exports[`wing compile -t tf-aws > proc.c341832069b7b13603626bc26227d936f0a7d7b7da45751e3666d6f4e7fa599a/index.js 1`] = `
+"async handle() { const { r } = this; {
+  (await r.capture_array());
+} };"
 `;
 
 exports[`wing test > stdout 1`] = `

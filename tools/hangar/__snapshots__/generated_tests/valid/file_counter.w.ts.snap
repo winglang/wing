@@ -1,13 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`wing compile -t tf-aws > index.js 1`] = `
-"async handle(body) { const { bucket, counter } = this; {
-  const next = (await counter.inc());
-  const key = \`myfile-\${\\"hi\\"}.txt\`;
-  (await bucket.put(key,body));
-} };"
-`;
-
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
@@ -231,6 +223,14 @@ constructor() {
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`wing compile -t tf-aws > proc.1ece6a476239c44d64d8b687b9e4389715198c49564defb8766e8b85b0f54620/index.js 1`] = `
+"async handle(body) { const { bucket, counter } = this; {
+  const next = (await counter.inc());
+  const key = \`myfile-\${\\"hi\\"}.txt\`;
+  (await bucket.put(key,body));
+} };"
 `;
 
 exports[`wing test > stdout 1`] = `"pass ─ file_counter.w (no tests)"`;

@@ -1,17 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`wing compile -t tf-aws > index.js 1`] = `
-"async handle(s) { const {  } = this; {
-} };"
-`;
-
-exports[`wing compile -t tf-aws > index.js 2`] = `
-"async handle(s) { const { str_to_str } = this; {
-  (await str_to_str.invoke(\\"one\\"));
-  {console.log((await str_to_str.invoke(\\"two\\")))};
-} };"
-`;
-
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
@@ -217,6 +205,18 @@ constructor() {
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`wing compile -t tf-aws > proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js 1`] = `
+"async handle(s) { const {  } = this; {
+} };"
+`;
+
+exports[`wing compile -t tf-aws > proc.2241fd974faa47c8b8d27f5a3e172f473ca36c6b44cb328a58655fd2d0aac7d7/index.js 1`] = `
+"async handle(s) { const { str_to_str } = this; {
+  (await str_to_str.invoke(\\"one\\"));
+  {console.log((await str_to_str.invoke(\\"two\\")))};
+} };"
 `;
 
 exports[`wing test > stdout 1`] = `"pass ─ asynchronous_model_implicit_await_in_functions.w (no tests)"`;

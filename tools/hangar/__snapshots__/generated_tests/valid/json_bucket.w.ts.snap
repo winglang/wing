@@ -1,19 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`wing compile -t tf-aws > index.js 1`] = `
-"async handle(msg) { const { b, file_name } = this; {
-  const x = (await b.getJson(file_name));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((((x)[\\"persons\\"])[0])[\\"fears\\"])[1] === \\"failure\\")'\`)})((((((x)[\\"persons\\"])[0])[\\"fears\\"])[1] === \\"failure\\"))};
-} };"
-`;
-
-exports[`wing compile -t tf-aws > index.js 2`] = `
-"async handle(msg) { const { b, file_name, get_json, j } = this; {
-  (await b.putJson(file_name,j));
-  (await get_json.invoke(msg));
-} };"
-`;
-
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
@@ -285,6 +271,20 @@ constructor() {
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`wing compile -t tf-aws > proc.1dabd42192b8d28a57f44a84b644a18eb6fedb868257af123181c0ecec2c2a70/index.js 1`] = `
+"async handle(msg) { const { b, file_name } = this; {
+  const x = (await b.getJson(file_name));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((((x)[\\"persons\\"])[0])[\\"fears\\"])[1] === \\"failure\\")'\`)})((((((x)[\\"persons\\"])[0])[\\"fears\\"])[1] === \\"failure\\"))};
+} };"
+`;
+
+exports[`wing compile -t tf-aws > proc.742d4f24b17fb7f7f831acbd15487b30d36ad90d44229b79672a09f910cb6619/index.js 1`] = `
+"async handle(msg) { const { b, file_name, get_json, j } = this; {
+  (await b.putJson(file_name,j));
+  (await get_json.invoke(msg));
+} };"
 `;
 
 exports[`wing test > stdout 1`] = `"pass ─ json_bucket.w » root/test:put"`;

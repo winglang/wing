@@ -172,7 +172,7 @@ jobs:
       matrix:
         runner: [ubuntu-latest, macos-latest]
         node: [18, 19]
-        shard: ["1/3", "2/3", "3/3"]
+        shard: ["1/2", "2/2"]
         full_run: 
           - ${{ github.event_name == 'push' }}
         exclude:

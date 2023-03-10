@@ -1,19 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`wing compile -t tf-aws > index.js 1`] = `
-"async handle() { const {  } = this; {
-  {console.log(\\"inflight print 1.1\\")};
-  {console.log(\\"inflight print 1.2\\")};
-} };"
-`;
-
-exports[`wing compile -t tf-aws > index.js 2`] = `
-"async handle() { const {  } = this; {
-  {console.log(\\"inflight print 2.1\\")};
-  {console.log(\\"inflight print 2.2\\")};
-} };"
-`;
-
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
@@ -214,6 +200,20 @@ constructor() {
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`wing compile -t tf-aws > proc.5d5065e7d4d5abb68575b6b618fc014e76b4159c3240fef327354a5900bb9fa6/index.js 1`] = `
+"async handle() { const {  } = this; {
+  {console.log(\\"inflight print 1.1\\")};
+  {console.log(\\"inflight print 1.2\\")};
+} };"
+`;
+
+exports[`wing compile -t tf-aws > proc.44e74a6db41cb5fd5b35696592c6a747e9831b228b4d1ce62b6e65f43dee835d/index.js 1`] = `
+"async handle() { const {  } = this; {
+  {console.log(\\"inflight print 2.1\\")};
+  {console.log(\\"inflight print 2.2\\")};
+} };"
 `;
 
 exports[`wing test > stdout 1`] = `

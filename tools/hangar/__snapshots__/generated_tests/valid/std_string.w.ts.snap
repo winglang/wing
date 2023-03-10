@@ -1,13 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`wing compile -t tf-aws > index.js 1`] = `
-"async handle() { const { s1, s2 } = this; {
-  {console.log(\`index of \\\\\\"s\\\\\\" in s1 is \${s1.indexOf(\\"s\\")}\`)};
-  {console.log((await (await s1.split(\\" \\")).at(1)))};
-  {console.log((await s1.concat(s2)))};
-} };"
-`;
-
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
@@ -167,6 +159,14 @@ constructor() {
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`wing compile -t tf-aws > proc.0fb01e81c63b003d77d6245e36ba84561e3e2d3268e69a7c975f81cfe7565fac/index.js 1`] = `
+"async handle() { const { s1, s2 } = this; {
+  {console.log(\`index of \\\\\\"s\\\\\\" in s1 is \${s1.indexOf(\\"s\\")}\`)};
+  {console.log((await (await s1.split(\\" \\")).at(1)))};
+  {console.log((await s1.concat(s2)))};
+} };"
 `;
 
 exports[`wing test > stdout 1`] = `

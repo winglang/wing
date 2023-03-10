@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`wing compile -t tf-aws > Bar.inflight.js 1`] = `
+exports[`wing compile -t tf-aws > clients/Bar.inflight.js 1`] = `
 "export class Bar_inflight  {
 constructor({ b, foo, name }) {
 
@@ -17,7 +17,7 @@ async  my_method()  {
 }}"
 `;
 
-exports[`wing compile -t tf-aws > Foo.inflight.js 1`] = `
+exports[`wing compile -t tf-aws > clients/Foo.inflight.js 1`] = `
 "export class Foo_inflight  {
 constructor({ c }) {
 
@@ -33,14 +33,6 @@ async  foo_get()  {
   return (await this.c.peek());
 }
 }}"
-`;
-
-exports[`wing compile -t tf-aws > index.js 1`] = `
-"async handle() { const { bucket, res } = this; {
-  const s = (await res.my_method());
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s === \\"counter is: 1\\")'\`)})((s === \\"counter is: 1\\"))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await bucket.list()).length === 1)'\`)})(((await bucket.list()).length === 1))};
-} };"
 `;
 
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
@@ -286,6 +278,14 @@ constructor() {
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`wing compile -t tf-aws > proc.e50bc85b13df379286b4aa72aa88788422e26d9146adbc9bba989a8a59253a73/index.js 1`] = `
+"async handle() { const { bucket, res } = this; {
+  const s = (await res.my_method());
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s === \\"counter is: 1\\")'\`)})((s === \\"counter is: 1\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await bucket.list()).length === 1)'\`)})(((await bucket.list()).length === 1))};
+} };"
 `;
 
 exports[`wing test > stdout 1`] = `"pass ─ resource.w » root/test"`;

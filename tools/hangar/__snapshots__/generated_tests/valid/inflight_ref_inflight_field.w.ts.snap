@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`wing compile -t tf-aws > Foo.inflight.js 1`] = `
+exports[`wing compile -t tf-aws > clients/Foo.inflight.js 1`] = `
 "export class Foo_inflight  {
 constructor({  }) {
 
@@ -16,13 +16,6 @@ async  get_field()  {
   return this.inflight_field;
 }
 }}"
-`;
-
-exports[`wing compile -t tf-aws > index.js 1`] = `
-"async handle() { const { f } = this; {
-  (await f.set_field(123));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await f.get_field()) === 1230)'\`)})(((await f.get_field()) === 1230))};
-} };"
 `;
 
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
@@ -180,6 +173,13 @@ constructor() {
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`wing compile -t tf-aws > proc.ef866f1d1f55245bd0673c32e84f0500ca60a72f43baa3d446a83445a7f65861/index.js 1`] = `
+"async handle() { const { f } = this; {
+  (await f.set_field(123));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await f.get_field()) === 1230)'\`)})(((await f.get_field()) === 1230))};
+} };"
 `;
 
 exports[`wing test > stdout 1`] = `"pass ─ inflight_ref_inflight_field.w » root/test"`;

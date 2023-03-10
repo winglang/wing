@@ -1,13 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`wing compile -t tf-aws > index.js 1`] = `
-"async handle(e) { const { b, x } = this; {
-  (await b.put(\\"file\\",\\"foo\\"));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b.get(\\"file\\")) === \\"foo\\")'\`)})(((await b.get(\\"file\\")) === \\"foo\\"))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(12 === x)'\`)})((12 === x))};
-} };"
-`;
-
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
@@ -197,6 +189,14 @@ constructor() {
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`wing compile -t tf-aws > proc.d3cc1deae5ea8972097ff15c11d688f395bd17117453789488a005b829eea245/index.js 1`] = `
+"async handle(e) { const { b, x } = this; {
+  (await b.put(\\"file\\",\\"foo\\"));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b.get(\\"file\\")) === \\"foo\\")'\`)})(((await b.get(\\"file\\")) === \\"foo\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(12 === x)'\`)})((12 === x))};
+} };"
 `;
 
 exports[`wing test > stdout 1`] = `"pass ─ capture_in_binary.w » root/test"`;

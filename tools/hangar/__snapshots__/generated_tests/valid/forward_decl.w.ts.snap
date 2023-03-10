@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`wing compile -t tf-aws > R.inflight.js 1`] = `
+exports[`wing compile -t tf-aws > clients/R.inflight.js 1`] = `
 "export class R_inflight  {
 constructor({ f }) {
 
