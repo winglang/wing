@@ -37,7 +37,78 @@ new cloud.Api(props?: ApiProps)
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Api.connect">connect</a></code> | Add a inflight handler to the api for CONNECT requests on the given route. |
+| <code><a href="#@winglang/sdk.cloud.Api.delete">delete</a></code> | Add a inflight handler to the api for DELETE requests on the given route. |
 | <code><a href="#@winglang/sdk.cloud.Api.get">get</a></code> | Add a inflight handler to the api for GET requests on the given route. |
+| <code><a href="#@winglang/sdk.cloud.Api.head">head</a></code> | Add a inflight handler to the api for HEAD requests on the given route. |
+| <code><a href="#@winglang/sdk.cloud.Api.options">options</a></code> | Add a inflight handler to the api for OPTIONS requests on the given route. |
+| <code><a href="#@winglang/sdk.cloud.Api.patch">patch</a></code> | Add a inflight handler to the api for PATCH requests on the given route. |
+| <code><a href="#@winglang/sdk.cloud.Api.post">post</a></code> | Add a inflight handler to the api for POST requests on the given route. |
+| <code><a href="#@winglang/sdk.cloud.Api.put">put</a></code> | Add a inflight handler to the api for PUT requests on the given route. |
+
+---
+
+##### `connect` <a name="connect" id="@winglang/sdk.cloud.Api.connect"></a>
+
+```wing
+connect(route: str, inflight: ~Inflight, props?: ApiConnectProps): void
+```
+
+Add a inflight handler to the api for CONNECT requests on the given route.
+
+###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.connect.parameter.route"></a>
+
+- *Type:* str
+
+The route to handle CONNECT requests for.
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.connect.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+
+The function to handle the request.
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.connect.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiConnectProps">ApiConnectProps</a>
+
+Options for the route.
+
+---
+
+##### `delete` <a name="delete" id="@winglang/sdk.cloud.Api.delete"></a>
+
+```wing
+delete(route: str, inflight: ~Inflight, props?: ApiDeleteProps): void
+```
+
+Add a inflight handler to the api for DELETE requests on the given route.
+
+###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.delete.parameter.route"></a>
+
+- *Type:* str
+
+The route to handle DELETE requests for.
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.delete.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+
+The function to handle the request.
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.delete.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiDeleteProps">ApiDeleteProps</a>
+
+Options for the route.
 
 ---
 
@@ -68,6 +139,166 @@ The function to handle the request.
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.get.parameter.props"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.ApiGetProps">ApiGetProps</a>
+
+Options for the route.
+
+---
+
+##### `head` <a name="head" id="@winglang/sdk.cloud.Api.head"></a>
+
+```wing
+head(route: str, inflight: ~Inflight, props?: ApiHeadProps): void
+```
+
+Add a inflight handler to the api for HEAD requests on the given route.
+
+###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.head.parameter.route"></a>
+
+- *Type:* str
+
+The route to handle HEAD requests for.
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.head.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+
+The function to handle the request.
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.head.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiHeadProps">ApiHeadProps</a>
+
+Options for the route.
+
+---
+
+##### `options` <a name="options" id="@winglang/sdk.cloud.Api.options"></a>
+
+```wing
+options(route: str, inflight: ~Inflight, props?: ApiOptionsProps): void
+```
+
+Add a inflight handler to the api for OPTIONS requests on the given route.
+
+###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.options.parameter.route"></a>
+
+- *Type:* str
+
+The route to handle OPTIONS requests for.
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.options.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+
+The function to handle the request.
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.options.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiOptionsProps">ApiOptionsProps</a>
+
+Options for the route.
+
+---
+
+##### `patch` <a name="patch" id="@winglang/sdk.cloud.Api.patch"></a>
+
+```wing
+patch(route: str, inflight: ~Inflight, props?: ApiPatchProps): void
+```
+
+Add a inflight handler to the api for PATCH requests on the given route.
+
+###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.patch.parameter.route"></a>
+
+- *Type:* str
+
+The route to handle PATCH requests for.
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.patch.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+
+The function to handle the request.
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.patch.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiPatchProps">ApiPatchProps</a>
+
+Options for the route.
+
+---
+
+##### `post` <a name="post" id="@winglang/sdk.cloud.Api.post"></a>
+
+```wing
+post(route: str, inflight: ~Inflight, props?: ApiPostProps): void
+```
+
+Add a inflight handler to the api for POST requests on the given route.
+
+###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.post.parameter.route"></a>
+
+- *Type:* str
+
+The route to handle POST requests for.
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.post.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+
+The function to handle the request.
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.post.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiPostProps">ApiPostProps</a>
+
+Options for the route.
+
+---
+
+##### `put` <a name="put" id="@winglang/sdk.cloud.Api.put"></a>
+
+```wing
+put(route: str, inflight: ~Inflight, props?: ApiPutProps): void
+```
+
+Add a inflight handler to the api for PUT requests on the given route.
+
+###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.put.parameter.route"></a>
+
+- *Type:* str
+
+The route to handle PUT requests for.
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.put.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+
+The function to handle the request.
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.put.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiPutProps">ApiPutProps</a>
 
 Options for the route.
 
@@ -2053,8 +2284,13 @@ new std.ImmutableArray()
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.ImmutableArray.at">at</a></code> | Get the value at the given index. |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.concat">concat</a></code> | Merge arr to the end of this array. |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.contains">contains</a></code> | Checks if this array includes searchElement. |
 | <code><a href="#@winglang/sdk.std.ImmutableArray.copy">copy</a></code> | Create an immutable shallow copy of this array. |
 | <code><a href="#@winglang/sdk.std.ImmutableArray.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this array. |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.indexOf">index_of</a></code> | Returns the index of the first occurrence of searchElement found. |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.lastIndexOf">last_index_of</a></code> | Returns the index of the last occurrence of searchElement found. |
 
 ---
 
@@ -2074,6 +2310,38 @@ index of the value to get.
 
 ---
 
+##### `concat` <a name="concat" id="@winglang/sdk.std.ImmutableArray.concat"></a>
+
+```wing
+concat(arr: ImmutableArray): ImmutableArray
+```
+
+Merge arr to the end of this array.
+
+###### `arr`<sup>Required</sup> <a name="arr" id="@winglang/sdk.std.ImmutableArray.concat.parameter.arr"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.ImmutableArray">ImmutableArray</a>
+
+array to merge.
+
+---
+
+##### `contains` <a name="contains" id="@winglang/sdk.std.ImmutableArray.contains"></a>
+
+```wing
+contains(search_element: T1): bool
+```
+
+Checks if this array includes searchElement.
+
+###### `search_element`<sup>Required</sup> <a name="search_element" id="@winglang/sdk.std.ImmutableArray.contains.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
+
 ##### `copy` <a name="copy" id="@winglang/sdk.std.ImmutableArray.copy"></a>
 
 ```wing
@@ -2089,6 +2357,55 @@ copy_mut(): MutableArray
 ```
 
 Create a mutable shallow copy of this array.
+
+##### `index_of` <a name="index_of" id="@winglang/sdk.std.ImmutableArray.indexOf"></a>
+
+```wing
+index_of(search_element: T1): num
+```
+
+Returns the index of the first occurrence of searchElement found.
+
+###### `search_element`<sup>Required</sup> <a name="search_element" id="@winglang/sdk.std.ImmutableArray.indexOf.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
+
+##### `join` <a name="join" id="@winglang/sdk.std.ImmutableArray.join"></a>
+
+```wing
+join(separator?: str): str
+```
+
+Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string.
+
+If the array has only
+one item, then that item will be returned without using the separator.
+
+###### `separator`<sup>Optional</sup> <a name="separator" id="@winglang/sdk.std.ImmutableArray.join.parameter.separator"></a>
+
+- *Type:* str
+
+---
+
+##### `last_index_of` <a name="last_index_of" id="@winglang/sdk.std.ImmutableArray.lastIndexOf"></a>
+
+```wing
+last_index_of(search_element: T1): num
+```
+
+Returns the index of the last occurrence of searchElement found.
+
+###### `search_element`<sup>Required</sup> <a name="search_element" id="@winglang/sdk.std.ImmutableArray.lastIndexOf.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2369,8 +2686,13 @@ new std.MutableArray()
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.MutableArray.at">at</a></code> | Get the value at the given index. |
+| <code><a href="#@winglang/sdk.std.MutableArray.concat">concat</a></code> | Merge arr to the end of this array. |
+| <code><a href="#@winglang/sdk.std.MutableArray.contains">contains</a></code> | Checks if this array includes searchElement. |
 | <code><a href="#@winglang/sdk.std.MutableArray.copy">copy</a></code> | Create an immutable shallow copy of this array. |
 | <code><a href="#@winglang/sdk.std.MutableArray.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this array. |
+| <code><a href="#@winglang/sdk.std.MutableArray.indexOf">index_of</a></code> | Returns the index of the first occurrence of searchElement found. |
+| <code><a href="#@winglang/sdk.std.MutableArray.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
+| <code><a href="#@winglang/sdk.std.MutableArray.lastIndexOf">last_index_of</a></code> | Returns the index of the last occurrence of searchElement found. |
 | <code><a href="#@winglang/sdk.std.MutableArray.pop">pop</a></code> | Remove value from end of array. |
 | <code><a href="#@winglang/sdk.std.MutableArray.push">push</a></code> | Add value to end of array. |
 
@@ -2392,6 +2714,38 @@ index of the value to get.
 
 ---
 
+##### `concat` <a name="concat" id="@winglang/sdk.std.MutableArray.concat"></a>
+
+```wing
+concat(arr: ImmutableArray): ImmutableArray
+```
+
+Merge arr to the end of this array.
+
+###### `arr`<sup>Required</sup> <a name="arr" id="@winglang/sdk.std.MutableArray.concat.parameter.arr"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.ImmutableArray">ImmutableArray</a>
+
+array to merge.
+
+---
+
+##### `contains` <a name="contains" id="@winglang/sdk.std.MutableArray.contains"></a>
+
+```wing
+contains(search_element: T1): bool
+```
+
+Checks if this array includes searchElement.
+
+###### `search_element`<sup>Required</sup> <a name="search_element" id="@winglang/sdk.std.MutableArray.contains.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
+
 ##### `copy` <a name="copy" id="@winglang/sdk.std.MutableArray.copy"></a>
 
 ```wing
@@ -2407,6 +2761,55 @@ copy_mut(): MutableArray
 ```
 
 Create a mutable shallow copy of this array.
+
+##### `index_of` <a name="index_of" id="@winglang/sdk.std.MutableArray.indexOf"></a>
+
+```wing
+index_of(search_element: T1): num
+```
+
+Returns the index of the first occurrence of searchElement found.
+
+###### `search_element`<sup>Required</sup> <a name="search_element" id="@winglang/sdk.std.MutableArray.indexOf.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
+
+##### `join` <a name="join" id="@winglang/sdk.std.MutableArray.join"></a>
+
+```wing
+join(separator?: str): str
+```
+
+Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string.
+
+If the array has only
+one item, then that item will be returned without using the separator.
+
+###### `separator`<sup>Optional</sup> <a name="separator" id="@winglang/sdk.std.MutableArray.join.parameter.separator"></a>
+
+- *Type:* str
+
+---
+
+##### `last_index_of` <a name="last_index_of" id="@winglang/sdk.std.MutableArray.lastIndexOf"></a>
+
+```wing
+last_index_of(search_element: T1): num
+```
+
+Returns the index of the last occurrence of searchElement found.
+
+###### `search_element`<sup>Required</sup> <a name="search_element" id="@winglang/sdk.std.MutableArray.lastIndexOf.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
 
 ##### `pop` <a name="pop" id="@winglang/sdk.std.MutableArray.pop"></a>
 

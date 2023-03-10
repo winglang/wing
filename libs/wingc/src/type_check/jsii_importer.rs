@@ -7,8 +7,8 @@ use crate::{
 		WING_CONSTRUCTOR_NAME,
 	},
 	utilities::camel_case_to_snake_case,
-	CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT,
-	WINGSDK_JSON, WINGSDK_MUT_JSON, WINGSDK_RESOURCE,
+	CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION,
+	WINGSDK_INFLIGHT, WINGSDK_JSON, WINGSDK_MUT_JSON, WINGSDK_RESOURCE,
 };
 use colored::Colorize;
 use serde_json::Value;
@@ -108,6 +108,8 @@ impl<'a> JsiiImporter<'a> {
 					}))
 				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION) {
 					self.wing_types.duration()
+				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_ARRAY) {
+					self.wing_types.add_type(Type::Array(self.wing_types.anything()))
 				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_JSON) {
 					self.wing_types.json()
 				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_MUT_JSON) {

@@ -16,6 +16,12 @@ Error at ../../../../examples/tests/invalid/access_static_from_instance.w:19:5 |
 Error at ../../../../examples/tests/invalid/access_static_from_instance.w:20:5 | Cannot access static property \\"m\\" from instance"
 `;
 
+exports[`break_scope_invalid.w > wing test (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 2 error(s)
+Error at ../../../../examples/tests/invalid/break_scope_invalid.w:3:5 | Expected break statement to be inside of a loop (while/for)
+Error at ../../../../examples/tests/invalid/break_scope_invalid.w:7:5 | Expected break statement to be inside of a loop (while/for)"
+`;
+
 exports[`bring.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 1 error(s)
 Error at ../../../../examples/tests/invalid/bring.w:1:1 | Redundant bring of \\"std\\""
@@ -144,7 +150,7 @@ Error at ../../../../examples/tests/invalid/optionals.w:7:3 | Expected type to b
 exports[`primitives.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 4 error(s)
 Error at ../../../../examples/tests/invalid/primitives.w:5:7 | Unexpected expression \\"structured_access_expression\\"
-Error at ../../../../examples/tests/invalid/primitives.w:9:16 | Unknown symbol \\"join\\"
+Error at ../../../../examples/tests/invalid/primitives.w:9:16 | Unknown symbol \\"blabla\\"
 Error at ../../../../examples/tests/invalid/primitives.w:11:5 | Unknown symbol \\"push\\"
 Error at ../../../../examples/tests/invalid/primitives.w:13:14 | Expected type to be \\"str\\", but got \\"num\\" instead"
 `;

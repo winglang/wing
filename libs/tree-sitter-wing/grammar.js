@@ -76,6 +76,7 @@ module.exports = grammar({
         $.resource_definition,
         $.for_in_loop,
         $.while_statement,
+        $.break_statement,
         $.if_statement,
         $.struct_definition,
         $.enum_definition,
@@ -201,6 +202,8 @@ module.exports = grammar({
 
     while_statement: ($) =>
       seq("while", field("condition", $.expression), field("block", $.block)),
+
+    break_statement: ($) => seq("break", ";"),
 
     if_statement: ($) =>
       seq(

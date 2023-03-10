@@ -267,6 +267,7 @@ pub enum StmtKind {
 		elif_statements: Vec<ElifBlock>,
 		else_statements: Option<Scope>,
 	},
+	Break,
 	Expression(Expr),
 	Assignment {
 		variable: Reference,
