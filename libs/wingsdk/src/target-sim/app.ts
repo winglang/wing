@@ -32,9 +32,14 @@ export class App extends core.App {
    * Directory where artifacts are synthesized to.
    */
   public readonly workdir: string;
+
+  /**
+   * The output directory of this app.
+   */
+  protected readonly outdir: string;
+
   private readonly name: string;
   private readonly simfile: string;
-  protected readonly outdir: string;
   private synthed = false;
 
   constructor(props: core.AppProps) {
