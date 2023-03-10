@@ -168,7 +168,7 @@ jobs:
           vercel-args: "--prod "
 
   e2e:
-    name: "E2E / ${{ matrix.runner}} / Node ${{ matrix.node }} / ${{ matrix.shard }}"
+    name: "E2E / ${{ matrix.runner }} + Node${{ matrix.node }} [${{ matrix.shard }}]"
     needs:
       - build
       - prepare
@@ -178,11 +178,10 @@ jobs:
         runner: [ubuntu, macos, windows]
         node: [18, 19]
         shard: ["1/2", "2/2"]
-        full_run: 
+        full_run:
           # Do a full run on push or when the PR is labeled "full-run"
           - ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'pr/e2e-full') }}
         exclude:
-          # Only run full test suite on push
           - runner: macos
             full_run: false
           - runner: ubuntu
