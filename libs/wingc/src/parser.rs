@@ -18,6 +18,7 @@ pub struct Parser<'a> {
 	pub source_name: String,
 	pub error_nodes: RefCell<HashSet<usize>>,
 	pub diagnostics: RefCell<Diagnostics>,
+	is_in_loop: RefCell<bool>,
 }
 
 // A custom struct could be used to better maintain metadata and issue tracking, though ideally
@@ -40,7 +41,17 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"=>" => "see https://github.com/winglang/wing/issues/474",
 };
 
-impl Parser<'_> {
+impl<'s> Parser<'s> {
+	pub fn new(source: &'s [u8], source_name: String) -> Self {
+		Self {
+			source,
+			source_name,
+			error_nodes: RefCell::new(HashSet::new()),
+			diagnostics: RefCell::new(Diagnostics::new()),
+			is_in_loop: RefCell::new(false),
+		}
+	}
+
 	pub fn wingit(&self, root: &Node) -> Scope {
 		let scope = match root.kind() {
 			"source" => self.build_scope(&root),
@@ -175,6 +186,7 @@ impl Parser<'_> {
 			"if_statement" => self.build_if_statement(statement_node)?,
 			"for_in_loop" => self.build_for_statement(statement_node)?,
 			"while_statement" => self.build_while_statement(statement_node)?,
+			"break_statement" => self.build_break_statement(statement_node)?,
 			"return_statement" => self.build_return_statement(statement_node)?,
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
@@ -237,10 +249,21 @@ impl Parser<'_> {
 		))
 	}
 
+	/// Builds scope statements for a loop (while/for), and maintains the is_in_loop flag
+	/// for the duration of the loop. So that later break statements inside can be validated
+	/// without traversing the AST.
+	fn build_in_loop_scope(&self, scope_node: &Node) -> Scope {
+		let prev_is_in_loop = *self.is_in_loop.borrow();
+		*self.is_in_loop.borrow_mut() = true;
+		let scope = self.build_scope(scope_node);
+		*self.is_in_loop.borrow_mut() = prev_is_in_loop;
+		scope
+	}
+
 	fn build_while_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		Ok(StmtKind::While {
 			condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
-			statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
+			statements: self.build_in_loop_scope(&statement_node.child_by_field_name("block").unwrap()),
 		})
 	}
 
@@ -248,8 +271,18 @@ impl Parser<'_> {
 		Ok(StmtKind::ForLoop {
 			iterator: self.node_symbol(&statement_node.child_by_field_name("iterator").unwrap())?,
 			iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
-			statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
+			statements: self.build_in_loop_scope(&statement_node.child_by_field_name("block").unwrap()),
 		})
+	}
+
+	fn build_break_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		if !*self.is_in_loop.borrow() {
+			return self.add_error::<StmtKind>(
+				format!("Expected break statement to be inside of a loop (while/for)"),
+				statement_node,
+			);
+		}
+		Ok(StmtKind::Break)
 	}
 
 	fn build_if_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {

@@ -1,5 +1,5 @@
 use lsp_types::{DidChangeTextDocumentParams, DidOpenTextDocumentParams, Url};
-use std::collections::HashSet;
+
 use std::path::Path;
 use std::{cell::RefCell, collections::HashMap};
 use tree_sitter::Tree;
@@ -90,12 +90,7 @@ fn partial_compile(source_file: &str, text: &[u8]) -> FileData {
 		}
 	};
 
-	let wing_parser = Parser {
-		source: &text[..],
-		source_name: source_file.to_string(),
-		error_nodes: RefCell::new(HashSet::new()),
-		diagnostics: RefCell::new(Diagnostics::new()),
-	};
+	let wing_parser = Parser::new(&text[..], source_file.to_string());
 
 	let mut scope = wing_parser.wingit(&tree.root_node());
 
