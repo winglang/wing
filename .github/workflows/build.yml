@@ -104,9 +104,6 @@ jobs:
       - name: Setup Node/NPM with pinned Volta version
         uses: volta-cli/action@v4.0.0
 
-      - name: Setup Cargo Cache
-        uses: Swatinem/rust-cache@v2
-
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
         with:
@@ -115,6 +112,9 @@ jobs:
             x86_64-unknown-linux-gnu
             wasm32-wasi
           components: rustfmt,clippy,rust-std
+
+      - name: Setup Cargo Cache
+        uses: Swatinem/rust-cache@v2
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
