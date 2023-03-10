@@ -15,7 +15,7 @@ export class TableClient implements ITableClient {
     private readonly primaryKey: string,
     private readonly columns: string,
     private readonly client = new DynamoDBClient({})
-  ) {}
+  ) { }
 
   public async insert(row: Json): Promise<void> {
     const command = new PutItemCommand({
