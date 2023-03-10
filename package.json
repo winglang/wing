@@ -5,16 +5,12 @@
     "@auto-it/git-tag": "^10.40.0",
     "@nrwl/devkit": "15.6.3",
     "@nxrs/cargo": "^0.3.3",
-    "all-contributors-cli": "^6.24.0",
     "auto": "^10.40.0",
     "npm-run-all": "^4.1.5",
     "nx": "15.6.3"
   },
   "scripts": {
     "build": "nx run-many --all --targets build,test,package",
-    "contributors:add": "all-contributors add",
-    "contributors:check": "all-contributors check",
-    "contributors:update": "all-contributors check | grep \"Missing contributors\" -A 1 | tail -n1 | sed -e \"s/,//g\" | xargs -n1 | grep -v \"\\[bot\\]\" | xargs -n1 -I{} all-contributors add {} code",
     "docs": "./scripts/docsite.sh",
     "install:examples-valid": "npm --prefix examples/tests/valid install",
     "install:examples-invalid": "npm --prefix examples/tests/invalid install",
