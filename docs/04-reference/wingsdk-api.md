@@ -2382,8 +2382,8 @@ The index of the element in the Json Array to return.
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.Json.clone">clone</a></code> | Creates a immutable deep clone of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.cloneMut">clone_mut</a></code> | Creates a mutable deep clone of the Json. |
-| <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes key in given Json. |
-| <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys of the Json. |
+| <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
+| <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json object. |
 | <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
 | <code><a href="#@winglang/sdk.std.Json.toStr">to_str</a></code> | Formats Json as string. |
 | <code><a href="#@winglang/sdk.std.Json.values">values</a></code> | Returns the values from the Json. |
@@ -2434,7 +2434,7 @@ bring std;
 std.Json.delete(json: Json, key: str)
 ```
 
-Deletes key in given Json.
+Deletes a key in a given Json.
 
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.delete.parameter.json"></a>
 
@@ -2460,7 +2460,7 @@ bring std;
 std.Json.keys(json: Json)
 ```
 
-Returns the keys of the Json.
+Returns the keys from the Json object.
 
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.keys.parameter.json"></a>
 
