@@ -165,7 +165,7 @@ jobs:
           vercel-args: "--prod "
 
   e2e:
-    name: "E2E | ${{ matrix.runner}} | Node@${{ matrix.node }} | ${{ matrix.shard }}"
+    name: "E2E / ${{ matrix.runner}} / Node ${{ matrix.node }} / ${{ matrix.shard }}"
     needs:
       - build
       - prepare
