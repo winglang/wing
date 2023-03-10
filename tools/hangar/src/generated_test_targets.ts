@@ -27,7 +27,7 @@ export async function compileTest(expect: Vi.ExpectStatic, wingFile: string) {
 export async function testTest(expect: Vi.ExpectStatic, wingFile: string) {
   const args = ["test"];
   const testDir = join(tmpDir, `${wingFile}_sim`);
-  mkdirpSync(testDir);
+  await mkdir(testDir);
 
   const out = await runWingCommand(
     testDir,
