@@ -7,6 +7,7 @@ export class Json {
    *
    * @macro Object.keys($args$)
    *
+   * @param json to get keys from
    * @returns The keys of the Json
    */
   public static keys(json: Json): string[] {
@@ -19,7 +20,8 @@ export class Json {
    *
    * @macro Object.values($args$)
    *
-   * @param Json values from Json
+   * @param json to get values from
+   * @returns The values from the Json as array of Json
    */
   public static values(json: Json): Json[] {
     json;
@@ -32,6 +34,7 @@ export class Json {
    * @macro (JSON.parse(JSON.stringify($args$)))
    *
    * @param json to clone
+   * @returns The mutable clone of the Json
    */
   public static cloneMut(json: Json): MutJson {
     json;
@@ -44,6 +47,7 @@ export class Json {
    * @macro (JSON.parse(JSON.stringify($args$)))
    *
    * @param json to clone
+   * @returns The immutable clone of the Json
    */
   public static clone(json: Json): Json {
     json;
@@ -70,6 +74,7 @@ export class Json {
    * @macro (JSON.stringify($args$))
    *
    * @param json to format as string
+   * @returns string representation of the Json
    */
   public static toStr(json: Json): string {
     json;
@@ -82,6 +87,7 @@ export class Json {
    * @macro (JSON.parse($args$))
    *
    * @param str to parse as Json
+   * @returns Json representation of the string
    */
   public static parse(str: string): Json {
     str;

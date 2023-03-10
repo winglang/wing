@@ -2466,6 +2466,8 @@ Returns the keys of the Json.
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
+to get keys from.
+
 ---
 
 ##### `parse` <a name="parse" id="@winglang/sdk.std.Json.parse"></a>
@@ -2517,6 +2519,8 @@ Returns the values from the Json.
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.values.parameter.json"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to get values from.
 
 ---
 
