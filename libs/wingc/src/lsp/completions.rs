@@ -243,6 +243,7 @@ fn get_completions_from_type(
 			// This is needed because our builtin types have no API
 			// So we have to get the API from the std lib
 			// But the std lib sometimes doesn't have the same names as the builtin types
+			// https://github.com/winglang/wing/issues/1780
 
 			// Additionally, this doesn't handle for generics
 			let type_name = type_.to_string();
