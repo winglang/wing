@@ -163,7 +163,7 @@ jobs:
           vercel-args: "--prod "
 
   e2e:
-    name: "E2E Testing"
+    name: "E2E Tests | ${{ matrix.runner}} node@${{ matrix.node }} (${{ matrix.shard }})"
     needs:
       - build
       - prepare
@@ -221,7 +221,7 @@ jobs:
         run: npm run test -- --shard=${{ matrix.shard }}
 
   publish:
-    name: Publish
+    name: Publish ${{ needs.prepare.outputs.version }}
     if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
     needs:
       - e2e
