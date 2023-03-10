@@ -1,0 +1,227 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`print > wing compile -t tf-aws > index.js 1`] = `
+"async handle() { const {  } = this; {
+  {console.log(\\"inflight print 1.1\\")};
+  {console.log(\\"inflight print 1.2\\")};
+} };"
+`;
+
+exports[`print > wing compile -t tf-aws > index.js 2`] = `
+"async handle() { const {  } = this; {
+  {console.log(\\"inflight print 2.1\\")};
+  {console.log(\\"inflight print 2.2\\")};
+} };"
+`;
+
+exports[`print > wing compile -t tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_testprint1_IamRole_AC783F9C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:print1/IamRole",
+            "uniqueId": "root_testprint1_IamRole_AC783F9C",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+      "root_testprint2_IamRole_1A5A4191": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:print2/IamRole",
+            "uniqueId": "root_testprint2_IamRole_1A5A4191",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_testprint1_IamRolePolicy_806AD6C3": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:print1/IamRolePolicy",
+            "uniqueId": "root_testprint1_IamRolePolicy_806AD6C3",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_testprint1_IamRole_AC783F9C.name}",
+      },
+      "root_testprint2_IamRolePolicy_D459BDAF": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:print2/IamRolePolicy",
+            "uniqueId": "root_testprint2_IamRolePolicy_D459BDAF",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_testprint2_IamRole_1A5A4191.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_testprint1_IamRolePolicyAttachment_E361420B": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:print1/IamRolePolicyAttachment",
+            "uniqueId": "root_testprint1_IamRolePolicyAttachment_E361420B",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_testprint1_IamRole_AC783F9C.name}",
+      },
+      "root_testprint2_IamRolePolicyAttachment_00548F9A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:print2/IamRolePolicyAttachment",
+            "uniqueId": "root_testprint2_IamRolePolicyAttachment_00548F9A",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_testprint2_IamRole_1A5A4191.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_testprint1_86EB7ADD": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:print1/Default",
+            "uniqueId": "root_testprint1_86EB7ADD",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "test-print1-c85e6495",
+          },
+        },
+        "function_name": "test-print1-c85e6495",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_testprint1_IamRole_AC783F9C.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_testprint1_Code_EF1D7786.bucket}",
+        "s3_key": "\${aws_s3_object.root_testprint1_S3Object_BF976A20.key}",
+        "timeout": 30,
+      },
+      "root_testprint2_C35721E6": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:print2/Default",
+            "uniqueId": "root_testprint2_C35721E6",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "test-print2-c864b24f",
+          },
+        },
+        "function_name": "test-print2-c864b24f",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_testprint2_IamRole_1A5A4191.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_testprint2_Code_0F714597.bucket}",
+        "s3_key": "\${aws_s3_object.root_testprint2_S3Object_22A6E03D.key}",
+        "timeout": 30,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_testprint1_Code_EF1D7786": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:print1/Code",
+            "uniqueId": "root_testprint1_Code_EF1D7786",
+          },
+        },
+        "bucket_prefix": "code-c8dcf8b8-",
+      },
+      "root_testprint2_Code_0F714597": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:print2/Code",
+            "uniqueId": "root_testprint2_Code_0F714597",
+          },
+        },
+        "bucket_prefix": "code-c8d35efe-",
+      },
+    },
+    "aws_s3_object": {
+      "root_testprint1_S3Object_BF976A20": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:print1/S3Object",
+            "uniqueId": "root_testprint1_S3Object_BF976A20",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_testprint1_Code_EF1D7786.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`print > wing compile -t tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"print\\", plugins: $plugins });
+  
+  {console.log(\\"preflight print\\")};
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:print1\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5d5065e7d4d5abb68575b6b618fc014e76b4159c3240fef327354a5900bb9fa6/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+    }
+  }));
+  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:print2\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.44e74a6db41cb5fd5b35696592c6a747e9831b228b4d1ce62b6e65f43dee835d/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`print > wing test > stdout 1`] = `
+"preflight print
+pass ┌ print.w » root/test:print1
+     │ inflight print 1.1
+     └ inflight print 1.2
+pass ┌ print.w » root/test:print2
+     │ inflight print 2.1
+     └ inflight print 2.2"
+`;
