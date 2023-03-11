@@ -16,7 +16,7 @@ use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use crate::parser::Parser;
 use std::alloc::{alloc, dealloc, Layout};
 use std::cell::RefCell;
-use std::collections::HashSet;
+
 use std::fs;
 use std::mem;
 use std::path::{Path, PathBuf};
@@ -56,7 +56,8 @@ const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
 const WINGSDK_RESOURCE: &'static str = "core.Resource";
 const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
 
-const CONSTRUCT_BASE: &'static str = "constructs.Construct";
+const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
+const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
 
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
@@ -145,6 +146,7 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 			let empty_scope = Scope {
 				statements: Vec::<Stmt>::new(),
 				env: RefCell::new(None),
+				span: Default::default(),
 			};
 			return (empty_scope, diagnostics);
 		}
@@ -157,12 +159,7 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 		}
 	};
 
-	let wing_parser = Parser {
-		source: &source[..],
-		source_name: source_path.to_str().unwrap().to_string(),
-		error_nodes: RefCell::new(HashSet::new()),
-		diagnostics: RefCell::new(Diagnostics::new()),
-	};
+	let wing_parser = Parser::new(&source[..], source_path.to_str().unwrap().to_string());
 
 	let scope = wing_parser.wingit(&tree.root_node());
 

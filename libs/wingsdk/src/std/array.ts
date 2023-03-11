@@ -29,6 +29,30 @@ export class ImmutableArray {
   }
 
   /**
+   * Merge arr to the end of this array
+   * @param arr array to merge
+   *
+   * @returns a new ImmutableArray with the values of this array followed by the values of arr
+   */
+  public concat(arr: ImmutableArray): ImmutableArray {
+    arr;
+    throw new Error("Abstract");
+  }
+
+  /**
+   * Checks if this array includes searchElement.
+   *
+   * @macro $self$.includes($args$)
+   *
+   * @param searchElement to search for.
+   * @returns true if this array includes searchElement.
+   */
+  public contains(searchElement: T1): boolean {
+    searchElement;
+    throw new Error("Macro");
+  }
+
+  /**
    * Create a mutable shallow copy of this array
    *
    * @macro [...($self$)]
@@ -47,6 +71,45 @@ export class ImmutableArray {
    * @returns an ImmutableArray with the same values as this array
    */
   public copy(): ImmutableArray {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns the index of the first occurrence of searchElement found.
+   *
+   * @macro $self$.indexOf($args$)
+   *
+   * @param searchElement to search for.
+   * @returns the index of the first occurrence of searchElement found, or -1 if not found.
+   */
+  public indexOf(searchElement: T1): number {
+    searchElement;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns a new string containing the concatenated values in this array,
+   * separated by commas or a specified separator string. If the array has only
+   * one item, then that item will be returned without using the separator.
+   *
+   * @returns a string containing the concatenated values in this array,
+   * separated by commas or a specified separator string.
+   */
+  public join(separator?: string): string {
+    separator;
+    throw new Error("Abstract");
+  }
+
+  /**
+   * Returns the index of the last occurrence of searchElement found.
+   *
+   * @macro $self$.lastIndexOf($args$)
+   *
+   * @param searchElement to search for.
+   * @returns the index of the last occurrence of searchElement found, or -1 if not found.
+   */
+  public lastIndexOf(searchElement: T1): number {
+    searchElement;
     throw new Error("Macro");
   }
 }

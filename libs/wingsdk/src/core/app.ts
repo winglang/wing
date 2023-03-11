@@ -1,5 +1,7 @@
 import { mkdirSync, readdirSync, renameSync, rmSync, existsSync } from "fs";
 import { join } from "path";
+import { DataAwsCallerIdentity } from "@cdktf/provider-aws/lib/data-aws-caller-identity";
+import { DataAwsRegion } from "@cdktf/provider-aws/lib/data-aws-region";
 import * as cdktf from "cdktf";
 import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
@@ -62,7 +64,7 @@ export abstract class App extends Construct {
   /**
    * Directory where artifacts are synthesized to.
    */
-  public abstract readonly outdir: string;
+  public abstract readonly workdir: string;
 
   /**
    * Synthesize the app into an artifact.
@@ -146,7 +148,7 @@ export abstract class CdktfApp extends App {
   /**
    * Directory where artifacts are synthesized to.
    */
-  public readonly outdir: string;
+  public readonly workdir: string;
   /**
    * Path to the Terraform manifest file.
    */
@@ -155,8 +157,12 @@ export abstract class CdktfApp extends App {
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
   private readonly pluginManager: PluginManager;
+  private readonly outdir: string;
+
   private synthed: boolean;
   private synthedOutput: string | undefined;
+  private awsRegionProvider?: DataAwsRegion;
+  private awsAccountIdProvider?: DataAwsCallerIdentity;
 
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
@@ -189,6 +195,7 @@ export abstract class CdktfApp extends App {
     this.pluginManager = new PluginManager(props.plugins ?? []);
 
     this.outdir = outdir;
+    this.workdir = cdktfOutdir;
     this.cdktfApp = cdktfApp;
     this.cdktfStack = cdktfStack;
     this.terraformManifestPath = join(this.outdir, "main.tf.json");
@@ -196,6 +203,26 @@ export abstract class CdktfApp extends App {
 
     // register a logger for this app.
     Logger.register(this);
+  }
+
+  /**
+   * The AWS account ID of the App
+   */
+  public get accountId(): string {
+    if (!this.awsAccountIdProvider) {
+      this.awsAccountIdProvider = new DataAwsCallerIdentity(this, "account");
+    }
+    return this.awsAccountIdProvider.accountId;
+  }
+
+  /**
+   * The AWS region of the App
+   */
+  public get region(): string {
+    if (!this.awsRegionProvider) {
+      this.awsRegionProvider = new DataAwsRegion(this, "Region");
+    }
+    return this.awsRegionProvider.name;
   }
 
   /**

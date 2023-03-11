@@ -11,8 +11,6 @@ exports[`asynchronous_model_implicit_await_in_functions.w > wing test --target s
 
 exports[`bring_cdktf.w > wing test --target sim > stdout 1`] = `"pass ─ bring_cdktf.w (no tests)"`;
 
-exports[`bring_fs.w > wing test --target sim > stdout 1`] = `"pass ─ bring_fs.w (no tests)"`;
-
 exports[`bring_jsii.w > wing test --target sim > stdout 1`] = `"pass ─ bring_jsii.w » root/test:say_hello"`;
 
 exports[`bring_jsii_path.w > wing test --target sim > stdout 1`] = `"pass ─ bring_jsii_path.w » root/test:say_hello"`;
@@ -55,6 +53,12 @@ lang: 3
 dang: 1
 dang: 2
 dang: 3
+wing: 1
+wing: 2
+lang: 1
+lang: 2
+dang: 1
+dang: 2
 pass ─ for_loop.w (no tests)"
 `;
 
