@@ -3230,6 +3230,54 @@ constructor() {
       }
     }
   }
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`for_loop_sequence.w > wing compile --target tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+}
+`;
+
+exports[`for_loop_sequence.w > wing compile --target tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"for_loop_sequence\\", plugins: $plugins });
+  
   {function* iterator(start, end) {
     let i = start;
    while (i < end) yield i++;
@@ -3239,7 +3287,7 @@ constructor() {
   for (const x of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x >= 0)'\`)})((x >= 0))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x < 5)'\`)})((x < 5))};
-    {console.log(\`increment => 0 <= \${x} < 5\`)};
+    {console.log(\`from 0 to 5 (increment) => 0 <= \${x} < 5\`)};
   }}
   {function* iterator(start, end) {
     let i = start;
@@ -3248,9 +3296,54 @@ constructor() {
   }
   const iter = iterator(10,5);
   for (const x of iter) {
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x <= 100)'\`)})((x <= 100))};
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x <= 10)'\`)})((x <= 10))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x > 5)'\`)})((x > 5))};
-    {console.log(\`decrement => 10 >= \${x} > 5 \`)};
+    {console.log(\`from 10 to 5 (decrement) => 10 >= \${x} > 5 \`)};
+  }}
+  const identifier = 3;
+  {function* iterator(start, end) {
+    let i = start;
+   while (i < end) yield i++;
+   while (i > end) yield i--;
+  }
+  const iter = iterator(0,identifier);
+  for (const x of iter) {
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x >= 0)'\`)})((x >= 0))};
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x < 3)'\`)})((x < 3))};
+    {console.log(\`from 0 to identifier (3) => 0 <= \${x} < 3\`)};
+  }}
+  {function* iterator(start, end) {
+    let i = start;
+   while (i < end) yield i++;
+   while (i > end) yield i--;
+  }
+  const iter = iterator(identifier,0);
+  for (const x of iter) {
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x <= 3)'\`)})((x <= 3))};
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x > 0)'\`)})((x > 0))};
+    {console.log(\`from identifier (3) to 0 => 3 >= \${x} > 0\`)};
+  }}
+  {function* iterator(start, end) {
+    let i = start;
+   while (i < end) yield i++;
+   while (i > end) yield i--;
+  }
+  const iter = iterator(0,(identifier * 2));
+  for (const x of iter) {
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x >= 0)'\`)})((x >= 0))};
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x < 6)'\`)})((x < 6))};
+    {console.log(\`from 0 to expression (3*2) => 0 <= \${x} < 6\`)};
+  }}
+  {function* iterator(start, end) {
+    let i = start;
+   while (i < end) yield i++;
+   while (i > end) yield i--;
+  }
+  const iter = iterator((identifier * 2),0);
+  for (const x of iter) {
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x <= 6)'\`)})((x <= 6))};
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x > 0)'\`)})((x > 0))};
+    {console.log(\`from expression (3*2) to 0 => 6 >= \${x} > 0\`)};
   }}
 }
 }
