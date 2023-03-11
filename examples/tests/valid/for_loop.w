@@ -25,7 +25,7 @@ for x in 0..5 {
 }
 
 for x in 10..5 {
-  assert(x <= 100);
+  assert(x <= 10);
   assert(x > 5);
   print("decrement => 10 >= ${x} > 5 ");
 }
