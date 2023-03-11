@@ -428,10 +428,21 @@ impl<'a> JSifier<'a> {
 				};
 				format!("({}{})", op, self.jsify_expression(exp, context))
 			}
-			ExprKind::NumberSequence { start, end } => {
-				let js_start = self.jsify_expression(start, context);
-				let js_end = self.jsify_expression(end, context);
-				format!("{},{}", js_start, js_end)
+			ExprKind::NumberSequence { start, inclusive, end } => {
+				let result = if inclusive.unwrap() == true {
+					format!(
+						"{},{} + 1",
+						self.jsify_expression(start, context),
+						self.jsify_expression(end, context)
+					)
+				} else {
+					format!(
+						"{},{}",
+						self.jsify_expression(start, context),
+						self.jsify_expression(end, context)
+					)
+				};
+				result
 			}
 			ExprKind::Binary { op, left, right } => {
 				let js_left = self.jsify_expression(left, context);

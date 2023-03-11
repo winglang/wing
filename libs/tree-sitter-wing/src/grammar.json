@@ -968,6 +968,10 @@
         }
       ]
     },
+    "inclusive_sequence": {
+      "type": "STRING",
+      "value": "="
+    },
     "num_sequence": {
       "type": "SEQ",
       "members": [
@@ -982,6 +986,22 @@
         {
           "type": "STRING",
           "value": ".."
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "inclusive_sequence",
+              "content": {
+                "type": "SYMBOL",
+                "name": "inclusive_sequence"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         },
         {
           "type": "FIELD",

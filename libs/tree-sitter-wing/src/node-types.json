@@ -949,6 +949,11 @@
     }
   },
   {
+    "type": "inclusive_sequence",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "inflight_closure",
     "named": true,
     "fields": {
@@ -1638,6 +1643,16 @@
         "types": [
           {
             "type": "expression",
+            "named": true
+          }
+        ]
+      },
+      "inclusive_sequence": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "inclusive_sequence",
             "named": true
           }
         ]

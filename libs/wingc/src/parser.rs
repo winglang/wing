@@ -870,13 +870,21 @@ impl<'s> Parser<'s> {
 				ExprKind::Literal(self.build_duration(&expression_node)?),
 				expression_span,
 			)),
-			"num_sequence" => Ok(Expr::new(
-				ExprKind::NumberSequence {
-					start: Box::new(self.build_expression(&expression_node.child_by_field_name("start").unwrap())?),
-					end: Box::new(self.build_expression(&expression_node.child_by_field_name("end").unwrap())?),
-				},
-				expression_span,
-			)),
+			"num_sequence" => {
+				let inclusive = if expression_node.child_by_field_name("inclusive_sequence").is_some() {
+					Some(true)
+				} else {
+					Some(false)
+				};
+				Ok(Expr::new(
+					ExprKind::NumberSequence {
+						start: Box::new(self.build_expression(&expression_node.child_by_field_name("start").unwrap())?),
+						inclusive: inclusive,
+						end: Box::new(self.build_expression(&expression_node.child_by_field_name("end").unwrap())?),
+					},
+					expression_span,
+				))
+			}
 			"reference" => Ok(Expr::new(
 				ExprKind::Reference(self.build_reference(&expression_node)?),
 				expression_span,

@@ -242,7 +242,11 @@ where
 			}
 			v.visit_args(arg_list);
 		}
-		ExprKind::NumberSequence { start, end } => {
+		ExprKind::NumberSequence {
+			start,
+			inclusive: _,
+			end,
+		} => {
 			v.visit_expr(start);
 			v.visit_expr(end);
 		}

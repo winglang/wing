@@ -201,11 +201,14 @@ module.exports = grammar({
         field("block", $.block)
       ),
 
+    inclusive_sequence: ($) => "=",
+
     num_sequence: ($) =>
       seq(
         field("start", $.expression),
         "..",
-        field("end", $.expression),
+        optional(field("inclusive_sequence", $.inclusive_sequence)),
+        field("end", $.expression)
       ),
 
     for_sequence: ($) =>

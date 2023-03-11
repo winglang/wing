@@ -1313,7 +1313,11 @@ impl<'a> TypeChecker<'a> {
 
 				function_type
 			}
-			ExprKind::NumberSequence { start, end } => {
+			ExprKind::NumberSequence {
+				start,
+				inclusive: _,
+				end,
+			} => {
 				let stype = self.type_check_exp(start, env, statement_idx, context);
 				let etype = self.type_check_exp(end, env, statement_idx, context);
 

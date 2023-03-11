@@ -323,6 +323,7 @@ pub enum ExprKind {
 	Literal(Literal),
 	NumberSequence {
 		start: Box<Expr>,
+		inclusive: Option<bool>,
 		end: Box<Expr>,
 	},
 	Reference(Reference),
