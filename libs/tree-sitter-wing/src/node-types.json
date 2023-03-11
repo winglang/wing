@@ -1637,7 +1637,7 @@
         "required": true,
         "types": [
           {
-            "type": "number",
+            "type": "expression",
             "named": true
           }
         ]
@@ -1647,7 +1647,7 @@
         "required": true,
         "types": [
           {
-            "type": "number",
+            "type": "expression",
             "named": true
           }
         ]

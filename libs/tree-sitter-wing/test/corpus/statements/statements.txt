@@ -31,6 +31,8 @@ For sequence
 for item in 0..100 {
 }
 
+for item in 0..(2*2) {
+}
 ---
 
 (source
@@ -39,6 +41,17 @@ for item in 0..100 {
     sequence: (num_sequence
         start: (number)
         end: (number))
+    block: (block)
+    )
+    (for_sequence
+    iterator: (reference (identifier))
+    sequence: (num_sequence
+        start: (number)
+        end: (parenthesized_expression
+            (binary_expression
+                left: (number)
+                right: (number)
+            )))
     block: (block)
     )
 )

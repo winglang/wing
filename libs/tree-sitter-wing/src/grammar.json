@@ -976,7 +976,7 @@
           "name": "start",
           "content": {
             "type": "SYMBOL",
-            "name": "number"
+            "name": "expression"
           }
         },
         {
@@ -988,7 +988,7 @@
           "name": "end",
           "content": {
             "type": "SYMBOL",
-            "name": "number"
+            "name": "expression"
           }
         }
       ]

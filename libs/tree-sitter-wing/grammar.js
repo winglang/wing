@@ -203,9 +203,9 @@ module.exports = grammar({
 
     num_sequence: ($) =>
       seq(
-        field("start", $.number),
+        field("start", $.expression),
         "..",
-        field("end", $.number),
+        field("end", $.expression),
       ),
 
     for_sequence: ($) =>
