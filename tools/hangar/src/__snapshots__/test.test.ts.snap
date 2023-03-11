@@ -61,6 +61,16 @@ lang: 1
 lang: 2
 dang: 1
 dang: 2
+increment => 0 <= 0 < 5
+increment => 0 <= 1 < 5
+increment => 0 <= 2 < 5
+increment => 0 <= 3 < 5
+increment => 0 <= 4 < 5
+decrement => 10 >= 10 > 5 
+decrement => 10 >= 9 > 5 
+decrement => 10 >= 8 > 5 
+decrement => 10 >= 7 > 5 
+decrement => 10 >= 6 > 5 
 pass ─ for_loop.w (no tests)"
 `;
 

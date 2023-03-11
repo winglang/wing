@@ -66,10 +66,6 @@
         "named": true
       },
       {
-        "type": "num_sequence",
-        "named": true
-      },
-      {
         "type": "parenthesized_expression",
         "named": true
       },
@@ -290,6 +286,10 @@
         },
         {
           "type": "for_in_loop",
+          "named": true
+        },
+        {
+          "type": "for_sequence",
           "named": true
         },
         {
@@ -722,6 +722,42 @@
         "types": [
           {
             "type": "reference",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "for_sequence",
+    "named": true,
+    "fields": {
+      "block": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "iterator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "reference",
+            "named": true
+          }
+        ]
+      },
+      "sequence": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "num_sequence",
             "named": true
           }
         ]
@@ -2104,6 +2140,10 @@
         },
         {
           "type": "for_in_loop",
+          "named": true
+        },
+        {
+          "type": "for_sequence",
           "named": true
         },
         {

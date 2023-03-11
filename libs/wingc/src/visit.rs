@@ -106,6 +106,15 @@ where
 			v.visit_expr(iterable);
 			v.visit_scope(statements);
 		}
+		StmtKind::ForSequence {
+			iterator,
+			sequence,
+			statements,
+		} => {
+			v.visit_symbol(iterator);
+			v.visit_expr(sequence);
+			v.visit_scope(statements);
+		}
 		StmtKind::While { condition, statements } => {
 			v.visit_expr(condition);
 			v.visit_scope(statements);

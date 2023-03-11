@@ -257,6 +257,11 @@ pub enum StmtKind {
 		iterable: Expr,
 		statements: Scope,
 	},
+	ForSequence {
+		iterator: Symbol,
+		sequence: Expr,
+		statements: Scope,
+	},
 	While {
 		condition: Expr,
 		statements: Scope,

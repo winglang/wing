@@ -38,6 +38,7 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"await_expression" => "see https://github.com/winglang/wing/issues/116",
 	"defer_expression" => "see https://github.com/winglang/wing/issues/116",
 	"for_in_loop" => "see https://github.com/winglang/wing/issues/118",
+	"for_sequence" => "see https://github.com/winglang/wing/issues/118",
 	"=>" => "see https://github.com/winglang/wing/issues/474",
 };
 
@@ -186,6 +187,7 @@ impl<'s> Parser<'s> {
 			"block" => StmtKind::Scope(self.build_scope(statement_node)),
 			"if_statement" => self.build_if_statement(statement_node)?,
 			"for_in_loop" => self.build_for_statement(statement_node)?,
+			"for_sequence" => self.build_for_sequence_statement(statement_node)?,
 			"while_statement" => self.build_while_statement(statement_node)?,
 			"break_statement" => self.build_break_statement(statement_node)?,
 			"return_statement" => self.build_return_statement(statement_node)?,
@@ -272,6 +274,14 @@ impl<'s> Parser<'s> {
 		Ok(StmtKind::ForLoop {
 			iterator: self.node_symbol(&statement_node.child_by_field_name("iterator").unwrap())?,
 			iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
+			statements: self.build_in_loop_scope(&statement_node.child_by_field_name("block").unwrap()),
+		})
+	}
+
+	fn build_for_sequence_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		Ok(StmtKind::ForSequence {
+			iterator: self.node_symbol(&statement_node.child_by_field_name("iterator").unwrap())?,
+			sequence: self.build_expression(&statement_node.child_by_field_name("sequence").unwrap())?,
 			statements: self.build_in_loop_scope(&statement_node.child_by_field_name("block").unwrap()),
 		})
 	}

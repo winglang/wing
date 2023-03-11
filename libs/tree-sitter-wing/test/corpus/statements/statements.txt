@@ -9,9 +9,6 @@ for fox in sox {
     break;
 }
 
-for item in 0..100 {
-}
-
 ---
 
 (source
@@ -25,13 +22,24 @@ for item in 0..100 {
     iterable: (reference (identifier))
         block: (block (break_statement))
     )
-    (for_in_loop
+)
+
+====================
+For sequence
+====================
+
+for item in 0..100 {
+}
+
+---
+
+(source
+    (for_sequence
     iterator: (reference (identifier))
-    iterable: (num_sequence
-            start: (number)
-            end: (number)
-        )
-        block: (block)
+    sequence: (num_sequence
+        start: (number)
+        end: (number))
+    block: (block)
     )
 )
 

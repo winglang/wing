@@ -582,7 +582,35 @@ impl<'a> JSifier<'a> {
 				iterator,
 				iterable,
 				statements,
-			} => self.jsify_forloop(iterator, iterable, statements, context),
+			} => {
+				format!(
+					"for (const {} of {}) {}",
+					self.jsify_symbol(iterator),
+					self.jsify_expression(iterable, context),
+					self.jsify_scope(statements, context)
+				)
+			}
+			StmtKind::ForSequence {
+				iterator,
+				sequence,
+				statements,
+			} => {
+				format!(
+					"{{{}\n{}\n{}}}",
+					format!(
+						"function* iterator(start, end) {{\n  {}\n {}\n {}\n}}",
+						format!("let i = start;"),
+						format!("while (i < end) yield i++;"),
+						format!("while (i > end) yield i--;")
+					),
+					format!("const iter = iterator ({});", self.jsify_expression(sequence, context)),
+					format!(
+						"for (const {} of iter) {}",
+						self.jsify_symbol(iterator),
+						self.jsify_scope(statements, context)
+					)
+				)
+			}
 			StmtKind::While { condition, statements } => {
 				format!(
 					"while ({}) {}",

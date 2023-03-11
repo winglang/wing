@@ -346,6 +346,14 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 				res.extend(scan_captures_in_expression(iterable, env, s.idx, diagnostics));
 				res.extend(scan_captures_in_inflight_scope(statements, diagnostics));
 			}
+			StmtKind::ForSequence {
+				iterator: _,
+				sequence,
+				statements,
+			} => {
+				res.extend(scan_captures_in_expression(sequence, env, s.idx, diagnostics));
+				res.extend(scan_captures_in_inflight_scope(statements, diagnostics));
+			}
 			StmtKind::While { condition, statements } => {
 				res.extend(scan_captures_in_expression(condition, env, s.idx, diagnostics));
 				res.extend(scan_captures_in_inflight_scope(statements, diagnostics));

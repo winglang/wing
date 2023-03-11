@@ -75,6 +75,7 @@ module.exports = grammar({
         $.class_definition,
         $.resource_definition,
         $.for_in_loop,
+        $.for_sequence,
         $.while_statement,
         $.break_statement,
         $.if_statement,
@@ -200,6 +201,22 @@ module.exports = grammar({
         field("block", $.block)
       ),
 
+    num_sequence: ($) =>
+      seq(
+        field("start", $.number),
+        "..",
+        field("end", $.number),
+      ),
+
+    for_sequence: ($) =>
+      seq(
+        "for",
+        field("iterator", $.reference),
+        "in",
+        field("sequence", $.num_sequence),
+        field("block", $.block)
+      ),
+
     while_statement: ($) =>
       seq("while", field("condition", $.expression), field("block", $.block)),
 
@@ -231,13 +248,6 @@ module.exports = grammar({
         optional(seq("finally", field("finally_block", $.block)))
       ),
 
-    num_sequence: ($) =>
-      seq(
-        field("start", $.number),
-        "..",
-        field("end", $.number),
-      ),
-
     expression: ($) =>
       choice(
         $.binary_expression,
@@ -254,8 +264,7 @@ module.exports = grammar({
         $.parenthesized_expression,
         $.structured_access_expression,
         $.json_literal,
-        $.struct_literal,
-        $.num_sequence
+        $.struct_literal
       ),
 
     // Primitives
