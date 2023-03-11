@@ -603,7 +603,7 @@ impl<'a> JSifier<'a> {
 						format!("while (i < end) yield i++;"),
 						format!("while (i > end) yield i--;")
 					),
-					format!("const iter = iterator ({});", self.jsify_expression(sequence, context)),
+					format!("const iter = iterator({});", self.jsify_expression(sequence, context)),
 					format!(
 						"for (const {} of iter) {}",
 						self.jsify_symbol(iterator),
