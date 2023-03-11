@@ -746,38 +746,6 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_forloop(
-		&mut self,
-		iterator: &Symbol,
-		iterable: &Expr,
-		statements: &Scope,
-		context: &JSifyContext,
-	) -> String {
-		match &iterable.kind {
-			ExprKind::Reference(_) => {
-				format!(
-					"for (const {} of {}) {}",
-					self.jsify_symbol(iterator),
-					self.jsify_expression(iterable, context),
-					self.jsify_scope(statements, context)
-				)
-			}
-			ExprKind::NumberSequence { start: _, end: _ } => {
-				format!(
-					"{{\n{}\n{}\n{}\n}}",
-					format!("function* iterator(start, end) {{\nlet i = start;\nwhile (i < end) yield i++;\nwhile (i > end) yield i--;}}"),
-					format!("const iter = iterator ({});", self.jsify_expression(iterable, context)),
-					format!(
-						"for (const {} of iter) {}",
-						self.jsify_symbol(iterator),
-						self.jsify_scope(statements, context)
-					)
-				)
-			}
-			_ => todo!(),
-		}
-	}
-
 	fn jsify_inflight_function(&mut self, func_def: &FunctionDefinition, context: &JSifyContext) -> String {
 		let mut parameter_list = vec![];
 		for p in func_def.parameters.iter() {
