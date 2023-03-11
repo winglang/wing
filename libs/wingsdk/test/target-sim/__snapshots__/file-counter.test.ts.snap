@@ -194,16 +194,6 @@ exports[`can create sequential files in a bucket 1`] = `
                 ],
                 "wing:resource:stateful": false,
               },
-              "children": {
-                "Code": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.1.245",
-                  },
-                  "id": "Code",
-                  "path": "root/HelloWorld/Queue-OnMessage-401ee792/Code",
-                },
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.245",
@@ -487,16 +477,6 @@ exports.handler = async function(event) {
                   },
                 ],
                 "wing:resource:stateful": false,
-              },
-              "children": {
-                "Code": {
-                  "constructInfo": {
-                    "fqn": "constructs.Construct",
-                    "version": "10.1.245",
-                  },
-                  "id": "Code",
-                  "path": "root/HelloWorld/Queue-OnMessage-401ee792/Code",
-                },
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
