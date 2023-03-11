@@ -63,34 +63,66 @@ pass ─ for_loop.w (no tests)"
 `;
 
 exports[`for_loop_sequence.w > wing test --target sim > stdout 1`] = `
-"from 0 to 5 (increment) => 0 <= 0 < 5
-from 0 to 5 (increment) => 0 <= 1 < 5
-from 0 to 5 (increment) => 0 <= 2 < 5
-from 0 to 5 (increment) => 0 <= 3 < 5
-from 0 to 5 (increment) => 0 <= 4 < 5
-from 10 to 5 (decrement) => 10 >= 10 > 5 
-from 10 to 5 (decrement) => 10 >= 9 > 5 
-from 10 to 5 (decrement) => 10 >= 8 > 5 
-from 10 to 5 (decrement) => 10 >= 7 > 5 
-from 10 to 5 (decrement) => 10 >= 6 > 5 
-from 0 to identifier (3) => 0 <= 0 < 3
-from 0 to identifier (3) => 0 <= 1 < 3
-from 0 to identifier (3) => 0 <= 2 < 3
-from identifier (3) to 0 => 3 >= 3 > 0
-from identifier (3) to 0 => 3 >= 2 > 0
-from identifier (3) to 0 => 3 >= 1 > 0
-from 0 to expression (3*2) => 0 <= 0 < 6
-from 0 to expression (3*2) => 0 <= 1 < 6
-from 0 to expression (3*2) => 0 <= 2 < 6
-from 0 to expression (3*2) => 0 <= 3 < 6
-from 0 to expression (3*2) => 0 <= 4 < 6
-from 0 to expression (3*2) => 0 <= 5 < 6
-from expression (3*2) to 0 => 6 >= 6 > 0
-from expression (3*2) to 0 => 6 >= 5 > 0
-from expression (3*2) to 0 => 6 >= 4 > 0
-from expression (3*2) to 0 => 6 >= 3 > 0
-from expression (3*2) to 0 => 6 >= 2 > 0
-from expression (3*2) to 0 => 6 >= 1 > 0
+"from 0 to 5 (increment)
+(0 <= 0 < 5)
+(0 <= 1 < 5)
+(0 <= 2 < 5)
+(0 <= 3 < 5)
+(0 <= 4 < 5)
+---
+from 10 to 5 (decrement)
+(10 >= 10 > 5)
+(10 >= 9 > 5)
+(10 >= 8 > 5)
+(10 >= 7 > 5)
+(10 >= 6 > 5)
+---
+from 0 to identifier (3)
+(0 <= 0 < 3)
+(0 <= 1 < 3)
+(0 <= 2 < 3)
+---
+from identifier (3) to 0
+(3 >= 3 > 0)
+(3 >= 2 > 0)
+(3 >= 1 > 0)
+---
+from 0 to expression (3*2)
+(0 <= 0 < 6)
+(0 <= 1 < 6)
+(0 <= 2 < 6)
+(0 <= 3 < 6)
+(0 <= 4 < 6)
+(0 <= 5 < 6)
+---
+from expression (3*2) to 0
+(6 >= 6 > 0)
+(6 >= 5 > 0)
+(6 >= 4 > 0)
+(6 >= 3 > 0)
+(6 >= 2 > 0)
+(6 >= 1 > 0)
+---
+inclusive range
+(0 >= 0 >= 3)
+(0 >= 1 >= 3)
+(0 >= 2 >= 3)
+(0 >= 3 >= 3)
+---
+inclusive range with identifier (3)
+(0 <= 0 <= 3)
+(0 <= 1 <= 3)
+(0 <= 2 <= 3)
+(0 <= 3 <= 3)
+---
+inclusive range with expression (3*2)
+(0 <= 0 <= 6)
+(0 <= 1 <= 6)
+(0 <= 2 <= 6)
+(0 <= 3 <= 6)
+(0 <= 4 <= 6)
+(0 <= 5 <= 6)
+(0 <= 6 <= 6)
 pass ─ for_loop_sequence.w (no tests)"
 `;
 

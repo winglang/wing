@@ -3278,6 +3278,7 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"for_loop_sequence\\", plugins: $plugins });
   
+  {console.log(\\"from 0 to 5 (increment)\\")};
   {function* iterator(start, end) {
     let i = start;
    while (i < end) yield i++;
@@ -3287,8 +3288,9 @@ constructor() {
   for (const x of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x >= 0)'\`)})((x >= 0))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x < 5)'\`)})((x < 5))};
-    {console.log(\`from 0 to 5 (increment) => 0 <= \${x} < 5\`)};
+    {console.log(\`(0 <= \${x} < 5)\`)};
   }}
+  {console.log(\\"---\\\\nfrom 10 to 5 (decrement)\\")};
   {function* iterator(start, end) {
     let i = start;
    while (i < end) yield i++;
@@ -3298,9 +3300,10 @@ constructor() {
   for (const x of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x <= 10)'\`)})((x <= 10))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x > 5)'\`)})((x > 5))};
-    {console.log(\`from 10 to 5 (decrement) => 10 >= \${x} > 5 \`)};
+    {console.log(\`(10 >= \${x} > 5)\`)};
   }}
   const identifier = 3;
+  {console.log(\\"---\\\\nfrom 0 to identifier (3)\\")};
   {function* iterator(start, end) {
     let i = start;
    while (i < end) yield i++;
@@ -3310,8 +3313,9 @@ constructor() {
   for (const x of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x >= 0)'\`)})((x >= 0))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x < 3)'\`)})((x < 3))};
-    {console.log(\`from 0 to identifier (3) => 0 <= \${x} < 3\`)};
+    {console.log(\`(0 <= \${x} < 3)\`)};
   }}
+  {console.log(\\"---\\\\nfrom identifier (3) to 0\\")};
   {function* iterator(start, end) {
     let i = start;
    while (i < end) yield i++;
@@ -3321,8 +3325,9 @@ constructor() {
   for (const x of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x <= 3)'\`)})((x <= 3))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x > 0)'\`)})((x > 0))};
-    {console.log(\`from identifier (3) to 0 => 3 >= \${x} > 0\`)};
+    {console.log(\`(3 >= \${x} > 0)\`)};
   }}
+  {console.log(\\"---\\\\nfrom 0 to expression (3*2)\\")};
   {function* iterator(start, end) {
     let i = start;
    while (i < end) yield i++;
@@ -3332,8 +3337,9 @@ constructor() {
   for (const x of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x >= 0)'\`)})((x >= 0))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x < 6)'\`)})((x < 6))};
-    {console.log(\`from 0 to expression (3*2) => 0 <= \${x} < 6\`)};
+    {console.log(\`(0 <= \${x} < 6)\`)};
   }}
+  {console.log(\\"---\\\\nfrom expression (3*2) to 0\\")};
   {function* iterator(start, end) {
     let i = start;
    while (i < end) yield i++;
@@ -3343,7 +3349,41 @@ constructor() {
   for (const x of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x <= 6)'\`)})((x <= 6))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x > 0)'\`)})((x > 0))};
-    {console.log(\`from expression (3*2) to 0 => 6 >= \${x} > 0\`)};
+    {console.log(\`(6 >= \${x} > 0)\`)};
+  }}
+  {console.log(\\"---\\\\ninclusive range\\")};
+  {function* iterator(start, end) {
+    let i = start;
+   while (i < end) yield i++;
+   while (i > end) yield i--;
+  }
+  const iter = iterator(0,3 + 1);
+  for (const x of iter) {
+    {console.log(\`(0 >= \${x} >= 3)\`)};
+  }}
+  {console.log(\\"---\\\\ninclusive range with identifier (3)\\")};
+  {function* iterator(start, end) {
+    let i = start;
+   while (i < end) yield i++;
+   while (i > end) yield i--;
+  }
+  const iter = iterator(0,identifier + 1);
+  for (const x of iter) {
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x >= 0)'\`)})((x >= 0))};
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x <= 3)'\`)})((x <= 3))};
+    {console.log(\`(0 <= \${x} <= 3)\`)};
+  }}
+  {console.log(\\"---\\\\ninclusive range with expression (3*2)\\")};
+  {function* iterator(start, end) {
+    let i = start;
+   while (i < end) yield i++;
+   while (i > end) yield i--;
+  }
+  const iter = iterator(0,(identifier * 2) + 1);
+  for (const x of iter) {
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x >= 0)'\`)})((x >= 0))};
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x <= 6)'\`)})((x <= 6))};
+    {console.log(\`(0 <= \${x} <= 6)\`)};
   }}
 }
 }
