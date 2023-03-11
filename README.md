@@ -95,7 +95,7 @@ We are also actively tracking planned features in our roadmap:
 ## Contributors
 
 <a href="https://github.com/winglang/wing/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=winglang/wing&columns=7" />
+  <img src="https://contrib.rocks/image?repo=winglang/wing" />
 </a>
 
 ## License
