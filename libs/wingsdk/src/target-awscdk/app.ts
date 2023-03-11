@@ -30,11 +30,13 @@ export class App extends CoreApp {
   /**
    * Directory where artifacts are synthesized to.
    */
-  public readonly outdir: string;
+  public readonly workdir: string;
 
   private readonly cdkApp: cdk.App;
   private readonly cdkStack: cdk.Stack;
   private readonly pluginManager: PluginManager;
+  public readonly outdir: string;
+
   private synthed: boolean;
   private synthedOutput: string | undefined;
 
@@ -76,6 +78,7 @@ export class App extends CoreApp {
     this.pluginManager = new PluginManager(props.plugins ?? []);
 
     this.outdir = outdir;
+    this.workdir = cdkOutdir;
     this.cdkApp = cdkApp;
     this.cdkStack = cdkStack;
     this.synthed = false;
