@@ -64,7 +64,7 @@ export abstract class App extends Construct {
   /**
    * Directory where artifacts are synthesized to.
    */
-  public abstract readonly outdir: string;
+  public abstract readonly workdir: string;
 
   /**
    * Synthesize the app into an artifact.
@@ -148,7 +148,7 @@ export abstract class CdktfApp extends App {
   /**
    * Directory where artifacts are synthesized to.
    */
-  public readonly outdir: string;
+  public readonly workdir: string;
   /**
    * Path to the Terraform manifest file.
    */
@@ -157,6 +157,8 @@ export abstract class CdktfApp extends App {
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
   private readonly pluginManager: PluginManager;
+  private readonly outdir: string;
+
   private synthed: boolean;
   private synthedOutput: string | undefined;
   private awsRegionProvider?: DataAwsRegion;
@@ -193,6 +195,7 @@ export abstract class CdktfApp extends App {
     this.pluginManager = new PluginManager(props.plugins ?? []);
 
     this.outdir = outdir;
+    this.workdir = cdktfOutdir;
     this.cdktfApp = cdktfApp;
     this.cdktfStack = cdktfStack;
     this.terraformManifestPath = join(this.outdir, "main.tf.json");

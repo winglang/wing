@@ -257,6 +257,12 @@ impl ClassLike for Class {
 	}
 }
 
+impl ClassLike for Struct {
+	fn get_env(&self) -> &SymbolEnv {
+		&self.env
+	}
+}
+
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct Struct {
@@ -1097,7 +1103,7 @@ impl<'a> TypeChecker<'a> {
 					return self.expr_error(&*function, format!("should be a function or method"));
 				};
 
-				if !can_call_flight(func_sig.flight, env.flight) {
+				if !env.flight.can_call_to(&func_sig.flight) {
 					self.expr_error(
 						exp,
 						format!("Cannot call into {} phase while {}", func_sig.flight, env.flight),
@@ -2583,19 +2589,6 @@ impl<'a> TypeChecker<'a> {
 			}
 			Err(type_error) => self.variable_error(type_error),
 		}
-	}
-}
-
-fn can_call_flight(fn_flight: Phase, scope_flight: Phase) -> bool {
-	if fn_flight == Phase::Independent {
-		// if the function we're trying to call is an "either-flight" function,
-		// then it can be called both in preflight, inflight, and in
-		// either-flight scopes
-		true
-	} else {
-		// otherwise, preflight functions can only be called in preflight scopes,
-		// and inflight functions can only be called in inflight scopes
-		fn_flight == scope_flight
 	}
 }
 

@@ -94,16 +94,6 @@ exports[`inflight uses a logger 2`] = `
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/my_function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -204,16 +194,6 @@ exports.handler = async function(event) {
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/my_function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
