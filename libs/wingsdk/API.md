@@ -678,94 +678,6 @@ Returns the set of environment variables for this function.
 ---
 
 
-### JsonFile <a name="JsonFile" id="@winglang/sdk.fs.JsonFile"></a>
-
-Represents a text file that should be synthesized in the app's outdir.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.fs.JsonFile.Initializer"></a>
-
-```wing
-bring fs;
-
-new fs.JsonFile(file_path: str, props: JsonFileProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.fs.JsonFile.Initializer.parameter.filePath">file_path</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#@winglang/sdk.fs.JsonFile.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.fs.JsonFileProps">JsonFileProps</a></code> | *No description.* |
-
----
-
-##### `file_path`<sup>Required</sup> <a name="file_path" id="@winglang/sdk.fs.JsonFile.Initializer.parameter.filePath"></a>
-
-- *Type:* str
-
----
-
-##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.fs.JsonFile.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.fs.JsonFileProps">JsonFileProps</a>
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.fs.JsonFile.save">save</a></code> | Render the contents of the file and save it to the user's file system. |
-
----
-
-##### `save` <a name="save" id="@winglang/sdk.fs.JsonFile.save"></a>
-
-```wing
-save(outdir: str): void
-```
-
-Render the contents of the file and save it to the user's file system.
-
-###### `outdir`<sup>Required</sup> <a name="outdir" id="@winglang/sdk.fs.JsonFile.save.parameter.outdir"></a>
-
-- *Type:* str
-
----
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.fs.JsonFile.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.fs.JsonFile.property.filePath">file_path</a></code> | <code>str</code> | The file's relative path to the output directory. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.fs.JsonFile.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `file_path`<sup>Required</sup> <a name="file_path" id="@winglang/sdk.fs.JsonFile.property.filePath"></a>
-
-```wing
-file_path: str;
-```
-
-- *Type:* str
-
-The file's relative path to the output directory.
-
----
-
-
 ### Logger <a name="Logger" id="@winglang/sdk.cloud.Logger"></a>
 
 **Inflight client:** [@winglang/sdk.cloud.ILoggerClient](#@winglang/sdk.cloud.ILoggerClient)
@@ -1066,7 +978,6 @@ with a fresh copy without any consequences.
 
 ---
 
-
 ### Table <a name="Table" id="@winglang/sdk.cloud.Table"></a>
 
 **Inflight client:** [@winglang/sdk.cloud.ITableClient](#@winglang/sdk.cloud.ITableClient)
@@ -1286,7 +1197,6 @@ file_path: str;
 The file's relative path to the output directory.
 
 ---
-
 
 ### Topic <a name="Topic" id="@winglang/sdk.cloud.Topic"></a>
 
@@ -1830,38 +1740,6 @@ The maximum amount of time the function can run.
 
 ---
 
-### JsonFileProps <a name="JsonFileProps" id="@winglang/sdk.fs.JsonFileProps"></a>
-
-Props for `JsonFile`.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.fs.JsonFileProps.Initializer"></a>
-
-```wing
-bring fs;
-
-let json_file_props = fs.JsonFileProps{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.fs.JsonFileProps.property.obj">obj</a></code> | <code>any</code> | The object that will be serialized into the file during synthesis. |
-
----
-
-##### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.fs.JsonFileProps.property.obj"></a>
-
-```wing
-obj: any;
-```
-
-- *Type:* any
-
-The object that will be serialized into the file during synthesis.
-
----
-
 ### QueueOnMessageProps <a name="QueueOnMessageProps" id="@winglang/sdk.cloud.QueueOnMessageProps"></a>
 
 Options for Queue.onMessage.
@@ -2106,7 +1984,6 @@ Trigger events at a periodic rate.
 ```wing
 1m
 ```
-
 
 ### TableProps <a name="TableProps" id="@winglang/sdk.cloud.TableProps"></a>
 
