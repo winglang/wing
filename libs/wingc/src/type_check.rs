@@ -387,12 +387,6 @@ impl Subtype for Type {
 				let r: &Type = &*r0;
 				l.is_subtype_of(r)
 			}
-			(Self::MutMap(l0), Self::Map(r0)) => {
-				// A MutMap type is a subtype of a Map type if the value type is a subtype of the other value type
-				let l: &Type = &*l0;
-				let r: &Type = &*r0;
-				l.is_subtype_of(r)
-			}
 			(Self::Set(l0), Self::Set(r0)) => {
 				// A Set type is a subtype of another Set type if the value type is a subtype of the other value type
 				let l: &Type = &*l0;
@@ -401,12 +395,6 @@ impl Subtype for Type {
 			}
 			(Self::MutSet(l0), Self::MutSet(r0)) => {
 				// A Set type is a subtype of another Set type if the value type is a subtype of the other value type
-				let l: &Type = &*l0;
-				let r: &Type = &*r0;
-				l.is_subtype_of(r)
-			}
-			(Self::MutSet(l0), Self::Set(r0)) => {
-				// A MutSet type is a subtype of a Set type if the value type is a subtype of the other value type
 				let l: &Type = &*l0;
 				let r: &Type = &*r0;
 				l.is_subtype_of(r)
