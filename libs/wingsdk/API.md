@@ -2486,16 +2486,24 @@ to parse as Json.
 ```wing
 bring std;
 
-std.Json.to_str(json: Json)
+std.Json.to_str(json: Json, indent?: num)
 ```
 
 Formats Json as string.
+
+(JSON.stringify($args$))
 
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.toStr.parameter.json"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 to format as string.
+
+---
+
+###### `indent`<sup>Optional</sup> <a name="indent" id="@winglang/sdk.std.Json.toStr.parameter.indent"></a>
+
+- *Type:* num
 
 ---
 
@@ -3064,6 +3072,52 @@ The value of the element to set.
 
 
 
+### Number <a name="Number" id="@winglang/sdk.std.Number"></a>
+
+Number.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.Number.Initializer"></a>
+
+```wing
+bring std;
+
+new std.Number()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Number.fromJson">from_json</a></code> | Parse a number from Json. |
+
+---
+
+##### `from_json` <a name="from_json" id="@winglang/sdk.std.Number.fromJson"></a>
+
+```wing
+bring std;
+
+std.Number.from_json(json: Json)
+```
+
+Parse a number from Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Number.fromJson.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to create number from.
+
+---
+
+
+
 ### String <a name="String" id="@winglang/sdk.std.String"></a>
 
 String.
@@ -3259,6 +3313,31 @@ uppercase(): str
 
 Returns this string in upper case.
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.String.fromJson">from_json</a></code> | Parse string from Json. |
+
+---
+
+##### `from_json` <a name="from_json" id="@winglang/sdk.std.String.fromJson"></a>
+
+```wing
+bring std;
+
+std.String.from_json(json: Json)
+```
+
+Parse string from Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.String.fromJson.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to create string from.
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 

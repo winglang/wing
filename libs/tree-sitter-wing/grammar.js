@@ -56,7 +56,7 @@ module.exports = grammar({
 
     // This is required because of ambiguity with using Json keyword for both instantiation of Json
     // and Identifier for static methods. Same issue exists for other types like Set, Map, etc.
-    stdlib_identifier: ($) => choice($._json_types),
+    stdlib_identifier: ($) => choice($._json_types, "str", "num", "bool"),
     nested_identifier: ($) =>
       prec(
         PREC.MEMBER,

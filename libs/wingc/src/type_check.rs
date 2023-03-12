@@ -2479,13 +2479,14 @@ impl<'a> TypeChecker<'a> {
 			match &curr_expr.kind {
 				ExprKind::Reference(reference) => match reference {
 					Reference::Identifier(symbol) => {
-						path.push(symbol.clone());
-						// If the symbol is a stdlib symbol we need to add the stdlib to path
-						if self.is_stdlib_symbol(symbol) {
+						if let Some(stdlib_symbol) = self.get_stdlib_symbol(symbol) {
+							path.push(stdlib_symbol);
 							path.push(Symbol {
 								name: "std".to_string(),
 								span: symbol.span.clone(),
 							});
+						} else {
+							path.push(symbol.clone());
 						}
 						break;
 					}

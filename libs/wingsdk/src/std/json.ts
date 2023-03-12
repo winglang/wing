@@ -71,13 +71,16 @@ export class Json {
   /**
    * Formats Json as string
    *
-   * @macro (JSON.stringify($args$))
+   * (JSON.stringify($args$))
+   *
+   * @macro ((args) => { return JSON.stringify(args[0], null, args[1]) })([$args$])
    *
    * @param json to format as string
    * @returns string representation of the Json
    */
-  public static toStr(json: Json): string {
+  public static toStr(json: Json, indent?: number): string {
     json;
+    indent;
     throw new Error("Macro");
   }
 

@@ -135,6 +135,18 @@
         {
           "type": "SYMBOL",
           "name": "_json_types"
+        },
+        {
+          "type": "STRING",
+          "value": "str"
+        },
+        {
+          "type": "STRING",
+          "value": "num"
+        },
+        {
+          "type": "STRING",
+          "value": "bool"
         }
       ]
     },
