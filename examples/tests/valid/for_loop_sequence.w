@@ -1,61 +1,63 @@
-print("from 0 to 5 (increment)");
-for x in 0..5 {
-  assert(x >= 0);
-  assert(x < 5);
-  print("(0 <= ${x} < 5)");
+print("from 0 to 2 (increment)");
+for i in 0..2 {
+  assert(i >= 0);
+  assert(i < 2);
+  print("(0 <= ${i} < 2)");
 }
 
-print("---\nfrom 10 to 5 (decrement)");
-for x in 10..5 {
-  assert(x <= 10);
-  assert(x > 5);
-  print("(10 >= ${x} > 5)");
+print("---\nfrom 0 to -2 (decrement)");
+for i in 0..-2 {
+  assert(i <= 0);
+  assert(i > -2);
+  print("(0 >= ${i} > -2)");
 }
 
-let identifier = 3;
-print("---\nfrom 0 to identifier (3)");
-for x in 0..identifier {
-  assert(x >= 0);
-  assert(x < 3);
-  print("(0 <= ${x} < 3)");
+let x = 2;
+print("---\nfrom 0 to x (2)");
+for i in 0..x {
+  assert(i >= 0);
+  assert(i < 2);
+  print("(0 <= ${i} < 2)");
 }
 
-print("---\nfrom identifier (3) to 0");
-for x in identifier..0 {
-  assert(x <= 3);
-  assert(x > 0);
-  print("(3 >= ${x} > 0)");
+print("---\nfrom x (2) to 0");
+for i in x..0 {
+  assert(i <= 2);
+  assert(i > 0);
+  print("(2 >= ${i} > 0)");
 }
 
-print("---\nfrom 0 to expression (3*2)");
-for x in 0..(identifier*2) {
-  assert(x >= 0);
-  assert(x < 6);
-  print("(0 <= ${x} < 6)");
+print("---\nfrom 0 to expression (x*2)");
+for i in 0..(x*2) {
+  assert(i >= 0);
+  assert(i < 4);
+  print("(0 <= ${i} < 4)");
 }
 
-print("---\nfrom expression (3*2) to 0");
-for x in (identifier*2)..0 {
-  assert(x <= 6);
-  assert(x > 0);
-  print("(6 >= ${x} > 0)");
+print("---\nfrom expression (x*2) to 0");
+for i in (x*2)..0 {
+  assert(i <= 4);
+  assert(i > 0);
+  print("(4 >= ${i} > 0)");
 }
 
-print("---\ninclusive range");
-for x in 0..=3 {
-  print("(0 >= ${x} >= 3)");
+print("---\ninclusive range from 0 to 2");
+for i in 0..=2 {
+  assert(i >= 0);
+  assert(i <= 2);
+  print("(0 >= ${i} >= 2)");
 }
 
-print("---\ninclusive range with identifier (3)");
-for x in 0..=identifier {
-  assert(x >= 0);
-  assert(x <= 3);
-  print("(0 <= ${x} <= 3)");
+print("---\ninclusive range from 0 to x (2)");
+for i in 0..=x {
+  assert(i >= 0);
+  assert(i <= 2);
+  print("(0 <= ${i} <= 2)");
 }
 
-print("---\ninclusive range with expression (3*2)");
-for x in 0..=(identifier*2) {
-  assert(x >= 0);
-  assert(x <= 6);
-  print("(0 <= ${x} <= 6)");
+print("---\ninclusive range from 0 to (x*2)");
+for i in 0..=(x*2) {
+  assert(i >= 0);
+  assert(i <= 4);
+  print("(0 <= ${i} <= 4)");
 }
