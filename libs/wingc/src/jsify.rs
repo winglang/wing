@@ -431,13 +431,13 @@ impl<'a> JSifier<'a> {
 			ExprKind::NumberSequence { start, inclusive, end } => {
 				let result = if inclusive.unwrap() == true {
 					format!(
-						"{},{} + 1",
+						"{},{},true",
 						self.jsify_expression(start, context),
 						self.jsify_expression(end, context)
 					)
 				} else {
 					format!(
-						"{},{}",
+						"{},{},false",
 						self.jsify_expression(start, context),
 						self.jsify_expression(end, context)
 					)
@@ -607,12 +607,13 @@ impl<'a> JSifier<'a> {
 				statements,
 			} => {
 				format!(
-					"{{{}\n{}\n{}}}",
+					"{{\n{}\n{}\n{}\n}}",
 					format!(
-						"function* iterator(start, end) {{\n  {}\n {}\n {}\n}}",
+						"function* iterator(start, end, inclusive) {{\n\t{}\t\n{}\t\n{}\t\n{}\n}}",
 						format!("let i = start;"),
-						format!("while (i < end) yield i++;"),
-						format!("while (i > end) yield i--;")
+						format!("let inc = inclusive ? 1 : 0;"),
+						format!("while (i < (end + inc)) yield i++;"),
+						format!("while (i > (end + inc)) yield i--;"),
 					),
 					format!("const iter = iterator({});", self.jsify_expression(sequence, context)),
 					format!(
