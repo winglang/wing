@@ -611,7 +611,7 @@ impl<'a> JSifier<'a> {
 					format!(
 						"function* iterator(start, end, inclusive) {{\n\t{}\t\n{}\t\n{}\t\n{}\n}}",
 						format!("let i = start;"),
-						format!("let inc = inclusive ? 1 : 0;"),
+						format!("let inc = inclusive ? ((end < start) ? -1 : 1) : 0;"),
 						format!("while (i < (end + inc)) yield i++;"),
 						format!("while (i > (end + inc)) yield i--;"),
 					),

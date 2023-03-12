@@ -63,50 +63,54 @@ pass ─ for_loop.w (no tests)"
 `;
 
 exports[`for_loop_sequence.w > wing test --target sim > stdout 1`] = `
-"from 0 to 2 (increment)
-(0 <= 0 < 2)
-(0 <= 1 < 2)
+"---
+for i in 0..0 { ... }
+there's no value to iterate
 ---
-from 0 to -2 (decrement)
-(0 >= 0 > -2)
-(0 >= -1 > -2)
+for i in 0..=0 { ... }
+[0]
 ---
-from 0 to x (2)
-(0 <= 0 < 2)
-(0 <= 1 < 2)
+for i in 0..2 { ... }
+[0,1]
 ---
-from x (2) to 0
-(2 >= 2 > 0)
-(2 >= 1 > 0)
+for i in 0..=2 { ... }
+[0,1,2]
 ---
-from 0 to expression (x*2)
-(0 <= 0 < 4)
-(0 <= 1 < 4)
-(0 <= 2 < 4)
-(0 <= 3 < 4)
+for i in 2..0 { ... }
+[2,1]
 ---
-from expression (x*2) to 0
-(4 >= 4 > 0)
-(4 >= 3 > 0)
-(4 >= 2 > 0)
-(4 >= 1 > 0)
+for i in 2..=0 { ... }
+[2,1,0]
 ---
-inclusive range from 0 to 2
-(0 >= 0 >= 2)
-(0 >= 1 >= 2)
-(0 >= 2 >= 2)
+for i in 0..-2 { ... }
+[0,-1]
 ---
-inclusive range from 0 to x (2)
-(0 <= 0 <= 2)
-(0 <= 1 <= 2)
-(0 <= 2 <= 2)
+for i in 0..=-2 { ... }
+[0,-1,-2]
 ---
-inclusive range from 0 to (x*2)
-(0 <= 0 <= 4)
-(0 <= 1 <= 4)
-(0 <= 2 <= 4)
-(0 <= 3 <= 4)
-(0 <= 4 <= 4)
+for i in -2..0 { ... }
+[-2,-1]
+---
+for i in -2..=0 { ... }
+[-2,-1,0]
+---
+for i in 0..x { ... }
+[0,1]
+---
+for i in 0..=x { ... }
+[0,1,2]
+---
+for i in x..0 { ... }
+[2,1]
+---
+for i in 0..(x*2) { ... }
+[0,1,2,3]
+---
+for i in 0..=(x*2) { ... }
+[0,1,2,3,4]
+---
+for i in (x*2)..0 { ... }
+[4,3,2,1]
 pass ─ for_loop_sequence.w (no tests)"
 `;
 
