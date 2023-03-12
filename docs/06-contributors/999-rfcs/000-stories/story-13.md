@@ -92,7 +92,7 @@ resource TaskList {
     let output = MutArray<str>[];
     for id in task_ids {
       let j = this.get_task(id); 
-      let title = j.get_str("title"); // notice this require us to create a small "get_str" function  implementation that should be removed by next sprint, maybe there is a different way around this. @hasanaburayyan and @staycoolcall911 ?
+      let title = Json.to_str(j.get("title"));
       if title.contains(term) { 
         print("found task ${id} with title \"${title}\" with term \"${term}\"");
         output.push(id);
@@ -114,7 +114,7 @@ new cloud.Function(inflight (s: str): str => {
   let result = tasks.find_tasks_with("clean the dishes");
   assert(result.length == 1);
   let t = tasks.get_task(result.at(0));
-  assert("clean the dishes" == t.get_str(title));
+  assert("clean the dishes" == Json.to_str(t.get("title")));
 }) as "test:add, get and find task";
 
 new cloud.Function(inflight (s: str): str => {
