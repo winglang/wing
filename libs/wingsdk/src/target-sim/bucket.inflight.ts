@@ -5,16 +5,21 @@ import { dirname, join } from "path";
 import { ISimulatorResourceInstance } from "./resource";
 import { BucketSchema } from "./schema-resources";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
+import { BucketEvents, BucketEventType } from "../cloud/bucket.events";
 import { Json } from "../std";
 import { ISimulatorContext } from "../testing/simulator";
 
-export class Bucket implements IBucketClient, ISimulatorResourceInstance {
+export class Bucket
+  extends BucketEvents
+  implements IBucketClient, ISimulatorResourceInstance
+{
   private readonly objectKeys: Set<string>;
   private readonly fileDir: string;
   private readonly context: ISimulatorContext;
   private readonly initialObjects: Record<string, string>;
 
   public constructor(props: BucketSchema["props"], context: ISimulatorContext) {
+    super();
     this.objectKeys = new Set();
     this.fileDir = fs.mkdtempSync(join(os.tmpdir(), "wing-sim-"));
     this.context = context;
@@ -45,12 +50,25 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
+  private async fileExists(key: string): Promise<boolean> {
+    return fs.promises
+      .access(join(this.fileDir, key))
+      .then(() => true)
+      .catch(() => false);
+  }
+
   public async putJson(key: string, body: Json): Promise<void> {
     return this.context.withTrace({
       message: `Put Json (key=${key}).`,
       activity: async () => {
+        const actionType: BucketEventType = (await this.fileExists(key))
+          ? BucketEventType.UPDATE
+          : BucketEventType.PUT;
+
         const filename = join(this.fileDir, key);
         await fs.promises.writeFile(filename, JSON.stringify(body, null, 2));
+
+        void this.onChange(actionType, key);
       },
     });
   }
@@ -109,17 +127,22 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         const filename = join(this.fileDir, hash);
         await fs.promises.unlink(filename);
         this.objectKeys.delete(key);
+        void this.onChange(BucketEventType.DELETE, key);
       },
     });
   }
 
   private async addFile(key: string, value: string): Promise<void> {
+    const actionType: BucketEventType = this.objectKeys.has(key)
+      ? BucketEventType.UPDATE
+      : BucketEventType.PUT;
     const hash = this.hashKey(key);
     const filename = join(this.fileDir, hash);
     const dirName = dirname(filename);
     await fs.promises.mkdir(dirName, { recursive: true });
     await fs.promises.writeFile(filename, value);
     this.objectKeys.add(key);
+    void this.onChange(actionType, key);
   }
 
   private hashKey(key: string): string {

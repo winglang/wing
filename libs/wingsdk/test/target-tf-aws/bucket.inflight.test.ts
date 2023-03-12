@@ -9,7 +9,8 @@ import {
 import { SdkStream } from "@aws-sdk/types";
 import { sdkStreamMixin } from "@aws-sdk/util-stream-node";
 import { mockClient } from "aws-sdk-client-mock";
-import { test, expect, beforeEach } from "vitest";
+import { vi, test, expect, beforeEach } from "vitest";
+import { BucketEventType } from "../../src/cloud/bucket.events";
 import { BucketClient } from "../../src/target-tf-aws/bucket.inflight";
 
 const s3Mock = mockClient(S3Client);
@@ -62,7 +63,7 @@ test("get Json object from a bucket", async () => {
   expect(response).toEqual(VALUE);
 });
 
-test("put an object into a bucket", async () => {
+test("insert an object into a bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
@@ -70,13 +71,47 @@ test("put an object into a bucket", async () => {
   s3Mock
     .on(PutObjectCommand, { Bucket: BUCKET_NAME, Key: KEY, Body: VALUE })
     .resolves({});
+  s3Mock
+    .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .resolves({ Body: createMockStream("") });
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
+  const eventCallBack = vi.fn();
+  const updateCallback = vi.fn();
+  const uploadCallback = vi.fn();
+  client.onUpload(uploadCallback);
+  client.onEvent(eventCallBack);
   const response = await client.put(KEY, VALUE);
 
   // THEN
   expect(response).toEqual(undefined);
+  expect(uploadCallback).toBeCalledWith(KEY);
+  expect(eventCallBack).toBeCalledWith({ key: KEY, type: BucketEventType.PUT });
+  expect(updateCallback).not.toBeCalled();
+});
+
+test("update an object into a bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+  s3Mock
+    .on(PutObjectCommand, { Bucket: BUCKET_NAME, Key: KEY, Body: VALUE })
+    .resolves({});
+  s3Mock
+    .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .resolves({ Body: createMockStream("previous value") });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const updateCallback = vi.fn();
+  client.onUpdate(updateCallback);
+  const response = await client.put(KEY, VALUE);
+
+  // THEN
+  expect(response).toEqual(undefined);
+  expect(updateCallback).toBeCalledWith(KEY);
 });
 
 test("put a Json object into a bucket", async () => {
@@ -91,6 +126,9 @@ test("put a Json object into a bucket", async () => {
       Body: JSON.stringify(VALUE),
     })
     .resolves({});
+  s3Mock
+    .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .resolves({ Body: createMockStream("") });
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
@@ -125,10 +163,15 @@ test("delete object from a bucket", async () => {
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
+  const callback = vi.fn();
+  client.onDelete(callback);
+
   const response = await client.delete(KEY);
 
   // THEN
   expect(response).toEqual(undefined);
+
+  expect(callback).toBeCalledWith(KEY);
 });
 
 test("delete object from a bucket with mustExist option", async () => {

@@ -9,21 +9,30 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
+import { BucketEvents, BucketEventType } from "../cloud/bucket.events";
 import { Json } from "../std";
 
-export class BucketClient implements IBucketClient {
+export class BucketClient extends BucketEvents implements IBucketClient {
   constructor(
     private readonly bucketName: string,
     private readonly s3Client = new S3Client({})
-  ) {}
+  ) {
+    super();
+  }
 
   public async put(key: string, body: string): Promise<void> {
+    // TODO: [tsuf] switch to exists when https://github.com/winglang/wing/pull/1750 will be merged
+    const actionType = !!(await this.get(key))
+      ? BucketEventType.UPDATE
+      : BucketEventType.PUT;
+
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: key,
       Body: body,
     });
     await this.s3Client.send(command);
+    void this.onChange(actionType, key);
   }
 
   public async putJson(key: string, body: Json): Promise<void> {
@@ -87,6 +96,7 @@ export class BucketClient implements IBucketClient {
 
     try {
       await this.s3Client.send(command);
+      void this.onChange(BucketEventType.DELETE, key);
     } catch (er) {
       const error = er as any;
       if (!mustExist && error.name === "NoSuchKey") {

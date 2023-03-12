@@ -1,4 +1,4 @@
-import { test, expect } from "vitest";
+import { vi, test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { SimApp } from "../../src/testing";
@@ -38,6 +38,8 @@ test("put json objects from bucket", async () => {
   const VALUE = { msg: "Hello world!" };
 
   // WHEN
+  const callback = vi.fn();
+  client.onUpload(callback);
   await client.putJson(KEY, VALUE as any);
   const response = await client.getJson("greeting.json");
 
@@ -47,6 +49,39 @@ test("put json objects from bucket", async () => {
   expect(response).toEqual(VALUE);
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
+  expect(callback).toBeCalledWith(KEY);
+});
+
+test("update an object in bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const KEY = "greeting.txt";
+  const VALUE = JSON.stringify({ msg: "Hello world!" });
+
+  // WHEN
+  const eventCallback = vi.fn();
+  const updateCallback = vi.fn();
+  const uploadCallback = vi.fn();
+
+  client.onEvent(eventCallback);
+  client.onUpdate(updateCallback);
+  client.onUpload(uploadCallback);
+
+  await client.put(KEY, VALUE);
+  await client.put(KEY, JSON.stringify({ msg: "another msg" }));
+
+  // THEN
+  await s.stop();
+
+  expect(eventCallback).toBeCalledTimes(2);
+  expect(updateCallback).toBeCalledWith(KEY);
+  expect(uploadCallback).toBeCalledWith(KEY);
+  expect(listMessages(s)).toMatchSnapshot();
 });
 
 test("put and get objects from bucket", async () => {
@@ -235,10 +270,13 @@ test("remove object from a bucket", async () => {
   await client.put(fileName, JSON.stringify({ msg: "Hello world!" }));
 
   // delete file
+  const callback = vi.fn();
+  client.onDelete(callback);
   const response = await client.delete(fileName);
 
   await s.stop();
 
+  expect(callback).toBeCalledWith(fileName);
   expect(response).toEqual(undefined);
   expect(listMessages(s)).toMatchSnapshot();
 });

@@ -121,7 +121,13 @@ export class Bucket extends cloud.Bucket {
     if (ops.includes(cloud.BucketInflightMethods.PUT)) {
       host.addPolicyStatements({
         effect: "Allow",
-        action: ["s3:PutObject*", "s3:Abort*"],
+        action: [
+          "s3:PutObject*",
+          "s3:Abort*",
+          "s3:GetObject*",
+          "s3:GetBucket*",
+          "s3:List*",
+        ],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
@@ -175,3 +181,7 @@ Bucket._annotateInflight("delete", {});
 Bucket._annotateInflight("list", {});
 Bucket._annotateInflight("put_json", {});
 Bucket._annotateInflight("get_json", {});
+Bucket._annotateInflight("on_upload", {});
+Bucket._annotateInflight("on_update", {});
+Bucket._annotateInflight("on_delete", {});
+Bucket._annotateInflight("on_event", {});

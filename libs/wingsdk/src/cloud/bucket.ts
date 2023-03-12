@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { IBucketEvents } from "./bucket.events";
 import { fqnForType } from "../constants";
 import { App, Resource } from "../core";
 import { Json } from "../std";
@@ -70,7 +71,7 @@ export interface BucketDeleteOptions {
 /**
  * Inflight interface for `Bucket`.
  */
-export interface IBucketClient {
+export interface IBucketClient extends IBucketEvents {
   /**
    * Put an object in the bucket.
    * @param key Key of the object.
@@ -139,4 +140,12 @@ export enum BucketInflightMethods {
   PUT_JSON = "putJson",
   /** `Bucket.getJson */
   GET_JSON = "getJson",
+  /** `Bucket.getJson */
+  ON_UPLOAD = "onUpload",
+  /** `Bucket.getJson */
+  ON_DELETE = "onDelete",
+  /** `Bucket.getJson */
+  ON_UPDATE = "onUpdate",
+  /** `Bucket.getJson */
+  ON_EVENT = "onEvent",
 }

@@ -1,9 +1,10 @@
 import { DefaultAzureCredential } from "@azure/identity";
 import { BlobServiceClient, ContainerClient } from "@azure/storage-blob";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
+import { BucketEvents, BucketEventType } from "../cloud/bucket.events";
 import { Json } from "../std";
 
-export class BucketClient implements IBucketClient {
+export class BucketClient extends BucketEvents implements IBucketClient {
   private readonly bucketName: string;
   private readonly blobServiceClient: BlobServiceClient;
   private readonly containerClient: ContainerClient;
@@ -15,6 +16,7 @@ export class BucketClient implements IBucketClient {
     storageAccount: string,
     blobServiceClient?: BlobServiceClient
   ) {
+    super();
     this.bucketName = bucketName;
     this.blobServiceClient =
       blobServiceClient ??
@@ -34,9 +36,15 @@ export class BucketClient implements IBucketClient {
    * @param body string contents of the object
    */
   public async put(key: string, body: string): Promise<void> {
+    const actionType = (await this.list(key)).length
+      ? BucketEventType.UPDATE
+      : BucketEventType.PUT;
+
     await this.containerClient
       .getBlockBlobClient(key)
       .upload(body, body.length);
+
+    void this.onChange(actionType, key);
   }
 
   /**
@@ -112,6 +120,7 @@ export class BucketClient implements IBucketClient {
 
     try {
       await blockBlobClient.delete();
+      void this.onChange(BucketEventType.DELETE, key);
     } catch (err) {
       const error = err as any;
       if (!mustExist && error.details.errorCode === "BlobNotFound") {

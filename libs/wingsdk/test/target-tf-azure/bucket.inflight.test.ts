@@ -13,6 +13,7 @@ import {
   ContainerListBlobsOptions,
 } from "@azure/storage-blob";
 import { test, expect, beforeEach, vi } from "vitest";
+import { BucketEventType } from "../../src/cloud/bucket.events";
 import { BucketClient } from "../../src/target-tf-azure/bucket.inflight";
 
 vi.mock("@azure/storage-blob");
@@ -59,10 +60,39 @@ test("put an object into a bucket", async () => {
     STORAGE_NAME,
     mockBlobServiceClient
   );
+
+  const callback = vi.fn();
+  client.onUpload(callback);
+  // mocking list to return empty
+  client.list = vi.fn(async () => []);
   const response = await client.put(KEY, VALUE);
 
   // THEN
   expect(response).toEqual(undefined);
+  expect(callback).toBeCalledWith(KEY);
+});
+
+test("update an object into a bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const STORAGE_NAME = "STORAGE_NAME";
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+
+  // WHEN
+  const client = new BucketClient(
+    BUCKET_NAME,
+    STORAGE_NAME,
+    mockBlobServiceClient
+  );
+
+  const callback = vi.fn();
+  client.onUpdate(callback);
+  const response = await client.put(KEY, VALUE);
+
+  // THEN
+  expect(response).toEqual(undefined);
+  expect(callback).toBeCalledWith(KEY);
 });
 
 test("put an Json into a bucket", async () => {
@@ -96,10 +126,19 @@ test("delete object from a bucket", async () => {
     STORAGE_NAME,
     mockBlobServiceClient
   );
+  const deleteCallback = vi.fn();
+  const eventCallback = vi.fn();
+  client.onDelete(deleteCallback);
+  client.onEvent(eventCallback);
   const response = await client.delete(KEY);
 
   // THEN
   expect(response).toEqual(undefined);
+  expect(deleteCallback).toBeCalledWith(KEY);
+  expect(eventCallback).toBeCalledWith({
+    key: KEY,
+    type: BucketEventType.DELETE,
+  });
 });
 
 test("List objects from bucket", async () => {
@@ -140,7 +179,7 @@ class MockBlockBlobClient extends BlockBlobClient {
 }
 
 class MockContainerClient extends ContainerClient {
-  getBlobClient(key: string): BlobClient {
+  getBlobClient(key: string, value = ""): BlobClient {
     return new MockBlobClient(key);
   }
 
