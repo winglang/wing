@@ -1,6 +1,12 @@
 import { exec } from "child_process";
 import { env } from "process";
-import { ExtensionContext, ProgressLocation, window, workspace } from "vscode";
+import {
+  ExtensionContext,
+  languages,
+  ProgressLocation,
+  window,
+  workspace,
+} from "vscode";
 import {
   Executable,
   LanguageClient,
@@ -22,6 +28,12 @@ export function deactivate() {
 }
 
 export async function activate(context: ExtensionContext) {
+  // For some reason, the word pattern is not set correctly by the language config file
+  // https://github.com/microsoft/vscode/issues/42649
+  languages.setLanguageConfiguration("wing", {
+    wordPattern: /([a-zA-Z_$][A-Za-z_$0-9]*)/,
+  });
+
   await startLanguageServer(context);
 }
 

@@ -9,21 +9,13 @@ This version of it includes the following functional changes:
 
 Also, it includes some non-functional requirements: 
 - The Bucket should be replicated across different regions 
-  - +100 if we are able to do the same for azure as well
-- Least privileged permissions are granted:
-  - Give all permissions unless stated otherwise
-  - If the developer explicitly set permissions, give only the stated permissions 
-- The code should work on sim, aws, azure
+- Least privileged permissions syntax is defined in RFC
+- The code should work on sim, aws
 - VScode should help developers with code completion and hover
   - Windows support - vscode extention should work on windows
   - Hover: when you hover over a symbol you get its type information
-  - Code Completion: 
-    - VScode should complete keywords (for, bring, if...)  in the right context
-    - VScode should complete symbols in scope 
-    - VScode should complete fields and methods of a object 
-    - VScode should complete type annotation after using the :
 - Console should be able to show all resources, and interact with them
-
+- The wing command can be used in windows
 
 ```ts (wing)
 bring cloud;
@@ -66,20 +58,7 @@ resource TaskList {
     return this._bucket.get_json(id);
   }
 
-  /** 
-   * Sets effort estimation on a test
-   * @param id - the id of the task to return
-   * @param effort_estimation - the time (duration) estimated for this task
-   * @returns The ID of the existing task.
-   */
-  inflight add_estimation(id: str, effort_estimation: duration): str {
-    let j = Json.clone_mut(this.get_task(id));
-    j.set("effort_estimation", effort_estimation);
-    this._bucket.put_json(id, j);
-    return id;
-  }
-
-  /** 
+    /** 
    * Removes a task from the list
    * @param id - the id of the task to be removed
    */
@@ -113,14 +92,14 @@ resource TaskList {
     let output = MutArray<str>[];
     for id in task_ids {
       let j = this.get_task(id); 
-      let title = str.from_json(j.get("title"));
+      let title = j.get_str("title"); // notice this require us to create a small "get_str" function  implementation that should be removed by next sprint, maybe there is a different way around this. @hasanaburayyan and @staycoolcall911 ?
       if title.contains(term) { 
         print("found task ${id} with title \"${title}\" with term \"${term}\"");
         output.push(id);
       }
     }
     
-    print("found ${output.len} tasks which match term '${term}'");
+    print("found ${output.length} tasks which match term '${term}'");
     return output.copy();
   }
 }
@@ -133,9 +112,9 @@ let tasks = new TaskList();
 new cloud.Function(inflight (s: str): str => {
   tasks.add_task("clean the dishes");
   let result = tasks.find_tasks_with("clean the dishes");
-  assert(result.len == 1);
+  assert(result.length == 1);
   let t = tasks.get_task(result.at(0));
-  assert("clean the dishes" == str.from_json(t.title));
+  assert("clean the dishes" == t.get_str(title));
 }) as "test:add, get and find task";
 
 new cloud.Function(inflight (s: str): str => {
@@ -143,15 +122,6 @@ new cloud.Function(inflight (s: str): str => {
   tasks.add_task("buy dishwasher soap");
   tasks.remove_tasks(tasks.find_tasks_with("clean the").at(0));
   let result = tasks.find_tasks_with("clean the dish");
-  assert(result.len == 0);
+  assert(result.length == 0);
 }) as "test:add, remove and find task";
-
-new cloud.Function(inflight (s: str): str => {
-  let id = tasks.add_task("clean the dishes");
-  let j = Json.clone_mut(tasks.get_task(id));
-  assert(!j.get("effort_estimation")); //  make sure effort estimation default nil
-  tasks.add_estimation(id, 4h);
-  let j2 = tasks.get_task(id);
-  assert(4h == j2.get("effort_estimation"));
-}) as "test: effort estimation";
 ```
