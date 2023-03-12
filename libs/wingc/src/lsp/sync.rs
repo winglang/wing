@@ -1,14 +1,12 @@
 use lsp_types::{DidChangeTextDocumentParams, DidOpenTextDocumentParams, Url};
-use std::collections::HashSet;
+
 use std::path::Path;
 use std::{cell::RefCell, collections::HashMap};
 use tree_sitter::Tree;
 
-use crate::capture::CaptureVisitor;
 use crate::lsp::notifications::send_diagnostics;
 use crate::parser::Parser;
 use crate::type_check;
-use crate::visit::Visit;
 use crate::{ast::Scope, diagnostic::Diagnostics, type_check::Types, wasm_util::ptr_to_string};
 
 /// The result of running wingc on a file
@@ -43,13 +41,12 @@ pub unsafe extern "C" fn wingc_on_did_open_text_document(ptr: u32, len: u32) {
 }
 pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
 	FILES.with(|files| {
-		let mut files = files.borrow_mut();
 		let uri = params.text_document.uri;
 		let uri_path = uri.to_file_path().unwrap();
 		let path = uri_path.to_str().unwrap();
 		let result = partial_compile(path, params.text_document.text.as_bytes());
 		send_diagnostics(&uri, &result.diagnostics);
-		files.insert(uri, result);
+		files.borrow_mut().insert(uri, result);
 	});
 }
 
@@ -64,14 +61,14 @@ pub unsafe extern "C" fn wingc_on_did_change_text_document(ptr: u32, len: u32) {
 }
 pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
 	FILES.with(|files| {
-		let mut files = files.borrow_mut();
 		let uri = params.text_document.uri;
 		let uri_path = uri.to_file_path().unwrap();
 		let path = uri_path.to_str().unwrap();
 
 		let result = partial_compile(path, params.content_changes[0].text.as_bytes());
+
 		send_diagnostics(&uri, &result.diagnostics);
-		files.insert(uri, result);
+		files.borrow_mut().insert(uri, result);
 	});
 }
 
@@ -90,28 +87,16 @@ fn partial_compile(source_file: &str, text: &[u8]) -> FileData {
 		}
 	};
 
-	let wing_parser = Parser {
-		source: &text[..],
-		source_name: source_file.to_string(),
-		error_nodes: RefCell::new(HashSet::new()),
-		diagnostics: RefCell::new(Diagnostics::new()),
-	};
+	let wing_parser = Parser::new(&text[..], source_file.to_string());
 
 	let mut scope = wing_parser.wingit(&tree.root_node());
 
 	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file));
 	let parse_diag = wing_parser.diagnostics.into_inner();
 
-	// Analyze inflight captures
-	let mut capture_visitor = CaptureVisitor::new();
-	capture_visitor.visit_scope(&scope);
-
 	let mut diagnostics = Diagnostics::new();
-	for diags in [parse_diag, type_diag, capture_visitor.diagnostics].iter() {
-		for diag in diags.iter() {
-			diagnostics.push(diag.clone());
-		}
-	}
+	diagnostics.extend(parse_diag.iter().cloned());
+	diagnostics.extend(type_diag.iter().cloned());
 
 	return FileData {
 		contents: String::from_utf8(text.to_vec()).unwrap(),
