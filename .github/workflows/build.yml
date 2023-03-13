@@ -184,6 +184,8 @@ jobs:
         exclude:
           - runner: macos
             full_run: false
+          - runner: windows
+            full_run: false
           - runner: ubuntu
             node: 19
             full_run: false
@@ -215,6 +217,16 @@ jobs:
       - name: Run E2E Tests
         working-directory: tools/hangar
         run: npm run test -- --shard=${{ matrix.shard }}
+
+  quality-gate:
+    name: Quality Gate
+    runs-on: ubuntu-latest
+    needs: 
+     - build
+     - e2e
+    steps:
+      - name: All good
+        run: echo "Builds and tests passed! 🎉🎉🎉"
 
   publish:
     name: Publish
