@@ -2097,6 +2097,9 @@ exports.make_id = function() {
 };
 ```
 
+Given a method of name X, the compiler will map the method to the JavaScript export with the 
+matching name (without any case conversion).
+
 Initially, we only support specifying `extern` for static methods (either inflight or preflight),
 but we will consider adding support for instance methods in the future. In those cases the first
 argument to the method will implicitly be `this`.
