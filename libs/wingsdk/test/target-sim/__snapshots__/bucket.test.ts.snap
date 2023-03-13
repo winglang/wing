@@ -366,6 +366,19 @@ exports[`put json objects from bucket 2`] = `
 }
 `;
 
+exports[`put multiple json objects and list all from bucket 1`] = `
+[
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Bucket created.",
+  "Put Json (key=greeting1.json).",
+  "Put Json (key=greeting2.json).",
+  "Put Json (key=greeting3.json).",
+  "List (prefix=null).",
+  "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
 exports[`put multiple objects and list all from bucket 1`] = `
 [
   "wingsdk.cloud.Logger created.",
