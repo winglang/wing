@@ -132,7 +132,7 @@ new cloud.Function(inflight (s: str): str => {
   let result = tasks.find_tasks_with("clean the dishes");
   assert(result.length == 1);
   let t = tasks.get_task(result.at(0));
-  assert("clean the dishes" == str.from_json(t.title));
+  assert("clean the dishes" == str.from_json(t.get("title")));
 }) as "test:add, get and find task";
 
 new cloud.Function(inflight (s: str): str => {
