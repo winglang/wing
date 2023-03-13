@@ -63,6 +63,17 @@ constructor() {
   while (true) {
     break;
   }
+  let v = 0;
+  let i = 0;
+  while ((i < 10)) {
+    i = (i + 1);
+    if (((i % 2) === 0)) {
+      continue;
+    }
+    v = (v + 1);
+  }
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i === 10)'\`)})((i === 10))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(v === 5)'\`)})((v === 5))};
 }
 }
 new MyApp().synth();"
