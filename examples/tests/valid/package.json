@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@cdktf/provider-aws": "12.0.5",
+    "jsii-code-samples": "1.7.0",
+    "projen": "0.67.65"
+  },
+  "volta": {
+    "node": "18.12.1",
+    "npm": "8.19.3"
+  }
+}

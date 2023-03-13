@@ -34,5 +34,5 @@ See [issues labeled with `vscode-extension` or `language-server`](https://github
 
 ## Contributing
 
-See the FAQ in [Contributor's Handbook](https://docs.winglang.io/contributors/handbook#-how-do-i-build-the-vscode-extension) for how to contribute!
+See the FAQ in [Contributor's Handbook](https://docs.winglang.io/contributors/development#-how-do-i-build-the-vscode-extension) for how to contribute!
 

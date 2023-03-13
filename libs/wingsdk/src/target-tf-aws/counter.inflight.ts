@@ -10,6 +10,7 @@ const AMOUNT_TOKEN = "amount";
 const INITIAL_VALUE_TOKEN = "initial";
 const COUNTER_ID = "counter";
 const VALUE_ATTRIBUTE = "counter_value";
+const RESET_VALUE = "reset_value";
 
 export class CounterClient extends CounterClientBase {
   constructor(
@@ -55,5 +56,21 @@ export class CounterClient extends CounterClientBase {
     }
 
     return parseInt(currentValue);
+  }
+
+  public async reset(value?: number): Promise<void> {
+    const command = new UpdateItemCommand({
+      TableName: this.tableName,
+      Key: { [HASH_KEY]: { S: COUNTER_ID } },
+      UpdateExpression: `SET ${VALUE_ATTRIBUTE} = :${RESET_VALUE}`,
+      ExpressionAttributeValues: {
+        [`:${RESET_VALUE}`]: { N: `${value}` },
+      },
+      ReturnValues: "UPDATED_NEW",
+    });
+
+    await this.client.send(command);
+
+    return;
   }
 }

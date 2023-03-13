@@ -1,0 +1,632 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`api with CONNECT route 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/": {
+      "connect": {
+        "operationId": "connect",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with DELETE route 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/": {
+      "delete": {
+        "operationId": "delete",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with GET route at root 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with GET routes with common prefix 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/hello/bat": {
+      "get": {
+        "operationId": "get-hello/bat",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequest0a615500_C2702661.arn}/invocations",
+        },
+      },
+    },
+    "/hello/foo": {
+      "get": {
+        "operationId": "get-hello/foo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with GET routes with different prefix 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/foo/bar": {
+      "get": {
+        "operationId": "get-foo/bar",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequest0a615500_C2702661.arn}/invocations",
+        },
+      },
+    },
+    "/hello/foo": {
+      "get": {
+        "operationId": "get-hello/foo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with HEAD route 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/": {
+      "head": {
+        "operationId": "head",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with OPTIONS route 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/": {
+      "options": {
+        "operationId": "options",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with PATCH route 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/": {
+      "patch": {
+        "operationId": "patch",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with POST route 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/": {
+      "post": {
+        "operationId": "post",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with PUT route 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/": {
+      "put": {
+        "operationId": "put",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with multiple GET route and one lambda 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/hello/bat": {
+      "get": {
+        "operationId": "get-hello/bat",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+    "/hello/foo": {
+      "get": {
+        "operationId": "get-hello/foo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with multiple methods and multiple lambda 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/hello/bat": {
+      "post": {
+        "operationId": "post-hello/bat",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequest0a615500_C2702661.arn}/invocations",
+        },
+      },
+    },
+    "/hello/foo": {
+      "get": {
+        "operationId": "get-hello/foo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with multiple methods and one lambda 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/hello/bat": {
+      "post": {
+        "operationId": "post-hello/bat",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+    "/hello/foo": {
+      "get": {
+        "operationId": "get-hello/foo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with multiple methods on same route 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+      "put": {
+        "operationId": "put",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`api with path parameter 1`] = `
+{
+  "openapi": "3.0.3",
+  "paths": {
+    "/hello/{world}": {
+      "get": {
+        "operationId": "get-hello/{world}",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "world",
+            "required": true,
+            "schema": {
+              "type": "string",
+            },
+          },
+        ],
+        "responses": {
+          "200": {
+            "content": {},
+            "description": "200 response",
+          },
+        },
+        "x-amazon-apigateway-integration": {
+          "contentHandling": "CONVERT_TO_TEXT",
+          "httpMethod": "POST",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200",
+            },
+          },
+          "type": "aws_proxy",
+          "uri": "arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations",
+        },
+      },
+    },
+  },
+}
+`;

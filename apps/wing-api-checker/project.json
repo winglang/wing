@@ -6,7 +6,7 @@
       "executor": "nx:run-script",
       "options": {
         "cwd": "apps/wing-api-checker",
-        "script": "build"
+        "script": "compile"
       }
     }
   }

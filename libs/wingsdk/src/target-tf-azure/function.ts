@@ -6,7 +6,7 @@ import { RoleAssignment } from "@cdktf/provider-azurerm/lib/role-assignment";
 import { ServicePlan } from "@cdktf/provider-azurerm/lib/service-plan";
 import { StorageAccount } from "@cdktf/provider-azurerm/lib/storage-account";
 import { StorageBlob } from "@cdktf/provider-azurerm/lib/storage-blob";
-import { AssetType, TerraformAsset } from "cdktf";
+import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Bucket, StorageAccountPermissions } from "./bucket";
@@ -45,7 +45,7 @@ export interface ScopedRoleAssignment {
  *
  * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
  */
-export class Function extends cloud.FunctionBase {
+export class Function extends cloud.Function {
   private readonly function: LinuxFunctionApp;
   private readonly servicePlan: ServicePlan;
   private readonly storageAccount: StorageAccount;
@@ -56,11 +56,11 @@ export class Function extends cloud.FunctionBase {
     scope: Construct,
     id: string,
     inflight: cloud.IFunctionHandler,
-    props: cloud.FunctionProps
+    props: cloud.FunctionProps = {}
   ) {
     super(scope, id, inflight, props);
 
-    const app = App.of(this);
+    const app = App.of(this) as App;
     this.storageAccount = app.storageAccount;
     this.resourceGroup = app.resourceGroup;
     this.servicePlan = app.servicePlan;
@@ -82,6 +82,11 @@ export class Function extends cloud.FunctionBase {
     // must be in its own folder containing an index.js and function.json files
     fs.mkdirSync(`${codeDir}/${functionName}`);
     fs.renameSync(`${codeDir}/index.js`, `${outDir}/index.js`);
+
+    // throw an error if props.memory is defined for an Azure function
+    if (props.memory) {
+      throw new Error("memory is an invalid parameter on Azure");
+    }
 
     // As per documentation "a function must have exactly one trigger" so for now
     // by default a function will support http get requests
@@ -152,11 +157,13 @@ export class Function extends cloud.FunctionBase {
         },
       },
       httpsOnly: true,
-      appSettings: {
-        ...this.env,
-        WEBSITE_RUN_FROM_PACKAGE: `https://${this.storageAccount.name}.blob.core.windows.net/${functionCodeBucket.storageContainer.name}/${functionCodeBlob.name}`,
-        FUNCTIONS_WORKER_RUNTIME: functionRuntime,
-      },
+      appSettings: Lazy.anyValue({
+        produce: () => ({
+          ...this.env,
+          WEBSITE_RUN_FROM_PACKAGE: `https://${this.storageAccount.name}.blob.core.windows.net/${functionCodeBucket.storageContainer.name}/${functionCodeBlob.name}`,
+          FUNCTIONS_WORKER_RUNTIME: functionRuntime,
+        }),
+      }) as any,
     });
 
     // Add permissions to read function code

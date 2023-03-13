@@ -7,1006 +7,7 @@ This is a test project to make sure the \`jsii-docgen\` cli property renders API
 for construct libraries.
 # API Reference <a name=\\"API Reference\\" id=\\"api-reference\\"></a>
 
-## Constructs <a name=\\"Constructs\\" id=\\"Constructs\\"></a>
-
-### GreeterBucket <a name=\\"GreeterBucket\\" id=\\"GreeterBucket\\"></a>
-
-#### Initializers <a name=\\"Initializers\\" id=\\"GreeterBucket.Initializer\\"></a>
-
-\`\`\`wing
-bring { GreeterBucket } from \\"construct-library\\"
-
-new GreeterBucket(props?: BucketProps)
-\`\`\`
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.Initializer.parameter.props?lang=python\\">props</a></code> | <code><a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/BucketProps?lang=python\\">BucketProps</a></code> | *No description.* |
-
----
-
-##### \`props\`<sup>Optional</sup> <a name=\\"props\\" id=\\"GreeterBucket.Initializer.parameter.props\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/BucketProps?lang=python\\">BucketProps</a>
-
----
-
-#### Methods <a name=\\"Methods\\" id=\\"Methods\\"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.toString?lang=python\\">to_string</a></code> | Returns a string representation of this construct. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.applyRemovalPolicy?lang=python\\">apply_removal_policy</a></code> | Apply the given removal policy to this resource. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.addEventNotification?lang=python\\">add_event_notification</a></code> | Adds a bucket notification event destination. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.addObjectCreatedNotification?lang=python\\">add_object_created_notification</a></code> | Subscribes a destination to receive notifications when an object is created in the bucket. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.addObjectRemovedNotification?lang=python\\">add_object_removed_notification</a></code> | Subscribes a destination to receive notifications when an object is removed from the bucket. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.addToResourcePolicy?lang=python\\">add_to_resource_policy</a></code> | Adds a statement to the resource policy for a principal (i.e. account/role/service) to perform actions on this bucket and/or its contents. Use \`bucketArn\` and \`arnForObjects(keys)\` to obtain ARNs for this bucket or objects. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.arnForObjects?lang=python\\">arn_for_objects</a></code> | Returns an ARN that represents all objects within the bucket that match the key pattern specified. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.grantDelete?lang=python\\">grant_delete</a></code> | Grants s3:DeleteObject* permission to an IAM principal for objects in this bucket. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.grantPublicAccess?lang=python\\">grant_public_access</a></code> | Allows unrestricted access to objects from this bucket. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.grantPut?lang=python\\">grant_put</a></code> | Grants s3:PutObject* and s3:Abort* permissions for this bucket to an IAM principal. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.grantPutAcl?lang=python\\">grant_put_acl</a></code> | Grant the given IAM identity permissions to modify the ACLs of objects in the given Bucket. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.grantRead?lang=python\\">grant_read</a></code> | Grant read permissions for this bucket and it's contents to an IAM principal (Role/Group/User). |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.grantReadWrite?lang=python\\">grant_read_write</a></code> | Grants read/write permissions for this bucket and it's contents to an IAM principal (Role/Group/User). |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.grantWrite?lang=python\\">grant_write</a></code> | Grant write permissions to this bucket to an IAM principal. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.onCloudTrailEvent?lang=python\\">on_cloud_trail_event</a></code> | Define a CloudWatch event that triggers when something happens to this repository. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.onCloudTrailPutObject?lang=python\\">on_cloud_trail_put_object</a></code> | Defines an AWS CloudWatch event that triggers when an object is uploaded to the specified paths (keys) in this bucket using the PutObject API call. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.onCloudTrailWriteObject?lang=python\\">on_cloud_trail_write_object</a></code> | Defines an AWS CloudWatch event that triggers when an object at the specified paths (keys) in this bucket are written to. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.s3UrlForObject?lang=python\\">s3_url_for_object</a></code> | The S3 URL of an S3 object. For example:. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.transferAccelerationUrlForObject?lang=python\\">transfer_acceleration_url_for_object</a></code> | The https Transfer Acceleration URL of an S3 object. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.urlForObject?lang=python\\">url_for_object</a></code> | The https URL of an S3 object. Specify \`regional: false\` at the options for non-regional URLs. For example:. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.virtualHostedUrlForObject?lang=python\\">virtual_hosted_url_for_object</a></code> | The virtual hosted-style URL of an S3 object. Specify \`regional: false\` at the options for non-regional URL. For example:. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.addCorsRule?lang=python\\">add_cors_rule</a></code> | Adds a cross-origin access configuration for objects in an Amazon S3 bucket. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.addInventory?lang=python\\">add_inventory</a></code> | Add an inventory configuration. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.addLifecycleRule?lang=python\\">add_lifecycle_rule</a></code> | Add a lifecycle rule to the bucket. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.addMetric?lang=python\\">add_metric</a></code> | Adds a metrics configuration for the CloudWatch request metrics from the bucket. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.greet?lang=python\\">greet</a></code> | *No description.* |
-
----
-
-##### \`to_string\` <a name=\\"to_string\\" id=\\"GreeterBucket.toString\\"></a>
-
-\`\`\`wing
-to_string(): str
-\`\`\`
-
-Returns a string representation of this construct.
-
-##### \`apply_removal_policy\` <a name=\\"apply_removal_policy\\" id=\\"GreeterBucket.applyRemovalPolicy\\"></a>
-
-\`\`\`wing
-apply_removal_policy(policy: RemovalPolicy): void
-\`\`\`
-
-Apply the given removal policy to this resource.
-
-The Removal Policy controls what happens to this resource when it stops
-being managed by CloudFormation, either because you've removed it from the
-CDK application or because you've made a change that requires the resource
-to be replaced.
-
-The resource can be deleted (\`RemovalPolicy.DESTROY\`), or left in your AWS
-account for data recovery and cleanup later (\`RemovalPolicy.RETAIN\`).
-
-###### \`policy\`<sup>Required</sup> <a name=\\"policy\\" id=\\"GreeterBucket.applyRemovalPolicy.parameter.policy\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/RemovalPolicy?lang=python\\">RemovalPolicy</a>
-
----
-
-##### \`add_event_notification\` <a name=\\"add_event_notification\\" id=\\"GreeterBucket.addEventNotification\\"></a>
-
-\`\`\`wing
-add_event_notification(event: EventType, dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
-\`\`\`
-
-Adds a bucket notification event destination.
-
-> [https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html](https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html)
-
-*Example*
-
-\`\`\`wing
-   declare const myLambda: lambda.Function;
-   const bucket = new s3.Bucket(this, 'MyBucket');
-   bucket.addEventNotification(s3.EventType.OBJECT_CREATED, new s3n.LambdaDestination(myLambda), {prefix: 'home/myusername/*'});
-\`\`\`
-
-
-###### \`event\`<sup>Required</sup> <a name=\\"event\\" id=\\"GreeterBucket.addEventNotification.parameter.event\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/EventType?lang=python\\">EventType</a>
-
-The event to trigger the notification.
-
----
-
-###### \`dest\`<sup>Required</sup> <a name=\\"dest\\" id=\\"GreeterBucket.addEventNotification.parameter.dest\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/IBucketNotificationDestination?lang=python\\">IBucketNotificationDestination</a>
-
-The notification destination (Lambda, SNS Topic or SQS Queue).
-
----
-
-###### \`filters\`<sup>Required</sup> <a name=\\"filters\\" id=\\"GreeterBucket.addEventNotification.parameter.filters\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/NotificationKeyFilter?lang=python\\">NotificationKeyFilter</a>
-
-S3 object key filter rules to determine which objects trigger this event.
-
-Each filter must include a \`prefix\` and/or \`suffix\`
-that will be matched against the s3 object key. Refer to the S3 Developer Guide
-for details about allowed filter rules.
-
----
-
-##### \`add_object_created_notification\` <a name=\\"add_object_created_notification\\" id=\\"GreeterBucket.addObjectCreatedNotification\\"></a>
-
-\`\`\`wing
-add_object_created_notification(dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
-\`\`\`
-
-Subscribes a destination to receive notifications when an object is created in the bucket.
-
-This is identical to calling
-\`onEvent(EventType.OBJECT_CREATED)\`.
-
-###### \`dest\`<sup>Required</sup> <a name=\\"dest\\" id=\\"GreeterBucket.addObjectCreatedNotification.parameter.dest\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/IBucketNotificationDestination?lang=python\\">IBucketNotificationDestination</a>
-
-The notification destination (see onEvent).
-
----
-
-###### \`filters\`<sup>Required</sup> <a name=\\"filters\\" id=\\"GreeterBucket.addObjectCreatedNotification.parameter.filters\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/NotificationKeyFilter?lang=python\\">NotificationKeyFilter</a>
-
-Filters (see onEvent).
-
----
-
-##### \`add_object_removed_notification\` <a name=\\"add_object_removed_notification\\" id=\\"GreeterBucket.addObjectRemovedNotification\\"></a>
-
-\`\`\`wing
-add_object_removed_notification(dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
-\`\`\`
-
-Subscribes a destination to receive notifications when an object is removed from the bucket.
-
-This is identical to calling
-\`onEvent(EventType.OBJECT_REMOVED)\`.
-
-###### \`dest\`<sup>Required</sup> <a name=\\"dest\\" id=\\"GreeterBucket.addObjectRemovedNotification.parameter.dest\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/IBucketNotificationDestination?lang=python\\">IBucketNotificationDestination</a>
-
-The notification destination (see onEvent).
-
----
-
-###### \`filters\`<sup>Required</sup> <a name=\\"filters\\" id=\\"GreeterBucket.addObjectRemovedNotification.parameter.filters\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/NotificationKeyFilter?lang=python\\">NotificationKeyFilter</a>
-
-Filters (see onEvent).
-
----
-
-##### \`add_to_resource_policy\` <a name=\\"add_to_resource_policy\\" id=\\"GreeterBucket.addToResourcePolicy\\"></a>
-
-\`\`\`wing
-add_to_resource_policy(permission: PolicyStatement): AddToResourcePolicyResult
-\`\`\`
-
-Adds a statement to the resource policy for a principal (i.e. account/role/service) to perform actions on this bucket and/or its contents. Use \`bucketArn\` and \`arnForObjects(keys)\` to obtain ARNs for this bucket or objects.
-
-Note that the policy statement may or may not be added to the policy.
-For example, when an \`IBucket\` is created from an existing bucket,
-it's not possible to tell whether the bucket already has a policy
-attached, let alone to re-use that policy to add more statements to it.
-So it's safest to do nothing in these cases.
-
-###### \`permission\`<sup>Required</sup> <a name=\\"permission\\" id=\\"GreeterBucket.addToResourcePolicy.parameter.permission\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-iam/v/99.99.99/api/PolicyStatement?lang=python\\">PolicyStatement</a>
-
-the policy statement to be added to the bucket's policy.
-
----
-
-##### \`arn_for_objects\` <a name=\\"arn_for_objects\\" id=\\"GreeterBucket.arnForObjects\\"></a>
-
-\`\`\`wing
-arn_for_objects(key_pattern: str): str
-\`\`\`
-
-Returns an ARN that represents all objects within the bucket that match the key pattern specified.
-
-To represent all keys, specify \`\`\\"*\\"\`\`.
-
-If you need to specify a keyPattern with multiple components, concatenate them into a single string, e.g.:
-
-   arnForObjects(\`home/\${team}/\${user}/*\`)
-
-###### \`key_pattern\`<sup>Required</sup> <a name=\\"key_pattern\\" id=\\"GreeterBucket.arnForObjects.parameter.keyPattern\\"></a>
-
-- *Type:* str
-
----
-
-##### \`grant_delete\` <a name=\\"grant_delete\\" id=\\"GreeterBucket.grantDelete\\"></a>
-
-\`\`\`wing
-grant_delete(identity: IGrantable, objects_key_pattern?: any): Grant
-\`\`\`
-
-Grants s3:DeleteObject* permission to an IAM principal for objects in this bucket.
-
-###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"GreeterBucket.grantDelete.parameter.identity\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-iam/v/99.99.99/api/IGrantable?lang=python\\">IGrantable</a>
-
-The principal.
-
----
-
-###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"GreeterBucket.grantDelete.parameter.objectsKeyPattern\\"></a>
-
-- *Type:* any
-
-Restrict the permission to a certain key pattern (default '*').
-
----
-
-##### \`grant_public_access\` <a name=\\"grant_public_access\\" id=\\"GreeterBucket.grantPublicAccess\\"></a>
-
-\`\`\`wing
-grant_public_access(allowed_actions: str, key_prefix?: str): Grant
-\`\`\`
-
-Allows unrestricted access to objects from this bucket.
-
-IMPORTANT: This permission allows anyone to perform actions on S3 objects
-in this bucket, which is useful for when you configure your bucket as a
-website and want everyone to be able to read objects in the bucket without
-needing to authenticate.
-
-Without arguments, this method will grant read (\\"s3:GetObject\\") access to
-all objects (\\"*\\") in the bucket.
-
-The method returns the \`iam.Grant\` object, which can then be modified
-as needed. For example, you can add a condition that will restrict access only
-to an IPv4 range like this:
-
-     const grant = bucket.grantPublicAccess();
-     grant.resourceStatement!.addCondition(‘IpAddress’, { “aws:SourceIp”: “54.240.143.0/24” });
-
-Note that if this \`IBucket\` refers to an existing bucket, possibly not
-managed by CloudFormation, this method will have no effect, since it's
-impossible to modify the policy of an existing bucket.
-
-###### \`allowed_actions\`<sup>Required</sup> <a name=\\"allowed_actions\\" id=\\"GreeterBucket.grantPublicAccess.parameter.allowedActions\\"></a>
-
-- *Type:* str
-
-the set of S3 actions to allow.
-
-Default is \\"s3:GetObject\\".
-
----
-
-###### \`key_prefix\`<sup>Optional</sup> <a name=\\"key_prefix\\" id=\\"GreeterBucket.grantPublicAccess.parameter.keyPrefix\\"></a>
-
-- *Type:* str
-
-the prefix of S3 object keys (e.g. \`home/*\`). Default is \\"*\\".
-
----
-
-##### \`grant_put\` <a name=\\"grant_put\\" id=\\"GreeterBucket.grantPut\\"></a>
-
-\`\`\`wing
-grant_put(identity: IGrantable, objects_key_pattern?: any): Grant
-\`\`\`
-
-Grants s3:PutObject* and s3:Abort* permissions for this bucket to an IAM principal.
-
-If encryption is used, permission to use the key to encrypt the contents
-of written files will also be granted to the same principal.
-
-###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"GreeterBucket.grantPut.parameter.identity\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-iam/v/99.99.99/api/IGrantable?lang=python\\">IGrantable</a>
-
-The principal.
-
----
-
-###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"GreeterBucket.grantPut.parameter.objectsKeyPattern\\"></a>
-
-- *Type:* any
-
-Restrict the permission to a certain key pattern (default '*').
-
----
-
-##### \`grant_put_acl\` <a name=\\"grant_put_acl\\" id=\\"GreeterBucket.grantPutAcl\\"></a>
-
-\`\`\`wing
-grant_put_acl(identity: IGrantable, objects_key_pattern?: str): Grant
-\`\`\`
-
-Grant the given IAM identity permissions to modify the ACLs of objects in the given Bucket.
-
-If your application has the '@aws-cdk/aws-s3:grantWriteWithoutAcl' feature flag set,
-calling {@link grantWrite} or {@link grantReadWrite} no longer grants permissions to modify the ACLs of the objects;
-in this case, if you need to modify object ACLs, call this method explicitly.
-
-###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"GreeterBucket.grantPutAcl.parameter.identity\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-iam/v/99.99.99/api/IGrantable?lang=python\\">IGrantable</a>
-
----
-
-###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"GreeterBucket.grantPutAcl.parameter.objectsKeyPattern\\"></a>
-
-- *Type:* str
-
----
-
-##### \`grant_read\` <a name=\\"grant_read\\" id=\\"GreeterBucket.grantRead\\"></a>
-
-\`\`\`wing
-grant_read(identity: IGrantable, objects_key_pattern?: any): Grant
-\`\`\`
-
-Grant read permissions for this bucket and it's contents to an IAM principal (Role/Group/User).
-
-If encryption is used, permission to use the key to decrypt the contents
-of the bucket will also be granted to the same principal.
-
-###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"GreeterBucket.grantRead.parameter.identity\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-iam/v/99.99.99/api/IGrantable?lang=python\\">IGrantable</a>
-
-The principal.
-
----
-
-###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"GreeterBucket.grantRead.parameter.objectsKeyPattern\\"></a>
-
-- *Type:* any
-
-Restrict the permission to a certain key pattern (default '*').
-
----
-
-##### \`grant_read_write\` <a name=\\"grant_read_write\\" id=\\"GreeterBucket.grantReadWrite\\"></a>
-
-\`\`\`wing
-grant_read_write(identity: IGrantable, objects_key_pattern?: any): Grant
-\`\`\`
-
-Grants read/write permissions for this bucket and it's contents to an IAM principal (Role/Group/User).
-
-If an encryption key is used, permission to use the key for
-encrypt/decrypt will also be granted.
-
-Before CDK version 1.85.0, this method granted the \`s3:PutObject*\` permission that included \`s3:PutObjectAcl\`,
-which could be used to grant read/write object access to IAM principals in other accounts.
-If you want to get rid of that behavior, update your CDK version to 1.85.0 or later,
-and make sure the \`@aws-cdk/aws-s3:grantWriteWithoutAcl\` feature flag is set to \`true\`
-in the \`context\` key of your cdk.json file.
-If you've already updated, but still need the principal to have permissions to modify the ACLs,
-use the {@link grantPutAcl} method.
-
-###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"GreeterBucket.grantReadWrite.parameter.identity\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-iam/v/99.99.99/api/IGrantable?lang=python\\">IGrantable</a>
-
----
-
-###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"GreeterBucket.grantReadWrite.parameter.objectsKeyPattern\\"></a>
-
-- *Type:* any
-
----
-
-##### \`grant_write\` <a name=\\"grant_write\\" id=\\"GreeterBucket.grantWrite\\"></a>
-
-\`\`\`wing
-grant_write(identity: IGrantable, objects_key_pattern?: any): Grant
-\`\`\`
-
-Grant write permissions to this bucket to an IAM principal.
-
-If encryption is used, permission to use the key to encrypt the contents
-of written files will also be granted to the same principal.
-
-Before CDK version 1.85.0, this method granted the \`s3:PutObject*\` permission that included \`s3:PutObjectAcl\`,
-which could be used to grant read/write object access to IAM principals in other accounts.
-If you want to get rid of that behavior, update your CDK version to 1.85.0 or later,
-and make sure the \`@aws-cdk/aws-s3:grantWriteWithoutAcl\` feature flag is set to \`true\`
-in the \`context\` key of your cdk.json file.
-If you've already updated, but still need the principal to have permissions to modify the ACLs,
-use the {@link grantPutAcl} method.
-
-###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"GreeterBucket.grantWrite.parameter.identity\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-iam/v/99.99.99/api/IGrantable?lang=python\\">IGrantable</a>
-
----
-
-###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"GreeterBucket.grantWrite.parameter.objectsKeyPattern\\"></a>
-
-- *Type:* any
-
----
-
-##### \`on_cloud_trail_event\` <a name=\\"on_cloud_trail_event\\" id=\\"GreeterBucket.onCloudTrailEvent\\"></a>
-
-\`\`\`wing
-on_cloud_trail_event(options?: OnCloudTrailBucketEventOptions): Rule
-\`\`\`
-
-Define a CloudWatch event that triggers when something happens to this repository.
-
-Requires that there exists at least one CloudTrail Trail in your account
-that captures the event. This method will not create the Trail.
-
-###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"GreeterBucket.onCloudTrailEvent.parameter.options\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/OnCloudTrailBucketEventOptions?lang=python\\">OnCloudTrailBucketEventOptions</a>
-
-Options for adding the rule.
-
----
-
-##### \`on_cloud_trail_put_object\` <a name=\\"on_cloud_trail_put_object\\" id=\\"GreeterBucket.onCloudTrailPutObject\\"></a>
-
-\`\`\`wing
-on_cloud_trail_put_object(options?: OnCloudTrailBucketEventOptions): Rule
-\`\`\`
-
-Defines an AWS CloudWatch event that triggers when an object is uploaded to the specified paths (keys) in this bucket using the PutObject API call.
-
-Note that some tools like \`aws s3 cp\` will automatically use either
-PutObject or the multipart upload API depending on the file size,
-so using \`onCloudTrailWriteObject\` may be preferable.
-
-Requires that there exists at least one CloudTrail Trail in your account
-that captures the event. This method will not create the Trail.
-
-###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"GreeterBucket.onCloudTrailPutObject.parameter.options\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/OnCloudTrailBucketEventOptions?lang=python\\">OnCloudTrailBucketEventOptions</a>
-
-Options for adding the rule.
-
----
-
-##### \`on_cloud_trail_write_object\` <a name=\\"on_cloud_trail_write_object\\" id=\\"GreeterBucket.onCloudTrailWriteObject\\"></a>
-
-\`\`\`wing
-on_cloud_trail_write_object(options?: OnCloudTrailBucketEventOptions): Rule
-\`\`\`
-
-Defines an AWS CloudWatch event that triggers when an object at the specified paths (keys) in this bucket are written to.
-
-This includes
-the events PutObject, CopyObject, and CompleteMultipartUpload.
-
-Note that some tools like \`aws s3 cp\` will automatically use either
-PutObject or the multipart upload API depending on the file size,
-so using this method may be preferable to \`onCloudTrailPutObject\`.
-
-Requires that there exists at least one CloudTrail Trail in your account
-that captures the event. This method will not create the Trail.
-
-###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"GreeterBucket.onCloudTrailWriteObject.parameter.options\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/OnCloudTrailBucketEventOptions?lang=python\\">OnCloudTrailBucketEventOptions</a>
-
-Options for adding the rule.
-
----
-
-##### \`s3_url_for_object\` <a name=\\"s3_url_for_object\\" id=\\"GreeterBucket.s3UrlForObject\\"></a>
-
-\`\`\`wing
-s3_url_for_object(key?: str): str
-\`\`\`
-
-The S3 URL of an S3 object. For example:.
-
-\`s3://onlybucket\`
-- \`s3://bucket/key\`
-
-###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"GreeterBucket.s3UrlForObject.parameter.key\\"></a>
-
-- *Type:* str
-
-The S3 key of the object.
-
-If not specified, the S3 URL of the
-bucket is returned.
-
----
-
-##### \`transfer_acceleration_url_for_object\` <a name=\\"transfer_acceleration_url_for_object\\" id=\\"GreeterBucket.transferAccelerationUrlForObject\\"></a>
-
-\`\`\`wing
-transfer_acceleration_url_for_object(key?: str, options?: TransferAccelerationUrlOptions): str
-\`\`\`
-
-The https Transfer Acceleration URL of an S3 object.
-
-Specify \`dualStack: true\` at the options
-for dual-stack endpoint (connect to the bucket over IPv6). For example:
-
-- \`https://bucket.s3-accelerate.amazonaws.com\`
-- \`https://bucket.s3-accelerate.amazonaws.com/key\`
-
-###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"GreeterBucket.transferAccelerationUrlForObject.parameter.key\\"></a>
-
-- *Type:* str
-
-The S3 key of the object.
-
-If not specified, the URL of the
-bucket is returned.
-
----
-
-###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"GreeterBucket.transferAccelerationUrlForObject.parameter.options\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/TransferAccelerationUrlOptions?lang=python\\">TransferAccelerationUrlOptions</a>
-
-Options for generating URL.
-
----
-
-##### \`url_for_object\` <a name=\\"url_for_object\\" id=\\"GreeterBucket.urlForObject\\"></a>
-
-\`\`\`wing
-url_for_object(key?: str): str
-\`\`\`
-
-The https URL of an S3 object. Specify \`regional: false\` at the options for non-regional URLs. For example:.
-
-\`https://s3.us-west-1.amazonaws.com/onlybucket\`
-- \`https://s3.us-west-1.amazonaws.com/bucket/key\`
-- \`https://s3.cn-north-1.amazonaws.com.cn/china-bucket/mykey\`
-
-###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"GreeterBucket.urlForObject.parameter.key\\"></a>
-
-- *Type:* str
-
-The S3 key of the object.
-
-If not specified, the URL of the
-bucket is returned.
-
----
-
-##### \`virtual_hosted_url_for_object\` <a name=\\"virtual_hosted_url_for_object\\" id=\\"GreeterBucket.virtualHostedUrlForObject\\"></a>
-
-\`\`\`wing
-virtual_hosted_url_for_object(key?: str, options?: VirtualHostedStyleUrlOptions): str
-\`\`\`
-
-The virtual hosted-style URL of an S3 object. Specify \`regional: false\` at the options for non-regional URL. For example:.
-
-\`https://only-bucket.s3.us-west-1.amazonaws.com\`
-- \`https://bucket.s3.us-west-1.amazonaws.com/key\`
-- \`https://bucket.s3.amazonaws.com/key\`
-- \`https://china-bucket.s3.cn-north-1.amazonaws.com.cn/mykey\`
-
-###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"GreeterBucket.virtualHostedUrlForObject.parameter.key\\"></a>
-
-- *Type:* str
-
-The S3 key of the object.
-
-If not specified, the URL of the
-bucket is returned.
-
----
-
-###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"GreeterBucket.virtualHostedUrlForObject.parameter.options\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/VirtualHostedStyleUrlOptions?lang=python\\">VirtualHostedStyleUrlOptions</a>
-
-Options for generating URL.
-
----
-
-##### \`add_cors_rule\` <a name=\\"add_cors_rule\\" id=\\"GreeterBucket.addCorsRule\\"></a>
-
-\`\`\`wing
-add_cors_rule(rule: CorsRule): void
-\`\`\`
-
-Adds a cross-origin access configuration for objects in an Amazon S3 bucket.
-
-###### \`rule\`<sup>Required</sup> <a name=\\"rule\\" id=\\"GreeterBucket.addCorsRule.parameter.rule\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/CorsRule?lang=python\\">CorsRule</a>
-
-The CORS configuration rule to add.
-
----
-
-##### \`add_inventory\` <a name=\\"add_inventory\\" id=\\"GreeterBucket.addInventory\\"></a>
-
-\`\`\`wing
-add_inventory(inventory: Inventory): void
-\`\`\`
-
-Add an inventory configuration.
-
-###### \`inventory\`<sup>Required</sup> <a name=\\"inventory\\" id=\\"GreeterBucket.addInventory.parameter.inventory\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/Inventory?lang=python\\">Inventory</a>
-
-configuration to add.
-
----
-
-##### \`add_lifecycle_rule\` <a name=\\"add_lifecycle_rule\\" id=\\"GreeterBucket.addLifecycleRule\\"></a>
-
-\`\`\`wing
-add_lifecycle_rule(rule: LifecycleRule): void
-\`\`\`
-
-Add a lifecycle rule to the bucket.
-
-###### \`rule\`<sup>Required</sup> <a name=\\"rule\\" id=\\"GreeterBucket.addLifecycleRule.parameter.rule\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/LifecycleRule?lang=python\\">LifecycleRule</a>
-
-The rule to add.
-
----
-
-##### \`add_metric\` <a name=\\"add_metric\\" id=\\"GreeterBucket.addMetric\\"></a>
-
-\`\`\`wing
-add_metric(metric: BucketMetrics): void
-\`\`\`
-
-Adds a metrics configuration for the CloudWatch request metrics from the bucket.
-
-###### \`metric\`<sup>Required</sup> <a name=\\"metric\\" id=\\"GreeterBucket.addMetric.parameter.metric\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/BucketMetrics?lang=python\\">BucketMetrics</a>
-
-The metric configuration to add.
-
----
-
-##### \`greet\` <a name=\\"greet\\" id=\\"GreeterBucket.greet\\"></a>
-
-\`\`\`wing
-greet(): void
-\`\`\`
-
-#### Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.isConstruct?lang=python\\">is_construct</a></code> | Return whether the given object is a Construct. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.isResource?lang=python\\">is_resource</a></code> | Check whether the given construct is a Resource. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.fromBucketArn?lang=python\\">from_bucket_arn</a></code> | *No description.* |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.fromBucketAttributes?lang=python\\">from_bucket_attributes</a></code> | Creates a Bucket construct that represents an external bucket. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.fromBucketName?lang=python\\">from_bucket_name</a></code> | *No description.* |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.validateBucketName?lang=python\\">validate_bucket_name</a></code> | Thrown an exception if the given bucket name is not valid. |
-
----
-
-##### \`is_construct\` <a name=\\"is_construct\\" id=\\"GreeterBucket.isConstruct\\"></a>
-
-\`\`\`wing
-bring { GreeterBucket } from \\"construct-library\\"
-
-GreeterBucket.is_construct(x: any)
-\`\`\`
-
-Return whether the given object is a Construct.
-
-###### \`x\`<sup>Required</sup> <a name=\\"x\\" id=\\"GreeterBucket.isConstruct.parameter.x\\"></a>
-
-- *Type:* any
-
----
-
-##### \`is_resource\` <a name=\\"is_resource\\" id=\\"GreeterBucket.isResource\\"></a>
-
-\`\`\`wing
-bring { GreeterBucket } from \\"construct-library\\"
-
-GreeterBucket.is_resource(construct: IConstruct)
-\`\`\`
-
-Check whether the given construct is a Resource.
-
-###### \`construct\`<sup>Required</sup> <a name=\\"construct\\" id=\\"GreeterBucket.isResource.parameter.construct\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/IConstruct?lang=python\\">IConstruct</a>
-
----
-
-##### \`from_bucket_arn\` <a name=\\"from_bucket_arn\\" id=\\"GreeterBucket.fromBucketArn\\"></a>
-
-\`\`\`wing
-bring { GreeterBucket } from \\"construct-library\\"
-
-GreeterBucket.from_bucket_arn(bucket_arn: str)
-\`\`\`
-
-###### \`bucket_arn\`<sup>Required</sup> <a name=\\"bucket_arn\\" id=\\"GreeterBucket.fromBucketArn.parameter.bucketArn\\"></a>
-
-- *Type:* str
-
----
-
-##### \`from_bucket_attributes\` <a name=\\"from_bucket_attributes\\" id=\\"GreeterBucket.fromBucketAttributes\\"></a>
-
-\`\`\`wing
-bring { GreeterBucket } from \\"construct-library\\"
-
-GreeterBucket.from_bucket_attributes(attrs: BucketAttributes)
-\`\`\`
-
-Creates a Bucket construct that represents an external bucket.
-
-###### \`attrs\`<sup>Required</sup> <a name=\\"attrs\\" id=\\"GreeterBucket.fromBucketAttributes.parameter.attrs\\"></a>
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/BucketAttributes?lang=python\\">BucketAttributes</a>
-
-A \`BucketAttributes\` object.
-
-Can be obtained from a call to
-\`bucket.export()\` or manually created.
-
----
-
-##### \`from_bucket_name\` <a name=\\"from_bucket_name\\" id=\\"GreeterBucket.fromBucketName\\"></a>
-
-\`\`\`wing
-bring { GreeterBucket } from \\"construct-library\\"
-
-GreeterBucket.from_bucket_name(bucket_name: str)
-\`\`\`
-
-###### \`bucket_name\`<sup>Required</sup> <a name=\\"bucket_name\\" id=\\"GreeterBucket.fromBucketName.parameter.bucketName\\"></a>
-
-- *Type:* str
-
----
-
-##### \`validate_bucket_name\` <a name=\\"validate_bucket_name\\" id=\\"GreeterBucket.validateBucketName\\"></a>
-
-\`\`\`wing
-bring { GreeterBucket } from \\"construct-library\\"
-
-GreeterBucket.validate_bucket_name(physical_name: str)
-\`\`\`
-
-Thrown an exception if the given bucket name is not valid.
-
-###### \`physical_name\`<sup>Required</sup> <a name=\\"physical_name\\" id=\\"GreeterBucket.validateBucketName.parameter.physicalName\\"></a>
-
-- *Type:* str
-
-name of the bucket.
-
----
-
-#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.node?lang=python\\">node</a></code> | <code><a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/ConstructNode?lang=python\\">ConstructNode</a></code> | The construct tree node associated with this construct. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.env?lang=python\\">env</a></code> | <code><a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/ResourceEnvironment?lang=python\\">ResourceEnvironment</a></code> | The environment this resource belongs to. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.stack?lang=python\\">stack</a></code> | <code><a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/Stack?lang=python\\">Stack</a></code> | The stack in which this resource is defined. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.bucketArn?lang=python\\">bucket_arn</a></code> | <code>str</code> | The ARN of the bucket. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.bucketDomainName?lang=python\\">bucket_domain_name</a></code> | <code>str</code> | The IPv4 DNS name of the specified bucket. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.bucketDualStackDomainName?lang=python\\">bucket_dual_stack_domain_name</a></code> | <code>str</code> | The IPv6 DNS name of the specified bucket. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.bucketName?lang=python\\">bucket_name</a></code> | <code>str</code> | The name of the bucket. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.bucketRegionalDomainName?lang=python\\">bucket_regional_domain_name</a></code> | <code>str</code> | The regional domain name of the specified bucket. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.bucketWebsiteDomainName?lang=python\\">bucket_website_domain_name</a></code> | <code>str</code> | The Domain name of the static website. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.bucketWebsiteUrl?lang=python\\">bucket_website_url</a></code> | <code>str</code> | The URL of the static website. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.encryptionKey?lang=python\\">encryption_key</a></code> | <code><a href=\\"/packages/@aws-cdk/aws-kms/v/99.99.99/api/IKey?lang=python\\">IKey</a></code> | Optional KMS encryption key associated with this bucket. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.isWebsite?lang=python\\">is_website</a></code> | <code>bool</code> | If this bucket has been configured for static website hosting. |
-| <code><a href=\\"/packages/construct-library/v/0.0.0/api/GreeterBucket.property.policy?lang=python\\">policy</a></code> | <code><a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/BucketPolicy?lang=python\\">BucketPolicy</a></code> | The resource policy associated with this bucket. |
-
----
-
-##### \`node\`<sup>Required</sup> <a name=\\"node\\" id=\\"GreeterBucket.property.node\\"></a>
-
-\`\`\`wing
-node: ConstructNode;
-\`\`\`
-
-- *Type:* <a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/ConstructNode?lang=python\\">ConstructNode</a>
-
-The construct tree node associated with this construct.
-
----
-
-##### \`env\`<sup>Required</sup> <a name=\\"env\\" id=\\"GreeterBucket.property.env\\"></a>
-
-\`\`\`wing
-env: ResourceEnvironment;
-\`\`\`
-
-- *Type:* <a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/ResourceEnvironment?lang=python\\">ResourceEnvironment</a>
-
-The environment this resource belongs to.
-
-For resources that are created and managed by the CDK
-(generally, those created by creating new class instances like Role, Bucket, etc.),
-this is always the same as the environment of the stack they belong to;
-however, for imported resources
-(those obtained from static methods like fromRoleArn, fromBucketName, etc.),
-that might be different than the stack they were imported into.
-
----
-
-##### \`stack\`<sup>Required</sup> <a name=\\"stack\\" id=\\"GreeterBucket.property.stack\\"></a>
-
-\`\`\`wing
-stack: Stack;
-\`\`\`
-
-- *Type:* <a href=\\"/packages/@aws-cdk/core/v/99.99.99/api/Stack?lang=python\\">Stack</a>
-
-The stack in which this resource is defined.
-
----
-
-##### \`bucket_arn\`<sup>Required</sup> <a name=\\"bucket_arn\\" id=\\"GreeterBucket.property.bucketArn\\"></a>
-
-\`\`\`wing
-bucket_arn: str;
-\`\`\`
-
-- *Type:* str
-
-The ARN of the bucket.
-
----
-
-##### \`bucket_domain_name\`<sup>Required</sup> <a name=\\"bucket_domain_name\\" id=\\"GreeterBucket.property.bucketDomainName\\"></a>
-
-\`\`\`wing
-bucket_domain_name: str;
-\`\`\`
-
-- *Type:* str
-
-The IPv4 DNS name of the specified bucket.
-
----
-
-##### \`bucket_dual_stack_domain_name\`<sup>Required</sup> <a name=\\"bucket_dual_stack_domain_name\\" id=\\"GreeterBucket.property.bucketDualStackDomainName\\"></a>
-
-\`\`\`wing
-bucket_dual_stack_domain_name: str;
-\`\`\`
-
-- *Type:* str
-
-The IPv6 DNS name of the specified bucket.
-
----
-
-##### \`bucket_name\`<sup>Required</sup> <a name=\\"bucket_name\\" id=\\"GreeterBucket.property.bucketName\\"></a>
-
-\`\`\`wing
-bucket_name: str;
-\`\`\`
-
-- *Type:* str
-
-The name of the bucket.
-
----
-
-##### \`bucket_regional_domain_name\`<sup>Required</sup> <a name=\\"bucket_regional_domain_name\\" id=\\"GreeterBucket.property.bucketRegionalDomainName\\"></a>
-
-\`\`\`wing
-bucket_regional_domain_name: str;
-\`\`\`
-
-- *Type:* str
-
-The regional domain name of the specified bucket.
-
----
-
-##### \`bucket_website_domain_name\`<sup>Required</sup> <a name=\\"bucket_website_domain_name\\" id=\\"GreeterBucket.property.bucketWebsiteDomainName\\"></a>
-
-\`\`\`wing
-bucket_website_domain_name: str;
-\`\`\`
-
-- *Type:* str
-
-The Domain name of the static website.
-
----
-
-##### \`bucket_website_url\`<sup>Required</sup> <a name=\\"bucket_website_url\\" id=\\"GreeterBucket.property.bucketWebsiteUrl\\"></a>
-
-\`\`\`wing
-bucket_website_url: str;
-\`\`\`
-
-- *Type:* str
-
-The URL of the static website.
-
----
-
-##### \`encryption_key\`<sup>Optional</sup> <a name=\\"encryption_key\\" id=\\"GreeterBucket.property.encryptionKey\\"></a>
-
-\`\`\`wing
-encryption_key: IKey;
-\`\`\`
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-kms/v/99.99.99/api/IKey?lang=python\\">IKey</a>
-
-Optional KMS encryption key associated with this bucket.
-
----
-
-##### \`is_website\`<sup>Optional</sup> <a name=\\"is_website\\" id=\\"GreeterBucket.property.isWebsite\\"></a>
-
-\`\`\`wing
-is_website: bool;
-\`\`\`
-
-- *Type:* bool
-
-If this bucket has been configured for static website hosting.
-
----
-
-##### \`policy\`<sup>Optional</sup> <a name=\\"policy\\" id=\\"GreeterBucket.property.policy\\"></a>
-
-\`\`\`wing
-policy: BucketPolicy;
-\`\`\`
-
-- *Type:* <a href=\\"/packages/@aws-cdk/aws-s3/v/99.99.99/api/BucketPolicy?lang=python\\">BucketPolicy</a>
-
-The resource policy associated with this bucket.
-
-If \`autoCreatePolicy\` is true, a \`BucketPolicy\` will be created upon the
-first call to addToResourcePolicy(s).
-
----
-
-
-
-
-
-"
-`;
-
-exports[`simple link formatter wing snapshot 1`] = `
-"# construct-library
-
-This is a test project to make sure the \`jsii-docgen\` cli property renders API documentation
-for construct libraries.
-# API Reference <a name=\\"API Reference\\" id=\\"api-reference\\"></a>
-
-## Constructs <a name=\\"Constructs\\" id=\\"Constructs\\"></a>
+## Resources <a name=\\"Resources\\" id=\\"Resources\\"></a>
 
 ### GreeterBucket <a name=\\"GreeterBucket\\" id=\\"construct-library.GreeterBucket\\"></a>
 
@@ -1034,7 +35,6 @@ new GreeterBucket(props?: BucketProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#custom-construct-library.GreeterBucket.toString\\">to_string</a></code> | Returns a string representation of this construct. |
 | <code><a href=\\"#custom-construct-library.GreeterBucket.applyRemovalPolicy\\">apply_removal_policy</a></code> | Apply the given removal policy to this resource. |
 | <code><a href=\\"#custom-construct-library.GreeterBucket.addEventNotification\\">add_event_notification</a></code> | Adds a bucket notification event destination. |
 | <code><a href=\\"#custom-construct-library.GreeterBucket.addObjectCreatedNotification\\">add_object_created_notification</a></code> | Subscribes a destination to receive notifications when an object is created in the bucket. |
@@ -1062,14 +62,6 @@ new GreeterBucket(props?: BucketProps)
 | <code><a href=\\"#custom-construct-library.GreeterBucket.greet\\">greet</a></code> | *No description.* |
 
 ---
-
-##### \`to_string\` <a name=\\"to_string\\" id=\\"construct-library.GreeterBucket.toString\\"></a>
-
-\`\`\`wing
-to_string(): str
-\`\`\`
-
-Returns a string representation of this construct.
 
 ##### \`apply_removal_policy\` <a name=\\"apply_removal_policy\\" id=\\"construct-library.GreeterBucket.applyRemovalPolicy\\"></a>
 
@@ -1697,7 +689,6 @@ greet(): void
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#custom-construct-library.GreeterBucket.isConstruct\\">is_construct</a></code> | Return whether the given object is a Construct. |
 | <code><a href=\\"#custom-construct-library.GreeterBucket.isResource\\">is_resource</a></code> | Check whether the given construct is a Resource. |
 | <code><a href=\\"#custom-construct-library.GreeterBucket.fromBucketArn\\">from_bucket_arn</a></code> | *No description.* |
 | <code><a href=\\"#custom-construct-library.GreeterBucket.fromBucketAttributes\\">from_bucket_attributes</a></code> | Creates a Bucket construct that represents an external bucket. |
@@ -1706,19 +697,976 @@ greet(): void
 
 ---
 
-##### \`is_construct\` <a name=\\"is_construct\\" id=\\"construct-library.GreeterBucket.isConstruct\\"></a>
+##### \`is_resource\` <a name=\\"is_resource\\" id=\\"construct-library.GreeterBucket.isResource\\"></a>
 
 \`\`\`wing
 bring { GreeterBucket } from \\"construct-library\\"
 
-GreeterBucket.is_construct(x: any)
+GreeterBucket.is_resource(construct: IConstruct)
 \`\`\`
 
-Return whether the given object is a Construct.
+Check whether the given construct is a Resource.
 
-###### \`x\`<sup>Required</sup> <a name=\\"x\\" id=\\"construct-library.GreeterBucket.isConstruct.parameter.x\\"></a>
+###### \`construct\`<sup>Required</sup> <a name=\\"construct\\" id=\\"construct-library.GreeterBucket.isResource.parameter.construct\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/core.IConstruct\\">IConstruct</a>
+
+---
+
+##### \`from_bucket_arn\` <a name=\\"from_bucket_arn\\" id=\\"construct-library.GreeterBucket.fromBucketArn\\"></a>
+
+\`\`\`wing
+bring { GreeterBucket } from \\"construct-library\\"
+
+GreeterBucket.from_bucket_arn(bucket_arn: str)
+\`\`\`
+
+###### \`bucket_arn\`<sup>Required</sup> <a name=\\"bucket_arn\\" id=\\"construct-library.GreeterBucket.fromBucketArn.parameter.bucketArn\\"></a>
+
+- *Type:* str
+
+---
+
+##### \`from_bucket_attributes\` <a name=\\"from_bucket_attributes\\" id=\\"construct-library.GreeterBucket.fromBucketAttributes\\"></a>
+
+\`\`\`wing
+bring { GreeterBucket } from \\"construct-library\\"
+
+GreeterBucket.from_bucket_attributes(attrs: BucketAttributes)
+\`\`\`
+
+Creates a Bucket construct that represents an external bucket.
+
+###### \`attrs\`<sup>Required</sup> <a name=\\"attrs\\" id=\\"construct-library.GreeterBucket.fromBucketAttributes.parameter.attrs\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.BucketAttributes\\">BucketAttributes</a>
+
+A \`BucketAttributes\` object.
+
+Can be obtained from a call to
+\`bucket.export()\` or manually created.
+
+---
+
+##### \`from_bucket_name\` <a name=\\"from_bucket_name\\" id=\\"construct-library.GreeterBucket.fromBucketName\\"></a>
+
+\`\`\`wing
+bring { GreeterBucket } from \\"construct-library\\"
+
+GreeterBucket.from_bucket_name(bucket_name: str)
+\`\`\`
+
+###### \`bucket_name\`<sup>Required</sup> <a name=\\"bucket_name\\" id=\\"construct-library.GreeterBucket.fromBucketName.parameter.bucketName\\"></a>
+
+- *Type:* str
+
+---
+
+##### \`validate_bucket_name\` <a name=\\"validate_bucket_name\\" id=\\"construct-library.GreeterBucket.validateBucketName\\"></a>
+
+\`\`\`wing
+bring { GreeterBucket } from \\"construct-library\\"
+
+GreeterBucket.validate_bucket_name(physical_name: str)
+\`\`\`
+
+Thrown an exception if the given bucket name is not valid.
+
+###### \`physical_name\`<sup>Required</sup> <a name=\\"physical_name\\" id=\\"construct-library.GreeterBucket.validateBucketName.parameter.physicalName\\"></a>
+
+- *Type:* str
+
+name of the bucket.
+
+---
+
+#### Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.node\\">node</a></code> | <code><a href=\\"#custom-@aws-cdk/core.ConstructNode\\">ConstructNode</a></code> | The construct tree node associated with this construct. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.env\\">env</a></code> | <code><a href=\\"#custom-@aws-cdk/core.ResourceEnvironment\\">ResourceEnvironment</a></code> | The environment this resource belongs to. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.stack\\">stack</a></code> | <code><a href=\\"#custom-@aws-cdk/core.Stack\\">Stack</a></code> | The stack in which this resource is defined. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.bucketArn\\">bucket_arn</a></code> | <code>str</code> | The ARN of the bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.bucketDomainName\\">bucket_domain_name</a></code> | <code>str</code> | The IPv4 DNS name of the specified bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.bucketDualStackDomainName\\">bucket_dual_stack_domain_name</a></code> | <code>str</code> | The IPv6 DNS name of the specified bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.bucketName\\">bucket_name</a></code> | <code>str</code> | The name of the bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.bucketRegionalDomainName\\">bucket_regional_domain_name</a></code> | <code>str</code> | The regional domain name of the specified bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.bucketWebsiteDomainName\\">bucket_website_domain_name</a></code> | <code>str</code> | The Domain name of the static website. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.bucketWebsiteUrl\\">bucket_website_url</a></code> | <code>str</code> | The URL of the static website. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.encryptionKey\\">encryption_key</a></code> | <code><a href=\\"#custom-@aws-cdk/aws-kms.IKey\\">IKey</a></code> | Optional KMS encryption key associated with this bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.isWebsite\\">is_website</a></code> | <code>bool</code> | If this bucket has been configured for static website hosting. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.property.policy\\">policy</a></code> | <code><a href=\\"#custom-@aws-cdk/aws-s3.BucketPolicy\\">BucketPolicy</a></code> | The resource policy associated with this bucket. |
+
+---
+
+##### \`node\`<sup>Required</sup> <a name=\\"node\\" id=\\"construct-library.GreeterBucket.property.node\\"></a>
+
+\`\`\`wing
+node: ConstructNode;
+\`\`\`
+
+- *Type:* <a href=\\"#custom-@aws-cdk/core.ConstructNode\\">ConstructNode</a>
+
+The construct tree node associated with this construct.
+
+---
+
+##### \`env\`<sup>Required</sup> <a name=\\"env\\" id=\\"construct-library.GreeterBucket.property.env\\"></a>
+
+\`\`\`wing
+env: ResourceEnvironment;
+\`\`\`
+
+- *Type:* <a href=\\"#custom-@aws-cdk/core.ResourceEnvironment\\">ResourceEnvironment</a>
+
+The environment this resource belongs to.
+
+For resources that are created and managed by the CDK
+(generally, those created by creating new class instances like Role, Bucket, etc.),
+this is always the same as the environment of the stack they belong to;
+however, for imported resources
+(those obtained from static methods like fromRoleArn, fromBucketName, etc.),
+that might be different than the stack they were imported into.
+
+---
+
+##### \`stack\`<sup>Required</sup> <a name=\\"stack\\" id=\\"construct-library.GreeterBucket.property.stack\\"></a>
+
+\`\`\`wing
+stack: Stack;
+\`\`\`
+
+- *Type:* <a href=\\"#custom-@aws-cdk/core.Stack\\">Stack</a>
+
+The stack in which this resource is defined.
+
+---
+
+##### \`bucket_arn\`<sup>Required</sup> <a name=\\"bucket_arn\\" id=\\"construct-library.GreeterBucket.property.bucketArn\\"></a>
+
+\`\`\`wing
+bucket_arn: str;
+\`\`\`
+
+- *Type:* str
+
+The ARN of the bucket.
+
+---
+
+##### \`bucket_domain_name\`<sup>Required</sup> <a name=\\"bucket_domain_name\\" id=\\"construct-library.GreeterBucket.property.bucketDomainName\\"></a>
+
+\`\`\`wing
+bucket_domain_name: str;
+\`\`\`
+
+- *Type:* str
+
+The IPv4 DNS name of the specified bucket.
+
+---
+
+##### \`bucket_dual_stack_domain_name\`<sup>Required</sup> <a name=\\"bucket_dual_stack_domain_name\\" id=\\"construct-library.GreeterBucket.property.bucketDualStackDomainName\\"></a>
+
+\`\`\`wing
+bucket_dual_stack_domain_name: str;
+\`\`\`
+
+- *Type:* str
+
+The IPv6 DNS name of the specified bucket.
+
+---
+
+##### \`bucket_name\`<sup>Required</sup> <a name=\\"bucket_name\\" id=\\"construct-library.GreeterBucket.property.bucketName\\"></a>
+
+\`\`\`wing
+bucket_name: str;
+\`\`\`
+
+- *Type:* str
+
+The name of the bucket.
+
+---
+
+##### \`bucket_regional_domain_name\`<sup>Required</sup> <a name=\\"bucket_regional_domain_name\\" id=\\"construct-library.GreeterBucket.property.bucketRegionalDomainName\\"></a>
+
+\`\`\`wing
+bucket_regional_domain_name: str;
+\`\`\`
+
+- *Type:* str
+
+The regional domain name of the specified bucket.
+
+---
+
+##### \`bucket_website_domain_name\`<sup>Required</sup> <a name=\\"bucket_website_domain_name\\" id=\\"construct-library.GreeterBucket.property.bucketWebsiteDomainName\\"></a>
+
+\`\`\`wing
+bucket_website_domain_name: str;
+\`\`\`
+
+- *Type:* str
+
+The Domain name of the static website.
+
+---
+
+##### \`bucket_website_url\`<sup>Required</sup> <a name=\\"bucket_website_url\\" id=\\"construct-library.GreeterBucket.property.bucketWebsiteUrl\\"></a>
+
+\`\`\`wing
+bucket_website_url: str;
+\`\`\`
+
+- *Type:* str
+
+The URL of the static website.
+
+---
+
+##### \`encryption_key\`<sup>Optional</sup> <a name=\\"encryption_key\\" id=\\"construct-library.GreeterBucket.property.encryptionKey\\"></a>
+
+\`\`\`wing
+encryption_key: IKey;
+\`\`\`
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-kms.IKey\\">IKey</a>
+
+Optional KMS encryption key associated with this bucket.
+
+---
+
+##### \`is_website\`<sup>Optional</sup> <a name=\\"is_website\\" id=\\"construct-library.GreeterBucket.property.isWebsite\\"></a>
+
+\`\`\`wing
+is_website: bool;
+\`\`\`
+
+- *Type:* bool
+
+If this bucket has been configured for static website hosting.
+
+---
+
+##### \`policy\`<sup>Optional</sup> <a name=\\"policy\\" id=\\"construct-library.GreeterBucket.property.policy\\"></a>
+
+\`\`\`wing
+policy: BucketPolicy;
+\`\`\`
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.BucketPolicy\\">BucketPolicy</a>
+
+The resource policy associated with this bucket.
+
+If \`autoCreatePolicy\` is true, a \`BucketPolicy\` will be created upon the
+first call to addToResourcePolicy(s).
+
+---
+
+
+
+
+
+"
+`;
+
+exports[`simple link formatter wing snapshot 1`] = `
+"# construct-library
+
+This is a test project to make sure the \`jsii-docgen\` cli property renders API documentation
+for construct libraries.
+# API Reference <a name=\\"API Reference\\" id=\\"api-reference\\"></a>
+
+## Resources <a name=\\"Resources\\" id=\\"Resources\\"></a>
+
+### GreeterBucket <a name=\\"GreeterBucket\\" id=\\"construct-library.GreeterBucket\\"></a>
+
+#### Initializers <a name=\\"Initializers\\" id=\\"construct-library.GreeterBucket.Initializer\\"></a>
+
+\`\`\`wing
+bring { GreeterBucket } from \\"construct-library\\"
+
+new GreeterBucket(props?: BucketProps)
+\`\`\`
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.Initializer.parameter.props\\">props</a></code> | <code><a href=\\"#custom-@aws-cdk/aws-s3.BucketProps\\">BucketProps</a></code> | *No description.* |
+
+---
+
+##### \`props\`<sup>Optional</sup> <a name=\\"props\\" id=\\"construct-library.GreeterBucket.Initializer.parameter.props\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.BucketProps\\">BucketProps</a>
+
+---
+
+#### Methods <a name=\\"Methods\\" id=\\"Methods\\"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.applyRemovalPolicy\\">apply_removal_policy</a></code> | Apply the given removal policy to this resource. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.addEventNotification\\">add_event_notification</a></code> | Adds a bucket notification event destination. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.addObjectCreatedNotification\\">add_object_created_notification</a></code> | Subscribes a destination to receive notifications when an object is created in the bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.addObjectRemovedNotification\\">add_object_removed_notification</a></code> | Subscribes a destination to receive notifications when an object is removed from the bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.addToResourcePolicy\\">add_to_resource_policy</a></code> | Adds a statement to the resource policy for a principal (i.e. account/role/service) to perform actions on this bucket and/or its contents. Use \`bucketArn\` and \`arnForObjects(keys)\` to obtain ARNs for this bucket or objects. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.arnForObjects\\">arn_for_objects</a></code> | Returns an ARN that represents all objects within the bucket that match the key pattern specified. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.grantDelete\\">grant_delete</a></code> | Grants s3:DeleteObject* permission to an IAM principal for objects in this bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.grantPublicAccess\\">grant_public_access</a></code> | Allows unrestricted access to objects from this bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.grantPut\\">grant_put</a></code> | Grants s3:PutObject* and s3:Abort* permissions for this bucket to an IAM principal. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.grantPutAcl\\">grant_put_acl</a></code> | Grant the given IAM identity permissions to modify the ACLs of objects in the given Bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.grantRead\\">grant_read</a></code> | Grant read permissions for this bucket and it's contents to an IAM principal (Role/Group/User). |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.grantReadWrite\\">grant_read_write</a></code> | Grants read/write permissions for this bucket and it's contents to an IAM principal (Role/Group/User). |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.grantWrite\\">grant_write</a></code> | Grant write permissions to this bucket to an IAM principal. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.onCloudTrailEvent\\">on_cloud_trail_event</a></code> | Define a CloudWatch event that triggers when something happens to this repository. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.onCloudTrailPutObject\\">on_cloud_trail_put_object</a></code> | Defines an AWS CloudWatch event that triggers when an object is uploaded to the specified paths (keys) in this bucket using the PutObject API call. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.onCloudTrailWriteObject\\">on_cloud_trail_write_object</a></code> | Defines an AWS CloudWatch event that triggers when an object at the specified paths (keys) in this bucket are written to. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.s3UrlForObject\\">s3_url_for_object</a></code> | The S3 URL of an S3 object. For example:. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.transferAccelerationUrlForObject\\">transfer_acceleration_url_for_object</a></code> | The https Transfer Acceleration URL of an S3 object. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.urlForObject\\">url_for_object</a></code> | The https URL of an S3 object. Specify \`regional: false\` at the options for non-regional URLs. For example:. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.virtualHostedUrlForObject\\">virtual_hosted_url_for_object</a></code> | The virtual hosted-style URL of an S3 object. Specify \`regional: false\` at the options for non-regional URL. For example:. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.addCorsRule\\">add_cors_rule</a></code> | Adds a cross-origin access configuration for objects in an Amazon S3 bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.addInventory\\">add_inventory</a></code> | Add an inventory configuration. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.addLifecycleRule\\">add_lifecycle_rule</a></code> | Add a lifecycle rule to the bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.addMetric\\">add_metric</a></code> | Adds a metrics configuration for the CloudWatch request metrics from the bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.greet\\">greet</a></code> | *No description.* |
+
+---
+
+##### \`apply_removal_policy\` <a name=\\"apply_removal_policy\\" id=\\"construct-library.GreeterBucket.applyRemovalPolicy\\"></a>
+
+\`\`\`wing
+apply_removal_policy(policy: RemovalPolicy): void
+\`\`\`
+
+Apply the given removal policy to this resource.
+
+The Removal Policy controls what happens to this resource when it stops
+being managed by CloudFormation, either because you've removed it from the
+CDK application or because you've made a change that requires the resource
+to be replaced.
+
+The resource can be deleted (\`RemovalPolicy.DESTROY\`), or left in your AWS
+account for data recovery and cleanup later (\`RemovalPolicy.RETAIN\`).
+
+###### \`policy\`<sup>Required</sup> <a name=\\"policy\\" id=\\"construct-library.GreeterBucket.applyRemovalPolicy.parameter.policy\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/core.RemovalPolicy\\">RemovalPolicy</a>
+
+---
+
+##### \`add_event_notification\` <a name=\\"add_event_notification\\" id=\\"construct-library.GreeterBucket.addEventNotification\\"></a>
+
+\`\`\`wing
+add_event_notification(event: EventType, dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+\`\`\`
+
+Adds a bucket notification event destination.
+
+> [https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html](https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html)
+
+*Example*
+
+\`\`\`wing
+   declare const myLambda: lambda.Function;
+   const bucket = new s3.Bucket(this, 'MyBucket');
+   bucket.addEventNotification(s3.EventType.OBJECT_CREATED, new s3n.LambdaDestination(myLambda), {prefix: 'home/myusername/*'});
+\`\`\`
+
+
+###### \`event\`<sup>Required</sup> <a name=\\"event\\" id=\\"construct-library.GreeterBucket.addEventNotification.parameter.event\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.EventType\\">EventType</a>
+
+The event to trigger the notification.
+
+---
+
+###### \`dest\`<sup>Required</sup> <a name=\\"dest\\" id=\\"construct-library.GreeterBucket.addEventNotification.parameter.dest\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.IBucketNotificationDestination\\">IBucketNotificationDestination</a>
+
+The notification destination (Lambda, SNS Topic or SQS Queue).
+
+---
+
+###### \`filters\`<sup>Required</sup> <a name=\\"filters\\" id=\\"construct-library.GreeterBucket.addEventNotification.parameter.filters\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.NotificationKeyFilter\\">NotificationKeyFilter</a>
+
+S3 object key filter rules to determine which objects trigger this event.
+
+Each filter must include a \`prefix\` and/or \`suffix\`
+that will be matched against the s3 object key. Refer to the S3 Developer Guide
+for details about allowed filter rules.
+
+---
+
+##### \`add_object_created_notification\` <a name=\\"add_object_created_notification\\" id=\\"construct-library.GreeterBucket.addObjectCreatedNotification\\"></a>
+
+\`\`\`wing
+add_object_created_notification(dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+\`\`\`
+
+Subscribes a destination to receive notifications when an object is created in the bucket.
+
+This is identical to calling
+\`onEvent(EventType.OBJECT_CREATED)\`.
+
+###### \`dest\`<sup>Required</sup> <a name=\\"dest\\" id=\\"construct-library.GreeterBucket.addObjectCreatedNotification.parameter.dest\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.IBucketNotificationDestination\\">IBucketNotificationDestination</a>
+
+The notification destination (see onEvent).
+
+---
+
+###### \`filters\`<sup>Required</sup> <a name=\\"filters\\" id=\\"construct-library.GreeterBucket.addObjectCreatedNotification.parameter.filters\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.NotificationKeyFilter\\">NotificationKeyFilter</a>
+
+Filters (see onEvent).
+
+---
+
+##### \`add_object_removed_notification\` <a name=\\"add_object_removed_notification\\" id=\\"construct-library.GreeterBucket.addObjectRemovedNotification\\"></a>
+
+\`\`\`wing
+add_object_removed_notification(dest: IBucketNotificationDestination, filters: NotificationKeyFilter): void
+\`\`\`
+
+Subscribes a destination to receive notifications when an object is removed from the bucket.
+
+This is identical to calling
+\`onEvent(EventType.OBJECT_REMOVED)\`.
+
+###### \`dest\`<sup>Required</sup> <a name=\\"dest\\" id=\\"construct-library.GreeterBucket.addObjectRemovedNotification.parameter.dest\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.IBucketNotificationDestination\\">IBucketNotificationDestination</a>
+
+The notification destination (see onEvent).
+
+---
+
+###### \`filters\`<sup>Required</sup> <a name=\\"filters\\" id=\\"construct-library.GreeterBucket.addObjectRemovedNotification.parameter.filters\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.NotificationKeyFilter\\">NotificationKeyFilter</a>
+
+Filters (see onEvent).
+
+---
+
+##### \`add_to_resource_policy\` <a name=\\"add_to_resource_policy\\" id=\\"construct-library.GreeterBucket.addToResourcePolicy\\"></a>
+
+\`\`\`wing
+add_to_resource_policy(permission: PolicyStatement): AddToResourcePolicyResult
+\`\`\`
+
+Adds a statement to the resource policy for a principal (i.e. account/role/service) to perform actions on this bucket and/or its contents. Use \`bucketArn\` and \`arnForObjects(keys)\` to obtain ARNs for this bucket or objects.
+
+Note that the policy statement may or may not be added to the policy.
+For example, when an \`IBucket\` is created from an existing bucket,
+it's not possible to tell whether the bucket already has a policy
+attached, let alone to re-use that policy to add more statements to it.
+So it's safest to do nothing in these cases.
+
+###### \`permission\`<sup>Required</sup> <a name=\\"permission\\" id=\\"construct-library.GreeterBucket.addToResourcePolicy.parameter.permission\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-iam.PolicyStatement\\">PolicyStatement</a>
+
+the policy statement to be added to the bucket's policy.
+
+---
+
+##### \`arn_for_objects\` <a name=\\"arn_for_objects\\" id=\\"construct-library.GreeterBucket.arnForObjects\\"></a>
+
+\`\`\`wing
+arn_for_objects(key_pattern: str): str
+\`\`\`
+
+Returns an ARN that represents all objects within the bucket that match the key pattern specified.
+
+To represent all keys, specify \`\`\\"*\\"\`\`.
+
+If you need to specify a keyPattern with multiple components, concatenate them into a single string, e.g.:
+
+   arnForObjects(\`home/\${team}/\${user}/*\`)
+
+###### \`key_pattern\`<sup>Required</sup> <a name=\\"key_pattern\\" id=\\"construct-library.GreeterBucket.arnForObjects.parameter.keyPattern\\"></a>
+
+- *Type:* str
+
+---
+
+##### \`grant_delete\` <a name=\\"grant_delete\\" id=\\"construct-library.GreeterBucket.grantDelete\\"></a>
+
+\`\`\`wing
+grant_delete(identity: IGrantable, objects_key_pattern?: any): Grant
+\`\`\`
+
+Grants s3:DeleteObject* permission to an IAM principal for objects in this bucket.
+
+###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"construct-library.GreeterBucket.grantDelete.parameter.identity\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-iam.IGrantable\\">IGrantable</a>
+
+The principal.
+
+---
+
+###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"construct-library.GreeterBucket.grantDelete.parameter.objectsKeyPattern\\"></a>
 
 - *Type:* any
+
+Restrict the permission to a certain key pattern (default '*').
+
+---
+
+##### \`grant_public_access\` <a name=\\"grant_public_access\\" id=\\"construct-library.GreeterBucket.grantPublicAccess\\"></a>
+
+\`\`\`wing
+grant_public_access(allowed_actions: str, key_prefix?: str): Grant
+\`\`\`
+
+Allows unrestricted access to objects from this bucket.
+
+IMPORTANT: This permission allows anyone to perform actions on S3 objects
+in this bucket, which is useful for when you configure your bucket as a
+website and want everyone to be able to read objects in the bucket without
+needing to authenticate.
+
+Without arguments, this method will grant read (\\"s3:GetObject\\") access to
+all objects (\\"*\\") in the bucket.
+
+The method returns the \`iam.Grant\` object, which can then be modified
+as needed. For example, you can add a condition that will restrict access only
+to an IPv4 range like this:
+
+     const grant = bucket.grantPublicAccess();
+     grant.resourceStatement!.addCondition(‘IpAddress’, { “aws:SourceIp”: “54.240.143.0/24” });
+
+Note that if this \`IBucket\` refers to an existing bucket, possibly not
+managed by CloudFormation, this method will have no effect, since it's
+impossible to modify the policy of an existing bucket.
+
+###### \`allowed_actions\`<sup>Required</sup> <a name=\\"allowed_actions\\" id=\\"construct-library.GreeterBucket.grantPublicAccess.parameter.allowedActions\\"></a>
+
+- *Type:* str
+
+the set of S3 actions to allow.
+
+Default is \\"s3:GetObject\\".
+
+---
+
+###### \`key_prefix\`<sup>Optional</sup> <a name=\\"key_prefix\\" id=\\"construct-library.GreeterBucket.grantPublicAccess.parameter.keyPrefix\\"></a>
+
+- *Type:* str
+
+the prefix of S3 object keys (e.g. \`home/*\`). Default is \\"*\\".
+
+---
+
+##### \`grant_put\` <a name=\\"grant_put\\" id=\\"construct-library.GreeterBucket.grantPut\\"></a>
+
+\`\`\`wing
+grant_put(identity: IGrantable, objects_key_pattern?: any): Grant
+\`\`\`
+
+Grants s3:PutObject* and s3:Abort* permissions for this bucket to an IAM principal.
+
+If encryption is used, permission to use the key to encrypt the contents
+of written files will also be granted to the same principal.
+
+###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"construct-library.GreeterBucket.grantPut.parameter.identity\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-iam.IGrantable\\">IGrantable</a>
+
+The principal.
+
+---
+
+###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"construct-library.GreeterBucket.grantPut.parameter.objectsKeyPattern\\"></a>
+
+- *Type:* any
+
+Restrict the permission to a certain key pattern (default '*').
+
+---
+
+##### \`grant_put_acl\` <a name=\\"grant_put_acl\\" id=\\"construct-library.GreeterBucket.grantPutAcl\\"></a>
+
+\`\`\`wing
+grant_put_acl(identity: IGrantable, objects_key_pattern?: str): Grant
+\`\`\`
+
+Grant the given IAM identity permissions to modify the ACLs of objects in the given Bucket.
+
+If your application has the '@aws-cdk/aws-s3:grantWriteWithoutAcl' feature flag set,
+calling {@link grantWrite} or {@link grantReadWrite} no longer grants permissions to modify the ACLs of the objects;
+in this case, if you need to modify object ACLs, call this method explicitly.
+
+###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"construct-library.GreeterBucket.grantPutAcl.parameter.identity\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-iam.IGrantable\\">IGrantable</a>
+
+---
+
+###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"construct-library.GreeterBucket.grantPutAcl.parameter.objectsKeyPattern\\"></a>
+
+- *Type:* str
+
+---
+
+##### \`grant_read\` <a name=\\"grant_read\\" id=\\"construct-library.GreeterBucket.grantRead\\"></a>
+
+\`\`\`wing
+grant_read(identity: IGrantable, objects_key_pattern?: any): Grant
+\`\`\`
+
+Grant read permissions for this bucket and it's contents to an IAM principal (Role/Group/User).
+
+If encryption is used, permission to use the key to decrypt the contents
+of the bucket will also be granted to the same principal.
+
+###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"construct-library.GreeterBucket.grantRead.parameter.identity\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-iam.IGrantable\\">IGrantable</a>
+
+The principal.
+
+---
+
+###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"construct-library.GreeterBucket.grantRead.parameter.objectsKeyPattern\\"></a>
+
+- *Type:* any
+
+Restrict the permission to a certain key pattern (default '*').
+
+---
+
+##### \`grant_read_write\` <a name=\\"grant_read_write\\" id=\\"construct-library.GreeterBucket.grantReadWrite\\"></a>
+
+\`\`\`wing
+grant_read_write(identity: IGrantable, objects_key_pattern?: any): Grant
+\`\`\`
+
+Grants read/write permissions for this bucket and it's contents to an IAM principal (Role/Group/User).
+
+If an encryption key is used, permission to use the key for
+encrypt/decrypt will also be granted.
+
+Before CDK version 1.85.0, this method granted the \`s3:PutObject*\` permission that included \`s3:PutObjectAcl\`,
+which could be used to grant read/write object access to IAM principals in other accounts.
+If you want to get rid of that behavior, update your CDK version to 1.85.0 or later,
+and make sure the \`@aws-cdk/aws-s3:grantWriteWithoutAcl\` feature flag is set to \`true\`
+in the \`context\` key of your cdk.json file.
+If you've already updated, but still need the principal to have permissions to modify the ACLs,
+use the {@link grantPutAcl} method.
+
+###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"construct-library.GreeterBucket.grantReadWrite.parameter.identity\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-iam.IGrantable\\">IGrantable</a>
+
+---
+
+###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"construct-library.GreeterBucket.grantReadWrite.parameter.objectsKeyPattern\\"></a>
+
+- *Type:* any
+
+---
+
+##### \`grant_write\` <a name=\\"grant_write\\" id=\\"construct-library.GreeterBucket.grantWrite\\"></a>
+
+\`\`\`wing
+grant_write(identity: IGrantable, objects_key_pattern?: any): Grant
+\`\`\`
+
+Grant write permissions to this bucket to an IAM principal.
+
+If encryption is used, permission to use the key to encrypt the contents
+of written files will also be granted to the same principal.
+
+Before CDK version 1.85.0, this method granted the \`s3:PutObject*\` permission that included \`s3:PutObjectAcl\`,
+which could be used to grant read/write object access to IAM principals in other accounts.
+If you want to get rid of that behavior, update your CDK version to 1.85.0 or later,
+and make sure the \`@aws-cdk/aws-s3:grantWriteWithoutAcl\` feature flag is set to \`true\`
+in the \`context\` key of your cdk.json file.
+If you've already updated, but still need the principal to have permissions to modify the ACLs,
+use the {@link grantPutAcl} method.
+
+###### \`identity\`<sup>Required</sup> <a name=\\"identity\\" id=\\"construct-library.GreeterBucket.grantWrite.parameter.identity\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-iam.IGrantable\\">IGrantable</a>
+
+---
+
+###### \`objects_key_pattern\`<sup>Optional</sup> <a name=\\"objects_key_pattern\\" id=\\"construct-library.GreeterBucket.grantWrite.parameter.objectsKeyPattern\\"></a>
+
+- *Type:* any
+
+---
+
+##### \`on_cloud_trail_event\` <a name=\\"on_cloud_trail_event\\" id=\\"construct-library.GreeterBucket.onCloudTrailEvent\\"></a>
+
+\`\`\`wing
+on_cloud_trail_event(options?: OnCloudTrailBucketEventOptions): Rule
+\`\`\`
+
+Define a CloudWatch event that triggers when something happens to this repository.
+
+Requires that there exists at least one CloudTrail Trail in your account
+that captures the event. This method will not create the Trail.
+
+###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"construct-library.GreeterBucket.onCloudTrailEvent.parameter.options\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.OnCloudTrailBucketEventOptions\\">OnCloudTrailBucketEventOptions</a>
+
+Options for adding the rule.
+
+---
+
+##### \`on_cloud_trail_put_object\` <a name=\\"on_cloud_trail_put_object\\" id=\\"construct-library.GreeterBucket.onCloudTrailPutObject\\"></a>
+
+\`\`\`wing
+on_cloud_trail_put_object(options?: OnCloudTrailBucketEventOptions): Rule
+\`\`\`
+
+Defines an AWS CloudWatch event that triggers when an object is uploaded to the specified paths (keys) in this bucket using the PutObject API call.
+
+Note that some tools like \`aws s3 cp\` will automatically use either
+PutObject or the multipart upload API depending on the file size,
+so using \`onCloudTrailWriteObject\` may be preferable.
+
+Requires that there exists at least one CloudTrail Trail in your account
+that captures the event. This method will not create the Trail.
+
+###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"construct-library.GreeterBucket.onCloudTrailPutObject.parameter.options\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.OnCloudTrailBucketEventOptions\\">OnCloudTrailBucketEventOptions</a>
+
+Options for adding the rule.
+
+---
+
+##### \`on_cloud_trail_write_object\` <a name=\\"on_cloud_trail_write_object\\" id=\\"construct-library.GreeterBucket.onCloudTrailWriteObject\\"></a>
+
+\`\`\`wing
+on_cloud_trail_write_object(options?: OnCloudTrailBucketEventOptions): Rule
+\`\`\`
+
+Defines an AWS CloudWatch event that triggers when an object at the specified paths (keys) in this bucket are written to.
+
+This includes
+the events PutObject, CopyObject, and CompleteMultipartUpload.
+
+Note that some tools like \`aws s3 cp\` will automatically use either
+PutObject or the multipart upload API depending on the file size,
+so using this method may be preferable to \`onCloudTrailPutObject\`.
+
+Requires that there exists at least one CloudTrail Trail in your account
+that captures the event. This method will not create the Trail.
+
+###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"construct-library.GreeterBucket.onCloudTrailWriteObject.parameter.options\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.OnCloudTrailBucketEventOptions\\">OnCloudTrailBucketEventOptions</a>
+
+Options for adding the rule.
+
+---
+
+##### \`s3_url_for_object\` <a name=\\"s3_url_for_object\\" id=\\"construct-library.GreeterBucket.s3UrlForObject\\"></a>
+
+\`\`\`wing
+s3_url_for_object(key?: str): str
+\`\`\`
+
+The S3 URL of an S3 object. For example:.
+
+\`s3://onlybucket\`
+- \`s3://bucket/key\`
+
+###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"construct-library.GreeterBucket.s3UrlForObject.parameter.key\\"></a>
+
+- *Type:* str
+
+The S3 key of the object.
+
+If not specified, the S3 URL of the
+bucket is returned.
+
+---
+
+##### \`transfer_acceleration_url_for_object\` <a name=\\"transfer_acceleration_url_for_object\\" id=\\"construct-library.GreeterBucket.transferAccelerationUrlForObject\\"></a>
+
+\`\`\`wing
+transfer_acceleration_url_for_object(key?: str, options?: TransferAccelerationUrlOptions): str
+\`\`\`
+
+The https Transfer Acceleration URL of an S3 object.
+
+Specify \`dualStack: true\` at the options
+for dual-stack endpoint (connect to the bucket over IPv6). For example:
+
+- \`https://bucket.s3-accelerate.amazonaws.com\`
+- \`https://bucket.s3-accelerate.amazonaws.com/key\`
+
+###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"construct-library.GreeterBucket.transferAccelerationUrlForObject.parameter.key\\"></a>
+
+- *Type:* str
+
+The S3 key of the object.
+
+If not specified, the URL of the
+bucket is returned.
+
+---
+
+###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"construct-library.GreeterBucket.transferAccelerationUrlForObject.parameter.options\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.TransferAccelerationUrlOptions\\">TransferAccelerationUrlOptions</a>
+
+Options for generating URL.
+
+---
+
+##### \`url_for_object\` <a name=\\"url_for_object\\" id=\\"construct-library.GreeterBucket.urlForObject\\"></a>
+
+\`\`\`wing
+url_for_object(key?: str): str
+\`\`\`
+
+The https URL of an S3 object. Specify \`regional: false\` at the options for non-regional URLs. For example:.
+
+\`https://s3.us-west-1.amazonaws.com/onlybucket\`
+- \`https://s3.us-west-1.amazonaws.com/bucket/key\`
+- \`https://s3.cn-north-1.amazonaws.com.cn/china-bucket/mykey\`
+
+###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"construct-library.GreeterBucket.urlForObject.parameter.key\\"></a>
+
+- *Type:* str
+
+The S3 key of the object.
+
+If not specified, the URL of the
+bucket is returned.
+
+---
+
+##### \`virtual_hosted_url_for_object\` <a name=\\"virtual_hosted_url_for_object\\" id=\\"construct-library.GreeterBucket.virtualHostedUrlForObject\\"></a>
+
+\`\`\`wing
+virtual_hosted_url_for_object(key?: str, options?: VirtualHostedStyleUrlOptions): str
+\`\`\`
+
+The virtual hosted-style URL of an S3 object. Specify \`regional: false\` at the options for non-regional URL. For example:.
+
+\`https://only-bucket.s3.us-west-1.amazonaws.com\`
+- \`https://bucket.s3.us-west-1.amazonaws.com/key\`
+- \`https://bucket.s3.amazonaws.com/key\`
+- \`https://china-bucket.s3.cn-north-1.amazonaws.com.cn/mykey\`
+
+###### \`key\`<sup>Optional</sup> <a name=\\"key\\" id=\\"construct-library.GreeterBucket.virtualHostedUrlForObject.parameter.key\\"></a>
+
+- *Type:* str
+
+The S3 key of the object.
+
+If not specified, the URL of the
+bucket is returned.
+
+---
+
+###### \`options\`<sup>Optional</sup> <a name=\\"options\\" id=\\"construct-library.GreeterBucket.virtualHostedUrlForObject.parameter.options\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.VirtualHostedStyleUrlOptions\\">VirtualHostedStyleUrlOptions</a>
+
+Options for generating URL.
+
+---
+
+##### \`add_cors_rule\` <a name=\\"add_cors_rule\\" id=\\"construct-library.GreeterBucket.addCorsRule\\"></a>
+
+\`\`\`wing
+add_cors_rule(rule: CorsRule): void
+\`\`\`
+
+Adds a cross-origin access configuration for objects in an Amazon S3 bucket.
+
+###### \`rule\`<sup>Required</sup> <a name=\\"rule\\" id=\\"construct-library.GreeterBucket.addCorsRule.parameter.rule\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.CorsRule\\">CorsRule</a>
+
+The CORS configuration rule to add.
+
+---
+
+##### \`add_inventory\` <a name=\\"add_inventory\\" id=\\"construct-library.GreeterBucket.addInventory\\"></a>
+
+\`\`\`wing
+add_inventory(inventory: Inventory): void
+\`\`\`
+
+Add an inventory configuration.
+
+###### \`inventory\`<sup>Required</sup> <a name=\\"inventory\\" id=\\"construct-library.GreeterBucket.addInventory.parameter.inventory\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.Inventory\\">Inventory</a>
+
+configuration to add.
+
+---
+
+##### \`add_lifecycle_rule\` <a name=\\"add_lifecycle_rule\\" id=\\"construct-library.GreeterBucket.addLifecycleRule\\"></a>
+
+\`\`\`wing
+add_lifecycle_rule(rule: LifecycleRule): void
+\`\`\`
+
+Add a lifecycle rule to the bucket.
+
+###### \`rule\`<sup>Required</sup> <a name=\\"rule\\" id=\\"construct-library.GreeterBucket.addLifecycleRule.parameter.rule\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.LifecycleRule\\">LifecycleRule</a>
+
+The rule to add.
+
+---
+
+##### \`add_metric\` <a name=\\"add_metric\\" id=\\"construct-library.GreeterBucket.addMetric\\"></a>
+
+\`\`\`wing
+add_metric(metric: BucketMetrics): void
+\`\`\`
+
+Adds a metrics configuration for the CloudWatch request metrics from the bucket.
+
+###### \`metric\`<sup>Required</sup> <a name=\\"metric\\" id=\\"construct-library.GreeterBucket.addMetric.parameter.metric\\"></a>
+
+- *Type:* <a href=\\"#custom-@aws-cdk/aws-s3.BucketMetrics\\">BucketMetrics</a>
+
+The metric configuration to add.
+
+---
+
+##### \`greet\` <a name=\\"greet\\" id=\\"construct-library.GreeterBucket.greet\\"></a>
+
+\`\`\`wing
+greet(): void
+\`\`\`
+
+#### Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.isResource\\">is_resource</a></code> | Check whether the given construct is a Resource. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.fromBucketArn\\">from_bucket_arn</a></code> | *No description.* |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.fromBucketAttributes\\">from_bucket_attributes</a></code> | Creates a Bucket construct that represents an external bucket. |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.fromBucketName\\">from_bucket_name</a></code> | *No description.* |
+| <code><a href=\\"#custom-construct-library.GreeterBucket.validateBucketName\\">validate_bucket_name</a></code> | Thrown an exception if the given bucket name is not valid. |
 
 ---
 

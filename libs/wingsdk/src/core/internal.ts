@@ -12,12 +12,8 @@ export function makeHandler(
 ): Resource {
   const clients: Record<string, string> = {};
 
-  for (const [k, v] of Object.entries(bindings.resources ?? {})) {
-    clients[k] = v.resource._toInflight().text;
-  }
-
-  for (const [k, v] of Object.entries(bindings.data ?? {})) {
-    clients[k] = serializeImmutableData(v);
+  for (const [k, v] of Object.entries(bindings)) {
+    clients[k] = serializeImmutableData(v.obj);
   }
 
   // implements IFunctionHandler
@@ -28,14 +24,8 @@ export function makeHandler(
       super(scope, id);
 
       // pretend as if we have a field for each binding
-      for (const [field, resource] of Object.entries(
-        bindings.resources ?? {}
-      )) {
-        (this as any)[field] = resource.resource;
-      }
-
-      for (const [field, value] of Object.entries(bindings.data ?? {})) {
-        (this as any)[field] = value;
+      for (const [field, value] of Object.entries(bindings)) {
+        (this as any)[field] = value.obj;
       }
 
       this.display.title = display?.title;
@@ -64,12 +54,9 @@ ${Object.entries(clients)
   }
 
   const annotation: Record<string, { ops: Array<string> }> = {};
-  for (const [k, v] of Object.entries(bindings.resources ?? {})) {
-    annotation["this." + k] = { ops: v.ops };
-  }
 
-  for (const k of Object.keys(bindings.data ?? {})) {
-    annotation["this." + k] = { ops: [] };
+  for (const [k, v] of Object.entries(bindings)) {
+    annotation["this." + k] = { ops: v.ops ?? [] };
   }
 
   Handler._annotateInflight("handle", annotation);
@@ -77,7 +64,7 @@ ${Object.entries(clients)
   return new Handler();
 }
 
-function serializeImmutableData(obj: any): string {
+export function serializeImmutableData(obj: any): string {
   switch (typeof obj) {
     case "string":
     case "boolean":

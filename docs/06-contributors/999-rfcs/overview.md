@@ -15,10 +15,6 @@ feedback on any change. Quite often, even changes that seem obvious and simple a
 significantly improved once a wider group of interested and experienced people have a chance to
 weigh in.
 
-## RFC Process
-
-For more information about what is an RFC, see [CONTRIBUTING.md](../06-contributors/handbook.md#what-is-an-rfc).
-
 ### 1. Kick-off
 
 Before diving into writing the RFC, it is highly recommended to organize a

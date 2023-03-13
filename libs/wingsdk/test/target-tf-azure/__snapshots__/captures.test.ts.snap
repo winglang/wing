@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`function with a bucket binding requiring only read 1`] = `
 "new ((function(){
@@ -11,7 +11,7 @@ return class Handler {
   async handle(event) { await this.bucket.get(\\"hello.txt\\"); }
 };
 })())({
-bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-azure/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME_e51fbb13\\"], process.env[\\"STORAGE_ACCOUNT_e51fbb13\\"])
+bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-azure/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_e51fbb13\\"], process.env[\\"STORAGE_ACCOUNT_e51fbb13\\"])
 })"
 `;
 
@@ -115,7 +115,7 @@ return class Handler {
   async handle(event) { await this.bucket.put(\\"hello.txt\\", event); }
 };
 })())({
-bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-azure/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME_e51fbb13\\"], process.env[\\"STORAGE_ACCOUNT_e51fbb13\\"])
+bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-azure/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_e51fbb13\\"], process.env[\\"STORAGE_ACCOUNT_e51fbb13\\"])
 })"
 `;
 

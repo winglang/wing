@@ -8,6 +8,10 @@ import debug from "debug";
 import * as wingCompiler from "../wingc";
 import { normalPath } from "../util";
 
+// increase the stack trace limit to 50, useful for debugging Rust panics
+// (not setting the limit too high in case of infinite recursion)
+Error.stackTraceLimit = 50;
+
 const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
 const WINGC_PREFLIGHT = "preflight.js";
@@ -37,6 +41,7 @@ const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
 export interface ICompileOptions {
   readonly outDir: string;
   readonly target: Target;
+  readonly plugins?: string[];
 }
 
 /**
@@ -55,7 +60,7 @@ function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
 }
 
 /**
- * Compiles a Wing program.
+ * Compiles a Wing program. Throws an error if compilation fails.
  * @param entrypoint The program .w entrypoint.
  * @param options Compile options.
  */
@@ -79,28 +84,46 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
       RUST_BACKTRACE: "full",
       WINGSDK_SYNTH_DIR: normalPath(synthDir),
       WINGC_PREFLIGHT,
+      CLICOLOR_FORCE: chalk.supportsColor ? "1" : "0",
     },
     preopens: {
       [wingDir]: wingDir, // for Rust's access to the source file
       [workDir]: workDir, // for Rust's access to the work directory
       [synthDir]: synthDir, // for Rust's access to the synth directory
     },
-    imports: {
-      env: {
-        // This function is used by the lsp command, which is not used in compilation
-        send_notification: () => {},
-      },
-    },
   });
 
   const arg = `${normalPath(wingFile)};${normalPath(workDir)}`;
   log(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
-  wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
+  let compileResult;
+  try {
+    compileResult = wingCompiler.invoke(wingc, WINGC_COMPILE, arg);
+  } catch (e) {
+    // This is a bug in Wing, not the user's code.
+    console.error(e);
+    console.log("\n\n" + chalk.bold.red("Internal error:") + " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace.");
+    process.exit(1);
+  }
+  if (compileResult !== 0) {
+    // This is a bug in the user's code. Print the compiler diagnostics.
+    // TODO: change wingc to output diagnostics in a structured format,
+    // so we can format and print them in a more user-friendly way.
+    throw new Error(compileResult.toString());
+  }
 
   const artifactPath = resolve(workDir, WINGC_PREFLIGHT);
   log("reading artifact from %s", artifactPath);
   const artifact = await readFile(artifactPath, "utf-8");
   log("artifact: %s", artifact);
+
+  const preflightRequire = (path: string) => {
+    // Try looking for dependencies not only in the current directory (wherever
+    // the wing CLI was installed to), but also in the source code directory.
+    // This is necessary because the Wing app may have installed dependencies in
+    // the project directory.
+    const requirePath = require.resolve(path, { paths: [__dirname, wingDir] });
+    return require(requirePath);
+  };
 
   // If you're wondering how the execution of the preflight works, despite it
   // being in a different directory: it works because at the top of the file
@@ -108,16 +131,17 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   // is starting up, the passed context already has wingsdk in it.
   // "__dirname" is also synthetically changed so nested requires work.
   const context = vm.createContext({
-    require,
+    require: preflightRequire,
     process: {
       env: {
         WINGSDK_SYNTH_DIR: synthDir,
         WING_TARGET: options.target,
       },
     },
+    console,
     __dirname: workDir,
     __filename: artifactPath,
-
+    $plugins: resolvePluginPaths(options.plugins ?? []),
     // since the SDK is loaded in the outer VM, we need these to be the same class instance,
     // otherwise "instanceof" won't work between preflight code and the SDK. this is needed e.g. in
     // `serializeImmutableData` which has special cases for serializing these types.
@@ -149,7 +173,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
         "  " +
           chalk.bold.white("note:") +
           " " +
-          chalk.white("intermediate javascript code:")
+          chalk.white(`intermediate javascript code (${artifactPath}):`)
       );
       const lineNumber =
         Number.parseInt(
@@ -184,5 +208,22 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
           )
       );
     }
+
+    process.exitCode = 1;
   }
+}
+
+/**
+ * Resolves a list of plugin paths as absolute paths, using the current working directory
+ * if absolute path is not provided.
+ *
+ * @param plugins list of plugin paths (absolute or relative)
+ * @returns list of absolute plugin paths or relative to cwd
+ */
+function resolvePluginPaths(plugins: string[]): string[] {
+  const resolvedPluginPaths: string[] = [];
+  for (const plugin of plugins) {
+    resolvedPluginPaths.push(resolve(process.cwd(), plugin));
+  }
+  return resolvedPluginPaths;
 }

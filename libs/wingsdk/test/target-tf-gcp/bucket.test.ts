@@ -1,4 +1,5 @@
-import * as cloud from "../../src/cloud";
+import { test, expect } from "vitest";
+import { Bucket } from "../../src/cloud";
 import * as tfgcp from "../../src/target-tf-gcp";
 import { mkdtemp } from "../../src/util";
 import {
@@ -16,7 +17,7 @@ const GCP_APP_OPTS = {
 test("create a bucket", () => {
   // GIVEN
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
-  new cloud.Bucket(app, "my_bucket");
+  Bucket._newBucket(app, "my_bucket");
   const output = app.synth();
 
   // THEN
@@ -28,7 +29,7 @@ test("create a bucket", () => {
 test("bucket is public", () => {
   // GIVEN
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
-  new cloud.Bucket(app, "my_bucket", { public: true });
+  Bucket._newBucket(app, "my_bucket", { public: true });
   const output = app.synth();
 
   // THEN
@@ -44,8 +45,8 @@ test("bucket is public", () => {
 test("two buckets", () => {
   // GIVEN
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
-  new cloud.Bucket(app, "my_bucket1");
-  new cloud.Bucket(app, "my_bucket2");
+  Bucket._newBucket(app, "my_bucket1");
+  Bucket._newBucket(app, "my_bucket2");
   const output = app.synth();
 
   // THEN
@@ -59,7 +60,7 @@ test("two buckets", () => {
 test("bucket with two preflight objects", () => {
   // GIVEN
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
-  const bucket = new cloud.Bucket(app, "my_bucket");
+  const bucket = Bucket._newBucket(app, "my_bucket");
   bucket.addObject("file1.txt", "hello world");
   bucket.addObject("file2.txt", "boom bam");
   const output = app.synth();

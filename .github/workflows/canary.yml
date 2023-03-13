@@ -1,0 +1,41 @@
+name: Canary Testing
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch: {}
+
+jobs:
+  install:
+    name: Installation User Flow
+    strategy:
+      fail-fast: true
+      matrix:
+        runner:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+        node:
+          - 18
+          - 19
+        install_command:
+          - npm install -g winglang
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Get Latest Wing Version
+        id: get-version
+        run: |
+          echo version=$(npm view winglang version) >> $GITHUB_OUTPUT
+      - name: Install Wing
+        run: |
+          ${{ matrix.install_command }}@${{ steps.get-version.outputs.version }}
+      - name: Download examples/tests/valid/test_bucket.w
+        run: |
+          curl -L https://raw.githubusercontent.com/winglang/wing/main/examples/tests/valid/test_bucket.w > test_bucket.w
+          cat test_bucket.w
+      - name: Run Test
+        run: |
+          wing test test_bucket.w

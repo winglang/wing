@@ -1,0 +1,88 @@
+import assert from "assert";
+import { execa } from "execa";
+import fs from "fs-extra";
+import path from "path";
+import {
+  npmBin,
+  npmCacheDir,
+  targetWingSDKSpec,
+  targetWingSpec,
+  tmpDir,
+  wingBin,
+} from "./paths";
+
+const basePackageJson = {
+  name: "hangar-test",
+  description: "",
+  version: "0.0.0",
+  dependencies: {
+    "@winglang/sdk": `${targetWingSDKSpec}`,
+    winglang: `${targetWingSpec}`,
+  },
+  devDependencies: {},
+};
+
+const shellEnv = {
+  ...process.env,
+  npm_config_audit: "false",
+  npm_config_progress: "false",
+  npm_config_yes: "true",
+  npm_config_cache: npmCacheDir,
+  npm_config_color: "false",
+  npm_config_foreground_scripts: "true",
+};
+
+export default async function () {
+  Object.assign(process.env, shellEnv);
+  // Explicitly remove FORCE_COLOR from env, this is because NX sets it to true, so when we run 
+  // under NX build we get color output in the snapshots, which is not what we want.
+  // Might be related to https://github.com/nrwl/nx/issues/8051#issuecomment-1047061889
+  delete process.env.FORCE_COLOR;
+
+  // reset tmpDir
+  fs.removeSync(tmpDir);
+  fs.mkdirpSync(tmpDir);
+  fs.writeJsonSync(path.join(tmpDir, "package.json"), basePackageJson);
+
+  // use execSync to install npm deps in tmpDir
+  console.debug(`Installing npm deps into ${tmpDir}...`);
+  const installArgs = ["install", "--no-package-lock", "--install-links=false"];
+
+  const installResult = await execa(npmBin, installArgs, {
+    cwd: tmpDir,
+  });
+
+  assert.equal(
+    installResult.exitCode,
+    0,
+    `Failed to install npm deps: \n${installResult.stderr}`
+  );
+  assert.doesNotMatch(
+    installResult.stdout,
+    />/,
+    `Install contains unexpected script hook: \n${installResult.stdout}`
+  );
+  assert.doesNotMatch(
+    installResult.stdout,
+    / warn /,
+    `Install contains unexpected warning: \n${installResult.stdout}`
+  );
+
+  console.debug(`Done!`);
+
+  const versionOutput = await execa(wingBin, ["--version"], {
+    cwd: tmpDir,
+  });
+
+  assert.equal(
+    versionOutput.exitCode,
+    0,
+    `Failed to get wing version: ${versionOutput.stderr}`
+  );
+
+  assert.match(
+    versionOutput.stdout,
+    /^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/,
+    `Wing version invalid: ${versionOutput.stderr}`
+  );
+}

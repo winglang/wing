@@ -1,36 +1,40 @@
 // idk how many of these are actually needed
-import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
-import { NodeModulesPolyfillPlugin } from "@esbuild-plugins/node-modules-polyfill";
-import rollupNodePolyFill from "rollup-plugin-node-polyfills";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
+/** @type {import('vite').UserConfig} */
 export default {
   resolve: {
+    preserveSymlinks: true,
     alias: {
-      process: "rollup-plugin-node-polyfills/polyfills/process-es6",
-      buffer: "rollup-plugin-node-polyfills/polyfills/buffer-es6",
+      "wasi-js/dist/bindings/node": "wasi-js/dist/bindings/browser",
     },
   },
+  plugins: [nodePolyfills()],
   worker: {
     format: "es",
+    plugins: [nodePolyfills()],
+    rollupOptions: {
+      preserveSymlinks: true,
+    },
   },
   build: {
-    target: "esnext",
-    rollupOptions: {
-      plugins: [rollupNodePolyFill()],
+    target: "es2022",
+    commonjsOptions: {
+      // This is needed because winglang is symlinked
+      include: [/winglang/, /node_modules/],
+    },
+  },
+  server: {
+    fs: {
+      allow: [".."],
     },
   },
   optimizeDeps: {
+    include: ["winglang"],
     esbuildOptions: {
-      define: {
-        global: "globalThis",
-      },
-      plugins: [
-        NodeGlobalsPolyfillPlugin({
-          process: true,
-          buffer: true,
-        }),
-        NodeModulesPolyfillPlugin(),
-      ],
+      target: "es2022",
+      preserveSymlinks: true,
     },
+    force: true,
   },
 };

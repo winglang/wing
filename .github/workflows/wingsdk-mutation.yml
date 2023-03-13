@@ -16,7 +16,6 @@ defaults:
     working-directory: libs/wingsdk
 
 env:
-  NODEJS_VERSION: "18.x"
   CI: "true"
 
 jobs:
@@ -40,22 +39,21 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           token: ${{ secrets.MUTATION_TOKEN }}
-      - name: Setup Node
-        if: steps.token-check.outputs.HAS_TOKEN == 'true'
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODEJS_VERSION }}
-      - name: Build transitive dependency (wing-api-checker)
-        if: steps.token-check.outputs.HAS_TOKEN == 'true'
-        run: npm ci && npm run build
-        working-directory: apps/wing-api-checker
-      - name: Build transitive dependency (jsii-docgen)
-        if: steps.token-check.outputs.HAS_TOKEN == 'true'
-        run: npm ci && npm run build
-        working-directory: apps/jsii-docgen
+      # Reads versions from root package.json "volta" section
+      - name: Setup Node/NPM with pinned Volta version
+        uses: volta-cli/action@v4.0.0
       - name: Install dependencies
         if: steps.token-check.outputs.HAS_TOKEN == 'true'
         run: npm ci
+        working-directory: "."
+      - name: Build transitive dependency (wing-api-checker)
+        if: steps.token-check.outputs.HAS_TOKEN == 'true'
+        run: npm run build
+        working-directory: apps/wing-api-checker
+      - name: Build transitive dependency (jsii-docgen)
+        if: steps.token-check.outputs.HAS_TOKEN == 'true'
+        run: npm run build
+        working-directory: apps/jsii-docgen
       - name: build
         if: steps.token-check.outputs.HAS_TOKEN == 'true'
         run: npx projen build

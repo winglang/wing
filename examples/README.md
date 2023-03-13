@@ -1,6 +1,6 @@
 # Wing Examples
 
-This directory contains a collection of Wing examples of the kinds of apps you can build in Wing! Check out the [Wing Contributor's Handbook](../docs/06-contributors/handbook.md#%EF%B8%8F-how-do-i-add-an-example) for a guide on on how to add your own example.
+This directory contains a collection of Wing examples of the kinds of apps you can build in Wing! Check out the [Wing Contributor's Handbook](../docs/06-contributors/docs#%EF%B8%8F-how-do-i-add-an-example) for a guide on on how to add your own example.
 
 The examples in the `tests` directory are examples specifically used for testing the compiler. `tests/valid` are examples that should compile successfully, and `tests/invalid` are examples that should fail.
 
@@ -28,11 +28,17 @@ _Add yours here!_
 * **Description:** A naive distributed lock implementation. This lock uses the atomicity of `Counter` internally to guarantee that it can only be acquired by a single inflight function at a time, even if they are on different machines.
 * **Author:** [@Chriscbr](https://github.com/Chriscbr)
 
-## Counting semaphore
+### Counting semaphore
 
-**Source code:** [./proposed/counting-semaphore.w](./proposed/counting-semaphore.w)
-**Description:** A Wing resource that helps access control for a common resource in a cloud environment.
-**Author:** [@flyingImer](https://github.com/flyingImer)
+* **Source code:** [./proposed/counting-semaphore.w](./proposed/counting-semaphore.w)
+* **Description:** A Wing resource that helps access control for a common resource in a cloud environment.
+* **Author:** [@flyingImer](https://github.com/flyingImer)
+
+### Replayable Queue
+
+* **Source code:** [./proposed/replayable-queue.w](./proposed/replayable-queue.w)
+* **Description:** A Wing Queue that saves all the messages sent to it on a bucket and allow you to replay all messages
+* **Author:** [@ekeren](https://github.com/ekeren)
 
 <!--
 

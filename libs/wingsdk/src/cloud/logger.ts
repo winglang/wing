@@ -1,41 +1,17 @@
 import { Construct, IConstruct } from "constructs";
-import { Polycons } from "polycons";
-import { Code } from "../core/inflight";
+import { fqnForType } from "../constants";
+import { App } from "../core";
 import { Resource } from "../core/resource";
 
-export const LOGGER_TYPE = "wingsdk.cloud.Logger";
-export const LOGGER_SYMBOL = Symbol.for(LOGGER_TYPE);
-
-/**
- * Functionality shared between all `Logger` implementations.
- */
-export abstract class LoggerBase extends Resource {
-  public readonly stateful = true;
-
-  constructor(scope: Construct, id: string) {
-    super(scope, id);
-
-    this.display.hidden = true;
-    this.display.title = "Logger";
-    this.display.description = "A cloud logging facility";
-  }
-
-  /**
-   * Logs a message (preflight).
-   * @param message The message to log.
-   */
-  public print(message: string): void {
-    // default implementation, can be overridden
-    console.log(message);
-  }
-}
+export const LOGGER_FQN = fqnForType("cloud.Logger");
+const LOGGER_SYMBOL = Symbol.for(LOGGER_FQN);
 
 /**
  * A cloud logging facility.
  *
  * @inflight `@winglang/sdk.cloud.ILoggerClient`
  */
-export class Logger extends LoggerBase {
+export abstract class Logger extends Resource {
   /**
    * Returns the logger registered to the given scope, throwing an error if
    * there is none.
@@ -63,7 +39,11 @@ export class Logger extends LoggerBase {
       throw new Error("There is already a logger registered to this scope.");
     }
 
-    const logger = new Logger(scope, "WingLogger");
+    const logger = App.of(scope).newAbstract(
+      LOGGER_FQN,
+      scope,
+      "WingLogger"
+    ) as Logger;
 
     Object.defineProperty(scope, LOGGER_SYMBOL, {
       value: logger,
@@ -72,14 +52,14 @@ export class Logger extends LoggerBase {
     });
   }
 
-  private constructor(scope: Construct, id: string) {
-    super(null as any, id);
-    return Polycons.newInstance(LOGGER_TYPE, scope, id) as Logger;
-  }
+  public readonly stateful = true;
 
-  /** @internal */
-  public _toInflight(): Code {
-    throw new Error("Method not implemented.");
+  constructor(scope: Construct, id: string) {
+    super(scope, id);
+
+    this.display.hidden = true;
+    this.display.title = "Logger";
+    this.display.description = "A cloud logging facility";
   }
 }
 

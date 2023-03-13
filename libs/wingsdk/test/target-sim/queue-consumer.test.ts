@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing, TraceType } from "../../src/testing";
 
@@ -10,7 +11,7 @@ test("pushing messages through a queue", async () => {
     constructor(scope: Construct, id: string) {
       super(scope, id);
 
-      const queue = new cloud.Queue(this, "Queue");
+      const queue = cloud.Queue._newQueue(this, "Queue");
       const pusher = Testing.makeHandler(
         app,
         "Pusher",
@@ -19,15 +20,13 @@ test("pushing messages through a queue", async () => {
           await this.queue.push(event);
         }`,
         {
-          resources: {
-            queue: {
-              resource: queue,
-              ops: [cloud.QueueInflightMethods.PUSH],
-            },
+          queue: {
+            obj: queue,
+            ops: [cloud.QueueInflightMethods.PUSH],
           },
         }
       );
-      new cloud.Function(this, "Function", pusher);
+      cloud.Function._newFunction(this, "Function", pusher);
 
       const processor = Testing.makeHandler(
         app,

@@ -4,28 +4,42 @@ import { Function } from "./function.inflight";
 import { Logger } from "./logger.inflight";
 import { Queue } from "./queue.inflight";
 import { ISimulatorResourceInstance } from "./resource";
+import {
+  BUCKET_TYPE,
+  COUNTER_TYPE,
+  FUNCTION_TYPE,
+  LOGGER_TYPE,
+  QUEUE_TYPE,
+  TOPIC_TYPE,
+} from "./schema-resources";
 import { Topic } from "./topic.inflight";
-import * as cloud from "../cloud";
 import { ISimulatorFactory, ISimulatorContext } from "../testing/simulator";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
+  /**
+   * Creates a new simulator runtime resource
+   * @param type type id
+   * @param props resource properties
+   * @param context simulator context
+   * @returns a new instance
+   */
   public resolve(
     type: string,
     props: any,
     context: ISimulatorContext
   ): ISimulatorResourceInstance {
     switch (type) {
-      case cloud.BUCKET_TYPE:
+      case BUCKET_TYPE:
         return new Bucket(props, context);
-      case cloud.FUNCTION_TYPE:
+      case FUNCTION_TYPE:
         return new Function(props, context);
-      case cloud.QUEUE_TYPE:
+      case QUEUE_TYPE:
         return new Queue(props, context);
-      case cloud.LOGGER_TYPE:
+      case LOGGER_TYPE:
         return new Logger(props, context);
-      case cloud.COUNTER_TYPE:
+      case COUNTER_TYPE:
         return new Counter(props, context);
-      case cloud.TOPIC_TYPE:
+      case TOPIC_TYPE:
         return new Topic(props, context);
       default:
         throw new Error(`Type ${type} not implemented.`);

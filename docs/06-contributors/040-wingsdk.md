@@ -93,10 +93,10 @@ During development, you might find it useful to watch for changes and automatica
 npm run test:watch
 ```
 
-To re-run individual tests, you can directly use the `jest` command -- for example:
+To re-run individual tests, you can directly use the `vitest` command -- for example:
 
 ```sh
-npx jest test/tf-aws/bucket.test.ts
+npx vitest run test/target-tf-aws/bucket.test.ts
 ```
 
 ## What is the architecture of the Wing SDK?

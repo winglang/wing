@@ -3,7 +3,7 @@
 exports[`construct-library 1`] = `
 "# API Reference <a name=\\"API Reference\\" id=\\"api-reference\\"></a>
 
-## Constructs <a name=\\"Constructs\\" id=\\"Constructs\\"></a>
+## Resources <a name=\\"Resources\\" id=\\"Resources\\"></a>
 
 ### GoodbyeBucket <a name=\\"GoodbyeBucket\\" id=\\"construct-library.submod1.GoodbyeBucket\\"></a>
 
@@ -45,7 +45,6 @@ new submod1.GoodbyeBucket(scope: Construct, id: string, props?: BucketProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#construct-library.submod1.GoodbyeBucket.toString\\">toString</a></code> | Returns a string representation of this construct. |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.applyRemovalPolicy\\">applyRemovalPolicy</a></code> | Apply the given removal policy to this resource. |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.addEventNotification\\">addEventNotification</a></code> | Adds a bucket notification event destination. |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.addObjectCreatedNotification\\">addObjectCreatedNotification</a></code> | Subscribes a destination to receive notifications when an object is created in the bucket. |
@@ -73,14 +72,6 @@ new submod1.GoodbyeBucket(scope: Construct, id: string, props?: BucketProps)
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.goodbye\\">goodbye</a></code> | *No description.* |
 
 ---
-
-##### \`toString\` <a name=\\"toString\\" id=\\"construct-library.submod1.GoodbyeBucket.toString\\"></a>
-
-\`\`\`typescript
-public toString(): string
-\`\`\`
-
-Returns a string representation of this construct.
 
 ##### \`applyRemovalPolicy\` <a name=\\"applyRemovalPolicy\\" id=\\"construct-library.submod1.GoodbyeBucket.applyRemovalPolicy\\"></a>
 
@@ -732,28 +723,11 @@ public goodbye(): void
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#construct-library.submod1.GoodbyeBucket.isConstruct\\">isConstruct</a></code> | Return whether the given object is a Construct. |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.isResource\\">isResource</a></code> | Check whether the given construct is a Resource. |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.fromBucketArn\\">fromBucketArn</a></code> | *No description.* |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.fromBucketAttributes\\">fromBucketAttributes</a></code> | Creates a Bucket construct that represents an external bucket. |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.fromBucketName\\">fromBucketName</a></code> | *No description.* |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.validateBucketName\\">validateBucketName</a></code> | Thrown an exception if the given bucket name is not valid. |
-
----
-
-##### \`isConstruct\` <a name=\\"isConstruct\\" id=\\"construct-library.submod1.GoodbyeBucket.isConstruct\\"></a>
-
-\`\`\`typescript
-import { submod1 } from 'construct-library'
-
-submod1.GoodbyeBucket.isConstruct(x: any)
-\`\`\`
-
-Return whether the given object is a Construct.
-
-###### \`x\`<sup>Required</sup> <a name=\\"x\\" id=\\"construct-library.submod1.GoodbyeBucket.isConstruct.parameter.x\\"></a>
-
-- *Type:* any
 
 ---
 
@@ -1107,7 +1081,6 @@ new GreeterBucket(scope: Construct, id: string, props?: BucketProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#construct-library.GreeterBucket.toString\\">toString</a></code> | Returns a string representation of this construct. |
 | <code><a href=\\"#construct-library.GreeterBucket.applyRemovalPolicy\\">applyRemovalPolicy</a></code> | Apply the given removal policy to this resource. |
 | <code><a href=\\"#construct-library.GreeterBucket.addEventNotification\\">addEventNotification</a></code> | Adds a bucket notification event destination. |
 | <code><a href=\\"#construct-library.GreeterBucket.addObjectCreatedNotification\\">addObjectCreatedNotification</a></code> | Subscribes a destination to receive notifications when an object is created in the bucket. |
@@ -1135,14 +1108,6 @@ new GreeterBucket(scope: Construct, id: string, props?: BucketProps)
 | <code><a href=\\"#construct-library.GreeterBucket.greet\\">greet</a></code> | *No description.* |
 
 ---
-
-##### \`toString\` <a name=\\"toString\\" id=\\"construct-library.GreeterBucket.toString\\"></a>
-
-\`\`\`typescript
-public toString(): string
-\`\`\`
-
-Returns a string representation of this construct.
 
 ##### \`applyRemovalPolicy\` <a name=\\"applyRemovalPolicy\\" id=\\"construct-library.GreeterBucket.applyRemovalPolicy\\"></a>
 
@@ -1794,28 +1759,11 @@ public greet(): void
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#construct-library.GreeterBucket.isConstruct\\">isConstruct</a></code> | Return whether the given object is a Construct. |
 | <code><a href=\\"#construct-library.GreeterBucket.isResource\\">isResource</a></code> | Check whether the given construct is a Resource. |
 | <code><a href=\\"#construct-library.GreeterBucket.fromBucketArn\\">fromBucketArn</a></code> | *No description.* |
 | <code><a href=\\"#construct-library.GreeterBucket.fromBucketAttributes\\">fromBucketAttributes</a></code> | Creates a Bucket construct that represents an external bucket. |
 | <code><a href=\\"#construct-library.GreeterBucket.fromBucketName\\">fromBucketName</a></code> | *No description.* |
 | <code><a href=\\"#construct-library.GreeterBucket.validateBucketName\\">validateBucketName</a></code> | Thrown an exception if the given bucket name is not valid. |
-
----
-
-##### \`isConstruct\` <a name=\\"isConstruct\\" id=\\"construct-library.GreeterBucket.isConstruct\\"></a>
-
-\`\`\`typescript
-import { GreeterBucket } from 'construct-library'
-
-GreeterBucket.isConstruct(x: any)
-\`\`\`
-
-Return whether the given object is a Construct.
-
-###### \`x\`<sup>Required</sup> <a name=\\"x\\" id=\\"construct-library.GreeterBucket.isConstruct.parameter.x\\"></a>
-
-- *Type:* any
 
 ---
 
@@ -2138,7 +2086,7 @@ first call to addToResourcePolicy(s).
 exports[`specify language 1`] = `
 "# API Reference <a name=\\"API Reference\\" id=\\"api-reference\\"></a>
 
-## Constructs <a name=\\"Constructs\\" id=\\"Constructs\\"></a>
+## Resources <a name=\\"Resources\\" id=\\"Resources\\"></a>
 
 ### GoodbyeBucket <a name=\\"GoodbyeBucket\\" id=\\"construct-library.submod1.GoodbyeBucket\\"></a>
 
@@ -2500,7 +2448,6 @@ Rules that define when a redirect is applied and the redirect behavior.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#construct-library.submod1.GoodbyeBucket.toString\\">to_string</a></code> | Returns a string representation of this construct. |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.applyRemovalPolicy\\">apply_removal_policy</a></code> | Apply the given removal policy to this resource. |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.addEventNotification\\">add_event_notification</a></code> | Adds a bucket notification event destination. |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.addObjectCreatedNotification\\">add_object_created_notification</a></code> | Subscribes a destination to receive notifications when an object is created in the bucket. |
@@ -2528,14 +2475,6 @@ Rules that define when a redirect is applied and the redirect behavior.
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.goodbye\\">goodbye</a></code> | *No description.* |
 
 ---
-
-##### \`to_string\` <a name=\\"to_string\\" id=\\"construct-library.submod1.GoodbyeBucket.toString\\"></a>
-
-\`\`\`python
-def to_string() -> str
-\`\`\`
-
-Returns a string representation of this construct.
 
 ##### \`apply_removal_policy\` <a name=\\"apply_removal_policy\\" id=\\"construct-library.submod1.GoodbyeBucket.applyRemovalPolicy\\"></a>
 
@@ -3723,30 +3662,11 @@ def goodbye() -> None
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#construct-library.submod1.GoodbyeBucket.isConstruct\\">is_construct</a></code> | Return whether the given object is a Construct. |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.isResource\\">is_resource</a></code> | Check whether the given construct is a Resource. |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.fromBucketArn\\">from_bucket_arn</a></code> | *No description.* |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.fromBucketAttributes\\">from_bucket_attributes</a></code> | Creates a Bucket construct that represents an external bucket. |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.fromBucketName\\">from_bucket_name</a></code> | *No description.* |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.validateBucketName\\">validate_bucket_name</a></code> | Thrown an exception if the given bucket name is not valid. |
-
----
-
-##### \`is_construct\` <a name=\\"is_construct\\" id=\\"construct-library.submod1.GoodbyeBucket.isConstruct\\"></a>
-
-\`\`\`python
-from construct_library import submod1
-
-submod1.GoodbyeBucket.is_construct(
-  x: typing.Any
-)
-\`\`\`
-
-Return whether the given object is a Construct.
-
-###### \`x\`<sup>Required</sup> <a name=\\"x\\" id=\\"construct-library.submod1.GoodbyeBucket.isConstruct.parameter.x\\"></a>
-
-- *Type:* typing.Any
 
 ---
 
@@ -4548,7 +4468,6 @@ Rules that define when a redirect is applied and the redirect behavior.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#construct-library.GreeterBucket.toString\\">to_string</a></code> | Returns a string representation of this construct. |
 | <code><a href=\\"#construct-library.GreeterBucket.applyRemovalPolicy\\">apply_removal_policy</a></code> | Apply the given removal policy to this resource. |
 | <code><a href=\\"#construct-library.GreeterBucket.addEventNotification\\">add_event_notification</a></code> | Adds a bucket notification event destination. |
 | <code><a href=\\"#construct-library.GreeterBucket.addObjectCreatedNotification\\">add_object_created_notification</a></code> | Subscribes a destination to receive notifications when an object is created in the bucket. |
@@ -4576,14 +4495,6 @@ Rules that define when a redirect is applied and the redirect behavior.
 | <code><a href=\\"#construct-library.GreeterBucket.greet\\">greet</a></code> | *No description.* |
 
 ---
-
-##### \`to_string\` <a name=\\"to_string\\" id=\\"construct-library.GreeterBucket.toString\\"></a>
-
-\`\`\`python
-def to_string() -> str
-\`\`\`
-
-Returns a string representation of this construct.
 
 ##### \`apply_removal_policy\` <a name=\\"apply_removal_policy\\" id=\\"construct-library.GreeterBucket.applyRemovalPolicy\\"></a>
 
@@ -5771,30 +5682,11 @@ def greet() -> None
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#construct-library.GreeterBucket.isConstruct\\">is_construct</a></code> | Return whether the given object is a Construct. |
 | <code><a href=\\"#construct-library.GreeterBucket.isResource\\">is_resource</a></code> | Check whether the given construct is a Resource. |
 | <code><a href=\\"#construct-library.GreeterBucket.fromBucketArn\\">from_bucket_arn</a></code> | *No description.* |
 | <code><a href=\\"#construct-library.GreeterBucket.fromBucketAttributes\\">from_bucket_attributes</a></code> | Creates a Bucket construct that represents an external bucket. |
 | <code><a href=\\"#construct-library.GreeterBucket.fromBucketName\\">from_bucket_name</a></code> | *No description.* |
 | <code><a href=\\"#construct-library.GreeterBucket.validateBucketName\\">validate_bucket_name</a></code> | Thrown an exception if the given bucket name is not valid. |
-
----
-
-##### \`is_construct\` <a name=\\"is_construct\\" id=\\"construct-library.GreeterBucket.isConstruct\\"></a>
-
-\`\`\`python
-import construct_library
-
-construct_library.GreeterBucket.is_construct(
-  x: typing.Any
-)
-\`\`\`
-
-Return whether the given object is a Construct.
-
-###### \`x\`<sup>Required</sup> <a name=\\"x\\" id=\\"construct-library.GreeterBucket.isConstruct.parameter.x\\"></a>
-
-- *Type:* typing.Any
 
 ---
 
@@ -6245,7 +6137,7 @@ first call to addToResourcePolicy(s).
 exports[`specify root submodule 1`] = `
 "# API Reference <a name=\\"API Reference\\" id=\\"api-reference\\"></a>
 
-## Constructs <a name=\\"Constructs\\" id=\\"Constructs\\"></a>
+## Resources <a name=\\"Resources\\" id=\\"Resources\\"></a>
 
 ### GreeterBucket <a name=\\"GreeterBucket\\" id=\\"construct-library.GreeterBucket\\"></a>
 
@@ -6287,7 +6179,6 @@ new GreeterBucket(scope: Construct, id: string, props?: BucketProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#construct-library.GreeterBucket.toString\\">toString</a></code> | Returns a string representation of this construct. |
 | <code><a href=\\"#construct-library.GreeterBucket.applyRemovalPolicy\\">applyRemovalPolicy</a></code> | Apply the given removal policy to this resource. |
 | <code><a href=\\"#construct-library.GreeterBucket.addEventNotification\\">addEventNotification</a></code> | Adds a bucket notification event destination. |
 | <code><a href=\\"#construct-library.GreeterBucket.addObjectCreatedNotification\\">addObjectCreatedNotification</a></code> | Subscribes a destination to receive notifications when an object is created in the bucket. |
@@ -6315,14 +6206,6 @@ new GreeterBucket(scope: Construct, id: string, props?: BucketProps)
 | <code><a href=\\"#construct-library.GreeterBucket.greet\\">greet</a></code> | *No description.* |
 
 ---
-
-##### \`toString\` <a name=\\"toString\\" id=\\"construct-library.GreeterBucket.toString\\"></a>
-
-\`\`\`typescript
-public toString(): string
-\`\`\`
-
-Returns a string representation of this construct.
 
 ##### \`applyRemovalPolicy\` <a name=\\"applyRemovalPolicy\\" id=\\"construct-library.GreeterBucket.applyRemovalPolicy\\"></a>
 
@@ -6974,28 +6857,11 @@ public greet(): void
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#construct-library.GreeterBucket.isConstruct\\">isConstruct</a></code> | Return whether the given object is a Construct. |
 | <code><a href=\\"#construct-library.GreeterBucket.isResource\\">isResource</a></code> | Check whether the given construct is a Resource. |
 | <code><a href=\\"#construct-library.GreeterBucket.fromBucketArn\\">fromBucketArn</a></code> | *No description.* |
 | <code><a href=\\"#construct-library.GreeterBucket.fromBucketAttributes\\">fromBucketAttributes</a></code> | Creates a Bucket construct that represents an external bucket. |
 | <code><a href=\\"#construct-library.GreeterBucket.fromBucketName\\">fromBucketName</a></code> | *No description.* |
 | <code><a href=\\"#construct-library.GreeterBucket.validateBucketName\\">validateBucketName</a></code> | Thrown an exception if the given bucket name is not valid. |
-
----
-
-##### \`isConstruct\` <a name=\\"isConstruct\\" id=\\"construct-library.GreeterBucket.isConstruct\\"></a>
-
-\`\`\`typescript
-import { GreeterBucket } from 'construct-library'
-
-GreeterBucket.isConstruct(x: any)
-\`\`\`
-
-Return whether the given object is a Construct.
-
-###### \`x\`<sup>Required</sup> <a name=\\"x\\" id=\\"construct-library.GreeterBucket.isConstruct.parameter.x\\"></a>
-
-- *Type:* any
 
 ---
 
@@ -7318,7 +7184,7 @@ first call to addToResourcePolicy(s).
 exports[`specify submodule 1`] = `
 "# API Reference <a name=\\"API Reference\\" id=\\"api-reference\\"></a>
 
-## Constructs <a name=\\"Constructs\\" id=\\"Constructs\\"></a>
+## Resources <a name=\\"Resources\\" id=\\"Resources\\"></a>
 
 ### GoodbyeBucket <a name=\\"GoodbyeBucket\\" id=\\"construct-library.submod1.GoodbyeBucket\\"></a>
 
@@ -7360,7 +7226,6 @@ new submod1.GoodbyeBucket(scope: Construct, id: string, props?: BucketProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#construct-library.submod1.GoodbyeBucket.toString\\">toString</a></code> | Returns a string representation of this construct. |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.applyRemovalPolicy\\">applyRemovalPolicy</a></code> | Apply the given removal policy to this resource. |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.addEventNotification\\">addEventNotification</a></code> | Adds a bucket notification event destination. |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.addObjectCreatedNotification\\">addObjectCreatedNotification</a></code> | Subscribes a destination to receive notifications when an object is created in the bucket. |
@@ -7388,14 +7253,6 @@ new submod1.GoodbyeBucket(scope: Construct, id: string, props?: BucketProps)
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.goodbye\\">goodbye</a></code> | *No description.* |
 
 ---
-
-##### \`toString\` <a name=\\"toString\\" id=\\"construct-library.submod1.GoodbyeBucket.toString\\"></a>
-
-\`\`\`typescript
-public toString(): string
-\`\`\`
-
-Returns a string representation of this construct.
 
 ##### \`applyRemovalPolicy\` <a name=\\"applyRemovalPolicy\\" id=\\"construct-library.submod1.GoodbyeBucket.applyRemovalPolicy\\"></a>
 
@@ -8047,28 +7904,11 @@ public goodbye(): void
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#construct-library.submod1.GoodbyeBucket.isConstruct\\">isConstruct</a></code> | Return whether the given object is a Construct. |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.isResource\\">isResource</a></code> | Check whether the given construct is a Resource. |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.fromBucketArn\\">fromBucketArn</a></code> | *No description.* |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.fromBucketAttributes\\">fromBucketAttributes</a></code> | Creates a Bucket construct that represents an external bucket. |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.fromBucketName\\">fromBucketName</a></code> | *No description.* |
 | <code><a href=\\"#construct-library.submod1.GoodbyeBucket.validateBucketName\\">validateBucketName</a></code> | Thrown an exception if the given bucket name is not valid. |
-
----
-
-##### \`isConstruct\` <a name=\\"isConstruct\\" id=\\"construct-library.submod1.GoodbyeBucket.isConstruct\\"></a>
-
-\`\`\`typescript
-import { submod1 } from 'construct-library'
-
-submod1.GoodbyeBucket.isConstruct(x: any)
-\`\`\`
-
-Return whether the given object is a Construct.
-
-###### \`x\`<sup>Required</sup> <a name=\\"x\\" id=\\"construct-library.submod1.GoodbyeBucket.isConstruct.parameter.x\\"></a>
-
-- *Type:* any
 
 ---
 

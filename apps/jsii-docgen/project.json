@@ -6,7 +6,7 @@
       "executor": "nx:run-script",
       "options": {
         "cwd": "apps/jsii-docgen",
-        "script": "build"
+        "script": "compile"
       }
     }
   }

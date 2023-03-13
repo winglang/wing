@@ -39,6 +39,7 @@ changelog. To that end, pull request titles must follow this convention:
   * `docs` (documentation update)
   * `rfc` (new/update to an RFC doc)
   * `chore` (not included in changelog)
+  * `revert` (undoing a past change)
 * `<scope>` must be one of:
   * `compiler`
   * `sdk`

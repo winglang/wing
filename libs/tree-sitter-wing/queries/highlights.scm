@@ -3,22 +3,23 @@
 (variable_definition_statement 
   name: (identifier) @variable
 )
-(reference (identifier)) @variable
-(reference (nested_identifier property: (identifier))) @property
+(reference (identifier) @variable)
+(reference (nested_identifier property: (identifier) @property) ) 
+
 
 ; Classes
 
 (custom_type) @type
-(class_member 
+(class_field 
   name: (identifier) @member
 ) 
 (class_definition 
   name: (identifier) @type
 )
-(function_definition
+(method_definition
   name: (identifier) @function
 )
-(inflight_function_definition
+(inflight_method_definition
   name: (identifier) @function
 )
 
