@@ -2071,7 +2071,7 @@ supported languages.
 
 ## 5.2 JavaScript
 
-The `extern(file)` modifier can be used on method declarations (in classes and resources) to indicate that a method is backed by an implementation imported from a JavaScript file.
+The `extern "file.js"` modifier can be used on method declarations (in classes and resources) to indicate that a method is backed by an implementation imported from a JavaScript file.
 
 In the following example, the static inflight method `make_id` is implemented
 in `helper.js`:
@@ -2086,7 +2086,7 @@ resource TaskList {
     this.bucket.put(id, title);
   }
 
-  extern("./helpers.js") static inflight make_id(): str;
+  extern "./helpers.js" static inflight make_id(): str;
 } 
 
 // helpers.js
