@@ -3471,7 +3471,7 @@ Invoke the function asynchronously with a given payload.
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>
 
-**Inflight client:** [wingsdk.cloud.IFunctionHandlerClient](#wingsdk.cloud.IFunctionHandlerClient)
+**Inflight client:** [@winglang/sdk.cloud.IFunctionHandlerClient](#@winglang/sdk.cloud.IFunctionHandlerClient)
 
 Represents a resource with an inflight "handle" method that can be used to create a `cloud.Function`.
 
@@ -3636,7 +3636,7 @@ Payload to send to the queue.
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IQueueOnMessageHandler">IQueueOnMessageHandler</a>
 
-**Inflight client:** [wingsdk.cloud.IQueueOnMessageHandlerClient](#wingsdk.cloud.IQueueOnMessageHandlerClient)
+**Inflight client:** [@winglang/sdk.cloud.IQueueOnMessageHandlerClient](#@winglang/sdk.cloud.IQueueOnMessageHandlerClient)
 
 Represents a resource with an inflight "handle" method that can be passed to `Queue.on_message`.
 
@@ -3711,7 +3711,7 @@ Function that will be called when a message is received from the queue.
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>
 
-**Inflight client:** [wingsdk.cloud.IScheduleOnTickHandlerClient](#wingsdk.cloud.IScheduleOnTickHandlerClient)
+**Inflight client:** [@winglang/sdk.cloud.IScheduleOnTickHandlerClient](#@winglang/sdk.cloud.IScheduleOnTickHandlerClient)
 
 Represents a resource with an inflight "handle" method that can be passed to `Schedule.on_tick`.
 
@@ -3813,7 +3813,7 @@ Payload to publish to Topic.
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>
 
-**Inflight client:** [wingsdk.cloud.ITopicOnMessageHandlerClient](#wingsdk.cloud.ITopicOnMessageHandlerClient)
+**Inflight client:** [@winglang/sdk.cloud.ITopicOnMessageHandlerClient](#@winglang/sdk.cloud.ITopicOnMessageHandlerClient)
 
 Represents a resource with an inflight "handle" method that can be passed to `Topic.on_message`.
 

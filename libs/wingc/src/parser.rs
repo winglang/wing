@@ -26,6 +26,7 @@ pub struct Parser<'a> {
 // k=grammar, v=optional_message, example: ("generic", "targed impl: 1.0.0")
 static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"struct_definition" => "see https://github.com/winglang/wing/issues/120",
+	"interface_definition" => "see https://github.com/winglang/wing/issues/123",
 	"any" => "see https://github.com/winglang/wing/issues/434",
 	"void" => "see https://github.com/winglang/wing/issues/432",
 	"nil" => "see https://github.com/winglang/wing/issues/433",
@@ -516,11 +517,40 @@ impl<'s> Parser<'s> {
 		} else {
 			None
 		};
+
+		let mut implements = vec![];
+		for type_node in statement_node.children_by_field_name("implements", &mut cursor) {
+			// ignore comments
+			if type_node.is_extra() {
+				continue;
+			}
+
+			// ignore commas
+			if !type_node.is_named() {
+				continue;
+			}
+
+			let interface_type = self.build_type_annotation(&type_node)?;
+			match interface_type {
+				TypeAnnotation::UserDefined(interface_type) => implements.push(interface_type),
+				_ => {
+					self.add_error::<Node>(
+						format!(
+							"Implemented interface must be a user defined type, found {}",
+							interface_type
+						),
+						&type_node,
+					)?;
+				}
+			}
+		}
+
 		Ok(StmtKind::Class(Class {
 			name,
 			fields,
 			methods,
 			parent,
+			implements,
 			constructor: constructor.unwrap(),
 			is_resource,
 		}))
