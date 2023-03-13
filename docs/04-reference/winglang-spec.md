@@ -1085,7 +1085,7 @@ if let ip_address = options.networking?.ip_address {
 In the future we will consider the following additional sugar syntax:
 
 * `x ?? throw("message")` to unwrap `x` or throw if `x` is not defined.
-* `x =?? value` returns `x` or assigns a value to it and returns it to support lazy evaluation/memoization.
+* `x ??= value` returns `x` or assigns a value to it and returns it to support lazy evaluation/memoization (inspired by [Nullish coalescing assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_assignment)).
 
 [`▲ top`][top]
 
