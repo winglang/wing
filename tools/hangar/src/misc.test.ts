@@ -10,19 +10,24 @@ test("unsupported resource in target", async ({ expect }) => {
   const entrypoint = join(workdir, "test.w");
 
   // for now, GCP doesn't support schedules. at some point we will need to update this test
-  await writeFile(entrypoint, `
+  await writeFile(
+    entrypoint,
+    `
     bring cloud;
     new cloud.Schedule();
-  `);
+  `
+  );
 
-  await expect(runWingCommand(
-    workdir,
-    entrypoint,
-    ["compile", "--target", "tf-gcp"],
-    true,
-    {
-      GOOGLE_PROJECT_ID: "test-project",
-      GOOGLE_STORAGE_LOCATION: "us-central1",
-    }
-  )).rejects.toThrow(/Unable to create an instance of abstract type "@winglang\/sdk.cloud.Schedule"/);
+  await expect(
+    runWingCommand(
+      workdir,
+      entrypoint,
+      ["compile", "--target", "tf-gcp"],
+      true,
+      {
+        GOOGLE_PROJECT_ID: "test-project",
+        GOOGLE_STORAGE_LOCATION: "us-central1",
+      }
+    )
+  ).rejects.toThrowErrorMatchingInlineSnapshot('"preflight error: Unable to create an instance of abstract type \\"@winglang/sdk.cloud.Schedule\\" for this target"');
 });

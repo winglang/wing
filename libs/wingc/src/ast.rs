@@ -68,6 +68,21 @@ pub enum Phase {
 	Independent,
 }
 
+impl Phase {
+	/// Returns true if the current phase can call into given phase.
+	/// Rules:
+	/// - Independent functions can be called from any phase.
+	/// - Preflight can call into preflight
+	/// - Inflight can call into inflight
+	///
+	pub fn can_call_to(&self, to: &Phase) -> bool {
+		match to {
+			Phase::Independent => true,
+			Phase::Inflight | Phase::Preflight => to == self,
+		}
+	}
+}
+
 impl Display for Phase {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
@@ -262,6 +277,8 @@ pub enum StmtKind {
 		elif_statements: Vec<ElifBlock>,
 		else_statements: Option<Scope>,
 	},
+	Break,
+	Continue,
 	Expression(Expr),
 	Assignment {
 		variable: Reference,
@@ -409,6 +426,7 @@ pub enum InterpolatedStringPart {
 #[derivative(Debug)]
 pub struct Scope {
 	pub statements: Vec<Stmt>,
+	pub span: WingSpan,
 	#[derivative(Debug = "ignore")]
 	pub env: RefCell<Option<SymbolEnv>>, // None after parsing, set to Some during type checking phase
 }

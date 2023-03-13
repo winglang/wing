@@ -19,6 +19,7 @@ env:
   NODE_OPTIONS: "--max-old-space-size=4096"
   PROJEN_BUMP_VERSION: "0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}"
   RUST_VERSION: "1.67.1"
+  CARGO_TERM_COLOR: always
 
 jobs:
   prepare:
@@ -72,7 +73,7 @@ jobs:
           cat CHANGELOG.md >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Changelog
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: changelog
           path: CHANGELOG.md
@@ -83,14 +84,14 @@ jobs:
 
       - name: Upload Docs
         if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: docs
           path: docs.tgz
 
   build:
     name: "Build"
-    timeout-minutes: 20
+    timeout-minutes: 25
     runs-on: ubuntu-latest
     needs: prepare
     env:
@@ -104,11 +105,13 @@ jobs:
         uses: volta-cli/action@v4.0.0
 
       - name: Install Rust
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ env.RUST_VERSION }}
-          components: rustfmt,clippy
-          override: true
+          targets: |
+            x86_64-unknown-linux-gnu
+            wasm32-wasi
+          components: rustfmt,clippy,rust-std
 
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
@@ -116,42 +119,43 @@ jobs:
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
 
-      - name: Lint Nx
+      - name: Lint Nx Configuration
         run: npx nx workspace-lint
 
-      - name: Build, Test, and Package
-        uses: MansaGroup/nrwl-nx-action@v2
-        with:
-          targets: "build,test,package"
-          all: true
-          # If pushing, exclude hangar because we're going to run it in a separate job
-          args: "${{ github.event_name == 'push' && '--exclude=hangar ' || '' }}--configuration=release --output-style=stream --verbose"
+      - name: Build
+        run: npm run build:ci
+
+      - name: Package
+        run: npm run package:ci
+
+      - name: Test
+        run: npm run test:ci
 
       - name: Upload Wing CLI
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: wing
           path: apps/wing/*.tgz
 
       - name: Upload WingSDK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: wingsdk
           path: libs/wingsdk/*.tgz
 
       - name: Upload WingC WASM
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: wingc
           path: target/wasm32-wasi/release/wingc.wasm
 
-      - name: Upload extension
-        uses: actions/upload-artifact@v2
+      - name: Upload Extension
+        uses: actions/upload-artifact@v3
         with:
           name: vscode-wing
           path: apps/vscode-wing/vscode-wing.vsix
 
-      - name: "Publish Wing Playground"
+      - name: Publish Playground
         if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
         uses: amondnet/vercel-action@v25.1.0
         with:
@@ -164,20 +168,26 @@ jobs:
           vercel-args: "--prod "
 
   e2e:
-    name: "E2E Testing"
-    if: github.event_name == 'push'
+    name: "E2E / ${{ matrix.runner }} + Node${{ matrix.node }} [${{ matrix.shard }}]"
     needs:
       - build
       - prepare
     strategy:
       fail-fast: true
       matrix:
-        runner:
-          - ubuntu-latest
-          # - windows-latest
-          - macos-latest
+        runner: [ubuntu, macos, windows]
         node: [18, 19]
-    runs-on: ${{ matrix.runner }}
+        shard: ["1/2", "2/2"]
+        full_run:
+          # Do a full run on push or when the PR is labeled "full-run"
+          - ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'pr/e2e-full') }}
+        exclude:
+          - runner: macos
+            full_run: false
+          - runner: ubuntu
+            node: 19
+            full_run: false
+    runs-on: "${{ matrix.runner }}-latest"
     env:
       HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.prepare.outputs.version }}.tgz"
       HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.prepare.outputs.version }}.tgz"
@@ -196,24 +206,15 @@ jobs:
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
         with:
-          working-directory: tools/hangar
+          working-directory: |
+            tools/hangar
+            examples/tests/valid
+            examples/tests/invalid
           install-command: npm ci --ignore-scripts
-
-      - name: Install Example Dependencies (1/2)
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: examples/tests/valid
-          install-command: npm ci
-
-      - name: Install Example Dependencies (2/2)
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: examples/tests/invalid
-          install-command: npm ci
 
       - name: Run E2E Tests
         working-directory: tools/hangar
-        run: npm run test
+        run: npm run test -- --shard=${{ matrix.shard }}
 
   publish:
     name: Publish
@@ -245,7 +246,7 @@ jobs:
           registryUrl: "https://marketplace.visualstudio.com"
           extensionFile: "vscode-wing/vscode-wing.vsix"
 
-      - name: Login to Private NPM registry
+      - name: Login to NPM registry
         run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
 
       - name: Check published Wing version
