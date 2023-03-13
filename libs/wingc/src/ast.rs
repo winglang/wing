@@ -268,6 +268,7 @@ pub enum StmtKind {
 		else_statements: Option<Scope>,
 	},
 	Break,
+	Continue,
 	Expression(Expr),
 	Assignment {
 		variable: Reference,
