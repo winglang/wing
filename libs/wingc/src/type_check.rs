@@ -1491,11 +1491,11 @@ impl<'a> TypeChecker<'a> {
 	) -> TypeRef {
 		// Skip validate if in Json
 		if !context.in_json {
-			self.validate_type(actual_type, expected_type, exp);
+			return self.validate_type(actual_type, expected_type, exp);
 		}
 
 		if !actual_type.is_json_legal_value() {
-			self.expr_error(
+			return self.expr_error(
 				exp,
 				format!(
 					"Expected \"Json\" elements to be Json Value (https://www.json.org/json-en.html), but got \"{}\" which is not Json Value",
