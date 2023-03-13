@@ -69,6 +69,8 @@ constructor() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_val === \\"hello\\")'\`)})((s_val === \\"hello\\"))};
   const n_val = ((args) => { if (typeof args !== \\"number\\") {throw new Error(\`unable to parse \${typeof args} \\"\${args}\\" as a number\`)}; return JSON.parse(JSON.stringify(args)) })((json_of_many)[\\"a\\"]);
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(n_val === 123)'\`)})((n_val === 123))};
+  const b_val = ((args) => { if (typeof args !== \\"boolean\\") {throw new Error(\`unable to parse \${typeof args} \\"\${args}\\" as a boolean\`)}; return JSON.parse(JSON.stringify(args)) })((json_of_many)[\\"c\\"]);
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: 'b_val'\`)})(b_val)};
 }
 }
 new MyApp().synth();"

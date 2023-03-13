@@ -1,6 +1,5 @@
 import { Json } from "./json";
 
-
 /**
  * Boolean
  */

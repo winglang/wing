@@ -1795,6 +1795,52 @@ let topic_props = cloud.TopicProps{ ... }
 
 ## Classes <a name="Classes" id="Classes"></a>
 
+### Boolean <a name="Boolean" id="@winglang/sdk.std.Boolean"></a>
+
+Boolean.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.Boolean.Initializer"></a>
+
+```wing
+bring std;
+
+new std.Boolean()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Boolean.fromJson">from_json</a></code> | Parse a boolean from Json. |
+
+---
+
+##### `from_json` <a name="from_json" id="@winglang/sdk.std.Boolean.fromJson"></a>
+
+```wing
+bring std;
+
+std.Boolean.from_json(json: Json)
+```
+
+Parse a boolean from Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Boolean.fromJson.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to parse boolean from.
+
+---
+
+
+
 ### CounterClientBase <a name="CounterClientBase" id="@winglang/sdk.cloud.CounterClientBase"></a>
 
 - *Implements:* <a href="#@winglang/sdk.cloud.ICounterClient">ICounterClient</a>
@@ -3112,7 +3158,7 @@ Parse a number from Json.
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
-to create number from.
+to parse number from.
 
 ---
 
