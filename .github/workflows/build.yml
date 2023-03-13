@@ -218,6 +218,13 @@ jobs:
         working-directory: tools/hangar
         run: npm run test -- --shard=${{ matrix.shard }}
 
+  quality-gate:
+    name: Quality Gate
+    runs-on: ubuntu-latest
+    needs: 
+     - prepare
+     - e2e
+
   publish:
     name: Publish
     if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
