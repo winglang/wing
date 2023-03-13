@@ -1,7 +1,7 @@
+import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import { Resource } from "../../src/core";
 import { SimApp, Testing } from "../../src/testing";
-import { test, expect } from "vitest";
 
 test("create a bucket", async () => {
   // GIVEN
