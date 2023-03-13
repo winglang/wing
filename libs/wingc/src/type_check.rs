@@ -304,7 +304,7 @@ trait Subtype {
 
 impl Subtype for Phase {
 	fn is_subtype_of(&self, other: &Self) -> bool {
-		// We model phase subtyping is as if the independent phase is an
+		// We model phase subtyping as if the independent phase is an
 		// intersection type of preflight and inflight. This means that
 		// independent = preflight & inflight.
 		//
