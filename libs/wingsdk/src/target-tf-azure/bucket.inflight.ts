@@ -17,8 +17,8 @@ export class BucketClient implements IBucketClient {
     isPublic: boolean = false,
     blobServiceClient?: BlobServiceClient
   ) {
+    isPublic; // for implementing public_url later on
     this.bucketName = bucketName;
-    this._public = isPublic;
     this.blobServiceClient =
       blobServiceClient ??
       new BlobServiceClient(
