@@ -405,7 +405,7 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 				todo!()
 			}
 			// Type definitions with no expressions in them can't capture anything
-			StmtKind::Struct { .. } | StmtKind::Enum { .. } | StmtKind::Break { .. } => {}
+			StmtKind::Struct { .. } | StmtKind::Enum { .. } | StmtKind::Break | StmtKind::Continue => {}
 			StmtKind::TryCatch {
 				try_statements,
 				catch_block,

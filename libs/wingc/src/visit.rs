@@ -119,7 +119,7 @@ where
 			v.visit_expr(condition);
 			v.visit_scope(statements);
 		}
-		StmtKind::Break { .. } => {}
+		StmtKind::Break | StmtKind::Continue => {}
 		StmtKind::If {
 			condition,
 			statements,

@@ -630,7 +630,8 @@ impl<'a> JSifier<'a> {
 					self.jsify_scope(statements, context),
 				)
 			}
-			StmtKind::Break { .. } => "break;".into(),
+			StmtKind::Break => "break;".into(),
+			StmtKind::Continue => "continue;".into(),
 			StmtKind::If {
 				condition,
 				statements,
