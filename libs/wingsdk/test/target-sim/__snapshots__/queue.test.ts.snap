@@ -229,16 +229,6 @@ exports[`messages are requeued if the function fails 2`] = `
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/my_queue-OnMessage-e645076f/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -592,16 +582,6 @@ exports[`queue with one subscriber, batch size of 5 2`] = `
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/my_queue-OnMessage-e645076f/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -863,16 +843,6 @@ exports[`queue with one subscriber, default batch size of 1 2`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/my_queue-OnMessage-e645076f/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",

@@ -107,7 +107,7 @@ impl<'s> Parser<'s> {
 	}
 
 	fn check_error<'a>(&'a self, node: Node<'a>, expected: &str) -> DiagnosticResult<Node> {
-		if node.has_error() {
+		if node.is_error() {
 			self.add_error(format!("Expected {}", expected), &node)
 		} else {
 			Ok(node)
@@ -171,6 +171,7 @@ impl<'s> Parser<'s> {
 				.filter_map(|(i, st_node)| self.build_statement(&st_node, i).ok())
 				.collect(),
 			env: RefCell::new(None), // env should be set later when scope is type-checked
+			span: self.node_span(scope_node),
 		}
 	}
 
@@ -187,6 +188,7 @@ impl<'s> Parser<'s> {
 			"for_in_loop" => self.build_for_statement(statement_node)?,
 			"while_statement" => self.build_while_statement(statement_node)?,
 			"break_statement" => self.build_break_statement(statement_node)?,
+			"continue_statement" => self.build_continue_statement(statement_node)?,
 			"return_statement" => self.build_return_statement(statement_node)?,
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
@@ -283,6 +285,16 @@ impl<'s> Parser<'s> {
 			);
 		}
 		Ok(StmtKind::Break)
+	}
+
+	fn build_continue_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		if !*self.is_in_loop.borrow() {
+			return self.add_error::<StmtKind>(
+				format!("Expected continue statement to be inside of a loop (while/for)"),
+				statement_node,
+			);
+		}
+		Ok(StmtKind::Continue)
 	}
 
 	fn build_if_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
@@ -638,10 +650,19 @@ impl<'s> Parser<'s> {
 		if nested_node.has_error() {
 			return self.add_error(format!("Syntax error"), &nested_node);
 		}
-		Ok(Reference::InstanceMember {
-			object: Box::new(self.build_expression(&nested_node.child_by_field_name("object").unwrap())?),
-			property: self.node_symbol(&nested_node.child_by_field_name("property").unwrap())?,
-		})
+		if let Some(property) = nested_node.child_by_field_name("property") {
+			Ok(Reference::InstanceMember {
+				object: Box::new(self.build_expression(&nested_node.child_by_field_name("object").unwrap())?),
+				property: self.node_symbol(&property)?,
+			})
+		} else {
+			self.add_error(
+				format!("Expected property"),
+				&nested_node
+					.child(nested_node.child_count() - 1)
+					.expect("Nested identifier should have at least one child"),
+			)
+		}
 	}
 
 	fn build_udt_annotation(&self, nested_node: &Node) -> DiagnosticResult<TypeAnnotation> {
@@ -1018,7 +1039,15 @@ impl<'s> Parser<'s> {
 		for node in iter {
 			if !self.error_nodes.borrow().contains(&node.id()) {
 				if node.is_error() {
-					_ = self.add_error::<()>(String::from("Unknown parser error."), &node);
+					if node.named_child_count() == 0 {
+						_ = self.add_error::<()>(String::from("Unknown parser error."), &node);
+					} else {
+						let mut cursor = node.walk();
+						let children = node.named_children(&mut cursor);
+						for child in children {
+							_ = self.add_error::<()>(format!("Unexpected '{}'.", child.kind()), &child);
+						}
+					}
 				} else if node.is_missing() {
 					_ = self.add_error::<()>(format!("'{}' expected.", node.kind()), &node);
 				}

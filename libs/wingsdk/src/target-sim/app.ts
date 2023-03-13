@@ -31,8 +31,13 @@ export class App extends core.App {
   /**
    * Directory where artifacts are synthesized to.
    */
-  public readonly outdir: string;
-  private readonly files: core.Files;
+  public readonly workdir: string;
+
+  /**
+   * The output directory of this app.
+   */
+  protected readonly outdir: string;
+
   private readonly name: string;
   private readonly simfile: string;
   private synthed = false;
@@ -41,8 +46,9 @@ export class App extends core.App {
     super(undefined as any, "root");
     this.name = props.name ?? "app";
     this.outdir = props.outdir ?? ".";
+    this.workdir = mkdtemp();
+
     Logger.register(this);
-    this.files = new core.Files({ app: this, stateFile: props.stateFile });
     this.simfile = path.join(this.outdir, `${this.name}.wsim`);
   }
 
@@ -90,22 +96,17 @@ export class App extends core.App {
     // call preSynthesize() on every construct in the tree
     preSynthesizeAllConstructs(this);
 
-    const workdir = mkdtemp();
-
-    // write application assets into workdir
-    this.files.synth(workdir);
-
     // write simulator.json file into workdir
-    this.synthSimulatorFile(workdir);
+    this.synthSimulatorFile(this.workdir);
 
     // write tree.json file into workdir
-    core.synthesizeTree(this, workdir);
+    core.synthesizeTree(this, this.workdir);
 
     // tar + gzip the workdir, and write it as a .wsim file to the simfile
     tar.create(
       {
         gzip: true,
-        cwd: workdir,
+        cwd: this.workdir,
         sync: true,
         file: this.simfile,
       },

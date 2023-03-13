@@ -277,6 +277,10 @@
           "named": true
         },
         {
+          "type": "continue_statement",
+          "named": true
+        },
+        {
           "type": "enum_definition",
           "named": true
         },
@@ -556,6 +560,11 @@
         ]
       }
     }
+  },
+  {
+    "type": "continue_statement",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "custom_type",
@@ -1498,7 +1507,7 @@
       },
       "property": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "identifier",
@@ -2062,6 +2071,10 @@
         },
         {
           "type": "class_definition",
+          "named": true
+        },
+        {
+          "type": "continue_statement",
           "named": true
         },
         {
@@ -2694,6 +2707,10 @@
   {
     "type": "comment",
     "named": true
+  },
+  {
+    "type": "continue",
+    "named": false
   },
   {
     "type": "defer",
