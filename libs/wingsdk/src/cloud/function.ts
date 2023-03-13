@@ -1,12 +1,13 @@
 import { spawnSync } from "child_process";
-import { readFileSync, writeFileSync } from "fs";
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import { Logger } from "./logger";
 import { fqnForType } from "../constants";
 import { IInflightHost, IResource, Inflight, Resource, App } from "../core";
 import { Duration } from "../std";
-import { mkdtemp, normalPath } from "../util";
+import { normalPath } from "../util";
+import { CaseConventions, ResourceNames } from "../utils/resource-names";
 
 /**
  * Global identifier for `Function`.
@@ -109,9 +110,21 @@ export abstract class Function extends Resource implements IInflightHost {
       implicit: true,
     });
 
-    const tempdir = mkdtemp();
-    const infile = join(tempdir, "prebundle.js");
-    const outfile = join(tempdir, "index.js");
+    const assetRelativeDir = join(
+      "assets",
+      ResourceNames.generateName(this, {
+        // Avoid characters that may cause path issues
+        disallowedRegex: /[><:"/\\|?*]/g,
+        case: CaseConventions.LOWERCASE,
+        sep: "_",
+      })
+    );
+
+    const assetDir = join(App.of(this).workdir, assetRelativeDir);
+    mkdirSync(assetDir, { recursive: true });
+
+    const infile = join(assetDir, "prebundle.js");
+    const outfile = join(assetDir, "index.js");
     writeFileSync(infile, lines.join("\n"));
 
     // We would invoke esbuild directly here, but there is a bug where esbuild
@@ -123,7 +136,11 @@ export abstract class Function extends Resource implements IInflightHost {
       `const esbuild = require("${normalPath(
         require.resolve("esbuild-wasm")
       )}");`,
-      `esbuild.buildSync({ bundle: true, entryPoints: ["${infile}"], outfile: "${outfile}", minify: false, platform: "node", target: "node16", external: ["aws-sdk"] });`,
+      `esbuild.buildSync({ bundle: true, entryPoints: ["${normalPath(
+        infile
+      )}"], outfile: "${normalPath(
+        outfile
+      )}", minify: false, platform: "node", target: "node16", external: ["aws-sdk"] });`,
     ].join("\n");
     let result = spawnSync(process.argv[0], ["-e", esbuildScript]);
     if (result.status !== 0) {
@@ -138,6 +155,9 @@ export abstract class Function extends Resource implements IInflightHost {
     const outlines = readFileSync(outfile, "utf-8").split("\n");
     const isNotLineComment = (line: string) => !line.startsWith("//");
     writeFileSync(outfile, outlines.filter(isNotLineComment).join("\n"));
+
+    // remove input file
+    rmSync(infile);
 
     this.assetPath = outfile;
   }

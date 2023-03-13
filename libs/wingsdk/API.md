@@ -678,94 +678,6 @@ Returns the set of environment variables for this function.
 ---
 
 
-### JsonFile <a name="JsonFile" id="@winglang/sdk.fs.JsonFile"></a>
-
-Represents a text file that should be synthesized in the app's outdir.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.fs.JsonFile.Initializer"></a>
-
-```wing
-bring fs;
-
-new fs.JsonFile(file_path: str, props: JsonFileProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.fs.JsonFile.Initializer.parameter.filePath">file_path</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#@winglang/sdk.fs.JsonFile.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.fs.JsonFileProps">JsonFileProps</a></code> | *No description.* |
-
----
-
-##### `file_path`<sup>Required</sup> <a name="file_path" id="@winglang/sdk.fs.JsonFile.Initializer.parameter.filePath"></a>
-
-- *Type:* str
-
----
-
-##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.fs.JsonFile.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.fs.JsonFileProps">JsonFileProps</a>
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.fs.JsonFile.save">save</a></code> | Render the contents of the file and save it to the user's file system. |
-
----
-
-##### `save` <a name="save" id="@winglang/sdk.fs.JsonFile.save"></a>
-
-```wing
-save(outdir: str): void
-```
-
-Render the contents of the file and save it to the user's file system.
-
-###### `outdir`<sup>Required</sup> <a name="outdir" id="@winglang/sdk.fs.JsonFile.save.parameter.outdir"></a>
-
-- *Type:* str
-
----
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.fs.JsonFile.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.fs.JsonFile.property.filePath">file_path</a></code> | <code>str</code> | The file's relative path to the output directory. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.fs.JsonFile.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `file_path`<sup>Required</sup> <a name="file_path" id="@winglang/sdk.fs.JsonFile.property.filePath"></a>
-
-```wing
-file_path: str;
-```
-
-- *Type:* str
-
-The file's relative path to the output directory.
-
----
-
-
 ### Logger <a name="Logger" id="@winglang/sdk.cloud.Logger"></a>
 
 **Inflight client:** [@winglang/sdk.cloud.ILoggerClient](#@winglang/sdk.cloud.ILoggerClient)
@@ -1063,109 +975,6 @@ Whether a resource is stateful, i.e. it stores information that is not defined b
 A non-stateful resource does not remember information about past
 transactions or events, and can typically be replaced by a cloud provider
 with a fresh copy without any consequences.
-
----
-
-
-### TextFile <a name="TextFile" id="@winglang/sdk.fs.TextFile"></a>
-
-Represents a text file that should be synthesized in the app's outdir.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.fs.TextFile.Initializer"></a>
-
-```wing
-bring fs;
-
-new fs.TextFile(file_path: str, props?: TextFileProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.fs.TextFile.Initializer.parameter.filePath">file_path</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#@winglang/sdk.fs.TextFile.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.fs.TextFileProps">TextFileProps</a></code> | *No description.* |
-
----
-
-##### `file_path`<sup>Required</sup> <a name="file_path" id="@winglang/sdk.fs.TextFile.Initializer.parameter.filePath"></a>
-
-- *Type:* str
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.fs.TextFile.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.fs.TextFileProps">TextFileProps</a>
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.fs.TextFile.save">save</a></code> | Render the contents of the file and save it to the user's file system. |
-| <code><a href="#@winglang/sdk.fs.TextFile.addLine">add_line</a></code> | Append a line to the text file's contents. |
-
----
-
-##### `save` <a name="save" id="@winglang/sdk.fs.TextFile.save"></a>
-
-```wing
-save(outdir: str): void
-```
-
-Render the contents of the file and save it to the user's file system.
-
-###### `outdir`<sup>Required</sup> <a name="outdir" id="@winglang/sdk.fs.TextFile.save.parameter.outdir"></a>
-
-- *Type:* str
-
----
-
-##### `add_line` <a name="add_line" id="@winglang/sdk.fs.TextFile.addLine"></a>
-
-```wing
-add_line(line: str): void
-```
-
-Append a line to the text file's contents.
-
-###### `line`<sup>Required</sup> <a name="line" id="@winglang/sdk.fs.TextFile.addLine.parameter.line"></a>
-
-- *Type:* str
-
----
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.fs.TextFile.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.fs.TextFile.property.filePath">file_path</a></code> | <code>str</code> | The file's relative path to the output directory. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.fs.TextFile.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `file_path`<sup>Required</sup> <a name="file_path" id="@winglang/sdk.fs.TextFile.property.filePath"></a>
-
-```wing
-file_path: str;
-```
-
-- *Type:* str
-
-The file's relative path to the output directory.
 
 ---
 
@@ -1712,38 +1521,6 @@ The maximum amount of time the function can run.
 
 ---
 
-### JsonFileProps <a name="JsonFileProps" id="@winglang/sdk.fs.JsonFileProps"></a>
-
-Props for `JsonFile`.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.fs.JsonFileProps.Initializer"></a>
-
-```wing
-bring fs;
-
-let json_file_props = fs.JsonFileProps{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.fs.JsonFileProps.property.obj">obj</a></code> | <code>any</code> | The object that will be serialized into the file during synthesis. |
-
----
-
-##### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.fs.JsonFileProps.property.obj"></a>
-
-```wing
-obj: any;
-```
-
-- *Type:* any
-
-The object that will be serialized into the file during synthesis.
-
----
-
 ### QueueOnMessageProps <a name="QueueOnMessageProps" id="@winglang/sdk.cloud.QueueOnMessageProps"></a>
 
 Options for Queue.onMessage.
@@ -1989,41 +1766,6 @@ Trigger events at a periodic rate.
 1m
 ```
 
-
-### TextFileProps <a name="TextFileProps" id="@winglang/sdk.fs.TextFileProps"></a>
-
-Props for `TextFile`.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.fs.TextFileProps.Initializer"></a>
-
-```wing
-bring fs;
-
-let text_file_props = fs.TextFileProps{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.fs.TextFileProps.property.lines">lines</a></code> | <code>MutArray&lt;str&gt;</code> | The lines of text that will be serialized into the file during synthesis. |
-
----
-
-##### `lines`<sup>Optional</sup> <a name="lines" id="@winglang/sdk.fs.TextFileProps.property.lines"></a>
-
-```wing
-lines: MutArray<str>;
-```
-
-- *Type:* MutArray&lt;str&gt;
-- *Default:* []
-
-The lines of text that will be serialized into the file during synthesis.
-
-They will be joined with newline characters.
-
----
 
 ### TopicOnMessageProps <a name="TopicOnMessageProps" id="@winglang/sdk.cloud.TopicOnMessageProps"></a>
 
@@ -2277,9 +2019,12 @@ new std.ImmutableArray()
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.ImmutableArray.at">at</a></code> | Get the value at the given index. |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.copy">copy</a></code> | Create an immutable shallow copy of this array. |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.concat">concat</a></code> | Merge arr to the end of this array. |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.contains">contains</a></code> | Checks if this array includes searchElement. |
 | <code><a href="#@winglang/sdk.std.ImmutableArray.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this array. |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.join">join</a></code> | Creates and returns a new string by concatenating all of the elements in an array, separated by commas or a specified separator string. |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.indexOf">index_of</a></code> | Returns the index of the first occurrence of searchElement found. |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.lastIndexOf">last_index_of</a></code> | Returns the index of the last occurrence of searchElement found. |
 
 ---
 
@@ -2299,13 +2044,37 @@ index of the value to get.
 
 ---
 
-##### `copy` <a name="copy" id="@winglang/sdk.std.ImmutableArray.copy"></a>
+##### `concat` <a name="concat" id="@winglang/sdk.std.ImmutableArray.concat"></a>
 
 ```wing
-copy(): ImmutableArray
+concat(arr: ImmutableArray): ImmutableArray
 ```
 
-Create an immutable shallow copy of this array.
+Merge arr to the end of this array.
+
+###### `arr`<sup>Required</sup> <a name="arr" id="@winglang/sdk.std.ImmutableArray.concat.parameter.arr"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.ImmutableArray">ImmutableArray</a>
+
+array to merge.
+
+---
+
+##### `contains` <a name="contains" id="@winglang/sdk.std.ImmutableArray.contains"></a>
+
+```wing
+contains(search_element: T1): bool
+```
+
+Checks if this array includes searchElement.
+
+###### `search_element`<sup>Required</sup> <a name="search_element" id="@winglang/sdk.std.ImmutableArray.contains.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
 
 ##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.ImmutableArray.copyMut"></a>
 
@@ -2315,21 +2084,52 @@ copy_mut(): MutableArray
 
 Create a mutable shallow copy of this array.
 
+##### `index_of` <a name="index_of" id="@winglang/sdk.std.ImmutableArray.indexOf"></a>
+
+```wing
+index_of(search_element: T1): num
+```
+
+Returns the index of the first occurrence of searchElement found.
+
+###### `search_element`<sup>Required</sup> <a name="search_element" id="@winglang/sdk.std.ImmutableArray.indexOf.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
+
 ##### `join` <a name="join" id="@winglang/sdk.std.ImmutableArray.join"></a>
 
 ```wing
 join(separator?: str): str
 ```
 
-Creates and returns a new string by concatenating all of the elements in an array, separated by commas or a specified separator string.
+Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string.
+
+If the array has only
+one item, then that item will be returned without using the separator.
 
 ###### `separator`<sup>Optional</sup> <a name="separator" id="@winglang/sdk.std.ImmutableArray.join.parameter.separator"></a>
 
 - *Type:* str
 
-Specifies a string to separate each pair of adjacent elements of the array.
+---
 
-The separator is converted to a string if necessary. If omitted, the array elements are separated with a comma (",").
+##### `last_index_of` <a name="last_index_of" id="@winglang/sdk.std.ImmutableArray.lastIndexOf"></a>
+
+```wing
+last_index_of(search_element: T1): num
+```
+
+Returns the index of the last occurrence of searchElement found.
+
+###### `search_element`<sup>Required</sup> <a name="search_element" id="@winglang/sdk.std.ImmutableArray.lastIndexOf.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
 
 ---
 
@@ -2376,21 +2176,12 @@ new std.ImmutableMap()
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.ImmutableMap.copy">copy</a></code> | Create an immutable shallow copy of this map. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this map. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.get">get</a></code> | Returns a specified element from the map. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.size">size</a></code> | Returns the number of elements in the map. |
 
 ---
-
-##### `copy` <a name="copy" id="@winglang/sdk.std.ImmutableMap.copy"></a>
-
-```wing
-copy(): ImmutableMap
-```
-
-Create an immutable shallow copy of this map.
 
 ##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.ImmutableMap.copyMut"></a>
 
@@ -2469,19 +2260,10 @@ new std.ImmutableSet()
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.ImmutableSet.copy">copy</a></code> | Create an immutable shallow copy of this set. |
 | <code><a href="#@winglang/sdk.std.ImmutableSet.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this set. |
 | <code><a href="#@winglang/sdk.std.ImmutableSet.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
 
 ---
-
-##### `copy` <a name="copy" id="@winglang/sdk.std.ImmutableSet.copy"></a>
-
-```wing
-copy(): ImmutableSet
-```
-
-Create an immutable shallow copy of this set.
 
 ##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.ImmutableSet.copyMut"></a>
 
@@ -2612,9 +2394,12 @@ new std.MutableArray()
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.MutableArray.at">at</a></code> | Get the value at the given index. |
+| <code><a href="#@winglang/sdk.std.MutableArray.concat">concat</a></code> | Merge arr to the end of this array. |
+| <code><a href="#@winglang/sdk.std.MutableArray.contains">contains</a></code> | Checks if this array includes searchElement. |
 | <code><a href="#@winglang/sdk.std.MutableArray.copy">copy</a></code> | Create an immutable shallow copy of this array. |
-| <code><a href="#@winglang/sdk.std.MutableArray.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this array. |
-| <code><a href="#@winglang/sdk.std.MutableArray.join">join</a></code> | Creates and returns a new string by concatenating all of the elements in an array, separated by commas or a specified separator string. |
+| <code><a href="#@winglang/sdk.std.MutableArray.indexOf">index_of</a></code> | Returns the index of the first occurrence of searchElement found. |
+| <code><a href="#@winglang/sdk.std.MutableArray.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
+| <code><a href="#@winglang/sdk.std.MutableArray.lastIndexOf">last_index_of</a></code> | Returns the index of the last occurrence of searchElement found. |
 | <code><a href="#@winglang/sdk.std.MutableArray.pop">pop</a></code> | Remove value from end of array. |
 | <code><a href="#@winglang/sdk.std.MutableArray.push">push</a></code> | Add value to end of array. |
 
@@ -2636,6 +2421,38 @@ index of the value to get.
 
 ---
 
+##### `concat` <a name="concat" id="@winglang/sdk.std.MutableArray.concat"></a>
+
+```wing
+concat(arr: MutableArray): MutableArray
+```
+
+Merge arr to the end of this array.
+
+###### `arr`<sup>Required</sup> <a name="arr" id="@winglang/sdk.std.MutableArray.concat.parameter.arr"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.MutableArray">MutableArray</a>
+
+array to merge.
+
+---
+
+##### `contains` <a name="contains" id="@winglang/sdk.std.MutableArray.contains"></a>
+
+```wing
+contains(search_element: T1): bool
+```
+
+Checks if this array includes searchElement.
+
+###### `search_element`<sup>Required</sup> <a name="search_element" id="@winglang/sdk.std.MutableArray.contains.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
+
 ##### `copy` <a name="copy" id="@winglang/sdk.std.MutableArray.copy"></a>
 
 ```wing
@@ -2644,13 +2461,21 @@ copy(): ImmutableArray
 
 Create an immutable shallow copy of this array.
 
-##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.MutableArray.copyMut"></a>
+##### `index_of` <a name="index_of" id="@winglang/sdk.std.MutableArray.indexOf"></a>
 
 ```wing
-copy_mut(): MutableArray
+index_of(search_element: T1): num
 ```
 
-Create a mutable shallow copy of this array.
+Returns the index of the first occurrence of searchElement found.
+
+###### `search_element`<sup>Required</sup> <a name="search_element" id="@winglang/sdk.std.MutableArray.indexOf.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
 
 ##### `join` <a name="join" id="@winglang/sdk.std.MutableArray.join"></a>
 
@@ -2658,15 +2483,30 @@ Create a mutable shallow copy of this array.
 join(separator?: str): str
 ```
 
-Creates and returns a new string by concatenating all of the elements in an array, separated by commas or a specified separator string.
+Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string.
+
+If the array has only
+one item, then that item will be returned without using the separator.
 
 ###### `separator`<sup>Optional</sup> <a name="separator" id="@winglang/sdk.std.MutableArray.join.parameter.separator"></a>
 
 - *Type:* str
 
-Specifies a string to separate each pair of adjacent elements of the array.
+---
 
-The separator is converted to a string if necessary. If omitted, the array elements are separated with a comma (",").
+##### `last_index_of` <a name="last_index_of" id="@winglang/sdk.std.MutableArray.lastIndexOf"></a>
+
+```wing
+last_index_of(search_element: T1): num
+```
+
+Returns the index of the last occurrence of searchElement found.
+
+###### `search_element`<sup>Required</sup> <a name="search_element" id="@winglang/sdk.std.MutableArray.lastIndexOf.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
 
 ---
 
@@ -2737,16 +2577,23 @@ new std.MutableMap()
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.std.MutableMap.clear">clear</a></code> | Removes all elements. |
 | <code><a href="#@winglang/sdk.std.MutableMap.copy">copy</a></code> | Create an immutable shallow copy of this map. |
-| <code><a href="#@winglang/sdk.std.MutableMap.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this map. |
+| <code><a href="#@winglang/sdk.std.MutableMap.delete">delete</a></code> | Removes the specified element from a map. |
 | <code><a href="#@winglang/sdk.std.MutableMap.get">get</a></code> | Returns a specified element from the map. |
 | <code><a href="#@winglang/sdk.std.MutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
-| <code><a href="#@winglang/sdk.std.MutableMap.size">size</a></code> | Returns the number of elements in the map. |
-| <code><a href="#@winglang/sdk.std.MutableMap.clear">clear</a></code> | Removes all elements. |
-| <code><a href="#@winglang/sdk.std.MutableMap.delete">delete</a></code> | Removes the specified element from a map. |
 | <code><a href="#@winglang/sdk.std.MutableMap.set">set</a></code> | Adds or updates an entry in a Map object with a specified key and a value. |
+| <code><a href="#@winglang/sdk.std.MutableMap.size">size</a></code> | Returns the number of elements in the map. |
 
 ---
+
+##### `clear` <a name="clear" id="@winglang/sdk.std.MutableMap.clear"></a>
+
+```wing
+clear(): void
+```
+
+Removes all elements.
 
 ##### `copy` <a name="copy" id="@winglang/sdk.std.MutableMap.copy"></a>
 
@@ -2756,13 +2603,21 @@ copy(): ImmutableMap
 
 Create an immutable shallow copy of this map.
 
-##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.MutableMap.copyMut"></a>
+##### `delete` <a name="delete" id="@winglang/sdk.std.MutableMap.delete"></a>
 
 ```wing
-copy_mut(): MutableMap
+delete(key: str): bool
 ```
 
-Create a mutable shallow copy of this map.
+Removes the specified element from a map.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.delete.parameter.key"></a>
+
+- *Type:* str
+
+The key.
+
+---
 
 ##### `get` <a name="get" id="@winglang/sdk.std.MutableMap.get"></a>
 
@@ -2799,40 +2654,6 @@ The key of the element to test for presence.
 
 ---
 
-##### `size` <a name="size" id="@winglang/sdk.std.MutableMap.size"></a>
-
-```wing
-size(): num
-```
-
-Returns the number of elements in the map.
-
-TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
-
-##### `clear` <a name="clear" id="@winglang/sdk.std.MutableMap.clear"></a>
-
-```wing
-clear(): void
-```
-
-Removes all elements.
-
-##### `delete` <a name="delete" id="@winglang/sdk.std.MutableMap.delete"></a>
-
-```wing
-delete(key: str): bool
-```
-
-Removes the specified element from a map.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.delete.parameter.key"></a>
-
-- *Type:* str
-
-The key.
-
----
-
 ##### `set` <a name="set" id="@winglang/sdk.std.MutableMap.set"></a>
 
 ```wing
@@ -2859,6 +2680,16 @@ The value of the element to add.
 
 ---
 
+##### `size` <a name="size" id="@winglang/sdk.std.MutableMap.size"></a>
+
+```wing
+size(): num
+```
+
+Returns the number of elements in the map.
+
+TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
+
 
 
 
@@ -2883,44 +2714,11 @@ new std.MutableSet()
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.MutableSet.copy">copy</a></code> | Create an immutable shallow copy of this set. |
-| <code><a href="#@winglang/sdk.std.MutableSet.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this set. |
-| <code><a href="#@winglang/sdk.std.MutableSet.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
 | <code><a href="#@winglang/sdk.std.MutableSet.add">add</a></code> | Add value to set. |
 | <code><a href="#@winglang/sdk.std.MutableSet.clear">clear</a></code> | The clear() method removes all elements from a set. |
+| <code><a href="#@winglang/sdk.std.MutableSet.copy">copy</a></code> | Create an immutable shallow copy of this set. |
 | <code><a href="#@winglang/sdk.std.MutableSet.delete">delete</a></code> | Removes a specified value from a set, if it is in the set. |
-
----
-
-##### `copy` <a name="copy" id="@winglang/sdk.std.MutableSet.copy"></a>
-
-```wing
-copy(): ImmutableSet
-```
-
-Create an immutable shallow copy of this set.
-
-##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.MutableSet.copyMut"></a>
-
-```wing
-copy_mut(): MutableSet
-```
-
-Create a mutable shallow copy of this set.
-
-##### `has` <a name="has" id="@winglang/sdk.std.MutableSet.has"></a>
-
-```wing
-has(value: T1): bool
-```
-
-Returns a boolean indicating whether an element with the specified value exists in the set.
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.has.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-The value to test for presence in the Set object.
+| <code><a href="#@winglang/sdk.std.MutableSet.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
 
 ---
 
@@ -2948,6 +2746,14 @@ clear(): void
 
 The clear() method removes all elements from a set.
 
+##### `copy` <a name="copy" id="@winglang/sdk.std.MutableSet.copy"></a>
+
+```wing
+copy(): ImmutableSet
+```
+
+Create an immutable shallow copy of this set.
+
 ##### `delete` <a name="delete" id="@winglang/sdk.std.MutableSet.delete"></a>
 
 ```wing
@@ -2961,6 +2767,22 @@ Removes a specified value from a set, if it is in the set.
 - *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
 
 The value to remove from the set.
+
+---
+
+##### `has` <a name="has" id="@winglang/sdk.std.MutableSet.has"></a>
+
+```wing
+has(value: T1): bool
+```
+
+Returns a boolean indicating whether an element with the specified value exists in the set.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.has.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+The value to test for presence in the Set object.
 
 ---
 

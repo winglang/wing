@@ -16,6 +16,7 @@ use itertools::Itertools;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
 use std::collections::BTreeMap;
+use std::collections::HashMap;
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
 use std::path::Path;
@@ -257,6 +258,12 @@ impl ClassLike for Class {
 	}
 }
 
+impl ClassLike for Struct {
+	fn get_env(&self) -> &SymbolEnv {
+		&self.env
+	}
+}
+
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct Struct {
@@ -364,6 +371,12 @@ impl Subtype for Type {
 			}
 			(Self::MutArray(l0), Self::MutArray(r0)) => {
 				// An Array type is a subtype of another Array type if the value type is a subtype of the other value type
+				let l: &Type = &*l0;
+				let r: &Type = &*r0;
+				l.is_subtype_of(r)
+			}
+			(Self::MutArray(l0), Self::Array(r0)) => {
+				// A MutArray type is a subtype of an Array type if the value type is a subtype of the other value type
 				let l: &Type = &*l0;
 				let r: &Type = &*r0;
 				l.is_subtype_of(r)
@@ -1091,7 +1104,7 @@ impl<'a> TypeChecker<'a> {
 					return self.expr_error(&*function, format!("should be a function or method"));
 				};
 
-				if !can_call_flight(func_sig.flight, env.flight) {
+				if !env.flight.can_call_to(&func_sig.flight) {
 					self.expr_error(
 						exp,
 						format!("Cannot call into {} phase while {}", func_sig.flight, env.flight),
@@ -1579,6 +1592,7 @@ impl<'a> TypeChecker<'a> {
 
 				self.inner_scopes.push(statements);
 			}
+			StmtKind::Break => {}
 			StmtKind::If {
 				condition,
 				statements,
@@ -2153,7 +2167,7 @@ impl<'a> TypeChecker<'a> {
 	///
 	/// * `env` - The environment to use for looking up the original type
 	/// * `original_fqn` - The fully qualified name of the original type
-	/// * `type_param` - The type argument to use for the `any`
+	/// * `type_params` - The type argument to use for the T1, T2, .. in the original type
 	///
 	/// # Returns
 	/// The hydrated type reference
@@ -2184,6 +2198,12 @@ impl<'a> TypeChecker<'a> {
 			));
 		}
 
+		// map from original_type_params to type_params
+		let mut types_map = HashMap::new();
+		for (o, n) in original_type_params.iter().zip(type_params.iter()) {
+			types_map.insert(format!("{o}"), (*o, *n));
+		}
+
 		let new_env = SymbolEnv::new(
 			None,
 			original_type_class.env.return_type,
@@ -2209,118 +2229,112 @@ impl<'a> TypeChecker<'a> {
 
 		// Add symbols from original type to new type
 		// Note: this is currently limited to top-level function signatures and fields
-		for (type_index, original_type_param) in original_type_params.iter().enumerate() {
-			let new_type_arg = type_params[type_index];
-			for (name, symbol, _) in original_type_class.env.iter(true) {
-				match symbol {
-					SymbolKind::Variable(VariableInfo {
-						type_: v,
-						reassignable,
-						flight,
-						is_static,
-					}) => {
-						// Replace type params in function signatures
-						if let Some(sig) = v.as_function_sig() {
-							let new_return_type = if sig.return_type.is_same_type_as(original_type_param) {
-								new_type_arg
+		for (name, symbol, _) in original_type_class.env.iter(true) {
+			match symbol {
+				SymbolKind::Variable(VariableInfo {
+					type_: v,
+					reassignable,
+					flight,
+					is_static,
+				}) => {
+					// Replace type params in function signatures
+					if let Some(sig) = v.as_function_sig() {
+						let new_return_type = self.get_concrete_type_for_generic(sig.return_type, &types_map);
+
+						let new_args: Vec<UnsafeRef<Type>> = sig
+							.parameters
+							.iter()
+							.map(|arg| self.get_concrete_type_for_generic(*arg, &types_map))
+							.collect();
+
+						let new_sig = FunctionSignature {
+							parameters: new_args,
+							return_type: new_return_type,
+							flight: sig.flight.clone(),
+							js_override: sig.js_override.clone(),
+						};
+
+						match new_type_class.env.define(
+							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
+							&Symbol::global(name),
+							if *is_static {
+								SymbolKind::make_variable(self.types.add_type(Type::Function(new_sig)), *reassignable, *flight)
 							} else {
-								// Handle generic return types
-								// TODO: If a generic class has a method that returns another generic, it must be a builtin
-								if let Some(c) = sig.return_type.as_class() {
-									if c.type_parameters.is_some() {
-										let fqn = format!("{}.{}", WINGSDK_STD_MODULE, c.name.name);
-										match fqn.as_str() {
-											WINGSDK_MUT_ARRAY => self.types.add_type(Type::MutArray(new_type_arg)),
-											WINGSDK_ARRAY => self.types.add_type(Type::Array(new_type_arg)),
-											WINGSDK_MAP => self.types.add_type(Type::Map(new_type_arg)),
-											WINGSDK_MUT_MAP => self.types.add_type(Type::MutMap(new_type_arg)),
-											WINGSDK_SET => self.types.add_type(Type::Set(new_type_arg)),
-											WINGSDK_MUT_SET => self.types.add_type(Type::MutSet(new_type_arg)),
-											_ => self.general_type_error(format!("\"{}\" is not a supported generic return type", fqn)),
-										}
-									} else {
-										sig.return_type
-									}
-								} else {
-									sig.return_type
-								}
-							};
-
-							let new_args: Vec<UnsafeRef<Type>> = sig
-								.parameters
-								.iter()
-								.map(|arg| {
-									if arg.is_same_type_as(original_type_param) {
-										new_type_arg
-									} else {
-										*arg
-									}
-								})
-								.collect();
-
-							let new_sig = FunctionSignature {
-								parameters: new_args,
-								return_type: new_return_type,
-								flight: sig.flight.clone(),
-								js_override: sig.js_override.clone(),
-							};
-
-							match new_type_class.env.define(
-								// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
-								&Symbol::global(name),
-								if *is_static {
-									SymbolKind::make_variable(self.types.add_type(Type::Function(new_sig)), *reassignable, *flight)
-								} else {
-									SymbolKind::make_instance_variable(
-										self.types.add_type(Type::Function(new_sig)),
-										*reassignable,
-										*flight,
-									)
-								},
-								StatementIdx::Top,
-							) {
-								Err(type_error) => {
-									self.type_error(type_error);
-								}
-								_ => {}
+								SymbolKind::make_instance_variable(self.types.add_type(Type::Function(new_sig)), *reassignable, *flight)
+							},
+							StatementIdx::Top,
+						) {
+							Err(type_error) => {
+								self.type_error(type_error);
 							}
-						} else if let Some(VariableInfo {
-							type_: var,
-							reassignable,
-							flight,
-							is_static: _static,
-						}) = symbol.as_variable()
-						{
-							let new_var_type = if var.is_same_type_as(original_type_param) {
-								new_type_arg
+							_ => {}
+						}
+					} else {
+						let new_var_type = self.get_concrete_type_for_generic(*v, &types_map);
+						match new_type_class.env.define(
+							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
+							&Symbol::global(name),
+							if *is_static {
+								SymbolKind::make_variable(new_var_type, *reassignable, *flight)
 							} else {
-								var
-							};
-							match new_type_class.env.define(
-								// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
-								&Symbol::global(name),
-								if *is_static {
-									SymbolKind::make_variable(new_var_type, reassignable, flight)
-								} else {
-									SymbolKind::make_instance_variable(new_var_type, reassignable, flight)
-								},
-								StatementIdx::Top,
-							) {
-								Err(type_error) => {
-									self.type_error(type_error);
-								}
-								_ => {}
+								SymbolKind::make_instance_variable(new_var_type, *reassignable, *flight)
+							},
+							StatementIdx::Top,
+						) {
+							Err(type_error) => {
+								self.type_error(type_error);
 							}
+							_ => {}
 						}
 					}
-					_ => {
-						panic!("Unexpected symbol kind: {:?} in class env", symbol)
-					}
+				}
+				_ => {
+					panic!("Unexpected symbol kind: {:?} in class env", symbol)
 				}
 			}
 		}
 
 		return new_type;
+	}
+
+	fn get_concrete_type_for_generic(
+		&mut self,
+		type_to_maybe_replace: TypeRef,
+		types_map: &HashMap<String, (TypeRef, TypeRef)>,
+	) -> TypeRef {
+		// Lookup type to replace in the types map and return the concrete type from the maps
+		if let Some(new_type_arg) = types_map
+			.get(&format!("{type_to_maybe_replace}"))
+			.filter(|(o, _)| type_to_maybe_replace.is_same_type_as(o))
+			.map(|(_, n)| n)
+		{
+			return *new_type_arg;
+		} else {
+			// Handle generic return types
+			// TODO: If a generic class has a method that returns another generic, it must be a builtin
+			if let Some(c) = type_to_maybe_replace.as_class() {
+				if let Some(type_parameters) = &c.type_parameters {
+					// For now all our generics only have a single type parameter so use the first type parameter as our "T1"
+					let t1 = type_parameters[0];
+					let t1_replacement = *types_map
+						.get(&format!("{t1}"))
+						.filter(|(o, _)| t1.is_same_type_as(o))
+						.map(|(_, n)| n)
+						.expect("generic must have a type parameter");
+					let fqn = format!("{}.{}", WINGSDK_STD_MODULE, c.name.name);
+					return match fqn.as_str() {
+						WINGSDK_MUT_ARRAY => self.types.add_type(Type::MutArray(t1_replacement)),
+						WINGSDK_ARRAY => self.types.add_type(Type::Array(t1_replacement)),
+						WINGSDK_MAP => self.types.add_type(Type::Map(t1_replacement)),
+						WINGSDK_MUT_MAP => self.types.add_type(Type::MutMap(t1_replacement)),
+						WINGSDK_SET => self.types.add_type(Type::Set(t1_replacement)),
+						WINGSDK_MUT_SET => self.types.add_type(Type::MutSet(t1_replacement)),
+						_ => self.general_type_error(format!("\"{}\" is not a supported generic return type", fqn)),
+					};
+				}
+			}
+		}
+		return type_to_maybe_replace;
 	}
 
 	/// Check if this expression is actually a reference to a type. The parser doesn't distinguish between a `some_expression.field` and `SomeType.field`.
@@ -2576,19 +2590,6 @@ impl<'a> TypeChecker<'a> {
 			}
 			Err(type_error) => self.variable_error(type_error),
 		}
-	}
-}
-
-fn can_call_flight(fn_flight: Phase, scope_flight: Phase) -> bool {
-	if fn_flight == Phase::Independent {
-		// if the function we're trying to call is an "either-flight" function,
-		// then it can be called both in preflight, inflight, and in
-		// either-flight scopes
-		true
-	} else {
-		// otherwise, preflight functions can only be called in preflight scopes,
-		// and inflight functions can only be called in inflight scopes
-		fn_flight == scope_flight
 	}
 }
 

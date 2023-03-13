@@ -352,104 +352,6 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`bring_fs.w > wing compile --target tf-aws > main.tf.json 1`] = `
-{
-  "//": {
-    "metadata": {
-      "backend": "local",
-      "stackName": "root",
-      "version": "0.15.2",
-    },
-    "outputs": {},
-  },
-  "provider": {
-    "aws": [
-      {},
-    ],
-  },
-  "resource": {
-    "aws_s3_bucket": {
-      "root_cloudBucket_4F3C4F53": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/cloud.Bucket/Default",
-            "uniqueId": "root_cloudBucket_4F3C4F53",
-          },
-        },
-        "bucket_prefix": "cloud-bucket-c87175e7-",
-      },
-    },
-    "aws_s3_bucket_public_access_block": {
-      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
-          },
-        },
-        "block_public_acls": true,
-        "block_public_policy": true,
-        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-        "ignore_public_acls": true,
-        "restrict_public_buckets": true,
-      },
-    },
-    "aws_s3_bucket_server_side_encryption_configuration": {
-      "root_cloudBucket_Encryption_8ED0CD9C": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/cloud.Bucket/Encryption",
-            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
-          },
-        },
-        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-        "rule": [
-          {
-            "apply_server_side_encryption_by_default": {
-              "sse_algorithm": "AES256",
-            },
-          },
-        ],
-      },
-    },
-  },
-}
-`;
-
-exports[`bring_fs.w > wing compile --target tf-aws > preflight.js 1`] = `
-"const $stdlib = require('@winglang/sdk');
-const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
-
-function __app(target) {
-	switch (target) {
-		case \\"sim\\":
-			return $stdlib.sim.App;
-		case \\"tfaws\\":
-		case \\"tf-aws\\":
-			return $stdlib.tfaws.App;
-		case \\"tf-gcp\\":
-			return $stdlib.tfgcp.App;
-		case \\"tf-azure\\":
-			return $stdlib.tfazure.App;
-		default:
-			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
-	}
-}
-const $App = __app(process.env.WING_TARGET);
-
-const cloud = require('@winglang/sdk').cloud;
-const fs = require('@winglang/sdk').fs;
-class MyApp extends $App {
-constructor() {
-  super({ outdir: $outdir, name: \\"bring_fs\\", plugins: $plugins });
-  
-  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
-  this.node.root.new(\\"@winglang/sdk.fs.TextFile\\",fs.TextFile,this,\\"fs.TextFile\\",\\"/tmp/test.txt\\");
-}
-}
-new MyApp().synth();"
-`;
-
 exports[`bring_jsii.w > wing compile --target tf-aws > index.js 1`] = `
 "async handle(m) { const { greeting } = this; {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(greeting === \\"Hello, wingnuts\\")'\`)})((greeting === \\"Hello, wingnuts\\"))};
@@ -3332,6 +3234,15 @@ constructor() {
     for (const number of unique_numbers) {
       {((cond) => {if (!cond) throw new Error(\`assertion failed: '(number > 0)'\`)})((number > 0))};
       {console.log(\`\${word}: \${number}\`)};
+    }
+  }
+  for (const word of words) {
+    for (const number of unique_numbers) {
+      {((cond) => {if (!cond) throw new Error(\`assertion failed: '(number > 0)'\`)})((number > 0))};
+      {console.log(\`\${word}: \${number}\`)};
+      if ((number === 2)) {
+        break;
+      }
     }
   }
 }
@@ -7234,23 +7145,38 @@ constructor() {
   const mut_array = [...(s_array)];
   (mut_array.push(\\"three\\"));
   const immut_array = Object.freeze([...(mut_array)]);
-  const s_set = Object.freeze(new Set([\\"one\\", \\"two\\"]));
-  const mut_set = new Set(s_set);
-  (mut_set.add(\\"three\\"));
-  const immut_set = Object.freeze(new Set(mut_set));
-  const s_map = Object.freeze({\\"one\\":1,\\"two\\":2});
-  const nested_map = Object.freeze({\\"a\\":Object.freeze({\\"b\\":Object.freeze({\\"c\\":\\"hello\\"})})});
-  const mut_map = {...(s_map)};
-  ((obj, args) => { obj[args[0]] = args[1]; })(mut_map, [\\"five\\",5]);
-  const immut_map = Object.freeze({...(mut_map)});
   const s = (s_array.at(1));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s === \\"two\\")'\`)})((s === \\"two\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s_array.at(1)) === \\"two\\")'\`)})(((s_array.at(1)) === \\"two\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_array.length === 2)'\`)})((s_array.length === 2))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_array.length === 3)'\`)})((immut_array.length === 3))};
+  const s_array2 = Object.freeze([\\"if\\", \\"you\\", \\"build\\", \\"it\\"]);
+  const s_array3 = Object.freeze([\\"he\\", \\"will\\", \\"come\\", \\"for\\", \\"you\\"]);
+  const merged_array = (s_array2.concat(s_array3));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(merged_array.length === 9)'\`)})((merged_array.length === 9))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((merged_array.at(5)) === \\"will\\")'\`)})(((merged_array.at(5)) === \\"will\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: 'merged_array.includes(\\"build\\")'\`)})(merged_array.includes(\\"build\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(!merged_array.includes(\\"bring\\"))'\`)})((!merged_array.includes(\\"bring\\")))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(merged_array.indexOf(\\"you\\") === 1)'\`)})((merged_array.indexOf(\\"you\\") === 1))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((merged_array.join(\\" \\")) === \\"if you build it he will come for you\\")'\`)})(((merged_array.join(\\" \\")) === \\"if you build it he will come for you\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((merged_array.join()) === \\"if,you,build,it,he,will,come,for,you\\")'\`)})(((merged_array.join()) === \\"if,you,build,it,he,will,come,for,you\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(merged_array.lastIndexOf(\\"you\\") === 8)'\`)})((merged_array.lastIndexOf(\\"you\\") === 8))};
+  const mut_array2 = [\\"how\\", \\"does\\", \\"that\\", \\"look\\"];
+  const merged_mut_array = (mut_array.concat(mut_array2));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(merged_mut_array.length === 7)'\`)})((merged_mut_array.length === 7))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((merged_mut_array.at(5)) === \\"that\\")'\`)})(((merged_mut_array.at(5)) === \\"that\\"))};
+  const s_set = Object.freeze(new Set([\\"one\\", \\"two\\"]));
+  const mut_set = new Set(s_set);
+  (mut_set.add(\\"three\\"));
+  const immut_set = Object.freeze(new Set(mut_set));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_set.has(\\"one\\"))'\`)})((s_set.has(\\"one\\")))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s_set.size === 2)'\`)})((s_set.size === 2))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(immut_set.size === 3)'\`)})((immut_set.size === 3))};
+  const s_map = Object.freeze({\\"one\\":1,\\"two\\":2});
+  const nested_map = Object.freeze({\\"a\\":Object.freeze({\\"b\\":Object.freeze({\\"c\\":\\"hello\\"})})});
+  const mut_map = {...(s_map)};
+  ((obj, args) => { obj[args[0]] = args[1]; })(mut_map, [\\"five\\",5]);
+  const immut_map = Object.freeze({...(mut_map)});
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((s_map)[\\"one\\"] === 1)'\`)})(((s_map)[\\"one\\"] === 1))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(s_map).length === 2)'\`)})((Object.keys(s_map).length === 2))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(immut_map).length === 3)'\`)})((Object.keys(immut_map).length === 3))};
@@ -8619,6 +8545,17 @@ constructor() {
   const y = 123;
   while ((y < 0)) {
     const x = 1;
+  }
+  let z = 0;
+  while (true) {
+    z = (z + 1);
+    if ((z > 2)) {
+      break;
+    }
+  }
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(z === 3)'\`)})((z === 3))};
+  while (true) {
+    break;
   }
 }
 }
