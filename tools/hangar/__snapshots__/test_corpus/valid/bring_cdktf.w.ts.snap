@@ -15,6 +15,22 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       {},
     ],
   },
+  "resource": {
+    "aws_s3_bucket": {
+      "root_Bucket_966015A6": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Bucket",
+            "uniqueId": "root_Bucket_966015A6",
+          },
+        },
+        "bucket_prefix": "hello",
+        "versioning": {
+          "enabled": true,
+        },
+      },
+    },
+  },
 }
 `;
 
@@ -39,21 +55,18 @@ function __app(target) {
 }
 const $App = __app(process.env.WING_TARGET);
 
+const aws = require(\\"@cdktf/provider-aws\\");
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"enums\\", plugins: $plugins });
+  super({ outdir: $outdir, name: \\"bring_cdktf\\", plugins: $plugins });
   
-  const SomeEnum = Object.freeze((function (SomeEnum) {
-    SomeEnum[SomeEnum[\\"ONE\\"] = 0] = \\"ONE\\";
-    SomeEnum[SomeEnum[\\"TWO\\"] = 1] = \\"TWO\\";
-    SomeEnum[SomeEnum[\\"THREE\\"] = 2] = \\"THREE\\";
-    return SomeEnum;
-  })({}));
-  const one = SomeEnum.ONE;
-  const two = SomeEnum.TWO;
+  this.node.root.new(\\"@cdktf/provider-aws.s3Bucket.S3Bucket\\",aws.s3Bucket.S3Bucket,this,\\"Bucket\\",{ bucketPrefix: \\"hello\\", versioning: {
+  \\"enabled\\": true,
+  \\"mfa_delete\\": true,}
+   });
 }
 }
 new MyApp().synth();"
 `;
 
-exports[`wing test > stdout 1`] = `"pass ─ enums.w (no tests)"`;
+exports[`wing test > stdout 1`] = `"pass ─ bring_cdktf.w (no tests)"`;
