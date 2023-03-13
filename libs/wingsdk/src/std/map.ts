@@ -61,6 +61,34 @@ export class ImmutableMap {
   public copyMut(): MutableMap {
     throw new Error("Macro");
   }
+}
+
+/**
+ * Mutable Map
+ *
+ * @typeparam T1
+ */
+export class MutableMap {
+  /**
+   * Returns the number of elements in the map.
+   *
+   * TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
+   * @macro Object.keys($self$).length
+   *
+   * @returns The number of elements in map
+   */
+  public size(): number {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Removes all elements
+   *
+   * @macro ((map) => { for(const k in map){delete map[k]}; })($self$)
+   */
+  public clear(): void {
+    throw new Error("Macro");
+  }
 
   /**
    * Create an immutable shallow copy of this map
@@ -70,22 +98,6 @@ export class ImmutableMap {
    * @returns an ImmutableMap with the same values as this map
    */
   public copy(): ImmutableMap {
-    throw new Error("Macro");
-  }
-}
-
-/**
- * Mutable Map
- *
- * @typeparam T1
- */
-export class MutableMap extends ImmutableMap {
-  /**
-   * Removes all elements
-   *
-   * @macro ((map) => { for(const k in map){delete map[k]}; })($self$)
-   */
-  public clear(): void {
     throw new Error("Macro");
   }
 
@@ -98,6 +110,35 @@ export class MutableMap extends ImmutableMap {
    * @returns true if the given key is no longer present
    */
   public delete(key: string): boolean {
+    key;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns a specified element from the map.
+   *
+   * If the value that is associated to the provided key is an object, then you will get a reference
+   * to that object and any change made to that object will effectively modify it inside the map.
+   *
+   * @macro ($self$)[$args$]
+   *
+   * @param key The key of the element to return.
+   * @returns The element associated with the specified key, or undefined if the key can't be found
+   */
+  public get(key: string): T1 {
+    key;
+    throw new Error("Macro");
+  }
+
+  /**
+   * Returns a boolean indicating whether an element with the specified key exists or not.
+   *
+   * @macro ($args$ in ($self$))
+   *
+   * @param key The key of the element to test for presence
+   * @returns true if an element with the specified key exists in the map; otherwise false.
+   */
+  public has(key: string): boolean {
     key;
     throw new Error("Macro");
   }
