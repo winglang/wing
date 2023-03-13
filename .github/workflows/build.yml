@@ -222,8 +222,11 @@ jobs:
     name: Quality Gate
     runs-on: ubuntu-latest
     needs: 
-     - prepare
+     - build
      - e2e
+    steps:
+      - name: All good
+        run: echo "Builds and tests passed! 🎉🎉🎉"
 
   publish:
     name: Publish
