@@ -30,10 +30,6 @@ export class BucketClient implements IBucketClient {
     );
   }
 
-  get public(): boolean {
-    return this._public;
-  }
-
   /**
    * Put object into bucket with given body contents
    *

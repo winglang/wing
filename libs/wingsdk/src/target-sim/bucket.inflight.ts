@@ -23,10 +23,6 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     this._public = props.public ?? false;
   }
 
-  public get public(): boolean {
-    return this._public;
-  }
-
   public async init(): Promise<void> {
     for (const [key, value] of Object.entries(this.initialObjects)) {
       await this.context.withTrace({

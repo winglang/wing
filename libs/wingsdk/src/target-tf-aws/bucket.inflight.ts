@@ -19,10 +19,6 @@ export class BucketClient implements IBucketClient {
     private readonly s3Client = new S3Client({})
   ) {}
 
-  public get public(): boolean {
-    return this._public;
-  }
-
   public async put(key: string, body: string): Promise<void> {
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
