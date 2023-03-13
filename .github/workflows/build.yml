@@ -184,6 +184,8 @@ jobs:
         exclude:
           - runner: macos
             full_run: false
+          - runner: windows
+            full_run: false
           - runner: ubuntu
             node: 19
             full_run: false
