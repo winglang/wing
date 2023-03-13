@@ -7,7 +7,7 @@ import * as chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
 import { normalPath } from "../util";
-import { CHARS_ASCII, emitDiagnostic, Severity } from "codespan-wasm";
+import { CHARS_ASCII, emitDiagnostic, Severity, File, Label } from "codespan-wasm";
 import { readFileSync } from "fs";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
@@ -131,22 +131,31 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
 
     for (const error of errors) {
       const { message, span, level } = error;
-      const source = readFileSync(span.file_id, "utf8");
-      const start = offsetFromLineAndColumn(source, span.start.line, span.start.col);
-      const end = offsetFromLineAndColumn(source, span.end.line, span.end.col);
-      const diagnosticText = await emitDiagnostic([{
-        name: span.file_id,
-        source,
-      }], {
-        message,
-        severity: level.toLowerCase() as Severity,
-        labels: [{
+      let files: File[] = [];
+      let labels: Label[] = [];
+
+      if (span !== null) {
+        // `span` should only be null if source file couldn't be read etc.
+        const source = readFileSync(span.file_id, "utf8");
+        const start = offsetFromLineAndColumn(source, span.start.line, span.start.col);
+        const end = offsetFromLineAndColumn(source, span.end.line, span.end.col);
+        files.push({
+          name: span.file_id,
+          source,
+        });
+        labels.push({
           fileId: span.file_id,
           rangeStart: start,
           rangeEnd: end,
           message,
           style: "primary"
-        }]
+        });
+      }
+
+      const diagnosticText = await emitDiagnostic(files, {
+        message,
+        severity: level.toLowerCase() as Severity,
+        labels,
       }, {
         chars: CHARS_ASCII
       }, coloring);
