@@ -44,7 +44,7 @@ module.exports = grammar({
       ),
 
     // Identifiers
-    reference: ($) => choice($.nested_identifier, $.identifier),
+    reference: ($) => choice($.stdlib_identifier, $.nested_identifier, $.identifier),
 
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
 
@@ -605,7 +605,9 @@ module.exports = grammar({
 
     json_element: ($) => choice($._literal, $.map_literal, $.array_literal),
 
-    json_container_type: ($) => choice("Json", "MutJson"),
+    json_container_type: ($) => $._json_types,
+
+    _json_types: ($) => choice("Json", "MutJson"),
   },
 });
 

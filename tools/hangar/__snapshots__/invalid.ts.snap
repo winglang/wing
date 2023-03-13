@@ -116,6 +116,11 @@ Error at ../../../examples/tests/invalid/json.w:15:21 | Expected type to be \\"A
 Error at ../../../examples/tests/invalid/json.w:20:14 | Unknown symbol \\"set\\""
 `;
 
+exports[`json_static.w > stderr 1`] = `
+"Compilation failed with 1 error(s)
+Error at ../../../examples/tests/invalid/json_static.w:4:9 | Unknown symbol \\"set\\""
+`;
+
 exports[`missing_semicolon.w > stderr 1`] = `
 "Compilation failed with 4 error(s)
 Error at ../../../examples/tests/invalid/missing_semicolon.w:7:1 | Syntax error
