@@ -53,7 +53,7 @@ export class BucketClient implements IBucketClient {
       MaxKeys: 1,
     });
     const resp: ListObjectsCommandOutput = await this.s3Client.send(command);
-    return !!(resp.Contents && resp.Contents.length > 0);
+    return !!resp.Contents && resp.Contents.length > 0;
   }
 
   private async getLocation(): Promise<string> {
