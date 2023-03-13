@@ -1592,7 +1592,7 @@ impl<'a> TypeChecker<'a> {
 
 				self.inner_scopes.push(statements);
 			}
-			StmtKind::Break => {}
+			StmtKind::Break | StmtKind::Continue => {}
 			StmtKind::If {
 				condition,
 				statements,
