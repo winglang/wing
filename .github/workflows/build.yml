@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     name: Build
-    timeout-minutes: 5
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     permissions:
       contents: write

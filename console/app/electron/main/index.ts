@@ -132,6 +132,13 @@ function createWindowManager() {
         port: server.port,
       });
 
+      // When running Playwright tests, hide the window so it acts as a headless runner.
+      // See https://github.com/microsoft/playwright/issues/13288#issuecomment-1324357472.
+      // TODO: Use a CLI argument rather than an environment variable.
+      if (process.env.PLAYWRIGHT_TEST && !process.env.CI) {
+        newWindow.hide();
+      }
+
       newWindow.setRepresentedFilename(simfile);
       windows.set(simfile, newWindow);
 
