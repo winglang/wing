@@ -40,16 +40,6 @@ exports[`provides raw tree data 1`] = `
           ],
           "wing:resource:stateful": false,
         },
-        "children": {
-          "Code": {
-            "constructInfo": {
-              "fqn": "constructs.Construct",
-              "version": "10.1.245",
-            },
-            "id": "Code",
-            "path": "root/test/Code",
-          },
-        },
         "constructInfo": {
           "fqn": "constructs.Construct",
           "version": "10.1.245",

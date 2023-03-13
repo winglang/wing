@@ -34,7 +34,7 @@ const shellEnv = {
 
 export default async function () {
   Object.assign(process.env, shellEnv);
-  // Explicitly remove FORCE_COLOR from env, this is because NX sets it to true, so when we run 
+  // Explicitly remove FORCE_COLOR from env, this is because NX sets it to true, so when we run
   // under NX build we get color output in the snapshots, which is not what we want.
   // Might be related to https://github.com/nrwl/nx/issues/8051#issuecomment-1047061889
   delete process.env.FORCE_COLOR;
