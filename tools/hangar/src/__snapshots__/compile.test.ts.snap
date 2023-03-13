@@ -3282,9 +3282,9 @@ constructor() {
   {
   function* iterator(start, end, inclusive) {
   	let i = start;	
-  let inc = inclusive ? ((end < start) ? -1 : 1) : 0;	
-  while (i < (end + inc)) yield i++;	
-  while (i > (end + inc)) yield i--;
+  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
+  while (i < limit) yield i++;	
+  while (i > limit) yield i--;
   }
   const iter = iterator(0,0,false);
   for (const i of iter) {
@@ -3297,9 +3297,9 @@ constructor() {
   {
   function* iterator(start, end, inclusive) {
   	let i = start;	
-  let inc = inclusive ? ((end < start) ? -1 : 1) : 0;	
-  while (i < (end + inc)) yield i++;	
-  while (i > (end + inc)) yield i--;
+  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
+  while (i < limit) yield i++;	
+  while (i > limit) yield i--;
   }
   const iter = iterator(0,0,true);
   for (const i of iter) {
@@ -3313,9 +3313,9 @@ constructor() {
   {
   function* iterator(start, end, inclusive) {
   	let i = start;	
-  let inc = inclusive ? ((end < start) ? -1 : 1) : 0;	
-  while (i < (end + inc)) yield i++;	
-  while (i > (end + inc)) yield i--;
+  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
+  while (i < limit) yield i++;	
+  while (i > limit) yield i--;
   }
   const iter = iterator(0,2,false);
   for (const i of iter) {
@@ -3330,9 +3330,9 @@ constructor() {
   {
   function* iterator(start, end, inclusive) {
   	let i = start;	
-  let inc = inclusive ? ((end < start) ? -1 : 1) : 0;	
-  while (i < (end + inc)) yield i++;	
-  while (i > (end + inc)) yield i--;
+  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
+  while (i < limit) yield i++;	
+  while (i > limit) yield i--;
   }
   const iter = iterator(0,2,true);
   for (const i of iter) {
@@ -3347,9 +3347,9 @@ constructor() {
   {
   function* iterator(start, end, inclusive) {
   	let i = start;	
-  let inc = inclusive ? ((end < start) ? -1 : 1) : 0;	
-  while (i < (end + inc)) yield i++;	
-  while (i > (end + inc)) yield i--;
+  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
+  while (i < limit) yield i++;	
+  while (i > limit) yield i--;
   }
   const iter = iterator(2,0,false);
   for (const i of iter) {
@@ -3364,9 +3364,9 @@ constructor() {
   {
   function* iterator(start, end, inclusive) {
   	let i = start;	
-  let inc = inclusive ? ((end < start) ? -1 : 1) : 0;	
-  while (i < (end + inc)) yield i++;	
-  while (i > (end + inc)) yield i--;
+  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
+  while (i < limit) yield i++;	
+  while (i > limit) yield i--;
   }
   const iter = iterator(2,0,true);
   for (const i of iter) {
@@ -3381,9 +3381,9 @@ constructor() {
   {
   function* iterator(start, end, inclusive) {
   	let i = start;	
-  let inc = inclusive ? ((end < start) ? -1 : 1) : 0;	
-  while (i < (end + inc)) yield i++;	
-  while (i > (end + inc)) yield i--;
+  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
+  while (i < limit) yield i++;	
+  while (i > limit) yield i--;
   }
   const iter = iterator(0,(-2),false);
   for (const i of iter) {
@@ -3398,9 +3398,9 @@ constructor() {
   {
   function* iterator(start, end, inclusive) {
   	let i = start;	
-  let inc = inclusive ? ((end < start) ? -1 : 1) : 0;	
-  while (i < (end + inc)) yield i++;	
-  while (i > (end + inc)) yield i--;
+  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
+  while (i < limit) yield i++;	
+  while (i > limit) yield i--;
   }
   const iter = iterator(0,(-2),true);
   for (const i of iter) {
@@ -3415,9 +3415,9 @@ constructor() {
   {
   function* iterator(start, end, inclusive) {
   	let i = start;	
-  let inc = inclusive ? ((end < start) ? -1 : 1) : 0;	
-  while (i < (end + inc)) yield i++;	
-  while (i > (end + inc)) yield i--;
+  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
+  while (i < limit) yield i++;	
+  while (i > limit) yield i--;
   }
   const iter = iterator((-2),0,false);
   for (const i of iter) {
@@ -3432,9 +3432,9 @@ constructor() {
   {
   function* iterator(start, end, inclusive) {
   	let i = start;	
-  let inc = inclusive ? ((end < start) ? -1 : 1) : 0;	
-  while (i < (end + inc)) yield i++;	
-  while (i > (end + inc)) yield i--;
+  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
+  while (i < limit) yield i++;	
+  while (i > limit) yield i--;
   }
   const iter = iterator((-2),0,true);
   for (const i of iter) {
@@ -3445,14 +3445,14 @@ constructor() {
   }
   {console.log(\`[\${arr9}]\`)};
   const x = 2;
-  {console.log(\\"---\\\\nfor i in 0..x { ... }\\")};
+  {console.log(\\"---\\\\nfor i in 0..x { ... } <=> x = 2\\")};
   const arr10 = [];
   {
   function* iterator(start, end, inclusive) {
   	let i = start;	
-  let inc = inclusive ? ((end < start) ? -1 : 1) : 0;	
-  while (i < (end + inc)) yield i++;	
-  while (i > (end + inc)) yield i--;
+  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
+  while (i < limit) yield i++;	
+  while (i > limit) yield i--;
   }
   const iter = iterator(0,x,false);
   for (const i of iter) {
@@ -3462,14 +3462,14 @@ constructor() {
   }
   }
   {console.log(\`[\${arr10}]\`)};
-  {console.log(\\"---\\\\nfor i in 0..=x { ... }\\")};
+  {console.log(\\"---\\\\nfor i in 0..=x { ... } <=> x = 2\\")};
   const arr11 = [];
   {
   function* iterator(start, end, inclusive) {
   	let i = start;	
-  let inc = inclusive ? ((end < start) ? -1 : 1) : 0;	
-  while (i < (end + inc)) yield i++;	
-  while (i > (end + inc)) yield i--;
+  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
+  while (i < limit) yield i++;	
+  while (i > limit) yield i--;
   }
   const iter = iterator(0,x,true);
   for (const i of iter) {
@@ -3479,14 +3479,14 @@ constructor() {
   }
   }
   {console.log(\`[\${arr11}]\`)};
-  {console.log(\\"---\\\\nfor i in x..0 { ... }\\")};
+  {console.log(\\"---\\\\nfor i in x..0 { ... } <=> x = 2\\")};
   const arr12 = [];
   {
   function* iterator(start, end, inclusive) {
   	let i = start;	
-  let inc = inclusive ? ((end < start) ? -1 : 1) : 0;	
-  while (i < (end + inc)) yield i++;	
-  while (i > (end + inc)) yield i--;
+  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
+  while (i < limit) yield i++;	
+  while (i > limit) yield i--;
   }
   const iter = iterator(x,0,false);
   for (const i of iter) {
@@ -3496,14 +3496,14 @@ constructor() {
   }
   }
   {console.log(\`[\${arr12}]\`)};
-  {console.log(\\"---\\\\nfor i in 0..(x*2) { ... }\\")};
+  {console.log(\\"---\\\\nfor i in 0..(x*2) { ... } <=> x = 2\\")};
   const arr13 = [];
   {
   function* iterator(start, end, inclusive) {
   	let i = start;	
-  let inc = inclusive ? ((end < start) ? -1 : 1) : 0;	
-  while (i < (end + inc)) yield i++;	
-  while (i > (end + inc)) yield i--;
+  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
+  while (i < limit) yield i++;	
+  while (i > limit) yield i--;
   }
   const iter = iterator(0,(x * 2),false);
   for (const i of iter) {
@@ -3513,14 +3513,14 @@ constructor() {
   }
   }
   {console.log(\`[\${arr13}]\`)};
-  {console.log(\\"---\\\\nfor i in 0..=(x*2) { ... }\\")};
+  {console.log(\\"---\\\\nfor i in 0..=(x*2) { ... } <=> x = 2\\")};
   const arr14 = [];
   {
   function* iterator(start, end, inclusive) {
   	let i = start;	
-  let inc = inclusive ? ((end < start) ? -1 : 1) : 0;	
-  while (i < (end + inc)) yield i++;	
-  while (i > (end + inc)) yield i--;
+  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
+  while (i < limit) yield i++;	
+  while (i > limit) yield i--;
   }
   const iter = iterator(0,(x * 2),true);
   for (const i of iter) {
@@ -3530,14 +3530,14 @@ constructor() {
   }
   }
   {console.log(\`[\${arr14}]\`)};
-  {console.log(\\"---\\\\nfor i in (x*2)..0 { ... }\\")};
+  {console.log(\\"---\\\\nfor i in (x*2)..0 { ... } <=> x = 2\\")};
   const arr15 = [];
   {
   function* iterator(start, end, inclusive) {
   	let i = start;	
-  let inc = inclusive ? ((end < start) ? -1 : 1) : 0;	
-  while (i < (end + inc)) yield i++;	
-  while (i > (end + inc)) yield i--;
+  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
+  while (i < limit) yield i++;	
+  while (i > limit) yield i--;
   }
   const iter = iterator((x * 2),0,false);
   for (const i of iter) {

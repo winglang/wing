@@ -94,22 +94,22 @@ for i in -2..0 { ... }
 for i in -2..=0 { ... }
 [-2,-1,0]
 ---
-for i in 0..x { ... }
+for i in 0..x { ... } <=> x = 2
 [0,1]
 ---
-for i in 0..=x { ... }
+for i in 0..=x { ... } <=> x = 2
 [0,1,2]
 ---
-for i in x..0 { ... }
+for i in x..0 { ... } <=> x = 2
 [2,1]
 ---
-for i in 0..(x*2) { ... }
+for i in 0..(x*2) { ... } <=> x = 2
 [0,1,2,3]
 ---
-for i in 0..=(x*2) { ... }
+for i in 0..=(x*2) { ... } <=> x = 2
 [0,1,2,3,4]
 ---
-for i in (x*2)..0 { ... }
+for i in (x*2)..0 { ... } <=> x = 2
 [4,3,2,1]
 pass ─ for_loop_sequence.w (no tests)"
 `;
