@@ -7,6 +7,8 @@ import * as chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
 import { normalPath } from "../util";
+import { CHARS_ASCII, emitDiagnostic, Severity } from "codespan-wasm";
+import { readFileSync } from "fs";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -59,6 +61,23 @@ function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
   return join(outDir, `${entrypointName}.${targetDirSuffix}`);
 }
 
+// from diagnostic.rs
+interface Error {
+  message: string;
+  span: {
+    start: {
+      line: number;
+      col: number;
+    };
+    end: {
+      line: number;
+      col: number;
+    };
+    file_id: string;
+  };
+  level: "Error" | "Warning" | "Note";
+}
+
 /**
  * Compiles a Wing program. Throws an error if compilation fails.
  * @param entrypoint The program .w entrypoint.
@@ -106,9 +125,34 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   }
   if (compileResult !== 0) {
     // This is a bug in the user's code. Print the compiler diagnostics.
-    // TODO: change wingc to output diagnostics in a structured format,
-    // so we can format and print them in a more user-friendly way.
-    throw new Error(compileResult.toString());
+    const errors: Error[] = JSON.parse(compileResult.toString());
+    const result = [];
+    const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
+
+    for (const error of errors) {
+      const { message, span, level } = error;
+      const source = readFileSync(span.file_id, "utf8");
+      const start = offsetFromLineAndColumn(source, span.start.line, span.start.col);
+      const end = offsetFromLineAndColumn(source, span.end.line, span.end.col);
+      const diagnosticText = await emitDiagnostic([{
+        name: span.file_id,
+        source,
+      }], {
+        message,
+        severity: level.toLowerCase() as Severity,
+        labels: [{
+          fileId: span.file_id,
+          rangeStart: start,
+          rangeEnd: end,
+          message,
+          style: "primary"
+        }]
+      }, {
+        chars: CHARS_ASCII
+      }, coloring);
+      result.push(diagnosticText);
+    }
+    throw new Error(result.join("\n"));
   }
 
   const artifactPath = resolve(workDir, WINGC_PREFLIGHT);
@@ -226,4 +270,14 @@ function resolvePluginPaths(plugins: string[]): string[] {
     resolvedPluginPaths.push(resolve(process.cwd(), plugin));
   }
   return resolvedPluginPaths;
+}
+
+function offsetFromLineAndColumn(source: string, line: number, column: number) {
+  const lines = source.split("\n");
+  let offset = 0;
+  for (let i = 0; i < line; i++) {
+    offset += lines[i].length + 1;
+  }
+  offset += column;
+  return offset;
 }
