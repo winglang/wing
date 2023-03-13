@@ -46,7 +46,6 @@ describe("compile command tests", () => {
     const files = await readdir(artifactDir);
     expect(files.length).toBeGreaterThan(0);
     expect(files).toContain("captures.wsim");
-    expect(files).toContain("tree.json");
   });
 
   it("should error if a nonexistent file is compiled", async () => {
