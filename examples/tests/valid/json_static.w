@@ -39,3 +39,5 @@ let s_val = str.from_json(json_of_many.get("b"));
 assert(s_val == "hello");
 let n_val = num.from_json(json_of_many.get("a"));
 assert(n_val == 123);
+let b_val = bool.from_json(json_of_many.get("c"));
+assert(b_val);
