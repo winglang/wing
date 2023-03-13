@@ -41,7 +41,8 @@
           "copy",
           "test",
           "lint",
-          "package"
+          "package",
+          "generate"
         ]
       }
     }
