@@ -2168,7 +2168,6 @@ impl<'a> TypeChecker<'a> {
 	/// * `env` - The environment to use for looking up the original type
 	/// * `original_fqn` - The fully qualified name of the original type
 	/// * `type_params` - The type argument to use for the T1, T2, .. in the original type
-	/// * `target_type` - The type we want to hydrate
 	///
 	/// # Returns
 	/// The hydrated type reference
@@ -2178,7 +2177,6 @@ impl<'a> TypeChecker<'a> {
 		env: &SymbolEnv,
 		original_fqn: &str,
 		type_params: Vec<TypeRef>,
-		_target_type: TypeRef,
 	) -> TypeRef {
 		let original_type = env.lookup_nested_str(original_fqn, None).unwrap().as_type().unwrap();
 		let original_type_class = original_type.as_class().unwrap();
@@ -2442,27 +2440,27 @@ impl<'a> TypeChecker<'a> {
 
 					// Lookup wingsdk std types, hydrating generics if necessary
 					Type::Array(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_ARRAY, vec![t], instance_type);
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_ARRAY, vec![t]);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
 					Type::MutArray(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_ARRAY, vec![t], instance_type);
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_ARRAY, vec![t]);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
 					Type::Set(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_SET, vec![t], instance_type);
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_SET, vec![t]);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
 					Type::MutSet(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_SET, vec![t], instance_type);
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_SET, vec![t]);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
 					Type::Map(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MAP, vec![t], instance_type);
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MAP, vec![t]);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
 					Type::MutMap(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_MAP, vec![t], instance_type);
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_MAP, vec![t]);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
 					Type::Json => self.get_property_from_class(
