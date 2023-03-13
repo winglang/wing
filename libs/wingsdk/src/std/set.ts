@@ -38,17 +38,6 @@ export class ImmutableSet {
   public copyMut(): MutableSet {
     throw new Error("Macro");
   }
-
-  /**
-   * Create an immutable shallow copy of this set
-   *
-   * @macro Object.freeze(new Set($self$))
-   *
-   * @returns an ImmutableSet with the same values as this set
-   */
-  public copy(): ImmutableSet {
-    throw new Error("Macro");
-  }
 }
 
 /**
@@ -56,7 +45,15 @@ export class ImmutableSet {
  *
  * @typeparam T1
  */
-export class MutableSet extends ImmutableSet {
+export class MutableSet {
+  /**
+   * The length of the set
+   * @returns the length of the set
+   */
+  public get size(): number {
+    throw new Error("Abstract");
+  }
+
   /**
    * Add value to set
    * @param value value to add
@@ -75,11 +72,32 @@ export class MutableSet extends ImmutableSet {
   }
 
   /**
+   * Create an immutable shallow copy of this set
+   *
+   * @macro Object.freeze(new Set($self$))
+   *
+   * @returns an ImmutableSet with the same values as this set
+   */
+  public copy(): ImmutableSet {
+    throw new Error("Macro");
+  }
+
+  /**
    * Removes a specified value from a set, if it is in the set.
    * @param value The value to remove from the set.
    * @returns Returns `true` if `value` was already in the set; otherwise `false`.
    */
   public delete(value: T1): boolean {
+    value;
+    throw new Error("Abstract");
+  }
+
+  /**
+   * Returns a boolean indicating whether an element with the specified value exists in the set.
+   * @param value The value to test for presence in the Set object.
+   * @returns `true` if an element with the specified value exists in the set; otherwise `false`.
+   */
+  public has(value: T1): boolean {
     value;
     throw new Error("Abstract");
   }

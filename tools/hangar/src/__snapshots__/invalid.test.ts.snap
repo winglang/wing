@@ -190,6 +190,11 @@ Error at ../../../../examples/tests/invalid/statements_if.w:5:5 | Expected type 
 Error at ../../../../examples/tests/invalid/statements_if.w:8:5 | Expected type to be \\"bool\\", but got \\"num\\" instead"
 `;
 
+exports[`std_containers.w > wing test (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 1 error(s)
+Error at ../../../../examples/tests/invalid/std_containers.w:3:18 | Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead"
+`;
+
 exports[`struct_expansion.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 5 error(s)
 Error at ../../../../examples/tests/invalid/struct_expansion.w:3:15 | \\"bublic\\" is not a field of \\"BucketProps\\"
