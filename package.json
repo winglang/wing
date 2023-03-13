@@ -10,7 +10,13 @@
     "nx": "15.6.3"
   },
   "scripts": {
+    "nx": "nx",
     "build": "nx run-many --all --targets build,test,package",
+    "test": "nx run-many --all --target=test",
+    "package": "nx run-many --all --target=package",
+    "build:ci": "nx run-many --target=build --all --configuration=release --output-style=stream --verbose",
+    "test:ci": "nx run-many --exclude=hangar --target=test --all --configuration=release --output-style=stream --verbose",
+    "package:ci": "nx run-many --target=package --all --configuration=release --output-style=stream --verbose",
     "docs": "./scripts/docsite.sh",
     "install:examples-valid": "npm --prefix examples/tests/valid install",
     "install:examples-invalid": "npm --prefix examples/tests/invalid install",
@@ -23,9 +29,7 @@
     "install:wing-api-checker": "npm --prefix apps/wing-api-checker install",
     "install:wing-playground": "npm --prefix apps/wing-playground install",
     "install:winglang": "npm --prefix apps/wing install --ignore-scripts",
-    "nx": "nx",
-    "postinstall": "run-p -l --max-parallel 3 'install:*'",
-    "test": "nx run-many --target=test --all=true"
+    "postinstall": "run-p -l --max-parallel 3 'install:*'"
   },
   "volta": {
     "node": "18.12.1",
