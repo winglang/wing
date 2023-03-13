@@ -16,12 +16,6 @@ Error at ../../../examples/tests/invalid/access_static_from_instance.w:19:5 | Ca
 Error at ../../../examples/tests/invalid/access_static_from_instance.w:20:5 | Cannot access static property \\"m\\" from instance"
 `;
 
-exports[`break_scope_invalid.w > stderr 1`] = `
-"Compilation failed with 2 error(s)
-Error at ../../../examples/tests/invalid/break_scope_invalid.w:3:5 | Expected break statement to be inside of a loop (while/for)
-Error at ../../../examples/tests/invalid/break_scope_invalid.w:7:5 | Expected break statement to be inside of a loop (while/for)"
-`;
-
 exports[`bring.w > stderr 1`] = `
 "Compilation failed with 1 error(s)
 Error at ../../../examples/tests/invalid/bring.w:1:1 | Redundant bring of \\"std\\""
@@ -181,6 +175,14 @@ Error at ../../../examples/tests/invalid/sorted_errors_no_span.w:1:14 | Expected
 Error at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:17 | Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:17) to be a type but it's a variable
 Error at ../../../examples/tests/invalid/sorted_errors_no_span.w:6:14 | Expected type to be \\"num\\", but got \\"str\\" instead
 Error at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:17 | Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:17) to be a type but it's a variable"
+`;
+
+exports[`statement_invalid_scope.w > stderr 1`] = `
+"Compilation failed with 4 error(s)
+Error at ../../../examples/tests/invalid/statement_invalid_scope.w:3:5 | Expected break statement to be inside of a loop (while/for)
+Error at ../../../examples/tests/invalid/statement_invalid_scope.w:7:5 | Expected break statement to be inside of a loop (while/for)
+Error at ../../../examples/tests/invalid/statement_invalid_scope.w:11:5 | Expected continue statement to be inside of a loop (while/for)
+Error at ../../../examples/tests/invalid/statement_invalid_scope.w:15:5 | Expected continue statement to be inside of a loop (while/for)"
 `;
 
 exports[`statements_if.w > stderr 1`] = `
