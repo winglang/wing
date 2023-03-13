@@ -1,17 +1,18 @@
 import * as cloud from "../../src/cloud";
 import { Resource } from "../../src/core";
 import { SimApp, Testing } from "../../src/testing";
+import { test, expect } from "vitest";
 
 test("create a bucket", async () => {
   // GIVEN
   const app = new SimApp();
-  const bucket = new cloud.Bucket(app, "my_bucket");
+  const bucket = cloud.Bucket._newBucket(app, "my_bucket");
   const handler = Testing.makeHandler(
     app,
     "Handler",
     "async handle() { return 'hello'; }"
   );
-  const fn = new cloud.Function(app, "my_function", handler);
+  const fn = cloud.Function._newFunction(app, "my_function", handler);
 
   // WHEN
   for (let i = 0; i < 5; i++) {
