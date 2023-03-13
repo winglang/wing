@@ -95,7 +95,7 @@ export class BucketClient implements IBucketClient {
   public async signed_url(key: string, duration?: Duration): Promise<string> {
     // for signed_url take a look here: https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/s3-example-creating-buckets.html#s3-create-presigendurl-get
     throw new Error(
-      `signed_url is now implemented yet (key=${key}, duration=${duration})`
+      `signed_url is not implemented yet (key=${key}, duration=${duration})`
     );
   }
 
