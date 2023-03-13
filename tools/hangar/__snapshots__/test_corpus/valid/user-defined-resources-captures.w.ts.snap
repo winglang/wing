@@ -1,0 +1,10 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`wing test > stdout 1`] = `
+"pass ─ user-defined-resources-captures.w » root/test:capture_array          
+pass ─ user-defined-resources-captures.w » root/test:capture_array_of_queues
+pass ─ user-defined-resources-captures.w » root/test:capture_map            
+pass ─ user-defined-resources-captures.w » root/test:capture_primitives     
+pass ─ user-defined-resources-captures.w » root/test:capture_resource       
+pass ─ user-defined-resources-captures.w » root/test:capture_set            "
+`;
