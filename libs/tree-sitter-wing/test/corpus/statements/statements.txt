@@ -5,6 +5,14 @@ For loop
 for fox in sox {
 }
 
+for fox in sox {
+    break;
+}
+
+for fox in sox {
+    continue;
+}
+
 ---
 
 (source
@@ -12,6 +20,16 @@ for fox in sox {
     iterator: (reference (identifier))
     iterable: (reference (identifier))
         block: (block)
+    )
+    (for_in_loop
+    iterator: (reference (identifier))
+    iterable: (reference (identifier))
+        block: (block (break_statement))
+    )
+    (for_in_loop
+    iterator: (reference (identifier))
+    iterable: (reference (identifier))
+        block: (block (continue_statement))
     )
 )
 
@@ -222,11 +240,27 @@ While statement
 
 while false {}
 
+while true {
+    break;
+}
+
+while true {
+    continue;
+}
+
 ---
 (source
     (while_statement
         condition: (bool)
         block: (block)
+    )
+    (while_statement
+        condition: (bool)
+        block: (block (break_statement))
+    )
+    (while_statement
+        condition: (bool)
+        block: (block (continue_statement))
     )
 )
 

@@ -41,16 +41,6 @@ exports[`array 1`] = `
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -160,16 +150,6 @@ exports.handler = async function(event) {
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -329,16 +309,6 @@ exports[`array of buckets 1`] = `
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -496,16 +466,6 @@ exports.handler = async function(event) {
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -611,16 +571,6 @@ exports[`array of durations 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -732,16 +682,6 @@ exports.handler = async function(event) {
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -847,16 +787,6 @@ exports[`array of maps 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -965,16 +895,6 @@ exports.handler = async function(event) {
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -1081,16 +1001,6 @@ exports[`boolean 1`] = `
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -1194,16 +1104,6 @@ exports.handler = async function(event) {
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1310,16 +1210,6 @@ exports[`duration 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1431,16 +1321,6 @@ exports.handler = async function(event) {
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -1546,16 +1426,6 @@ exports[`map 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1673,16 +1543,6 @@ exports.handler = async function(event) {
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -1788,16 +1648,6 @@ exports[`map of arrays 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1921,16 +1771,6 @@ exports.handler = async function(event) {
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -2036,16 +1876,6 @@ exports[`map of arrays of durations 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2159,16 +1989,6 @@ exports.handler = async function(event) {
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2328,16 +2148,6 @@ exports[`map of buckets 1`] = `
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -2488,16 +2298,6 @@ exports.handler = async function(event) {
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -2604,16 +2404,6 @@ exports[`number 1`] = `
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -2717,16 +2507,6 @@ exports.handler = async function(event) {
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2833,16 +2613,6 @@ exports[`set 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2957,16 +2727,6 @@ exports.handler = async function(event) {
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -3072,16 +2832,6 @@ exports[`set of durations 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -3193,16 +2943,6 @@ exports.handler = async function(event) {
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -3308,16 +3048,6 @@ exports[`string 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -3426,16 +3156,6 @@ exports.handler = async function(event) {
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -3541,16 +3261,6 @@ exports[`struct 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -3665,16 +3375,6 @@ exports.handler = async function(event) {
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -3780,16 +3480,6 @@ exports[`struct of maps 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -3903,16 +3593,6 @@ exports.handler = async function(event) {
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -4150,16 +3830,6 @@ exports[`struct with resources 1`] = `
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -4384,16 +4054,6 @@ exports.handler = async function(event) {
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",

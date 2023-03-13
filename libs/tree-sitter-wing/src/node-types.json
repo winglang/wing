@@ -269,7 +269,15 @@
       "required": false,
       "types": [
         {
+          "type": "break_statement",
+          "named": true
+        },
+        {
           "type": "class_definition",
+          "named": true
+        },
+        {
+          "type": "continue_statement",
           "named": true
         },
         {
@@ -325,6 +333,11 @@
   },
   {
     "type": "bool",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "break_statement",
     "named": true,
     "fields": {}
   },
@@ -547,6 +560,11 @@
         ]
       }
     }
+  },
+  {
+    "type": "continue_statement",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "custom_type",
@@ -1489,7 +1507,7 @@
       },
       "property": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "identifier",
@@ -2048,7 +2066,15 @@
       "required": false,
       "types": [
         {
+          "type": "break_statement",
+          "named": true
+        },
+        {
           "type": "class_definition",
+          "named": true
+        },
+        {
+          "type": "continue_statement",
           "named": true
         },
         {
@@ -2663,6 +2689,10 @@
     "named": false
   },
   {
+    "type": "break",
+    "named": false
+  },
+  {
     "type": "bring",
     "named": false
   },
@@ -2677,6 +2707,10 @@
   {
     "type": "comment",
     "named": true
+  },
+  {
+    "type": "continue",
+    "named": false
   },
   {
     "type": "defer",
