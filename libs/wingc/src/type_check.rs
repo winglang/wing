@@ -741,24 +741,19 @@ impl TypeRef {
 		}
 	}
 
-	pub fn is_serializable(&self) -> bool {
+	pub fn is_json_legal_value(&self) -> bool {
 		match **self {
 			Type::Resource(_) => false,
-			Type::Enum(_) => true,
+			Type::Enum(_) => false,
 			Type::Number => true,
 			Type::String => true,
-			Type::Duration => true,
+			Type::Duration => false,
 			Type::Boolean => true,
 			Type::Json => true,
-			Type::Array(v) => v.is_serializable(),
-			Type::Map(v) => v.is_serializable(),
-			Type::Set(v) => v.is_serializable(),
-			Type::Struct(_) => self.as_struct().unwrap().env.iter(true).all(|(_, v, _)| {
-				v.as_variable()
-					.expect("Expected struct field to be a variable in the struct env")
-					.type_
-					.is_serializable()
-			}),
+			Type::Array(v) => v.is_json_legal_value(),
+			Type::Map(v) => v.is_json_legal_value(),
+			Type::Set(v) => v.is_json_legal_value(),
+			Type::Struct(_) => false,
 			_ => false,
 		}
 	}
@@ -1495,21 +1490,21 @@ impl<'a> TypeChecker<'a> {
 		context: &TypeCheckerContext,
 	) -> TypeRef {
 		// Skip validate if in Json
-		if context.in_json {
-			if !actual_type.is_serializable() {
-				self.expr_error(
-					exp,
-					format!(
-						"Expected \"Json\" elements to be serializable, but got \"{}\" which is not serializable",
-						actual_type
-					),
-				);
-			}
-
-			return actual_type;
+		if !context.in_json {
+			self.validate_type(actual_type, expected_type, exp);
 		}
 
-		self.validate_type(actual_type, expected_type, exp)
+		if !actual_type.is_json_legal_value() {
+			self.expr_error(
+				exp,
+				format!(
+					"Expected \"Json\" elements to be Json Value (https://www.json.org/json-en.html), but got \"{}\" which is not Json Value",
+					actual_type
+				),
+			);
+		}
+
+		actual_type
 	}
 
 	/// Validate that the given type is a subtype (or same) as the expected type. If not, add an error
