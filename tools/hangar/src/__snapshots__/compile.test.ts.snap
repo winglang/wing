@@ -3279,274 +3279,212 @@ constructor() {
   super({ outdir: $outdir, name: \\"for_loop_sequence\\", plugins: $plugins });
   
   {console.log(\\"---\\\\nfor i in 0..0 { ... }\\")};
-  {
-  function* iterator(start, end, inclusive) {
-  	let i = start;	
-  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
-  while (i < limit) yield i++;	
-  while (i > limit) yield i--;
+  {function* iterator(start, end, inclusive) {
+    let i = start;
+    let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;
+    while (i < limit) yield i++;
+    while (i > limit) yield i--;
   }
   const iter = iterator(0,0,false);
   for (const i of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
-  }
-  }
+  }};
   {console.log(\\"there's no value to iterate\\")};
   {console.log(\\"---\\\\nfor i in 0..=0 { ... }\\")};
-  const arr1 = [];
-  {
-  function* iterator(start, end, inclusive) {
-  	let i = start;	
-  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
-  while (i < limit) yield i++;	
-  while (i > limit) yield i--;
+  {function* iterator(start, end, inclusive) {
+    let i = start;
+    let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;
+    while (i < limit) yield i++;
+    while (i > limit) yield i--;
   }
   const iter = iterator(0,0,true);
   for (const i of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i === 0)'\`)})((i === 0))};
-    (arr1.push(i));
-  }
-  }
-  {console.log(\`[\${arr1}]\`)};
+    {console.log(\`\${i}\`)};
+  }};
   {console.log(\\"---\\\\nfor i in 0..2 { ... }\\")};
-  const arr2 = [];
-  {
-  function* iterator(start, end, inclusive) {
-  	let i = start;	
-  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
-  while (i < limit) yield i++;	
-  while (i > limit) yield i--;
+  {function* iterator(start, end, inclusive) {
+    let i = start;
+    let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;
+    while (i < limit) yield i++;
+    while (i > limit) yield i--;
   }
   const iter = iterator(0,2,false);
   for (const i of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i >= 0)'\`)})((i >= 0))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i < 2)'\`)})((i < 2))};
-    (arr2.push(i));
-  }
-  }
-  {console.log(\`[\${arr2}]\`)};
+    {console.log(\`\${i}\`)};
+  }};
   {console.log(\\"---\\\\nfor i in 0..=2 { ... }\\")};
-  const arr3 = [];
-  {
-  function* iterator(start, end, inclusive) {
-  	let i = start;	
-  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
-  while (i < limit) yield i++;	
-  while (i > limit) yield i--;
+  {function* iterator(start, end, inclusive) {
+    let i = start;
+    let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;
+    while (i < limit) yield i++;
+    while (i > limit) yield i--;
   }
   const iter = iterator(0,2,true);
   for (const i of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i >= 0)'\`)})((i >= 0))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i <= 2)'\`)})((i <= 2))};
-    (arr3.push(i));
-  }
-  }
-  {console.log(\`[\${arr3}]\`)};
+    {console.log(\`\${i}\`)};
+  }};
   {console.log(\\"---\\\\nfor i in 2..0 { ... }\\")};
-  const arr4 = [];
-  {
-  function* iterator(start, end, inclusive) {
-  	let i = start;	
-  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
-  while (i < limit) yield i++;	
-  while (i > limit) yield i--;
+  {function* iterator(start, end, inclusive) {
+    let i = start;
+    let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;
+    while (i < limit) yield i++;
+    while (i > limit) yield i--;
   }
   const iter = iterator(2,0,false);
   for (const i of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i <= 2)'\`)})((i <= 2))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i > 0)'\`)})((i > 0))};
-    (arr4.push(i));
-  }
-  }
-  {console.log(\`[\${arr4}]\`)};
+    {console.log(\`\${i}\`)};
+  }};
   {console.log(\\"---\\\\nfor i in 2..=0 { ... }\\")};
-  const arr5 = [];
-  {
-  function* iterator(start, end, inclusive) {
-  	let i = start;	
-  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
-  while (i < limit) yield i++;	
-  while (i > limit) yield i--;
+  {function* iterator(start, end, inclusive) {
+    let i = start;
+    let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;
+    while (i < limit) yield i++;
+    while (i > limit) yield i--;
   }
   const iter = iterator(2,0,true);
   for (const i of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i <= 2)'\`)})((i <= 2))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i >= 0)'\`)})((i >= 0))};
-    (arr5.push(i));
-  }
-  }
-  {console.log(\`[\${arr5}]\`)};
+    {console.log(\`\${i}\`)};
+  }};
   {console.log(\\"---\\\\nfor i in 0..-2 { ... }\\")};
-  const arr6 = [];
-  {
-  function* iterator(start, end, inclusive) {
-  	let i = start;	
-  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
-  while (i < limit) yield i++;	
-  while (i > limit) yield i--;
+  {function* iterator(start, end, inclusive) {
+    let i = start;
+    let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;
+    while (i < limit) yield i++;
+    while (i > limit) yield i--;
   }
   const iter = iterator(0,(-2),false);
   for (const i of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i <= 0)'\`)})((i <= 0))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i > (-2))'\`)})((i > (-2)))};
-    (arr6.push(i));
-  }
-  }
-  {console.log(\`[\${arr6}]\`)};
+    {console.log(\`\${i}\`)};
+  }};
   {console.log(\\"---\\\\nfor i in 0..=-2 { ... }\\")};
-  const arr7 = [];
-  {
-  function* iterator(start, end, inclusive) {
-  	let i = start;	
-  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
-  while (i < limit) yield i++;	
-  while (i > limit) yield i--;
+  {function* iterator(start, end, inclusive) {
+    let i = start;
+    let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;
+    while (i < limit) yield i++;
+    while (i > limit) yield i--;
   }
   const iter = iterator(0,(-2),true);
   for (const i of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i <= 0)'\`)})((i <= 0))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i > (-3))'\`)})((i > (-3)))};
-    (arr7.push(i));
-  }
-  }
-  {console.log(\`[\${arr7}]\`)};
+    {console.log(\`\${i}\`)};
+  }};
   {console.log(\\"---\\\\nfor i in -2..0 { ... }\\")};
-  const arr8 = [];
-  {
-  function* iterator(start, end, inclusive) {
-  	let i = start;	
-  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
-  while (i < limit) yield i++;	
-  while (i > limit) yield i--;
+  {function* iterator(start, end, inclusive) {
+    let i = start;
+    let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;
+    while (i < limit) yield i++;
+    while (i > limit) yield i--;
   }
   const iter = iterator((-2),0,false);
   for (const i of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i >= (-2))'\`)})((i >= (-2)))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i < 0)'\`)})((i < 0))};
-    (arr8.push(i));
-  }
-  }
-  {console.log(\`[\${arr8}]\`)};
+    {console.log(\`\${i}\`)};
+  }};
   {console.log(\\"---\\\\nfor i in -2..=0 { ... }\\")};
-  const arr9 = [];
-  {
-  function* iterator(start, end, inclusive) {
-  	let i = start;	
-  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
-  while (i < limit) yield i++;	
-  while (i > limit) yield i--;
+  {function* iterator(start, end, inclusive) {
+    let i = start;
+    let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;
+    while (i < limit) yield i++;
+    while (i > limit) yield i--;
   }
   const iter = iterator((-2),0,true);
   for (const i of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i >= (-2))'\`)})((i >= (-2)))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i <= 0)'\`)})((i <= 0))};
-    (arr9.push(i));
-  }
-  }
-  {console.log(\`[\${arr9}]\`)};
+    {console.log(\`\${i}\`)};
+  }};
   const x = 2;
   {console.log(\\"---\\\\nfor i in 0..x { ... } <=> x = 2\\")};
-  const arr10 = [];
-  {
-  function* iterator(start, end, inclusive) {
-  	let i = start;	
-  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
-  while (i < limit) yield i++;	
-  while (i > limit) yield i--;
+  {function* iterator(start, end, inclusive) {
+    let i = start;
+    let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;
+    while (i < limit) yield i++;
+    while (i > limit) yield i--;
   }
   const iter = iterator(0,x,false);
   for (const i of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i >= 0)'\`)})((i >= 0))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i < 2)'\`)})((i < 2))};
-    (arr10.push(i));
-  }
-  }
-  {console.log(\`[\${arr10}]\`)};
+    {console.log(\`\${i}\`)};
+  }};
   {console.log(\\"---\\\\nfor i in 0..=x { ... } <=> x = 2\\")};
-  const arr11 = [];
-  {
-  function* iterator(start, end, inclusive) {
-  	let i = start;	
-  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
-  while (i < limit) yield i++;	
-  while (i > limit) yield i--;
+  {function* iterator(start, end, inclusive) {
+    let i = start;
+    let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;
+    while (i < limit) yield i++;
+    while (i > limit) yield i--;
   }
   const iter = iterator(0,x,true);
   for (const i of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i >= 0)'\`)})((i >= 0))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i <= 2)'\`)})((i <= 2))};
-    (arr11.push(i));
-  }
-  }
-  {console.log(\`[\${arr11}]\`)};
+    {console.log(\`\${i}\`)};
+  }};
   {console.log(\\"---\\\\nfor i in x..0 { ... } <=> x = 2\\")};
-  const arr12 = [];
-  {
-  function* iterator(start, end, inclusive) {
-  	let i = start;	
-  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
-  while (i < limit) yield i++;	
-  while (i > limit) yield i--;
+  {function* iterator(start, end, inclusive) {
+    let i = start;
+    let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;
+    while (i < limit) yield i++;
+    while (i > limit) yield i--;
   }
   const iter = iterator(x,0,false);
   for (const i of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i <= 2)'\`)})((i <= 2))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i > 0)'\`)})((i > 0))};
-    (arr12.push(i));
-  }
-  }
-  {console.log(\`[\${arr12}]\`)};
+    {console.log(\`\${i}\`)};
+  }};
   {console.log(\\"---\\\\nfor i in 0..(x*2) { ... } <=> x = 2\\")};
-  const arr13 = [];
-  {
-  function* iterator(start, end, inclusive) {
-  	let i = start;	
-  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
-  while (i < limit) yield i++;	
-  while (i > limit) yield i--;
+  {function* iterator(start, end, inclusive) {
+    let i = start;
+    let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;
+    while (i < limit) yield i++;
+    while (i > limit) yield i--;
   }
   const iter = iterator(0,(x * 2),false);
   for (const i of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i >= 0)'\`)})((i >= 0))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i < 4)'\`)})((i < 4))};
-    (arr13.push(i));
-  }
-  }
-  {console.log(\`[\${arr13}]\`)};
+    {console.log(\`\${i}\`)};
+  }};
   {console.log(\\"---\\\\nfor i in 0..=(x*2) { ... } <=> x = 2\\")};
-  const arr14 = [];
-  {
-  function* iterator(start, end, inclusive) {
-  	let i = start;	
-  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
-  while (i < limit) yield i++;	
-  while (i > limit) yield i--;
+  {function* iterator(start, end, inclusive) {
+    let i = start;
+    let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;
+    while (i < limit) yield i++;
+    while (i > limit) yield i--;
   }
   const iter = iterator(0,(x * 2),true);
   for (const i of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i >= 0)'\`)})((i >= 0))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i <= 4)'\`)})((i <= 4))};
-    (arr14.push(i));
-  }
-  }
-  {console.log(\`[\${arr14}]\`)};
+    {console.log(\`\${i}\`)};
+  }};
   {console.log(\\"---\\\\nfor i in (x*2)..0 { ... } <=> x = 2\\")};
-  const arr15 = [];
-  {
-  function* iterator(start, end, inclusive) {
-  	let i = start;	
-  let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;	
-  while (i < limit) yield i++;	
-  while (i > limit) yield i--;
+  {function* iterator(start, end, inclusive) {
+    let i = start;
+    let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;
+    while (i < limit) yield i++;
+    while (i > limit) yield i--;
   }
   const iter = iterator((x * 2),0,false);
   for (const i of iter) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i <= 4)'\`)})((i <= 4))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i > 0)'\`)})((i > 0))};
-    (arr15.push(i));
-  }
-  }
-  {console.log(\`[\${arr15}]\`)};
+    {console.log(\`\${i}\`)};
+  }};
 }
 }
 new MyApp().synth();"

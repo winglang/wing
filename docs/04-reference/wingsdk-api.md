@@ -2028,7 +2028,6 @@ new std.ImmutableArray()
 | <code><a href="#@winglang/sdk.std.ImmutableArray.at">at</a></code> | Get the value at the given index. |
 | <code><a href="#@winglang/sdk.std.ImmutableArray.concat">concat</a></code> | Merge arr to the end of this array. |
 | <code><a href="#@winglang/sdk.std.ImmutableArray.contains">contains</a></code> | Checks if this array includes searchElement. |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.copy">copy</a></code> | Create an immutable shallow copy of this array. |
 | <code><a href="#@winglang/sdk.std.ImmutableArray.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this array. |
 | <code><a href="#@winglang/sdk.std.ImmutableArray.indexOf">index_of</a></code> | Returns the index of the first occurrence of searchElement found. |
 | <code><a href="#@winglang/sdk.std.ImmutableArray.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
@@ -2083,14 +2082,6 @@ Checks if this array includes searchElement.
 to search for.
 
 ---
-
-##### `copy` <a name="copy" id="@winglang/sdk.std.ImmutableArray.copy"></a>
-
-```wing
-copy(): ImmutableArray
-```
-
-Create an immutable shallow copy of this array.
 
 ##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.ImmutableArray.copyMut"></a>
 
@@ -2192,21 +2183,12 @@ new std.ImmutableMap()
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.ImmutableMap.copy">copy</a></code> | Create an immutable shallow copy of this map. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this map. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.get">get</a></code> | Returns a specified element from the map. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.size">size</a></code> | Returns the number of elements in the map. |
 
 ---
-
-##### `copy` <a name="copy" id="@winglang/sdk.std.ImmutableMap.copy"></a>
-
-```wing
-copy(): ImmutableMap
-```
-
-Create an immutable shallow copy of this map.
 
 ##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.ImmutableMap.copyMut"></a>
 
@@ -2285,19 +2267,10 @@ new std.ImmutableSet()
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.ImmutableSet.copy">copy</a></code> | Create an immutable shallow copy of this set. |
 | <code><a href="#@winglang/sdk.std.ImmutableSet.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this set. |
 | <code><a href="#@winglang/sdk.std.ImmutableSet.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
 
 ---
-
-##### `copy` <a name="copy" id="@winglang/sdk.std.ImmutableSet.copy"></a>
-
-```wing
-copy(): ImmutableSet
-```
-
-Create an immutable shallow copy of this set.
 
 ##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.ImmutableSet.copyMut"></a>
 
@@ -2431,7 +2404,6 @@ new std.MutableArray()
 | <code><a href="#@winglang/sdk.std.MutableArray.concat">concat</a></code> | Merge arr to the end of this array. |
 | <code><a href="#@winglang/sdk.std.MutableArray.contains">contains</a></code> | Checks if this array includes searchElement. |
 | <code><a href="#@winglang/sdk.std.MutableArray.copy">copy</a></code> | Create an immutable shallow copy of this array. |
-| <code><a href="#@winglang/sdk.std.MutableArray.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this array. |
 | <code><a href="#@winglang/sdk.std.MutableArray.indexOf">index_of</a></code> | Returns the index of the first occurrence of searchElement found. |
 | <code><a href="#@winglang/sdk.std.MutableArray.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
 | <code><a href="#@winglang/sdk.std.MutableArray.lastIndexOf">last_index_of</a></code> | Returns the index of the last occurrence of searchElement found. |
@@ -2459,14 +2431,14 @@ index of the value to get.
 ##### `concat` <a name="concat" id="@winglang/sdk.std.MutableArray.concat"></a>
 
 ```wing
-concat(arr: ImmutableArray): ImmutableArray
+concat(arr: MutableArray): MutableArray
 ```
 
 Merge arr to the end of this array.
 
 ###### `arr`<sup>Required</sup> <a name="arr" id="@winglang/sdk.std.MutableArray.concat.parameter.arr"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.ImmutableArray">ImmutableArray</a>
+- *Type:* <a href="#@winglang/sdk.std.MutableArray">MutableArray</a>
 
 array to merge.
 
@@ -2495,14 +2467,6 @@ copy(): ImmutableArray
 ```
 
 Create an immutable shallow copy of this array.
-
-##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.MutableArray.copyMut"></a>
-
-```wing
-copy_mut(): MutableArray
-```
-
-Create a mutable shallow copy of this array.
 
 ##### `index_of` <a name="index_of" id="@winglang/sdk.std.MutableArray.indexOf"></a>
 
@@ -2620,16 +2584,23 @@ new std.MutableMap()
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.std.MutableMap.clear">clear</a></code> | Removes all elements. |
 | <code><a href="#@winglang/sdk.std.MutableMap.copy">copy</a></code> | Create an immutable shallow copy of this map. |
-| <code><a href="#@winglang/sdk.std.MutableMap.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this map. |
+| <code><a href="#@winglang/sdk.std.MutableMap.delete">delete</a></code> | Removes the specified element from a map. |
 | <code><a href="#@winglang/sdk.std.MutableMap.get">get</a></code> | Returns a specified element from the map. |
 | <code><a href="#@winglang/sdk.std.MutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
-| <code><a href="#@winglang/sdk.std.MutableMap.size">size</a></code> | Returns the number of elements in the map. |
-| <code><a href="#@winglang/sdk.std.MutableMap.clear">clear</a></code> | Removes all elements. |
-| <code><a href="#@winglang/sdk.std.MutableMap.delete">delete</a></code> | Removes the specified element from a map. |
 | <code><a href="#@winglang/sdk.std.MutableMap.set">set</a></code> | Adds or updates an entry in a Map object with a specified key and a value. |
+| <code><a href="#@winglang/sdk.std.MutableMap.size">size</a></code> | Returns the number of elements in the map. |
 
 ---
+
+##### `clear` <a name="clear" id="@winglang/sdk.std.MutableMap.clear"></a>
+
+```wing
+clear(): void
+```
+
+Removes all elements.
 
 ##### `copy` <a name="copy" id="@winglang/sdk.std.MutableMap.copy"></a>
 
@@ -2639,13 +2610,21 @@ copy(): ImmutableMap
 
 Create an immutable shallow copy of this map.
 
-##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.MutableMap.copyMut"></a>
+##### `delete` <a name="delete" id="@winglang/sdk.std.MutableMap.delete"></a>
 
 ```wing
-copy_mut(): MutableMap
+delete(key: str): bool
 ```
 
-Create a mutable shallow copy of this map.
+Removes the specified element from a map.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.delete.parameter.key"></a>
+
+- *Type:* str
+
+The key.
+
+---
 
 ##### `get` <a name="get" id="@winglang/sdk.std.MutableMap.get"></a>
 
@@ -2682,40 +2661,6 @@ The key of the element to test for presence.
 
 ---
 
-##### `size` <a name="size" id="@winglang/sdk.std.MutableMap.size"></a>
-
-```wing
-size(): num
-```
-
-Returns the number of elements in the map.
-
-TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
-
-##### `clear` <a name="clear" id="@winglang/sdk.std.MutableMap.clear"></a>
-
-```wing
-clear(): void
-```
-
-Removes all elements.
-
-##### `delete` <a name="delete" id="@winglang/sdk.std.MutableMap.delete"></a>
-
-```wing
-delete(key: str): bool
-```
-
-Removes the specified element from a map.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.delete.parameter.key"></a>
-
-- *Type:* str
-
-The key.
-
----
-
 ##### `set` <a name="set" id="@winglang/sdk.std.MutableMap.set"></a>
 
 ```wing
@@ -2742,6 +2687,16 @@ The value of the element to add.
 
 ---
 
+##### `size` <a name="size" id="@winglang/sdk.std.MutableMap.size"></a>
+
+```wing
+size(): num
+```
+
+Returns the number of elements in the map.
+
+TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
+
 
 
 
@@ -2766,44 +2721,11 @@ new std.MutableSet()
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.MutableSet.copy">copy</a></code> | Create an immutable shallow copy of this set. |
-| <code><a href="#@winglang/sdk.std.MutableSet.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this set. |
-| <code><a href="#@winglang/sdk.std.MutableSet.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
 | <code><a href="#@winglang/sdk.std.MutableSet.add">add</a></code> | Add value to set. |
 | <code><a href="#@winglang/sdk.std.MutableSet.clear">clear</a></code> | The clear() method removes all elements from a set. |
+| <code><a href="#@winglang/sdk.std.MutableSet.copy">copy</a></code> | Create an immutable shallow copy of this set. |
 | <code><a href="#@winglang/sdk.std.MutableSet.delete">delete</a></code> | Removes a specified value from a set, if it is in the set. |
-
----
-
-##### `copy` <a name="copy" id="@winglang/sdk.std.MutableSet.copy"></a>
-
-```wing
-copy(): ImmutableSet
-```
-
-Create an immutable shallow copy of this set.
-
-##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.MutableSet.copyMut"></a>
-
-```wing
-copy_mut(): MutableSet
-```
-
-Create a mutable shallow copy of this set.
-
-##### `has` <a name="has" id="@winglang/sdk.std.MutableSet.has"></a>
-
-```wing
-has(value: T1): bool
-```
-
-Returns a boolean indicating whether an element with the specified value exists in the set.
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.has.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-The value to test for presence in the Set object.
+| <code><a href="#@winglang/sdk.std.MutableSet.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
 
 ---
 
@@ -2831,6 +2753,14 @@ clear(): void
 
 The clear() method removes all elements from a set.
 
+##### `copy` <a name="copy" id="@winglang/sdk.std.MutableSet.copy"></a>
+
+```wing
+copy(): ImmutableSet
+```
+
+Create an immutable shallow copy of this set.
+
 ##### `delete` <a name="delete" id="@winglang/sdk.std.MutableSet.delete"></a>
 
 ```wing
@@ -2844,6 +2774,22 @@ Removes a specified value from a set, if it is in the set.
 - *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
 
 The value to remove from the set.
+
+---
+
+##### `has` <a name="has" id="@winglang/sdk.std.MutableSet.has"></a>
+
+```wing
+has(value: T1): bool
+```
+
+Returns a boolean indicating whether an element with the specified value exists in the set.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.has.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+The value to test for presence in the Set object.
 
 ---
 

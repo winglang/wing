@@ -607,9 +607,9 @@ impl<'a> JSifier<'a> {
 				statements,
 			} => {
 				format!(
-					"{{\n{}\n{}\n{}\n}}",
+					"{{{}\n{}\n{}}};",
 					format!(
-						"function* iterator(start, end, inclusive) {{\n\t{}\t\n{}\t\n{}\t\n{}\n}}",
+						"function* iterator(start, end, inclusive) {{\n  {}\n  {}\n  {}\n  {}\n}}",
 						format!("let i = start;"),
 						format!("let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;"),
 						format!("while (i < limit) yield i++;"),
