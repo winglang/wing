@@ -83,6 +83,12 @@ exports[`immutable_container_types.w > stderr 1`] = `
 Error at ../../../examples/tests/invalid/immutable_container_types.w:3:4 | Unknown symbol \\"set\\""
 `;
 
+exports[`impl_interface.w > stderr 1`] = `
+"Compilation failed with 2 error(s)
+Error at ../../../examples/tests/invalid/impl_interface.w:3:10 | Resource \\"A (at ../../../examples/tests/invalid/impl_interface.w:3:10)\\" does not implement method \\"handle\\" of interface \\"cloud.IQueueOnMessageHandler\\"
+Error at ../../../examples/tests/invalid/impl_interface.w:8:10 | Expected type to be \\"inflight (IQueueOnMessageHandler, str): void\\", but got \\"inflight (B): void\\" instead"
+`;
+
 exports[`inflight_in_class.w > stderr 1`] = `
 "Compilation failed with 1 error(s)
 Error at ../../../examples/tests/invalid/inflight_in_class.w:3:3 | Class cannot have inflight fields"
