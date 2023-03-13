@@ -2107,7 +2107,7 @@ It is possible to use TypeScript to write helpers, but at the moment this will n
 directly supported by Wing. This means that you will need to setup the TypeScript toolchain
 to compile your code to JavaScript and then use `extern` against the JavaScript file.
 
-In the future we will consider adding direct support for `extern("./helpers.ts")`.
+In the future we will consider adding direct support for `extern "./helpers.ts"`.
 
 
 [`▲ top`][top]
