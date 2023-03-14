@@ -42,8 +42,9 @@ Error at ../../../examples/tests/invalid/capture_reassignable.w:6:17 | Cannot ca
 `;
 
 exports[`cloud_function_expects_inflight.w > stderr 1`] = `
-"Compilation failed with 1 error(s)
-Error at ../../../examples/tests/invalid/cloud_function_expects_inflight.w:3:20 | Expected type to be \\"inflight (any): any\\", but got \\"preflight (str): str\\" instead"
+"Compilation failed with 2 error(s)
+Error at ../../../examples/tests/invalid/cloud_function_expects_inflight.w:3:20 | Expected type to be \\"IFunctionHandler\\", but got \\"preflight (str): str\\" instead
+Error at ../../../examples/tests/invalid/cloud_function_expects_inflight.w:9:14 | Expected type to be \\"IQueueOnMessageHandler\\", but got \\"inflight (num): void\\" instead"
 `;
 
 exports[`container_types.w > stderr 1`] = `
@@ -84,9 +85,8 @@ Error at ../../../examples/tests/invalid/immutable_container_types.w:3:4 | Unkno
 `;
 
 exports[`impl_interface.w > stderr 1`] = `
-"Compilation failed with 2 error(s)
-Error at ../../../examples/tests/invalid/impl_interface.w:3:10 | Resource \\"A (at ../../../examples/tests/invalid/impl_interface.w:3:10)\\" does not implement method \\"handle\\" of interface \\"cloud.IQueueOnMessageHandler\\"
-Error at ../../../examples/tests/invalid/impl_interface.w:8:10 | Expected type to be \\"inflight (IQueueOnMessageHandler, str): void\\", but got \\"inflight (B): void\\" instead"
+"Compilation failed with 1 error(s)
+Error at ../../../examples/tests/invalid/impl_interface.w:3:10 | Resource \\"A\\" does not implement method \\"handle\\" of interface \\"cloud.IQueueOnMessageHandler\\""
 `;
 
 exports[`inflight_in_class.w > stderr 1`] = `

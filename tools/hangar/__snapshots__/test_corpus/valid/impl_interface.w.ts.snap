@@ -98,9 +98,25 @@ constructor() {
   }
   }
   B._annotateInflight(\\"handle\\", {});
+  const x = new A(this,\\"A\\");
+  const y = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.a5455e5c5848cfc293fcb861d9393d32e29a39f8dc8ac79c19dd5289279762fe/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+      x: {
+        obj: x,
+        ops: []
+      },
+    }
+  });
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`wing compile -t tf-aws > proc.a5455e5c5848cfc293fcb861d9393d32e29a39f8dc8ac79c19dd5289279762fe/index.js 1`] = `
+"async handle() { const { x } = this; {
+  (await x.handle(\\"hello world!\\"));
+} };"
 `;
 
 exports[`wing test > stdout 1`] = `"pass ─ impl_interface.w (no tests)"`;

@@ -13,3 +13,9 @@ resource B impl cloud.IQueueOnMessageHandler {
     return 5;
   }
 }
+
+let x: cloud.IQueueOnMessageHandler = new A();
+
+let y = inflight () => {
+  x.handle("hello world!");
+};

@@ -341,6 +341,17 @@ impl Subtype for Type {
 				// TODO: Hack to make anything's compatible with all other types, specifically useful for handling core.Inflight handlers
 				true
 			}
+			(Self::Function(_), Self::Interface(r0)) => {
+				// TODO: Hack to make functions compatible with interfaces
+				// Remove this after https://github.com/winglang/wing/issues/1448
+				// Compare the function to a method on the interface named "handle" if it exists
+				if let Some(method) = r0.get_env().try_lookup("handle", None) {
+					let method = method.as_variable().unwrap();
+					self.is_subtype_of(&*method.type_)
+				} else {
+					false
+				}
+			}
 			(Self::Function(l0), Self::Function(r0)) => {
 				if !l0.phase.is_subtype_of(&r0.phase) {
 					return false;
@@ -354,13 +365,10 @@ impl Subtype for Type {
 
 				// In this section, we check if the parameter types are not subtypes of each other, then this is not a subtype.
 
-				// Check that this function has at least as many required parameters as the other function requires
-				if l0.min_parameters() < r0.min_parameters() {
-					return false;
-				}
-
 				let mut lparams = l0.parameters.iter().peekable();
 				let mut rparams = r0.parameters.iter().peekable();
+
+				// TODO: check that the number of parameters match
 
 				// If the first parameter is a class or resource, then we assume it refers to the `this` parameter
 				// in a class or resource, and skip it.
@@ -384,7 +392,7 @@ impl Subtype for Type {
 					// (Cat) => void is not a subtype of (Animal) => void
 					// but (Animal) => void is a subtype of (Cat) => void
 					// see https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)
-					if l.is_strict_subtype_of(&r) {
+					if !r.is_subtype_of(l) {
 						return false;
 					}
 				}
@@ -727,6 +735,7 @@ impl TypeRef {
 	pub fn is_capturable(&self) -> bool {
 		match **self {
 			Type::Resource(_) => true,
+			Type::Interface(_) => true,
 			Type::Enum(_) => true,
 			Type::Number => true,
 			Type::String => true,
@@ -1872,6 +1881,19 @@ impl<'a> TypeChecker<'a> {
 				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
 				let dummy_env = SymbolEnv::new(None, self.types.void(), true, false, env.flight, stmt.idx);
 
+				let impl_interfaces = implements
+					.iter()
+					.filter_map(|i| {
+						let t = resolve_user_defined_type(i, env, stmt.idx).unwrap_or_else(|e| self.type_error(e));
+						if t.as_interface().is_some() {
+							Some(t)
+						} else {
+							self.general_type_error(format!("Class {}'s implements \"{}\" is not an interface", name, t));
+							None
+						}
+					})
+					.collect::<Vec<_>>();
+
 				// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
 				let class_spec = Class {
 					should_case_convert_jsii: false,
@@ -1879,7 +1901,7 @@ impl<'a> TypeChecker<'a> {
 					fqn: None,
 					env: dummy_env,
 					parent: parent_class,
-					implements: vec![], // TODO parse AST information - https://github.com/winglang/wing/issues/1697
+					implements: impl_interfaces,
 					is_abstract: false,
 					type_parameters: None, // TODO no way to have generic args in wing yet
 				};
@@ -2064,7 +2086,7 @@ impl<'a> TypeChecker<'a> {
 							self.type_error(TypeError {
 								message: format!(
 									"Resource \"{}\" does not implement method \"{}\" of interface \"{}\"",
-									name, method_name, interface
+									name.name, method_name, interface
 								),
 								span: name.span.clone(),
 							});
@@ -2080,7 +2102,7 @@ impl<'a> TypeChecker<'a> {
 							self.type_error(TypeError {
 								message: format!(
 									"Resource \"{}\" does not implement field \"{}\" of interface \"{}\"",
-									name, field_name, interface
+									name.name, field_name, interface
 								),
 								span: name.span.clone(),
 							});
@@ -2591,7 +2613,8 @@ impl<'a> TypeChecker<'a> {
 
 				let instance_type = self.type_check_exp(object, env, statement_idx, context);
 				let res = match *instance_type {
-					Type::Class(ref class) | Type::Resource(ref class) => self.get_property_from_class(class, property),
+					Type::Class(ref class) | Type::Resource(ref class) => self.get_property_from_class_like(class, property),
+					Type::Interface(ref interface) => self.get_property_from_class_like(interface, property),
 					Type::Anything => VariableInfo {
 						type_: instance_type,
 						reassignable: false,
@@ -2602,29 +2625,29 @@ impl<'a> TypeChecker<'a> {
 					// Lookup wingsdk std types, hydrating generics if necessary
 					Type::Array(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_ARRAY, vec![t]);
-						self.get_property_from_class(new_class.as_class().unwrap(), property)
+						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
 					}
 					Type::MutArray(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_ARRAY, vec![t]);
-						self.get_property_from_class(new_class.as_class().unwrap(), property)
+						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
 					}
 					Type::Set(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_SET, vec![t]);
-						self.get_property_from_class(new_class.as_class().unwrap(), property)
+						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
 					}
 					Type::MutSet(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_SET, vec![t]);
-						self.get_property_from_class(new_class.as_class().unwrap(), property)
+						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
 					}
 					Type::Map(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MAP, vec![t]);
-						self.get_property_from_class(new_class.as_class().unwrap(), property)
+						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
 					}
 					Type::MutMap(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_MAP, vec![t]);
-						self.get_property_from_class(new_class.as_class().unwrap(), property)
+						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
 					}
-					Type::Json => self.get_property_from_class(
+					Type::Json => self.get_property_from_class_like(
 						env
 							.lookup_nested_str(WINGSDK_JSON, None)
 							.unwrap()
@@ -2634,7 +2657,7 @@ impl<'a> TypeChecker<'a> {
 							.unwrap(),
 						property,
 					),
-					Type::MutJson => self.get_property_from_class(
+					Type::MutJson => self.get_property_from_class_like(
 						env
 							.lookup_nested_str(WINGSDK_MUT_JSON, None)
 							.unwrap()
@@ -2644,7 +2667,7 @@ impl<'a> TypeChecker<'a> {
 							.unwrap(),
 						property,
 					),
-					Type::String => self.get_property_from_class(
+					Type::String => self.get_property_from_class_like(
 						env
 							.lookup_nested_str(WINGSDK_STRING, None)
 							.unwrap()
@@ -2654,7 +2677,7 @@ impl<'a> TypeChecker<'a> {
 							.unwrap(),
 						property,
 					),
-					Type::Duration => self.get_property_from_class(
+					Type::Duration => self.get_property_from_class_like(
 						env
 							.lookup_nested_str(WINGSDK_DURATION, None)
 							.unwrap()
@@ -2736,8 +2759,8 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	/// Get's the type of an instance variable in a class
-	fn get_property_from_class(&mut self, class: &Class, property: &Symbol) -> VariableInfo {
-		match class.env.lookup(property, None) {
+	fn get_property_from_class_like(&mut self, class: &impl ClassLike, property: &Symbol) -> VariableInfo {
+		match class.get_env().lookup(property, None) {
 			Ok(field) => {
 				let var = field.as_variable().expect("Expected property to be a variable");
 				if var.is_static {
