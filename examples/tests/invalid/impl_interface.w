@@ -8,7 +8,7 @@ resource A impl cloud.IQueueOnMessageHandler {
 resource B impl cloud.IQueueOnMessageHandler {
   init() {}
   inflight handle(x: num) {
-    // Error: Expected type to be "inflight (str): void", but got "inflight (): void" instead
+    // Error: Expected type to be "inflight (str): void", but got "inflight (num): void" instead
     return;
   }
 }
