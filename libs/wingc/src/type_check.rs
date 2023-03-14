@@ -2075,7 +2075,13 @@ impl<'a> TypeChecker<'a> {
 				for interface in implements.iter() {
 					let interface_type =
 						resolve_user_defined_type(interface, env, stmt.idx).unwrap_or_else(|e| self.type_error(e));
-					let interface_type = interface_type.as_interface().expect("Expected interface type");
+					let interface_type = match interface_type.as_interface() {
+						Some(t) => t,
+						None => {
+							// No need to type error here, the resolve_user_defined_type call above will have already done so
+							continue;
+						}
+					};
 
 					// Check all methods are implemented
 					for (method_name, method_type) in interface_type.methods(true) {

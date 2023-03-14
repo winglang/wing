@@ -334,6 +334,9 @@ error: Expected type to be \\"inflight (IQueueOnMessageHandler, str): void\\", b
 8 | resource B impl cloud.IQueueOnMessageHandler {
   |          ^ Expected type to be \\"inflight (IQueueOnMessageHandler, str): void\\", but got \\"inflight (B, num): void\\" instead
 
+
+error: Class C (at ../../../examples/tests/invalid/impl_interface.w:16:10)'s implements \\"Bucket\\" is not an interface
+
 "
 `;
 

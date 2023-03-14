@@ -12,3 +12,7 @@ resource B impl cloud.IQueueOnMessageHandler {
     return;
   }
 }
+
+resource C impl cloud.Bucket {
+  init() {}
+}
