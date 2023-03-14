@@ -21,7 +21,7 @@ The following code is an initial implementation of TaskList with api gateway and
 - [x] Optionality ? ?? and ??=
 - [x] redis is packaged inside our SDK
 - [x] I wanted to use ioredis as an inflight memebr but there are 2 issues:
-  - [x] Missing inflight init (used lazy getter style method) 
+  - [x] Missing inflight init (used lazy getter style method instead) 
   - [x] ioredis is from type any (redis.IRedisClient) 
 
 ## Open issues
