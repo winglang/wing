@@ -147,11 +147,6 @@ Error at ../../../examples/tests/invalid/mut_container_types.w:22:23 | Expected 
 Error at ../../../examples/tests/invalid/mut_container_types.w:25:23 | Expected type to be \\"MutMap<str>\\", but got \\"MutMap<num>\\" instead"
 `;
 
-exports[`number_from_json.w > stderr 1`] = `
-"preflight error: unable to parse string apples as a number
-no .wsim file found in output directory"
-`;
-
 exports[`optionals.w > stderr 1`] = `
 "Compilation failed with 1 error(s)
 Error at ../../../examples/tests/invalid/optionals.w:7:3 | Expected type to be \\"num\\", but got \\"num?\\" instead"
@@ -211,11 +206,6 @@ Error at ../../../examples/tests/invalid/statements_if.w:8:5 | Expected type to 
 exports[`std_containers.w > stderr 1`] = `
 "Compilation failed with 1 error(s)
 Error at ../../../examples/tests/invalid/std_containers.w:3:18 | Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead"
-`;
-
-exports[`string_from_json.w > stderr 1`] = `
-"preflight error: unable to parse number 123 as a string
-no .wsim file found in output directory"
 `;
 
 exports[`struct_expansion.w > stderr 1`] = `
