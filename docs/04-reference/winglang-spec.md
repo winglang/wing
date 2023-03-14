@@ -882,7 +882,7 @@ Here's a quick summary of how optionality works in Wing:
 * `x: T?` marks `x` as "optional of T". This means that `x` can store a value of type `T` but it can also be in a state where there is no value stored there.
 * To test if `x` has a value or not, use `x?`, which returns a `bool`. If x has a value, `x?` will be `true`, otherwise it will be `false`.
 * The `if let y = x { } else { }` is a special if statement that binds `y` inside the block only if `x` includes a value. Otherwise, the `else` block will be executed.
-* The `x?.y` notation can be used to access object fields only if there is a value. It returns an undefined optional if the value is not defined.
+* The `x?.y` notation can be used to access object fields only if there is a value. It returns an empty optional if the value is not defined.
 * The `x ?? y` notation will return the value in `x` (if there is one) or `y` otherwise (`y` must be of type `T`, not `T?`).
 * A default value can also be supplied using `= y` in the declaration of the field or argument, which implies that the type will always be defined.
 
