@@ -593,36 +593,38 @@ impl<'a> JSifier<'a> {
 				iterator,
 				iterable,
 				statements,
-			} => {
-				format!(
-					"for (const {} of {}) {}",
-					self.jsify_symbol(iterator),
-					self.jsify_expression(iterable, context),
-					self.jsify_scope(statements, context)
-				)
-			}
-			StmtKind::ForSequence {
-				iterator,
-				sequence,
-				statements,
-			} => {
-				format!(
-					"{{{}\n{}\n{}}};",
+			} => match &iterable.kind {
+				ExprKind::NumberSequence {
+					start: _,
+					inclusive: _,
+					end: _,
+				} => {
 					format!(
-						"function* iterator(start, end, inclusive) {{\n  {}\n  {}\n  {}\n  {}\n}}",
-						format!("let i = start;"),
-						format!("let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;"),
-						format!("while (i < limit) yield i++;"),
-						format!("while (i > limit) yield i--;"),
-					),
-					format!("const iter = iterator({});", self.jsify_expression(sequence, context)),
+						"{{{}\n{}\n{}}};",
+						format!(
+							"function* iterator(start, end, inclusive) {{\n  {}\n  {}\n  {}\n  {}\n}}",
+							format!("let i = start;"),
+							format!("let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;"),
+							format!("while (i < limit) yield i++;"),
+							format!("while (i > limit) yield i--;"),
+						),
+						format!("const iter = iterator({});", self.jsify_expression(iterable, context)),
+						format!(
+							"for (const {} of iter) {}",
+							self.jsify_symbol(iterator),
+							self.jsify_scope(statements, context)
+						)
+					)
+				}
+				_ => {
 					format!(
-						"for (const {} of iter) {}",
+						"for (const {} of {}) {}",
 						self.jsify_symbol(iterator),
+						self.jsify_expression(iterable, context),
 						self.jsify_scope(statements, context)
 					)
-				)
-			}
+				}
+			},
 			StmtKind::While { condition, statements } => {
 				format!(
 					"while ({}) {}",

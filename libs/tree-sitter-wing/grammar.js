@@ -81,7 +81,6 @@ module.exports = grammar({
         $.resource_definition,
         $.interface_definition,
         $.for_in_loop,
-        $.for_sequence,
         $.while_statement,
         $.break_statement,
         $.continue_statement,
@@ -226,7 +225,7 @@ module.exports = grammar({
         "for",
         field("iterator", $.reference),
         "in",
-        field("iterable", $.expression),
+        field("iterable", choice($.expression, $.num_sequence)),
         field("block", $.block)
       ),
 
@@ -238,15 +237,6 @@ module.exports = grammar({
         "..",
         optional(field("inclusive_sequence", $.inclusive_sequence)),
         field("end", $.expression)
-      ),
-
-    for_sequence: ($) =>
-      seq(
-        "for",
-        field("iterator", $.reference),
-        "in",
-        field("sequence", $.num_sequence),
-        field("block", $.block)
       ),
 
     while_statement: ($) =>

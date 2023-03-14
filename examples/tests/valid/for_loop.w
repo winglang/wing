@@ -45,3 +45,114 @@ for word in words {
   assert(post_continue_hits == 0);
 }
 assert(j == 3);
+
+print("---\nfor x in 0..0 { ... }");
+for x in 0..0 {
+  assert(false);
+}
+print("there's no value to iterate");
+
+print("---\nfor x in 0..=0 { ... }");
+for x in 0..=0 {
+  assert(x == 0);
+  print("${x}");
+}
+
+print("---\nfor x in 0..2 { ... }");
+for x in 0..2 {
+  assert(x >= 0);
+  assert(x < 2);
+  print("${x}");
+}
+
+print("---\nfor x in 0..=2 { ... }");
+for x in 0..=2 {
+  assert(x >= 0);
+  assert(x <= 2);
+  print("${x}");
+}
+
+print("---\nfor x in 2..0 { ... }");
+for x in 2..0 {
+  assert(x <= 2);
+  assert(x > 0);
+  print("${x}");
+}
+
+print("---\nfor x in 2..=0 { ... }");
+for x in 2..=0 {
+  assert(x <= 2);
+  assert(x >= 0);
+  print("${x}");
+}
+
+print("---\nfor x in 0..-2 { ... }");
+for x in 0..-2 {
+  assert(x <= 0);
+  assert(x > -2);
+  print("${x}");
+}
+
+print("---\nfor x in 0..=-2 { ... }");
+for x in 0..=-2 {
+  assert(x <= 0);
+  assert(x > -3);
+  print("${x}");
+}
+
+print("---\nfor x in -2..0 { ... }");
+for x in -2..0 {
+  assert(x >= -2);
+  assert(x < 0);
+  print("${x}");
+}
+
+print("---\nfor x in -2..=0 { ... }");
+for x in -2..=0 {
+  assert(x >= -2);
+  assert(x <= 0);
+  print("${x}");
+}
+
+let z = 2;
+print("---\nfor x in 0..z { ... } <=> x = 2");
+for x in 0..z {
+  assert(x >= 0);
+  assert(x < 2);
+  print("${x}");
+}
+
+print("---\nfor x in 0..=z { ... } <=> x = 2");
+for x in 0..=z {
+  assert(x >= 0);
+  assert(x <= 2);
+  print("${x}");
+}
+
+print("---\nfor x in z..0 { ... } <=> x = 2");
+for x in z..0 {
+  assert(x <= 2);
+  assert(x > 0);
+  print("${x}");
+}
+
+print("---\nfor x in 0..(z*2) { ... } <=> x = 2");
+for x in 0..(z*2) {
+  assert(x >= 0);
+  assert(x < 4);
+  print("${x}");
+}
+
+print("---\nfor x in 0..=(z*2) { ... } <=> x = 2");
+for x in 0..=(z*2) {
+  assert(x >= 0);
+  assert(x <= 4);
+  print("${x}");
+}
+
+print("---\nfor x in (z*2)..0 { ... } <=> x = 2");
+for x in (z*2)..0 {
+  assert(x <= 4);
+  assert(x > 0);
+  print("${x}");
+}

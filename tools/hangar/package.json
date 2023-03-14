@@ -5,7 +5,7 @@
   "scripts": {
     "test": "vitest run",
     "test:generate": "tsx src/generate_tests.ts",
-    "test:watch": "vitest watch --reporter=verbose",
+    "test:watch": "vitest watch --update --reporter=verbose",
     "test:update": "vitest run --update --reporter=verbose"
   },
   "author": "Monada",

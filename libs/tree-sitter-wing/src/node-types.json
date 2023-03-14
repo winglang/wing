@@ -293,10 +293,6 @@
           "named": true
         },
         {
-          "type": "for_sequence",
-          "named": true
-        },
-        {
           "type": "if_statement",
           "named": true
         },
@@ -740,51 +736,19 @@
           {
             "type": "expression",
             "named": true
-          }
-        ]
-      },
-      "iterator": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "reference",
-            "named": true
-          }
-        ]
-      }
-    }
-  },
-  {
-    "type": "for_sequence",
-    "named": true,
-    "fields": {
-      "block": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "block",
-            "named": true
-          }
-        ]
-      },
-      "iterator": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "reference",
-            "named": true
-          }
-        ]
-      },
-      "sequence": {
-        "multiple": false,
-        "required": true,
-        "types": [
+          },
           {
             "type": "num_sequence",
+            "named": true
+          }
+        ]
+      },
+      "iterator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "reference",
             "named": true
           }
         ]
@@ -2500,10 +2464,6 @@
         },
         {
           "type": "for_in_loop",
-          "named": true
-        },
-        {
-          "type": "for_sequence",
           "named": true
         },
         {

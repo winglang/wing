@@ -1688,17 +1688,48 @@ impl<'a> TypeChecker<'a> {
 					};
 				}
 			}
-			StmtKind::ForSequence {
-				iterator,
-				sequence,
-				statements,
-			} => self.type_check_loop(iterator, sequence, statements, stmt, env, context),
 			StmtKind::ForLoop {
 				iterator,
 				iterable,
 				statements,
-			} => self.type_check_loop(iterator, iterable, statements, stmt, env, context),
+			} => {
+				// TODO: Expression must be iterable
+				let exp_type = self.type_check_exp(iterable, env, stmt.idx, context);
 
+				let iterator_type = match &*exp_type {
+					// These are builtin iterables that have a clear/direct iterable type
+					Type::Array(t) => *t,
+					Type::Set(t) => *t,
+					Type::MutArray(t) => *t,
+					Type::MutSet(t) => *t,
+
+					// TODO: Handle non-builtin iterables
+					t => {
+						self.type_error(TypeError {
+							message: format!("Unable to iterate over \"{}\"", t),
+							span: iterable.span.clone(),
+						});
+						self.types.anything()
+					}
+				};
+
+				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.flight, stmt.idx);
+				match scope_env.define(
+					&iterator,
+					SymbolKind::make_variable(iterator_type, false, env.flight),
+					StatementIdx::Top,
+				) {
+					Err(type_error) => {
+						self.type_error(type_error);
+					}
+					_ => {}
+				};
+				statements.set_env(scope_env);
+
+				self.inner_scopes.push(statements);
+
+				// self.type_check_loop(iterator, iterable, statements, stmt, env, context)
+			}
 			StmtKind::While { condition, statements } => {
 				let cond_type = self.type_check_exp(condition, env, stmt.idx, context);
 				self.validate_type(cond_type, self.types.bool(), condition);
