@@ -6,30 +6,30 @@ import { useNotifications } from "../../design-system/Notification.js";
 import { TextArea } from "../../design-system/TextArea.js";
 import { trpc } from "../../utils/trpc.js";
 
-export interface QueueViewProps {
+export interface TopicViewProps {
   resourcePath: string;
 }
 
-export const QueueView = ({ resourcePath }: QueueViewProps) => {
+export const TopicView = ({ resourcePath }: TopicViewProps) => {
   const { appMode } = useContext(AppContext);
-  const pushMessage = trpc["queue.push"].useMutation();
+  const publish = trpc["topic.publish"].useMutation();
 
   const [message, setMessage] = useState("");
   const { showNotification } = useNotifications();
 
-  const sendMessage = useCallback(async () => {
+  const publishMessage = useCallback(async () => {
     if (appMode === "webapp") {
       return;
     }
-    if (!message || message === "") {
+    if (!message) {
       return;
     }
-    pushMessage.mutate({
+    publish.mutate({
       resourcePath,
       message: message,
     });
-    showNotification("Message sent", { body: message, type: "success" });
-  }, [message, pushMessage]);
+    showNotification("Message published", { body: message, type: "success" });
+  }, [message, publish]);
 
   const id = useId();
 
@@ -38,14 +38,15 @@ export const QueueView = ({ resourcePath }: QueueViewProps) => {
       <div className="flex flex-col gap-2">
         <TextArea
           id={id}
+          className="text-xs"
           value={message}
           onInput={(event) => setMessage(event.currentTarget.value)}
         />
         <div className="flex gap-2 justify-end">
           <Button
-            label="Send"
+            label="Publish"
             disabled={appMode === "webapp"}
-            onClick={() => sendMessage()}
+            onClick={() => publishMessage()}
           />
         </div>
       </div>

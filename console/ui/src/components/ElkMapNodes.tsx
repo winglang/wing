@@ -25,6 +25,9 @@ const getResourceBorderColor = (
     case "wingsdk.cloud.Counter": {
       return "border-t-[3px] border-t-lime-500 group-hover:border-t-lime-500 group-focus:border-t-lime-500";
     }
+    case "wingsdk.cloud.Topic": {
+      return "border-t-[3px] border-t-pink-500 group-hover:border-t-pink-500 group-focus:border-t-pink-500";
+    }
   }
 };
 

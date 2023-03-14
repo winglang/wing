@@ -4,24 +4,23 @@ import {
   CalculatorIcon,
   ClockIcon,
   CubeIcon,
-  CubeTransparentIcon,
   GlobeAltIcon,
   QueueListIcon,
+  MegaphoneIcon,
 } from "@heroicons/react/24/outline";
 import {
   ArchiveBoxIcon as SolidArchiveBoxIcon,
   BoltIcon as SolidBoltIcon,
   CalculatorIcon as SolidCalculatorIcon,
   ClockIcon as SolidClockIcon,
-  CubeIcon as SolidCubeIcon,
-  CubeTransparentIcon as SolidCubeTransparentIcon,
   GlobeAltIcon as SolidGlobeAltIcon,
   QueueListIcon as SolidQueueListIcon,
+  MegaphoneIcon as SolidMegaphoneIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
 import { BaseResourceSchema, WingSimulatorSchema } from "@wingconsole/server";
 import classNames from "classnames";
-import React from "react";
+import { SVGProps } from "react";
 
 import { TreeMenuItem } from "../design-system/TreeMenu.js";
 
@@ -64,21 +63,6 @@ export const SchemaToTreeMenuItems = (
   return tree;
 };
 
-const CubeTransparentExIcon = (props: React.SVGProps<SVGSVGElement>) => {
-  return (
-    <div className="relative">
-      <div className="opacity-40">
-        <CubeIcon {...props} />
-      </div>
-
-      <CubeTransparentIcon
-        {...props}
-        className={classNames(props.className, "absolute inset-0 opacity-70")}
-      />
-    </div>
-  );
-};
-
 export const CustomResourceIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <div className="relative">
@@ -115,34 +99,14 @@ export const getResourceIconComponent = (
     case "wingsdk.cloud.Counter": {
       return solid ? SolidCalculatorIcon : CalculatorIcon;
     }
+    case "wingsdk.cloud.Topic": {
+      return solid ? SolidMegaphoneIcon : MegaphoneIcon;
+    }
     case "cloud.Cron": {
       return solid ? SolidClockIcon : ClockIcon;
     }
     default: {
       return CubeIcon;
-    }
-  }
-};
-
-export const getResourceColors = (options: {
-  resourceType: BaseResourceSchema["type"] | undefined;
-}) => {
-  switch (options.resourceType) {
-    case "wingsdk.cloud.Bucket": {
-      return "orange";
-    }
-
-    case "wingsdk.cloud.Function": {
-      return "sky";
-    }
-    case "wingsdk.cloud.Queue": {
-      return "emerald";
-    }
-    case "wingsdk.cloud.Endpoint": {
-      return "sky";
-    }
-    case "wingsdk.cloud.Counter": {
-      return "lime";
     }
   }
 };
@@ -193,6 +157,14 @@ const getResourceIconColors = (options: {
         options.forceDarken && "text-lime-600 dark:text-lime-300",
       ];
     }
+    case "wingsdk.cloud.Topic": {
+      return [
+        "text-pink-500 dark:text-pink-400",
+        options.darkenOnGroupHover &&
+          "group-hover:text-pink-600 dark:group-hover:text-pink-300",
+        options.forceDarken && "text-pink-600 dark:text-pink-300",
+      ];
+    }
     default: {
       return [
         "text-slate-500 dark:text-slate-400",
@@ -204,7 +176,7 @@ const getResourceIconColors = (options: {
   }
 };
 
-export interface ResourceIconProps extends React.SVGProps<SVGSVGElement> {
+export interface ResourceIconProps extends SVGProps<SVGSVGElement> {
   resourceType: BaseResourceSchema["type"] | undefined;
   darkenOnGroupHover?: boolean;
   forceDarken?: boolean;

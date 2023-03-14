@@ -18,13 +18,14 @@ import { trpc } from "../utils/trpc.js";
 
 import { AttributeView } from "./AttributeView.js";
 import { BucketMetadata } from "./resource-metadata/BucketMetadata.js";
+import { CounterMetadata } from "./resource-metadata/CounterMetadata.js";
 import { FunctionMetadata } from "./resource-metadata/FunctionMetadata.js";
 import { QueueMetadata } from "./resource-metadata/QueueMetadata.js";
 import { ResourceView } from "./resource-views/ResourceView.js";
 
 interface AttributeGroup {
   groupName: string;
-  actionName: string;
+  actionName?: string;
   icon?: ForwardRefExoticComponent<SVGProps<SVGSVGElement>>;
 }
 
@@ -99,6 +100,23 @@ export const MetadataPanel = ({
           resourceGroup = {
             groupName: "Bucket",
             actionName: "Files",
+            icon: getResourceIconComponent(node.type),
+          };
+
+          break;
+        }
+        case "wingsdk.cloud.Counter": {
+          resourceGroup = {
+            groupName: "Counter",
+            icon: getResourceIconComponent(node.type),
+          };
+
+          break;
+        }
+        case "wingsdk.cloud.Topic": {
+          resourceGroup = {
+            groupName: "Topic",
+            actionName: "Publish Message",
             icon: getResourceIconComponent(node.type),
           };
 
@@ -205,7 +223,7 @@ export const MetadataPanel = ({
                         <button
                           key={`${connection.path}_${index}`}
                           className={classNames(
-                            "w-full flex-shrink-0 max-w-full truncate bg-slate-50 hover:bg-slate-200/50 shadow-sm text-sm px-4 py-1 flex items-center gap-1 min-w-0 text-slate-700",
+                            "w-full flex-shrink-0 max-w-full truncate bg-slate-50 hover:bg-slate-200/50 shadow-sm text-sm pl-4 pr-2 py-1 flex items-center gap-1 min-w-0 text-slate-700",
                           )}
                           title={connection.path}
                           onClick={() =>
@@ -268,6 +286,9 @@ export const MetadataPanel = ({
                         )}
                         {node.type === "wingsdk.cloud.Bucket" && (
                           <BucketMetadata node={node} />
+                        )}
+                        {node.type === "wingsdk.cloud.Counter" && (
+                          <CounterMetadata node={node} />
                         )}
                       </div>
                       <InspectorSection

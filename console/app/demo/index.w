@@ -19,3 +19,11 @@ new cloud.Function(inflight (message: str): str => {
 }) as "IncrementCounter";
 
 let topic = new cloud.Topic() as "Topic";
+topic.on_message(inflight (message: str): str => {
+  print("Topic subscriber #1: ${message}");
+  return message;
+});
+topic.on_message(inflight (message: str): str => {
+  print("Topic subscriber #2: ${message}");
+  return message;
+});

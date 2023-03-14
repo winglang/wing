@@ -2,6 +2,7 @@ import { BucketView } from "./BucketView.js";
 import { CounterView } from "./CounterView.js";
 import { FunctionView } from "./FunctionView.js";
 import { QueueView } from "./QueueView.js";
+import { TopicView } from "./TopicView.js";
 import { UnsupportedView } from "./UnsupportedView.js";
 
 export interface ResourceViewProps {
@@ -25,6 +26,9 @@ export const ResourceView = ({
       }
       case "wingsdk.cloud.Counter": {
         return <CounterView resourcePath={resourcePath} />;
+      }
+      case "wingsdk.cloud.Topic": {
+        return <TopicView resourcePath={resourcePath} />;
       }
       default: {
         return (

@@ -18,22 +18,22 @@ export const AttributeView = ({
   children,
 }: PropsWithChildren<AttributeViewProps>) => {
   return (
-    <div className="pl-4 flex flex-row items-center">
+    <div className="pl-4 flex flex-row items-center gap-x-1">
       <div className="text-slate-500 min-w-[100px]">{name}</div>
-      {value && type === "url" && (
+      {value !== undefined && type === "url" && (
         <div className="truncate">
           <Link href={url}>{value}</Link>
         </div>
       )}
-      {value && type !== "url" && (
+      {value !== undefined && type !== "url" && (
         <input
-          className="w-full bg-transparent ease-in-out focus:border-sky-500 focus:ring-2 focus:ring-sky-500/50 items-center outline-none px-2.5 select-text text-slate-600 text-sm transition truncate"
+          className="w-full bg-transparent ease-in-out focus:border-sky-500 focus:ring-2 focus:ring-sky-500/50 items-center outline-none select-text text-slate-600 text-sm transition truncate"
           value={value}
           disabled
         />
       )}
-      {!value && (
-        <div className="w-full bg-transparent items-center px-2.5 select-text text-slate-600 text-sm transition truncate">
+      {value === undefined && (
+        <div className="w-full bg-transparent items-center select-text text-slate-600 text-sm transition truncate">
           {children}
         </div>
       )}

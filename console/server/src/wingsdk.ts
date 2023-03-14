@@ -10,4 +10,5 @@ export type {
   IFunctionClient,
   IQueueClient,
   ICounterClient,
+  ITopicClient,
 } from "@winglang/sdk/lib/cloud/index.js";
