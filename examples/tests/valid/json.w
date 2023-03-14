@@ -25,6 +25,24 @@ let jj = Json some_number;
 let jj1 = Json {foo: some_number};
 let jj2 = Json [ some_number, {bar: some_number} ];
 
+let get_str = (): str => {
+  return "hello";
+};
+
+let jj3 = Json get_str();
+assert(jj3 == Json "hello");
+
+resource Foo {
+  _sum_str: str;
+  init() {
+    this._sum_str = "wow!";
+  }
+}
+
+let f = new Foo();
+let jj4 = Json f._sum_str;
+assert(jj4 == Json "wow!");
+
 let some_json = MutJson {
   x: some_number
 };
