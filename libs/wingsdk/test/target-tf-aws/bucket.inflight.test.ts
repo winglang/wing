@@ -1,6 +1,7 @@
 import { Readable } from "stream";
 import {
   DeleteObjectCommand,
+  GetBucketLocationCommand,
   GetObjectCommand,
   ListObjectsCommand,
   PutObjectCommand,
@@ -146,4 +147,77 @@ test("delete object from a bucket with mustExist option", async () => {
 
   // THEN
   expect(response).toEqual(undefined);
+});
+
+test("Given a non public bucket when reaching to a key public url it should throw an error", async () => {
+  // GIVEN
+  let error;
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+
+  s3Mock
+    .on(GetBucketLocationCommand, { Bucket: BUCKET_NAME })
+    .resolves({ LocationConstraint: "us-east-2" });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+
+  try {
+    await client.publicUrl(KEY);
+  } catch (err) {
+    error = err;
+  }
+  // THEN
+  expect(error?.message).toBe(
+    "Cannot provide public url for a non-public bucket"
+  );
+});
+
+test("Given a public bucket when reaching to a non existent key, public url it should throw an error", async () => {
+  // GIVEN
+  let error;
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+
+  s3Mock
+    .on(GetBucketLocationCommand, { Bucket: BUCKET_NAME })
+    .resolves({ LocationConstraint: "us-east-2" });
+  s3Mock
+    .on(ListObjectsCommand, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
+    .resolves({ Contents: [] });
+
+  //WHEN
+  const client = new BucketClient(BUCKET_NAME, true);
+  try {
+    await client.publicUrl(KEY);
+  } catch (err) {
+    error = err;
+  }
+  // THEN
+  expect(error?.message).toBe(
+    "Cannot provide public url for an non-existent key (key=KEY)"
+  );
+});
+
+test("Given a public bucket, when giving one of its keys, we should get it's public url", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const REGION = "us-east-2";
+
+  s3Mock
+    .on(GetBucketLocationCommand, { Bucket: BUCKET_NAME })
+    .resolves({ LocationConstraint: REGION });
+  s3Mock
+    .on(ListObjectsCommand, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
+    .resolves({ Contents: [{}] });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME, true);
+  const response = await client.publicUrl(KEY);
+
+  // THEN
+  expect(response).toEqual(
+    `https://${BUCKET_NAME}.s3.${REGION}.amazonaws.com/${KEY}`
+  );
 });
