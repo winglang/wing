@@ -58,7 +58,7 @@ bring cloud;
 bring redis;
 
 interface IMyRegExp {
-  inflight test(s: str): bool
+  inflight test(s: str): bool;
 }
 
 enum Status {
