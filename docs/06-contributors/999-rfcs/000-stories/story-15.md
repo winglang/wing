@@ -12,18 +12,19 @@ The following code is an initial implementation of TaskList with api gateway and
   - [x] bring an internal nodejs stdlib (RegEx)
   - [x] How does untyped works with numeric operations?
   - [x] Do we cast untyped? 
-- [x] enum & duration that can be included inside json
+- [x] ~enum & duration that can be included inside json~ (Json should not include these) 
 - [x] It leverages setting explicit permissions (using the `this.inflight` API, described [here](https://github.com/winglang/wing/pull/1610))
 - [x] Using interface 
 - [x] use redis instead of bucket
 - [x] code that updates estimation and duration from REST put command
 - [x] console requirements
+- [x] Optionality ? ?? and ??=
+- [x] redis is packaged inside our SDK
+- [x] I wanted to use ioredis as an inflight memebr but there are 2 issues:
+  - [x] Missing inflight init (used lazy getter style method) 
+  - [x] ioredis is from type any (redis.IRedisClient) 
 
 ## Open issues
-- [ ] How is the redis package distributed (currently inside wing, we don't have npm yet)
-- [ ] I wanted to use ioredis as an inflight memebr but there are 2 issues:
-  - [ ] Missing inflight init 
-  - [ ] ioredis is from type any, so I can't put it as a member
 
 ## Developer Experience
 
@@ -82,18 +83,25 @@ interface ITaskList {
 
 resource TaskList implementes ITaskList {
   _redis: redis.Redis;
+  inflight _redis_client: redis.IRedisClient;
   
   init() {
     this._redis = new redis.Redis();
   }
+  
+  inflight get_redis_client(): redis.IRedisClient { 
+    this._redis_client ??= this._redis.ioredis();
+    return this._redis_client;
+  }
+
 
   inflight get(id: str): Json {
-     return Json.parse(this._redis.ioredis().get(id));
+     return Json.parse(this.get_redis_client().get(id));
   }
   
   inflight _add(id: str, j: Json): str {
-    this._redis.ioredis().set(id , Json.to_str(j));
-    this._redis.ioredis().sadd("todo", id);
+    this.get_redis_client().set(id , Json.to_str(j));
+    this.get_redis_client().sadd("todo", id);
     return id;
   } 
   
@@ -110,15 +118,15 @@ resource TaskList implementes ITaskList {
 
   inflight remove(id: str) {
     print("removing task ${id}");
-    this._redis.ioredis().del(id);
+    this.get_redis_client().del(id);
   }
 
   inflight find(term: str): Array<str> { 
     let r = create_regex(term);
     let result = MutArray<str>[]; 
-    let ids = this._redis.ioredis().smembers("todo");
+    let ids = this.get_redis_client().smembers("todo");
     for id in ids {
-      let j = Json.parse(this._redis.ioredis().get(id));
+      let j = Json.parse(this.get_redis_client().get(id));
       if r.test(j.title) {
         result.push(id);
       }
