@@ -4062,25 +4062,8 @@
           "name": "element",
           "content": {
             "type": "SYMBOL",
-            "name": "json_element"
+            "name": "expression"
           }
-        }
-      ]
-    },
-    "json_element": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "_literal"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "map_literal"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "array_literal"
         }
       ]
     },
@@ -4137,6 +4120,16 @@
       {
         "type": "SYMBOL",
         "name": "stdlib_identifier"
+      }
+    ],
+    [
+      {
+        "type": "SYMBOL",
+        "name": "json_literal"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "structured_access_expression"
       }
     ]
   ],

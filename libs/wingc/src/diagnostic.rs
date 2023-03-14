@@ -4,6 +4,8 @@ use tree_sitter::Point;
 
 use lsp_types::{Position, Range};
 
+use serde::Serialize;
+
 use crate::debug;
 
 pub type FileId = String;
@@ -11,7 +13,7 @@ pub type Diagnostics = Vec<Diagnostic>;
 pub type DiagnosticResult<T> = Result<T, ()>;
 
 /// Line and character location in a UTF8 Wing source file
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize)]
 pub struct WingLocation {
 	pub line: u32,
 	pub col: u32,
@@ -64,7 +66,7 @@ impl Display for WingLocation {
 }
 
 /// A span of text in a Wing source file
-#[derive(Debug, Default, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, Default, PartialEq, Eq, Hash, Clone, Serialize)]
 pub struct WingSpan {
 	pub start: WingLocation,
 	pub end: WingLocation,
@@ -144,14 +146,14 @@ impl PartialOrd for WingSpan {
 	}
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize)]
 pub enum DiagnosticLevel {
 	Error,
 	Warning,
 	Note,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize)]
 pub struct Diagnostic {
 	pub message: String,
 	pub span: Option<WingSpan>,

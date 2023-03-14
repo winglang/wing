@@ -1,5 +1,14 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`wing compile -t tf-aws > clients/Foo.inflight.js 1`] = `
+"export class Foo_inflight  {
+constructor({ _sum_str }) {
+
+  this._sum_str = _sum_str;
+}
+}"
+`;
+
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
   "//": {
@@ -43,6 +52,21 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"json\\", plugins: $plugins });
   
+  class Foo extends $stdlib.core.Resource {
+  	constructor(scope, id, ) {
+  	super(scope, id);
+  {
+    this._sum_str = \\"wow!\\";
+  }
+  }
+  	
+  	_toInflight() {
+  	const _sum_str_client = this._lift(this._sum_str);
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/Foo.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo_inflight({_sum_str: \${_sum_str_client}}))\`);
+  }
+  }
+  
   const json_number = 123;
   const json_bool = true;
   const json_array = [1, 2, 3];
@@ -52,6 +76,19 @@ constructor() {
   ((obj, args) => { obj[args[0]] = args[1]; })(json_mut_obj, [\\"hello\\",message]);
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((json_mut_obj)[\\"hello\\"] === message)'\`)})(((json_mut_obj)[\\"hello\\"] === message))};
   const some_number = 999;
+  const jj = some_number;
+  const jj1 = Object.freeze({\\"foo\\":some_number});
+  const jj2 = [some_number, {\\"bar\\":some_number}];
+  const get_str =  () =>  {
+  	{
+    return \\"hello\\";
+  }
+  };
+  const jj3 = (get_str());
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(jj3 === \\"hello\\")'\`)})((jj3 === \\"hello\\"))};
+  const f = new Foo(this,\\"Foo\\");
+  const jj4 = f._sum_str;
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(jj4 === \\"wow!\\")'\`)})((jj4 === \\"wow!\\"))};
   const some_json = {\\"x\\":some_number};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((some_json)[\\"x\\"] === some_number)'\`)})(((some_json)[\\"x\\"] === some_number))};
   ((obj, args) => { obj[args[0]] = args[1]; })(some_json, [\\"x\\",111]);
@@ -61,9 +98,10 @@ constructor() {
   ((obj, args) => { obj[args[0]] = args[1]; })(((nested_json)[\\"b\\"])[\\"d\\"], [\\"foo\\",\\"tastic\\"]);
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((((nested_json)[\\"b\\"])[\\"d\\"])[\\"foo\\"] === \\"tastic\\")'\`)})(((((nested_json)[\\"b\\"])[\\"d\\"])[\\"foo\\"] === \\"tastic\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((((nested_json)[\\"b\\"])[\\"d\\"])[\\"bar\\"] === 123)'\`)})(((((nested_json)[\\"b\\"])[\\"d\\"])[\\"bar\\"] === 123))};
-  const arr = [1, 2, \\"buckle\\", \\"my\\", \\"shoe\\", 3, 4, [\\"shut\\", \\"the\\", \\"door\\"]];
+  const b = \\"buckle\\";
+  const arr = [1, 2, b, \\"my\\", \\"shoe\\", 3, 4, [\\"shut\\", \\"the\\", \\"door\\"]];
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr)[0] === 1)'\`)})(((arr)[0] === 1))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr)[2] === \\"buckle\\")'\`)})(((arr)[2] === \\"buckle\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr)[2] === b)'\`)})(((arr)[2] === b))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((arr)[7])[0] === \\"shut\\")'\`)})((((arr)[7])[0] === \\"shut\\"))};
 }
 }
