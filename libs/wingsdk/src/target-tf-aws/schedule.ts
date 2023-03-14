@@ -56,7 +56,7 @@ export class Schedule extends cloud.Schedule {
   }
 
   public onTick(
-    inflight: core.Inflight,
+    inflight: cloud.IScheduleOnTickHandler,
     props: cloud.ScheduleOnTickProps = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);

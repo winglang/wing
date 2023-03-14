@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App, Inflight, Resource } from "../core";
+import { App, IResource, Resource } from "../core";
 
 /**
  * Global identifier for `Api`.
@@ -64,7 +64,7 @@ export abstract class Api extends Resource {
    */
   public abstract get(
     route: string,
-    inflight: Inflight,
+    inflight: IApiEndpointHandler,
     props?: ApiGetProps
   ): void;
 
@@ -76,7 +76,7 @@ export abstract class Api extends Resource {
    */
   public abstract post(
     route: string,
-    inflight: Inflight,
+    inflight: IApiEndpointHandler,
     props?: ApiPostProps
   ): void;
 
@@ -88,7 +88,7 @@ export abstract class Api extends Resource {
    */
   public abstract put(
     route: string,
-    inflight: Inflight,
+    inflight: IApiEndpointHandler,
     props?: ApiPutProps
   ): void;
 
@@ -100,7 +100,7 @@ export abstract class Api extends Resource {
    */
   public abstract delete(
     route: string,
-    inflight: Inflight,
+    inflight: IApiEndpointHandler,
     props?: ApiDeleteProps
   ): void;
 
@@ -112,7 +112,7 @@ export abstract class Api extends Resource {
    */
   public abstract patch(
     route: string,
-    inflight: Inflight,
+    inflight: IApiEndpointHandler,
     props?: ApiPatchProps
   ): void;
 
@@ -124,7 +124,7 @@ export abstract class Api extends Resource {
    */
   public abstract options(
     route: string,
-    inflight: Inflight,
+    inflight: IApiEndpointHandler,
     props?: ApiOptionsProps
   ): void;
 
@@ -136,7 +136,7 @@ export abstract class Api extends Resource {
    */
   public abstract head(
     route: string,
-    inflight: Inflight,
+    inflight: IApiEndpointHandler,
     props?: ApiHeadProps
   ): void;
 
@@ -148,7 +148,7 @@ export abstract class Api extends Resource {
    */
   public abstract connect(
     route: string,
-    inflight: Inflight,
+    inflight: IApiEndpointHandler,
     props?: ApiConnectProps
   ): void;
 
@@ -315,6 +315,14 @@ export interface ApiResponse {
   /** The response's headers. */
   readonly headers?: Record<string, string>;
 }
+
+/**
+ * Represents a resource with an inflight "handle" method that can be passed to
+ * one of the `Api` request preflight methods.
+ *
+ * @inflight `@winglang/sdk.cloud.IApiEndpointHandlerClient`
+ */
+export interface IApiEndpointHandler extends IResource {}
 
 /**
  * Inflight client for `IApiEndpointHandler`.
