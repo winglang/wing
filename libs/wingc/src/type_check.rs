@@ -2901,4 +2901,126 @@ mod tests {
 		assert!(!Phase::Preflight.is_subtype_of(&Phase::Inflight));
 		assert!(!Phase::Inflight.is_subtype_of(&Phase::Preflight));
 	}
+
+	#[test]
+	fn optional_subtyping() {
+		let string = UnsafeRef::<Type>(&Type::String as *const Type);
+		let opt_string = UnsafeRef::<Type>(&Type::Optional(string) as *const Type);
+
+		// T is a subtype of T? since T can be used anywhere a T? is expected
+		// (but not vice versa)
+		assert!(string.is_subtype_of(&opt_string));
+		assert!(!opt_string.is_subtype_of(&string));
+
+		// subtyping is reflexive
+		assert!(string.is_subtype_of(&string));
+		assert!(opt_string.is_subtype_of(&opt_string));
+	}
+
+	#[test]
+	fn function_subtyping_across_phases() {
+		let void = UnsafeRef::<Type>(&Type::Void as *const Type);
+		let inflight_fn = Type::Function(FunctionSignature {
+			parameters: vec![],
+			return_type: void,
+			phase: Phase::Inflight,
+			js_override: None,
+		});
+		let preflight_fn = Type::Function(FunctionSignature {
+			parameters: vec![],
+			return_type: void,
+			phase: Phase::Preflight,
+			js_override: None,
+		});
+
+		// functions of different phases are not subtypes of each other
+		assert!(!inflight_fn.is_subtype_of(&preflight_fn));
+		assert!(!preflight_fn.is_subtype_of(&inflight_fn));
+
+		// subtyping is reflexive
+		assert!(inflight_fn.is_subtype_of(&preflight_fn));
+		assert!(preflight_fn.is_subtype_of(&inflight_fn));
+	}
+
+	#[test]
+	fn function_subtyping_incompatible_single_param() {
+		let void = UnsafeRef::<Type>(&Type::Void as *const Type);
+		let num = UnsafeRef::<Type>(&Type::Number as *const Type);
+		let string = UnsafeRef::<Type>(&Type::String as *const Type);
+		let num_fn = Type::Function(FunctionSignature {
+			parameters: vec![num],
+			return_type: void,
+			phase: Phase::Inflight,
+			js_override: None,
+		});
+		let str_fn = Type::Function(FunctionSignature {
+			parameters: vec![string],
+			return_type: void,
+			phase: Phase::Inflight,
+			js_override: None,
+		});
+
+		// functions of incompatible arguments are not subtypes of each other
+		assert!(!num_fn.is_subtype_of(&str_fn));
+		assert!(!str_fn.is_subtype_of(&num_fn));
+	}
+
+	#[test]
+	fn function_subtyping_incompatible_return_type() {
+		let void = UnsafeRef::<Type>(&Type::Void as *const Type);
+		let num = UnsafeRef::<Type>(&Type::Number as *const Type);
+		let string = UnsafeRef::<Type>(&Type::String as *const Type);
+		let returns_num = Type::Function(FunctionSignature {
+			parameters: vec![],
+			return_type: num,
+			phase: Phase::Inflight,
+			js_override: None,
+		});
+		let returns_str = Type::Function(FunctionSignature {
+			parameters: vec![],
+			return_type: string,
+			phase: Phase::Inflight,
+			js_override: None,
+		});
+		let returns_void = Type::Function(FunctionSignature {
+			parameters: vec![],
+			return_type: void,
+			phase: Phase::Inflight,
+			js_override: None,
+		});
+
+		// functions of incompatible return types are not subtypes of each other
+		assert!(!returns_num.is_subtype_of(&returns_str));
+		assert!(!returns_str.is_subtype_of(&returns_num));
+
+		// functions with specific return types are subtypes of functions with void return type
+		assert!(returns_num.is_subtype_of(&returns_void));
+		assert!(returns_str.is_subtype_of(&returns_void));
+	}
+
+	#[test]
+	fn function_subtyping_parameter_contravariance() {
+		let void = UnsafeRef::<Type>(&Type::Void as *const Type);
+		let string = UnsafeRef::<Type>(&Type::String as *const Type);
+		let opt_string = UnsafeRef::<Type>(&Type::Optional(string) as *const Type);
+		let str_fn = Type::Function(FunctionSignature {
+			parameters: vec![string],
+			return_type: void,
+			phase: Phase::Inflight,
+			js_override: None,
+		});
+		let opt_str_fn = Type::Function(FunctionSignature {
+			parameters: vec![opt_string],
+			return_type: void,
+			phase: Phase::Inflight,
+			js_override: None,
+		});
+
+		// let x = (s: string) => {};
+		// let y = (s: string?) => {};
+		// y is a subtype of x because a function that accepts a "string?" can be used
+		// in place of a function that accepts a "string", but not vice versa
+		assert!(opt_str_fn.is_subtype_of(&str_fn));
+		assert!(!str_fn.is_subtype_of(&opt_str_fn));
+	}
 }
