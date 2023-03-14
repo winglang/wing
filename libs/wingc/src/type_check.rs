@@ -743,17 +743,13 @@ impl TypeRef {
 
 	pub fn is_json_legal_value(&self) -> bool {
 		match **self {
-			Type::Resource(_) => false,
-			Type::Enum(_) => false,
 			Type::Number => true,
 			Type::String => true,
-			Type::Duration => false,
 			Type::Boolean => true,
 			Type::Json => true,
 			Type::Array(v) => v.is_json_legal_value(),
 			Type::Map(v) => v.is_json_legal_value(),
 			Type::Set(v) => v.is_json_legal_value(),
-			Type::Struct(_) => false,
 			_ => false,
 		}
 	}
