@@ -57,19 +57,19 @@ A good example on how this may look like is Redis embedded prompt inside their d
 bring cloud;
 bring redis;
 
-extern "./tasklist_helper.js" {
-  inflight get_data: (url: str) => Json;
-  inflight create_regex: (s: str) => IMyRegExp;
-  inflight uuid() => str; 
-};
+interface IMyRegExp {
+  inflight test(s: str): bool
+}
+
+resource Helper {
+  extern "./tasklist_helper.js" inflight get_data: (url: str) => Json;
+  extern "./tasklist_helper.js" inflight uuid() => str; 
+  extern "./tasklist_helper.js" inflight create_regex: (s: str) => IMyRegExp  
+}
 
 enum Status {
   Uncompleted,
   Completed
-}
-
-interface IMyRegExp {
-  inflight test(s: str): bool
 }
 
 interface ITaskList {
@@ -107,7 +107,7 @@ resource TaskList implementes ITaskList {
   
   inflight add(title: str): str {
     // PLACEHOLDER - how does untyped works with numeric operations
-    let id = uuid();
+    let id = Helper.uuid();
     let j = Json { 
       title: title, 
       status: "uncompleted"
@@ -122,7 +122,7 @@ resource TaskList implementes ITaskList {
   }
 
   inflight find(term: str): Array<str> { 
-    let r = create_regex(term);
+    let r = Helper.create_regex(term);
     let result = MutArray<str>[]; 
     let ids = this.get_redis_client().smembers("todo");
     for id in ids {
@@ -167,7 +167,7 @@ resource TaskListApi {
       // Easter Egg - if you add a todo with the single word "random" as the title, 
       //              the system will fetch a random task from the internet
       if title == "random" {
-        let data: Json = get_data('https://www.boredapi.com/api/activity');
+        let data: Json = Helper.get_data('https://www.boredapi.com/api/activity');
         title = str.from_json(data.activity); 
       } 
       let id = this.task_list.add(title);
