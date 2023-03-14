@@ -11,7 +11,7 @@ return class Handler {
   async handle(event) { await this.bucket.put(\\"hello.txt\\", event); }
 };
 })())({
-bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_1357ca3a\\"])
+bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_1357ca3a\\"], process.env[\\"BUCKET_NAME_1357ca3a_IS_PUBLIC\\"])
 })"
 `;
 
@@ -40,6 +40,7 @@ exports[`function with a bucket binding 2`] = `
         \\"environment\\": {
           \\"variables\\": {
             \\"BUCKET_NAME_1357ca3a\\": \\"\${aws_s3_bucket.root_Bucket_966015A6.bucket}\\",
+            \\"BUCKET_NAME_1357ca3a_IS_PUBLIC\\": \\"false\\",
             \\"WING_FUNCTION_NAME\\": \\"Function-c852aba6\\"
           }
         },

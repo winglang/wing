@@ -133,8 +133,11 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_0c557d45": "\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
+            "BUCKET_NAME_0c557d45_IS_PUBLIC": "false",
             "BUCKET_NAME_21bd2572": "\${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
+            "BUCKET_NAME_21bd2572_IS_PUBLIC": "true",
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "AnotherFunction-c88d2a81",
           },
         },
@@ -157,8 +160,11 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_0c557d45": "\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
+            "BUCKET_NAME_0c557d45_IS_PUBLIC": "false",
             "BUCKET_NAME_21bd2572": "\${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
+            "BUCKET_NAME_21bd2572_IS_PUBLIC": "true",
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
           },
         },
@@ -181,8 +187,11 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_0c557d45": "\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
+            "BUCKET_NAME_0c557d45_IS_PUBLIC": "false",
             "BUCKET_NAME_21bd2572": "\${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
+            "BUCKET_NAME_21bd2572_IS_PUBLIC": "true",
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "cloud-Queue-OnMessage-e46e5cb7-c86cd0c0",
           },
         },
@@ -391,19 +400,19 @@ constructor() {
   const bucket3 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"PrivateBucket\\",{ public: false });
   const queue = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Queue\\",this,\\"cloud.Queue\\");
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5f0e4e25898a72c973f063e92444f7572d58a18cdd38b3fb3a575af6adf7440f/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.7117cacac13b5aec2868af198145d060294a0f8c3a40444eeae5b1f6002f9e77/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
     bindings: {
       bucket1: {
         obj: bucket1,
-        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"public_url\\",\\"put\\",\\"put_json\\"]
       },
       bucket2: {
         obj: bucket2,
-        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"public_url\\",\\"put\\",\\"put_json\\"]
       },
       bucket3: {
         obj: bucket3,
-        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"public_url\\",\\"put\\",\\"put_json\\"]
       },
     }
   });
@@ -416,7 +425,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile -t tf-aws > proc.5f0e4e25898a72c973f063e92444f7572d58a18cdd38b3fb3a575af6adf7440f/index.js 1`] = `
+exports[`wing compile -t tf-aws > proc.7117cacac13b5aec2868af198145d060294a0f8c3a40444eeae5b1f6002f9e77/index.js 1`] = `
 "async handle(event) { const { bucket1, bucket2, bucket3 } = this; {
   (await bucket1.put(\\"file.txt\\",\\"data\\"));
   (await bucket2.get(\\"file.txt\\"));
@@ -424,6 +433,19 @@ exports[`wing compile -t tf-aws > proc.5f0e4e25898a72c973f063e92444f7572d58a18cd
   (await bucket3.get(\\"file3.txt\\"));
   for (const stuff of (await bucket1.list())) {
     {console.log(stuff)};
+  }
+  {console.log((await bucket2.publicUrl(\\"file.txt\\")))};
+  try {
+  	{
+    (await bucket1.publicUrl(\\"file.txt\\"));
+  }
+  } catch ($error_error) {
+  	const error = $error_error.message;
+  	{
+    {console.log(error)};
+  }
+  } finally {
+  	
   }
 } };"
 `;
