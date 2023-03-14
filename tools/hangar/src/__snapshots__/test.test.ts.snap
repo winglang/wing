@@ -11,6 +11,8 @@ exports[`asynchronous_model_implicit_await_in_functions.w > wing test --target s
 
 exports[`bring_cdktf.w > wing test --target sim > stdout 1`] = `"pass ─ bring_cdktf.w (no tests)"`;
 
+exports[`bring_fs.w > wing test --target sim > stdout 1`] = `"pass ─ bring_fs.w (no tests)"`;
+
 exports[`bring_jsii.w > wing test --target sim > stdout 1`] = `"pass ─ bring_jsii.w » root/test:say_hello"`;
 
 exports[`bring_jsii_path.w > wing test --target sim > stdout 1`] = `"pass ─ bring_jsii_path.w » root/test:say_hello"`;
@@ -148,6 +150,8 @@ pass ─ forward_decl.w (no tests)"
 exports[`hello.w > wing test --target sim > stdout 1`] = `"pass ─ hello.w (no tests)"`;
 
 exports[`identical_inflights.w > wing test --target sim > stdout 1`] = `"pass ─ identical_inflights.w (no tests)"`;
+
+exports[`impl_interface.w > wing test --target sim > stdout 1`] = `"pass ─ impl_interface.w (no tests)"`;
 
 exports[`inflight_ref_external.w > wing test --target sim > stdout 1`] = `"pass ─ inflight_ref_external.w » root/test"`;
 

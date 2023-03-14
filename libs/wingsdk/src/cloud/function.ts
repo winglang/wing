@@ -195,7 +195,7 @@ export interface IFunctionClient {
  * Represents a resource with an inflight "handle" method that can be used to
  * create a `cloud.Function`.
  *
- * @inflight `wingsdk.cloud.IFunctionHandlerClient`
+ * @inflight `@winglang/sdk.cloud.IFunctionHandlerClient`
  */
 export interface IFunctionHandler extends IResource {}
 
