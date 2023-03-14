@@ -61,23 +61,6 @@ function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
   return join(outDir, `${entrypointName}.${targetDirSuffix}`);
 }
 
-// from diagnostic.rs
-interface Error {
-  message: string;
-  span: {
-    start: {
-      line: number;
-      col: number;
-    };
-    end: {
-      line: number;
-      col: number;
-    };
-    file_id: string;
-  };
-  level: "Error" | "Warning" | "Note";
-}
-
 /**
  * Compiles a Wing program. Throws an error if compilation fails.
  * @param entrypoint The program .w entrypoint.
@@ -125,7 +108,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   }
   if (compileResult !== 0) {
     // This is a bug in the user's code. Print the compiler diagnostics.
-    const errors: Error[] = JSON.parse(compileResult.toString());
+    const errors: wingCompiler.WingDiagnostic[] = JSON.parse(compileResult.toString());
     const result = [];
     const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
 

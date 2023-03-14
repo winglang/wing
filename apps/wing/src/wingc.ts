@@ -141,6 +141,23 @@ export async function load(options: WingCompilerLoadOptions) {
 const LOW_MASK = 2n ** 32n - 1n;
 const HIGH_MASK = BigInt(32);
 
+// From diagnostic.rs
+export interface WingDiagnostic {
+  message: string;
+  span: {
+    start: {
+      line: number;
+      col: number;
+    };
+    end: {
+      line: number;
+      col: number;
+    };
+    file_id: string;
+  };
+  level: "Error" | "Warning" | "Note";
+}
+
 /**
  * Runs the given WASM function in the Wing Compiler WASM instance.
  *
