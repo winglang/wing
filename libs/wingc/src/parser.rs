@@ -995,11 +995,6 @@ impl<'s> Parser<'s> {
 					expression_span,
 				))
 			}
-			"json_element" => self.build_expression(
-				&expression_node
-					.child(0)
-					.expect("Json element should always have child node"),
-			),
 			"json_literal" => {
 				let type_node = expression_node
 					.child_by_field_name("type")
