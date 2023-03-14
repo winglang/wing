@@ -83,6 +83,12 @@ exports[`immutable_container_types.w > stderr 1`] = `
 Error at ../../../examples/tests/invalid/immutable_container_types.w:3:4 | Unknown symbol \\"set\\""
 `;
 
+exports[`impl_interface.w > stderr 1`] = `
+"Compilation failed with 2 error(s)
+Error at ../../../examples/tests/invalid/impl_interface.w:3:10 | Resource \\"A (at ../../../examples/tests/invalid/impl_interface.w:3:10)\\" does not implement method \\"handle\\" of interface \\"cloud.IQueueOnMessageHandler\\"
+Error at ../../../examples/tests/invalid/impl_interface.w:8:10 | Expected type to be \\"inflight (IQueueOnMessageHandler, str): void\\", but got \\"inflight (B): void\\" instead"
+`;
+
 exports[`inflight_in_class.w > stderr 1`] = `
 "Compilation failed with 1 error(s)
 Error at ../../../examples/tests/invalid/inflight_in_class.w:3:3 | Class cannot have inflight fields"
@@ -108,6 +114,11 @@ Error at ../../../examples/tests/invalid/json.w:11:19 | Expected type to be \\"M
 Error at ../../../examples/tests/invalid/json.w:13:20 | Expected type to be \\"Set<str>\\", but got \\"Json\\" instead
 Error at ../../../examples/tests/invalid/json.w:15:21 | Expected type to be \\"Array<str>\\", but got \\"Json\\" instead
 Error at ../../../examples/tests/invalid/json.w:20:14 | Unknown symbol \\"set\\""
+`;
+
+exports[`json_static.w > stderr 1`] = `
+"Compilation failed with 1 error(s)
+Error at ../../../examples/tests/invalid/json_static.w:4:9 | Unknown symbol \\"set\\""
 `;
 
 exports[`missing_semicolon.w > stderr 1`] = `

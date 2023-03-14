@@ -51,8 +51,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Put Json (key=${key}).`,
       activity: async () => {
-        const filename = join(this.fileDir, key);
-        await fs.promises.writeFile(filename, JSON.stringify(body, null, 2));
+        await this.addFile(key, JSON.stringify(body, null, 2));
       },
     });
   }
@@ -72,7 +71,8 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Get Json (key=${key}).`,
       activity: async () => {
-        const filename = join(this.fileDir, key);
+        const hash = this.hashKey(key);
+        const filename = join(this.fileDir, hash);
         return JSON.parse(await fs.promises.readFile(filename, "utf8"));
       },
     });

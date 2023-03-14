@@ -49,6 +49,34 @@ test("put json objects from bucket", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
+test("put multiple json objects and list all from bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+  const KEY1 = "greeting1.json";
+  const KEY2 = "greeting2.json";
+  const KEY3 = "greeting3.json";
+  const VALUE1 = { msg: "Hello world!" };
+  const VALUE2 = { msg: "Hello world again!" };
+  const VALUE3 = { msg: "Hello world again!" };
+
+  // WHEN
+  await client.putJson(KEY1, VALUE1 as any);
+  await client.putJson(KEY2, VALUE2 as any);
+  await client.putJson(KEY3, VALUE3 as any);
+  const response = await client.list();
+
+  // THEN
+  await s.stop();
+
+  expect(response).toEqual([KEY1, KEY2, KEY3]);
+  expect(listMessages(s)).toMatchSnapshot();
+});
+
 test("put and get objects from bucket", async () => {
   // GIVEN
   const app = new SimApp();
