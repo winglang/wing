@@ -213,7 +213,7 @@ resource TaskListApi {
 
     this.api.get("/tasks", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let search = str.from_json(req.query.search ?? Json ".*"); 
-      let results = this.task_list.find(TaskListApi.create_regex(term));
+      let results = this.task_list.find(TaskListApi.create_regex(search));
       return cloud.ApiResponse { status: 200, body: Json.to_str(results) };
     });
   }
