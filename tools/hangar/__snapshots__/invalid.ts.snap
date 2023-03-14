@@ -412,6 +412,20 @@ error: Unknown symbol \\"set\\"
 20 | forever_json.set(\\"a\\", \\"world!\\");
    |              ^^^ Unknown symbol \\"set\\"
 
+
+error: Expected \\"Json\\" elements to be Json Value (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not Json Value
+   --> ../../../examples/tests/invalid/json.w:24:19
+   |
+24 | let j_arr = Json [bkt];
+   |                   ^^^ Expected \\"Json\\" elements to be Json Value (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not Json Value
+
+
+error: Expected \\"Json\\" elements to be Json Value (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not Json Value
+   --> ../../../examples/tests/invalid/json.w:27:29
+   |
+27 | let json_obj = Json { boom: bkt };
+   |                             ^^^ Expected \\"Json\\" elements to be Json Value (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not Json Value
+
 "
 `;
 
