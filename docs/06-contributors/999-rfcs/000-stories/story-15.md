@@ -62,9 +62,9 @@ interface IMyRegExp {
 }
 
 resource Helper {
-  extern "./tasklist_helper.js" inflight get_data: (url: str) => Json;
-  extern "./tasklist_helper.js" inflight uuid() => str; 
-  extern "./tasklist_helper.js" inflight create_regex: (s: str) => IMyRegExp  
+  extern "./tasklist_helper.js" inflight get_data(url: str): Json;
+  extern "./tasklist_helper.js" inflight uuid(): str;
+  extern "./tasklist_helper.js" inflight create_regex(s: str): IMyRegExp;
 }
 
 enum Status {
