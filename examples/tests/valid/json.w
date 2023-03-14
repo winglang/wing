@@ -21,6 +21,28 @@ assert(json_mut_obj.get("hello") == message);
 // Assignment from natives
 let some_number: num = 999;
 
+let jj = Json some_number;
+let jj1 = Json {foo: some_number};
+let jj2 = Json [ some_number, {bar: some_number} ];
+
+let get_str = (): str => {
+  return "hello";
+};
+
+let jj3 = Json get_str();
+assert(jj3 == Json "hello");
+
+resource Foo {
+  _sum_str: str;
+  init() {
+    this._sum_str = "wow!";
+  }
+}
+
+let f = new Foo();
+let jj4 = Json f._sum_str;
+assert(jj4 == Json "wow!");
+
 let some_json = MutJson {
   x: some_number
 };
@@ -49,7 +71,8 @@ assert(nested_json.get("b").get("d").get("foo") == "tastic");
 assert(nested_json.get("b").get("d").get("bar") == 123);
 
 // Heterogenous Array
-let arr = Json [1, 2, "buckle", "my", "shoe", 3, 4, [ "shut", "the", "door"]];
+let b = "buckle";
+let arr = Json [1, 2, b, "my", "shoe", 3, 4, [ "shut", "the", "door"]];
 assert(arr.get_at(0) == 1);
-assert(arr.get_at(2) == "buckle");
+assert(arr.get_at(2) == b);
 assert(arr.get_at(7).get_at(0) == "shut");

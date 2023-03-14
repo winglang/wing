@@ -159,7 +159,7 @@ resource A {
 Resource inheritance
 ==================================
 
-resource A extends B {}
+resource A extends B impl C, D {}
 
 ---
 (source
@@ -168,6 +168,49 @@ resource A extends B {}
         parent: (custom_type 
             object: (identifier)
         )
+        implements: (custom_type
+            object: (identifier)
+        )
+        implements: (custom_type
+            object: (identifier)
+        )
         implementation: (resource_implementation)
     )
 )
+
+==================================
+Interface definition
+==================================
+
+interface A extends B, C {
+    do_something();
+    inflight do_something_else(x: str): num;
+    a_member: str;
+    inflight b_member: num;
+}
+
+---
+(source
+  (interface_definition
+    name: (identifier)
+    implements: (custom_type
+      object: (identifier))
+    implements: (custom_type
+      object: (identifier))
+    implementation: (interface_implementation
+      (method_signature
+        name: (identifier)
+        parameter_list: (parameter_list))
+      (inflight_method_signature
+        name: (identifier)
+        parameter_list: (parameter_list
+          (parameter_definition
+            name: (identifier)
+            type: (builtin_type)))
+        type: (builtin_type))
+      (class_field
+        name: (identifier)
+        type: (builtin_type))
+      (class_field
+        name: (identifier)
+        type: (builtin_type)))))

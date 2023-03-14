@@ -120,6 +120,17 @@ pub struct UserDefinedType {
 	pub fields: Vec<Symbol>,
 }
 
+impl Display for UserDefinedType {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut name = self.root.name.clone();
+		for field in &self.fields {
+			name.push('.');
+			name.push_str(&field.name);
+		}
+		write!(f, "{}", name)
+	}
+}
+
 impl Display for TypeAnnotation {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
@@ -137,9 +148,7 @@ impl Display for TypeAnnotation {
 			TypeAnnotation::Set(t) => write!(f, "Set<{}>", t),
 			TypeAnnotation::MutSet(t) => write!(f, "MutSet<{}>", t),
 			TypeAnnotation::FunctionSignature(sig) => write!(f, "{}", sig),
-			TypeAnnotation::UserDefined(user_defined_type) => {
-				write!(f, "{}", user_defined_type.root.name)
-			}
+			TypeAnnotation::UserDefined(user_defined_type) => write!(f, "{}", user_defined_type),
 		}
 	}
 }
@@ -237,6 +246,7 @@ pub struct Class {
 	pub methods: Vec<(Symbol, FunctionDefinition)>,
 	pub constructor: Constructor,
 	pub parent: Option<UserDefinedType>,
+	pub implements: Vec<UserDefinedType>,
 	pub is_resource: bool,
 }
 
@@ -505,5 +515,37 @@ impl Display for Reference {
 				write!(f, "{}.{}", TypeAnnotation::UserDefined(type_.clone()), property.name)
 			}
 		}
+	}
+}
+
+/// Represents any type that has a span.
+pub trait ToSpan {
+	fn span(&self) -> WingSpan;
+}
+
+impl ToSpan for Stmt {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
+}
+
+impl ToSpan for Expr {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
+}
+
+impl ToSpan for Symbol {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
+}
+
+impl<T> ToSpan for Box<T>
+where
+	T: ToSpan,
+{
+	fn span(&self) -> WingSpan {
+		(&**self).span()
 	}
 }
