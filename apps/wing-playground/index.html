@@ -7,9 +7,13 @@
     import hljs from "https://unpkg.com/@highlightjs/cdn-assets@11.6.0/es/highlight.min.js";
     import javascript from "https://unpkg.com/@highlightjs/cdn-assets@11.6.0/es/languages/javascript.min.js";
     hljs.registerLanguage("javascript", javascript);
-    
-    const examples = import.meta.glob('../../examples/tests/valid/*.w', { as: 'raw' })
+
+    const examples = import.meta.glob("../../examples/tests/valid/*.w", {
+      as: "raw",
+    });
     import MyWorker from "./worker?worker";
+
+    const LOCAL_STORAGE_KEY = "playground_file";
 
     const worker = new MyWorker();
 
@@ -23,29 +27,29 @@
       const stdout = document.getElementById("stdout");
       const stderr = document.getElementById("stderr");
       const example = document.getElementById("example");
-      const lineCounter = document.getElementById("lineCounter")
+      const lineCounter = document.getElementById("lineCounter");
 
       code.addEventListener("input", () => sendCodeToWorker(code.value));
 
       code.addEventListener("scroll", () => {
-          lineCounter.scrollTop = code.scrollTop;
-          lineCounter.scrollLeft = code.scrollLeft;
+        lineCounter.scrollTop = code.scrollTop;
+        lineCounter.scrollLeft = code.scrollLeft;
       });
 
       var lineCountCache = 0;
       function line_counter() {
-            var lineCount = code.value.split("\n").length;
-            var outarr = new Array();
-            if (lineCountCache != lineCount) {
-              for (var x = 0; x < lineCount; x++) {
-                  outarr[x] = x + 1;
-              }
-              lineCounter.value = outarr.join("\n");
-            }
-            lineCountCache = lineCount;
+        var lineCount = code.value.split("\n").length;
+        var outarr = new Array();
+        if (lineCountCache != lineCount) {
+          for (var x = 0; x < lineCount; x++) {
+            outarr[x] = x + 1;
+          }
+          lineCounter.value = outarr.join("\n");
+        }
+        lineCountCache = lineCount;
       }
       code.addEventListener("input", () => {
-          line_counter();
+        line_counter();
       });
 
       for (const path of Object.keys(examples)) {
@@ -57,6 +61,7 @@
 
       example.addEventListener("change", async () => {
         code.value = await examples[example.value]();
+        localStorage.setItem(LOCAL_STORAGE_KEY, example.value);
         code.dispatchEvent(new Event("input"));
       });
 
@@ -64,7 +69,7 @@
         if (e.data === "WORKER_READY") {
           // worker is ready (takes a while), send whatever initial data is currently in the textarea
           sendCodeToWorker(code.value);
-        } else if(e.data) {
+        } else if (e.data) {
           stdout.textContent = e.data.stdout;
           stderr.textContent = e.data.stderr;
           intermediateJS.textContent = e.data.intermediateJS;
@@ -82,6 +87,11 @@
           intermediateJS.style.display = "block";
         }
       });
+      const currentExample = localStorage.getItem(LOCAL_STORAGE_KEY);
+
+      if (!!examples[currentExample]) {
+        example.value = currentExample;
+      }
 
       example.dispatchEvent(new Event("change"));
     };
@@ -91,15 +101,20 @@
     <select id="example"></select>
     <main>
       <section id="wing-side">
-        <textarea name="lineCount" id="lineCounter" wrap="off" readonly></textarea>
+        <textarea
+          name="lineCount"
+          id="lineCounter"
+          wrap="off"
+          readonly
+        ></textarea>
         <textarea id="code"></textarea>
       </section>
       <section id="js-side">
         <pre>
           <code class="language-javascript" id="intermediateJS"></code>
         </pre>
-          <pre id="stderr" class="stderr"></pre>
-          <pre id="stdout" class="stdout"></pre>
+        <pre id="stderr" class="stderr"></pre>
+        <pre id="stdout" class="stdout"></pre>
       </section>
     </main>
   </body>

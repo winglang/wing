@@ -590,7 +590,8 @@ impl<'a> JSifier<'a> {
 					self.jsify_scope(statements, context),
 				)
 			}
-			StmtKind::Break { .. } => "break;".into(),
+			StmtKind::Break => "break;".into(),
+			StmtKind::Continue => "continue;".into(),
 			StmtKind::If {
 				condition,
 				statements,
@@ -1172,7 +1173,7 @@ impl<'a> JSifier<'a> {
 						.unwrap()
 						.methods(true)
 						.filter_map(|(name, sig)| {
-							if sig.as_function_sig().unwrap().flight == Phase::Inflight {
+							if sig.as_function_sig().unwrap().phase == Phase::Inflight {
 								Some(name)
 							} else {
 								None

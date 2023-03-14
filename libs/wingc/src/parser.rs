@@ -26,6 +26,7 @@ pub struct Parser<'a> {
 // k=grammar, v=optional_message, example: ("generic", "targed impl: 1.0.0")
 static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"struct_definition" => "see https://github.com/winglang/wing/issues/120",
+	"interface_definition" => "see https://github.com/winglang/wing/issues/123",
 	"any" => "see https://github.com/winglang/wing/issues/434",
 	"void" => "see https://github.com/winglang/wing/issues/432",
 	"nil" => "see https://github.com/winglang/wing/issues/433",
@@ -188,6 +189,7 @@ impl<'s> Parser<'s> {
 			"for_in_loop" => self.build_for_statement(statement_node)?,
 			"while_statement" => self.build_while_statement(statement_node)?,
 			"break_statement" => self.build_break_statement(statement_node)?,
+			"continue_statement" => self.build_continue_statement(statement_node)?,
 			"return_statement" => self.build_return_statement(statement_node)?,
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
@@ -284,6 +286,16 @@ impl<'s> Parser<'s> {
 			);
 		}
 		Ok(StmtKind::Break)
+	}
+
+	fn build_continue_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		if !*self.is_in_loop.borrow() {
+			return self.add_error::<StmtKind>(
+				format!("Expected continue statement to be inside of a loop (while/for)"),
+				statement_node,
+			);
+		}
+		Ok(StmtKind::Continue)
 	}
 
 	fn build_if_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
@@ -505,11 +517,40 @@ impl<'s> Parser<'s> {
 		} else {
 			None
 		};
+
+		let mut implements = vec![];
+		for type_node in statement_node.children_by_field_name("implements", &mut cursor) {
+			// ignore comments
+			if type_node.is_extra() {
+				continue;
+			}
+
+			// ignore commas
+			if !type_node.is_named() {
+				continue;
+			}
+
+			let interface_type = self.build_type_annotation(&type_node)?;
+			match interface_type {
+				TypeAnnotation::UserDefined(interface_type) => implements.push(interface_type),
+				_ => {
+					self.add_error::<Node>(
+						format!(
+							"Implemented interface must be a user defined type, found {}",
+							interface_type
+						),
+						&type_node,
+					)?;
+				}
+			}
+		}
+
 		Ok(StmtKind::Class(Class {
 			name,
 			fields,
 			methods,
 			parent,
+			implements,
 			constructor: constructor.unwrap(),
 			is_resource,
 		}))
@@ -668,7 +709,7 @@ impl<'s> Parser<'s> {
 	fn build_reference(&self, reference_node: &Node) -> DiagnosticResult<Reference> {
 		let actual_node = reference_node.named_child(0).unwrap();
 		match actual_node.kind() {
-			"identifier" => Ok(Reference::Identifier(self.node_symbol(&actual_node)?)),
+			"identifier" | "stdlib_identifier" => Ok(Reference::Identifier(self.node_symbol(&actual_node)?)),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node)?),
 			"ERROR" => self.add_error(format!("Expected type || {:#?}", reference_node), &actual_node),
 			other => self.report_unimplemented_grammar(other, "type node", &actual_node),
@@ -954,11 +995,6 @@ impl<'s> Parser<'s> {
 					expression_span,
 				))
 			}
-			"json_element" => self.build_expression(
-				&expression_node
-					.child(0)
-					.expect("Json element should always have child node"),
-			),
 			"json_literal" => {
 				let type_node = expression_node
 					.child_by_field_name("type")

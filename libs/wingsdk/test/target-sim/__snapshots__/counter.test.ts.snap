@@ -67,52 +67,6 @@ exports[`create a counter 1`] = `
     },
     "version": "tree-0.1",
   },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_counter": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A distributed atomic counter",
-            "title": "Counter",
-          },
-          "id": "my_counter",
-          "path": "root/my_counter",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -138,52 +92,6 @@ exports[`dec 1`] = `
     "sdkVersion": "0.0.0",
   },
   "app.wsim/tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_counter": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A distributed atomic counter",
-            "title": "Counter",
-          },
-          "id": "my_counter",
-          "path": "root/my_counter",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {
@@ -299,52 +207,6 @@ exports[`inc 1`] = `
     },
     "version": "tree-0.1",
   },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_counter": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A distributed atomic counter",
-            "title": "Counter",
-          },
-          "id": "my_counter",
-          "path": "root/my_counter",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -415,52 +277,6 @@ exports[`reset with initial value 1`] = `
     },
     "version": "tree-0.1",
   },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_counter": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A distributed atomic counter",
-            "title": "Counter",
-          },
-          "id": "my_counter",
-          "path": "root/my_counter",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -486,52 +302,6 @@ exports[`reset without initial value 1`] = `
     "sdkVersion": "0.0.0",
   },
   "app.wsim/tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_counter": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A distributed atomic counter",
-            "title": "Counter",
-          },
-          "id": "my_counter",
-          "path": "root/my_counter",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {

@@ -16,12 +16,6 @@ Error at ../../../examples/tests/invalid/access_static_from_instance.w:19:5 | Ca
 Error at ../../../examples/tests/invalid/access_static_from_instance.w:20:5 | Cannot access static property \\"m\\" from instance"
 `;
 
-exports[`break_scope_invalid.w > stderr 1`] = `
-"Compilation failed with 2 error(s)
-Error at ../../../examples/tests/invalid/break_scope_invalid.w:3:5 | Expected break statement to be inside of a loop (while/for)
-Error at ../../../examples/tests/invalid/break_scope_invalid.w:7:5 | Expected break statement to be inside of a loop (while/for)"
-`;
-
 exports[`bring.w > stderr 1`] = `
 "Compilation failed with 1 error(s)
 Error at ../../../examples/tests/invalid/bring.w:1:1 | Redundant bring of \\"std\\""
@@ -89,6 +83,12 @@ exports[`immutable_container_types.w > stderr 1`] = `
 Error at ../../../examples/tests/invalid/immutable_container_types.w:3:4 | Unknown symbol \\"set\\""
 `;
 
+exports[`impl_interface.w > stderr 1`] = `
+"Compilation failed with 2 error(s)
+Error at ../../../examples/tests/invalid/impl_interface.w:3:10 | Resource \\"A (at ../../../examples/tests/invalid/impl_interface.w:3:10)\\" does not implement method \\"handle\\" of interface \\"cloud.IQueueOnMessageHandler\\"
+Error at ../../../examples/tests/invalid/impl_interface.w:8:10 | Expected type to be \\"inflight (IQueueOnMessageHandler, str): void\\", but got \\"inflight (B): void\\" instead"
+`;
+
 exports[`inflight_in_class.w > stderr 1`] = `
 "Compilation failed with 1 error(s)
 Error at ../../../examples/tests/invalid/inflight_in_class.w:3:3 | Class cannot have inflight fields"
@@ -114,6 +114,11 @@ Error at ../../../examples/tests/invalid/json.w:11:19 | Expected type to be \\"M
 Error at ../../../examples/tests/invalid/json.w:13:20 | Expected type to be \\"Set<str>\\", but got \\"Json\\" instead
 Error at ../../../examples/tests/invalid/json.w:15:21 | Expected type to be \\"Array<str>\\", but got \\"Json\\" instead
 Error at ../../../examples/tests/invalid/json.w:20:14 | Unknown symbol \\"set\\""
+`;
+
+exports[`json_static.w > stderr 1`] = `
+"Compilation failed with 1 error(s)
+Error at ../../../examples/tests/invalid/json_static.w:4:9 | Unknown symbol \\"set\\""
 `;
 
 exports[`missing_semicolon.w > stderr 1`] = `
@@ -181,6 +186,14 @@ Error at ../../../examples/tests/invalid/sorted_errors_no_span.w:1:14 | Expected
 Error at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:17 | Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:17) to be a type but it's a variable
 Error at ../../../examples/tests/invalid/sorted_errors_no_span.w:6:14 | Expected type to be \\"num\\", but got \\"str\\" instead
 Error at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:17 | Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:17) to be a type but it's a variable"
+`;
+
+exports[`statement_invalid_scope.w > stderr 1`] = `
+"Compilation failed with 4 error(s)
+Error at ../../../examples/tests/invalid/statement_invalid_scope.w:3:5 | Expected break statement to be inside of a loop (while/for)
+Error at ../../../examples/tests/invalid/statement_invalid_scope.w:7:5 | Expected break statement to be inside of a loop (while/for)
+Error at ../../../examples/tests/invalid/statement_invalid_scope.w:11:5 | Expected continue statement to be inside of a loop (while/for)
+Error at ../../../examples/tests/invalid/statement_invalid_scope.w:15:5 | Expected continue statement to be inside of a loop (while/for)"
 `;
 
 exports[`statements_if.w > stderr 1`] = `
