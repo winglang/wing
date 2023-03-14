@@ -24,7 +24,6 @@ The following code is an initial implementation of TaskList with api gateway and
   - [x] Missing inflight init (used lazy getter style method instead) 
   - [x] ioredis is from type any (redis.IRedisClient) 
 
-## Open issues
 
 ## Developer Experience
 
