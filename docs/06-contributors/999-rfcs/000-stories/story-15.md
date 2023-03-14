@@ -83,7 +83,7 @@ interface ITaskList {
 
 resource TaskList implementes ITaskList {
   _redis: redis.Redis;
-  inflight _redis_client: redis.IRedisClient;
+  inflight var _redis_client: redis.IRedisClient?;
   
   init() {
     this._redis = new redis.Redis();
