@@ -749,6 +749,19 @@ impl TypeRef {
 			_ => false,
 		}
 	}
+
+	pub fn is_json_legal_value(&self) -> bool {
+		match **self {
+			Type::Number => true,
+			Type::String => true,
+			Type::Boolean => true,
+			Type::Json => true,
+			Type::Array(v) => v.is_json_legal_value(),
+			Type::Map(v) => v.is_json_legal_value(),
+			Type::Set(v) => v.is_json_legal_value(),
+			_ => false,
+		}
+	}
 }
 
 impl Subtype for TypeRef {
@@ -1276,13 +1289,10 @@ impl<'a> TypeChecker<'a> {
 					_ => self.expr_error(exp, format!("Expected \"Array\" type, found \"{}\"", container_type)),
 				};
 
-				// Skip validate type if in Json
-				if !context.in_json {
-					// Verify all types are the same as the inferred type
-					for v in items.iter() {
-						let t = self.type_check_exp(v, env, statement_idx, context);
-						self.validate_type(t, element_type, v);
-					}
+				// Verify all types are the same as the inferred type
+				for v in items.iter() {
+					let t = self.type_check_exp(v, env, statement_idx, context);
+					self.check_json_serializable_or_validate_type(t, element_type, v, context);
 				}
 
 				container_type
@@ -1349,13 +1359,10 @@ impl<'a> TypeChecker<'a> {
 					_ => self.expr_error(exp, format!("Expected \"Map\" type, found \"{}\"", container_type)),
 				};
 
-				// Skip validate if in Json
-				if !context.in_json {
-					// Verify all types are the same as the inferred type
-					for (_, v) in fields.iter() {
-						let t = self.type_check_exp(v, env, statement_idx, context);
-						self.validate_type(t, value_type, v);
-					}
+				// Verify all types are the same as the inferred type
+				for (_, v) in fields.iter() {
+					let t = self.type_check_exp(v, env, statement_idx, context);
+					self.check_json_serializable_or_validate_type(t, value_type, v, context);
 				}
 
 				container_type
@@ -1478,6 +1485,31 @@ impl<'a> TypeChecker<'a> {
 				);
 			}
 		}
+	}
+
+	fn check_json_serializable_or_validate_type(
+		&mut self,
+		actual_type: TypeRef,
+		expected_type: TypeRef,
+		exp: &Expr,
+		context: &TypeCheckerContext,
+	) -> TypeRef {
+		// Skip validate if in Json
+		if !context.in_json {
+			return self.validate_type(actual_type, expected_type, exp);
+		}
+
+		if !actual_type.is_json_legal_value() {
+			return self.expr_error(
+				exp,
+				format!(
+					"Expected \"Json\" elements to be Json Value (https://www.json.org/json-en.html), but got \"{}\" which is not Json Value",
+					actual_type
+				),
+			);
+		}
+
+		actual_type
 	}
 
 	/// Validate that the given type is a subtype (or same) as the expected type. If not, add an error
