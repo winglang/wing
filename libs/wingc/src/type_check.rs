@@ -2469,6 +2469,27 @@ impl<'a> TypeChecker<'a> {
 		return type_to_maybe_replace;
 	}
 
+	fn get_stdlib_symbol(&self, symbol: &Symbol) -> Option<Symbol> {
+		// Need this in order to map wing types to their stdlib equivalents
+		// e.g. wing::str -> stdlib::String | wing::Array -> stdlib::ImmutableArray
+		match symbol.name.as_str() {
+			"Json" => Some(symbol.clone()),
+			"str" => Some(Symbol {
+				name: "String".to_string(),
+				span: symbol.span.clone(),
+			}),
+			"num" => Some(Symbol {
+				name: "Number".to_string(),
+				span: symbol.span.clone(),
+			}),
+			"bool" => Some(Symbol {
+				name: "Boolean".to_string(),
+				span: symbol.span.clone(),
+			}),
+			_ => None,
+		}
+	}
+
 	/// Check if this expression is actually a reference to a type. The parser doesn't distinguish between a `some_expression.field` and `SomeType.field`.
 	/// This function checks if the expression is a reference to a user define type and if it is it returns it. If not it returns `None`.
 	fn expr_maybe_type(&mut self, expr: &Expr, env: &SymbolEnv, statement_idx: usize) -> Option<UserDefinedType> {
@@ -2479,7 +2500,15 @@ impl<'a> TypeChecker<'a> {
 			match &curr_expr.kind {
 				ExprKind::Reference(reference) => match reference {
 					Reference::Identifier(symbol) => {
-						path.push(symbol.clone());
+						if let Some(stdlib_symbol) = self.get_stdlib_symbol(symbol) {
+							path.push(stdlib_symbol);
+							path.push(Symbol {
+								name: "std".to_string(),
+								span: symbol.span.clone(),
+							});
+						} else {
+							path.push(symbol.clone());
+						}
 						break;
 					}
 					Reference::InstanceMember { object, property } => {

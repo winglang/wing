@@ -27,6 +27,7 @@ module.exports = grammar({
     // Handle ambiguity in case of empty literal: `a = {}`
     // In this case tree-sitter doesn't know if it's a set or a map literal so just assume its a map
     [$.map_literal, $.set_literal],
+    [$.json_container_type, $.stdlib_identifier]
   ],
 
   conflicts: ($) => [[$.reference, $.custom_type]],
@@ -43,7 +44,7 @@ module.exports = grammar({
       ),
 
     // Identifiers
-    reference: ($) => choice($.nested_identifier, $.identifier),
+    reference: ($) => choice($.stdlib_identifier, $.nested_identifier, $.identifier),
 
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
 
@@ -53,6 +54,9 @@ module.exports = grammar({
         repeat(seq(".", field("fields", $.identifier)))
       ),
 
+    // This is required because of ambiguity with using Json keyword for both instantiation of Json
+    // and Identifier for static methods. Same issue exists for other types like Set, Map, etc.
+    stdlib_identifier: ($) => choice($._json_types, "str", "num", "bool"),
     nested_identifier: ($) =>
       prec(
         PREC.MEMBER,
@@ -601,7 +605,9 @@ module.exports = grammar({
 
     json_element: ($) => choice($._literal, $.map_literal, $.array_literal),
 
-    json_container_type: ($) => choice("Json", "MutJson"),
+    json_container_type: ($) => $._json_types,
+
+    _json_types: ($) => choice("Json", "MutJson"),
   },
 });
 

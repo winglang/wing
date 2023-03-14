@@ -2235,6 +2235,10 @@
         {
           "type": "nested_identifier",
           "named": true
+        },
+        {
+          "type": "stdlib_identifier",
+          "named": true
         }
       ]
     }
@@ -2482,6 +2486,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "stdlib_identifier",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "string",
