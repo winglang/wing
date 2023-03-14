@@ -187,6 +187,8 @@ export const Tree = ({
   };
 
   return (
+    // TODO: Fix a11y
+    //  eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
       className={classNames(
         "bg-white outline-none rounded border border-slate-300 text-slate-700",
@@ -194,6 +196,8 @@ export const Tree = ({
         "p-1",
         className,
       )}
+      // TODO: Fix a11y
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
       tabIndex={0}
       onKeyDown={onKeyDown}
       onClick={() => {
@@ -205,6 +209,8 @@ export const Tree = ({
         const previous = entries[index - 1];
         const next = entries[index + 1];
         return (
+          // TODO: Fix a11y
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
           <div
             key={entry.name}
             className={classNames(

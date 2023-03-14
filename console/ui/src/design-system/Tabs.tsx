@@ -33,6 +33,8 @@ export const Tabs = (props: TabsProps) => {
         {tabs.map((tab) => {
           const isCurrent = tab.id === currentTabId;
           return (
+            // TODO: Fix a11y
+            // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
             <div
               key={tab.id}
               className={classNames(

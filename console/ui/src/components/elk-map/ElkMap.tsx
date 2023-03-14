@@ -58,13 +58,15 @@ export interface ElkMapProps<T> {
   onSelectedNodeIdChange?: (id: string) => void;
 }
 
-export const ElkMap = <T extends unknown = undefined>(
-  props: ElkMapProps<T>,
-) => {
-  const NodeItem = props.node;
-
-  const nodeStaticData = useNodeStaticData({
-    nodes: props.nodes,
+export const ElkMap = <T extends unknown = undefined>({
+  nodes,
+  edges,
+  node: NodeItem,
+  selectedNodeId,
+  onSelectedNodeIdChange,
+}: ElkMapProps<T>) => {
+  const { nodeRecord, sizes } = useNodeStaticData({
+    nodes,
     node: NodeItem,
   });
 
@@ -72,12 +74,11 @@ export const ElkMap = <T extends unknown = undefined>(
     useState<Map<string, { x: number; y: number }>>();
   const [graph, setGraph] = useState<ElkNode>();
   useEffect(() => {
-    if (!nodeStaticData.sizes || Object.keys(nodeStaticData.sizes).length === 0)
-      return;
+    if (!sizes || Object.keys(sizes).length === 0) return;
 
     const elk = new ELK();
     const toElkNode = (node: Node<T>): ElkNode => {
-      const size = nodeStaticData.sizes?.[node.id];
+      const size = sizes?.[node.id];
       return {
         id: node.id,
         width: size?.width,
@@ -99,8 +100,8 @@ export const ElkMap = <T extends unknown = undefined>(
           ...layoutOptions,
           "elk.padding": "[top=10,left=10,bottom=10,right=10]",
         },
-        children: props.nodes.map((node) => toElkNode(node)),
-        edges: props.edges?.map((edge) => ({
+        children: nodes.map((node) => toElkNode(node)),
+        edges: edges?.map((edge) => ({
           id: edge.id,
           sources: [edge.source],
           targets: [edge.target],
@@ -128,7 +129,7 @@ export const ElkMap = <T extends unknown = undefined>(
     return () => {
       abort = true;
     };
-  }, [props.nodes, props.edges, nodeStaticData.sizes]);
+  }, [nodes, edges, sizes]);
 
   const [highlighted, setHighlighted] = useState<string>();
 
@@ -147,11 +148,11 @@ export const ElkMap = <T extends unknown = undefined>(
 
   const renderElk = useCallback(
     (node: ElkNode, depth = 0) => {
-      if (!nodeStaticData.nodeRecord) return;
+      if (!nodeRecord) return;
       const offset = offsets?.get(node.id) ?? { x: 0, y: 0 };
-      const data = nodeStaticData.nodeRecord[node.id];
+      const data = nodeRecord[node.id];
       if (!data) return;
-      const hasEdge = props.edges?.some(
+      const hasEdge = edges?.some(
         (edge) =>
           (edge.source === node.id && edge.target === highlighted) ||
           (edge.source === highlighted && edge.target === node.id),
@@ -179,7 +180,7 @@ export const ElkMap = <T extends unknown = undefined>(
             exit={{
               opacity: 0,
             }}
-            onClick={() => props.onSelectedNodeIdChange?.(node.id)}
+            onClick={() => onSelectedNodeIdChange?.(node.id)}
             onMouseEnter={() => setHighlighted(node.id)}
             onMouseLeave={() => setHighlighted(undefined)}
           >
@@ -190,7 +191,15 @@ export const ElkMap = <T extends unknown = undefined>(
         </Fragment>
       );
     },
-    [nodeStaticData.nodeRecord, offsets, NodeItem, highlighted, setHighlighted],
+    [
+      nodeRecord,
+      offsets,
+      edges,
+      isHighlighted,
+      NodeItem,
+      highlighted,
+      onSelectedNodeIdChange,
+    ],
   );
 
   return (
@@ -269,8 +278,8 @@ export const ElkMap = <T extends unknown = undefined>(
               isHighlighted(edge.sources[0]!) ||
               isHighlighted(edge.targets[0]!);
             const isSelected =
-              edge.sources[0] === props.selectedNodeId ||
-              edge.targets[0] === props.selectedNodeId;
+              edge.sources[0] === selectedNodeId ||
+              edge.targets[0] === selectedNodeId;
             const visible =
               (highlighted && (isEdgeHighlighted || isNodeHighlighted)) ||
               (!highlighted && isSelected);

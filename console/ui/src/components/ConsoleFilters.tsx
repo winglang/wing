@@ -24,10 +24,11 @@ export const ConsoleFilters = ({
 }: ConsoleFiltersProps) => {
   const [searchText, setSearchText] = useState("");
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedOnSearch = useCallback(debounce(onSearch, 300), [onSearch]);
   useEffect(() => {
     debouncedOnSearch(searchText);
-  }, [searchText]);
+  }, [debouncedOnSearch, searchText]);
 
   return (
     <div className="flex px-2 space-x-2 pt-1">

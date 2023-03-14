@@ -82,7 +82,7 @@ export const useNodeStaticData = <T,>({
       clearTimeout(timeout);
       element.remove();
     };
-  }, [nodes, setSizes]);
+  }, [nodes, setSizes, NodeItem]);
 
   const [nodeRecord, setNodeRecord] = useState<Record<string, Node<T>>>();
   useEffect(() => {

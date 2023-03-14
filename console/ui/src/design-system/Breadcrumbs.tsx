@@ -18,10 +18,7 @@ export const Breadcrumbs = (props: BreadcrumbsProps) => {
 
   return (
     <nav className="flex" aria-label="Breadcrumb">
-      <ol
-        role="list"
-        className="px-4 py-2 flex items-center text-xs text-slate-500"
-      >
+      <ol className="px-4 py-2 flex items-center text-xs text-slate-500">
         {breadcrumbs.map((breadcrumb, index) => {
           const isLastBreadcrumb = index === numberBreadcrumbs - 1;
           return (

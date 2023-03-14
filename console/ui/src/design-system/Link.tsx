@@ -6,7 +6,7 @@ export interface LinkProps
     HTMLAnchorElement
   > {}
 
-export const Link = ({ className, ...props }: LinkProps) => {
+export const Link = ({ className, children, ...props }: LinkProps) => {
   return (
     <a
       className={classNames(
@@ -16,6 +16,8 @@ export const Link = ({ className, ...props }: LinkProps) => {
         className,
       )}
       {...props}
-    />
+    >
+      {children}
+    </a>
   );
 };

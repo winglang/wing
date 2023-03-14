@@ -17,7 +17,7 @@
     "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix",
     "vitest": "vitest run --coverage",
     "playwright": "PLAYWRIGHT_TEST=true xvfb-maybe --auto-servernum --server-args='-screen 0 3440x1440x24' -- playwright test",
-    "playwright:update": "npm run playwright -u"
+    "playwright:update": "PLAYWRIGHT_TEST=true xvfb-maybe --auto-servernum --server-args='-screen 0 3440x1440x24' -- playwright test -u"
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.287.0",

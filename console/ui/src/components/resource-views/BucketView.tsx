@@ -114,7 +114,7 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
       downloadFiles(files);
     }
     setSelectedEntries([]);
-  }, [selectedEntries]);
+  }, [selectedEntries, download, downloadFile, downloadFiles, resourcePath]);
 
   // todo [sa] make it work better with actual file objects and not only keys
   useEffect(() => {

@@ -14,7 +14,8 @@ export interface FunctionViewProps {
 export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
   const { appMode } = useContext(AppContext);
   const [response, setResponse] = useState("");
-  const inputId = useId();
+  const payloadId = useId();
+  const responseId = useId();
 
   const invoke = trpc["function.invoke"].useMutation({
     onSuccess: (data) => {
@@ -45,9 +46,12 @@ export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
           </div>
         </div>
         <div>
-          <label className="text-sm text-gray-500">Response</label>
+          <label htmlFor={responseId} className="text-sm text-gray-500">
+            Response
+          </label>
           <div className="text-slate-700 space-x-2 min-w-0 flex flex-1">
             <textarea
+              id={responseId}
               rows={response ? response.split("\n").length : 1}
               disabled
               placeholder="No response"
@@ -77,12 +81,12 @@ export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
 
             <label
               className="block text-sm font-medium text-gray-700"
-              htmlFor={inputId}
+              htmlFor={payloadId}
             >
               Payload (JSON)
             </label>
             <TextArea
-              id={inputId}
+              id={payloadId}
               value={message}
               rows={5}
               onInput={(event) => setMessage(event.currentTarget.value)}

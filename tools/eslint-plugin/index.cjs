@@ -76,6 +76,10 @@ module.exports = {
         "plugin:react-hooks/recommended",
         "plugin:jsx-a11y/recommended",
       ],
+      rules: {
+        ...base.rules,
+        "react/prop-types": ["off"],
+      },
     },
   },
 };

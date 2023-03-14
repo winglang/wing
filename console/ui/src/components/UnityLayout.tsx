@@ -32,7 +32,7 @@ interface LinkProps
     React.AnchorHTMLAttributes<HTMLAnchorElement>,
     HTMLAnchorElement
   > {}
-const Link = ({ className, ...props }: LinkProps) => {
+const Link = ({ className, children, ...props }: LinkProps) => {
   return (
     <a
       className={classNames(
@@ -42,7 +42,9 @@ const Link = ({ className, ...props }: LinkProps) => {
         className,
       )}
       {...props}
-    />
+    >
+      {children}
+    </a>
   );
 };
 
@@ -124,12 +126,12 @@ export function UnityLayout({ schema }: UnityLayoutProps) {
   const treeMenu = useTreeMenuItems();
   useEffect(() => {
     treeMenu.setItems(schema ? SchemaToTreeMenuItems(schema) : []);
-  }, [schema]);
+  }, [schema, treeMenu]);
   useEffect(() => {
     treeMenu.expand("");
     treeMenu.expandAll();
     treeMenu.setCurrent("");
-  }, [treeMenu.items]);
+  }, [treeMenu, treeMenu.items]);
 
   useEffect(() => {
     document.querySelector(`.${SELECTED_TREE_ITEM_CSS_ID}`)?.scrollIntoView({

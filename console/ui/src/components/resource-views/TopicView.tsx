@@ -29,7 +29,7 @@ export const TopicView = ({ resourcePath }: TopicViewProps) => {
       message: message,
     });
     showNotification("Message published", { body: message, type: "success" });
-  }, [message, publish]);
+  }, [message, publish, appMode, resourcePath, showNotification]);
 
   const id = useId();
 

@@ -1,8 +1,7 @@
 import { LogEntry, LogLevel, ExplorerItem, State } from "@wingconsole/server";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { BlueScreenOfDeath } from "../design-system/BlueScreenOfDeath.js";
-import { Breadcrumbs } from "../design-system/Breadcrumbs.js";
 import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
 import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
@@ -29,22 +28,30 @@ export const VscodeLayout = ({
   cloudAppState,
   wingVersion,
 }: VscodeLayoutProps) => {
-  const treeMenu = useTreeMenuItems();
+  const {
+    items,
+    expandAll,
+    setItems,
+    setCurrent,
+    currentItemId,
+    toggle,
+    openItemIds,
+    collapseAll,
+    expand,
+  } = useTreeMenuItems();
 
   const errorMessage = trpc["app.error"].useQuery();
   const explorerTree = trpc["app.explorerTree"].useQuery();
   useEffect(() => {
     if (explorerTree.data) {
-      treeMenu.setItems([
-        createTreeMenuItemFromExplorerTreeItem(explorerTree.data),
-      ]);
-      treeMenu.setCurrent("root");
+      setItems([createTreeMenuItemFromExplorerTreeItem(explorerTree.data)]);
+      setCurrent("root");
     }
-  }, [explorerTree.data]);
+  }, [explorerTree.data, setItems, setCurrent]);
 
   useEffect(() => {
-    treeMenu.expandAll();
-  }, [treeMenu.items]);
+    expandAll();
+  }, [items, expandAll]);
 
   const [selectedLogTypeFilters, setSelectedLogTypeFilters] = useState<
     LogLevel[]
@@ -90,16 +97,16 @@ export const VscodeLayout = ({
   const onResourceClick = (log: LogEntry) => {
     const path = log.ctx?.sourcePath;
     if (path) {
-      treeMenu.setCurrent(path);
+      setCurrent(path);
     }
   };
 
   const metadata = trpc["app.nodeMetadata"].useQuery(
     {
-      path: treeMenu.currentItemId,
+      path: currentItemId,
     },
     {
-      enabled: !!treeMenu.currentItemId,
+      enabled: !!currentItemId,
     },
   );
 
@@ -110,11 +117,11 @@ export const VscodeLayout = ({
   const map = trpc["app.map"].useQuery();
   const mapRefs = useRef<{ [key: string]: HTMLElement | undefined }>({});
   useEffect(() => {
-    if (!treeMenu.currentItemId) {
+    if (!currentItemId) {
       return;
     }
 
-    const element = mapRefs.current[treeMenu.currentItemId];
+    const element = mapRefs.current[currentItemId];
     if (element) {
       element.scrollIntoView({
         behavior: "smooth",
@@ -122,7 +129,7 @@ export const VscodeLayout = ({
         inline: "center",
       });
     }
-  }, [treeMenu.currentItemId]);
+  }, [currentItemId]);
 
   return (
     <div
@@ -147,17 +154,17 @@ export const VscodeLayout = ({
         <RightResizableWidget className="h-full flex flex-col w-80 min-w-[10rem] min-h-[15rem] border-r border-slate-300">
           <TreeMenu
             title="Explorer"
-            items={treeMenu.items}
-            selectedItemId={treeMenu.currentItemId}
-            openMenuItemIds={treeMenu.openItemIds}
+            items={items}
+            selectedItemId={currentItemId}
+            openMenuItemIds={openItemIds}
             onItemClick={(item) => {
-              treeMenu.setCurrent(item.id);
+              setCurrent(item.id);
             }}
             onItemToggle={(item) => {
-              treeMenu.toggle(item.id);
+              toggle(item.id);
             }}
-            onExpandAll={() => treeMenu.expandAll()}
-            onCollapseAll={() => treeMenu.collapseAll()}
+            onExpandAll={() => expandAll()}
+            onCollapseAll={() => collapseAll()}
             disabled={isLoading}
           />
         </RightResizableWidget>
@@ -176,10 +183,8 @@ export const VscodeLayout = ({
                       <ElkMap
                         nodes={map.data.nodes}
                         edges={map.data.edges}
-                        selectedNodeId={treeMenu.currentItemId}
-                        onSelectedNodeIdChange={(id) => {
-                          treeMenu.setCurrent(id);
-                        }}
+                        selectedNodeId={currentItemId}
+                        onSelectedNodeIdChange={setCurrent}
                         node={({ node, depth }) => (
                           <div
                             ref={(element) =>
@@ -190,7 +195,7 @@ export const VscodeLayout = ({
                             <ContainerNode
                               name={node.data?.label}
                               open={node.children && node.children?.length > 0}
-                              selected={node.id === treeMenu.currentItemId}
+                              selected={node.id === currentItemId}
                               resourceType={node.data?.type}
                               icon={(props) => (
                                 <ResourceIcon
@@ -217,8 +222,8 @@ export const VscodeLayout = ({
                   inbound={metadata.data.inbound}
                   outbound={metadata.data.outbound}
                   onConnectionNodeClick={(path) => {
-                    treeMenu.expand(path);
-                    treeMenu.setCurrent(path);
+                    expand(path);
+                    setCurrent(path);
                   }}
                 />
               )}

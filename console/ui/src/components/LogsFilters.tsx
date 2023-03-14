@@ -60,7 +60,7 @@ export default function LogsFilters({
   useEffect(() => {
     document.body.append(root);
     return () => root.remove();
-  }, []);
+  }, [root]);
 
   return (
     <Listbox
@@ -96,6 +96,8 @@ export default function LogsFilters({
               {...attributes.popper}
             >
               <Listbox.Options className="z-10 m-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-xs shadow-lg ring-1 ring-black ring-opacity-5 outline-none">
+                {/* TODO: Fix a11y */}
+                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
                 <li
                   className="relative cursor-default select-none py-2 pl-10 pr-4 text-slate-900 hover:bg-sky-50 hover:text-sky-900"
                   onClick={() => onChange?.(["info", "warn", "error"])}

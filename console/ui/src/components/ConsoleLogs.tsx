@@ -147,7 +147,7 @@ const LogEntryRow = ({ log, onResourceClick }: LogEntryProps) => {
                 className="h-4 w-4"
               />
             )}
-            <a
+            <button
               onClick={() => onResourceClick(log)}
               className={classNames(
                 "flex cursor-pointer underline truncate",
@@ -155,7 +155,7 @@ const LogEntryRow = ({ log, onResourceClick }: LogEntryProps) => {
               )}
             >
               {log.ctx?.sourcePath}
-            </a>
+            </button>
           </div>
         )}
       </div>

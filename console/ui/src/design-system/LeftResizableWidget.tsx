@@ -18,7 +18,7 @@ export function LeftResizableWidget(props: LeftResizableWidgetProps) {
     if (resizeTarget.current) {
       resizeTarget.current.style.width = `${resizeTarget.current.clientWidth}px`;
     }
-  }, []);
+  }, [resizeTarget]);
 
   return (
     <div className={classNames("relative", className)} ref={resizeTarget}>

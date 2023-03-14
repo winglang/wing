@@ -47,6 +47,8 @@ const ResourceButton = ({
   children?: React.ReactNode;
 }) => {
   return (
+    // TODO: Fix a11y
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
       className="h-full w-full p-1 rounded bg-white shadow sm:rounded-lg hover:shadow-md group flex flex-col gap-2 cursor-pointer"
       title={node.path}

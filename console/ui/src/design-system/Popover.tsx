@@ -57,7 +57,7 @@ export const Popover = ({
   useEffect(() => {
     document.body.append(root);
     return () => root.remove();
-  }, []);
+  }, [root]);
 
   return (
     <HeadlessPopover>
