@@ -310,9 +310,20 @@ exports[`immutable_container_types.w > stderr 1`] = `
 `;
 
 exports[`impl_interface.w > stderr 1`] = `
-"Compilation failed with 2 error(s)
-Error at ../../../examples/tests/invalid/impl_interface.w:3:10 | Resource \\"A (at ../../../examples/tests/invalid/impl_interface.w:3:10)\\" does not implement method \\"handle\\" of interface \\"cloud.IQueueOnMessageHandler\\"
-Error at ../../../examples/tests/invalid/impl_interface.w:8:10 | Expected type to be \\"inflight (IQueueOnMessageHandler, str): void\\", but got \\"inflight (B): void\\" instead"
+"error: Resource \\"A (at ../../../examples/tests/invalid/impl_interface.w:3:10)\\" does not implement method \\"handle\\" of interface \\"cloud.IQueueOnMessageHandler\\"
+  --> ../../../examples/tests/invalid/impl_interface.w:3:10
+  |
+3 | resource A impl cloud.IQueueOnMessageHandler {
+  |          ^ Resource \\"A (at ../../../examples/tests/invalid/impl_interface.w:3:10)\\" does not implement method \\"handle\\" of interface \\"cloud.IQueueOnMessageHandler\\"
+
+
+error: Expected type to be \\"inflight (IQueueOnMessageHandler, str): void\\", but got \\"inflight (B): void\\" instead
+  --> ../../../examples/tests/invalid/impl_interface.w:8:10
+  |
+8 | resource B impl cloud.IQueueOnMessageHandler {
+  |          ^ Expected type to be \\"inflight (IQueueOnMessageHandler, str): void\\", but got \\"inflight (B): void\\" instead
+
+"
 `;
 
 exports[`inflight_in_class.w > stderr 1`] = `
@@ -405,8 +416,13 @@ error: Unknown symbol \\"set\\"
 `;
 
 exports[`json_static.w > stderr 1`] = `
-"Compilation failed with 1 error(s)
-Error at ../../../examples/tests/invalid/json_static.w:4:9 | Unknown symbol \\"set\\""
+"error: Unknown symbol \\"set\\"
+  --> ../../../examples/tests/invalid/json_static.w:4:9
+  |
+4 | immut_j.set(\\"a\\", \\"foo\\");
+  |         ^^^ Unknown symbol \\"set\\"
+
+"
 `;
 
 exports[`missing_semicolon.w > stderr 1`] = `
@@ -627,9 +643,48 @@ exports[`resource_access_field_as_method.w > stderr 1`] = `
 "
 `;
 
-exports[`resource_inflight.w > stderr 1`] = `"Cannot read properties of null (reading 'file_id')"`;
+exports[`resource_inflight.w > stderr 1`] = `
+"error: Cannot create the resource \\"Bucket (at src/cloud/bucket.ts:27:1)\\" in inflight phase
 
-exports[`sorted_errors_no_span.w > stderr 1`] = `"Cannot read properties of null (reading 'file_id')"`;
+"
+`;
+
+exports[`sorted_errors_no_span.w > stderr 1`] = `
+"error: Expected type to be \\"num\\", but got \\"str\\" instead
+  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:1:14
+  |
+1 | let a: num = \\"s\\";
+  |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:17) to be a type but it's a variable
+  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:3:17
+  |
+3 | class c extends b {
+  |                 ^ Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:17) to be a type but it's a variable
+
+
+error: Class c (at ../../../examples/tests/invalid/sorted_errors_no_span.w:3:7)'s parent \\"any\\" is not a class
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:6:14
+  |
+6 | let d: num = \\"s\\";
+  |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:17) to be a type but it's a variable
+  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:7:17
+  |
+7 | class e extends b {
+  |                 ^ Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:17) to be a type but it's a variable
+
+
+error: Class e (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:7)'s parent \\"any\\" is not a class
+
+"
+`;
 
 exports[`statement_invalid_scope.w > stderr 1`] = `
 "error: Expected break statement to be inside of a loop (while/for)
