@@ -1,7 +1,7 @@
+import { Redis as IoRedis } from "ioredis";
 import { test, expect } from "vitest";
 import * as redis from "../../src/redis";
 import { SimApp } from "../../src/testing";
-import { Redis as IoRedis } from "ioredis";
 
 test("create a Redis resource", async () => {
   // GIVEN
@@ -34,6 +34,7 @@ test("access a Redis resource", async () => {
   const s = await app.startSimulator();
   try {
     const client = s.getResource("/my_redis") as redis.IRedisClient;
+    expect((await client.url()).startsWith("redis://")).toBeTruthy();
     const redisClient = (await client.ioredis()) as IoRedis;
     await redisClient.set("foo", "bar");
     expect(await redisClient.get("foo")).toEqual("bar");

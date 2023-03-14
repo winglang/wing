@@ -17,10 +17,7 @@ export abstract class Redis extends Resource {
    * Create a new redis.
    * @internal
    */
-  public static _newRedis(
-    scope: Construct,
-    id: string,
-  ): Redis {
+  public static _newRedis(scope: Construct, id: string): Redis {
     return App.of(scope).newAbstract(REDIS_FQN, scope, id);
   }
 

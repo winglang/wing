@@ -65,52 +65,6 @@ exports[`access a Redis resource 1`] = `
     },
     "version": "tree-0.1",
   },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_redis": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A Redis server",
-            "title": "Redis",
-          },
-          "id": "my_redis",
-          "path": "root/my_redis",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -134,52 +88,6 @@ exports[`create a Redis resource 1`] = `
     "sdkVersion": "0.0.0",
   },
   "app.wsim/tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_redis": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A Redis server",
-            "title": "Redis",
-          },
-          "id": "my_redis",
-          "path": "root/my_redis",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {

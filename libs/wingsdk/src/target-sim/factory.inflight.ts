@@ -3,6 +3,7 @@ import { Counter } from "./counter.inflight";
 import { Function } from "./function.inflight";
 import { Logger } from "./logger.inflight";
 import { Queue } from "./queue.inflight";
+import { Redis } from "./redis.inflight";
 import { ISimulatorResourceInstance } from "./resource";
 import {
   BUCKET_TYPE,
@@ -14,7 +15,6 @@ import {
   REDIS_TYPE,
 } from "./schema-resources";
 import { Topic } from "./topic.inflight";
-import { Redis } from "./redis.inflight";
 import { ISimulatorFactory, ISimulatorContext } from "../testing/simulator";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {

@@ -7,10 +7,10 @@ import { Counter } from "./counter";
 import { Function } from "./function";
 import { Logger } from "./logger";
 import { Queue } from "./queue";
+import { Redis } from "./redis";
 import { isSimulatorResource } from "./resource";
 import { WingSimulatorSchema } from "./schema";
 import { Topic } from "./topic";
-import { Redis } from "./redis";
 import {
   BUCKET_FQN,
   COUNTER_FQN,
@@ -19,10 +19,10 @@ import {
   QUEUE_FQN,
   TOPIC_FQN,
 } from "../cloud";
-import { REDIS_FQN } from "../redis";
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
+import { REDIS_FQN } from "../redis";
 import { mkdtemp, SIMULATOR_FILE_PATH } from "../util";
 
 /**
