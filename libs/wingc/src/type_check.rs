@@ -2970,8 +2970,8 @@ mod tests {
 		assert!(!preflight_fn.is_subtype_of(&inflight_fn));
 
 		// subtyping is reflexive
-		assert!(inflight_fn.is_subtype_of(&preflight_fn));
-		assert!(preflight_fn.is_subtype_of(&inflight_fn));
+		assert!(inflight_fn.is_subtype_of(&inflight_fn));
+		assert!(preflight_fn.is_subtype_of(&preflight_fn));
 	}
 
 	#[test]
