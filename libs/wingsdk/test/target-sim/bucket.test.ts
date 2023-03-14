@@ -377,3 +377,75 @@ test("can add object in preflight", async () => {
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
+
+test("Given a non public bucket when reaching to a key public url it should throw an error", async () => {
+  //GIVEN
+  let error;
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const KEY = "KEY";
+
+  // WHEN
+  try {
+    await client.publicUrl(KEY);
+  } catch (err) {
+    error = err;
+  }
+
+  // THEN
+  expect(error?.message).toBe(
+    "Cannot provide public url for a non-public bucket"
+  );
+  await s.stop();
+});
+
+test("Given a public bucket when reaching to a non existent key, public url it should throw an error", async () => {
+  //GIVEN
+  let error;
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket", { public: true });
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const KEY = "KEY";
+
+  // WHEN
+  try {
+    await client.publicUrl(KEY);
+  } catch (err) {
+    error = err;
+  }
+
+  expect(error?.message).toBe(
+    "Cannot provide public url for an non-existent key (key=KEY)"
+  );
+  // THEN
+  await s.stop();
+});
+
+test("Given a public bucket, when giving one of its keys, we should get it's public url", async () => {
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket", { public: true });
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const KEY = "KEY";
+  const VALUE = "VALUE";
+
+  // WHEN
+  await client.put(KEY, VALUE);
+  const response = await client.publicUrl(KEY);
+
+  // THEN
+  await s.stop();
+  expect(response).toEqual(
+    // @ts-expect-error (reaching into private property)
+    `${client.fileDir}/${KEY}`
+  );
+});

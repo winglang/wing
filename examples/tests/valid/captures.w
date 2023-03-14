@@ -16,6 +16,14 @@ let handler = inflight (event: str): str => {
   for stuff in bucket1.list() {
     print(stuff);
   }
+
+  print(bucket2.public_url("file.txt"));
+
+  try {
+    bucket1.public_url("file.txt");
+  } catch error {
+    print(error);
+  }
 };
 
 queue.on_message(handler, batch_size: 5);
