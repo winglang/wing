@@ -1,3 +1,4 @@
+import Dockerode from "dockerode";
 import { ISimulatorResourceInstance } from "./resource";
 import { RedisSchema } from "./schema-resources";
 import { IRedisClient } from "../redis";
@@ -5,14 +6,13 @@ import { ISimulatorContext } from "../testing/simulator";
 
 // Issue using types from ioredis with JSII
 //import { Redis as IoRedis } from "ioredis";
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const IoRedis = require("ioredis");
 
-import Dockerode from "dockerode";
-
 export class Redis implements IRedisClient, ISimulatorResourceInstance {
+  static uid = 0;
   private readonly container_name: string;
   private readonly context: ISimulatorContext;
-  static uid = 0;
 
   private connection_url?: string = undefined;
   private docker?: Dockerode = undefined;
@@ -20,7 +20,10 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
 
   public constructor(_props: RedisSchema["props"], context: ISimulatorContext) {
     this.context = context;
-    this.container_name = `wing-sim-redis-${this.context.resourcePath.replace("/", ".")}-${Redis.uid}`;
+    this.container_name = `wing-sim-redis-${this.context.resourcePath.replace(
+      "/",
+      "."
+    )}-${Redis.uid}`;
     Redis.uid++;
   }
 
@@ -54,14 +57,13 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
     let container = this.docker?.getContainer(this.container_name);
     await container?.stop();
     await container?.remove();
-
   }
 
   public async ioredis(): Promise<any> {
     if (this.connection != undefined) {
       return this.connection;
     } else if (this.connection_url != undefined) {
-      return this.connection = new IoRedis(this.connection_url);
+      return (this.connection = new IoRedis(this.connection_url));
     } else {
       throw new Error("Redis server not initialized");
     }

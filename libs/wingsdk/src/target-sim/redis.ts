@@ -3,8 +3,8 @@ import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { RedisSchema, REDIS_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
-import * as redis from "../redis";
 import * as core from "../core";
+import * as redis from "../redis";
 
 /**
  * Simulator implementation of `redis.Redis`.

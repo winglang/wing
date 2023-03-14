@@ -4,6 +4,7 @@ import { Counter } from "./counter.inflight";
 import { Function } from "./function.inflight";
 import { Logger } from "./logger.inflight";
 import { Queue } from "./queue.inflight";
+import { Redis } from "./redis.inflight";
 import { ISimulatorResourceInstance } from "./resource";
 import {
   API_TYPE,
@@ -18,7 +19,6 @@ import {
 } from "./schema-resources";
 import { Table } from "./table.inflight";
 import { Topic } from "./topic.inflight";
-import { Redis } from "./redis.inflight";
 import { ISimulatorFactory, ISimulatorContext } from "../testing/simulator";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
