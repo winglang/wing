@@ -51,6 +51,9 @@ jobs:
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
 
+      - name: Install redis docker image
+        run: docker pull redis
+
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
 
