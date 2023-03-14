@@ -83,9 +83,26 @@ exports[`immutable_container_types.w > wing test (--target sim) - invalid > stde
 Error at ../../../../examples/tests/invalid/immutable_container_types.w:3:4 | Unknown symbol \\"set\\""
 `;
 
+exports[`impl_interface.w > wing test (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 2 error(s)
+Error at ../../../../examples/tests/invalid/impl_interface.w:3:10 | Resource \\"A (at ../../../../examples/tests/invalid/impl_interface.w:3:10)\\" does not implement method \\"handle\\" of interface \\"cloud.IQueueOnMessageHandler\\"
+Error at ../../../../examples/tests/invalid/impl_interface.w:8:10 | Expected type to be \\"inflight (IQueueOnMessageHandler, str): void\\", but got \\"inflight (B): void\\" instead"
+`;
+
 exports[`inflight_in_class.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 1 error(s)
 Error at ../../../../examples/tests/invalid/inflight_in_class.w:3:3 | Class cannot have inflight fields"
+`;
+
+exports[`inflight_ref_invalid.w > wing test (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 2 error(s)
+Error at ../../../../examples/tests/invalid/inflight_ref_invalid.w:12:19 | Unable to reference \\"this.reassignable\\" from inflight method \\"test\\" because it is reassignable (\\"var\\")
+Error at ../../../../examples/tests/invalid/inflight_ref_invalid.w:14:16 | Unable to reference \\"this.mut_array\\" from inflight method \\"test\\" because type MutArray<str> is not capturable"
+`;
+
+exports[`inflight_ref_resource_sub_field.w > wing test (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 1 error(s)
+Error at ../../../../examples/tests/invalid/inflight_ref_resource_sub_field.w:26:10 | Unable to reference \\"my_queue.push\\" from inflight method \\"test\\" because it is not an inflight method"
 `;
 
 exports[`json.w > wing test (--target sim) - invalid > stderr 1`] = `
@@ -144,7 +161,7 @@ Error at ../../../../examples/tests/invalid/optionals.w:6:1 | Unknown symbol \\"
 exports[`primitives.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 4 error(s)
 Error at ../../../../examples/tests/invalid/primitives.w:5:7 | Unexpected expression \\"structured_access_expression\\"
-Error at ../../../../examples/tests/invalid/primitives.w:9:16 | Unknown symbol \\"join\\"
+Error at ../../../../examples/tests/invalid/primitives.w:9:16 | Unknown symbol \\"blabla\\"
 Error at ../../../../examples/tests/invalid/primitives.w:11:5 | Unknown symbol \\"push\\"
 Error at ../../../../examples/tests/invalid/primitives.w:13:14 | Expected type to be \\"str\\", but got \\"num\\" instead"
 `;

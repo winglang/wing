@@ -9,6 +9,353 @@ keywords: [Wing sdk, sdk, Wing API Reference]
 
 ## Resources <a name="Resources" id="Resources"></a>
 
+### Api <a name="Api" id="@winglang/sdk.cloud.Api"></a>
+
+Functionality shared between all `Api` implementations.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Api.Initializer"></a>
+
+```wing
+bring cloud;
+
+new cloud.Api(props?: ApiProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Api.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.ApiProps">ApiProps</a></code> | *No description.* |
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiProps">ApiProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Api.connect">connect</a></code> | Add a inflight handler to the api for CONNECT requests on the given route. |
+| <code><a href="#@winglang/sdk.cloud.Api.delete">delete</a></code> | Add a inflight handler to the api for DELETE requests on the given route. |
+| <code><a href="#@winglang/sdk.cloud.Api.get">get</a></code> | Add a inflight handler to the api for GET requests on the given route. |
+| <code><a href="#@winglang/sdk.cloud.Api.head">head</a></code> | Add a inflight handler to the api for HEAD requests on the given route. |
+| <code><a href="#@winglang/sdk.cloud.Api.options">options</a></code> | Add a inflight handler to the api for OPTIONS requests on the given route. |
+| <code><a href="#@winglang/sdk.cloud.Api.patch">patch</a></code> | Add a inflight handler to the api for PATCH requests on the given route. |
+| <code><a href="#@winglang/sdk.cloud.Api.post">post</a></code> | Add a inflight handler to the api for POST requests on the given route. |
+| <code><a href="#@winglang/sdk.cloud.Api.put">put</a></code> | Add a inflight handler to the api for PUT requests on the given route. |
+
+---
+
+##### `connect` <a name="connect" id="@winglang/sdk.cloud.Api.connect"></a>
+
+```wing
+connect(route: str, inflight: ~Inflight, props?: ApiConnectProps): void
+```
+
+Add a inflight handler to the api for CONNECT requests on the given route.
+
+###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.connect.parameter.route"></a>
+
+- *Type:* str
+
+The route to handle CONNECT requests for.
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.connect.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+
+The function to handle the request.
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.connect.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiConnectProps">ApiConnectProps</a>
+
+Options for the route.
+
+---
+
+##### `delete` <a name="delete" id="@winglang/sdk.cloud.Api.delete"></a>
+
+```wing
+delete(route: str, inflight: ~Inflight, props?: ApiDeleteProps): void
+```
+
+Add a inflight handler to the api for DELETE requests on the given route.
+
+###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.delete.parameter.route"></a>
+
+- *Type:* str
+
+The route to handle DELETE requests for.
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.delete.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+
+The function to handle the request.
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.delete.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiDeleteProps">ApiDeleteProps</a>
+
+Options for the route.
+
+---
+
+##### `get` <a name="get" id="@winglang/sdk.cloud.Api.get"></a>
+
+```wing
+get(route: str, inflight: ~Inflight, props?: ApiGetProps): void
+```
+
+Add a inflight handler to the api for GET requests on the given route.
+
+###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.get.parameter.route"></a>
+
+- *Type:* str
+
+The route to handle GET requests for.
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.get.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+
+The function to handle the request.
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.get.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiGetProps">ApiGetProps</a>
+
+Options for the route.
+
+---
+
+##### `head` <a name="head" id="@winglang/sdk.cloud.Api.head"></a>
+
+```wing
+head(route: str, inflight: ~Inflight, props?: ApiHeadProps): void
+```
+
+Add a inflight handler to the api for HEAD requests on the given route.
+
+###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.head.parameter.route"></a>
+
+- *Type:* str
+
+The route to handle HEAD requests for.
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.head.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+
+The function to handle the request.
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.head.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiHeadProps">ApiHeadProps</a>
+
+Options for the route.
+
+---
+
+##### `options` <a name="options" id="@winglang/sdk.cloud.Api.options"></a>
+
+```wing
+options(route: str, inflight: ~Inflight, props?: ApiOptionsProps): void
+```
+
+Add a inflight handler to the api for OPTIONS requests on the given route.
+
+###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.options.parameter.route"></a>
+
+- *Type:* str
+
+The route to handle OPTIONS requests for.
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.options.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+
+The function to handle the request.
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.options.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiOptionsProps">ApiOptionsProps</a>
+
+Options for the route.
+
+---
+
+##### `patch` <a name="patch" id="@winglang/sdk.cloud.Api.patch"></a>
+
+```wing
+patch(route: str, inflight: ~Inflight, props?: ApiPatchProps): void
+```
+
+Add a inflight handler to the api for PATCH requests on the given route.
+
+###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.patch.parameter.route"></a>
+
+- *Type:* str
+
+The route to handle PATCH requests for.
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.patch.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+
+The function to handle the request.
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.patch.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiPatchProps">ApiPatchProps</a>
+
+Options for the route.
+
+---
+
+##### `post` <a name="post" id="@winglang/sdk.cloud.Api.post"></a>
+
+```wing
+post(route: str, inflight: ~Inflight, props?: ApiPostProps): void
+```
+
+Add a inflight handler to the api for POST requests on the given route.
+
+###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.post.parameter.route"></a>
+
+- *Type:* str
+
+The route to handle POST requests for.
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.post.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+
+The function to handle the request.
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.post.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiPostProps">ApiPostProps</a>
+
+Options for the route.
+
+---
+
+##### `put` <a name="put" id="@winglang/sdk.cloud.Api.put"></a>
+
+```wing
+put(route: str, inflight: ~Inflight, props?: ApiPutProps): void
+```
+
+Add a inflight handler to the api for PUT requests on the given route.
+
+###### `route`<sup>Required</sup> <a name="route" id="@winglang/sdk.cloud.Api.put.parameter.route"></a>
+
+- *Type:* str
+
+The route to handle PUT requests for.
+
+---
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.put.parameter.inflight"></a>
+
+- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+
+The function to handle the request.
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.put.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiPutProps">ApiPutProps</a>
+
+Options for the route.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Api.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.Api.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Api.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Api.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Api.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* <a href="#@winglang/sdk.core.Display">Display</a>
+
+Information on how to display a resource in the UI.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/sdk.cloud.Api.property.stateful"></a>
+
+```wing
+stateful: bool;
+```
+
+- *Type:* bool
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+
 ### Bucket <a name="Bucket" id="@winglang/sdk.cloud.Bucket"></a>
 
 **Inflight client:** [@winglang/sdk.cloud.IBucketClient](#@winglang/sdk.cloud.IBucketClient)
@@ -338,94 +685,6 @@ Returns the set of environment variables for this function.
 ---
 
 
-### JsonFile <a name="JsonFile" id="@winglang/sdk.fs.JsonFile"></a>
-
-Represents a text file that should be synthesized in the app's outdir.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.fs.JsonFile.Initializer"></a>
-
-```wing
-bring fs;
-
-new fs.JsonFile(file_path: str, props: JsonFileProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.fs.JsonFile.Initializer.parameter.filePath">file_path</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#@winglang/sdk.fs.JsonFile.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.fs.JsonFileProps">JsonFileProps</a></code> | *No description.* |
-
----
-
-##### `file_path`<sup>Required</sup> <a name="file_path" id="@winglang/sdk.fs.JsonFile.Initializer.parameter.filePath"></a>
-
-- *Type:* str
-
----
-
-##### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.fs.JsonFile.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.fs.JsonFileProps">JsonFileProps</a>
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.fs.JsonFile.save">save</a></code> | Render the contents of the file and save it to the user's file system. |
-
----
-
-##### `save` <a name="save" id="@winglang/sdk.fs.JsonFile.save"></a>
-
-```wing
-save(outdir: str): void
-```
-
-Render the contents of the file and save it to the user's file system.
-
-###### `outdir`<sup>Required</sup> <a name="outdir" id="@winglang/sdk.fs.JsonFile.save.parameter.outdir"></a>
-
-- *Type:* str
-
----
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.fs.JsonFile.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.fs.JsonFile.property.filePath">file_path</a></code> | <code>str</code> | The file's relative path to the output directory. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.fs.JsonFile.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `file_path`<sup>Required</sup> <a name="file_path" id="@winglang/sdk.fs.JsonFile.property.filePath"></a>
-
-```wing
-file_path: str;
-```
-
-- *Type:* str
-
-The file's relative path to the output directory.
-
----
-
-
 ### Logger <a name="Logger" id="@winglang/sdk.cloud.Logger"></a>
 
 **Inflight client:** [@winglang/sdk.cloud.ILoggerClient](#@winglang/sdk.cloud.ILoggerClient)
@@ -727,109 +986,6 @@ with a fresh copy without any consequences.
 ---
 
 
-### TextFile <a name="TextFile" id="@winglang/sdk.fs.TextFile"></a>
-
-Represents a text file that should be synthesized in the app's outdir.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.fs.TextFile.Initializer"></a>
-
-```wing
-bring fs;
-
-new fs.TextFile(file_path: str, props?: TextFileProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.fs.TextFile.Initializer.parameter.filePath">file_path</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#@winglang/sdk.fs.TextFile.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.fs.TextFileProps">TextFileProps</a></code> | *No description.* |
-
----
-
-##### `file_path`<sup>Required</sup> <a name="file_path" id="@winglang/sdk.fs.TextFile.Initializer.parameter.filePath"></a>
-
-- *Type:* str
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.fs.TextFile.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.fs.TextFileProps">TextFileProps</a>
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.fs.TextFile.save">save</a></code> | Render the contents of the file and save it to the user's file system. |
-| <code><a href="#@winglang/sdk.fs.TextFile.addLine">add_line</a></code> | Append a line to the text file's contents. |
-
----
-
-##### `save` <a name="save" id="@winglang/sdk.fs.TextFile.save"></a>
-
-```wing
-save(outdir: str): void
-```
-
-Render the contents of the file and save it to the user's file system.
-
-###### `outdir`<sup>Required</sup> <a name="outdir" id="@winglang/sdk.fs.TextFile.save.parameter.outdir"></a>
-
-- *Type:* str
-
----
-
-##### `add_line` <a name="add_line" id="@winglang/sdk.fs.TextFile.addLine"></a>
-
-```wing
-add_line(line: str): void
-```
-
-Append a line to the text file's contents.
-
-###### `line`<sup>Required</sup> <a name="line" id="@winglang/sdk.fs.TextFile.addLine.parameter.line"></a>
-
-- *Type:* str
-
----
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.fs.TextFile.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.fs.TextFile.property.filePath">file_path</a></code> | <code>str</code> | The file's relative path to the output directory. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.fs.TextFile.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `file_path`<sup>Required</sup> <a name="file_path" id="@winglang/sdk.fs.TextFile.property.filePath"></a>
-
-```wing
-file_path: str;
-```
-
-- *Type:* str
-
-The file's relative path to the output directory.
-
----
-
-
 ### Topic <a name="Topic" id="@winglang/sdk.cloud.Topic"></a>
 
 **Inflight client:** [@winglang/sdk.cloud.ITopicClient](#@winglang/sdk.cloud.ITopicClient)
@@ -937,6 +1093,278 @@ with a fresh copy without any consequences.
 
 
 ## Structs <a name="Structs" id="Structs"></a>
+
+### ApiConnectProps <a name="ApiConnectProps" id="@winglang/sdk.cloud.ApiConnectProps"></a>
+
+Options for Api patch endpoint.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiConnectProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let api_connect_props = cloud.ApiConnectProps{ ... }
+```
+
+
+### ApiDeleteProps <a name="ApiDeleteProps" id="@winglang/sdk.cloud.ApiDeleteProps"></a>
+
+Options for Api put endpoint.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiDeleteProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let api_delete_props = cloud.ApiDeleteProps{ ... }
+```
+
+
+### ApiGetProps <a name="ApiGetProps" id="@winglang/sdk.cloud.ApiGetProps"></a>
+
+Options for Api get endpoint.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiGetProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let api_get_props = cloud.ApiGetProps{ ... }
+```
+
+
+### ApiHeadProps <a name="ApiHeadProps" id="@winglang/sdk.cloud.ApiHeadProps"></a>
+
+Options for Api patch endpoint.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiHeadProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let api_head_props = cloud.ApiHeadProps{ ... }
+```
+
+
+### ApiOptionsProps <a name="ApiOptionsProps" id="@winglang/sdk.cloud.ApiOptionsProps"></a>
+
+Options for Api patch endpoint.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiOptionsProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let api_options_props = cloud.ApiOptionsProps{ ... }
+```
+
+
+### ApiPatchProps <a name="ApiPatchProps" id="@winglang/sdk.cloud.ApiPatchProps"></a>
+
+Options for Api patch endpoint.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiPatchProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let api_patch_props = cloud.ApiPatchProps{ ... }
+```
+
+
+### ApiPostProps <a name="ApiPostProps" id="@winglang/sdk.cloud.ApiPostProps"></a>
+
+Options for Api post endpoint.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiPostProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let api_post_props = cloud.ApiPostProps{ ... }
+```
+
+
+### ApiProps <a name="ApiProps" id="@winglang/sdk.cloud.ApiProps"></a>
+
+Properties for `Api`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let api_props = cloud.ApiProps{ ... }
+```
+
+
+### ApiPutProps <a name="ApiPutProps" id="@winglang/sdk.cloud.ApiPutProps"></a>
+
+Options for Api put endpoint.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiPutProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let api_put_props = cloud.ApiPutProps{ ... }
+```
+
+
+### ApiRequest <a name="ApiRequest" id="@winglang/sdk.cloud.ApiRequest"></a>
+
+Shape of a request to an inflight handler.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiRequest.Initializer"></a>
+
+```wing
+bring cloud;
+
+let api_request = cloud.ApiRequest{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The request's headers. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.method">method</a></code> | <code><a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a></code> | The request's HTTP method. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.path">path</a></code> | <code>str</code> | The request's path. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.body">body</a></code> | <code>json</code> | The request's body. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.query">query</a></code> | <code>str</code> | The request's query string. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.vars">vars</a></code> | <code>MutMap&lt;str&gt;</code> | The path variables. |
+
+---
+
+##### `headers`<sup>Required</sup> <a name="headers" id="@winglang/sdk.cloud.ApiRequest.property.headers"></a>
+
+```wing
+headers: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+The request's headers.
+
+---
+
+##### `method`<sup>Required</sup> <a name="method" id="@winglang/sdk.cloud.ApiRequest.property.method"></a>
+
+```wing
+method: HttpMethod;
+```
+
+- *Type:* <a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a>
+
+The request's HTTP method.
+
+---
+
+##### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.ApiRequest.property.path"></a>
+
+```wing
+path: str;
+```
+
+- *Type:* str
+
+The request's path.
+
+---
+
+##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.cloud.ApiRequest.property.body"></a>
+
+```wing
+body: json;
+```
+
+- *Type:* json
+
+The request's body.
+
+---
+
+##### `query`<sup>Optional</sup> <a name="query" id="@winglang/sdk.cloud.ApiRequest.property.query"></a>
+
+```wing
+query: str;
+```
+
+- *Type:* str
+
+The request's query string.
+
+---
+
+##### `vars`<sup>Optional</sup> <a name="vars" id="@winglang/sdk.cloud.ApiRequest.property.vars"></a>
+
+```wing
+vars: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+The path variables.
+
+---
+
+### ApiResponse <a name="ApiResponse" id="@winglang/sdk.cloud.ApiResponse"></a>
+
+Shape of a response from a inflight handler.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiResponse.Initializer"></a>
+
+```wing
+bring cloud;
+
+let api_response = cloud.ApiResponse{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.status">status</a></code> | <code>num</code> | The response's status code. |
+| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.body">body</a></code> | <code>json</code> | The response's body. |
+| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The response's headers. |
+
+---
+
+##### `status`<sup>Required</sup> <a name="status" id="@winglang/sdk.cloud.ApiResponse.property.status"></a>
+
+```wing
+status: num;
+```
+
+- *Type:* num
+
+The response's status code.
+
+---
+
+##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.cloud.ApiResponse.property.body"></a>
+
+```wing
+body: json;
+```
+
+- *Type:* json
+
+The response's body.
+
+---
+
+##### `headers`<sup>Optional</sup> <a name="headers" id="@winglang/sdk.cloud.ApiResponse.property.headers"></a>
+
+```wing
+headers: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+The response's headers.
+
+---
 
 ### BucketDeleteOptions <a name="BucketDeleteOptions" id="@winglang/sdk.cloud.BucketDeleteOptions"></a>
 
@@ -1097,38 +1525,6 @@ timeout: Duration;
 - *Default:* 1m
 
 The maximum amount of time the function can run.
-
----
-
-### JsonFileProps <a name="JsonFileProps" id="@winglang/sdk.fs.JsonFileProps"></a>
-
-Props for `JsonFile`.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.fs.JsonFileProps.Initializer"></a>
-
-```wing
-bring fs;
-
-let json_file_props = fs.JsonFileProps{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.fs.JsonFileProps.property.obj">obj</a></code> | <code>any</code> | The object that will be serialized into the file during synthesis. |
-
----
-
-##### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.fs.JsonFileProps.property.obj"></a>
-
-```wing
-obj: any;
-```
-
-- *Type:* any
-
-The object that will be serialized into the file during synthesis.
 
 ---
 
@@ -1378,41 +1774,6 @@ Trigger events at a periodic rate.
 ```
 
 
-### TextFileProps <a name="TextFileProps" id="@winglang/sdk.fs.TextFileProps"></a>
-
-Props for `TextFile`.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.fs.TextFileProps.Initializer"></a>
-
-```wing
-bring fs;
-
-let text_file_props = fs.TextFileProps{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.fs.TextFileProps.property.lines">lines</a></code> | <code>MutArray&lt;str&gt;</code> | The lines of text that will be serialized into the file during synthesis. |
-
----
-
-##### `lines`<sup>Optional</sup> <a name="lines" id="@winglang/sdk.fs.TextFileProps.property.lines"></a>
-
-```wing
-lines: MutArray<str>;
-```
-
-- *Type:* MutArray&lt;str&gt;
-- *Default:* []
-
-The lines of text that will be serialized into the file during synthesis.
-
-They will be joined with newline characters.
-
----
-
 ### TopicOnMessageProps <a name="TopicOnMessageProps" id="@winglang/sdk.cloud.TopicOnMessageProps"></a>
 
 Options for `Topic.onMessage`.
@@ -1440,6 +1801,52 @@ let topic_props = cloud.TopicProps{ ... }
 
 
 ## Classes <a name="Classes" id="Classes"></a>
+
+### Boolean <a name="Boolean" id="@winglang/sdk.std.Boolean"></a>
+
+Boolean.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.Boolean.Initializer"></a>
+
+```wing
+bring std;
+
+new std.Boolean()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Boolean.fromJson">from_json</a></code> | Parse a boolean from Json. |
+
+---
+
+##### `from_json` <a name="from_json" id="@winglang/sdk.std.Boolean.fromJson"></a>
+
+```wing
+bring std;
+
+std.Boolean.from_json(json: Json)
+```
+
+Parse a boolean from Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Boolean.fromJson.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to parse boolean from.
+
+---
+
+
 
 ### CounterClientBase <a name="CounterClientBase" id="@winglang/sdk.cloud.CounterClientBase"></a>
 
@@ -1665,8 +2072,12 @@ new std.ImmutableArray()
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.ImmutableArray.at">at</a></code> | Get the value at the given index. |
-| <code><a href="#@winglang/sdk.std.ImmutableArray.copy">copy</a></code> | Create an immutable shallow copy of this array. |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.concat">concat</a></code> | Merge arr to the end of this array. |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.contains">contains</a></code> | Checks if this array includes searchElement. |
 | <code><a href="#@winglang/sdk.std.ImmutableArray.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this array. |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.indexOf">index_of</a></code> | Returns the index of the first occurrence of searchElement found. |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
+| <code><a href="#@winglang/sdk.std.ImmutableArray.lastIndexOf">last_index_of</a></code> | Returns the index of the last occurrence of searchElement found. |
 
 ---
 
@@ -1686,13 +2097,37 @@ index of the value to get.
 
 ---
 
-##### `copy` <a name="copy" id="@winglang/sdk.std.ImmutableArray.copy"></a>
+##### `concat` <a name="concat" id="@winglang/sdk.std.ImmutableArray.concat"></a>
 
 ```wing
-copy(): ImmutableArray
+concat(arr: ImmutableArray): ImmutableArray
 ```
 
-Create an immutable shallow copy of this array.
+Merge arr to the end of this array.
+
+###### `arr`<sup>Required</sup> <a name="arr" id="@winglang/sdk.std.ImmutableArray.concat.parameter.arr"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.ImmutableArray">ImmutableArray</a>
+
+array to merge.
+
+---
+
+##### `contains` <a name="contains" id="@winglang/sdk.std.ImmutableArray.contains"></a>
+
+```wing
+contains(search_element: T1): bool
+```
+
+Checks if this array includes searchElement.
+
+###### `search_element`<sup>Required</sup> <a name="search_element" id="@winglang/sdk.std.ImmutableArray.contains.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
 
 ##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.ImmutableArray.copyMut"></a>
 
@@ -1701,6 +2136,55 @@ copy_mut(): MutableArray
 ```
 
 Create a mutable shallow copy of this array.
+
+##### `index_of` <a name="index_of" id="@winglang/sdk.std.ImmutableArray.indexOf"></a>
+
+```wing
+index_of(search_element: T1): num
+```
+
+Returns the index of the first occurrence of searchElement found.
+
+###### `search_element`<sup>Required</sup> <a name="search_element" id="@winglang/sdk.std.ImmutableArray.indexOf.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
+
+##### `join` <a name="join" id="@winglang/sdk.std.ImmutableArray.join"></a>
+
+```wing
+join(separator?: str): str
+```
+
+Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string.
+
+If the array has only
+one item, then that item will be returned without using the separator.
+
+###### `separator`<sup>Optional</sup> <a name="separator" id="@winglang/sdk.std.ImmutableArray.join.parameter.separator"></a>
+
+- *Type:* str
+
+---
+
+##### `last_index_of` <a name="last_index_of" id="@winglang/sdk.std.ImmutableArray.lastIndexOf"></a>
+
+```wing
+last_index_of(search_element: T1): num
+```
+
+Returns the index of the last occurrence of searchElement found.
+
+###### `search_element`<sup>Required</sup> <a name="search_element" id="@winglang/sdk.std.ImmutableArray.lastIndexOf.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1745,21 +2229,12 @@ new std.ImmutableMap()
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.ImmutableMap.copy">copy</a></code> | Create an immutable shallow copy of this map. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this map. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.get">get</a></code> | Returns a specified element from the map. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
 | <code><a href="#@winglang/sdk.std.ImmutableMap.size">size</a></code> | Returns the number of elements in the map. |
 
 ---
-
-##### `copy` <a name="copy" id="@winglang/sdk.std.ImmutableMap.copy"></a>
-
-```wing
-copy(): ImmutableMap
-```
-
-Create an immutable shallow copy of this map.
 
 ##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.ImmutableMap.copyMut"></a>
 
@@ -1838,19 +2313,10 @@ new std.ImmutableSet()
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.ImmutableSet.copy">copy</a></code> | Create an immutable shallow copy of this set. |
 | <code><a href="#@winglang/sdk.std.ImmutableSet.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this set. |
 | <code><a href="#@winglang/sdk.std.ImmutableSet.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
 
 ---
-
-##### `copy` <a name="copy" id="@winglang/sdk.std.ImmutableSet.copy"></a>
-
-```wing
-copy(): ImmutableSet
-```
-
-Create an immutable shallow copy of this set.
 
 ##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.ImmutableSet.copyMut"></a>
 
@@ -1956,6 +2422,161 @@ The index of the element in the Json Array to return.
 
 ---
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Json.clone">clone</a></code> | Creates a immutable deep clone of the Json. |
+| <code><a href="#@winglang/sdk.std.Json.cloneMut">clone_mut</a></code> | Creates a mutable deep clone of the Json. |
+| <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
+| <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json object. |
+| <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
+| <code><a href="#@winglang/sdk.std.Json.toStr">to_str</a></code> | Formats Json as string. |
+| <code><a href="#@winglang/sdk.std.Json.values">values</a></code> | Returns the values from the Json. |
+
+---
+
+##### `clone` <a name="clone" id="@winglang/sdk.std.Json.clone"></a>
+
+```wing
+bring std;
+
+std.Json.clone(json: Json)
+```
+
+Creates a immutable deep clone of the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.clone.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to clone.
+
+---
+
+##### `clone_mut` <a name="clone_mut" id="@winglang/sdk.std.Json.cloneMut"></a>
+
+```wing
+bring std;
+
+std.Json.clone_mut(json: Json)
+```
+
+Creates a mutable deep clone of the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.cloneMut.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to clone.
+
+---
+
+##### `delete` <a name="delete" id="@winglang/sdk.std.Json.delete"></a>
+
+```wing
+bring std;
+
+std.Json.delete(json: Json, key: str)
+```
+
+Deletes a key in a given Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.delete.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to delete key from.
+
+---
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.delete.parameter.key"></a>
+
+- *Type:* str
+
+the key to delete.
+
+---
+
+##### `keys` <a name="keys" id="@winglang/sdk.std.Json.keys"></a>
+
+```wing
+bring std;
+
+std.Json.keys(json: Json)
+```
+
+Returns the keys from the Json object.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.keys.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to get keys from.
+
+---
+
+##### `parse` <a name="parse" id="@winglang/sdk.std.Json.parse"></a>
+
+```wing
+bring std;
+
+std.Json.parse(str: str)
+```
+
+Parse a string into a Json.
+
+###### `str`<sup>Required</sup> <a name="str" id="@winglang/sdk.std.Json.parse.parameter.str"></a>
+
+- *Type:* str
+
+to parse as Json.
+
+---
+
+##### `to_str` <a name="to_str" id="@winglang/sdk.std.Json.toStr"></a>
+
+```wing
+bring std;
+
+std.Json.to_str(json: Json, indent?: num)
+```
+
+Formats Json as string.
+
+(JSON.stringify($args$))
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.toStr.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to format as string.
+
+---
+
+###### `indent`<sup>Optional</sup> <a name="indent" id="@winglang/sdk.std.Json.toStr.parameter.indent"></a>
+
+- *Type:* num
+
+---
+
+##### `values` <a name="values" id="@winglang/sdk.std.Json.values"></a>
+
+```wing
+bring std;
+
+std.Json.values(json: Json)
+```
+
+Returns the values from the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.values.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to get values from.
+
+---
 
 
 
@@ -1981,8 +2602,12 @@ new std.MutableArray()
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.MutableArray.at">at</a></code> | Get the value at the given index. |
+| <code><a href="#@winglang/sdk.std.MutableArray.concat">concat</a></code> | Merge arr to the end of this array. |
+| <code><a href="#@winglang/sdk.std.MutableArray.contains">contains</a></code> | Checks if this array includes searchElement. |
 | <code><a href="#@winglang/sdk.std.MutableArray.copy">copy</a></code> | Create an immutable shallow copy of this array. |
-| <code><a href="#@winglang/sdk.std.MutableArray.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this array. |
+| <code><a href="#@winglang/sdk.std.MutableArray.indexOf">index_of</a></code> | Returns the index of the first occurrence of searchElement found. |
+| <code><a href="#@winglang/sdk.std.MutableArray.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
+| <code><a href="#@winglang/sdk.std.MutableArray.lastIndexOf">last_index_of</a></code> | Returns the index of the last occurrence of searchElement found. |
 | <code><a href="#@winglang/sdk.std.MutableArray.pop">pop</a></code> | Remove value from end of array. |
 | <code><a href="#@winglang/sdk.std.MutableArray.push">push</a></code> | Add value to end of array. |
 
@@ -2004,6 +2629,38 @@ index of the value to get.
 
 ---
 
+##### `concat` <a name="concat" id="@winglang/sdk.std.MutableArray.concat"></a>
+
+```wing
+concat(arr: MutableArray): MutableArray
+```
+
+Merge arr to the end of this array.
+
+###### `arr`<sup>Required</sup> <a name="arr" id="@winglang/sdk.std.MutableArray.concat.parameter.arr"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.MutableArray">MutableArray</a>
+
+array to merge.
+
+---
+
+##### `contains` <a name="contains" id="@winglang/sdk.std.MutableArray.contains"></a>
+
+```wing
+contains(search_element: T1): bool
+```
+
+Checks if this array includes searchElement.
+
+###### `search_element`<sup>Required</sup> <a name="search_element" id="@winglang/sdk.std.MutableArray.contains.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
+
 ##### `copy` <a name="copy" id="@winglang/sdk.std.MutableArray.copy"></a>
 
 ```wing
@@ -2012,13 +2669,54 @@ copy(): ImmutableArray
 
 Create an immutable shallow copy of this array.
 
-##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.MutableArray.copyMut"></a>
+##### `index_of` <a name="index_of" id="@winglang/sdk.std.MutableArray.indexOf"></a>
 
 ```wing
-copy_mut(): MutableArray
+index_of(search_element: T1): num
 ```
 
-Create a mutable shallow copy of this array.
+Returns the index of the first occurrence of searchElement found.
+
+###### `search_element`<sup>Required</sup> <a name="search_element" id="@winglang/sdk.std.MutableArray.indexOf.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
+
+##### `join` <a name="join" id="@winglang/sdk.std.MutableArray.join"></a>
+
+```wing
+join(separator?: str): str
+```
+
+Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string.
+
+If the array has only
+one item, then that item will be returned without using the separator.
+
+###### `separator`<sup>Optional</sup> <a name="separator" id="@winglang/sdk.std.MutableArray.join.parameter.separator"></a>
+
+- *Type:* str
+
+---
+
+##### `last_index_of` <a name="last_index_of" id="@winglang/sdk.std.MutableArray.lastIndexOf"></a>
+
+```wing
+last_index_of(search_element: T1): num
+```
+
+Returns the index of the last occurrence of searchElement found.
+
+###### `search_element`<sup>Required</sup> <a name="search_element" id="@winglang/sdk.std.MutableArray.lastIndexOf.parameter.searchElement"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+to search for.
+
+---
 
 ##### `pop` <a name="pop" id="@winglang/sdk.std.MutableArray.pop"></a>
 
@@ -2087,16 +2785,23 @@ new std.MutableMap()
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.std.MutableMap.clear">clear</a></code> | Removes all elements. |
 | <code><a href="#@winglang/sdk.std.MutableMap.copy">copy</a></code> | Create an immutable shallow copy of this map. |
-| <code><a href="#@winglang/sdk.std.MutableMap.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this map. |
+| <code><a href="#@winglang/sdk.std.MutableMap.delete">delete</a></code> | Removes the specified element from a map. |
 | <code><a href="#@winglang/sdk.std.MutableMap.get">get</a></code> | Returns a specified element from the map. |
 | <code><a href="#@winglang/sdk.std.MutableMap.has">has</a></code> | Returns a boolean indicating whether an element with the specified key exists or not. |
-| <code><a href="#@winglang/sdk.std.MutableMap.size">size</a></code> | Returns the number of elements in the map. |
-| <code><a href="#@winglang/sdk.std.MutableMap.clear">clear</a></code> | Removes all elements. |
-| <code><a href="#@winglang/sdk.std.MutableMap.delete">delete</a></code> | Removes the specified element from a map. |
 | <code><a href="#@winglang/sdk.std.MutableMap.set">set</a></code> | Adds or updates an entry in a Map object with a specified key and a value. |
+| <code><a href="#@winglang/sdk.std.MutableMap.size">size</a></code> | Returns the number of elements in the map. |
 
 ---
+
+##### `clear` <a name="clear" id="@winglang/sdk.std.MutableMap.clear"></a>
+
+```wing
+clear(): void
+```
+
+Removes all elements.
 
 ##### `copy` <a name="copy" id="@winglang/sdk.std.MutableMap.copy"></a>
 
@@ -2106,13 +2811,21 @@ copy(): ImmutableMap
 
 Create an immutable shallow copy of this map.
 
-##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.MutableMap.copyMut"></a>
+##### `delete` <a name="delete" id="@winglang/sdk.std.MutableMap.delete"></a>
 
 ```wing
-copy_mut(): MutableMap
+delete(key: str): bool
 ```
 
-Create a mutable shallow copy of this map.
+Removes the specified element from a map.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.delete.parameter.key"></a>
+
+- *Type:* str
+
+The key.
+
+---
 
 ##### `get` <a name="get" id="@winglang/sdk.std.MutableMap.get"></a>
 
@@ -2149,40 +2862,6 @@ The key of the element to test for presence.
 
 ---
 
-##### `size` <a name="size" id="@winglang/sdk.std.MutableMap.size"></a>
-
-```wing
-size(): num
-```
-
-Returns the number of elements in the map.
-
-TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
-
-##### `clear` <a name="clear" id="@winglang/sdk.std.MutableMap.clear"></a>
-
-```wing
-clear(): void
-```
-
-Removes all elements.
-
-##### `delete` <a name="delete" id="@winglang/sdk.std.MutableMap.delete"></a>
-
-```wing
-delete(key: str): bool
-```
-
-Removes the specified element from a map.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.MutableMap.delete.parameter.key"></a>
-
-- *Type:* str
-
-The key.
-
----
-
 ##### `set` <a name="set" id="@winglang/sdk.std.MutableMap.set"></a>
 
 ```wing
@@ -2209,6 +2888,16 @@ The value of the element to add.
 
 ---
 
+##### `size` <a name="size" id="@winglang/sdk.std.MutableMap.size"></a>
+
+```wing
+size(): num
+```
+
+Returns the number of elements in the map.
+
+TODO: For now this has to be a method rather than a getter as macros only work on methods https://github.com/winglang/wing/issues/1658
+
 
 
 
@@ -2233,44 +2922,11 @@ new std.MutableSet()
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.MutableSet.copy">copy</a></code> | Create an immutable shallow copy of this set. |
-| <code><a href="#@winglang/sdk.std.MutableSet.copyMut">copy_mut</a></code> | Create a mutable shallow copy of this set. |
-| <code><a href="#@winglang/sdk.std.MutableSet.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
 | <code><a href="#@winglang/sdk.std.MutableSet.add">add</a></code> | Add value to set. |
 | <code><a href="#@winglang/sdk.std.MutableSet.clear">clear</a></code> | The clear() method removes all elements from a set. |
+| <code><a href="#@winglang/sdk.std.MutableSet.copy">copy</a></code> | Create an immutable shallow copy of this set. |
 | <code><a href="#@winglang/sdk.std.MutableSet.delete">delete</a></code> | Removes a specified value from a set, if it is in the set. |
-
----
-
-##### `copy` <a name="copy" id="@winglang/sdk.std.MutableSet.copy"></a>
-
-```wing
-copy(): ImmutableSet
-```
-
-Create an immutable shallow copy of this set.
-
-##### `copy_mut` <a name="copy_mut" id="@winglang/sdk.std.MutableSet.copyMut"></a>
-
-```wing
-copy_mut(): MutableSet
-```
-
-Create a mutable shallow copy of this set.
-
-##### `has` <a name="has" id="@winglang/sdk.std.MutableSet.has"></a>
-
-```wing
-has(value: T1): bool
-```
-
-Returns a boolean indicating whether an element with the specified value exists in the set.
-
-###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.has.parameter.value"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
-
-The value to test for presence in the Set object.
+| <code><a href="#@winglang/sdk.std.MutableSet.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
 
 ---
 
@@ -2298,6 +2954,14 @@ clear(): void
 
 The clear() method removes all elements from a set.
 
+##### `copy` <a name="copy" id="@winglang/sdk.std.MutableSet.copy"></a>
+
+```wing
+copy(): ImmutableSet
+```
+
+Create an immutable shallow copy of this set.
+
 ##### `delete` <a name="delete" id="@winglang/sdk.std.MutableSet.delete"></a>
 
 ```wing
@@ -2311,6 +2975,22 @@ Removes a specified value from a set, if it is in the set.
 - *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
 
 The value to remove from the set.
+
+---
+
+##### `has` <a name="has" id="@winglang/sdk.std.MutableSet.has"></a>
+
+```wing
+has(value: T1): bool
+```
+
+Returns a boolean indicating whether an element with the specified value exists in the set.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutableSet.has.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+
+The value to test for presence in the Set object.
 
 ---
 
@@ -2442,6 +3122,52 @@ The value of the element to set.
 
 ---
 
+
+
+
+### Number <a name="Number" id="@winglang/sdk.std.Number"></a>
+
+Number.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.Number.Initializer"></a>
+
+```wing
+bring std;
+
+new std.Number()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Number.fromJson">from_json</a></code> | Parse a number from Json. |
+
+---
+
+##### `from_json` <a name="from_json" id="@winglang/sdk.std.Number.fromJson"></a>
+
+```wing
+bring std;
+
+std.Number.from_json(json: Json)
+```
+
+Parse a number from Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Number.fromJson.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to parse number from.
+
+---
 
 
 
@@ -2640,6 +3366,31 @@ uppercase(): str
 
 Returns this string in upper case.
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.String.fromJson">from_json</a></code> | Parse string from Json. |
+
+---
+
+##### `from_json` <a name="from_json" id="@winglang/sdk.std.String.fromJson"></a>
+
+```wing
+bring std;
+
+std.String.from_json(json: Json)
+```
+
+Parse string from Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.String.fromJson.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to create string from.
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 
@@ -2686,6 +3437,37 @@ new std.T1()
 
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
+
+### IApiEndpointHandlerClient <a name="IApiEndpointHandlerClient" id="@winglang/sdk.cloud.IApiEndpointHandlerClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IApiEndpointHandlerClient">IApiEndpointHandlerClient</a>
+
+Inflight client for `IApiEndpointHandler`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IApiEndpointHandlerClient.handle">handle</a></code> | Inflight that will be called when a request is made to the endpoint. |
+
+---
+
+##### `handle` <a name="handle" id="@winglang/sdk.cloud.IApiEndpointHandlerClient.handle"></a>
+
+```wing
+handle(request: ApiRequest): ApiResponse
+```
+
+**Inflight client:** [true](#true)
+
+Inflight that will be called when a request is made to the endpoint.
+
+###### `request`<sup>Required</sup> <a name="request" id="@winglang/sdk.cloud.IApiEndpointHandlerClient.handle.parameter.request"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiRequest">ApiRequest</a>
+
+---
+
 
 ### IBucketClient <a name="IBucketClient" id="@winglang/sdk.cloud.IBucketClient"></a>
 
@@ -2961,7 +3743,7 @@ Invoke the function asynchronously with a given payload.
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>
 
-**Inflight client:** [wingsdk.cloud.IFunctionHandlerClient](#wingsdk.cloud.IFunctionHandlerClient)
+**Inflight client:** [@winglang/sdk.cloud.IFunctionHandlerClient](#@winglang/sdk.cloud.IFunctionHandlerClient)
 
 Represents a resource with an inflight "handle" method that can be used to create a `cloud.Function`.
 
@@ -3126,7 +3908,7 @@ Payload to send to the queue.
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IQueueOnMessageHandler">IQueueOnMessageHandler</a>
 
-**Inflight client:** [wingsdk.cloud.IQueueOnMessageHandlerClient](#wingsdk.cloud.IQueueOnMessageHandlerClient)
+**Inflight client:** [@winglang/sdk.cloud.IQueueOnMessageHandlerClient](#@winglang/sdk.cloud.IQueueOnMessageHandlerClient)
 
 Represents a resource with an inflight "handle" method that can be passed to `Queue.on_message`.
 
@@ -3201,7 +3983,7 @@ Function that will be called when a message is received from the queue.
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>
 
-**Inflight client:** [wingsdk.cloud.IScheduleOnTickHandlerClient](#wingsdk.cloud.IScheduleOnTickHandlerClient)
+**Inflight client:** [@winglang/sdk.cloud.IScheduleOnTickHandlerClient](#@winglang/sdk.cloud.IScheduleOnTickHandlerClient)
 
 Represents a resource with an inflight "handle" method that can be passed to `Schedule.on_tick`.
 
@@ -3303,7 +4085,7 @@ Payload to publish to Topic.
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>
 
-**Inflight client:** [wingsdk.cloud.ITopicOnMessageHandlerClient](#wingsdk.cloud.ITopicOnMessageHandlerClient)
+**Inflight client:** [@winglang/sdk.cloud.ITopicOnMessageHandlerClient](#@winglang/sdk.cloud.ITopicOnMessageHandlerClient)
 
 Represents a resource with an inflight "handle" method that can be passed to `Topic.on_message`.
 
@@ -3371,4 +4153,80 @@ Function that will be called when a message is received from the topic.
 
 ---
 
+
+## Enums <a name="Enums" id="Enums"></a>
+
+### HttpMethod <a name="HttpMethod" id="@winglang/sdk.cloud.HttpMethod"></a>
+
+Allowed HTTP methods for a endpoint.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.GET">GET</a></code> | Get. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.HEAD">HEAD</a></code> | Head. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.POST">POST</a></code> | Post. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.PUT">PUT</a></code> | Put. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.DELETE">DELETE</a></code> | Delete. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.CONNECT">CONNECT</a></code> | Connect. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.OPTIONS">OPTIONS</a></code> | Options. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.PATCH">PATCH</a></code> | Patch. |
+
+---
+
+##### `GET` <a name="GET" id="@winglang/sdk.cloud.HttpMethod.GET"></a>
+
+Get.
+
+---
+
+
+##### `HEAD` <a name="HEAD" id="@winglang/sdk.cloud.HttpMethod.HEAD"></a>
+
+Head.
+
+---
+
+
+##### `POST` <a name="POST" id="@winglang/sdk.cloud.HttpMethod.POST"></a>
+
+Post.
+
+---
+
+
+##### `PUT` <a name="PUT" id="@winglang/sdk.cloud.HttpMethod.PUT"></a>
+
+Put.
+
+---
+
+
+##### `DELETE` <a name="DELETE" id="@winglang/sdk.cloud.HttpMethod.DELETE"></a>
+
+Delete.
+
+---
+
+
+##### `CONNECT` <a name="CONNECT" id="@winglang/sdk.cloud.HttpMethod.CONNECT"></a>
+
+Connect.
+
+---
+
+
+##### `OPTIONS` <a name="OPTIONS" id="@winglang/sdk.cloud.HttpMethod.OPTIONS"></a>
+
+Options.
+
+---
+
+
+##### `PATCH` <a name="PATCH" id="@winglang/sdk.cloud.HttpMethod.PATCH"></a>
+
+Patch.
+
+---
 

@@ -41,16 +41,6 @@ exports[`array 1`] = `
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -146,93 +136,6 @@ exports.handler = async function(event) {
   }).handle(event);
 };
 ",
-  "tree.json": {
-    "tree": {
-      "children": {
-        "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function",
-          "path": "root/Function",
-        },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/Function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -328,16 +231,6 @@ exports[`array of buckets 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -449,125 +342,6 @@ exports.handler = async function(event) {
   }).handle(event);
 };
 ",
-  "tree.json": {
-    "tree": {
-      "children": {
-        "B1": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "B1",
-          "path": "root/B1",
-        },
-        "B2": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "B2",
-          "path": "root/B2",
-        },
-        "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function",
-          "path": "root/Function",
-        },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/Function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -611,16 +385,6 @@ exports[`array of durations 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -717,93 +481,6 @@ exports.handler = async function(event) {
   }).handle(event);
 };
 ",
-  "tree.json": {
-    "tree": {
-      "children": {
-        "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function",
-          "path": "root/Function",
-        },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/Function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -847,16 +524,6 @@ exports[`array of maps 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -950,93 +617,6 @@ exports.handler = async function(event) {
   }).handle(event);
 };
 ",
-  "tree.json": {
-    "tree": {
-      "children": {
-        "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function",
-          "path": "root/Function",
-        },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/Function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -1080,16 +660,6 @@ exports[`boolean 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1180,93 +750,6 @@ exports.handler = async function(event) {
   }).handle(event);
 };
 ",
-  "tree.json": {
-    "tree": {
-      "children": {
-        "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function",
-          "path": "root/Function",
-        },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/Function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -1310,16 +793,6 @@ exports[`duration 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1416,93 +889,6 @@ exports.handler = async function(event) {
   }).handle(event);
 };
 ",
-  "tree.json": {
-    "tree": {
-      "children": {
-        "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function",
-          "path": "root/Function",
-        },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/Function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -1546,16 +932,6 @@ exports[`map 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1658,93 +1034,6 @@ exports.handler = async function(event) {
   }).handle(event);
 };
 ",
-  "tree.json": {
-    "tree": {
-      "children": {
-        "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function",
-          "path": "root/Function",
-        },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/Function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -1788,16 +1077,6 @@ exports[`map of arrays 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1906,93 +1185,6 @@ exports.handler = async function(event) {
   }).handle(event);
 };
 ",
-  "tree.json": {
-    "tree": {
-      "children": {
-        "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function",
-          "path": "root/Function",
-        },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/Function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -2036,16 +1228,6 @@ exports[`map of arrays of durations 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2145,93 +1327,6 @@ exports.handler = async function(event) {
   }).handle(event);
 };
 ",
-  "tree.json": {
-    "tree": {
-      "children": {
-        "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function",
-          "path": "root/Function",
-        },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/Function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -2327,16 +1422,6 @@ exports[`map of buckets 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2441,125 +1526,6 @@ exports.handler = async function(event) {
   }).handle(event);
 };
 ",
-  "tree.json": {
-    "tree": {
-      "children": {
-        "B1": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "B1",
-          "path": "root/B1",
-        },
-        "B2": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "B2",
-          "path": "root/B2",
-        },
-        "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function",
-          "path": "root/Function",
-        },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/Function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -2603,16 +1569,6 @@ exports[`number 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2703,93 +1659,6 @@ exports.handler = async function(event) {
   }).handle(event);
 };
 ",
-  "tree.json": {
-    "tree": {
-      "children": {
-        "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function",
-          "path": "root/Function",
-        },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/Function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -2833,16 +1702,6 @@ exports[`set 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2942,93 +1801,6 @@ exports.handler = async function(event) {
   }).handle(event);
 };
 ",
-  "tree.json": {
-    "tree": {
-      "children": {
-        "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function",
-          "path": "root/Function",
-        },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/Function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -3072,16 +1844,6 @@ exports[`set of durations 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -3178,93 +1940,6 @@ exports.handler = async function(event) {
   }).handle(event);
 };
 ",
-  "tree.json": {
-    "tree": {
-      "children": {
-        "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function",
-          "path": "root/Function",
-        },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/Function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -3308,16 +1983,6 @@ exports[`string 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -3411,93 +2076,6 @@ exports.handler = async function(event) {
   }).handle(event);
 };
 ",
-  "tree.json": {
-    "tree": {
-      "children": {
-        "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function",
-          "path": "root/Function",
-        },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/Function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -3541,16 +2119,6 @@ exports[`struct 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -3650,93 +2218,6 @@ exports.handler = async function(event) {
   }).handle(event);
 };
 ",
-  "tree.json": {
-    "tree": {
-      "children": {
-        "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function",
-          "path": "root/Function",
-        },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/Function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -3780,16 +2261,6 @@ exports[`struct of maps 1`] = `
               },
             ],
             "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -3889,93 +2360,6 @@ exports.handler = async function(event) {
   }).handle(event);
 };
 ",
-  "tree.json": {
-    "tree": {
-      "children": {
-        "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function",
-          "path": "root/Function",
-        },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/Function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -4150,16 +2534,6 @@ exports[`struct with resources 1`] = `
             ],
             "wing:resource:stateful": false,
           },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
@@ -4290,172 +2664,5 @@ exports.handler = async function(event) {
   }).handle(event);
 };
 ",
-  "tree.json": {
-    "tree": {
-      "children": {
-        "B1": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "B1",
-          "path": "root/B1",
-        },
-        "B2": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "B2",
-          "path": "root/B2",
-        },
-        "B3": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "B3",
-          "path": "root/B3",
-        },
-        "B4": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "B4",
-          "path": "root/B4",
-        },
-        "B5": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud object store",
-            "title": "Bucket",
-          },
-          "id": "B5",
-          "path": "root/B5",
-        },
-        "Function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "children": {
-            "Code": {
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "id": "Code",
-              "path": "root/Function/Code",
-            },
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "Function",
-          "path": "root/Function",
-        },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/Function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "foo": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "An inflight resource",
-            "hidden": true,
-            "title": "Inflight",
-          },
-          "id": "foo",
-          "path": "root/foo",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;

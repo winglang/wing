@@ -1,6 +1,11 @@
 .DS_Store
 node_modules/
 .env
+*.tfstate
+*.tfstate.*
+
+# WASI SDK (insalled by "npm install")
+.cargo/wasi-sdk-*/
 
 # Generated wing output
 *.w.out/

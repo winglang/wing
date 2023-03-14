@@ -1,6 +1,5 @@
 export * as cloud from "./cloud";
 export * as core from "./core";
-export * as fs from "./fs";
 export * as std from "./std";
 export * as redis from "./redis";
 export * as sim from "./target-sim";

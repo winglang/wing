@@ -5,10 +5,25 @@
     "sdk"
   ],
   "targets": {
+    "generate": {
+      "executor": "nx:run-commands",
+      "inputs": [
+        "src",
+        "examples-tests"
+      ],
+      "outputs": [
+        "{projectRoot}/src/generated_tests/**/*}"
+      ],
+      "options": {
+        "command": "npm run test:generate",
+        "cwd": "tools/hangar"
+      }
+    },
     "test": {
       "dependsOn": [
         "^build",
-        "^package"
+        "^package",
+        "generate"
       ],
       "inputs": [
         "src",

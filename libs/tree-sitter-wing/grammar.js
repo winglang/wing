@@ -27,13 +27,12 @@ module.exports = grammar({
     // Handle ambiguity in case of empty literal: `a = {}`
     // In this case tree-sitter doesn't know if it's a set or a map literal so just assume its a map
     [$.map_literal, $.set_literal],
+    [$.json_container_type, $.stdlib_identifier]
   ],
+
+  conflicts: ($) => [[$.reference, $.custom_type]],
 
   supertypes: ($) => [$.expression, $._literal],
-
-  conflicts: $ => [
-    [$.reference, $.custom_type],
-  ],
 
   rules: {
     // Basics
@@ -45,8 +44,7 @@ module.exports = grammar({
       ),
 
     // Identifiers
-    reference: ($) =>
-      choice($.nested_identifier, $.identifier),
+    reference: ($) => choice($.stdlib_identifier, $.nested_identifier, $.identifier),
 
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
 
@@ -56,12 +54,18 @@ module.exports = grammar({
         repeat(seq(".", field("fields", $.identifier)))
       ),
 
+    // This is required because of ambiguity with using Json keyword for both instantiation of Json
+    // and Identifier for static methods. Same issue exists for other types like Set, Map, etc.
+    stdlib_identifier: ($) => choice($._json_types, "str", "num", "bool"),
     nested_identifier: ($) =>
-      prec(PREC.MEMBER, seq(
-        field("object", $.expression),
-        choice(".", "?."),
-        field("property", $.identifier)
-      )),
+      prec(
+        PREC.MEMBER,
+        seq(
+          field("object", $.expression),
+          choice(".", "?."),
+          optional(field("property", $.identifier))
+        )
+      ),
 
     _inflight_specifier: ($) => "inflight",
 
@@ -74,12 +78,15 @@ module.exports = grammar({
         $.return_statement,
         $.class_definition,
         $.resource_definition,
+        $.interface_definition,
         $.for_in_loop,
         $.while_statement,
+        $.break_statement,
+        $.continue_statement,
         $.if_statement,
         $.struct_definition,
         $.enum_definition,
-        $.try_catch_statement,
+        $.try_catch_statement
       ),
 
     short_import_statement: ($) =>
@@ -101,7 +108,6 @@ module.exports = grammar({
       ),
     struct_field: ($) =>
       seq(field("name", $.identifier), $._type_annotation, ";"),
-
 
     enum_definition: ($) =>
       seq(
@@ -143,6 +149,7 @@ module.exports = grammar({
         "class",
         field("name", $.identifier),
         optional(seq("extends", field("parent", $.custom_type))),
+        optional(seq("impl", field("implements", commaSep1($.custom_type)))),
         field("implementation", $.class_implementation)
       ),
     class_implementation: ($) =>
@@ -153,7 +160,7 @@ module.exports = grammar({
             $.constructor,
             $.method_definition,
             $.inflight_method_definition,
-            $.class_field,
+            $.class_field
           )
         ),
         "}"
@@ -175,6 +182,7 @@ module.exports = grammar({
         "resource",
         field("name", $.identifier),
         optional(seq("extends", field("parent", $.custom_type))),
+        optional(seq("impl", field("implements", commaSep1($.custom_type)))),
         field("implementation", $.resource_implementation)
       ),
     resource_implementation: ($) =>
@@ -185,6 +193,26 @@ module.exports = grammar({
             $.constructor,
             $.method_definition,
             $.inflight_method_definition,
+            $.class_field
+          )
+        ),
+        "}"
+      ),
+
+    interface_definition: ($) =>
+      seq(
+        "interface",
+        field("name", $.identifier),
+        optional(seq("extends", field("implements", commaSep1($.custom_type)))),
+        field("implementation", $.interface_implementation)
+      ),
+    interface_implementation: ($) =>
+      seq(
+        "{",
+        repeat(
+          choice(
+            $.method_signature,
+            $.inflight_method_signature,
             $.class_field,
           )
         ),
@@ -203,6 +231,10 @@ module.exports = grammar({
     while_statement: ($) =>
       seq("while", field("condition", $.expression), field("block", $.block)),
 
+    break_statement: ($) => seq("break", ";"),
+
+    continue_statement: ($) => seq("continue", ";"),
+
     if_statement: ($) =>
       seq(
         "if",
@@ -213,21 +245,19 @@ module.exports = grammar({
       ),
 
     elif_block: ($) =>
-      seq(
-        "elif",
-        field("condition", $.expression),
-        field("block", $.block),
-      ),
+      seq("elif", field("condition", $.expression), field("block", $.block)),
 
     try_catch_statement: ($) =>
       seq(
         "try",
         field("block", $.block),
-        optional(seq(
-          "catch",
-          optional(field("exception_identifier", $.identifier)),
-          field("catch_block", $.block),
-        )),
+        optional(
+          seq(
+            "catch",
+            optional(field("exception_identifier", $.identifier)),
+            field("catch_block", $.block)
+          )
+        ),
         optional(seq("finally", field("finally_block", $.block)))
       ),
 
@@ -247,9 +277,8 @@ module.exports = grammar({
         $.parenthesized_expression,
         $.structured_access_expression,
         $.json_literal,
-        $.struct_literal,
+        $.struct_literal
       ),
-
 
     // Primitives
     _literal: ($) => choice($.string, $.number, $.bool, $.duration),
@@ -257,7 +286,6 @@ module.exports = grammar({
     number: ($) => choice($._integer, $._decimal),
     _integer: ($) => choice("0", /[1-9]\d*/),
     _decimal: ($) => choice(/0\.\d+/, /[1-9]\d*\.\d+/),
-
 
     bool: ($) => choice("true", "false"),
 
@@ -273,7 +301,7 @@ module.exports = grammar({
           choice(
             $._string_fragment,
             $._escape_sequence,
-            $.template_substitution,
+            $.template_substitution
           )
         ),
         '"'
@@ -296,7 +324,10 @@ module.exports = grammar({
       ),
 
     call: ($) =>
-      prec.left(PREC.CALL, seq(field("caller", $.expression), field("args", $.argument_list))),
+      prec.left(
+        PREC.CALL,
+        seq(field("caller", $.expression), field("args", $.argument_list))
+      ),
 
     argument_list: ($) =>
       seq(
@@ -361,13 +392,25 @@ module.exports = grammar({
 
     parameter_type_list: ($) => seq("(", commaSep($._type), ")"),
 
-    builtin_type: ($) => choice("num", "bool", "any", "str", "void", "duration"),
+    builtin_type: ($) =>
+      choice("num", "bool", "any", "str", "void", "duration"),
 
     constructor: ($) =>
       seq(
         "init",
         field("parameter_list", $.parameter_list),
         field("block", $.block)
+      ),
+
+    method_signature: ($) =>
+      seq(
+        optional(field("access_modifier", $.access_modifier)),
+        optional(field("static", $.static)),
+        optional(field("async", $.async_modifier)),
+        field("name", $.identifier),
+        field("parameter_list", $.parameter_list),
+        optional(field("return_type", $._type_annotation)),
+        ";"
       ),
 
     method_definition: ($) =>
@@ -379,6 +422,17 @@ module.exports = grammar({
         field("parameter_list", $.parameter_list),
         optional(field("return_type", $._type_annotation)),
         field("block", $.block)
+      ),
+
+    inflight_method_signature: ($) =>
+      seq(
+        optional(field("access_modifier", $.access_modifier)),
+        optional(field("static", $.static)),
+        field("phase_modifier", $._inflight_specifier),
+        field("name", $.identifier),
+        field("parameter_list", $.parameter_list),
+        optional(field("return_type", $._type_annotation)),
+        ";"
       ),
 
     inflight_method_definition: ($) =>
@@ -407,36 +461,23 @@ module.exports = grammar({
 
     immutable_container_type: ($) =>
       seq(
-        field(
-          "collection_type",
-          choice(
-            "Array",
-            "Set",
-            "Map",
-            "Promise",
-          ),
-        ),
+        field("collection_type", choice("Array", "Set", "Map", "Promise")),
         $._container_value_type
       ),
 
     mutable_container_type: ($) =>
       choice(
         seq(
-          field(
-            "collection_type",
-            choice(
-              "MutSet",
-              "MutMap",
-              "MutArray",
-            )
-          ),
+          field("collection_type", choice("MutSet", "MutMap", "MutArray")),
           $._container_value_type
-        ),
+        )
       ),
 
-    _builtin_container_type: ($) => choice($.immutable_container_type, $.mutable_container_type),
+    _builtin_container_type: ($) =>
+      choice($.immutable_container_type, $.mutable_container_type),
 
-    _container_value_type: ($) => seq("<", field("type_parameter", $._type), ">"),
+    _container_value_type: ($) =>
+      seq("<", field("type_parameter", $._type), ">"),
 
     unary_expression: ($) => {
       /** @type {Array<[RuleOrLiteral, number]>} */
@@ -498,20 +539,22 @@ module.exports = grammar({
       );
     },
 
-    preflight_closure: ($) => seq(
-      field("parameter_list", $.parameter_list),
-      optional(field("return_type", $._type_annotation)),
-      "=>",
-      field("block", $.block)
-    ),
+    preflight_closure: ($) =>
+      seq(
+        field("parameter_list", $.parameter_list),
+        optional(field("return_type", $._type_annotation)),
+        "=>",
+        field("block", $.block)
+      ),
 
-    inflight_closure: ($) => seq(
-      "inflight",
-      field("parameter_list", $.parameter_list),
-      optional(field("return_type", $._type_annotation)),
-      "=>",
-      field("block", $.block)
-    ),
+    inflight_closure: ($) =>
+      seq(
+        "inflight",
+        field("parameter_list", $.parameter_list),
+        optional(field("return_type", $._type_annotation)),
+        "=>",
+        field("block", $.block)
+      ),
 
     await_expression: ($) => prec.right(seq("await", $.expression)),
     defer_expression: ($) => prec.right(seq("defer", $.expression)),
@@ -519,39 +562,52 @@ module.exports = grammar({
 
     _collection_literal: ($) =>
       choice($.array_literal, $.set_literal, $.map_literal),
-    array_literal: ($) => seq(
-      optional(field("type", $._builtin_container_type)),
-      "[", commaSep(field("element", $.expression)), "]"
-    ),
-    set_literal: ($) => seq(
-      optional(field("type", $._builtin_container_type)),
-      "{", commaSep(field("element", $.expression)), "}"
-    ),
-    map_literal: ($) => seq(
-      optional(field("type", $._builtin_container_type)),
-      "{", commaSep(field("member", $.map_literal_member)), "}"
-    ),
-    struct_literal: ($) => seq(field("type", $.custom_type), "{", field("fields", commaSep($.struct_literal_member)), "}"),
+    array_literal: ($) =>
+      seq(
+        optional(field("type", $._builtin_container_type)),
+        "[",
+        commaSep(field("element", $.expression)),
+        "]"
+      ),
+    set_literal: ($) =>
+      seq(
+        optional(field("type", $._builtin_container_type)),
+        "{",
+        commaSep(field("element", $.expression)),
+        "}"
+      ),
+    map_literal: ($) =>
+      seq(
+        optional(field("type", $._builtin_container_type)),
+        "{",
+        commaSep(field("member", $.map_literal_member)),
+        "}"
+      ),
+    struct_literal: ($) =>
+      seq(
+        field("type", $.custom_type),
+        "{",
+        field("fields", commaSep($.struct_literal_member)),
+        "}"
+      ),
 
     map_literal_member: ($) =>
       seq(choice($.identifier, $.string), ":", $.expression),
-    struct_literal_member: ($) =>
-      seq($.identifier, ":", $.expression),
+    struct_literal_member: ($) => seq($.identifier, ":", $.expression),
     structured_access_expression: ($) =>
       prec.right(seq($.expression, "[", $.expression, "]")),
 
-    json_literal: ($) => seq(field("type", $.json_container_type), field("element", $.json_element)),
+    json_literal: ($) =>
+      seq(
+        field("type", $.json_container_type),
+        field("element", $.json_element)
+      ),
 
-    json_element: ($) => choice(
-      $._literal,
-      $.map_literal,
-      $.array_literal
-    ),
+    json_element: ($) => choice($._literal, $.map_literal, $.array_literal),
 
-    json_container_type: ($) => choice(
-      "Json",
-      "MutJson"
-    ),
+    json_container_type: ($) => $._json_types,
+
+    _json_types: ($) => choice("Json", "MutJson"),
   },
 });
 

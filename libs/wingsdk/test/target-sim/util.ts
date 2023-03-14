@@ -25,13 +25,19 @@ export function simulatorJsonOf(simfile: string) {
 }
 
 export function treeJsonOf(simfile: string) {
-  // returns the tree.json content
-  const treeJsonFile =
-    simfile.substring(0, simfile.lastIndexOf("/")) + "/tree.json";
-  if (!existsSync(treeJsonFile)) {
-    throw new Error(`Invalid path (${simfile}) - tree.json not found.`);
+  // extract the simulator.json from the .wsim file
+  const workdir = mkdtemp();
+  tar.extract({
+    cwd: workdir,
+    sync: true,
+    file: simfile,
+  });
+
+  const treeJson = join(workdir, "tree.json");
+  if (!existsSync(treeJson)) {
+    throw new Error(`Invalid Wing app (${simfile}) - tree.json not found.`);
   }
-  return readJsonSync(treeJsonFile);
+  return readJsonSync(treeJson);
 }
 
 export interface IScopeCallback {

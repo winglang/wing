@@ -67,52 +67,6 @@ exports[`create a topic 1`] = `
     },
     "version": "tree-0.1",
   },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_topic": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A pub/sub notification topic",
-            "title": "Topic",
-          },
-          "id": "my_topic",
-          "path": "root/my_topic",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 

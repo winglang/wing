@@ -18,10 +18,10 @@ pub struct Symbol {
 }
 
 impl Symbol {
-	pub fn global(name: &str) -> Self {
+	pub fn global<S: Into<String>>(name: S) -> Self {
 		Self {
-			name: name.to_string(),
-			span: WingSpan::global(),
+			name: name.into(),
+			span: Default::default(),
 		}
 	}
 }
@@ -68,6 +68,21 @@ pub enum Phase {
 	Independent,
 }
 
+impl Phase {
+	/// Returns true if the current phase can call into given phase.
+	/// Rules:
+	/// - Independent functions can be called from any phase.
+	/// - Preflight can call into preflight
+	/// - Inflight can call into inflight
+	///
+	pub fn can_call_to(&self, to: &Phase) -> bool {
+		match to {
+			Phase::Independent => true,
+			Phase::Inflight | Phase::Preflight => to == self,
+		}
+	}
+}
+
 impl Display for Phase {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
@@ -105,6 +120,17 @@ pub struct UserDefinedType {
 	pub fields: Vec<Symbol>,
 }
 
+impl Display for UserDefinedType {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut name = self.root.name.clone();
+		for field in &self.fields {
+			name.push('.');
+			name.push_str(&field.name);
+		}
+		write!(f, "{}", name)
+	}
+}
+
 impl Display for TypeAnnotation {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
@@ -122,9 +148,7 @@ impl Display for TypeAnnotation {
 			TypeAnnotation::Set(t) => write!(f, "Set<{}>", t),
 			TypeAnnotation::MutSet(t) => write!(f, "MutSet<{}>", t),
 			TypeAnnotation::FunctionSignature(sig) => write!(f, "{}", sig),
-			TypeAnnotation::UserDefined(user_defined_type) => {
-				write!(f, "{}", user_defined_type.root.name)
-			}
+			TypeAnnotation::UserDefined(user_defined_type) => write!(f, "{}", user_defined_type),
 		}
 	}
 }
@@ -222,6 +246,7 @@ pub struct Class {
 	pub methods: Vec<(Symbol, FunctionDefinition)>,
 	pub constructor: Constructor,
 	pub parent: Option<UserDefinedType>,
+	pub implements: Vec<UserDefinedType>,
 	pub is_resource: bool,
 }
 
@@ -252,6 +277,8 @@ pub enum StmtKind {
 		elif_statements: Vec<ElifBlock>,
 		else_statements: Option<Scope>,
 	},
+	Break,
+	Continue,
 	Expression(Expr),
 	Assignment {
 		variable: Reference,
@@ -399,6 +426,7 @@ pub enum InterpolatedStringPart {
 #[derivative(Debug)]
 pub struct Scope {
 	pub statements: Vec<Stmt>,
+	pub span: WingSpan,
 	#[derivative(Debug = "ignore")]
 	pub env: RefCell<Option<SymbolEnv>>, // None after parsing, set to Some during type checking phase
 }
@@ -487,5 +515,37 @@ impl Display for Reference {
 				write!(f, "{}.{}", TypeAnnotation::UserDefined(type_.clone()), property.name)
 			}
 		}
+	}
+}
+
+/// Represents any type that has a span.
+pub trait ToSpan {
+	fn span(&self) -> WingSpan;
+}
+
+impl ToSpan for Stmt {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
+}
+
+impl ToSpan for Expr {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
+}
+
+impl ToSpan for Symbol {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
+}
+
+impl<T> ToSpan for Box<T>
+where
+	T: ToSpan,
+{
+	fn span(&self) -> WingSpan {
+		(&**self).span()
 	}
 }

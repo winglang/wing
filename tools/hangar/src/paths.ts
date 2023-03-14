@@ -20,7 +20,18 @@ export const targetWingSDKSpec =
 
 export const validWingFiles = fs
   .readdirSync(validTestDir)
-  .filter((f) => f.endsWith(".w"));
+  .filter((f) => f.endsWith(".w"))
+  .filter((f) => !f.endsWith("skip.w"));
 export const invalidWingFiles = fs
   .readdirSync(invalidTestDir)
-  .filter((f) => f.endsWith(".w"));
+  .filter((f) => f.endsWith(".w"))
+  .filter((f) => !f.endsWith("skip.w"));
+
+/** Recursively walk a directory, yielding each file path. */
+export async function* walkdir(dir: string): AsyncGenerator<string> {
+  for await (const d of await fs.promises.opendir(dir)) {
+      const entry = path.join(dir, d.name);
+      if (d.isDirectory()) yield* walkdir(entry);
+      else if (d.isFile()) yield entry;
+  }
+}

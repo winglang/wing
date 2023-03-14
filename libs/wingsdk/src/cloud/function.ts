@@ -1,12 +1,13 @@
 import { spawnSync } from "child_process";
-import { readFileSync, writeFileSync } from "fs";
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import { Logger } from "./logger";
 import { fqnForType } from "../constants";
 import { IInflightHost, IResource, Inflight, Resource, App } from "../core";
 import { Duration } from "../std";
-import { mkdtemp } from "../util";
+import { normalPath } from "../util";
+import { CaseConventions, ResourceNames } from "../utils/resource-names";
 
 /**
  * Global identifier for `Function`.
@@ -109,23 +110,43 @@ export abstract class Function extends Resource implements IInflightHost {
       implicit: true,
     });
 
-    const tempdir = mkdtemp();
-    const infile = join(tempdir, "prebundle.js");
-    const outfile = join(tempdir, "index.js");
+    const assetRelativeDir = join(
+      "assets",
+      ResourceNames.generateName(this, {
+        // Avoid characters that may cause path issues
+        disallowedRegex: /[><:"/\\|?*]/g,
+        case: CaseConventions.LOWERCASE,
+        sep: "_",
+      })
+    );
+
+    const assetDir = join(App.of(this).workdir, assetRelativeDir);
+    mkdirSync(assetDir, { recursive: true });
+
+    const infile = join(assetDir, "prebundle.js");
+    const outfile = join(assetDir, "index.js");
     writeFileSync(infile, lines.join("\n"));
 
     // We would invoke esbuild directly here, but there is a bug where esbuild
     // mangles the stdout/stderr of the process that invokes it.
     // https://github.com/evanw/esbuild/issues/2927
     // To workaround the issue, spawn a new process and invoke esbuild inside it.
-    try {
-      let esbuildScript = [
-        `const esbuild = require("${require.resolve("esbuild-wasm")}");`,
-        `esbuild.buildSync({ bundle: true, entryPoints: ["${infile}"], outfile: "${outfile}", minify: false, platform: "node", target: "node16", external: ["aws-sdk"] });`,
-      ].join("\n");
-      spawnSync(process.argv[0], ["-e", esbuildScript]);
-    } catch (e) {
-      throw new Error(`Failed to bundle function: ${e}`);
+
+    let esbuildScript = [
+      `const esbuild = require("${normalPath(
+        require.resolve("esbuild-wasm")
+      )}");`,
+      `esbuild.buildSync({ bundle: true, entryPoints: ["${normalPath(
+        infile
+      )}"], outfile: "${normalPath(
+        outfile
+      )}", minify: false, platform: "node", target: "node16", external: ["aws-sdk"] });`,
+    ].join("\n");
+    let result = spawnSync(process.argv[0], ["-e", esbuildScript]);
+    if (result.status !== 0) {
+      throw new Error(
+        `Failed to bundle function: ${result.stderr.toString("utf-8")}`
+      );
     }
 
     // the bundled contains line comments with file paths, which are not useful for us, especially
@@ -134,6 +155,9 @@ export abstract class Function extends Resource implements IInflightHost {
     const outlines = readFileSync(outfile, "utf-8").split("\n");
     const isNotLineComment = (line: string) => !line.startsWith("//");
     writeFileSync(outfile, outlines.filter(isNotLineComment).join("\n"));
+
+    // remove input file
+    rmSync(infile);
 
     this.assetPath = outfile;
   }
@@ -171,7 +195,7 @@ export interface IFunctionClient {
  * Represents a resource with an inflight "handle" method that can be used to
  * create a `cloud.Function`.
  *
- * @inflight `wingsdk.cloud.IFunctionHandlerClient`
+ * @inflight `@winglang/sdk.cloud.IFunctionHandlerClient`
  */
 export interface IFunctionHandler extends IResource {}
 

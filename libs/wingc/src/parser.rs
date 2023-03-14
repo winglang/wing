@@ -18,6 +18,7 @@ pub struct Parser<'a> {
 	pub source_name: String,
 	pub error_nodes: RefCell<HashSet<usize>>,
 	pub diagnostics: RefCell<Diagnostics>,
+	is_in_loop: RefCell<bool>,
 }
 
 // A custom struct could be used to better maintain metadata and issue tracking, though ideally
@@ -25,6 +26,7 @@ pub struct Parser<'a> {
 // k=grammar, v=optional_message, example: ("generic", "targed impl: 1.0.0")
 static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"struct_definition" => "see https://github.com/winglang/wing/issues/120",
+	"interface_definition" => "see https://github.com/winglang/wing/issues/123",
 	"any" => "see https://github.com/winglang/wing/issues/434",
 	"void" => "see https://github.com/winglang/wing/issues/432",
 	"nil" => "see https://github.com/winglang/wing/issues/433",
@@ -40,7 +42,17 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"=>" => "see https://github.com/winglang/wing/issues/474",
 };
 
-impl Parser<'_> {
+impl<'s> Parser<'s> {
+	pub fn new(source: &'s [u8], source_name: String) -> Self {
+		Self {
+			source,
+			source_name,
+			error_nodes: RefCell::new(HashSet::new()),
+			diagnostics: RefCell::new(Diagnostics::new()),
+			is_in_loop: RefCell::new(false),
+		}
+	}
+
 	pub fn wingit(&self, root: &Node) -> Scope {
 		let scope = match root.kind() {
 			"source" => self.build_scope(&root),
@@ -96,7 +108,7 @@ impl Parser<'_> {
 	}
 
 	fn check_error<'a>(&'a self, node: Node<'a>, expected: &str) -> DiagnosticResult<Node> {
-		if node.has_error() {
+		if node.is_error() {
 			self.add_error(format!("Expected {}", expected), &node)
 		} else {
 			Ok(node)
@@ -140,11 +152,10 @@ impl Parser<'_> {
 	}
 
 	fn node_span(&self, node: &Node) -> WingSpan {
+		let node_range = node.range();
 		WingSpan {
-			start: node.range().start_point,
-			end: node.range().end_point,
-			start_byte: node.byte_range().start,
-			end_byte: node.byte_range().end,
+			start: node_range.start_point.into(),
+			end: node_range.end_point.into(),
 			// TODO: Implement multi-file support
 			file_id: self.source_name.to_string(),
 		}
@@ -161,6 +172,7 @@ impl Parser<'_> {
 				.filter_map(|(i, st_node)| self.build_statement(&st_node, i).ok())
 				.collect(),
 			env: RefCell::new(None), // env should be set later when scope is type-checked
+			span: self.node_span(scope_node),
 		}
 	}
 
@@ -176,6 +188,8 @@ impl Parser<'_> {
 			"if_statement" => self.build_if_statement(statement_node)?,
 			"for_in_loop" => self.build_for_statement(statement_node)?,
 			"while_statement" => self.build_while_statement(statement_node)?,
+			"break_statement" => self.build_break_statement(statement_node)?,
+			"continue_statement" => self.build_continue_statement(statement_node)?,
 			"return_statement" => self.build_return_statement(statement_node)?,
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
@@ -238,10 +252,21 @@ impl Parser<'_> {
 		))
 	}
 
+	/// Builds scope statements for a loop (while/for), and maintains the is_in_loop flag
+	/// for the duration of the loop. So that later break statements inside can be validated
+	/// without traversing the AST.
+	fn build_in_loop_scope(&self, scope_node: &Node) -> Scope {
+		let prev_is_in_loop = *self.is_in_loop.borrow();
+		*self.is_in_loop.borrow_mut() = true;
+		let scope = self.build_scope(scope_node);
+		*self.is_in_loop.borrow_mut() = prev_is_in_loop;
+		scope
+	}
+
 	fn build_while_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		Ok(StmtKind::While {
 			condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
-			statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
+			statements: self.build_in_loop_scope(&statement_node.child_by_field_name("block").unwrap()),
 		})
 	}
 
@@ -249,8 +274,28 @@ impl Parser<'_> {
 		Ok(StmtKind::ForLoop {
 			iterator: self.node_symbol(&statement_node.child_by_field_name("iterator").unwrap())?,
 			iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
-			statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
+			statements: self.build_in_loop_scope(&statement_node.child_by_field_name("block").unwrap()),
 		})
+	}
+
+	fn build_break_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		if !*self.is_in_loop.borrow() {
+			return self.add_error::<StmtKind>(
+				format!("Expected break statement to be inside of a loop (while/for)"),
+				statement_node,
+			);
+		}
+		Ok(StmtKind::Break)
+	}
+
+	fn build_continue_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		if !*self.is_in_loop.borrow() {
+			return self.add_error::<StmtKind>(
+				format!("Expected continue statement to be inside of a loop (while/for)"),
+				statement_node,
+			);
+		}
+		Ok(StmtKind::Continue)
 	}
 
 	fn build_if_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
@@ -472,11 +517,40 @@ impl Parser<'_> {
 		} else {
 			None
 		};
+
+		let mut implements = vec![];
+		for type_node in statement_node.children_by_field_name("implements", &mut cursor) {
+			// ignore comments
+			if type_node.is_extra() {
+				continue;
+			}
+
+			// ignore commas
+			if !type_node.is_named() {
+				continue;
+			}
+
+			let interface_type = self.build_type_annotation(&type_node)?;
+			match interface_type {
+				TypeAnnotation::UserDefined(interface_type) => implements.push(interface_type),
+				_ => {
+					self.add_error::<Node>(
+						format!(
+							"Implemented interface must be a user defined type, found {}",
+							interface_type
+						),
+						&type_node,
+					)?;
+				}
+			}
+		}
+
 		Ok(StmtKind::Class(Class {
 			name,
 			fields,
 			methods,
 			parent,
+			implements,
 			constructor: constructor.unwrap(),
 			is_resource,
 		}))
@@ -606,10 +680,19 @@ impl Parser<'_> {
 		if nested_node.has_error() {
 			return self.add_error(format!("Syntax error"), &nested_node);
 		}
-		Ok(Reference::InstanceMember {
-			object: Box::new(self.build_expression(&nested_node.child_by_field_name("object").unwrap())?),
-			property: self.node_symbol(&nested_node.child_by_field_name("property").unwrap())?,
-		})
+		if let Some(property) = nested_node.child_by_field_name("property") {
+			Ok(Reference::InstanceMember {
+				object: Box::new(self.build_expression(&nested_node.child_by_field_name("object").unwrap())?),
+				property: self.node_symbol(&property)?,
+			})
+		} else {
+			self.add_error(
+				format!("Expected property"),
+				&nested_node
+					.child(nested_node.child_count() - 1)
+					.expect("Nested identifier should have at least one child"),
+			)
+		}
 	}
 
 	fn build_udt_annotation(&self, nested_node: &Node) -> DiagnosticResult<TypeAnnotation> {
@@ -626,7 +709,7 @@ impl Parser<'_> {
 	fn build_reference(&self, reference_node: &Node) -> DiagnosticResult<Reference> {
 		let actual_node = reference_node.named_child(0).unwrap();
 		match actual_node.kind() {
-			"identifier" => Ok(Reference::Identifier(self.node_symbol(&actual_node)?)),
+			"identifier" | "stdlib_identifier" => Ok(Reference::Identifier(self.node_symbol(&actual_node)?)),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node)?),
 			"ERROR" => self.add_error(format!("Expected type || {:#?}", reference_node), &actual_node),
 			other => self.report_unimplemented_grammar(other, "type node", &actual_node),
@@ -986,7 +1069,15 @@ impl Parser<'_> {
 		for node in iter {
 			if !self.error_nodes.borrow().contains(&node.id()) {
 				if node.is_error() {
-					_ = self.add_error::<()>(String::from("Unknown parser error."), &node);
+					if node.named_child_count() == 0 {
+						_ = self.add_error::<()>(String::from("Unknown parser error."), &node);
+					} else {
+						let mut cursor = node.walk();
+						let children = node.named_children(&mut cursor);
+						for child in children {
+							_ = self.add_error::<()>(format!("Unexpected '{}'.", child.kind()), &child);
+						}
+					}
 				} else if node.is_missing() {
 					_ = self.add_error::<()>(format!("'{}' expected.", node.kind()), &node);
 				}

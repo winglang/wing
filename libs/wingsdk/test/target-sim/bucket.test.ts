@@ -49,6 +49,34 @@ test("put json objects from bucket", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
+test("put multiple json objects and list all from bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+  const KEY1 = "greeting1.json";
+  const KEY2 = "greeting2.json";
+  const KEY3 = "greeting3.json";
+  const VALUE1 = { msg: "Hello world!" };
+  const VALUE2 = { msg: "Hello world again!" };
+  const VALUE3 = { msg: "Hello world again!" };
+
+  // WHEN
+  await client.putJson(KEY1, VALUE1 as any);
+  await client.putJson(KEY2, VALUE2 as any);
+  await client.putJson(KEY3, VALUE3 as any);
+  const response = await client.list();
+
+  // THEN
+  await s.stop();
+
+  expect(response).toEqual([KEY1, KEY2, KEY3]);
+  expect(listMessages(s)).toMatchSnapshot();
+});
+
 test("put and get objects from bucket", async () => {
   // GIVEN
   const app = new SimApp();
@@ -69,7 +97,6 @@ test("put and get objects from bucket", async () => {
 
   expect(response).toEqual(VALUE);
   expect(listMessages(s)).toMatchSnapshot();
-  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("put multiple objects and list all from bucket", async () => {
@@ -98,10 +125,9 @@ test("put multiple objects and list all from bucket", async () => {
 
   expect(response).toEqual([KEY1, KEY2, KEY3]);
   expect(listMessages(s)).toMatchSnapshot();
-  expect(app.snapshot()).toMatchSnapshot();
 });
 
-test("put when directory does not exist", async () => {
+test("list respects prefixes", async () => {
   // GIVEN
   const app = new SimApp();
   cloud.Bucket._newBucket(app, "my_bucket");
@@ -130,12 +156,49 @@ test("put when directory does not exist", async () => {
   // THEN
   await s.stop();
 
-  expect(responseRoot).toEqual([ROOT_DIR]);
-  expect(responsePath).toEqual([DIR1, DIR2]);
-  expect(responseDir1).toEqual([filename1]);
-  expect(responseDir2).toEqual([filename2]);
+  expect(responseRoot).toEqual([KEY1, KEY2]);
+  expect(responsePath).toEqual([KEY1, KEY2]);
+  expect(responseDir1).toEqual([KEY1]);
+  expect(responseDir2).toEqual([KEY2]);
   expect(listMessages(s)).toMatchSnapshot();
-  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("objects can have keys that look like directories", async () => {
+  // GIVEN
+  const app = new SimApp();
+  cloud.Bucket._newBucket(app, "my_bucket");
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  // WHEN
+  const KEY1 = "foo";
+  const KEY2 = "foo/";
+  const KEY3 = "foo/bar";
+  const KEY4 = "foo/bar/";
+  const KEY5 = "foo/bar/baz";
+  await client.put(KEY1, "text");
+  await client.put(KEY2, "text");
+  await client.put(KEY3, "text");
+  await client.put(KEY4, "text");
+  await client.put(KEY5, "text");
+  const response = await client.list();
+  const responseFoo = await client.list(KEY1);
+  const responseFooSlash = await client.list(KEY2);
+  const responseFooBar = await client.list(KEY3);
+  const responseFooBarSlash = await client.list(KEY4);
+  const responseFooBarBaz = await client.list(KEY5);
+
+  // THEN
+  await s.stop();
+
+  expect(response).toEqual([KEY1, KEY2, KEY3, KEY4, KEY5]);
+  expect(responseFoo).toEqual([KEY1, KEY2, KEY3, KEY4, KEY5]);
+  expect(responseFooSlash).toEqual([KEY2, KEY3, KEY4, KEY5]);
+  expect(responseFooBar).toEqual([KEY3, KEY4, KEY5]);
+  expect(responseFooBarSlash).toEqual([KEY4, KEY5]);
+  expect(responseFooBarBaz).toEqual([KEY5]);
+  expect(listMessages(s)).toMatchSnapshot();
 });
 
 test("get invalid object throws an error", async () => {
@@ -180,7 +243,6 @@ test("remove object from a bucket with mustExist as option", async () => {
 
   expect(response).toEqual(undefined);
   expect(listMessages(s)).toMatchSnapshot();
-  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("remove object from a bucket", async () => {
@@ -207,7 +269,6 @@ test("remove object from a bucket", async () => {
 
   expect(response).toEqual(undefined);
   expect(listMessages(s)).toMatchSnapshot();
-  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("remove non-existent object from a bucket", async () => {
@@ -314,4 +375,5 @@ test("can add object in preflight", async () => {
   expect(getResponse).toEqual(VALUE);
   expect(listResponse).toEqual([KEY]);
   expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
 });
