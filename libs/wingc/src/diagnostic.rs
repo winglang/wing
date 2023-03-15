@@ -1,5 +1,5 @@
 use colored::Colorize;
-use std::{fmt::Display, fs, io::Write};
+use std::fmt::Display;
 use tree_sitter::Point;
 
 use lsp_types::{Position, Range};
@@ -112,22 +112,6 @@ impl WingSpan {
 		} else {
 			false
 		}
-	}
-
-	/// Reads the the source code text of the span from disk and returns it. This is intended
-	/// primarily for debugging purposes. It currently only handles single line spans.
-	pub(crate) fn read_code(&self) -> String {
-		let Ok(contents) = fs::read_to_string(&self.file_id) else {
-			return format!("<cannot read {}>", self.file_id); 
-		};
-
-		// TODO: handle multi-line spans
-		assert!(self.start.line == self.end.line);
-
-		let lines: Vec<&str> = contents.split("\n").collect();
-		let line = lines[self.start.line as usize];
-		let out = &line[self.start.col as usize..self.end.col as usize];
-		out.to_string()
 	}
 }
 
@@ -272,20 +256,4 @@ mod tests {
 		assert!(span1 > sooner);
 		assert!(!(span1 < sooner));
 	}
-}
-
-#[test]
-fn wingspan_code() {
-	let tempdir = tempfile::tempdir().expect("unable to create a temp directory");
-	let filename = tempdir.path().join("test.w");
-	let mut file = fs::File::create(&filename).expect("unable to create a file");
-	file.write_all(b"bring cloud;\nlet x = 15;").expect("unable to write");
-
-	let span = WingSpan {
-		start: WingLocation { line: 1, col: 4 },
-		end: WingLocation { line: 1, col: 9 },
-		file_id: filename.to_str().unwrap().to_string(),
-	};
-
-	assert_eq!(span.read_code(), "x = 1".to_string());
 }
