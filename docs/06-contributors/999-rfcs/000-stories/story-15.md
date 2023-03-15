@@ -36,20 +36,6 @@ There is a range of posibilities here:
 One option is to have a a complete battery included solution that handle installing and running redis instance w/wo docker.<br/>
 Another option is taking the do-it-yourself approach that require the developer to setup the instance listening on a configured port.
 
-### Api Gateway in Console
-We want to allow develope to interact with the API internally inside the console and/or externally with curl, postman, etc...
-Wing Console will query the Api Gateway resource for all available endpoints
-
-### Redis in console
-When @yoav-steinberg was asked about which Redis GUI is the most common one, he answered: 
-> I think 99% of users just use command line.
-
-Considering that is the case, it would be nice to allow developers to interact with REDIS inside the console, if possible and feasible in a timely manner 
-A good example on how this may look like is Redis embedded prompt inside their docs (see the [examples section](https://redis.io/commands/set/#examples))
-
-![image](https://user-images.githubusercontent.com/1727147/222132089-c679b5dd-04e1-42c1-b9d0-83aa4a0cf47b.png)
-
-
 ## Code 
 #### `tasklist.w`
 ```ts (wing)
