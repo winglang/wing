@@ -3,10 +3,10 @@
 import { test } from "vitest";
 import { compileTest, testTest } from "../../generated_test_targets";
 
-test.skip.concurrent("wing compile -t tf-aws", async ({ expect }) => {
+test.skip("wing compile -t tf-aws", async ({ expect }) => {
   await compileTest(expect, "api.skip.w");
 });
 
-test.skip.concurrent("wing test", async ({ expect }) => {
+test.skip("wing test", async ({ expect }) => {
   await testTest(expect, "api.skip.w");
 });
