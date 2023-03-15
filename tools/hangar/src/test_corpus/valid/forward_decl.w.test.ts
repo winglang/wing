@@ -3,10 +3,10 @@
 import { test } from "vitest";
 import { compileTest, testTest } from "../../generated_test_targets";
 
-test.concurrent("wing compile -t tf-aws", async ({ expect }) => {
+test("wing compile -t tf-aws", async ({ expect }) => {
   await compileTest(expect, "forward_decl.w");
 });
 
-test.concurrent("wing test", async ({ expect }) => {
+test("wing test", async ({ expect }) => {
   await testTest(expect, "forward_decl.w");
 });
