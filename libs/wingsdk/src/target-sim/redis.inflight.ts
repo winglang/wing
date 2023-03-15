@@ -35,7 +35,6 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
       let container = await this.docker.createContainer({
         Image: "redis",
         name: this.container_name,
-        ExposedPorts: { "6379/tcp": {} },
       });
 
       // Start the redis container
