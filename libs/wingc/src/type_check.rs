@@ -1114,7 +1114,7 @@ impl<'a> TypeChecker<'a> {
 							return self.types.anything();
 						} else {
 							return self.general_type_error(format!(
-								"Cannot create an instance of the type \"{}\"",
+								"Cannot instantiate type \"{}\" because it is not a class or resource",
 								type_.to_string()
 							));
 						}

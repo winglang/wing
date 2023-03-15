@@ -150,6 +150,12 @@ exports[`cloud_function_expects_inflight.w > stderr 1`] = `
 "
 `;
 
+exports[`construction.w > stderr 1`] = `
+"error: Cannot instantiate type \\"BucketProps\\" because it is not a class or resource
+
+"
+`;
+
 exports[`container_types.w > stderr 1`] = `
 "error: Unknown parser error.
    --> ../../../examples/tests/invalid/container_types.w:10:24
