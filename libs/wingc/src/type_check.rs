@@ -708,6 +708,19 @@ impl TypeRef {
 		}
 	}
 
+	/// Returns the item type of a collection type, or None if the type is not a collection.
+	pub fn collection_item_type(&self) -> Option<TypeRef> {
+		match **self {
+			Type::Array(t) => Some(t),
+			Type::MutArray(t) => Some(t),
+			Type::Map(t) => Some(t),
+			Type::MutMap(t) => Some(t),
+			Type::Set(t) => Some(t),
+			Type::MutSet(t) => Some(t),
+			_ => None,
+		}
+	}
+
 	pub fn is_mutable_collection(&self) -> bool {
 		if let Type::MutArray(_) | Type::MutSet(_) | Type::MutMap(_) = **self {
 			true
@@ -2616,7 +2629,7 @@ impl<'a> TypeChecker<'a> {
 						property: property.clone(),
 					};
 					// Replace the reference with the new one, this is unsafe because `reference` isn't mutable and theoretically someone may
-					// hold anoter reference to it. But our AST doesn't hold up/cross references so this is safe as long as we return right.
+					// hold another reference to it. But our AST doesn't hold up/cross references so this is safe as long as we return right.
 					let const_ptr = reference as *const Reference;
 					let mut_ptr = const_ptr as *mut Reference;
 					unsafe {

@@ -1,5 +1,3 @@
-// NOTE: this test is supposed to fail once https://github.com/winglang/wing/pull/1610 is complete
-
 bring cloud;
 
 resource Test {
@@ -11,6 +9,7 @@ resource Test {
 
   inflight test() {
     let x = this.b;
+//               ^ Cannot qualify which operations are performed on resource
     x.put("hello", "world");
   }
 }
