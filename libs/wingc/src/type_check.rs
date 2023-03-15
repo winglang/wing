@@ -754,17 +754,6 @@ impl TypeRef {
 		}
 	}
 
-	/// Returns `true` if the type is a resource or a collection of resources
-	pub fn contains_resources(&self) -> bool {
-		match **self {
-			Type::Resource(_) => true,
-			Type::Array(v) => v.contains_resources(),
-			Type::Map(v) => v.contains_resources(),
-			Type::Set(v) => v.contains_resources(),
-			_ => false,
-		}
-	}
-
 	pub fn is_json_legal_value(&self) -> bool {
 		match **self {
 			Type::Number => true,
