@@ -38,7 +38,7 @@ export abstract class Api extends Resource {
     scope: Construct,
     id: string,
     props: ApiProps = {}
-  ): Function {
+  ): Api {
     return App.of(scope).newAbstract(API_FQN, scope, id, props);
   }
 
@@ -254,6 +254,11 @@ export interface ApiHeadProps {}
  * Options for Api patch endpoint.
  */
 export interface ApiConnectProps {}
+
+/**
+ * Inflight methods and members of `Bucket`.
+ */
+export interface IApiClient {}
 
 /**
  * Allowed HTTP methods for a endpoint.

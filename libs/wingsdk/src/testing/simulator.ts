@@ -288,9 +288,9 @@ export class Simulator {
         resolvedProps,
         context
       );
-      await resource.init();
+      const resourceAttrs = await resource.init();
       const handle = this._handles.allocate(resource);
-      (resourceConfig as any).attrs = { handle };
+      (resourceConfig as any).attrs = { ...resourceAttrs, handle };
       let event: Trace = {
         type: TraceType.RESOURCE,
         data: { message: `${resourceConfig.type} created.` },

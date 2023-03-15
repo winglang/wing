@@ -15,14 +15,11 @@ export interface BaseResourceSchema {
   /** The resource-specific properties needed to create this resource. */
   readonly props: { [key: string]: any };
   /** The resource-specific attributes that are set after the resource is created. */
-  readonly attrs: BaseResourceAttributes;
+  readonly attrs: Record<string, any>;
 }
 
 /** Schema for resource attributes */
 export interface BaseResourceAttributes {
   /** The resource's simulator-unique id. */
   readonly handle: string;
-
-  /** Any other attributes. */
-  [key: string]: unknown;
 }
