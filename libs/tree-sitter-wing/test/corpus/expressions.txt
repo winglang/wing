@@ -462,7 +462,7 @@ Optional test (and precedence)
 let a: num? = 1;
 a?;
 !a?;
-(!a)?; // Valid grammar but not invalid types (can't negate an optional)
+(!a)?; // Valid grammar but invalid types (can't negate an optional)
 
 ---
 
