@@ -1,5 +1,5 @@
 use colored::Colorize;
-use std::{fmt::Display, fs};
+use std::{fmt::Display, fs, io::Write};
 use tree_sitter::Point;
 
 use lsp_types::{Position, Range};
@@ -278,7 +278,7 @@ mod tests {
 fn wingspan_code() {
 	let tempdir = tempfile::tempdir().expect("unable to create a temp directory");
 	let filename = tempdir.path().join("test.w");
-	let mut file = File::create(&filename).expect("unable to create a file");
+	let mut file = fs::File::create(&filename).expect("unable to create a file");
 	file.write(b"bring cloud;\nlet x = 15;").expect("unable to write");
 
 	let span = WingSpan {
