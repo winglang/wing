@@ -82,48 +82,55 @@ export const createConsoleServer = async ({
     log,
   });
 
-  const simulatorPromiseResolved = await simulatorPromise;
-  const simulatorInstance = await simulatorPromiseResolved.get();
+  const getSimulator = async () => {
+    const simulatorPromiseResolved = await simulatorPromise;
+    return await simulatorPromiseResolved.get();
+  };
 
-  simulatorInstance.onTrace({
-    callback(event) {
-      // TODO: Refactor the whole logs and events so we support all of the fields that the simulator uses.
-      const message = `${
-        event.data.message ?? JSON.stringify(event.data, undefined, 2)
-      }`;
-      if (event.type === "log") {
-        consoleLogger.log(message, "simulator", {
-          sourceType: event.sourceType,
-          sourcePath: event.sourcePath,
-        });
-      } else {
-        consoleLogger.verbose(message, "simulator", {
-          sourceType: event.sourceType,
-          sourcePath: event.sourcePath,
-        });
-      }
-      if (event.data.status === "failure") {
-        consoleLogger.error(event.data.error.message, "user", {
-          sourceType: event.sourceType,
-          sourcePath: event.sourcePath,
-        });
-      }
+  getSimulator().then(async (simulatorInstance) => {
+    simulatorInstance.onTrace({
+      callback(event) {
+        // TODO: Refactor the whole logs and events so we support all of the fields that the simulator uses.
+        const message = `${
+          event.data.message ?? JSON.stringify(event.data, undefined, 2)
+        }`;
+        if (event.type === "log") {
+          consoleLogger.log(message, "simulator", {
+            sourceType: event.sourceType,
+            sourcePath: event.sourcePath,
+          });
+        } else {
+          consoleLogger.verbose(message, "simulator", {
+            sourceType: event.sourceType,
+            sourcePath: event.sourcePath,
+          });
+        }
+        if (event.data.status === "failure") {
+          consoleLogger.error(event.data.error.message, "user", {
+            sourceType: event.sourceType,
+            sourcePath: event.sourcePath,
+          });
+        }
 
-      if (
-        event.sourceType === "wingsdk.cloud.Queue" &&
-        // TODO: Change implementation after https://github.com/winglang/wing/issues/1713 is done
-        event.data.message?.includes("Sending messages")
-      ) {
-        void emitter.emit("invalidateQuery", {
-          query: "queue.approxSize",
-        });
-      }
-    },
+        if (
+          event.sourceType === "wingsdk.cloud.Queue" &&
+          // TODO: Change implementation after https://github.com/winglang/wing/issues/1713 is done
+          event.data.message?.includes("Sending messages")
+        ) {
+          void emitter.emit("invalidateQuery", {
+            query: "queue.approxSize",
+          });
+        }
+      },
+    });
   });
 
   const close = async () => {
     try {
-      await Promise.allSettled([server.close(), simulatorInstance.stop()]);
+      await Promise.allSettled([
+        server.close(),
+        getSimulator().then((simulator) => simulator.stop()),
+      ]);
     } catch (error) {
       log.error(error);
     }
