@@ -1089,7 +1089,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Lookup the type in the env
 				let type_ = self.resolve_type_annotation(class, env, statement_idx);
-				let (class_env, class_symbol) = match *type_ {
+				let (class_env, class_symbol) = match &*type_ {
 					Type::Class(ref class) => (&class.env, &class.name),
 					Type::Resource(ref class) => {
 						if matches!(env.flight, Phase::Preflight) {
@@ -1101,12 +1101,23 @@ impl<'a> TypeChecker<'a> {
 							));
 						}
 					}
-					Type::Anything => return self.types.anything(),
-					_ => {
-						return self.general_type_error(format!(
-							"Cannot instantiate type \"{}\" because it is not a class or resource",
-							type_.to_string()
-						))
+					t => {
+						// Even though the type isn't really constructable, we can still type check the args
+						for arg in &arg_list.pos_args {
+							self.type_check_exp(arg, env, statement_idx, context);
+						}
+						for arg in &arg_list.named_args {
+							self.type_check_exp(arg.1, env, statement_idx, context);
+						}
+
+						if matches!(t, Type::Anything) {
+							return self.types.anything();
+						} else {
+							return self.general_type_error(format!(
+								"Cannot create an instance of the type \"{}\"",
+								type_.to_string()
+							));
+						}
 					}
 				};
 

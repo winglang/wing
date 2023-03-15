@@ -899,31 +899,38 @@ exports[`unknown_symbol.w > stderr 1`] = `
   |                  ^^^^ Unknown symbol \\"clod\\"
 
 
-error: Unknown symbol \\"y\\"
-  --> ../../../examples/tests/invalid/unknown_symbol.w:6:13
+error: Unknown symbol \\"cloudy\\"
+  --> ../../../examples/tests/invalid/unknown_symbol.w:6:17
   |
-6 | let x = 2 + y;
+6 | let funky = new cloudy.Funktion(inflight () => { });
+  |                 ^^^^^^ Unknown symbol \\"cloudy\\"
+
+
+error: Unknown symbol \\"y\\"
+  --> ../../../examples/tests/invalid/unknown_symbol.w:9:13
+  |
+9 | let x = 2 + y;
   |             ^ Unknown symbol \\"y\\"
 
 
 error: Unknown symbol \\"assert\\"
-   --> ../../../examples/tests/invalid/unknown_symbol.w:17:18
+   --> ../../../examples/tests/invalid/unknown_symbol.w:20:18
    |
-17 |     this._bucket.assert(2 + \\"2\\");
+20 |     this._bucket.assert(2 + \\"2\\");
    |                  ^^^^^^ Unknown symbol \\"assert\\"
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/unknown_symbol.w:17:29
+   --> ../../../examples/tests/invalid/unknown_symbol.w:20:29
    |
-17 |     this._bucket.assert(2 + \\"2\\");
+20 |     this._bucket.assert(2 + \\"2\\");
    |                             ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Unknown symbol \\"method_which_is_not_part_of_bucket_api\\"
-   --> ../../../examples/tests/invalid/unknown_symbol.w:20:25
+   --> ../../../examples/tests/invalid/unknown_symbol.w:23:25
    |
-20 |     return this._bucket.method_which_is_not_part_of_bucket_api(id);
+23 |     return this._bucket.method_which_is_not_part_of_bucket_api(id);
    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Unknown symbol \\"method_which_is_not_part_of_bucket_api\\"
 
 "

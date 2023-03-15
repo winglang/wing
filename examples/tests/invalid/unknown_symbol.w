@@ -3,6 +3,9 @@ bring cloud;
 let bucket = new clod.Bucket();
                //^ Unknown symbol
 
+let funky = new cloudy.Funktion(inflight () => { });
+              //^ Unknown symbol
+
 let x = 2 + y;
           //^ Unknown symbol
 
