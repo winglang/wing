@@ -8,7 +8,7 @@ import classNames from "classnames";
 import throttle from "lodash.throttle";
 import { Fragment, useEffect, useRef, useState } from "react";
 
-import { ResourceIcon } from "../stories/utils.js";
+import { ResourceIcon } from "../utils/utils.js";
 
 const dateTimeFormat = new Intl.DateTimeFormat(undefined, {
   hour: "2-digit",

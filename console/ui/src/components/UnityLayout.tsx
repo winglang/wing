@@ -12,8 +12,8 @@ import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
 import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
 import { TopResizableWidget } from "../design-system/TopResizableWidget.js";
-import { ResourceIcon, SchemaToTreeMenuItems } from "../stories/utils.js";
 import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
+import { ResourceIcon, SchemaToTreeMenuItems } from "../utils/utils.js";
 
 interface Attribute {
   key: string;
@@ -494,7 +494,6 @@ function TreeNode({
 
           <div className="flex-0 relative">
             <ResourceIcon
-              // className="w-4 h-4 animate-pulse"
               className="w-4 h-4"
               resourceType={node.type}
               forceDarken={isSelected}

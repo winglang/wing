@@ -8,9 +8,9 @@ import { ScrollableArea } from "../design-system/ScrollableArea.js";
 import { SpinnerLoader } from "../design-system/SpinnerLoader.js";
 import { TopResizableWidget } from "../design-system/TopResizableWidget.js";
 import { TreeMenu, TreeMenuItem } from "../design-system/TreeMenu.js";
-import { ResourceIcon } from "../stories/utils.js";
 import { trpc } from "../utils/trpc.js";
 import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
+import { ResourceIcon } from "../utils/utils.js";
 
 import { ConsoleFilters } from "./ConsoleFilters.js";
 import { ConsoleLogs } from "./ConsoleLogs.js";

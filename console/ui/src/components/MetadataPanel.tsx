@@ -13,8 +13,7 @@ import { ForwardRefExoticComponent, SVGProps, useMemo, useState } from "react";
 import { InspectorSection } from "../design-system/InspectorSection.js";
 import { Pill } from "../design-system/Pill.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
-import { getResourceIconComponent, ResourceIcon } from "../stories/utils.js";
-import { trpc } from "../utils/trpc.js";
+import { getResourceIconComponent, ResourceIcon } from "../utils/utils.js";
 
 import { AttributeView } from "./AttributeView.js";
 import { BucketMetadata } from "./resource-metadata/BucketMetadata.js";

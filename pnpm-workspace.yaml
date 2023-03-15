@@ -1,4 +1,3 @@
 packages:
     - console/*
-    - design-system
     - tools/*

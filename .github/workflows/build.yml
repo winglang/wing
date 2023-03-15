@@ -42,6 +42,13 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Upload playwright report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: playwright-report
+          path: playwright-report/
+
       - name: Find mutations
         id: self_mutation
         run: |-

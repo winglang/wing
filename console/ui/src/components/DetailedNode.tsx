@@ -5,7 +5,7 @@ import {
   ArrowLongRightIcon,
   HorizontalLineIcon,
 } from "../design-system/icons/index.js";
-import { ResourceIcon } from "../stories/utils.js";
+import { ResourceIcon } from "../utils/utils.js";
 
 import { ResourceValue } from "./map-resource-value/ResourceValue.js";
 
