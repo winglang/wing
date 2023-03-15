@@ -4,18 +4,18 @@
 
 
 ## Main diffrences from story 15 and issues noticed
-- [ ] Introduced Task struct
-  - [ ] The `ITaskList` API to include the `Task` struct
-  - [ ] Task -> Json enconding/decoding actually includes duration and Enum encoding/decoding 
-  - [ ] struct should support string interpolation 
-  - [ ] Missing Struct <-> String API - I've repeated this pattern alot `Task.from_json(Json.parse(...))`
-  - [ ] Using the spread api for defining new Task based on an old one
+- Introduced Task struct
+  - The `ITaskList` API to include the `Task` struct
+  - Task -> Json enconding/decoding actually includes duration and Enum encoding/decoding 
+  - struct should support string interpolation 
+  - Missing Struct <-> String API - I've repeated this pattern alot `Task.from_json(Json.parse(...))`
+  - Using the spread api for defining new Task based on an old one
  and `Json.to_str(Task.to_json(...))`
-  - [ ] I had an Array<Task> that I wanted to turn into a Json, should this be a single API call of Array ? 
-- [ ] `inflight init` to remove the lazy calcuation of Redis Connection
-- [ ] Modified find to accept a predicate Task -> bool instead of a term
-  - [ ] Missing phase independantfunctions - it was awkward to define that predicate as `inflight`
-- [ ] Added Duration.from_days 
+  - I had an Array<Task> that I wanted to turn into a Json, should this be a single API call of Array ? 
+- `inflight init` to remove the lazy calcuation of Redis Connection
+- Modified find to accept a predicate Task -> bool instead of a term
+  - Missing phase independantfunctions - it was awkward to define that predicate as `inflight`
+- Added Duration.from_days 
 
 
 ### Api Gateway in Console
