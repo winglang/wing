@@ -19,11 +19,11 @@ for (const fileInfo of readdirSync(validTestDir, { withFileTypes: true })) {
 import { test } from "vitest";
 import { compileTest, testTest } from "../../generated_test_targets";
 
-test${skipText}.concurrent("wing compile -t tf-aws", async ({ expect }) => {
+test${skipText}("wing compile -t tf-aws", async ({ expect }) => {
   await compileTest(expect, "${filename}");
 });
 
-test${skipText}.concurrent("wing test", async ({ expect }) => {
+test${skipText}("wing test", async ({ expect }) => {
   await testTest(expect, "${filename}");
 });`;
 
