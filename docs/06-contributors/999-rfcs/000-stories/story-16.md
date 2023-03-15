@@ -69,7 +69,7 @@ resource TaskList implementes ITaskList {
   // that creates the _redis_client when it is first called
   inflight _redis_connection: redis.IRedisClient?; 
   
-  extern "./tasklist_helper.js" static inflight uuid() => str; 
+  extern "./tasklist_helper.js" static inflight uuid(): str; 
   
   init() {
     this._redis = new redis.Redis();
@@ -119,8 +119,8 @@ resource TaskListApi {
   api: cloud.Api;
   task_list: ITaskList;
         
-  extern "./tasklist_helper.js" static inflight create_regex: (s: str) => IMyRegExp  
-  extern "./tasklist_helper.js" static inflight get_data: (url: str) => Json;
+  extern "./tasklist_helper.js" static inflight create_regex: (s: str): IMyRegExp  
+  extern "./tasklist_helper.js" static inflight get_data: (url: str): Json;
         
   init(task_list: ITaskList) {
     this.task_list = task_list;
