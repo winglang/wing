@@ -4,7 +4,7 @@ import { invalidTestDir, invalidWingFiles, tmpDir } from "./paths";
 import { runWingCommand } from "./utils";
 
 invalidWingFiles.forEach((wingFile) => {
-  test.concurrent(wingFile, async ({ expect }) => {
+  test(wingFile, async ({ expect }) => {
     const args = ["test"];
 
     const relativeWingFile = path.relative(
