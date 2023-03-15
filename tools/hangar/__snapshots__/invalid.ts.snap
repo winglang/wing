@@ -582,6 +582,13 @@ exports[`optionals.w > stderr 1`] = `
 7 | f(x);
   |   ^ Expected type to be \\"num\\", but got \\"num?\\" instead
 
+
+error: Expected optional type, found \\"bool\\"
+   --> ../../../examples/tests/invalid/optionals.w:11:4
+   |
+11 | if y? {
+   |    ^ Expected optional type, found \\"bool\\"
+
 "
 `;
 

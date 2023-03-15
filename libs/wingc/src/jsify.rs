@@ -532,6 +532,9 @@ impl<'a> JSifier<'a> {
 					context,
 				),
 			},
+			ExprKind::OptionalTest { optional } => {
+				format!("(({}) !== null)", self.jsify_expression(optional, context))
+			}
 		}
 	}
 
