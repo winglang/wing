@@ -1201,6 +1201,13 @@ impl<'a> TypeChecker<'a> {
 
 				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud.Bucket().upload())
 				if matches!(*func_type, Type::Anything) {
+					// Even if we don't know the type of the function, we can still type check the arguments
+					for arg in arg_list.pos_args.iter() {
+						self.type_check_exp(arg, env, statement_idx, context);
+					}
+					for arg in arg_list.named_args.values() {
+						self.type_check_exp(arg, env, statement_idx, context);
+					}
 					return self.types.anything();
 				}
 

@@ -906,10 +906,24 @@ error: Unknown symbol \\"y\\"
   |             ^ Unknown symbol \\"y\\"
 
 
-error: Unknown symbol \\"method_which_is_not_part_of_bucket_api\\"
-   --> ../../../examples/tests/invalid/unknown_symbol.w:17:25
+error: Unknown symbol \\"assert\\"
+   --> ../../../examples/tests/invalid/unknown_symbol.w:17:18
    |
-17 |     return this._bucket.method_which_is_not_part_of_bucket_api(id);
+17 |     this._bucket.assert(2 + \\"2\\");
+   |                  ^^^^^^ Unknown symbol \\"assert\\"
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/unknown_symbol.w:17:29
+   |
+17 |     this._bucket.assert(2 + \\"2\\");
+   |                             ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Unknown symbol \\"method_which_is_not_part_of_bucket_api\\"
+   --> ../../../examples/tests/invalid/unknown_symbol.w:20:25
+   |
+20 |     return this._bucket.method_which_is_not_part_of_bucket_api(id);
    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Unknown symbol \\"method_which_is_not_part_of_bucket_api\\"
 
 "

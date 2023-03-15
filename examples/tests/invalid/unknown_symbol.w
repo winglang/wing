@@ -14,6 +14,9 @@ resource SomeResource {
   }
 
   inflight get_task(id: str): str {
+    this._bucket.assert(2 + "2");
+               //^ Unknown symbol
+                          //^ Expected type to be "num", but got "str" instead
     return this._bucket.method_which_is_not_part_of_bucket_api(id);
                       //^ Unknown symbol
   }
