@@ -118,7 +118,7 @@ impl WingSpan {
 	/// (currently only handles single line spans)
 	pub fn code(&self) -> String {
 		let Ok(contents) = fs::read_to_string(&self.file_id) else {
-			return format!("<cannot read {}", self.file_id); 
+			return format!("<cannot read {}>", self.file_id); 
 		};
 
 		// TODO: handle multi-line spans
@@ -272,4 +272,20 @@ mod tests {
 		assert!(span1 > sooner);
 		assert!(!(span1 < sooner));
 	}
+}
+
+#[test]
+fn wingspan_code() {
+	let tempdir = tempfile::tempdir().expect("unable to create a temp directory");
+	let filename = tempdir.path().join("test.w");
+	let mut file = File::create(&filename).expect("unable to create a file");
+	file.write(b"bring cloud;\nlet x = 15;").expect("unable to write");
+
+	let span = WingSpan {
+		start: WingLocation { line: 1, col: 4 },
+		end: WingLocation { line: 1, col: 9 },
+		file_id: filename.to_str().unwrap().to_string(),
+	};
+
+	assert_eq!(span.code(), "x = 1".to_string());
 }

@@ -23,6 +23,7 @@ indexmap = "1.9.1"
 aho-corasick = "0.7.20"
 lsp-types = "0.94.0"
 indoc = "2.0.0"
+tempfile = "3.4.0"
 
 [lib]
 crate-type = ["rlib", "cdylib"]
