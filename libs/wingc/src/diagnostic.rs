@@ -279,7 +279,7 @@ fn wingspan_code() {
 	let tempdir = tempfile::tempdir().expect("unable to create a temp directory");
 	let filename = tempdir.path().join("test.w");
 	let mut file = fs::File::create(&filename).expect("unable to create a file");
-	file.write(b"bring cloud;\nlet x = 15;").expect("unable to write");
+	file.write_all(b"bring cloud;\nlet x = 15;").expect("unable to write");
 
 	let span = WingSpan {
 		start: WingLocation { line: 1, col: 4 },
