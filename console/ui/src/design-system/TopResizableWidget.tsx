@@ -14,12 +14,6 @@ export function TopResizableWidget(props: TopResizableWidgetProps) {
   const resizeTarget = createRef<HTMLDivElement>();
   const [isResizing, setResizing] = useState(false);
 
-  useEffect(() => {
-    if (resizeTarget.current) {
-      resizeTarget.current.style.height = `${resizeTarget.current.clientHeight}px`;
-    }
-  }, [resizeTarget]);
-
   return (
     <div className={classNames("relative", className)} ref={resizeTarget}>
       <DraggableCore

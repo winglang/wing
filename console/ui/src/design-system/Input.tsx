@@ -9,6 +9,7 @@ export interface InputProps {
   placeholder?: string;
   value?: string;
   readOnly?: boolean;
+  disabled?: boolean;
   onFocus?: React.FocusEventHandler<HTMLInputElement>;
   leftIcon?: React.ForwardRefExoticComponent<React.SVGProps<SVGSVGElement>>;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;

@@ -17,9 +17,16 @@ const dateTimeFormat = new Intl.DateTimeFormat(undefined, {
   fractionalSecondDigits: 3,
 });
 
+export interface LoggerEntry extends LogEntry {
+  logClassName?: string;
+  labelClassName?: string;
+}
+
 interface LogEntryProps {
-  log: LogEntry;
+  log: LoggerEntry;
   onResourceClick?: (log: LogEntry) => void;
+  onRowClick?: (log: LogEntry) => void;
+  showIcons?: boolean;
 }
 
 export const formatAbsolutePaths = (
@@ -37,7 +44,12 @@ export const formatAbsolutePaths = (
     .replace(/(\r\n|\n|\r)/gm, expanded ? "<br />" : "\n");
 };
 
-const LogEntryRow = ({ log, onResourceClick }: LogEntryProps) => {
+const LogEntryRow = ({
+  log,
+  showIcons = true,
+  onRowClick,
+  onResourceClick,
+}: LogEntryProps) => {
   const [expanded, setExpanded] = useState(false);
   const expandableRef = useRef<HTMLElement>(null);
   const [overflows, setOverflows] = useState(false);
@@ -79,6 +91,8 @@ const LogEntryRow = ({ log, onResourceClick }: LogEntryProps) => {
 
   return (
     <Fragment>
+      {/*TODO: Fix a11y*/}
+      {/*eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions*/}
       <div
         className={classNames(
           "group w-full flex",
@@ -95,29 +109,35 @@ const LogEntryRow = ({ log, onResourceClick }: LogEntryProps) => {
             "text-red-500 bg-red-100": log.level === "error",
             "hover:text-red-600": log.level === "error" && canBeExpanded,
           },
+          log.logClassName,
         )}
+        onClick={() => onRowClick?.(log)}
       >
-        <div className="flex-shrink-0">
-          <XCircleIcon
-            className={classNames(
-              "w-3.5 h-3.5",
-              "text-red-500 mr-1 inline-block -mt-0.5",
-              {
-                invisible: log.level !== "error",
-              },
-            )}
-          />
-        </div>
+        {showIcons && (
+          <div className="flex-shrink-0">
+            <XCircleIcon
+              className={classNames(
+                "w-3.5 h-3.5",
+                "text-red-500 mr-1 inline-block -mt-0.5",
+                {
+                  invisible: log.level !== "error",
+                },
+              )}
+            />
+          </div>
+        )}
 
-        <div className="flex text-slate-500 ml-1">
-          {dateTimeFormat.format(log.timestamp)}
-        </div>
-
+        {log.timestamp && (
+          <div className="flex text-slate-500">
+            {dateTimeFormat.format(log.timestamp)}
+          </div>
+        )}
         <div
           className={classNames(
-            "cursor-default select-text min-w-0 ml-2 text-left grow",
+            "cursor-default select-text min-w-0 text-left grow",
             {
               truncate: !expanded,
+              "ml-2": log.timestamp,
             },
           )}
         >
@@ -136,7 +156,7 @@ const LogEntryRow = ({ log, onResourceClick }: LogEntryProps) => {
               />
             </button>
           )}
-          <span ref={expandableRef} />
+          <span className={log.labelClassName} ref={expandableRef} />
         </div>
 
         {onResourceClick && (
@@ -154,7 +174,7 @@ const LogEntryRow = ({ log, onResourceClick }: LogEntryProps) => {
                 "text-slate-500 hover:text-slate-600",
               )}
             >
-              {log.ctx?.sourcePath}
+              {log.ctx?.label || log.ctx?.sourcePath}
             </button>
           </div>
         )}
@@ -165,17 +185,26 @@ const LogEntryRow = ({ log, onResourceClick }: LogEntryProps) => {
 
 export interface ConsoleLogsProps {
   logs: LogEntry[];
+  onRowClick?: (log: LogEntry) => void;
   onResourceClick?: (log: LogEntry) => void;
+  showIcons?: boolean;
 }
 
-export const ConsoleLogs = ({ logs, onResourceClick }: ConsoleLogsProps) => {
+export const ConsoleLogs = ({
+  logs,
+  onRowClick,
+  onResourceClick,
+  showIcons = true,
+}: ConsoleLogsProps) => {
   return (
     <div className="w-full gap-x-2 text-2xs font-mono">
       {logs.map((log, logIndex) => (
         <LogEntryRow
           key={`${log.id}`}
           log={log}
-          onResourceClick={(logEntry) => onResourceClick?.(logEntry)}
+          onResourceClick={onResourceClick}
+          onRowClick={onRowClick}
+          showIcons={showIcons}
         />
       ))}
       {logs.length === 0 && (

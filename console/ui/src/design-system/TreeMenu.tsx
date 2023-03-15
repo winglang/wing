@@ -1,6 +1,6 @@
 import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import React, { Fragment, useEffect, useMemo, useRef } from "react";
+import React, { Fragment, ReactNode, useEffect, useMemo, useRef } from "react";
 
 import { Square2StackMinusIcon, Square2StackPlusIcon } from "./icons/index.js";
 import { ScrollableArea } from "./ScrollableArea.js";
@@ -8,8 +8,8 @@ import { ScrollableArea } from "./ScrollableArea.js";
 export interface TreeMenuItem {
   id: string;
   icon?: React.ReactNode;
-  label: string;
-  parentId?: string;
+  label: string | ReactNode | ((item: TreeMenuItem) => ReactNode);
+  secondaryLabel?: string | ReactNode | ((item: TreeMenuItem) => ReactNode);
   children?: TreeMenuItem[];
 }
 
@@ -23,6 +23,9 @@ export interface TreeMenuProps {
   onExpandAll?: () => void;
   onCollapseAll?: () => void;
   disabled?: boolean;
+  hideToolbar?: boolean;
+  hideChevrons?: boolean;
+  dataTestId?: string;
 }
 
 export const TreeMenu = ({
@@ -35,41 +38,53 @@ export const TreeMenu = ({
   onExpandAll,
   onCollapseAll,
   disabled = false,
+  hideToolbar = false,
+  hideChevrons = false,
+  dataTestId = "",
 }: TreeMenuProps) => {
   return (
-    <div className={"w-full h-full flex flex-col"} data-testid="tree-menu">
-      <div className="h-9 flex-shrink-0 flex items-center justify-between gap-2 px-2">
-        <div className="flex items-center min-w-0">
-          <span className="text-slate-600 text-sm truncate uppercase">
-            {title}
-          </span>
-        </div>
+    <div className={"w-full h-full flex flex-col"} data-testid={dataTestId}>
+      <div
+        className={classNames(
+          "flex-shrink-0 flex items-center justify-between gap-2 px-2",
+          !title && !hideToolbar && "pb-2",
+        )}
+      >
+        {title && (
+          <div className="flex items-center min-w-0">
+            <span className="text-slate-600 text-sm truncate uppercase">
+              {title}
+            </span>
+          </div>
+        )}
 
-        <div className="flex items-center">
-          <button
-            className="p-0.5 hover:bg-slate-200 rounded group"
-            onClick={onExpandAll}
-            title="Expand All"
-            disabled={disabled}
-          >
-            <Square2StackPlusIcon
-              className="w-4 h-4 text-slate-600 group-hover:text-slate-700 rotate-90"
-              aria-hidden="true"
-            />
-          </button>
+        {!hideToolbar && (
+          <div className="flex items-center h-9">
+            <button
+              className="p-0.5 hover:bg-slate-200 rounded group"
+              onClick={onExpandAll}
+              title="Expand All"
+              disabled={disabled}
+            >
+              <Square2StackPlusIcon
+                className="w-4 h-4 text-slate-600 group-hover:text-slate-700 rotate-90"
+                aria-hidden="true"
+              />
+            </button>
 
-          <button
-            className="p-0.5 hover:bg-slate-200 rounded group"
-            onClick={onCollapseAll}
-            title="Collapse All"
-            disabled={disabled}
-          >
-            <Square2StackMinusIcon
-              className="w-4 h-4 text-slate-600 group-hover:text-slate-700 rotate-90"
-              aria-hidden="true"
-            />
-          </button>
-        </div>
+            <button
+              className="p-0.5 hover:bg-slate-200 rounded group"
+              onClick={onCollapseAll}
+              title="Collapse All"
+              disabled={disabled}
+            >
+              <Square2StackMinusIcon
+                className="w-4 h-4 text-slate-600 group-hover:text-slate-700 rotate-90"
+                aria-hidden="true"
+              />
+            </button>
+          </div>
+        )}
       </div>
       <div className="relative grow">
         <div className="absolute inset-0">
@@ -84,6 +99,7 @@ export const TreeMenu = ({
                 openedMenuItems={openMenuItemIds}
                 onItemClick={onItemClick}
                 onItemToggle={onItemToggle}
+                hideChevrons={hideChevrons}
               />
             </div>
           </ScrollableArea>
@@ -100,6 +116,7 @@ interface MenuItemsProps {
   indentationLevel?: number;
   onItemClick?: (item: TreeMenuItem) => void;
   onItemToggle?: (item: TreeMenuItem) => void;
+  hideChevrons?: boolean;
 }
 
 function MenuItems({
@@ -109,6 +126,7 @@ function MenuItems({
   indentationLevel = 0,
   onItemClick,
   onItemToggle,
+  hideChevrons = false,
 }: MenuItemsProps) {
   return (
     <>
@@ -121,6 +139,7 @@ function MenuItems({
           indentationLevel={indentationLevel}
           onItemClick={onItemClick}
           onItemToggle={onItemToggle}
+          hideChevron={hideChevrons}
         />
       ))}
     </>
@@ -134,6 +153,7 @@ interface MenuItemProps {
   indentationLevel?: number;
   onItemClick?: (item: TreeMenuItem) => void;
   onItemToggle?: (item: TreeMenuItem) => void;
+  hideChevron?: boolean;
 }
 
 function MenuItem({
@@ -143,6 +163,7 @@ function MenuItem({
   indentationLevel = 0,
   onItemClick,
   onItemToggle,
+  hideChevron = false,
 }: MenuItemProps) {
   const open = useMemo(() => {
     return openedMenuItems.includes(item.id);
@@ -197,30 +218,33 @@ function MenuItem({
           onItemToggle?.(item);
         }}
       >
+        {!hideChevron && (
+          <button
+            type={"button"}
+            className={classNames("pl-2 py-0.5 flex items-center", {
+              invisible: !hasChildren,
+            })}
+            style={{ marginLeft: `${8 * indentationLevel}px` }}
+            onClick={(event) => {
+              event.stopPropagation();
+              onItemToggle?.(item);
+            }}
+          >
+            <ChevronIcon
+              className={classNames(
+                "w-4 h-4 text-slate-500 mr-1.5 flex-shrink-0 group-hover:text-slate-600",
+                {
+                  "text-slate-600": selectedItem === item.id,
+                },
+              )}
+              aria-hidden="true"
+            />
+          </button>
+        )}
+        {hideChevron && <div className="pl-2" />}
         <button
           type={"button"}
-          className={classNames("pl-2 py-0.5 flex items-center", {
-            invisible: !hasChildren,
-          })}
-          style={{ marginLeft: `${8 * indentationLevel}px` }}
-          onClick={(event) => {
-            event.stopPropagation();
-            onItemToggle?.(item);
-          }}
-        >
-          <ChevronIcon
-            className={classNames(
-              "w-4 h-4 text-slate-500 mr-1.5 flex-shrink-0 group-hover:text-slate-600",
-              {
-                "text-slate-600": selectedItem === item.id,
-              },
-            )}
-            aria-hidden="true"
-          />
-        </button>
-        <button
-          type={"button"}
-          className="py-0.5 flex items-center truncate"
+          className="grow py-0.5 flex items-center truncate"
           onClick={(event) => {
             event.stopPropagation();
             onItemClick?.(item);
@@ -231,17 +255,25 @@ function MenuItem({
           }}
         >
           {item.icon && <div className="mr-1.5 flex-shrink-0">{item.icon}</div>}
-          <span
-            title={item.label}
-            className={classNames(
-              "truncate text-slate-800 group-hover:text-slate-900",
-              {
-                "text-slate-900": selectedItem === item.id,
-              },
-            )}
-          >
-            {item.label}
-          </span>
+
+          {typeof item.label === "function" && item.label(item)}
+          {typeof item.label === "string" && (
+            <span
+              title={item.label}
+              className={classNames(
+                "truncate text-slate-800 group-hover:text-slate-900",
+                {
+                  "text-slate-900": selectedItem === item.id,
+                },
+              )}
+            >
+              {item.label}
+            </span>
+          )}
+          <div className="grow" />
+          {item.secondaryLabel && typeof item.secondaryLabel === "function"
+            ? item.secondaryLabel(item)
+            : item.secondaryLabel}
         </button>
       </div>
       {open && (

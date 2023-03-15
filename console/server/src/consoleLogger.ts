@@ -7,13 +7,14 @@ export type LogLevel = "verbose" | "info" | "warn" | "error";
 export type LogSource = "compiler" | "console" | "simulator" | "user";
 
 export interface TracingContext {
-  sourceType: string;
-  sourcePath: string;
+  sourceType?: string;
+  sourcePath?: string;
+  label?: string;
 }
 
 export interface LogEntry {
   id: string;
-  timestamp: number;
+  timestamp?: number;
   level: LogLevel;
   message: string;
   source: LogSource;

@@ -27,3 +27,18 @@ topic.on_message(inflight (message: str): str => {
   print("Topic subscriber #2: ${message}");
   return message;
 });
+
+new cloud.Function(inflight (message: str) => {
+  let value = counter.inc();
+  print("Counter is now ${counter.inc(0)}");
+  assert(value == 1);
+}) as "test: Increment counter";
+
+new cloud.Function(inflight (message: str) => {
+ queue.push("hey");
+}) as "test: Push message to the queue";
+
+new cloud.Function(inflight (message: str) => {
+  print("Hello World!");
+  assert(true);
+}) as "test: Print";

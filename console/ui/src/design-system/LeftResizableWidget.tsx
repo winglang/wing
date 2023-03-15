@@ -14,12 +14,6 @@ export function LeftResizableWidget(props: LeftResizableWidgetProps) {
   const resizeTarget = createRef<HTMLDivElement>();
   const [isResizing, setResizing] = useState(false);
 
-  useEffect(() => {
-    if (resizeTarget.current) {
-      resizeTarget.current.style.width = `${resizeTarget.current.clientWidth}px`;
-    }
-  }, [resizeTarget]);
-
   return (
     <div className={classNames("relative", className)} ref={resizeTarget}>
       <DraggableCore

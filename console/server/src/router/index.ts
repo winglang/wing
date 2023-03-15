@@ -5,6 +5,7 @@ import { createBucketRouter } from "./bucket.js";
 import { createCounterRouter } from "./counter.js";
 import { createFunctionRouter } from "./function.js";
 import { createQueueRouter } from "./queue.js";
+import { createTestRouter } from "./test.js";
 import { createTopicRouter } from "./topic.js";
 
 export const mergeAllRouters = () => {
@@ -16,6 +17,7 @@ export const mergeAllRouters = () => {
     createQueueRouter(),
     createFunctionRouter(),
     createCounterRouter(),
+    createTestRouter(),
     createTopicRouter(),
   );
 

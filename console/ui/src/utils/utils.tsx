@@ -45,7 +45,6 @@ export const SchemaToTreeMenuItems = (
       id: node.path ?? "",
       label: node.path?.split("/").pop() ?? "",
       children: [],
-      parentId: parent?.id,
       icon: (
         <ResourceIcon
           resourceType={node.type}

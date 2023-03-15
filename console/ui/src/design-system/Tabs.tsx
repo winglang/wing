@@ -1,71 +1,73 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
+import { ReactNode, useState } from "react";
 
 import { ScrollableArea } from "./ScrollableArea.js";
 
 export interface Tab {
   id: string;
   name: string;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
+  panel?: ReactNode | (() => ReactNode);
 }
 
 export interface TabsProps {
   tabs: Tab[];
   currentTabId?: string;
-  onTabClicked?: (tab: Tab) => void;
-  onTabClosed?: (tab: Tab) => void;
+  renderActiveTabPanelOnly?: boolean;
 }
 
 export const Tabs = (props: TabsProps) => {
-  const { tabs, currentTabId, onTabClicked, onTabClosed } = props;
-  if (tabs.length === 0) {
-    return <></>;
-  }
+  const [currentTabId, setCurrentTabId] = useState(props.currentTabId);
 
   return (
-    <div className="flex-1 relative w-full text-sm h-8 bg-slate-100 select-none">
-      <ScrollableArea
-        overflowX
-        overflowY
-        scrollbarSize="xs"
-        className="flex gap-px"
-      >
-        {tabs.map((tab) => {
-          const isCurrent = tab.id === currentTabId;
-          return (
-            // TODO: Fix a11y
-            // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-            <div
-              key={tab.id}
-              className={classNames(
-                "relative flex items-center px-4 cursor-pointer group",
-                isCurrent ? "bg-white" : "bg-slate-200",
-              )}
-              onClick={() => onTabClicked?.(tab)}
-            >
-              {tab.icon && <div className="mr-1.5">{tab.icon}</div>}
-              <div className="whitespace-nowrap">{tab.name}</div>
-              <button
-                type="button"
+    <div className="h-full flex flex-col">
+      <div className="relative w-full text-sm h-8 bg-slate-100 select-none">
+        <ScrollableArea
+          overflowX
+          overflowY
+          scrollbarSize="xs"
+          className="flex gap-px bg-slate-200"
+        >
+          {props.tabs.map((tab) => {
+            const isCurrent = tab.id === currentTabId;
+            return (
+              // TODO: Fix a11y
+              // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+              <div
+                key={tab.id}
                 className={classNames(
-                  "ml-1 -mr-1.5 p-1 rounded",
-                  isCurrent ? "hover:bg-slate-200" : "hover:bg-slate-300",
-                  { "invisible group-hover:visible": !isCurrent },
+                  "relative flex items-center px-4 cursor-pointer group",
+                  isCurrent ? "bg-slate-50" : "bg-slate-200 hover:bg-slate-100",
                 )}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onTabClosed?.(tab);
-                }}
+                onClick={() => setCurrentTabId(tab.id)}
               >
-                <XMarkIcon
-                  className="w-4 h-4 text-slate-600"
-                  aria-hidden="true"
-                />
-              </button>
-            </div>
-          );
-        })}
-      </ScrollableArea>
+                {tab.icon && <div className="mr-1.5">{tab.icon}</div>}
+                <div className="whitespace-nowrap">{tab.name}</div>
+              </div>
+            );
+          })}
+        </ScrollableArea>
+      </div>
+
+      {props.tabs.map((tab) => {
+        const isCurrent = tab.id === currentTabId;
+        if (props.renderActiveTabPanelOnly && !isCurrent) {
+          return;
+        }
+
+        return (
+          <div
+            key={tab.id}
+            className={classNames("flex flex-col", {
+              "invisible overflow-hidden h-0": !isCurrent,
+              grow: isCurrent,
+            })}
+          >
+            {typeof tab.panel === "function" ? tab.panel() : tab.panel}
+          </div>
+        );
+      })}
     </div>
   );
 };

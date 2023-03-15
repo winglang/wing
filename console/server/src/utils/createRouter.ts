@@ -5,7 +5,6 @@ import { LogEntry } from "../consoleLogger.js";
 import { Simulator } from "../wingsdk.js";
 
 import { CloudAppStateService } from "./cloudAppState.js";
-import { ConstructTree } from "./createSimulator.js";
 
 export type QueryNames = {
   query:

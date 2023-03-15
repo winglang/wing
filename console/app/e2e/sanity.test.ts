@@ -61,7 +61,7 @@ test("no loader", async () => {
   await expect(loader).toBeHidden({ timeout: 10_000 });
 });
 
-test("tree menu", async () => {
+test("explorer tree menu", async () => {
   // Get the first window that the app opens, wait if necessary.
   const window = await electronApp.firstWindow();
   window.on("console", console.log);
@@ -69,10 +69,13 @@ test("tree menu", async () => {
 
   await pause(3000);
 
-  const treeMenu = await window.getByTestId("tree-menu");
-  expect(await treeMenu.screenshot()).toMatchSnapshot("tree-menu.png", {
-    maxDiffPixelRatio: 0.3,
-  });
+  const treeMenu = await window.getByTestId("explorer-tree-menu");
+  expect(await treeMenu.screenshot()).toMatchSnapshot(
+    "explorer-tree-menu.png",
+    {
+      maxDiffPixelRatio: 0.3,
+    },
+  );
 });
 
 test("map view", async () => {

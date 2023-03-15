@@ -9,6 +9,7 @@ import {
   NodeDisplay,
   buildConstructTreeNodeMap,
   NodeConnection,
+  ConstructTreeNodeMap,
 } from "../utils/constructTreeNodeMap.js";
 import {
   QueryNames,
@@ -17,6 +18,8 @@ import {
 } from "../utils/createRouter.js";
 import { ConstructTreeNode } from "../utils/createSimulator.js";
 import { BaseResourceSchema, Simulator } from "../wingsdk.js";
+
+const isTest = /(\/test$|\/test:([^/\\])+$)/;
 
 export interface ExplorerItem {
   id: string;
@@ -52,6 +55,7 @@ export const createAppRouter = () => {
           .filter(
             (entry) =>
               input.filters.level[entry.level] &&
+              entry.timestamp &&
               entry.timestamp >= input.filters.timestamp &&
               (!input.filters.text ||
                 `${entry.message}${entry.ctx?.sourcePath}`
@@ -82,7 +86,7 @@ export const createAppRouter = () => {
         const children = nodeMap.getAll(node?.children ?? []);
         return children
           .filter((node) => {
-            return !node.display?.hidden;
+            return !node.display?.hidden && !isTest.test(node.path);
           })
           .map((node) => ({
             node: {
@@ -98,7 +102,7 @@ export const createAppRouter = () => {
                     return;
                   }
                   const node = nodeMap.get(resource)!;
-                  return !node.display?.hidden;
+                  return !node.display?.hidden && !isTest.test(node.path);
                 })
                 .map((connection) => {
                   const node = nodeMap.get(connection.resource)!;
@@ -118,7 +122,7 @@ export const createAppRouter = () => {
                     return;
                   }
                   const node = nodeMap.get(resource)!;
-                  return !node.display?.hidden;
+                  return !node.display?.hidden && !isTest.test(node.path);
                 })
                 .map((connection) => {
                   const node = nodeMap.get(connection.resource)!;
@@ -215,6 +219,7 @@ export const createAppRouter = () => {
           });
         }
 
+        // TODO - remove once SDK will solve duplicate connections
         // Since connections may be duplicated, we need to filter them out. While deduplicating,
         // we keep only one connection per resource and direction (because the SDK currently has
         // no way to distinguish between multiple connections to the same resource).
@@ -226,7 +231,7 @@ export const createAppRouter = () => {
           },
         ).filter((connection) => {
           const node = nodeMap.get(connection.resource);
-          return !node?.display?.hidden;
+          return !node?.display?.hidden && !isTest.test(node?.path ?? "");
         });
 
         const config = getResourceConfig(path, simulator);
@@ -275,9 +280,10 @@ export const createAppRouter = () => {
     "app.map": createProcedure.query(async ({ ctx }) => {
       const simulator = await ctx.simulator();
       const { tree } = simulator.tree().rawData();
+      const nodeMap = buildConstructTreeNodeMap(tree);
       const nodes = [createMapNodeFromConstructTreeNode(tree, simulator)];
       const edges = uniqby(
-        createMapEdgeFromConstructTreeNode(tree),
+        createMapEdgeFromConstructTreeNode(tree, nodeMap),
         (edge) => edge.id,
       );
 
@@ -316,7 +322,7 @@ function createExplorerItemFromConstructTreeNode(
     childItems: node.children
       ? Object.values(node.children)
           .filter((node) => {
-            return !node.display?.hidden;
+            return !node.display?.hidden && !isTest.test(node.path);
           })
           .map((node) =>
             createExplorerItemFromConstructTreeNode(node, simulator),
@@ -349,7 +355,7 @@ function createMapNodeFromConstructTreeNode(
     children: node.children
       ? Object.values(node.children)
           .filter((node) => {
-            return !node.display?.hidden;
+            return !node.display?.hidden && !isTest.test(node.path);
           })
           .map((node) => createMapNodeFromConstructTreeNode(node, simulator))
       : undefined,
@@ -364,15 +370,18 @@ interface MapEdge {
 
 function createMapEdgeFromConstructTreeNode(
   node: ConstructTreeNode,
+  nodeMap: ConstructTreeNodeMap,
 ): MapEdge[] {
-  if (node.display?.hidden) {
+  if (node.display?.hidden || isTest.test(node.path)) {
     return [];
   }
 
   return [
     ...(node.attributes?.["wing:resource:connections"]
-      ?.filter(({ direction }: NodeConnection) => {
-        if (direction === "inbound") {
+      ?.filter(({ direction, resource }: NodeConnection) => {
+        const node = nodeMap.get(resource)!;
+        const shouldRemove = node.display?.hidden || isTest.test(node.path);
+        if (direction === "inbound" && !shouldRemove) {
           return true;
         }
       })
@@ -384,7 +393,7 @@ function createMapEdgeFromConstructTreeNode(
         };
       }) ?? []),
     ...(Object.values(node.children ?? {})?.map((child) =>
-      createMapEdgeFromConstructTreeNode(child),
+      createMapEdgeFromConstructTreeNode(child, nodeMap),
     ) ?? []),
   ].flat();
 }

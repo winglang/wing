@@ -1,3 +1,4 @@
+import { BeakerIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
 import { LogEntry, LogLevel, ExplorerItem, State } from "@wingconsole/server";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -6,6 +7,7 @@ import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
 import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
 import { SpinnerLoader } from "../design-system/SpinnerLoader.js";
+import { Tabs } from "../design-system/Tabs.js";
 import { TopResizableWidget } from "../design-system/TopResizableWidget.js";
 import { TreeMenu, TreeMenuItem } from "../design-system/TreeMenu.js";
 import { trpc } from "../utils/trpc.js";
@@ -18,6 +20,7 @@ import { ElkMap } from "./elk-map/ElkMap.js";
 import { ContainerNode } from "./ElkMapNodes.js";
 import { MetadataPanel } from "./MetadataPanel.js";
 import { StatusBar } from "./StatusBar.js";
+import { TestsTab } from "./TestsTab.js";
 
 export interface VscodeLayoutProps {
   cloudAppState: State;
@@ -166,6 +169,7 @@ export const VscodeLayout = ({
             onExpandAll={() => expandAll()}
             onCollapseAll={() => collapseAll()}
             disabled={isLoading}
+            dataTestId={"explorer-tree-menu"}
           />
         </RightResizableWidget>
 
@@ -232,27 +236,51 @@ export const VscodeLayout = ({
         </div>
       </div>
       {cloudAppState !== "error" && (
-        <TopResizableWidget className="border-t border-slate-300 bg-slate-50 min-h-[5rem] h-[12rem] pt-1.5">
-          <div className="relative h-full flex flex-col gap-2">
-            {isLoading && (
-              <div className="absolute bg-white bg-opacity-70 h-full w-full z-50" />
-            )}
-            <ConsoleFilters
-              selectedLogTypeFilters={selectedLogTypeFilters}
-              setSelectedLogTypeFilters={setSelectedLogTypeFilters}
-              clearLogs={clearLogs}
-              isLoading={isLoading}
-              onSearch={setSearchText}
-            />
-            <div className="relative h-full">
-              <ScrollableArea ref={logsRef} overflowY className="pb-1.5">
-                <ConsoleLogs
-                  logs={logs.data ?? []}
-                  onResourceClick={onResourceClick}
-                />
-              </ScrollableArea>
-            </div>
-          </div>
+        <TopResizableWidget className="border-t border-slate-300 bg-slate-50 min-h-[5rem] h-[18rem]">
+          <Tabs
+            tabs={[
+              {
+                id: "logs",
+                name: "Logs",
+                icon: (
+                  <DocumentTextIcon className="w-4 h-4 text-slate-600 -ml-0.5" />
+                ),
+                panel: (
+                  <div className="relative h-full flex flex-col gap-2">
+                    {isLoading && (
+                      <div className="absolute bg-white bg-opacity-70 h-full w-full z-50" />
+                    )}
+                    <ConsoleFilters
+                      selectedLogTypeFilters={selectedLogTypeFilters}
+                      setSelectedLogTypeFilters={setSelectedLogTypeFilters}
+                      clearLogs={clearLogs}
+                      isLoading={isLoading}
+                      onSearch={setSearchText}
+                    />
+                    <div className="relative h-full">
+                      <ScrollableArea
+                        ref={logsRef}
+                        overflowY
+                        className="pb-1.5"
+                      >
+                        <ConsoleLogs
+                          logs={logs.data ?? []}
+                          onResourceClick={onResourceClick}
+                        />
+                      </ScrollableArea>
+                    </div>
+                  </div>
+                ),
+              },
+              {
+                id: "tests",
+                name: "Tests",
+                icon: <BeakerIcon className="w-4 h-4 text-slate-600 -ml-0.5" />,
+                panel: <TestsTab />,
+              },
+            ]}
+            currentTabId="logs"
+          />
         </TopResizableWidget>
       )}
 
