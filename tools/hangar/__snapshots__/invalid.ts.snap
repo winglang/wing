@@ -177,6 +177,14 @@ Error at ../../../examples/tests/invalid/sorted_errors_no_span.w:6:14 | Expected
 Error at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:17 | Expected b (at ../../../examples/tests/invalid/sorted_errors_no_span.w:7:17) to be a type but it's a variable"
 `;
 
+exports[`statement_invalid_scope.w > stderr 1`] = `
+"Compilation failed with 4 error(s)
+Error at ../../../examples/tests/invalid/statement_invalid_scope.w:3:5 | Expected break statement to be inside of a loop (while/for)
+Error at ../../../examples/tests/invalid/statement_invalid_scope.w:7:5 | Expected break statement to be inside of a loop (while/for)
+Error at ../../../examples/tests/invalid/statement_invalid_scope.w:11:5 | Expected continue statement to be inside of a loop (while/for)
+Error at ../../../examples/tests/invalid/statement_invalid_scope.w:15:5 | Expected continue statement to be inside of a loop (while/for)"
+`;
+
 exports[`statements_if.w > stderr 1`] = `
 "Compilation failed with 3 error(s)
 Error at ../../../examples/tests/invalid/statements_if.w:2:1 | Unexpected unary operator \\"--\\"
