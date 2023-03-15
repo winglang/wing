@@ -93,9 +93,9 @@ let import_contacts = new TaskManager(inflight () => {
 
 new cloud.Function(inflight () => {
   let key = import_contacts.start("hello");
-  std.sleep(1s);
+  Utils.sleep(1s);
   assert(import_contacts.check(key) == "pending");
-  std.sleep(5s);
+  Utils.sleep(5s);
   assert(import_contacts.check(key) == "done");
   assert(import_contacts.get_result(key) == "hello");
 }) as "test:import_contacts_work"
