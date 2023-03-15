@@ -5,6 +5,7 @@ export const repoRoot = path.resolve(__dirname, "../../..");
 export const testDir = path.join(repoRoot, "examples/tests");
 export const validTestDir = path.join(testDir, "valid");
 export const invalidTestDir = path.join(testDir, "invalid");
+export const errorTestDir = path.join(testDir, "error");
 export const hangarDir = path.join(repoRoot, "tools/hangar");
 export const tmpDir = path.join(hangarDir, "tmp");
 export const npmCacheDir = path.join(tmpDir, ".npm");
@@ -24,6 +25,10 @@ export const validWingFiles = fs
   .filter((f) => !f.endsWith("skip.w"));
 export const invalidWingFiles = fs
   .readdirSync(invalidTestDir)
+  .filter((f) => f.endsWith(".w"))
+  .filter((f) => !f.endsWith("skip.w"));
+export const errorWingFiles = fs
+  .readdirSync(errorTestDir)
   .filter((f) => f.endsWith(".w"))
   .filter((f) => !f.endsWith("skip.w"));
 

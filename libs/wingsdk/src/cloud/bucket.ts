@@ -114,6 +114,13 @@ export interface IBucketClient {
   list(prefix?: string): Promise<string[]>;
 
   /**
+   * Returns a url to the given file.
+   * @Throws if the file is not public or if object does not exist.
+   * @inflight
+   */
+  publicUrl(key: string): Promise<string>;
+
+  /**
    * Delete an existing object using a key from the bucket
    * @param key Key of the object.
    * @param opts Options available for delete an item from a bucket.
@@ -136,7 +143,9 @@ export enum BucketInflightMethods {
   /** `Bucket.delete` */
   DELETE = "delete",
   /** `Bucket.putJson */
-  PUT_JSON = "putJson",
+  PUT_JSON = "put_json",
   /** `Bucket.getJson */
-  GET_JSON = "getJson",
+  GET_JSON = "get_json",
+  /** `Bucket.publicUrl */
+  PUBLIC_URL = "public_url",
 }

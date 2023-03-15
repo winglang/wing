@@ -262,6 +262,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_51ee81c0": "\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.bucket}",
+            "BUCKET_NAME_51ee81c0_IS_PUBLIC": "false",
             "QUEUE_URL_409f9855": "\${aws_sqs_queue.root_MyResource_q2_A7C72267.url}",
             "QUEUE_URL_5a2f5a6e": "\${aws_sqs_queue.root_MyResource_q1_3171D68C.url}",
             "WING_FUNCTION_NAME": "test-capture_array-c84da7f0",
@@ -286,6 +287,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_51ee81c0": "\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.bucket}",
+            "BUCKET_NAME_51ee81c0_IS_PUBLIC": "false",
             "QUEUE_URL_409f9855": "\${aws_sqs_queue.root_MyResource_q2_A7C72267.url}",
             "QUEUE_URL_5a2f5a6e": "\${aws_sqs_queue.root_MyResource_q1_3171D68C.url}",
             "WING_FUNCTION_NAME": "test-capture_array_of_queues-c8f52b65",
@@ -310,6 +312,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_51ee81c0": "\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.bucket}",
+            "BUCKET_NAME_51ee81c0_IS_PUBLIC": "false",
             "QUEUE_URL_409f9855": "\${aws_sqs_queue.root_MyResource_q2_A7C72267.url}",
             "QUEUE_URL_5a2f5a6e": "\${aws_sqs_queue.root_MyResource_q1_3171D68C.url}",
             "WING_FUNCTION_NAME": "test-capture_map-c8002cff",
@@ -334,6 +337,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_51ee81c0": "\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.bucket}",
+            "BUCKET_NAME_51ee81c0_IS_PUBLIC": "false",
             "QUEUE_URL_409f9855": "\${aws_sqs_queue.root_MyResource_q2_A7C72267.url}",
             "QUEUE_URL_5a2f5a6e": "\${aws_sqs_queue.root_MyResource_q1_3171D68C.url}",
             "WING_FUNCTION_NAME": "test-capture_primitives-c8a111ce",
@@ -358,6 +362,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_51ee81c0": "\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.bucket}",
+            "BUCKET_NAME_51ee81c0_IS_PUBLIC": "false",
             "QUEUE_URL_409f9855": "\${aws_sqs_queue.root_MyResource_q2_A7C72267.url}",
             "QUEUE_URL_5a2f5a6e": "\${aws_sqs_queue.root_MyResource_q1_3171D68C.url}",
             "WING_FUNCTION_NAME": "test-capture_resource-c829c6e3",
@@ -382,6 +387,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_51ee81c0": "\${aws_s3_bucket.root_MyResource_cloudBucket_AF30D75E.bucket}",
+            "BUCKET_NAME_51ee81c0_IS_PUBLIC": "false",
             "QUEUE_URL_409f9855": "\${aws_sqs_queue.root_MyResource_q2_A7C72267.url}",
             "QUEUE_URL_5a2f5a6e": "\${aws_sqs_queue.root_MyResource_q1_3171D68C.url}",
             "WING_FUNCTION_NAME": "test-capture_set-c849421f",

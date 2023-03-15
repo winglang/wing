@@ -91,6 +91,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "test-get-c8e58069",
           },
         },
@@ -113,6 +114,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "test-put-c899ce9b",
           },
         },
@@ -238,7 +240,7 @@ constructor() {
     bindings: {
       b: {
         obj: b,
-        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"public_url\\",\\"put\\",\\"put_json\\"]
       },
     }
   }));
@@ -247,7 +249,7 @@ constructor() {
     bindings: {
       b: {
         obj: b,
-        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"public_url\\",\\"put\\",\\"put_json\\"]
       },
     }
   }));

@@ -75,6 +75,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_7f08500e": "\${aws_s3_bucket.root_Test_cloudBucket_8208F150.bucket}",
+            "BUCKET_NAME_7f08500e_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "test-c8b6eece",
           },
         },
