@@ -1,5 +1,5 @@
 use colored::Colorize;
-use std::fmt::Display;
+use std::{fmt::Display, fs};
 use tree_sitter::Point;
 
 use lsp_types::{Position, Range};
@@ -112,6 +112,22 @@ impl WingSpan {
 		} else {
 			false
 		}
+	}
+
+	/// Returns the source code text of the span (reads the file from disk and extracts the text)
+	/// (currently only handles single line spans)
+	pub fn code(&self) -> String {
+		let Ok(contents) = fs::read_to_string(&self.file_id) else {
+			return format!("<cannot read {}", self.file_id); 
+		};
+
+		// TODO: handle multi-line spans
+		assert!(self.start.line == self.end.line);
+
+		let lines: Vec<&str> = contents.split("\n").collect();
+		let line = lines[self.start.line as usize];
+		let out = &line[self.start.col as usize..self.end.col as usize];
+		out.to_string()
 	}
 }
 
