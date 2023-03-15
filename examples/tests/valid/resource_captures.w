@@ -141,19 +141,3 @@ new cloud.Function(inflight () => {
   r.test_user_defined_resource();
   r.test_inflight_field();
 }) as "test";
-
-// let r = new MyResource();
-// new cloud.Function(inflight () => { r.capture_resource(); }) as "test:capture_resource";
-// new cloud.Function(inflight () => { r.capture_primitives(); }) as "test:capture_primitives";
-// new cloud.Function(inflight () => { r.capture_array(); }) as "test:capture_array";
-// new cloud.Function(inflight () => { r.capture_map(); }) as "test:capture_map";
-// new cloud.Function(inflight () => { r.capture_set(); }) as "test:capture_set";
-// new cloud.Function(inflight () => { r.capture_array_of_queues(); }) as "test:capture_array_of_queues";
-// new cloud.Function(inflight () => {
-//   r.test_no_capture();
-//   r.test_direct_resource();
-//   r.test_direct_primitive();
-//   r.test_nested_field();
-//   r.test_nested_resource();
-//   r.test_expression_recursive();
-// }) as "test:more";
