@@ -1,0 +1,21 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`bool_from_json.w > stderr 1`] = `
+"preflight error: unable to parse number 123 as a boolean
+no .wsim file found in output directory"
+`;
+
+exports[`number_from_json.w > stderr 1`] = `
+"preflight error: unable to parse string apples as a number
+no .wsim file found in output directory"
+`;
+
+exports[`string_from_json.w > stderr 1`] = `
+"preflight error: unable to parse number 123 as a string
+no .wsim file found in output directory"
+`;
+
+exports[`utilities.w > stderr 1`] = `
+"preflight error: assertion failed: 'false'
+no .wsim file found in output directory"
+`;
