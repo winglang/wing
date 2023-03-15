@@ -114,9 +114,9 @@ impl WingSpan {
 		}
 	}
 
-	/// Returns the source code text of the span (reads the file from disk and extracts the text)
-	/// (currently only handles single line spans)
-	pub fn code(&self) -> String {
+	/// Reads the the source code text of the span from disk and returns it. This is intended
+	/// primarily for debugging purposes. It currently only handles single line spans.
+	pub(crate) fn read_code(&self) -> String {
 		let Ok(contents) = fs::read_to_string(&self.file_id) else {
 			return format!("<cannot read {}>", self.file_id); 
 		};
@@ -287,5 +287,5 @@ fn wingspan_code() {
 		file_id: filename.to_str().unwrap().to_string(),
 	};
 
-	assert_eq!(span.code(), "x = 1".to_string());
+	assert_eq!(span.read_code(), "x = 1".to_string());
 }
