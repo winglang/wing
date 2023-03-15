@@ -17,6 +17,7 @@ export class BucketClient implements IBucketClient {
     isPublic: boolean = false,
     blobServiceClient?: BlobServiceClient
   ) {
+    this._public = isPublic;
     this.bucketName = bucketName;
     this._public = isPublic;
     this.blobServiceClient =
@@ -108,6 +109,7 @@ export class BucketClient implements IBucketClient {
    * @Throws if the file is not public or if object does not exist.
    */
   public async publicUrl(key: string): Promise<string> {
+    this._public; // a little help for implementing public_url later on
     throw new Error(`publicUrl is not supported yet. (key=${key})`);
   }
   /**

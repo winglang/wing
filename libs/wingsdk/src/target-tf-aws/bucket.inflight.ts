@@ -57,7 +57,7 @@ export class BucketClient implements IBucketClient {
       MaxKeys: 1,
     });
     const resp: ListObjectsCommandOutput = await this.s3Client.send(command);
-    return !!(resp.Contents && resp.Contents.length > 0);
+    return !!resp.Contents && resp.Contents.length > 0;
   }
 
   private async getLocation(): Promise<string> {
@@ -92,6 +92,12 @@ export class BucketClient implements IBucketClient {
     );
   }
 
+  /**
+   * Returns a signed url to the given file. This URL can be used by anyone to
+   * access the file until the link expires (defaults to 24 hours).
+   * @param key The key to reach
+   * @param duration Time until expires
+   */
   public async signed_url(key: string, duration?: Duration): Promise<string> {
     // for signed_url take a look here: https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/s3-example-creating-buckets.html#s3-create-presigendurl-get
     throw new Error(
