@@ -116,6 +116,7 @@ export class Bucket extends cloud.Bucket {
 
     host.addEnvironment(this.envName(), this.storageContainer.name);
     host.addEnvironment(this.envStorageAccountName(), this.storageAccount.name);
+    host.addEnvironment(this.isPublicEnvName(), `${this.public}`);
     super._bind(host, ops);
   }
 
@@ -124,7 +125,11 @@ export class Bucket extends cloud.Bucket {
     return core.InflightClient.for(__dirname, __filename, "BucketClient", [
       `process.env["${this.envName()}"]`,
       `process.env["${this.envStorageAccountName()}"]`,
+      `process.env["${this.isPublicEnvName()}"]`,
     ]);
+  }
+  private isPublicEnvName(): string {
+    return `${this.envName()}_IS_PUBLIC`;
   }
 
   private envName(): string {
@@ -142,3 +147,4 @@ Bucket._annotateInflight("delete", {});
 Bucket._annotateInflight("list", {});
 Bucket._annotateInflight("put_json", {});
 Bucket._annotateInflight("get_json", {});
+Bucket._annotateInflight("public_url", {});

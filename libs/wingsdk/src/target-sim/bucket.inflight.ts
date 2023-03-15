@@ -13,12 +13,14 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private readonly fileDir: string;
   private readonly context: ISimulatorContext;
   private readonly initialObjects: Record<string, string>;
+  private readonly _public: boolean;
 
   public constructor(props: BucketSchema["props"], context: ISimulatorContext) {
     this.objectKeys = new Set();
     this.fileDir = fs.mkdtempSync(join(os.tmpdir(), "wing-sim-"));
     this.context = context;
     this.initialObjects = props.initialObjects ?? {};
+    this._public = props.public ?? false;
   }
 
   public async init(): Promise<void> {
@@ -87,6 +89,26 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
             return true;
           }
         });
+      },
+    });
+  }
+
+  public async publicUrl(key: string): Promise<string> {
+    if (!this._public) {
+      throw new Error("Cannot provide public url for a non-public bucket");
+    }
+    return this.context.withTrace({
+      message: `Public URL (key=${key}).`,
+      activity: async () => {
+        const filePath = join(this.fileDir, key);
+
+        if (!this.objectKeys.has(key)) {
+          throw new Error(
+            `Cannot provide public url for an non-existent key (key=${key})`
+          );
+        }
+
+        return filePath;
       },
     });
   }

@@ -3483,6 +3483,7 @@ Inflight interface for `Bucket`.
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.getJson">get_json</a></code> | Retrieve a Json object from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">public_url</a></code> | Returns a url to the given file. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">put_json</a></code> | Put a Json object in the bucket. |
 
@@ -3565,6 +3566,22 @@ Retrieve existing objects keys from the bucket.
 - *Type:* str
 
 Limits the response to keys that begin with the specified prefix.
+
+---
+
+##### `public_url` <a name="public_url" id="@winglang/sdk.cloud.IBucketClient.publicUrl"></a>
+
+```wing
+public_url(key: str): str
+```
+
+**Inflight client:** [true](#true)
+
+Returns a url to the given file.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.publicUrl.parameter.key"></a>
+
+- *Type:* str
 
 ---
 
