@@ -1977,7 +1977,7 @@ impl<'a> TypeChecker<'a> {
 					fqn: None,
 					env: dummy_env,
 					parent: parent_class,
-					implements: impl_interfaces,
+					implements: impl_interfaces.clone(),
 					is_abstract: false,
 					type_parameters: None, // TODO no way to have generic args in wing yet
 				};
@@ -2148,13 +2148,11 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Check that the class satisfies all of its interfaces
-				for interface in implements.iter() {
-					let interface_type =
-						resolve_user_defined_type(interface, env, stmt.idx).unwrap_or_else(|e| self.type_error(e));
+				for interface_type in impl_interfaces.iter() {
 					let interface_type = match interface_type.as_interface() {
 						Some(t) => t,
 						None => {
-							// No need to type error here, the resolve_user_defined_type call above will have already done so
+							// No need to error here, it will be caught when `impl_interaces` was created
 							continue;
 						}
 					};
@@ -2168,7 +2166,7 @@ impl<'a> TypeChecker<'a> {
 							self.type_error(TypeError {
 								message: format!(
 									"Resource \"{}\" does not implement method \"{}\" of interface \"{}\"",
-									name.name, method_name, interface
+									name.name, method_name, interface_type.name
 								),
 								span: name.span.clone(),
 							});
@@ -2184,7 +2182,7 @@ impl<'a> TypeChecker<'a> {
 							self.type_error(TypeError {
 								message: format!(
 									"Resource \"{}\" does not implement field \"{}\" of interface \"{}\"",
-									name.name, field_name, interface
+									name.name, field_name, interface_type.name
 								),
 								span: name.span.clone(),
 							});
