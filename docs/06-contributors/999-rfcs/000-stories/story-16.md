@@ -63,7 +63,7 @@ interface    {
   inflight find(predicate: inflight (Task): bool): Array<Task>;
 }
 
-resource TaskList implementes ITaskList {
+resource TaskList impl ITaskList {
   _redis: redis.Redis;
   // we are missing inflight init, so I need to create a lazy get_redis_client method  
   // that creates the _redis_client when it is first called
