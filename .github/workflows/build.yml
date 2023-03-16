@@ -107,7 +107,7 @@ jobs:
         uses: volta-cli/action@v4.0.0
 
       - name: Install Deps
-        run: apt-get update && apt-get install -y curl ca-certificates gnupg lsb-release
+        run: apt-get update && apt-get install -y curl ca-certificates gnupg lsb-release make
 
       - name: Install Docker
         run: |
