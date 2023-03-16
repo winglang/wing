@@ -612,6 +612,41 @@ error: Expected optional type, found \\"bool\\"
 11 | if y? {
    |    ^ Expected optional type, found \\"bool\\"
 
+
+error: Left argument of ?? must be an optional type
+   --> ../../../examples/tests/invalid/optionals.w:15:9
+   |
+15 | let z = y ?? 1;
+   |         ^ Left argument of ?? must be an optional type
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+   --> ../../../examples/tests/invalid/optionals.w:18:14
+   |
+18 | let w: str = x ?? 3;
+   |              ^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/optionals.w:21:6
+   |
+21 | x ?? \\"hello\\";
+   |      ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Expected type to be \\"Sub1\\", but got \\"Sub2\\" instead
+   --> ../../../examples/tests/invalid/optionals.w:35:18
+   |
+35 | optional_sub1 ?? new Sub2();
+   |                  ^^^^^^^^^^ Expected type to be \\"Sub1\\", but got \\"Sub2\\" instead
+
+
+error: Expected type to be \\"Sub1\\", but got \\"Super\\" instead
+   --> ../../../examples/tests/invalid/optionals.w:37:18
+   |
+37 | optional_sub1 ?? new Super();
+   |                  ^^^^^^^^^^^ Expected type to be \\"Sub1\\", but got \\"Super\\" instead
+
 "
 `;
 

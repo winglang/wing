@@ -465,6 +465,7 @@ pub enum BinaryOperator {
 	NotEqual,
 	LogicalAnd,
 	LogicalOr,
+	UnwrapOr,
 }
 
 impl BinaryOperator {

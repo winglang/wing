@@ -1073,6 +1073,17 @@ impl<'a> TypeChecker<'a> {
 				} else if op.numerical_args() {
 					self.validate_type(ltype, self.types.number(), left);
 					self.validate_type(rtype, self.types.number(), right);
+				} else if matches!(op, crate::ast::BinaryOperator::UnwrapOr) {
+					// Left argument must be an optional type
+					if !ltype.is_option() {
+						self.expr_error(left, "Left argument of ?? must be an optional type".to_string());
+						return ltype;
+					} else {
+						// Right argument must be a subtype of the inner type of the left argument
+						let inner_type = ltype.maybe_unwrap_option();
+						self.validate_type(rtype, inner_type, right);
+						return inner_type;
+					}
 				} else {
 					self.validate_type(rtype, ltype, exp);
 				}
@@ -1448,7 +1459,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			ExprKind::OptionalTest { optional } => {
 				let t = self.type_check_exp(optional, env, statement_idx, context);
-				if !matches!(*t, Type::Optional(_)) {
+				if !t.is_option() {
 					self.expr_error(optional, format!("Expected optional type, found \"{}\"", t));
 				}
 				self.types.bool()
