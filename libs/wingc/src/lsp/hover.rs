@@ -276,7 +276,7 @@ fn format_symbol_with_lookup(symbol_name: &str, symbol_lookup: (&SymbolKind, Sym
 			format!("**{}**", t)
 		}
 		SymbolKind::Variable(variable_info) => {
-			let flight = match lookup_info.flight {
+			let flight = match lookup_info.phase {
 				Phase::Inflight => "inflight ",
 				Phase::Preflight => "preflight ",
 				Phase::Independent => "",

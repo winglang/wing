@@ -521,7 +521,7 @@ impl<'a> JSifier<'a> {
 					format!("Object.freeze(new Set([{}]))", item_list)
 				}
 			}
-			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
+			ExprKind::FunctionClosure(func_def) => match func_def.signature.phase {
 				Phase::Inflight => self.jsify_inflight_function(func_def, context),
 				Phase::Independent => unimplemented!(),
 				Phase::Preflight => self.jsify_function(
@@ -876,7 +876,7 @@ impl<'a> JSifier<'a> {
 		let inflight_methods = class
 			.methods
 			.iter()
-			.filter(|(_, m)| m.signature.flight == Phase::Inflight)
+			.filter(|(_, m)| m.signature.phase == Phase::Inflight)
 			.collect::<Vec<_>>();
 		self.jsify_resource_client(
 			env,
@@ -891,7 +891,7 @@ impl<'a> JSifier<'a> {
 		let preflight_methods = class
 			.methods
 			.iter()
-			.filter(|(_, m)| m.signature.flight != Phase::Inflight)
+			.filter(|(_, m)| m.signature.phase != Phase::Inflight)
 			.collect::<Vec<_>>();
 
 		let toinflight_method = self.jsify_toinflight_method(&class.name, &captured_fields);
@@ -1063,7 +1063,7 @@ impl<'a> JSifier<'a> {
 						def.is_static,
 						&JSifyContext {
 							in_json: context.in_json.clone(),
-							phase: def.signature.flight,
+							phase: def.signature.phase,
 						}
 					)
 				)
@@ -1133,7 +1133,7 @@ impl<'a> JSifier<'a> {
 		let inflight_methods = resource_class
 			.methods
 			.iter()
-			.filter(|(_, m)| m.signature.flight == Phase::Inflight);
+			.filter(|(_, m)| m.signature.phase == Phase::Inflight);
 
 		let mut result = vec![];
 
@@ -1161,7 +1161,7 @@ impl<'a> JSifier<'a> {
 			.filter(|(_, kind, _)| {
 				let var = kind.as_variable().unwrap();
 				// We capture preflight non-reassignable fields
-				var.flight != Phase::Inflight && !var.reassignable && var.type_.is_capturable()
+				var.phase != Phase::Inflight && !var.reassignable && var.type_.is_capturable()
 			})
 			.map(|(name, kind, _)| {
 				let _type = kind.as_variable().unwrap().type_;
@@ -1293,7 +1293,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 			.expect("field is not a variable");
 
 		// we only care about preflight fields (inflight fields are normal references)
-		if field_kind.flight != Phase::Preflight {
+		if field_kind.phase != Phase::Preflight {
 			return false;
 		}
 
@@ -1340,7 +1340,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 			if let Some(r) = field_kind.type_.as_resource() {
 				if r
 					.get_method(&op)
-					.filter(|v| v.flight == Phase::Inflight && !v.is_static)
+					.filter(|v| v.phase == Phase::Inflight && !v.is_static)
 					.is_none()
 				{
 					self.diagnostics.push(Diagnostic {

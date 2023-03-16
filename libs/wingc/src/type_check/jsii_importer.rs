@@ -229,7 +229,7 @@ impl<'a> JsiiImporter<'a> {
 		} else {
 			let ns = self.wing_types.add_namespace(Namespace {
 				name: type_name.assembly().to_string(),
-				env: SymbolEnv::new(None, self.wing_types.void(), false, false, self.env.flight, 0),
+				env: SymbolEnv::new(None, self.wing_types.void(), false, false, self.env.phase, 0),
 			});
 			self
 				.wing_types
@@ -242,7 +242,7 @@ impl<'a> JsiiImporter<'a> {
 				.unwrap();
 		};
 
-		let flight = self.env.flight;
+		let flight = self.env.phase;
 
 		// Next, ensure there is a namespace for each of the namespaces in the type name
 		for (ns_idx, namespace_name) in type_name.namespaces().enumerate() {
@@ -347,7 +347,7 @@ impl<'a> JsiiImporter<'a> {
 			self.wing_types.void(),
 			true,
 			false,
-			self.env.flight,
+			self.env.phase,
 			self.import_statement_idx,
 		);
 		let new_type_symbol = Self::jsii_name_to_symbol(&type_name, &jsii_interface.location_in_module);
@@ -360,7 +360,7 @@ impl<'a> JsiiImporter<'a> {
 					self.wing_types.void(),
 					true,
 					false,
-					iface_env.flight,
+					iface_env.phase,
 					self.import_statement_idx,
 				), // Dummy env, will be replaced below
 			})),
@@ -372,7 +372,7 @@ impl<'a> JsiiImporter<'a> {
 					self.wing_types.void(),
 					true,
 					false,
-					iface_env.flight,
+					iface_env.phase,
 					self.import_statement_idx,
 				), // Dummy env, will be replaced below
 			})),
@@ -380,7 +380,7 @@ impl<'a> JsiiImporter<'a> {
 
 		self.register_jsii_type(&jsii_interface_fqn, &new_type_symbol, wing_type);
 
-		self.add_members_to_class_env(jsii_interface, false, iface_env.flight, &mut iface_env, wing_type);
+		self.add_members_to_class_env(jsii_interface, false, iface_env.phase, &mut iface_env, wing_type);
 
 		// Add properties from our parents to the new structs env
 		if is_struct {
@@ -432,11 +432,11 @@ impl<'a> JsiiImporter<'a> {
 		&mut self,
 		jsii_interface: &T,
 		is_resource: bool,
-		flight: Phase,
+		phase: Phase,
 		class_env: &mut SymbolEnv,
 		wing_type: TypeRef,
 	) {
-		assert!(!is_resource || flight == Phase::Preflight);
+		assert!(!is_resource || phase == Phase::Preflight);
 
 		// Add methods to the class environment
 		if let Some(methods) = &jsii_interface.methods() {
@@ -481,7 +481,7 @@ impl<'a> JsiiImporter<'a> {
 				let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
 					parameters: arg_types,
 					return_type,
-					phase: flight,
+					phase,
 					js_override: m
 						.docs
 						.as_ref()
@@ -494,9 +494,9 @@ impl<'a> JsiiImporter<'a> {
 					.define(
 						&Self::jsii_name_to_symbol(&name, &m.location_in_module),
 						if is_static {
-							SymbolKind::make_variable(method_sig, false, flight)
+							SymbolKind::make_variable(method_sig, false, phase)
 						} else {
-							SymbolKind::make_instance_variable(method_sig, false, flight)
+							SymbolKind::make_instance_variable(method_sig, false, phase)
 						},
 						StatementIdx::Top,
 					)
@@ -510,7 +510,7 @@ impl<'a> JsiiImporter<'a> {
 		if let Some(properties) = jsii_interface.properties() {
 			for p in properties {
 				debug!("Found property {} with type {:?}", p.name.green(), p.type_);
-				if flight == Phase::Inflight {
+				if phase == Phase::Inflight {
 					todo!("No support for inflight properties yet");
 				}
 				let base_wing_type = self.type_ref_to_wing_type(&p.type_);
@@ -528,9 +528,9 @@ impl<'a> JsiiImporter<'a> {
 					.define(
 						&Self::jsii_name_to_symbol(&camel_case_to_snake_case(&p.name), &p.location_in_module),
 						if is_static {
-							SymbolKind::make_variable(wing_type, matches!(p.immutable, Some(true)), flight)
+							SymbolKind::make_variable(wing_type, matches!(p.immutable, Some(true)), phase)
 						} else {
-							SymbolKind::make_instance_variable(wing_type, matches!(p.immutable, Some(true)), flight)
+							SymbolKind::make_instance_variable(wing_type, matches!(p.immutable, Some(true)), phase)
 						},
 						StatementIdx::Top,
 					)
@@ -625,7 +625,7 @@ impl<'a> JsiiImporter<'a> {
 		};
 
 		let phase = if is_resource {
-			self.env.flight
+			self.env.phase
 		} else {
 			Phase::Independent
 		};

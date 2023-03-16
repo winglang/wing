@@ -73,7 +73,7 @@ impl Visit<'_> for CaptureVisitor {
 	// TODO: currently there's no special treatment for resources, see file's top comment
 
 	fn visit_constructor(&mut self, constructor: &Constructor) {
-		match constructor.signature.flight {
+		match constructor.signature.phase {
 			Phase::Inflight => {
 				// TODO: the result of this is not used, see file's top comment
 				scan_captures_in_inflight_scope(&constructor.statements, &mut self.diagnostics);
@@ -84,7 +84,7 @@ impl Visit<'_> for CaptureVisitor {
 	}
 
 	fn visit_function_definition(&mut self, func_def: &FunctionDefinition) {
-		match func_def.signature.flight {
+		match func_def.signature.phase {
 			Phase::Inflight => {
 				let mut func_captures = func_def.captures.borrow_mut();
 				assert!(func_captures.is_none());
@@ -164,7 +164,7 @@ fn scan_captures_in_expression(
 						let t = var.as_variable().unwrap().type_;
 
 						// if the identifier represents a preflight value, then capture it
-						if si.flight == Phase::Preflight {
+						if si.phase == Phase::Preflight {
 							if var.is_reassignable() {
 								diagnostics.push(Diagnostic {
 									level: DiagnosticLevel::Error,
@@ -307,8 +307,8 @@ fn scan_captures_in_expression(
 		}
 		ExprKind::FunctionClosure(func_def) => {
 			// Can't define preflight stuff in inflight context
-			assert!(func_def.signature.flight != Phase::Preflight);
-			if let Phase::Inflight = func_def.signature.flight {
+			assert!(func_def.signature.phase != Phase::Preflight);
+			if let Phase::Inflight = func_def.signature.phase {
 				let mut func_captures = func_def.captures.borrow_mut();
 				assert!(func_captures.is_none());
 				*func_captures = Some(collect_captures(scan_captures_in_inflight_scope(
@@ -327,7 +327,7 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 	let env = env_ref.as_ref().unwrap();
 
 	// Make sure we're looking for captures only in inflight code
-	assert!(matches!(env.flight, Phase::Inflight));
+	assert!(matches!(env.phase, Phase::Inflight));
 
 	for s in scope.statements.iter() {
 		match &s.kind {

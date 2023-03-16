@@ -73,26 +73,26 @@ pub struct VariableInfo {
 	/// Can the variable be reassigned?
 	pub reassignable: bool,
 	/// The phase in which this variable exists
-	pub flight: Phase,
+	pub phase: Phase,
 	/// Is this a static or instance variable?
 	pub is_static: bool,
 }
 
 impl SymbolKind {
-	pub fn make_variable(type_: TypeRef, reassignable: bool, flight: Phase) -> Self {
+	pub fn make_variable(type_: TypeRef, reassignable: bool, phase: Phase) -> Self {
 		SymbolKind::Variable(VariableInfo {
 			type_,
 			reassignable,
-			flight,
+			phase,
 			is_static: true,
 		})
 	}
 
-	pub fn make_instance_variable(type_: TypeRef, reassignable: bool, flight: Phase) -> Self {
+	pub fn make_instance_variable(type_: TypeRef, reassignable: bool, phase: Phase) -> Self {
 		SymbolKind::Variable(VariableInfo {
 			type_,
 			reassignable,
-			flight,
+			phase,
 			is_static: false,
 		})
 	}
@@ -353,7 +353,7 @@ impl Subtype for Type {
 				// Next, compare the function to a method on the interface named "handle" if it exists
 				if let Some(method) = r0.get_env().try_lookup("handle", None) {
 					let method = method.as_variable().unwrap();
-					if method.flight != Phase::Inflight {
+					if method.phase != Phase::Inflight {
 						return false;
 					}
 					self.is_subtype_of(&*method.type_)
@@ -982,7 +982,7 @@ impl<'a> TypeChecker<'a> {
 		VariableInfo {
 			type_: self.types.anything(),
 			reassignable: false,
-			flight: Phase::Independent,
+			phase: Phase::Independent,
 			is_static: true,
 		}
 	}
@@ -1027,7 +1027,7 @@ impl<'a> TypeChecker<'a> {
 		VariableInfo {
 			type_: self.types.anything(),
 			reassignable: false,
-			flight: Phase::Independent,
+			phase: Phase::Independent,
 			is_static: false,
 		}
 	}
@@ -1110,7 +1110,7 @@ impl<'a> TypeChecker<'a> {
 				let (class_env, class_symbol) = match &*type_ {
 					Type::Class(ref class) => (&class.env, &class.name),
 					Type::Resource(ref class) => {
-						if matches!(env.flight, Phase::Preflight) {
+						if matches!(env.phase, Phase::Preflight) {
 							(&class.env, &class.name)
 						} else {
 							return self.general_type_error(format!(
@@ -1247,10 +1247,10 @@ impl<'a> TypeChecker<'a> {
 					return self.expr_error(&*function, format!("should be a function or method"));
 				};
 
-				if !env.flight.can_call_to(&func_sig.phase) {
+				if !env.phase.can_call_to(&func_sig.phase) {
 					self.expr_error(
 						exp,
-						format!("Cannot call into {} phase while {}", func_sig.phase, env.flight),
+						format!("Cannot call into {} phase while {}", func_sig.phase, env.phase),
 					);
 				}
 
@@ -1423,7 +1423,7 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::FunctionClosure(func_def) => {
 				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 
-				if matches!(func_def.signature.flight, Phase::Inflight) {
+				if matches!(func_def.signature.phase, Phase::Inflight) {
 					self.unimplemented_type("Inflight function signature"); // TODO: what typechecking do we need here?self??
 				}
 
@@ -1441,7 +1441,7 @@ impl<'a> TypeChecker<'a> {
 					sig.return_type,
 					false,
 					false,
-					func_def.signature.flight,
+					func_def.signature.phase,
 					statement_idx,
 				);
 				self.add_arguments_to_env(&func_def.parameters, &sig, &mut function_env);
@@ -1616,7 +1616,7 @@ impl<'a> TypeChecker<'a> {
 					return_type: ast_sig.return_type.as_ref().map_or(self.types.void(), |t| {
 						self.resolve_type_annotation(t, env, statement_idx)
 					}),
-					phase: ast_sig.flight,
+					phase: ast_sig.phase,
 					js_override: None,
 				};
 				// TODO: avoid creating a new type for each function_sig resolution
@@ -1678,7 +1678,7 @@ impl<'a> TypeChecker<'a> {
 					self.validate_type(inferred_type, explicit_type, initial_value);
 					match env.define(
 						var_name,
-						SymbolKind::make_variable(explicit_type, *reassignable, env.flight),
+						SymbolKind::make_variable(explicit_type, *reassignable, env.phase),
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
@@ -1689,7 +1689,7 @@ impl<'a> TypeChecker<'a> {
 				} else {
 					match env.define(
 						var_name,
-						SymbolKind::make_variable(inferred_type, *reassignable, env.flight),
+						SymbolKind::make_variable(inferred_type, *reassignable, env.phase),
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
@@ -1724,10 +1724,10 @@ impl<'a> TypeChecker<'a> {
 					}
 				};
 
-				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.flight, stmt.idx);
+				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 				match scope_env.define(
 					&iterator,
-					SymbolKind::make_variable(iterator_type, false, env.flight),
+					SymbolKind::make_variable(iterator_type, false, env.phase),
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -1748,7 +1748,7 @@ impl<'a> TypeChecker<'a> {
 					env.return_type,
 					false,
 					false,
-					env.flight,
+					env.phase,
 					stmt.idx,
 				));
 
@@ -1769,7 +1769,7 @@ impl<'a> TypeChecker<'a> {
 					env.return_type,
 					false,
 					false,
-					env.flight,
+					env.phase,
 					stmt.idx,
 				));
 				self.inner_scopes.push(statements);
@@ -1783,7 +1783,7 @@ impl<'a> TypeChecker<'a> {
 						env.return_type,
 						false,
 						false,
-						env.flight,
+						env.phase,
 						stmt.idx,
 					));
 					self.inner_scopes.push(&elif_scope.statements);
@@ -1795,7 +1795,7 @@ impl<'a> TypeChecker<'a> {
 						env.return_type,
 						false,
 						false,
-						env.flight,
+						env.phase,
 						stmt.idx,
 					));
 					self.inner_scopes.push(else_scope);
@@ -1875,7 +1875,7 @@ impl<'a> TypeChecker<'a> {
 					env.return_type,
 					false,
 					false,
-					env.flight,
+					env.phase,
 					stmt.idx,
 				));
 				self.inner_scopes.push(scope)
@@ -1910,7 +1910,7 @@ impl<'a> TypeChecker<'a> {
 				is_resource,
 			}) => {
 				// Resources cannot be defined inflight
-				assert!(!*is_resource || env.flight == Phase::Preflight);
+				assert!(!*is_resource || env.phase == Phase::Preflight);
 
 				if *is_resource {
 					// TODO
@@ -1938,7 +1938,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-				let dummy_env = SymbolEnv::new(None, self.types.void(), true, false, env.flight, stmt.idx);
+				let dummy_env = SymbolEnv::new(None, self.types.void(), true, false, env.phase, stmt.idx);
 
 				let impl_interfaces = implements
 					.iter()
@@ -1977,7 +1977,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create a the real class environment to be filled with the class AST types
-				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), true, false, env.flight, stmt.idx);
+				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), true, false, env.phase, stmt.idx);
 
 				// Add fields to the class env
 				for field in fields.iter() {
@@ -1985,9 +1985,9 @@ impl<'a> TypeChecker<'a> {
 					match class_env.define(
 						&field.name,
 						if field.is_static {
-							SymbolKind::make_variable(field_type, field.reassignable, field.flight)
+							SymbolKind::make_variable(field_type, field.reassignable, field.phase)
 						} else {
-							SymbolKind::make_instance_variable(field_type, field.reassignable, field.flight)
+							SymbolKind::make_instance_variable(field_type, field.reassignable, field.phase)
 						},
 						StatementIdx::Top,
 					) {
@@ -2016,9 +2016,9 @@ impl<'a> TypeChecker<'a> {
 					match class_env.define(
 						method_name,
 						if method_def.is_static {
-							SymbolKind::make_variable(method_type, false, method_def.signature.flight)
+							SymbolKind::make_variable(method_type, false, method_def.signature.phase)
 						} else {
-							SymbolKind::make_instance_variable(method_type, false, method_def.signature.flight)
+							SymbolKind::make_instance_variable(method_type, false, method_def.signature.phase)
 						},
 						StatementIdx::Top,
 					) {
@@ -2040,7 +2040,7 @@ impl<'a> TypeChecker<'a> {
 						name: WING_CONSTRUCTOR_NAME.into(),
 						span: name.span.clone(),
 					},
-					SymbolKind::make_variable(constructor_type, false, constructor.signature.flight),
+					SymbolKind::make_variable(constructor_type, false, constructor.signature.phase),
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -2069,7 +2069,7 @@ impl<'a> TypeChecker<'a> {
 					constructor_sig.return_type,
 					false,
 					true,
-					constructor.signature.flight,
+					constructor.signature.phase,
 					stmt.idx,
 				);
 				self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
@@ -2080,7 +2080,7 @@ impl<'a> TypeChecker<'a> {
 							name: "this".into(),
 							span: name.span.clone(),
 						},
-						SymbolKind::make_variable(class_type, false, constructor_env.flight),
+						SymbolKind::make_variable(class_type, false, constructor_env.phase),
 						StatementIdx::Top,
 					)
 					.expect("Expected `this` to be added to constructor env");
@@ -2181,14 +2181,14 @@ impl<'a> TypeChecker<'a> {
 				//   fail type checking.
 
 				// Create an environment for the struct
-				let mut struct_env = SymbolEnv::new(None, self.types.void(), true, false, env.flight, stmt.idx);
+				let mut struct_env = SymbolEnv::new(None, self.types.void(), true, false, env.phase, stmt.idx);
 
 				// Add fields to the struct env
 				for field in members.iter() {
 					let field_type = self.resolve_type_annotation(&field.member_type, env, stmt.idx);
 					match struct_env.define(
 						&field.name,
-						SymbolKind::make_variable(field_type, false, field.flight),
+						SymbolKind::make_variable(field_type, false, field.phase),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -2256,19 +2256,19 @@ impl<'a> TypeChecker<'a> {
 				finally_statements,
 			} => {
 				// Create a new environment for the try block
-				let try_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.flight, stmt.idx);
+				let try_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 				try_statements.set_env(try_env);
 				self.inner_scopes.push(try_statements);
 
 				// Create a new environment for the catch block
 				if let Some(catch_block) = catch_block {
-					let mut catch_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.flight, stmt.idx);
+					let mut catch_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 
 					// Add the exception variable to the catch block
 					if let Some(exception_var) = &catch_block.exception_var {
 						match catch_env.define(
 							exception_var,
-							SymbolKind::make_variable(self.types.string(), false, env.flight),
+							SymbolKind::make_variable(self.types.string(), false, env.phase),
 							StatementIdx::Top,
 						) {
 							Err(type_error) => {
@@ -2283,7 +2283,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Create a new environment for the finally block
 				if let Some(finally_statements) = finally_statements {
-					let finally_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.flight, stmt.idx);
+					let finally_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 					finally_statements.set_env(finally_env);
 					self.inner_scopes.push(finally_statements);
 				}
@@ -2369,7 +2369,7 @@ impl<'a> TypeChecker<'a> {
 		for (arg, arg_type) in args.iter().zip(sig.parameters.iter()) {
 			match env.define(
 				&arg.0,
-				SymbolKind::make_variable(*arg_type, arg.1, env.flight),
+				SymbolKind::make_variable(*arg_type, arg.1, env.phase),
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -2453,7 +2453,7 @@ impl<'a> TypeChecker<'a> {
 				SymbolKind::Variable(VariableInfo {
 					type_: v,
 					reassignable,
-					flight,
+					phase: flight,
 					is_static,
 				}) => {
 					// Replace type params in function signatures
@@ -2683,7 +2683,7 @@ impl<'a> TypeChecker<'a> {
 					Type::Anything => VariableInfo {
 						type_: instance_type,
 						reassignable: false,
-						flight: env.flight,
+						phase: env.phase,
 						is_static: false,
 					},
 
@@ -2762,7 +2762,7 @@ impl<'a> TypeChecker<'a> {
 							),
 						),
 						reassignable: false,
-						flight: Phase::Independent,
+						phase: Phase::Independent,
 						is_static: false,
 					},
 				};
@@ -2785,7 +2785,7 @@ impl<'a> TypeChecker<'a> {
 							VariableInfo {
 								type_,
 								reassignable: false,
-								flight: Phase::Independent,
+								phase: Phase::Independent,
 								is_static: true,
 							}
 						} else {
@@ -2889,7 +2889,7 @@ fn add_parent_members_to_struct_env(
 						name: parent_member_name,
 						span: name.span.clone(),
 					},
-					SymbolKind::make_variable(member_type, false, struct_env.flight),
+					SymbolKind::make_variable(member_type, false, struct_env.phase),
 					StatementIdx::Top,
 				)?;
 			}
