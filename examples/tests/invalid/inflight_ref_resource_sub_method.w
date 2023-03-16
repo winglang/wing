@@ -1,5 +1,3 @@
-// NOTE: this test is supposed to fail once https://github.com/winglang/wing/pull/1610 is complete
-
 bring cloud;
 
 resource Another {
@@ -11,6 +9,7 @@ resource Another {
 
   inflight inflight_returns_resource(): cloud.Queue {
     return this.my_queue;
+//              ^^^^^^^^ Cannot qualify which operations are performed on resource "this.my_queue"
   }
 }
 
