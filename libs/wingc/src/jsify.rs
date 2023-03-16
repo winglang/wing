@@ -17,9 +17,9 @@ use sha2::{Digest, Sha256};
 
 use crate::{
 	ast::{
-		ArgList, BinaryOperator, Class as AstClass, ClassField, Constructor, Expr, ExprKind, FunctionDefinition,
-		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator,
-		UserDefinedType,
+		ArgList, BinaryOperator, Class as AstClass, ClassField, Constructor, Expr, ExprKind, FunctionBody,
+		FunctionDefinition, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
+		TypeAnnotation, UnaryOperator, UserDefinedType,
 	},
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
 	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, VariableInfo},
@@ -722,7 +722,7 @@ impl<'a> JSifier<'a> {
 			parameter_list.push(p.0.name.clone());
 		}
 
-		let block = if let Some(scope) = &func_def.statements {
+		let block = if let FunctionBody::Statements(scope) = &func_def.body {
 			self.jsify_scope(
 				scope,
 				&JSifyContext {
@@ -814,18 +814,16 @@ impl<'a> JSifier<'a> {
 		};
 
 		let parameters = parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ");
-		let body = if let Some(scope) = &func_def.statements {
-			self.jsify_scope(scope, context)
-		} else {
-			if let Some(external_spec) = &func_def.external_implementation {
+
+		let body = match &func_def.body {
+			FunctionBody::Statements(scope) => self.jsify_scope(scope, context),
+			FunctionBody::External(external_spec) => {
 				let new_path = self.prepare_extern(
 					matches!(func_def.signature.flight, Phase::Inflight),
 					external_spec,
 					&func_def.span.file_id,
 				);
 				format!("return require({new_path})[\"{name}\"]({parameters})")
-			} else {
-				panic!("Function {} has no body and is not extern", name);
 			}
 		};
 		let mut modifiers = vec![];
@@ -1275,7 +1273,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 	}
 
 	pub fn find_refs(mut self) -> (BTreeMap<String, BTreeSet<String>>, Diagnostics) {
-		if let Some(statements) = &self.function_def.statements {
+		if let FunctionBody::Statements(statements) = &self.function_def.body {
 			self.visit_scope(statements);
 		}
 		(self.references, self.diagnostics)

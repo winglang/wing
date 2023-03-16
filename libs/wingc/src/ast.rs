@@ -182,19 +182,24 @@ pub struct FunctionSignature {
 	pub flight: Phase,
 }
 
+#[derive(Debug)]
+pub enum FunctionBody {
+	Statements(Scope),
+	/// The `extern` modifier value, pointing to an external implementation file
+	External(String),
+}
+
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct FunctionDefinition {
 	/// List of names of function parameters and whether they are reassignable (`var`) or not.
 	pub parameters: Vec<(Symbol, bool)>, // TODO: move into FunctionSignature and make optional
-	/// The function implementation (body).
-	pub statements: Option<Scope>,
+	/// The function implementation.
+	pub body: FunctionBody,
 	/// The function signature, including the return type.
 	pub signature: FunctionSignature,
 	/// Whether this function is static or not. In case of a closure, this is always true.
 	pub is_static: bool,
-	/// The `extern` modifier value, pointing to an external implementation file
-	pub external_implementation: Option<String>,
 
 	pub span: WingSpan,
 

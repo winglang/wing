@@ -8,8 +8,8 @@
 
 use crate::{
 	ast::{
-		ArgList, Class, Constructor, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase, Reference,
-		Scope, StmtKind, Symbol,
+		ArgList, Class, Constructor, Expr, ExprKind, FunctionBody, FunctionDefinition, InterpolatedStringPart, Literal,
+		Phase, Reference, Scope, StmtKind, Symbol,
 	},
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
 	type_check::{symbol_env::SymbolEnv, ClassLike, Type},
@@ -84,7 +84,7 @@ impl Visit<'_> for CaptureVisitor {
 	}
 
 	fn visit_function_definition(&mut self, func_def: &FunctionDefinition) {
-		let func_scope = if let Some(scope) = &func_def.statements {
+		let func_scope = if let FunctionBody::Statements(scope) = &func_def.body {
 			scope
 		} else {
 			return;
@@ -307,7 +307,7 @@ fn scan_captures_in_expression(
 			// Can't define preflight stuff in inflight context
 			assert!(func_def.signature.flight != Phase::Preflight);
 			if let Phase::Inflight = func_def.signature.flight {
-				let func_scope = if let Some(scope) = &func_def.statements {
+				let func_scope = if let FunctionBody::Statements(scope) = &func_def.body {
 					scope
 				} else {
 					return res;
@@ -390,7 +390,7 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 			}) => {
 				res.extend(scan_captures_in_inflight_scope(&constructor.statements, diagnostics));
 				for (_, m) in methods.iter() {
-					let func_scope = if let Some(scope) = &m.statements {
+					let func_scope = if let FunctionBody::Statements(scope) = &m.body {
 						scope
 					} else {
 						continue;

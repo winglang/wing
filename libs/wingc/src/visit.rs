@@ -1,6 +1,6 @@
 use crate::ast::{
-	ArgList, Class, Constructor, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Reference, Scope,
-	Stmt, StmtKind, Symbol, TypeAnnotation,
+	ArgList, Class, Constructor, Expr, ExprKind, FunctionBody, FunctionDefinition, InterpolatedStringPart, Literal,
+	Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
 };
 
 /// Visitor pattern inspired by implementation from https://docs.rs/syn/latest/syn/visit/index.html
@@ -343,7 +343,7 @@ where
 		v.visit_type_annotation(return_type);
 	}
 
-	if let Some(scope) = &node.statements {
+	if let FunctionBody::Statements(scope) = &node.body {
 		v.visit_scope(scope);
 	};
 }

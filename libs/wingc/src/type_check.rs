@@ -1,8 +1,8 @@
 mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{
-	Class as AstClass, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-	ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
+	Class as AstClass, Expr, ExprKind, FunctionBody, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt,
+	StmtKind, Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{
@@ -1441,7 +1441,7 @@ impl<'a> TypeChecker<'a> {
 				);
 				self.add_arguments_to_env(&func_def.parameters, &sig, &mut function_env);
 
-				if let Some(scope) = &func_def.statements {
+				if let FunctionBody::Statements(scope) = &func_def.body {
 					scope.set_env(function_env);
 
 					self.inner_scopes.push(scope);
@@ -2121,7 +2121,7 @@ impl<'a> TypeChecker<'a> {
 					actual_parameters.extend(method_def.parameters.clone());
 					self.add_arguments_to_env(&actual_parameters, method_sig, &mut method_env);
 
-					if let Some(scope) = &method_def.statements {
+					if let FunctionBody::Statements(scope) = &method_def.body {
 						scope.set_env(method_env);
 						self.inner_scopes.push(scope);
 					}
