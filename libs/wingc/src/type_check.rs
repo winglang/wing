@@ -708,6 +708,19 @@ impl TypeRef {
 		}
 	}
 
+	/// Returns the item type of a collection type, or None if the type is not a collection.
+	pub fn collection_item_type(&self) -> Option<TypeRef> {
+		match **self {
+			Type::Array(t) => Some(t),
+			Type::MutArray(t) => Some(t),
+			Type::Map(t) => Some(t),
+			Type::MutMap(t) => Some(t),
+			Type::Set(t) => Some(t),
+			Type::MutSet(t) => Some(t),
+			_ => None,
+		}
+	}
+
 	pub fn is_mutable_collection(&self) -> bool {
 		if let Type::MutArray(_) | Type::MutSet(_) | Type::MutMap(_) = **self {
 			true
@@ -1089,7 +1102,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Lookup the type in the env
 				let type_ = self.resolve_type_annotation(class, env, statement_idx);
-				let (class_env, class_symbol) = match *type_ {
+				let (class_env, class_symbol) = match &*type_ {
 					Type::Class(ref class) => (&class.env, &class.name),
 					Type::Resource(ref class) => {
 						if matches!(env.flight, Phase::Preflight) {
@@ -1101,12 +1114,23 @@ impl<'a> TypeChecker<'a> {
 							));
 						}
 					}
-					Type::Anything => return self.types.anything(),
-					_ => {
-						return self.general_type_error(format!(
-							"Cannot instantiate type \"{}\" because it is not a class or resource",
-							type_.to_string()
-						))
+					t => {
+						// Even though the type isn't really constructable, we can still type check the args
+						for arg in &arg_list.pos_args {
+							self.type_check_exp(arg, env, statement_idx, context);
+						}
+						for arg in &arg_list.named_args {
+							self.type_check_exp(arg.1, env, statement_idx, context);
+						}
+
+						if matches!(t, Type::Anything) {
+							return self.types.anything();
+						} else {
+							return self.general_type_error(format!(
+								"Cannot instantiate type \"{}\" because it is not a class or resource",
+								type_.to_string()
+							));
+						}
 					}
 				};
 
@@ -1201,6 +1225,13 @@ impl<'a> TypeChecker<'a> {
 
 				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud.Bucket().upload())
 				if matches!(*func_type, Type::Anything) {
+					// Even if we don't know the type of the function, we can still type check the arguments
+					for arg in arg_list.pos_args.iter() {
+						self.type_check_exp(arg, env, statement_idx, context);
+					}
+					for arg in arg_list.named_args.values() {
+						self.type_check_exp(arg, env, statement_idx, context);
+					}
 					return self.types.anything();
 				}
 
@@ -2598,7 +2629,7 @@ impl<'a> TypeChecker<'a> {
 						property: property.clone(),
 					};
 					// Replace the reference with the new one, this is unsafe because `reference` isn't mutable and theoretically someone may
-					// hold anoter reference to it. But our AST doesn't hold up/cross references so this is safe as long as we return right.
+					// hold another reference to it. But our AST doesn't hold up/cross references so this is safe as long as we return right.
 					let const_ptr = reference as *const Reference;
 					let mut_ptr = const_ptr as *mut Reference;
 					unsafe {
