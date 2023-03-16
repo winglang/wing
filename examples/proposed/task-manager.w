@@ -22,7 +22,7 @@ resource TaskManager {
 
     let wrapper = inflight (id: str, input: str) => {
       try {
-        let result = handler.invoke(message);
+        let result = handler.invoke(input);
         this.bucket.put("${id}/status", "done");
         this.bucket.put("${id}/result", result);
       } catch e {
@@ -84,10 +84,11 @@ resource TaskManager {
   }
 }
 
-let import_contacts = new TaskManager(inflight () => {
+let import_contacts = new TaskManager(inflight (input: str) => {
   // pretend to do some work
   Utils.sleep(5s);
-}, retries: 3);
+  print(input);
+});
 
 // Tests
 
