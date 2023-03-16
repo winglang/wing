@@ -152,7 +152,7 @@
     },
     "nested_identifier": {
       "type": "PREC",
-      "value": 14,
+      "value": 15,
       "content": {
         "type": "SEQ",
         "members": [
@@ -1511,6 +1511,10 @@
         {
           "type": "SYMBOL",
           "name": "struct_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "optional_test"
         }
       ]
     },
@@ -1757,9 +1761,26 @@
         ]
       }
     },
+    "optional_test": {
+      "type": "PREC_RIGHT",
+      "value": 12,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "expression"
+          },
+          {
+            "type": "STRING",
+            "value": "?"
+          }
+        ]
+      }
+    },
     "call": {
       "type": "PREC_LEFT",
-      "value": 15,
+      "value": 16,
       "content": {
         "type": "SEQ",
         "members": [
@@ -3241,7 +3262,7 @@
         },
         {
           "type": "PREC_LEFT",
-          "value": 12,
+          "value": 13,
           "content": {
             "type": "SEQ",
             "members": [
@@ -3538,7 +3559,7 @@
         },
         {
           "type": "PREC_LEFT",
-          "value": 13,
+          "value": 14,
           "content": {
             "type": "SEQ",
             "members": [

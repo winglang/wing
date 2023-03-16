@@ -1451,6 +1451,13 @@ impl<'a> TypeChecker<'a> {
 					function_type
 				}
 			}
+			ExprKind::OptionalTest { optional } => {
+				let t = self.type_check_exp(optional, env, statement_idx, context);
+				if !matches!(*t, Type::Optional(_)) {
+					self.expr_error(optional, format!("Expected optional type, found \"{}\"", t));
+				}
+				self.types.bool()
+			}
 		};
 		exp.evaluated_type.replace(Some(t));
 		t

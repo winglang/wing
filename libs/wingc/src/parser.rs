@@ -1050,6 +1050,15 @@ impl<'s> Parser<'s> {
 					expression_span,
 				))
 			}
+			"optional_test" => {
+				let expression = self.build_expression(&expression_node.named_child(0).unwrap());
+				Ok(Expr::new(
+					ExprKind::OptionalTest {
+						optional: Box::new(expression?),
+					},
+					expression_span,
+				))
+			}
 			other => self.report_unimplemented_grammar(other, "expression", expression_node),
 		}
 	}
