@@ -190,7 +190,7 @@ resource TaskListApi {
       // is there an short way to do this? 
       let result = MutJson [];
       for t in tasks {
-        result.add(Task.to_json(t));
+        result.push(Task.to_json(t));
       }
       return cloud.ApiResponse { status: 200, body: result.copy() };
     });
