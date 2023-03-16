@@ -118,7 +118,8 @@ jobs:
           && apt-get update \
           && apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
           && chmod 777 -R /__w \
-          && chmod 777 -R /github/home/.npm
+          && mkdir /github/home/.npm \
+          && chown -R 1001:123 /github/home/.npm
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
