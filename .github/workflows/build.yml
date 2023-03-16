@@ -121,6 +121,10 @@ jobs:
           && mkdir /github/home/.npm \
           && chown -R 1001:123 /github/home/.npm
 
+      - name: Who am I
+        run: |
+          whoami
+
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
         with:
@@ -138,6 +142,7 @@ jobs:
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
+        
 
       - name: Lint Nx Configuration
         run: npx nx workspace-lint
