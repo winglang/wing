@@ -14,5 +14,6 @@ resource B impl cloud.IQueueOnMessageHandler {
 }
 
 resource C impl cloud.Bucket {
+              // ^^^^^^^^^^^ Error: cloud.Bucket is a resource, not an interface
   init() {}
 }
