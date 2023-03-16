@@ -356,7 +356,20 @@ impl Subtype for Type {
 					if method.phase != Phase::Inflight {
 						return false;
 					}
-					self.is_subtype_of(&*method.type_)
+
+					// hallucinate a "this" parameter for the function, since the
+					// interface must be implemented on a class-like type
+					// TODO: hack until we implement https://github.com/winglang/wing/issues/1678
+					let temp_params = vec![UnsafeRef(other)]
+						.iter()
+						.chain(l0.parameters.clone().iter())
+						.cloned()
+						.collect::<Vec<_>>();
+					let temp_fn = Self::Function(FunctionSignature {
+						parameters: temp_params,
+						..(l0.clone())
+					});
+					temp_fn.is_subtype_of(&*method.type_)
 				} else {
 					false
 				}
@@ -374,10 +387,14 @@ impl Subtype for Type {
 
 				// In this section, we check if the parameter types are not subtypes of each other, then this is not a subtype.
 
+				// Check that this function has at most as many required parameters as the other function requires
+				// if it doesn't, we know it's not a subtype
+				if l0.min_parameters() > r0.min_parameters() {
+					return false;
+				}
+
 				let mut lparams = l0.parameters.iter().peekable();
 				let mut rparams = r0.parameters.iter().peekable();
-
-				// TODO: check that the number of parameters match
 
 				// If the first parameter is a class or resource, then we assume it refers to the `this` parameter
 				// in a class or resource, and skip it.
@@ -522,7 +539,7 @@ impl Subtype for Type {
 	}
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct FunctionSignature {
 	pub parameters: Vec<TypeRef>,
 	pub return_type: TypeRef,
@@ -2961,6 +2978,15 @@ mod tests {
 		assert!(!Phase::Inflight.is_subtype_of(&Phase::Preflight));
 	}
 
+	fn make_function(params: Vec<TypeRef>, ret: TypeRef, phase: Phase) -> Type {
+		Type::Function(FunctionSignature {
+			parameters: params,
+			return_type: ret,
+			phase,
+			js_override: None,
+		})
+	}
+
 	#[test]
 	fn optional_subtyping() {
 		let string = UnsafeRef::<Type>(&Type::String as *const Type);
@@ -2979,18 +3005,8 @@ mod tests {
 	#[test]
 	fn function_subtyping_across_phases() {
 		let void = UnsafeRef::<Type>(&Type::Void as *const Type);
-		let inflight_fn = Type::Function(FunctionSignature {
-			parameters: vec![],
-			return_type: void,
-			phase: Phase::Inflight,
-			js_override: None,
-		});
-		let preflight_fn = Type::Function(FunctionSignature {
-			parameters: vec![],
-			return_type: void,
-			phase: Phase::Preflight,
-			js_override: None,
-		});
+		let inflight_fn = make_function(vec![], void, Phase::Inflight);
+		let preflight_fn = make_function(vec![], void, Phase::Preflight);
 
 		// functions of different phases are not subtypes of each other
 		assert!(!inflight_fn.is_subtype_of(&preflight_fn));
@@ -3006,18 +3022,8 @@ mod tests {
 		let void = UnsafeRef::<Type>(&Type::Void as *const Type);
 		let num = UnsafeRef::<Type>(&Type::Number as *const Type);
 		let string = UnsafeRef::<Type>(&Type::String as *const Type);
-		let num_fn = Type::Function(FunctionSignature {
-			parameters: vec![num],
-			return_type: void,
-			phase: Phase::Inflight,
-			js_override: None,
-		});
-		let str_fn = Type::Function(FunctionSignature {
-			parameters: vec![string],
-			return_type: void,
-			phase: Phase::Inflight,
-			js_override: None,
-		});
+		let num_fn = make_function(vec![num], void, Phase::Inflight);
+		let str_fn = make_function(vec![string], void, Phase::Inflight);
 
 		// functions of incompatible arguments are not subtypes of each other
 		assert!(!num_fn.is_subtype_of(&str_fn));
@@ -3029,24 +3035,9 @@ mod tests {
 		let void = UnsafeRef::<Type>(&Type::Void as *const Type);
 		let num = UnsafeRef::<Type>(&Type::Number as *const Type);
 		let string = UnsafeRef::<Type>(&Type::String as *const Type);
-		let returns_num = Type::Function(FunctionSignature {
-			parameters: vec![],
-			return_type: num,
-			phase: Phase::Inflight,
-			js_override: None,
-		});
-		let returns_str = Type::Function(FunctionSignature {
-			parameters: vec![],
-			return_type: string,
-			phase: Phase::Inflight,
-			js_override: None,
-		});
-		let returns_void = Type::Function(FunctionSignature {
-			parameters: vec![],
-			return_type: void,
-			phase: Phase::Inflight,
-			js_override: None,
-		});
+		let returns_num = make_function(vec![], num, Phase::Inflight);
+		let returns_str = make_function(vec![], string, Phase::Inflight);
+		let returns_void = make_function(vec![], void, Phase::Inflight);
 
 		// functions of incompatible return types are not subtypes of each other
 		assert!(!returns_num.is_subtype_of(&returns_str));
@@ -3062,18 +3053,8 @@ mod tests {
 		let void = UnsafeRef::<Type>(&Type::Void as *const Type);
 		let string = UnsafeRef::<Type>(&Type::String as *const Type);
 		let opt_string = UnsafeRef::<Type>(&Type::Optional(string) as *const Type);
-		let str_fn = Type::Function(FunctionSignature {
-			parameters: vec![string],
-			return_type: void,
-			phase: Phase::Inflight,
-			js_override: None,
-		});
-		let opt_str_fn = Type::Function(FunctionSignature {
-			parameters: vec![opt_string],
-			return_type: void,
-			phase: Phase::Inflight,
-			js_override: None,
-		});
+		let str_fn = make_function(vec![string], void, Phase::Inflight);
+		let opt_str_fn = make_function(vec![opt_string], void, Phase::Inflight);
 
 		// let x = (s: string) => {};
 		// let y = (s: string?) => {};
