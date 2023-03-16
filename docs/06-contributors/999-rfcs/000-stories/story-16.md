@@ -138,7 +138,7 @@ resource TaskListApi {
         title: title,
         completed: Status.Uncompleted
       });
-      return cloud.ApiResponse { status:201, body: Json.to_str(id) };
+      return cloud.ApiResponse { status:201, body: id };
     });
     
     this.api.put("/tasks/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
