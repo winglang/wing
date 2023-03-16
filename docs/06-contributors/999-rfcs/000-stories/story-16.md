@@ -55,7 +55,7 @@ struct Task {
   status: Status;
 }
 
-interface    {
+interface ITaskList {
   inflight get(id: str): Task;
   inflight add(task: Task): str;
   inflight update(id: str, task: Task): str;
