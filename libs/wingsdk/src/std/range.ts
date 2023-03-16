@@ -1,3 +1,7 @@
+/**
+ * Range
+ */
+
 export class Range {
   /**
    * Generate a range of numbers. 
