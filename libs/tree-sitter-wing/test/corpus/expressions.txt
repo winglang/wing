@@ -459,21 +459,14 @@ let a = A { f1: 3, f2: true };
 ================================
 Optional test (and precedence)
 ================================
-let a: num? = 1;
 a?;
 !a?;
-(!a)?; // Valid grammar but invalid types (can't negate an optional)
+(!a)?;
+(a.b.c)?;
 
 ---
 
 (source
-    (variable_definition_statement
-        name: (identifier)
-        type: (optional
-           (builtin_type)
-        )
-        value: (number)
-    )
     (expression_statement
         (optional_test
             (reference
@@ -501,5 +494,23 @@ a?;
             )
         )
     )
-    (comment)
+    (expression_statement
+        (optional_test
+            (parenthesized_expression
+                (reference
+                    (nested_identifier
+                        object: (reference
+                            (nested_identifier
+                                object: (reference
+                                    (identifier)
+                                )
+                                property: (identifier)
+                            )
+                        )
+                        property: (identifier)
+                    )
+                )
+            )
+        )
+    )
 )
