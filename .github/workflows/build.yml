@@ -93,6 +93,8 @@ jobs:
     name: "Build"
     timeout-minutes: 25
     runs-on: ubuntu-latest
+    container:
+      image: "ubuntu"
     needs: prepare
     env:
       PROJEN_BUMP_VERSION: ${{ needs.prepare.outputs.version }}
