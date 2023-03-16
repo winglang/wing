@@ -76,7 +76,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   const workDir = resolve(synthDir, ".wing");
   log("work dir: %s", workDir);
 
-  process.env["WINGSDK_SYNTH_DIR"] = synthDir;
+  process.env["WING_SYNTH_DIR"] = synthDir;
   process.env["WING_NODE_MODULES"] = resolve(join(wingDir, "node_modules") );
   process.env["WING_TARGET"] = options.target;
 
@@ -88,7 +88,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   const wingc = await wingCompiler.load({
     env: {
       RUST_BACKTRACE: "full",
-      WINGSDK_SYNTH_DIR: normalPath(synthDir),
+      WING_SYNTH_DIR: normalPath(synthDir),
       WINGC_PREFLIGHT,
       CLICOLOR_FORCE: chalk.supportsColor ? "1" : "0",
     },

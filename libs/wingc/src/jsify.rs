@@ -136,7 +136,7 @@ impl<'a> JSifier<'a> {
 
 		if self.shim {
 			output.push(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
-			output.push(format!("const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \".\";"));
+			output.push(format!("const $outdir = process.env.WING_SYNTH_DIR ?? \".\";"));
 			output.push(TARGET_CODE.to_owned());
 		}
 
@@ -717,21 +717,18 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_inflight_function(&mut self, func_def: &FunctionDefinition, context: &JSifyContext) -> String {
-		let mut parameter_list = vec![];
-		for p in func_def.parameters.iter() {
-			parameter_list.push(p.0.name.clone());
-		}
+		let parameters = func_def.parameters.iter().map(|p| &p.0.name).join(", ");
 
-		let block = if let FunctionBody::Statements(scope) = &func_def.body {
-			self.jsify_scope(
+		let block = match &func_def.body {
+			FunctionBody::Statements(scope) => self.jsify_scope(
 				scope,
 				&JSifyContext {
 					in_json: context.in_json.clone(),
 					phase: Phase::Inflight,
 				},
-			)
-		} else {
-			"".to_string()
+			),
+			// TODO extern usage with closures is not supported
+			FunctionBody::External(_) => format!("{{}}"),
 		};
 
 		let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
@@ -755,7 +752,7 @@ impl<'a> JSifier<'a> {
 		}
 		let mut proc_source = vec![];
 		let body = format!("{{ const {{ {} }} = this; {} }}", capture_names.join(", "), block);
-		proc_source.push(format!("async handle({}) {};", parameter_list.join(", "), body));
+		proc_source.push(format!("async handle({parameters}) {body};"));
 		let proc_dir = format!("{}/proc.{}", self.out_dir.to_string_lossy(), procid);
 		fs::create_dir_all(&proc_dir).expect("Creating inflight proc dir");
 		let file_path = format!("{}/index.js", proc_dir);
