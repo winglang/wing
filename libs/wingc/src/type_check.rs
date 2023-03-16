@@ -341,12 +341,21 @@ impl Subtype for Type {
 				// TODO: Hack to make anything's compatible with all other types, specifically useful for handling core.Inflight handlers
 				true
 			}
-			(Self::Function(_), Self::Interface(r0)) => {
+			(Self::Function(l0), Self::Interface(r0)) => {
 				// TODO: Hack to make functions compatible with interfaces
 				// Remove this after https://github.com/winglang/wing/issues/1448
-				// Compare the function to a method on the interface named "handle" if it exists
+
+				// First check that the function is in the inflight phase
+				if l0.phase != Phase::Inflight {
+					return false;
+				}
+
+				// Next, compare the function to a method on the interface named "handle" if it exists
 				if let Some(method) = r0.get_env().try_lookup("handle", None) {
 					let method = method.as_variable().unwrap();
+					if method.flight != Phase::Inflight {
+						return false;
+					}
 					self.is_subtype_of(&*method.type_)
 				} else {
 					false
