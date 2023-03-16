@@ -76,6 +76,10 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   const workDir = resolve(synthDir, ".wing");
   log("work dir: %s", workDir);
 
+  process.env["WINGSDK_SYNTH_DIR"] = synthDir;
+  process.env["WING_NODE_MODULES"] = resolve(join(wingDir, "node_modules") );
+  process.env["WING_TARGET"] = options.target;
+
   await Promise.all([
     mkdir(workDir, { recursive: true }),
     mkdir(synthDir, { recursive: true }),
@@ -168,12 +172,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   // "__dirname" is also synthetically changed so nested requires work.
   const context = vm.createContext({
     require: preflightRequire,
-    process: {
-      env: {
-        WINGSDK_SYNTH_DIR: synthDir,
-        WING_TARGET: options.target,
-      },
-    },
+    process,
     console,
     __dirname: workDir,
     __filename: artifactPath,

@@ -1,18 +1,18 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`wing compile -t tf-aws > clients/Another.inflight.js 1`] = `
-"export class Another_inflight  {
+"export class Another  {
 constructor({ first, my_field }) {
 
   this.first = first;
   this.my_field = my_field;
 }
-async  meaning_of_life()  {
+async meaning_of_life()  {
 	{
   return 42;
 }
 }
-async  another_func()  {
+async another_func()  {
 	{
   return \\"42\\";
 }
@@ -20,7 +20,7 @@ async  another_func()  {
 `;
 
 exports[`wing compile -t tf-aws > clients/First.inflight.js 1`] = `
-"export class First_inflight  {
+"export class First  {
 constructor({ my_resource }) {
 
   this.my_resource = my_resource;
@@ -29,7 +29,7 @@ constructor({ my_resource }) {
 `;
 
 exports[`wing compile -t tf-aws > clients/MyResource.inflight.js 1`] = `
-"export class MyResource_inflight  {
+"export class MyResource  {
 constructor({ another, array_of_str, ext_bucket, ext_num, map_of_num, my_bool, my_num, my_queue, my_resource, my_str, set_of_str }) {
 
   this.another = another;
@@ -44,14 +44,14 @@ constructor({ another, array_of_str, ext_bucket, ext_num, map_of_num, my_bool, m
   this.my_str = my_str;
   this.set_of_str = set_of_str;
 }
-async  test_no_capture()  {
+async test_no_capture()  {
 	{
   const arr = Object.freeze([1, 2, 3]);
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr.length === 3)'\`)})((arr.length === 3))};
   {console.log(\`array.len=\${arr.length}\`)};
 }
 }
-async  test_capture_collections_of_data()  {
+async test_capture_collections_of_data()  {
 	{
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.array_of_str.length === 2)'\`)})((this.array_of_str.length === 2))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.array_of_str.at(0)) === \\"s1\\")'\`)})(((await this.array_of_str.at(0)) === \\"s1\\"))};
@@ -63,51 +63,51 @@ async  test_capture_collections_of_data()  {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(!(await this.set_of_str.has(\\"s3\\")))'\`)})((!(await this.set_of_str.has(\\"s3\\"))))};
 }
 }
-async  test_capture_primitives()  {
+async test_capture_primitives()  {
 	{
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.my_str === \\"my_string\\")'\`)})((this.my_str === \\"my_string\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.my_num === 42)'\`)})((this.my_num === 42))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.my_bool === true)'\`)})((this.my_bool === true))};
 }
 }
-async  test_capture_resource()  {
+async test_capture_resource()  {
 	{
   (await this.my_resource.put(\\"f1.txt\\",\\"f1\\"));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.my_resource.get(\\"f1.txt\\")) === \\"f1\\")'\`)})(((await this.my_resource.get(\\"f1.txt\\")) === \\"f1\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.my_resource.list()).length === 1)'\`)})(((await this.my_resource.list()).length === 1))};
 }
 }
-async  test_nested_preflight_field()  {
+async test_nested_preflight_field()  {
 	{
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.another.my_field === \\"hello!\\")'\`)})((this.another.my_field === \\"hello!\\"))};
   {console.log(\`field=\${this.another.my_field}\`)};
 }
 }
-async  test_nested_resource()  {
+async test_nested_resource()  {
 	{
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.another.first.my_resource.list()).length === 0)'\`)})(((await this.another.first.my_resource.list()).length === 0))};
   (await this.another.first.my_resource.put(\\"hello\\",this.my_str));
   {console.log(\`this.another.first.my_resource:\${(await this.another.first.my_resource.get(\\"hello\\"))}\`)};
 }
 }
-async  test_expression_recursive()  {
+async test_expression_recursive()  {
 	{
   (await this.my_queue.push(this.my_str));
 }
 }
-async  test_external()  {
+async test_external()  {
 	{
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.ext_bucket.list()).length === 0)'\`)})(((await this.ext_bucket.list()).length === 0))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.ext_num === 12)'\`)})((this.ext_num === 12))};
 }
 }
-async  test_user_defined_resource()  {
+async test_user_defined_resource()  {
 	{
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.another.meaning_of_life()) === 42)'\`)})(((await this.another.meaning_of_life()) === 42))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await this.another.another_func()) === \\"42\\")'\`)})(((await this.another.another_func()) === \\"42\\"))};
 }
 }
-async  test_inflight_field()  {
+async test_inflight_field()  {
 	{
   this.inflight_field = 123;
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.inflight_field === 123)'\`)})((this.inflight_field === 123))};
@@ -378,7 +378,7 @@ constructor() {
   	_toInflight() {
   	const my_resource_client = this._lift(this.my_resource);
   	const self_client_path = require('path').resolve(__dirname, \\"clients/First.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).First_inflight({my_resource: \${my_resource_client}}))\`);
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).First({my_resource: \${my_resource_client}}))\`);
   }
   }
   
@@ -395,7 +395,7 @@ constructor() {
   	const first_client = this._lift(this.first);
   const my_field_client = this._lift(this.my_field);
   	const self_client_path = require('path').resolve(__dirname, \\"clients/Another.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Another_inflight({first: \${first_client}, my_field: \${my_field_client}}))\`);
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Another({first: \${first_client}, my_field: \${my_field_client}}))\`);
   }
   }
   Another._annotateInflight(\\"meaning_of_life\\", {});
@@ -435,7 +435,7 @@ constructor() {
   const my_str_client = this._lift(this.my_str);
   const set_of_str_client = this._lift(this.set_of_str);
   	const self_client_path = require('path').resolve(__dirname, \\"clients/MyResource.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).MyResource_inflight({another: \${another_client}, array_of_str: \${array_of_str_client}, ext_bucket: \${ext_bucket_client}, ext_num: \${ext_num_client}, map_of_num: \${map_of_num_client}, my_bool: \${my_bool_client}, my_num: \${my_num_client}, my_queue: \${my_queue_client}, my_resource: \${my_resource_client}, my_str: \${my_str_client}, set_of_str: \${set_of_str_client}}))\`);
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).MyResource({another: \${another_client}, array_of_str: \${array_of_str_client}, ext_bucket: \${ext_bucket_client}, ext_num: \${ext_num_client}, map_of_num: \${map_of_num_client}, my_bool: \${my_bool_client}, my_num: \${my_num_client}, my_queue: \${my_queue_client}, my_resource: \${my_resource_client}, my_str: \${my_str_client}, set_of_str: \${set_of_str_client}}))\`);
   }
   }
   MyResource._annotateInflight(\\"test_no_capture\\", {});

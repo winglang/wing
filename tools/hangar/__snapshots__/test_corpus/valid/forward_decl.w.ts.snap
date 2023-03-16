@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`wing compile -t tf-aws > clients/R.inflight.js 1`] = `
-"export class R_inflight  {
+"export class R  {
 constructor({ f }) {
 
   this.f = f;
@@ -72,7 +72,7 @@ constructor() {
   	_toInflight() {
   	const f_client = this._lift(this.f);
   	const self_client_path = require('path').resolve(__dirname, \\"clients/R.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R_inflight({f: \${f_client}}))\`);
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R({f: \${f_client}}))\`);
   }
   }
   

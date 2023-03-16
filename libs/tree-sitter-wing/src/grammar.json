@@ -2332,6 +2332,19 @@
         }
       ]
     },
+    "extern_modifier": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "extern"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "string"
+        }
+      ]
+    },
     "method_signature": {
       "type": "SEQ",
       "members": [
@@ -2429,6 +2442,22 @@
           "members": [
             {
               "type": "FIELD",
+              "name": "extern_modifier",
+              "content": {
+                "type": "SYMBOL",
+                "name": "extern_modifier"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
               "name": "access_modifier",
               "content": {
                 "type": "SYMBOL",
@@ -2505,12 +2534,21 @@
           ]
         },
         {
-          "type": "FIELD",
-          "name": "block",
-          "content": {
-            "type": "SYMBOL",
-            "name": "block"
-          }
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "block",
+              "content": {
+                "type": "SYMBOL",
+                "name": "block"
+              }
+            },
+            {
+              "type": "STRING",
+              "value": ";"
+            }
+          ]
         }
       ]
     },
@@ -2603,6 +2641,22 @@
           "members": [
             {
               "type": "FIELD",
+              "name": "extern_modifier",
+              "content": {
+                "type": "SYMBOL",
+                "name": "extern_modifier"
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
               "name": "access_modifier",
               "content": {
                 "type": "SYMBOL",
@@ -2671,12 +2725,21 @@
           ]
         },
         {
-          "type": "FIELD",
-          "name": "block",
-          "content": {
-            "type": "SYMBOL",
-            "name": "block"
-          }
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "block",
+              "content": {
+                "type": "SYMBOL",
+                "name": "block"
+              }
+            },
+            {
+              "type": "STRING",
+              "value": ";"
+            }
+          ]
         }
       ]
     },

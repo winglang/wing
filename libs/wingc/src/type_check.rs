@@ -1440,11 +1440,16 @@ impl<'a> TypeChecker<'a> {
 					statement_idx,
 				);
 				self.add_arguments_to_env(&func_def.parameters, &sig, &mut function_env);
-				func_def.statements.set_env(function_env);
 
-				self.inner_scopes.push(&func_def.statements);
+				if let Some(scope) = &func_def.statements {
+					scope.set_env(function_env);
 
-				function_type
+					self.inner_scopes.push(scope);
+
+					function_type
+				} else {
+					function_type
+				}
 			}
 		};
 		exp.evaluated_type.replace(Some(t));
@@ -2108,8 +2113,11 @@ impl<'a> TypeChecker<'a> {
 					}
 					actual_parameters.extend(method_def.parameters.clone());
 					self.add_arguments_to_env(&actual_parameters, method_sig, &mut method_env);
-					method_def.statements.set_env(method_env);
-					self.inner_scopes.push(&method_def.statements);
+
+					if let Some(scope) = &method_def.statements {
+						scope.set_env(method_env);
+						self.inner_scopes.push(scope);
+					}
 				}
 
 				// Check that the class satisfies all of its interfaces

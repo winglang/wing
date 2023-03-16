@@ -120,11 +120,14 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			return;
 		}
 
-		self.with_scope(&node.statements, |v| {
-			for param in &node.parameters {
-				v.visit_symbol(&param.0);
-			}
-		});
+		if let Some(scope) = &node.statements {
+			self.with_scope(scope, |v| {
+				for param in &node.parameters {
+					v.visit_symbol(&param.0);
+				}
+			});
+		}
+
 		for param_type in &node.signature.parameters {
 			self.visit_type_annotation(param_type);
 		}
@@ -132,7 +135,9 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			self.visit_type_annotation(return_type);
 		}
 
-		self.visit_scope(&node.statements);
+		if let Some(scope) = &node.statements {
+			self.visit_scope(scope);
+		}
 	}
 
 	fn visit_class(&mut self, node: &'a Class) {

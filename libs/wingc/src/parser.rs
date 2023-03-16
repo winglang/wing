@@ -562,9 +562,16 @@ impl<'s> Parser<'s> {
 
 	fn build_function_definition(&self, func_def_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
 		let parameters = self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap())?;
+
+		let statements = if func_def_node.child_by_field_name("extern_modifier").is_none() {
+			Some(self.build_scope(&self.get_child_field(func_def_node, "block")?))
+		} else {
+			None
+		};
+
 		Ok(FunctionDefinition {
 			parameters: parameters.iter().map(|p| (p.0.clone(), p.2)).collect(),
-			statements: self.build_scope(&func_def_node.child_by_field_name("block").unwrap()),
+			statements,
 			signature: FunctionSignature {
 				parameters: parameters.iter().map(|p| p.1.clone()).collect(),
 				return_type: if let Some(rt) = func_def_node.child_by_field_name("type") {
@@ -576,6 +583,12 @@ impl<'s> Parser<'s> {
 			},
 			is_static: func_def_node.child_by_field_name("static").is_some(),
 			captures: RefCell::new(None),
+			span: self.node_span(func_def_node),
+			external_implementation: func_def_node.child_by_field_name("extern_modifier").and_then(|n| {
+				let node_text = self.node_text(&n.named_child(0).unwrap());
+				let node_text = &node_text[1..node_text.len() - 1];
+				Some(node_text.to_string())
+			}),
 		})
 	}
 

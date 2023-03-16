@@ -340,7 +340,9 @@ where
 		v.visit_type_annotation(return_type);
 	}
 
-	v.visit_scope(&node.statements);
+	if let Some(scope) = &node.statements {
+		v.visit_scope(scope);
+	};
 }
 
 pub fn visit_args<'ast, V>(v: &mut V, node: &'ast ArgList)
