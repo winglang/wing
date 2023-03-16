@@ -137,29 +137,11 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
             disabled={selectedEntries.length === 0}
             onClick={downloadSelectedEntries}
           />
-          <div className="relative">
-            <Popover label="Delete" disabled={selectedEntries.length === 0}>
-              {({ close }) => (
-                <>
-                  <span>
-                    Are you sure you want to delete {selectedEntries.length}{" "}
-                    file
-                    {selectedEntries.length > 1 && "s"}?
-                  </span>
-                  <div className="flex justify-end gap-2 mt-4">
-                    <Button label="Cancel" onClick={close} />
-                    <Button
-                      label="Confirm"
-                      onClick={async () => {
-                        close();
-                        await deleteSelectedEntries();
-                      }}
-                    />
-                  </div>
-                </>
-              )}
-            </Popover>
-          </div>
+          <Button
+            label="Delete"
+            disabled={selectedEntries.length === 0}
+            onClick={deleteSelectedEntries}
+          />
         </div>
 
         <div>
