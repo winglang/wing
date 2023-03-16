@@ -82,7 +82,7 @@ resource TaskList implementes ITaskList {
   }
   
   inflight _add(id: str, j: Json): str {
-    this.get_redis_client().set(id , Json.to_str(j));
+    this.get_redis_client().set(id , Json.stringify(j));
     this.get_redis_client().sadd("todo", id);
     return id;
   } 
@@ -153,7 +153,7 @@ resource TaskListApi {
         title = str.from_json(data.activity); 
       } 
       let id = this.task_list.add(title);
-      return cloud.ApiResponse { status:201, body: Json.to_str(id) };
+      return cloud.ApiResponse { status:201, body: Json.stringify(id) };
     });
         
     this.api.put("/tasks/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
@@ -170,7 +170,7 @@ resource TaskListApi {
       }
       try {
         let title = this.task_list.get(id);
-        return cloud.ApiResponse { status:200, body: Json.to_str(title) };
+        return cloud.ApiResponse { status:200, body: Json.stringify(title) };
       } catch {
         return cloud.ApiResponse { status: 400 };
       }
@@ -180,7 +180,7 @@ resource TaskListApi {
       let id = str.from_json(req.params.id);
       try {
         let title = this.task_list.get(id);
-        return cloud.ApiResponse { status:200, body: Json.to_str(title) };
+        return cloud.ApiResponse { status:200, body: Json.stringify(title) };
       } catch {
         return cloud.ApiResponse { status: 400 };
       }
@@ -199,7 +199,7 @@ resource TaskListApi {
     this.api.get("/tasks", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let search = str.from_json(req.query.search ?? Json ".*"); 
       let results = this.task_list.find(TaskListApi.create_regex(search));
-      return cloud.ApiResponse { status: 200, body: Json.to_str(results) };
+      return cloud.ApiResponse { status: 200, body: Json.stringify(results) };
     });
   }
 }
