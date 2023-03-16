@@ -81,11 +81,15 @@ exports[`inflight_ref_resource_collection.w > wing test --target sim > stdout 1`
 
 exports[`inflight_ref_resource_field.w > wing test --target sim > stdout 1`] = `"pass ─ inflight_ref_resource_field.w » root/test"`;
 
-exports[`inflight_ref_resource_sub_method.w > wing test --target sim > stdout 1`] = `"pass ─ inflight_ref_resource_sub_method.w » root/test"`;
+exports[`inflight_ref_resource_sub_field.w > wing test --target sim > stdout 1`] = `
+"pass ┌ inflight_ref_resource_sub_field.w » root/test
+     │ array.len=3
+     │ my_str=hello
+     │ this.another.my_field=hello!
+     └ this.another.first.my_resource:world"
+`;
 
 exports[`inflight_ref_resource_userdefined.w > wing test --target sim > stdout 1`] = `"pass ─ inflight_ref_resource_userdefined.w » root/test"`;
-
-exports[`inflight_ref_unknown_op.w > wing test --target sim > stdout 1`] = `"pass ─ inflight_ref_unknown_op.w » root/test"`;
 
 exports[`json.w > wing test --target sim > stdout 1`] = `"pass ─ json.w (no tests)"`;
 

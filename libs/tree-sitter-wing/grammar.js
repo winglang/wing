@@ -10,10 +10,11 @@ const PREC = {
   ADD: 9,
   MULTIPLY: 10,
   UNARY: 11,
-  POWER: 12,
-  NIL_COALESCING: 13,
-  MEMBER: 14,
-  CALL: 15,
+  OPTIONAL_TEST: 12,
+  POWER: 13,
+  NIL_COALESCING: 14,
+  MEMBER: 15,
+  CALL: 16,
 };
 
 module.exports = grammar({
@@ -278,7 +279,8 @@ module.exports = grammar({
         $.parenthesized_expression,
         $.structured_access_expression,
         $.json_literal,
-        $.struct_literal
+        $.struct_literal,
+        $.optional_test,
       ),
 
     // Primitives
@@ -323,6 +325,8 @@ module.exports = grammar({
           )
         )
       ),
+
+    optional_test: ($) => prec.right(PREC.OPTIONAL_TEST, seq($.expression, "?")),
 
     call: ($) =>
       prec.left(

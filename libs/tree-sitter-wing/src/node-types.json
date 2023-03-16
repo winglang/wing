@@ -66,6 +66,10 @@
         "named": true
       },
       {
+        "type": "optional_test",
+        "named": true
+      },
+      {
         "type": "parenthesized_expression",
         "named": true
       },
@@ -1950,6 +1954,21 @@
         },
         {
           "type": "optional",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "optional_test",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "expression",
           "named": true
         }
       ]
