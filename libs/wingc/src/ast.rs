@@ -366,6 +366,9 @@ pub enum ExprKind {
 		element: Box<Expr>,
 	},
 	FunctionClosure(FunctionDefinition),
+	OptionalTest {
+		optional: Box<Expr>,
+	},
 }
 
 #[derive(Derivative)]

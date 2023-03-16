@@ -530,6 +530,10 @@ impl<'a> JSifier<'a> {
 					context,
 				),
 			},
+			ExprKind::OptionalTest { optional } => {
+				// We use the abstract inequality operator here because we want to check for null or undefined
+				format!("(({}) != null)", self.jsify_expression(optional, context))
+			}
 		}
 	}
 

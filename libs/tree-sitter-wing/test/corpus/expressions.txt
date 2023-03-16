@@ -455,3 +455,62 @@ let a = A { f1: 3, f2: true };
         )
     )
 )
+
+================================
+Optional test (and precedence)
+================================
+a?;
+!a?;
+(!a)?;
+(a.b.c)?;
+
+---
+
+(source
+    (expression_statement
+        (optional_test
+            (reference
+                (identifier)
+            )
+        )
+    )
+    (expression_statement
+        (unary_expression
+            arg: (optional_test
+                (reference
+                    (identifier)
+                )
+            )
+        )
+    )
+    (expression_statement
+        (optional_test
+            (parenthesized_expression
+                (unary_expression
+                   arg: (reference
+                        (identifier)
+                   )
+                )
+            )
+        )
+    )
+    (expression_statement
+        (optional_test
+            (parenthesized_expression
+                (reference
+                    (nested_identifier
+                        object: (reference
+                            (nested_identifier
+                                object: (reference
+                                    (identifier)
+                                )
+                                property: (identifier)
+                            )
+                        )
+                        property: (identifier)
+                    )
+                )
+            )
+        )
+    )
+)
