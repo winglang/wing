@@ -106,6 +106,9 @@ jobs:
       - name: Setup Node/NPM with pinned Volta version
         uses: volta-cli/action@v4.0.0
 
+      - name: Install Deps
+        run: apt-get update && apt-get install -y curl
+
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
         with:
