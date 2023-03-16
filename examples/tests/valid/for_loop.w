@@ -156,3 +156,24 @@ for x in (z*2)..0 {
   assert(x > 0);
   print("${x}");
 }
+
+print("---\nfor x in std.Range.of(0, 2) { ... }");
+for x in std.Range.of(0, 2) {
+  assert(x >= 0);
+  assert(x < 2);
+  print("${x}");
+}
+
+print("---\nfor x in std.Range.of(0, 2, true) { ... }");
+for x in std.Range.of(0, 2, true) {
+  assert(x >= 0);
+  assert(x <= 2);
+  print("${x}");
+}
+
+print("---\nfor x in std.Range.of(2, 0) { ... }");
+for x in std.Range.of(2, 0) {
+  assert(x <= 2);
+  assert(x > 0);
+  print("${x}");
+}

@@ -429,20 +429,12 @@ impl<'a> JSifier<'a> {
 				format!("({}{})", op, self.jsify_expression(exp, context))
 			}
 			ExprKind::NumberSequence { start, inclusive, end } => {
-				let result = if inclusive.unwrap() == true {
-					format!(
-						"{},{},true",
+				format!(
+						"((s,e,i) => {{ function* iterator(start,end,inclusive) {{ let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }}; return iterator(s,e,i); }})({},{},{})",
 						self.jsify_expression(start, context),
-						self.jsify_expression(end, context)
+						self.jsify_expression(end, context),
+						inclusive.unwrap()
 					)
-				} else {
-					format!(
-						"{},{},false",
-						self.jsify_expression(start, context),
-						self.jsify_expression(end, context)
-					)
-				};
-				result
 			}
 			ExprKind::Binary { op, left, right } => {
 				let js_left = self.jsify_expression(left, context);
@@ -593,38 +585,12 @@ impl<'a> JSifier<'a> {
 				iterator,
 				iterable,
 				statements,
-			} => match &iterable.kind {
-				ExprKind::NumberSequence {
-					start: _,
-					inclusive: _,
-					end: _,
-				} => {
-					format!(
-						"{{{}\n{}\n{}}};",
-						format!(
-							"function* iterator(start, end, inclusive) {{\n  {}\n  {}\n  {}\n  {}\n}}",
-							format!("let i = start;"),
-							format!("let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end;"),
-							format!("while (i < limit) yield i++;"),
-							format!("while (i > limit) yield i--;"),
-						),
-						format!("const iter = iterator({});", self.jsify_expression(iterable, context)),
-						format!(
-							"for (const {} of iter) {}",
-							self.jsify_symbol(iterator),
-							self.jsify_scope(statements, context)
-						)
-					)
-				}
-				_ => {
-					format!(
-						"for (const {} of {}) {}",
-						self.jsify_symbol(iterator),
-						self.jsify_expression(iterable, context),
-						self.jsify_scope(statements, context)
-					)
-				}
-			},
+			} => format!(
+				"for (const {} of {}) {}",
+				self.jsify_symbol(iterator),
+				self.jsify_expression(iterable, context),
+				self.jsify_scope(statements, context)
+			),
 			StmtKind::While { condition, statements } => {
 				format!(
 					"while ({}) {}",
