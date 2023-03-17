@@ -50,9 +50,6 @@ export class Api extends cloud.Api implements ISimulatorResource {
   ): void {
     this._addToSpec(route, method, undefined);
 
-    // No conversion is necessary here because the simulator uses the
-    // `ApiRequest` and `ApiResponse` types directly.
-
     const fn = this.createOrGetFunction(inflight, props);
 
     const functionHandle = simulatorHandleToken(fn);
