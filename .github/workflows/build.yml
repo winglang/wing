@@ -172,9 +172,9 @@ jobs:
       - name: Get PR labels
         uses: octokit/request-action@v2.x
         id: pr-labels
+        if: github.event_name != 'push'
         with:
-          route: GET /repos/{owner}/{repo}/pulls/{number}
-          owner: ${{ github.repository_owner }}
+          route: GET /repos/{{repo}/pulls/{number}
           repo: ${{ github.repository }}
           number: ${{ github.event.pull_request.number }}
         env:
@@ -247,7 +247,7 @@ jobs:
     name: Publish
     if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
     needs:
-      - e2e
+      - quality-gate
       - prepare
     runs-on: ubuntu-latest
     steps:
