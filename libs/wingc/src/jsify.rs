@@ -1,12 +1,15 @@
 use aho_corasick::AhoCorasick;
 use indoc::formatdoc;
 use itertools::Itertools;
+
 use std::{
 	cell::RefCell,
 	cmp::Ordering,
 	collections::{BTreeMap, BTreeSet},
+	fmt::Display,
 	fs,
 	path::Path,
+	slice::Iter,
 	vec,
 };
 
@@ -14,17 +17,12 @@ use sha2::{Digest, Sha256};
 
 use crate::{
 	ast::{
-		ArgList, BinaryOperator, Class as AstClass, ClassField, Constructor, Expr, ExprKind, FunctionDefinition,
-		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator,
-		UserDefinedType,
+		ArgList, BinaryOperator, Class as AstClass, ClassField, Constructor, Expr, ExprKind, FunctionBody,
+		FunctionDefinition, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
+		TypeAnnotation, UnaryOperator, UserDefinedType,
 	},
-	debug,
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
-	type_check::{
-		resolve_user_defined_type,
-		symbol_env::{SymbolEnv, SymbolEnvRef},
-		ClassLike, Type, TypeRef,
-	},
+	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, VariableInfo},
 	utilities::snake_case_to_camel_case,
 	visit::{self, Visit},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
@@ -33,6 +31,7 @@ use crate::{
 const STDLIB: &str = "$stdlib";
 const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 const INFLIGHT_CLIENTS_DIR: &str = "clients";
+const EXTERN_DIR: &str = "extern";
 
 const TARGET_CODE: &str = r#"
 function __app(target) {
@@ -137,7 +136,7 @@ impl<'a> JSifier<'a> {
 
 		if self.shim {
 			output.push(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
-			output.push(format!("const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \".\";"));
+			output.push(format!("const $outdir = process.env.WING_SYNTH_DIR ?? \".\";"));
 			output.push(TARGET_CODE.to_owned());
 		}
 
@@ -450,6 +449,11 @@ impl<'a> JSifier<'a> {
 					BinaryOperator::NotEqual => "!==",
 					BinaryOperator::LogicalAnd => "&&",
 					BinaryOperator::LogicalOr => "||",
+					BinaryOperator::UnwrapOr => {
+						// Use JS nullish coalescing operator which treats undefined and null the same
+						// this is inline with how wing jsifies optionals
+						"??"
+					}
 				};
 				format!("({} {} {})", js_left, js_op, js_right)
 			}
@@ -524,14 +528,12 @@ impl<'a> JSifier<'a> {
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
 				Phase::Inflight => self.jsify_inflight_function(func_def, context),
 				Phase::Independent => unimplemented!(),
-				Phase::Preflight => self.jsify_function(
-					None,
-					&func_def.parameters,
-					&func_def.statements,
-					func_def.is_static,
-					context,
-				),
+				Phase::Preflight => self.jsify_function(None, func_def, context),
 			},
+			ExprKind::OptionalTest { optional } => {
+				// We use the abstract inequality operator here because we want to check for null or undefined
+				format!("(({}) != null)", self.jsify_expression(optional, context))
+			}
 		}
 	}
 
@@ -720,17 +722,19 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_inflight_function(&mut self, func_def: &FunctionDefinition, context: &JSifyContext) -> String {
-		let mut parameter_list = vec![];
-		for p in func_def.parameters.iter() {
-			parameter_list.push(p.0.name.clone());
-		}
-		let block = self.jsify_scope(
-			&func_def.statements,
-			&JSifyContext {
-				in_json: context.in_json.clone(),
-				phase: Phase::Inflight,
-			},
-		);
+		let parameters = func_def.parameters.iter().map(|p| &p.0.name).join(", ");
+
+		let block = match &func_def.body {
+			FunctionBody::Statements(scope) => self.jsify_scope(
+				scope,
+				&JSifyContext {
+					in_json: context.in_json.clone(),
+					phase: Phase::Inflight,
+				},
+			),
+			FunctionBody::External(_) => format!("{{ throw new Error(\"extern with closures is not supported\") }}"),
+		};
+
 		let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
 		let mut bindings = vec![];
 		let mut capture_names = vec![];
@@ -752,7 +756,7 @@ impl<'a> JSifier<'a> {
 		}
 		let mut proc_source = vec![];
 		let body = format!("{{ const {{ {} }} = this; {} }}", capture_names.join(", "), block);
-		proc_source.push(format!("async handle({}) {};", parameter_list.join(", "), body));
+		proc_source.push(format!("async handle({parameters}) {body};"));
 		let proc_dir = format!("{}/proc.{}", self.out_dir.to_string_lossy(), procid);
 		fs::create_dir_all(&proc_dir).expect("Creating inflight proc dir");
 		let file_path = format!("{}/index.js", proc_dir);
@@ -775,16 +779,10 @@ impl<'a> JSifier<'a> {
 		)
 	}
 
-	fn jsify_function(
-		&mut self,
-		name: Option<&str>,
-		parameters: &[(Symbol, bool)],
-		body: &Scope,
-		is_static: bool,
-		context: &JSifyContext,
-	) -> String {
+	fn jsify_constructor(&mut self, name: Option<&str>, func_def: &Constructor, context: &JSifyContext) -> String {
 		let mut parameter_list = vec![];
-		for p in parameters.iter() {
+
+		for p in func_def.parameters.iter() {
 			parameter_list.push(self.jsify_symbol(&p.0));
 		}
 
@@ -794,15 +792,82 @@ impl<'a> JSifier<'a> {
 		};
 
 		let parameters = parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ");
-		let body = self.jsify_scope(body, context);
-		let static_modifier = if is_static { "static" } else { "" };
+		let body = self.jsify_scope(&func_def.statements, context);
 
 		formatdoc!(
 			"
-			{static_modifier} {name}({parameters}) {arrow} {{
+		{name}({parameters}) {arrow} {{
+			{body}
+		}}"
+		)
+	}
+
+	fn jsify_function(&mut self, name: Option<&str>, func_def: &FunctionDefinition, context: &JSifyContext) -> String {
+		let mut parameter_list = vec![];
+
+		for p in func_def.parameters.iter() {
+			parameter_list.push(self.jsify_symbol(&p.0));
+		}
+
+		let (name, arrow) = match name {
+			Some(name) => (name, ""),
+			None => ("", "=> "),
+		};
+
+		let parameters = parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ");
+
+		let body = match &func_def.body {
+			FunctionBody::Statements(scope) => self.jsify_scope(scope, context),
+			FunctionBody::External(external_spec) => {
+				let new_path = self.prepare_extern(
+					matches!(func_def.signature.flight, Phase::Inflight),
+					external_spec,
+					&func_def.span.file_id,
+				);
+				format!("return require({new_path})[\"{name}\"]({parameters})")
+			}
+		};
+		let mut modifiers = vec![];
+		if func_def.is_static {
+			modifiers.push("static")
+		}
+		if matches!(func_def.signature.flight, Phase::Inflight) {
+			modifiers.push("async")
+		}
+		let modifiers = modifiers.join(" ");
+
+		formatdoc!(
+			"
+			{modifiers} {name}({parameters}) {arrow} {{
 				{body}
 			}}"
 		)
+	}
+
+	/// Retrieves the contents of the extern file and copies it to the intermediate directory.
+	/// Returns the path to the copied file
+	fn prepare_extern(&self, is_inflight: bool, path: &String, current_wing_file: &String) -> String {
+		let current_wing_file_dir = Path::new(current_wing_file).parent().unwrap();
+		let path_relative_to_wing = current_wing_file_dir.join(&path);
+		let path_relative_to_wing = path_relative_to_wing.to_str().expect("Converting path to string");
+
+		let contents = std::fs::read_to_string(path_relative_to_wing).expect("Copying extern file");
+
+		let id = base16ct::lower::encode_string(&Sha256::new().chain_update(&contents).finalize());
+		let id_file = format!("{}.js", id);
+		let extern_id_path = Path::new(EXTERN_DIR).join(&id_file);
+
+		let final_dir = self.out_dir.join(EXTERN_DIR);
+		let final_path = self.out_dir.join(&extern_id_path);
+		fs::create_dir_all(final_dir).expect("Creating extern dir");
+		std::fs::write(&final_path, contents).expect("Copying extern file");
+
+		if is_inflight {
+			let relative_path = Path::new("..").join(&extern_id_path);
+			format!("\"{}\"", relative_path.to_str().expect("Converting path to string"))
+		} else {
+			Self::js_resolve_path(&extern_id_path.to_str().expect("Converting path to string").to_string())
+		}
 	}
 
 	fn jsify_class_member(&mut self, member: &ClassField) -> String {
@@ -913,7 +978,7 @@ impl<'a> JSifier<'a> {
 			self.jsify_resource_constructor(&class.constructor, class.parent.is_none(), context),
 			preflight_methods
 				.iter()
-				.map(|(n, m)| self.jsify_function(Some(&n.name), &m.parameters, &m.statements, m.is_static, context))
+				.map(|(n, m)| self.jsify_function(Some(&n.name), &m, context))
 				.collect::<Vec<String>>()
 				.join("\n"),
 		);
@@ -928,7 +993,7 @@ impl<'a> JSifier<'a> {
 				refs
 					.iter()
 					.map(|(field, ops)| format!(
-						"\"this.{}\": {{ ops: [{}] }}",
+						"\"{}\": {{ ops: [{}] }}",
 						field,
 						ops.iter().map(|op| format!("\"{}\"", op)).join(",")
 					))
@@ -992,7 +1057,7 @@ impl<'a> JSifier<'a> {
 			_toInflight() {{
 				{inner_clients}
 				const self_client_path = {client_path};
-				return {STDLIB}.core.NodeJsCode.fromInline(`(new (require(\"${{self_client_path}}\")).{resource_name}_inflight({{{captured_fields}}}))`);
+				return {STDLIB}.core.NodeJsCode.fromInline(`(new (require(\"${{self_client_path}}\")).{resource_name}({{{captured_fields}}}))`);
 			}}",
 			resource_name = resource_name.name,
 		)
@@ -1054,27 +1119,22 @@ impl<'a> JSifier<'a> {
 		let client_methods = inflight_methods
 			.iter()
 			.map(|(name, def)| {
-				format!(
-					"async {}",
-					self.jsify_function(
-						Some(&name.name),
-						&def.parameters,
-						&def.statements,
-						def.is_static,
-						&JSifyContext {
-							in_json: context.in_json.clone(),
-							phase: def.signature.flight,
-						}
-					)
+				self.jsify_function(
+					Some(&name.name),
+					&def,
+					&JSifyContext {
+						in_json: context.in_json.clone(),
+						phase: def.signature.flight,
+					},
 				)
 			})
 			.collect_vec();
 
 		let client_source = format!(
-			"export class {}_inflight {} {{\n{}\n{}}}",
+			"export class {} {} {{\n{}\n{}}}",
 			name.name,
 			if let Some(parent) = parent {
-				format!("extends {}_inflight", self.jsify_user_defined_type(parent))
+				format!("extends {}", self.jsify_user_defined_type(parent))
 			} else {
 				"".to_string()
 			},
@@ -1102,13 +1162,7 @@ impl<'a> JSifier<'a> {
 			} else {
 				"".to_string()
 			},
-			self.jsify_function(
-				Some("constructor"),
-				&class.constructor.parameters,
-				&class.constructor.statements,
-				false, // Constructors are are kind of static, but we don't add the `static` modifier to ctors in js so we pass false here
-				context
-			),
+			self.jsify_constructor(Some("constructor"), &class.constructor, context),
 			class
 				.fields
 				.iter()
@@ -1118,7 +1172,7 @@ impl<'a> JSifier<'a> {
 			class
 				.methods
 				.iter()
-				.map(|(n, m)| self.jsify_function(Some(&n.name), &m.parameters, &m.statements, m.is_static, context))
+				.map(|(n, m)| self.jsify_function(Some(&n.name), &m, context))
 				.collect::<Vec<String>>()
 				.join("\n")
 		)
@@ -1139,7 +1193,7 @@ impl<'a> JSifier<'a> {
 
 		for (method_name, function_def) in inflight_methods {
 			// visit statements of method and find all references to fields ("this.xxx")
-			let visitor = FieldReferenceVisitor::new(method_name, &function_def);
+			let visitor = FieldReferenceVisitor::new(&function_def);
 			let (refs, find_diags) = visitor.find_refs();
 
 			self.diagnostics.extend(find_diags);
@@ -1204,165 +1258,211 @@ struct FieldReferenceVisitor<'a> {
 	/// The key is field name, value is a list of operations performed on this field
 	references: BTreeMap<String, BTreeSet<String>>,
 
-	/// Used internally by the visitor to keep track of the path to the field
-	path: Vec<String>,
-
 	/// The resource type's symbol env (used to resolve field types)
 	function_def: &'a FunctionDefinition,
-	method_name: &'a Symbol,
 
-	env: SymbolEnvRef,
 	diagnostics: Diagnostics,
 }
 
 impl<'a> FieldReferenceVisitor<'a> {
-	pub fn new(method_name: &'a Symbol, function_def: &'a FunctionDefinition) -> Self {
+	pub fn new(function_def: &'a FunctionDefinition) -> Self {
 		Self {
 			references: BTreeMap::new(),
 			diagnostics: Diagnostics::new(),
-			method_name,
-			path: vec![],
 			function_def,
-			env: function_def.statements.env.borrow().as_ref().unwrap().get_ref(),
 		}
 	}
 
 	pub fn find_refs(mut self) -> (BTreeMap<String, BTreeSet<String>>, Diagnostics) {
-		self.visit_scope(&self.function_def.statements);
+		if let FunctionBody::Statements(statements) = &self.function_def.body {
+			self.visit_scope(statements);
+		}
 		(self.references, self.diagnostics)
 	}
 }
 
-impl<'ast> Visit<'ast> for FieldReferenceVisitor<'_> {
-	fn visit_reference(&mut self, node: &'ast Reference) {
-		if self.collect_inflight_refs(node) {
+impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
+	fn visit_expr(&mut self, node: &'ast Expr) {
+		let parts = self.analyze_expr(node);
+
+		let is_field_reference = match parts.first() {
+			Some(first) => first.text == "this" && parts.len() > 1,
+			None => false,
+		};
+
+		if !is_field_reference {
+			visit::visit_expr(self, node);
 			return;
 		}
 
-		visit::visit_reference(self, node);
+		let mut index = 1; // we know i[0] is "this" and that we have at least 2 parts
+
+		// iterate over the components of the expression and determine
+		// what are we capturing from preflight.
+		let mut capture = vec![];
+
+		while index < parts.len() {
+			let curr = parts.get(index).unwrap();
+
+			let Some(variable) = &curr.variable else {
+				panic!("unexpected - all components should have a variable at this point");
+			};
+
+			// we have lift off (reached an inflight component)! break our search.
+			if variable.flight == Phase::Inflight {
+				break;
+			}
+
+			// now we need to verify that the component can be captured.
+			// (1) non-reassignable
+			// (2) capturable type (immutable/resource).
+
+			// if the variable is reassignable, bail out
+			if variable.reassignable {
+				self.diagnostics.push(Diagnostic {
+					level: DiagnosticLevel::Error,
+					message: format!("Cannot capture reassignable field '{}'", curr.text),
+					span: Some(curr.expr.span.clone()),
+				});
+
+				return;
+			}
+
+			// if this type is not capturable, bail out
+			if !variable.type_.is_capturable() {
+				self.diagnostics.push(Diagnostic {
+					level: DiagnosticLevel::Error,
+					message: format!(
+						"Cannot capture field '{}' with non-capturable type '{}'",
+						curr.text, variable.type_
+					),
+					span: Some(curr.expr.span.clone()),
+				});
+
+				return;
+			}
+
+			// okay, so we have a non-reassignable, capturable type.
+			// one more special case is collections. we currently only support
+			// collections which do not include resources because we cannot
+			// qualify the capture.
+			if let Some(inner_type) = variable.type_.collection_item_type() {
+				if inner_type.as_resource().is_some() {
+					self.diagnostics.push(Diagnostic {
+						level: DiagnosticLevel::Error,
+						message: format!(
+							"Capturing collection of resources is not supported yet (type is '{}')",
+							variable.type_,
+						),
+						span: Some(curr.expr.span.clone()),
+					});
+
+					return;
+				}
+			}
+
+			// accumulate "curr" into capture
+			capture.push(curr);
+			index = index + 1;
+
+			// if "curr" is a collection, break here because the following
+			// components are going to be simple identifiers (TODO: is this a bug in
+			// how we model the API of collections?)
+			if variable.type_.collection_item_type().is_some() {
+				break;
+			}
+		}
+
+		// if capture is empty, it means this is a reference to an inflight field, so we can just move
+		// on
+		if capture.is_empty() {
+			return;
+		}
+
+		// now that we have "capture", the rest of the expression
+		// is the "qualification" of the capture
+		let binding = parts.iter().collect::<Vec<_>>();
+		let qualification = binding.split_at(index).1.iter();
+
+		// if our last captured component is a resource and we don't have
+		// a qualification for it, it's currently an error.
+		if let Some(c) = capture.last() {
+			if let Some(v) = &c.variable {
+				if v.type_.as_resource().is_some() {
+					if qualification.len() == 0 {
+						self.diagnostics.push(Diagnostic {
+							level: DiagnosticLevel::Error,
+							message: format!(
+								"Unable to qualify which operations are performed on 'this.{}' of type '{}'. This is not supported yet.",
+								c.text, v.type_,
+							),
+							span: Some(c.expr.span.clone()),
+						});
+
+						return;
+					}
+				}
+			}
+		}
+
+		let fmt = |x: Iter<&Component>| x.map(|f| format!("{}", f.text)).collect_vec();
+		let key = format!("this.{}", fmt(capture.iter()).join("."));
+		let ops = fmt(qualification);
+
+		self.references.entry(key.to_string()).or_default().extend(ops);
+	}
+}
+
+#[derive(Clone, Debug)]
+
+struct Component<'a> {
+	expr: &'a Expr,
+	text: String,
+	variable: Option<VariableInfo>,
+}
+
+impl Display for Component<'_> {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		write!(f, "{}", self.text)
 	}
 }
 
 impl<'a> FieldReferenceVisitor<'a> {
-	/// If node is a reference to a field of "this", check that it references a legal field and add it
-	/// to the list of references. Returns true if no additional processing is needed or false if we
-	/// need to visit the node's children.
-	fn collect_inflight_refs(&mut self, node: &Reference) -> bool {
-		let (object, property) = match node {
-			Reference::InstanceMember { object, property } => (object, property),
-			_ => return false,
-		};
-
-		let r = match &object.kind {
-			ExprKind::Reference(r) => r,
-			_ => return false,
-		};
-
-		let s = match r {
-			Reference::Identifier(s) => s,
-			_ => {
-				self.path.insert(0, property.name.clone());
-				return false;
-			}
-		};
-
-		if s.name != "this" {
-			return false;
-		}
-
-		// resolve the type of the resource by looking up "this" in our environment
-		let resource_type = self
-			.env
-			.lookup(s, None)
-			.expect("'this' to be found")
-			.as_variable()
-			.expect("'this' to be a variable")
-			.type_;
-
-		let r = match &*resource_type {
-			Type::Resource(r) => r,
-			_ => panic!("'this' is not a resource"),
-		};
-
-		// lookup our field in the class environment
-		let field_kind = r
-			.env
-			.lookup(property, None)
-			.expect("unable to find field in resource env")
-			.as_variable()
-			.expect("field is not a variable");
-
-		// we only care about preflight fields (inflight fields are normal references)
-		if field_kind.flight != Phase::Preflight {
-			return false;
-		}
-
-		// don't allow capturing reassignable (`var`) fields.
-		if field_kind.reassignable {
-			self.diagnostics.push(Diagnostic {
-				level: DiagnosticLevel::Error,
-				message: format!(
-					"Unable to reference \"this.{}\" from inflight method \"{}\" because it is reassignable (\"var\")",
-					property.name, self.method_name.name,
-				),
-				span: Some(property.span.clone()),
-			});
-
-			return true;
-		}
-
-		// check if the type is capturable (resource, primitive or immutable collection)
-		if !field_kind.type_.is_capturable() {
-			self.diagnostics.push(Diagnostic {
-				level: DiagnosticLevel::Error,
-				message: format!(
-					"Unable to reference \"this.{}\" from inflight method \"{}\" because type {} is not capturable",
-					property.name, self.method_name.name, field_kind.type_,
-				),
-				span: Some(property.span.clone()),
-			});
-
-			return true;
-		}
-
-		debug!(
-			"field \"this.{}\" is referenced from inflight method {}",
-			property.name, self.method_name.name
-		);
-
-		// get/create an "ops" set for this field
-		let ops = self.references.entry(property.name.clone()).or_default();
-
-		if !self.path.is_empty() {
-			let op = self.path[0].clone();
-
-			// if we are referencing a resource, verify that the operation is an inflight method
-			if let Some(r) = field_kind.type_.as_resource() {
-				if r
-					.get_method(&op)
-					.filter(|v| v.flight == Phase::Inflight && !v.is_static)
-					.is_none()
-				{
-					self.diagnostics.push(Diagnostic {
-						level: DiagnosticLevel::Error,
-						message: format!(
-							"Unable to reference \"{}\" from inflight method \"{}\" because it is not an inflight method",
-							self.path.join("."),
-							self.method_name.name,
-						),
-						span: Some(property.span.clone()),
-					});
-
-					return true;
-				}
+	fn analyze_expr(&self, node: &'a Expr) -> Vec<Component> {
+		match &node.kind {
+			ExprKind::Reference(Reference::Identifier(x)) => {
+				return vec![Component {
+					expr: node,
+					text: x.name.to_string(),
+					variable: None,
+				}];
 			}
 
-			ops.insert(op);
+			ExprKind::Reference(Reference::InstanceMember { object, property }) => {
+				let var = if let Some(cls) = object.evaluated_type.borrow().unwrap().as_class_or_resource() {
+					Some(
+						cls
+							.env
+							.lookup(&property, None)
+							.expect("covered by type checking")
+							.as_variable()
+							.unwrap(),
+					)
+				} else {
+					None
+				};
+
+				let prop = vec![Component {
+					expr: node,
+					variable: var,
+					text: property.name.to_string(),
+				}];
+
+				let obj = self.analyze_expr(&object);
+				return [obj, prop].concat();
+			}
+
+			_ => vec![],
 		}
-
-		self.path.clear();
-
-		// no need to visit recursively
-		return true;
 	}
 }

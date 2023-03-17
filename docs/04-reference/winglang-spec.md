@@ -477,13 +477,13 @@ j1.hello = a1;
 
 ##### 1.1.4.9 Serialization
 
-The `Json.to_str(j: Json): str` static method can be used to serialize a `Json` as a string
+The `Json.stringify(j: Json): str` static method can be used to serialize a `Json` as a string
 ([JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)):
 
 ```js
-assert(Json.to_str(json_string) == "\"hello\"");
-assert(Json.to_str(json_obj) == "{\"boom\":123}");
-assert(Json.to_str(json_mut_obj, indent: 2) == "{\n\"hello\": 123,\n"  \"world\": [\n    1,\n    2,\n    3\n  ],\n  \"boom\": {\n    \"hello\": 1233\n  }\n}");
+assert(Json.stringify(json_string) == "\"hello\"");
+assert(Json.stringify(json_obj) == "{\"boom\":123}");
+assert(Json.stringify(json_mut_obj, indent: 2) == "{\n\"hello\": 123,\n"  \"world\": [\n    1,\n    2,\n    3\n  ],\n  \"boom\": {\n    \"hello\": 1233\n  }\n}");
 ```
 
 The `Json.parse(s: str): Json` static method can be used to parse a string into a `Json`:
@@ -541,7 +541,7 @@ A `Json` value can be printed using `print()`, in which case it will be pretty-f
 ```js
 print("my object is: ${json_obj}");
 // is equivalent to
-print("my object is: ${Json.to_str(json_obj, indent: 2)}");
+print("my object is: ${Json.stringify(json_obj, indent: 2)}");
 ```
 
 This will output:

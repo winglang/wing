@@ -78,7 +78,7 @@ export class Json {
    * @param json to format as string
    * @returns string representation of the Json
    */
-  public static toStr(json: Json, indent?: number): string {
+  public static stringify(json: Json, indent?: number): string {
     json;
     indent;
     throw new Error("Macro");

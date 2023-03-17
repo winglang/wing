@@ -1,8 +1,8 @@
 mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{
-	Class as AstClass, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-	ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
+	Class as AstClass, Expr, ExprKind, FunctionBody, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt,
+	StmtKind, Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{
@@ -708,6 +708,19 @@ impl TypeRef {
 		}
 	}
 
+	/// Returns the item type of a collection type, or None if the type is not a collection.
+	pub fn collection_item_type(&self) -> Option<TypeRef> {
+		match **self {
+			Type::Array(t) => Some(t),
+			Type::MutArray(t) => Some(t),
+			Type::Map(t) => Some(t),
+			Type::MutMap(t) => Some(t),
+			Type::Set(t) => Some(t),
+			Type::MutSet(t) => Some(t),
+			_ => None,
+		}
+	}
+
 	pub fn is_mutable_collection(&self) -> bool {
 		if let Type::MutArray(_) | Type::MutSet(_) | Type::MutMap(_) = **self {
 			true
@@ -1060,6 +1073,17 @@ impl<'a> TypeChecker<'a> {
 				} else if op.numerical_args() {
 					self.validate_type(ltype, self.types.number(), left);
 					self.validate_type(rtype, self.types.number(), right);
+				} else if matches!(op, crate::ast::BinaryOperator::UnwrapOr) {
+					// Left argument must be an optional type
+					if !ltype.is_option() {
+						self.expr_error(left, format!("Expected optional type, found \"{}\"", ltype));
+						return ltype;
+					} else {
+						// Right argument must be a subtype of the inner type of the left argument
+						let inner_type = ltype.maybe_unwrap_option();
+						self.validate_type(rtype, inner_type, right);
+						return inner_type;
+					}
 				} else {
 					self.validate_type(rtype, ltype, exp);
 				}
@@ -1427,11 +1451,23 @@ impl<'a> TypeChecker<'a> {
 					statement_idx,
 				);
 				self.add_arguments_to_env(&func_def.parameters, &sig, &mut function_env);
-				func_def.statements.set_env(function_env);
 
-				self.inner_scopes.push(&func_def.statements);
+				if let FunctionBody::Statements(scope) = &func_def.body {
+					scope.set_env(function_env);
 
-				function_type
+					self.inner_scopes.push(scope);
+
+					function_type
+				} else {
+					function_type
+				}
+			}
+			ExprKind::OptionalTest { optional } => {
+				let t = self.type_check_exp(optional, env, statement_idx, context);
+				if !t.is_option() {
+					self.expr_error(optional, format!("Expected optional type, found \"{}\"", t));
+				}
+				self.types.bool()
 			}
 		};
 		exp.evaluated_type.replace(Some(t));
@@ -2095,8 +2131,11 @@ impl<'a> TypeChecker<'a> {
 					}
 					actual_parameters.extend(method_def.parameters.clone());
 					self.add_arguments_to_env(&actual_parameters, method_sig, &mut method_env);
-					method_def.statements.set_env(method_env);
-					self.inner_scopes.push(&method_def.statements);
+
+					if let FunctionBody::Statements(scope) = &method_def.body {
+						scope.set_env(method_env);
+						self.inner_scopes.push(scope);
+					}
 				}
 
 				// Check that the class satisfies all of its interfaces
@@ -2553,7 +2592,7 @@ impl<'a> TypeChecker<'a> {
 						if let Some(stdlib_symbol) = self.get_stdlib_symbol(symbol) {
 							path.push(stdlib_symbol);
 							path.push(Symbol {
-								name: "std".to_string(),
+								name: WINGSDK_STD_MODULE.to_string(),
 								span: symbol.span.clone(),
 							});
 						} else {
@@ -2565,8 +2604,13 @@ impl<'a> TypeChecker<'a> {
 						path.push(property.clone());
 						curr_expr = &object;
 					}
-					Reference::TypeMember { .. } => {
-						panic!("Type property references cannot be a type name because they have a property");
+					Reference::TypeMember { type_, .. } => {
+						assert_eq!(
+							path.len(),
+							0,
+							"Type property references cannot be a type name because they have a property"
+						);
+						return Some(type_.clone());
 					}
 				},
 				_ => return None,
@@ -2616,7 +2660,7 @@ impl<'a> TypeChecker<'a> {
 						property: property.clone(),
 					};
 					// Replace the reference with the new one, this is unsafe because `reference` isn't mutable and theoretically someone may
-					// hold anoter reference to it. But our AST doesn't hold up/cross references so this is safe as long as we return right.
+					// hold another reference to it. But our AST doesn't hold up/cross references so this is safe as long as we return right.
 					let const_ptr = reference as *const Reference;
 					let mut_ptr = const_ptr as *mut Reference;
 					unsafe {

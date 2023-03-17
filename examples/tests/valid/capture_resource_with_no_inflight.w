@@ -8,5 +8,5 @@ resource A {
 
 let a = new A();
 new cloud.Function(inflight () => {
- assert("hey" == a.field);
+  assert("hey" == a.field);
 }) as "test";

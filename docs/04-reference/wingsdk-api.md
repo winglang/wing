@@ -2431,7 +2431,7 @@ The index of the element in the Json Array to return.
 | <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
 | <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json object. |
 | <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
-| <code><a href="#@winglang/sdk.std.Json.toStr">to_str</a></code> | Formats Json as string. |
+| <code><a href="#@winglang/sdk.std.Json.stringify">stringify</a></code> | Formats Json as string. |
 | <code><a href="#@winglang/sdk.std.Json.values">values</a></code> | Returns the values from the Json. |
 
 ---
@@ -2534,19 +2534,19 @@ to parse as Json.
 
 ---
 
-##### `to_str` <a name="to_str" id="@winglang/sdk.std.Json.toStr"></a>
+##### `stringify` <a name="stringify" id="@winglang/sdk.std.Json.stringify"></a>
 
 ```wing
 bring std;
 
-std.Json.to_str(json: Json, indent?: num)
+std.Json.stringify(json: Json, indent?: num)
 ```
 
 Formats Json as string.
 
 (JSON.stringify($args$))
 
-###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.toStr.parameter.json"></a>
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.stringify.parameter.json"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
@@ -2554,7 +2554,7 @@ to format as string.
 
 ---
 
-###### `indent`<sup>Optional</sup> <a name="indent" id="@winglang/sdk.std.Json.toStr.parameter.indent"></a>
+###### `indent`<sup>Optional</sup> <a name="indent" id="@winglang/sdk.std.Json.stringify.parameter.indent"></a>
 
 - *Type:* num
 
