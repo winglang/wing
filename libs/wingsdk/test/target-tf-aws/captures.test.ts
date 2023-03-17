@@ -7,7 +7,11 @@ import { tfResourcesOf, tfSanitize } from "../util";
 
 describe("function with bucket binding", () => {
   // Dirty little helper to check if a config contains a set of actions
-  const statementsContain = (config: any, actions: string[], effect: string): boolean => {
+  const statementsContain = (
+    config: any,
+    actions: string[],
+    effect: string
+  ): boolean => {
     const policies = config.resource.aws_iam_role_policy;
 
     // This is dangerous because it checks for any policy in the entire config to contain the actions
@@ -17,7 +21,7 @@ describe("function with bucket binding", () => {
         if (statement.Effect !== effect) {
           continue;
         }
-        if (actions.every(action => statement.Action.includes(action))) {
+        if (actions.every((action) => statement.Action.includes(action))) {
           return true;
         }
       }
@@ -42,10 +46,10 @@ describe("function with bucket binding", () => {
     );
     cloud.Function._newFunction(app, "Function", inflight);
     const output = app.synth();
-  
+
     // THEN
     expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
-  
+
     expect(tfResourcesOf(output)).toEqual([
       "aws_iam_role",
       "aws_iam_role_policy",
@@ -77,7 +81,7 @@ describe("function with bucket binding", () => {
     cloud.Function._newFunction(app, "Function", inflight);
     const output = JSON.parse(app.synth());
     const hasActions = statementsContain(output, ["s3:PutObject*"], "Allow");
-      
+
     // THEN
     expect(hasActions).toEqual(true);
   });
@@ -99,14 +103,16 @@ describe("function with bucket binding", () => {
     );
     cloud.Function._newFunction(app, "Function", inflight);
     const output = JSON.parse(app.synth());
-    const hasActions = statementsContain(output, ["s3:GetObject*", "s3:GetBucket*", "s3:List*"], "Allow");
-      
+    const hasActions = statementsContain(
+      output,
+      ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+      "Allow"
+    );
+
     // THEN
     expect(hasActions).toEqual(true);
   });
-
-})
-
+});
 
 test("function with a function binding", () => {
   // GIVEN
