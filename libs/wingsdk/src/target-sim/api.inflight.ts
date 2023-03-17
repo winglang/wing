@@ -8,21 +8,8 @@ import {
   ApiSchema,
   API_TYPE,
 } from "./schema-resources";
-import { ApiResponse, HttpMethod, IApiClient, IFunctionClient } from "../cloud";
+import { ApiResponse, IApiClient, IFunctionClient } from "../cloud";
 import { ISimulatorContext, TraceType } from "../testing/simulator";
-
-// For type safety, each const string must be one of the expressjs
-// routing methods. See https://expressjs.com/en/api.html#app.METHOD
-const HTTP_METHOD_LOWERCASE = {
-  [HttpMethod.GET]: "get" as const,
-  [HttpMethod.POST]: "post" as const,
-  [HttpMethod.PUT]: "put" as const,
-  [HttpMethod.DELETE]: "delete" as const,
-  [HttpMethod.HEAD]: "head" as const,
-  [HttpMethod.OPTIONS]: "options" as const,
-  [HttpMethod.PATCH]: "patch" as const,
-  [HttpMethod.CONNECT]: "connect" as const,
-};
 
 const LOCALHOST_HOSTNAME = "127.0.0.1";
 
@@ -40,7 +27,15 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
     // Set up an express server that handles the routes.
     this.app = express();
     for (const route of this.routes) {
-      const method = HTTP_METHOD_LOWERCASE[route.method];
+      const method = route.method.toLowerCase() as
+        | "get"
+        | "post"
+        | "put"
+        | "delete"
+        | "head"
+        | "options"
+        | "patch"
+        | "connect";
 
       const fnClient = this.context.findInstance(
         route.functionHandle

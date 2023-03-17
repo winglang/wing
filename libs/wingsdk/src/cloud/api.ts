@@ -275,7 +275,7 @@ export enum HttpMethod {
   /** Delete */
   DELETE = "DELETE",
   /** Connect */
-  CONNECT = "Connect",
+  CONNECT = "CONNECT",
   /** Options */
   OPTIONS = "OPTIONS",
   /** Patch */

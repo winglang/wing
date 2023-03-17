@@ -1,5 +1,5 @@
 import { BaseResourceAttributes, BaseResourceSchema } from "./schema";
-import { HttpMethod } from "../cloud";
+// import { HttpMethod } from "../cloud";
 
 export const API_TYPE = "wingsdk.cloud.Api";
 export const QUEUE_TYPE = "wingsdk.cloud.Queue";
@@ -33,7 +33,7 @@ export interface ApiRoute {
   /** The route to handle. */
   readonly route: string;
   /** The HTTP method to handle. */
-  readonly method: HttpMethod;
+  readonly method: string;
   /** The function that should be called when the route is hit. */
   readonly functionHandle: FunctionHandle;
 }

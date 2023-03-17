@@ -1,12 +1,15 @@
 import { Construct } from "constructs";
-import { ISimulatorResource } from ".";
 import { Function } from "./function";
+import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { ApiSchema, API_TYPE } from "./schema-resources";
-import { bindSimulatorResource, simulatorHandleToken } from "./util";
-import { cloud } from "..";
-import { HttpMethod } from "../cloud";
-import { Inflight, Code, IInflightHost, Resource } from "../core";
+import {
+  bindSimulatorResource,
+  makeSimulatorJsClient,
+  simulatorHandleToken,
+} from "./util";
+import * as cloud from "../cloud";
+import * as core from "../core";
 
 export class Api extends cloud.Api implements ISimulatorResource {
   private _routes: ApiSchema["props"]["routes"] = [];
@@ -27,10 +30,10 @@ export class Api extends cloud.Api implements ISimulatorResource {
 
   public get(
     route: string,
-    inflight: Inflight,
+    inflight: core.Inflight,
     props?: cloud.ApiGetProps | undefined
   ): void {
-    this._addToSpec(route, HttpMethod.GET, undefined);
+    this._addToSpec(route, cloud.HttpMethod.GET, undefined);
     const hash = inflight.node.addr.slice(-8);
 
     // No conversion is necessary here because the simulator uses the
@@ -51,11 +54,11 @@ export class Api extends cloud.Api implements ISimulatorResource {
     const functionHandle = simulatorHandleToken(fn);
     this._routes.push({
       route,
-      method: HttpMethod.GET,
+      method: cloud.HttpMethod.GET,
       functionHandle,
     });
 
-    Resource.addConnection({
+    core.Resource.addConnection({
       from: this,
       to: fn,
       relationship: "on_message",
@@ -70,12 +73,12 @@ export class Api extends cloud.Api implements ISimulatorResource {
    */
   public post(
     route: string,
-    inflight: Inflight,
+    inflight: core.Inflight,
     props?: cloud.ApiPostProps | undefined
   ): void {
     inflight;
     props;
-    this._addToSpec(route, HttpMethod.POST, undefined);
+    this._addToSpec(route, cloud.HttpMethod.POST, undefined);
   }
 
   /**
@@ -86,12 +89,12 @@ export class Api extends cloud.Api implements ISimulatorResource {
    */
   public put(
     route: string,
-    inflight: Inflight,
+    inflight: core.Inflight,
     props?: cloud.ApiPutProps | undefined
   ): void {
     inflight;
     props;
-    this._addToSpec(route, HttpMethod.PUT, undefined);
+    this._addToSpec(route, cloud.HttpMethod.PUT, undefined);
   }
 
   /**
@@ -102,12 +105,12 @@ export class Api extends cloud.Api implements ISimulatorResource {
    */
   public delete(
     route: string,
-    inflight: Inflight,
+    inflight: core.Inflight,
     props?: cloud.ApiDeleteProps | undefined
   ): void {
     inflight;
     props;
-    this._addToSpec(route, HttpMethod.DELETE, undefined);
+    this._addToSpec(route, cloud.HttpMethod.DELETE, undefined);
   }
 
   /**
@@ -118,12 +121,12 @@ export class Api extends cloud.Api implements ISimulatorResource {
    */
   public patch(
     route: string,
-    inflight: Inflight,
+    inflight: core.Inflight,
     props?: cloud.ApiPatchProps | undefined
   ): void {
     inflight;
     props;
-    this._addToSpec(route, HttpMethod.PATCH, undefined);
+    this._addToSpec(route, cloud.HttpMethod.PATCH, undefined);
   }
 
   /**
@@ -134,12 +137,12 @@ export class Api extends cloud.Api implements ISimulatorResource {
    */
   public options(
     route: string,
-    inflight: Inflight,
+    inflight: core.Inflight,
     props?: cloud.ApiOptionsProps | undefined
   ): void {
     inflight;
     props;
-    this._addToSpec(route, HttpMethod.OPTIONS, undefined);
+    this._addToSpec(route, cloud.HttpMethod.OPTIONS, undefined);
   }
 
   /**
@@ -150,12 +153,12 @@ export class Api extends cloud.Api implements ISimulatorResource {
    */
   public head(
     route: string,
-    inflight: Inflight,
+    inflight: core.Inflight,
     props?: cloud.ApiHeadProps | undefined
   ): void {
     inflight;
     props;
-    this._addToSpec(route, HttpMethod.HEAD, undefined);
+    this._addToSpec(route, cloud.HttpMethod.HEAD, undefined);
   }
 
   /**
@@ -166,12 +169,12 @@ export class Api extends cloud.Api implements ISimulatorResource {
    */
   public connect(
     route: string,
-    inflight: Inflight,
+    inflight: core.Inflight,
     props?: cloud.ApiConnectProps | undefined
   ): void {
     inflight;
     props;
-    this._addToSpec(route, HttpMethod.CONNECT, undefined);
+    this._addToSpec(route, cloud.HttpMethod.CONNECT, undefined);
   }
 
   public toSimulator(): BaseResourceSchema {
@@ -187,12 +190,12 @@ export class Api extends cloud.Api implements ISimulatorResource {
   }
 
   /** @internal */
-  public _toInflight(): Code {
-    throw new Error("Method not implemented.");
+  public _toInflight(): core.Code {
+    return makeSimulatorJsClient("bucket", this);
   }
 
   /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public _bind(host: core.IInflightHost, ops: string[]): void {
     bindSimulatorResource("api", this, host);
     super._bind(host, ops);
   }
