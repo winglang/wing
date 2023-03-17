@@ -759,9 +759,23 @@ impl TypeRef {
 	}
 
 	pub fn is_capturable(&self) -> bool {
-		match **self {
+		match &**self {
 			Type::Resource(_) => true,
-			Type::Interface(_) => true,
+			Type::Interface(iface) => {
+				// TODO: This should check that the interface extends `IResource` from
+				// the SDK, not just any interface with the name `IResource`
+				if iface.name.name == "IResource"
+					|| iface.extends.iter().any(|i| {
+						i.as_interface()
+							.expect("Interface extends a type that isn't an interface")
+							.name
+							.name == "IResource"
+					}) {
+					true
+				} else {
+					false
+				}
+			}
 			Type::Enum(_) => true,
 			Type::Number => true,
 			Type::String => true,
