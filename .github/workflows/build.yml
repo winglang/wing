@@ -142,7 +142,8 @@ jobs:
         run: docker pull redis
 
       - name: Install Dependencies
-        uses: bahmutov/npm-install@v1
+        # uses: bahmutov/npm-install@v1
+        run: npm install
         
 
       - name: Lint Nx Configuration
