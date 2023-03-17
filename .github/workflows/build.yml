@@ -102,7 +102,8 @@ jobs:
       - name: Prestuff
         run: |
           whoami \
-          && sudo chmod 777 -R /__w
+          && sudo chmod 777 -R /__w \
+          && sudo chmod 666 /var/run/docker.sock
     
       - name: Checkout
         uses: actions/checkout@v3
