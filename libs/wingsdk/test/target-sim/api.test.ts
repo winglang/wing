@@ -101,3 +101,49 @@ test("api with multiple methods on same route", async () => {
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
+
+test("api with multiple routes", async () => {
+  // GIVEN
+  const ROUTE1 = "/hello/world";
+  const ROUTE2 = "/hello/wingnuts";
+  const RESPONSE1 = "boom";
+  const RESPONSE2 = "bang";
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const inflight1 = Testing.makeHandler(
+    app,
+    "Handler1",
+    INFLIGHT_CODE(RESPONSE1)
+  );
+  const inflight2 = Testing.makeHandler(
+    app,
+    "Handler2",
+    INFLIGHT_CODE(RESPONSE2)
+  );
+  api.get(ROUTE1, inflight1);
+  api.get(ROUTE2, inflight2);
+
+  // WHEN
+  const s = await app.startSimulator();
+
+  const apiAttrs = s.getResourceConfig("/my_api").attrs as ApiAttributes;
+  const apiUrl = apiAttrs.url;
+
+  // WHEN
+  const response1 = await fetch(`${apiUrl}${ROUTE1}`, { method: "GET" });
+  const response2 = await fetch(`${apiUrl}${ROUTE2}`, { method: "GET" });
+
+  // THEN
+  await s.stop();
+
+  expect(response1.status).toEqual(200);
+  expect(await response1.text()).toEqual(RESPONSE1);
+
+  expect(response2.status).toEqual(200);
+  expect(await response2.text()).toEqual(RESPONSE2);
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+// TODO: test POST with body
