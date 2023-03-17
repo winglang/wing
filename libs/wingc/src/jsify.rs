@@ -727,8 +727,7 @@ impl<'a> JSifier<'a> {
 					phase: Phase::Inflight,
 				},
 			),
-			// TODO extern usage with closures is not supported
-			FunctionBody::External(_) => format!("{{}}"),
+			FunctionBody::External(_) => format!("{{ throw new Error(\"extern with closures is not supported\") }}"),
 		};
 
 		let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());

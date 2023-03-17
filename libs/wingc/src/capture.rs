@@ -84,10 +84,8 @@ impl Visit<'_> for CaptureVisitor {
 	}
 
 	fn visit_function_definition(&mut self, func_def: &FunctionDefinition) {
-		let func_scope = if let FunctionBody::Statements(scope) = &func_def.body {
-			scope
-		} else {
-			return;
+		let FunctionBody::Statements(func_scope) = &func_def.body else    {
+			return   ;
 		};
 
 		match func_def.signature.flight {
@@ -307,9 +305,7 @@ fn scan_captures_in_expression(
 			// Can't define preflight stuff in inflight context
 			assert!(func_def.signature.flight != Phase::Preflight);
 			if let Phase::Inflight = func_def.signature.flight {
-				let func_scope = if let FunctionBody::Statements(scope) = &func_def.body {
-					scope
-				} else {
+				let FunctionBody::Statements(func_scope) = &func_def.body else {
 					return res;
 				};
 
@@ -390,9 +386,7 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 			}) => {
 				res.extend(scan_captures_in_inflight_scope(&constructor.statements, diagnostics));
 				for (_, m) in methods.iter() {
-					let func_scope = if let FunctionBody::Statements(scope) = &m.body {
-						scope
-					} else {
+					let FunctionBody::Statements(func_scope) = &m.body else {
 						continue;
 					};
 					res.extend(scan_captures_in_inflight_scope(func_scope, diagnostics))
