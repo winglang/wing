@@ -12,6 +12,7 @@ use crate::ast::{
 	Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
+use crate::WINGSDK_STD_MODULE;
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
@@ -684,7 +685,16 @@ impl<'s> Parser<'s> {
 			let object_expr = self.get_child_field(nested_node, "object")?;
 			let object_expr = if object_expr.kind() == "json_container_type" {
 				Expr {
-					kind: ExprKind::Reference(Reference::Identifier(self.node_symbol(&object_expr)?)),
+					kind: ExprKind::Reference(Reference::TypeMember {
+						type_: UserDefinedType {
+							root: Symbol {
+								name: WINGSDK_STD_MODULE.to_string(),
+								span: Default::default(),
+							},
+							fields: vec![self.node_symbol(&object_expr)?],
+						},
+						property: self.node_symbol(&property)?,
+					}),
 					span: self.node_span(&object_expr),
 					evaluated_type: RefCell::new(None),
 				}
