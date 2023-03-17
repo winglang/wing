@@ -12,6 +12,7 @@ use crate::ast::{
 	Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
+use crate::WINGSDK_STD_MODULE;
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
@@ -691,8 +692,27 @@ impl<'s> Parser<'s> {
 			return self.add_error(format!("Syntax error"), &nested_node);
 		}
 		if let Some(property) = nested_node.child_by_field_name("property") {
+			let object_expr = self.get_child_field(nested_node, "object")?;
+			let object_expr = if object_expr.kind() == "json_container_type" {
+				Expr {
+					kind: ExprKind::Reference(Reference::TypeMember {
+						type_: UserDefinedType {
+							root: Symbol {
+								name: WINGSDK_STD_MODULE.to_string(),
+								span: Default::default(),
+							},
+							fields: vec![self.node_symbol(&object_expr)?],
+						},
+						property: self.node_symbol(&property)?,
+					}),
+					span: self.node_span(&object_expr),
+					evaluated_type: RefCell::new(None),
+				}
+			} else {
+				self.build_expression(&nested_node.child_by_field_name("object").unwrap())?
+			};
 			Ok(Reference::InstanceMember {
-				object: Box::new(self.build_expression(&nested_node.child_by_field_name("object").unwrap())?),
+				object: Box::new(object_expr),
 				property: self.node_symbol(&property)?,
 			})
 		} else {
@@ -719,7 +739,7 @@ impl<'s> Parser<'s> {
 	fn build_reference(&self, reference_node: &Node) -> DiagnosticResult<Reference> {
 		let actual_node = reference_node.named_child(0).unwrap();
 		match actual_node.kind() {
-			"identifier" | "stdlib_identifier" => Ok(Reference::Identifier(self.node_symbol(&actual_node)?)),
+			"identifier" => Ok(Reference::Identifier(self.node_symbol(&actual_node)?)),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node)?),
 			"ERROR" => self.add_error(format!("Expected type || {:#?}", reference_node), &actual_node),
 			other => self.report_unimplemented_grammar(other, "type node", &actual_node),
@@ -815,6 +835,7 @@ impl<'s> Parser<'s> {
 						"/" => BinaryOperator::Div,
 						"\\" => BinaryOperator::FloorDiv,
 						"**" => BinaryOperator::Power,
+						"??" => BinaryOperator::UnwrapOr,
 						"ERROR" => self.add_error::<BinaryOperator>(format!("Expected binary operator"), expression_node)?,
 						other => return self.report_unimplemented_grammar(other, "binary operator", expression_node),
 					},
@@ -911,8 +932,12 @@ impl<'s> Parser<'s> {
 				ExprKind::Literal(self.build_duration(&expression_node)?),
 				expression_span,
 			)),
-			"reference" => Ok(Expr::new(
-				ExprKind::Reference(self.build_reference(&expression_node)?),
+			"identifier" => Ok(Expr::new(
+				ExprKind::Reference(Reference::Identifier(self.node_symbol(&expression_node)?)),
+				expression_span,
+			)),
+			"nested_identifier" => Ok(Expr::new(
+				ExprKind::Reference(self.build_nested_identifier(&expression_node)?),
 				expression_span,
 			)),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap()),
