@@ -94,7 +94,7 @@ jobs:
     timeout-minutes: 25
     runs-on: ubuntu-latest
     container:
-      image: "ubuntu"
+      image: "hasanaburayyan/gha-ubuntu"
     needs: prepare
     env:
       PROJEN_BUMP_VERSION: ${{ needs.prepare.outputs.version }}
@@ -106,23 +106,23 @@ jobs:
       - name: Setup Node/NPM with pinned Volta version
         uses: volta-cli/action@v4.0.0
 
-      - name: Install Deps
-        run: apt-get update && apt-get install -y curl ca-certificates gnupg lsb-release make
+      # - name: Install Deps
+      #   run: apt-get update && apt-get install -y curl ca-certificates gnupg lsb-release make
 
-      - name: Install Docker
-        run: |
-          mkdir -m 0755 -p /etc/apt/keyrings \
-          && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
-          && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-          $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
-          && apt-get update \
-          && apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
-          && chmod 777 -R /__w \
-          && useradd --uid 1001 -m gha_user \
-          && apt-get install -y sudo \
-          && echo gha_user ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/gha_user \
-          && chmod 0440 /etc/sudoers.d/gha_user \
-          && su gha_user
+      # - name: Install Docker
+      #   run: |
+      #     mkdir -m 0755 -p /etc/apt/keyrings \
+      #     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
+      #     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+      #     $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
+      #     && apt-get update \
+      #     && apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
+      #     && chmod 777 -R /__w \
+      #     && useradd --uid 1001 -m gha_user \
+      #     && apt-get install -y sudo \
+      #     && echo gha_user ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/gha_user \
+      #     && chmod 0440 /etc/sudoers.d/gha_user \
+      #     && su gha_user
 
       - name: Who am I
         run: |
