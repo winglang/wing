@@ -118,8 +118,10 @@ jobs:
           && apt-get update \
           && apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
           && chmod 777 -R /__w \
-          && mkdir /github/home/.npm \
-          && chown -R 1001:123 /github/home/.npm
+          && useradd --uid 1001 --gid 1001 -m gha_user \
+          && echo gha_user ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/gha_user \
+          && chmod 0440 /etc/sudoers.d/gha_user \
+          && su gha_user
 
       - name: Who am I
         run: |
@@ -142,8 +144,7 @@ jobs:
         run: docker pull redis
 
       - name: Install Dependencies
-        # uses: bahmutov/npm-install@v1
-        run: npm install --force
+        uses: bahmutov/npm-install@v1
         
 
       - name: Lint Nx Configuration
