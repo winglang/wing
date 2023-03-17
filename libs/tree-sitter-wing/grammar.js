@@ -32,7 +32,9 @@ module.exports = grammar({
     [$.json_literal, $.structured_access_expression]
   ],
 
-  conflicts: ($) => [[$.reference, $.custom_type]],
+  conflicts: ($) => [
+    [$.expression, $.custom_type]
+  ],
 
   supertypes: ($) => [$.expression, $._literal],
 
@@ -269,7 +271,8 @@ module.exports = grammar({
         $.unary_expression,
         $.new_expression,
         $._literal,
-        $.reference,
+        $.identifier,
+        $.nested_identifier,
         $.call,
         $.preflight_closure,
         $.inflight_closure,

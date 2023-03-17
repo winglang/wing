@@ -1470,7 +1470,11 @@
         },
         {
           "type": "SYMBOL",
-          "name": "reference"
+          "name": "identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "nested_identifier"
         },
         {
           "type": "SYMBOL",
@@ -4118,7 +4122,7 @@
   ],
   "conflicts": [
     [
-      "reference",
+      "expression",
       "custom_type"
     ]
   ],

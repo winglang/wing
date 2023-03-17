@@ -901,8 +901,12 @@ impl<'s> Parser<'s> {
 				ExprKind::Literal(self.build_duration(&expression_node)?),
 				expression_span,
 			)),
-			"reference" => Ok(Expr::new(
-				ExprKind::Reference(self.build_reference(&expression_node)?),
+			"identifier" => Ok(Expr::new(
+				ExprKind::Reference(Reference::Identifier(self.node_symbol(&expression_node)?)),
+				expression_span,
+			)),
+			"nested_identifier" => Ok(Expr::new(
+				ExprKind::Reference(self.build_nested_identifier(&expression_node)?),
 				expression_span,
 			)),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap()),
