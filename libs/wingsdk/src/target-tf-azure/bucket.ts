@@ -98,7 +98,8 @@ export class Bucket extends cloud.Bucket {
     // TODO: investigate customized roles over builtin for finer grained access control
     if (
       ops.includes(cloud.BucketInflightMethods.DELETE) ||
-      ops.includes(cloud.BucketInflightMethods.PUT)
+      ops.includes(cloud.BucketInflightMethods.PUT) ||
+      ops.includes(cloud.BucketInflightMethods.PUT_JSON)
     ) {
       host.addPermission(this, {
         scope: `${this.storageAccount.id}`,
@@ -106,7 +107,8 @@ export class Bucket extends cloud.Bucket {
       });
     } else if (
       ops.includes(cloud.BucketInflightMethods.GET) ||
-      ops.includes(cloud.BucketInflightMethods.LIST)
+      ops.includes(cloud.BucketInflightMethods.LIST) ||
+      ops.includes(cloud.BucketInflightMethods.GET_JSON)
     ) {
       host.addPermission(this, {
         scope: `${this.storageAccount.id}`,
