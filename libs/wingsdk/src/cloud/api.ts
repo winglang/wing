@@ -282,15 +282,6 @@ export enum HttpMethod {
   PATCH = "PATCH",
 }
 
-// /**
-//  * Json type representation.
-//  */
-// // TODO: this should come from a shared package
-// export type Json = any;
-// //  {
-// //   [key: string]: Json | Json[] | string | number | boolean | null;
-// // }
-
 /**
  * Shape of a request to an inflight handler.
  */
