@@ -8,7 +8,13 @@ import {
   ApiSchema,
   API_TYPE,
 } from "./schema-resources";
-import { ApiResponse, IApiClient, IFunctionClient } from "../cloud";
+import {
+  ApiRequest,
+  ApiResponse,
+  HttpMethod,
+  IApiClient,
+  IFunctionClient,
+} from "../cloud";
 import { ISimulatorContext, TraceType } from "../testing/simulator";
 
 const LOCALHOST_HOSTNAME = "127.0.0.1";
@@ -26,6 +32,10 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
 
     // Set up an express server that handles the routes.
     this.app = express();
+
+    // Parse request bodies as json.
+    this.app.use(express.json());
+
     for (const route of this.routes) {
       const method = route.method.toLowerCase() as
         | "get"
@@ -52,44 +62,40 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
           next: express.NextFunction
         ) => {
           const body = req.body;
-          if (body) {
-            if (typeof body === "object") {
-              req.body = JSON.stringify(body);
-            } else if (typeof body !== "string") {
-              throw new Error(
-                `Expected request body to be a string or object, found ${typeof body}`
-              );
-            }
-            this.addTrace(
-              `Processing "${route.method} ${route.route}" (body=${body}).`
-            );
-          } else {
-            this.addTrace(`Processing "${route.method} ${route.route}".`);
-          }
+          this.addTrace(
+            `Processing "${route.method} ${route.route}" (body=${JSON.stringify(
+              body
+            )}).`
+          );
+
+          const apiRequest = transformRequest(req);
 
           if (Object.keys(req.params).length > 0) {
             throw new Error(
-              "Request parameters are not yet supported in the simulator."
+              "Path variables are not yet supported in the simulator."
             );
           }
 
           try {
-            await fnClient.invoke(req.body).then((result) => {
+            await fnClient
               // TODO: clean up once cloud.Function is typed as `inflight (Json): Json`
-              const response = result as unknown as ApiResponse;
-              if (!response.status) {
-                throw new Error(
-                  `Expected response to contain a status code, found ${JSON.stringify(
-                    response
-                  )}`
-                );
-              }
+              .invoke(apiRequest as unknown as string)
+              .then((response) => {
+                // TODO: clean up once cloud.Function is typed as `inflight (Json): Json`
+                if (!isApiResponse(response)) {
+                  throw new Error(
+                    `Expected an ApiResponse struct, found ${JSON.stringify(
+                      response
+                    )}`
+                  );
+                }
 
-              res.send(response.body);
-              this.addTrace(
-                `${route.method} ${route.route} - ${response.status}.`
-              );
-            });
+                res.status(response.status);
+                res.send(response.body);
+                this.addTrace(
+                  `${route.method} ${route.route} - ${response.status}.`
+                );
+              });
           } catch (err) {
             return next(err);
           }
@@ -137,4 +143,29 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
       timestamp: new Date().toISOString(),
     });
   }
+}
+
+function isApiResponse(response: unknown): response is ApiResponse {
+  return (
+    (response as any).status && typeof (response as any).status === "number"
+  );
+}
+
+function transformRequest(req: express.Request): ApiRequest {
+  const headers: Record<string, string> = {};
+  for (const [key, value] of Object.entries(req.headers)) {
+    if (typeof value !== "string") {
+      throw new Error(`Expected header value to be string, found ${value}`);
+    }
+    headers[key] = value;
+  }
+
+  return {
+    headers,
+    body: req.body,
+    method: req.method as HttpMethod,
+    path: req.path,
+    query: undefined, // TODO - change to map type
+    vars: {},
+  };
 }

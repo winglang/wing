@@ -4,8 +4,11 @@ import * as cloud from "../../src/cloud";
 import { ApiAttributes } from "../../src/target-sim/schema-resources";
 import { SimApp, Testing } from "../../src/testing";
 
+// Handler that responds to a request with a fixed string
 const INFLIGHT_CODE = (body: string) =>
   `async handle(req) { return { status: 200, body: "${body}" }; }`;
+// Handler that responds to a request with the request body
+const INFLIGHT_CODE_ECHO_BODY = `async handle(req) { return { status: 200, body: req.body }; }`;
 
 test("create an api", async () => {
   // GIVEN
@@ -146,4 +149,37 @@ test("api with multiple routes", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-// TODO: test POST with body
+test("api with one POST route, with body", async () => {
+  // GIVEN
+  const ROUTE = "/hello";
+  const REQUEST_BODY = { message: "hello world" };
+
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_BODY);
+  api.post(ROUTE, inflight);
+
+  // WHEN
+  const s = await app.startSimulator();
+
+  const apiAttrs = s.getResourceConfig("/my_api").attrs as ApiAttributes;
+  const apiUrl = apiAttrs.url;
+
+  // WHEN
+  const response = await fetch(apiUrl + ROUTE, {
+    method: "POST",
+    body: JSON.stringify(REQUEST_BODY),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  // THEN
+  await s.stop();
+
+  expect(await response.json()).toEqual(REQUEST_BODY);
+  expect(response.status).toEqual(200);
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
