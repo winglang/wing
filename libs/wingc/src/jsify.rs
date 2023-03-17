@@ -17,9 +17,9 @@ use sha2::{Digest, Sha256};
 
 use crate::{
 	ast::{
-		ArgList, BinaryOperator, Class as AstClass, ClassField, Constructor, Expr, ExprKind, FunctionDefinition,
-		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator,
-		UserDefinedType,
+		ArgList, BinaryOperator, Class as AstClass, ClassField, Constructor, Expr, ExprKind, FunctionBody,
+		FunctionDefinition, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
+		TypeAnnotation, UnaryOperator, UserDefinedType,
 	},
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
 	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, VariableInfo},
@@ -31,6 +31,7 @@ use crate::{
 const STDLIB: &str = "$stdlib";
 const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 const INFLIGHT_CLIENTS_DIR: &str = "clients";
+const EXTERN_DIR: &str = "extern";
 
 const TARGET_CODE: &str = r#"
 function __app(target) {
@@ -135,7 +136,7 @@ impl<'a> JSifier<'a> {
 
 		if self.shim {
 			output.push(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
-			output.push(format!("const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \".\";"));
+			output.push(format!("const $outdir = process.env.WING_SYNTH_DIR ?? \".\";"));
 			output.push(TARGET_CODE.to_owned());
 		}
 
@@ -527,13 +528,7 @@ impl<'a> JSifier<'a> {
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
 				Phase::Inflight => self.jsify_inflight_function(func_def, context),
 				Phase::Independent => unimplemented!(),
-				Phase::Preflight => self.jsify_function(
-					None,
-					&func_def.parameters,
-					&func_def.statements,
-					func_def.is_static,
-					context,
-				),
+				Phase::Preflight => self.jsify_function(None, func_def, context),
 			},
 			ExprKind::OptionalTest { optional } => {
 				// We use the abstract inequality operator here because we want to check for null or undefined
@@ -727,17 +722,19 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_inflight_function(&mut self, func_def: &FunctionDefinition, context: &JSifyContext) -> String {
-		let mut parameter_list = vec![];
-		for p in func_def.parameters.iter() {
-			parameter_list.push(p.0.name.clone());
-		}
-		let block = self.jsify_scope(
-			&func_def.statements,
-			&JSifyContext {
-				in_json: context.in_json.clone(),
-				phase: Phase::Inflight,
-			},
-		);
+		let parameters = func_def.parameters.iter().map(|p| &p.0.name).join(", ");
+
+		let block = match &func_def.body {
+			FunctionBody::Statements(scope) => self.jsify_scope(
+				scope,
+				&JSifyContext {
+					in_json: context.in_json.clone(),
+					phase: Phase::Inflight,
+				},
+			),
+			FunctionBody::External(_) => format!("{{ throw new Error(\"extern with closures is not supported\") }}"),
+		};
+
 		let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
 		let mut bindings = vec![];
 		let mut capture_names = vec![];
@@ -759,7 +756,7 @@ impl<'a> JSifier<'a> {
 		}
 		let mut proc_source = vec![];
 		let body = format!("{{ const {{ {} }} = this; {} }}", capture_names.join(", "), block);
-		proc_source.push(format!("async handle({}) {};", parameter_list.join(", "), body));
+		proc_source.push(format!("async handle({parameters}) {body};"));
 		let proc_dir = format!("{}/proc.{}", self.out_dir.to_string_lossy(), procid);
 		fs::create_dir_all(&proc_dir).expect("Creating inflight proc dir");
 		let file_path = format!("{}/index.js", proc_dir);
@@ -782,16 +779,10 @@ impl<'a> JSifier<'a> {
 		)
 	}
 
-	fn jsify_function(
-		&mut self,
-		name: Option<&str>,
-		parameters: &[(Symbol, bool)],
-		body: &Scope,
-		is_static: bool,
-		context: &JSifyContext,
-	) -> String {
+	fn jsify_constructor(&mut self, name: Option<&str>, func_def: &Constructor, context: &JSifyContext) -> String {
 		let mut parameter_list = vec![];
-		for p in parameters.iter() {
+
+		for p in func_def.parameters.iter() {
 			parameter_list.push(self.jsify_symbol(&p.0));
 		}
 
@@ -801,15 +792,82 @@ impl<'a> JSifier<'a> {
 		};
 
 		let parameters = parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ");
-		let body = self.jsify_scope(body, context);
-		let static_modifier = if is_static { "static" } else { "" };
+		let body = self.jsify_scope(&func_def.statements, context);
 
 		formatdoc!(
 			"
-			{static_modifier} {name}({parameters}) {arrow} {{
+		{name}({parameters}) {arrow} {{
+			{body}
+		}}"
+		)
+	}
+
+	fn jsify_function(&mut self, name: Option<&str>, func_def: &FunctionDefinition, context: &JSifyContext) -> String {
+		let mut parameter_list = vec![];
+
+		for p in func_def.parameters.iter() {
+			parameter_list.push(self.jsify_symbol(&p.0));
+		}
+
+		let (name, arrow) = match name {
+			Some(name) => (name, ""),
+			None => ("", "=> "),
+		};
+
+		let parameters = parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ");
+
+		let body = match &func_def.body {
+			FunctionBody::Statements(scope) => self.jsify_scope(scope, context),
+			FunctionBody::External(external_spec) => {
+				let new_path = self.prepare_extern(
+					matches!(func_def.signature.flight, Phase::Inflight),
+					external_spec,
+					&func_def.span.file_id,
+				);
+				format!("return require({new_path})[\"{name}\"]({parameters})")
+			}
+		};
+		let mut modifiers = vec![];
+		if func_def.is_static {
+			modifiers.push("static")
+		}
+		if matches!(func_def.signature.flight, Phase::Inflight) {
+			modifiers.push("async")
+		}
+		let modifiers = modifiers.join(" ");
+
+		formatdoc!(
+			"
+			{modifiers} {name}({parameters}) {arrow} {{
 				{body}
 			}}"
 		)
+	}
+
+	/// Retrieves the contents of the extern file and copies it to the intermediate directory.
+	/// Returns the path to the copied file
+	fn prepare_extern(&self, is_inflight: bool, path: &String, current_wing_file: &String) -> String {
+		let current_wing_file_dir = Path::new(current_wing_file).parent().unwrap();
+		let path_relative_to_wing = current_wing_file_dir.join(&path);
+		let path_relative_to_wing = path_relative_to_wing.to_str().expect("Converting path to string");
+
+		let contents = std::fs::read_to_string(path_relative_to_wing).expect("Copying extern file");
+
+		let id = base16ct::lower::encode_string(&Sha256::new().chain_update(&contents).finalize());
+		let id_file = format!("{}.js", id);
+		let extern_id_path = Path::new(EXTERN_DIR).join(&id_file);
+
+		let final_dir = self.out_dir.join(EXTERN_DIR);
+		let final_path = self.out_dir.join(&extern_id_path);
+		fs::create_dir_all(final_dir).expect("Creating extern dir");
+		std::fs::write(&final_path, contents).expect("Copying extern file");
+
+		if is_inflight {
+			let relative_path = Path::new("..").join(&extern_id_path);
+			format!("\"{}\"", relative_path.to_str().expect("Converting path to string"))
+		} else {
+			Self::js_resolve_path(&extern_id_path.to_str().expect("Converting path to string").to_string())
+		}
 	}
 
 	fn jsify_class_member(&mut self, member: &ClassField) -> String {
@@ -920,7 +978,7 @@ impl<'a> JSifier<'a> {
 			self.jsify_resource_constructor(&class.constructor, class.parent.is_none(), context),
 			preflight_methods
 				.iter()
-				.map(|(n, m)| self.jsify_function(Some(&n.name), &m.parameters, &m.statements, m.is_static, context))
+				.map(|(n, m)| self.jsify_function(Some(&n.name), &m, context))
 				.collect::<Vec<String>>()
 				.join("\n"),
 		);
@@ -999,7 +1057,7 @@ impl<'a> JSifier<'a> {
 			_toInflight() {{
 				{inner_clients}
 				const self_client_path = {client_path};
-				return {STDLIB}.core.NodeJsCode.fromInline(`(new (require(\"${{self_client_path}}\")).{resource_name}_inflight({{{captured_fields}}}))`);
+				return {STDLIB}.core.NodeJsCode.fromInline(`(new (require(\"${{self_client_path}}\")).{resource_name}({{{captured_fields}}}))`);
 			}}",
 			resource_name = resource_name.name,
 		)
@@ -1061,27 +1119,22 @@ impl<'a> JSifier<'a> {
 		let client_methods = inflight_methods
 			.iter()
 			.map(|(name, def)| {
-				format!(
-					"async {}",
-					self.jsify_function(
-						Some(&name.name),
-						&def.parameters,
-						&def.statements,
-						def.is_static,
-						&JSifyContext {
-							in_json: context.in_json.clone(),
-							phase: def.signature.flight,
-						}
-					)
+				self.jsify_function(
+					Some(&name.name),
+					&def,
+					&JSifyContext {
+						in_json: context.in_json.clone(),
+						phase: def.signature.flight,
+					},
 				)
 			})
 			.collect_vec();
 
 		let client_source = format!(
-			"export class {}_inflight {} {{\n{}\n{}}}",
+			"export class {} {} {{\n{}\n{}}}",
 			name.name,
 			if let Some(parent) = parent {
-				format!("extends {}_inflight", self.jsify_user_defined_type(parent))
+				format!("extends {}", self.jsify_user_defined_type(parent))
 			} else {
 				"".to_string()
 			},
@@ -1109,13 +1162,7 @@ impl<'a> JSifier<'a> {
 			} else {
 				"".to_string()
 			},
-			self.jsify_function(
-				Some("constructor"),
-				&class.constructor.parameters,
-				&class.constructor.statements,
-				false, // Constructors are are kind of static, but we don't add the `static` modifier to ctors in js so we pass false here
-				context
-			),
+			self.jsify_constructor(Some("constructor"), &class.constructor, context),
 			class
 				.fields
 				.iter()
@@ -1125,7 +1172,7 @@ impl<'a> JSifier<'a> {
 			class
 				.methods
 				.iter()
-				.map(|(n, m)| self.jsify_function(Some(&n.name), &m.parameters, &m.statements, m.is_static, context))
+				.map(|(n, m)| self.jsify_function(Some(&n.name), &m, context))
 				.collect::<Vec<String>>()
 				.join("\n")
 		)
@@ -1227,7 +1274,9 @@ impl<'a> FieldReferenceVisitor<'a> {
 	}
 
 	pub fn find_refs(mut self) -> (BTreeMap<String, BTreeSet<String>>, Diagnostics) {
-		self.visit_scope(&self.function_def.statements);
+		if let FunctionBody::Statements(statements) = &self.function_def.body {
+			self.visit_scope(statements);
+		}
 		(self.references, self.diagnostics)
 	}
 }

@@ -1,8 +1,8 @@
 mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{
-	Class as AstClass, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-	ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
+	Class as AstClass, Expr, ExprKind, FunctionBody, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt,
+	StmtKind, Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{
@@ -1451,11 +1451,16 @@ impl<'a> TypeChecker<'a> {
 					statement_idx,
 				);
 				self.add_arguments_to_env(&func_def.parameters, &sig, &mut function_env);
-				func_def.statements.set_env(function_env);
 
-				self.inner_scopes.push(&func_def.statements);
+				if let FunctionBody::Statements(scope) = &func_def.body {
+					scope.set_env(function_env);
 
-				function_type
+					self.inner_scopes.push(scope);
+
+					function_type
+				} else {
+					function_type
+				}
 			}
 			ExprKind::OptionalTest { optional } => {
 				let t = self.type_check_exp(optional, env, statement_idx, context);
@@ -2126,8 +2131,11 @@ impl<'a> TypeChecker<'a> {
 					}
 					actual_parameters.extend(method_def.parameters.clone());
 					self.add_arguments_to_env(&actual_parameters, method_sig, &mut method_env);
-					method_def.statements.set_env(method_env);
-					self.inner_scopes.push(&method_def.statements);
+
+					if let FunctionBody::Statements(scope) = &method_def.body {
+						scope.set_env(method_env);
+						self.inner_scopes.push(scope);
+					}
 				}
 
 				// Check that the class satisfies all of its interfaces

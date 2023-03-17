@@ -147,7 +147,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
-const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
 	switch (target) {
