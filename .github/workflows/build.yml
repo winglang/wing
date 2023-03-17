@@ -119,6 +119,7 @@ jobs:
           && apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
           && chmod 777 -R /__w \
           && useradd --uid 1001 -m gha_user \
+          && apt-get install -y sudo \
           && echo gha_user ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/gha_user \
           && chmod 0440 /etc/sudoers.d/gha_user \
           && su gha_user
