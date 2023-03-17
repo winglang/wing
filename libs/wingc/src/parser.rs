@@ -7,9 +7,9 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionDefinition,
-	FunctionSignature, InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind,
-	Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
+	ArgList, BinaryOperator, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionBody,
+	FunctionDefinition, FunctionSignature, InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope,
+	Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 use crate::WINGSDK_STD_MODULE;
@@ -563,9 +563,18 @@ impl<'s> Parser<'s> {
 
 	fn build_function_definition(&self, func_def_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
 		let parameters = self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap())?;
+
+		let statements = if let Some(external) = func_def_node.child_by_field_name("extern_modifier") {
+			let node_text = self.node_text(&external.named_child(0).unwrap());
+			let node_text = &node_text[1..node_text.len() - 1];
+			FunctionBody::External(node_text.to_string())
+		} else {
+			FunctionBody::Statements(self.build_scope(&self.get_child_field(func_def_node, "block")?))
+		};
+
 		Ok(FunctionDefinition {
 			parameters: parameters.iter().map(|p| (p.0.clone(), p.2)).collect(),
-			statements: self.build_scope(&func_def_node.child_by_field_name("block").unwrap()),
+			body: statements,
 			signature: FunctionSignature {
 				parameters: parameters.iter().map(|p| p.1.clone()).collect(),
 				return_type: if let Some(rt) = func_def_node.child_by_field_name("type") {
@@ -577,6 +586,7 @@ impl<'s> Parser<'s> {
 			},
 			is_static: func_def_node.child_by_field_name("static").is_some(),
 			captures: RefCell::new(None),
+			span: self.node_span(func_def_node),
 		})
 	}
 

@@ -724,6 +724,21 @@
     }
   },
   {
+    "type": "extern_modifier",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "for_in_loop",
     "named": true,
     "fields": {
@@ -1057,10 +1072,20 @@
       },
       "block": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "extern_modifier": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "extern_modifier",
             "named": true
           }
         ]
@@ -1495,10 +1520,20 @@
       },
       "block": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "extern_modifier": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "extern_modifier",
             "named": true
           }
         ]
@@ -3089,6 +3124,10 @@
   },
   {
     "type": "extends",
+    "named": false
+  },
+  {
+    "type": "extern",
     "named": false
   },
   {
