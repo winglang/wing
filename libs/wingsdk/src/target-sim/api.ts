@@ -35,8 +35,8 @@ export class Api extends cloud.Api implements ISimulatorResource {
 
     const fn = Function._newFunction(this, fnPath, inflight, props) as Function;
 
-    // At the time the Api is created in the simulator, it needs to be able to
-    // call referenced functions.
+    // Api needs to be deployed after functions in the simulator so that the
+    // function handles will be available.
     this.node.addDependency(fn);
 
     return fn;
