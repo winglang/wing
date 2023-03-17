@@ -531,12 +531,14 @@ export class Simulator {
         const [path, rest] = ref.split("#");
         const config = this.getResourceConfig(path);
         if (rest.startsWith("attrs.")) {
-          if (!config.attrs) {
+          const attrName = rest.slice(6);
+          const attr = config?.attrs[attrName];
+          if (!attr) {
             throw new Error(
-              `Tried to resolve token "${obj}" but resource ${path} has no attributes defined yet. Is it possible ${source} needs to take a dependency on ${path}?`
+              `Tried to resolve token "${obj}" but resource ${path} has no attribute ${attrName} defined yet. Is it possible ${source} needs to take a dependency on ${path}?`
             );
           }
-          return config.attrs[rest.slice(6)];
+          return attr;
         } else if (rest.startsWith("props.")) {
           if (!config.props) {
             throw new Error(

@@ -52,9 +52,20 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
           next: express.NextFunction
         ) => {
           const body = req.body;
-          this.addTrace(
-            `Processing "${route.method} ${route.route}" (body=${body}).`
-          );
+          if (body) {
+            if (typeof body === "object") {
+              req.body = JSON.stringify(body);
+            } else if (typeof body !== "string") {
+              throw new Error(
+                `Expected request body to be a string or object, found ${typeof body}`
+              );
+            }
+            this.addTrace(
+              `Processing "${route.method} ${route.route}" (body=${body}).`
+            );
+          } else {
+            this.addTrace(`Processing "${route.method} ${route.route}".`);
+          }
 
           if (Object.keys(req.params).length > 0) {
             throw new Error(

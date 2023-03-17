@@ -21,19 +21,13 @@ export class Api extends cloud.Api implements ISimulatorResource {
     super(scope, id, props);
   }
 
-  /**
-   * Add a inflight to handle GET requests to a route.
-   * @param route Route to add
-   * @param inflight Inflight to handle request
-   * @param props Additional props
-   */
-
-  public get(
+  private addEndpoint(
     route: string,
+    method: cloud.HttpMethod,
     inflight: core.Inflight,
-    props?: cloud.ApiGetProps | undefined
+    props: any
   ): void {
-    this._addToSpec(route, cloud.HttpMethod.GET, undefined);
+    this._addToSpec(route, method, undefined);
     const hash = inflight.node.addr.slice(-8);
 
     // No conversion is necessary here because the simulator uses the
@@ -41,28 +35,41 @@ export class Api extends cloud.Api implements ISimulatorResource {
 
     const fn = Function._newFunction(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessage-${hash}`,
+      `${this.node.id}-OnRequestHandler-${hash}`,
       inflight,
       props
     );
 
     // At the time the Api is created in the simulator, it needs to be able to
     // call referenced functions.
-    // TODO: is this necessary?
     this.node.addDependency(fn);
 
     const functionHandle = simulatorHandleToken(fn);
     this._routes.push({
       route,
-      method: cloud.HttpMethod.GET,
+      method,
       functionHandle,
     });
 
     core.Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "on_message",
+      relationship: `on_${method.toLowerCase()}_request`,
     });
+  }
+
+  /**
+   * Add a inflight to handle GET requests to a route.
+   * @param route Route to add
+   * @param inflight Inflight to handle request
+   * @param props Additional props
+   */
+  public get(
+    route: string,
+    inflight: core.Inflight,
+    props?: cloud.ApiGetProps | undefined
+  ): void {
+    this.addEndpoint(route, cloud.HttpMethod.GET, inflight, props);
   }
 
   /**
@@ -76,9 +83,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     inflight: core.Inflight,
     props?: cloud.ApiPostProps | undefined
   ): void {
-    inflight;
-    props;
-    this._addToSpec(route, cloud.HttpMethod.POST, undefined);
+    this.addEndpoint(route, cloud.HttpMethod.POST, inflight, props);
   }
 
   /**
@@ -92,9 +97,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     inflight: core.Inflight,
     props?: cloud.ApiPutProps | undefined
   ): void {
-    inflight;
-    props;
-    this._addToSpec(route, cloud.HttpMethod.PUT, undefined);
+    this.addEndpoint(route, cloud.HttpMethod.PUT, inflight, props);
   }
 
   /**
@@ -108,9 +111,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     inflight: core.Inflight,
     props?: cloud.ApiDeleteProps | undefined
   ): void {
-    inflight;
-    props;
-    this._addToSpec(route, cloud.HttpMethod.DELETE, undefined);
+    this.addEndpoint(route, cloud.HttpMethod.DELETE, inflight, props);
   }
 
   /**
@@ -124,9 +125,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     inflight: core.Inflight,
     props?: cloud.ApiPatchProps | undefined
   ): void {
-    inflight;
-    props;
-    this._addToSpec(route, cloud.HttpMethod.PATCH, undefined);
+    this.addEndpoint(route, cloud.HttpMethod.PATCH, inflight, props);
   }
 
   /**
@@ -140,9 +139,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     inflight: core.Inflight,
     props?: cloud.ApiOptionsProps | undefined
   ): void {
-    inflight;
-    props;
-    this._addToSpec(route, cloud.HttpMethod.OPTIONS, undefined);
+    this.addEndpoint(route, cloud.HttpMethod.OPTIONS, inflight, props);
   }
 
   /**
@@ -156,9 +153,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     inflight: core.Inflight,
     props?: cloud.ApiHeadProps | undefined
   ): void {
-    inflight;
-    props;
-    this._addToSpec(route, cloud.HttpMethod.HEAD, undefined);
+    this.addEndpoint(route, cloud.HttpMethod.HEAD, inflight, props);
   }
 
   /**
@@ -172,9 +167,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     inflight: core.Inflight,
     props?: cloud.ApiConnectProps | undefined
   ): void {
-    inflight;
-    props;
-    this._addToSpec(route, cloud.HttpMethod.CONNECT, undefined);
+    this.addEndpoint(route, cloud.HttpMethod.CONNECT, inflight, props);
   }
 
   public toSimulator(): BaseResourceSchema {
