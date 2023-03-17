@@ -327,11 +327,11 @@ exports[`immutable_container_types.w > stderr 1`] = `
 `;
 
 exports[`impl_interface.w > stderr 1`] = `
-"error: Resource \\"A\\" does not implement method \\"handle\\" of interface \\"cloud.IQueueOnMessageHandler\\"
+"error: Resource \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueOnMessageHandler (at src/cloud/queue.ts:107:1)\\"
   --> ../../../examples/tests/invalid/impl_interface.w:3:10
   |
 3 | resource A impl cloud.IQueueOnMessageHandler {
-  |          ^ Resource \\"A\\" does not implement method \\"handle\\" of interface \\"cloud.IQueueOnMessageHandler\\"
+  |          ^ Resource \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueOnMessageHandler (at src/cloud/queue.ts:107:1)\\"
 
 
 error: Expected type to be \\"inflight (IQueueOnMessageHandler, str): void\\", but got \\"inflight (B, num): void\\" instead
