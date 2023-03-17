@@ -1076,7 +1076,7 @@ impl<'a> TypeChecker<'a> {
 				} else if matches!(op, crate::ast::BinaryOperator::UnwrapOr) {
 					// Left argument must be an optional type
 					if !ltype.is_option() {
-						self.expr_error(left, "Left argument of ?? must be an optional type".to_string());
+						self.expr_error(left, format!("Expected optional type, found \"{}\"", ltype));
 						return ltype;
 					} else {
 						// Right argument must be a subtype of the inner type of the left argument
