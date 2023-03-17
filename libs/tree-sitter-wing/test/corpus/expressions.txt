@@ -218,6 +218,8 @@ Template string
 ================================================================================
 
 maybeVal ?? 2;
+maybeVal ?? 2 + 2;
+maybeVal ?? 2 == 2;
 
 --------------------------------------------------------------------------------
 
@@ -225,9 +227,22 @@ maybeVal ?? 2;
   (expression_statement
     (binary_expression
       (identifier)
+      (number)))
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (binary_expression
+        (number)
+        (number))))
+  (expression_statement
+    (binary_expression
+      (binary_expression
+        (identifier)
+        (number))
       (number))))
 
 ================================================================================
+>>>>>>> 7e08a6d3f92f31497406dace539d6ccbabc6426e
 Set Literal
 ================================================================================
 

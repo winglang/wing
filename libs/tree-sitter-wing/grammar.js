@@ -1,20 +1,20 @@
 const PREC = {
-  LOGICAL_OR: 1,
-  LOGICAL_AND: 2,
-  INCLUSIVE_OR: 3,
-  EXCLUSIVE_OR: 4,
-  BITWISE_AND: 5,
-  EQUAL: 6,
-  RELATIONAL: 7,
-  SHIFT: 8,
-  ADD: 9,
-  MULTIPLY: 10,
-  UNARY: 11,
-  OPTIONAL_TEST: 12,
-  POWER: 13,
-  NIL_COALESCING: 14,
-  MEMBER: 15,
-  CALL: 16,
+  LOGICAL_OR: 10,
+  LOGICAL_AND: 20,
+  INCLUSIVE_OR: 30,
+  EXCLUSIVE_OR: 40,
+  BITWISE_AND: 50,
+  EQUAL: 60,
+  RELATIONAL: 70,
+  UNWRAP_OR: 80,
+  SHIFT: 90,
+  ADD: 100,
+  MULTIPLY: 110,
+  UNARY: 120,
+  OPTIONAL_TEST: 130,
+  POWER: 140,
+  MEMBER: 150,
+  CALL: 160,
 };
 
 module.exports = grammar({
@@ -533,7 +533,7 @@ module.exports = grammar({
         //['<<', PREC.SHIFT],
         //['>>', PREC.SHIFT],
         //['>>>', PREC.SHIFT],
-        ["??", PREC.NIL_COALESCING],
+        ["??", PREC.UNWRAP_OR],
       ];
 
       return choice(
