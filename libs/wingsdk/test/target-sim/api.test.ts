@@ -2,13 +2,14 @@ import { test, expect } from "vitest";
 import { listMessages } from "./util";
 import * as cloud from "../../src/cloud";
 import { ApiAttributes } from "../../src/target-sim/schema-resources";
-import { SimApp, Testing } from "../../src/testing";
+import { SimApp, Simulator, Testing } from "../../src/testing";
 
 // Handler that responds to a request with a fixed string
 const INFLIGHT_CODE = (body: string) =>
   `async handle(req) { return { status: 200, body: "${body}" }; }`;
 // Handler that responds to a request with the request body
 const INFLIGHT_CODE_ECHO_BODY = `async handle(req) { return { status: 200, body: req.body }; }`;
+const INFLIGHT_CODE_WITH_RESPONSE_HEADER = `async handle(req) { return { status: 200, body: req.body, headers: { "x-wingnuts": "cloudy" } }; }`;
 
 test("create an api", async () => {
   // GIVEN
@@ -45,11 +46,7 @@ test("api with one GET route", async () => {
 
   // WHEN
   const s = await app.startSimulator();
-
-  const apiAttrs = s.getResourceConfig("/my_api").attrs as ApiAttributes;
-  const apiUrl = apiAttrs.url;
-
-  // WHEN
+  const apiUrl = getApiUrl(s, "/my_api");
   const response = await fetch(apiUrl + ROUTE, { method: "GET" });
 
   // THEN
@@ -84,11 +81,7 @@ test("api with multiple methods on same route", async () => {
 
   // WHEN
   const s = await app.startSimulator();
-
-  const apiAttrs = s.getResourceConfig("/my_api").attrs as ApiAttributes;
-  const apiUrl = apiAttrs.url;
-
-  // WHEN
+  const apiUrl = getApiUrl(s, "/my_api");
   const getResponse = await fetch(`${apiUrl}${ROUTE}`, { method: "GET" });
   const postResponse = await fetch(`${apiUrl}${ROUTE}`, { method: "POST" });
 
@@ -128,11 +121,7 @@ test("api with multiple routes", async () => {
 
   // WHEN
   const s = await app.startSimulator();
-
-  const apiAttrs = s.getResourceConfig("/my_api").attrs as ApiAttributes;
-  const apiUrl = apiAttrs.url;
-
-  // WHEN
+  const apiUrl = getApiUrl(s, "/my_api");
   const response1 = await fetch(`${apiUrl}${ROUTE1}`, { method: "GET" });
   const response2 = await fetch(`${apiUrl}${ROUTE2}`, { method: "GET" });
 
@@ -161,11 +150,7 @@ test("api with one POST route, with body", async () => {
 
   // WHEN
   const s = await app.startSimulator();
-
-  const apiAttrs = s.getResourceConfig("/my_api").attrs as ApiAttributes;
-  const apiUrl = apiAttrs.url;
-
-  // WHEN
+  const apiUrl = getApiUrl(s, "/my_api");
   const response = await fetch(apiUrl + ROUTE, {
     method: "POST",
     body: JSON.stringify(REQUEST_BODY),
@@ -183,3 +168,36 @@ test("api with one POST route, with body", async () => {
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
+
+test("api handler can set response headers", async () => {
+  // GIVEN
+  const ROUTE = "/hello";
+
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const inflight = Testing.makeHandler(
+    app,
+    "Handler",
+    INFLIGHT_CODE_WITH_RESPONSE_HEADER
+  );
+  api.get(ROUTE, inflight);
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl = getApiUrl(s, "/my_api");
+  const response = await fetch(apiUrl + ROUTE, { method: "GET" });
+
+  // THEN
+  await s.stop();
+
+  expect(response.status).toEqual(200);
+  expect(response.headers.get("x-wingnuts")).toEqual("cloudy");
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+function getApiUrl(s: Simulator, path: string): string {
+  const apiAttrs = s.getResourceConfig(path).attrs as ApiAttributes;
+  return apiAttrs.url;
+}

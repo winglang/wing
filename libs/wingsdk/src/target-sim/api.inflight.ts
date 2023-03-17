@@ -91,6 +91,11 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
                 }
 
                 res.status(response.status);
+                for (const [key, value] of Object.entries(
+                  response.headers ?? {}
+                )) {
+                  res.set(key, value);
+                }
                 res.send(response.body);
                 this.addTrace(
                   `${route.method} ${route.route} - ${response.status}.`
