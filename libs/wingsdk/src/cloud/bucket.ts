@@ -143,9 +143,9 @@ export enum BucketInflightMethods {
   /** `Bucket.delete` */
   DELETE = "delete",
   /** `Bucket.putJson */
-  PUT_JSON = "putJson",
+  PUT_JSON = "put_json",
   /** `Bucket.getJson */
-  GET_JSON = "getJson",
+  GET_JSON = "get_json",
   /** `Bucket.publicUrl */
-  PUBLIC_URL = "publicUrl",
+  PUBLIC_URL = "public_url",
 }
