@@ -413,6 +413,8 @@ module.exports = grammar({
         field("block", $.block)
       ),
 
+    extern_modifier : ($) => seq("extern", $.string),
+
     method_signature: ($) =>
       seq(
         optional(field("access_modifier", $.access_modifier)),
@@ -426,13 +428,14 @@ module.exports = grammar({
 
     method_definition: ($) =>
       seq(
+        optional(field("extern_modifier", $.extern_modifier)),
         optional(field("access_modifier", $.access_modifier)),
         optional(field("static", $.static)),
         optional(field("async", $.async_modifier)),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         optional(field("return_type", $._type_annotation)),
-        field("block", $.block)
+        choice(field("block", $.block), ";")
       ),
 
     inflight_method_signature: ($) =>
@@ -448,13 +451,14 @@ module.exports = grammar({
 
     inflight_method_definition: ($) =>
       seq(
+        optional(field("extern_modifier", $.extern_modifier)),
         optional(field("access_modifier", $.access_modifier)),
         optional(field("static", $.static)),
         field("phase_modifier", $._inflight_specifier),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         optional(field("return_type", $._type_annotation)),
-        field("block", $.block)
+        choice(field("block", $.block), ";")
       ),
 
     async_modifier: ($) => "async",
