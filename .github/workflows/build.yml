@@ -123,7 +123,8 @@ jobs:
 
       - name: Who am I
         run: |
-          whoami
+          whoami \
+          && cat /etc/passwd
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
