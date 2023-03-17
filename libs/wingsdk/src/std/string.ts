@@ -11,7 +11,7 @@ export class String {
   /**
    * Parse string from Json.
    *
-   * @macro ((args) => { if (typeof args !== "string") {throw new Error(`unable to parse ${typeof args} ${args} as a string`)}; return JSON.parse(JSON.stringify(args)) })($args$)
+   * @macro ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })($args$)
    *
    * @param json to create string from.
    * @returns a string.

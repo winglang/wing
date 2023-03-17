@@ -7,14 +7,17 @@ export class BucketClient implements IBucketClient {
   private readonly bucketName: string;
   private readonly blobServiceClient: BlobServiceClient;
   private readonly containerClient: ContainerClient;
+  private readonly _public: boolean;
   private readonly defaultAzureCredential: DefaultAzureCredential =
     new DefaultAzureCredential();
 
   constructor(
     bucketName: string,
     storageAccount: string,
+    isPublic: boolean = false,
     blobServiceClient?: BlobServiceClient
   ) {
+    this._public = isPublic;
     this.bucketName = bucketName;
     this.blobServiceClient =
       blobServiceClient ??
@@ -96,6 +99,14 @@ export class BucketClient implements IBucketClient {
     return list;
   }
 
+  /**
+   * Returns a url to the given file.
+   * @Throws if the file is not public or if object does not exist.
+   */
+  public async publicUrl(key: string): Promise<string> {
+    this._public; // a little help for implementing public_url later on
+    throw new Error(`publicUrl is not supported yet. (key=${key})`);
+  }
   /**
    * Delete an existing object using a key from the bucket
    *

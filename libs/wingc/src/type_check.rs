@@ -708,6 +708,19 @@ impl TypeRef {
 		}
 	}
 
+	/// Returns the item type of a collection type, or None if the type is not a collection.
+	pub fn collection_item_type(&self) -> Option<TypeRef> {
+		match **self {
+			Type::Array(t) => Some(t),
+			Type::MutArray(t) => Some(t),
+			Type::Map(t) => Some(t),
+			Type::MutMap(t) => Some(t),
+			Type::Set(t) => Some(t),
+			Type::MutSet(t) => Some(t),
+			_ => None,
+		}
+	}
+
 	pub fn is_mutable_collection(&self) -> bool {
 		if let Type::MutArray(_) | Type::MutSet(_) | Type::MutMap(_) = **self {
 			true
@@ -737,6 +750,19 @@ impl TypeRef {
 			Type::Map(v) => v.is_capturable(),
 			Type::Set(v) => v.is_capturable(),
 			Type::Struct(_) => true,
+			_ => false,
+		}
+	}
+
+	pub fn is_json_legal_value(&self) -> bool {
+		match **self {
+			Type::Number => true,
+			Type::String => true,
+			Type::Boolean => true,
+			Type::Json => true,
+			Type::Array(v) => v.is_json_legal_value(),
+			Type::Map(v) => v.is_json_legal_value(),
+			Type::Set(v) => v.is_json_legal_value(),
 			_ => false,
 		}
 	}
@@ -1047,6 +1073,17 @@ impl<'a> TypeChecker<'a> {
 				} else if op.numerical_args() {
 					self.validate_type(ltype, self.types.number(), left);
 					self.validate_type(rtype, self.types.number(), right);
+				} else if matches!(op, crate::ast::BinaryOperator::UnwrapOr) {
+					// Left argument must be an optional type
+					if !ltype.is_option() {
+						self.expr_error(left, format!("Expected optional type, found \"{}\"", ltype));
+						return ltype;
+					} else {
+						// Right argument must be a subtype of the inner type of the left argument
+						let inner_type = ltype.maybe_unwrap_option();
+						self.validate_type(rtype, inner_type, right);
+						return inner_type;
+					}
 				} else {
 					self.validate_type(rtype, ltype, exp);
 				}
@@ -1076,7 +1113,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Lookup the type in the env
 				let type_ = self.resolve_type_annotation(class, env, statement_idx);
-				let (class_env, class_symbol) = match *type_ {
+				let (class_env, class_symbol) = match &*type_ {
 					Type::Class(ref class) => (&class.env, &class.name),
 					Type::Resource(ref class) => {
 						if matches!(env.flight, Phase::Preflight) {
@@ -1088,12 +1125,23 @@ impl<'a> TypeChecker<'a> {
 							));
 						}
 					}
-					Type::Anything => return self.types.anything(),
-					_ => {
-						return self.general_type_error(format!(
-							"Cannot instantiate type \"{}\" because it is not a class or resource",
-							type_.to_string()
-						))
+					t => {
+						// Even though the type isn't really constructable, we can still type check the args
+						for arg in &arg_list.pos_args {
+							self.type_check_exp(arg, env, statement_idx, context);
+						}
+						for arg in &arg_list.named_args {
+							self.type_check_exp(arg.1, env, statement_idx, context);
+						}
+
+						if matches!(t, Type::Anything) {
+							return self.types.anything();
+						} else {
+							return self.general_type_error(format!(
+								"Cannot instantiate type \"{}\" because it is not a class or resource",
+								type_.to_string()
+							));
+						}
 					}
 				};
 
@@ -1188,6 +1236,13 @@ impl<'a> TypeChecker<'a> {
 
 				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud.Bucket().upload())
 				if matches!(*func_type, Type::Anything) {
+					// Even if we don't know the type of the function, we can still type check the arguments
+					for arg in arg_list.pos_args.iter() {
+						self.type_check_exp(arg, env, statement_idx, context);
+					}
+					for arg in arg_list.named_args.values() {
+						self.type_check_exp(arg, env, statement_idx, context);
+					}
 					return self.types.anything();
 				}
 
@@ -1267,13 +1322,10 @@ impl<'a> TypeChecker<'a> {
 					_ => self.expr_error(exp, format!("Expected \"Array\" type, found \"{}\"", container_type)),
 				};
 
-				// Skip validate type if in Json
-				if !context.in_json {
-					// Verify all types are the same as the inferred type
-					for v in items.iter() {
-						let t = self.type_check_exp(v, env, statement_idx, context);
-						self.validate_type(t, element_type, v);
-					}
+				// Verify all types are the same as the inferred type
+				for v in items.iter() {
+					let t = self.type_check_exp(v, env, statement_idx, context);
+					self.check_json_serializable_or_validate_type(t, element_type, v, context);
 				}
 
 				container_type
@@ -1340,13 +1392,10 @@ impl<'a> TypeChecker<'a> {
 					_ => self.expr_error(exp, format!("Expected \"Map\" type, found \"{}\"", container_type)),
 				};
 
-				// Skip validate if in Json
-				if !context.in_json {
-					// Verify all types are the same as the inferred type
-					for (_, v) in fields.iter() {
-						let t = self.type_check_exp(v, env, statement_idx, context);
-						self.validate_type(t, value_type, v);
-					}
+				// Verify all types are the same as the inferred type
+				for (_, v) in fields.iter() {
+					let t = self.type_check_exp(v, env, statement_idx, context);
+					self.check_json_serializable_or_validate_type(t, value_type, v, context);
 				}
 
 				container_type
@@ -1407,6 +1456,13 @@ impl<'a> TypeChecker<'a> {
 				self.inner_scopes.push(&func_def.statements);
 
 				function_type
+			}
+			ExprKind::OptionalTest { optional } => {
+				let t = self.type_check_exp(optional, env, statement_idx, context);
+				if !t.is_option() {
+					self.expr_error(optional, format!("Expected optional type, found \"{}\"", t));
+				}
+				self.types.bool()
 			}
 		};
 		exp.evaluated_type.replace(Some(t));
@@ -1469,6 +1525,31 @@ impl<'a> TypeChecker<'a> {
 				);
 			}
 		}
+	}
+
+	fn check_json_serializable_or_validate_type(
+		&mut self,
+		actual_type: TypeRef,
+		expected_type: TypeRef,
+		exp: &Expr,
+		context: &TypeCheckerContext,
+	) -> TypeRef {
+		// Skip validate if in Json
+		if !context.in_json {
+			return self.validate_type(actual_type, expected_type, exp);
+		}
+
+		if !actual_type.is_json_legal_value() {
+			return self.expr_error(
+				exp,
+				format!(
+					"Expected \"Json\" elements to be Json Value (https://www.json.org/json-en.html), but got \"{}\" which is not Json Value",
+					actual_type
+				),
+			);
+		}
+
+		actual_type
 	}
 
 	/// Validate that the given type is a subtype (or same) as the expected type. If not, add an error
@@ -2503,7 +2584,7 @@ impl<'a> TypeChecker<'a> {
 						if let Some(stdlib_symbol) = self.get_stdlib_symbol(symbol) {
 							path.push(stdlib_symbol);
 							path.push(Symbol {
-								name: "std".to_string(),
+								name: WINGSDK_STD_MODULE.to_string(),
 								span: symbol.span.clone(),
 							});
 						} else {
@@ -2515,8 +2596,13 @@ impl<'a> TypeChecker<'a> {
 						path.push(property.clone());
 						curr_expr = &object;
 					}
-					Reference::TypeMember { .. } => {
-						panic!("Type property references cannot be a type name because they have a property");
+					Reference::TypeMember { type_, .. } => {
+						assert_eq!(
+							path.len(),
+							0,
+							"Type property references cannot be a type name because they have a property"
+						);
+						return Some(type_.clone());
 					}
 				},
 				_ => return None,
@@ -2566,7 +2652,7 @@ impl<'a> TypeChecker<'a> {
 						property: property.clone(),
 					};
 					// Replace the reference with the new one, this is unsafe because `reference` isn't mutable and theoretically someone may
-					// hold anoter reference to it. But our AST doesn't hold up/cross references so this is safe as long as we return right.
+					// hold another reference to it. But our AST doesn't hold up/cross references so this is safe as long as we return right.
 					let const_ptr = reference as *const Reference;
 					let mut_ptr = const_ptr as *mut Reference;
 					unsafe {

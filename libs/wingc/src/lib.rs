@@ -112,16 +112,11 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	let output_dir = split.get(1).map(|s| Path::new(s));
 
 	let results = compile(source_file, output_dir);
-	if let Err(mut err) = results {
-		// Sort error messages by line number (ascending)
-		err.sort_by(|a, b| a.cmp(&b));
-		let result = format!(
-			"Compilation failed with {} error(s)\n{}",
-			err.len(),
-			err.iter().map(|d| format!("{}", d)).collect::<Vec<_>>().join("\n")
-		);
+	if let Err(diagnostics) = results {
+		// Output diagnostics as a stringified JSON array
+		let json = serde_json::to_string(&diagnostics).unwrap();
 
-		string_to_combined_ptr(result)
+		string_to_combined_ptr(json)
 	} else {
 		WASM_RETURN_ERROR
 	}

@@ -222,7 +222,7 @@ fn scan_captures_in_expression(
 
 				// If the expression evaluates to a resource we should check what method of the resource we're accessing
 				if let Type::Resource(ref resource) = **object.evaluated_type.borrow().as_ref().unwrap() {
-					let (prop_type, _flight) = match resource.env.lookup_ext(property, None) {
+					let (_, _flight) = match resource.env.lookup_ext(property, None) {
 						Ok((prop_type, phase)) => (
 							prop_type
 								.as_variable()
@@ -235,14 +235,6 @@ fn scan_captures_in_expression(
 							return res;
 						}
 					};
-
-					// TODO: handle accessing things other than function_sigs while recursively accessing Reference?
-					if let Some(func) = prop_type.as_function_sig() {
-						assert!(
-							func.phase != Phase::Preflight,
-							"Can't access preflight method {property} inflight"
-						);
-					}
 				}
 			}
 			Reference::TypeMember { .. } => {
@@ -316,6 +308,9 @@ fn scan_captures_in_expression(
 					diagnostics,
 				)));
 			}
+		}
+		ExprKind::OptionalTest { optional } => {
+			res.extend(scan_captures_in_expression(optional, env, statement_idx, diagnostics));
 		}
 	}
 	res

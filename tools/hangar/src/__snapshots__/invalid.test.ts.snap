@@ -94,15 +94,31 @@ exports[`inflight_in_class.w > wing test (--target sim) - invalid > stderr 1`] =
 Error at ../../../../examples/tests/invalid/inflight_in_class.w:3:3 | Class cannot have inflight fields"
 `;
 
-exports[`inflight_ref_invalid.w > wing test (--target sim) - invalid > stderr 1`] = `
+exports[`inflight_ref_explicit_ops.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 2 error(s)
-Error at ../../../../examples/tests/invalid/inflight_ref_invalid.w:12:19 | Unable to reference \\"this.reassignable\\" from inflight method \\"test\\" because it is reassignable (\\"var\\")
-Error at ../../../../examples/tests/invalid/inflight_ref_invalid.w:14:16 | Unable to reference \\"this.mut_array\\" from inflight method \\"test\\" because type MutArray<str> is not capturable"
+Error at ../../../../examples/tests/invalid/inflight_ref_explicit_ops.w:13:17 | Cannot qualify which operations are performed on resource \\"this.my_queue\\" (see https://github.com/winglang/wing/issues/76)
+Error at ../../../../examples/tests/invalid/inflight_ref_explicit_ops.w:34:18 | Cannot qualify which operations are performed on resource \\"this.b\\" (see https://github.com/winglang/wing/issues/76)"
 `;
 
-exports[`inflight_ref_resource_sub_field.w > wing test (--target sim) - invalid > stderr 1`] = `
+exports[`inflight_ref_invalid.w > wing test (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 2 error(s)
+Error at ../../../../examples/tests/invalid/inflight_ref_invalid.w:12:19 | Cannot reference a reassignable field \\"reassignable\\" (\\"var\\") from an inflight context
+Error at ../../../../examples/tests/invalid/inflight_ref_invalid.w:14:16 | Cannot reference non-capturable field \\"mut_array\\" from an inflight context"
+`;
+
+exports[`inflight_ref_preflight_method.w > wing test (--target sim) - invalid > stderr 1`] = `
 "Compilation failed with 1 error(s)
-Error at ../../../../examples/tests/invalid/inflight_ref_resource_sub_field.w:26:10 | Unable to reference \\"my_queue.push\\" from inflight method \\"test\\" because it is not an inflight method"
+Error at ../../../../examples/tests/invalid/inflight_ref_preflight_method.w:19:5 | Cannot call into preflight phase while inflight"
+`;
+
+exports[`inflight_ref_resource_sub_method.w > wing test (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 1 error(s)
+Error at ../../../../examples/tests/invalid/inflight_ref_resource_sub_method.w:13:17 | Cannot qualify which operations are performed on resource \\"this.my_queue\\" (see https://github.com/winglang/wing/issues/76)"
+`;
+
+exports[`inflight_ref_unknown_op.w > wing test (--target sim) - invalid > stderr 1`] = `
+"Compilation failed with 1 error(s)
+Error at ../../../../examples/tests/invalid/inflight_ref_unknown_op.w:11:18 | Cannot qualify which operations are performed on resource \\"this.b\\" (see https://github.com/winglang/wing/issues/76)"
 `;
 
 exports[`json.w > wing test (--target sim) - invalid > stderr 1`] = `
@@ -113,7 +129,9 @@ Error at ../../../../examples/tests/invalid/json.w:9:15 | Expected type to be \\
 Error at ../../../../examples/tests/invalid/json.w:11:19 | Expected type to be \\"Map<str>\\", but got \\"Json\\" instead
 Error at ../../../../examples/tests/invalid/json.w:13:20 | Expected type to be \\"Set<str>\\", but got \\"Json\\" instead
 Error at ../../../../examples/tests/invalid/json.w:15:21 | Expected type to be \\"Array<str>\\", but got \\"Json\\" instead
-Error at ../../../../examples/tests/invalid/json.w:20:14 | Unknown symbol \\"set\\""
+Error at ../../../../examples/tests/invalid/json.w:20:14 | Unknown symbol \\"set\\"
+Error at ../../../../examples/tests/invalid/json.w:24:19 | Expected \\"Json\\" elements to be Json Value (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not Json Value
+Error at ../../../../examples/tests/invalid/json.w:27:29 | Expected \\"Json\\" elements to be Json Value (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not Json Value"
 `;
 
 exports[`missing_semicolon.w > wing test (--target sim) - invalid > stderr 1`] = `

@@ -27,17 +27,14 @@ assert(Json.keys(j).length == 2);
 
 // Format to string
 let jj = Json {a: 123, b: {c: 456, d: 789}};
-let ss = Json.to_str(jj);
+let ss = Json.stringify(jj);
 assert(ss == "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}");
 
-let ss2 = Json.to_str(jj, 2);
+let ss2 = Json.stringify(jj, 2);
 assert(ss2 == "{\n  \"a\": 123,\n  \"b\": {\n    \"c\": 456,\n    \"d\": 789\n  }\n}");
 
 // From Json Methods
 let json_of_many = Json {a: 123, b: "hello", c: true};
-let s_val = str.from_json(json_of_many.get("b"));
-assert(s_val == "hello");
-let n_val = num.from_json(json_of_many.get("a"));
-assert(n_val == 123);
-let b_val = bool.from_json(json_of_many.get("c"));
-assert(b_val);
+assert(str.from_json(json_of_many.get("b")) == "hello");
+assert(num.from_json(json_of_many.get("a")) == 123);
+assert(bool.from_json(json_of_many.get("c")));

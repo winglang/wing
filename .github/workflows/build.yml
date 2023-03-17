@@ -201,7 +201,9 @@ jobs:
       fail-fast: true
       matrix:
         runner: [ubuntu, macos, windows]
-        node: [18, 19]
+        # Note: Node 19.7.0 is pinned due to regressions in later versions
+        # See https://github.com/nodejs/node/issues/47096
+        node: ["18", "19.7.0"]
         shard: ["1/2", "2/2"]
         full_run:
           # Do a full run on push or when the PR is labeled "full-run"
@@ -212,7 +214,7 @@ jobs:
           - runner: windows
             full_run: false
           - runner: ubuntu
-            node: 19
+            node: "19.7.0"
             full_run: false
     runs-on: "${{ matrix.runner }}-latest"
     env:

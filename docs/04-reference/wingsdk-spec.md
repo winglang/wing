@@ -5,9 +5,9 @@ description: Specification for the Wing SDK
 
 :::caution Not fully implemented yet
 
-This document is a *specification* of the Wing SDK, and many features
+This document is a _specification_ of the Wing SDK, and many features
 are still not implemented (see [project board](https://github.com/orgs/winglang/projects/3)).
- 
+
 :::
 
 ## Overview
@@ -23,32 +23,32 @@ In writing this, we are hoping to provide a jumping-off point for contributors l
 When designing APIs for Wing, we try to follow these tenets:
 
 - **Focused on functional behavior**: our APIs are designed around the functional aspects that developers care about for building and testing their applications.
-Implementations of resources in the SDK are guaranteed to be scalable, highly-available, and fault tolerant by default, so that developers do not need to customize security policies or scaling configuration within their application code.
-Operational aspects of resources should not leak into the core API surface area, except when they are essential to the functional behavior of the resource and the user's mental model.
-For example, while the timeout of a serverless function can be considered an operational detail, it is essential to the user's mental model of functions as an ephemeral, stateless resource that should not be used for long-running or stateful workloads.
+  Implementations of resources in the SDK are guaranteed to be scalable, highly-available, and fault tolerant by default, so that developers do not need to customize security policies or scaling configuration within their application code.
+  Operational aspects of resources should not leak into the core API surface area, except when they are essential to the functional behavior of the resource and the user's mental model.
+  For example, while the timeout of a serverless function can be considered an operational detail, it is essential to the user's mental model of functions as an ephemeral, stateless resource that should not be used for long-running or stateful workloads.
 
 - **Easy to understand, with sensible defaults**: our APIs are based on the mental model of the user, and not the mental model of cloud service APIs, which are frequently designed against the constraints of the backend system and the fact that these APIs are used through network requests.
-It's okay to enable multiple ways to achieve the same thing, in order to make it more natural for users who come from different mental models.
-APIs should have sensible defaults, and should be easy to use correctly.
-APIs should make it easy to do the right thing, and hard to do the wrong thing.
+  It's okay to enable multiple ways to achieve the same thing, in order to make it more natural for users who come from different mental models.
+  APIs should have sensible defaults, and should be easy to use correctly.
+  APIs should make it easy to do the right thing, and hard to do the wrong thing.
 
 - **All clouds are equal**: our APIs and their documentation should not have any assumptions about where resources are being deployed.
-When possible, prefer mental models and terminology that are natural for operating with data structures for code running on your own machine (eg., choose "push" and "pop" over "send" and "receive").
-Avoid APIs and options that may only be supported on one or two major cloud providers.
-In the case that an essential option or method is not available on a given cloud provider, then the resource's concrete implementation should throw when the option or method is used.
-Resources that are difficult to abstract across cloud providers should be implemented as third party Wing libraries.
+  When possible, prefer mental models and terminology that are natural for operating with data structures for code running on your own machine (eg., choose "push" and "pop" over "send" and "receive").
+  Avoid APIs and options that may only be supported on one or two major cloud providers.
+  In the case that an essential option or method is not available on a given cloud provider, then the resource's concrete implementation should throw when the option or method is used.
+  Resources that are difficult to abstract across cloud providers should be implemented as third party Wing libraries.
 
 - **Open**: The Wing SDK is an extensible framework.
-It is also open source, and designed to be easy to contribute to.
-It heavily relies on interfaces to allow developers to extend its behavior and provide their own custom implementations targeting new cloud providers, or allow more customized behavior.
+  It is also open source, and designed to be easy to contribute to.
+  It heavily relies on interfaces to allow developers to extend its behavior and provide their own custom implementations targeting new cloud providers, or allow more customized behavior.
 
 - **Deterministic**: The same code should always produce the same result.
-Any non-determinism should be minimized and scoped to inputs provided by the user (e.g. by letting the user provide file sources or environment variables).
-Non-determistic information can also be managed by the provisioning engine (for example, in Terraform state) in the form of late-bound values.
+  Any non-determinism should be minimized and scoped to inputs provided by the user (e.g. by letting the user provide file sources or environment variables).
+  Non-determistic information can also be managed by the provisioning engine (for example, in Terraform state) in the form of late-bound values.
 
 - **Built with jsii, designed for Wing**: The Wing SDK is designed first and foremost for the Wing language, but it is compiled with jsii to allow resources to be created as (preflight) CDK constructs in all jsii-supported programming languages.
-jsii poses restrictions on language features that cannot be idiomatically represented in target languages, and encourages good practices for object-oriented design.
-Features that are specific to Wing (such as inflight functions) may not be supported in other jsii languages.
+  jsii poses restrictions on language features that cannot be idiomatically represented in target languages, and encourages good practices for object-oriented design.
+  Features that are specific to Wing (such as inflight functions) may not be supported in other jsii languages.
 
 ## Concepts used throughout the SDK
 
@@ -68,7 +68,7 @@ See [this issue](https://github.com/winglang/wing/discussions/1054) for more det
 ### Serializing data
 
 > Reqtag: `sdk:serializable`
-<span id="sdk:serializable"/>
+> <span id="sdk:serializable"/>
 
 Several APIs in the SDK accept or return values that need to be serialized and sent over the wire, and deserialized on the other side.
 
@@ -79,7 +79,7 @@ The SDK specification currently models these APIs using the `Json` or `Blob` typ
 ### Paginated APIs
 
 > Reqtag: `sdk:pagination`
-<span id="sdk:pagination"/>
+> <span id="sdk:pagination"/>
 
 Some APIs return a list of results that may be too large to fit in memory, or too large to fetch from the cloud all at once.
 In these cases, APIs can return an `Iterator` object.
@@ -94,7 +94,7 @@ These events are "fire-and-forget" notifications which may not always be deliver
 Resources that emit events in a "fire-and-forget" fashion should make their events listenable through a method named `on_<event>`.
 
 > Reqtag: `sdk:on-event-name`
-<span id="sdk:on-event-name"/>
+> <span id="sdk:on-event-name"/>
 
 For example, a `cloud.Bucket` can emit events whenever an object is uploaded, and these events can be listened to by calling `on_upload` on the bucket:
 
@@ -136,7 +136,7 @@ let x2 = new X();
 ```
 
 > Reqtag: `sdk:event-handler-conversion`
-<span id="sdk:event-handler-conversion"/>
+> <span id="sdk:event-handler-conversion"/>
 
 In the example with `bucket.on_upload` from earlier this section, when the method is called, cloud infrastructure is automatically added to invoke the event handler's `handle` method whenever an object is added to the bucket.
 
@@ -196,35 +196,35 @@ struct ThresholdReachedEvent {
 
 ## Planned resources
 
-* Bucket (P1) - object storage, similar to AWS S3, Azure Blob Storage, GCP Storage
-* Queue (P1) - a message queue, similar to AWS SQS, Azure Storage Queues
-* Function (P1) - a serverless function, similar to AWS Lambda, Azure Functions, GCP Cloud Functions
-* Topic (P1) - a pub/sub topic, similar to AWS SNS, Azure Event Grid, GCP Pub/Sub
-* Logger (P1) - a log aggregator
-* Counter (P1) - an atomic counter
-* Schedule (P1) - a cron job / scheduled task trigger
-* Api (P1) - a REST API
-* Service (P1) - a long-running service, similar to AWS ECS, Azure Container Instances, GCP Cloud Run
-* SqlDatabase (P1) - a relational database that lets you execute arbitrary SQL queries, similar to AWS RDS, Azure SQL Database, GCP Cloud SQL
-* Website (P2) - a CDN-backed static website
-* Metric (P2) - a metric for monitoring system performance
-* Alarm (P2) - an alarm that triggers when a metric crosses a threshold
-* Table (P2) - a NoSQL database table
-* Key-value store (P2) - a lightweight key-value store, similar to Redis or Memcached
-* Job (P2) - a long-running compute workload that can be run on demand
-* Workflow (P2) - a task orchestration engine, similar to AWS Step Functions, Azure Logic Apps, GCP Workflows
-* Secret (P2) - a secret value, similar to AWS Secrets Manager, Azure Key Vault, GCP Secret Manager
-* Stream (P2) - a stream of events, similar to AWS Kinesis, Azure Event Hubs, GCP Pub/Sub and Dataflow
-* OnDeploy (P2) - a variation of Function that runs every time the app is deployed
-* GraphQLApi (P2) - a GraphQL API, similar to AWS AppSync
+- Bucket (P1) - object storage, similar to AWS S3, Azure Blob Storage, GCP Storage
+- Queue (P1) - a message queue, similar to AWS SQS, Azure Storage Queues
+- Function (P1) - a serverless function, similar to AWS Lambda, Azure Functions, GCP Cloud Functions
+- Topic (P1) - a pub/sub topic, similar to AWS SNS, Azure Event Grid, GCP Pub/Sub
+- Logger (P1) - a log aggregator
+- Counter (P1) - an atomic counter
+- Schedule (P1) - a cron job / scheduled task trigger
+- Api (P1) - a REST API
+- Service (P1) - a long-running service, similar to AWS ECS, Azure Container Instances, GCP Cloud Run
+- SqlDatabase (P1) - a relational database that lets you execute arbitrary SQL queries, similar to AWS RDS, Azure SQL Database, GCP Cloud SQL
+- Website (P2) - a CDN-backed static website
+- Metric (P2) - a metric for monitoring system performance
+- Alarm (P2) - an alarm that triggers when a metric crosses a threshold
+- Table (P2) - a NoSQL database table
+- Key-value store (P2) - a lightweight key-value store, similar to Redis or Memcached
+- Job (P2) - a long-running compute workload that can be run on demand
+- Workflow (P2) - a task orchestration engine, similar to AWS Step Functions, Azure Logic Apps, GCP Workflows
+- Secret (P2) - a secret value, similar to AWS Secrets Manager, Azure Key Vault, GCP Secret Manager
+- Stream (P2) - a stream of events, similar to AWS Kinesis, Azure Event Hubs, GCP Pub/Sub and Dataflow
+- OnDeploy (P2) - a variation of Function that runs every time the app is deployed
+- GraphQLApi (P2) - a GraphQL API, similar to AWS AppSync
 
 ### Resources planned as third party libraries
 
-* Redis (P1)
-* DynamoDBTable
-* MongoDB
-* GithubRepo
-* Authorization/authentication related resources
+- Redis (P1)
+- DynamoDBTable
+- MongoDB
+- GithubRepo
+- Authorization/authentication related resources
 
 ## Bucket
 
@@ -313,7 +313,7 @@ resource Bucket {
 
   /**
    * Returns a signed url to the given file. This URL can be used by anyone to
-   * access the file until theh link expires (defaults to 24 hours).
+   * access the file until the link expires (defaults to 24 hours).
    */
   inflight signed_url(key: str, duration?: duration): str;
 }
@@ -336,12 +336,14 @@ enum BucketEventType {
 ```
 
 Future extensions:
+
 - `versioned` constructor property for object versioning
 
 ## Queue
 
 > Note: this API is WIP, and needs more research for multi-cloud support.
 > Open questions:
+>
 > - How are messages acknowledged?
 > - What is the API for FIFO queues?
 > - What is the API for dead-letter queues?
@@ -381,7 +383,7 @@ resource Queue {
   get timeout(): duration;
 
   /**
-   * Run an inflight in a cloud function whenever a message is pushed to the queue. 
+   * Run an inflight in a cloud function whenever a message is pushed to the queue.
    */
   add_consumer(fn: inflight (message: Json) => void, opts: QueueAddConsumerProps?): void;
 
@@ -410,6 +412,7 @@ struct QueueAddConsumerProps { /* elided */ }
 ```
 
 Future extensions:
+
 - automatic dead-letter queue configuration
 
 ## Function
@@ -491,6 +494,7 @@ resource Function {
 ```
 
 Future extensions:
+
 - `on_invoke(fn: inflight (payload: Json) => void): cloud.Function`
 - `on_resolve(fn: inflight(result: Json) => void): cloud.Function`
 
@@ -566,6 +570,7 @@ enum LogLevel {
 ```
 
 Future extensions:
+
 - log severity options?
 - APIs for scanning/filtering logs?
 - tracing options
@@ -635,6 +640,7 @@ assert(counter.peek("bar") == 2);
 ```
 
 Future extensions:
+
 - `on_change(fn: inflight (delta: num, new_value: num) => void): cloud.Function`
 
 ## Topic
@@ -923,6 +929,7 @@ Hello, world!
 ```
 
 Future extensions:
+
 - endpoint authorization?
 - APIs for creating paginated APIs / responses?
 
@@ -1020,6 +1027,7 @@ enum ComparisonOperator {
 ```
 
 Future extensions:
+
 - support for derived metrics? (e.g. `metric1 + metric2`)
 
 ## Service
@@ -1055,10 +1063,7 @@ source code and without a Dockerfile.
 > would be used to create a service.
 >
 > Links:
-> https://aws.amazon.com/blogs/containers/creating-container-images-with-cloud-native-buildpacks-using-aws-codebuild-and-aws-codepipeline/
-> https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/apprunner_service#image-repository
-> https://github.com/buildpacks/community/blob/main/ADOPTERS.md
-> https://cloud.google.com/blog/products/containers-kubernetes/google-cloud-now-supports-buildpacks
+> https://aws.amazon.com/blogs/containers/creating-container-images-with-cloud-native-buildpacks-using-aws-codebuild-and-aws-codepipeline/ > https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/apprunner_service#image-repository > https://github.com/buildpacks/community/blob/main/ADOPTERS.md > https://cloud.google.com/blog/products/containers-kubernetes/google-cloud-now-supports-buildpacks
 
 TODO: How should autoscaling be configured?
 
@@ -1279,6 +1284,7 @@ resource Table {
 ```
 
 Future extensions:
+
 - `on_insert(fn: inflight (row: Map<str, Json>) => void): cloud.Function;`
 - `on_update(fn: inflight (row: Map<str, Json>) => void): cloud.Function;`
 - `on_delete(fn: inflight (row: Map<str, Json>) => void): cloud.Function;`
