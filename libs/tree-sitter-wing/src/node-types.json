@@ -1820,6 +1820,10 @@
           {
             "type": "expression",
             "named": true
+          },
+          {
+            "type": "json_container_type",
+            "named": true
           }
         ]
       },
@@ -2231,10 +2235,6 @@
         {
           "type": "nested_identifier",
           "named": true
-        },
-        {
-          "type": "stdlib_identifier",
-          "named": true
         }
       ]
     }
@@ -2482,11 +2482,6 @@
         }
       ]
     }
-  },
-  {
-    "type": "stdlib_identifier",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "string",
