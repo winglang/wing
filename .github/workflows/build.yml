@@ -99,6 +99,11 @@ jobs:
     env:
       PROJEN_BUMP_VERSION: ${{ needs.prepare.outputs.version }}
     steps:
+      - name: Prestuff
+        run: |
+          whoami \
+          && sudo chmod 777 -R /__w
+    
       - name: Checkout
         uses: actions/checkout@v3
 
