@@ -2584,7 +2584,7 @@ impl<'a> TypeChecker<'a> {
 						if let Some(stdlib_symbol) = self.get_stdlib_symbol(symbol) {
 							path.push(stdlib_symbol);
 							path.push(Symbol {
-								name: "std".to_string(),
+								name: WINGSDK_STD_MODULE.to_string(),
 								span: symbol.span.clone(),
 							});
 						} else {
@@ -2596,8 +2596,13 @@ impl<'a> TypeChecker<'a> {
 						path.push(property.clone());
 						curr_expr = &object;
 					}
-					Reference::TypeMember { .. } => {
-						panic!("Type property references cannot be a type name because they have a property");
+					Reference::TypeMember { type_, .. } => {
+						assert_eq!(
+							path.len(),
+							0,
+							"Type property references cannot be a type name because they have a property"
+						);
+						return Some(type_.clone());
 					}
 				},
 				_ => return None,

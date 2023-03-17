@@ -80,10 +80,6 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "stdlib_identifier"
-        },
-        {
-          "type": "SYMBOL",
           "name": "nested_identifier"
         },
         {
@@ -129,27 +125,6 @@
         }
       ]
     },
-    "stdlib_identifier": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "_json_types"
-        },
-        {
-          "type": "STRING",
-          "value": "str"
-        },
-        {
-          "type": "STRING",
-          "value": "num"
-        },
-        {
-          "type": "STRING",
-          "value": "bool"
-        }
-      ]
-    },
     "nested_identifier": {
       "type": "PREC",
       "value": 150,
@@ -160,8 +135,17 @@
             "type": "FIELD",
             "name": "object",
             "content": {
-              "type": "SYMBOL",
-              "name": "expression"
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "expression"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "json_container_type"
+                }
+              ]
             }
           },
           {
@@ -1470,7 +1454,11 @@
         },
         {
           "type": "SYMBOL",
-          "name": "reference"
+          "name": "identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "nested_identifier"
         },
         {
           "type": "SYMBOL",
@@ -4118,7 +4106,7 @@
   ],
   "conflicts": [
     [
-      "reference",
+      "expression",
       "custom_type"
     ]
   ],
@@ -4131,16 +4119,6 @@
       {
         "type": "SYMBOL",
         "name": "set_literal"
-      }
-    ],
-    [
-      {
-        "type": "SYMBOL",
-        "name": "json_container_type"
-      },
-      {
-        "type": "SYMBOL",
-        "name": "stdlib_identifier"
       }
     ],
     [

@@ -28,11 +28,12 @@ module.exports = grammar({
     // Handle ambiguity in case of empty literal: `a = {}`
     // In this case tree-sitter doesn't know if it's a set or a map literal so just assume its a map
     [$.map_literal, $.set_literal],
-    [$.json_container_type, $.stdlib_identifier],
-    [$.json_literal, $.structured_access_expression]
+    [$.json_literal, $.structured_access_expression],
   ],
 
-  conflicts: ($) => [[$.reference, $.custom_type]],
+  conflicts: ($) => [
+    [$.expression, $.custom_type]
+  ],
 
   supertypes: ($) => [$.expression, $._literal],
 
@@ -46,7 +47,7 @@ module.exports = grammar({
       ),
 
     // Identifiers
-    reference: ($) => choice($.stdlib_identifier, $.nested_identifier, $.identifier),
+    reference: ($) => choice($.nested_identifier, $.identifier),
 
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
 
@@ -56,14 +57,18 @@ module.exports = grammar({
         repeat(seq(".", field("fields", $.identifier)))
       ),
 
-    // This is required because of ambiguity with using Json keyword for both instantiation of Json
-    // and Identifier for static methods. Same issue exists for other types like Set, Map, etc.
-    stdlib_identifier: ($) => choice($._json_types, "str", "num", "bool"),
     nested_identifier: ($) =>
       prec(
         PREC.MEMBER,
         seq(
-          field("object", $.expression),
+          field("object", 
+            choice(
+              $.expression, 
+              // This is required because of ambiguity with using Json keyword for both instantiation of Json
+              // and Identifier for static methods.
+              $.json_container_type
+            )
+          ),
           choice(".", "?."),
           optional(field("property", $.identifier))
         )
@@ -269,7 +274,8 @@ module.exports = grammar({
         $.unary_expression,
         $.new_expression,
         $._literal,
-        $.reference,
+        $.identifier,
+        $.nested_identifier,
         $.call,
         $.preflight_closure,
         $.inflight_closure,
