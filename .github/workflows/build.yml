@@ -174,7 +174,7 @@ jobs:
         id: pr-labels
         if: github.event_name != 'push'
         with:
-          route: GET /repos/{{repo}/pulls/{number}
+          route: GET /repos/{repo}/pulls/{number}
           repo: ${{ github.repository }}
           number: ${{ github.event.pull_request.number }}
         env:
