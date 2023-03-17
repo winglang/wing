@@ -1,38 +1,32 @@
-====================
+================================================================================
 Unary minus expression
-====================
+================================================================================
 
 -1;
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (expression_statement
-        (unary_expression
-            arg: (number)
-        )
-    )
-)
+  (expression_statement
+    (unary_expression
+      arg: (number))))
 
-====================
+================================================================================
 Unary not expression
-====================
+================================================================================
 
 !false;
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (expression_statement
-        (unary_expression
-            arg: (bool)
-        )
-    )
-)
+  (expression_statement
+    (unary_expression
+      arg: (bool))))
 
-====================
+================================================================================
 Binary expressions
-====================
+================================================================================
 
 5 * 1;
 (5+1) % 1;
@@ -41,476 +35,352 @@ Binary expressions
 5 ** (1**5);
 501\(99 + 1);
 
----
-
-(source
-    (expression_statement
-        (binary_expression
-            left: (number)
-            right: (number)
-        )
-    )
-    (expression_statement
-        (binary_expression
-            left: (parenthesized_expression
-                (binary_expression
-                    left: (number)
-                    right: (number)
-                )
-            )
-            right: (number)
-        )
-    )
-    (expression_statement
-        (binary_expression
-            left: (number)
-            right: (binary_expression
-                left: (number)
-                right: (number)
-            )
-        )
-    )
-    (expression_statement
-        (binary_expression
-            left: (binary_expression
-                left: (number)
-                right: (number)
-            )
-            right: (number)
-        )
-    )
-    (expression_statement
-        (binary_expression
-            left: (number)
-            right: (parenthesized_expression
-                (binary_expression
-                    left: (number)
-                    right: (number)
-                )
-            )
-        )
-    )
-    (expression_statement
-        (binary_expression
-            left: (number)
-            right: (parenthesized_expression
-                (binary_expression
-                    left: (number)
-                    right: (number)
-                )
-            )
-        )
-    )
-)
-
-====================
-Function call
-====================
-
-hello(1,a);
-
----
-
-(source
-    (expression_statement
-        (call
-            caller: (reference (identifier))
-            args: (argument_list
-                (positional_argument
-                    (number)
-                )
-                (positional_argument
-                    (reference (identifier))
-                )
-            )
-        )
-    )
-)
-
-====================
-Method call
-====================
-
-obj.method();
-
----
-
-(source
-    (expression_statement
-        (call
-            caller: (reference
-                (nested_identifier
-                    object: (reference (identifier))
-                    property: (identifier)
-                )
-            )
-            args: (argument_list)
-        )
-    )
-)
-
-====================
-Method call in binary expression
-====================
-
-x == obj.method();
-
----
+--------------------------------------------------------------------------------
 
 (source
   (expression_statement
     (binary_expression
-      left: (reference
-        (identifier))
+      left: (number)
+      right: (number)))
+  (expression_statement
+    (binary_expression
+      left: (parenthesized_expression
+        (binary_expression
+          left: (number)
+          right: (number)))
+      right: (number)))
+  (expression_statement
+    (binary_expression
+      left: (number)
+      right: (binary_expression
+        left: (number)
+        right: (number))))
+  (expression_statement
+    (binary_expression
+      left: (binary_expression
+        left: (number)
+        right: (number))
+      right: (number)))
+  (expression_statement
+    (binary_expression
+      left: (number)
+      right: (parenthesized_expression
+        (binary_expression
+          left: (number)
+          right: (number)))))
+  (expression_statement
+    (binary_expression
+      left: (number)
+      right: (parenthesized_expression
+        (binary_expression
+          left: (number)
+          right: (number))))))
+
+================================================================================
+Function call
+================================================================================
+
+hello(1,a);
+
+--------------------------------------------------------------------------------
+
+(source
+  (expression_statement
+    (call
+      caller: (identifier)
+      args: (argument_list
+        (positional_argument
+          (number))
+        (positional_argument
+          (identifier))))))
+
+================================================================================
+Method call
+================================================================================
+
+obj.method();
+
+--------------------------------------------------------------------------------
+
+(source
+  (expression_statement
+    (call
+      caller: (nested_identifier
+        object: (identifier)
+        property: (identifier))
+      args: (argument_list))))
+
+================================================================================
+Method call in binary expression
+================================================================================
+
+x == obj.method();
+
+--------------------------------------------------------------------------------
+
+(source
+  (expression_statement
+    (binary_expression
+      left: (identifier)
       right: (call
-        caller: (reference
-          (nested_identifier
-            object: (reference
-              (identifier))
-            property: (identifier)))
+        caller: (nested_identifier
+          object: (identifier)
+          property: (identifier))
         args: (argument_list)))))
 
-====================
+================================================================================
 New expression
-====================
+================================================================================
 
 new A();
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (expression_statement
-        (new_expression
-            class: (custom_type object: (identifier))
-            args: (argument_list)
-        )
-    )
-)
+  (expression_statement
+    (new_expression
+      class: (custom_type
+        object: (identifier))
+      args: (argument_list))))
 
-================================
+================================================================================
 New expression with id and scope
-================================
+================================================================================
 
 new A() as "b" in c;
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (expression_statement
-        (new_expression
-            class: (custom_type object: (identifier))
-            args: (argument_list)
-            id: (new_object_id (string))
-            scope: (new_object_scope (reference (identifier)))
-        )
-    )
-)
+  (expression_statement
+    (new_expression
+      class: (custom_type
+        object: (identifier))
+      args: (argument_list)
+      id: (new_object_id
+        (string))
+      scope: (new_object_scope
+        (identifier)))))
 
-================================
+================================================================================
 preflight anonymous closure
-================================
+================================================================================
 
 (a: num): num => { return a; };
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (expression_statement
-        (preflight_closure
-            (parameter_list
-                (parameter_definition
-                    (identifier)
-                    (builtin_type)
-                )
-            )
-            (builtin_type)
-            (block
-                (return_statement
-                    (reference
-                        (identifier)
-                    )
-                )
-            )
-        )
-    )
-)
+  (expression_statement
+    (preflight_closure
+      (parameter_list
+        (parameter_definition
+          (identifier)
+          (builtin_type)))
+      (builtin_type)
+      (block
+        (return_statement
+          (identifier))))))
 
-================================
+================================================================================
 inflight anonymous closure
-================================
+================================================================================
 
 inflight (): num => { return 1; };
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (expression_statement
-        (inflight_closure
-            (parameter_list)
-            (builtin_type)
-            (block
-                (return_statement
-                    (number)
-                )
-            )
-        )
-    )
-)
+  (expression_statement
+    (inflight_closure
+      (parameter_list)
+      (builtin_type)
+      (block
+        (return_statement
+          (number))))))
 
-================================
+================================================================================
 Template string
-================================
+================================================================================
 
 "cool ${test}";
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (expression_statement
-        (string
-            (template_substitution
-                (reference
-                    (identifier)
-                )
-            )
-        )
-    )
-)
+  (expression_statement
+    (string
+      (template_substitution
+        (identifier)))))
 
-================================
+================================================================================
 ?? operator
-================================
+================================================================================
 
 maybeVal ?? 2;
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (expression_statement
-        (binary_expression
-            (reference
-                (identifier)
-            )
-            (number)
-        )
-    )
-)
+  (expression_statement
+    (binary_expression
+      (identifier)
+      (number))))
 
-
-================================
+================================================================================
 Set Literal
-================================
+================================================================================
 
 {1, 2, 3};
 Set<num> { 1, 2, 3 };
----
+--------------------------------------------------------------------------------
 
 (source
-    (expression_statement
-        (set_literal
-            element: (number)
-            element: (number)
-            element: (number)
-        )
-    )
-    (expression_statement
-        (set_literal
-            type: (immutable_container_type
-                type_parameter: (builtin_type)
-            )
-            element: (number)
-            element: (number)
-            element: (number)
-        )
-    )
-)
+  (expression_statement
+    (set_literal
+      element: (number)
+      element: (number)
+      element: (number)))
+  (expression_statement
+    (set_literal
+      type: (immutable_container_type
+        type_parameter: (builtin_type))
+      element: (number)
+      element: (number)
+      element: (number))))
 
-================================
+================================================================================
 Empty Map Literal
-================================
+================================================================================
 
 {};
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (expression_statement
-        (map_literal)
-    )
-)
+  (expression_statement
+    (map_literal)))
 
-================================
+================================================================================
 Map Literal
-================================
+================================================================================
 
 { a: 1, "a": 2, b: 3,};
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (expression_statement
-        (map_literal
-            member: (map_literal_member
-                (identifier)
-                (number)
-            )
-            member: (map_literal_member
-                (string)
-                (number)
-            )
-            member: (map_literal_member
-                (identifier)
-                (number)
-            )
-        )
-    )
-)
+  (expression_statement
+    (map_literal
+      member: (map_literal_member
+        (identifier)
+        (number))
+      member: (map_literal_member
+        (string)
+        (number))
+      member: (map_literal_member
+        (identifier)
+        (number)))))
 
-================================
+================================================================================
 Array Literal
-================================
+================================================================================
 
 [1, 2, 3,];
 Array<str>[];
----
+--------------------------------------------------------------------------------
 
 (source
-    (expression_statement
-        (array_literal
-            element: (number)
-            element: (number)
-            element: (number)
-        )
-    )
-    (expression_statement
-       (array_literal
-            type: (immutable_container_type
-                type_parameter: (builtin_type)
-            )
-        )
-    )
-)
+  (expression_statement
+    (array_literal
+      element: (number)
+      element: (number)
+      element: (number)))
+  (expression_statement
+    (array_literal
+      type: (immutable_container_type
+        type_parameter: (builtin_type)))))
 
-================================
+================================================================================
 Container Type Annotation
-================================
+================================================================================
 
 let a: Array<num> = [];
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (variable_definition_statement
-        name: (identifier)
-        type: (immutable_container_type
-            type_parameter: (builtin_type)
-        )
-        value: (array_literal)
-    )
-)
+  (variable_definition_statement
+    name: (identifier)
+    type: (immutable_container_type
+      type_parameter: (builtin_type))
+    value: (array_literal)))
 
-================================
+================================================================================
 Container Type Constructor Invocation
-================================
+================================================================================
 
 let a = new MutMap<num>();
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (variable_definition_statement
-        name: (identifier)
-        value: (new_expression
-            class: (mutable_container_type
-                type_parameter: (builtin_type)
-            )
-            args: (argument_list)
-        )
-    )
-)
+  (variable_definition_statement
+    name: (identifier)
+    value: (new_expression
+      class: (mutable_container_type
+        type_parameter: (builtin_type))
+      args: (argument_list))))
 
-================================
+================================================================================
 Struct literal
-================================
+================================================================================
 
 let a = A { f1: 3, f2: true };
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (variable_definition_statement
-        name: (identifier)
-        value: (struct_literal
-            type: (custom_type
-                object: (identifier)
-            )
-            fields: (struct_literal_member
-                (identifier)
-                (number)
-            )
-            fields: (struct_literal_member
-                (identifier)
-                (bool)
-            )
-        )
-    )
-)
+  (variable_definition_statement
+    name: (identifier)
+    value: (struct_literal
+      type: (custom_type
+        object: (identifier))
+      fields: (struct_literal_member
+        (identifier)
+        (number))
+      fields: (struct_literal_member
+        (identifier)
+        (bool)))))
 
-================================
+================================================================================
 Optional test (and precedence)
-================================
+================================================================================
 a?;
 !a?;
 (!a)?;
 (a.b.c)?;
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (expression_statement
-        (optional_test
-            (reference
-                (identifier)
-            )
-        )
-    )
-    (expression_statement
+  (expression_statement
+    (optional_test
+      (identifier)))
+  (expression_statement
+    (unary_expression
+      arg: (optional_test
+        (identifier))))
+  (expression_statement
+    (optional_test
+      (parenthesized_expression
         (unary_expression
-            arg: (optional_test
-                (reference
-                    (identifier)
-                )
-            )
-        )
-    )
-    (expression_statement
-        (optional_test
-            (parenthesized_expression
-                (unary_expression
-                   arg: (reference
-                        (identifier)
-                   )
-                )
-            )
-        )
-    )
-    (expression_statement
-        (optional_test
-            (parenthesized_expression
-                (reference
-                    (nested_identifier
-                        object: (reference
-                            (nested_identifier
-                                object: (reference
-                                    (identifier)
-                                )
-                                property: (identifier)
-                            )
-                        )
-                        property: (identifier)
-                    )
-                )
-            )
-        )
-    )
-)
+          arg: (identifier)))))
+  (expression_statement
+    (optional_test
+      (parenthesized_expression
+        (nested_identifier
+          object: (nested_identifier
+            object: (identifier)
+            property: (identifier))
+          property: (identifier))))))
