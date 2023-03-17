@@ -9,7 +9,7 @@ const INFLIGHT_CODE = (body: string) =>
   `async handle(req) { return { status: 200, body: "${body}" }; }`;
 // Handler that responds to a request with the request body
 const INFLIGHT_CODE_ECHO_BODY = `async handle(req) { return { status: 200, body: req.body }; }`;
-const INFLIGHT_CODE_WITH_RESPONSE_HEADER = `async handle(req) { return { status: 200, body: req.body, headers: { "x-wingnuts": "cloudy" } }; }`;
+const INFLIGHT_CODE_WITH_RESPONSE_HEADER = `async handle(req) { return { status: 200, body: req.headers, headers: { "x-wingnuts": "cloudy" } }; }`;
 
 test("create an api", async () => {
   // GIVEN
@@ -172,6 +172,8 @@ test("api with one POST route, with body", async () => {
 test("api handler can set response headers", async () => {
   // GIVEN
   const ROUTE = "/hello";
+  const REQUEST_HEADER_KEY = "foo";
+  const REQUEST_HEADER_VALUE = "bar";
 
   const app = new SimApp();
   const api = cloud.Api._newApi(app, "my_api");
@@ -185,13 +187,19 @@ test("api handler can set response headers", async () => {
   // WHEN
   const s = await app.startSimulator();
   const apiUrl = getApiUrl(s, "/my_api");
-  const response = await fetch(apiUrl + ROUTE, { method: "GET" });
+  const response = await fetch(apiUrl + ROUTE, {
+    method: "GET",
+    headers: {
+      [REQUEST_HEADER_KEY]: REQUEST_HEADER_VALUE,
+    },
+  });
 
   // THEN
   await s.stop();
 
   expect(response.status).toEqual(200);
-  expect(response.headers.get("x-wingnuts")).toEqual("cloudy");
+  const json = await response.json();
+  expect(json[REQUEST_HEADER_KEY]).toEqual(REQUEST_HEADER_VALUE);
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();

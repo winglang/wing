@@ -11,13 +11,14 @@ import {
 import {
   ApiRequest,
   ApiResponse,
-  HttpMethod,
   IApiClient,
   IFunctionClient,
+  parseHttpMethod,
+  sanitizeParamLikeObject,
 } from "../cloud";
 import { ISimulatorContext, TraceType } from "../testing/simulator";
 
-const LOCALHOST_HOSTNAME = "127.0.0.1";
+const LOCALHOST_ADDRESS = "127.0.0.1";
 
 export class Api implements IApiClient, ISimulatorResourceInstance {
   private readonly routes: ApiRoute[];
@@ -114,7 +115,7 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
     // on a port. We use a promise to wait for the server to start
     // listening before returning the URL.
     const addrInfo: AddressInfo = await new Promise((resolve, reject) => {
-      this.server = this.app.listen(0, LOCALHOST_HOSTNAME, () => {
+      this.server = this.app.listen(0, LOCALHOST_ADDRESS, () => {
         const addr = this.server?.address();
         if (addr && typeof addr === "object" && (addr as AddressInfo).port) {
           resolve(addr);
@@ -157,20 +158,12 @@ function isApiResponse(response: unknown): response is ApiResponse {
 }
 
 function transformRequest(req: express.Request): ApiRequest {
-  const headers: Record<string, string> = {};
-  for (const [key, value] of Object.entries(req.headers)) {
-    if (typeof value !== "string") {
-      throw new Error(`Expected header value to be string, found ${value}`);
-    }
-    headers[key] = value;
-  }
-
   return {
-    headers,
+    headers: sanitizeParamLikeObject(req.headers),
     body: req.body,
-    method: req.method as HttpMethod,
+    method: parseHttpMethod(req.method),
     path: req.path,
-    query: undefined, // TODO - change to map type
-    vars: {},
+    query: sanitizeParamLikeObject(req.query as any),
+    vars: {}, // TODO: not supported in simulator yet
   };
 }
