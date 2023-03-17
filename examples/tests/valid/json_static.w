@@ -27,10 +27,10 @@ assert(Json.keys(j).length == 2);
 
 // Format to string
 let jj = Json {a: 123, b: {c: 456, d: 789}};
-let ss = Json.to_str(jj);
+let ss = Json.stringify(jj);
 assert(ss == "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}");
 
-let ss2 = Json.to_str(jj, 2);
+let ss2 = Json.stringify(jj, 2);
 assert(ss2 == "{\n  \"a\": 123,\n  \"b\": {\n    \"c\": 456,\n    \"d\": 789\n  }\n}");
 
 // From Json Methods

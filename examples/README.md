@@ -40,6 +40,12 @@ _Add yours here!_
 * **Description:** A Wing Queue that saves all the messages sent to it on a bucket and allow you to replay all messages
 * **Author:** [@ekeren](https://github.com/ekeren)
 
+### Task Manager
+
+* **Source code:** [./proposed/task-manager.w](./proposed/task-manager.w)
+* **Description:** A task manager that lets you create background tasks asynchronously, and check their status at any point in time.
+* **Author:** [@Chriscbr](https://github.com/Chriscbr)
+
 <!--
 
 ### Tweet queue

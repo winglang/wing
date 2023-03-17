@@ -50,6 +50,10 @@
         "named": true
       },
       {
+        "type": "identifier",
+        "named": true
+      },
+      {
         "type": "inflight_closure",
         "named": true
       },
@@ -62,7 +66,15 @@
         "named": true
       },
       {
+        "type": "nested_identifier",
+        "named": true
+      },
+      {
         "type": "new_expression",
+        "named": true
+      },
+      {
+        "type": "optional_test",
         "named": true
       },
       {
@@ -71,10 +83,6 @@
       },
       {
         "type": "preflight_closure",
-        "named": true
-      },
-      {
-        "type": "reference",
         "named": true
       },
       {
@@ -1455,10 +1463,6 @@
           "named": true
         },
         {
-          "type": "identifier",
-          "named": true
-        },
-        {
           "type": "string",
           "named": true
         }
@@ -1816,6 +1820,10 @@
           {
             "type": "expression",
             "named": true
+          },
+          {
+            "type": "json_container_type",
+            "named": true
           }
         ]
       },
@@ -1950,6 +1958,21 @@
         },
         {
           "type": "optional",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "optional_test",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "expression",
           "named": true
         }
       ]
@@ -2212,10 +2235,6 @@
         {
           "type": "nested_identifier",
           "named": true
-        },
-        {
-          "type": "stdlib_identifier",
-          "named": true
         }
       ]
     }
@@ -2465,11 +2484,6 @@
     }
   },
   {
-    "type": "stdlib_identifier",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "string",
     "named": true,
     "fields": {},
@@ -2604,10 +2618,6 @@
       "types": [
         {
           "type": "expression",
-          "named": true
-        },
-        {
-          "type": "identifier",
           "named": true
         }
       ]
