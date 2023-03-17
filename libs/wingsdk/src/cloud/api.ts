@@ -337,6 +337,8 @@ export function parseHttpMethod(method: string): HttpMethod {
       return HttpMethod.POST;
     case "PUT":
       return HttpMethod.PUT;
+    case "HEAD":
+      return HttpMethod.HEAD;
     case "DELETE":
       return HttpMethod.DELETE;
     case "CONNECT":

@@ -21,6 +21,27 @@ export class Api extends cloud.Api implements ISimulatorResource {
     super(scope, id, props);
   }
 
+  private createOrGetFunction(
+    inflight: core.Inflight,
+    props: cloud.FunctionProps
+  ): Function {
+    const hash = inflight.node.addr.slice(-8);
+    const fnPath = `${this.node.id}-OnRequestHandler-${hash}`;
+
+    let existingFn = this.node.tryFindChild(fnPath);
+    if (existingFn) {
+      return existingFn as Function;
+    }
+
+    const fn = Function._newFunction(this, fnPath, inflight, props) as Function;
+
+    // At the time the Api is created in the simulator, it needs to be able to
+    // call referenced functions.
+    this.node.addDependency(fn);
+
+    return fn;
+  }
+
   private addEndpoint(
     route: string,
     method: cloud.HttpMethod,
@@ -28,21 +49,11 @@ export class Api extends cloud.Api implements ISimulatorResource {
     props: any
   ): void {
     this._addToSpec(route, method, undefined);
-    const hash = inflight.node.addr.slice(-8);
 
     // No conversion is necessary here because the simulator uses the
     // `ApiRequest` and `ApiResponse` types directly.
 
-    const fn = Function._newFunction(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnRequestHandler-${hash}`,
-      inflight,
-      props
-    );
-
-    // At the time the Api is created in the simulator, it needs to be able to
-    // call referenced functions.
-    this.node.addDependency(fn);
+    const fn = this.createOrGetFunction(inflight, props);
 
     const functionHandle = simulatorHandleToken(fn);
     this._routes.push({

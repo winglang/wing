@@ -9,6 +9,9 @@ const INFLIGHT_CODE = (body: string) =>
   `async handle(req) { return { status: 200, body: "${body}" }; }`;
 // Handler that responds to a request with the request body
 const INFLIGHT_CODE_ECHO_BODY = `async handle(req) { return { status: 200, body: req.body }; }`;
+// Handler that responds to a request with the request method
+const INFLIGHT_CODE_ECHO_METHOD = `async handle(req) { return { status: 200, body: req.method }; }`;
+// Handler that responds to a request with extra response headers
 const INFLIGHT_CODE_WITH_RESPONSE_HEADER = `async handle(req) { return { status: 200, body: req.headers, headers: { "x-wingnuts": "cloudy" } }; }`;
 
 test("create an api", async () => {
@@ -54,6 +57,66 @@ test("api with one GET route", async () => {
 
   expect(response.status).toEqual(200);
   expect(await response.text()).toEqual(RESPONSE);
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("api with multiple GET routes and one lambda", () => {
+  // GIVEN
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_BODY);
+
+  api.get("/hello/foo", inflight);
+  api.get("/hello/bat", inflight);
+
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("api supports every method type", async () => {
+  // GIVEN
+  const METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "DELETE",
+    "HEAD",
+    "OPTIONS",
+    "PATCH",
+    // "CONNECT",
+    // CONNECT cannot be tested since JavaScript doesn't allow it:
+    // https://stackoverflow.com/questions/58656378/is-it-possible-to-make-an-http-connect-request-with-javascript-in-a-browser
+  ];
+  const ROUTE = "/hello";
+
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const inflight = Testing.makeHandler(
+    app,
+    "Handler",
+    INFLIGHT_CODE_ECHO_METHOD
+  );
+  METHODS.forEach((method) => {
+    api[method.toLowerCase()](ROUTE, inflight);
+  });
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl = getApiUrl(s, "/my_api");
+  const responses = await Promise.all(
+    METHODS.map((method) => fetch(apiUrl + ROUTE, { method }))
+  );
+
+  // THEN
+  await s.stop();
+
+  await Promise.all(
+    zip(METHODS, responses).map(async ([method, response]) => {
+      expect(response.status).toEqual(200);
+      expect(await response.text()).toEqual(method === "HEAD" ? "" : method);
+    })
+  );
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
@@ -208,4 +271,8 @@ test("api handler can set response headers", async () => {
 function getApiUrl(s: Simulator, path: string): string {
   const apiAttrs = s.getResourceConfig(path).attrs as ApiAttributes;
   return apiAttrs.url;
+}
+
+function zip<T, U>(a: T[], b: U[]): Array<[T, U]> {
+  return a.map((x, i) => [x, b[i]]);
 }

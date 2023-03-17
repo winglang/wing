@@ -28,12 +28,12 @@ exports[`api handler can set response headers 2`] = `
       },
       {
         "attrs": {},
-        "path": "root/my_api-OnRequestHandler-e645076f",
+        "path": "root/my_api/my_api-OnRequestHandler-e645076f",
         "props": {
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_api-onrequesthandler-e645076f_c8f990c6/index.js",
+          "sourceCodeFile": "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -45,7 +45,7 @@ exports[`api handler can set response headers 2`] = `
         "props": {
           "routes": [
             {
-              "functionHandle": "\${root/my_api-OnRequestHandler-e645076f#attrs.handle}",
+              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
               "method": "GET",
               "route": "/hello",
             },
@@ -83,7 +83,7 @@ exports[`api handler can set response headers 2`] = `
                 "direction": "inbound",
                 "implicit": true,
                 "relationship": "print",
-                "resource": "root/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
               },
             ],
             "wing:resource:stateful": true,
@@ -107,10 +107,41 @@ exports[`api handler can set response headers 2`] = `
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_get_request",
-                "resource": "root/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
               },
             ],
             "wing:resource:stateful": true,
+          },
+          "children": {
+            "my_api-OnRequestHandler-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [
+                  {
+                    "direction": "outbound",
+                    "implicit": true,
+                    "relationship": "print",
+                    "resource": "root/WingLogger",
+                  },
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "on_get_request",
+                    "resource": "root/my_api",
+                  },
+                ],
+                "wing:resource:stateful": false,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "title": "Function",
+              },
+              "id": "my_api-OnRequestHandler-e645076f",
+              "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -123,35 +154,6 @@ exports[`api handler can set response headers 2`] = `
           "id": "my_api",
           "path": "root/my_api",
         },
-        "my_api-OnRequestHandler-e645076f": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "on_get_request",
-                "resource": "root/my_api",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "my_api-OnRequestHandler-e645076f",
-          "path": "root/my_api-OnRequestHandler-e645076f",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -162,7 +164,7 @@ exports[`api handler can set response headers 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_api-onrequesthandler-e645076f_c8f990c6/index.js": "var $logger = function(env) {
+  "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -180,6 +182,495 @@ exports.handler = async function(event) {
       }
       async handle(req) {
         return { status: 200, body: req.headers, headers: { \\"x-wingnuts\\": \\"cloudy\\" } };
+      }
+    };
+  }())({}).handle(event);
+};
+",
+}
+`;
+
+exports[`api supports every method type 1`] = `
+[
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Function created.",
+  "Server listening on http://127.0.0.1:<port>",
+  "wingsdk.cloud.Api created.",
+  "Processing \\"GET /hello\\" (body={}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "GET /hello - 200.",
+  "Processing \\"POST /hello\\" (body={}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":{},\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "POST /hello - 200.",
+  "Processing \\"PUT /hello\\" (body={}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":{},\\"method\\":\\"PUT\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "PUT /hello - 200.",
+  "Processing \\"DELETE /hello\\" (body={}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"DELETE\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "DELETE /hello - 200.",
+  "Processing \\"GET /hello\\" (body={}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"HEAD\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "GET /hello - 200.",
+  "Processing \\"OPTIONS /hello\\" (body={}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"OPTIONS\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "OPTIONS /hello - 200.",
+  "Processing \\"PATCH /hello\\" (body={}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":{},\\"method\\":\\"PATCH\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "PATCH /hello - 200.",
+  "Closing server on http://127.0.0.1:<port>",
+  "wingsdk.cloud.Api deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`api supports every method type 2`] = `
+{
+  "app.wsim/simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/WingLogger",
+        "props": {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+        "props": {
+          "environmentVariables": {
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+          },
+          "sourceCodeFile": "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api",
+        "props": {
+          "routes": [
+            {
+              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+              "method": "GET",
+              "route": "/hello",
+            },
+            {
+              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+              "method": "POST",
+              "route": "/hello",
+            },
+            {
+              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+              "method": "PUT",
+              "route": "/hello",
+            },
+            {
+              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+              "method": "DELETE",
+              "route": "/hello",
+            },
+            {
+              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+              "method": "HEAD",
+              "route": "/hello",
+            },
+            {
+              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+              "method": "OPTIONS",
+              "route": "/hello",
+            },
+            {
+              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+              "method": "PATCH",
+              "route": "/hello",
+            },
+          ],
+        },
+        "type": "wingsdk.cloud.Api",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "app.wsim/tree.json": {
+    "tree": {
+      "children": {
+        "Handler": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
+        "WingLogger": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
+                "direction": "inbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+        "my_api": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "on_get_request",
+                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "on_post_request",
+                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "on_put_request",
+                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "on_delete_request",
+                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "on_head_request",
+                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "on_options_request",
+                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "on_patch_request",
+                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "children": {
+            "my_api-OnRequestHandler-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [
+                  {
+                    "direction": "outbound",
+                    "implicit": true,
+                    "relationship": "print",
+                    "resource": "root/WingLogger",
+                  },
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "on_get_request",
+                    "resource": "root/my_api",
+                  },
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "on_post_request",
+                    "resource": "root/my_api",
+                  },
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "on_put_request",
+                    "resource": "root/my_api",
+                  },
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "on_delete_request",
+                    "resource": "root/my_api",
+                  },
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "on_head_request",
+                    "resource": "root/my_api",
+                  },
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "on_options_request",
+                    "resource": "root/my_api",
+                  },
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "on_patch_request",
+                    "resource": "root/my_api",
+                  },
+                ],
+                "wing:resource:stateful": false,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "title": "Function",
+              },
+              "id": "my_api-OnRequestHandler-e645076f",
+              "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+            },
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A REST API endpoint",
+            "title": "Api",
+          },
+          "id": "my_api",
+          "path": "root/my_api",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.1.245",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+  "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js": "var $logger = function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+}(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await new (function() {
+    return class Handler {
+      constructor(clients) {
+        for (const [name, client] of Object.entries(clients)) {
+          this[name] = client;
+        }
+      }
+      async handle(req) {
+        return { status: 200, body: req.method };
+      }
+    };
+  }())({}).handle(event);
+};
+",
+}
+`;
+
+exports[`api with multiple GET routes and one lambda 1`] = `
+{
+  "app.wsim/simulator.json": {
+    "resources": [
+      {
+        "attrs": {},
+        "path": "root/WingLogger",
+        "props": {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+        "props": {
+          "environmentVariables": {
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+          },
+          "sourceCodeFile": "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api",
+        "props": {
+          "routes": [
+            {
+              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+              "method": "GET",
+              "route": "/hello/foo",
+            },
+            {
+              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+              "method": "GET",
+              "route": "/hello/bat",
+            },
+          ],
+        },
+        "type": "wingsdk.cloud.Api",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "app.wsim/tree.json": {
+    "tree": {
+      "children": {
+        "Handler": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
+        "WingLogger": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
+                "direction": "inbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+        "my_api": {
+          "attributes": {
+            "wing:resource:connections": [
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "on_get_request",
+                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "children": {
+            "my_api-OnRequestHandler-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [
+                  {
+                    "direction": "outbound",
+                    "implicit": true,
+                    "relationship": "print",
+                    "resource": "root/WingLogger",
+                  },
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "on_get_request",
+                    "resource": "root/my_api",
+                  },
+                ],
+                "wing:resource:stateful": false,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "title": "Function",
+              },
+              "id": "my_api-OnRequestHandler-e645076f",
+              "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+            },
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A REST API endpoint",
+            "title": "Api",
+          },
+          "id": "my_api",
+          "path": "root/my_api",
+        },
+      },
+      "constructInfo": {
+        "fqn": "constructs.Construct",
+        "version": "10.1.245",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+  "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js": "var $logger = function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+}(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await new (function() {
+    return class Handler {
+      constructor(clients) {
+        for (const [name, client] of Object.entries(clients)) {
+          this[name] = client;
+        }
+      }
+      async handle(req) {
+        return { status: 200, body: req.body };
       }
     };
   }())({}).handle(event);
@@ -221,12 +712,12 @@ exports[`api with multiple methods on same route 2`] = `
       },
       {
         "attrs": {},
-        "path": "root/my_api-OnRequestHandler-7c48a9f0",
+        "path": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
         "props": {
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_api-onrequesthandler-7c48a9f0_c85db096/index.js",
+          "sourceCodeFile": "assets/my_api-onrequesthandler-7c48a9f0_c88f14d5/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -234,12 +725,12 @@ exports[`api with multiple methods on same route 2`] = `
       },
       {
         "attrs": {},
-        "path": "root/my_api-OnRequestHandler-f6d90a7f",
+        "path": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
         "props": {
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_api-onrequesthandler-f6d90a7f_c856b9bb/index.js",
+          "sourceCodeFile": "assets/my_api-onrequesthandler-f6d90a7f_c878cf95/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -251,12 +742,12 @@ exports[`api with multiple methods on same route 2`] = `
         "props": {
           "routes": [
             {
-              "functionHandle": "\${root/my_api-OnRequestHandler-7c48a9f0#attrs.handle}",
+              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-7c48a9f0#attrs.handle}",
               "method": "GET",
               "route": "/hello",
             },
             {
-              "functionHandle": "\${root/my_api-OnRequestHandler-f6d90a7f#attrs.handle}",
+              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-f6d90a7f#attrs.handle}",
               "method": "POST",
               "route": "/hello",
             },
@@ -311,13 +802,13 @@ exports[`api with multiple methods on same route 2`] = `
                 "direction": "inbound",
                 "implicit": true,
                 "relationship": "print",
-                "resource": "root/my_api-OnRequestHandler-7c48a9f0",
+                "resource": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
               },
               {
                 "direction": "inbound",
                 "implicit": true,
                 "relationship": "print",
-                "resource": "root/my_api-OnRequestHandler-f6d90a7f",
+                "resource": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
               },
             ],
             "wing:resource:stateful": true,
@@ -341,16 +832,76 @@ exports[`api with multiple methods on same route 2`] = `
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_get_request",
-                "resource": "root/my_api-OnRequestHandler-7c48a9f0",
+                "resource": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_post_request",
-                "resource": "root/my_api-OnRequestHandler-f6d90a7f",
+                "resource": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
               },
             ],
             "wing:resource:stateful": true,
+          },
+          "children": {
+            "my_api-OnRequestHandler-7c48a9f0": {
+              "attributes": {
+                "wing:resource:connections": [
+                  {
+                    "direction": "outbound",
+                    "implicit": true,
+                    "relationship": "print",
+                    "resource": "root/WingLogger",
+                  },
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "on_get_request",
+                    "resource": "root/my_api",
+                  },
+                ],
+                "wing:resource:stateful": false,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "title": "Function",
+              },
+              "id": "my_api-OnRequestHandler-7c48a9f0",
+              "path": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
+            },
+            "my_api-OnRequestHandler-f6d90a7f": {
+              "attributes": {
+                "wing:resource:connections": [
+                  {
+                    "direction": "outbound",
+                    "implicit": true,
+                    "relationship": "print",
+                    "resource": "root/WingLogger",
+                  },
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "on_post_request",
+                    "resource": "root/my_api",
+                  },
+                ],
+                "wing:resource:stateful": false,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "title": "Function",
+              },
+              "id": "my_api-OnRequestHandler-f6d90a7f",
+              "path": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
+            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -363,64 +914,6 @@ exports[`api with multiple methods on same route 2`] = `
           "id": "my_api",
           "path": "root/my_api",
         },
-        "my_api-OnRequestHandler-7c48a9f0": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "on_get_request",
-                "resource": "root/my_api",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "my_api-OnRequestHandler-7c48a9f0",
-          "path": "root/my_api-OnRequestHandler-7c48a9f0",
-        },
-        "my_api-OnRequestHandler-f6d90a7f": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "on_post_request",
-                "resource": "root/my_api",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "my_api-OnRequestHandler-f6d90a7f",
-          "path": "root/my_api-OnRequestHandler-f6d90a7f",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -431,7 +924,7 @@ exports[`api with multiple methods on same route 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_api-onrequesthandler-7c48a9f0_c85db096/index.js": "var $logger = function(env) {
+  "assets/my_api-onrequesthandler-7c48a9f0_c88f14d5/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -454,7 +947,7 @@ exports.handler = async function(event) {
   }())({}).handle(event);
 };
 ",
-  "assets/my_api-onrequesthandler-f6d90a7f_c856b9bb/index.js": "var $logger = function(env) {
+  "assets/my_api-onrequesthandler-f6d90a7f_c878cf95/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -513,12 +1006,12 @@ exports[`api with multiple routes 2`] = `
       },
       {
         "attrs": {},
-        "path": "root/my_api-OnRequestHandler-7c48a9f0",
+        "path": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
         "props": {
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_api-onrequesthandler-7c48a9f0_c85db096/index.js",
+          "sourceCodeFile": "assets/my_api-onrequesthandler-7c48a9f0_c88f14d5/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -526,12 +1019,12 @@ exports[`api with multiple routes 2`] = `
       },
       {
         "attrs": {},
-        "path": "root/my_api-OnRequestHandler-f6d90a7f",
+        "path": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
         "props": {
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_api-onrequesthandler-f6d90a7f_c856b9bb/index.js",
+          "sourceCodeFile": "assets/my_api-onrequesthandler-f6d90a7f_c878cf95/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -543,12 +1036,12 @@ exports[`api with multiple routes 2`] = `
         "props": {
           "routes": [
             {
-              "functionHandle": "\${root/my_api-OnRequestHandler-7c48a9f0#attrs.handle}",
+              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-7c48a9f0#attrs.handle}",
               "method": "GET",
               "route": "/hello/world",
             },
             {
-              "functionHandle": "\${root/my_api-OnRequestHandler-f6d90a7f#attrs.handle}",
+              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-f6d90a7f#attrs.handle}",
               "method": "GET",
               "route": "/hello/wingnuts",
             },
@@ -603,13 +1096,13 @@ exports[`api with multiple routes 2`] = `
                 "direction": "inbound",
                 "implicit": true,
                 "relationship": "print",
-                "resource": "root/my_api-OnRequestHandler-7c48a9f0",
+                "resource": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
               },
               {
                 "direction": "inbound",
                 "implicit": true,
                 "relationship": "print",
-                "resource": "root/my_api-OnRequestHandler-f6d90a7f",
+                "resource": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
               },
             ],
             "wing:resource:stateful": true,
@@ -633,16 +1126,76 @@ exports[`api with multiple routes 2`] = `
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_get_request",
-                "resource": "root/my_api-OnRequestHandler-7c48a9f0",
+                "resource": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_get_request",
-                "resource": "root/my_api-OnRequestHandler-f6d90a7f",
+                "resource": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
               },
             ],
             "wing:resource:stateful": true,
+          },
+          "children": {
+            "my_api-OnRequestHandler-7c48a9f0": {
+              "attributes": {
+                "wing:resource:connections": [
+                  {
+                    "direction": "outbound",
+                    "implicit": true,
+                    "relationship": "print",
+                    "resource": "root/WingLogger",
+                  },
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "on_get_request",
+                    "resource": "root/my_api",
+                  },
+                ],
+                "wing:resource:stateful": false,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "title": "Function",
+              },
+              "id": "my_api-OnRequestHandler-7c48a9f0",
+              "path": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
+            },
+            "my_api-OnRequestHandler-f6d90a7f": {
+              "attributes": {
+                "wing:resource:connections": [
+                  {
+                    "direction": "outbound",
+                    "implicit": true,
+                    "relationship": "print",
+                    "resource": "root/WingLogger",
+                  },
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "on_get_request",
+                    "resource": "root/my_api",
+                  },
+                ],
+                "wing:resource:stateful": false,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "title": "Function",
+              },
+              "id": "my_api-OnRequestHandler-f6d90a7f",
+              "path": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
+            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -655,64 +1208,6 @@ exports[`api with multiple routes 2`] = `
           "id": "my_api",
           "path": "root/my_api",
         },
-        "my_api-OnRequestHandler-7c48a9f0": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "on_get_request",
-                "resource": "root/my_api",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "my_api-OnRequestHandler-7c48a9f0",
-          "path": "root/my_api-OnRequestHandler-7c48a9f0",
-        },
-        "my_api-OnRequestHandler-f6d90a7f": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "on_get_request",
-                "resource": "root/my_api",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "my_api-OnRequestHandler-f6d90a7f",
-          "path": "root/my_api-OnRequestHandler-f6d90a7f",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -723,7 +1218,7 @@ exports[`api with multiple routes 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_api-onrequesthandler-7c48a9f0_c85db096/index.js": "var $logger = function(env) {
+  "assets/my_api-onrequesthandler-7c48a9f0_c88f14d5/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -746,7 +1241,7 @@ exports.handler = async function(event) {
   }())({}).handle(event);
 };
 ",
-  "assets/my_api-onrequesthandler-f6d90a7f_c856b9bb/index.js": "var $logger = function(env) {
+  "assets/my_api-onrequesthandler-f6d90a7f_c878cf95/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -800,12 +1295,12 @@ exports[`api with one GET route 2`] = `
       },
       {
         "attrs": {},
-        "path": "root/my_api-OnRequestHandler-e645076f",
+        "path": "root/my_api/my_api-OnRequestHandler-e645076f",
         "props": {
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_api-onrequesthandler-e645076f_c8f990c6/index.js",
+          "sourceCodeFile": "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -817,7 +1312,7 @@ exports[`api with one GET route 2`] = `
         "props": {
           "routes": [
             {
-              "functionHandle": "\${root/my_api-OnRequestHandler-e645076f#attrs.handle}",
+              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
               "method": "GET",
               "route": "/hello",
             },
@@ -855,7 +1350,7 @@ exports[`api with one GET route 2`] = `
                 "direction": "inbound",
                 "implicit": true,
                 "relationship": "print",
-                "resource": "root/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
               },
             ],
             "wing:resource:stateful": true,
@@ -879,10 +1374,41 @@ exports[`api with one GET route 2`] = `
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_get_request",
-                "resource": "root/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
               },
             ],
             "wing:resource:stateful": true,
+          },
+          "children": {
+            "my_api-OnRequestHandler-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [
+                  {
+                    "direction": "outbound",
+                    "implicit": true,
+                    "relationship": "print",
+                    "resource": "root/WingLogger",
+                  },
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "on_get_request",
+                    "resource": "root/my_api",
+                  },
+                ],
+                "wing:resource:stateful": false,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "title": "Function",
+              },
+              "id": "my_api-OnRequestHandler-e645076f",
+              "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -895,35 +1421,6 @@ exports[`api with one GET route 2`] = `
           "id": "my_api",
           "path": "root/my_api",
         },
-        "my_api-OnRequestHandler-e645076f": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "on_get_request",
-                "resource": "root/my_api",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "my_api-OnRequestHandler-e645076f",
-          "path": "root/my_api-OnRequestHandler-e645076f",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -934,7 +1431,7 @@ exports[`api with one GET route 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_api-onrequesthandler-e645076f_c8f990c6/index.js": "var $logger = function(env) {
+  "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
@@ -988,12 +1485,12 @@ exports[`api with one POST route, with body 2`] = `
       },
       {
         "attrs": {},
-        "path": "root/my_api-OnRequestHandler-e645076f",
+        "path": "root/my_api/my_api-OnRequestHandler-e645076f",
         "props": {
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_api-onrequesthandler-e645076f_c8f990c6/index.js",
+          "sourceCodeFile": "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1005,7 +1502,7 @@ exports[`api with one POST route, with body 2`] = `
         "props": {
           "routes": [
             {
-              "functionHandle": "\${root/my_api-OnRequestHandler-e645076f#attrs.handle}",
+              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
               "method": "POST",
               "route": "/hello",
             },
@@ -1043,7 +1540,7 @@ exports[`api with one POST route, with body 2`] = `
                 "direction": "inbound",
                 "implicit": true,
                 "relationship": "print",
-                "resource": "root/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
               },
             ],
             "wing:resource:stateful": true,
@@ -1067,10 +1564,41 @@ exports[`api with one POST route, with body 2`] = `
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "on_post_request",
-                "resource": "root/my_api-OnRequestHandler-e645076f",
+                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
               },
             ],
             "wing:resource:stateful": true,
+          },
+          "children": {
+            "my_api-OnRequestHandler-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [
+                  {
+                    "direction": "outbound",
+                    "implicit": true,
+                    "relationship": "print",
+                    "resource": "root/WingLogger",
+                  },
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "on_post_request",
+                    "resource": "root/my_api",
+                  },
+                ],
+                "wing:resource:stateful": false,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "title": "Function",
+              },
+              "id": "my_api-OnRequestHandler-e645076f",
+              "path": "root/my_api/my_api-OnRequestHandler-e645076f",
+            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1083,35 +1611,6 @@ exports[`api with one POST route, with body 2`] = `
           "id": "my_api",
           "path": "root/my_api",
         },
-        "my_api-OnRequestHandler-e645076f": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "print",
-                "resource": "root/WingLogger",
-              },
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "on_post_request",
-                "resource": "root/my_api",
-              },
-            ],
-            "wing:resource:stateful": false,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud function (FaaS)",
-            "title": "Function",
-          },
-          "id": "my_api-OnRequestHandler-e645076f",
-          "path": "root/my_api-OnRequestHandler-e645076f",
-        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -1122,7 +1621,7 @@ exports[`api with one POST route, with body 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_api-onrequesthandler-e645076f_c8f990c6/index.js": "var $logger = function(env) {
+  "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js": "var $logger = function(env) {
   let handle = process.env[env];
   if (!handle) {
     throw new Error(\\"Missing environment variable: \\" + env);
