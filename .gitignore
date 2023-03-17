@@ -44,3 +44,4 @@ apps/vscode-wing/resources/native/wing-language-server
 
 # hangar
 tools/hangar/tmp/
+tools/hangar/src/test_corpus/
