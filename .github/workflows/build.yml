@@ -91,7 +91,7 @@ jobs:
 
   build:
     name: "Build"
-    timeout-minutes: 25
+    timeout-minutes: 35
     runs-on: ubuntu-latest
     container:
       image: "hasanaburayyan/gha-ubuntu"
