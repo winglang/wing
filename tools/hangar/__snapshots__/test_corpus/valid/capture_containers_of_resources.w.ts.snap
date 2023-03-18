@@ -62,7 +62,9 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_12a95bb8": "\${aws_s3_bucket.root_b1_A5C8D4B7.bucket}",
+            "BUCKET_NAME_12a95bb8_IS_PUBLIC": "false",
             "BUCKET_NAME_fa6445bb": "\${aws_s3_bucket.root_b2_26383A0E.bucket}",
+            "BUCKET_NAME_fa6445bb_IS_PUBLIC": "false",
             "QUEUE_URL_31e95cbd": "\${aws_sqs_queue.root_cloudQueue_E3597F7A.url}",
             "WING_FUNCTION_NAME": "test-c8b6eece",
           },
@@ -186,7 +188,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
-const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
 	switch (target) {

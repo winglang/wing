@@ -3,10 +3,16 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "targets": {
     "test": {
+      "dependsOn": ["build"],
       "executor": "nx:run-commands",
       "options": {
-        "command": "npm run test",
+        "command": "npm run test:update",
         "cwd": "libs/tree-sitter-wing"
+      },
+      "configurations": {
+        "release": {
+          "command": "npm run test"
+        }
       }
     },
     "build": {

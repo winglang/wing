@@ -477,13 +477,13 @@ j1.hello = a1;
 
 ##### 1.1.4.9 Serialization
 
-The `Json.to_str(j: Json): str` static method can be used to serialize a `Json` as a string
+The `Json.stringify(j: Json): str` static method can be used to serialize a `Json` as a string
 ([JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)):
 
 ```js
-assert(Json.to_str(json_string) == "\"hello\"");
-assert(Json.to_str(json_obj) == "{\"boom\":123}");
-assert(Json.to_str(json_mut_obj, indent: 2) == "{\n\"hello\": 123,\n"  \"world\": [\n    1,\n    2,\n    3\n  ],\n  \"boom\": {\n    \"hello\": 1233\n  }\n}");
+assert(Json.stringify(json_string) == "\"hello\"");
+assert(Json.stringify(json_obj) == "{\"boom\":123}");
+assert(Json.stringify(json_mut_obj, indent: 2) == "{\n\"hello\": 123,\n"  \"world\": [\n    1,\n    2,\n    3\n  ],\n  \"boom\": {\n    \"hello\": 1233\n  }\n}");
 ```
 
 The `Json.parse(s: str): Json` static method can be used to parse a string into a `Json`:
@@ -541,7 +541,7 @@ A `Json` value can be printed using `print()`, in which case it will be pretty-f
 ```js
 print("my object is: ${json_obj}");
 // is equivalent to
-print("my object is: ${Json.to_str(json_obj, indent: 2)}");
+print("my object is: ${Json.stringify(json_obj, indent: 2)}");
 ```
 
 This will output:
@@ -2240,9 +2240,11 @@ respect the visibility of JSII module exports.
 
 ---
 
-## 5. JSII Interoperability
+## 5. Interoperability
 
-### 5.1 External Libraries
+## 5.1 JSII Interoperability
+
+### 5.1.1 External Libraries
 
 You may import JSII modules in Wing and they are considered resources if their
 JSII type manifest shows that the JSII module is a construct. Wing is a consumer
@@ -2255,10 +2257,54 @@ let bucket = cdk.aws_s3.Bucket(
 );
 ```
 
-### 5.2 Internal Libraries
+### 5.1.2 Internal Libraries
 
 Wing libraries themselves are JSII modules. They can be used in all other JSII
 supported languages.
+
+## 5.2 JavaScript
+
+The `extern "file.js"` modifier can be used on method declarations (in classes and resources) to indicate that a method is backed by an implementation imported from a JavaScript file.
+
+In the following example, the static inflight method `make_id` is implemented
+in `helper.js`:
+
+```js
+// task-list.w
+resource TaskList {
+  // ...
+
+  inflight add_task(title: str) {
+    let id = TaskList.uuid();
+    this.bucket.put(id, title);
+  }
+
+  extern "./helpers.js" static inflight make_id(): str;
+} 
+
+// helpers.js
+const uuid = require('uuid');
+
+exports.make_id = function() {
+  return uuid.v6();
+};
+```
+
+Given a method of name X, the compiler will map the method to the JavaScript export with the 
+matching name (without any case conversion).
+
+Initially, we only support specifying `extern` for static methods (either inflight or preflight),
+but we will consider adding support for instance methods in the future. In those cases the first
+argument to the method will implicitly be `this`.
+
+### 5.2.1 TypeScript
+
+It is possible to use TypeScript to write helpers, but at the moment this will not be
+directly supported by Wing. This means that you will need to setup the TypeScript toolchain
+to compile your code to JavaScript and then use `extern` against the JavaScript file.
+
+In the future we will consider adding direct support for `extern "./helpers.ts"`.
+
 
 [`▲ top`][top]
 

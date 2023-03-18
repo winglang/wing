@@ -1,14 +1,14 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`wing compile -t tf-aws > clients/Bar.inflight.js 1`] = `
-"export class Bar_inflight  {
+"export class Bar  {
 constructor({ b, foo, name }) {
 
   this.b = b;
   this.foo = foo;
   this.name = name;
 }
-async  my_method()  {
+async my_method()  {
 	{
   (await this.foo.foo_inc());
   (await this.b.put(\\"foo\\",\`counter is: \${(await this.foo.foo_get())}\`));
@@ -18,17 +18,17 @@ async  my_method()  {
 `;
 
 exports[`wing compile -t tf-aws > clients/Foo.inflight.js 1`] = `
-"export class Foo_inflight  {
+"export class Foo  {
 constructor({ c }) {
 
   this.c = c;
 }
-async  foo_inc()  {
+async foo_inc()  {
 	{
   (await this.c.inc());
 }
 }
-async  foo_get()  {
+async foo_get()  {
 	{
   return (await this.c.peek());
 }
@@ -116,6 +116,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "DYNAMODB_TABLE_NAME_c7446906": "\${aws_dynamodb_table.root_Bar_Foo_cloudCounter_616CF239.name}",
             "WING_FUNCTION_NAME": "test-c8b6eece",
           },
@@ -201,7 +202,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
-const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
 	switch (target) {
@@ -236,7 +237,7 @@ constructor() {
   	_toInflight() {
   	const c_client = this._lift(this.c);
   	const self_client_path = require('path').resolve(__dirname, \\"clients/Foo.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo_inflight({c: \${c_client}}))\`);
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo({c: \${c_client}}))\`);
   }
   }
   Foo._annotateInflight(\\"foo_inc\\", {\\"this.c\\": { ops: [\\"inc\\"] }});
@@ -256,7 +257,7 @@ constructor() {
   const foo_client = this._lift(this.foo);
   const name_client = this._lift(this.name);
   	const self_client_path = require('path').resolve(__dirname, \\"clients/Bar.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Bar_inflight({b: \${b_client}, foo: \${foo_client}, name: \${name_client}}))\`);
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Bar({b: \${b_client}, foo: \${foo_client}, name: \${name_client}}))\`);
   }
   }
   Bar._annotateInflight(\\"my_method\\", {\\"this.b\\": { ops: [\\"get\\",\\"put\\"] },\\"this.foo\\": { ops: [\\"foo_get\\",\\"foo_inc\\"] }});
@@ -267,7 +268,7 @@ constructor() {
     bindings: {
       bucket: {
         obj: bucket,
-        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"put\\",\\"put_json\\"]
+        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"public_url\\",\\"put\\",\\"put_json\\"]
       },
       res: {
         obj: res,
