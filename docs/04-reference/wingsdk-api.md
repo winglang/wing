@@ -985,6 +985,7 @@ with a fresh copy without any consequences.
 
 ---
 
+
 ### Table <a name="Table" id="@winglang/sdk.cloud.Table"></a>
 
 **Inflight client:** [@winglang/sdk.cloud.ITableClient](#@winglang/sdk.cloud.ITableClient)
@@ -1102,108 +1103,6 @@ Table primary key name.
 
 ---
 
-
-### TextFile <a name="TextFile" id="@winglang/sdk.fs.TextFile"></a>
-
-Represents a text file that should be synthesized in the app's outdir.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.fs.TextFile.Initializer"></a>
-
-```wing
-bring fs;
-
-new fs.TextFile(file_path: str, props?: TextFileProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.fs.TextFile.Initializer.parameter.filePath">file_path</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#@winglang/sdk.fs.TextFile.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.fs.TextFileProps">TextFileProps</a></code> | *No description.* |
-
----
-
-##### `file_path`<sup>Required</sup> <a name="file_path" id="@winglang/sdk.fs.TextFile.Initializer.parameter.filePath"></a>
-
-- *Type:* str
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.fs.TextFile.Initializer.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.fs.TextFileProps">TextFileProps</a>
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.fs.TextFile.save">save</a></code> | Render the contents of the file and save it to the user's file system. |
-| <code><a href="#@winglang/sdk.fs.TextFile.addLine">add_line</a></code> | Append a line to the text file's contents. |
-
----
-
-##### `save` <a name="save" id="@winglang/sdk.fs.TextFile.save"></a>
-
-```wing
-save(outdir: str): void
-```
-
-Render the contents of the file and save it to the user's file system.
-
-###### `outdir`<sup>Required</sup> <a name="outdir" id="@winglang/sdk.fs.TextFile.save.parameter.outdir"></a>
-
-- *Type:* str
-
----
-
-##### `add_line` <a name="add_line" id="@winglang/sdk.fs.TextFile.addLine"></a>
-
-```wing
-add_line(line: str): void
-```
-
-Append a line to the text file's contents.
-
-###### `line`<sup>Required</sup> <a name="line" id="@winglang/sdk.fs.TextFile.addLine.parameter.line"></a>
-
-- *Type:* str
-
----
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.fs.TextFile.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.fs.TextFile.property.filePath">file_path</a></code> | <code>str</code> | The file's relative path to the output directory. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.fs.TextFile.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `file_path`<sup>Required</sup> <a name="file_path" id="@winglang/sdk.fs.TextFile.property.filePath"></a>
-
-```wing
-file_path: str;
-```
-
-- *Type:* str
-
-The file's relative path to the output directory.
-
----
 
 ### Topic <a name="Topic" id="@winglang/sdk.cloud.Topic"></a>
 
@@ -1992,6 +1891,7 @@ Trigger events at a periodic rate.
 1m
 ```
 
+
 ### TableProps <a name="TableProps" id="@winglang/sdk.cloud.TableProps"></a>
 
 Properties for `Table`.
@@ -2053,41 +1953,6 @@ The table's primary key.
 
 No two rows can have the same value for the
 primary key.
-
----
-
-### TextFileProps <a name="TextFileProps" id="@winglang/sdk.fs.TextFileProps"></a>
-
-Props for `TextFile`.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.fs.TextFileProps.Initializer"></a>
-
-```wing
-bring fs;
-
-let text_file_props = fs.TextFileProps{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.fs.TextFileProps.property.lines">lines</a></code> | <code>MutArray&lt;str&gt;</code> | The lines of text that will be serialized into the file during synthesis. |
-
----
-
-##### `lines`<sup>Optional</sup> <a name="lines" id="@winglang/sdk.fs.TextFileProps.property.lines"></a>
-
-```wing
-lines: MutArray<str>;
-```
-
-- *Type:* MutArray&lt;str&gt;
-- *Default:* []
-
-The lines of text that will be serialized into the file during synthesis.
-
-They will be joined with newline characters.
 
 ---
 
