@@ -118,10 +118,6 @@ export class App extends core.App {
       ["./"]
     );
 
-    // write tree.json file into the app's outdir
-    // (for backwards compatibility with older versions of the Wing console)
-    core.synthesizeTree(this, this.outdir);
-
     this.synthed = true;
 
     return this.simfile;

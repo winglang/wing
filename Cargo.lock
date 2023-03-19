@@ -1240,6 +1240,7 @@ dependencies = [
  "lazy_static",
  "lsp-types",
  "phf",
+ "serde",
  "serde_json",
  "sha2",
  "tree-sitter",

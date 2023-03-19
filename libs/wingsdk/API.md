@@ -1977,6 +1977,52 @@ let topic_props = cloud.TopicProps{ ... }
 
 ## Classes <a name="Classes" id="Classes"></a>
 
+### Boolean <a name="Boolean" id="@winglang/sdk.std.Boolean"></a>
+
+Boolean.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.Boolean.Initializer"></a>
+
+```wing
+bring std;
+
+new std.Boolean()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Boolean.fromJson">from_json</a></code> | Parse a boolean from Json. |
+
+---
+
+##### `from_json` <a name="from_json" id="@winglang/sdk.std.Boolean.fromJson"></a>
+
+```wing
+bring std;
+
+std.Boolean.from_json(json: Json)
+```
+
+Parse a boolean from Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Boolean.fromJson.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to parse boolean from.
+
+---
+
+
+
 ### CounterClientBase <a name="CounterClientBase" id="@winglang/sdk.cloud.CounterClientBase"></a>
 
 - *Implements:* <a href="#@winglang/sdk.cloud.ICounterClient">ICounterClient</a>
@@ -2551,6 +2597,161 @@ The index of the element in the Json Array to return.
 
 ---
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Json.clone">clone</a></code> | Creates a immutable deep clone of the Json. |
+| <code><a href="#@winglang/sdk.std.Json.cloneMut">clone_mut</a></code> | Creates a mutable deep clone of the Json. |
+| <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
+| <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json object. |
+| <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
+| <code><a href="#@winglang/sdk.std.Json.stringify">stringify</a></code> | Formats Json as string. |
+| <code><a href="#@winglang/sdk.std.Json.values">values</a></code> | Returns the values from the Json. |
+
+---
+
+##### `clone` <a name="clone" id="@winglang/sdk.std.Json.clone"></a>
+
+```wing
+bring std;
+
+std.Json.clone(json: Json)
+```
+
+Creates a immutable deep clone of the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.clone.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to clone.
+
+---
+
+##### `clone_mut` <a name="clone_mut" id="@winglang/sdk.std.Json.cloneMut"></a>
+
+```wing
+bring std;
+
+std.Json.clone_mut(json: Json)
+```
+
+Creates a mutable deep clone of the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.cloneMut.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to clone.
+
+---
+
+##### `delete` <a name="delete" id="@winglang/sdk.std.Json.delete"></a>
+
+```wing
+bring std;
+
+std.Json.delete(json: Json, key: str)
+```
+
+Deletes a key in a given Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.delete.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to delete key from.
+
+---
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.std.Json.delete.parameter.key"></a>
+
+- *Type:* str
+
+the key to delete.
+
+---
+
+##### `keys` <a name="keys" id="@winglang/sdk.std.Json.keys"></a>
+
+```wing
+bring std;
+
+std.Json.keys(json: Json)
+```
+
+Returns the keys from the Json object.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.keys.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to get keys from.
+
+---
+
+##### `parse` <a name="parse" id="@winglang/sdk.std.Json.parse"></a>
+
+```wing
+bring std;
+
+std.Json.parse(str: str)
+```
+
+Parse a string into a Json.
+
+###### `str`<sup>Required</sup> <a name="str" id="@winglang/sdk.std.Json.parse.parameter.str"></a>
+
+- *Type:* str
+
+to parse as Json.
+
+---
+
+##### `stringify` <a name="stringify" id="@winglang/sdk.std.Json.stringify"></a>
+
+```wing
+bring std;
+
+std.Json.stringify(json: Json, indent?: num)
+```
+
+Formats Json as string.
+
+(JSON.stringify($args$))
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.stringify.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to format as string.
+
+---
+
+###### `indent`<sup>Optional</sup> <a name="indent" id="@winglang/sdk.std.Json.stringify.parameter.indent"></a>
+
+- *Type:* num
+
+---
+
+##### `values` <a name="values" id="@winglang/sdk.std.Json.values"></a>
+
+```wing
+bring std;
+
+std.Json.values(json: Json)
+```
+
+Returns the values from the Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.values.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to get values from.
+
+---
 
 
 
@@ -3099,6 +3300,52 @@ The value of the element to set.
 
 
 
+### Number <a name="Number" id="@winglang/sdk.std.Number"></a>
+
+Number.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.Number.Initializer"></a>
+
+```wing
+bring std;
+
+new std.Number()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Number.fromJson">from_json</a></code> | Parse a number from Json. |
+
+---
+
+##### `from_json` <a name="from_json" id="@winglang/sdk.std.Number.fromJson"></a>
+
+```wing
+bring std;
+
+std.Number.from_json(json: Json)
+```
+
+Parse a number from Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Number.fromJson.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to parse number from.
+
+---
+
+
+
 ### String <a name="String" id="@winglang/sdk.std.String"></a>
 
 String.
@@ -3294,6 +3541,31 @@ uppercase(): str
 
 Returns this string in upper case.
 
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.String.fromJson">from_json</a></code> | Parse string from Json. |
+
+---
+
+##### `from_json` <a name="from_json" id="@winglang/sdk.std.String.fromJson"></a>
+
+```wing
+bring std;
+
+std.String.from_json(json: Json)
+```
+
+Parse string from Json.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.String.fromJson.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to create string from.
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 
@@ -3386,6 +3658,7 @@ Inflight interface for `Bucket`.
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.getJson">get_json</a></code> | Retrieve a Json object from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">public_url</a></code> | Returns a url to the given file. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">put_json</a></code> | Put a Json object in the bucket. |
 
@@ -3468,6 +3741,22 @@ Retrieve existing objects keys from the bucket.
 - *Type:* str
 
 Limits the response to keys that begin with the specified prefix.
+
+---
+
+##### `public_url` <a name="public_url" id="@winglang/sdk.cloud.IBucketClient.publicUrl"></a>
+
+```wing
+public_url(key: str): str
+```
+
+**Inflight client:** [true](#true)
+
+Returns a url to the given file.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.publicUrl.parameter.key"></a>
+
+- *Type:* str
 
 ---
 
@@ -3646,7 +3935,7 @@ Invoke the function asynchronously with a given payload.
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>
 
-**Inflight client:** [wingsdk.cloud.IFunctionHandlerClient](#wingsdk.cloud.IFunctionHandlerClient)
+**Inflight client:** [@winglang/sdk.cloud.IFunctionHandlerClient](#@winglang/sdk.cloud.IFunctionHandlerClient)
 
 Represents a resource with an inflight "handle" method that can be used to create a `cloud.Function`.
 
@@ -3811,7 +4100,7 @@ Payload to send to the queue.
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IQueueOnMessageHandler">IQueueOnMessageHandler</a>
 
-**Inflight client:** [wingsdk.cloud.IQueueOnMessageHandlerClient](#wingsdk.cloud.IQueueOnMessageHandlerClient)
+**Inflight client:** [@winglang/sdk.cloud.IQueueOnMessageHandlerClient](#@winglang/sdk.cloud.IQueueOnMessageHandlerClient)
 
 Represents a resource with an inflight "handle" method that can be passed to `Queue.on_message`.
 
@@ -3886,7 +4175,7 @@ Function that will be called when a message is received from the queue.
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>
 
-**Inflight client:** [wingsdk.cloud.IScheduleOnTickHandlerClient](#wingsdk.cloud.IScheduleOnTickHandlerClient)
+**Inflight client:** [@winglang/sdk.cloud.IScheduleOnTickHandlerClient](#@winglang/sdk.cloud.IScheduleOnTickHandlerClient)
 
 Represents a resource with an inflight "handle" method that can be passed to `Schedule.on_tick`.
 
@@ -4089,7 +4378,7 @@ Payload to publish to Topic.
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>
 
-**Inflight client:** [wingsdk.cloud.ITopicOnMessageHandlerClient](#wingsdk.cloud.ITopicOnMessageHandlerClient)
+**Inflight client:** [@winglang/sdk.cloud.ITopicOnMessageHandlerClient](#@winglang/sdk.cloud.ITopicOnMessageHandlerClient)
 
 Represents a resource with an inflight "handle" method that can be passed to `Topic.on_message`.
 

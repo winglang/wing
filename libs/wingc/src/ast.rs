@@ -120,6 +120,17 @@ pub struct UserDefinedType {
 	pub fields: Vec<Symbol>,
 }
 
+impl Display for UserDefinedType {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let mut name = self.root.name.clone();
+		for field in &self.fields {
+			name.push('.');
+			name.push_str(&field.name);
+		}
+		write!(f, "{}", name)
+	}
+}
+
 impl Display for TypeAnnotation {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
@@ -137,9 +148,7 @@ impl Display for TypeAnnotation {
 			TypeAnnotation::Set(t) => write!(f, "Set<{}>", t),
 			TypeAnnotation::MutSet(t) => write!(f, "MutSet<{}>", t),
 			TypeAnnotation::FunctionSignature(sig) => write!(f, "{}", sig),
-			TypeAnnotation::UserDefined(user_defined_type) => {
-				write!(f, "{}", user_defined_type.root.name)
-			}
+			TypeAnnotation::UserDefined(user_defined_type) => write!(f, "{}", user_defined_type),
 		}
 	}
 }
@@ -173,17 +182,27 @@ pub struct FunctionSignature {
 	pub flight: Phase,
 }
 
+#[derive(Debug)]
+pub enum FunctionBody {
+	/// The function body implemented within a Wing scope.
+	Statements(Scope),
+	/// The `extern` modifier value, pointing to an external implementation file
+	External(String),
+}
+
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct FunctionDefinition {
 	/// List of names of function parameters and whether they are reassignable (`var`) or not.
 	pub parameters: Vec<(Symbol, bool)>, // TODO: move into FunctionSignature and make optional
-	/// The function implementation (body).
-	pub statements: Scope,
+	/// The function implementation.
+	pub body: FunctionBody,
 	/// The function signature, including the return type.
 	pub signature: FunctionSignature,
 	/// Whether this function is static or not. In case of a closure, this is always true.
 	pub is_static: bool,
+
+	pub span: WingSpan,
 
 	#[derivative(Debug = "ignore")]
 	pub captures: RefCell<Option<Captures>>,
@@ -237,6 +256,7 @@ pub struct Class {
 	pub methods: Vec<(Symbol, FunctionDefinition)>,
 	pub constructor: Constructor,
 	pub parent: Option<UserDefinedType>,
+	pub implements: Vec<UserDefinedType>,
 	pub is_resource: bool,
 }
 
@@ -268,6 +288,7 @@ pub enum StmtKind {
 		else_statements: Option<Scope>,
 	},
 	Break,
+	Continue,
 	Expression(Expr),
 	Assignment {
 		variable: Reference,
@@ -355,6 +376,9 @@ pub enum ExprKind {
 		element: Box<Expr>,
 	},
 	FunctionClosure(FunctionDefinition),
+	OptionalTest {
+		optional: Box<Expr>,
+	},
 }
 
 #[derive(Derivative)]
@@ -451,6 +475,7 @@ pub enum BinaryOperator {
 	NotEqual,
 	LogicalAnd,
 	LogicalOr,
+	UnwrapOr,
 }
 
 impl BinaryOperator {
@@ -504,5 +529,37 @@ impl Display for Reference {
 				write!(f, "{}.{}", TypeAnnotation::UserDefined(type_.clone()), property.name)
 			}
 		}
+	}
+}
+
+/// Represents any type that has a span.
+pub trait ToSpan {
+	fn span(&self) -> WingSpan;
+}
+
+impl ToSpan for Stmt {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
+}
+
+impl ToSpan for Expr {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
+}
+
+impl ToSpan for Symbol {
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
+}
+
+impl<T> ToSpan for Box<T>
+where
+	T: ToSpan,
+{
+	fn span(&self) -> WingSpan {
+		(&**self).span()
 	}
 }

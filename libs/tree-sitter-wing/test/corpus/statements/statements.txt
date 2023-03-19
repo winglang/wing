@@ -1,6 +1,6 @@
-====================
+================================================================================
 For loop
-====================
+================================================================================
 
 for fox in sox {
 }
@@ -9,225 +9,203 @@ for fox in sox {
     break;
 }
 
----
+for fox in sox {
+    continue;
+}
+
+--------------------------------------------------------------------------------
 
 (source
-    (for_in_loop
-    iterator: (reference (identifier))
-    iterable: (reference (identifier))
-        block: (block)
-    )
-    (for_in_loop
-    iterator: (reference (identifier))
-    iterable: (reference (identifier))
-        block: (block (break_statement))
-    )
-)
+  (for_in_loop
+    iterator: (reference
+      (identifier))
+    iterable: (identifier)
+    block: (block))
+  (for_in_loop
+    iterator: (reference
+      (identifier))
+    iterable: (identifier)
+    block: (block
+      (break_statement)))
+  (for_in_loop
+    iterator: (reference
+      (identifier))
+    iterable: (identifier)
+    block: (block
+      (continue_statement))))
 
-====================
+================================================================================
 Variable assignment
-====================
+================================================================================
 
 let x: num = 1;
 x = 2;
 
 let var y = "hello";
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (variable_definition_statement
-        name: (identifier)
-        type: (builtin_type)
-        value: (number)
-    )
-    (variable_assignment_statement
-        name: (reference (identifier))
-        value: (number)
-    )
-    (variable_definition_statement
-        reassignable: (reassignable)
-        name: (identifier)
-        value: (string)
-    )
-)
+  (variable_definition_statement
+    name: (identifier)
+    type: (builtin_type)
+    value: (number))
+  (variable_assignment_statement
+    name: (reference
+      (identifier))
+    value: (number))
+  (variable_definition_statement
+    reassignable: (reassignable)
+    name: (identifier)
+    value: (string)))
 
-====================
+================================================================================
 If
-====================
+================================================================================
 
 if false {}
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (if_statement
-        condition: (bool)
-        block: (block)
-    )
-)
+  (if_statement
+    condition: (bool)
+    block: (block)))
 
-
-====================
+================================================================================
 If Else
-====================
+================================================================================
 
 if false {} else {}
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (if_statement
-        condition: (bool)
-        block: (block)
-        else_block: (block)
-    )
-)
+  (if_statement
+    condition: (bool)
+    block: (block)
+    else_block: (block)))
 
-====================
+================================================================================
 If Elif Else
-====================
+================================================================================
 
 if false {} elif false {} else {}
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (if_statement
-        condition: (bool)
-        block: (block)
-        elif_block: (elif_block
-            condition: (bool)
-            block: (block))
-        else_block: (block)
-    )
-)
+  (if_statement
+    condition: (bool)
+    block: (block)
+    elif_block: (elif_block
+      condition: (bool)
+      block: (block))
+    else_block: (block)))
 
-====================
+================================================================================
 If More Than One Elif Else
-====================
+================================================================================
 
 if false {} elif false {} elif true {} else {}
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (if_statement
-        condition: (bool)
-        block: (block)
-        elif_block: (elif_block
-            condition: (bool)
-            block: (block))
-        elif_block: (elif_block
-            condition: (bool)
-            block: (block))
-        else_block: (block)
-    )
-)
+  (if_statement
+    condition: (bool)
+    block: (block)
+    elif_block: (elif_block
+      condition: (bool)
+      block: (block))
+    elif_block: (elif_block
+      condition: (bool)
+      block: (block))
+    else_block: (block)))
 
-====================
+================================================================================
 Return
-====================
+================================================================================
 
 return 1;
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (return_statement
-        expression: (number)
-    )
-)
+  (return_statement
+    expression: (number)))
 
-====================
+================================================================================
 Inflight closure
-====================
+================================================================================
 
 inflight (a: num, b: str?, var c: bool) => {};
 
----
+--------------------------------------------------------------------------------
 
 (source
-    (expression_statement
-        (inflight_closure
-            parameter_list: (parameter_list
-                (parameter_definition
-                    name: (identifier)
-                    type: (builtin_type)
-                )
-                (parameter_definition
-                    name: (identifier)
-                    type: (optional
-                        (builtin_type)
-                    )
-                )
-                (parameter_definition
-                    reassignable: (reassignable)
-                    name: (identifier)
-                    type: (builtin_type)
-                )
-            )
-            block: (block)
-        )
-    )
-)
+  (expression_statement
+    (inflight_closure
+      parameter_list: (parameter_list
+        (parameter_definition
+          name: (identifier)
+          type: (builtin_type))
+        (parameter_definition
+          name: (identifier)
+          type: (optional
+            (builtin_type)))
+        (parameter_definition
+          reassignable: (reassignable)
+          name: (identifier)
+          type: (builtin_type)))
+      block: (block))))
 
-==================================
+================================================================================
 Inflight closure with function parameter
-==================================
+================================================================================
 
 inflight (callback: (num,num):bool) => {};
 
----
-(source
-    (expression_statement
-        (inflight_closure
-            parameter_list: (parameter_list
-                    (parameter_definition
-                        name: (identifier)
-                        type: (function_type
-                            parameter_types: (parameter_type_list
-                                (builtin_type)
-                                (builtin_type)
-                            )
-                            return_type: (builtin_type)
-                        )
-                    )
-                )
-            block: (block)
-        )
-    )
-)
+--------------------------------------------------------------------------------
 
-==================================
+(source
+  (expression_statement
+    (inflight_closure
+      parameter_list: (parameter_list
+        (parameter_definition
+          name: (identifier)
+          type: (function_type
+            parameter_types: (parameter_type_list
+              (builtin_type)
+              (builtin_type))
+            return_type: (builtin_type))))
+      block: (block))))
+
+================================================================================
 Struct definition
-==================================
+================================================================================
 
 struct Test {
     cool: num;
     hip: str?;
 }
 
----
-(source
-    (struct_definition
-        (identifier)
-        (struct_field
-            (identifier)
-            (builtin_type)
-        )
-        (struct_field
-            (identifier)
-            (optional
-                (builtin_type)
-            )
-        )
-    )
-)
+--------------------------------------------------------------------------------
 
-==================================
+(source
+  (struct_definition
+    (identifier)
+    (struct_field
+      (identifier)
+      (builtin_type))
+    (struct_field
+      (identifier)
+      (optional
+        (builtin_type)))))
+
+================================================================================
 While statement
-==================================
+================================================================================
 
 while false {}
 
@@ -235,32 +213,38 @@ while true {
     break;
 }
 
----
-(source
-    (while_statement
-        condition: (bool)
-        block: (block)
-    )
-    (while_statement
-        condition: (bool)
-        block: (block (break_statement))
-    )
-)
+while true {
+    continue;
+}
 
-==================================
+--------------------------------------------------------------------------------
+
+(source
+  (while_statement
+    condition: (bool)
+    block: (block))
+  (while_statement
+    condition: (bool)
+    block: (block
+      (break_statement)))
+  (while_statement
+    condition: (bool)
+    block: (block
+      (continue_statement))))
+
+================================================================================
 Enum definition
-==================================
+================================================================================
 
 enum SomeEnum {
     ONE, TWO, THREE
 }
 
----
+--------------------------------------------------------------------------------
+
 (source
-    (enum_definition
-        enum_name: (identifier)
-        (enum_field)
-        (enum_field)
-        (enum_field)
-    )
-)
+  (enum_definition
+    enum_name: (identifier)
+    (enum_field)
+    (enum_field)
+    (enum_field)))

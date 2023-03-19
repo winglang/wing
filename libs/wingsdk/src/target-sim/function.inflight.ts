@@ -68,6 +68,9 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
         [ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE]: FUNCTION_TYPE,
       },
 
+      require,
+      __dirname: path_.dirname(this.filename),
+
       // Make the global simulator available to user code so that they can find
       // and use other resource clients
       // TODO: Object.freeze this?

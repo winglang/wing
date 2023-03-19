@@ -118,21 +118,30 @@ export class Bucket extends cloud.Bucket {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
-    if (ops.includes(cloud.BucketInflightMethods.PUT)) {
+    if (
+      ops.includes(cloud.BucketInflightMethods.PUT) ||
+      ops.includes(cloud.BucketInflightMethods.PUT_JSON)
+    ) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:PutObject*", "s3:Abort*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (ops.includes(cloud.BucketInflightMethods.GET)) {
+    if (
+      ops.includes(cloud.BucketInflightMethods.GET) ||
+      ops.includes(cloud.BucketInflightMethods.GET_JSON)
+    ) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (ops.includes(cloud.BucketInflightMethods.LIST)) {
+    if (
+      ops.includes(cloud.BucketInflightMethods.LIST) ||
+      ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)
+    ) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
@@ -153,6 +162,7 @@ export class Bucket extends cloud.Bucket {
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucket);
+    host.addEnvironment(this.isPublicEnvName(), `${this.public}`);
 
     super._bind(host, ops);
   }
@@ -161,7 +171,12 @@ export class Bucket extends cloud.Bucket {
   public _toInflight(): core.Code {
     return core.InflightClient.for(__dirname, __filename, "BucketClient", [
       `process.env["${this.envName()}"]`,
+      `process.env["${this.isPublicEnvName()}"]`,
     ]);
+  }
+
+  private isPublicEnvName(): string {
+    return `${this.envName()}_IS_PUBLIC`;
   }
 
   private envName(): string {
@@ -175,3 +190,4 @@ Bucket._annotateInflight("delete", {});
 Bucket._annotateInflight("list", {});
 Bucket._annotateInflight("put_json", {});
 Bucket._annotateInflight("get_json", {});
+Bucket._annotateInflight("public_url", {});

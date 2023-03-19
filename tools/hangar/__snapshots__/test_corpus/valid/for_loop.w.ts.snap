@@ -20,7 +20,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
-const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
 	switch (target) {
@@ -51,15 +51,42 @@ constructor() {
       {console.log(\`\${word}: \${number}\`)};
     }
   }
+  let i = 0;
   for (const word of words) {
+    i = (i + 1);
+    let pre_break_hits = 0;
+    let post_break_hits = 0;
     for (const number of unique_numbers) {
       {((cond) => {if (!cond) throw new Error(\`assertion failed: '(number > 0)'\`)})((number > 0))};
       {console.log(\`\${word}: \${number}\`)};
+      pre_break_hits = (pre_break_hits + 1);
       if ((number === 2)) {
         break;
       }
+      post_break_hits = (post_break_hits + 1);
     }
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(pre_break_hits === 2)'\`)})((pre_break_hits === 2))};
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(post_break_hits === 1)'\`)})((post_break_hits === 1))};
   }
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i === 3)'\`)})((i === 3))};
+  let j = 0;
+  for (const word of words) {
+    j = (j + 1);
+    let pre_continue_hits = 0;
+    let post_continue_hits = 0;
+    for (const number of unique_numbers) {
+      {((cond) => {if (!cond) throw new Error(\`assertion failed: '(number > 0)'\`)})((number > 0))};
+      {console.log(\`\${word}: \${number}\`)};
+      pre_continue_hits = (pre_continue_hits + 1);
+      if ((number > 0)) {
+        continue;
+      }
+      post_continue_hits = (post_continue_hits + 1);
+    }
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(pre_continue_hits === 3)'\`)})((pre_continue_hits === 3))};
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(post_continue_hits === 0)'\`)})((post_continue_hits === 0))};
+  }
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(j === 3)'\`)})((j === 3))};
 }
 }
 new MyApp().synth();"
@@ -81,5 +108,14 @@ lang: 1
 lang: 2
 dang: 1
 dang: 2
+wing: 1
+wing: 2
+wing: 3
+lang: 1
+lang: 2
+lang: 3
+dang: 1
+dang: 2
+dang: 3
 pass ─ for_loop.w (no tests)"
 `;
