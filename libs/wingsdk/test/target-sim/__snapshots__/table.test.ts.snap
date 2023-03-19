@@ -72,52 +72,6 @@ exports[`create a table 1`] = `
     },
     "version": "tree-0.1",
   },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_table": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud NoSQL database table that can be used to store and query data",
-            "title": "Table",
-          },
-          "id": "my_table",
-          "path": "root/my_table",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -148,52 +102,6 @@ exports[`get row 1`] = `
     "sdkVersion": "0.0.0",
   },
   "app.wsim/tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_table": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud NoSQL database table that can be used to store and query data",
-            "title": "Table",
-          },
-          "id": "my_table",
-          "path": "root/my_table",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {
@@ -314,52 +222,6 @@ exports[`insert row 1`] = `
     },
     "version": "tree-0.1",
   },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_table": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud NoSQL database table that can be used to store and query data",
-            "title": "Table",
-          },
-          "id": "my_table",
-          "path": "root/my_table",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -435,52 +297,6 @@ exports[`list table 1`] = `
     },
     "version": "tree-0.1",
   },
-  "tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_table": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud NoSQL database table that can be used to store and query data",
-            "title": "Table",
-          },
-          "id": "my_table",
-          "path": "root/my_table",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
 }
 `;
 
@@ -511,52 +327,6 @@ exports[`update row 1`] = `
     "sdkVersion": "0.0.0",
   },
   "app.wsim/tree.json": {
-    "tree": {
-      "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
-        "my_table": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud NoSQL database table that can be used to store and query data",
-            "title": "Table",
-          },
-          "id": "my_table",
-          "path": "root/my_table",
-        },
-      },
-      "constructInfo": {
-        "fqn": "constructs.Construct",
-        "version": "10.1.245",
-      },
-      "id": "root",
-      "path": "root",
-    },
-    "version": "tree-0.1",
-  },
-  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {
