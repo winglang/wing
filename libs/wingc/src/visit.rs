@@ -186,8 +186,8 @@ where
 {
 	v.visit_symbol(&node.name);
 
-	if node.constructor.is_some() {
-		v.visit_constructor(&node.constructor.as_ref().unwrap());
+	if let Some(constructor) = node.constructor {
+		v.visit_constructor(&constructor);
 	}
 
 	for field in &node.fields {
