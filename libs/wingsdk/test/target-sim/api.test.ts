@@ -11,6 +11,10 @@ const INFLIGHT_CODE = (body: string) =>
 const INFLIGHT_CODE_ECHO_BODY = `async handle(req) { return { status: 200, body: req.body }; }`;
 // Handler that responds to a request with the request method
 const INFLIGHT_CODE_ECHO_METHOD = `async handle(req) { return { status: 200, body: req.method }; }`;
+// Handler that responds to a request with the request path
+const INFLIGHT_CODE_ECHO_PATH = `async handle(req) { return { status: 200, body: req.path }; }`;
+// Handler that responds to a request with the request query params
+const INFLIGHT_CODE_ECHO_QUERY = `async handle(req) { return { status: 200, body: req.query }; }`;
 // Handler that responds to a request with extra response headers
 const INFLIGHT_CODE_WITH_RESPONSE_HEADER = `async handle(req) { return { status: 200, body: req.headers, headers: { "x-wingnuts": "cloudy" } }; }`;
 
@@ -227,6 +231,60 @@ test("api with one POST route, with body", async () => {
 
   expect(await response.json()).toEqual(REQUEST_BODY);
   expect(response.status).toEqual(200);
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("api handler can read the request path", async () => {
+  // GIVEN
+  const ROUTE = "/hello";
+
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_PATH);
+  api.get(ROUTE, inflight);
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl = getApiUrl(s, "/my_api");
+  const response = await fetch(apiUrl + ROUTE, { method: "GET" });
+
+  // THEN
+  await s.stop();
+
+  expect(response.status).toEqual(200);
+  expect(await response.text()).toEqual(ROUTE);
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("api handler can read the request params", async () => {
+  // GIVEN
+  const ROUTE = "/hello";
+
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const inflight = Testing.makeHandler(
+    app,
+    "Handler",
+    INFLIGHT_CODE_ECHO_QUERY
+  );
+  api.get(ROUTE, inflight);
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl = getApiUrl(s, "/my_api");
+  const response = await fetch(apiUrl + ROUTE + "?foo=bar&bar=baz", {
+    method: "GET",
+  });
+
+  // THEN
+  await s.stop();
+
+  expect(response.status).toEqual(200);
+  expect(await response.json()).toEqual({ foo: "bar", bar: "baz" });
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
