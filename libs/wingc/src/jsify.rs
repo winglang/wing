@@ -975,8 +975,8 @@ impl<'a> JSifier<'a> {
 			} else {
 				format!(" extends {}.{}", STDLIB, WINGSDK_RESOURCE)
 			},
-			if class.constructor.is_some() {
-				self.jsify_resource_constructor(&class.constructor.as_ref().unwrap(), class.parent.is_none(), context)
+			if let Some(constructor) = class.constructor {
+				self.jsify_resource_constructor(&class.constructor, class.parent.is_none(), context)
 			} else {
 				format!("constructor(scope, id) {{\nsuper(scope, id);\n}}")
 			},
