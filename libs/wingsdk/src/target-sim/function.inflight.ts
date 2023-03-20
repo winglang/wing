@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path_ from "path";
+import { dirname } from "path";
 import * as process from "process";
 import * as vm from "vm";
 import {
@@ -21,7 +22,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     if (props.sourceCodeLanguage !== "javascript") {
       throw new Error("Only JavaScript is supported");
     }
-    this.filename = path_.resolve(context.assetsDir, props.sourceCodeFile);
+    this.filename = path_.resolve(context.simdir, props.sourceCodeFile);
     this.env = props.environmentVariables ?? {};
     this.context = context;
     this.timeout = props.timeout;
@@ -45,6 +46,15 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       `exports.handler(${JSON.stringify(payload)});`,
     ].join("\n");
 
+    const resolvePaths = [dirname(this.filename)];
+    const requireResolve = (p: string) =>
+      require.resolve(p, { paths: resolvePaths });
+    const inflightRequire = (p: string) => {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      return require(requireResolve(p));
+    };
+    inflightRequire.resolve = requireResolve;
+
     const context = vm.createContext({
       // TODO: include all NodeJS globals?
       // https://nodejs.org/api/globals.html#global-objects
@@ -53,6 +63,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       path: path_,
       process: {
         ...process,
+
         // override process.exit to throw an exception instead of exiting the process
         exit: (code: number) => {
           throw new Error("process.exit() was called with exit code " + code);
@@ -68,7 +79,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
         [ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE]: FUNCTION_TYPE,
       },
 
-      require,
+      require: inflightRequire,
       __dirname: path_.dirname(this.filename),
 
       // Make the global simulator available to user code so that they can find

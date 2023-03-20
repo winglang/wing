@@ -6,17 +6,14 @@ import { runWingCommand, sanitize_json_paths } from "./utils";
 export async function compileTest(expect: Vi.ExpectStatic, wingFile: string) {
   const wingBasename = basename(wingFile);
   const args = ["compile", "--target", "tf-aws"];
-  const testDir = join(tmpDir, `${wingBasename}_cdktf`);
   const targetDir = join(
-    testDir,
+    validTestDir,
     "target",
     `${wingBasename.replace(".w", "")}.tfaws`
   );
   const tf_json = join(targetDir, "main.tf.json");
 
-  await mkdir(testDir);
-
-  await runWingCommand(testDir, join(validTestDir, wingBasename), args, true);
+  await runWingCommand(validTestDir, join(validTestDir, wingBasename), args, true);
 
   const npx_tfJson = sanitize_json_paths(tf_json);
 

@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import { resolve } from "path";
 import { LinuxFunctionApp } from "@cdktf/provider-azurerm/lib/linux-function-app";
 import { ResourceGroup } from "@cdktf/provider-azurerm/lib/resource-group";
 import { RoleAssignment } from "@cdktf/provider-azurerm/lib/role-assignment";
@@ -13,6 +12,7 @@ import { Bucket, StorageAccountPermissions } from "./bucket";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { IResource } from "../core";
+import { createBundle } from "../utils/bundling";
 import {
   CaseConventions,
   NameOptions,
@@ -74,14 +74,16 @@ export class Function extends cloud.Function {
     // TODO: can we share a bucket for all functions?  https://github.com/winglang/wing/issues/178
     const functionCodeBucket = new Bucket(this, "FunctionBucket");
 
+    const bundle = createBundle(this.entrypoint);
+    const codeDir = bundle.directory;
+
     // Package up code in azure expected format
-    const codeDir = resolve(this.assetPath, "..");
     const outDir = `${codeDir}/${functionName}`;
 
     // Move index.js to function name directory. Every Azure function in a function app
     // must be in its own folder containing an index.js and function.json files
     fs.mkdirSync(`${codeDir}/${functionName}`);
-    fs.renameSync(`${codeDir}/index.js`, `${outDir}/index.js`);
+    fs.renameSync(bundle.entrypointPath, `${outDir}/index.js`);
 
     // throw an error if props.memory is defined for an Azure function
     if (props.memory) {
