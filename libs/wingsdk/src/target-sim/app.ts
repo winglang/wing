@@ -82,6 +82,8 @@ export class App extends core.App {
       return this.outdir;
     }
 
+    fs.mkdirSync(this.outdir, { recursive: true });
+
     // call preSynthesize() on every construct in the tree
     preSynthesizeAllConstructs(this);
 

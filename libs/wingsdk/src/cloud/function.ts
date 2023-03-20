@@ -1,4 +1,4 @@
-import { writeFileSync } from "fs";
+import { mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import { Logger } from "./logger";
@@ -118,7 +118,9 @@ export abstract class Function extends Resource implements IInflightHost {
     // write the entrypoint next to the partial inflight code emitted by the compiler, so that
     // `require` resolves naturally.
 
-    const entrypoint = join(App.of(this).workdir, `${assetName}.js`);
+    const workdir = App.of(this).workdir;
+    mkdirSync(workdir, { recursive: true });
+    const entrypoint = join(workdir, `${assetName}.js`);
     writeFileSync(entrypoint, lines.join("\n"));
     this.entrypoint = entrypoint;
   }

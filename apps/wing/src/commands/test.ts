@@ -12,7 +12,7 @@ export async function test(entrypoints: string[]) {
 async function testOne(entrypoint: string) {
   const simdir = await compile(entrypoint, { target: Target.SIM });
   
-  const s = new sdk.testing.Simulator({ simdir });
+  const s = new sdk.testing.Simulator({ simfile: simdir });
   await s.start();
   const results = await s.runAllTests();
   await s.stop();

@@ -18,7 +18,7 @@ export interface SimulatorProps {
   /**
    * Path to a Wing simulator output directory (.wsim).
    */
-  readonly simdir: string;
+  readonly simfile: string;
 
   /**
    * The factory that produces resource simulations.
@@ -168,8 +168,8 @@ export class Simulator {
   private _tree: Tree;
 
   constructor(props: SimulatorProps) {
-    this.simdir = props.simdir;
-    const { config, treeData } = this._loadApp(props.simdir);
+    this.simdir = props.simfile;
+    const { config, treeData } = this._loadApp(props.simfile);
     this._config = config;
     this._tree = new Tree(treeData);
 
@@ -446,7 +446,7 @@ export class Simulator {
    */
   public async runTest(path: string): Promise<TestResult> {
     // create a new simulator instance to run this test in isolation
-    const isolated = new Simulator({ simdir: this.simdir });
+    const isolated = new Simulator({ simfile: this.simdir });
     await isolated.start();
 
     // find the test function and verify it exists and indeed is a function

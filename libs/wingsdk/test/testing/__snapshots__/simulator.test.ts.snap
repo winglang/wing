@@ -219,7 +219,7 @@ exports[`run single test > test failure 1`] = `
   "error": "Error: test failed
     at Handler.handle 
     at Object.exports.handler 
-    at evalmachine.<anonymous>:27:9
+    at evalmachine.<anonymous>:26:9
     at Script.runInContext 
     at Proxy.runInContext 
     at Object.activity 

@@ -23,7 +23,7 @@ export class SimApp extends sim.App {
   public async startSimulator(): Promise<Simulator> {
     this.synthIfNeeded();
     const simfile = this.synth();
-    const s = new Simulator({ simdir: simfile });
+    const s = new Simulator({ simfile: simfile });
     await s.start();
     return s;
   }

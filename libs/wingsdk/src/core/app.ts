@@ -259,7 +259,7 @@ export abstract class CdktfApp extends App {
     );
 
     // delete `outdir/.tmp.cdktf.out`
-    rmSync(this.cdktfApp.outdir, { recursive: true });
+    rmSync(this.cdktfApp.outdir, { recursive: true, force: true });
 
     // write `outdir/tree.json`
     synthesizeTree(this, this.outdir);
@@ -275,7 +275,7 @@ export abstract class CdktfApp extends App {
     this.synthedOutput = stringify(cleaned, null, 2) ?? "";
 
     // clean up working directory
-    rmSync(this.workdir, { recursive: true });
+    rmSync(this.workdir, { recursive: true, force: true });
 
     return this.synthedOutput;
   }
