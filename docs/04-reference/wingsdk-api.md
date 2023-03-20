@@ -1227,24 +1227,12 @@ let api_request = cloud.ApiRequest{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The request's headers. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.method">method</a></code> | <code><a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a></code> | The request's HTTP method. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.path">path</a></code> | <code>str</code> | The request's path. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.query">query</a></code> | <code>MutMap&lt;str&gt;</code> | The request's query string values. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.body">body</a></code> | <code>json</code> | The request's body. |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.query">query</a></code> | <code>str</code> | The request's query string. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The request's headers. |
 | <code><a href="#@winglang/sdk.cloud.ApiRequest.property.vars">vars</a></code> | <code>MutMap&lt;str&gt;</code> | The path variables. |
-
----
-
-##### `headers`<sup>Required</sup> <a name="headers" id="@winglang/sdk.cloud.ApiRequest.property.headers"></a>
-
-```wing
-headers: MutMap<str>;
-```
-
-- *Type:* MutMap&lt;str&gt;
-
-The request's headers.
 
 ---
 
@@ -1272,6 +1260,18 @@ The request's path.
 
 ---
 
+##### `query`<sup>Required</sup> <a name="query" id="@winglang/sdk.cloud.ApiRequest.property.query"></a>
+
+```wing
+query: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+The request's query string values.
+
+---
+
 ##### `body`<sup>Optional</sup> <a name="body" id="@winglang/sdk.cloud.ApiRequest.property.body"></a>
 
 ```wing
@@ -1284,15 +1284,15 @@ The request's body.
 
 ---
 
-##### `query`<sup>Optional</sup> <a name="query" id="@winglang/sdk.cloud.ApiRequest.property.query"></a>
+##### `headers`<sup>Optional</sup> <a name="headers" id="@winglang/sdk.cloud.ApiRequest.property.headers"></a>
 
 ```wing
-query: str;
+headers: MutMap<str>;
 ```
 
-- *Type:* str
+- *Type:* MutMap&lt;str&gt;
 
-The request's query string.
+The request's headers.
 
 ---
 
@@ -3437,6 +3437,14 @@ new std.T1()
 
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
+
+### IApiClient <a name="IApiClient" id="@winglang/sdk.cloud.IApiClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IApiClient">IApiClient</a>
+
+Inflight methods and members of `cloud.Api`.
+
+
 
 ### IApiEndpointHandlerClient <a name="IApiEndpointHandlerClient" id="@winglang/sdk.cloud.IApiEndpointHandlerClient"></a>
 
