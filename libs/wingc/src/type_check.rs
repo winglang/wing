@@ -225,6 +225,30 @@ impl Interface {
 	}
 }
 
+impl Display for Interface {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		if let Some(method) = self.get_env().try_lookup("handle", None) {
+			let method = method.as_variable().unwrap();
+			if method.phase != Phase::Inflight {
+				return write!(f, "{}", self.name.name);
+			}
+
+			// remove the "this" parameter for the interface method, to avoid recursion
+			// TODO: hack until we implement https://github.com/winglang/wing/issues/1678
+			let method_sig = method.type_.as_function_sig().unwrap();
+			let mut temp_params = method_sig.parameters.clone();
+			temp_params.remove(0);
+			let temp_fn = Type::Function(FunctionSignature {
+				parameters: temp_params,
+				..method_sig.clone()
+			});
+			write!(f, "{} ({})", self.name.name, temp_fn)
+		} else {
+			write!(f, "{}", self.name.name)
+		}
+	}
+}
+
 pub trait ClassLike {
 	fn get_env(&self) -> &SymbolEnv;
 
@@ -632,7 +656,7 @@ impl Display for Type {
 			Type::Function(sig) => write!(f, "{}", sig),
 			Type::Class(class) => write!(f, "{}", class.name.name),
 			Type::Resource(class) => write!(f, "{}", class.name.name),
-			Type::Interface(iface) => write!(f, "{}", iface.name.name),
+			Type::Interface(iface) => write!(f, "{}", iface),
 			Type::Struct(s) => write!(f, "{}", s.name.name),
 			Type::Array(v) => write!(f, "Array<{}>", v),
 			Type::MutArray(v) => write!(f, "MutArray<{}>", v),
