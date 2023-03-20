@@ -2247,7 +2247,7 @@ impl<'a> TypeChecker<'a> {
 							self.type_error(TypeError {
 								message: format!(
 									"Resource \"{}\" does not implement method \"{}\" of interface \"{}\"",
-									name.name, method_name, interface_type.name
+									name.name, method_name, interface_type.name.name
 								),
 								span: name.span.clone(),
 							});
@@ -2263,7 +2263,7 @@ impl<'a> TypeChecker<'a> {
 							self.type_error(TypeError {
 								message: format!(
 									"Resource \"{}\" does not implement field \"{}\" of interface \"{}\"",
-									name.name, field_name, interface_type.name
+									name.name, field_name, interface_type.name.name
 								),
 								span: name.span.clone(),
 							});
