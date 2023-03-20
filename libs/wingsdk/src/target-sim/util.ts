@@ -2,7 +2,16 @@ import { access, constants } from "fs";
 import { promisify } from "util";
 import { IConstruct } from "constructs";
 import { Function } from "./function";
-import { IInflightHost, NodeJsCode, Resource } from "../core";
+import { IInflightHost, IResource, NodeJsCode, Resource } from "../core";
+
+/**
+ * Produce a token that will be replaced with the handle of a resource
+ * when the simulator is run. This can be inserted to an environment variable
+ * so that the real value can be used by the function.
+ */
+export function simulatorHandleToken(resource: IResource): string {
+  return `\${${resource.node.path}#attrs.handle}`;
+}
 
 /**
  * Check if a file exists for an specific path
@@ -39,7 +48,7 @@ export function bindSimulatorResource(
   }
 
   const env = makeEnvVarName(type, resource);
-  const handle = `\${${resource.node.path}#attrs.handle}`; // TODO: proper token mechanism
+  const handle = simulatorHandleToken(resource);
   host.addEnvironment(env, handle);
   host.node.addDependency(resource);
 }
