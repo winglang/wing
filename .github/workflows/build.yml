@@ -97,7 +97,7 @@ jobs:
     env:
       PROJEN_BUMP_VERSION: ${{ needs.prepare.outputs.version }}
     outputs:
-      run-full-e2e: ${{ github.event_name == 'push' || contains(fromJson(steps.pr-data.outputs.data).labels.*.name, 'pr/e2e-full') }}
+      run-full-e2e: ${{ steps.labels.outputs.run-full-e2e }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -179,6 +179,13 @@ jobs:
           number: ${{ github.event.pull_request.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check Labels
+        id: labels
+        run: |
+          echo "${{ steps.pr-data.outputs.data }}"
+          echo "${{ contains(fromJson(steps.pr-data.outputs.data).labels.*.name, 'pr/e2e-full') }}"
+          echo "run-full-e2e=${{ contains(fromJson(steps.pr-data.outputs.data).labels.*.name, 'pr/e2e-full') }}" > $GITHUB_OUTPUT
 
   e2e:
     name: "E2E / ${{ matrix.runner }} + Node${{ matrix.node }} [${{ matrix.shard }}]"
