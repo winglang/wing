@@ -492,16 +492,6 @@ impl<'s> Parser<'s> {
 				}
 			}
 		}
-		if constructor.is_none() && !is_resource {
-			self.add_error::<Node>(
-				format!(
-					"No constructor defined in {} {:?}",
-					if is_resource { "resource" } else { "class" },
-					statement_node
-				),
-				&statement_node,
-			)?;
-		}
 
 		let parent = if let Some(parent_node) = statement_node.child_by_field_name("parent") {
 			let parent_type = self.build_type_annotation(&parent_node)?;
