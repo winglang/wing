@@ -1,6 +1,8 @@
 use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
 
-use crate::ast::{Class, Constructor, Expr, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol};
+use crate::ast::{
+	Class, Constructor, Expr, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
+};
 use crate::diagnostic::WingSpan;
 use crate::lsp::sync::FILES;
 use crate::type_check::symbol_env::SymbolLookupInfo;
@@ -120,11 +122,14 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			return;
 		}
 
-		self.with_scope(&node.statements, |v| {
-			for param in &node.parameters {
-				v.visit_symbol(&param.0);
-			}
-		});
+		if let FunctionBody::Statements(scope) = &node.body {
+			self.with_scope(scope, |v| {
+				for param in &node.parameters {
+					v.visit_symbol(&param.0);
+				}
+			});
+		}
+
 		for param_type in &node.signature.parameters {
 			self.visit_type_annotation(param_type);
 		}
@@ -132,7 +137,9 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			self.visit_type_annotation(return_type);
 		}
 
-		self.visit_scope(&node.statements);
+		if let FunctionBody::Statements(scope) = &node.body {
+			self.visit_scope(scope);
+		}
 	}
 
 	fn visit_class(&mut self, node: &'a Class) {

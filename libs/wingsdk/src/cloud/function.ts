@@ -99,7 +99,7 @@ export abstract class Function extends Resource implements IInflightHost {
     lines.push(`console.log = (...args) => $logger.print(...args);`);
 
     lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await ${inflightClient.text}.handle(event);`);
+    lines.push(`  return await (${inflightClient.text}).handle(event);`);
     lines.push("};");
 
     // add an annotation that the Wing logger is implicitly used
@@ -127,6 +127,13 @@ export abstract class Function extends Resource implements IInflightHost {
     const outfile = join(assetDir, "index.js");
     writeFileSync(infile, lines.join("\n"));
 
+    // if the user has specified a node_modules directory to resolve from
+    const nodePathString = process.env.WING_NODE_MODULES
+      ? `nodePaths: [\"${normalPath(
+          process.env.WING_NODE_MODULES as string
+        )}\"],`
+      : "";
+
     // We would invoke esbuild directly here, but there is a bug where esbuild
     // mangles the stdout/stderr of the process that invokes it.
     // https://github.com/evanw/esbuild/issues/2927
@@ -138,9 +145,9 @@ export abstract class Function extends Resource implements IInflightHost {
       )}");`,
       `esbuild.buildSync({ bundle: true, entryPoints: ["${normalPath(
         infile
-      )}"], outfile: "${normalPath(
-        outfile
-      )}", minify: false, platform: "node", target: "node16", external: ["aws-sdk"] });`,
+      )}"], outfile: "${normalPath(outfile)}", ${nodePathString}
+      minify: false, platform: "node", target: "node16", external: ["aws-sdk"],
+     });`,
     ].join("\n");
     let result = spawnSync(process.argv[0], ["-e", esbuildScript]);
     if (result.status !== 0) {

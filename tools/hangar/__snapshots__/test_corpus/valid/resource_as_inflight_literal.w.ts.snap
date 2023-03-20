@@ -1,12 +1,12 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`wing compile -t tf-aws > clients/Foo.inflight.js 1`] = `
-"export class Foo_inflight  {
+"export class Foo  {
 constructor({  }) {
 
 
 }
-async  handle(message)  {
+async handle(message)  {
 	{
   return \\"hello world!\\";
 }
@@ -176,7 +176,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
-const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
 	switch (target) {
@@ -210,7 +210,7 @@ constructor() {
   	_toInflight() {
   	
   	const self_client_path = require('path').resolve(__dirname, \\"clients/Foo.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo_inflight({}))\`);
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo({}))\`);
   }
   }
   Foo._annotateInflight(\\"handle\\", {});

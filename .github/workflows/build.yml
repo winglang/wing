@@ -96,6 +96,8 @@ jobs:
     needs: prepare
     env:
       PROJEN_BUMP_VERSION: ${{ needs.prepare.outputs.version }}
+    outputs:
+      labels: ${{ steps.pr-labels.outputs.labels }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -167,6 +169,10 @@ jobs:
           github-comment: false
           vercel-args: "--prod "
 
+      - name: Get PR labels
+        id: pr-labels
+        uses: joerick/pr-labels-action@v1.0.7
+
   e2e:
     name: "E2E / ${{ matrix.runner }} + Node${{ matrix.node }} [${{ matrix.shard }}]"
     needs:
@@ -181,8 +187,8 @@ jobs:
         node: ["18", "19.7.0"]
         shard: ["1/2", "2/2"]
         full_run:
-          # Do a full run on push or when the PR is labeled "full-run"
-          - ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'pr/e2e-full') }}
+          # Do a full run on push or when the PR is labeled "pr/e2e-full"
+          - ${{ github.event_name == 'push' || contains(needs.build.labels, 'pr/e2e-full') }}
         exclude:
           - runner: macos
             full_run: false
