@@ -43,12 +43,15 @@ const project = new cdk.JsiiProject({
     "@azure/storage-blob@12.12.0",
     "@azure/identity@3.1.3",
     "@azure/core-paging",
+    // simulator dependencies
+    "tar",
   ],
   devDeps: [
     "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
     "@types/aws-lambda",
     "@types/debug",
     "@types/fs-extra",
+    "@types/tar",
     "aws-sdk-client-mock",
     "aws-sdk-client-mock-jest",
     "eslint-plugin-sort-exports",
