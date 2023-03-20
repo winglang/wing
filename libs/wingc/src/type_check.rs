@@ -2034,7 +2034,7 @@ impl<'a> TypeChecker<'a> {
 					};
 				}
 
-				if constructor.is_some() {
+				if let Some(constructor) = constructor {
 					// Add the constructor to the class env
 					let constructor_type = self.resolve_type_annotation(
 						&TypeAnnotation::FunctionSignature(constructor.as_ref().unwrap().signature.clone()),
