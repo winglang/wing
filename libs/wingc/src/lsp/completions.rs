@@ -98,7 +98,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 							types,
 							scope_visitor
 								.found_scope
-								.and_then(|s| Some(s.env.borrow().as_ref().expect("Scopes must have an environment").flight)),
+								.and_then(|s| Some(s.env.borrow().as_ref().expect("Scopes must have an environment").phase)),
 							true,
 						);
 					}
@@ -122,7 +122,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						let found_scope = scope_visitor.found_scope.expect("Should have found a scope");
 						let found_env = found_scope.env.borrow();
 						let found_env = found_env.as_ref().expect("Scope should have an env");
-						let found_phase = Some(found_env.flight);
+						let found_phase = Some(found_env.phase);
 						let found_symbol = root_env
 							.try_lookup(text.as_str(), None)
 							.or_else(|| found_env.try_lookup(text.as_str(), None));
@@ -303,7 +303,7 @@ fn get_completions_from_class(
 				return None;
 			}
 			if let Some(current_phase) = current_phase {
-				if !current_phase.can_call_to(&variable.flight) {
+				if !current_phase.can_call_to(&variable.phase) {
 					return None;
 				}
 			}

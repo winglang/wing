@@ -4,7 +4,7 @@ import { join } from "path";
 import { Construct } from "constructs";
 import { Logger } from "./logger";
 import { fqnForType } from "../constants";
-import { IInflightHost, IResource, Inflight, Resource, App } from "../core";
+import { IInflightHost, IResource, Resource, App } from "../core";
 import { Duration } from "../std";
 import { normalPath } from "../util";
 import { CaseConventions, ResourceNames } from "../utils/resource-names";
@@ -52,7 +52,7 @@ export abstract class Function extends Resource implements IInflightHost {
   public static _newFunction(
     scope: Construct,
     id: string,
-    inflight: Inflight,
+    inflight: IFunctionHandler,
     props: FunctionProps = {}
   ): Function {
     return App.of(scope).newAbstract(FUNCTION_FQN, scope, id, inflight, props);
@@ -70,7 +70,7 @@ export abstract class Function extends Resource implements IInflightHost {
   constructor(
     scope: Construct,
     id: string,
-    inflight: Inflight,
+    inflight: IFunctionHandler,
     props: FunctionProps = {}
   ) {
     super(scope, id);

@@ -51,7 +51,7 @@ new cloud.Api(props?: ApiProps)
 ##### `connect` <a name="connect" id="@winglang/sdk.cloud.Api.connect"></a>
 
 ```wing
-connect(route: str, inflight: ~Inflight, props?: ApiConnectProps): void
+connect(route: str, inflight: IApiEndpointHandler, props?: ApiConnectProps): void
 ```
 
 Add a inflight handler to the api for CONNECT requests on the given route.
@@ -66,7 +66,7 @@ The route to handle CONNECT requests for.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.connect.parameter.inflight"></a>
 
-- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
 
 The function to handle the request.
 
@@ -83,7 +83,7 @@ Options for the route.
 ##### `delete` <a name="delete" id="@winglang/sdk.cloud.Api.delete"></a>
 
 ```wing
-delete(route: str, inflight: ~Inflight, props?: ApiDeleteProps): void
+delete(route: str, inflight: IApiEndpointHandler, props?: ApiDeleteProps): void
 ```
 
 Add a inflight handler to the api for DELETE requests on the given route.
@@ -98,7 +98,7 @@ The route to handle DELETE requests for.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.delete.parameter.inflight"></a>
 
-- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
 
 The function to handle the request.
 
@@ -115,7 +115,7 @@ Options for the route.
 ##### `get` <a name="get" id="@winglang/sdk.cloud.Api.get"></a>
 
 ```wing
-get(route: str, inflight: ~Inflight, props?: ApiGetProps): void
+get(route: str, inflight: IApiEndpointHandler, props?: ApiGetProps): void
 ```
 
 Add a inflight handler to the api for GET requests on the given route.
@@ -130,7 +130,7 @@ The route to handle GET requests for.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.get.parameter.inflight"></a>
 
-- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
 
 The function to handle the request.
 
@@ -147,7 +147,7 @@ Options for the route.
 ##### `head` <a name="head" id="@winglang/sdk.cloud.Api.head"></a>
 
 ```wing
-head(route: str, inflight: ~Inflight, props?: ApiHeadProps): void
+head(route: str, inflight: IApiEndpointHandler, props?: ApiHeadProps): void
 ```
 
 Add a inflight handler to the api for HEAD requests on the given route.
@@ -162,7 +162,7 @@ The route to handle HEAD requests for.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.head.parameter.inflight"></a>
 
-- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
 
 The function to handle the request.
 
@@ -179,7 +179,7 @@ Options for the route.
 ##### `options` <a name="options" id="@winglang/sdk.cloud.Api.options"></a>
 
 ```wing
-options(route: str, inflight: ~Inflight, props?: ApiOptionsProps): void
+options(route: str, inflight: IApiEndpointHandler, props?: ApiOptionsProps): void
 ```
 
 Add a inflight handler to the api for OPTIONS requests on the given route.
@@ -194,7 +194,7 @@ The route to handle OPTIONS requests for.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.options.parameter.inflight"></a>
 
-- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
 
 The function to handle the request.
 
@@ -211,7 +211,7 @@ Options for the route.
 ##### `patch` <a name="patch" id="@winglang/sdk.cloud.Api.patch"></a>
 
 ```wing
-patch(route: str, inflight: ~Inflight, props?: ApiPatchProps): void
+patch(route: str, inflight: IApiEndpointHandler, props?: ApiPatchProps): void
 ```
 
 Add a inflight handler to the api for PATCH requests on the given route.
@@ -226,7 +226,7 @@ The route to handle PATCH requests for.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.patch.parameter.inflight"></a>
 
-- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
 
 The function to handle the request.
 
@@ -243,7 +243,7 @@ Options for the route.
 ##### `post` <a name="post" id="@winglang/sdk.cloud.Api.post"></a>
 
 ```wing
-post(route: str, inflight: ~Inflight, props?: ApiPostProps): void
+post(route: str, inflight: IApiEndpointHandler, props?: ApiPostProps): void
 ```
 
 Add a inflight handler to the api for POST requests on the given route.
@@ -258,7 +258,7 @@ The route to handle POST requests for.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.post.parameter.inflight"></a>
 
-- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
 
 The function to handle the request.
 
@@ -275,7 +275,7 @@ Options for the route.
 ##### `put` <a name="put" id="@winglang/sdk.cloud.Api.put"></a>
 
 ```wing
-put(route: str, inflight: ~Inflight, props?: ApiPutProps): void
+put(route: str, inflight: IApiEndpointHandler, props?: ApiPutProps): void
 ```
 
 Add a inflight handler to the api for PUT requests on the given route.
@@ -290,7 +290,7 @@ The route to handle PUT requests for.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.put.parameter.inflight"></a>
 
-- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
 
 The function to handle the request.
 
@@ -570,19 +570,19 @@ Represents a function.
 ```wing
 bring cloud;
 
-new cloud.Function(inflight: ~Inflight, props?: FunctionProps)
+new cloud.Function(inflight: IFunctionHandler, props?: FunctionProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Function.Initializer.parameter.inflight">inflight</a></code> | <code><a href="#@winglang/sdk.core.Inflight">Inflight</a></code> | *No description.* |
+| <code><a href="#@winglang/sdk.cloud.Function.Initializer.parameter.inflight">inflight</a></code> | <code><a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a></code> | *No description.* |
 | <code><a href="#@winglang/sdk.cloud.Function.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.FunctionProps">FunctionProps</a></code> | *No description.* |
 
 ---
 
 ##### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Function.Initializer.parameter.inflight"></a>
 
-- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>
 
 ---
 
@@ -811,14 +811,14 @@ new cloud.Queue(props?: QueueProps)
 ##### `on_message` <a name="on_message" id="@winglang/sdk.cloud.Queue.onMessage"></a>
 
 ```wing
-on_message(inflight: ~Inflight, props?: QueueOnMessageProps): Function
+on_message(handler: IQueueOnMessageHandler, props?: QueueOnMessageProps): Function
 ```
 
 Create a function to consume messages from this queue.
 
-###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Queue.onMessage.parameter.inflight"></a>
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.cloud.Queue.onMessage.parameter.handler"></a>
 
-- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IQueueOnMessageHandler">IQueueOnMessageHandler</a>
 
 ---
 
@@ -917,14 +917,14 @@ new cloud.Schedule(props?: ScheduleProps)
 ##### `on_tick` <a name="on_tick" id="@winglang/sdk.cloud.Schedule.onTick"></a>
 
 ```wing
-on_tick(inflight: ~Inflight, props?: ScheduleOnTickProps): Function
+on_tick(inflight: IScheduleOnTickHandler, props?: ScheduleOnTickProps): Function
 ```
 
 Create a function that runs when receiving the scheduled event.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Schedule.onTick.parameter.inflight"></a>
 
-- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>
 
 ---
 
@@ -1023,14 +1023,14 @@ new cloud.Topic(props?: TopicProps)
 ##### `on_message` <a name="on_message" id="@winglang/sdk.cloud.Topic.onMessage"></a>
 
 ```wing
-on_message(inflight: ~Inflight, props?: TopicOnMessageProps): Function
+on_message(inflight: ITopicOnMessageHandler, props?: TopicOnMessageProps): Function
 ```
 
 Run an inflight whenever an message is published to the topic.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Topic.onMessage.parameter.inflight"></a>
 
-- *Type:* <a href="#@winglang/sdk.core.Inflight">Inflight</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>
 
 ---
 
@@ -3445,6 +3445,50 @@ new std.T1()
 Inflight methods and members of `cloud.Api`.
 
 
+
+### IApiEndpointHandler <a name="IApiEndpointHandler" id="@winglang/sdk.cloud.IApiEndpointHandler"></a>
+
+- *Extends:* <a href="#@winglang/sdk.core.IResource">IResource</a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+
+**Inflight client:** [@winglang/sdk.cloud.IApiEndpointHandlerClient](#@winglang/sdk.cloud.IApiEndpointHandlerClient)
+
+Represents a resource with an inflight "handle" method that can be passed to one of the `Api` request preflight methods.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IApiEndpointHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.IApiEndpointHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IApiEndpointHandler.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.IApiEndpointHandler.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* <a href="#@winglang/sdk.core.Display">Display</a>
+
+Information on how to display a resource in the UI.
+
+---
 
 ### IApiEndpointHandlerClient <a name="IApiEndpointHandlerClient" id="@winglang/sdk.cloud.IApiEndpointHandlerClient"></a>
 

@@ -441,7 +441,7 @@ impl<'s> Parser<'s> {
 						member_type: self.build_type_annotation(&class_element.child_by_field_name("type").unwrap())?,
 						reassignable: class_element.child_by_field_name("reassignable").is_some(),
 						is_static,
-						flight: match class_element.child_by_field_name("phase_modifier") {
+						phase: match class_element.child_by_field_name("phase_modifier") {
 							Some(n) => {
 								if !is_resource {
 									self
@@ -473,7 +473,7 @@ impl<'s> Parser<'s> {
 								root: name.clone(),
 								fields: vec![],
 							}))),
-							flight: if is_resource { Phase::Preflight } else { Phase::Inflight },
+							phase: if is_resource { Phase::Preflight } else { Phase::Inflight },
 						},
 					})
 				}
@@ -557,11 +557,11 @@ impl<'s> Parser<'s> {
 		}))
 	}
 
-	fn build_anonymous_closure(&self, anon_closure_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
-		self.build_function_definition(anon_closure_node, flight)
+	fn build_anonymous_closure(&self, anon_closure_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
+		self.build_function_definition(anon_closure_node, phase)
 	}
 
-	fn build_function_definition(&self, func_def_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
+	fn build_function_definition(&self, func_def_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
 		let parameters = self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap())?;
 
 		let statements = if let Some(external) = func_def_node.child_by_field_name("extern_modifier") {
@@ -582,7 +582,7 @@ impl<'s> Parser<'s> {
 				} else {
 					None
 				},
-				flight,
+				phase,
 			},
 			is_static: func_def_node.child_by_field_name("static").is_some(),
 			captures: RefCell::new(None),
@@ -641,7 +641,7 @@ impl<'s> Parser<'s> {
 				Ok(TypeAnnotation::FunctionSignature(FunctionSignature {
 					parameters,
 					return_type,
-					flight: if type_node.child_by_field_name("inflight").is_some() {
+					phase: if type_node.child_by_field_name("inflight").is_some() {
 						Phase::Inflight
 					} else {
 						Phase::Preflight

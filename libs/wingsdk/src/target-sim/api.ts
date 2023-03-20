@@ -19,7 +19,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   private _routes: ApiSchema["props"]["routes"] = [];
 
   private createOrGetFunction(
-    inflight: core.Inflight,
+    inflight: cloud.IApiEndpointHandler,
     props: cloud.FunctionProps
   ): Function {
     const hash = inflight.node.addr.slice(-8);
@@ -42,7 +42,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   private addEndpoint(
     route: string,
     method: cloud.HttpMethod,
-    inflight: core.Inflight,
+    inflight: cloud.IApiEndpointHandler,
     props: any
   ): void {
     this._addToSpec(route, method, undefined);
@@ -71,7 +71,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
    */
   public get(
     route: string,
-    inflight: core.Inflight,
+    inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiGetProps | undefined
   ): void {
     this.addEndpoint(route, cloud.HttpMethod.GET, inflight, props);
@@ -85,7 +85,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
    */
   public post(
     route: string,
-    inflight: core.Inflight,
+    inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiPostProps | undefined
   ): void {
     this.addEndpoint(route, cloud.HttpMethod.POST, inflight, props);
@@ -99,7 +99,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
    */
   public put(
     route: string,
-    inflight: core.Inflight,
+    inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiPutProps | undefined
   ): void {
     this.addEndpoint(route, cloud.HttpMethod.PUT, inflight, props);
@@ -113,7 +113,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
    */
   public delete(
     route: string,
-    inflight: core.Inflight,
+    inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiDeleteProps | undefined
   ): void {
     this.addEndpoint(route, cloud.HttpMethod.DELETE, inflight, props);
@@ -127,7 +127,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
    */
   public patch(
     route: string,
-    inflight: core.Inflight,
+    inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiPatchProps | undefined
   ): void {
     this.addEndpoint(route, cloud.HttpMethod.PATCH, inflight, props);
@@ -141,7 +141,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
    */
   public options(
     route: string,
-    inflight: core.Inflight,
+    inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiOptionsProps | undefined
   ): void {
     this.addEndpoint(route, cloud.HttpMethod.OPTIONS, inflight, props);
@@ -155,7 +155,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
    */
   public head(
     route: string,
-    inflight: core.Inflight,
+    inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiHeadProps | undefined
   ): void {
     this.addEndpoint(route, cloud.HttpMethod.HEAD, inflight, props);
@@ -169,7 +169,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
    */
   public connect(
     route: string,
-    inflight: core.Inflight,
+    inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiConnectProps | undefined
   ): void {
     this.addEndpoint(route, cloud.HttpMethod.CONNECT, inflight, props);
