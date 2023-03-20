@@ -11,6 +11,11 @@ import {
 import * as cloud from "../cloud";
 import * as core from "../core";
 
+/**
+ * Simulator implementation of `cloud.Api`.
+ *
+ * @inflight `@winglang/sdk.cloud.IApiClient`
+ */
 export class Api extends cloud.Api implements ISimulatorResource {
   private _routes: ApiSchema["props"]["routes"] = [];
   constructor(
