@@ -73,9 +73,14 @@ resource TaskList implementes ITaskList {
   }
   
   inflight get_redis_client(): redis.IRedisClient { 
-    this._redis_client ??= this._redis.ioredis();
-    return this._redis_client;
-  }
+    if let var client = this._redis_client {
+      return client;
+    } else {
+      client = this._redis.ioredis();
+      this._redis_client = client;
+      return client;
+    } 
+   }
   
   inflight get(id: str): Json {
     return Json.parse(this.get_redis_client().get(id));
