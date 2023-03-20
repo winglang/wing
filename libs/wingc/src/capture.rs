@@ -384,9 +384,9 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 			StmtKind::Class(Class {
 				methods, constructor, ..
 			}) => {
-				if constructor.is_some() {
+				if let Some(constructor) = constructor {
 					res.extend(scan_captures_in_inflight_scope(
-						&constructor.as_ref().unwrap().statements,
+						&constructor.statements,
 						diagnostics,
 					));
 				}
