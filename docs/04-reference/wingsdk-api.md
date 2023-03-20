@@ -3442,7 +3442,7 @@ new std.T1()
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IApiClient">IApiClient</a>
 
-Inflight methods and members of `Bucket`.
+Inflight methods and members of `cloud.Api`.
 
 
 

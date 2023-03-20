@@ -256,7 +256,7 @@ export interface ApiHeadProps {}
 export interface ApiConnectProps {}
 
 /**
- * Inflight methods and members of `Bucket`.
+ * Inflight methods and members of `cloud.Api`.
  */
 export interface IApiClient {}
 
