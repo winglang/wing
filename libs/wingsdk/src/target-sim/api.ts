@@ -1,4 +1,3 @@
-import { Construct } from "constructs";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
@@ -18,13 +17,6 @@ import * as core from "../core";
  */
 export class Api extends cloud.Api implements ISimulatorResource {
   private _routes: ApiSchema["props"]["routes"] = [];
-  constructor(
-    scope: Construct,
-    id: string,
-    props?: cloud.ApiProps | undefined
-  ) {
-    super(scope, id, props);
-  }
 
   private createOrGetFunction(
     inflight: core.Inflight,
