@@ -97,7 +97,7 @@ jobs:
     env:
       PROJEN_BUMP_VERSION: ${{ needs.prepare.outputs.version }}
     outputs:
-      pr-labels: ${{ fromJson(steps.pr-data.outputs.data).labels }}
+      run-full-e2e: ${{ github.event_name == 'push' || contains(fromJson(steps.pr-data.outputs.data).*.name, 'pr/e2e-full') }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -195,7 +195,7 @@ jobs:
         shard: ["1/2", "2/2"]
         full_run:
           # Do a full run on push or when the PR is labeled "pr/e2e-full"
-          - ${{ github.event_name == 'push' || contains(needs.build.pr-labels.*.name, 'pr/e2e-full') }}
+          - ${{ needs.build.run-full-e2e }}
         exclude:
           - runner: macos
             full_run: false
