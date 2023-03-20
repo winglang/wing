@@ -81,29 +81,29 @@ exports[`messages are requeued if the function fails 1`] = `
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\"\\").",
   "Subscriber error - returning 1 messages to queue: Error: ERROR
-    at Handler.handle (evalmachine.<anonymous>:24:15)
-    at QueueOnMessageHandlerClient.handle (/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/queue.onmessage.inflight.ts:17:26)
-    at Object.exports.handler (evalmachine.<anonymous>:30:8)
-    at evalmachine.<anonymous>:32:9
+    at Handler.handle (evalmachine.<anonymous>:22:15)
+    at QueueOnMessageHandlerClient.handle (/home/runner/work/wing/wing/libs/wingsdk/src/target-sim/queue.onmessage.inflight.ts:17:26)
+    at Object.exports.handler (evalmachine.<anonymous>:28:8)
+    at evalmachine.<anonymous>:30:9
     at Script.runInContext (node:vm:141:12)
     at Proxy.runInContext (node:vm:297:6)
-    at /Users/eladb/code/wing2/libs/wingsdk/src/target-sim/function.inflight.ts:139:8
+    at /home/runner/work/wing/wing/libs/wingsdk/src/target-sim/function.inflight.ts:137:8
     at new Promise (<anonymous>)
-    at runInSandbox (/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/function.inflight.ts:112:10)
-    at Object.activity (/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/function.inflight.ts:45:16)",
+    at runInSandbox (/home/runner/work/wing/wing/libs/wingsdk/src/target-sim/function.inflight.ts:112:10)
+    at Object.activity (/home/runner/work/wing/wing/libs/wingsdk/src/target-sim/function.inflight.ts:45:16)",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\"\\").",
   "Subscriber error - returning 1 messages to queue: Error: ERROR
-    at Handler.handle (evalmachine.<anonymous>:24:15)
-    at QueueOnMessageHandlerClient.handle (/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/queue.onmessage.inflight.ts:17:26)
-    at Object.exports.handler (evalmachine.<anonymous>:30:8)
-    at evalmachine.<anonymous>:32:9
+    at Handler.handle (evalmachine.<anonymous>:22:15)
+    at QueueOnMessageHandlerClient.handle (/home/runner/work/wing/wing/libs/wingsdk/src/target-sim/queue.onmessage.inflight.ts:17:26)
+    at Object.exports.handler (evalmachine.<anonymous>:28:8)
+    at evalmachine.<anonymous>:30:9
     at Script.runInContext (node:vm:141:12)
     at Proxy.runInContext (node:vm:297:6)
-    at /Users/eladb/code/wing2/libs/wingsdk/src/target-sim/function.inflight.ts:139:8
+    at /home/runner/work/wing/wing/libs/wingsdk/src/target-sim/function.inflight.ts:137:8
     at new Promise (<anonymous>)
-    at runInSandbox (/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/function.inflight.ts:112:10)
-    at Object.activity (/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/function.inflight.ts:45:16)",
+    at runInSandbox (/home/runner/work/wing/wing/libs/wingsdk/src/target-sim/function.inflight.ts:112:10)
+    at Object.activity (/home/runner/work/wing/wing/libs/wingsdk/src/target-sim/function.inflight.ts:45:16)",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
