@@ -38,7 +38,7 @@ export abstract class Api extends Resource {
     scope: Construct,
     id: string,
     props: ApiProps = {}
-  ): Function {
+  ): Api {
     return App.of(scope).newAbstract(API_FQN, scope, id, props);
   }
 
@@ -256,6 +256,11 @@ export interface ApiHeadProps {}
 export interface ApiConnectProps {}
 
 /**
+ * Inflight methods and members of `cloud.Api`.
+ */
+export interface IApiClient {}
+
+/**
  * Allowed HTTP methods for a endpoint.
  */
 export enum HttpMethod {
@@ -270,21 +275,12 @@ export enum HttpMethod {
   /** Delete */
   DELETE = "DELETE",
   /** Connect */
-  CONNECT = "Connect",
+  CONNECT = "CONNECT",
   /** Options */
   OPTIONS = "OPTIONS",
   /** Patch */
   PATCH = "PATCH",
 }
-
-// /**
-//  * Json type representation.
-//  */
-// // TODO: this should come from a shared package
-// export type Json = any;
-// //  {
-// //   [key: string]: Json | Json[] | string | number | boolean | null;
-// // }
 
 /**
  * Shape of a request to an inflight handler.
@@ -294,14 +290,14 @@ export interface ApiRequest {
   readonly method: HttpMethod;
   /** The request's path. */
   readonly path: string;
-  /** The request's query string. */
-  readonly query?: string;
+  /** The request's query string values. */
+  readonly query: Record<string, string>;
   /** The path variables. */
   readonly vars?: Record<string, string>;
   /** The request's body. */
   readonly body?: object; // JSII sees this as "json" type
   /** The request's headers. */
-  readonly headers: Record<string, string>;
+  readonly headers?: Record<string, string>;
 }
 
 /**
@@ -333,4 +329,52 @@ export interface IApiEndpointHandlerClient {
    * @inflight
    */
   handle(request: ApiRequest): Promise<ApiResponse>;
+}
+
+/**
+ * Parse an HTTP method string to an HttpMethod enum
+ * @param method HTTP method string
+ * @returns HttpMethod enum
+ * @throws Error if the method is not supported
+ */
+export function parseHttpMethod(method: string): HttpMethod {
+  switch (method) {
+    case "GET":
+      return HttpMethod.GET;
+    case "POST":
+      return HttpMethod.POST;
+    case "PUT":
+      return HttpMethod.PUT;
+    case "HEAD":
+      return HttpMethod.HEAD;
+    case "DELETE":
+      return HttpMethod.DELETE;
+    case "CONNECT":
+      return HttpMethod.CONNECT;
+    case "OPTIONS":
+      return HttpMethod.OPTIONS;
+    case "PATCH":
+      return HttpMethod.PATCH;
+    default:
+      throw new Error(`Unsupported HTTP method: ${method}`);
+  }
+}
+
+/**
+ * Convert an object with multi-valued parameters to a an object with
+ * single-valued parameters.
+ */
+export function sanitizeParamLikeObject(
+  obj: Record<string, string | string[] | undefined>
+) {
+  const newObj: Record<string, string> = {};
+  Object.keys(obj).forEach((key) => {
+    const value = obj[key];
+    if (Array.isArray(value)) {
+      newObj[key] = value.join(",");
+    } else if (typeof value === "string") {
+      newObj[key] = value;
+    }
+  });
+  return newObj;
 }

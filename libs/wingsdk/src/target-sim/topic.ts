@@ -4,7 +4,11 @@ import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { TopicSchema, TopicSubscriber, TOPIC_TYPE } from "./schema-resources";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import {
+  bindSimulatorResource,
+  makeSimulatorJsClient,
+  simulatorHandleToken,
+} from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
@@ -44,9 +48,8 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
     this.node.addDependency(fn);
 
-    const functionHandle = `\${${fn.node.path}#attrs.handle}`;
     this.subscribers.push({
-      functionHandle,
+      functionHandle: simulatorHandleToken(fn),
     });
 
     core.Resource.addConnection({
