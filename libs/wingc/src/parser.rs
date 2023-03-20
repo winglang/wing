@@ -26,7 +26,7 @@ pub struct Parser<'a> {
 // this is meant to serve as a bandaide to be removed once wing is further developed.
 // k=grammar, v=optional_message, example: ("generic", "targed impl: 1.0.0")
 static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
-	"struct_definition" => "see https://github.com/winglang/wing/issues/120",
+	// "struct_definition" => "see https://github.com/winglang/wing/issues/120",
 	"interface_definition" => "see https://github.com/winglang/wing/issues/123",
 	"any" => "see https://github.com/winglang/wing/issues/434",
 	"void" => "see https://github.com/winglang/wing/issues/432",
@@ -196,6 +196,7 @@ impl<'s> Parser<'s> {
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
 			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"try_catch_statement" => self.build_try_catch_statement(statement_node)?,
+      "struct_definition" => self.build_struct_definition_statement(statement_node)?,
 			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -330,6 +331,17 @@ impl<'s> Parser<'s> {
 			variable: self.build_reference(&statement_node.child_by_field_name("name").unwrap())?,
 			value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
 		})
+	}
+
+  fn build_struct_definition_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+    dbg!(&statement_node);
+    self.build_expression(&statement_node);
+    // B4PR: Change how we buld structs
+    Ok(StmtKind::Struct { 
+      name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?, 
+      extends: vec![], 
+      members: vec![]
+    })
 	}
 
 	fn build_variable_def_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
@@ -1030,6 +1042,21 @@ impl<'s> Parser<'s> {
 					expression_span,
 				))
 			}
+      "struct_definition" => {
+        let mut fields = BTreeMap::new();
+        let mut cursor = expression_node.walk();
+        for field in expression_node.named_children(&mut cursor) {
+          match field.kind() {
+            "struct_field" => {
+              let field_name = self.node_symbol(&field.named_child(0).unwrap());
+              let field_type = self.build_type_annotation(&field.named_child(1).unwrap());
+              fields.insert(field_name, field_type);
+            },
+            _ => continue, // B4PR: Throw a fucking error!
+          }
+        }
+        Err(())
+      }
 			"json_literal" => {
 				let type_node = expression_node
 					.child_by_field_name("type")
