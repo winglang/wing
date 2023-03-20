@@ -77,16 +77,12 @@ exports[`topic publishes messages as they are received 1`] = `
   "wingsdk.cloud.Topic created.",
   "Publish (message=Alpha).",
   "Sending message (message=Alpha, subscriber=sim-1).",
+  "Received Alpha",
   "Invoke (payload=\\"\\"Alpha\\"\\").",
-  "Subscriber error: Error: Cannot find module '/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/topic.onmessage.inflight.js'
-Require stack:
-- /Users/eladb/code/wing2/libs/wingsdk/src/target-sim/function.inflight.ts",
   "Publish (message=Beta).",
   "Sending message (message=Beta, subscriber=sim-1).",
+  "Received Beta",
   "Invoke (payload=\\"\\"Beta\\"\\").",
-  "Subscriber error: Error: Cannot find module '/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/topic.onmessage.inflight.js'
-Require stack:
-- /Users/eladb/code/wing2/libs/wingsdk/src/target-sim/function.inflight.ts",
   "wingsdk.cloud.Topic deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
@@ -101,15 +97,11 @@ exports[`topic publishes messages to multiple subscribers 1`] = `
   "wingsdk.cloud.Topic created.",
   "Publish (message=Alpha).",
   "Sending message (message=Alpha, subscriber=sim-1).",
+  "Received Alpha",
   "Invoke (payload=\\"\\"Alpha\\"\\").",
-  "Subscriber error: Error: Cannot find module '/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/topic.onmessage.inflight.js'
-Require stack:
-- /Users/eladb/code/wing2/libs/wingsdk/src/target-sim/function.inflight.ts",
   "Sending message (message=Alpha, subscriber=sim-2).",
+  "Also received Alpha",
   "Invoke (payload=\\"\\"Alpha\\"\\").",
-  "Subscriber error: Error: Cannot find module '/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/topic.onmessage.inflight.js'
-Require stack:
-- /Users/eladb/code/wing2/libs/wingsdk/src/target-sim/function.inflight.ts",
   "wingsdk.cloud.Topic deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Function deleted.",

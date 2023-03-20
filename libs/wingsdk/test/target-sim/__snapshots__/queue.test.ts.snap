@@ -80,10 +80,30 @@ exports[`messages are requeued if the function fails 1`] = `
   "Push (message=BAD MESSAGE).",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\"\\").",
-  "Subscriber error - returning 1 messages to queue.",
+  "Subscriber error - returning 1 messages to queue: Error: ERROR
+    at Handler.handle (evalmachine.<anonymous>:24:15)
+    at QueueOnMessageHandlerClient.handle (/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/queue.onmessage.inflight.ts:17:26)
+    at Object.exports.handler (evalmachine.<anonymous>:30:8)
+    at evalmachine.<anonymous>:32:9
+    at Script.runInContext (node:vm:141:12)
+    at Proxy.runInContext (node:vm:297:6)
+    at /Users/eladb/code/wing2/libs/wingsdk/src/target-sim/function.inflight.ts:139:8
+    at new Promise (<anonymous>)
+    at runInSandbox (/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/function.inflight.ts:112:10)
+    at Object.activity (/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/function.inflight.ts:45:16)",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\"\\").",
-  "Subscriber error - returning 1 messages to queue.",
+  "Subscriber error - returning 1 messages to queue: Error: ERROR
+    at Handler.handle (evalmachine.<anonymous>:24:15)
+    at QueueOnMessageHandlerClient.handle (/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/queue.onmessage.inflight.ts:17:26)
+    at Object.exports.handler (evalmachine.<anonymous>:30:8)
+    at evalmachine.<anonymous>:32:9
+    at Script.runInContext (node:vm:141:12)
+    at Proxy.runInContext (node:vm:297:6)
+    at /Users/eladb/code/wing2/libs/wingsdk/src/target-sim/function.inflight.ts:139:8
+    at new Promise (<anonymous>)
+    at runInSandbox (/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/function.inflight.ts:112:10)
+    at Object.activity (/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/function.inflight.ts:45:16)",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
@@ -385,10 +405,8 @@ exports[`queue with one subscriber, batch size of 5 1`] = `
   "wingsdk.cloud.Queue created.",
   "Sending messages (messages=[\\"A\\",\\"B\\",\\"C\\",\\"D\\",\\"E\\"], subscriber=sim-1).",
   "Sending messages (messages=[\\"F\\"], subscriber=sim-1).",
-  "Invoke (payload=\\"\\"{\\\\\\"messages\\\\\\":[\\\\\\"A\\\\\\",\\\\\\"B\\\\\\",\\\\\\"C\\\\\\",\\\\\\"D\\\\\\",\\\\\\"E\\\\\\"]}\\"\\").",
   "Invoke (payload=\\"\\"{\\\\\\"messages\\\\\\":[\\\\\\"F\\\\\\"]}\\"\\").",
-  "Subscriber error - returning 5 messages to queue.",
-  "Subscriber error - returning 1 messages to queue.",
+  "Invoke (payload=\\"\\"{\\\\\\"messages\\\\\\":[\\\\\\"A\\\\\\",\\\\\\"B\\\\\\",\\\\\\"C\\\\\\",\\\\\\"D\\\\\\",\\\\\\"E\\\\\\"]}\\"\\").",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
@@ -615,8 +633,6 @@ exports[`queue with one subscriber, default batch size of 1 1`] = `
   "Sending messages (messages=[\\"B\\"], subscriber=sim-1).",
   "Invoke (payload=\\"\\"{\\\\\\"messages\\\\\\":[\\\\\\"A\\\\\\"]}\\"\\").",
   "Invoke (payload=\\"\\"{\\\\\\"messages\\\\\\":[\\\\\\"B\\\\\\"]}\\"\\").",
-  "Subscriber error - returning 1 messages to queue.",
-  "Subscriber error - returning 1 messages to queue.",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",

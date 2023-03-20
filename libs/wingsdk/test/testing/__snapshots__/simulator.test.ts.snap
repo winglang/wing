@@ -219,13 +219,14 @@ exports[`run single test > test failure 1`] = `
   "error": "Error: test failed
     at Handler.handle 
     at Object.exports.handler 
-    at evalmachine.<anonymous>:26:9
+    at evalmachine.<anonymous>:28:9
     at Script.runInContext 
     at Proxy.runInContext 
+    at /Users/eladb/code/wing2/libs/wingsdk/src/target-sim/function.inflight.ts:139:8
+    at new Promise 
+    at runInSandbox 
     at Object.activity 
-    at Object.withTrace 
-    at Function.invoke 
-    at Simulator.runTest ",
+    at Object.withTrace ",
   "pass": false,
   "path": "root/test",
   "traces": [

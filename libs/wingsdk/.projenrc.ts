@@ -251,4 +251,6 @@ project.addFields({
   files: ["lib", ".jsii", "API.md", "patches"],
 });
 
+project.gitignore.addPatterns("src/**/*.js", "src/**/*.d.ts");
+
 project.synth();
