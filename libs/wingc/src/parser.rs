@@ -492,7 +492,7 @@ impl<'s> Parser<'s> {
 				}
 			}
 		}
-		if constructor.is_none() {
+		if constructor.is_none() && !is_resource {
 			self.add_error::<Node>(
 				format!(
 					"No constructor defined in {} {:?}",
@@ -552,7 +552,7 @@ impl<'s> Parser<'s> {
 			methods,
 			parent,
 			implements,
-			constructor: constructor.unwrap(),
+			constructor: constructor,
 			is_resource,
 		}))
 	}

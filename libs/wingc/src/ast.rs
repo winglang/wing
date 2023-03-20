@@ -254,7 +254,7 @@ pub struct Class {
 	pub name: Symbol,
 	pub fields: Vec<ClassField>,
 	pub methods: Vec<(Symbol, FunctionDefinition)>,
-	pub constructor: Constructor,
+	pub constructor: Option<Constructor>,
 	pub parent: Option<UserDefinedType>,
 	pub implements: Vec<UserDefinedType>,
 	pub is_resource: bool,

@@ -186,7 +186,9 @@ where
 {
 	v.visit_symbol(&node.name);
 
-	v.visit_constructor(&node.constructor);
+	if node.constructor.is_some() {
+		v.visit_constructor(&node.constructor.as_ref().unwrap());
+	}
 
 	for field in &node.fields {
 		v.visit_symbol(&field.name);

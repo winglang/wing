@@ -2034,64 +2034,70 @@ impl<'a> TypeChecker<'a> {
 					};
 				}
 
-				// Add the constructor to the class env
-				let constructor_type = self.resolve_type_annotation(
-					&TypeAnnotation::FunctionSignature(constructor.signature.clone()),
-					env,
-					stmt.idx,
-				);
-				match class_env.define(
-					&Symbol {
-						name: WING_CONSTRUCTOR_NAME.into(),
-						span: name.span.clone(),
-					},
-					SymbolKind::make_variable(constructor_type, false, constructor.signature.flight),
-					StatementIdx::Top,
-				) {
-					Err(type_error) => {
-						self.type_error(type_error);
-					}
-					_ => {}
-				};
+				if constructor.is_some() {
+					// Add the constructor to the class env
+					let constructor_type = self.resolve_type_annotation(
+						&TypeAnnotation::FunctionSignature(constructor.as_ref().unwrap().signature.clone()),
+						env,
+						stmt.idx,
+					);
+					match class_env.define(
+						&Symbol {
+							name: WING_CONSTRUCTOR_NAME.into(),
+							span: name.span.clone(),
+						},
+						SymbolKind::make_variable(constructor_type, false, constructor.as_ref().unwrap().signature.flight),
+						StatementIdx::Top,
+					) {
+						Err(type_error) => {
+							self.type_error(type_error);
+						}
+						_ => {}
+					};
+
+					// Type check constructor
+					let constructor_sig = if let Type::Function(ref s) = *constructor_type {
+						s
+					} else {
+						panic!(
+							"Constructor of {} isn't defined as a function in the class environment",
+							name
+						);
+					};
+
+					// Create constructor environment and prime it with args
+					let mut constructor_env = SymbolEnv::new(
+						Some(env.get_ref()),
+						constructor_sig.return_type,
+						false,
+						true,
+						constructor.as_ref().unwrap().signature.flight,
+						stmt.idx,
+					);
+					self.add_arguments_to_env(
+						&constructor.as_ref().unwrap().parameters,
+						constructor_sig,
+						&mut constructor_env,
+					);
+					// Prime the constructor environment with `this`
+					constructor_env
+						.define(
+							&Symbol {
+								name: "this".into(),
+								span: name.span.clone(),
+							},
+							SymbolKind::make_variable(class_type, false, constructor_env.flight),
+							StatementIdx::Top,
+						)
+						.expect("Expected `this` to be added to constructor env");
+					constructor.as_ref().unwrap().statements.set_env(constructor_env);
+					// Check function scope
+					self.inner_scopes.push(&constructor.as_ref().unwrap().statements);
+				}
 
 				// Replace the dummy class environment with the real one before type checking the methods
 				class_type.as_mut_class_or_resource().unwrap().env = class_env;
 				let class_env = &class_type.as_class_or_resource().unwrap().env;
-
-				// Type check constructor
-				let constructor_sig = if let Type::Function(ref s) = *constructor_type {
-					s
-				} else {
-					panic!(
-						"Constructor of {} isn't defined as a function in the class environment",
-						name
-					);
-				};
-
-				// Create constructor environment and prime it with args
-				let mut constructor_env = SymbolEnv::new(
-					Some(env.get_ref()),
-					constructor_sig.return_type,
-					false,
-					true,
-					constructor.signature.flight,
-					stmt.idx,
-				);
-				self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
-				// Prime the constructor environment with `this`
-				constructor_env
-					.define(
-						&Symbol {
-							name: "this".into(),
-							span: name.span.clone(),
-						},
-						SymbolKind::make_variable(class_type, false, constructor_env.flight),
-						StatementIdx::Top,
-					)
-					.expect("Expected `this` to be added to constructor env");
-				constructor.statements.set_env(constructor_env);
-				// Check function scope
-				self.inner_scopes.push(&constructor.statements);
 
 				// TODO: handle member/method overrides in our env based on whatever rules we define in our spec
 

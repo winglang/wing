@@ -17,6 +17,15 @@ async my_method()  {
 }}"
 `;
 
+exports[`wing compile -t tf-aws > clients/Empty.inflight.js 1`] = `
+"export class Empty  {
+constructor({  }) {
+
+
+}
+}"
+`;
+
 exports[`wing compile -t tf-aws > clients/Foo.inflight.js 1`] = `
 "export class Foo  {
 constructor({ c }) {
@@ -261,6 +270,18 @@ constructor() {
   }
   }
   Bar._annotateInflight(\\"my_method\\", {\\"this.b\\": { ops: [\\"get\\",\\"put\\"] },\\"this.foo\\": { ops: [\\"foo_get\\",\\"foo_inc\\"] }});
+  class Empty extends $stdlib.core.Resource {
+  	constructor(scope, id) {
+  super(scope, id);
+  }
+  	
+  	_toInflight() {
+  	
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/Empty.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Empty({}))\`);
+  }
+  }
+  
   const bucket = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
   const res = new Bar(this,\\"Bar\\",\\"Arr\\",bucket);
   this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {

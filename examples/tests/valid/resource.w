@@ -47,3 +47,5 @@ new cloud.Function(inflight () => {
   assert(s == "counter is: 1");
   assert(bucket.list().length == 1);
 }) as "test";
+
+resource Empty {}
