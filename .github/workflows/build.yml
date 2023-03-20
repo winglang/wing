@@ -183,7 +183,6 @@ jobs:
       - name: Check Labels
         id: labels
         run: |
-          echo "${{ steps.pr-data.outputs.data }}"
           echo "${{ contains(fromJson(steps.pr-data.outputs.data).labels.*.name, 'pr/e2e-full') }}"
           echo "run-full-e2e=${{ contains(fromJson(steps.pr-data.outputs.data).labels.*.name, 'pr/e2e-full') }}" > $GITHUB_OUTPUT
 
