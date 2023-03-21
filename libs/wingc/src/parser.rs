@@ -1049,7 +1049,7 @@ impl<'s> Parser<'s> {
 			"set_literal" => self.build_set_literal(expression_node),
 			"struct_literal" => {
 				let type_ = self.build_type_annotation(&expression_node.child_by_field_name("type").unwrap());
-				let mut fields: BTreeMap<String, (Symbol, Expr)> = BTreeMap::new();
+				let mut fields = BTreeMap::new();
 				let mut cursor = expression_node.walk();
 				for field in expression_node.children_by_field_name("fields", &mut cursor) {
 					if !field.is_named() || field.is_extra() {
