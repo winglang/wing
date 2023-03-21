@@ -881,7 +881,12 @@ Here's a quick summary of how optionality works in Wing:
 
 * `x: T?` marks `x` as "optional of T". This means that `x` can store a value of type `T` but it can also be in a state where there is no value stored there.
 * To test if `x` has a value or not, use `x?`, which returns a `bool`. If x has a value, `x?` will be `true`, otherwise it will be `false`.
-* The `if let y = x { } else { }` is a special if statement that binds `y` inside the block only if `x` includes a value. Otherwise, the `else` block will be executed.
+* The `if let y = opt { } else { }` is a special if statement that binds `y` inside the block only if `x` includes a value. Otherwise, the `else` block will be executed.
+
+-------------
+* The `let x = opt else { }` can be used to <<<<<<>>>>>>???
+-------------
+
 * The `x?.y` notation can be used to access object fields only if there is a value. It returns an empty optional if the value is not defined.
 * The `x ?? y` notation will return the value in `x` (if there is one) or `y` otherwise (`y` must be of type `T`, not `T?`).
 * A default value can also be supplied using `= y` in the declaration of the field or argument, which implies that the type will always be defined.
@@ -908,7 +913,7 @@ let my_person = Person { name: "david" };
 assert(my_person.address? == false);
 ```
 
-It is also possible to use `=` in the field declaration to indicate the default value (similar to function arguments):
+It is also possible to use `=` in the field declaration to indicate the default value (similar to function arguments). If a default value is provided in a struct declaration, the field is not required in a struct literal definition. It also implies that the type of the field is `T` and not `T?` (because we can ensure it has a value). In the example below the field `radix` as a type of `num`.
 
 ```js
 struct FormatOpts {
@@ -1045,7 +1050,7 @@ if !my_person.address? {
 
 #### 1.7.3 Unwrapping using `if let` and `let else`
 
-The `if let` statement can be used to test if an optional is defined an *unwrap* it into a
+The `if let` statement can be used to test if an optional is defined and *unwrap* it into a
 non-optional variable defined inside the block:
 
 ```js
