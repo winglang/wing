@@ -90,7 +90,7 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
           // If the function returns an error, put the message back on the queue
           this.context.addTrace({
             data: {
-              message: `Subscriber error - returning ${messages.length} messages to queue: ${err.stack}`,
+              message: `Subscriber error - returning ${messages.length} messages to queue: ${err.message}`,
             },
             sourcePath: this.context.resourcePath,
             sourceType: QUEUE_TYPE,
