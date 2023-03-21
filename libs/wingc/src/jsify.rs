@@ -80,10 +80,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn js_resolve_path(path_name: &str) -> String {
-		format!(
-			"require('path').resolve(__dirname, \"{}\").replace(/\\\\/g, \"/\")",
-			path_name
-		)
+		format!("\"./{}\".replace(/\\\\/g, \"/\")", path_name)
 	}
 
 	fn render_block(statements: impl IntoIterator<Item = impl core::fmt::Display>) -> String {
@@ -764,7 +761,7 @@ impl<'a> JSifier<'a> {
 		fs::write(&file_path, proc_source.join("\n")).expect("Writing inflight proc source");
 		let props_block = Self::render_block([
 			format!(
-				"code: {}.core.NodeJsCode.fromFile({}),",
+				"code: {}.core.NodeJsCode.fromFile(require.resolve({})),",
 				STDLIB,
 				Self::js_resolve_path(&relative_file_path)
 			),
@@ -1131,7 +1128,7 @@ impl<'a> JSifier<'a> {
 			.collect_vec();
 
 		let client_source = format!(
-			"export class {} {} {{\n{}\n{}}}",
+			"class {} {} {{\n{}\n{}}}\nexports.{} = {};",
 			name.name,
 			if let Some(parent) = parent {
 				format!("extends {}", self.jsify_user_defined_type(parent))
@@ -1139,7 +1136,9 @@ impl<'a> JSifier<'a> {
 				"".to_string()
 			},
 			client_constructor,
-			client_methods.join("\n")
+			client_methods.join("\n"),
+			name.name,
+			name.name
 		);
 
 		let clients_dir = format!("{}/clients", self.out_dir.to_string_lossy());

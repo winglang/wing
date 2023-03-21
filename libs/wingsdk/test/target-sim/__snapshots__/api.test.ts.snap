@@ -18,7 +18,29 @@ exports[`api handler can read the request params 1`] = `
 
 exports[`api handler can read the request params 2`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(req) { return { status: 200, body: req.query }; }
+};
+})())({
+
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -33,7 +55,7 @@ exports[`api handler can read the request params 2`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js",
+          "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -56,7 +78,7 @@ exports[`api handler can read the request params 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -164,29 +186,6 @@ exports[`api handler can read the request params 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(req) {
-        return { status: 200, body: req.query };
-      }
-    };
-  }())({}).handle(event);
-};
-",
 }
 `;
 
@@ -208,7 +207,29 @@ exports[`api handler can read the request path 1`] = `
 
 exports[`api handler can read the request path 2`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(req) { return { status: 200, body: req.path }; }
+};
+})())({
+
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -223,7 +244,7 @@ exports[`api handler can read the request path 2`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js",
+          "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -246,7 +267,7 @@ exports[`api handler can read the request path 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -354,29 +375,6 @@ exports[`api handler can read the request path 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(req) {
-        return { status: 200, body: req.path };
-      }
-    };
-  }())({}).handle(event);
-};
-",
 }
 `;
 
@@ -398,7 +396,29 @@ exports[`api handler can set response headers 1`] = `
 
 exports[`api handler can set response headers 2`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(req) { return { status: 200, body: req.headers, headers: { \\"x-wingnuts\\": \\"cloudy\\" } }; }
+};
+})())({
+
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -413,7 +433,7 @@ exports[`api handler can set response headers 2`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js",
+          "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -436,7 +456,7 @@ exports[`api handler can set response headers 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -544,29 +564,6 @@ exports[`api handler can set response headers 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(req) {
-        return { status: 200, body: req.headers, headers: { \\"x-wingnuts\\": \\"cloudy\\" } };
-      }
-    };
-  }())({}).handle(event);
-};
-",
 }
 `;
 
@@ -606,7 +603,29 @@ exports[`api supports every method type 1`] = `
 
 exports[`api supports every method type 2`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(req) { return { status: 200, body: req.method }; }
+};
+})())({
+
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -621,7 +640,7 @@ exports[`api supports every method type 2`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js",
+          "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -674,7 +693,7 @@ exports[`api supports every method type 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -854,35 +873,34 @@ exports[`api supports every method type 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(req) {
-        return { status: 200, body: req.method };
-      }
-    };
-  }())({}).handle(event);
-};
-",
 }
 `;
 
 exports[`api with multiple GET routes and one lambda 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(req) { return { status: 200, body: req.body }; }
+};
+})())({
+
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -897,7 +915,7 @@ exports[`api with multiple GET routes and one lambda 1`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js",
+          "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -925,7 +943,7 @@ exports[`api with multiple GET routes and one lambda 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -1033,29 +1051,6 @@ exports[`api with multiple GET routes and one lambda 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(req) {
-        return { status: 200, body: req.body };
-      }
-    };
-  }())({}).handle(event);
-};
-",
 }
 `;
 
@@ -1082,7 +1077,51 @@ exports[`api with multiple methods on same route 1`] = `
 
 exports[`api with multiple methods on same route 2`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_api-onrequesthandler-7c48a9f0_c88f14d5.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(req) { return { status: 200, body: \\"boom\\" }; }
+};
+})())({
+
+})).handle(event);
+};",
+  ".wing/my_api-onrequesthandler-f6d90a7f_c878cf95.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(req) { return { status: 200, body: \\"bang\\" }; }
+};
+})())({
+
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -1097,7 +1136,7 @@ exports[`api with multiple methods on same route 2`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_api-onrequesthandler-7c48a9f0_c88f14d5/index.js",
+          "sourceCodeFile": ".wing/my_api-onrequesthandler-7c48a9f0_c88f14d5.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1110,7 +1149,7 @@ exports[`api with multiple methods on same route 2`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_api-onrequesthandler-f6d90a7f_c878cf95/index.js",
+          "sourceCodeFile": ".wing/my_api-onrequesthandler-f6d90a7f_c878cf95.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1138,7 +1177,7 @@ exports[`api with multiple methods on same route 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler1": {
@@ -1304,52 +1343,6 @@ exports[`api with multiple methods on same route 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_api-onrequesthandler-7c48a9f0_c88f14d5/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(req) {
-        return { status: 200, body: \\"boom\\" };
-      }
-    };
-  }())({}).handle(event);
-};
-",
-  "assets/my_api-onrequesthandler-f6d90a7f_c878cf95/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(req) {
-        return { status: 200, body: \\"bang\\" };
-      }
-    };
-  }())({}).handle(event);
-};
-",
 }
 `;
 
@@ -1376,7 +1369,51 @@ exports[`api with multiple routes 1`] = `
 
 exports[`api with multiple routes 2`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_api-onrequesthandler-7c48a9f0_c88f14d5.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(req) { return { status: 200, body: \\"boom\\" }; }
+};
+})())({
+
+})).handle(event);
+};",
+  ".wing/my_api-onrequesthandler-f6d90a7f_c878cf95.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(req) { return { status: 200, body: \\"bang\\" }; }
+};
+})())({
+
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -1391,7 +1428,7 @@ exports[`api with multiple routes 2`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_api-onrequesthandler-7c48a9f0_c88f14d5/index.js",
+          "sourceCodeFile": ".wing/my_api-onrequesthandler-7c48a9f0_c88f14d5.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1404,7 +1441,7 @@ exports[`api with multiple routes 2`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_api-onrequesthandler-f6d90a7f_c878cf95/index.js",
+          "sourceCodeFile": ".wing/my_api-onrequesthandler-f6d90a7f_c878cf95.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1432,7 +1469,7 @@ exports[`api with multiple routes 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler1": {
@@ -1598,52 +1635,6 @@ exports[`api with multiple routes 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_api-onrequesthandler-7c48a9f0_c88f14d5/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(req) {
-        return { status: 200, body: \\"boom\\" };
-      }
-    };
-  }())({}).handle(event);
-};
-",
-  "assets/my_api-onrequesthandler-f6d90a7f_c878cf95/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(req) {
-        return { status: 200, body: \\"bang\\" };
-      }
-    };
-  }())({}).handle(event);
-};
-",
 }
 `;
 
@@ -1665,7 +1656,29 @@ exports[`api with one GET route 1`] = `
 
 exports[`api with one GET route 2`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(req) { return { status: 200, body: \\"boom\\" }; }
+};
+})())({
+
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -1680,7 +1693,7 @@ exports[`api with one GET route 2`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js",
+          "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1703,7 +1716,7 @@ exports[`api with one GET route 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -1811,29 +1824,6 @@ exports[`api with one GET route 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(req) {
-        return { status: 200, body: \\"boom\\" };
-      }
-    };
-  }())({}).handle(event);
-};
-",
 }
 `;
 
@@ -1855,7 +1845,29 @@ exports[`api with one POST route, with body 1`] = `
 
 exports[`api with one POST route, with body 2`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(req) { return { status: 200, body: req.body }; }
+};
+})())({
+
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -1870,7 +1882,7 @@ exports[`api with one POST route, with body 2`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js",
+          "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1893,7 +1905,7 @@ exports[`api with one POST route, with body 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -2001,35 +2013,12 @@ exports[`api with one POST route, with body 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_api-onrequesthandler-e645076f_c8b4bd6e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(req) {
-        return { status: 200, body: req.body };
-      }
-    };
-  }())({}).handle(event);
-};
-",
 }
 `;
 
 exports[`create an api 1`] = `
 {
-  "app.wsim/simulator.json": {
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -2048,7 +2037,7 @@ exports[`create an api 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {

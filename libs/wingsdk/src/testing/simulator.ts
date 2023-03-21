@@ -1,6 +1,5 @@
 import { existsSync } from "fs";
 import { join } from "path";
-import * as tar from "tar";
 import { Tree } from "./tree";
 import { SDK_VERSION } from "../constants";
 import { ConstructTree } from "../core";
@@ -10,14 +9,14 @@ import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
 // eslint-disable-next-line import/no-restricted-paths
 import { Function } from "../target-sim/function.inflight";
 import { BaseResourceSchema, WingSimulatorSchema } from "../target-sim/schema";
-import { mkdtemp, readJsonSync } from "../util";
+import { readJsonSync } from "../util";
 
 /**
  * Props for `Simulator`.
  */
 export interface SimulatorProps {
   /**
-   * Path to a Wing simulator file (.wsim).
+   * Path to a Wing simulator output directory (.wsim).
    */
   readonly simfile: string;
 
@@ -114,10 +113,9 @@ export enum TraceType {
  */
 export interface ISimulatorContext {
   /**
-   * The directory where all assets extracted from `.wsim` file are stored
-   * during the simulation run.
+   * This directory where the compilation output is
    */
-  readonly assetsDir: string;
+  readonly simdir: string;
 
   /**
    * The path of the resource that is being simulated.
@@ -160,8 +158,7 @@ export class Simulator {
   // fields that are same between simulation runs / reloads
   private readonly _factory: ISimulatorFactory;
   private _config: WingSimulatorSchema;
-  private readonly _simfile: string;
-  private _assetsDir: string;
+  private readonly simdir: string;
 
   // fields that change between simulation runs / reloads
   private _running: boolean;
@@ -171,10 +168,9 @@ export class Simulator {
   private _tree: Tree;
 
   constructor(props: SimulatorProps) {
-    this._simfile = props.simfile;
-    const { assetsDir, config, treeData } = this._loadApp(props.simfile);
+    this.simdir = props.simfile;
+    const { config, treeData } = this._loadApp(props.simfile);
     this._config = config;
-    this._assetsDir = assetsDir;
     this._tree = new Tree(treeData);
 
     this._running = false;
@@ -184,23 +180,14 @@ export class Simulator {
     this._traceSubscribers = new Array();
   }
 
-  private _loadApp(simfile: string): {
-    assetsDir: string;
+  private _loadApp(simdir: string): {
     config: any;
     treeData: ConstructTree;
   } {
-    // create a temporary directory to store extracted files
-    const workdir = mkdtemp();
-    tar.extract({
-      cwd: workdir,
-      sync: true,
-      file: simfile,
-    });
-
-    const simJson = join(workdir, "simulator.json");
+    const simJson = join(this.simdir, "simulator.json");
     if (!existsSync(simJson)) {
       throw new Error(
-        `Invalid Wing app (${simfile}) - simulator.json not found.`
+        `Invalid Wing app (${simdir}) - simulator.json not found.`
       );
     }
 
@@ -210,22 +197,22 @@ export class Simulator {
     const expectedVersion = SDK_VERSION;
     if (foundVersion !== expectedVersion) {
       console.error(
-        `WARNING: The simulator file (${simfile}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
+        `WARNING: The simulator directory (${simdir}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
       );
     }
     if (config.resources === undefined) {
       throw new Error(
-        `Incompatible .wsim file. The simulator file (${simfile}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
+        `Incompatible .wsim file. The simulator directory (${simdir}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
       );
     }
 
-    const treeJson = join(workdir, "tree.json");
+    const treeJson = join(this.simdir, "tree.json");
     if (!existsSync(treeJson)) {
-      throw new Error(`Invalid Wing app (${simfile}) - tree.json not found.`);
+      throw new Error(`Invalid Wing app (${simdir}) - tree.json not found.`);
     }
     const treeData = readJsonSync(treeJson);
 
-    return { assetsDir: workdir, config, treeData };
+    return { config, treeData };
   }
 
   /**
@@ -242,7 +229,7 @@ export class Simulator {
 
     for (const resourceConfig of this._config.resources) {
       const context: ISimulatorContext = {
-        assetsDir: this._assetsDir,
+        simdir: this.simdir,
         resourcePath: resourceConfig.path,
         findInstance: (handle: string) => {
           return this._handles.find(handle);
@@ -347,9 +334,8 @@ export class Simulator {
   public async reload(): Promise<void> {
     await this.stop();
 
-    const { assetsDir, config, treeData } = this._loadApp(this._simfile);
+    const { config, treeData } = this._loadApp(this.simdir);
     this._config = config;
-    this._assetsDir = assetsDir;
     this._tree = new Tree(treeData);
 
     await this.start();
@@ -460,7 +446,7 @@ export class Simulator {
    */
   public async runTest(path: string): Promise<TestResult> {
     // create a new simulator instance to run this test in isolation
-    const isolated = new Simulator({ simfile: this._simfile });
+    const isolated = new Simulator({ simfile: this.simdir });
     await isolated.start();
 
     // find the test function and verify it exists and indeed is a function

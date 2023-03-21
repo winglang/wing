@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`wing compile -t tf-aws > clients/Foo.inflight.js 1`] = `
-"export class Foo  {
+"class Foo  {
 constructor({  }) {
 
 
@@ -10,7 +10,8 @@ async handle(message)  {
 	{
   return \\"hello world!\\";
 }
-}}"
+}}
+exports.Foo = Foo;"
 `;
 
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
@@ -209,14 +210,14 @@ constructor() {
   	
   	_toInflight() {
   	
-  	const self_client_path = require('path').resolve(__dirname, \\"clients/Foo.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	const self_client_path = \\"./clients/Foo.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo({}))\`);
   }
   }
   Foo._annotateInflight(\\"handle\\", {});
   const fn = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"cloud.Function\\",new Foo(this,\\"Foo\\"));
   this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.917572587cf19c37eec89740530b1f8d71072e09ccaeb9cbd4a3121ba0794d2a/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.917572587cf19c37eec89740530b1f8d71072e09ccaeb9cbd4a3121ba0794d2a/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
       fn: {
         obj: fn,

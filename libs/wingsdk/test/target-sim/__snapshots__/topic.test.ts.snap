@@ -2,7 +2,7 @@
 
 exports[`create a topic 1`] = `
 {
-  "app.wsim/simulator.json": {
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -21,7 +21,7 @@ exports[`create a topic 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {

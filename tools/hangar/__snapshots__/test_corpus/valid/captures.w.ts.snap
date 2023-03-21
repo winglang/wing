@@ -400,7 +400,7 @@ constructor() {
   const bucket3 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"PrivateBucket\\",{ public: false });
   const queue = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Queue\\",this,\\"cloud.Queue\\");
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.7117cacac13b5aec2868af198145d060294a0f8c3a40444eeae5b1f6002f9e77/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.7117cacac13b5aec2868af198145d060294a0f8c3a40444eeae5b1f6002f9e77/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
       bucket1: {
         obj: bucket1,

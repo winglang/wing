@@ -2,7 +2,7 @@
 
 exports[`create a queue 1`] = `
 {
-  "app.wsim/simulator.json": {
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -23,7 +23,7 @@ exports[`create a queue 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {
@@ -80,10 +80,10 @@ exports[`messages are requeued if the function fails 1`] = `
   "Push (message=BAD MESSAGE).",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
-  "Subscriber error - returning 1 messages to queue.",
+  "Subscriber error - returning 1 messages to queue: ERROR",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
-  "Subscriber error - returning 1 messages to queue.",
+  "Subscriber error - returning 1 messages to queue: ERROR",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
@@ -92,7 +92,34 @@ exports[`messages are requeued if the function fails 1`] = `
 
 exports[`messages are requeued if the function fails 2`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_queue-onmessage-e645076f_c89a8f49.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.js\\")).QueueOnMessageHandlerClient({ handler: new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  
+async handle(message) {
+    if (message === \\"BAD MESSAGE\\") {
+        throw new Error(\\"ERROR\\");
+    }
+}
+};
+})())({
+
+}) })).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -107,7 +134,7 @@ exports[`messages are requeued if the function fails 2`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_queue-onmessage-e645076f_c89a8f49/index.js",
+          "sourceCodeFile": ".wing/my_queue-onmessage-e645076f_c89a8f49.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -131,7 +158,7 @@ exports[`messages are requeued if the function fails 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -262,76 +289,6 @@ exports[`messages are requeued if the function fails 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_queue-onmessage-e645076f_c89a8f49/index.js": "var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-};
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === \\"object\\" || typeof from === \\"function\\") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toCommonJS = (mod) => __copyProps(__defProp({}, \\"__esModule\\", { value: true }), mod);
-
-var queue_onmessage_inflight_exports = {};
-__export(queue_onmessage_inflight_exports, {
-  QueueOnMessageHandlerClient: () => QueueOnMessageHandlerClient
-});
-var QueueOnMessageHandlerClient;
-var init_queue_onmessage_inflight = __esm({
-  \\"src/target-sim/queue.onmessage.inflight.ts\\"() {
-    \\"use strict\\";
-    QueueOnMessageHandlerClient = class {
-      constructor({ handler }) {
-        this.handler = handler;
-      }
-      async handle(event) {
-        let parsed = JSON.parse(event);
-        if (!parsed.messages)
-          throw new Error('No \\"messages\\" field in event.');
-        for (const $message of parsed.messages) {
-          await this.handler.handle($message);
-        }
-      }
-    };
-  }
-});
-
-var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (init_queue_onmessage_inflight(), __toCommonJS(queue_onmessage_inflight_exports)).QueueOnMessageHandlerClient({ handler: new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(message) {
-        if (message === \\"BAD MESSAGE\\") {
-          throw new Error(\\"ERROR\\");
-        }
-      }
-    };
-  }())({}) }).handle(event);
-};
-",
 }
 `;
 
@@ -351,7 +308,7 @@ exports[`queue batch size of 2, purge the queue 1`] = `
 
 exports[`queue batch size of 2, purge the queue 2`] = `
 {
-  "app.wsim/simulator.json": {
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -372,7 +329,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {
@@ -438,7 +395,34 @@ exports[`queue with one subscriber, batch size of 5 1`] = `
 
 exports[`queue with one subscriber, batch size of 5 2`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_queue-onmessage-e645076f_c89a8f49.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.js\\")).QueueOnMessageHandlerClient({ handler: new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  
+async handle(message) {
+    if (message === \\"BAD MESSAGE\\") {
+        throw new Error(\\"ERROR\\");
+    }
+}
+};
+})())({
+
+}) })).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -453,7 +437,7 @@ exports[`queue with one subscriber, batch size of 5 2`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_queue-onmessage-e645076f_c89a8f49/index.js",
+          "sourceCodeFile": ".wing/my_queue-onmessage-e645076f_c89a8f49.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -484,7 +468,7 @@ exports[`queue with one subscriber, batch size of 5 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -615,76 +599,6 @@ exports[`queue with one subscriber, batch size of 5 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_queue-onmessage-e645076f_c89a8f49/index.js": "var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-};
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === \\"object\\" || typeof from === \\"function\\") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toCommonJS = (mod) => __copyProps(__defProp({}, \\"__esModule\\", { value: true }), mod);
-
-var queue_onmessage_inflight_exports = {};
-__export(queue_onmessage_inflight_exports, {
-  QueueOnMessageHandlerClient: () => QueueOnMessageHandlerClient
-});
-var QueueOnMessageHandlerClient;
-var init_queue_onmessage_inflight = __esm({
-  \\"src/target-sim/queue.onmessage.inflight.ts\\"() {
-    \\"use strict\\";
-    QueueOnMessageHandlerClient = class {
-      constructor({ handler }) {
-        this.handler = handler;
-      }
-      async handle(event) {
-        let parsed = JSON.parse(event);
-        if (!parsed.messages)
-          throw new Error('No \\"messages\\" field in event.');
-        for (const $message of parsed.messages) {
-          await this.handler.handle($message);
-        }
-      }
-    };
-  }
-});
-
-var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (init_queue_onmessage_inflight(), __toCommonJS(queue_onmessage_inflight_exports)).QueueOnMessageHandlerClient({ handler: new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(message) {
-        if (message === \\"BAD MESSAGE\\") {
-          throw new Error(\\"ERROR\\");
-        }
-      }
-    };
-  }())({}) }).handle(event);
-};
-",
 }
 `;
 
@@ -707,7 +621,34 @@ exports[`queue with one subscriber, default batch size of 1 1`] = `
 
 exports[`queue with one subscriber, default batch size of 1 2`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_queue-onmessage-e645076f_c89a8f49.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.js\\")).QueueOnMessageHandlerClient({ handler: new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  
+async handle(message) {
+    if (message === \\"BAD MESSAGE\\") {
+        throw new Error(\\"ERROR\\");
+    }
+}
+};
+})())({
+
+}) })).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -722,7 +663,7 @@ exports[`queue with one subscriber, default batch size of 1 2`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_queue-onmessage-e645076f_c89a8f49/index.js",
+          "sourceCodeFile": ".wing/my_queue-onmessage-e645076f_c89a8f49.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -746,7 +687,7 @@ exports[`queue with one subscriber, default batch size of 1 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -877,75 +818,5 @@ exports[`queue with one subscriber, default batch size of 1 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_queue-onmessage-e645076f_c89a8f49/index.js": "var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-};
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === \\"object\\" || typeof from === \\"function\\") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toCommonJS = (mod) => __copyProps(__defProp({}, \\"__esModule\\", { value: true }), mod);
-
-var queue_onmessage_inflight_exports = {};
-__export(queue_onmessage_inflight_exports, {
-  QueueOnMessageHandlerClient: () => QueueOnMessageHandlerClient
-});
-var QueueOnMessageHandlerClient;
-var init_queue_onmessage_inflight = __esm({
-  \\"src/target-sim/queue.onmessage.inflight.ts\\"() {
-    \\"use strict\\";
-    QueueOnMessageHandlerClient = class {
-      constructor({ handler }) {
-        this.handler = handler;
-      }
-      async handle(event) {
-        let parsed = JSON.parse(event);
-        if (!parsed.messages)
-          throw new Error('No \\"messages\\" field in event.');
-        for (const $message of parsed.messages) {
-          await this.handler.handle($message);
-        }
-      }
-    };
-  }
-});
-
-var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (init_queue_onmessage_inflight(), __toCommonJS(queue_onmessage_inflight_exports)).QueueOnMessageHandlerClient({ handler: new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(message) {
-        if (message === \\"BAD MESSAGE\\") {
-          throw new Error(\\"ERROR\\");
-        }
-      }
-    };
-  }())({}) }).handle(event);
-};
-",
 }
 `;
