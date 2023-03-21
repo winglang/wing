@@ -155,7 +155,7 @@ impl Display for TypeAnnotation {
 
 impl Display for FunctionSignature {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let phase_str = match self.flight {
+		let phase_str = match self.phase {
 			Phase::Inflight => "inflight ",
 			Phase::Preflight => "preflight ",
 			Phase::Independent => "",
@@ -179,7 +179,7 @@ impl Display for FunctionSignature {
 pub struct FunctionSignature {
 	pub parameters: Vec<TypeAnnotation>,
 	pub return_type: Option<Box<TypeAnnotation>>,
-	pub flight: Phase,
+	pub phase: Phase,
 }
 
 #[derive(Debug)]
@@ -324,7 +324,7 @@ pub struct ClassField {
 	pub name: Symbol,
 	pub member_type: TypeAnnotation,
 	pub reassignable: bool,
-	pub flight: Phase,
+	pub phase: Phase,
 	pub is_static: bool,
 }
 
@@ -360,7 +360,7 @@ pub enum ExprKind {
 	StructLiteral {
 		type_: TypeAnnotation,
 		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
-		fields: BTreeMap<Symbol, Expr>,
+		fields: BTreeMap<String, (Symbol, Expr)>,
 	},
 	MapLiteral {
 		type_: Option<TypeAnnotation>,

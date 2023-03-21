@@ -4,9 +4,9 @@ import { test } from "vitest";
 import { compileTest, testTest } from "../../generated_test_targets";
 
 test("wing compile -t tf-aws", async ({ expect }) => {
-  await compileTest(expect, "resource_captures.w");
+  await compileTest(expect, "resource_as_inflight_literal.w");
 });
 
 test("wing test", async ({ expect }) => {
-  await testTest(expect, "resource_captures.w");
+  await testTest(expect, "resource_as_inflight_literal.w");
 });

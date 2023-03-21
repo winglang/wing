@@ -133,7 +133,7 @@ constructor() {
   const my_second_bool = false;
   const my_dur = $stdlib.std.Duration.fromSeconds(600);
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.275873c041545c7a2de55149fb73b77f5b75da61d16914ceadd71c3445173d97/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.275873c041545c7a2de55149fb73b77f5b75da61d16914ceadd71c3445173d97/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
       my_bool: {
         obj: my_bool,

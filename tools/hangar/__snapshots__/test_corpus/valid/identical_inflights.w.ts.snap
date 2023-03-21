@@ -44,12 +44,12 @@ constructor() {
   super({ outdir: $outdir, name: \\"identical_inflights\\", plugins: $plugins });
   
   const x = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
     }
   });
   const y = new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
     }
   });

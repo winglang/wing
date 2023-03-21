@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { Construct } from "constructs";
-import * as tar from "tar";
+import { Api } from "./api";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Function } from "./function";
@@ -12,6 +12,7 @@ import { WingSimulatorSchema } from "./schema";
 import { Table } from "./table";
 import { Topic } from "./topic";
 import {
+  API_FQN,
   BUCKET_FQN,
   COUNTER_FQN,
   FUNCTION_FQN,
@@ -23,7 +24,7 @@ import {
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
-import { mkdtemp, SIMULATOR_FILE_PATH } from "../util";
+import { SIMULATOR_FILE_PATH } from "../util";
 
 /**
  * A construct that knows how to synthesize simulator resources into a
@@ -31,27 +32,17 @@ import { mkdtemp, SIMULATOR_FILE_PATH } from "../util";
  */
 export class App extends core.App {
   /**
-   * Directory where artifacts are synthesized to.
-   */
-  public readonly workdir: string;
-
-  /**
    * The output directory of this app.
    */
-  protected readonly outdir: string;
+  public readonly outdir: string;
 
-  private readonly name: string;
-  private readonly simfile: string;
   private synthed = false;
 
   constructor(props: core.AppProps) {
     super(undefined as any, "root");
-    this.name = props.name ?? "app";
     this.outdir = props.outdir ?? ".";
-    this.workdir = mkdtemp();
 
     Logger.register(this);
-    this.simfile = path.join(this.outdir, `${this.name}.wsim`);
   }
 
   protected tryNew(
@@ -61,6 +52,9 @@ export class App extends core.App {
     ...args: any[]
   ): any {
     switch (fqn) {
+      case API_FQN:
+        return new Api(scope, id, args[0]);
+
       case FUNCTION_FQN:
         return new Function(scope, id, args[0], args[1]);
 
@@ -95,32 +89,23 @@ export class App extends core.App {
    */
   public synth(): string {
     if (this.synthed) {
-      return this.simfile;
+      return this.outdir;
     }
+
+    fs.mkdirSync(this.outdir, { recursive: true });
 
     // call preSynthesize() on every construct in the tree
     preSynthesizeAllConstructs(this);
 
     // write simulator.json file into workdir
-    this.synthSimulatorFile(this.workdir);
+    this.synthSimulatorFile(this.outdir);
 
     // write tree.json file into workdir
-    core.synthesizeTree(this, this.workdir);
-
-    // tar + gzip the workdir, and write it as a .wsim file to the simfile
-    tar.create(
-      {
-        gzip: true,
-        cwd: this.workdir,
-        sync: true,
-        file: this.simfile,
-      },
-      ["./"]
-    );
+    core.synthesizeTree(this, this.outdir);
 
     this.synthed = true;
 
-    return this.simfile;
+    return this.outdir;
   }
 
   private synthSimulatorFile(outdir: string) {

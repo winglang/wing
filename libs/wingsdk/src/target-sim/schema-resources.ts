@@ -1,6 +1,7 @@
-import { BaseResourceSchema } from "./schema";
-import { ColumnType } from "../cloud";
+import { BaseResourceAttributes, BaseResourceSchema } from "./schema";
+import { ColumnType, HttpMethod } from "../cloud";
 
+export const API_TYPE = "wingsdk.cloud.Api";
 export const QUEUE_TYPE = "wingsdk.cloud.Queue";
 export const FUNCTION_TYPE = "wingsdk.cloud.Function";
 export const BUCKET_TYPE = "wingsdk.cloud.Bucket";
@@ -11,6 +12,32 @@ export const TABLE_TYPE = "wingsdk.cloud.Table";
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 
 export type FunctionHandle = string;
+
+/** Schema for cloud.Api */
+export interface ApiSchema extends BaseResourceSchema {
+  readonly type: typeof API_TYPE;
+  readonly props: {
+    /** The routes that the API should handle. */
+    readonly routes: ApiRoute[];
+  };
+  readonly attrs: ApiAttributes & BaseResourceAttributes;
+}
+
+/** Runtime attributes for cloud.Api */
+export interface ApiAttributes {
+  /** The URL of the API. */
+  readonly url: string;
+}
+
+/** Schema for cloud.Api.props.routes */
+export interface ApiRoute {
+  /** The route to handle. */
+  readonly route: string;
+  /** The HTTP method to handle. */
+  readonly method: HttpMethod;
+  /** The function that should be called when the route is hit. */
+  readonly functionHandle: FunctionHandle;
+}
 
 /** Schema for cloud.Function */
 export interface FunctionSchema extends BaseResourceSchema {
@@ -27,6 +54,9 @@ export interface FunctionSchema extends BaseResourceSchema {
   };
 }
 
+/** Runtime attributes for cloud.Function */
+export interface FunctionAttributes {}
+
 /** Schema for cloud.Queue */
 export interface QueueSchema extends BaseResourceSchema {
   readonly type: typeof QUEUE_TYPE;
@@ -39,6 +69,9 @@ export interface QueueSchema extends BaseResourceSchema {
     readonly initialMessages: string[];
   };
 }
+
+/** Runtime attributes for cloud.Queue */
+export interface QueueAttributes {}
 
 /** Schema for cloud.Queue.props.subscribers */
 export interface QueueSubscriber {
@@ -55,6 +88,9 @@ export interface TopicSchema extends BaseResourceSchema {
     readonly subscribers: TopicSubscriber[];
   };
 }
+
+/** Runtime attributes for cloud.Topic */
+export interface TopicAttributes {}
 
 export interface TopicSubscriber {
   /** Function that should be called */
@@ -82,11 +118,17 @@ export interface BucketSchema extends BaseResourceSchema {
   };
 }
 
+/** Runtime attributes for cloud.Bucket */
+export interface BucketAttributes {}
+
 /** Schema for cloud.Logger */
 export interface LoggerSchema extends BaseResourceSchema {
   readonly type: typeof LOGGER_TYPE;
   readonly props: {};
 }
+
+/** Runtime attributes for cloud.Logger */
+export interface LoggerAttributes {}
 
 /** Schema for cloud.Counter */
 export interface CounterSchema extends BaseResourceSchema {
@@ -96,3 +138,6 @@ export interface CounterSchema extends BaseResourceSchema {
     readonly initial: number;
   };
 }
+
+/** Runtime attributes for cloud.Counter */
+export interface CounterAttributes {}

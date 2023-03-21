@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { Function } from "./function";
 import { fqnForType } from "../constants";
-import { IResource, Inflight, Resource, App } from "../core";
+import { IResource, Resource, App } from "../core";
 
 export const TOPIC_FQN = fqnForType("cloud.Topic");
 
@@ -43,7 +43,7 @@ export abstract class Topic extends Resource {
    * Run an inflight whenever an message is published to the topic.
    */
   public abstract onMessage(
-    inflight: Inflight,
+    inflight: ITopicOnMessageHandler,
     props?: TopicOnMessageProps
   ): Function;
 }
