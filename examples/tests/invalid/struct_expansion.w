@@ -12,6 +12,10 @@ let handler = inflight (event: str): str => {
             //^^^^^^^^^^^^^^^^ Named arguments must be after positional arguments
 };
 
+let x = cloud.ApiResponse {
+  body: Json "Hello, world!",
+};
+
 new cloud.Function(
   handler, 
   cloud.FunctionProps {

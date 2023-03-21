@@ -1421,23 +1421,21 @@ impl<'a> TypeChecker<'a> {
 					.expect(&format!("Expected \"{}\" to be a struct type", struct_type));
 
 				// Verify that all fields are present and are of the right type
-				if st.env.iter(true).count() > fields.len() {
-					panic!("Not all fields of {} are initialized.", struct_type);
-				}
-				for (k, v) in fields.iter() {
-					let field = st.env.try_lookup(&k.name, None);
-					if let Some(field) = field {
-						let t = self.type_check_exp(v, env, statement_idx, context);
-						self.validate_type(
-							t,
-							field
-								.as_variable()
-								.expect("Expected struct field to be a variable in the struct env")
-								.type_,
-							v,
-						);
-					} else {
-						self.expr_error(exp, format!("\"{}\" is not a field of \"{}\"", k.name, struct_type));
+				for (name, kind, _info) in st.env.iter(true) {
+					let field_type = kind
+						.as_variable()
+						.expect("Expected struct field to be a variable in the struct env")
+						.type_;
+					match fields.get(&name) {
+						Some((_, field_exp)) => {
+							let t = self.type_check_exp(field_exp, env, statement_idx, context);
+							self.validate_type(t, field_type, field_exp);
+						}
+						None => {
+							if !field_type.is_option() {
+								self.expr_error(exp, format!("\"{}\" is not initialized", name));
+							}
+						}
 					}
 				}
 

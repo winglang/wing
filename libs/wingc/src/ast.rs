@@ -360,7 +360,7 @@ pub enum ExprKind {
 	StructLiteral {
 		type_: TypeAnnotation,
 		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
-		fields: BTreeMap<Symbol, Expr>,
+		fields: BTreeMap<String, (Symbol, Expr)>,
 	},
 	MapLiteral {
 		type_: Option<TypeAnnotation>,

@@ -475,7 +475,7 @@ impl<'a> JSifier<'a> {
 				format!(
 					"{{\n{}}}\n",
 					fields
-						.iter()
+						.values()
 						.map(|(name, expr)| format!("\"{}\": {},", name.name, self.jsify_expression(expr, context)))
 						.collect::<Vec<String>>()
 						.join("\n")

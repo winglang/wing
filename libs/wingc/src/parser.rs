@@ -1049,7 +1049,7 @@ impl<'s> Parser<'s> {
 			"set_literal" => self.build_set_literal(expression_node),
 			"struct_literal" => {
 				let type_ = self.build_type_annotation(&expression_node.child_by_field_name("type").unwrap());
-				let mut fields = BTreeMap::new();
+				let mut fields: BTreeMap<String, (Symbol, Expr)> = BTreeMap::new();
 				let mut cursor = expression_node.walk();
 				for field in expression_node.children_by_field_name("fields", &mut cursor) {
 					if !field.is_named() || field.is_extra() {
@@ -1059,11 +1059,11 @@ impl<'s> Parser<'s> {
 					let field_value = self.build_expression(&field.named_child(1).unwrap());
 					// Add fields to our struct literal, if some are missing or aren't part of the type we'll fail on type checking
 					if let (Ok(k), Ok(v)) = (field_name, field_value) {
-						if fields.contains_key(&k) {
+						if fields.contains_key(&k.name) {
 							// TODO: ugly, we need to change add_error to not return anything and have a wrapper `raise_error` that returns a Result
 							_ = self.add_error::<()>(format!("Duplicate field {} in struct literal", k), expression_node);
 						} else {
-							fields.insert(k, v);
+							fields.insert(k.name.clone(), (k, v));
 						}
 					}
 				}
