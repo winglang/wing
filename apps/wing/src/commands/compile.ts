@@ -191,7 +191,6 @@ export async function compile(entrypoint: string, options: ICompileOptions): Pro
     Date,
     Function,
   });
-  log("evaluating artifact in context: %o", context);
 
   try {
     vm.runInContext(artifact, context);
