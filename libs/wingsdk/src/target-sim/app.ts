@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { Construct } from "constructs";
+import { Api } from "./api";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Function } from "./function";
@@ -10,6 +11,7 @@ import { isSimulatorResource } from "./resource";
 import { WingSimulatorSchema } from "./schema";
 import { Topic } from "./topic";
 import {
+  API_FQN,
   BUCKET_FQN,
   COUNTER_FQN,
   FUNCTION_FQN,
@@ -48,6 +50,9 @@ export class App extends core.App {
     ...args: any[]
   ): any {
     switch (fqn) {
+      case API_FQN:
+        return new Api(scope, id, args[0]);
+
       case FUNCTION_FQN:
         return new Function(scope, id, args[0], args[1]);
 

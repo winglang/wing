@@ -8,7 +8,11 @@ import {
   ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE,
 } from "./function";
 import { ISimulatorResourceInstance } from "./resource";
-import { FunctionSchema, FUNCTION_TYPE } from "./schema-resources";
+import {
+  FunctionAttributes,
+  FunctionSchema,
+  FUNCTION_TYPE,
+} from "./schema-resources";
 import { IFunctionClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
 
@@ -28,8 +32,8 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     this.timeout = props.timeout;
   }
 
-  public async init(): Promise<void> {
-    return;
+  public async init(): Promise<FunctionAttributes> {
+    return {};
   }
 
   public async cleanup(): Promise<void> {
@@ -40,7 +44,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     const userCode = fs.readFileSync(this.filename, "utf8");
 
     return this.context.withTrace({
-      message: `Invoke (payload="${JSON.stringify(payload)}").`,
+      message: `Invoke (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
         return runInSandbox(userCode, payload, {
           resolveDir: dirname(this.filename),

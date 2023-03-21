@@ -26,5 +26,7 @@ export interface IScopeCallback {
 }
 
 export function listMessages(s: Simulator) {
-  return s.listTraces().map((trace) => trace.data.message);
+  const message = s.listTraces().map((trace) => trace.data.message);
+  // Redact any messages containing port numbers
+  return message.map((m) => m.replace(/:\d+/, ":<port>"));
 }

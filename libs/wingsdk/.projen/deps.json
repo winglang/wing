@@ -9,6 +9,16 @@
       "type": "build"
     },
     {
+      "name": "@types/express-serve-static-core",
+      "version": "4.17.28",
+      "type": "build"
+    },
+    {
+      "name": "@types/express",
+      "version": "4.17.13",
+      "type": "build"
+    },
+    {
       "name": "@types/fs-extra",
       "type": "build"
     },
@@ -217,6 +227,10 @@
     },
     {
       "name": "esbuild-wasm",
+      "type": "bundled"
+    },
+    {
+      "name": "express",
       "type": "bundled"
     },
     {
