@@ -274,9 +274,6 @@ export abstract class CdktfApp extends App {
     this.synthed = true;
     this.synthedOutput = stringify(cleaned, null, 2) ?? "";
 
-    // clean up working directory
-    rmSync(this.workdir, { recursive: true, force: true });
-
     return this.synthedOutput;
   }
 
