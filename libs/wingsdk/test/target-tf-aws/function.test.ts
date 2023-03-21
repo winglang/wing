@@ -121,9 +121,9 @@ test("basic function with memory size specified", () => {
 
 test("asset path is stripped of spaces", () => {
   // GIVEN
-  const some_name = "I have a space in my name"
+  const some_name = "I have a space in my name";
   const expectedReplacement = "i_have_a_space_in_my_name";
-  const app = new tfaws.App({outdir: mkdtemp()});
+  const app = new tfaws.App({ outdir: mkdtemp() });
   const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const f = Function._newFunction(app, some_name, inflight);
   // WHEN
