@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`wing compile -t tf-aws > clients/Bar.inflight.js 1`] = `
-"export class Bar  {
+"class Bar  {
 constructor({ b, foo, name }) {
 
   this.b = b;
@@ -14,11 +14,12 @@ async my_method()  {
   (await this.b.put(\\"foo\\",\`counter is: \${(await this.foo.foo_get())}\`));
   return (await this.b.get(\\"foo\\"));
 }
-}}"
+}}
+exports.Bar = Bar;"
 `;
 
 exports[`wing compile -t tf-aws > clients/Foo.inflight.js 1`] = `
-"export class Foo  {
+"class Foo  {
 constructor({ c }) {
 
   this.c = c;
@@ -32,7 +33,8 @@ async foo_get()  {
 	{
   return (await this.c.peek());
 }
-}}"
+}}
+exports.Foo = Foo;"
 `;
 
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
@@ -236,7 +238,7 @@ constructor() {
   	
   	_toInflight() {
   	const c_client = this._lift(this.c);
-  	const self_client_path = require('path').resolve(__dirname, \\"clients/Foo.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	const self_client_path = \\"./clients/Foo.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo({c: \${c_client}}))\`);
   }
   }
@@ -256,7 +258,7 @@ constructor() {
   	const b_client = this._lift(this.b);
   const foo_client = this._lift(this.foo);
   const name_client = this._lift(this.name);
-  	const self_client_path = require('path').resolve(__dirname, \\"clients/Bar.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	const self_client_path = \\"./clients/Bar.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Bar({b: \${b_client}, foo: \${foo_client}, name: \${name_client}}))\`);
   }
   }
@@ -264,7 +266,7 @@ constructor() {
   const bucket = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
   const res = new Bar(this,\\"Bar\\",\\"Arr\\",bucket);
   this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.e50bc85b13df379286b4aa72aa88788422e26d9146adbc9bba989a8a59253a73/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.e50bc85b13df379286b4aa72aa88788422e26d9146adbc9bba989a8a59253a73/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
       bucket: {
         obj: bucket,

@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`wing compile -t tf-aws > clients/Another.inflight.js 1`] = `
-"export class Another  {
+"class Another  {
 constructor({ first, my_field }) {
 
   this.first = first;
@@ -16,20 +16,22 @@ async another_func()  {
 	{
   return \\"42\\";
 }
-}}"
+}}
+exports.Another = Another;"
 `;
 
 exports[`wing compile -t tf-aws > clients/First.inflight.js 1`] = `
-"export class First  {
+"class First  {
 constructor({ my_resource }) {
 
   this.my_resource = my_resource;
 }
-}"
+}
+exports.First = First;"
 `;
 
 exports[`wing compile -t tf-aws > clients/MyResource.inflight.js 1`] = `
-"export class MyResource  {
+"class MyResource  {
 constructor({ another, array_of_str, ext_bucket, ext_num, map_of_num, my_bool, my_num, my_queue, my_resource, my_str, set_of_str }) {
 
   this.another = another;
@@ -112,7 +114,8 @@ async test_inflight_field()  {
   this.inflight_field = 123;
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(this.inflight_field === 123)'\`)})((this.inflight_field === 123))};
 }
-}}"
+}}
+exports.MyResource = MyResource;"
 `;
 
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
@@ -377,7 +380,7 @@ constructor() {
   	
   	_toInflight() {
   	const my_resource_client = this._lift(this.my_resource);
-  	const self_client_path = require('path').resolve(__dirname, \\"clients/First.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	const self_client_path = \\"./clients/First.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).First({my_resource: \${my_resource_client}}))\`);
   }
   }
@@ -394,7 +397,7 @@ constructor() {
   	_toInflight() {
   	const first_client = this._lift(this.first);
   const my_field_client = this._lift(this.my_field);
-  	const self_client_path = require('path').resolve(__dirname, \\"clients/Another.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	const self_client_path = \\"./clients/Another.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Another({first: \${first_client}, my_field: \${my_field_client}}))\`);
   }
   }
@@ -434,7 +437,7 @@ constructor() {
   const my_resource_client = this._lift(this.my_resource);
   const my_str_client = this._lift(this.my_str);
   const set_of_str_client = this._lift(this.set_of_str);
-  	const self_client_path = require('path').resolve(__dirname, \\"clients/MyResource.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	const self_client_path = \\"./clients/MyResource.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).MyResource({another: \${another_client}, array_of_str: \${array_of_str_client}, ext_bucket: \${ext_bucket_client}, ext_num: \${ext_num_client}, map_of_num: \${map_of_num_client}, my_bool: \${my_bool_client}, my_num: \${my_num_client}, my_queue: \${my_queue_client}, my_resource: \${my_resource_client}, my_str: \${my_str_client}, set_of_str: \${set_of_str_client}}))\`);
   }
   }
@@ -451,7 +454,7 @@ constructor() {
   const b = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
   const r = new MyResource(this,\\"MyResource\\",b,12);
   this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.036fd96aa6897235ab34914959c244c2e2cd336a59d3482f555cb6f4da320b4c/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.036fd96aa6897235ab34914959c244c2e2cd336a59d3482f555cb6f4da320b4c/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
       r: {
         obj: r,
@@ -480,8 +483,8 @@ exports[`wing compile -t tf-aws > proc.036fd96aa6897235ab34914959c244c2e2cd336a5
 `;
 
 exports[`wing test > stdout 1`] = `
-"pass ┌ resource_captures.w » root/test
-     │ array.len=3
-     │ field=hello!
-     └ this.another.first.my_resource:my_string"
+"array.len=3
+field=hello!
+this.another.first.my_resource:my_string
+pass ─ resource_captures.w » root/test"
 `;

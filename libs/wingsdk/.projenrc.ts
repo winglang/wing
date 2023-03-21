@@ -45,6 +45,7 @@ const project = new cdk.JsiiProject({
     "@azure/core-paging",
     // simulator dependencies
     "tar",
+    "express",
   ],
   devDeps: [
     "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
@@ -52,6 +53,9 @@ const project = new cdk.JsiiProject({
     "@types/debug",
     "@types/fs-extra",
     "@types/tar",
+    // use older versions of these types to avoid conflicts with jsii
+    "@types/express@4.17.13",
+    "@types/express-serve-static-core@4.17.28",
     "aws-sdk-client-mock",
     "aws-sdk-client-mock-jest",
     "eslint-plugin-sort-exports",
@@ -250,5 +254,7 @@ project.addFields({
 project.addFields({
   files: ["lib", ".jsii", "API.md", "patches"],
 });
+
+project.gitignore.addPatterns("src/**/*.js", "src/**/*.d.ts");
 
 project.synth();

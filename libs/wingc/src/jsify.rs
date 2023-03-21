@@ -80,10 +80,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn js_resolve_path(path_name: &str) -> String {
-		format!(
-			"require('path').resolve(__dirname, \"{}\").replace(/\\\\/g, \"/\")",
-			path_name
-		)
+		format!("\"./{}\".replace(/\\\\/g, \"/\")", path_name)
 	}
 
 	fn render_block(statements: impl IntoIterator<Item = impl core::fmt::Display>) -> String {
@@ -475,7 +472,7 @@ impl<'a> JSifier<'a> {
 				format!(
 					"{{\n{}}}\n",
 					fields
-						.iter()
+						.values()
 						.map(|(name, expr)| format!("\"{}\": {},", name.name, self.jsify_expression(expr, context)))
 						.collect::<Vec<String>>()
 						.join("\n")
@@ -525,7 +522,7 @@ impl<'a> JSifier<'a> {
 					format!("Object.freeze(new Set([{}]))", item_list)
 				}
 			}
-			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
+			ExprKind::FunctionClosure(func_def) => match func_def.signature.phase {
 				Phase::Inflight => self.jsify_inflight_function(func_def, context),
 				Phase::Independent => unimplemented!(),
 				Phase::Preflight => self.jsify_function(None, func_def, context),
@@ -764,7 +761,7 @@ impl<'a> JSifier<'a> {
 		fs::write(&file_path, proc_source.join("\n")).expect("Writing inflight proc source");
 		let props_block = Self::render_block([
 			format!(
-				"code: {}.core.NodeJsCode.fromFile({}),",
+				"code: {}.core.NodeJsCode.fromFile(require.resolve({})),",
 				STDLIB,
 				Self::js_resolve_path(&relative_file_path)
 			),
@@ -820,7 +817,7 @@ impl<'a> JSifier<'a> {
 			FunctionBody::Statements(scope) => self.jsify_scope(scope, context),
 			FunctionBody::External(external_spec) => {
 				let new_path = self.prepare_extern(
-					matches!(func_def.signature.flight, Phase::Inflight),
+					matches!(func_def.signature.phase, Phase::Inflight),
 					external_spec,
 					&func_def.span.file_id,
 				);
@@ -831,7 +828,7 @@ impl<'a> JSifier<'a> {
 		if func_def.is_static {
 			modifiers.push("static")
 		}
-		if matches!(func_def.signature.flight, Phase::Inflight) {
+		if matches!(func_def.signature.phase, Phase::Inflight) {
 			modifiers.push("async")
 		}
 		let modifiers = modifiers.join(" ");
@@ -941,7 +938,7 @@ impl<'a> JSifier<'a> {
 		let inflight_methods = class
 			.methods
 			.iter()
-			.filter(|(_, m)| m.signature.flight == Phase::Inflight)
+			.filter(|(_, m)| m.signature.phase == Phase::Inflight)
 			.collect::<Vec<_>>();
 		self.jsify_resource_client(
 			env,
@@ -956,7 +953,7 @@ impl<'a> JSifier<'a> {
 		let preflight_methods = class
 			.methods
 			.iter()
-			.filter(|(_, m)| m.signature.flight != Phase::Inflight)
+			.filter(|(_, m)| m.signature.phase != Phase::Inflight)
 			.collect::<Vec<_>>();
 
 		let toinflight_method = self.jsify_toinflight_method(&class.name, &captured_fields);
@@ -1128,14 +1125,14 @@ impl<'a> JSifier<'a> {
 					&def,
 					&JSifyContext {
 						in_json: context.in_json.clone(),
-						phase: def.signature.flight,
+						phase: def.signature.phase,
 					},
 				)
 			})
 			.collect_vec();
 
 		let client_source = format!(
-			"export class {} {} {{\n{}\n{}}}",
+			"class {} {} {{\n{}\n{}}}\nexports.{} = {};",
 			name.name,
 			if let Some(parent) = parent {
 				format!("extends {}", self.jsify_user_defined_type(parent))
@@ -1143,7 +1140,9 @@ impl<'a> JSifier<'a> {
 				"".to_string()
 			},
 			client_constructor,
-			client_methods.join("\n")
+			client_methods.join("\n"),
+			name.name,
+			name.name
 		);
 
 		let clients_dir = format!("{}/clients", self.out_dir.to_string_lossy());
@@ -1195,7 +1194,7 @@ impl<'a> JSifier<'a> {
 		let inflight_methods = resource_class
 			.methods
 			.iter()
-			.filter(|(_, m)| m.signature.flight == Phase::Inflight);
+			.filter(|(_, m)| m.signature.phase == Phase::Inflight);
 
 		let mut result = vec![];
 
@@ -1223,7 +1222,7 @@ impl<'a> JSifier<'a> {
 			.filter(|(_, kind, _)| {
 				let var = kind.as_variable().unwrap();
 				// We capture preflight non-reassignable fields
-				var.flight != Phase::Inflight && !var.reassignable && var.type_.is_capturable()
+				var.phase != Phase::Inflight && !var.reassignable && var.type_.is_capturable()
 			})
 			.map(|(name, kind, _)| {
 				let _type = kind.as_variable().unwrap().type_;
@@ -1317,7 +1316,7 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 			};
 
 			// we have lift off (reached an inflight component)! break our search.
-			if variable.flight == Phase::Inflight {
+			if variable.phase == Phase::Inflight {
 				break;
 			}
 

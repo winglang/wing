@@ -1,9 +1,7 @@
 import { Target, compile } from "./compile";
 import { readdir, stat } from "fs/promises";
 
-import { join, resolve } from "path";
-import { mkdtempSync } from "fs";
-import { tmpdir } from "os";
+import { resolve } from "path";
 
 jest.setTimeout(1000 * 60 * 5);
 
@@ -14,14 +12,9 @@ describe("compile command tests", () => {
   );
 
   it("should be able to compile the SDK capture test to tf-aws", async () => {
-    const outDir = mkdtemp();
-    await compile(exampleWingFile, {
-      outDir,
+    const artifactDir = await compile(exampleWingFile, {
       target: Target.TF_AWS,
     });
-
-    // expect files to be generated in outDir/captures.tfaws
-    const artifactDir = join(outDir, "captures.tfaws");
 
     const stats = await stat(artifactDir);
     expect(stats.isDirectory()).toBeTruthy();
@@ -32,29 +25,20 @@ describe("compile command tests", () => {
   });
 
   it("should be able to compile the SDK capture test to sim", async () => {
-    const outDir = mkdtemp();
-    await compile(exampleWingFile, {
-      outDir: outDir,
+    const outDir = await compile(exampleWingFile, {
       target: Target.SIM,
     });
 
-    // expect files to be generated in outDir
-    const artifactDir = outDir;
-
-    const stats = await stat(artifactDir);
+    const stats = await stat(outDir);
     expect(stats.isDirectory()).toBeTruthy();
-    const files = await readdir(artifactDir);
+    const files = (await readdir(outDir)).sort();
     expect(files.length).toBeGreaterThan(0);
-    expect(files).toContain("captures.wsim");
+    expect(files).toEqual([".wing", "simulator.json", "tree.json"]);
   });
 
   it("should error if a nonexistent file is compiled", async () => {
-    const outDir = mkdtemp();
-    return expect(compile("non-existent-file.w", { outDir, target: Target.SIM }))
+    return expect(compile("non-existent-file.w", { target: Target.SIM }))
       .rejects.toThrowError(/Source file cannot be found/);
   });
 });
 
-function mkdtemp() {
-  return mkdtempSync(join(tmpdir(), "wingcli-tests."));
-}

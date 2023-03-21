@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`wing compile -t tf-aws > clients/A.inflight.js 1`] = `
-"export class A  {
+"class A  {
 constructor({  }) {
 
 
@@ -10,20 +10,8 @@ async handle(msg)  {
 	{
   return;
 }
-}}"
-`;
-
-exports[`wing compile -t tf-aws > clients/B.inflight.js 1`] = `
-"export class B  {
-constructor({  }) {
-
-
-}
-async handle(msg)  {
-	{
-  return 5;
-}
-}}"
+}}
+exports.A = A;"
 `;
 
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
@@ -79,28 +67,30 @@ constructor() {
   	
   	_toInflight() {
   	
-  	const self_client_path = require('path').resolve(__dirname, \\"clients/A.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	const self_client_path = \\"./clients/A.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).A({}))\`);
   }
   }
   A._annotateInflight(\\"handle\\", {});
-  class B extends $stdlib.core.Resource {
-  	constructor(scope, id, ) {
-  	super(scope, id);
-  {
-  }
-  }
-  	
-  	_toInflight() {
-  	
-  	const self_client_path = require('path').resolve(__dirname, \\"clients/B.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).B({}))\`);
-  }
-  }
-  B._annotateInflight(\\"handle\\", {});
+  const x = new A(this,\\"A\\");
+  const y = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.a5455e5c5848cfc293fcb861d9393d32e29a39f8dc8ac79c19dd5289279762fe/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+    bindings: {
+      x: {
+        obj: x,
+        ops: []
+      },
+    }
+  });
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`wing compile -t tf-aws > proc.a5455e5c5848cfc293fcb861d9393d32e29a39f8dc8ac79c19dd5289279762fe/index.js 1`] = `
+"async handle() { const { x } = this; {
+  (await x.handle(\\"hello world!\\"));
+} };"
 `;
 
 exports[`wing test > stdout 1`] = `"pass ─ impl_interface.w (no tests)"`;
