@@ -31,9 +31,9 @@ describe("compile command tests", () => {
 
     const stats = await stat(outDir);
     expect(stats.isDirectory()).toBeTruthy();
-    const files = await readdir(outDir);
+    const files = (await readdir(outDir)).sort();
     expect(files.length).toBeGreaterThan(0);
-    expect(files).toStrictEqual([".wing", "simulator.json", "tree.json"]);
+    expect(files).toEqual([".wing", "simulator.json", "tree.json"]);
   });
 
   it("should error if a nonexistent file is compiled", async () => {
