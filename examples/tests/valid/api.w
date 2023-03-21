@@ -15,9 +15,6 @@ let handler = inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
   let resp = cloud.ApiResponse {
     body: bodyResponse,
     status: 200,
-    headers: {
-      "Content-Type": "text/plain",
-    },
   };
   return resp;
 };
