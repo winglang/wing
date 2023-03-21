@@ -109,6 +109,9 @@ async function runInSandbox(code: string, payload: any, opts: RunCodeOptions) {
     ctx[k] = opts.context[k];
   }
 
+  // we are hijacking console.log to log to the inflight $logger so do not propagate
+  delete ctx.console;
+
   return new Promise(($resolve, $reject) => {
     const wrapper = [
       "const exports = {};",
