@@ -1,27 +1,14 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`wing compile -t tf-aws > clients/A.inflight.js 1`] = `
-"export class A_inflight  {
+"export class A  {
 constructor({  }) {
 
 
 }
-async  handle(msg)  {
+async handle(msg)  {
 	{
   return;
-}
-}}"
-`;
-
-exports[`wing compile -t tf-aws > clients/B.inflight.js 1`] = `
-"export class B_inflight  {
-constructor({  }) {
-
-
-}
-async  handle(msg)  {
-	{
-  return 5;
 }
 }}"
 `;
@@ -46,7 +33,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
-const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
 	switch (target) {
@@ -80,27 +67,29 @@ constructor() {
   	_toInflight() {
   	
   	const self_client_path = require('path').resolve(__dirname, \\"clients/A.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).A_inflight({}))\`);
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).A({}))\`);
   }
   }
   A._annotateInflight(\\"handle\\", {});
-  class B extends $stdlib.core.Resource {
-  	constructor(scope, id, ) {
-  	super(scope, id);
-  {
-  }
-  }
-  	
-  	_toInflight() {
-  	
-  	const self_client_path = require('path').resolve(__dirname, \\"clients/B.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).B_inflight({}))\`);
-  }
-  }
-  B._annotateInflight(\\"handle\\", {});
+  const x = new A(this,\\"A\\");
+  const y = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.a5455e5c5848cfc293fcb861d9393d32e29a39f8dc8ac79c19dd5289279762fe/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    bindings: {
+      x: {
+        obj: x,
+        ops: []
+      },
+    }
+  });
 }
 }
 new MyApp().synth();"
+`;
+
+exports[`wing compile -t tf-aws > proc.a5455e5c5848cfc293fcb861d9393d32e29a39f8dc8ac79c19dd5289279762fe/index.js 1`] = `
+"async handle() { const { x } = this; {
+  (await x.handle(\\"hello world!\\"));
+} };"
 `;
 
 exports[`wing test > stdout 1`] = `"pass ─ impl_interface.w (no tests)"`;

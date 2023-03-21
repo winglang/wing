@@ -7,9 +7,9 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionDefinition,
-	FunctionSignature, InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind,
-	Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
+	ArgList, BinaryOperator, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionBody,
+	FunctionDefinition, FunctionSignature, InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope,
+	Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 use crate::WINGSDK_STD_MODULE;
@@ -441,7 +441,7 @@ impl<'s> Parser<'s> {
 						member_type: self.build_type_annotation(&class_element.child_by_field_name("type").unwrap())?,
 						reassignable: class_element.child_by_field_name("reassignable").is_some(),
 						is_static,
-						flight: match class_element.child_by_field_name("phase_modifier") {
+						phase: match class_element.child_by_field_name("phase_modifier") {
 							Some(n) => {
 								if !is_resource {
 									self
@@ -473,7 +473,7 @@ impl<'s> Parser<'s> {
 								root: name.clone(),
 								fields: vec![],
 							}))),
-							flight: if is_resource { Phase::Preflight } else { Phase::Inflight },
+							phase: if is_resource { Phase::Preflight } else { Phase::Inflight },
 						},
 					})
 				}
@@ -557,15 +557,24 @@ impl<'s> Parser<'s> {
 		}))
 	}
 
-	fn build_anonymous_closure(&self, anon_closure_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
-		self.build_function_definition(anon_closure_node, flight)
+	fn build_anonymous_closure(&self, anon_closure_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
+		self.build_function_definition(anon_closure_node, phase)
 	}
 
-	fn build_function_definition(&self, func_def_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
+	fn build_function_definition(&self, func_def_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
 		let parameters = self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap())?;
+
+		let statements = if let Some(external) = func_def_node.child_by_field_name("extern_modifier") {
+			let node_text = self.node_text(&external.named_child(0).unwrap());
+			let node_text = &node_text[1..node_text.len() - 1];
+			FunctionBody::External(node_text.to_string())
+		} else {
+			FunctionBody::Statements(self.build_scope(&self.get_child_field(func_def_node, "block")?))
+		};
+
 		Ok(FunctionDefinition {
 			parameters: parameters.iter().map(|p| (p.0.clone(), p.2)).collect(),
-			statements: self.build_scope(&func_def_node.child_by_field_name("block").unwrap()),
+			body: statements,
 			signature: FunctionSignature {
 				parameters: parameters.iter().map(|p| p.1.clone()).collect(),
 				return_type: if let Some(rt) = func_def_node.child_by_field_name("type") {
@@ -573,10 +582,11 @@ impl<'s> Parser<'s> {
 				} else {
 					None
 				},
-				flight,
+				phase,
 			},
 			is_static: func_def_node.child_by_field_name("static").is_some(),
 			captures: RefCell::new(None),
+			span: self.node_span(func_def_node),
 		})
 	}
 
@@ -631,7 +641,7 @@ impl<'s> Parser<'s> {
 				Ok(TypeAnnotation::FunctionSignature(FunctionSignature {
 					parameters,
 					return_type,
-					flight: if type_node.child_by_field_name("inflight").is_some() {
+					phase: if type_node.child_by_field_name("inflight").is_some() {
 						Phase::Inflight
 					} else {
 						Phase::Preflight
@@ -1049,11 +1059,11 @@ impl<'s> Parser<'s> {
 					let field_value = self.build_expression(&field.named_child(1).unwrap());
 					// Add fields to our struct literal, if some are missing or aren't part of the type we'll fail on type checking
 					if let (Ok(k), Ok(v)) = (field_name, field_value) {
-						if fields.contains_key(&k) {
+						if fields.contains_key(&k.name) {
 							// TODO: ugly, we need to change add_error to not return anything and have a wrapper `raise_error` that returns a Result
 							_ = self.add_error::<()>(format!("Duplicate field {} in struct literal", k), expression_node);
 						} else {
-							fields.insert(k, v);
+							fields.insert(k.name.clone(), (k, v));
 						}
 					}
 				}

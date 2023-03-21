@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { IResource, Inflight, Resource, App } from "../core";
+import { IResource, Resource, App } from "../core";
 import { Duration } from "../std";
 
 /**
@@ -62,7 +62,7 @@ export abstract class Schedule extends Resource {
    * Create a function that runs when receiving the scheduled event.
    */
   public abstract onTick(
-    inflight: Inflight,
+    inflight: IScheduleOnTickHandler,
     props?: ScheduleOnTickProps
   ): Function;
 }

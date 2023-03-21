@@ -155,7 +155,7 @@ impl Display for TypeAnnotation {
 
 impl Display for FunctionSignature {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let phase_str = match self.flight {
+		let phase_str = match self.phase {
 			Phase::Inflight => "inflight ",
 			Phase::Preflight => "preflight ",
 			Phase::Independent => "",
@@ -179,7 +179,15 @@ impl Display for FunctionSignature {
 pub struct FunctionSignature {
 	pub parameters: Vec<TypeAnnotation>,
 	pub return_type: Option<Box<TypeAnnotation>>,
-	pub flight: Phase,
+	pub phase: Phase,
+}
+
+#[derive(Debug)]
+pub enum FunctionBody {
+	/// The function body implemented within a Wing scope.
+	Statements(Scope),
+	/// The `extern` modifier value, pointing to an external implementation file
+	External(String),
 }
 
 #[derive(Derivative)]
@@ -187,12 +195,14 @@ pub struct FunctionSignature {
 pub struct FunctionDefinition {
 	/// List of names of function parameters and whether they are reassignable (`var`) or not.
 	pub parameters: Vec<(Symbol, bool)>, // TODO: move into FunctionSignature and make optional
-	/// The function implementation (body).
-	pub statements: Scope,
+	/// The function implementation.
+	pub body: FunctionBody,
 	/// The function signature, including the return type.
 	pub signature: FunctionSignature,
 	/// Whether this function is static or not. In case of a closure, this is always true.
 	pub is_static: bool,
+
+	pub span: WingSpan,
 
 	#[derivative(Debug = "ignore")]
 	pub captures: RefCell<Option<Captures>>,
@@ -314,7 +324,7 @@ pub struct ClassField {
 	pub name: Symbol,
 	pub member_type: TypeAnnotation,
 	pub reassignable: bool,
-	pub flight: Phase,
+	pub phase: Phase,
 	pub is_static: bool,
 }
 
@@ -350,7 +360,7 @@ pub enum ExprKind {
 	StructLiteral {
 		type_: TypeAnnotation,
 		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
-		fields: BTreeMap<Symbol, Expr>,
+		fields: BTreeMap<String, (Symbol, Expr)>,
 	},
 	MapLiteral {
 		type_: Option<TypeAnnotation>,

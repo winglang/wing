@@ -138,14 +138,25 @@ exports[`capture_reassignable.w > stderr 1`] = `
 `;
 
 exports[`cloud_function_expects_inflight.w > stderr 1`] = `
-"error: Expected type to be \\"inflight (any): any\\", but got \\"preflight (str): str\\" instead
+"error: Expected type to be \\"IFunctionHandler (inflight (str): void)\\", but got \\"preflight (str): str\\" instead
   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:3:20
   |  
 3 |   new cloud.Function((name: str): str => {
   | /--------------------^
 4 | |     return \\"Hello \${name}\\";
 5 | | });
-  | \\\\-^ Expected type to be \\"inflight (any): any\\", but got \\"preflight (str): str\\" instead
+  | \\\\-^ Expected type to be \\"IFunctionHandler (inflight (str): void)\\", but got \\"preflight (str): str\\" instead
+
+
+error: Expected type to be \\"IQueueOnMessageHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
+   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:9:14
+   |  
+ 9 |   q.on_message(inflight (x: num) => {
+   | /--------------^
+10 | |                     // ^ \\"num\\" doesn't match the expected type \\"str\\"
+11 | |     return;
+12 | | });
+   | \\\\-^ Expected type to be \\"IQueueOnMessageHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
 
 "
 `;
@@ -316,18 +327,21 @@ exports[`immutable_container_types.w > stderr 1`] = `
 `;
 
 exports[`impl_interface.w > stderr 1`] = `
-"error: Resource \\"A (at ../../../examples/tests/invalid/impl_interface.w:3:10)\\" does not implement method \\"handle\\" of interface \\"cloud.IQueueOnMessageHandler\\"
+"error: Resource \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueOnMessageHandler\\"
   --> ../../../examples/tests/invalid/impl_interface.w:3:10
   |
 3 | resource A impl cloud.IQueueOnMessageHandler {
-  |          ^ Resource \\"A (at ../../../examples/tests/invalid/impl_interface.w:3:10)\\" does not implement method \\"handle\\" of interface \\"cloud.IQueueOnMessageHandler\\"
+  |          ^ Resource \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueOnMessageHandler\\"
 
 
-error: Expected type to be \\"inflight (IQueueOnMessageHandler, str): void\\", but got \\"inflight (B): void\\" instead
+error: Expected type to be \\"inflight (IQueueOnMessageHandler (inflight (str): void), str): void\\", but got \\"inflight (B, num): void\\" instead
   --> ../../../examples/tests/invalid/impl_interface.w:8:10
   |
 8 | resource B impl cloud.IQueueOnMessageHandler {
-  |          ^ Expected type to be \\"inflight (IQueueOnMessageHandler, str): void\\", but got \\"inflight (B): void\\" instead
+  |          ^ Expected type to be \\"inflight (IQueueOnMessageHandler (inflight (str): void), str): void\\", but got \\"inflight (B, num): void\\" instead
+
+
+error: Class C (at ../../../examples/tests/invalid/impl_interface.w:16:10)'s implements \\"Bucket\\" is not an interface
 
 "
 `;
@@ -898,6 +912,16 @@ error: Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
   |
 7 | let bucket2 = new cloud.Bucket(2, public: true);
   |                                ^ Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
+
+
+error: \\"status\\" is not initialized
+   --> ../../../examples/tests/invalid/struct_expansion.w:15:9
+   |  
+15 |   let x = cloud.ApiResponse {
+   | /---------^
+16 | |   body: Json \\"Hello, world!\\",
+17 | | };
+   | \\\\-^ \\"status\\" is not initialized
 
 
 error: Expected 2 arguments but got 1

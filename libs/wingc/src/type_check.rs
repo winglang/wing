@@ -1,8 +1,8 @@
 mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{
-	Class as AstClass, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-	ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
+	Class as AstClass, Expr, ExprKind, FunctionBody, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt,
+	StmtKind, Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{
@@ -73,26 +73,26 @@ pub struct VariableInfo {
 	/// Can the variable be reassigned?
 	pub reassignable: bool,
 	/// The phase in which this variable exists
-	pub flight: Phase,
+	pub phase: Phase,
 	/// Is this a static or instance variable?
 	pub is_static: bool,
 }
 
 impl SymbolKind {
-	pub fn make_variable(type_: TypeRef, reassignable: bool, flight: Phase) -> Self {
+	pub fn make_variable(type_: TypeRef, reassignable: bool, phase: Phase) -> Self {
 		SymbolKind::Variable(VariableInfo {
 			type_,
 			reassignable,
-			flight,
+			phase,
 			is_static: true,
 		})
 	}
 
-	pub fn make_instance_variable(type_: TypeRef, reassignable: bool, flight: Phase) -> Self {
+	pub fn make_instance_variable(type_: TypeRef, reassignable: bool, phase: Phase) -> Self {
 		SymbolKind::Variable(VariableInfo {
 			type_,
 			reassignable,
-			flight,
+			phase,
 			is_static: false,
 		})
 	}
@@ -205,6 +205,48 @@ pub struct Interface {
 	extends: Vec<TypeRef>, // Must be a Type::Interface type
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
+}
+
+impl Interface {
+	fn is_resource(&self) -> bool {
+		// TODO: This should check that the interface extends `IResource` from
+		// the SDK, not just any interface with the name `IResource`
+		if self.name.name == "IResource"
+			|| self.extends.iter().any(|i| {
+				i.as_interface()
+					.expect("Interface extends a type that isn't an interface")
+					.name
+					.name == "IResource"
+			}) {
+			true
+		} else {
+			false
+		}
+	}
+}
+
+impl Display for Interface {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		if let Some(method) = self.get_env().try_lookup("handle", None) {
+			let method = method.as_variable().unwrap();
+			if method.phase != Phase::Inflight {
+				return write!(f, "{}", self.name.name);
+			}
+
+			// remove the "this" parameter for the interface method, to avoid recursion
+			// TODO: hack until we implement https://github.com/winglang/wing/issues/1678
+			let method_sig = method.type_.as_function_sig().unwrap();
+			let mut temp_params = method_sig.parameters.clone();
+			temp_params.remove(0);
+			let temp_fn = Type::Function(FunctionSignature {
+				parameters: temp_params,
+				..method_sig.clone()
+			});
+			write!(f, "{} ({})", self.name.name, temp_fn)
+		} else {
+			write!(f, "{}", self.name.name)
+		}
+	}
 }
 
 pub trait ClassLike {
@@ -341,6 +383,39 @@ impl Subtype for Type {
 				// TODO: Hack to make anything's compatible with all other types, specifically useful for handling core.Inflight handlers
 				true
 			}
+			(Self::Function(l0), Self::Interface(r0)) => {
+				// TODO: Hack to make functions compatible with interfaces
+				// Remove this after https://github.com/winglang/wing/issues/1448
+
+				// First check that the function is in the inflight phase
+				if l0.phase != Phase::Inflight {
+					return false;
+				}
+
+				// Next, compare the function to a method on the interface named "handle" if it exists
+				if let Some(method) = r0.get_env().try_lookup("handle", None) {
+					let method = method.as_variable().unwrap();
+					if method.phase != Phase::Inflight {
+						return false;
+					}
+
+					// hallucinate a "this" parameter for the function, since the
+					// interface must be implemented on a class-like type
+					// TODO: hack until we implement https://github.com/winglang/wing/issues/1678
+					let temp_params = vec![UnsafeRef(other)]
+						.iter()
+						.chain(l0.parameters.clone().iter())
+						.cloned()
+						.collect::<Vec<_>>();
+					let temp_fn = Self::Function(FunctionSignature {
+						parameters: temp_params,
+						..(l0.clone())
+					});
+					temp_fn.is_subtype_of(&*method.type_)
+				} else {
+					false
+				}
+			}
 			(Self::Function(l0), Self::Function(r0)) => {
 				if !l0.phase.is_subtype_of(&r0.phase) {
 					return false;
@@ -354,8 +429,9 @@ impl Subtype for Type {
 
 				// In this section, we check if the parameter types are not subtypes of each other, then this is not a subtype.
 
-				// Check that this function has at least as many required parameters as the other function requires
-				if l0.min_parameters() < r0.min_parameters() {
+				// Check that this function has at most as many required parameters as the other function requires
+				// if it doesn't, we know it's not a subtype
+				if l0.min_parameters() > r0.min_parameters() {
 					return false;
 				}
 
@@ -384,7 +460,7 @@ impl Subtype for Type {
 					// (Cat) => void is not a subtype of (Animal) => void
 					// but (Animal) => void is a subtype of (Cat) => void
 					// see https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)
-					if l.is_strict_subtype_of(&r) {
+					if !r.is_subtype_of(l) {
 						return false;
 					}
 				}
@@ -505,7 +581,7 @@ impl Subtype for Type {
 	}
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct FunctionSignature {
 	pub parameters: Vec<TypeRef>,
 	pub return_type: TypeRef,
@@ -580,7 +656,7 @@ impl Display for Type {
 			Type::Function(sig) => write!(f, "{}", sig),
 			Type::Class(class) => write!(f, "{}", class.name.name),
 			Type::Resource(class) => write!(f, "{}", class.name.name),
-			Type::Interface(iface) => write!(f, "{}", iface.name.name),
+			Type::Interface(iface) => write!(f, "{}", iface),
 			Type::Struct(s) => write!(f, "{}", s.name.name),
 			Type::Array(v) => write!(f, "Array<{}>", v),
 			Type::MutArray(v) => write!(f, "MutArray<{}>", v),
@@ -738,8 +814,9 @@ impl TypeRef {
 	}
 
 	pub fn is_capturable(&self) -> bool {
-		match **self {
+		match &**self {
 			Type::Resource(_) => true,
+			Type::Interface(iface) => iface.is_resource(),
 			Type::Enum(_) => true,
 			Type::Number => true,
 			Type::String => true,
@@ -977,7 +1054,7 @@ impl<'a> TypeChecker<'a> {
 		VariableInfo {
 			type_: self.types.anything(),
 			reassignable: false,
-			flight: Phase::Independent,
+			phase: Phase::Independent,
 			is_static: true,
 		}
 	}
@@ -1022,7 +1099,7 @@ impl<'a> TypeChecker<'a> {
 		VariableInfo {
 			type_: self.types.anything(),
 			reassignable: false,
-			flight: Phase::Independent,
+			phase: Phase::Independent,
 			is_static: false,
 		}
 	}
@@ -1116,7 +1193,7 @@ impl<'a> TypeChecker<'a> {
 				let (class_env, class_symbol) = match &*type_ {
 					Type::Class(ref class) => (&class.env, &class.name),
 					Type::Resource(ref class) => {
-						if matches!(env.flight, Phase::Preflight) {
+						if matches!(env.phase, Phase::Preflight) {
 							(&class.env, &class.name)
 						} else {
 							return self.general_type_error(format!(
@@ -1253,10 +1330,10 @@ impl<'a> TypeChecker<'a> {
 					return self.expr_error(&*function, format!("should be a function or method"));
 				};
 
-				if !env.flight.can_call_to(&func_sig.phase) {
+				if !env.phase.can_call_to(&func_sig.phase) {
 					self.expr_error(
 						exp,
-						format!("Cannot call into {} phase while {}", func_sig.phase, env.flight),
+						format!("Cannot call into {} phase while {}", func_sig.phase, env.phase),
 					);
 				}
 
@@ -1344,23 +1421,21 @@ impl<'a> TypeChecker<'a> {
 					.expect(&format!("Expected \"{}\" to be a struct type", struct_type));
 
 				// Verify that all fields are present and are of the right type
-				if st.env.iter(true).count() > fields.len() {
-					panic!("Not all fields of {} are initialized.", struct_type);
-				}
-				for (k, v) in fields.iter() {
-					let field = st.env.try_lookup(&k.name, None);
-					if let Some(field) = field {
-						let t = self.type_check_exp(v, env, statement_idx, context);
-						self.validate_type(
-							t,
-							field
-								.as_variable()
-								.expect("Expected struct field to be a variable in the struct env")
-								.type_,
-							v,
-						);
-					} else {
-						self.expr_error(exp, format!("\"{}\" is not a field of \"{}\"", k.name, struct_type));
+				for (name, kind, _info) in st.env.iter(true) {
+					let field_type = kind
+						.as_variable()
+						.expect("Expected struct field to be a variable in the struct env")
+						.type_;
+					match fields.get(&name) {
+						Some((_, field_exp)) => {
+							let t = self.type_check_exp(field_exp, env, statement_idx, context);
+							self.validate_type(t, field_type, field_exp);
+						}
+						None => {
+							if !field_type.is_option() {
+								self.expr_error(exp, format!("\"{}\" is not initialized", name));
+							}
+						}
 					}
 				}
 
@@ -1429,7 +1504,7 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::FunctionClosure(func_def) => {
 				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 
-				if matches!(func_def.signature.flight, Phase::Inflight) {
+				if matches!(func_def.signature.phase, Phase::Inflight) {
 					self.unimplemented_type("Inflight function signature"); // TODO: what typechecking do we need here?self??
 				}
 
@@ -1447,15 +1522,20 @@ impl<'a> TypeChecker<'a> {
 					sig.return_type,
 					false,
 					false,
-					func_def.signature.flight,
+					func_def.signature.phase,
 					statement_idx,
 				);
 				self.add_arguments_to_env(&func_def.parameters, &sig, &mut function_env);
-				func_def.statements.set_env(function_env);
 
-				self.inner_scopes.push(&func_def.statements);
+				if let FunctionBody::Statements(scope) = &func_def.body {
+					scope.set_env(function_env);
 
-				function_type
+					self.inner_scopes.push(scope);
+
+					function_type
+				} else {
+					function_type
+				}
 			}
 			ExprKind::OptionalTest { optional } => {
 				let t = self.type_check_exp(optional, env, statement_idx, context);
@@ -1629,7 +1709,7 @@ impl<'a> TypeChecker<'a> {
 					return_type: ast_sig.return_type.as_ref().map_or(self.types.void(), |t| {
 						self.resolve_type_annotation(t, env, statement_idx)
 					}),
-					phase: ast_sig.flight,
+					phase: ast_sig.phase,
 					js_override: None,
 				};
 				// TODO: avoid creating a new type for each function_sig resolution
@@ -1691,7 +1771,7 @@ impl<'a> TypeChecker<'a> {
 					self.validate_type(inferred_type, explicit_type, initial_value);
 					match env.define(
 						var_name,
-						SymbolKind::make_variable(explicit_type, *reassignable, env.flight),
+						SymbolKind::make_variable(explicit_type, *reassignable, env.phase),
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
@@ -1702,7 +1782,7 @@ impl<'a> TypeChecker<'a> {
 				} else {
 					match env.define(
 						var_name,
-						SymbolKind::make_variable(inferred_type, *reassignable, env.flight),
+						SymbolKind::make_variable(inferred_type, *reassignable, env.phase),
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
@@ -1737,10 +1817,10 @@ impl<'a> TypeChecker<'a> {
 					}
 				};
 
-				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.flight, stmt.idx);
+				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 				match scope_env.define(
 					&iterator,
-					SymbolKind::make_variable(iterator_type, false, env.flight),
+					SymbolKind::make_variable(iterator_type, false, env.phase),
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -1761,7 +1841,7 @@ impl<'a> TypeChecker<'a> {
 					env.return_type,
 					false,
 					false,
-					env.flight,
+					env.phase,
 					stmt.idx,
 				));
 
@@ -1782,7 +1862,7 @@ impl<'a> TypeChecker<'a> {
 					env.return_type,
 					false,
 					false,
-					env.flight,
+					env.phase,
 					stmt.idx,
 				));
 				self.inner_scopes.push(statements);
@@ -1796,7 +1876,7 @@ impl<'a> TypeChecker<'a> {
 						env.return_type,
 						false,
 						false,
-						env.flight,
+						env.phase,
 						stmt.idx,
 					));
 					self.inner_scopes.push(&elif_scope.statements);
@@ -1808,7 +1888,7 @@ impl<'a> TypeChecker<'a> {
 						env.return_type,
 						false,
 						false,
-						env.flight,
+						env.phase,
 						stmt.idx,
 					));
 					self.inner_scopes.push(else_scope);
@@ -1888,7 +1968,7 @@ impl<'a> TypeChecker<'a> {
 					env.return_type,
 					false,
 					false,
-					env.flight,
+					env.phase,
 					stmt.idx,
 				));
 				self.inner_scopes.push(scope)
@@ -1923,7 +2003,7 @@ impl<'a> TypeChecker<'a> {
 				is_resource,
 			}) => {
 				// Resources cannot be defined inflight
-				assert!(!*is_resource || env.flight == Phase::Preflight);
+				assert!(!*is_resource || env.phase == Phase::Preflight);
 
 				if *is_resource {
 					// TODO
@@ -1951,7 +2031,20 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-				let dummy_env = SymbolEnv::new(None, self.types.void(), true, false, env.flight, stmt.idx);
+				let dummy_env = SymbolEnv::new(None, self.types.void(), true, false, env.phase, stmt.idx);
+
+				let impl_interfaces = implements
+					.iter()
+					.filter_map(|i| {
+						let t = resolve_user_defined_type(i, env, stmt.idx).unwrap_or_else(|e| self.type_error(e));
+						if t.as_interface().is_some() {
+							Some(t)
+						} else {
+							self.general_type_error(format!("Class {}'s implements \"{}\" is not an interface", name, t));
+							None
+						}
+					})
+					.collect::<Vec<_>>();
 
 				// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
 				let class_spec = Class {
@@ -1960,7 +2053,7 @@ impl<'a> TypeChecker<'a> {
 					fqn: None,
 					env: dummy_env,
 					parent: parent_class,
-					implements: vec![], // TODO parse AST information - https://github.com/winglang/wing/issues/1697
+					implements: impl_interfaces.clone(),
 					is_abstract: false,
 					type_parameters: None, // TODO no way to have generic args in wing yet
 				};
@@ -1977,7 +2070,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create a the real class environment to be filled with the class AST types
-				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), true, false, env.flight, stmt.idx);
+				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), true, false, env.phase, stmt.idx);
 
 				// Add fields to the class env
 				for field in fields.iter() {
@@ -1985,9 +2078,9 @@ impl<'a> TypeChecker<'a> {
 					match class_env.define(
 						&field.name,
 						if field.is_static {
-							SymbolKind::make_variable(field_type, field.reassignable, field.flight)
+							SymbolKind::make_variable(field_type, field.reassignable, field.phase)
 						} else {
-							SymbolKind::make_instance_variable(field_type, field.reassignable, field.flight)
+							SymbolKind::make_instance_variable(field_type, field.reassignable, field.phase)
 						},
 						StatementIdx::Top,
 					) {
@@ -2016,9 +2109,9 @@ impl<'a> TypeChecker<'a> {
 					match class_env.define(
 						method_name,
 						if method_def.is_static {
-							SymbolKind::make_variable(method_type, false, method_def.signature.flight)
+							SymbolKind::make_variable(method_type, false, method_def.signature.phase)
 						} else {
-							SymbolKind::make_instance_variable(method_type, false, method_def.signature.flight)
+							SymbolKind::make_instance_variable(method_type, false, method_def.signature.phase)
 						},
 						StatementIdx::Top,
 					) {
@@ -2040,7 +2133,7 @@ impl<'a> TypeChecker<'a> {
 						name: WING_CONSTRUCTOR_NAME.into(),
 						span: name.span.clone(),
 					},
-					SymbolKind::make_variable(constructor_type, false, constructor.signature.flight),
+					SymbolKind::make_variable(constructor_type, false, constructor.signature.phase),
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -2069,7 +2162,7 @@ impl<'a> TypeChecker<'a> {
 					constructor_sig.return_type,
 					false,
 					true,
-					constructor.signature.flight,
+					constructor.signature.phase,
 					stmt.idx,
 				);
 				self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
@@ -2080,7 +2173,7 @@ impl<'a> TypeChecker<'a> {
 							name: "this".into(),
 							span: name.span.clone(),
 						},
-						SymbolKind::make_variable(class_type, false, constructor_env.flight),
+						SymbolKind::make_variable(class_type, false, constructor_env.phase),
 						StatementIdx::Top,
 					)
 					.expect("Expected `this` to be added to constructor env");
@@ -2126,15 +2219,22 @@ impl<'a> TypeChecker<'a> {
 					}
 					actual_parameters.extend(method_def.parameters.clone());
 					self.add_arguments_to_env(&actual_parameters, method_sig, &mut method_env);
-					method_def.statements.set_env(method_env);
-					self.inner_scopes.push(&method_def.statements);
+
+					if let FunctionBody::Statements(scope) = &method_def.body {
+						scope.set_env(method_env);
+						self.inner_scopes.push(scope);
+					}
 				}
 
 				// Check that the class satisfies all of its interfaces
-				for interface in implements.iter() {
-					let interface_type =
-						resolve_user_defined_type(interface, env, stmt.idx).unwrap_or_else(|e| self.type_error(e));
-					let interface_type = interface_type.as_interface().expect("Expected interface type");
+				for interface_type in impl_interfaces.iter() {
+					let interface_type = match interface_type.as_interface() {
+						Some(t) => t,
+						None => {
+							// No need to error here, it will be caught when `impl_interaces` was created
+							continue;
+						}
+					};
 
 					// Check all methods are implemented
 					for (method_name, method_type) in interface_type.methods(true) {
@@ -2145,7 +2245,7 @@ impl<'a> TypeChecker<'a> {
 							self.type_error(TypeError {
 								message: format!(
 									"Resource \"{}\" does not implement method \"{}\" of interface \"{}\"",
-									name, method_name, interface
+									name.name, method_name, interface_type.name.name
 								),
 								span: name.span.clone(),
 							});
@@ -2161,7 +2261,7 @@ impl<'a> TypeChecker<'a> {
 							self.type_error(TypeError {
 								message: format!(
 									"Resource \"{}\" does not implement field \"{}\" of interface \"{}\"",
-									name, field_name, interface
+									name.name, field_name, interface_type.name.name
 								),
 								span: name.span.clone(),
 							});
@@ -2175,14 +2275,14 @@ impl<'a> TypeChecker<'a> {
 				//   fail type checking.
 
 				// Create an environment for the struct
-				let mut struct_env = SymbolEnv::new(None, self.types.void(), true, false, env.flight, stmt.idx);
+				let mut struct_env = SymbolEnv::new(None, self.types.void(), true, false, env.phase, stmt.idx);
 
 				// Add fields to the struct env
 				for field in members.iter() {
 					let field_type = self.resolve_type_annotation(&field.member_type, env, stmt.idx);
 					match struct_env.define(
 						&field.name,
-						SymbolKind::make_variable(field_type, false, field.flight),
+						SymbolKind::make_variable(field_type, false, field.phase),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -2250,19 +2350,19 @@ impl<'a> TypeChecker<'a> {
 				finally_statements,
 			} => {
 				// Create a new environment for the try block
-				let try_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.flight, stmt.idx);
+				let try_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 				try_statements.set_env(try_env);
 				self.inner_scopes.push(try_statements);
 
 				// Create a new environment for the catch block
 				if let Some(catch_block) = catch_block {
-					let mut catch_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.flight, stmt.idx);
+					let mut catch_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 
 					// Add the exception variable to the catch block
 					if let Some(exception_var) = &catch_block.exception_var {
 						match catch_env.define(
 							exception_var,
-							SymbolKind::make_variable(self.types.string(), false, env.flight),
+							SymbolKind::make_variable(self.types.string(), false, env.phase),
 							StatementIdx::Top,
 						) {
 							Err(type_error) => {
@@ -2277,7 +2377,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Create a new environment for the finally block
 				if let Some(finally_statements) = finally_statements {
-					let finally_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.flight, stmt.idx);
+					let finally_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 					finally_statements.set_env(finally_env);
 					self.inner_scopes.push(finally_statements);
 				}
@@ -2363,7 +2463,7 @@ impl<'a> TypeChecker<'a> {
 		for (arg, arg_type) in args.iter().zip(sig.parameters.iter()) {
 			match env.define(
 				&arg.0,
-				SymbolKind::make_variable(*arg_type, arg.1, env.flight),
+				SymbolKind::make_variable(*arg_type, arg.1, env.phase),
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -2447,7 +2547,7 @@ impl<'a> TypeChecker<'a> {
 				SymbolKind::Variable(VariableInfo {
 					type_: v,
 					reassignable,
-					flight,
+					phase: flight,
 					is_static,
 				}) => {
 					// Replace type params in function signatures
@@ -2677,40 +2777,41 @@ impl<'a> TypeChecker<'a> {
 
 				let instance_type = self.type_check_exp(object, env, statement_idx, context);
 				let res = match *instance_type {
-					Type::Class(ref class) | Type::Resource(ref class) => self.get_property_from_class(class, property),
+					Type::Class(ref class) | Type::Resource(ref class) => self.get_property_from_class_like(class, property),
+					Type::Interface(ref interface) => self.get_property_from_class_like(interface, property),
 					Type::Anything => VariableInfo {
 						type_: instance_type,
 						reassignable: false,
-						flight: env.flight,
+						phase: env.phase,
 						is_static: false,
 					},
 
 					// Lookup wingsdk std types, hydrating generics if necessary
 					Type::Array(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_ARRAY, vec![t]);
-						self.get_property_from_class(new_class.as_class().unwrap(), property)
+						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
 					}
 					Type::MutArray(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_ARRAY, vec![t]);
-						self.get_property_from_class(new_class.as_class().unwrap(), property)
+						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
 					}
 					Type::Set(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_SET, vec![t]);
-						self.get_property_from_class(new_class.as_class().unwrap(), property)
+						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
 					}
 					Type::MutSet(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_SET, vec![t]);
-						self.get_property_from_class(new_class.as_class().unwrap(), property)
+						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
 					}
 					Type::Map(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MAP, vec![t]);
-						self.get_property_from_class(new_class.as_class().unwrap(), property)
+						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
 					}
 					Type::MutMap(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_MAP, vec![t]);
-						self.get_property_from_class(new_class.as_class().unwrap(), property)
+						self.get_property_from_class_like(new_class.as_class().unwrap(), property)
 					}
-					Type::Json => self.get_property_from_class(
+					Type::Json => self.get_property_from_class_like(
 						env
 							.lookup_nested_str(WINGSDK_JSON, None)
 							.unwrap()
@@ -2720,7 +2821,7 @@ impl<'a> TypeChecker<'a> {
 							.unwrap(),
 						property,
 					),
-					Type::MutJson => self.get_property_from_class(
+					Type::MutJson => self.get_property_from_class_like(
 						env
 							.lookup_nested_str(WINGSDK_MUT_JSON, None)
 							.unwrap()
@@ -2730,7 +2831,7 @@ impl<'a> TypeChecker<'a> {
 							.unwrap(),
 						property,
 					),
-					Type::String => self.get_property_from_class(
+					Type::String => self.get_property_from_class_like(
 						env
 							.lookup_nested_str(WINGSDK_STRING, None)
 							.unwrap()
@@ -2740,7 +2841,7 @@ impl<'a> TypeChecker<'a> {
 							.unwrap(),
 						property,
 					),
-					Type::Duration => self.get_property_from_class(
+					Type::Duration => self.get_property_from_class_like(
 						env
 							.lookup_nested_str(WINGSDK_DURATION, None)
 							.unwrap()
@@ -2760,7 +2861,7 @@ impl<'a> TypeChecker<'a> {
 							),
 						),
 						reassignable: false,
-						flight: Phase::Independent,
+						phase: Phase::Independent,
 						is_static: false,
 					},
 				};
@@ -2783,7 +2884,7 @@ impl<'a> TypeChecker<'a> {
 							VariableInfo {
 								type_,
 								reassignable: false,
-								flight: Phase::Independent,
+								phase: Phase::Independent,
 								is_static: true,
 							}
 						} else {
@@ -2822,8 +2923,8 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	/// Get's the type of an instance variable in a class
-	fn get_property_from_class(&mut self, class: &Class, property: &Symbol) -> VariableInfo {
-		match class.env.lookup(property, None) {
+	fn get_property_from_class_like(&mut self, class: &impl ClassLike, property: &Symbol) -> VariableInfo {
+		match class.get_env().lookup(property, None) {
 			Ok(field) => {
 				let var = field.as_variable().expect("Expected property to be a variable");
 				if var.is_static {
@@ -2887,7 +2988,7 @@ fn add_parent_members_to_struct_env(
 						name: parent_member_name,
 						span: name.span.clone(),
 					},
-					SymbolKind::make_variable(member_type, false, struct_env.flight),
+					SymbolKind::make_variable(member_type, false, struct_env.phase),
 					StatementIdx::Top,
 				)?;
 			}
@@ -2957,5 +3058,91 @@ mod tests {
 		// preflight and inflight are not subtypes of each other
 		assert!(!Phase::Preflight.is_subtype_of(&Phase::Inflight));
 		assert!(!Phase::Inflight.is_subtype_of(&Phase::Preflight));
+	}
+
+	fn make_function(params: Vec<TypeRef>, ret: TypeRef, phase: Phase) -> Type {
+		Type::Function(FunctionSignature {
+			parameters: params,
+			return_type: ret,
+			phase,
+			js_override: None,
+		})
+	}
+
+	#[test]
+	fn optional_subtyping() {
+		let string = UnsafeRef::<Type>(&Type::String as *const Type);
+		let opt_string = UnsafeRef::<Type>(&Type::Optional(string) as *const Type);
+
+		// T is a subtype of T? since T can be used anywhere a T? is expected
+		// (but not vice versa)
+		assert!(string.is_subtype_of(&opt_string));
+		assert!(!opt_string.is_subtype_of(&string));
+
+		// subtyping is reflexive
+		assert!(string.is_subtype_of(&string));
+		assert!(opt_string.is_subtype_of(&opt_string));
+	}
+
+	#[test]
+	fn function_subtyping_across_phases() {
+		let void = UnsafeRef::<Type>(&Type::Void as *const Type);
+		let inflight_fn = make_function(vec![], void, Phase::Inflight);
+		let preflight_fn = make_function(vec![], void, Phase::Preflight);
+
+		// functions of different phases are not subtypes of each other
+		assert!(!inflight_fn.is_subtype_of(&preflight_fn));
+		assert!(!preflight_fn.is_subtype_of(&inflight_fn));
+
+		// subtyping is reflexive
+		assert!(inflight_fn.is_subtype_of(&inflight_fn));
+		assert!(preflight_fn.is_subtype_of(&preflight_fn));
+	}
+
+	#[test]
+	fn function_subtyping_incompatible_single_param() {
+		let void = UnsafeRef::<Type>(&Type::Void as *const Type);
+		let num = UnsafeRef::<Type>(&Type::Number as *const Type);
+		let string = UnsafeRef::<Type>(&Type::String as *const Type);
+		let num_fn = make_function(vec![num], void, Phase::Inflight);
+		let str_fn = make_function(vec![string], void, Phase::Inflight);
+
+		// functions of incompatible arguments are not subtypes of each other
+		assert!(!num_fn.is_subtype_of(&str_fn));
+		assert!(!str_fn.is_subtype_of(&num_fn));
+	}
+
+	#[test]
+	fn function_subtyping_incompatible_return_type() {
+		let void = UnsafeRef::<Type>(&Type::Void as *const Type);
+		let num = UnsafeRef::<Type>(&Type::Number as *const Type);
+		let string = UnsafeRef::<Type>(&Type::String as *const Type);
+		let returns_num = make_function(vec![], num, Phase::Inflight);
+		let returns_str = make_function(vec![], string, Phase::Inflight);
+		let returns_void = make_function(vec![], void, Phase::Inflight);
+
+		// functions of incompatible return types are not subtypes of each other
+		assert!(!returns_num.is_subtype_of(&returns_str));
+		assert!(!returns_str.is_subtype_of(&returns_num));
+
+		// functions with specific return types are subtypes of functions with void return type
+		assert!(returns_num.is_subtype_of(&returns_void));
+		assert!(returns_str.is_subtype_of(&returns_void));
+	}
+
+	#[test]
+	fn function_subtyping_parameter_contravariance() {
+		let void = UnsafeRef::<Type>(&Type::Void as *const Type);
+		let string = UnsafeRef::<Type>(&Type::String as *const Type);
+		let opt_string = UnsafeRef::<Type>(&Type::Optional(string) as *const Type);
+		let str_fn = make_function(vec![string], void, Phase::Inflight);
+		let opt_str_fn = make_function(vec![opt_string], void, Phase::Inflight);
+
+		// let x = (s: string) => {};
+		// let y = (s: string?) => {};
+		// y is a subtype of x because a function that accepts a "string?" can be used
+		// in place of a function that accepts a "string", but not vice versa
+		assert!(opt_str_fn.is_subtype_of(&str_fn));
+		assert!(!str_fn.is_subtype_of(&opt_str_fn));
 	}
 }

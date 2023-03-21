@@ -8,8 +8,8 @@
 
 use crate::{
 	ast::{
-		ArgList, Class, Constructor, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase, Reference,
-		Scope, StmtKind, Symbol,
+		ArgList, Class, Constructor, Expr, ExprKind, FunctionBody, FunctionDefinition, InterpolatedStringPart, Literal,
+		Phase, Reference, Scope, StmtKind, Symbol,
 	},
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
 	type_check::{symbol_env::SymbolEnv, ClassLike, Type},
@@ -73,7 +73,7 @@ impl Visit<'_> for CaptureVisitor {
 	// TODO: currently there's no special treatment for resources, see file's top comment
 
 	fn visit_constructor(&mut self, constructor: &Constructor) {
-		match constructor.signature.flight {
+		match constructor.signature.phase {
 			Phase::Inflight => {
 				// TODO: the result of this is not used, see file's top comment
 				scan_captures_in_inflight_scope(&constructor.statements, &mut self.diagnostics);
@@ -84,18 +84,22 @@ impl Visit<'_> for CaptureVisitor {
 	}
 
 	fn visit_function_definition(&mut self, func_def: &FunctionDefinition) {
-		match func_def.signature.flight {
+		let FunctionBody::Statements(func_scope) = &func_def.body else    {
+			return;
+		};
+
+		match func_def.signature.phase {
 			Phase::Inflight => {
 				let mut func_captures = func_def.captures.borrow_mut();
 				assert!(func_captures.is_none());
-				assert!(func_def.statements.env.borrow().is_some()); // make sure env is defined
+				assert!(func_scope.env.borrow().is_some()); // make sure env is defined
 				*func_captures = Some(collect_captures(scan_captures_in_inflight_scope(
-					&func_def.statements,
+					func_scope,
 					&mut self.diagnostics,
 				)));
 			}
-			Phase::Independent => self.visit_scope(&func_def.statements),
-			Phase::Preflight => self.visit_scope(&func_def.statements),
+			Phase::Independent => self.visit_scope(&func_scope),
+			Phase::Preflight => self.visit_scope(&func_scope),
 		}
 	}
 }
@@ -164,7 +168,7 @@ fn scan_captures_in_expression(
 						let t = var.as_variable().unwrap().type_;
 
 						// if the identifier represents a preflight value, then capture it
-						if si.flight == Phase::Preflight {
+						if si.phase == Phase::Preflight {
 							if var.is_reassignable() {
 								diagnostics.push(Diagnostic {
 									level: DiagnosticLevel::Error,
@@ -283,8 +287,8 @@ fn scan_captures_in_expression(
 			res.extend(scan_captures_in_expression(&element, env, statement_idx, diagnostics));
 		}
 		ExprKind::StructLiteral { fields, .. } => {
-			for v in fields.values() {
-				res.extend(scan_captures_in_expression(&v, env, statement_idx, diagnostics));
+			for (_sym, exp) in fields.values() {
+				res.extend(scan_captures_in_expression(&exp, env, statement_idx, diagnostics));
 			}
 		}
 		ExprKind::MapLiteral { fields, .. } => {
@@ -299,12 +303,16 @@ fn scan_captures_in_expression(
 		}
 		ExprKind::FunctionClosure(func_def) => {
 			// Can't define preflight stuff in inflight context
-			assert!(func_def.signature.flight != Phase::Preflight);
-			if let Phase::Inflight = func_def.signature.flight {
+			assert!(func_def.signature.phase != Phase::Preflight);
+			if let Phase::Inflight = func_def.signature.phase {
+				let FunctionBody::Statements(func_scope) = &func_def.body else {
+					return res;
+				};
+
 				let mut func_captures = func_def.captures.borrow_mut();
 				assert!(func_captures.is_none());
 				*func_captures = Some(collect_captures(scan_captures_in_inflight_scope(
-					&func_def.statements,
+					func_scope,
 					diagnostics,
 				)));
 			}
@@ -322,7 +330,7 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 	let env = env_ref.as_ref().unwrap();
 
 	// Make sure we're looking for captures only in inflight code
-	assert!(matches!(env.flight, Phase::Inflight));
+	assert!(matches!(env.phase, Phase::Inflight));
 
 	for s in scope.statements.iter() {
 		match &s.kind {
@@ -378,7 +386,10 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 			}) => {
 				res.extend(scan_captures_in_inflight_scope(&constructor.statements, diagnostics));
 				for (_, m) in methods.iter() {
-					res.extend(scan_captures_in_inflight_scope(&m.statements, diagnostics))
+					let FunctionBody::Statements(func_scope) = &m.body else {
+						continue;
+					};
+					res.extend(scan_captures_in_inflight_scope(func_scope, diagnostics))
 				}
 			}
 			StmtKind::Bring {
