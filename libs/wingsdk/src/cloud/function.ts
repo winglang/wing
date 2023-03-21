@@ -108,15 +108,12 @@ export abstract class Function extends Resource implements IInflightHost {
       implicit: true,
     });
 
-    const assetName = join(
-      "assets",
-      ResourceNames.generateName(this, {
-        // Avoid characters that may cause path issues
-        disallowedRegex: /[><:"/\\|?* ]/g,
-        case: CaseConventions.LOWERCASE,
-        sep: "_",
-      })
-    );
+    const assetName = ResourceNames.generateName(this, {
+      // Avoid characters that may cause path issues
+      disallowedRegex: /[><:"/\\|?* ]/g,
+      case: CaseConventions.LOWERCASE,
+      sep: "_",
+    });
 
     // write the entrypoint next to the partial inflight code emitted by the compiler, so that
     // `require` resolves naturally.

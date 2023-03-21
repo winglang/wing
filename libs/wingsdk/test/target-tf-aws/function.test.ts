@@ -129,5 +129,5 @@ test("asset path is stripped of spaces", () => {
   // WHEN
   app.synth();
   // THEN
-  expect(f.assetPath).toContain(expectedReplacement);
+  expect(f.entrypoint).toContain(expectedReplacement);
 });
