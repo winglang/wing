@@ -19,9 +19,20 @@ export async function compileTest(expect: Vi.ExpectStatic, wingFile: string) {
 
   expect(npx_tfJson).toMatchSnapshot("main.tf.json");
 
+  // which files to include from the .wing directory
   const dotWing = join(targetDir, ".wing");
+  const include = [
+    "preflight.js",
+    "clients/",
+    "extern/",
+    "proc.",
+  ];
+
   for await (const dotFile of walkdir(dotWing)) {
     const subpath = relative(dotWing, dotFile).replace(/\\/g, "/");
+    if (!include.find((f) => subpath.startsWith(f))) {
+      continue;
+    }
     expect(await readFile(dotFile, "utf8")).toMatchSnapshot(subpath);
   }
 }
@@ -29,7 +40,7 @@ export async function compileTest(expect: Vi.ExpectStatic, wingFile: string) {
 export async function testTest(expect: Vi.ExpectStatic, wingFile: string) {
   const args = ["test"];
   const testDir = join(tmpDir, `${wingFile}_sim`);
-  await mkdir(testDir);
+  await mkdir(testDir, { recursive: true });
 
   const out = await runWingCommand(
     testDir,

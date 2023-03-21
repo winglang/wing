@@ -80,30 +80,10 @@ exports[`messages are requeued if the function fails 1`] = `
   "Push (message=BAD MESSAGE).",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\"\\").",
-  "Subscriber error - returning 1 messages to queue: Error: ERROR
-    at Handler.handle (evalmachine.<anonymous>:22:15)
-    at QueueOnMessageHandlerClient.handle (/home/runner/work/wing/wing/libs/wingsdk/src/target-sim/queue.onmessage.inflight.ts:17:26)
-    at Object.exports.handler (evalmachine.<anonymous>:28:8)
-    at evalmachine.<anonymous>:30:9
-    at Script.runInContext (node:vm:141:12)
-    at Proxy.runInContext (node:vm:297:6)
-    at /home/runner/work/wing/wing/libs/wingsdk/src/target-sim/function.inflight.ts:137:8
-    at new Promise (<anonymous>)
-    at runInSandbox (/home/runner/work/wing/wing/libs/wingsdk/src/target-sim/function.inflight.ts:112:10)
-    at Object.activity (/home/runner/work/wing/wing/libs/wingsdk/src/target-sim/function.inflight.ts:45:16)",
+  "Subscriber error - returning 1 messages to queue: ERROR",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\"\\").",
-  "Subscriber error - returning 1 messages to queue: Error: ERROR
-    at Handler.handle (evalmachine.<anonymous>:22:15)
-    at QueueOnMessageHandlerClient.handle (/home/runner/work/wing/wing/libs/wingsdk/src/target-sim/queue.onmessage.inflight.ts:17:26)
-    at Object.exports.handler (evalmachine.<anonymous>:28:8)
-    at evalmachine.<anonymous>:30:9
-    at Script.runInContext (node:vm:141:12)
-    at Proxy.runInContext (node:vm:297:6)
-    at /home/runner/work/wing/wing/libs/wingsdk/src/target-sim/function.inflight.ts:137:8
-    at new Promise (<anonymous>)
-    at runInSandbox (/home/runner/work/wing/wing/libs/wingsdk/src/target-sim/function.inflight.ts:112:10)
-    at Object.activity (/home/runner/work/wing/wing/libs/wingsdk/src/target-sim/function.inflight.ts:45:16)",
+  "Subscriber error - returning 1 messages to queue: ERROR",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",

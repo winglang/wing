@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`wing compile -t tf-aws > clients/A.inflight.js 1`] = `
-"export class A  {
+"class A  {
 constructor({  }) {
 
 
@@ -10,11 +10,12 @@ async handle(msg)  {
 	{
   return;
 }
-}}"
+}}
+exports.A = A;"
 `;
 
 exports[`wing compile -t tf-aws > clients/B.inflight.js 1`] = `
-"export class B  {
+"class B  {
 constructor({  }) {
 
 
@@ -23,7 +24,8 @@ async handle(msg)  {
 	{
   return 5;
 }
-}}"
+}}
+exports.B = B;"
 `;
 
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
@@ -79,7 +81,7 @@ constructor() {
   	
   	_toInflight() {
   	
-  	const self_client_path = require('path').resolve(__dirname, \\"clients/A.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	const self_client_path = \\"./clients/A.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).A({}))\`);
   }
   }
@@ -93,7 +95,7 @@ constructor() {
   	
   	_toInflight() {
   	
-  	const self_client_path = require('path').resolve(__dirname, \\"clients/B.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	const self_client_path = \\"./clients/B.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
   	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).B({}))\`);
   }
   }
