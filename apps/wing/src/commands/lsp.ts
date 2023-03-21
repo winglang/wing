@@ -6,6 +6,7 @@ import {
   CompletionItem,
   DocumentSymbol,
   Hover,
+  LocationLink,
 } from "vscode-languageserver/node";
 
 import * as wingCompiler from "../wingc";
@@ -30,6 +31,7 @@ export async function run_server() {
         },
         hoverProvider: true,
         documentSymbolProvider: true,
+        definitionProvider: true,
       },
     };
     return result;
@@ -50,6 +52,18 @@ export async function run_server() {
       JSON.stringify(params)
     ) as string;
     return JSON.parse(result) as CompletionItem[];
+  });
+  connection.onDefinition(async (params) => {
+    const result = wingCompiler.invoke(
+      wingc,
+      "wingc_on_goto_definition",
+      JSON.stringify(params)
+    );
+    if (result == 0) {
+      return null;
+    } else {
+      return JSON.parse(result as string) as LocationLink[];
+    }
   });
   connection.onDocumentSymbol(async (params) => {
     const result = wingCompiler.invoke(
