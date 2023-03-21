@@ -32,7 +32,7 @@ importers:
       '@wingconsole/server': workspace:^0.0.0
       '@wingconsole/tsconfig': workspace:^0.0.0
       '@wingconsole/ui': workspace:^0.0.0
-      '@winglang/sdk': ^0.5.135
+      '@winglang/sdk': ^0.6.0
       analytics-node: ^6.2.0
       autoprefixer: ^10.4.13
       c8: ^7.12.0
@@ -82,7 +82,7 @@ importers:
       '@wingconsole/server': link:../server
       '@wingconsole/tsconfig': link:../../tools/tsconfig
       '@wingconsole/ui': link:../ui
-      '@winglang/sdk': 0.5.135_constructs@10.1.272
+      '@winglang/sdk': 0.6.0_constructs@10.1.272
       analytics-node: 6.2.0
       autoprefixer: 10.4.13_postcss@8.4.21
       c8: 7.13.0
@@ -192,7 +192,7 @@ importers:
       '@vitest/coverage-c8': ^0.29.2
       '@wingconsole/eslint-plugin': workspace:^0.0.0
       '@wingconsole/tsconfig': workspace:^0.0.0
-      '@winglang/sdk': ^0.5.135
+      '@winglang/sdk': ^0.6.0
       chokidar: ^3.5.3
       constructs: ^10.1.272
       cors: ^2.8.5
@@ -217,7 +217,7 @@ importers:
       '@vitest/coverage-c8': 0.29.2_vitest@0.29.2
       '@wingconsole/eslint-plugin': link:../../tools/eslint-plugin
       '@wingconsole/tsconfig': link:../../tools/tsconfig
-      '@winglang/sdk': 0.5.135_constructs@10.1.272
+      '@winglang/sdk': 0.6.0_constructs@10.1.272
       chokidar: 3.5.3
       constructs: 10.1.272
       cors: 2.8.5
@@ -252,7 +252,7 @@ importers:
       '@wingconsole/eslint-plugin': workspace:^0.0.0
       '@wingconsole/server': workspace:^0.0.0
       '@wingconsole/tsconfig': workspace:^0.0.0
-      '@winglang/sdk': ^0.5.135
+      '@winglang/sdk': ^0.6.0
       classnames: ^2.3.2
       constructs: ^10.1.272
       elkjs: ^0.8.2
@@ -290,7 +290,7 @@ importers:
       '@wingconsole/eslint-plugin': link:../../tools/eslint-plugin
       '@wingconsole/server': link:../server
       '@wingconsole/tsconfig': link:../../tools/tsconfig
-      '@winglang/sdk': 0.5.135_constructs@10.1.272
+      '@winglang/sdk': 0.6.0_constructs@10.1.272
       classnames: 2.3.2
       constructs: 10.1.272
       elkjs: 0.8.2
@@ -3692,8 +3692,8 @@ packages:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
 
-  /@cdktf/provider-aws/12.0.8_pdc7ilfrtxxhzovxj2pvxc6nu4:
-    resolution: {integrity: sha512-+tHVP//VmZK3c/FrAgd5yrIRC3AqcjC/6PmiWWFoCvzmDfewZDdnbM3wltNfMDqQH6PxQl3dO/jXHv7UWHA94g==}
+  /@cdktf/provider-aws/12.0.10_pdc7ilfrtxxhzovxj2pvxc6nu4:
+    resolution: {integrity: sha512-+0NL0Aic3+Xme+0fuQs9Eo3tijuuuiXmZESAvQ/Y5E8yUHhhw0F4ODf+URsFK+4/fHEGJlsnodRezvZjCBggsA==}
     engines: {node: '>= 14.17.0'}
     peerDependencies:
       cdktf: ^0.15.0
@@ -3703,8 +3703,8 @@ packages:
       constructs: 10.1.272
     dev: true
 
-  /@cdktf/provider-azurerm/5.0.8_pdc7ilfrtxxhzovxj2pvxc6nu4:
-    resolution: {integrity: sha512-lv4U6OJGPLwmQUpiROfuk0w9bE9xLiNVZ7J9sYa5BXuxjNfJMIF6R/GiHGtYs8dYSM61f3xXmkP5dSrjH6pJwQ==}
+  /@cdktf/provider-azurerm/5.0.10_pdc7ilfrtxxhzovxj2pvxc6nu4:
+    resolution: {integrity: sha512-5Ou6rZqo7i0nAvXfy+NPHnQMilWXUVFowlMe4uPbkDZo8HJU60G2ECUGW1/4J6EYohpbEpIx/oWY8pkyJ7Gl+g==}
     engines: {node: '>= 14.17.0'}
     peerDependencies:
       cdktf: ^0.15.0
@@ -3714,8 +3714,8 @@ packages:
       constructs: 10.1.272
     dev: true
 
-  /@cdktf/provider-google/5.0.8_pdc7ilfrtxxhzovxj2pvxc6nu4:
-    resolution: {integrity: sha512-8U9/oWGYjmyfbnahahO2iL6sy/2zNt1QfO12atUVzN6yh+LPOWgijbE2aQS2AbVDt3l6Cng5dZlWsWqRvlkSiA==}
+  /@cdktf/provider-google/5.0.9_pdc7ilfrtxxhzovxj2pvxc6nu4:
+    resolution: {integrity: sha512-CvV5gZAitQhYB7icK69eraiCSEO3DrbvaZWWmcVwkhZsoPVDlw6AI+iPuKlOKdC1i/GPG+JM9s2yEEBWjdfqGA==}
     engines: {node: '>= 14.17.0'}
     peerDependencies:
       cdktf: ^0.15.0
@@ -6999,15 +6999,15 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
-  /@winglang/sdk/0.5.135_constructs@10.1.272:
-    resolution: {integrity: sha512-pV6TbgWyU+rHCkr8h97Es6N48E1x/3eza8ujPo4nzlIEQeMbrHZ0ClvizoqQ0ho1FiVV39k+swQvpseXezyqDg==}
+  /@winglang/sdk/0.6.0_constructs@10.1.272:
+    resolution: {integrity: sha512-jOD9BmHu9+i7WV3bpM1iKYw3/6f7Ix28dwx7EyTX/np4tmD0G+vzJiBMHWxEKI9nn9p0bRBV/xyS8PL4922xVg==}
     engines: {node: '>= 16.16.0'}
     peerDependencies:
       constructs: ~10.1.228
     dependencies:
-      '@cdktf/provider-aws': 12.0.8_pdc7ilfrtxxhzovxj2pvxc6nu4
-      '@cdktf/provider-azurerm': 5.0.8_pdc7ilfrtxxhzovxj2pvxc6nu4
-      '@cdktf/provider-google': 5.0.8_pdc7ilfrtxxhzovxj2pvxc6nu4
+      '@cdktf/provider-aws': 12.0.10_pdc7ilfrtxxhzovxj2pvxc6nu4
+      '@cdktf/provider-azurerm': 5.0.10_pdc7ilfrtxxhzovxj2pvxc6nu4
+      '@cdktf/provider-google': 5.0.9_pdc7ilfrtxxhzovxj2pvxc6nu4
       '@cdktf/provider-random': 5.0.0_pdc7ilfrtxxhzovxj2pvxc6nu4
       cdktf: 0.15.2_constructs@10.1.272
       constructs: 10.1.272
@@ -7027,6 +7027,7 @@ packages:
       - '@azure/storage-blob'
       - debug
       - esbuild-wasm
+      - express
       - safe-stable-stringify
       - tar
 

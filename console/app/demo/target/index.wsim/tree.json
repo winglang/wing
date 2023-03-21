@@ -1,0 +1,748 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "root",
+    "path": "root",
+    "children": {
+      "WingLogger": {
+        "id": "WingLogger",
+        "path": "root/WingLogger",
+        "attributes": {
+          "wing:resource:stateful": true,
+          "wing:resource:connections": [
+            {
+              "direction": "inbound",
+              "relationship": "print",
+              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "implicit": true
+            },
+            {
+              "direction": "inbound",
+              "relationship": "print",
+              "resource": "root/IncrementCounter",
+              "implicit": true
+            },
+            {
+              "direction": "inbound",
+              "relationship": "print",
+              "resource": "root/Topic-OnMessage-90af6456",
+              "implicit": true
+            },
+            {
+              "direction": "inbound",
+              "relationship": "print",
+              "resource": "root/Topic-OnMessage-05ec50df",
+              "implicit": true
+            },
+            {
+              "direction": "inbound",
+              "relationship": "print",
+              "resource": "root/test: Increment counter",
+              "implicit": true
+            },
+            {
+              "direction": "inbound",
+              "relationship": "print",
+              "resource": "root/test: Push message to the queue",
+              "implicit": true
+            },
+            {
+              "direction": "inbound",
+              "relationship": "print",
+              "resource": "root/test: Print",
+              "implicit": true
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        },
+        "display": {
+          "title": "Logger",
+          "description": "A cloud logging facility",
+          "hidden": true
+        }
+      },
+      "cloud.Bucket": {
+        "id": "cloud.Bucket",
+        "path": "root/cloud.Bucket",
+        "attributes": {
+          "wing:resource:stateful": true,
+          "wing:resource:connections": [
+            {
+              "direction": "inbound",
+              "relationship": "delete",
+              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "get",
+              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "get_json",
+              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "list",
+              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "public_url",
+              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "put",
+              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "put_json",
+              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "implicit": false
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        },
+        "display": {
+          "title": "Bucket",
+          "description": "A cloud object store"
+        }
+      },
+      "cloud.Queue": {
+        "id": "cloud.Queue",
+        "path": "root/cloud.Queue",
+        "attributes": {
+          "wing:resource:stateful": true,
+          "wing:resource:connections": [
+            {
+              "direction": "outbound",
+              "relationship": "on_message",
+              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "approx_size",
+              "resource": "root/test: Push message to the queue",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "purge",
+              "resource": "root/test: Push message to the queue",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "push",
+              "resource": "root/test: Push message to the queue",
+              "implicit": false
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        },
+        "display": {
+          "title": "Queue",
+          "description": "A distributed message queue"
+        }
+      },
+      "$Inflight1": {
+        "id": "$Inflight1",
+        "path": "root/$Inflight1",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": [
+            {
+              "direction": "inbound",
+              "relationship": "handle",
+              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "implicit": false
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        },
+        "display": {
+          "title": "Inflight",
+          "description": "An inflight resource",
+          "hidden": true
+        }
+      },
+      "cloud.Queue-OnMessageHandler-de95ec56": {
+        "id": "cloud.Queue-OnMessageHandler-de95ec56",
+        "path": "root/cloud.Queue-OnMessageHandler-de95ec56",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": []
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        }
+      },
+      "cloud.Queue-OnMessage-de95ec56": {
+        "id": "cloud.Queue-OnMessage-de95ec56",
+        "path": "root/cloud.Queue-OnMessage-de95ec56",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": [
+            {
+              "direction": "outbound",
+              "relationship": "delete",
+              "resource": "root/cloud.Bucket",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "get",
+              "resource": "root/cloud.Bucket",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "get_json",
+              "resource": "root/cloud.Bucket",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "list",
+              "resource": "root/cloud.Bucket",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "public_url",
+              "resource": "root/cloud.Bucket",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "put",
+              "resource": "root/cloud.Bucket",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "put_json",
+              "resource": "root/cloud.Bucket",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "handle",
+              "resource": "root/$Inflight1",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "print",
+              "resource": "root/WingLogger",
+              "implicit": true
+            },
+            {
+              "direction": "inbound",
+              "relationship": "on_message",
+              "resource": "root/cloud.Queue",
+              "implicit": false
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        },
+        "display": {
+          "title": "Function",
+          "description": "A cloud function (FaaS)"
+        }
+      },
+      "cloud.Counter": {
+        "id": "cloud.Counter",
+        "path": "root/cloud.Counter",
+        "attributes": {
+          "wing:resource:stateful": true,
+          "wing:resource:connections": [
+            {
+              "direction": "inbound",
+              "relationship": "dec",
+              "resource": "root/IncrementCounter",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "inc",
+              "resource": "root/IncrementCounter",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "peek",
+              "resource": "root/IncrementCounter",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "reset",
+              "resource": "root/IncrementCounter",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "dec",
+              "resource": "root/test: Increment counter",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "inc",
+              "resource": "root/test: Increment counter",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "peek",
+              "resource": "root/test: Increment counter",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "reset",
+              "resource": "root/test: Increment counter",
+              "implicit": false
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        },
+        "display": {
+          "title": "Counter",
+          "description": "A distributed atomic counter"
+        }
+      },
+      "$Inflight2": {
+        "id": "$Inflight2",
+        "path": "root/$Inflight2",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": []
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        },
+        "display": {
+          "title": "Inflight",
+          "description": "An inflight resource",
+          "hidden": true
+        }
+      },
+      "IncrementCounter": {
+        "id": "IncrementCounter",
+        "path": "root/IncrementCounter",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": [
+            {
+              "direction": "outbound",
+              "relationship": "dec",
+              "resource": "root/cloud.Counter",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "inc",
+              "resource": "root/cloud.Counter",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "peek",
+              "resource": "root/cloud.Counter",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "reset",
+              "resource": "root/cloud.Counter",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "print",
+              "resource": "root/WingLogger",
+              "implicit": true
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        },
+        "display": {
+          "title": "Function",
+          "description": "A cloud function (FaaS)"
+        }
+      },
+      "Topic": {
+        "id": "Topic",
+        "path": "root/Topic",
+        "attributes": {
+          "wing:resource:stateful": true,
+          "wing:resource:connections": [
+            {
+              "direction": "outbound",
+              "relationship": "on_message",
+              "resource": "root/Topic-OnMessage-90af6456",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "on_message",
+              "resource": "root/Topic-OnMessage-05ec50df",
+              "implicit": false
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        },
+        "display": {
+          "title": "Topic",
+          "description": "A pub/sub notification topic"
+        }
+      },
+      "$Inflight3": {
+        "id": "$Inflight3",
+        "path": "root/$Inflight3",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": [
+            {
+              "direction": "inbound",
+              "relationship": "handle",
+              "resource": "root/Topic-OnMessage-90af6456",
+              "implicit": false
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        },
+        "display": {
+          "title": "Inflight",
+          "description": "An inflight resource",
+          "hidden": true
+        }
+      },
+      "Topic-OnMessageHandler-90af6456": {
+        "id": "Topic-OnMessageHandler-90af6456",
+        "path": "root/Topic-OnMessageHandler-90af6456",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": []
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        }
+      },
+      "Topic-OnMessage-90af6456": {
+        "id": "Topic-OnMessage-90af6456",
+        "path": "root/Topic-OnMessage-90af6456",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": [
+            {
+              "direction": "outbound",
+              "relationship": "handle",
+              "resource": "root/$Inflight3",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "print",
+              "resource": "root/WingLogger",
+              "implicit": true
+            },
+            {
+              "direction": "inbound",
+              "relationship": "on_message",
+              "resource": "root/Topic",
+              "implicit": false
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        },
+        "display": {
+          "title": "Function",
+          "description": "A cloud function (FaaS)"
+        }
+      },
+      "$Inflight4": {
+        "id": "$Inflight4",
+        "path": "root/$Inflight4",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": [
+            {
+              "direction": "inbound",
+              "relationship": "handle",
+              "resource": "root/Topic-OnMessage-05ec50df",
+              "implicit": false
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        },
+        "display": {
+          "title": "Inflight",
+          "description": "An inflight resource",
+          "hidden": true
+        }
+      },
+      "Topic-OnMessageHandler-05ec50df": {
+        "id": "Topic-OnMessageHandler-05ec50df",
+        "path": "root/Topic-OnMessageHandler-05ec50df",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": []
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        }
+      },
+      "Topic-OnMessage-05ec50df": {
+        "id": "Topic-OnMessage-05ec50df",
+        "path": "root/Topic-OnMessage-05ec50df",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": [
+            {
+              "direction": "outbound",
+              "relationship": "handle",
+              "resource": "root/$Inflight4",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "print",
+              "resource": "root/WingLogger",
+              "implicit": true
+            },
+            {
+              "direction": "inbound",
+              "relationship": "on_message",
+              "resource": "root/Topic",
+              "implicit": false
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        },
+        "display": {
+          "title": "Function",
+          "description": "A cloud function (FaaS)"
+        }
+      },
+      "$Inflight5": {
+        "id": "$Inflight5",
+        "path": "root/$Inflight5",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": []
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        },
+        "display": {
+          "title": "Inflight",
+          "description": "An inflight resource",
+          "hidden": true
+        }
+      },
+      "test: Increment counter": {
+        "id": "test: Increment counter",
+        "path": "root/test: Increment counter",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": [
+            {
+              "direction": "outbound",
+              "relationship": "dec",
+              "resource": "root/cloud.Counter",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "inc",
+              "resource": "root/cloud.Counter",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "peek",
+              "resource": "root/cloud.Counter",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "reset",
+              "resource": "root/cloud.Counter",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "print",
+              "resource": "root/WingLogger",
+              "implicit": true
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        },
+        "display": {
+          "title": "Function",
+          "description": "A cloud function (FaaS)"
+        }
+      },
+      "$Inflight6": {
+        "id": "$Inflight6",
+        "path": "root/$Inflight6",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": []
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        },
+        "display": {
+          "title": "Inflight",
+          "description": "An inflight resource",
+          "hidden": true
+        }
+      },
+      "test: Push message to the queue": {
+        "id": "test: Push message to the queue",
+        "path": "root/test: Push message to the queue",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": [
+            {
+              "direction": "outbound",
+              "relationship": "approx_size",
+              "resource": "root/cloud.Queue",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "purge",
+              "resource": "root/cloud.Queue",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "push",
+              "resource": "root/cloud.Queue",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "print",
+              "resource": "root/WingLogger",
+              "implicit": true
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        },
+        "display": {
+          "title": "Function",
+          "description": "A cloud function (FaaS)"
+        }
+      },
+      "$Inflight7": {
+        "id": "$Inflight7",
+        "path": "root/$Inflight7",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": []
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        },
+        "display": {
+          "title": "Inflight",
+          "description": "An inflight resource",
+          "hidden": true
+        }
+      },
+      "test: Print": {
+        "id": "test: Print",
+        "path": "root/test: Print",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": [
+            {
+              "direction": "outbound",
+              "relationship": "print",
+              "resource": "root/WingLogger",
+              "implicit": true
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.272"
+        },
+        "display": {
+          "title": "Function",
+          "description": "A cloud function (FaaS)"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "constructs.Construct",
+      "version": "10.1.272"
+    }
+  }
+}

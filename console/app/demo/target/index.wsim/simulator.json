@@ -1,0 +1,153 @@
+{
+  "resources": [
+    {
+      "type": "wingsdk.cloud.Logger",
+      "path": "root/WingLogger",
+      "props": {},
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Counter",
+      "path": "root/cloud.Counter",
+      "props": {
+        "initial": 0
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/IncrementCounter",
+      "props": {
+        "sourceCodeFile": ".wing/incrementcounter_c8945e06.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {
+          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}",
+          "COUNTER_HANDLE_e5a56560": "${root/cloud.Counter#attrs.handle}"
+        },
+        "timeout": 60000
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/Topic-OnMessage-90af6456",
+      "props": {
+        "sourceCodeFile": ".wing/topic-onmessage-90af6456_c85fef18.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {
+          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}"
+        },
+        "timeout": 60000
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/Topic-OnMessage-05ec50df",
+      "props": {
+        "sourceCodeFile": ".wing/topic-onmessage-05ec50df_c8d9f85e.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {
+          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}"
+        },
+        "timeout": 60000
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Topic",
+      "path": "root/Topic",
+      "props": {
+        "subscribers": [
+          {
+            "functionHandle": "${root/Topic-OnMessage-90af6456#attrs.handle}"
+          },
+          {
+            "functionHandle": "${root/Topic-OnMessage-05ec50df#attrs.handle}"
+          }
+        ]
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/test: Increment counter",
+      "props": {
+        "sourceCodeFile": ".wing/test_ increment counter_c8257dd6.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {
+          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}",
+          "COUNTER_HANDLE_e5a56560": "${root/cloud.Counter#attrs.handle}"
+        },
+        "timeout": 60000
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Bucket",
+      "path": "root/cloud.Bucket",
+      "props": {
+        "public": false,
+        "initialObjects": {}
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/cloud.Queue-OnMessage-de95ec56",
+      "props": {
+        "sourceCodeFile": ".wing/cloud.queue-onmessage-de95ec56_c821f89b.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {
+          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}",
+          "BUCKET_HANDLE_2cd0933d": "${root/cloud.Bucket#attrs.handle}"
+        },
+        "timeout": 60000
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Queue",
+      "path": "root/cloud.Queue",
+      "props": {
+        "timeout": 30,
+        "subscribers": [
+          {
+            "functionHandle": "${root/cloud.Queue-OnMessage-de95ec56#attrs.handle}",
+            "batchSize": 1
+          }
+        ],
+        "initialMessages": []
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/test: Push message to the queue",
+      "props": {
+        "sourceCodeFile": ".wing/test_ push message to the queue_c844f3de.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {
+          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}",
+          "QUEUE_HANDLE_25e0ce1c": "${root/cloud.Queue#attrs.handle}"
+        },
+        "timeout": 60000
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/test: Print",
+      "props": {
+        "sourceCodeFile": ".wing/test_ print_c8ce8953.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {
+          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}"
+        },
+        "timeout": 60000
+      },
+      "attrs": {}
+    }
+  ],
+  "sdkVersion": "0.6.0"
+}

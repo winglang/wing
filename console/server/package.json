@@ -19,7 +19,7 @@
     "@vitest/coverage-c8": "^0.29.2",
     "@wingconsole/eslint-plugin": "workspace:^0.0.0",
     "@wingconsole/tsconfig": "workspace:^0.0.0",
-    "@winglang/sdk": "^0.5.135",
+    "@winglang/sdk": "^0.6.0",
     "chokidar": "^3.5.3",
     "constructs": "^10.1.272",
     "cors": "^2.8.5",

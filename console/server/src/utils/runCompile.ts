@@ -1,6 +1,4 @@
-import fs from "node:fs";
 import { access } from "node:fs/promises";
-import * as os from "node:os";
 import path from "node:path";
 
 import { FSWatcher } from "chokidar";
@@ -27,17 +25,19 @@ export const runCompile = async ({
   consoleLogger,
   log,
 }: CreateCompileRunnerProps): Promise<FSWatcher> => {
-  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "wing-app-target-dir-"));
   const fileName = path.basename(wingSrcFile, ".w");
-  const compiledSimFile = path.join(tmpDir, fileName + ".wsim");
-  log.info(`compiling ${wingSrcFile} into ${tmpDir}`, "compiler");
+  const compiledWSimDir = path.join(
+    path.dirname(wingSrcFile),
+    "target",
+    `${fileName}.wsim`,
+  );
+  log.info(`compiling ${wingSrcFile} into ${compiledWSimDir}`, "compiler");
 
   const runCompile = async () => {
     try {
       onCompilerStatusChange("loading");
       const status = await compile({
         wingSrcFile,
-        outDir: tmpDir,
         consoleLogger,
         log,
       });
@@ -45,11 +45,11 @@ export const runCompile = async ({
         onCompilerStatusChange("error", "Compilation failed");
       } else {
         try {
-          await access(compiledSimFile);
-          onCompilerStatusChange("success", compiledSimFile);
+          await access(compiledWSimDir);
+          onCompilerStatusChange("success", compiledWSimDir);
         } catch (error) {
           consoleLogger.error(
-            `file ${compiledSimFile} doesn't exist ${
+            `directory ${compiledWSimDir} doesn't exist ${
               typeof error === "string" ? error : JSON.stringify(error)
             }`,
             "compiler",
@@ -60,7 +60,7 @@ export const runCompile = async ({
       }
     } catch (error) {
       consoleLogger.error(
-        `failed to recompile Wing application. wFile: ${wingSrcFile}, outDir: ${tmpDir}\n ${
+        `failed to recompile Wing application. wFile: ${wingSrcFile}\n ${
           typeof error === "string" ? error : JSON.stringify(error)
         }`,
         "compiler",
@@ -86,15 +86,17 @@ export const runCompile = async ({
       );
       await runCompile();
     })
-    .on("unlink", async () => {
-      consoleLogger.error(
-        `Wing application src directory has been deleted ${wingSrcDir}`,
-        "compiler",
-      );
-      onCompilerStatusChange(
-        "error",
-        "Wing application src directory has been deleted",
-      );
-      // todo [sa] what should we do here?
+    .on("unlink", async (path: string) => {
+      if (path === wingSrcFile) {
+        consoleLogger.error(
+          `Wing application src file has been deleted ${wingSrcFile}`,
+          "compiler",
+        );
+        onCompilerStatusChange(
+          "error",
+          "Wing application src file has been deleted",
+        );
+        return;
+      }
     });
 };

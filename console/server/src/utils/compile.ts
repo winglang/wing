@@ -8,7 +8,6 @@ import { LogInterface } from "./LogInterface.js";
 export type CompileStatusTypes = "success" | "error" | "compiling";
 
 export interface ICompileOptions {
-  outDir: string;
   wingSrcFile: string;
   consoleLogger: ConsoleLogger;
   log: LogInterface;
@@ -17,17 +16,16 @@ export interface ICompileOptions {
 export const compile = async ({
   wingSrcFile,
   consoleLogger,
-  outDir,
   log,
 }: ICompileOptions): Promise<CompileStatusTypes> => {
   log.info(
-    `exec child process: wing compile ${wingSrcFile} -t sim -o ${outDir}`,
+    `exec child process: wing compile ${wingSrcFile} -t sim`,
     "compiler",
   );
   try {
     // fixPath();
     const { stdout, stderr } = await util.promisify(exec)(
-      `wing compile ${wingSrcFile} -t sim -o ${outDir}`,
+      `wing compile ${wingSrcFile} -t sim`,
     );
     if (stdout) {
       log.info(stdout, "compiler");

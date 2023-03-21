@@ -156,7 +156,7 @@ function createWindowManager() {
       await app.whenReady();
       const { canceled, filePaths } = await dialog.showOpenDialog({
         properties: ["openFile"],
-        filters: [{ name: "Wing File", extensions: ["wsim", "w"] }],
+        filters: [{ name: "Wing File", extensions: ["w"] }],
       });
       if (canceled) {
         onFileInputClose();
@@ -299,7 +299,7 @@ async function main() {
           async click() {
             const { canceled, filePaths } = await dialog.showOpenDialog({
               properties: ["openFile"],
-              filters: [{ name: "Wing File", extensions: ["wsim", "w"] }],
+              filters: [{ name: "Wing File", extensions: ["w"] }],
             });
             if (canceled) {
               return;

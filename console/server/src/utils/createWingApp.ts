@@ -4,7 +4,6 @@ import { AppEvent } from "./cloudAppState.js";
 import { createSimulator } from "./createSimulator.js";
 import { LogInterface } from "./LogInterface.js";
 import { runCompile } from "./runCompile.js";
-import { watchSimulatorFile } from "./watchSimulatorFile.js";
 
 export interface CreateWingAppProps {
   inputFile: string;
@@ -22,48 +21,31 @@ export const createWingApp = async ({
   return new Promise<ReturnType<typeof createSimulator>>(
     async (resolve, reject) => {
       let simulator: ReturnType<typeof createSimulator>;
-      if (inputFile.endsWith(".w")) {
-        await runCompile({
-          wingSrcFile: inputFile,
-          onCompilerStatusChange: (state, data) => {
-            if (state === "loading") {
-              sendCloudAppStateEvent("COMPILER_LOADING");
+      await runCompile({
+        wingSrcFile: inputFile,
+        onCompilerStatusChange: (state, data) => {
+          if (state === "loading") {
+            sendCloudAppStateEvent("COMPILER_LOADING");
+          }
+          if (state === "error") {
+            sendCloudAppStateEvent("COMPILER_ERROR");
+          }
+          if (state === "success") {
+            sendCloudAppStateEvent("COMPILER_SUCCESS");
+            if (simulator) {
+              void simulator.reload();
+              return;
             }
-            if (state === "error") {
-              sendCloudAppStateEvent("COMPILER_ERROR");
-            }
-            if (state === "success") {
-              sendCloudAppStateEvent("COMPILER_SUCCESS");
-              if (simulator) {
-                void simulator.reload();
-                return;
-              }
-              simulator = createSimulator({
-                simulatorProps: { simfile: data as string },
-                sendCloudAppStateEvent,
-              });
-              resolve(simulator);
-            }
-          },
-          consoleLogger,
-          log,
-        });
-      } else {
-        // loading wsim file
-        const sim = createSimulator({
-          simulatorProps: { simfile: inputFile },
-          sendCloudAppStateEvent,
-        });
-        watchSimulatorFile({
-          simulatorStop: sim.stop,
-          simulatorReload: sim.reload,
-          simulatorFile: sim.getSimFile(),
-          sendCloudAppStateEvent,
-          consoleLogger,
-          log,
-        });
-        resolve(sim);
-      }
+            simulator = createSimulator({
+              simulatorProps: { simfile: data as string },
+              sendCloudAppStateEvent,
+            });
+            resolve(simulator);
+          }
+        },
+        consoleLogger,
+        log,
+      });
     },
   );
 };

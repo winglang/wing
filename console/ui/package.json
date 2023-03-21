@@ -26,7 +26,7 @@
     "@wingconsole/eslint-plugin": "workspace:^0.0.0",
     "@wingconsole/server": "workspace:^0.0.0",
     "@wingconsole/tsconfig": "workspace:^0.0.0",
-    "@winglang/sdk": "^0.5.135",
+    "@winglang/sdk": "^0.6.0",
     "classnames": "^2.3.2",
     "constructs": "^10.1.272",
     "elkjs": "^0.8.2",
