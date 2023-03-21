@@ -29,14 +29,11 @@ describe("compile command tests", () => {
       target: Target.SIM,
     });
 
-    // expect files to be generated in outDir
-    const artifactDir = outDir;
-
-    const stats = await stat(artifactDir);
+    const stats = await stat(outDir);
     expect(stats.isDirectory()).toBeTruthy();
-    const files = await readdir(artifactDir);
+    const files = await readdir(outDir);
     expect(files.length).toBeGreaterThan(0);
-    expect(files).toContain("captures.wsim");
+    expect(files).toStrictEqual([".wing", "simulator.json", "tree.json"]);
   });
 
   it("should error if a nonexistent file is compiled", async () => {
