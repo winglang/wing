@@ -61,9 +61,9 @@ module.exports = grammar({
       prec(
         PREC.MEMBER,
         seq(
-          field("object", 
+          field("object",
             choice(
-              $.expression, 
+              $.expression,
               // This is required because of ambiguity with using Json keyword for both instantiation of Json
               // and Identifier for static methods.
               $.json_container_type
@@ -413,7 +413,7 @@ module.exports = grammar({
         field("block", $.block)
       ),
 
-    extern_modifier : ($) => seq("extern", $.string),
+    extern_modifier: ($) => seq("extern", $.string),
 
     method_signature: ($) =>
       seq(

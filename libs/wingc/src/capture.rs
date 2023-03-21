@@ -385,10 +385,7 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 				methods, constructor, ..
 			}) => {
 				if let Some(constructor) = constructor {
-					res.extend(scan_captures_in_inflight_scope(
-						&constructor.statements,
-						diagnostics,
-					));
+					res.extend(scan_captures_in_inflight_scope(&constructor.statements, diagnostics));
 				}
 				for (_, m) in methods.iter() {
 					let FunctionBody::Statements(func_scope) = &m.body else {

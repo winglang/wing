@@ -1,0 +1,99 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`wing compile -t tf-aws > clients/T1.inflight.js 1`] = `
+"export class T1  {
+constructor({  }) {
+
+
+}
+}"
+`;
+
+exports[`wing compile -t tf-aws > clients/T2.inflight.js 1`] = `
+"export class T2  {
+constructor({  }) {
+
+
+}
+}"
+`;
+
+exports[`wing compile -t tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+}
+`;
+
+exports[`wing compile -t tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"resource_without_an_initializer\\", plugins: $plugins });
+  
+  class T1 extends $stdlib.core.Resource {
+  	constructor(scope, id) {{
+  super(scope, id);
+  }}
+  	
+  	_toInflight() {
+  	
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/T1.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).T1({}))\`);
+  }
+  }
+  
+  class T2 extends $stdlib.core.Resource {
+  	constructor(scope, id) {{
+  super(scope, id);
+  }}
+  	static m()  {
+  	{
+    return 1;
+  }
+  }
+  	_toInflight() {
+  	
+  	const self_client_path = require('path').resolve(__dirname, \\"clients/T2.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).T2({}))\`);
+  }
+  }
+  
+  const t = new T1(this,\\"T1\\");
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((T2.m()) === 1)'\`)})(((T2.m()) === 1))};
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`wing test > stdout 1`] = `"pass ─ resource_without_an_initializer.w (no tests)"`;

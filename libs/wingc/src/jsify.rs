@@ -975,10 +975,10 @@ impl<'a> JSifier<'a> {
 			} else {
 				format!(" extends {}.{}", STDLIB, WINGSDK_RESOURCE)
 			},
-			if let Some(constructor) = class.constructor {
-				self.jsify_resource_constructor(&class.constructor, class.parent.is_none(), context)
+			if let Some(constructor) = &class.constructor {
+				self.jsify_resource_constructor(&constructor, class.parent.is_none(), context)
 			} else {
-				format!("constructor(scope, id) {{\nsuper(scope, id);\n}}")
+				"constructor(scope, id) {{\nsuper(scope, id);\n}}".to_string()
 			},
 			preflight_methods
 				.iter()
@@ -1166,8 +1166,8 @@ impl<'a> JSifier<'a> {
 			} else {
 				"".to_string()
 			},
-			if class.constructor.is_some() {
-				self.jsify_constructor(Some("constructor"), &class.constructor.as_ref().unwrap(), context)
+			if let Some(constructor) = &class.constructor {
+				self.jsify_constructor(Some("constructor"), &constructor, context)
 			} else {
 				"".to_string()
 			},

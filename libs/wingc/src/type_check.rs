@@ -1154,47 +1154,43 @@ impl<'a> TypeChecker<'a> {
 					None,
 				) {
 					Ok(v) => v.as_variable().expect("Expected constructor to be a variable").type_,
-					Err(type_error) => {
-						self.type_error(type_error);
-						return self.types.anything();
+					Err(_) => self.types.anything(),
+				};
+
+				if let Some(constructor_sig) = constructor_type.as_function_sig() {
+					// Verify return type (This should never fail since we define the constructors return type during AST building)
+					self.validate_type(constructor_sig.return_type, type_, exp);
+
+					if !arg_list.named_args.is_empty() {
+						let last_arg = constructor_sig.parameters.last().unwrap().maybe_unwrap_option();
+						self.validate_structural_type(&arg_list.named_args, &last_arg, exp, env, statement_idx, context);
+					}
+
+					// Verify arity
+					let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
+					let min_args = constructor_sig.min_parameters();
+					let max_args = constructor_sig.max_parameters();
+					if arg_count < min_args || arg_count > max_args {
+						let err_text = if min_args == max_args {
+							format!(
+								"Expected {} arguments but got {} when instantiating \"{}\"",
+								min_args, arg_count, type_
+							)
+						} else {
+							format!(
+								"Expected between {} and {} arguments but got {} when instantiating \"{}\"",
+								min_args, max_args, arg_count, type_
+							)
+						};
+						self.expr_error(exp, err_text);
+					}
+
+					// Verify passed arguments match the constructor
+					for (arg_expr, arg_type) in arg_list.pos_args.iter().zip(constructor_sig.parameters.iter()) {
+						let arg_expr_type = self.type_check_exp(arg_expr, env, statement_idx, context);
+						self.validate_type(arg_expr_type, *arg_type, arg_expr);
 					}
 				};
-				let constructor_sig = constructor_type
-					.as_function_sig()
-					.expect("Expected constructor to be a function signature");
-
-				// Verify return type (This should never fail since we define the constructors return type during AST building)
-				self.validate_type(constructor_sig.return_type, type_, exp);
-
-				if !arg_list.named_args.is_empty() {
-					let last_arg = constructor_sig.parameters.last().unwrap().maybe_unwrap_option();
-					self.validate_structural_type(&arg_list.named_args, &last_arg, exp, env, statement_idx, context);
-				}
-
-				// Verify arity
-				let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
-				let min_args = constructor_sig.min_parameters();
-				let max_args = constructor_sig.max_parameters();
-				if arg_count < min_args || arg_count > max_args {
-					let err_text = if min_args == max_args {
-						format!(
-							"Expected {} arguments but got {} when instantiating \"{}\"",
-							min_args, arg_count, type_
-						)
-					} else {
-						format!(
-							"Expected between {} and {} arguments but got {} when instantiating \"{}\"",
-							min_args, max_args, arg_count, type_
-						)
-					};
-					self.expr_error(exp, err_text);
-				}
-
-				// Verify passed arguments match the constructor
-				for (arg_expr, arg_type) in arg_list.pos_args.iter().zip(constructor_sig.parameters.iter()) {
-					let arg_expr_type = self.type_check_exp(arg_expr, env, statement_idx, context);
-					self.validate_type(arg_expr_type, *arg_type, arg_expr);
-				}
 
 				// If this is a Resource then create a new type for this resource object
 				if type_.as_resource().is_some() {
@@ -2037,7 +2033,7 @@ impl<'a> TypeChecker<'a> {
 				if let Some(constructor) = constructor {
 					// Add the constructor to the class env
 					let constructor_type = self.resolve_type_annotation(
-						&TypeAnnotation::FunctionSignature(constructor.as_ref().unwrap().signature.clone()),
+						&TypeAnnotation::FunctionSignature(constructor.signature.clone()),
 						env,
 						stmt.idx,
 					);
@@ -2046,7 +2042,7 @@ impl<'a> TypeChecker<'a> {
 							name: WING_CONSTRUCTOR_NAME.into(),
 							span: name.span.clone(),
 						},
-						SymbolKind::make_variable(constructor_type, false, constructor.as_ref().unwrap().signature.flight),
+						SymbolKind::make_variable(constructor_type, false, constructor.signature.flight),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -2071,14 +2067,10 @@ impl<'a> TypeChecker<'a> {
 						constructor_sig.return_type,
 						false,
 						true,
-						constructor.as_ref().unwrap().signature.flight,
+						constructor.signature.flight,
 						stmt.idx,
 					);
-					self.add_arguments_to_env(
-						&constructor.as_ref().unwrap().parameters,
-						constructor_sig,
-						&mut constructor_env,
-					);
+					self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
 					// Prime the constructor environment with `this`
 					constructor_env
 						.define(
@@ -2090,9 +2082,9 @@ impl<'a> TypeChecker<'a> {
 							StatementIdx::Top,
 						)
 						.expect("Expected `this` to be added to constructor env");
-					constructor.as_ref().unwrap().statements.set_env(constructor_env);
+					constructor.statements.set_env(constructor_env);
 					// Check function scope
-					self.inner_scopes.push(&constructor.as_ref().unwrap().statements);
+					self.inner_scopes.push(&constructor.statements);
 				}
 
 				// Replace the dummy class environment with the real one before type checking the methods

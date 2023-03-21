@@ -48,4 +48,3 @@ new cloud.Function(inflight () => {
   assert(bucket.list().length == 1);
 }) as "test";
 
-resource Empty {}

@@ -186,7 +186,7 @@ where
 {
 	v.visit_symbol(&node.name);
 
-	if let Some(constructor) = node.constructor {
+	if let Some(constructor) = &node.constructor {
 		v.visit_constructor(&constructor);
 	}
 
