@@ -1,5 +1,10 @@
 import { ISimulatorResourceInstance } from "./resource";
-import { TopicSchema, TopicSubscriber, TOPIC_TYPE } from "./schema-resources";
+import {
+  TopicAttributes,
+  TopicSchema,
+  TopicSubscriber,
+  TOPIC_TYPE,
+} from "./schema-resources";
 import { IFunctionClient, ITopicClient } from "../cloud";
 import { ISimulatorContext, TraceType } from "../testing/simulator";
 
@@ -13,6 +18,12 @@ export class Topic implements ITopicClient, ISimulatorResourceInstance {
     }
     this.context = context;
   }
+
+  public async init(): Promise<TopicAttributes> {
+    return {};
+  }
+
+  public async cleanup(): Promise<void> {}
 
   private async publishMessage(message: string) {
     for (const subscriber of this.subscribers) {
@@ -60,12 +71,5 @@ export class Topic implements ITopicClient, ISimulatorResourceInstance {
     });
 
     return this.publishMessage(message);
-  }
-
-  public async init(): Promise<void> {
-    return;
-  }
-  public async cleanup(): Promise<void> {
-    return;
   }
 }

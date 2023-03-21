@@ -4,9 +4,9 @@ import { test } from "vitest";
 import { compileTest, testTest } from "../../generated_test_targets";
 
 test("wing compile -t tf-aws", async ({ expect }) => {
-  await compileTest(expect, "static_members.w");
+  await compileTest(expect, "api.w");
 });
 
 test("wing test", async ({ expect }) => {
-  await testTest(expect, "static_members.w");
+  await testTest(expect, "api.w");
 });

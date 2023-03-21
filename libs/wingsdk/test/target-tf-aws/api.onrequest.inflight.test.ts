@@ -131,7 +131,7 @@ describe("ApiRequest", () => {
         key: "value",
       },
       multiValueQueryStringParameters: {
-        multi: ["value"],
+        multi: ["value1", "value2"],
       },
     };
 
@@ -154,7 +154,7 @@ describe("ApiRequest", () => {
       method: "GET",
       path: "/",
       vars: { "path-param-1": "value-1" },
-      query: JSON.stringify({ key: "value", multi: ["value"] }),
+      query: { key: "value", multi: "value1,value2" },
     });
   });
 
@@ -181,8 +181,11 @@ describe("ApiRequest", () => {
     // THEN
     expect(handlerMock).toHaveBeenCalledWith({
       body: "",
+      headers: undefined,
       method: "GET",
       path: "/",
+      query: {},
+      vars: {},
     });
   });
 
@@ -208,8 +211,11 @@ describe("ApiRequest", () => {
     // THEN
     expect(handlerMock).toHaveBeenCalledWith({
       body: "",
+      headers: undefined,
       method: "GET",
       path: "/",
+      query: {},
+      vars: {},
     });
   });
 });

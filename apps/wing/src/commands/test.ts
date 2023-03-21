@@ -1,6 +1,4 @@
-import { mkdtemp, readdir } from "fs/promises";
-import { tmpdir } from "os";
-import { basename, extname, join } from "path";
+import { basename } from "path";
 import { compile, Target } from "./compile";
 import * as chalk from "chalk";
 import * as sdk from "@winglang/sdk";
@@ -12,15 +10,9 @@ export async function test(entrypoints: string[]) {
 }
 
 async function testOne(entrypoint: string) {
-  const workdir = await mkdtemp(join(tmpdir(), "wing-test-"));
-  await compile(entrypoint, { outDir: workdir, target: Target.SIM });
-  const wsim = (await readdir(workdir)).find((f) => extname(f) === ".wsim");
-  if (!wsim) {
-    throw new Error("no .wsim file found in output directory");
-  }
-
-  const simfile = join(workdir, wsim);
-  const s = new sdk.testing.Simulator({ simfile });
+  const simdir = await compile(entrypoint, { target: Target.SIM });
+  
+  const s = new sdk.testing.Simulator({ simfile: simdir });
   await s.start();
   const results = await s.runAllTests();
   await s.stop();

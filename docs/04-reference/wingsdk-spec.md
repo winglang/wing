@@ -876,7 +876,7 @@ struct ApiRequest {
   /** The request's body. */
   body: Json?;
   /** The request's headers. */
-  headers: Map<str, str>;
+  headers: Map<str, str>?;
 }
 
 struct ApiResponse {
@@ -885,7 +885,7 @@ struct ApiResponse {
   /** The response's body. */
   body: Json?;
   /** The response's headers. */
-  headers: Map<str, str>;
+  headers: Map<str, str>?;
 }
 
 enum HttpMethod {

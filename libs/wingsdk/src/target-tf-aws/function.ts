@@ -1,5 +1,3 @@
-import * as crypto from "crypto";
-import { readFileSync } from "fs";
 import { resolve } from "path";
 import { IamRole } from "@cdktf/provider-aws/lib/iam-role";
 import { IamRolePolicy } from "@cdktf/provider-aws/lib/iam-role-policy";
@@ -14,6 +12,7 @@ import { BUCKET_PREFIX_OPTS } from "./bucket";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { Duration } from "../std/duration";
+import { createBundle } from "../utils/bundling";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
@@ -56,17 +55,11 @@ export class Function extends cloud.Function {
     super(scope, id, inflight, props);
 
     // bundled code is guaranteed to be in a fresh directory
-    const codeDir = resolve(this.assetPath, "..");
-
-    // calculate a md5 hash of the contents of asset.path
-    const codeHash = crypto
-      .createHash("md5")
-      .update(readFileSync(this.assetPath))
-      .digest("hex");
+    const bundle = createBundle(this.entrypoint);
 
     // Create Lambda executable
     const asset = new TerraformAsset(this, "Asset", {
-      path: codeDir,
+      path: resolve(bundle.directory),
       type: AssetType.ARCHIVE,
     });
 
@@ -79,7 +72,7 @@ export class Function extends cloud.Function {
     // - whenever code changes, the object name changes
     // - even if two functions have the same code, they get different names
     //   (separation of concerns)
-    const objectKey = `asset.${this.node.addr}.${codeHash}.zip`;
+    const objectKey = `asset.${this.node.addr}.${bundle.hash}.zip`;
 
     // Upload Lambda zip file to newly created S3 bucket
     const lambdaArchive = new S3Object(this, "S3Object", {

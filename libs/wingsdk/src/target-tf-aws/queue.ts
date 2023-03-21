@@ -41,7 +41,7 @@ export class Queue extends cloud.Queue {
   }
 
   public onMessage(
-    inflight: core.Inflight, // cloud.IQueueOnMessageHandler
+    inflight: cloud.IQueueOnMessageHandler,
     props: cloud.QueueOnMessageProps = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
