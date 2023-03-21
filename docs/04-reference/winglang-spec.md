@@ -9,7 +9,7 @@ keywords: [Wing reference, Wing language, language, Wing language spec, Wing pro
 
 This document is a *specification* of the programming language, and many features
 are still not implemented (see [project board](https://github.com/orgs/winglang/projects/1)).
-
+ 
 :::
 
 ## 0. Preface
@@ -913,11 +913,17 @@ It is also possible to use `=` in the field declaration to indicate the default 
 ```js
 struct FormatOpts {
   radix: num = 10;
+  some_optional: str?;
 }
 
 let opts = FormatOpts {};
 assert(opts.radix == 10);
+assert(opts.some_optional? == false); // <-- no value inside `some_optional`
 ```
+
+A value can be omitted from a struct literal if the field is optional _or_ if it has a default value in the struct
+declaration. If the field is optional, it's type is `T?`. If it has a default value it's type is `T` (since we know it will always have a value).
+In the above example the type of `radix` is `num`.
 
 ##### 1.7.1.2 Declaration in variables
 
