@@ -32,29 +32,33 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
 
   public async init(): Promise<void> {
     this.docker = new Dockerode();
-
+    let hostPort: number;
     // Create a redis container
     try {
-      const hostPort = await this.getAvailablePort();
-      const container = await this.docker.createContainer({
-        Image: "redis",
-        name: this.container_name,
-        HostConfig: {
-          PortBindings: {
-            "6379/tcp": [
-              {
-                HostPort: `${hostPort}`,
+      await portfinder
+        .getPortPromise({ port: this.base_port })
+        .then(async (port) => {
+          hostPort = port;
+          const container = await this.docker!.createContainer({
+            Image: "redis",
+            name: this.container_name,
+            HostConfig: {
+              PortBindings: {
+                "6379/tcp": [
+                  {
+                    HostPort: `${port}`,
+                  },
+                ],
               },
-            ],
-          },
-        },
-      });
+            },
+          });
 
-      // Start the redis container
-      await container.start();
+          // Start the redis container
+          await container.start();
+        });
 
       // redis url based on host port
-      this.connection_url = `redis://0.0.0.0:${hostPort}`;
+      this.connection_url = `redis://0.0.0.0:${hostPort!}`;
     } catch (e) {
       throw Error(`Error setting up Redis resource simulation (${e})
       - Make sure you have docker installed and running
@@ -90,11 +94,5 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
     } else {
       throw new Error("Redis server not initialized");
     }
-  }
-
-  private async getAvailablePort(): Promise<number> {
-    return portfinder.getPortPromise({ port: this.base_port }).then((port) => {
-      return port;
-    });
   }
 }
