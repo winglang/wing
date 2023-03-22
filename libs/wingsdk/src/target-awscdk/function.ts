@@ -9,6 +9,7 @@ import { Function as CdkFunction, Code, Runtime } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { normalPath } from "../util";
 
 /**
  * AWS implementation of `cloud.Function`.
@@ -29,7 +30,7 @@ export class Function extends cloud.Function {
     super(scope, id, inflight, props);
 
     // bundled code is guaranteed to be in a fresh directory
-    const codeDir = resolve(this.assetPath, "..");
+    const codeDir = resolve(normalPath(this.entrypoint), "..");
 
     this.function = new CdkFunction(this, "Default", {
       handler: "index.handler",
