@@ -276,10 +276,8 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 	};
 
 	// Validate that every Expr has an evaluated_type
-	if cfg!(debug_assertions) {
-		let mut tc_assert = TypeCheckAssert;
-		tc_assert.visit_scope(&scope);
-	}
+	let mut tc_assert = TypeCheckAssert;
+	tc_assert.visit_scope(&scope);
 
 	// Print diagnostics
 	print_diagnostics(&parse_diagnostics);

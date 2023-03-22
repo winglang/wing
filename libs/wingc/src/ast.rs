@@ -4,7 +4,7 @@ use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 
 use derivative::Derivative;
-use indexmap::IndexSet;
+use indexmap::{IndexMap, IndexSet};
 
 use crate::capture::Captures;
 use crate::diagnostic::WingSpan;
@@ -360,7 +360,7 @@ pub enum ExprKind {
 	StructLiteral {
 		type_: TypeAnnotation,
 		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
-		fields: BTreeMap<String, (Symbol, Expr)>,
+		fields: IndexMap<Symbol, Expr>,
 	},
 	MapLiteral {
 		type_: Option<TypeAnnotation>,

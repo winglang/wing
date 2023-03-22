@@ -11,7 +11,7 @@ use crate::{
 	WINGSDK_STRING,
 };
 use derivative::Derivative;
-use indexmap::IndexSet;
+use indexmap::{IndexMap, IndexSet};
 use itertools::{izip, Itertools};
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
@@ -1442,6 +1442,16 @@ impl<'a> TypeChecker<'a> {
 				// Find this struct's type in the environment
 				let struct_type = self.resolve_type_annotation(type_, env, statement_idx);
 
+				// Type check each of the struct's fields
+				let field_types: IndexMap<Symbol, TypeRef> = fields
+					.iter()
+					.map(|(name, exp)| {
+						let t = self.type_check_exp(exp, env, statement_idx, context);
+						(name.clone(), t)
+					})
+					.collect();
+
+				// If the struct type is anything, we don't need to validate the fields
 				if struct_type.is_anything() {
 					return struct_type;
 				}
@@ -1451,22 +1461,29 @@ impl<'a> TypeChecker<'a> {
 					.as_struct()
 					.expect(&format!("Expected \"{}\" to be a struct type", struct_type));
 
-				// Verify that all fields are present and are of the right type
+				// Verify that all expected fields are present and are the right type
 				for (name, kind, _info) in st.env.iter(true) {
 					let field_type = kind
 						.as_variable()
 						.expect("Expected struct field to be a variable in the struct env")
 						.type_;
-					match fields.get(&name) {
-						Some((_, field_exp)) => {
-							let t = self.type_check_exp(field_exp, env, statement_idx, context);
-							self.validate_type(t, field_type, field_exp);
+					match fields.get(&Symbol::global(&name)) {
+						Some(field_exp) => {
+							let t = field_types.get(&Symbol::global(&name)).unwrap();
+							self.validate_type(*t, field_type, field_exp);
 						}
 						None => {
 							if !field_type.is_option() {
 								self.expr_error(exp, format!("\"{}\" is not initialized", name));
 							}
 						}
+					}
+				}
+
+				// Verify that no unexpected fields are present
+				for (name, _t) in field_types.iter() {
+					if !st.env.lookup(&name, Some(statement_idx)).is_ok() {
+						self.expr_error(exp, format!("\"{}\" is not a field of \"{}\"", name.name, st.name.name));
 					}
 				}
 
