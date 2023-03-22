@@ -478,32 +478,6 @@ pub enum BinaryOperator {
 	UnwrapOr,
 }
 
-impl BinaryOperator {
-	pub fn boolean_result(&self) -> bool {
-		use BinaryOperator::*;
-		match self {
-			Greater | GreaterOrEqual | Less | LessOrEqual | Equal | NotEqual | LogicalAnd | LogicalOr => true,
-			_ => false,
-		}
-	}
-
-	pub fn boolean_args(&self) -> bool {
-		use BinaryOperator::*;
-		match self {
-			LogicalAnd | LogicalOr => true,
-			_ => false,
-		}
-	}
-
-	pub fn numerical_args(&self) -> bool {
-		use BinaryOperator::*;
-		match self {
-			Add | Sub | Mul | Div | FloorDiv | Mod | Power | Greater | GreaterOrEqual | Less | LessOrEqual => true,
-			_ => false,
-		}
-	}
-}
-
 #[derive(Debug)]
 pub enum Reference {
 	/// A simple identifier: `x`
