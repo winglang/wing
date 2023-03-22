@@ -417,7 +417,6 @@ module.exports = grammar({
 
     method_signature: ($) =>
       seq(
-        optional(field("access_modifier", $.access_modifier)),
         optional(field("static", $.static)),
         optional(field("async", $.async_modifier)),
         field("name", $.identifier),
@@ -440,7 +439,6 @@ module.exports = grammar({
 
     inflight_method_signature: ($) =>
       seq(
-        optional(field("access_modifier", $.access_modifier)),
         optional(field("static", $.static)),
         field("phase_modifier", $._inflight_specifier),
         field("name", $.identifier),

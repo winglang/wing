@@ -9,7 +9,7 @@ use tree_sitter_traversal::{traverse, Order};
 use crate::ast::{
 	ArgList, BinaryOperator, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionBody,
 	FunctionDefinition, FunctionSignature, InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope,
-	Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
+	Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType, Interface,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 use crate::WINGSDK_STD_MODULE;
@@ -27,7 +27,6 @@ pub struct Parser<'a> {
 // k=grammar, v=optional_message, example: ("generic", "targed impl: 1.0.0")
 static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"struct_definition" => "see https://github.com/winglang/wing/issues/120",
-	"interface_definition" => "see https://github.com/winglang/wing/issues/123",
 	"any" => "see https://github.com/winglang/wing/issues/434",
 	"void" => "see https://github.com/winglang/wing/issues/432",
 	"nil" => "see https://github.com/winglang/wing/issues/433",
@@ -194,6 +193,7 @@ impl<'s> Parser<'s> {
 			"return_statement" => self.build_return_statement(statement_node)?,
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
+			"interface_definition" => self.build_interface_statement(statement_node)?,
 			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"try_catch_statement" => self.build_try_catch_statement(statement_node)?,
 			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
@@ -555,6 +555,124 @@ impl<'s> Parser<'s> {
 			constructor: constructor.unwrap(),
 			is_resource,
 		}))
+	}
+
+	fn build_interface_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		let mut cursor = statement_node.walk();
+		let mut fields = vec![];
+		let mut methods = vec![];
+		let name = self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+		for interface_element in statement_node
+			.child_by_field_name("implementation")
+			.unwrap()
+			.named_children(&mut cursor)
+		{
+			if interface_element.is_extra() {
+				continue;
+			}
+			match (interface_element.kind()) {
+				"method_signature" => {
+					let method_name = self.node_symbol(&interface_element.child_by_field_name("name").unwrap());
+					let func_sig = self.build_function_signature(&interface_element, Phase::Preflight)?;
+					match (method_name, func_sig) {
+						(Ok(method_name), Ok(func_sig)) => methods.push((method_name, func_sig)),
+						_ => {}
+					}
+				}
+				"inflight_method_signature" => {
+					let method_name = self.node_symbol(&interface_element.child_by_field_name("name").unwrap());
+					let func_sig = self.build_function_signature(&interface_element, Phase::Inflight)?;
+					match (method_name, func_sig) {
+						(Ok(method_name), Ok(func_sig)) => methods.push((method_name, func_sig)),
+						_ => {}
+					}
+				}
+				"class_field" => {
+					let is_static = interface_element.child_by_field_name("static").is_some();
+					if is_static {
+						self.diagnostics.borrow_mut().push(Diagnostic {
+							level: DiagnosticLevel::Error,
+							message: format!(
+								"Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668",
+							),
+							span: Some(self.node_span(&interface_element)),
+						});
+					}
+
+					fields.push(ClassField {
+						name: self.node_symbol(&interface_element.child_by_field_name("name").unwrap())?,
+						member_type: self.build_type_annotation(&interface_element.child_by_field_name("type").unwrap())?,
+						reassignable: interface_element.child_by_field_name("reassignable").is_some(),
+						is_static,
+						phase: match interface_element.child_by_field_name("phase_modifier") {
+							Some(n) => {
+								Phase::Inflight
+							}
+							None => Phase::Preflight,
+						},
+					})
+				}
+				"ERROR" => {
+					self
+						.add_error::<Node>(format!("Expected interface element node"), &interface_element)
+						.err();
+				}
+				other => {
+					panic!(
+						"Unexpected interface element node type {} || {:#?}",
+						other,
+						interface_element
+					);
+				}
+			}
+		}
+
+		let mut extends = vec![];
+		for type_node in statement_node.children_by_field_name("extends", &mut cursor) {
+			// ignore comments
+			if type_node.is_extra() {
+				continue;
+			}
+
+			// ignore commas
+			if !type_node.is_named() {
+				continue;
+			}
+
+			let interface_type = self.build_type_annotation(&type_node)?;
+			match interface_type {
+				TypeAnnotation::UserDefined(interface_type) => extends.push(interface_type),
+				_ => {
+					self.add_error::<Node>(
+						format!(
+							"Extended interface must be a user defined type, found {}",
+							interface_type
+						),
+						&type_node,
+					)?;
+				}
+			}
+		}
+
+		Ok(StmtKind::Interface(Interface {
+			name,
+			fields,
+			methods,
+			extends,
+		}))
+	}
+
+	fn build_function_signature(&self, func_sig_node: &Node, phase: Phase) -> DiagnosticResult<FunctionSignature> {
+		let parameters = self.build_parameter_list(&func_sig_node.child_by_field_name("parameter_list").unwrap())?;
+		Ok(FunctionSignature {
+			parameters: parameters.iter().map(|p| p.1.clone()).collect(),
+			return_type: if let Some(rt) = func_sig_node.child_by_field_name("return_type") {
+				Some(Box::new(self.build_type_annotation(&rt)?))
+			} else {
+				None
+			},
+			phase,
+		})
 	}
 
 	fn build_anonymous_closure(&self, anon_closure_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
