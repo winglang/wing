@@ -195,15 +195,15 @@ jobs:
         shard: ["1/2", "2/2"]
         full_run:
           # Do a full run on push or when the PR is labeled "pr/e2e-full"
-          - "${{ needs.build.run-full-e2e }}"
+          - ${{ needs.build.run-full-e2e }}
         exclude:
           - runner: macos
-            full_run: "false"
+            full_run: false
           - runner: windows
-            full_run: "false"
+            full_run: false
           - runner: ubuntu
             node: "19.7.0"
-            full_run: "false"
+            full_run: false
     runs-on: "${{ matrix.runner }}-latest"
     env:
       HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.prepare.outputs.version }}.tgz"
