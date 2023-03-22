@@ -869,8 +869,8 @@ struct ApiRequest {
   method: HttpMethod;
   /** The request's path. */
   path: str;
-  /** The request's query string. */
-  query: str?;
+  /** The request's query parameters. */
+  query: Map<str, str>?;
   /** The path variables. */
   vars: Map<str, str>?;
   /** The request's body. */
