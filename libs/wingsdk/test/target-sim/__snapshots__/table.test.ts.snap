@@ -2,7 +2,7 @@
 
 exports[`create a table 1`] = `
 {
-  "app.wsim/simulator.json": {
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -26,7 +26,7 @@ exports[`create a table 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {
@@ -77,7 +77,7 @@ exports[`create a table 1`] = `
 
 exports[`get row 1`] = `
 {
-  "app.wsim/simulator.json": {
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -101,7 +101,7 @@ exports[`get row 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {
@@ -152,7 +152,7 @@ exports[`get row 1`] = `
 
 exports[`insert row 1`] = `
 {
-  "app.wsim/simulator.json": {
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -176,7 +176,7 @@ exports[`insert row 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {
@@ -227,7 +227,7 @@ exports[`insert row 1`] = `
 
 exports[`list table 1`] = `
 {
-  "app.wsim/simulator.json": {
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -251,7 +251,7 @@ exports[`list table 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {
@@ -302,7 +302,7 @@ exports[`list table 1`] = `
 
 exports[`update row 1`] = `
 {
-  "app.wsim/simulator.json": {
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -326,7 +326,7 @@ exports[`update row 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {
