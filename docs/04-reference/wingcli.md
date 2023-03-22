@@ -135,7 +135,7 @@ You can deploy your stack to GCP using Terraform ([example](/getting-started/aws
 
 ### `awscdk` Target
 
-Compiles your program for AWS-CDK and run on AWS.
+Compiles your program for AWS CDK with CloudFormation to run on AWS.
 
 Usage:
 
