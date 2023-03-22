@@ -178,23 +178,8 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			completions.push(format_symbol_kind_as_completion(symbol_data.0, symbol_kind));
 		}
 
-		// The following iteration logic is needed due to a bug:
-		// The root environment is not properly accessible from .parent
-		// https://github.com/winglang/wing/issues/1644
-		// So we can't use the normal iteration logic with ancestry
-		let mut parent_env = found_env.parent;
-		while let Some(current_env) = parent_env {
-			if current_env.is_root() {
-				for symbol_data in root_env.symbol_map.iter() {
-					completions.push(format_symbol_kind_as_completion(symbol_data.0, &symbol_data.1 .1));
-				}
-				break;
-			} else {
-				for data in current_env.iter(false) {
-					completions.push(format_symbol_kind_as_completion(&data.0, &data.1));
-				}
-			}
-			parent_env = current_env.parent;
+		for data in found_env.iter(true) {
+			completions.push(format_symbol_kind_as_completion(&data.0, &data.1));
 		}
 
 		completions
