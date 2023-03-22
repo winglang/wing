@@ -32,7 +32,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
 
     // Create a redis container
     try {
-      let container = await this.docker.createContainer({
+      const container = await this.docker.createContainer({
         Image: "redis",
         name: this.container_name,
       });
