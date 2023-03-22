@@ -134,6 +134,7 @@ export interface ITableClient {
    * @returns list all row.
    * @inflight
    */
+  // TODO: change the return type to Iterator<Map<string, Json>> in the future.
   list(): any;
 }
 
