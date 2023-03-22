@@ -219,7 +219,7 @@ constructor() {
   const api = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Api\\",this,\\"cloud.Api\\");
   const counter = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Counter\\",this,\\"cloud.Counter\\");
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.a6fd19f0306eaaacd48dd508f8fe29d398c6bd20d69fb2e95adc8cd70c5a997c/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.c83263b121750e827ffc19b09e3c0813a9accb33e17a19eae0dbc2680135a09e/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
       counter: {
         obj: counter,
