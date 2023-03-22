@@ -1,7 +1,7 @@
 use indexmap::{IndexMap, IndexSet};
 use phf::phf_map;
 use std::cell::RefCell;
-use std::collections::{BTreeMap, HashSet};
+use std::collections::HashSet;
 use std::{str, vec};
 use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
@@ -748,7 +748,7 @@ impl<'s> Parser<'s> {
 
 	fn build_arg_list(&self, arg_list_node: &Node) -> DiagnosticResult<ArgList> {
 		let mut pos_args = vec![];
-		let mut named_args = BTreeMap::new();
+		let mut named_args = IndexMap::new();
 
 		let mut cursor = arg_list_node.walk();
 		let mut seen_keyword_args = false;
@@ -990,7 +990,7 @@ impl<'s> Parser<'s> {
 					None
 				};
 
-				let mut fields = BTreeMap::new();
+				let mut fields = IndexMap::new();
 				let mut cursor = expression_node.walk();
 				for field_node in expression_node.children_by_field_name("member", &mut cursor) {
 					if field_node.is_extra() {

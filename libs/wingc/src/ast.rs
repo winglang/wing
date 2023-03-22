@@ -1,5 +1,4 @@
 use std::cell::RefCell;
-use std::collections::BTreeMap;
 use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 
@@ -359,13 +358,13 @@ pub enum ExprKind {
 	},
 	StructLiteral {
 		type_: TypeAnnotation,
-		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
+		// We're using a map implementation with reliable iteration to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
 		fields: IndexMap<Symbol, Expr>,
 	},
 	MapLiteral {
 		type_: Option<TypeAnnotation>,
-		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
-		fields: BTreeMap<String, Expr>,
+		// We're using a map implementation with reliable iteration to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
+		fields: IndexMap<String, Expr>,
 	},
 	SetLiteral {
 		type_: Option<TypeAnnotation>,
@@ -403,14 +402,14 @@ impl Expr {
 #[derive(Debug)]
 pub struct ArgList {
 	pub pos_args: Vec<Expr>,
-	pub named_args: BTreeMap<Symbol, Expr>,
+	pub named_args: IndexMap<Symbol, Expr>,
 }
 
 impl ArgList {
 	pub fn new() -> Self {
 		ArgList {
 			pos_args: vec![],
-			named_args: BTreeMap::new(),
+			named_args: IndexMap::new(),
 		}
 	}
 }

@@ -15,7 +15,6 @@ use indexmap::{IndexMap, IndexSet};
 use itertools::{izip, Itertools};
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
-use std::collections::BTreeMap;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
@@ -309,7 +308,7 @@ impl ClassLike for Struct {
 /// Intermediate struct for storing the evaluated types of arguments in a function call or constructor call.
 pub struct ArgListTypes {
 	pub pos_args: Vec<TypeRef>,
-	pub named_args: BTreeMap<Symbol, TypeRef>,
+	pub named_args: IndexMap<Symbol, TypeRef>,
 }
 
 #[derive(Derivative)]
@@ -1598,8 +1597,8 @@ impl<'a> TypeChecker<'a> {
 	/// Validate that a given map can be assigned to a variable of given struct type
 	fn validate_structural_type(
 		&mut self,
-		object: &BTreeMap<Symbol, Expr>,
-		object_types: &BTreeMap<Symbol, TypeRef>,
+		object: &IndexMap<Symbol, Expr>,
+		object_types: &IndexMap<Symbol, TypeRef>,
 		expected_type: &TypeRef,
 		value: &Expr,
 	) {
@@ -1612,7 +1611,7 @@ impl<'a> TypeChecker<'a> {
 
 		// Verify that there are no extraneous fields
 		// Also map original field names to the ones in the struct type
-		let mut field_map = BTreeMap::new();
+		let mut field_map = IndexMap::new();
 		for (k, _) in object_types.iter() {
 			let field = expected_struct.env.try_lookup(&k.name, None);
 			if let Some(field) = field {
@@ -1636,8 +1635,8 @@ impl<'a> TypeChecker<'a> {
 			)
 		}) {
 			if let Some((symb, expected_field_type)) = field_map.get(&k) {
-				let provided_exp = object.get(symb).unwrap();
-				let t = object_types.get(symb).unwrap();
+				let provided_exp = object.get(*symb).unwrap();
+				let t = object_types.get(*symb).unwrap();
 				self.validate_type(*t, *expected_field_type, provided_exp);
 			} else if !v.is_option() {
 				self.expr_error(
@@ -1817,7 +1816,7 @@ impl<'a> TypeChecker<'a> {
 				let arg_type = self.type_check_exp(&expr, env, statement_idx, context);
 				(sym.clone(), arg_type)
 			})
-			.collect::<BTreeMap<_, _>>();
+			.collect::<IndexMap<_, _>>();
 
 		ArgListTypes {
 			pos_args: pos_arg_types,
