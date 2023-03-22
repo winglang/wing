@@ -18,7 +18,7 @@ The following code is an initial implementation of TaskList with api gateway and
 - [x] use redis instead of bucket
 - [x] code that updates estimation and duration from REST put command
 - [x] console requirements
-- [x] Optionality ? ?? and ??=
+- [x] Optionality ? and ??
 - [x] redis is packaged inside our SDK
 - [x] I wanted to use ioredis as an inflight memebr but there are 2 issues:
   - [x] Missing inflight init (used lazy getter style method instead) 
@@ -60,20 +60,22 @@ interface ITaskList {
   inflight set_estimation(id: str, estimation: duration): str;
 }
 
-resource TaskList implementes ITaskList {
+resource TaskList impl ITaskList {
   _redis: redis.Redis;
   // we are missing inflight init, so I need to create a lazy get_redis_client method  
   // that creates the _redis_client when it is first called
   inflight var _redis_client: redis.IRedisClient?; 
   
-  extern "./tasklist_helper.js" static inflight uuid() => str; 
+  extern "./tasklist_helper.js" static inflight uuid(): str; 
   
   init() {
     this._redis = new redis.Redis();
   }
   
   inflight get_redis_client(): redis.IRedisClient { 
-    this._redis_client ??= this._redis.ioredis();
+    if !this.redis_client? {
+      this._redis_client = this._redis.ioredis();
+    }
     return this._redis_client;
   }
   
@@ -107,7 +109,7 @@ resource TaskList implementes ITaskList {
     let ids = this.get_redis_client().smembers("todo");
     for id in ids {
       let j = Json.parse(this.get_redis_client().get(id));
-      if r.test(j.title) {
+      if r.test(j.get("title")) {
         result.push(id);
       }
     }
@@ -117,9 +119,9 @@ resource TaskList implementes ITaskList {
   inflight set_status(id: str, status: Status): str {
     let j = Json.clone_mut(this.get(id));
     if status == Status.Completed {
-      j.status = "completed";
+      j.set("status", "completed");
     } else {
-      j.status = "uncompleted";
+      j.set("status", "uncompleted");
     }
     this._add(id, Json.clone(j));
     return id;
@@ -127,7 +129,7 @@ resource TaskList implementes ITaskList {
         
   inflight set_estimation(id: str, estimation: duration): str {
     let j = Json.clone_mut(this.get(id));
-    j.estimated_in_seconds = estimation.seconds;
+    j.set("estimated_in_seconds", estimation.seconds);
     this._add(id, Json.clone(j));
     return id;
   }
@@ -137,32 +139,32 @@ resource TaskListApi {
   api: cloud.Api;
   task_list: ITaskList;
         
-  extern "./tasklist_helper.js" static inflight create_regex: (s: str) => IMyRegExp  
-  extern "./tasklist_helper.js" static inflight get_data: (url: str) => Json;
+  extern "./tasklist_helper.js" static inflight create_regex(s: str): IMyRegExp;
+  extern "./tasklist_helper.js" static inflight get_data(url: str): Json;
         
   init(task_list: ITaskList) {
     this.task_list = task_list;
     this.api = new cloud.Api();
         
-    this.api.post("/tasks", inflight (req: cloud. Api.ApiRequest): cloud.ApiResponse => {
-      let var title = str.from_json(req.body.title);
+    this.api.post("/tasks", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+      let var title = str.from_json(req.body.get("title"));
       // Easter Egg - if you add a todo with the single word "random" as the title, 
       //              the system will fetch a random task from the internet
       if title == "random" {
-        let data: Json = TaskListApi.get_data('https://www.boredapi.com/api/activity');
-        title = str.from_json(data.activity); 
+        let data: Json = TaskListApi.get_data("https://www.boredapi.com/api/activity");
+        title = str.from_json(data.get("activity")); 
       } 
       let id = this.task_list.add(title);
-      return cloud.ApiResponse { status:201, body: Json.stringify(id) };
+      return cloud.ApiResponse { status:201, body: id };
     });
         
     this.api.put("/tasks/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-      let id = str.from_json(req.params.id);
-      if req.body.estimation_in_days? { 
-        this.task_list.set_estimation(id, num.from_str(req.body.estimation_in_days));
+      let id = str.from_json(req.vars.get("id"));
+      if req.body.get("estimation_in_days")? { 
+        this.task_list.set_estimation(id, num.from_str(req.body.get("estimation_in_days")));
       }
-      if req.body.completed? {
-        if bool.from_json(req.body.completed) {
+      if req.body.get("completed")? {
+        if bool.from_json(req.body.get("completed")) {
           this.task_list.set_status(id, Status.Completed);
         } else {
           this.task_list.set_status(id, Status.Uncompleted);
@@ -170,24 +172,24 @@ resource TaskListApi {
       }
       try {
         let title = this.task_list.get(id);
-        return cloud.ApiResponse { status:200, body: Json.stringify(title) };
+        return cloud.ApiResponse { status:200, body: title };
       } catch {
         return cloud.ApiResponse { status: 400 };
       }
     });
 
     this.api.get("/tasks/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-      let id = str.from_json(req.params.id);
+      let id = str.from_json(req.vars.get("id"));
       try {
         let title = this.task_list.get(id);
-        return cloud.ApiResponse { status:200, body: Json.stringify(title) };
+        return cloud.ApiResponse { status:200, body: title };
       } catch {
         return cloud.ApiResponse { status: 400 };
       }
     });
     
     this.api.delete("/tasks/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-      let id = str.from_json(req.params.id);
+      let id = str.from_json(req.vars.get("id"));
       try {
         this.task_list.delete(id);
         return cloud.ApiResponse { status: 204 };
@@ -197,9 +199,9 @@ resource TaskListApi {
     });
 
     this.api.get("/tasks", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-      let search = str.from_json(req.query.search ?? Json ".*"); 
+      let search = str.from_json(req.query.get("search") ?? Json ".*"); 
       let results = this.task_list.find(TaskListApi.create_regex(search));
-      return cloud.ApiResponse { status: 200, body: Json.stringify(results) };
+      return cloud.ApiResponse { status: 200, body: results };
     });
   }
 }
@@ -210,7 +212,7 @@ let t = new TaskListApi(task_list);
 #### `tasklist_helper.js`
 
 ```js
-const axios = require('axios');
+const axios = require("axios");
 
 exports.get_data = async function(url) {
   const response = await axios.get(url);
