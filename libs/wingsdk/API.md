@@ -3323,6 +3323,7 @@ new std.Number()
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.Number.fromJson">from_json</a></code> | Parse a number from Json. |
+| <code><a href="#@winglang/sdk.std.Number.fromStr">from_str</a></code> | Parse a number from string. |
 
 ---
 
@@ -3339,6 +3340,24 @@ Parse a number from Json.
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Number.fromJson.parameter.json"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to parse number from.
+
+---
+
+##### `from_str` <a name="from_str" id="@winglang/sdk.std.Number.fromStr"></a>
+
+```wing
+bring std;
+
+std.Number.from_str(str: str)
+```
+
+Parse a number from string.
+
+###### `str`<sup>Required</sup> <a name="str" id="@winglang/sdk.std.Number.fromStr.parameter.str"></a>
+
+- *Type:* str
 
 to parse number from.
 
