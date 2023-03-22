@@ -60,7 +60,10 @@ export class Bucket extends cloud.Bucket {
         resources: [`${this.bucket.bucketArn}`, `${this.bucket.bucketArn}/*`],
       });
     }
-    if (ops.includes(cloud.BucketInflightMethods.LIST) || ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)) {
+    if (
+      ops.includes(cloud.BucketInflightMethods.LIST) ||
+      ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)
+    ) {
       host.addPolicyStatements({
         effect: Effect.ALLOW,
         actions: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
