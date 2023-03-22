@@ -19,7 +19,7 @@ exports[`basic function 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "9a107ea8951fa421ab0b611040ce39abf23431fd905855cc428a5dab1c7bf852.zip",
+          "S3Key": "0b1e45083e52b1cab7ff947d6f40eab42f557970a959ff0e70bcb370230ad748.zip",
         },
         "Handler": "index.handler",
         "Role": {
@@ -114,7 +114,7 @@ exports[`basic function with environment variables 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "9a107ea8951fa421ab0b611040ce39abf23431fd905855cc428a5dab1c7bf852.zip",
+          "S3Key": "0b1e45083e52b1cab7ff947d6f40eab42f557970a959ff0e70bcb370230ad748.zip",
         },
         "Environment": {
           "Variables": {
@@ -215,7 +215,7 @@ exports[`basic function with timeout explicitly set 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "9a107ea8951fa421ab0b611040ce39abf23431fd905855cc428a5dab1c7bf852.zip",
+          "S3Key": "0b1e45083e52b1cab7ff947d6f40eab42f557970a959ff0e70bcb370230ad748.zip",
         },
         "Handler": "index.handler",
         "Role": {
