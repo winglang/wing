@@ -55,7 +55,7 @@ export interface FunctionSchema extends BaseResourceSchema {
 }
 
 /** Runtime attributes for cloud.Function */
-export interface FunctionAttributes {}
+export interface FunctionAttributes { }
 
 /** Schema for cloud.Queue */
 export interface QueueSchema extends BaseResourceSchema {
@@ -71,7 +71,7 @@ export interface QueueSchema extends BaseResourceSchema {
 }
 
 /** Runtime attributes for cloud.Queue */
-export interface QueueAttributes {}
+export interface QueueAttributes { }
 
 /** Schema for cloud.Queue.props.subscribers */
 export interface QueueSubscriber {
@@ -90,12 +90,15 @@ export interface TopicSchema extends BaseResourceSchema {
 }
 
 /** Runtime attributes for cloud.Topic */
-export interface TopicAttributes {}
+export interface TopicAttributes { }
 
 export interface TopicSubscriber {
   /** Function that should be called */
   readonly functionHandle: FunctionHandle;
 }
+
+/** Runtime attributes for cloud.Table */
+export interface TableAttributes { }
 
 /** Schema for cloud.Table */
 export interface TableSchema extends BaseResourceSchema {
@@ -119,7 +122,7 @@ export interface BucketSchema extends BaseResourceSchema {
 }
 
 /** Runtime attributes for cloud.Bucket */
-export interface BucketAttributes {}
+export interface BucketAttributes { }
 
 /** Schema for cloud.Logger */
 export interface LoggerSchema extends BaseResourceSchema {
@@ -128,7 +131,7 @@ export interface LoggerSchema extends BaseResourceSchema {
 }
 
 /** Runtime attributes for cloud.Logger */
-export interface LoggerAttributes {}
+export interface LoggerAttributes { }
 
 /** Schema for cloud.Counter */
 export interface CounterSchema extends BaseResourceSchema {
@@ -140,4 +143,4 @@ export interface CounterSchema extends BaseResourceSchema {
 }
 
 /** Runtime attributes for cloud.Counter */
-export interface CounterAttributes {}
+export interface CounterAttributes { }
