@@ -1,4 +1,3 @@
-use crate::diagnostic::WingSpan;
 use crate::lsp::sync::FILES;
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use tree_sitter::Point;
