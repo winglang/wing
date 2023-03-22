@@ -11,7 +11,7 @@ const IoRedis = require("ioredis");
 
 export class Redis implements IRedisClient, ISimulatorResourceInstance {
   static uid = 0;
-  static base_port = 6379;
+  private base_port = 6379;
   private readonly container_name: string;
   private readonly context: ISimulatorContext;
 
@@ -27,7 +27,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
       "."
     )}-${Redis.uid}`;
     Redis.uid++;
-    this.connection_port = Redis.base_port + Redis.uid;
+    this.connection_port = this.base_port + Redis.uid;
   }
 
   public async init(): Promise<void> {
@@ -45,7 +45,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
               },
             ],
           },
-        }
+        },
       });
 
       // Start the redis container
@@ -74,12 +74,12 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
     if (this.connection) {
       return this.connection;
     }
-    
+
     if (this.connection_url) {
       this.connection = new IoRedis(this.connection_url);
       return this.connection;
     }
-    
+
     throw new Error("Redis server not initialized");
   }
 
