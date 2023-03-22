@@ -1,4 +1,7 @@
-use crate::{ast::Expr, visit::Visit};
+use crate::{
+	ast::Expr,
+	visit::{self, Visit},
+};
 
 pub struct TypeCheckAssert;
 
@@ -9,5 +12,6 @@ impl Visit<'_> for TypeCheckAssert {
 			"Expr was not type checked: {:?}",
 			expr
 		);
+		visit::visit_expr(self, expr);
 	}
 }

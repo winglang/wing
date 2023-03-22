@@ -1,8 +1,8 @@
 mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{
-	BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, InterpolatedStringPart, Literal, Phase, Reference,
-	Scope, Stmt, StmtKind, Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
+	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, InterpolatedStringPart, Literal, Phase,
+	Reference, Scope, Stmt, StmtKind, Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{
@@ -12,7 +12,7 @@ use crate::{
 };
 use derivative::Derivative;
 use indexmap::IndexSet;
-use itertools::Itertools;
+use itertools::{izip, Itertools};
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
 use std::collections::BTreeMap;
@@ -304,6 +304,12 @@ impl ClassLike for Struct {
 	fn get_env(&self) -> &SymbolEnv {
 		&self.env
 	}
+}
+
+/// Intermediate struct for storing the evaluated types of arguments in a function call or constructor call.
+pub struct ArgListTypes {
+	pub pos_args: Vec<TypeRef>,
+	pub named_args: BTreeMap<Symbol, TypeRef>,
 }
 
 #[derive(Derivative)]
@@ -1216,7 +1222,10 @@ impl<'a> TypeChecker<'a> {
 			} => {
 				// TODO: obj_id, obj_scope ignored, should use it once we support Type::Resource and then remove it from Classes (fail if a class has an id if grammar doesn't handle this for us)
 
-				// Lookup the type in the env
+				// Type check the arguments
+				let arg_list_types = self.type_check_arg_list(arg_list, env, statement_idx, context);
+
+				// Lookup the class's type in the env
 				let type_ = self.resolve_type_annotation(class, env, statement_idx);
 				let (class_env, class_symbol) = match &*type_ {
 					Type::Class(ref class) => (&class.env, &class.name),
@@ -1231,14 +1240,6 @@ impl<'a> TypeChecker<'a> {
 						}
 					}
 					t => {
-						// Even though the type isn't really constructable, we can still type check the args
-						for arg in &arg_list.pos_args {
-							self.type_check_exp(arg, env, statement_idx, context);
-						}
-						for arg in &arg_list.named_args {
-							self.type_check_exp(arg.1, env, statement_idx, context);
-						}
-
 						if matches!(t, Type::Anything) {
 							return self.types.anything();
 						} else {
@@ -1273,7 +1274,7 @@ impl<'a> TypeChecker<'a> {
 
 				if !arg_list.named_args.is_empty() {
 					let last_arg = constructor_sig.parameters.last().unwrap().maybe_unwrap_option();
-					self.validate_structural_type(&arg_list.named_args, &last_arg, exp, env, statement_idx, context);
+					self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
 				}
 
 				// Verify arity
@@ -1295,10 +1296,13 @@ impl<'a> TypeChecker<'a> {
 					self.expr_error(exp, err_text);
 				}
 
-				// Verify passed arguments match the constructor
-				for (arg_expr, arg_type) in arg_list.pos_args.iter().zip(constructor_sig.parameters.iter()) {
-					let arg_expr_type = self.type_check_exp(arg_expr, env, statement_idx, context);
-					self.validate_type(arg_expr_type, *arg_type, arg_expr);
+				// Verify passed positional arguments match the constructor
+				for (arg_expr, arg_type, param_type) in izip!(
+					arg_list.pos_args.iter(),
+					arg_list_types.pos_args.iter(),
+					constructor_sig.parameters.iter()
+				) {
+					self.validate_type(*arg_type, *param_type, arg_expr);
 				}
 
 				// If this is a Resource then create a new type for this resource object
@@ -1339,15 +1343,10 @@ impl<'a> TypeChecker<'a> {
 					_ => 0,
 				};
 
+				let arg_list_types = self.type_check_arg_list(arg_list, env, statement_idx, context);
+
 				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud.Bucket().upload())
 				if matches!(*func_type, Type::Anything) {
-					// Even if we don't know the type of the function, we can still type check the arguments
-					for arg in arg_list.pos_args.iter() {
-						self.type_check_exp(arg, env, statement_idx, context);
-					}
-					for arg in arg_list.named_args.values() {
-						self.type_check_exp(arg, env, statement_idx, context);
-					}
 					return self.types.anything();
 				}
 
@@ -1367,7 +1366,7 @@ impl<'a> TypeChecker<'a> {
 
 				if !arg_list.named_args.is_empty() {
 					let last_arg = func_sig.parameters.last().unwrap().maybe_unwrap_option();
-					self.validate_structural_type(&arg_list.named_args, &last_arg, exp, env, statement_idx, context);
+					self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
 				}
 
 				// Count number of optional parameters from the end of the function's params
@@ -1400,11 +1399,11 @@ impl<'a> TypeChecker<'a> {
 					.iter()
 					.skip(this_args)
 					.take(func_sig.parameters.len() - num_optionals);
-				let args = arg_list.pos_args.iter();
 
-				for (arg_type, param_exp) in params.zip(args) {
-					let param_type = self.type_check_exp(param_exp, env, statement_idx, context);
-					self.validate_type(param_type, *arg_type, param_exp);
+				// Verify passed positional arguments match the function's parameter types
+				for (arg_expr, arg_type, param_type) in izip!(arg_list.pos_args.iter(), arg_list_types.pos_args.iter(), params)
+				{
+					self.validate_type(*arg_type, *param_type, arg_expr);
 				}
 
 				func_sig.return_type
@@ -1579,11 +1578,9 @@ impl<'a> TypeChecker<'a> {
 	fn validate_structural_type(
 		&mut self,
 		object: &BTreeMap<Symbol, Expr>,
+		object_types: &BTreeMap<Symbol, TypeRef>,
 		expected_type: &TypeRef,
 		value: &Expr,
-		env: &SymbolEnv,
-		statement_idx: usize,
-		context: &TypeCheckerContext,
 	) {
 		let expected_struct = if let Some(expected_struct) = expected_type.as_struct() {
 			expected_struct
@@ -1595,7 +1592,7 @@ impl<'a> TypeChecker<'a> {
 		// Verify that there are no extraneous fields
 		// Also map original field names to the ones in the struct type
 		let mut field_map = BTreeMap::new();
-		for (k, _) in object.iter() {
+		for (k, _) in object_types.iter() {
 			let field = expected_struct.env.try_lookup(&k.name, None);
 			if let Some(field) = field {
 				let field_type = field
@@ -1619,8 +1616,8 @@ impl<'a> TypeChecker<'a> {
 		}) {
 			if let Some((symb, expected_field_type)) = field_map.get(&k) {
 				let provided_exp = object.get(symb).unwrap();
-				let t = self.type_check_exp(provided_exp, env, statement_idx, context);
-				self.validate_type(t, *expected_field_type, provided_exp);
+				let t = object_types.get(symb).unwrap();
+				self.validate_type(*t, *expected_field_type, provided_exp);
 			} else if !v.is_option() {
 				self.expr_error(
 					value,
@@ -1774,6 +1771,36 @@ impl<'a> TypeChecker<'a> {
 				// TODO: avoid creating a new type for each map resolution
 				self.types.add_type(Type::MutMap(value_type))
 			}
+		}
+	}
+
+	fn type_check_arg_list(
+		&mut self,
+		arg_list: &ArgList,
+		env: &SymbolEnv,
+		statement_idx: usize,
+		context: &TypeCheckerContext,
+	) -> ArgListTypes {
+		// Type check the positional arguments, e.g. fn(exp1, exp2, exp3)
+		let pos_arg_types = arg_list
+			.pos_args
+			.iter()
+			.map(|pos_arg| self.type_check_exp(pos_arg, env, statement_idx, context))
+			.collect();
+
+		// Type check the named arguments, e.g. fn(named_arg1: exp4, named_arg2: exp5)
+		let named_arg_types = arg_list
+			.named_args
+			.iter()
+			.map(|(sym, expr)| {
+				let arg_type = self.type_check_exp(&expr, env, statement_idx, context);
+				(sym.clone(), arg_type)
+			})
+			.collect::<BTreeMap<_, _>>();
+
+		ArgListTypes {
+			pos_args: pos_arg_types,
+			named_args: named_arg_types,
 		}
 	}
 
