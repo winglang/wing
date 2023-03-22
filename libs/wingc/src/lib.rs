@@ -10,6 +10,7 @@ use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
+use type_check_assert::TypeCheckAssert;
 use visit::Visit;
 use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
@@ -33,6 +34,7 @@ pub mod jsify;
 pub mod lsp;
 pub mod parser;
 pub mod type_check;
+pub mod type_check_assert;
 pub mod utilities;
 pub mod visit;
 mod wasm_util;
@@ -272,6 +274,12 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 		// empty scope, no type checking needed
 		Diagnostics::new()
 	};
+
+	// Validate that every Expr has an evaluated_type
+	if cfg!(debug_assertions) {
+		let mut tc_assert = TypeCheckAssert;
+		tc_assert.visit_scope(&scope);
+	}
 
 	// Print diagnostics
 	print_diagnostics(&parse_diagnostics);

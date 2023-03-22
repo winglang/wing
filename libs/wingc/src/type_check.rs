@@ -1,8 +1,8 @@
 mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{
-	Class as AstClass, Expr, ExprKind, FunctionBody, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt,
-	StmtKind, Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
+	BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, InterpolatedStringPart, Literal, Phase, Reference,
+	Scope, Stmt, StmtKind, Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{
@@ -1124,7 +1124,19 @@ impl<'a> TypeChecker<'a> {
 		statement_idx: usize,
 		context: &TypeCheckerContext,
 	) -> TypeRef {
-		let t = match &exp.kind {
+		let t = self.type_check_exp_helper(&exp, env, statement_idx, context);
+		exp.evaluated_type.replace(Some(t));
+		t
+	}
+
+	fn type_check_exp_helper(
+		&mut self,
+		exp: &Expr,
+		env: &SymbolEnv,
+		statement_idx: usize,
+		context: &TypeCheckerContext,
+	) -> TypeRef {
+		match &exp.kind {
 			ExprKind::Literal(lit) => match lit {
 				Literal::String(_) => self.types.string(),
 				Literal::InterpolatedString(s) => {
@@ -1144,31 +1156,47 @@ impl<'a> TypeChecker<'a> {
 				let ltype = self.type_check_exp(left, env, statement_idx, context);
 				let rtype = self.type_check_exp(right, env, statement_idx, context);
 
-				if op.boolean_args() {
-					self.validate_type(ltype, self.types.bool(), left);
-					self.validate_type(rtype, self.types.bool(), right);
-				} else if op.numerical_args() {
-					self.validate_type(ltype, self.types.number(), left);
-					self.validate_type(rtype, self.types.number(), right);
-				} else if matches!(op, crate::ast::BinaryOperator::UnwrapOr) {
-					// Left argument must be an optional type
-					if !ltype.is_option() {
-						self.expr_error(left, format!("Expected optional type, found \"{}\"", ltype));
-						return ltype;
-					} else {
-						// Right argument must be a subtype of the inner type of the left argument
-						let inner_type = ltype.maybe_unwrap_option();
-						self.validate_type(rtype, inner_type, right);
-						return inner_type;
+				match op {
+					BinaryOperator::LogicalAnd | BinaryOperator::LogicalOr => {
+						self.validate_type(ltype, self.types.bool(), left);
+						self.validate_type(rtype, self.types.bool(), right);
+						self.types.bool()
 					}
-				} else {
-					self.validate_type(rtype, ltype, exp);
-				}
-
-				if op.boolean_result() {
-					self.types.bool()
-				} else {
-					ltype
+					BinaryOperator::Add
+					| BinaryOperator::Sub
+					| BinaryOperator::Mul
+					| BinaryOperator::Div
+					| BinaryOperator::FloorDiv
+					| BinaryOperator::Mod
+					| BinaryOperator::Power => {
+						self.validate_type(ltype, self.types.number(), left);
+						self.validate_type(rtype, self.types.number(), right);
+						self.types.number()
+					}
+					BinaryOperator::Equal | BinaryOperator::NotEqual => {
+						self.validate_type(rtype, ltype, exp);
+						self.types.bool()
+					}
+					BinaryOperator::Less
+					| BinaryOperator::LessOrEqual
+					| BinaryOperator::Greater
+					| BinaryOperator::GreaterOrEqual => {
+						self.validate_type(ltype, self.types.number(), left);
+						self.validate_type(rtype, self.types.number(), right);
+						self.types.bool()
+					}
+					BinaryOperator::UnwrapOr => {
+						// Left argument must be an optional type
+						if !ltype.is_option() {
+							self.expr_error(left, format!("Expected optional type, found \"{}\"", ltype));
+							ltype
+						} else {
+							// Right argument must be a subtype of the inner type of the left argument
+							let inner_type = ltype.maybe_unwrap_option();
+							self.validate_type(rtype, inner_type, right);
+							inner_type
+						}
+					}
 				}
 			}
 			ExprKind::Unary { op, exp: unary_exp } => {
@@ -1544,9 +1572,7 @@ impl<'a> TypeChecker<'a> {
 				}
 				self.types.bool()
 			}
-		};
-		exp.evaluated_type.replace(Some(t));
-		t
+		}
 	}
 
 	/// Validate that a given map can be assigned to a variable of given struct type
