@@ -20,6 +20,10 @@
     "playwright": {
       "dependsOn": ["compile"],
       "outputs": ["playwright-report/**"]
+    },
+    "playwright:update": {
+      "dependsOn": ["compile"],
+      "cache": false
     }
   }
 }

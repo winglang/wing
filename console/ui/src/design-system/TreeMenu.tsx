@@ -26,6 +26,7 @@ export interface TreeMenuProps {
   hideToolbar?: boolean;
   hideChevrons?: boolean;
   dataTestId?: string;
+  toolbarActions?: ReactNode;
 }
 
 export const TreeMenu = ({
@@ -41,6 +42,7 @@ export const TreeMenu = ({
   hideToolbar = false,
   hideChevrons = false,
   dataTestId = "",
+  toolbarActions,
 }: TreeMenuProps) => {
   return (
     <div className={"w-full h-full flex flex-col"} data-testid={dataTestId}>
@@ -51,7 +53,7 @@ export const TreeMenu = ({
         )}
       >
         {title && (
-          <div className="flex items-center min-w-0">
+          <div className="flex items-center min-w-0 h-9">
             <span className="text-slate-600 text-sm truncate uppercase">
               {title}
             </span>
@@ -60,29 +62,34 @@ export const TreeMenu = ({
 
         {!hideToolbar && (
           <div className="flex items-center h-9">
-            <button
-              className="p-0.5 hover:bg-slate-200 rounded group"
-              onClick={onExpandAll}
-              title="Expand All"
-              disabled={disabled}
-            >
-              <Square2StackPlusIcon
-                className="w-4 h-4 text-slate-600 group-hover:text-slate-700 rotate-90"
-                aria-hidden="true"
-              />
-            </button>
+            {toolbarActions}
+            {!hideChevrons && (
+              <>
+                <button
+                  className="p-0.5 hover:bg-slate-200 rounded group"
+                  onClick={onExpandAll}
+                  title="Expand All"
+                  disabled={disabled}
+                >
+                  <Square2StackPlusIcon
+                    className="w-4 h-4 text-slate-600 group-hover:text-slate-700 rotate-90"
+                    aria-hidden="true"
+                  />
+                </button>
 
-            <button
-              className="p-0.5 hover:bg-slate-200 rounded group"
-              onClick={onCollapseAll}
-              title="Collapse All"
-              disabled={disabled}
-            >
-              <Square2StackMinusIcon
-                className="w-4 h-4 text-slate-600 group-hover:text-slate-700 rotate-90"
-                aria-hidden="true"
-              />
-            </button>
+                <button
+                  className="p-0.5 hover:bg-slate-200 rounded group"
+                  onClick={onCollapseAll}
+                  title="Collapse All"
+                  disabled={disabled}
+                >
+                  <Square2StackMinusIcon
+                    className="w-4 h-4 text-slate-600 group-hover:text-slate-700 rotate-90"
+                    aria-hidden="true"
+                  />
+                </button>
+              </>
+            )}
           </div>
         )}
       </div>

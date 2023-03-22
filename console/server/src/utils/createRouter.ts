@@ -5,6 +5,7 @@ import { LogEntry } from "../consoleLogger.js";
 import { Simulator } from "../wingsdk.js";
 
 import { CloudAppStateService } from "./cloudAppState.js";
+import { TestLogger } from "./testLogger.js";
 
 export type QueryNames = {
   query:
@@ -28,6 +29,7 @@ export interface RouterContext {
   errorMessage: () => string | undefined;
   emitter: Emittery<RouterEvents>;
   cloudAppStateService: CloudAppStateService;
+  testLogger: TestLogger;
 }
 
 const t = initTRPC.context<RouterContext>().create();

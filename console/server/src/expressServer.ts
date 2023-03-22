@@ -13,6 +13,7 @@ import { RouterContext, RouterEvents } from "./utils/createRouter.js";
 import { createSimulator } from "./utils/createSimulator.js";
 import { getWingVersion } from "./utils/getWingVersion.js";
 import { LogInterface } from "./utils/LogInterface.js";
+import { TestLogger } from "./utils/testLogger.js";
 
 export interface CreateExpressServerOptions {
   simulatorPromise: Promise<ReturnType<typeof createSimulator>>;
@@ -21,6 +22,7 @@ export interface CreateExpressServerOptions {
   errorMessage: () => string | undefined;
   emitter: Emittery<RouterEvents>;
   log: LogInterface;
+  testLogger: TestLogger;
 }
 
 export const createExpressServer = async ({
@@ -30,6 +32,7 @@ export const createExpressServer = async ({
   emitter,
   cloudAppStateService,
   log,
+  testLogger,
 }: CreateExpressServerOptions) => {
   const app = express();
   app.use(cors());
@@ -52,6 +55,7 @@ export const createExpressServer = async ({
       errorMessage() {
         return errorMessage();
       },
+      testLogger: testLogger,
       emitter: emitter,
       cloudAppStateService: cloudAppStateService,
     };

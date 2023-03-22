@@ -1,6 +1,6 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 import { ScrollableArea } from "./ScrollableArea.js";
 
@@ -14,11 +14,25 @@ export interface Tab {
 export interface TabsProps {
   tabs: Tab[];
   currentTabId?: string;
+  onTabChange?: (tabId: string) => void;
   renderActiveTabPanelOnly?: boolean;
+  tabsWithNotifications?: string[];
 }
 
 export const Tabs = (props: TabsProps) => {
   const [currentTabId, setCurrentTabId] = useState(props.currentTabId);
+
+  useEffect(() => {
+    if (props.currentTabId) {
+      setCurrentTabId(props.currentTabId);
+    }
+  }, [props]);
+
+  useEffect(() => {
+    if (props.onTabChange && currentTabId) {
+      props.onTabChange(currentTabId);
+    }
+  }, [currentTabId]);
 
   return (
     <div className="h-full flex flex-col">
@@ -44,6 +58,15 @@ export const Tabs = (props: TabsProps) => {
               >
                 {tab.icon && <div className="mr-1.5">{tab.icon}</div>}
                 <div className="whitespace-nowrap">{tab.name}</div>
+
+                {props.tabsWithNotifications?.includes(tab.id) && (
+                  <div className="ml-2">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-slate-400" />
+                    </span>
+                  </div>
+                )}
               </div>
             );
           })}

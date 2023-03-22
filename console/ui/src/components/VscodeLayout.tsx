@@ -1,5 +1,12 @@
 import { BeakerIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
-import { LogEntry, LogLevel, ExplorerItem, State } from "@wingconsole/server";
+import type { inferRouterOutputs } from "@trpc/server";
+import {
+  LogEntry,
+  LogLevel,
+  ExplorerItem,
+  State,
+  Router,
+} from "@wingconsole/server";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { BlueScreenOfDeath } from "../design-system/BlueScreenOfDeath.js";
@@ -21,11 +28,19 @@ import { ContainerNode } from "./ElkMapNodes.js";
 import { MetadataPanel } from "./MetadataPanel.js";
 import { StatusBar } from "./StatusBar.js";
 import { TestsTab } from "./TestsTab.js";
+import { TestItem, TestStatus, TestsTree } from "./TestsTree.js";
+
+type RouterOutput = inferRouterOutputs<Router>;
 
 export interface VscodeLayoutProps {
   cloudAppState: State;
   wingVersion: string | undefined;
 }
+
+const getTestName = (testPath: string) => {
+  const test = testPath.split("/").pop() ?? testPath;
+  return test.replace(/test: /g, "");
+};
 
 export const VscodeLayout = ({
   cloudAppState,
@@ -45,6 +60,98 @@ export const VscodeLayout = ({
 
   const errorMessage = trpc["app.error"].useQuery();
   const explorerTree = trpc["app.explorerTree"].useQuery();
+  const [currentTabId, setCurrentTabId] = useState("logs");
+  const [tabsWithNotifications, setTabsWithNotifications] = useState<string[]>(
+    [],
+  );
+
+  const openTab = (tabId: string) => {
+    setCurrentTabId(tabId);
+    setTabsWithNotifications(
+      tabsWithNotifications.filter((id) => id !== tabId),
+    );
+  };
+
+  const setHasNotifications = (tabId: string) => {
+    if (tabId !== currentTabId) {
+      setTabsWithNotifications([...tabsWithNotifications, tabId]);
+    }
+  };
+
+  const [testTree, setTestTree] = useState<TestItem[]>([]);
+
+  const testListQuery = trpc["test.list"].useQuery();
+  useEffect(() => {
+    if (!testListQuery.data) {
+      return;
+    }
+    setTestTree(
+      testListQuery.data.map((resourcePath) => {
+        return {
+          id: resourcePath,
+          label: getTestName(resourcePath),
+          status: "pending",
+        };
+      }),
+    );
+  }, [testListQuery.data]);
+
+  const setTestStatus = (
+    resourcePath: string,
+    status: TestStatus,
+    time?: number,
+  ) => {
+    setTestTree((testTree) => {
+      return testTree.map((testItem) => {
+        if (testItem.id === resourcePath) {
+          return {
+            ...testItem,
+            status,
+            time: time || testItem.time,
+          };
+        }
+        return testItem;
+      });
+    });
+  };
+
+  const setAllTestStatus = (status: TestStatus, time?: number) => {
+    setTestTree((testTree) => {
+      return testTree.map((testItem) => {
+        return {
+          ...testItem,
+          status,
+          time: time || testItem.time,
+        };
+      });
+    });
+  };
+
+  const onRunTestsSuccess = (runOutput: RouterOutput["test.run"][]) => {
+    setHasNotifications("tests");
+    for (const output of runOutput) {
+      setTestStatus(
+        output.path,
+        output.error ? "error" : "success",
+        output.time,
+      );
+    }
+  };
+
+  const runAllTests = trpc["test.runAll"].useMutation({
+    onMutate: () => {
+      setAllTestStatus("running");
+    },
+    onSuccess: (data) => onRunTestsSuccess(data),
+  });
+
+  const runTest = trpc["test.run"].useMutation({
+    onMutate: (data) => {
+      setTestStatus(data.resourcePath, "running");
+    },
+    onSuccess: (data) => onRunTestsSuccess([data]),
+  });
+
   useEffect(() => {
     if (explorerTree.data) {
       setItems([createTreeMenuItemFromExplorerTreeItem(explorerTree.data)]);
@@ -62,9 +169,6 @@ export const VscodeLayout = ({
   const [searchText, setSearchText] = useState("");
 
   const [logsTimeFilter, setLogsTimeFilter] = useState(0);
-  const clearLogs = () => {
-    setLogsTimeFilter(Date.now());
-  };
 
   const logs = trpc["app.logs"].useQuery(
     {
@@ -95,6 +199,7 @@ export const VscodeLayout = ({
     if (!logs.data) {
       return;
     }
+    setHasNotifications("logs");
   }, [logs.data]);
 
   const onResourceClick = (log: LogEntry) => {
@@ -155,22 +260,41 @@ export const VscodeLayout = ({
         />
 
         <RightResizableWidget className="h-full flex flex-col w-80 min-w-[10rem] min-h-[15rem] border-r border-slate-300">
-          <TreeMenu
-            title="Explorer"
-            items={items}
-            selectedItemId={currentItemId}
-            openMenuItemIds={openItemIds}
-            onItemClick={(item) => {
-              setCurrent(item.id);
-            }}
-            onItemToggle={(item) => {
-              toggle(item.id);
-            }}
-            onExpandAll={() => expandAll()}
-            onCollapseAll={() => collapseAll()}
-            disabled={isLoading}
-            dataTestId={"explorer-tree-menu"}
-          />
+          <div className="flex grow">
+            <TreeMenu
+              title="Explorer"
+              items={items}
+              selectedItemId={currentItemId}
+              openMenuItemIds={openItemIds}
+              onItemClick={(item) => {
+                setCurrent(item.id);
+              }}
+              onItemToggle={(item) => {
+                toggle(item.id);
+              }}
+              onExpandAll={() => expandAll()}
+              onCollapseAll={() => collapseAll()}
+              disabled={isLoading}
+              dataTestId={"explorer-tree-menu"}
+            />
+          </div>
+          <TopResizableWidget className="h-1/3 border-t border-slate-300">
+            {testTree.length === 0 && (
+              <div className="text-slate-400 text-2xs px-3 py-2 font-mono">
+                No Tests
+              </div>
+            )}
+            <TestsTree
+              items={testTree}
+              onItemClick={(item) =>
+                runTest.mutateAsync({
+                  resourcePath: item,
+                })
+              }
+              onRunAll={() => runAllTests.mutateAsync()}
+              runAllDisabled={testTree.length === 0}
+            />
+          </TopResizableWidget>
         </RightResizableWidget>
 
         <div className="flex-1 flex flex-col">
@@ -236,7 +360,7 @@ export const VscodeLayout = ({
         </div>
       </div>
       {cloudAppState !== "error" && (
-        <TopResizableWidget className="border-t border-slate-300 bg-slate-50 min-h-[5rem] h-[18rem]">
+        <TopResizableWidget className="border-t border-slate-300 bg-slate-50 min-h-[5rem] h-[15rem]">
           <Tabs
             tabs={[
               {
@@ -253,7 +377,7 @@ export const VscodeLayout = ({
                     <ConsoleFilters
                       selectedLogTypeFilters={selectedLogTypeFilters}
                       setSelectedLogTypeFilters={setSelectedLogTypeFilters}
-                      clearLogs={clearLogs}
+                      clearLogs={() => setLogsTimeFilter(Date.now())}
                       isLoading={isLoading}
                       onSearch={setSearchText}
                     />
@@ -279,7 +403,9 @@ export const VscodeLayout = ({
                 panel: <TestsTab />,
               },
             ]}
-            currentTabId="logs"
+            tabsWithNotifications={tabsWithNotifications}
+            currentTabId={currentTabId}
+            onTabChange={openTab}
           />
         </TopResizableWidget>
       )}

@@ -8,6 +8,7 @@ import {
 import classNames from "classnames";
 import { useEffect } from "react";
 
+import { Button } from "../design-system/Button.js";
 import { TreeMenu } from "../design-system/TreeMenu.js";
 import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
 
@@ -18,13 +19,22 @@ export interface TestItem {
   label: string;
   status: TestStatus;
   time?: number;
+  onRunAll?: () => void;
+  runAllDisabled?: boolean;
 }
 export interface TestsTreeProps {
   items: TestItem[];
   onItemClick?: (resourcePath: string) => void;
+  onRunAll?: () => void;
+  runAllDisabled?: boolean;
 }
 
-export const TestsTree = ({ items, onItemClick }: TestsTreeProps) => {
+export const TestsTree = ({
+  items,
+  onRunAll,
+  runAllDisabled,
+  onItemClick,
+}: TestsTreeProps) => {
   const treeMenu = useTreeMenuItems();
 
   useEffect(() => {
@@ -58,11 +68,15 @@ export const TestsTree = ({ items, onItemClick }: TestsTreeProps) => {
           secondaryLabel: (
             <div
               className={classNames(
-                "pr-2 flex items-center group-hover:visible",
-                item.status !== "running" && "invisible",
+                "pr-2 flex items-center group-hover:visible invisible",
               )}
             >
-              <button className="p-0.5 hover:bg-slate-200 rounded">
+              <button
+                className="p-0.5 hover:bg-slate-200 rounded"
+                onClick={() => {
+                  onItemClick?.(item.id);
+                }}
+              >
                 <PlayIcon className="w-4 h-4 text-slate-500" />
               </button>
             </div>
@@ -72,15 +86,50 @@ export const TestsTree = ({ items, onItemClick }: TestsTreeProps) => {
     );
   }, [items]);
 
+  const toolbarActions = (
+    <div>
+      <button
+        className="p-0.5 hover:bg-slate-200 rounded relative h-5 w-5 text-slate-600 hover:text-slate-700"
+        onClick={onRunAll}
+        title="Run all tests"
+        disabled={runAllDisabled}
+      >
+        <PlayIcon className="w-4 h-4 -ml-[1.5px]" aria-hidden="true" />
+
+        <div
+          className={classNames(
+            "absolute transform top-1/2 -translate-y-1/2 ml-[1.5px]",
+          )}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            aria-hidden="true"
+            className="w-4 h-4"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985"
+            ></path>
+          </svg>
+        </div>
+      </button>
+    </div>
+  );
+
   return (
     <TreeMenu
+      title="Tests"
       items={treeMenu.items}
       selectedItemId={treeMenu.currentItemId}
-      onItemClick={(item) => onItemClick?.(item.id)}
       openMenuItemIds={treeMenu.openItemIds}
-      hideToolbar
       hideChevrons
       dataTestId={"test-tree-menu"}
+      toolbarActions={toolbarActions}
     />
   );
 };
