@@ -1135,6 +1135,10 @@ impl<'a> TypeChecker<'a> {
 		t
 	}
 
+	/// Helper function for type_check_exp. This is needed because we want to be able to `return`
+	/// and break early, while still setting the evaluated type on the expression.
+	///
+	/// Do not use this function directly, use `type_check_exp` instead.
 	fn type_check_exp_helper(
 		&mut self,
 		exp: &Expr,
