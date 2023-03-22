@@ -147,10 +147,9 @@ $ wing compile --target awscdk app.w
 The output includes both a AWS-CDK configuration file (under `target/<file name>.awscdk`) and
 JavaScript bundles that include inflight code that executes on compute platforms such as AWS Lambda.
 
-You can deploy your stack to AWS using `cdk deploy` command
+You can deploy your stack to AWS by installing the [AWS CDK Toolkit](https://docs.aws.amazon.com/cdk/v2/guide/cli.html) and running:
 ```sh
 $ cdk deploy --app target/app.awscdk
-```
 
 ### Plugins
 
