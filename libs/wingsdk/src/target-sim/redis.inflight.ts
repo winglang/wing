@@ -41,7 +41,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
       await container.start();
 
       // Generate the redis url based on the container ip address
-      let container_spec = await container.inspect();
+      const container_spec = await container.inspect();
       this.connection_url = `redis://${container_spec.NetworkSettings.IPAddress}:6379`;
     } catch (e) {
       throw Error(`Error setting up Redis resource simulation (${e})
