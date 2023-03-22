@@ -1,6 +1,6 @@
 use crate::ast::{
-	ArgList, Class, Constructor, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Reference, Scope,
-	Stmt, StmtKind, Symbol, TypeAnnotation,
+	ArgList, Class, Constructor, Expr, ExprKind, FunctionBody, FunctionDefinition, InterpolatedStringPart, Literal,
+	Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
 };
 
 /// Visitor pattern inspired by implementation from https://docs.rs/syn/latest/syn/visit/index.html
@@ -263,7 +263,8 @@ where
 		}
 		ExprKind::StructLiteral { type_, fields } => {
 			v.visit_type_annotation(type_);
-			for val in fields.values() {
+			for (sym, val) in fields.values() {
+				v.visit_symbol(sym);
 				v.visit_expr(val);
 			}
 		}
@@ -285,6 +286,9 @@ where
 		}
 		ExprKind::FunctionClosure(def) => {
 			v.visit_function_definition(def);
+		}
+		ExprKind::OptionalTest { optional } => {
+			v.visit_expr(optional);
 		}
 	}
 }
@@ -340,7 +344,9 @@ where
 		v.visit_type_annotation(return_type);
 	}
 
-	v.visit_scope(&node.statements);
+	if let FunctionBody::Statements(scope) = &node.body {
+		v.visit_scope(scope);
+	};
 }
 
 pub fn visit_args<'ast, V>(v: &mut V, node: &'ast ArgList)

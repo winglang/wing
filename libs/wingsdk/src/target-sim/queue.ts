@@ -4,7 +4,11 @@ import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { QueueSchema, QueueSubscriber, QUEUE_TYPE } from "./schema-resources";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import {
+  bindSimulatorResource,
+  makeSimulatorJsClient,
+  simulatorHandleToken,
+} from "./util";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
@@ -28,7 +32,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   }
 
   public onMessage(
-    inflight: core.Inflight, // cloud.IQueueOnMessageHandler
+    inflight: cloud.IQueueOnMessageHandler,
     props: cloud.QueueOnMessageProps = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
@@ -74,9 +78,8 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     // call subscribed functions.
     this.node.addDependency(fn);
 
-    const functionHandle = `\${${fn.node.path}#attrs.handle}`; // TODO: proper token mechanism
     this.subscribers.push({
-      functionHandle,
+      functionHandle: simulatorHandleToken(fn),
       batchSize: props.batchSize ?? 1,
     });
 

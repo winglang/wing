@@ -21,7 +21,7 @@ pub struct SymbolEnv {
 
 	is_class: bool,
 	pub is_init: bool,
-	pub flight: Phase,
+	pub phase: Phase,
 	statement_idx: usize,
 }
 
@@ -49,7 +49,7 @@ enum LookupResult<'a> {
 #[derive(Debug)]
 pub struct SymbolLookupInfo {
 	/// The phase the symbol was defined in
-	pub flight: Phase,
+	pub phase: Phase,
 	/// Whether the symbol was defined in an `init`'s environment
 	pub init: bool,
 }
@@ -70,7 +70,7 @@ impl SymbolEnv {
 		return_type: TypeRef,
 		is_class: bool,
 		is_init: bool,
-		flight: Phase,
+		phase: Phase,
 		statement_idx: usize,
 	) -> Self {
 		// assert that if the return type isn't void, then there is a parent environment
@@ -82,7 +82,7 @@ impl SymbolEnv {
 			return_type,
 			is_class,
 			is_init,
-			flight,
+			phase,
 			statement_idx,
 		}
 	}
@@ -145,7 +145,7 @@ impl SymbolEnv {
 			LookupResult::Found((
 				kind.into(),
 				SymbolLookupInfo {
-					flight: self.flight,
+					phase: self.phase,
 					init: self.is_init,
 				},
 			))
@@ -166,7 +166,7 @@ impl SymbolEnv {
 					}
 				}
 			}
-			LookupMutResult::Found((kind.into(), self.flight))
+			LookupMutResult::Found((kind.into(), self.phase))
 		} else if let Some(ref mut parent_env) = self.parent {
 			parent_env.try_lookup_mut_ext(symbol_name, not_after_stmt_idx.map(|_| self.statement_idx))
 		} else {
@@ -357,7 +357,7 @@ impl<'a> Iterator for SymbolEnvIter<'a> {
 					name.clone(),
 					kind,
 					SymbolLookupInfo {
-						flight: self.curr_env.flight,
+						phase: self.curr_env.phase,
 						init: self.curr_env.is_init,
 					},
 				))

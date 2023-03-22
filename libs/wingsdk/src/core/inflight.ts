@@ -1,7 +1,6 @@
 import { createHash } from "crypto";
-import { mkdtempSync, readFileSync, writeFileSync } from "fs";
-import { tmpdir } from "os";
-import { basename, join } from "path";
+import { readFileSync } from "fs";
+import { basename } from "path";
 import { Construct } from "constructs";
 import { makeHandler } from "./internal";
 import { Connection, Display, IInflightHost, IResource } from "./resource";
@@ -18,17 +17,9 @@ export abstract class Code {
   public abstract readonly language: Language;
 
   /**
-   * A path to the code in the user's file system that can be referenced
-   * for bundling purposes.
+   * The code.
    */
-  public abstract readonly path: string;
-
-  /**
-   * The code contents.
-   */
-  public get text(): string {
-    return readFileSync(this.path, "utf-8");
-  }
+  public abstract readonly text: string;
 
   /**
    * Generate a hash of the code contents.
@@ -54,28 +45,22 @@ export class NodeJsCode extends Code {
    * Reference code from a file path.
    */
   public static fromFile(path: string) {
-    return new NodeJsCode(path);
+    return new NodeJsCode(readFileSync(path, "utf-8"));
   }
 
   /**
    * Reference code directly from a string.
    */
   public static fromInline(text: string) {
-    // TODO: can we use a relative path here?
-    // TODO: can we avoid writing to file until actually necessary?
-    // TODO: can we share the temp dir between Code objects?
-    const tempdir = mkdtempSync(join(tmpdir(), "wingsdk."));
-    const file = join(tempdir, "index.js");
-    writeFileSync(file, text);
-    return new NodeJsCode(file);
+    return new NodeJsCode(text);
   }
 
   public readonly language = Language.NODE_JS;
-  public readonly path: string;
+  public readonly text: string;
 
-  private constructor(path: string) {
+  private constructor(text: string) {
     super();
-    this.path = path;
+    this.text = text;
   }
 }
 

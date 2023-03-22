@@ -7,11 +7,12 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionDefinition,
-	FunctionSignature, InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind,
-	Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
+	ArgList, BinaryOperator, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionBody,
+	FunctionDefinition, FunctionSignature, InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope,
+	Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
+use crate::WINGSDK_STD_MODULE;
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
@@ -440,7 +441,7 @@ impl<'s> Parser<'s> {
 						member_type: self.build_type_annotation(&class_element.child_by_field_name("type").unwrap())?,
 						reassignable: class_element.child_by_field_name("reassignable").is_some(),
 						is_static,
-						flight: match class_element.child_by_field_name("phase_modifier") {
+						phase: match class_element.child_by_field_name("phase_modifier") {
 							Some(n) => {
 								if !is_resource {
 									self
@@ -472,7 +473,7 @@ impl<'s> Parser<'s> {
 								root: name.clone(),
 								fields: vec![],
 							}))),
-							flight: if is_resource { Phase::Preflight } else { Phase::Inflight },
+							phase: if is_resource { Phase::Preflight } else { Phase::Inflight },
 						},
 					})
 				}
@@ -556,15 +557,24 @@ impl<'s> Parser<'s> {
 		}))
 	}
 
-	fn build_anonymous_closure(&self, anon_closure_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
-		self.build_function_definition(anon_closure_node, flight)
+	fn build_anonymous_closure(&self, anon_closure_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
+		self.build_function_definition(anon_closure_node, phase)
 	}
 
-	fn build_function_definition(&self, func_def_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
+	fn build_function_definition(&self, func_def_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
 		let parameters = self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap())?;
+
+		let statements = if let Some(external) = func_def_node.child_by_field_name("extern_modifier") {
+			let node_text = self.node_text(&external.named_child(0).unwrap());
+			let node_text = &node_text[1..node_text.len() - 1];
+			FunctionBody::External(node_text.to_string())
+		} else {
+			FunctionBody::Statements(self.build_scope(&self.get_child_field(func_def_node, "block")?))
+		};
+
 		Ok(FunctionDefinition {
 			parameters: parameters.iter().map(|p| (p.0.clone(), p.2)).collect(),
-			statements: self.build_scope(&func_def_node.child_by_field_name("block").unwrap()),
+			body: statements,
 			signature: FunctionSignature {
 				parameters: parameters.iter().map(|p| p.1.clone()).collect(),
 				return_type: if let Some(rt) = func_def_node.child_by_field_name("type") {
@@ -572,10 +582,11 @@ impl<'s> Parser<'s> {
 				} else {
 					None
 				},
-				flight,
+				phase,
 			},
 			is_static: func_def_node.child_by_field_name("static").is_some(),
 			captures: RefCell::new(None),
+			span: self.node_span(func_def_node),
 		})
 	}
 
@@ -630,7 +641,7 @@ impl<'s> Parser<'s> {
 				Ok(TypeAnnotation::FunctionSignature(FunctionSignature {
 					parameters,
 					return_type,
-					flight: if type_node.child_by_field_name("inflight").is_some() {
+					phase: if type_node.child_by_field_name("inflight").is_some() {
 						Phase::Inflight
 					} else {
 						Phase::Preflight
@@ -681,8 +692,27 @@ impl<'s> Parser<'s> {
 			return self.add_error(format!("Syntax error"), &nested_node);
 		}
 		if let Some(property) = nested_node.child_by_field_name("property") {
+			let object_expr = self.get_child_field(nested_node, "object")?;
+			let object_expr = if object_expr.kind() == "json_container_type" {
+				Expr {
+					kind: ExprKind::Reference(Reference::TypeMember {
+						type_: UserDefinedType {
+							root: Symbol {
+								name: WINGSDK_STD_MODULE.to_string(),
+								span: Default::default(),
+							},
+							fields: vec![self.node_symbol(&object_expr)?],
+						},
+						property: self.node_symbol(&property)?,
+					}),
+					span: self.node_span(&object_expr),
+					evaluated_type: RefCell::new(None),
+				}
+			} else {
+				self.build_expression(&nested_node.child_by_field_name("object").unwrap())?
+			};
 			Ok(Reference::InstanceMember {
-				object: Box::new(self.build_expression(&nested_node.child_by_field_name("object").unwrap())?),
+				object: Box::new(object_expr),
 				property: self.node_symbol(&property)?,
 			})
 		} else {
@@ -709,7 +739,7 @@ impl<'s> Parser<'s> {
 	fn build_reference(&self, reference_node: &Node) -> DiagnosticResult<Reference> {
 		let actual_node = reference_node.named_child(0).unwrap();
 		match actual_node.kind() {
-			"identifier" | "stdlib_identifier" => Ok(Reference::Identifier(self.node_symbol(&actual_node)?)),
+			"identifier" => Ok(Reference::Identifier(self.node_symbol(&actual_node)?)),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node)?),
 			"ERROR" => self.add_error(format!("Expected type || {:#?}", reference_node), &actual_node),
 			other => self.report_unimplemented_grammar(other, "type node", &actual_node),
@@ -805,6 +835,7 @@ impl<'s> Parser<'s> {
 						"/" => BinaryOperator::Div,
 						"\\" => BinaryOperator::FloorDiv,
 						"**" => BinaryOperator::Power,
+						"??" => BinaryOperator::UnwrapOr,
 						"ERROR" => self.add_error::<BinaryOperator>(format!("Expected binary operator"), expression_node)?,
 						other => return self.report_unimplemented_grammar(other, "binary operator", expression_node),
 					},
@@ -901,8 +932,12 @@ impl<'s> Parser<'s> {
 				ExprKind::Literal(self.build_duration(&expression_node)?),
 				expression_span,
 			)),
-			"reference" => Ok(Expr::new(
-				ExprKind::Reference(self.build_reference(&expression_node)?),
+			"identifier" => Ok(Expr::new(
+				ExprKind::Reference(Reference::Identifier(self.node_symbol(&expression_node)?)),
+				expression_span,
+			)),
+			"nested_identifier" => Ok(Expr::new(
+				ExprKind::Reference(self.build_nested_identifier(&expression_node)?),
 				expression_span,
 			)),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap()),
@@ -1024,16 +1059,25 @@ impl<'s> Parser<'s> {
 					let field_value = self.build_expression(&field.named_child(1).unwrap());
 					// Add fields to our struct literal, if some are missing or aren't part of the type we'll fail on type checking
 					if let (Ok(k), Ok(v)) = (field_name, field_value) {
-						if fields.contains_key(&k) {
+						if fields.contains_key(&k.name) {
 							// TODO: ugly, we need to change add_error to not return anything and have a wrapper `raise_error` that returns a Result
 							_ = self.add_error::<()>(format!("Duplicate field {} in struct literal", k), expression_node);
 						} else {
-							fields.insert(k, v);
+							fields.insert(k.name.clone(), (k, v));
 						}
 					}
 				}
 				Ok(Expr::new(
 					ExprKind::StructLiteral { type_: type_?, fields },
+					expression_span,
+				))
+			}
+			"optional_test" => {
+				let expression = self.build_expression(&expression_node.named_child(0).unwrap());
+				Ok(Expr::new(
+					ExprKind::OptionalTest {
+						optional: Box::new(expression?),
+					},
 					expression_span,
 				))
 			}

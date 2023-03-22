@@ -1,10 +1,7 @@
 ; Variables
 
-(variable_definition_statement 
-  name: (identifier) @variable
-)
-(reference (identifier) @variable)
-(reference (nested_identifier property: (identifier) @property) ) 
+((nested_identifier) @variable)
+((nested_identifier property: (identifier) @property) . ) 
 
 
 ; Classes
@@ -27,7 +24,10 @@
 
 (keyword_argument_key) @variable.parameter
 (call 
-  caller: (reference) @function.method
+  caller: (identifier) @function.method
+)
+(call 
+  caller: (nested_identifier) @function.method
 )
 
 ; Primitives
@@ -39,6 +39,7 @@
 (string) @string
 (bool) @constant.builtin
 (builtin_type) @type.builtin
+(json_container_type) @type.builtin
 
 ; Special
 
@@ -66,6 +67,7 @@
   ">"
   ">="
   "&&"
+  "??"
   "||"
 ] @operator
 

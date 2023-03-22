@@ -24,9 +24,10 @@ export function isSimulatorResource(obj: any): obj is ISimulatorResource {
  */
 export interface ISimulatorResourceInstance {
   /**
-   * Perform any async initialization required by the resource.
+   * Perform any async initialization required by the resource. Return a map of
+   * the resource's runtime attributes.
    */
-  init(): Promise<void>;
+  init(): Promise<Record<string, any>>;
 
   /**
    * Stop the resource and clean up any physical resources it may have created

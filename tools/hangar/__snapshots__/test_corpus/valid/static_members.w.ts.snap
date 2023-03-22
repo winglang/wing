@@ -1,16 +1,17 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`wing compile -t tf-aws > clients/Foo.inflight.js 1`] = `
-"export class Foo_inflight  {
+"class Foo  {
 constructor({ instance_field }) {
 
   this.instance_field = instance_field;
 }
-async static get_123()  {
+static async get_123()  {
 	{
   return 123;
 }
-}}"
+}}
+exports.Foo = Foo;"
 `;
 
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
@@ -116,7 +117,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
-const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
 	switch (target) {
@@ -156,8 +157,8 @@ constructor() {
   }
   	_toInflight() {
   	const instance_field_client = this._lift(this.instance_field);
-  	const self_client_path = require('path').resolve(__dirname, \\"clients/Foo.inflight.js\\").replace(/\\\\\\\\/g, \\"/\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo_inflight({instance_field: \${instance_field_client}}))\`);
+  	const self_client_path = \\"./clients/Foo.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo({instance_field: \${instance_field_client}}))\`);
   }
   }
   Foo._annotateInflight(\\"get_123\\", {});
@@ -165,7 +166,7 @@ constructor() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(foo.instance_field === 100)'\`)})((foo.instance_field === 100))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((Foo.m()) === 99)'\`)})(((Foo.m()) === 99))};
   this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.8b58045c72709175549d51937a233ff65ac5e5aa12e83837daf5ea7baf9f224b/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.3e3ded5aab7ad84970aba71e51b0f5571a6ab4ed41f41ae3461d977097e72746/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
     }
   }));
@@ -174,21 +175,21 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile -t tf-aws > proc.8b58045c72709175549d51937a233ff65ac5e5aa12e83837daf5ea7baf9f224b/index.js 1`] = `
+exports[`wing compile -t tf-aws > proc.3e3ded5aab7ad84970aba71e51b0f5571a6ab4ed41f41ae3461d977097e72746/index.js 1`] = `
 "async handle(s) { const {  } = this; {
   class InflightClass
   {
-   constructor()  {
+  constructor()  {
   	{
   }
   }
   
-   inflight_method()  {
+  async inflight_method()  {
   	{
     return \\"Inflight method\\";
   }
   }
-  static static_inflight_method()  {
+  static async static_inflight_method()  {
   	{
     return \\"Static inflight method\\";
   }

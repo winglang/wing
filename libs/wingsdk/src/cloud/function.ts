@@ -1,12 +1,10 @@
-import { spawnSync } from "child_process";
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from "fs";
+import { mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import { Logger } from "./logger";
 import { fqnForType } from "../constants";
-import { IInflightHost, IResource, Inflight, Resource, App } from "../core";
+import { IInflightHost, IResource, Resource, App } from "../core";
 import { Duration } from "../std";
-import { normalPath } from "../util";
 import { CaseConventions, ResourceNames } from "../utils/resource-names";
 
 /**
@@ -52,7 +50,7 @@ export abstract class Function extends Resource implements IInflightHost {
   public static _newFunction(
     scope: Construct,
     id: string,
-    inflight: Inflight,
+    inflight: IFunctionHandler,
     props: FunctionProps = {}
   ): Function {
     return App.of(scope).newAbstract(FUNCTION_FQN, scope, id, inflight, props);
@@ -63,14 +61,14 @@ export abstract class Function extends Resource implements IInflightHost {
   public readonly stateful = false;
 
   /**
-   * The path to the file asset that contains the handler code.
+   * The path to the entrypoint source code of the function.
    */
-  protected readonly assetPath: string;
+  protected readonly entrypoint: string;
 
   constructor(
     scope: Construct,
     id: string,
-    inflight: Inflight,
+    inflight: IFunctionHandler,
     props: FunctionProps = {}
   ) {
     super(scope, id);
@@ -99,7 +97,7 @@ export abstract class Function extends Resource implements IInflightHost {
     lines.push(`console.log = (...args) => $logger.print(...args);`);
 
     lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await ${inflightClient.text}.handle(event);`);
+    lines.push(`  return await (${inflightClient.text}).handle(event);`);
     lines.push("};");
 
     // add an annotation that the Wing logger is implicitly used
@@ -110,56 +108,21 @@ export abstract class Function extends Resource implements IInflightHost {
       implicit: true,
     });
 
-    const assetRelativeDir = join(
-      "assets",
-      ResourceNames.generateName(this, {
-        // Avoid characters that may cause path issues
-        disallowedRegex: /[><:"/\\|?*]/g,
-        case: CaseConventions.LOWERCASE,
-        sep: "_",
-      })
-    );
+    const assetName = ResourceNames.generateName(this, {
+      // Avoid characters that may cause path issues
+      disallowedRegex: /[><:"/\\|?*\s]/g,
+      case: CaseConventions.LOWERCASE,
+      sep: "_",
+    });
 
-    const assetDir = join(App.of(this).workdir, assetRelativeDir);
-    mkdirSync(assetDir, { recursive: true });
+    // write the entrypoint next to the partial inflight code emitted by the compiler, so that
+    // `require` resolves naturally.
 
-    const infile = join(assetDir, "prebundle.js");
-    const outfile = join(assetDir, "index.js");
-    writeFileSync(infile, lines.join("\n"));
-
-    // We would invoke esbuild directly here, but there is a bug where esbuild
-    // mangles the stdout/stderr of the process that invokes it.
-    // https://github.com/evanw/esbuild/issues/2927
-    // To workaround the issue, spawn a new process and invoke esbuild inside it.
-
-    let esbuildScript = [
-      `const esbuild = require("${normalPath(
-        require.resolve("esbuild-wasm")
-      )}");`,
-      `esbuild.buildSync({ bundle: true, entryPoints: ["${normalPath(
-        infile
-      )}"], outfile: "${normalPath(
-        outfile
-      )}", minify: false, platform: "node", target: "node16", external: ["aws-sdk"] });`,
-    ].join("\n");
-    let result = spawnSync(process.argv[0], ["-e", esbuildScript]);
-    if (result.status !== 0) {
-      throw new Error(
-        `Failed to bundle function: ${result.stderr.toString("utf-8")}`
-      );
-    }
-
-    // the bundled contains line comments with file paths, which are not useful for us, especially
-    // since they may contain system-specific paths. sadly, esbuild doesn't have a way to disable
-    // this, so we simply filter those out from the bundle.
-    const outlines = readFileSync(outfile, "utf-8").split("\n");
-    const isNotLineComment = (line: string) => !line.startsWith("//");
-    writeFileSync(outfile, outlines.filter(isNotLineComment).join("\n"));
-
-    // remove input file
-    rmSync(infile);
-
-    this.assetPath = outfile;
+    const workdir = App.of(this).workdir;
+    mkdirSync(workdir, { recursive: true });
+    const entrypoint = join(workdir, `${assetName}.js`);
+    writeFileSync(entrypoint, lines.join("\n"));
+    this.entrypoint = entrypoint;
   }
 
   /**

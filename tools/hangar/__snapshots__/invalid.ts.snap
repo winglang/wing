@@ -138,14 +138,25 @@ exports[`capture_reassignable.w > stderr 1`] = `
 `;
 
 exports[`cloud_function_expects_inflight.w > stderr 1`] = `
-"error: Expected type to be \\"inflight (any): any\\", but got \\"preflight (str): str\\" instead
+"error: Expected type to be \\"IFunctionHandler (inflight (str): void)\\", but got \\"preflight (str): str\\" instead
   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:3:20
   |  
 3 |   new cloud.Function((name: str): str => {
   | /--------------------^
 4 | |     return \\"Hello \${name}\\";
 5 | | });
-  | \\\\-^ Expected type to be \\"inflight (any): any\\", but got \\"preflight (str): str\\" instead
+  | \\\\-^ Expected type to be \\"IFunctionHandler (inflight (str): void)\\", but got \\"preflight (str): str\\" instead
+
+
+error: Expected type to be \\"IQueueOnMessageHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
+   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:9:14
+   |  
+ 9 |   q.on_message(inflight (x: num) => {
+   | /--------------^
+10 | |                     // ^ \\"num\\" doesn't match the expected type \\"str\\"
+11 | |     return;
+12 | | });
+   | \\\\-^ Expected type to be \\"IQueueOnMessageHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
 
 "
 `;
@@ -316,18 +327,21 @@ exports[`immutable_container_types.w > stderr 1`] = `
 `;
 
 exports[`impl_interface.w > stderr 1`] = `
-"error: Resource \\"A (at ../../../examples/tests/invalid/impl_interface.w:3:10)\\" does not implement method \\"handle\\" of interface \\"cloud.IQueueOnMessageHandler\\"
+"error: Resource \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueOnMessageHandler\\"
   --> ../../../examples/tests/invalid/impl_interface.w:3:10
   |
 3 | resource A impl cloud.IQueueOnMessageHandler {
-  |          ^ Resource \\"A (at ../../../examples/tests/invalid/impl_interface.w:3:10)\\" does not implement method \\"handle\\" of interface \\"cloud.IQueueOnMessageHandler\\"
+  |          ^ Resource \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueOnMessageHandler\\"
 
 
-error: Expected type to be \\"inflight (IQueueOnMessageHandler, str): void\\", but got \\"inflight (B): void\\" instead
+error: Expected type to be \\"inflight (IQueueOnMessageHandler (inflight (str): void), str): void\\", but got \\"inflight (B, num): void\\" instead
   --> ../../../examples/tests/invalid/impl_interface.w:8:10
   |
 8 | resource B impl cloud.IQueueOnMessageHandler {
-  |          ^ Expected type to be \\"inflight (IQueueOnMessageHandler, str): void\\", but got \\"inflight (B): void\\" instead
+  |          ^ Expected type to be \\"inflight (IQueueOnMessageHandler (inflight (str): void), str): void\\", but got \\"inflight (B, num): void\\" instead
+
+
+error: Class C (at ../../../examples/tests/invalid/impl_interface.w:16:10)'s implements \\"Bucket\\" is not an interface
 
 "
 `;
@@ -342,29 +356,46 @@ exports[`inflight_in_class.w > stderr 1`] = `
 "
 `;
 
-exports[`inflight_ref_invalid.w > stderr 1`] = `
-"error: Unable to reference \\"this.reassignable\\" from inflight method \\"test\\" because it is reassignable (\\"var\\")
-   --> ../../../examples/tests/invalid/inflight_ref_invalid.w:12:19
+exports[`inflight_ref_explicit_ops.w > stderr 1`] = `
+"error: Unable to qualify which operations are performed on 'this.my_queue' of type 'Queue'. This is not supported yet.
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:13:12
    |
-12 |     print(\\"\${this.reassignable}\\");
-   |                   ^^^^^^^^^^^^ Unable to reference \\"this.reassignable\\" from inflight method \\"test\\" because it is reassignable (\\"var\\")
+13 |     return this.my_queue;
+   |            ^^^^^^^^^^^^^ Unable to qualify which operations are performed on 'this.my_queue' of type 'Queue'. This is not supported yet.
 
 
-error: Unable to reference \\"this.mut_array\\" from inflight method \\"test\\" because type MutArray<str> is not capturable
-   --> ../../../examples/tests/invalid/inflight_ref_invalid.w:14:16
+error: Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:34:13
    |
-14 |     print(this.mut_array.at(0));
-   |                ^^^^^^^^^ Unable to reference \\"this.mut_array\\" from inflight method \\"test\\" because type MutArray<str> is not capturable
+34 |     let x = this.b;
+   |             ^^^^^^ Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
+
+
+error: Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
+   --> ../../../examples/tests/invalid/inflight_ref_explicit_ops.w:47:13
+   |
+47 |     let b = this.array.at(1);
+   |             ^^^^^^^^^^ Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
 
 "
 `;
 
-exports[`inflight_ref_resource_sub_field.w > stderr 1`] = `
-"error: Unable to reference \\"my_queue.push\\" from inflight method \\"test\\" because it is not an inflight method
-   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_field.w:26:10
+exports[`inflight_ref_resource_sub_method.w > stderr 1`] = `
+"error: Unable to qualify which operations are performed on 'this.my_queue' of type 'Queue'. This is not supported yet.
+   --> ../../../examples/tests/invalid/inflight_ref_resource_sub_method.w:11:12
    |
-26 |     this.another.my_queue.push(\\"message\\");
-   |          ^^^^^^^ Unable to reference \\"my_queue.push\\" from inflight method \\"test\\" because it is not an inflight method
+11 |     return this.my_queue;
+   |            ^^^^^^^^^^^^^ Unable to qualify which operations are performed on 'this.my_queue' of type 'Queue'. This is not supported yet.
+
+"
+`;
+
+exports[`inflight_ref_unknown_op.w > stderr 1`] = `
+"error: Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
+   --> ../../../examples/tests/invalid/inflight_ref_unknown_op.w:11:13
+   |
+11 |     let x = this.b;
+   |             ^^^^^^ Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
 
 "
 `;
@@ -588,6 +619,58 @@ exports[`optionals.w > stderr 1`] = `
 7 | f(x);
   |   ^ Expected type to be \\"num\\", but got \\"num?\\" instead
 
+
+error: Expected optional type, found \\"bool\\"
+   --> ../../../examples/tests/invalid/optionals.w:11:4
+   |
+11 | if y? {
+   |    ^ Expected optional type, found \\"bool\\"
+
+
+error: Expected optional type, found \\"bool\\"
+   --> ../../../examples/tests/invalid/optionals.w:15:9
+   |
+15 | let z = y ?? 1;
+   |         ^ Expected optional type, found \\"bool\\"
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+   --> ../../../examples/tests/invalid/optionals.w:18:14
+   |
+18 | let w: str = x ?? 3;
+   |              ^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/optionals.w:21:6
+   |
+21 | x ?? \\"hello\\";
+   |      ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Expected type to be \\"Sub1\\", but got \\"Sub2\\" instead
+   --> ../../../examples/tests/invalid/optionals.w:35:18
+   |
+35 | optional_sub1 ?? new Sub2();
+   |                  ^^^^^^^^^^ Expected type to be \\"Sub1\\", but got \\"Sub2\\" instead
+
+
+error: Expected type to be \\"Sub1\\", but got \\"Super\\" instead
+   --> ../../../examples/tests/invalid/optionals.w:37:18
+   |
+37 | optional_sub1 ?? new Super();
+   |                  ^^^^^^^^^^^ Expected type to be \\"Sub1\\", but got \\"Super\\" instead
+
+"
+`;
+
+exports[`preflight_from_inflight.w > stderr 1`] = `
+"error: Cannot call into preflight phase while inflight
+   --> ../../../examples/tests/invalid/preflight_from_inflight.w:19:5
+   |
+19 |     this.r.my_preflight();
+   |     ^^^^^^^^^^^^^^^^^^^^^ Cannot call into preflight phase while inflight
+
 "
 `;
 
@@ -659,6 +742,37 @@ exports[`resource_access_field_as_method.w > stderr 1`] = `
   |
 8 | x.name();
   | ^^^^^^ should be a function or method
+
+"
+`;
+
+exports[`resource_captures.w > stderr 1`] = `
+"error: Cannot capture reassignable field 'reassignable'
+   --> ../../../examples/tests/invalid/resource_captures.w:17:14
+   |
+17 |     print(\\"\${this.reassignable}\\");
+   |              ^^^^^^^^^^^^^^^^^ Cannot capture reassignable field 'reassignable'
+
+
+error: Cannot capture field 'mut_array' with non-capturable type 'MutArray<str>'
+   --> ../../../examples/tests/invalid/resource_captures.w:19:11
+   |
+19 |     print(this.mut_array.at(0));
+   |           ^^^^^^^^^^^^^^ Cannot capture field 'mut_array' with non-capturable type 'MutArray<str>'
+
+
+error: Unable to qualify which operations are performed on 'this.bucket' of type 'Bucket'. This is not supported yet.
+   --> ../../../examples/tests/invalid/resource_captures.w:22:13
+   |
+22 |     let b = this.bucket;
+   |             ^^^^^^^^^^^ Unable to qualify which operations are performed on 'this.bucket' of type 'Bucket'. This is not supported yet.
+
+
+error: Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
+   --> ../../../examples/tests/invalid/resource_captures.w:26:5
+   |
+26 |     this.collection_of_resources.at(0).put(\\"hello\\", \\"world\\");
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
 
 "
 `;
@@ -798,6 +912,16 @@ error: Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
   |
 7 | let bucket2 = new cloud.Bucket(2, public: true);
   |                                ^ Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
+
+
+error: \\"status\\" is not initialized
+   --> ../../../examples/tests/invalid/struct_expansion.w:15:9
+   |  
+15 |   let x = cloud.ApiResponse {
+   | /---------^
+16 | |   body: Json \\"Hello, world!\\",
+17 | | };
+   | \\\\-^ \\"status\\" is not initialized
 
 
 error: Expected 2 arguments but got 1
