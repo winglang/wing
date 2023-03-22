@@ -237,6 +237,10 @@
       "type": "bundled"
     },
     {
+      "name": "portfinder",
+      "type": "bundled"
+    },
+    {
       "name": "safe-stable-stringify",
       "type": "bundled"
     },
