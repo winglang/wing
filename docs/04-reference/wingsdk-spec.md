@@ -454,7 +454,7 @@ struct FunctionProps {
    * The environment variables to pass to the function.
    * @default {}
    */
-  env: Map<str, str>?;
+  env: Map<str>?;
 }
 
 resource Function {
@@ -869,14 +869,14 @@ struct ApiRequest {
   method: HttpMethod;
   /** The request's path. */
   path: str;
-  /** The request's query string. */
-  query: str?;
+  /** The request's query parameters. */
+  query: Map<str>?;
   /** The path variables. */
-  vars: Map<str, str>?;
+  vars: Map<str>?;
   /** The request's body. */
   body: Json?;
   /** The request's headers. */
-  headers: Map<str, str>?;
+  headers: Map<str>?;
 }
 
 struct ApiResponse {
@@ -885,7 +885,7 @@ struct ApiResponse {
   /** The response's body. */
   body: Json?;
   /** The response's headers. */
-  headers: Map<str, str>?;
+  headers: Map<str>?;
 }
 
 enum HttpMethod {
@@ -1079,7 +1079,7 @@ struct ServiceProps {
    * The service's environment variables.
    * @default {}
    */
-  env: Map<str, str>;
+  env: Map<str>;
 
   /**
    * The service's command.
@@ -1170,7 +1170,7 @@ struct ServiceRequestOptions {
    * The request's headers.
    * @default {}
    */
-  headers: Map<str, str>;
+  headers: Map<str>;
 
   /**
    * The request's body.
@@ -1188,7 +1188,7 @@ struct ServiceResponse {
   /**
    * The response's headers.
    */
-  headers: Map<str, str>;
+  headers: Map<str>;
 
   /**
    * The response's body.
@@ -1221,7 +1221,7 @@ struct TableProps {
   /**
    * The table's columns.
    */
-  columns: Map<str, ColumnType>;
+  columns: Map<ColumnType>;
 
   /**
    * The table's primary key. No two rows can have the same value for the
@@ -1249,7 +1249,7 @@ resource Table {
   /**
    * The table's columns.
    */
-  columns: Map<str, ColumnType>;
+  columns: Map<ColumnType>;
 
   /**
    * The table's primary key.
@@ -1259,12 +1259,12 @@ resource Table {
   /**
    * Insert a row into the table.
    */
-  inflight insert(row: Map<str, Json>): void;
+  inflight insert(row: Map<Json>): void;
 
   /**
    * Update a row in the table.
    */
-  inflight update(row: Map<str, Json>): void;
+  inflight update(row: Map<Json>): void;
 
   /**
    * Delete a row from the table, by primary key.
@@ -1274,17 +1274,17 @@ resource Table {
   /**
    * Get a row from the table, by primary key.
    */
-  inflight get(key: str): Map<str, Json>;
+  inflight get(key: str): Map<Json>;
 
   /**
    * List all rows in the table.
    */
-  inflight list(): Iterator<Map<str, Json>>;
+  inflight list(): Iterator<Map<Json>>;
 }
 ```
 
 Future extensions:
 
-- `on_insert(fn: inflight (row: Map<str, Json>) => void): cloud.Function;`
-- `on_update(fn: inflight (row: Map<str, Json>) => void): cloud.Function;`
-- `on_delete(fn: inflight (row: Map<str, Json>) => void): cloud.Function;`
+- `on_insert(fn: inflight (row: Map<Json>) => void): cloud.Function;`
+- `on_update(fn: inflight (row: Map<Json>) => void): cloud.Function;`
+- `on_delete(fn: inflight (row: Map<Json>) => void): cloud.Function;`
