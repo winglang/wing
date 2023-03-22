@@ -1,4 +1,5 @@
 import Dockerode from "dockerode";
+import * as portfinder from "portfinder";
 import { ISimulatorResourceInstance } from "./resource";
 import { RedisSchema } from "./schema-resources";
 import { IRedisClient } from "../redis";
@@ -11,12 +12,11 @@ const IoRedis = require("ioredis");
 
 export class Redis implements IRedisClient, ISimulatorResourceInstance {
   static uid = 0;
-  private base_port = 6379;
+  private readonly base_port: number;
   private readonly container_name: string;
   private readonly context: ISimulatorContext;
 
   private connection_url?: string = undefined;
-  private connection_port: number;
   private docker?: Dockerode = undefined;
   private connection?: any;
 
@@ -27,21 +27,22 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
       "."
     )}-${Redis.uid}`;
     Redis.uid++;
-    this.connection_port = this.base_port + Redis.uid;
+    this.base_port = (process.env.REDIS_BASE_PORT ?? 6379) as number;
   }
 
   public async init(): Promise<void> {
     this.docker = new Dockerode();
     // Create a redis container
     try {
+      const hostPort = await this.getAvailablePort();
       const container = await this.docker.createContainer({
         Image: "redis",
         name: this.container_name,
         HostConfig: {
           PortBindings: {
-            [`6379/tcp`]: [
+            "6379/tcp": [
               {
-                HostPort: `${this.connection_port}`,
+                HostPort: `${hostPort}`,
               },
             ],
           },
@@ -51,9 +52,8 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
       // Start the redis container
       await container.start();
 
-      // Generate the redis url based on the container ip address
-      // const container_spec = await container.inspect();
-      this.connection_url = `redis://0.0.0.0:${this.connection_port}`;
+      // redis url based on host port
+      this.connection_url = `redis://0.0.0.0:${hostPort}`;
     } catch (e) {
       throw Error(`Error setting up Redis resource simulation (${e})
       - Make sure you have docker installed and running
@@ -89,5 +89,11 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
     } else {
       throw new Error("Redis server not initialized");
     }
+  }
+
+  private async getAvailablePort(): Promise<number> {
+    return portfinder.getPortPromise({ port: this.base_port }).then((port) => {
+      return port;
+    });
   }
 }

@@ -108,6 +108,7 @@
     "dockerode": "^3.3.4",
     "esbuild-wasm": "^0.17.4",
     "ioredis": "^5.3.1",
+    "portfinder": "^1.0.32",
     "safe-stable-stringify": "*",
     "tar": "^6.1.13"
   },
@@ -128,6 +129,7 @@
     "dockerode",
     "esbuild-wasm",
     "ioredis",
+    "portfinder",
     "safe-stable-stringify",
     "tar"
   ],

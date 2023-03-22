@@ -46,6 +46,7 @@ const project = new cdk.JsiiProject({
     // simulator dependencies
     "tar",
     "dockerode",
+    "portfinder",
     // shared client dependencies
     "ioredis",
   ],
