@@ -60,13 +60,16 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
   }
 
   public async ioredis(): Promise<any> {
-    if (this.connection != undefined) {
+    if (this.connection) {
       return this.connection;
-    } else if (this.connection_url != undefined) {
-      return (this.connection = new IoRedis(this.connection_url));
-    } else {
-      throw new Error("Redis server not initialized");
     }
+    
+    if (this.connection_url) {
+      this.connection = new IoRedis(this.connection_url);
+      return this.connection;
+    }
+    
+    throw new Error("Redis server not initialized");
   }
 
   public async url(): Promise<string> {
