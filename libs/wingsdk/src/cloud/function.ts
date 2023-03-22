@@ -110,7 +110,7 @@ export abstract class Function extends Resource implements IInflightHost {
 
     const assetName = ResourceNames.generateName(this, {
       // Avoid characters that may cause path issues
-      disallowedRegex: /[><:"/\\|?*]/g,
+      disallowedRegex: /[><:"/\\|?*\s]/g,
       case: CaseConventions.LOWERCASE,
       sep: "_",
     });

@@ -12,8 +12,10 @@ import {
   FUNCTION_TYPE,
   LOGGER_TYPE,
   QUEUE_TYPE,
+  TABLE_TYPE,
   TOPIC_TYPE,
 } from "./schema-resources";
+import { Table } from "./table.inflight";
 import { Topic } from "./topic.inflight";
 import { ISimulatorFactory, ISimulatorContext } from "../testing/simulator";
 
@@ -43,6 +45,8 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return new Logger(props, context);
       case COUNTER_TYPE:
         return new Counter(props, context);
+      case TABLE_TYPE:
+        return new Table(props, context);
       case TOPIC_TYPE:
         return new Topic(props, context);
       default:
