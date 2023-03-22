@@ -906,16 +906,16 @@ Example:
 // wing
 let api = new cloud.Api();
 
-api.get("/hello", inflight (req: cloud.ApiRequest) => {
+api.get("/hello", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
-    status_code: 200,
+    status: 200,
     body: "Hello, world!"
   };
 });
 
-api.post("/hello", inflight (req: cloud.ApiRequest) => {
+api.post("/hello", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
-    status_code: 200,
+    status: 200,
     body: "Hello, " + req.body + "!"
   };
 });
