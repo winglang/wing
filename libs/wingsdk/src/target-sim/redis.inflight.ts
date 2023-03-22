@@ -11,10 +11,12 @@ const IoRedis = require("ioredis");
 
 export class Redis implements IRedisClient, ISimulatorResourceInstance {
   static uid = 0;
+  static base_port = 6379;
   private readonly container_name: string;
   private readonly context: ISimulatorContext;
 
   private connection_url?: string = undefined;
+  private connection_port: number;
   private docker?: Dockerode = undefined;
   private connection?: any;
 
@@ -25,24 +27,33 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
       "."
     )}-${Redis.uid}`;
     Redis.uid++;
+    this.connection_port = Redis.base_port + Redis.uid;
   }
 
   public async init(): Promise<void> {
     this.docker = new Dockerode();
-
     // Create a redis container
     try {
       const container = await this.docker.createContainer({
         Image: "redis",
         name: this.container_name,
+        HostConfig: {
+          PortBindings: {
+            [`6379/tcp`]: [
+              {
+                HostPort: `${this.connection_port}`,
+              },
+            ],
+          },
+        }
       });
 
       // Start the redis container
       await container.start();
 
       // Generate the redis url based on the container ip address
-      const container_spec = await container.inspect();
-      this.connection_url = `redis://${container_spec.NetworkSettings.IPAddress}:6379`;
+      // const container_spec = await container.inspect();
+      this.connection_url = `redis://0.0.0.0:${this.connection_port}`;
     } catch (e) {
       throw Error(`Error setting up Redis resource simulation (${e})
       - Make sure you have docker installed and running
