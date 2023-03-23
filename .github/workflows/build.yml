@@ -240,7 +240,7 @@ jobs:
     name: Publish
     if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
     needs:
-      - e2e
+      - quality-gate
       - prepare
     runs-on: ubuntu-latest
     steps:
