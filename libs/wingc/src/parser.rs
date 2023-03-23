@@ -335,13 +335,40 @@ impl<'s> Parser<'s> {
 
   fn build_struct_definition_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
     dbg!(&statement_node);
-    self.build_expression(&statement_node);
     // B4PR: Change how we buld structs
-    Ok(StmtKind::Struct { 
+
+    let mut cursor = statement_node.walk();
+    let mut fields = vec![];
+    for field_node in statement_node.children_by_field_name("field", &mut cursor) {
+      let type_ = if let Some(type_node) = field_node.child_by_field_name("type") {
+        Some(self.build_type_annotation(&type_node)?)
+      } else {
+        None
+      };
+      let identifier = self.node_symbol(&field_node.child_by_field_name("name").unwrap())?;
+      let f = ClassField {
+        name: identifier,
+        member_type: type_.expect("Must have type"),
+        reassignable: false,
+        phase: Phase::Preflight,
+        is_static: false,
+      };
+      fields.push(f);
+    }
+
+    let mut extends = vec![];
+    for super_node in statement_node.children_by_field_name("super", &mut cursor) {
+      dbg!(&super_node);
+      extends.push(self.node_symbol(&super_node)?);
+    }
+
+    let x = StmtKind::Struct { 
       name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?, 
-      extends: vec![], 
-      members: vec![]
-    })
+      extends, 
+      members: fields
+    };
+    dbg!(&x);
+    Ok(x)
 	}
 
 	fn build_variable_def_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
