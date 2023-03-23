@@ -1,7 +1,7 @@
-use indexmap::IndexSet;
+use indexmap::{IndexMap, IndexSet};
 use phf::phf_map;
 use std::cell::RefCell;
-use std::collections::{BTreeMap, HashSet};
+use std::collections::HashSet;
 use std::{str, vec};
 use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
@@ -748,7 +748,7 @@ impl<'s> Parser<'s> {
 
 	fn build_arg_list(&self, arg_list_node: &Node) -> DiagnosticResult<ArgList> {
 		let mut pos_args = vec![];
-		let mut named_args = BTreeMap::new();
+		let mut named_args = IndexMap::new();
 
 		let mut cursor = arg_list_node.walk();
 		let mut seen_keyword_args = false;
@@ -990,7 +990,7 @@ impl<'s> Parser<'s> {
 					None
 				};
 
-				let mut fields = BTreeMap::new();
+				let mut fields = IndexMap::new();
 				let mut cursor = expression_node.walk();
 				for field_node in expression_node.children_by_field_name("member", &mut cursor) {
 					if field_node.is_extra() {
@@ -1049,7 +1049,7 @@ impl<'s> Parser<'s> {
 			"set_literal" => self.build_set_literal(expression_node),
 			"struct_literal" => {
 				let type_ = self.build_type_annotation(&expression_node.child_by_field_name("type").unwrap());
-				let mut fields = BTreeMap::new();
+				let mut fields = IndexMap::new();
 				let mut cursor = expression_node.walk();
 				for field in expression_node.children_by_field_name("fields", &mut cursor) {
 					if !field.is_named() || field.is_extra() {
@@ -1059,11 +1059,11 @@ impl<'s> Parser<'s> {
 					let field_value = self.build_expression(&field.named_child(1).unwrap());
 					// Add fields to our struct literal, if some are missing or aren't part of the type we'll fail on type checking
 					if let (Ok(k), Ok(v)) = (field_name, field_value) {
-						if fields.contains_key(&k.name) {
+						if fields.contains_key(&k) {
 							// TODO: ugly, we need to change add_error to not return anything and have a wrapper `raise_error` that returns a Result
 							_ = self.add_error::<()>(format!("Duplicate field {} in struct literal", k), expression_node);
 						} else {
-							fields.insert(k.name.clone(), (k, v));
+							fields.insert(k, v);
 						}
 					}
 				}

@@ -17,6 +17,12 @@ let x = cloud.ApiResponse {
 };
 // ^^^ "status" is not initialized
 
+let y = cloud.ApiResponse {
+  status: 200,
+  not_a_field: 500,
+// ^^^^^^^^^^^ "not_a_field" is not a field of "ApiResponse"
+};
+
 new cloud.Function(
   handler, 
   cloud.FunctionProps {
