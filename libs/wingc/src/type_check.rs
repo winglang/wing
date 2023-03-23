@@ -1349,17 +1349,6 @@ impl<'a> TypeChecker<'a> {
 
 				let arg_list_types = self.type_check_arg_list(arg_list, env, statement_idx, context);
 
-				// // Hack to give an error message if user tries to call "print" instead of "log"
-				// if let ExprKind::Reference(Reference::Identifier(name)) = &function.kind {
-				// 	dbg!(&name.span);
-				// 	if name.name == "print" && name.span == WingSpan::default() {
-				// 		return self.expr_error(
-				// 			function,
-				// 			"\"print\" is not a function, did you mean to use \"log\"?".to_string(),
-				// 		);
-				// 	}
-				// }
-
 				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud.Bucket().upload())
 				if matches!(*func_type, Type::Anything) {
 					return self.types.anything();
