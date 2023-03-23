@@ -3,8 +3,8 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { NameOptions, ResourceNames } from "../utils/resource-names";
 import { COUNTER_HASH_KEY } from "../shared-aws/commons";
+import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
  * Counter (Table) names must be between 3 and 255 characters.

@@ -9,8 +9,8 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { calculateBucketPermissions } from "../shared-aws/permissions";
 import { AwsTarget } from "../shared-aws/commons";
+import { calculateBucketPermissions } from "../shared-aws/permissions";
 
 /**
  * AWS implementation of `cloud.Bucket`.
