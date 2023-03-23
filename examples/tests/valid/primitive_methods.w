@@ -7,3 +7,5 @@ print(stringy);
 if stringy.contains("60") && stringy.split(":").at(0) == "60" {
   print("${stringy.length}!");
 }
+
+assert(num.from_str("123") == 123);

@@ -198,6 +198,11 @@
       "type": "bundled"
     },
     {
+      "name": "@aws-sdk/util-dynamodb",
+      "version": "3.256.0",
+      "type": "bundled"
+    },
+    {
       "name": "@aws-sdk/util-stream-node",
       "version": "3.254.0",
       "type": "bundled"
