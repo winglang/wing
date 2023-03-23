@@ -95,6 +95,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         },
         "bucket": "\${aws_s3_bucket.root_teststring_Code_042172E8.bucket}",
         "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
       },
     },
   },
