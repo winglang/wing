@@ -67,6 +67,7 @@ export interface BucketSchema extends BaseResourceSchema {
     readonly public: boolean;
     /** The initial objects uploaded to the bucket. */
     readonly initialObjects: Record<string, string>;
+    readonly topics: Record<string, string>;
   };
 }
 

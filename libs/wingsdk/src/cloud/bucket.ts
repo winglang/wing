@@ -1,7 +1,9 @@
 import { Construct } from "constructs";
+import { core } from "..";
 import { fqnForType } from "../constants";
 import { App, Resource } from "../core";
 import { Json } from "../std";
+import { Topic } from "./topic";
 
 /**
  * Global identifier for `Bucket`.
@@ -25,6 +27,8 @@ export interface BucketProps {
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export abstract class Bucket extends Resource {
+  private readonly topics = new Map<BucketEventType, Topic>();
+
   /**
    * Create a new bucket.
    * @internal
@@ -55,8 +59,93 @@ export abstract class Bucket extends Resource {
    * referencing a file from the local filesystem.
    */
   public abstract addObject(key: string, body: string): void;
-}
 
+  protected convertTopicsToHandles() {
+    const topicMap: Record<string, string> = {};
+
+    this.topics.forEach((value, key) => {
+      topicMap[key] = `\${${value.node.path}#attrs.handle}`;
+    });
+
+    return topicMap;
+  }
+
+  protected createTopic(actionType: BucketEventType): Topic {
+    const hash = this.node.addr.slice(-8);
+
+    return Topic._newTopic(
+      this.node.scope!, // ok since we're not a tree root
+      `${this.node.id}-on_${actionType.toLowerCase()}-${hash}`
+    );
+  }
+
+  private getTopic(actionType: BucketEventType): Topic {
+    if (!this.topics.has(actionType)) {
+      this.topics.set(actionType, this.createTopic(actionType));
+    }
+    return this.topics.get(actionType) as Topic;
+  }
+
+  private createBucketEvent(
+    eventNames: BucketEventType[],
+    inflight: core.Inflight,
+    opts?: BucketOnUploadProps
+  ) {
+    opts;
+    if (eventNames.includes(BucketEventType.PUT)) {
+      this.getTopic(BucketEventType.PUT).onMessage(inflight);
+    }
+    if (eventNames.includes(BucketEventType.UPDATE)) {
+      this.getTopic(BucketEventType.UPDATE).onMessage(inflight);
+    }
+    if (eventNames.includes(BucketEventType.DELETE)) {
+      this.getTopic(BucketEventType.DELETE).onMessage(inflight);
+    }
+  }
+  /**
+   * Run an inflight whenever a file is uploaded to the bucket.
+   */
+  public onUpload(fn: core.Inflight, opts?: BucketOnUploadProps): void {
+    if (opts) {
+      console.warn("bucket.onUpload does not support props yet");
+    }
+    this.createBucketEvent([BucketEventType.PUT], fn, opts);
+  }
+
+  /**
+   * Run an inflight whenever a file is deleted from the bucket.
+   */
+  public onDelete(fn: core.Inflight, opts?: BucketOnDeleteProps): void {
+    if (opts) {
+      console.warn("bucket.onDelete does not support props yet");
+    }
+    this.createBucketEvent([BucketEventType.DELETE], fn, opts);
+  }
+
+  /**
+   * Run an inflight whenever a file is updated in the bucket.
+   */
+  public onUpdate(fn: core.Inflight, opts?: BucketOnUpdateProps): void {
+    if (opts) {
+      console.warn("bucket.onUpdate does not support props yet");
+    }
+    this.createBucketEvent([BucketEventType.UPDATE], fn, opts);
+  }
+
+  /**
+   * Run an inflight whenever a file is uploaded, modified, or deleted from the bucket.
+   */
+  public onEvent(fn: core.Inflight, opts?: BucketOnEventProps): void {
+    if (opts) {
+      console.warn("bucket.onEvent does not support props yet");
+    }
+    this.createBucketEvent(
+      [BucketEventType.PUT, BucketEventType.UPDATE, BucketEventType.DELETE],
+      fn,
+      opts
+    );
+  }
+}
 /** Interface for delete method inside `Bucket` */
 export interface BucketDeleteOptions {
   /**
@@ -127,6 +216,30 @@ export interface IBucketClient {
    * @inflight
    */
   delete(key: string, opts?: BucketDeleteOptions): Promise<void>;
+}
+
+export interface BucketOnUploadProps {
+  /* elided */
+}
+export interface BucketOnDeleteProps {
+  /* elided */
+}
+export interface BucketOnUpdateProps {
+  /* elided */
+}
+export interface BucketOnEventProps {
+  /* elided */
+}
+
+export interface BucketEvent {
+  readonly key: string;
+  readonly type: BucketEventType;
+}
+
+export enum BucketEventType {
+  PUT = "PUT",
+  DELETE = "DELETE",
+  UPDATE = "UPDATE",
 }
 
 /**

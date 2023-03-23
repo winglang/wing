@@ -31,6 +31,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
       props: {
         public: this.public,
         initialObjects: this.initialObjects,
+        topics: this.convertTopicsToHandles(),
       },
       attrs: {} as any,
     };

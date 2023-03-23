@@ -175,7 +175,7 @@ Error at ../../../examples/tests/invalid/resource_access_field_as_method.w:8:1 |
 
 exports[`resource_inflight.w > stderr 1`] = `
 "Compilation failed with 1 error(s)
-Error | Cannot create the resource \\"Bucket (at src/cloud/bucket.ts:27:1)\\" in inflight phase"
+Error | Cannot create the resource \\"Bucket (at src/cloud/bucket.ts:28:1)\\" in inflight phase"
 `;
 
 exports[`sorted_errors_no_span.w > stderr 1`] = `

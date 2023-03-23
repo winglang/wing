@@ -11,6 +11,12 @@ import {
   NameOptions,
   ResourceNames,
 } from "../utils/resource-names";
+import {
+  BucketOnDeleteProps,
+  BucketOnEventProps,
+  BucketOnUpdateProps,
+  BucketOnUploadProps,
+} from "../cloud";
 
 /**
  * Bucket names must be between 3 and 63 characters.
@@ -118,6 +124,50 @@ export class Bucket extends cloud.Bucket {
     host.addEnvironment(this.envStorageAccountName(), this.storageAccount.name);
     host.addEnvironment(this.isPublicEnvName(), `${this.public}`);
     super._bind(host, ops);
+  }
+
+  /**
+   * Run an inflight whenever a file is uploaded to the bucket.
+   */
+  public onUpload(fn: core.Inflight, opts?: BucketOnUploadProps): void {
+    fn;
+    opts;
+    throw new Error(
+      "on_upload method isn't implemented yet on the current target."
+    );
+  }
+
+  /**
+   * Run an inflight whenever a file is deleted from the bucket.
+   */
+  public onDelete(fn: core.Inflight, opts?: BucketOnDeleteProps): void {
+    fn;
+    opts;
+    throw new Error(
+      "on_delete method isn't implemented yet on the current target."
+    );
+  }
+
+  /**
+   * Run an inflight whenever a file is updated in the bucket.
+   */
+  public onUpdate(fn: core.Inflight, opts?: BucketOnUpdateProps): void {
+    fn;
+    opts;
+    throw new Error(
+      "on_update method isn't implemented yet on the current target."
+    );
+  }
+
+  /**
+   * Run an inflight whenever a file is uploaded, modified, or deleted from the bucket.
+   */
+  public onEvent(fn: core.Inflight, opts?: BucketOnEventProps): void {
+    fn;
+    opts;
+    throw new Error(
+      "on_event method isn't implemented yet on the current target."
+    );
   }
 
   /** @internal */

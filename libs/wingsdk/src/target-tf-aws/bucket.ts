@@ -1,10 +1,13 @@
 import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
+import { S3BucketNotification } from "@cdktf/provider-aws/lib/s3-bucket-notification";
+
 import { S3BucketPolicy } from "@cdktf/provider-aws/lib/s3-bucket-policy";
 import { S3BucketPublicAccessBlock } from "@cdktf/provider-aws/lib/s3-bucket-public-access-block";
 import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/lib/s3-bucket-server-side-encryption-configuration";
 import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { Construct } from "constructs";
-import { Function } from "./function";
+import { Function as AWSFunction } from "./function";
+import { Topic as AWSTopic } from "./topic";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import {
@@ -12,6 +15,13 @@ import {
   NameOptions,
   ResourceNames,
 } from "../utils/resource-names";
+import { BucketEventType, Topic } from "../cloud";
+
+const EVENTS = {
+  [BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],
+  [BucketEventType.PUT]: ["s3:ObjectCreated:Post"],
+  [BucketEventType.UPDATE]: ["s3:ObjectCreated:Put"],
+};
 
 /**
  * Bucket prefix provided to Terraform must be between 3 and 37 characters.
@@ -112,9 +122,43 @@ export class Bucket extends cloud.Bucket {
     });
   }
 
+  protected createTopic(actionType: BucketEventType): Topic {
+    const handler = super.createTopic(actionType);
+
+    // TODO: remove this constraint by adding generic permission APIs to cloud.Function
+    if (!(handler instanceof AWSTopic)) {
+      throw new Error("Topic only supports creating tfaws.Function right now");
+    }
+
+    handler.addPermissionToPublish(this, "s3.amazonaws.com", this.bucket.arn);
+
+    core.Resource.addConnection({
+      from: this,
+      to: handler,
+      relationship: actionType,
+    });
+
+    new S3BucketNotification(
+      this,
+      `S3Object_on_${actionType.toLowerCase()}_notifier`,
+      {
+        bucket: this.bucket.id,
+        topic: [
+          {
+            events: EVENTS[actionType],
+            topicArn: handler.arn,
+          },
+        ],
+        dependsOn: [handler.permissions],
+      }
+    );
+
+    return handler;
+  }
+
   /** @internal */
   public _bind(host: core.IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
+    if (!(host instanceof AWSFunction)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
