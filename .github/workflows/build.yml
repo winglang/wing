@@ -195,7 +195,7 @@ jobs:
         shard: ["1/2", "2/2"]
         full_run:
           # Do a full run on push or when the PR is labeled "pr/e2e-full"
-          - ${{ needs.build.run-full-e2e }}
+          - ${{ needs.build.run-full-e2e == 'true' }}
         exclude:
           - runner: macos
             full_run: false
