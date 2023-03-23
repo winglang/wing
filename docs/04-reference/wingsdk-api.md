@@ -3330,6 +3330,7 @@ new std.Number()
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.Number.fromJson">from_json</a></code> | Parse a number from Json. |
+| <code><a href="#@winglang/sdk.std.Number.fromStr">from_str</a></code> | Parse a number from string. |
 
 ---
 
@@ -3346,6 +3347,24 @@ Parse a number from Json.
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Number.fromJson.parameter.json"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+to parse number from.
+
+---
+
+##### `from_str` <a name="from_str" id="@winglang/sdk.std.Number.fromStr"></a>
+
+```wing
+bring std;
+
+std.Number.from_str(str: str)
+```
+
+Parse a number from string.
+
+###### `str`<sup>Required</sup> <a name="str" id="@winglang/sdk.std.Number.fromStr.parameter.str"></a>
+
+- *Type:* str
 
 to parse number from.
 
@@ -3377,11 +3396,11 @@ new std.String()
 | <code><a href="#@winglang/sdk.std.String.at">at</a></code> | Returns the character at the specified index. |
 | <code><a href="#@winglang/sdk.std.String.concat">concat</a></code> | Combines the text of two (or more) strings and returns a new string. |
 | <code><a href="#@winglang/sdk.std.String.contains">contains</a></code> | Checks if string includes substring. |
-| <code><a href="#@winglang/sdk.std.String.ends">ends</a></code> | Does this string end with the given searchString? |
+| <code><a href="#@winglang/sdk.std.String.endsWith">ends_with</a></code> | Does this string end with the given searchString? |
 | <code><a href="#@winglang/sdk.std.String.indexOf">index_of</a></code> | Returns the index of the first occurrence of searchString found. |
 | <code><a href="#@winglang/sdk.std.String.lowercase">lowercase</a></code> | Returns this string in lower case. |
 | <code><a href="#@winglang/sdk.std.String.split">split</a></code> | Splits string by separator. |
-| <code><a href="#@winglang/sdk.std.String.starts">starts</a></code> | Does this string start with the given searchString? |
+| <code><a href="#@winglang/sdk.std.String.startsWith">starts_with</a></code> | Does this string start with the given searchString? |
 | <code><a href="#@winglang/sdk.std.String.substring">substring</a></code> | Returns a string between indexStart, indexEnd. |
 | <code><a href="#@winglang/sdk.std.String.trim">trim</a></code> | Removes white spaces from start and end of this string. |
 | <code><a href="#@winglang/sdk.std.String.uppercase">uppercase</a></code> | Returns this string in upper case. |
@@ -3436,15 +3455,15 @@ substring to search for.
 
 ---
 
-##### `ends` <a name="ends" id="@winglang/sdk.std.String.ends"></a>
+##### `ends_with` <a name="ends_with" id="@winglang/sdk.std.String.endsWith"></a>
 
 ```wing
-ends(search_string: str): bool
+ends_with(search_string: str): bool
 ```
 
 Does this string end with the given searchString?
 
-###### `search_string`<sup>Required</sup> <a name="search_string" id="@winglang/sdk.std.String.ends.parameter.searchString"></a>
+###### `search_string`<sup>Required</sup> <a name="search_string" id="@winglang/sdk.std.String.endsWith.parameter.searchString"></a>
 
 - *Type:* str
 
@@ -3492,15 +3511,15 @@ separator to split by.
 
 ---
 
-##### `starts` <a name="starts" id="@winglang/sdk.std.String.starts"></a>
+##### `starts_with` <a name="starts_with" id="@winglang/sdk.std.String.startsWith"></a>
 
 ```wing
-starts(search_string: str): bool
+starts_with(search_string: str): bool
 ```
 
 Does this string start with the given searchString?
 
-###### `search_string`<sup>Required</sup> <a name="search_string" id="@winglang/sdk.std.String.starts.parameter.searchString"></a>
+###### `search_string`<sup>Required</sup> <a name="search_string" id="@winglang/sdk.std.String.startsWith.parameter.searchString"></a>
 
 - *Type:* str
 
