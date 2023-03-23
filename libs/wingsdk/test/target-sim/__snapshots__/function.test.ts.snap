@@ -9,7 +9,7 @@ exports[`create a function 1`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -88,7 +88,7 @@ async handle(event) {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_function",
               },
             ],
@@ -112,7 +112,7 @@ async handle(event) {
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
             ],
@@ -161,7 +161,7 @@ exports[`invoke function exceeds timeout 2`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -230,7 +230,7 @@ async handle() {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_function",
               },
             ],
@@ -254,7 +254,7 @@ async handle() {
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
             ],
@@ -303,7 +303,7 @@ exports[`invoke function fails 2`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -381,7 +381,7 @@ async handle(event) {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_function",
               },
             ],
@@ -405,7 +405,7 @@ async handle(event) {
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
             ],
@@ -454,7 +454,7 @@ exports[`invoke function succeeds 2`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -532,7 +532,7 @@ async handle(event) {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_function",
               },
             ],
@@ -556,7 +556,7 @@ async handle(event) {
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
             ],
@@ -605,7 +605,7 @@ exports[`invoke function with environment variables 2`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -684,7 +684,7 @@ async handle(event) {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_function",
               },
             ],
@@ -708,7 +708,7 @@ async handle(event) {
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
             ],
@@ -757,7 +757,7 @@ exports[`invoke function with process.exit(1) 2`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -825,7 +825,7 @@ async handle() {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_function",
               },
             ],
@@ -849,7 +849,7 @@ async handle() {
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
             ],

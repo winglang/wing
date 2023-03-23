@@ -129,10 +129,10 @@ error: Cannot reference 'a_cloned' of type 'MutArray<str>' from an inflight cont
 
 exports[`capture_reassignable.w > stderr 1`] = `
 "error: Cannot capture a reassignable variable \\"x\\"
-  --> ../../../examples/tests/invalid/capture_reassignable.w:6:17
+  --> ../../../examples/tests/invalid/capture_reassignable.w:6:15
   |
-6 |     print(\\"x: \${x}\\");
-  |                 ^ Cannot capture a reassignable variable \\"x\\"
+6 |     log(\\"x: \${x}\\");
+  |               ^ Cannot capture a reassignable variable \\"x\\"
 
 "
 `;
@@ -676,10 +676,10 @@ exports[`preflight_from_inflight.w > stderr 1`] = `
 
 exports[`primitives.w > stderr 1`] = `
 "error: Unexpected expression \\"structured_access_expression\\"
-  --> ../../../examples/tests/invalid/primitives.w:5:7
+  --> ../../../examples/tests/invalid/primitives.w:5:5
   |
-5 | print(y[0]);
-  |       ^^^^ Unexpected expression \\"structured_access_expression\\"
+5 | log(y[0]);
+  |     ^^^^ Unexpected expression \\"structured_access_expression\\"
 
 
 error: Unknown symbol \\"blabla\\"
@@ -748,17 +748,17 @@ exports[`resource_access_field_as_method.w > stderr 1`] = `
 
 exports[`resource_captures.w > stderr 1`] = `
 "error: Cannot capture reassignable field 'reassignable'
-   --> ../../../examples/tests/invalid/resource_captures.w:17:14
+   --> ../../../examples/tests/invalid/resource_captures.w:17:12
    |
-17 |     print(\\"\${this.reassignable}\\");
-   |              ^^^^^^^^^^^^^^^^^ Cannot capture reassignable field 'reassignable'
+17 |     log(\\"\${this.reassignable}\\");
+   |            ^^^^^^^^^^^^^^^^^ Cannot capture reassignable field 'reassignable'
 
 
 error: Cannot capture field 'mut_array' with non-capturable type 'MutArray<str>'
-   --> ../../../examples/tests/invalid/resource_captures.w:19:11
+   --> ../../../examples/tests/invalid/resource_captures.w:19:9
    |
-19 |     print(this.mut_array.at(0));
-   |           ^^^^^^^^^^^^^^ Cannot capture field 'mut_array' with non-capturable type 'MutArray<str>'
+19 |     log(this.mut_array.at(0));
+   |         ^^^^^^^^^^^^^^ Cannot capture field 'mut_array' with non-capturable type 'MutArray<str>'
 
 
 error: Unable to qualify which operations are performed on 'this.bucket' of type 'Bucket'. This is not supported yet.
@@ -950,7 +950,7 @@ exports[`try_no_catch_or_finally.w > stderr 1`] = `
   --> ../../../examples/tests/invalid/try_no_catch_or_finally.w:1:1
   |  
 1 | / try {
-2 | |   print(\\"Hello World\\");
+2 | |   log(\\"Hello World\\");
 3 | | }
   | \\\\-^ Missing \`catch\` or \`finally\` blocks for this try statement
 
@@ -1080,17 +1080,17 @@ error: Unknown symbol \\"method_which_is_not_part_of_bucket_api\\"
 
 exports[`use_before_defined.w > stderr 1`] = `
 "error: Unknown symbol \\"y\\"
-  --> ../../../examples/tests/invalid/use_before_defined.w:1:10
+  --> ../../../examples/tests/invalid/use_before_defined.w:1:8
   |
-1 | print(\\"\${y}\\"); // Access y before it's defined
-  |          ^ Unknown symbol \\"y\\"
+1 | log(\\"\${y}\\"); // Access y before it's defined
+  |        ^ Unknown symbol \\"y\\"
 
 
 error: Symbol \\"x\\" used before being defined
-  --> ../../../examples/tests/invalid/use_before_defined.w:5:12
+  --> ../../../examples/tests/invalid/use_before_defined.w:5:10
   |
-5 |   print(\\"\${x}\\"); // Access x before it's defined (even though it's defined in an outer scope)
-  |            ^ Symbol \\"x\\" used before being defined
+5 |   log(\\"\${x}\\"); // Access x before it's defined (even though it's defined in an outer scope)
+  |          ^ Symbol \\"x\\" used before being defined
 
 "
 `;
@@ -1109,15 +1109,15 @@ exports[`void_in_expression_position.w > stderr 1`] = `
 "error: Expression must be a class or resource instance to access property \\"get\\", instead found type \\"void\\"
   --> ../../../examples/tests/invalid/void_in_expression_position.w:1:1
   |
-1 | print(\\"hey\\").get(\\"x\\");
-  | ^^^^^^^^^^^^ Expression must be a class or resource instance to access property \\"get\\", instead found type \\"void\\"
+1 | log(\\"hey\\").get(\\"x\\");
+  | ^^^^^^^^^^ Expression must be a class or resource instance to access property \\"get\\", instead found type \\"void\\"
 
 
 error: Expected type to be \\"num\\", but got \\"void\\" instead
   --> ../../../examples/tests/invalid/void_in_expression_position.w:7:13
   |
-7 | let y = 5 + print(\\"hello\\");
-  |             ^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"void\\" instead
+7 | let y = 5 + log(\\"hello\\");
+  |             ^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"void\\" instead
 
 
 error: Cannot assign expression of type \\"void\\" to a variable

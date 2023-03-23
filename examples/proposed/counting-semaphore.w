@@ -69,7 +69,7 @@ queue.on_message(inflight (message: str) => {
   }
 
   // real work
-  print("all resources are acquired, processing message: ${message}");
+  log("all resources are acquired, processing message: ${message}");
 
   resource_1.release();
   resource_2.release();

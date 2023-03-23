@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
+import { LoggerInflightMethods } from "../cloud";
 import * as core from "../core";
 
 /**
@@ -28,4 +29,4 @@ export class Logger extends cloud.Logger {
   }
 }
 
-Logger._annotateInflight("print", {});
+Logger._annotateInflight(LoggerInflightMethods.LOG, {});

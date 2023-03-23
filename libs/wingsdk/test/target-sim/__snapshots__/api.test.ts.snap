@@ -25,7 +25,7 @@ exports[`api handler can read the request params 2`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -104,7 +104,7 @@ return class Handler {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
               },
             ],
@@ -141,7 +141,7 @@ return class Handler {
                   {
                     "direction": "outbound",
                     "implicit": true,
-                    "relationship": "print",
+                    "relationship": "log",
                     "resource": "root/WingLogger",
                   },
                   {
@@ -214,7 +214,7 @@ exports[`api handler can read the request path 2`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -293,7 +293,7 @@ return class Handler {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
               },
             ],
@@ -330,7 +330,7 @@ return class Handler {
                   {
                     "direction": "outbound",
                     "implicit": true,
-                    "relationship": "print",
+                    "relationship": "log",
                     "resource": "root/WingLogger",
                   },
                   {
@@ -403,7 +403,7 @@ exports[`api handler can set response headers 2`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -482,7 +482,7 @@ return class Handler {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
               },
             ],
@@ -519,7 +519,7 @@ return class Handler {
                   {
                     "direction": "outbound",
                     "implicit": true,
-                    "relationship": "print",
+                    "relationship": "log",
                     "resource": "root/WingLogger",
                   },
                   {
@@ -610,7 +610,7 @@ exports[`api supports every method type 2`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -719,7 +719,7 @@ return class Handler {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
               },
             ],
@@ -792,7 +792,7 @@ return class Handler {
                   {
                     "direction": "outbound",
                     "implicit": true,
-                    "relationship": "print",
+                    "relationship": "log",
                     "resource": "root/WingLogger",
                   },
                   {
@@ -885,7 +885,7 @@ exports[`api with multiple GET routes and one lambda 1`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -969,7 +969,7 @@ return class Handler {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
               },
             ],
@@ -1006,7 +1006,7 @@ return class Handler {
                   {
                     "direction": "outbound",
                     "implicit": true,
-                    "relationship": "print",
+                    "relationship": "log",
                     "resource": "root/WingLogger",
                   },
                   {
@@ -1084,7 +1084,7 @@ exports[`api with multiple methods on same route 2`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -1106,7 +1106,7 @@ return class Handler {
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -1220,13 +1220,13 @@ return class Handler {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
               },
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
               },
             ],
@@ -1269,7 +1269,7 @@ return class Handler {
                   {
                     "direction": "outbound",
                     "implicit": true,
-                    "relationship": "print",
+                    "relationship": "log",
                     "resource": "root/WingLogger",
                   },
                   {
@@ -1298,7 +1298,7 @@ return class Handler {
                   {
                     "direction": "outbound",
                     "implicit": true,
-                    "relationship": "print",
+                    "relationship": "log",
                     "resource": "root/WingLogger",
                   },
                   {
@@ -1376,7 +1376,7 @@ exports[`api with multiple routes 2`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -1398,7 +1398,7 @@ return class Handler {
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -1512,13 +1512,13 @@ return class Handler {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
               },
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
               },
             ],
@@ -1561,7 +1561,7 @@ return class Handler {
                   {
                     "direction": "outbound",
                     "implicit": true,
-                    "relationship": "print",
+                    "relationship": "log",
                     "resource": "root/WingLogger",
                   },
                   {
@@ -1590,7 +1590,7 @@ return class Handler {
                   {
                     "direction": "outbound",
                     "implicit": true,
-                    "relationship": "print",
+                    "relationship": "log",
                     "resource": "root/WingLogger",
                   },
                   {
@@ -1663,7 +1663,7 @@ exports[`api with one GET route 2`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -1742,7 +1742,7 @@ return class Handler {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
               },
             ],
@@ -1779,7 +1779,7 @@ return class Handler {
                   {
                     "direction": "outbound",
                     "implicit": true,
-                    "relationship": "print",
+                    "relationship": "log",
                     "resource": "root/WingLogger",
                   },
                   {
@@ -1852,7 +1852,7 @@ exports[`api with one POST route, with body 2`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -1931,7 +1931,7 @@ return class Handler {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
               },
             ],
@@ -1968,7 +1968,7 @@ return class Handler {
                   {
                     "direction": "outbound",
                     "implicit": true,
-                    "relationship": "print",
+                    "relationship": "log",
                     "resource": "root/WingLogger",
                   },
                   {

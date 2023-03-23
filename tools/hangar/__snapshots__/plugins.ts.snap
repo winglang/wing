@@ -152,8 +152,8 @@ exports[`Plugin examples > AWS target plugins > permission-boundary.js 1`] = `
           },
         },
         "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
-        "key": "asset.c86cd0c0c9dc1b0298aaebb2fb4561ba65c36c4795.438fc38ad238079f941f7530172ce962.zip",
-        "source": "assets/root_cloudQueueOnMessagee46e5cb7_Asset_1C1D632C/438FC38AD238079F941F7530172CE962/archive.zip",
+        "key": "asset.c86cd0c0c9dc1b0298aaebb2fb4561ba65c36c4795.319552e364ce69b821ac32800fe52fd7.zip",
+        "source": "assets/root_cloudQueueOnMessagee46e5cb7_Asset_1C1D632C/319552E364CE69B821AC32800FE52FD7/archive.zip",
       },
     },
     "aws_sqs_queue": {
@@ -171,7 +171,7 @@ exports[`Plugin examples > AWS target plugins > permission-boundary.js 1`] = `
   "terraform": {
     "backend": {
       "local": {
-        "path": "/Users/hasan/repos/monada/wing/tools/hangar/tmp/terraform.root.tfstate",
+        "path": "/Users/chrisr/dev/wing3/tools/hangar/tmp/terraform.root.tfstate",
       },
     },
     "required_providers": {
@@ -523,8 +523,8 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
           },
         },
         "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
-        "key": "asset.c86cd0c0c9dc1b0298aaebb2fb4561ba65c36c4795.438fc38ad238079f941f7530172ce962.zip",
-        "source": "assets/root_cloudQueueOnMessagee46e5cb7_Asset_1C1D632C/438FC38AD238079F941F7530172CE962/archive.zip",
+        "key": "asset.c86cd0c0c9dc1b0298aaebb2fb4561ba65c36c4795.319552e364ce69b821ac32800fe52fd7.zip",
+        "source": "assets/root_cloudQueueOnMessagee46e5cb7_Asset_1C1D632C/319552E364CE69B821AC32800FE52FD7/archive.zip",
       },
     },
     "aws_sqs_queue": {
@@ -542,7 +542,7 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
   "terraform": {
     "backend": {
       "local": {
-        "path": "/Users/hasan/repos/monada/wing/tools/hangar/tmp/terraform.root.tfstate",
+        "path": "/Users/chrisr/dev/wing3/tools/hangar/tmp/terraform.root.tfstate",
       },
     },
     "required_providers": {
@@ -706,8 +706,8 @@ exports[`Plugin examples > AWS target plugins > tf-s3-backend.js 1`] = `
           },
         },
         "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
-        "key": "asset.c86cd0c0c9dc1b0298aaebb2fb4561ba65c36c4795.438fc38ad238079f941f7530172ce962.zip",
-        "source": "assets/root_cloudQueueOnMessagee46e5cb7_Asset_1C1D632C/438FC38AD238079F941F7530172CE962/archive.zip",
+        "key": "asset.c86cd0c0c9dc1b0298aaebb2fb4561ba65c36c4795.319552e364ce69b821ac32800fe52fd7.zip",
+        "source": "assets/root_cloudQueueOnMessagee46e5cb7_Asset_1C1D632C/319552E364CE69B821AC32800FE52FD7/archive.zip",
       },
     },
     "aws_sqs_queue": {
