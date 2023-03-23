@@ -13,9 +13,7 @@ export interface RunWingCommandOptions {
 }
 
 export async function runWingCommand(options: RunWingCommandOptions) {
-  // TODO: plugins cant easily be combined with args because the plugin option is a variadic option which will consume
-  // the name of the wing file. So they must be passed in as the last option. 
-  const plugins = options.plugins? ['--plugins', ...options.plugins] : '';
+  const plugins = options.plugins? ['--plugins', ...options.plugins] : [];
   const out = await execa(wingBin, [...options.args, options.wingFile, ...plugins], {
     cwd: options.cwd,
     reject: false,

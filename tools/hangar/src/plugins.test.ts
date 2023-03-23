@@ -1,6 +1,6 @@
 import {describe, expect, test} from "vitest"
 import * as path from "path";
-import fs from "fs";
+import fs from "fs-extra";
 import { pluginsDir, tmpDir } from "./paths";
 import { runWingCommand, tfResourcesOfCount } from "./utils";
 import * as cdktf from "cdktf";
@@ -29,7 +29,7 @@ describe("Plugin examples", () => {
   
       const terraformOutput = fs.readFileSync(path.join(targetDir, "main.tf.json"), "utf-8");
   
-      expect(terraformOutput).toMatchSnapshot();
+      expect(JSON.parse(terraformOutput)).toMatchSnapshot();
       expect(
         cdktf.Testing.toHaveResourceWithProperties(terraformOutput, "aws_iam_role", {
           permissions_boundary: expectedPermissionBoundaryArn,
@@ -54,7 +54,7 @@ describe("Plugin examples", () => {
 
       const terraformOutput = fs.readFileSync(path.join(targetDir, "main.tf.json"), "utf-8");
   
-      expect(terraformOutput).toMatchSnapshot();
+      expect(JSON.parse(terraformOutput)).toMatchSnapshot();
       expect(tfResourcesOfCount(terraformOutput, "aws_s3_bucket")).toEqual(4); // 2 buckets + 2 replicas
       expect(tfResourcesOfCount(terraformOutput, "aws_s3_bucket_versioning")).toEqual(4); // 2 buckets + 2 replicas
       expect(
@@ -79,10 +79,10 @@ describe("Plugin examples", () => {
         plugins: [plugin],
       });
       
-      const terraformOutput = fs.readFileSync(path.join(targetDir, "main.tf.json"), "utf-8");
-      console.log(JSON.parse(terraformOutput).terraform.backend);
+      const terraformOutput = fs.readJsonSync(path.join(targetDir, "main.tf.json"), "utf-8");
+
       expect(terraformOutput).toMatchSnapshot();
-      expect(JSON.parse(terraformOutput).terraform.backend).toEqual({
+      expect(terraformOutput.terraform.backend).toEqual({
         s3: {
           bucket: tfBackendBucket,
           region: tfBackendBucketRegion,
