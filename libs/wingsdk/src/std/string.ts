@@ -66,6 +66,8 @@ export class String {
   /**
    * Does this string end with the given searchString?
    *
+   * @macro $self$.endsWith($args$)
+   * 
    * @param searchString substring to search for.
    * @returns true if string ends with searchString.
    */
@@ -111,7 +113,9 @@ export class String {
 
   /**
    * Does this string start with the given searchString?
-   *
+   * 
+   * @macro $self$.startsWith($args$)
+   * 
    * @param searchString substring to search for.
    * @returns true if string starts with searchString.
    */
