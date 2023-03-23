@@ -276,6 +276,9 @@ async handle(message) {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
           },
+          "display": {
+            "hidden": true,
+          },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
         },
@@ -586,6 +589,9 @@ async handle(message) {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
           },
+          "display": {
+            "hidden": true,
+          },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
         },
@@ -804,6 +810,9 @@ async handle(message) {
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.245",
+          },
+          "display": {
+            "hidden": true,
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
