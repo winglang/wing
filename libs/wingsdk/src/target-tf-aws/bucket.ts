@@ -169,7 +169,7 @@ export class Bucket extends cloud.Bucket {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__dirname, __filename, "BucketClient", [
+    return core.InflightClient.for(__dirname.replace("target-tf-aws", "shared-aws"), __filename, "BucketClient", [
       `process.env["${this.envName()}"]`,
       `process.env["${this.isPublicEnvName()}"]`,
     ]);

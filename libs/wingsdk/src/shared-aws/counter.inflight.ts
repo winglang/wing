@@ -3,7 +3,7 @@ import {
   GetItemCommand,
   DynamoDBClient,
 } from "@aws-sdk/client-dynamodb";
-import { HASH_KEY } from "./counter";
+import { COUNTER_HASH_KEY } from "./share";
 import { CounterClientBase } from "../cloud";
 
 const AMOUNT_TOKEN = "amount";
@@ -24,7 +24,7 @@ export class CounterClient extends CounterClientBase {
   public async inc(amount = 1): Promise<number> {
     const command = new UpdateItemCommand({
       TableName: this.tableName,
-      Key: { [HASH_KEY]: { S: COUNTER_ID } },
+      Key: { [COUNTER_HASH_KEY]: { S: COUNTER_ID } },
       UpdateExpression: `SET ${VALUE_ATTRIBUTE} = if_not_exists(${VALUE_ATTRIBUTE}, :${INITIAL_VALUE_TOKEN}) + :${AMOUNT_TOKEN}`,
       ExpressionAttributeValues: {
         [`:${AMOUNT_TOKEN}`]: { N: `${amount}` },
@@ -46,7 +46,7 @@ export class CounterClient extends CounterClientBase {
   public async peek(): Promise<number> {
     const command = new GetItemCommand({
       TableName: this.tableName,
-      Key: { [HASH_KEY]: { S: COUNTER_ID } },
+      Key: { [COUNTER_HASH_KEY]: { S: COUNTER_ID } },
     });
 
     const result = await this.client.send(command);
@@ -61,7 +61,7 @@ export class CounterClient extends CounterClientBase {
   public async reset(value?: number): Promise<void> {
     const command = new UpdateItemCommand({
       TableName: this.tableName,
-      Key: { [HASH_KEY]: { S: COUNTER_ID } },
+      Key: { [COUNTER_HASH_KEY]: { S: COUNTER_ID } },
       UpdateExpression: `SET ${VALUE_ATTRIBUTE} = :${RESET_VALUE}`,
       ExpressionAttributeValues: {
         [`:${RESET_VALUE}`]: { N: `${value}` },

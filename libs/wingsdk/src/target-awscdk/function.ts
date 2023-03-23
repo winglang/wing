@@ -9,7 +9,7 @@ import { Function as CdkFunction, Code, Runtime } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { normalPath } from "../util";
+import { createBundle } from "../utils/bundling";
 
 /**
  * AWS implementation of `cloud.Function`.
@@ -30,11 +30,11 @@ export class Function extends cloud.Function {
     super(scope, id, inflight, props);
 
     // bundled code is guaranteed to be in a fresh directory
-    const codeDir = resolve(normalPath(this.entrypoint), "..");
+    const bundle = createBundle(this.entrypoint);
 
     this.function = new CdkFunction(this, "Default", {
       handler: "index.handler",
-      code: Code.fromAsset(codeDir),
+      code: Code.fromAsset(resolve(bundle.directory)),
       runtime: Runtime.NODEJS_16_X,
       timeout: props.timeout
         ? Duration.seconds(props.timeout.seconds)
@@ -53,7 +53,7 @@ export class Function extends cloud.Function {
   /** @internal */
   public _toInflight(): core.Code {
     return core.InflightClient.for(
-      __dirname.replace("awscdk", "tf-aws"),
+      __dirname.replace("target-awscdk", "shared-aws"),
       __filename,
       "FunctionClient",
       [`process.env["${this.envName()}"]`]

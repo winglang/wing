@@ -90,7 +90,7 @@ export class Table extends cloud.Table {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__dirname, __filename, "TableClient", [
+    return core.InflightClient.for(__dirname.replace("target-tf-aws", "shared-aws"), __filename, "TableClient", [
       `process.env["${this.envName()}"]`,
       `process.env["${this.primaryKeyEnvName()}"]`,
       `process.env["${this.columnsEnvName()}"]`,

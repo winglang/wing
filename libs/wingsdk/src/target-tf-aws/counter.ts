@@ -4,8 +4,7 @@ import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
-
-export const HASH_KEY = "id";
+import { COUNTER_HASH_KEY } from "../shared-aws/share";
 
 /**
  * Counter (Table) names must be between 3 and 255 characters.
@@ -30,8 +29,8 @@ export class Counter extends cloud.Counter {
 
     this.table = new DynamodbTable(this, "Default", {
       name: ResourceNames.generateName(this, NAME_OPTS),
-      attribute: [{ name: HASH_KEY, type: "S" }],
-      hashKey: HASH_KEY,
+      attribute: [{ name: COUNTER_HASH_KEY, type: "S" }],
+      hashKey: COUNTER_HASH_KEY,
       billingMode: "PAY_PER_REQUEST",
     });
   }
@@ -69,7 +68,7 @@ export class Counter extends cloud.Counter {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__dirname, __filename, "CounterClient", [
+    return core.InflightClient.for(__dirname.replace("target-tf-aws", "shared-aws"), __filename, "CounterClient", [
       `process.env["${this.envName()}"]`,
       `${this.initial}`,
     ]);

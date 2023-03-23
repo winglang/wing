@@ -190,7 +190,7 @@ export class Function extends cloud.Function {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__dirname, __filename, "FunctionClient", [
+    return core.InflightClient.for(__dirname.replace("target-tf-aws", "shared-aws"), __filename, "FunctionClient", [
       `process.env["${this.envName()}"]`,
     ]);
   }

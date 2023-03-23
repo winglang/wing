@@ -11,7 +11,7 @@ import { SdkStream } from "@aws-sdk/types";
 import { sdkStreamMixin } from "@aws-sdk/util-stream-node";
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, beforeEach } from "vitest";
-import { BucketClient } from "../../src/target-tf-aws/bucket.inflight";
+import { BucketClient } from "../../src/shared-aws/bucket.inflight";
 
 const s3Mock = mockClient(S3Client);
 
@@ -22,7 +22,7 @@ beforeEach(() => {
 // https://github.com/m-radzikowski/aws-sdk-client-mock/issues/131
 function createMockStream(text: string): SdkStream<Readable> {
   const stream = new Readable();
-  stream._read = () => {};
+  stream._read = () => { };
   stream.push(text);
   stream.push(null); // indicate end of file
   const sdkStream = sdkStreamMixin(stream);

@@ -49,7 +49,7 @@ export class Queue extends cloud.Queue {
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnMessageHandler-${hash}`,
       inflight,
-      join(__dirname, "queue.onmessage.inflight.js"),
+      join(__dirname.replace("target-tf-aws", "shared-aws").replace("target-tf-aws", "shared-aws"), "queue.onmessage.inflight.js"),
       "QueueOnMessageHandlerClient"
     );
 
@@ -131,7 +131,7 @@ export class Queue extends cloud.Queue {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__dirname, __filename, "QueueClient", [
+    return core.InflightClient.for(__dirname.replace("target-tf-aws", "shared-aws").replace("target-tf-aws", "shared-aws"), __filename, "QueueClient", [
       `process.env["${this.envName()}"]`,
     ]);
   }

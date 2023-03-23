@@ -10,7 +10,7 @@ import {
 
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, beforeEach } from "vitest";
-import { CounterClient } from "../../src/target-tf-aws/counter.inflight";
+import { CounterClient } from "../../src/shared-aws/counter.inflight";
 
 const MOCK_TABLE_NAME = "MyBeautifulCounter";
 const dynamoMock = mockClient(DynamoDBClient);
@@ -124,8 +124,8 @@ function setupIncMock(opts: MockOptions) {
     Attributes: !opts.responseValue
       ? undefined
       : {
-          counter_value: { N: `${opts.responseValue}` },
-        },
+        counter_value: { N: `${opts.responseValue}` },
+      },
   };
 
   dynamoMock.on(UpdateItemCommand, expectedRequest).resolves(mockResponse);
@@ -140,11 +140,11 @@ function setupPeekMock(opts: MockOptions) {
     $metadata: {},
     Item: !opts.responseValue
       ? {
-          counter_value: { N: "0" },
-        }
+        counter_value: { N: "0" },
+      }
       : {
-          counter_value: { N: `${opts.responseValue}` },
-        },
+        counter_value: { N: `${opts.responseValue}` },
+      },
   };
 
   dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
@@ -166,8 +166,8 @@ function setupResetMock(opts: MockOptions) {
       opts.resetValue === undefined
         ? undefined
         : {
-            counter_value: { N: `${opts.resetValue}` },
-          },
+          counter_value: { N: `${opts.resetValue}` },
+        },
   };
 
   dynamoMock.on(UpdateItemCommand, expectedRequest).resolves(mockResponse);

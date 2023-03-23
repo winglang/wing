@@ -2,7 +2,7 @@ import { SNSClient, PublishCommand } from "@aws-sdk/client-sns";
 import { mockClient } from "aws-sdk-client-mock";
 import "aws-sdk-client-mock-jest";
 import { test, expect, beforeEach, vi } from "vitest";
-import { TopicClient } from "../../src/target-tf-aws/topic.inflight";
+import { TopicClient } from "../../src/shared-aws/topic.inflight";
 
 const snsMock = mockClient(SNSClient);
 
