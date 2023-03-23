@@ -226,7 +226,7 @@ pub struct Stmt {
 
 #[derive(Debug)]
 pub enum UtilityFunctions {
-	Print,
+	Log,
 	Panic,
 	Throw,
 	Assert,
@@ -235,7 +235,7 @@ pub enum UtilityFunctions {
 impl Display for UtilityFunctions {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
-			UtilityFunctions::Print => write!(f, "print"),
+			UtilityFunctions::Log => write!(f, "log"),
 			UtilityFunctions::Panic => write!(f, "panic"),
 			UtilityFunctions::Throw => write!(f, "throw"),
 			UtilityFunctions::Assert => write!(f, "assert"),

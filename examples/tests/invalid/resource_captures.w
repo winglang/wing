@@ -14,9 +14,9 @@ resource Foo {
   }
 
   inflight test() {
-    print("${this.reassignable}");
+    log("${this.reassignable}");
 //           ^^^^^^^^^^^^^^^^^ Cannot capture reassignable field 'reassignable'
-    print(this.mut_array.at(0));
+    log(this.mut_array.at(0));
 //        ^^^^^^^^^ Unable to reference "this.mut_array" from inflight method "test" because type MutArray<str> is not capturable
 
     let b = this.bucket;

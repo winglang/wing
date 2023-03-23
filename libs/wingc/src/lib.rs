@@ -170,7 +170,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> D
 	// note: Globals are emitted here and wrapped in "{ ... }" blocks. Wrapping makes these emissions, actual
 	// statements and not expressions. this makes the runtime panic if these are used in place of expressions.
 	add_builtin(
-		UtilityFunctions::Print.to_string().as_str(),
+		UtilityFunctions::Log.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			parameters: vec![types.string()],
 			return_type: types.void(),
