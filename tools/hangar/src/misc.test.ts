@@ -19,15 +19,15 @@ test("unsupported resource in target", async ({ expect }) => {
   );
 
   await expect(
-    runWingCommand(
-      workdir,
-      entrypoint,
-      ["compile", "--target", "tf-gcp"],
-      true,
-      {
+    runWingCommand({
+      cwd: workdir,
+      wingFile: entrypoint,
+      args: ["compile", "--target", "tf-gcp"],
+      shouldSucceed: true,
+      env: {
         GOOGLE_PROJECT_ID: "test-project",
         GOOGLE_STORAGE_LOCATION: "us-central1",
       }
-    )
+    })
   ).rejects.toThrowErrorMatchingInlineSnapshot('"preflight error: Unable to create an instance of abstract type \\"@winglang/sdk.cloud.Schedule\\" for this target"');
 });
