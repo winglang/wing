@@ -3,7 +3,7 @@ use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 
 use derivative::Derivative;
-use indexmap::{IndexMap, IndexSet};
+use indexmap::{Equivalent, IndexMap, IndexSet};
 
 use crate::capture::Captures;
 use crate::diagnostic::WingSpan;
@@ -54,9 +54,15 @@ impl PartialEq for Symbol {
 	}
 }
 
-impl std::fmt::Display for Symbol {
+impl Display for Symbol {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		write!(f, "{} (at {})", self.name, self.span)
+	}
+}
+
+impl Equivalent<Symbol> for str {
+	fn equivalent(&self, key: &Symbol) -> bool {
+		self == key.name
 	}
 }
 

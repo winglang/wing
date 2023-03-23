@@ -1466,9 +1466,9 @@ impl<'a> TypeChecker<'a> {
 						.as_variable()
 						.expect("Expected struct field to be a variable in the struct env")
 						.type_;
-					match fields.get(&Symbol::global(&name)) {
+					match fields.get(name.as_str()) {
 						Some(field_exp) => {
-							let t = field_types.get(&Symbol::global(&name)).unwrap();
+							let t = field_types.get(name.as_str()).unwrap();
 							self.validate_type(*t, field_type, field_exp);
 						}
 						None => {
