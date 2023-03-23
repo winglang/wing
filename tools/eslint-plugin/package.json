@@ -8,10 +8,10 @@
     "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix"
   },
   "dependencies": {
-    "@cloudy-ts/eslint-plugin": "^0.0.248",
-    "@typescript-eslint/eslint-plugin": "^5.54.1",
-    "@typescript-eslint/parser": "^5.54.1",
-    "eslint-config-prettier": "^8.7.0",
+    "@cloudy-ts/eslint-plugin": "^0.0.260",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.56.0",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-import-resolver-node": "^0.3.6",
     "eslint-import-resolver-typescript": "^3.5.2",
     "eslint-plugin-import": "^2.26.0",
@@ -27,8 +27,8 @@
     "typescript": "^4.9.4"
   },
   "devDependencies": {
-    "eslint": "^8.35.0",
-    "prettier": "^2.8.1",
-    "typescript": "^4.9.4"
+    "eslint": "^8.36.0",
+    "prettier": "^2.8.6",
+    "typescript": "^5.0.2"
   }
 }

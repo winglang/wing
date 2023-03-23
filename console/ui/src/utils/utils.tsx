@@ -22,7 +22,7 @@ import { BaseResourceSchema, WingSimulatorSchema } from "@wingconsole/server";
 import classNames from "classnames";
 import { SVGProps } from "react";
 
-import { TreeMenuItem } from "../design-system/TreeMenu.js";
+import { TreeMenuItem } from "./useTreeMenuItems.js";
 
 export const flattenTreeMenuItems = (items: TreeMenuItem[]): TreeMenuItem[] => {
   return items.flatMap((item) => {

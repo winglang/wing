@@ -17,6 +17,9 @@
     "vitest": {
       "outputs": ["coverage/**"]
     },
+    "vitest:update": {
+      "cache": false
+    },
     "playwright": {
       "dependsOn": ["compile"],
       "outputs": ["playwright-report/**"]

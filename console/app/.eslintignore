@@ -1,6 +1,8 @@
 /.turbo/
 /coverage/
 /dist/
-/playwright-report/
 /release/
+/target/
+/test-results/
+/playwright-report/
 /node_modules/

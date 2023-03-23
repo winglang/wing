@@ -5,14 +5,27 @@ import {
   PlayIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
+import type { inferRouterOutputs } from "@trpc/server";
+import {
+  Toolbar,
+  ToolbarButton,
+  TreeView,
+  TreeItem,
+} from "@wingconsole/design-system";
+import type { Router } from "@wingconsole/server";
 import classNames from "classnames";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import { Button } from "../design-system/Button.js";
-import { TreeMenu } from "../design-system/TreeMenu.js";
-import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
+import { PlayAllIcon } from "../design-system/icons/index.js";
+import { ScrollableArea } from "../design-system/ScrollableArea.js";
+import { trpc } from "../utils/trpc.js";
 
 export type TestStatus = "success" | "error" | "running" | "pending";
+
+const getTestName = (testPath: string) => {
+  const test = testPath.split("/").pop() ?? testPath;
+  return test.replace(/test: /g, "");
+};
 
 export interface TestItem {
   id: string;
@@ -23,113 +36,180 @@ export interface TestItem {
   runAllDisabled?: boolean;
 }
 export interface TestsTreeProps {
-  items: TestItem[];
-  onItemClick?: (resourcePath: string) => void;
   onRunAll?: () => void;
-  runAllDisabled?: boolean;
+  onRunTest?: (testPath: string) => void;
 }
 
-export const TestsTree = ({
-  items,
-  onRunAll,
-  runAllDisabled,
-  onItemClick,
-}: TestsTreeProps) => {
-  const treeMenu = useTreeMenuItems();
+type RouterOutput = inferRouterOutputs<Router>;
 
+export const TestsTree = ({ onRunAll, onRunTest }: TestsTreeProps) => {
+  const [testTree, setTestTree] = useState<TestItem[]>([]);
+
+  const testListQuery = trpc["test.list"].useQuery();
   useEffect(() => {
-    treeMenu.setItems(
-      items.map((item) => {
+    if (!testListQuery.data) {
+      return;
+    }
+    setTestTree(
+      testListQuery.data.map((resourcePath) => {
         return {
-          id: item.id,
-          label: () => (
-            <div className="flex items-center space-x-1">
-              <span
-                className={classNames(
-                  "truncate text-slate-800 group-hover:text-slate-900",
-                )}
-              >
-                {item.label}
-              </span>
-              {item.time && (
-                <span className="text-slate-400 text-xs">{item.time}ms</span>
-              )}
-            </div>
-          ),
-          icon: (item.status === "success" && (
-            <CheckCircleIcon className="w-4 h-4 text-green-500" />
-          )) ||
-            (item.status === "error" && (
-              <XCircleIcon className="w-4 h-4 text-red-500" />
-            )) ||
-            (item.status === "running" && (
-              <ArrowPathIcon className="w-4 h-4 text-slate-500 animate-spin" />
-            )) || <MinusCircleIcon className="w-4 h-4 text-slate-500" />,
-          secondaryLabel: (
-            <div
-              className={classNames(
-                "pr-2 flex items-center group-hover:visible invisible",
-              )}
-            >
-              <button
-                className="p-0.5 hover:bg-slate-200 rounded"
-                onClick={() => {
-                  onItemClick?.(item.id);
-                }}
-              >
-                <PlayIcon className="w-4 h-4 text-slate-500" />
-              </button>
-            </div>
-          ),
+          id: resourcePath,
+          label: getTestName(resourcePath),
+          status: "pending",
         };
       }),
     );
-  }, [items]);
+  }, [testListQuery.data]);
 
-  const toolbarActions = (
-    <div>
-      <button
-        className="p-0.5 hover:bg-slate-200 rounded relative h-5 w-5 text-slate-600 hover:text-slate-700"
-        onClick={onRunAll}
-        title="Run all tests"
-        disabled={runAllDisabled}
-      >
-        <PlayIcon className="w-4 h-4 -ml-[1.5px]" aria-hidden="true" />
+  const setTestStatus = (
+    resourcePath: string,
+    status: TestStatus,
+    time?: number,
+  ) => {
+    setTestTree((testTree) => {
+      return testTree.map((testItem) => {
+        if (testItem.id === resourcePath) {
+          return {
+            ...testItem,
+            status,
+            time: time || testItem.time,
+          };
+        }
+        return testItem;
+      });
+    });
+  };
 
-        <div
-          className={classNames(
-            "absolute transform top-1/2 -translate-y-1/2 ml-[1.5px]",
-          )}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            aria-hidden="true"
-            className="w-4 h-4"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985"
-            ></path>
-          </svg>
-        </div>
-      </button>
-    </div>
-  );
+  const setAllTestStatus = (status: TestStatus, time?: number) => {
+    setTestTree((testTree) => {
+      return testTree.map((testItem) => {
+        return {
+          ...testItem,
+          status,
+          time: time || testItem.time,
+        };
+      });
+    });
+  };
+
+  const onRunTestsSuccess = (runOutput: RouterOutput["test.run"][]) => {
+    for (const output of runOutput) {
+      setTestStatus(
+        output.path,
+        output.error ? "error" : "success",
+        output.time,
+      );
+    }
+  };
+
+  const runAllTests = trpc["test.runAll"].useMutation({
+    onMutate: () => {
+      setAllTestStatus("running");
+    },
+    onSuccess: (data) => {
+      onRunTestsSuccess(data);
+      onRunAll?.();
+    },
+  });
+
+  const runTest = trpc["test.run"].useMutation({
+    onMutate: (data) => {
+      setTestStatus(data.resourcePath, "running");
+    },
+    onSuccess: (data) => {
+      onRunTestsSuccess([data]);
+      onRunTest?.(data.path);
+    },
+  });
 
   return (
-    <TreeMenu
-      title="Tests"
-      items={treeMenu.items}
-      selectedItemId={treeMenu.currentItemId}
-      openMenuItemIds={treeMenu.openItemIds}
-      hideChevrons
-      dataTestId={"test-tree-menu"}
-      toolbarActions={toolbarActions}
-    />
+    <div className="w-full h-full flex flex-col" data-testid="test-tree-menu">
+      <Toolbar title="Tests">
+        <ToolbarButton
+          onClick={() => runAllTests.mutate()}
+          title="Run All Tests"
+          disabled={testTree.length === 0}
+        >
+          <PlayAllIcon className="w-4 h-4 text-slate-600" />
+        </ToolbarButton>
+      </Toolbar>
+
+      <div className="relative grow">
+        <div className="absolute inset-0">
+          <ScrollableArea
+            overflowY
+            className="h-full w-full text-sm text-slate-800 bg-slate-50 flex flex-col gap-1"
+          >
+            <div className="flex flex-col">
+              {testTree.length === 0 && (
+                <div className="text-slate-400 text-2xs px-3 py-2 font-mono">
+                  No Tests
+                </div>
+              )}
+              <TreeView>
+                {testTree.map((test) => (
+                  <TreeItem
+                    key={test.id}
+                    itemId={test.id}
+                    label={
+                      <div className="flex items-center gap-1">
+                        <span className="truncate">{test.label}</span>
+                        {test.time && (
+                          <span className="text-slate-400 text-xs">
+                            {test.time}ms
+                          </span>
+                        )}
+                      </div>
+                    }
+                    secondaryLabel={
+                      <div
+                        className={classNames(
+                          "hidden group-hover:flex items-center ",
+                        )}
+                      >
+                        <ToolbarButton
+                          title={`Run ${test.label}`}
+                          onClick={() =>
+                            runTest.mutate({
+                              resourcePath: test.id,
+                            })
+                          }
+                        >
+                          <PlayIcon className="w-4 h-4 text-slate-500" />
+                        </ToolbarButton>
+                      </div>
+                    }
+                    title={test.label}
+                    icon={
+                      <>
+                        {test.status === "success" && (
+                          <CheckCircleIcon className="w-4 h-4 text-green-500" />
+                        )}
+                        {test.status === "error" && (
+                          <XCircleIcon className="w-4 h-4 text-red-500" />
+                        )}
+                        {test.status === "running" && (
+                          <ArrowPathIcon className="w-4 h-4 text-slate-500 animate-spin" />
+                        )}
+                        {test.status === "pending" && (
+                          <MinusCircleIcon className="w-4 h-4 text-slate-500" />
+                        )}
+                      </>
+                    }
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        runTest.mutate({
+                          resourcePath: test.id,
+                        });
+                      }
+                    }}
+                  />
+                ))}
+              </TreeView>
+            </div>
+          </ScrollableArea>
+        </div>
+      </div>
+    </div>
   );
 };

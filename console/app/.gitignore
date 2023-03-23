@@ -2,5 +2,6 @@
 /coverage
 /dist
 /release
-/playwright-report
+/target
 /test-results
+/playwright-report

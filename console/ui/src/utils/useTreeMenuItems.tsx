@@ -1,20 +1,28 @@
-import { useCallback, useState } from "react";
+import { ReactNode, useCallback, useState } from "react";
 
-import { TreeMenuItem } from "../design-system/TreeMenu.js";
+export interface TreeMenuItem {
+  id: string;
+  icon?: React.ReactNode;
+  label: string;
+  secondaryLabel?: string | ReactNode | ((item: TreeMenuItem) => ReactNode);
+  children?: TreeMenuItem[];
+}
 
 export function useTreeMenuItems(options?: {
   treeMenuItems?: TreeMenuItem[];
-  selectedItemId?: string;
+  selectedItemIds?: string[];
   openMenuItemIds?: string[];
 }) {
   const [items, setItems] = useState(options?.treeMenuItems ?? []);
 
-  const [currentItemId, setCurrent] = useState(options?.selectedItemId);
-  const [openItemIds, setOpenMenuItemIds] = useState(
+  const [selectedItems, setSelectedItems] = useState(
+    () => options?.selectedItemIds ?? [],
+  );
+  const [expandedItems, setExpandedItems] = useState(
     options?.openMenuItemIds ?? [],
   );
-  const toggle = (itemId: string) => {
-    setOpenMenuItemIds(([...openedMenuItems]) => {
+  const toggle = useCallback((itemId: string) => {
+    setExpandedItems(([...openedMenuItems]) => {
       const index = openedMenuItems.indexOf(itemId);
       if (index !== -1) {
         openedMenuItems.splice(index, 1);
@@ -24,7 +32,7 @@ export function useTreeMenuItems(options?: {
       openedMenuItems.push(itemId);
       return openedMenuItems;
     });
-  };
+  }, []);
 
   const expandAll = useCallback(() => {
     const itemIds = [];
@@ -42,15 +50,15 @@ export function useTreeMenuItems(options?: {
       }
     }
 
-    setOpenMenuItemIds(itemIds);
+    setExpandedItems(itemIds);
   }, [items]);
 
-  const collapseAll = () => {
-    setOpenMenuItemIds([]);
-  };
+  const collapseAll = useCallback(() => {
+    setExpandedItems([]);
+  }, []);
 
-  const expand = (itemId: string) => {
-    setOpenMenuItemIds(([...openedMenuItems]) => {
+  const expand = useCallback((itemId: string) => {
+    setExpandedItems(([...openedMenuItems]) => {
       const index = openedMenuItems.indexOf(itemId);
       if (index !== -1) {
         return openedMenuItems;
@@ -59,14 +67,15 @@ export function useTreeMenuItems(options?: {
       openedMenuItems.push(itemId);
       return openedMenuItems;
     });
-  };
+  }, []);
 
   return {
     items,
     setItems,
-    currentItemId,
-    setCurrent,
-    openItemIds,
+    selectedItems,
+    setSelectedItems,
+    expandedItems,
+    setExpandedItems,
     toggle,
     expandAll,
     collapseAll,

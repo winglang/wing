@@ -73,7 +73,7 @@
       "type": "wingsdk.cloud.Function",
       "path": "root/test: Increment counter",
       "props": {
-        "sourceCodeFile": ".wing/test_ increment counter_c8257dd6.js",
+        "sourceCodeFile": ".wing/test__increment_counter_c8257dd6.js",
         "sourceCodeLanguage": "javascript",
         "environmentVariables": {
           "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}",
@@ -125,7 +125,7 @@
       "type": "wingsdk.cloud.Function",
       "path": "root/test: Push message to the queue",
       "props": {
-        "sourceCodeFile": ".wing/test_ push message to the queue_c844f3de.js",
+        "sourceCodeFile": ".wing/test__push_message_to_the_queue_c844f3de.js",
         "sourceCodeLanguage": "javascript",
         "environmentVariables": {
           "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}",
@@ -139,7 +139,7 @@
       "type": "wingsdk.cloud.Function",
       "path": "root/test: Print",
       "props": {
-        "sourceCodeFile": ".wing/test_ print_c8ce8953.js",
+        "sourceCodeFile": ".wing/test__print_c8ce8953.js",
         "sourceCodeLanguage": "javascript",
         "environmentVariables": {
           "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}"
@@ -149,5 +149,5 @@
       "attrs": {}
     }
   ],
-  "sdkVersion": "0.6.0"
+  "sdkVersion": "0.6.3"
 }

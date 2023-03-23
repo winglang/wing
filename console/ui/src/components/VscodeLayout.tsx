@@ -1,13 +1,6 @@
 import { BeakerIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
-import type { inferRouterOutputs } from "@trpc/server";
-import {
-  LogEntry,
-  LogLevel,
-  ExplorerItem,
-  State,
-  Router,
-} from "@wingconsole/server";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { LogEntry, LogLevel, State } from "@wingconsole/server";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { BlueScreenOfDeath } from "../design-system/BlueScreenOfDeath.js";
 import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
@@ -16,31 +9,24 @@ import { ScrollableArea } from "../design-system/ScrollableArea.js";
 import { SpinnerLoader } from "../design-system/SpinnerLoader.js";
 import { Tabs } from "../design-system/Tabs.js";
 import { TopResizableWidget } from "../design-system/TopResizableWidget.js";
-import { TreeMenu, TreeMenuItem } from "../design-system/TreeMenu.js";
 import { trpc } from "../utils/trpc.js";
-import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
+import { useExplorer } from "../utils/use-explorer.js";
 import { ResourceIcon } from "../utils/utils.js";
 
 import { ConsoleFilters } from "./ConsoleFilters.js";
 import { ConsoleLogs } from "./ConsoleLogs.js";
 import { ElkMap } from "./elk-map/ElkMap.js";
 import { ContainerNode } from "./ElkMapNodes.js";
+import { Explorer } from "./explorer.js";
 import { MetadataPanel } from "./MetadataPanel.js";
 import { StatusBar } from "./StatusBar.js";
 import { TestsTab } from "./TestsTab.js";
-import { TestItem, TestStatus, TestsTree } from "./TestsTree.js";
-
-type RouterOutput = inferRouterOutputs<Router>;
+import { TestsTree } from "./TestsTree.js";
 
 export interface VscodeLayoutProps {
   cloudAppState: State;
   wingVersion: string | undefined;
 }
-
-const getTestName = (testPath: string) => {
-  const test = testPath.split("/").pop() ?? testPath;
-  return test.replace(/test: /g, "");
-};
 
 export const VscodeLayout = ({
   cloudAppState,
@@ -48,120 +34,39 @@ export const VscodeLayout = ({
 }: VscodeLayoutProps) => {
   const {
     items,
-    expandAll,
-    setItems,
-    setCurrent,
-    currentItemId,
-    toggle,
-    openItemIds,
-    collapseAll,
+    selectedItems,
+    setSelectedItems,
+    expandedItems,
+    setExpandedItems,
     expand,
-  } = useTreeMenuItems();
+    expandAll,
+    collapseAll,
+  } = useExplorer();
 
   const errorMessage = trpc["app.error"].useQuery();
-  const explorerTree = trpc["app.explorerTree"].useQuery();
   const [currentTabId, setCurrentTabId] = useState("logs");
   const [tabsWithNotifications, setTabsWithNotifications] = useState<string[]>(
     [],
   );
 
-  const openTab = (tabId: string) => {
+  const openTab = useCallback((tabId: string) => {
     setCurrentTabId(tabId);
-    setTabsWithNotifications(
+    setTabsWithNotifications((tabsWithNotifications) =>
       tabsWithNotifications.filter((id) => id !== tabId),
     );
-  };
+  }, []);
 
-  const setHasNotifications = (tabId: string) => {
-    if (tabId !== currentTabId) {
-      setTabsWithNotifications([...tabsWithNotifications, tabId]);
-    }
-  };
-
-  const [testTree, setTestTree] = useState<TestItem[]>([]);
-
-  const testListQuery = trpc["test.list"].useQuery();
-  useEffect(() => {
-    if (!testListQuery.data) {
-      return;
-    }
-    setTestTree(
-      testListQuery.data.map((resourcePath) => {
-        return {
-          id: resourcePath,
-          label: getTestName(resourcePath),
-          status: "pending",
-        };
-      }),
-    );
-  }, [testListQuery.data]);
-
-  const setTestStatus = (
-    resourcePath: string,
-    status: TestStatus,
-    time?: number,
-  ) => {
-    setTestTree((testTree) => {
-      return testTree.map((testItem) => {
-        if (testItem.id === resourcePath) {
-          return {
-            ...testItem,
-            status,
-            time: time || testItem.time,
-          };
-        }
-        return testItem;
-      });
-    });
-  };
-
-  const setAllTestStatus = (status: TestStatus, time?: number) => {
-    setTestTree((testTree) => {
-      return testTree.map((testItem) => {
-        return {
-          ...testItem,
-          status,
-          time: time || testItem.time,
-        };
-      });
-    });
-  };
-
-  const onRunTestsSuccess = (runOutput: RouterOutput["test.run"][]) => {
-    setHasNotifications("tests");
-    for (const output of runOutput) {
-      setTestStatus(
-        output.path,
-        output.error ? "error" : "success",
-        output.time,
-      );
-    }
-  };
-
-  const runAllTests = trpc["test.runAll"].useMutation({
-    onMutate: () => {
-      setAllTestStatus("running");
+  const setHasNotifications = useCallback(
+    (tabId: string) => {
+      if (tabId !== currentTabId) {
+        setTabsWithNotifications((tabsWithNotifications) => [
+          ...tabsWithNotifications,
+          tabId,
+        ]);
+      }
     },
-    onSuccess: (data) => onRunTestsSuccess(data),
-  });
-
-  const runTest = trpc["test.run"].useMutation({
-    onMutate: (data) => {
-      setTestStatus(data.resourcePath, "running");
-    },
-    onSuccess: (data) => onRunTestsSuccess([data]),
-  });
-
-  useEffect(() => {
-    if (explorerTree.data) {
-      setItems([createTreeMenuItemFromExplorerTreeItem(explorerTree.data)]);
-      setCurrent("root");
-    }
-  }, [explorerTree.data, setItems, setCurrent]);
-
-  useEffect(() => {
-    expandAll();
-  }, [items, expandAll]);
+    [currentTabId],
+  );
 
   const [selectedLogTypeFilters, setSelectedLogTypeFilters] = useState<
     LogLevel[]
@@ -200,36 +105,39 @@ export const VscodeLayout = ({
       return;
     }
     setHasNotifications("logs");
+    // TODO: Fix the whole notifications thing. If setHasNotifications is added as a dependency, it stops working.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logs.data]);
 
   const onResourceClick = (log: LogEntry) => {
     const path = log.ctx?.sourcePath;
     if (path) {
-      setCurrent(path);
+      setSelectedItems([path]);
     }
   };
 
   const metadata = trpc["app.nodeMetadata"].useQuery(
     {
-      path: currentItemId,
+      path: selectedItems[0],
     },
     {
-      enabled: !!currentItemId,
+      enabled: selectedItems.length > 0,
     },
   );
 
-  const isLoading = useMemo(() => {
-    return cloudAppState === "loading" || explorerTree.isLoading;
-  }, [explorerTree, cloudAppState]);
+  const loading = useMemo(() => {
+    return cloudAppState === "loading";
+  }, [cloudAppState]);
 
   const map = trpc["app.map"].useQuery();
   const mapRefs = useRef<{ [key: string]: HTMLElement | undefined }>({});
   useEffect(() => {
-    if (!currentItemId) {
+    const [selectedItem] = selectedItems;
+    if (!selectedItem) {
       return;
     }
 
-    const element = mapRefs.current[currentItemId];
+    const element = mapRefs.current[selectedItem];
     if (element) {
       element.scrollIntoView({
         behavior: "smooth",
@@ -237,7 +145,7 @@ export const VscodeLayout = ({
         inline: "center",
       });
     }
-  }, [currentItemId]);
+  }, [selectedItems]);
 
   return (
     <div
@@ -245,7 +153,7 @@ export const VscodeLayout = ({
       className="h-full flex flex-col bg-slate-50 select-none"
     >
       <div className="flex-1 flex relative">
-        {isLoading && (
+        {loading && (
           <div className="absolute bg-white bg-opacity-70 h-full w-full z-50">
             <div className=" absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
               <SpinnerLoader />
@@ -261,38 +169,26 @@ export const VscodeLayout = ({
 
         <RightResizableWidget className="h-full flex flex-col w-80 min-w-[10rem] min-h-[15rem] border-r border-slate-300">
           <div className="flex grow">
-            <TreeMenu
-              title="Explorer"
+            <Explorer
+              loading={loading}
               items={items}
-              selectedItemId={currentItemId}
-              openMenuItemIds={openItemIds}
-              onItemClick={(item) => {
-                setCurrent(item.id);
-              }}
-              onItemToggle={(item) => {
-                toggle(item.id);
-              }}
-              onExpandAll={() => expandAll()}
-              onCollapseAll={() => collapseAll()}
-              disabled={isLoading}
-              dataTestId={"explorer-tree-menu"}
+              selectedItems={selectedItems}
+              onSelectedItemsChange={setSelectedItems}
+              expandedItems={expandedItems}
+              onExpandedItemsChange={setExpandedItems}
+              onExpandAll={expandAll}
+              onCollapseAll={collapseAll}
+              data-testid="explorer-tree-menu"
             />
           </div>
           <TopResizableWidget className="h-1/3 border-t border-slate-300">
-            {testTree.length === 0 && (
-              <div className="text-slate-400 text-2xs px-3 py-2 font-mono">
-                No Tests
-              </div>
-            )}
             <TestsTree
-              items={testTree}
-              onItemClick={(item) =>
-                runTest.mutateAsync({
-                  resourcePath: item,
-                })
-              }
-              onRunAll={() => runAllTests.mutateAsync()}
-              runAllDisabled={testTree.length === 0}
+              onRunAll={() => {
+                setHasNotifications("tests");
+              }}
+              onRunTest={() => {
+                setHasNotifications("tests");
+              }}
             />
           </TopResizableWidget>
         </RightResizableWidget>
@@ -311,8 +207,10 @@ export const VscodeLayout = ({
                       <ElkMap
                         nodes={map.data.nodes}
                         edges={map.data.edges}
-                        selectedNodeId={currentItemId}
-                        onSelectedNodeIdChange={setCurrent}
+                        selectedNodeId={selectedItems[0]}
+                        onSelectedNodeIdChange={(nodeId) =>
+                          setSelectedItems([nodeId])
+                        }
                         node={({ node, depth }) => (
                           <div
                             ref={(element) =>
@@ -323,7 +221,7 @@ export const VscodeLayout = ({
                             <ContainerNode
                               name={node.data?.label}
                               open={node.children && node.children?.length > 0}
-                              selected={node.id === currentItemId}
+                              selected={node.id === selectedItems[0]}
                               resourceType={node.data?.type}
                               icon={(props) => (
                                 <ResourceIcon
@@ -351,7 +249,7 @@ export const VscodeLayout = ({
                   outbound={metadata.data.outbound}
                   onConnectionNodeClick={(path) => {
                     expand(path);
-                    setCurrent(path);
+                    setSelectedItems([path]);
                   }}
                 />
               )}
@@ -371,14 +269,14 @@ export const VscodeLayout = ({
                 ),
                 panel: (
                   <div className="relative h-full flex flex-col gap-2">
-                    {isLoading && (
+                    {loading && (
                       <div className="absolute bg-white bg-opacity-70 h-full w-full z-50" />
                     )}
                     <ConsoleFilters
                       selectedLogTypeFilters={selectedLogTypeFilters}
                       setSelectedLogTypeFilters={setSelectedLogTypeFilters}
                       clearLogs={() => setLogsTimeFilter(Date.now())}
-                      isLoading={isLoading}
+                      isLoading={loading}
                       onSearch={setSearchText}
                     />
                     <div className="relative h-full">
@@ -418,22 +316,3 @@ export const VscodeLayout = ({
     </div>
   );
 };
-
-function createTreeMenuItemFromExplorerTreeItem(
-  item: ExplorerItem,
-): TreeMenuItem {
-  return {
-    id: item.id,
-    label: item.label,
-    icon: item.type ? (
-      <ResourceIcon
-        resourceType={item.type}
-        className="w-4 h-4"
-        darkenOnGroupHover
-      />
-    ) : undefined,
-    children: item.childItems?.map((item) =>
-      createTreeMenuItemFromExplorerTreeItem(item),
-    ),
-  };
-}

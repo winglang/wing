@@ -16,12 +16,12 @@
     "@types/standard-version": "^7.0.1",
     "@wingconsole/eslint-plugin": "workspace:^0.0.0",
     "@wingconsole/tsconfig": "workspace:^0.0.0",
-    "typescript": "^4.9.5"
+    "typescript": "^5.0.2"
   },
   "dependencies": {
     "npm-which": "^3.0.1",
     "standard-version": "^9.5.0",
-    "tsx": "^3.12.3",
+    "tsx": "^3.12.6",
     "yoctocolors": "^1.0.0"
   }
 }

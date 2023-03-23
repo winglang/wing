@@ -23,7 +23,7 @@ const base = {
     "unicorn/prevent-abbreviations": [
       "error",
       {
-        ignore: [/props/i, /dir/i, /dev/i, /env/i, /ref/i],
+        ignore: [/props?/i, /dir/i, /dev/i, /env/i, /ref/i],
       },
     ],
     "unicorn/prefer-module": ["off"],

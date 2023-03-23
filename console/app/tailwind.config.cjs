@@ -11,6 +11,7 @@ module.exports = {
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
     "../ui/src/**/*.{vue,js,ts,jsx,tsx}",
+    "../design-system/src/**/*.{vue,js,ts,jsx,tsx}",
   ],
   theme: {
     fontFamily: {
