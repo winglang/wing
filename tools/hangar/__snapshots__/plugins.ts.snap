@@ -680,8 +680,8 @@ exports[`Plugin examples > AWS target plugins > tf-s3-backend.js 1`] = `
           },
         },
         "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
-        "key": "asset.c86cd0c0c9dc1b0298aaebb2fb4561ba65c36c4795.319552e364ce69b821ac32800fe52fd7.zip",
-        "source": "assets/root_cloudQueueOnMessagee46e5cb7_Asset_1C1D632C/319552E364CE69B821AC32800FE52FD7/archive.zip",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
       },
     },
     "aws_sqs_queue": {
@@ -693,21 +693,6 @@ exports[`Plugin examples > AWS target plugins > tf-s3-backend.js 1`] = `
           },
         },
         "name": "cloud-Queue-c86e03d8",
-      },
-    },
-  },
-  "terraform": {
-    "backend": {
-      "s3": {
-        "bucket": "my-wing-bucket",
-        "key": "some-state-file.tfstate",
-        "region": "us-east-1",
-      },
-    },
-    "required_providers": {
-      "aws": {
-        "source": "aws",
-        "version": "4.52.0",
       },
     },
   },

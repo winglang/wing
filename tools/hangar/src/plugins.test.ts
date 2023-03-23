@@ -100,13 +100,12 @@ describe("Plugin examples", () => {
         plugins: [plugin],
       });
 
-      const terraformOutput = fs.readJsonSync(
-        path.join(targetDir, "main.tf.json"),
-        "utf-8"
-      );
+      const tfPath = path.join(targetDir, "main.tf.json");
+      const terraformOutput = sanitize_json_paths(tfPath);
+      const unsanitizedTerraformOutput = fs.readJsonSync(tfPath);
 
       expect(terraformOutput).toMatchSnapshot();
-      expect(terraformOutput.terraform.backend).toEqual({
+      expect(unsanitizedTerraformOutput.terraform.backend).toEqual({
         s3: {
           bucket: tfBackendBucket,
           region: tfBackendBucketRegion,
