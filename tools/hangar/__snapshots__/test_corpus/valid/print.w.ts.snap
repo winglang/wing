@@ -162,7 +162,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
-const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
 	switch (target) {
@@ -188,12 +188,12 @@ constructor() {
   
   {console.log(\\"preflight print\\")};
   this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:print1\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5d5065e7d4d5abb68575b6b618fc014e76b4159c3240fef327354a5900bb9fa6/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.5d5065e7d4d5abb68575b6b618fc014e76b4159c3240fef327354a5900bb9fa6/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
     }
   }));
   this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:print2\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.44e74a6db41cb5fd5b35696592c6a747e9831b228b4d1ce62b6e65f43dee835d/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.44e74a6db41cb5fd5b35696592c6a747e9831b228b4d1ce62b6e65f43dee835d/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
     }
   }));

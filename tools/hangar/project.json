@@ -12,7 +12,7 @@
         "examples-tests"
       ],
       "outputs": [
-        "{projectRoot}/src/generated_tests/**/*}"
+        "{projectRoot}/src/test_corpus/**/*}"
       ],
       "options": {
         "command": "npm run test:generate",

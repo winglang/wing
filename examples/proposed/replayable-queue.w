@@ -52,3 +52,8 @@ resource RemoteControl {
 
 let q = new ReplayableQueue();
 new RemoteControl(q);
+
+// Exercises for the curious reader:
+// - Add some time retention for keeping messages
+// - Add some max messages to keep property
+// - Make sure that messages are replayed in order (currenlty it relies on the bucket.list() order) 

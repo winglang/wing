@@ -4,9 +4,11 @@ use std::path::Path;
 use std::{cell::RefCell, collections::HashMap};
 use tree_sitter::Tree;
 
+use crate::capture::CaptureVisitor;
 use crate::lsp::notifications::send_diagnostics;
 use crate::parser::Parser;
 use crate::type_check;
+use crate::visit::Visit;
 use crate::{ast::Scope, diagnostic::Diagnostics, type_check::Types, wasm_util::ptr_to_string};
 
 /// The result of running wingc on a file
@@ -18,7 +20,7 @@ pub struct FileData {
 	/// The diagnostics returned by wingc
 	pub diagnostics: Diagnostics,
 	/// The top scope of the file
-	pub scope: Scope,
+	pub scope: Box<Scope>,
 	/// The universal type collection for the scope. This is saved to ensure references live long enough.
 	pub types: Types,
 }
@@ -89,14 +91,20 @@ fn partial_compile(source_file: &str, text: &[u8]) -> FileData {
 
 	let wing_parser = Parser::new(&text[..], source_file.to_string());
 
-	let mut scope = wing_parser.wingit(&tree.root_node());
+	// Note: The scope is intentionally boxed here to force heap allocation
+	// Otherwise, the scope will be moved and we'll be left with dangling references elsewhere
+	let mut scope = Box::new(wing_parser.wingit(&tree.root_node()));
 
 	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file));
-	let parse_diag = wing_parser.diagnostics.into_inner();
+
+	// Analyze inflight captures
+	let mut capture_visitor = CaptureVisitor::new();
+	capture_visitor.visit_scope(&scope);
 
 	let mut diagnostics = Diagnostics::new();
-	diagnostics.extend(parse_diag.iter().cloned());
-	diagnostics.extend(type_diag.iter().cloned());
+	diagnostics.extend(wing_parser.diagnostics.into_inner());
+	diagnostics.extend(type_diag);
+	diagnostics.extend(capture_visitor.diagnostics);
 
 	return FileData {
 		contents: String::from_utf8(text.to_vec()).unwrap(),

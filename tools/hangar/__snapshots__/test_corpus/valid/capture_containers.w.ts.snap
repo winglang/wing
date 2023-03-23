@@ -103,7 +103,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
-const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
 	switch (target) {
@@ -133,7 +133,7 @@ constructor() {
   const arr_of_map = Object.freeze([Object.freeze({\\"bang\\":123})]);
   const j = Object.freeze({\\"a\\":\\"hello\\",\\"b\\":\\"world\\"});
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.dc7e5dc23da309970778fe7db4c795e3a6ae63c0d0ddc5e1780d4e2daadf67e1/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.dc7e5dc23da309970778fe7db4c795e3a6ae63c0d0ddc5e1780d4e2daadf67e1/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
       arr: {
         obj: arr,

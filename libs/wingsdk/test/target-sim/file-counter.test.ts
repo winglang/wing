@@ -21,8 +21,8 @@ test("can create sequential files in a bucket", async () => {
         "Processor",
         `async handle(event) {
           let next = await this.counter.inc();
-            let key = "file-" + next + ".txt";
-            await this.bucket.put(key, event);
+          let key = "file-" + next + ".txt";
+          await this.bucket.put(key, event);
         }`,
         {
           counter: {

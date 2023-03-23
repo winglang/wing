@@ -160,7 +160,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
-const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
 	switch (target) {
@@ -187,7 +187,7 @@ constructor() {
   const bucket = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
   const queue = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Queue\\",this,\\"cloud.Queue\\");
   (queue.onMessage(new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.211d46e8ec3b5ce3e93872fcb29755356fb3566f5016eae5fcd6ec0f670ab580/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.211d46e8ec3b5ce3e93872fcb29755356fb3566f5016eae5fcd6ec0f670ab580/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
       bucket: {
         obj: bucket,

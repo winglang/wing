@@ -12,6 +12,7 @@ export type WingCompilerFunction =
   | "wingc_on_did_open_text_document"
   | "wingc_on_did_change_text_document"
   | "wingc_on_completion"
+  | "wingc_on_goto_definition"
   | "wingc_on_document_symbol"
   | "wingc_on_semantic_tokens"
   | "wingc_on_hover";
@@ -140,6 +141,23 @@ export async function load(options: WingCompilerLoadOptions) {
 // https://stackoverflow.com/questions/5971645/extracting-high-and-low-order-bytes-of-a-64-bit-integer
 const LOW_MASK = 2n ** 32n - 1n;
 const HIGH_MASK = BigInt(32);
+
+// From diagnostic.rs
+export interface WingDiagnostic {
+  message: string;
+  span: {
+    start: {
+      line: number;
+      col: number;
+    };
+    end: {
+      line: number;
+      col: number;
+    };
+    file_id: string;
+  };
+  level: "Error" | "Warning" | "Note";
+}
 
 /**
  * Runs the given WASM function in the Wing Compiler WASM instance.

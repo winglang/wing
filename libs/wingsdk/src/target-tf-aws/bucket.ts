@@ -162,14 +162,20 @@ export class Bucket extends cloud.Bucket {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
-    if (ops.includes(cloud.BucketInflightMethods.PUT)) {
+    if (
+      ops.includes(cloud.BucketInflightMethods.PUT) ||
+      ops.includes(cloud.BucketInflightMethods.PUT_JSON)
+    ) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:PutObject*", "s3:Abort*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (ops.includes(cloud.BucketInflightMethods.GET)) {
+    if (
+      ops.includes(cloud.BucketInflightMethods.GET) ||
+      ops.includes(cloud.BucketInflightMethods.GET_JSON)
+    ) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],

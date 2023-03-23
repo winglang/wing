@@ -3,7 +3,7 @@ import * as fs from "fs";
 import * as os from "os";
 import { dirname, join } from "path";
 import { ISimulatorResourceInstance } from "./resource";
-import { BucketSchema } from "./schema-resources";
+import { BucketAttributes, BucketSchema } from "./schema-resources";
 import {
   BucketDeleteOptions,
   BucketEventType,
@@ -30,7 +30,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     this.topicHandlers = props.topics;
   }
 
-  public async init(): Promise<void> {
+  public async init(): Promise<BucketAttributes> {
     for (const [key, value] of Object.entries(this.initialObjects)) {
       await this.context.withTrace({
         message: `Adding object from preflight (key=${key}).`,
@@ -39,6 +39,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         },
       });
     }
+    return {};
   }
 
   public async cleanup(): Promise<void> {

@@ -98,7 +98,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 							types,
 							scope_visitor
 								.found_scope
-								.and_then(|s| Some(s.env.borrow().as_ref().expect("Scopes must have an environment").flight)),
+								.and_then(|s| Some(s.env.borrow().as_ref().expect("Scopes must have an environment").phase)),
 							true,
 						);
 					}
@@ -122,7 +122,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						let found_scope = scope_visitor.found_scope.expect("Should have found a scope");
 						let found_env = found_scope.env.borrow();
 						let found_env = found_env.as_ref().expect("Scope should have an env");
-						let found_phase = Some(found_env.flight);
+						let found_phase = Some(found_env.phase);
 						let found_symbol = root_env
 							.try_lookup(text.as_str(), None)
 							.or_else(|| found_env.try_lookup(text.as_str(), None));
@@ -178,23 +178,8 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			completions.push(format_symbol_kind_as_completion(symbol_data.0, symbol_kind));
 		}
 
-		// The following iteration logic is needed due to a bug:
-		// The root environment is not properly accessible from .parent
-		// https://github.com/winglang/wing/issues/1644
-		// So we can't use the normal iteration logic with ancestry
-		let mut parent_env = found_env.parent;
-		while let Some(current_env) = parent_env {
-			if current_env.is_root() {
-				for symbol_data in root_env.symbol_map.iter() {
-					completions.push(format_symbol_kind_as_completion(symbol_data.0, &symbol_data.1 .1));
-				}
-				break;
-			} else {
-				for data in current_env.iter(false) {
-					completions.push(format_symbol_kind_as_completion(&data.0, &data.1));
-				}
-			}
-			parent_env = current_env.parent;
+		for data in found_env.iter(true) {
+			completions.push(format_symbol_kind_as_completion(&data.0, &data.1));
 		}
 
 		completions
@@ -303,7 +288,7 @@ fn get_completions_from_class(
 				return None;
 			}
 			if let Some(current_phase) = current_phase {
-				if !current_phase.can_call_to(&variable.flight) {
+				if !current_phase.can_call_to(&variable.phase) {
 					return None;
 				}
 			}

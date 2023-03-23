@@ -40,7 +40,7 @@ export class Topic extends cloud.Topic {
   }
 
   public onMessage(
-    inflight: core.Inflight, // cloud.ITopicOnMessageHandler
+    inflight: cloud.ITopicOnMessageHandler,
     props: cloud.TopicOnMessageProps = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);

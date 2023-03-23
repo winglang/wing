@@ -10,6 +10,7 @@ use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
+use type_check_assert::TypeCheckAssert;
 use visit::Visit;
 use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
@@ -33,6 +34,7 @@ pub mod jsify;
 pub mod lsp;
 pub mod parser;
 pub mod type_check;
+pub mod type_check_assert;
 pub mod utilities;
 pub mod visit;
 mod wasm_util;
@@ -111,16 +113,11 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	let output_dir = split.get(1).map(|s| Path::new(s));
 
 	let results = compile(source_file, output_dir);
-	if let Err(mut err) = results {
-		// Sort error messages by line number (ascending)
-		err.sort_by(|a, b| a.cmp(&b));
-		let result = format!(
-			"Compilation failed with {} error(s)\n{}",
-			err.len(),
-			err.iter().map(|d| format!("{}", d)).collect::<Vec<_>>().join("\n")
-		);
+	if let Err(diagnostics) = results {
+		// Output diagnostics as a stringified JSON array
+		let json = serde_json::to_string(&diagnostics).unwrap();
 
-		string_to_combined_ptr(result)
+		string_to_combined_ptr(json)
 	} else {
 		WASM_RETURN_ERROR
 	}
@@ -277,6 +274,12 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 		// empty scope, no type checking needed
 		Diagnostics::new()
 	};
+
+	// Validate that every Expr has an evaluated_type
+	if cfg!(debug_assertions) {
+		let mut tc_assert = TypeCheckAssert;
+		tc_assert.visit_scope(&scope);
+	}
 
 	// Print diagnostics
 	print_diagnostics(&parse_diagnostics);

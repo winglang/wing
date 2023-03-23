@@ -2,7 +2,34 @@
 
 exports[`array 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/function_c8e6b4af.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() {
+if (!(this.my_capture.length === 2)) { throw new Error(\`assertion failed: \\"this.my_capture.length === 2\\"\`); }
+if (!(this.my_capture[0] === \\"hello\\")) { throw new Error(\`assertion failed: \\"this.my_capture[0] === \\\\\\"hello\\\\\\"\\"\`); }
+if (!(this.my_capture[1] === \\"dude\\")) { throw new Error(\`assertion failed: \\"this.my_capture[1] === \\\\\\"dude\\\\\\"\\"\`); }
+
+}
+};
+})())({
+my_capture: [\\"hello\\",\\"dude\\"]
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -17,7 +44,7 @@ exports[`array 1`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -26,7 +53,7 @@ exports[`array 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Function": {
@@ -103,45 +130,54 @@ exports[`array 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        if (!(this.my_capture.length === 2)) {
-          throw new Error(\`assertion failed: \\"this.my_capture.length === 2\\"\`);
-        }
-        if (!(this.my_capture[0] === \\"hello\\")) {
-          throw new Error(\`assertion failed: \\"this.my_capture[0] === \\"hello\\"\\"\`);
-        }
-        if (!(this.my_capture[1] === \\"dude\\")) {
-          throw new Error(\`assertion failed: \\"this.my_capture[1] === \\"dude\\"\\"\`);
-        }
-      }
-    };
-  }())({
-    my_capture: [\\"hello\\", \\"dude\\"]
-  }).handle(event);
-};
-",
 }
 `;
 
 exports[`array of buckets 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/function_c8e6b4af.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() {
+await this.my_buckets[0].put(\\"hello.txt\\", \\"world\\");
+const objects = await this.my_buckets[0].list();
+if (!(objects.length === 1)) { throw new Error(\`assertion failed: \\"objects.length === 1\\"\`); }
+if (!(objects[0] === \\"hello.txt\\")) { throw new Error(\`assertion failed: \\"objects[0] === \\\\\\"hello.txt\\\\\\"\\"\`); }
+await this.my_buckets[1].put(\\"foo\\", \\"bar\\");
+if (!(await this.my_buckets[1].get(\\"foo\\") === \\"bar\\")) { throw new Error(\`assertion failed: \\"await this.my_buckets[1].get(\\\\\\"foo\\\\\\") === \\\\\\"bar\\\\\\"\\"\`); }
+
+}
+};
+})())({
+my_buckets: [(function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"BUCKET_HANDLE_4fecd6d0\\"),(function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"BUCKET_HANDLE_300e8055\\")]
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -176,7 +212,7 @@ exports[`array of buckets 1`] = `
             "BUCKET_HANDLE_4fecd6d0": "\${root/B1#attrs.handle}",
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -185,7 +221,7 @@ exports[`array of buckets 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "B1": {
@@ -294,60 +330,39 @@ exports[`array of buckets 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        await this.my_buckets[0].put(\\"hello.txt\\", \\"world\\");
-        const objects = await this.my_buckets[0].list();
-        if (!(objects.length === 1)) {
-          throw new Error(\`assertion failed: \\"objects.length === 1\\"\`);
-        }
-        if (!(objects[0] === \\"hello.txt\\")) {
-          throw new Error(\`assertion failed: \\"objects[0] === \\"hello.txt\\"\\"\`);
-        }
-        await this.my_buckets[1].put(\\"foo\\", \\"bar\\");
-        if (!(await this.my_buckets[1].get(\\"foo\\") === \\"bar\\")) {
-          throw new Error(\`assertion failed: \\"await this.my_buckets[1].get(\\"foo\\") === \\"bar\\"\\"\`);
-        }
-      }
-    };
-  }())({
-    my_buckets: [function(env) {
-      let handle = process.env[env];
-      if (!handle) {
-        throw new Error(\\"Missing environment variable: \\" + env);
-      }
-      return $simulator.findInstance(handle);
-    }(\\"BUCKET_HANDLE_4fecd6d0\\"), function(env) {
-      let handle = process.env[env];
-      if (!handle) {
-        throw new Error(\\"Missing environment variable: \\" + env);
-      }
-      return $simulator.findInstance(handle);
-    }(\\"BUCKET_HANDLE_300e8055\\")]
-  }).handle(event);
-};
-",
 }
 `;
 
 exports[`array of durations 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/function_c8e6b4af.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() {
+if (!(this.my_array.length === 2)) { throw new Error(\`assertion failed: \\"this.my_array.length === 2\\"\`); }
+if (!(this.my_array[0].minutes === 10)) { throw new Error(\`assertion failed: \\"this.my_array[0].minutes === 10\\"\`); }
+if (!(this.my_array[1].minutes === 20)) { throw new Error(\`assertion failed: \\"this.my_array[1].minutes === 20\\"\`); }
+
+}
+};
+})())({
+my_array: [{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200,minutes: 20,hours: 0.3333333333333333,}]
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -362,7 +377,7 @@ exports[`array of durations 1`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -371,7 +386,7 @@ exports[`array of durations 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Function": {
@@ -448,45 +463,38 @@ exports[`array of durations 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        if (!(this.my_array.length === 2)) {
-          throw new Error(\`assertion failed: \\"this.my_array.length === 2\\"\`);
-        }
-        if (!(this.my_array[0].minutes === 10)) {
-          throw new Error(\`assertion failed: \\"this.my_array[0].minutes === 10\\"\`);
-        }
-        if (!(this.my_array[1].minutes === 20)) {
-          throw new Error(\`assertion failed: \\"this.my_array[1].minutes === 20\\"\`);
-        }
-      }
-    };
-  }())({
-    my_array: [{ seconds: 600, minutes: 10, hours: 0.16666666666666666 }, { seconds: 1200, minutes: 20, hours: 0.3333333333333333 }]
-  }).handle(event);
-};
-",
 }
 `;
 
 exports[`array of maps 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/function_c8e6b4af.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() {
+if (!(this.my_array[0].get('foo') === 1)) { throw new Error(\`assertion failed: \\"this.my_array[0].get('foo') === 1\\"\`); }
+if (!(this.my_array[1].get('bar') === 4)) { throw new Error(\`assertion failed: \\"this.my_array[1].get('bar') === 4\\"\`); }
+
+}
+};
+})())({
+my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar\\",4]])]
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -501,7 +509,7 @@ exports[`array of maps 1`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -510,7 +518,7 @@ exports[`array of maps 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Function": {
@@ -587,42 +595,37 @@ exports[`array of maps 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        if (!(this.my_array[0].get(\\"foo\\") === 1)) {
-          throw new Error(\`assertion failed: \\"this.my_array[0].get('foo') === 1\\"\`);
-        }
-        if (!(this.my_array[1].get(\\"bar\\") === 4)) {
-          throw new Error(\`assertion failed: \\"this.my_array[1].get('bar') === 4\\"\`);
-        }
-      }
-    };
-  }())({
-    my_array: [/* @__PURE__ */ new Map([[\\"foo\\", 1], [\\"bar\\", 2]]), /* @__PURE__ */ new Map([[\\"foo\\", 3], [\\"bar\\", 4]])]
-  }).handle(event);
-};
-",
 }
 `;
 
 exports[`boolean 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/function_c8e6b4af.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() {
+if (!(this.my_capture === false)) { throw new Error(\`assertion failed: \\"this.my_capture === false\\"\`); }
+
+}
+};
+})())({
+my_capture: false
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -637,7 +640,7 @@ exports[`boolean 1`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -646,7 +649,7 @@ exports[`boolean 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Function": {
@@ -723,39 +726,39 @@ exports[`boolean 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        if (!(this.my_capture === false)) {
-          throw new Error(\`assertion failed: \\"this.my_capture === false\\"\`);
-        }
-      }
-    };
-  }())({
-    my_capture: false
-  }).handle(event);
-};
-",
 }
 `;
 
 exports[`duration 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/function_c8e6b4af.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() {
+if (!(this.my_capture.minutes === 120)) { throw new Error(\`assertion failed: \\"this.my_capture.minutes === 120\\"\`); }
+if (!(this.my_capture.seconds === 7200)) { throw new Error(\`assertion failed: \\"this.my_capture.seconds === 7200\\"\`); }
+if (!(this.my_capture.hours === 2)) { throw new Error(\`assertion failed: \\"this.my_capture.hours === 2\\"\`); }
+
+}
+};
+})())({
+my_capture: {seconds: 7200,minutes: 120,hours: 2,}
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -770,7 +773,7 @@ exports[`duration 1`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -779,7 +782,7 @@ exports[`duration 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Function": {
@@ -856,45 +859,41 @@ exports[`duration 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        if (!(this.my_capture.minutes === 120)) {
-          throw new Error(\`assertion failed: \\"this.my_capture.minutes === 120\\"\`);
-        }
-        if (!(this.my_capture.seconds === 7200)) {
-          throw new Error(\`assertion failed: \\"this.my_capture.seconds === 7200\\"\`);
-        }
-        if (!(this.my_capture.hours === 2)) {
-          throw new Error(\`assertion failed: \\"this.my_capture.hours === 2\\"\`);
-        }
-      }
-    };
-  }())({
-    my_capture: { seconds: 7200, minutes: 120, hours: 2 }
-  }).handle(event);
-};
-",
 }
 `;
 
 exports[`map 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/function_c8e6b4af.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() {
+if (!(this.my_capture.has(\\"foo\\"))) { throw new Error(\`assertion failed: \\"this.my_capture.has(\\\\\\"foo\\\\\\")\\"\`); }
+if (!(this.my_capture.has(\\"bar\\"))) { throw new Error(\`assertion failed: \\"this.my_capture.has(\\\\\\"bar\\\\\\")\\"\`); }
+if (!(this.my_capture.size === 2)) { throw new Error(\`assertion failed: \\"this.my_capture.size === 2\\"\`); }
+if (!(this.my_capture.get(\\"foo\\") === 123)) { throw new Error(\`assertion failed: \\"this.my_capture.get(\\\\\\"foo\\\\\\") === 123\\"\`); }
+if (!(this.my_capture.get(\\"bar\\") === 456)) { throw new Error(\`assertion failed: \\"this.my_capture.get(\\\\\\"bar\\\\\\") === 456\\"\`); }
+
+}
+};
+})())({
+my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -909,7 +908,7 @@ exports[`map 1`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -918,7 +917,7 @@ exports[`map 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Function": {
@@ -995,51 +994,43 @@ exports[`map 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        if (!this.my_capture.has(\\"foo\\")) {
-          throw new Error(\`assertion failed: \\"this.my_capture.has(\\"foo\\")\\"\`);
-        }
-        if (!this.my_capture.has(\\"bar\\")) {
-          throw new Error(\`assertion failed: \\"this.my_capture.has(\\"bar\\")\\"\`);
-        }
-        if (!(this.my_capture.size === 2)) {
-          throw new Error(\`assertion failed: \\"this.my_capture.size === 2\\"\`);
-        }
-        if (!(this.my_capture.get(\\"foo\\") === 123)) {
-          throw new Error(\`assertion failed: \\"this.my_capture.get(\\"foo\\") === 123\\"\`);
-        }
-        if (!(this.my_capture.get(\\"bar\\") === 456)) {
-          throw new Error(\`assertion failed: \\"this.my_capture.get(\\"bar\\") === 456\\"\`);
-        }
-      }
-    };
-  }())({
-    my_capture: /* @__PURE__ */ new Map([[\\"foo\\", 123], [\\"bar\\", 456]])
-  }).handle(event);
-};
-",
 }
 `;
 
 exports[`map of arrays 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/function_c8e6b4af.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() {
+if (!(this.my_map.has(\\"foo\\"))) { throw new Error(\`assertion failed: \\"this.my_map.has(\\\\\\"foo\\\\\\")\\"\`); }
+if (!(this.my_map.has(\\"bar\\"))) { throw new Error(\`assertion failed: \\"this.my_map.has(\\\\\\"bar\\\\\\")\\"\`); }
+if (!(this.my_map.size === 2)) { throw new Error(\`assertion failed: \\"this.my_map.size === 2\\"\`); }
+if (!(this.my_map.get(\\"foo\\")[0] === 1)) { throw new Error(\`assertion failed: \\"this.my_map.get(\\\\\\"foo\\\\\\")[0] === 1\\"\`); }
+if (!(this.my_map.get(\\"foo\\")[1] === 2)) { throw new Error(\`assertion failed: \\"this.my_map.get(\\\\\\"foo\\\\\\")[1] === 2\\"\`); }
+if (!(this.my_map.get(\\"bar\\")[0] === 3)) { throw new Error(\`assertion failed: \\"this.my_map.get(\\\\\\"bar\\\\\\")[0] === 3\\"\`); }
+if (!(this.my_map.get(\\"bar\\")[1] === 4)) { throw new Error(\`assertion failed: \\"this.my_map.get(\\\\\\"bar\\\\\\")[1] === 4\\"\`); }
+
+}
+};
+})())({
+my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -1054,7 +1045,7 @@ exports[`map of arrays 1`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1063,7 +1054,7 @@ exports[`map of arrays 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Function": {
@@ -1140,57 +1131,40 @@ exports[`map of arrays 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        if (!this.my_map.has(\\"foo\\")) {
-          throw new Error(\`assertion failed: \\"this.my_map.has(\\"foo\\")\\"\`);
-        }
-        if (!this.my_map.has(\\"bar\\")) {
-          throw new Error(\`assertion failed: \\"this.my_map.has(\\"bar\\")\\"\`);
-        }
-        if (!(this.my_map.size === 2)) {
-          throw new Error(\`assertion failed: \\"this.my_map.size === 2\\"\`);
-        }
-        if (!(this.my_map.get(\\"foo\\")[0] === 1)) {
-          throw new Error(\`assertion failed: \\"this.my_map.get(\\"foo\\")[0] === 1\\"\`);
-        }
-        if (!(this.my_map.get(\\"foo\\")[1] === 2)) {
-          throw new Error(\`assertion failed: \\"this.my_map.get(\\"foo\\")[1] === 2\\"\`);
-        }
-        if (!(this.my_map.get(\\"bar\\")[0] === 3)) {
-          throw new Error(\`assertion failed: \\"this.my_map.get(\\"bar\\")[0] === 3\\"\`);
-        }
-        if (!(this.my_map.get(\\"bar\\")[1] === 4)) {
-          throw new Error(\`assertion failed: \\"this.my_map.get(\\"bar\\")[1] === 4\\"\`);
-        }
-      }
-    };
-  }())({
-    my_map: /* @__PURE__ */ new Map([[\\"foo\\", [1, 2]], [\\"bar\\", [3, 4]]])
-  }).handle(event);
-};
-",
 }
 `;
 
 exports[`map of arrays of durations 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/function_c8e6b4af.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() {
+if (!(this.my_map.get('foo')[0].minutes === 10)) { throw new Error(\`assertion failed: \\"this.my_map.get('foo')[0].minutes === 10\\"\`); }
+if (!(this.my_map.get('foo')[1].seconds === 20 * 60)) { throw new Error(\`assertion failed: \\"this.my_map.get('foo')[1].seconds === 20 * 60\\"\`); }
+if (!(this.my_map.get('bar')[0].minutes === 30)) { throw new Error(\`assertion failed: \\"this.my_map.get('bar')[0].minutes === 30\\"\`); }
+if (!(this.my_map.get('bar')[1].seconds === 40 * 60)) { throw new Error(\`assertion failed: \\"this.my_map.get('bar')[1].seconds === 40 * 60\\"\`); }
+
+}
+};
+})())({
+my_map: new Map([[\\"foo\\",[{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200,minutes: 20,hours: 0.3333333333333333,}]],[\\"bar\\",[{seconds: 1800,minutes: 30,hours: 0.5,},{seconds: 2400,minutes: 40,hours: 0.6666666666666666,}]]])
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -1205,7 +1179,7 @@ exports[`map of arrays of durations 1`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1214,7 +1188,7 @@ exports[`map of arrays of durations 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Function": {
@@ -1291,48 +1265,51 @@ exports[`map of arrays of durations 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        if (!(this.my_map.get(\\"foo\\")[0].minutes === 10)) {
-          throw new Error(\`assertion failed: \\"this.my_map.get('foo')[0].minutes === 10\\"\`);
-        }
-        if (!(this.my_map.get(\\"foo\\")[1].seconds === 20 * 60)) {
-          throw new Error(\`assertion failed: \\"this.my_map.get('foo')[1].seconds === 20 * 60\\"\`);
-        }
-        if (!(this.my_map.get(\\"bar\\")[0].minutes === 30)) {
-          throw new Error(\`assertion failed: \\"this.my_map.get('bar')[0].minutes === 30\\"\`);
-        }
-        if (!(this.my_map.get(\\"bar\\")[1].seconds === 40 * 60)) {
-          throw new Error(\`assertion failed: \\"this.my_map.get('bar')[1].seconds === 40 * 60\\"\`);
-        }
-      }
-    };
-  }())({
-    my_map: /* @__PURE__ */ new Map([[\\"foo\\", [{ seconds: 600, minutes: 10, hours: 0.16666666666666666 }, { seconds: 1200, minutes: 20, hours: 0.3333333333333333 }]], [\\"bar\\", [{ seconds: 1800, minutes: 30, hours: 0.5 }, { seconds: 2400, minutes: 40, hours: 0.6666666666666666 }]]])
-  }).handle(event);
-};
-",
 }
 `;
 
 exports[`map of buckets 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/function_c8e6b4af.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() {
+const foo = this.my_map.get(\\"foo\\");
+await foo.put(\\"hello.txt\\", \\"world\\");
+if (!(await foo.get(\\"hello.txt\\") === \\"world\\")) { throw new Error(\`assertion failed: \\"await foo.get(\\\\\\"hello.txt\\\\\\") === \\\\\\"world\\\\\\"\\"\`); }
+
+}
+};
+})())({
+my_map: new Map([[\\"foo\\",(function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"BUCKET_HANDLE_4fecd6d0\\")],[\\"bar\\",(function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"BUCKET_HANDLE_300e8055\\")]])
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -1367,7 +1344,7 @@ exports[`map of buckets 1`] = `
             "BUCKET_HANDLE_4fecd6d0": "\${root/B1#attrs.handle}",
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1376,7 +1353,7 @@ exports[`map of buckets 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "B1": {
@@ -1485,53 +1462,37 @@ exports[`map of buckets 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        const foo = this.my_map.get(\\"foo\\");
-        await foo.put(\\"hello.txt\\", \\"world\\");
-        if (!(await foo.get(\\"hello.txt\\") === \\"world\\")) {
-          throw new Error(\`assertion failed: \\"await foo.get(\\"hello.txt\\") === \\"world\\"\\"\`);
-        }
-      }
-    };
-  }())({
-    my_map: /* @__PURE__ */ new Map([[\\"foo\\", function(env) {
-      let handle = process.env[env];
-      if (!handle) {
-        throw new Error(\\"Missing environment variable: \\" + env);
-      }
-      return $simulator.findInstance(handle);
-    }(\\"BUCKET_HANDLE_4fecd6d0\\")], [\\"bar\\", function(env) {
-      let handle = process.env[env];
-      if (!handle) {
-        throw new Error(\\"Missing environment variable: \\" + env);
-      }
-      return $simulator.findInstance(handle);
-    }(\\"BUCKET_HANDLE_300e8055\\")]])
-  }).handle(event);
-};
-",
 }
 `;
 
 exports[`number 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/function_c8e6b4af.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() {
+if (!(this.my_capture + 20 === 143)) { throw new Error(\`assertion failed: \\"this.my_capture + 20 === 143\\"\`); }
+
+}
+};
+})())({
+my_capture: 123
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -1546,7 +1507,7 @@ exports[`number 1`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1555,7 +1516,7 @@ exports[`number 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Function": {
@@ -1632,39 +1593,40 @@ exports[`number 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        if (!(this.my_capture + 20 === 143)) {
-          throw new Error(\`assertion failed: \\"this.my_capture + 20 === 143\\"\`);
-        }
-      }
-    };
-  }())({
-    my_capture: 123
-  }).handle(event);
-};
-",
 }
 `;
 
 exports[`set 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/function_c8e6b4af.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() {
+if (!(this.my_capture.has(\\"boom\\"))) { throw new Error(\`assertion failed: \\"this.my_capture.has(\\\\\\"boom\\\\\\")\\"\`); }
+if (!(this.my_capture.has(\\"bam\\"))) { throw new Error(\`assertion failed: \\"this.my_capture.has(\\\\\\"bam\\\\\\")\\"\`); }
+if (!(this.my_capture.has(\\"bang\\"))) { throw new Error(\`assertion failed: \\"this.my_capture.has(\\\\\\"bang\\\\\\")\\"\`); }
+if (!(this.my_capture.size === 3)) { throw new Error(\`assertion failed: \\"this.my_capture.size === 3\\"\`); }
+
+}
+};
+})())({
+my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -1679,7 +1641,7 @@ exports[`set 1`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1688,7 +1650,7 @@ exports[`set 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Function": {
@@ -1765,48 +1727,39 @@ exports[`set 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        if (!this.my_capture.has(\\"boom\\")) {
-          throw new Error(\`assertion failed: \\"this.my_capture.has(\\"boom\\")\\"\`);
-        }
-        if (!this.my_capture.has(\\"bam\\")) {
-          throw new Error(\`assertion failed: \\"this.my_capture.has(\\"bam\\")\\"\`);
-        }
-        if (!this.my_capture.has(\\"bang\\")) {
-          throw new Error(\`assertion failed: \\"this.my_capture.has(\\"bang\\")\\"\`);
-        }
-        if (!(this.my_capture.size === 3)) {
-          throw new Error(\`assertion failed: \\"this.my_capture.size === 3\\"\`);
-        }
-      }
-    };
-  }())({
-    my_capture: /* @__PURE__ */ new Set([\\"boom\\", \\"bam\\", \\"bang\\"])
-  }).handle(event);
-};
-",
 }
 `;
 
 exports[`set of durations 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/function_c8e6b4af.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() {
+if (!(Array.from(this.my_set)[0].minutes === 10)) { throw new Error(\`assertion failed: \\"Array.from(this.my_set)[0].minutes === 10\\"\`); }
+if (!(Array.from(this.my_set)[0].hours === 0.16666666666666666)) { throw new Error(\`assertion failed: \\"Array.from(this.my_set)[0].hours === 0.16666666666666666\\"\`); }
+if (!(Array.from(this.my_set)[1].seconds === 1200)) { throw new Error(\`assertion failed: \\"Array.from(this.my_set)[1].seconds === 1200\\"\`); }
+
+}
+};
+})())({
+my_set: new Set([{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200,minutes: 20,hours: 0.3333333333333333,}])
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -1821,7 +1774,7 @@ exports[`set of durations 1`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1830,7 +1783,7 @@ exports[`set of durations 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Function": {
@@ -1907,45 +1860,38 @@ exports[`set of durations 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        if (!(Array.from(this.my_set)[0].minutes === 10)) {
-          throw new Error(\`assertion failed: \\"Array.from(this.my_set)[0].minutes === 10\\"\`);
-        }
-        if (!(Array.from(this.my_set)[0].hours === 0.16666666666666666)) {
-          throw new Error(\`assertion failed: \\"Array.from(this.my_set)[0].hours === 0.16666666666666666\\"\`);
-        }
-        if (!(Array.from(this.my_set)[1].seconds === 1200)) {
-          throw new Error(\`assertion failed: \\"Array.from(this.my_set)[1].seconds === 1200\\"\`);
-        }
-      }
-    };
-  }())({
-    my_set: /* @__PURE__ */ new Set([{ seconds: 600, minutes: 10, hours: 0.16666666666666666 }, { seconds: 1200, minutes: 20, hours: 0.3333333333333333 }])
-  }).handle(event);
-};
-",
 }
 `;
 
 exports[`string 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/function_c8e6b4af.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() {
+if (!(this.my_capture.length === 11)) { throw new Error(\`assertion failed: \\"this.my_capture.length === 11\\"\`); }
+if (!(this.my_capture === \\"bam bam bam\\")) { throw new Error(\`assertion failed: \\"this.my_capture === \\\\\\"bam bam bam\\\\\\"\\"\`); }
+
+}
+};
+})())({
+my_capture: \\"bam bam bam\\"
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -1960,7 +1906,7 @@ exports[`string 1`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -1969,7 +1915,7 @@ exports[`string 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Function": {
@@ -2046,42 +1992,40 @@ exports[`string 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        if (!(this.my_capture.length === 11)) {
-          throw new Error(\`assertion failed: \\"this.my_capture.length === 11\\"\`);
-        }
-        if (!(this.my_capture === \\"bam bam bam\\")) {
-          throw new Error(\`assertion failed: \\"this.my_capture === \\"bam bam bam\\"\\"\`);
-        }
-      }
-    };
-  }())({
-    my_capture: \\"bam bam bam\\"
-  }).handle(event);
-};
-",
 }
 `;
 
 exports[`struct 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/function_c8e6b4af.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() {
+if (!(this.my_capture.hello === \\"dude\\")) { throw new Error(\`assertion failed: \\"this.my_capture.hello === \\\\\\"dude\\\\\\"\\"\`); }
+if (!(this.my_capture.world === \\"cup\\")) { throw new Error(\`assertion failed: \\"this.my_capture.world === \\\\\\"cup\\\\\\"\\"\`); }
+if (!(this.my_capture.foo === \\"bar\\")) { throw new Error(\`assertion failed: \\"this.my_capture.foo === \\\\\\"bar\\\\\\"\\"\`); }
+if (!(Object.keys(this.my_capture).length === 3)) { throw new Error(\`assertion failed: \\"Object.keys(this.my_capture).length === 3\\"\`); }
+
+}
+};
+})())({
+my_capture: {hello: \\"dude\\",world: \\"cup\\",foo: \\"bar\\",}
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -2096,7 +2040,7 @@ exports[`struct 1`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -2105,7 +2049,7 @@ exports[`struct 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Function": {
@@ -2182,48 +2126,40 @@ exports[`struct 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        if (!(this.my_capture.hello === \\"dude\\")) {
-          throw new Error(\`assertion failed: \\"this.my_capture.hello === \\"dude\\"\\"\`);
-        }
-        if (!(this.my_capture.world === \\"cup\\")) {
-          throw new Error(\`assertion failed: \\"this.my_capture.world === \\"cup\\"\\"\`);
-        }
-        if (!(this.my_capture.foo === \\"bar\\")) {
-          throw new Error(\`assertion failed: \\"this.my_capture.foo === \\"bar\\"\\"\`);
-        }
-        if (!(Object.keys(this.my_capture).length === 3)) {
-          throw new Error(\`assertion failed: \\"Object.keys(this.my_capture).length === 3\\"\`);
-        }
-      }
-    };
-  }())({
-    my_capture: { hello: \\"dude\\", world: \\"cup\\", foo: \\"bar\\" }
-  }).handle(event);
-};
-",
 }
 `;
 
 exports[`struct of maps 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/function_c8e6b4af.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() {
+if (!(this.my_struct.foo.get('foo') === 1)) { throw new Error(\`assertion failed: \\"this.my_struct.foo.get('foo') === 1\\"\`); }
+if (!(this.my_struct.foo.get('bar') === 2)) { throw new Error(\`assertion failed: \\"this.my_struct.foo.get('bar') === 2\\"\`); }
+if (!(this.my_struct.bar.get('foo') === 3)) { throw new Error(\`assertion failed: \\"this.my_struct.bar.get('foo') === 3\\"\`); }
+if (!(this.my_struct.bar.get('bar') === 4)) { throw new Error(\`assertion failed: \\"this.my_struct.bar.get('bar') === 4\\"\`); }
+
+}
+};
+})())({
+my_struct: {foo: new Map([[\\"foo\\",1],[\\"bar\\",2]]),bar: new Map([[\\"foo\\",3],[\\"bar\\",4]]),}
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -2238,7 +2174,7 @@ exports[`struct of maps 1`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -2247,7 +2183,7 @@ exports[`struct of maps 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Function": {
@@ -2324,48 +2260,74 @@ exports[`struct of maps 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        if (!(this.my_struct.foo.get(\\"foo\\") === 1)) {
-          throw new Error(\`assertion failed: \\"this.my_struct.foo.get('foo') === 1\\"\`);
-        }
-        if (!(this.my_struct.foo.get(\\"bar\\") === 2)) {
-          throw new Error(\`assertion failed: \\"this.my_struct.foo.get('bar') === 2\\"\`);
-        }
-        if (!(this.my_struct.bar.get(\\"foo\\") === 3)) {
-          throw new Error(\`assertion failed: \\"this.my_struct.bar.get('foo') === 3\\"\`);
-        }
-        if (!(this.my_struct.bar.get(\\"bar\\") === 4)) {
-          throw new Error(\`assertion failed: \\"this.my_struct.bar.get('bar') === 4\\"\`);
-        }
-      }
-    };
-  }())({
-    my_struct: { foo: /* @__PURE__ */ new Map([[\\"foo\\", 1], [\\"bar\\", 2]]), bar: /* @__PURE__ */ new Map([[\\"foo\\", 3], [\\"bar\\", 4]]) }
-  }).handle(event);
-};
-",
 }
 `;
 
 exports[`struct with resources 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/function_c8e6b4af.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() {
+const b = this.my_struct.bucky;
+await b.put(\\"hello.txt\\", \\"world\\");
+if (!(await b.get(\\"hello.txt\\") === \\"world\\")) { throw new Error(\`assertion failed: \\"await b.get(\\\\\\"hello.txt\\\\\\") === \\\\\\"world\\\\\\"\\"\`); }
+const boom = this.my_struct.arry.boom[1];
+if (!((await boom.list()).length === 0)) { throw new Error(\`assertion failed: \\"(await boom.list()).length === 0\\"\`); }
+const bar = this.my_struct.mapy.get(\\"bar\\");
+await bar.put(\\"foo\\", \\"bar\\");
+if (!(await bar.get(\\"foo\\") === \\"bar\\")) { throw new Error(\`assertion failed: \\"await bar.get(\\\\\\"foo\\\\\\") === \\\\\\"bar\\\\\\"\\"\`); }
+
+}
+};
+})())({
+my_struct: {bucky: (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"BUCKET_HANDLE_4fecd6d0\\"),mapy: new Map([[\\"foo\\",(function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"BUCKET_HANDLE_300e8055\\")],[\\"bar\\",(function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"BUCKET_HANDLE_0120daf4\\")]]),arry: {boom: [(function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"BUCKET_HANDLE_ea7944ef\\"),(function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"BUCKET_HANDLE_1d7ab674\\")],},}
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -2430,7 +2392,7 @@ exports[`struct with resources 1`] = `
             "BUCKET_HANDLE_ea7944ef": "\${root/B4#attrs.handle}",
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/function_c8e6b4af/index.js",
+          "sourceCodeFile": ".wing/function_c8e6b4af.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -2439,7 +2401,7 @@ exports[`struct with resources 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "B1": {
@@ -2596,73 +2558,5 @@ exports[`struct with resources 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/function_c8e6b4af/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        const b = this.my_struct.bucky;
-        await b.put(\\"hello.txt\\", \\"world\\");
-        if (!(await b.get(\\"hello.txt\\") === \\"world\\")) {
-          throw new Error(\`assertion failed: \\"await b.get(\\"hello.txt\\") === \\"world\\"\\"\`);
-        }
-        const boom = this.my_struct.arry.boom[1];
-        if (!((await boom.list()).length === 0)) {
-          throw new Error(\`assertion failed: \\"(await boom.list()).length === 0\\"\`);
-        }
-        const bar = this.my_struct.mapy.get(\\"bar\\");
-        await bar.put(\\"foo\\", \\"bar\\");
-        if (!(await bar.get(\\"foo\\") === \\"bar\\")) {
-          throw new Error(\`assertion failed: \\"await bar.get(\\"foo\\") === \\"bar\\"\\"\`);
-        }
-      }
-    };
-  }())({
-    my_struct: { bucky: function(env) {
-      let handle = process.env[env];
-      if (!handle) {
-        throw new Error(\\"Missing environment variable: \\" + env);
-      }
-      return $simulator.findInstance(handle);
-    }(\\"BUCKET_HANDLE_4fecd6d0\\"), mapy: /* @__PURE__ */ new Map([[\\"foo\\", function(env) {
-      let handle = process.env[env];
-      if (!handle) {
-        throw new Error(\\"Missing environment variable: \\" + env);
-      }
-      return $simulator.findInstance(handle);
-    }(\\"BUCKET_HANDLE_300e8055\\")], [\\"bar\\", function(env) {
-      let handle = process.env[env];
-      if (!handle) {
-        throw new Error(\\"Missing environment variable: \\" + env);
-      }
-      return $simulator.findInstance(handle);
-    }(\\"BUCKET_HANDLE_0120daf4\\")]]), arry: { boom: [function(env) {
-      let handle = process.env[env];
-      if (!handle) {
-        throw new Error(\\"Missing environment variable: \\" + env);
-      }
-      return $simulator.findInstance(handle);
-    }(\\"BUCKET_HANDLE_ea7944ef\\"), function(env) {
-      let handle = process.env[env];
-      if (!handle) {
-        throw new Error(\\"Missing environment variable: \\" + env);
-      }
-      return $simulator.findInstance(handle);
-    }(\\"BUCKET_HANDLE_1d7ab674\\")] } }
-  }).handle(event);
-};
-",
 }
 `;

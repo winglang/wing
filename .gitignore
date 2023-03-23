@@ -26,6 +26,7 @@ target/
 libs/tree-sitter-wing/log.html
 libs/tree-sitter-wing/*.wasm
 libs/tree-sitter-wing/build/
+libs/tree-sitter-wing/src/
 
 # wing
 apps/wing/dist
@@ -44,3 +45,4 @@ apps/vscode-wing/resources/native/wing-language-server
 
 # hangar
 tools/hangar/tmp/
+tools/hangar/src/test_corpus/

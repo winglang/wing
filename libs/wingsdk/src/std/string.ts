@@ -11,7 +11,7 @@ export class String {
   /**
    * Parse string from Json.
    *
-   * @macro ((args) => { if (typeof args !== "string") {throw new Error(`unable to parse ${typeof args} ${args} as a string`)}; return JSON.parse(JSON.stringify(args)) })($args$)
+   * @macro ((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })($args$)
    *
    * @param json to create string from.
    * @returns a string.
@@ -66,14 +66,12 @@ export class String {
   /**
    * Does this string end with the given searchString?
    *
-   * @macro $self$.endsWith($args$)
-   *
    * @param searchString substring to search for.
    * @returns true if string ends with searchString.
    */
-  public ends(searchString: string): boolean {
+  public endsWith(searchString: string): boolean {
     searchString;
-    throw new Error("Macro");
+    throw new Error("Abstract");
   }
 
   /**
@@ -114,14 +112,12 @@ export class String {
   /**
    * Does this string start with the given searchString?
    *
-   * @macro $self$.startsWith($args$)
-   *
    * @param searchString substring to search for.
    * @returns true if string starts with searchString.
    */
-  public starts(searchString: string): boolean {
+  public startsWith(searchString: string): boolean {
     searchString;
-    throw new Error("Macro");
+    throw new Error("Abstract");
   }
 
   /**
