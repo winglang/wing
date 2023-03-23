@@ -21,7 +21,7 @@ export async function runWingCommand(options: RunWingCommandOptions) {
     env: options.env,
   });
   if (options.shouldSucceed) {
-    if (out.exitCode !== 0) {
+    if (out.exitCode !== 0 || out.stderr !== "") {
       expect.fail(out.stderr);
     }
   } else {
