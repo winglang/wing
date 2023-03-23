@@ -152,8 +152,8 @@ exports[`Plugin examples > AWS target plugins > permission-boundary.js 1`] = `
           },
         },
         "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
-        "key": "asset.c86cd0c0c9dc1b0298aaebb2fb4561ba65c36c4795.438fc38ad238079f941f7530172ce962.zip",
-        "source": "assets/root_cloudQueueOnMessagee46e5cb7_Asset_1C1D632C/438FC38AD238079F941F7530172CE962/archive.zip",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
       },
     },
     "aws_sqs_queue": {
@@ -165,19 +165,6 @@ exports[`Plugin examples > AWS target plugins > permission-boundary.js 1`] = `
           },
         },
         "name": "cloud-Queue-c86e03d8",
-      },
-    },
-  },
-  "terraform": {
-    "backend": {
-      "local": {
-        "path": "/Users/hasan/repos/monada/wing/tools/hangar/tmp/terraform.root.tfstate",
-      },
-    },
-    "required_providers": {
-      "aws": {
-        "source": "aws",
-        "version": "4.52.0",
       },
     },
   },
@@ -523,8 +510,8 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
           },
         },
         "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
-        "key": "asset.c86cd0c0c9dc1b0298aaebb2fb4561ba65c36c4795.438fc38ad238079f941f7530172ce962.zip",
-        "source": "assets/root_cloudQueueOnMessagee46e5cb7_Asset_1C1D632C/438FC38AD238079F941F7530172CE962/archive.zip",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
       },
     },
     "aws_sqs_queue": {
@@ -536,19 +523,6 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
           },
         },
         "name": "cloud-Queue-c86e03d8",
-      },
-    },
-  },
-  "terraform": {
-    "backend": {
-      "local": {
-        "path": "/Users/hasan/repos/monada/wing/tools/hangar/tmp/terraform.root.tfstate",
-      },
-    },
-    "required_providers": {
-      "aws": {
-        "source": "aws",
-        "version": "4.52.0",
       },
     },
   },

@@ -172,6 +172,19 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         },
         "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
         "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
+      },
+    },
+    "aws_sqs_queue": {
+      "root_cloudQueue_E3597F7A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Queue/Default",
+            "uniqueId": "root_cloudQueue_E3597F7A",
+          },
+        },
+        "name": "cloud-Queue-c86e03d8",
+        "visibility_timeout_seconds": 10,
       },
     },
   },

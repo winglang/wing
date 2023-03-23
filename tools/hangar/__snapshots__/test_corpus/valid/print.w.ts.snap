@@ -154,6 +154,18 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         },
         "bucket": "\${aws_s3_bucket.root_testprint1_Code_EF1D7786.bucket}",
         "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
+      },
+      "root_testprint2_S3Object_22A6E03D": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:print2/S3Object",
+            "uniqueId": "root_testprint2_S3Object_22A6E03D",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_testprint2_Code_0F714597.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
       },
     },
   },
