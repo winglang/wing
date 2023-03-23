@@ -1,8 +1,12 @@
-import {describe, expect, test} from "vitest"
+import { describe, expect, test } from "vitest";
 import * as path from "path";
 import fs from "fs-extra";
 import { pluginsDir, tmpDir } from "./paths";
-import { runWingCommand, tfResourcesOfCount } from "./utils";
+import {
+  runWingCommand,
+  sanitize_json_paths,
+  tfResourcesOfCount,
+} from "./utils";
 import * as cdktf from "cdktf";
 
 describe("Plugin examples", () => {
@@ -15,10 +19,10 @@ describe("Plugin examples", () => {
 
     test("permission-boundary.js", async () => {
       const plugin = path.join(pluginsDir, "permission-boundary.js");
-      
+
       const expectedPermissionBoundaryArn = "some:fake:arn:SUPERADMIN";
       process.env.PERMISSION_BOUNDARY_ARN = expectedPermissionBoundaryArn;
-      
+
       await runWingCommand({
         cwd: tmpDir,
         wingFile: appFile,
@@ -26,17 +30,24 @@ describe("Plugin examples", () => {
         shouldSucceed: true,
         plugins: [plugin],
       });
-  
-      const terraformOutput = fs.readFileSync(path.join(targetDir, "main.tf.json"), "utf-8");
-  
-      expect(JSON.parse(terraformOutput)).toMatchSnapshot();
+
+      const terraformOutput = sanitize_json_paths(
+        path.join(targetDir, "main.tf.json")
+      );
+      const terraformOutputString = JSON.stringify(terraformOutput);
+
+      expect(terraformOutput).toMatchSnapshot();
       expect(
-        cdktf.Testing.toHaveResourceWithProperties(terraformOutput, "aws_iam_role", {
-          permissions_boundary: expectedPermissionBoundaryArn,
-        })
+        cdktf.Testing.toHaveResourceWithProperties(
+          terraformOutputString,
+          "aws_iam_role",
+          {
+            permissions_boundary: expectedPermissionBoundaryArn,
+          }
+        )
       ).toEqual(true);
     });
-  
+
     test("replicate-s3.js", async () => {
       const plugin = path.join(pluginsDir, "replicate-s3.js");
       const replicaPrefix = "some-prefix";
@@ -52,13 +63,23 @@ describe("Plugin examples", () => {
         plugins: [plugin],
       });
 
-      const terraformOutput = fs.readFileSync(path.join(targetDir, "main.tf.json"), "utf-8");
-  
-      expect(JSON.parse(terraformOutput)).toMatchSnapshot();
-      expect(tfResourcesOfCount(terraformOutput, "aws_s3_bucket")).toEqual(4); // 2 buckets + 2 replicas
-      expect(tfResourcesOfCount(terraformOutput, "aws_s3_bucket_versioning")).toEqual(4); // 2 buckets + 2 replicas
+      const terraformOutput = sanitize_json_paths(
+        path.join(targetDir, "main.tf.json")
+      );
+      const terraformOutputString = JSON.stringify(terraformOutput);
+
+      expect(terraformOutput).toMatchSnapshot();
       expect(
-        tfResourcesOfCount(terraformOutput, "aws_s3_bucket_replication_configuration")
+        tfResourcesOfCount(terraformOutputString, "aws_s3_bucket")
+      ).toEqual(4); // 2 buckets + 2 replicas
+      expect(
+        tfResourcesOfCount(terraformOutputString, "aws_s3_bucket_versioning")
+      ).toEqual(4); // 2 buckets + 2 replicas
+      expect(
+        tfResourcesOfCount(
+          terraformOutputString,
+          "aws_s3_bucket_replication_configuration"
+        )
       ).toEqual(2); // 2 replica rules
     });
 
@@ -78,8 +99,11 @@ describe("Plugin examples", () => {
         shouldSucceed: true,
         plugins: [plugin],
       });
-      
-      const terraformOutput = fs.readJsonSync(path.join(targetDir, "main.tf.json"), "utf-8");
+
+      const terraformOutput = fs.readJsonSync(
+        path.join(targetDir, "main.tf.json"),
+        "utf-8"
+      );
 
       expect(terraformOutput).toMatchSnapshot();
       expect(terraformOutput.terraform.backend).toEqual({
@@ -91,5 +115,4 @@ describe("Plugin examples", () => {
       });
     });
   });
-  
 });
