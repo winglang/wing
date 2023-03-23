@@ -924,6 +924,18 @@ error: \\"status\\" is not initialized
    | \\\\-^ \\"status\\" is not initialized
 
 
+error: \\"not_a_field\\" is not a field of \\"ApiResponse\\"
+   --> ../../../examples/tests/invalid/struct_expansion.w:20:9
+   |  
+20 |   let y = cloud.ApiResponse {
+   | /---------^
+21 | |   status: 200,
+22 | |   not_a_field: 500,
+23 | | // ^^^^^^^^^^^ \\"not_a_field\\" is not a field of \\"ApiResponse\\"
+24 | | };
+   | \\\\-^ \\"not_a_field\\" is not a field of \\"ApiResponse\\"
+
+
 error: Expected 2 arguments but got 1
    --> ../../../examples/tests/invalid/struct_expansion.w:11:3
    |
