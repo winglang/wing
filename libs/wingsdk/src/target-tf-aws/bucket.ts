@@ -12,6 +12,7 @@ import {
   NameOptions,
   ResourceNames,
 } from "../utils/resource-names";
+import { calculateBucketPermissions } from "../shared-aws/share";
 
 /**
  * Bucket prefix provided to Terraform must be between 3 and 37 characters.
@@ -118,47 +119,49 @@ export class Bucket extends cloud.Bucket {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
-    if (
-      ops.includes(cloud.BucketInflightMethods.PUT) ||
-      ops.includes(cloud.BucketInflightMethods.PUT_JSON)
-    ) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["s3:PutObject*", "s3:Abort*"],
-        resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
-      });
-    }
-    if (
-      ops.includes(cloud.BucketInflightMethods.GET) ||
-      ops.includes(cloud.BucketInflightMethods.GET_JSON)
-    ) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
-        resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
-      });
-    }
-    if (
-      ops.includes(cloud.BucketInflightMethods.LIST) ||
-      ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)
-    ) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
-        resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
-      });
-    }
-    if (ops.includes(cloud.BucketInflightMethods.DELETE)) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: [
-          "s3:DeleteObject*",
-          "s3:DeleteObjectVersion*",
-          "s3:PutLifecycleConfiguration*",
-        ],
-        resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
-      });
-    }
+    host.addPolicyStatements(...calculateBucketPermissions(this.bucket.arn, ops));
+
+    // if (
+    //   ops.includes(cloud.BucketInflightMethods.PUT) ||
+    //   ops.includes(cloud.BucketInflightMethods.PUT_JSON)
+    // ) {
+    //   host.addPolicyStatements({
+    //     effect: "Allow",
+    //     action: ["s3:PutObject*", "s3:Abort*"],
+    //     resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
+    //   });
+    // }
+    // if (
+    //   ops.includes(cloud.BucketInflightMethods.GET) ||
+    //   ops.includes(cloud.BucketInflightMethods.GET_JSON)
+    // ) {
+    //   host.addPolicyStatements({
+    //     effect: "Allow",
+    //     action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+    //     resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
+    //   });
+    // }
+    // if (
+    //   ops.includes(cloud.BucketInflightMethods.LIST) ||
+    //   ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)
+    // ) {
+    //   host.addPolicyStatements({
+    //     effect: "Allow",
+    //     action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+    //     resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
+    //   });
+    // }
+    // if (ops.includes(cloud.BucketInflightMethods.DELETE)) {
+    //   host.addPolicyStatements({
+    //     effect: "Allow",
+    //     action: [
+    //       "s3:DeleteObject*",
+    //       "s3:DeleteObjectVersion*",
+    //       "s3:PutLifecycleConfiguration*",
+    //     ],
+    //     resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
+    //   });
+    // }
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucket);
