@@ -87,7 +87,7 @@ resource TaskManager {
 let import_contacts = new TaskManager(inflight (input: str) => {
   // pretend to do some work
   Utils.sleep(5s);
-  print(input);
+  log(input);
 });
 
 // Tests

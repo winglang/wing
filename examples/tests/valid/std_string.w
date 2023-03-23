@@ -19,7 +19,7 @@ assert("Some String".uppercase() == "SOME STRING");
   
 // For debugging the test
 new cloud.Function(inflight () => {
-  print("index of \"s\" in s1 is ${s1.index_of("s")}");
-  print(s1.split(" ").at(1));
-  print(s1.concat(s2));
+  log("index of \"s\" in s1 is ${s1.index_of("s")}");
+  log(s1.split(" ").at(1));
+  log(s1.concat(s2));
 }) as "test:string";

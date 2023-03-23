@@ -159,7 +159,7 @@ exports[`schedule behavior with cron 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                     {
@@ -266,7 +266,7 @@ exports[`schedule behavior with cron 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/Schedule-OnTick-c5395e41",
                     },
                   ],
@@ -487,7 +487,7 @@ exports[`schedule behavior with rate 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                     {
@@ -594,7 +594,7 @@ exports[`schedule behavior with rate 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/Schedule-OnTick-c5395e41",
                     },
                   ],
@@ -898,7 +898,7 @@ exports[`schedule with two functions 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                     {
@@ -999,7 +999,7 @@ exports[`schedule with two functions 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                     {
@@ -1118,13 +1118,13 @@ exports[`schedule with two functions 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/Schedule-OnTick-7b33bcba",
                     },
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/Schedule-OnTick-0a615500",
                     },
                   ],

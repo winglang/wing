@@ -35,7 +35,7 @@ resource ReplayableQueue {
 resource RemoteControl { 
   init(q: ReplayableQueue){
     let f = inflight (m: str): str => {
-      print("on_message got triggered with ${m}");
+      log("on_message got triggered with ${m}");
     };
       
     q.on_message(f);

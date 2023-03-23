@@ -7,17 +7,17 @@ let my_second_bool = false;
 let my_dur = 10m;
 
 let handler = inflight (s: str): str => {
-  print(my_str);
+  log(my_str);
 
   let n = my_num;
-  print("${n}");
+  log("${n}");
 
   assert(my_second_bool == false);
 
   if my_bool {
-    print("bool=true");
+    log("bool=true");
   } else {
-    print("bool=false");
+    log("bool=false");
   }
 
   let min = my_dur.minutes;

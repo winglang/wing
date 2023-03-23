@@ -91,7 +91,7 @@ exports[`basic function 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                   ],
@@ -215,7 +215,7 @@ exports[`basic function 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/Function",
                     },
                   ],
@@ -370,7 +370,7 @@ exports[`basic function with environment variables 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                   ],
@@ -494,7 +494,7 @@ exports[`basic function with environment variables 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/Function",
                     },
                   ],
@@ -688,7 +688,7 @@ exports[`replace invalid character from function name 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/someFunction01",
                     },
                   ],
@@ -720,7 +720,7 @@ exports[`replace invalid character from function name 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                   ],

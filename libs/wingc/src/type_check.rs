@@ -2809,7 +2809,17 @@ impl<'a> TypeChecker<'a> {
 						})
 					}
 				}
-				Err(type_error) => self.variable_error(type_error),
+				Err(type_error) => {
+					// Give a specific error message if someone tries to write "print" instead of "log"
+					if symbol.name == "print" {
+						self.variable_error(TypeError {
+							message: "Unknown symbol \"print\", did you mean to use \"log\"?".to_string(),
+							span: symbol.span.clone(),
+						})
+					} else {
+						self.variable_error(type_error)
+					}
+				}
 			},
 			Reference::InstanceMember { object, property } => {
 				// There's a special case where the object is actually a type and the property is either a static member or an enum variant.

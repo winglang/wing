@@ -350,7 +350,7 @@ exports[`dec() policy statement 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                   ],
@@ -448,7 +448,7 @@ exports[`dec() policy statement 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/Function",
                     },
                   ],
@@ -668,7 +668,7 @@ exports[`function with a counter binding 3`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                   ],
@@ -766,7 +766,7 @@ exports[`function with a counter binding 3`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/Function",
                     },
                   ],
@@ -948,7 +948,7 @@ exports[`inc() policy statement 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                   ],
@@ -1046,7 +1046,7 @@ exports[`inc() policy statement 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/Function",
                     },
                   ],
@@ -1228,7 +1228,7 @@ exports[`peek() policy statement 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                   ],
@@ -1326,7 +1326,7 @@ exports[`peek() policy statement 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/Function",
                     },
                   ],
@@ -1623,7 +1623,7 @@ exports[`reset() policy statement 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                   ],
@@ -1721,7 +1721,7 @@ exports[`reset() policy statement 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/Function",
                     },
                   ],
