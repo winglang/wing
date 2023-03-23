@@ -292,13 +292,53 @@ resource Bucket {
 
   /**
    * Get a file from the bucket.
+   *
+   * @throws Will throw if the file doesn't exist.
    */
   inflight get(key: str): Blob;
 
   /**
+   * Get a file from the bucket if it exists.
+   */
+  inflight try_get(key: str): Blob?;
+
+  /**
    * Delete a file from the bucket.
+   *
+   * @throws Will throw if the file doesn't exist.
    */
   inflight delete(key: str): void;
+
+  /**
+   * Delete a file from the bucket if it exists.
+   */
+  inflight try_delete(key: str): bool;
+
+  /**
+   * Check if a file exists in the bucket.
+   */
+  inflight exists(key: str): bool;
+
+  /**
+   * Get the metadata of a file in the bucket.
+   */
+  inflight stats(key: str): FileMetadata;
+
+  /**
+   * Move a file to a new location in the bucket. If the destination file already
+   * exists, it will be overwritten.
+   *
+   * @throws Will throw if the `src` file doesn't exist.
+   */
+  inflight move(src: str, dst: str): void;
+
+  /**
+   * Copy a file to a new location in the bucket. If the destination file already
+   * exists, it will be overwritten.
+   *
+   * @throws Will throw if the `src` file doesn't exist.
+   */
+  inflight copy(src: str, dst: str): void;
 
   /**
    * List all files in the bucket with the given prefix.
@@ -306,8 +346,9 @@ resource Bucket {
   inflight list(prefix: str?): Iterator<str>;
 
   /**
-   * Returns a url to the given file.
-   * @throws Will throw if the file is not public.
+   * Returns a url to the given file key. Does not check if the file exists.
+   *
+   * @throws Will throw if the bucket is not public.
    */
   inflight public_url(key: str): str;
 
@@ -316,6 +357,15 @@ resource Bucket {
    * access the file until the link expires (defaults to 24 hours).
    */
   inflight signed_url(key: str, duration?: duration): str;
+}
+
+struct FileMetadata {
+  /** The size of the file in bytes. */
+  size: Size;
+  /** The time the file was last modified. */
+  last_modified: Date; // or an ISO timestamp `str` until we have Date API support
+  /** The content type of the file, if it is known. */
+  content_type: str?;
 }
 
 struct BucketOnUploadProps { /* elided */ }
