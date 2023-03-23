@@ -3,7 +3,7 @@ import {
   GetItemCommand,
   DynamoDBClient,
 } from "@aws-sdk/client-dynamodb";
-import { COUNTER_HASH_KEY } from "./share";
+import { COUNTER_HASH_KEY } from "./commons";
 import { CounterClientBase } from "../cloud";
 
 const AMOUNT_TOKEN = "amount";

@@ -214,7 +214,7 @@ exports[`queue name valid 2`] = `
 }
 `;
 
-exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_68e3f3ae\\"])"`;
+exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_68e3f3ae\\"])"`;
 
 exports[`queue with a consumer function 2`] = `
 "{

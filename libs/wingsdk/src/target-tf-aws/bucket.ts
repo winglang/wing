@@ -7,12 +7,13 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { calculateBucketPermissions } from "../shared-aws/permissions";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
 } from "../utils/resource-names";
-import { calculateBucketPermissions } from "../shared-aws/share";
+import { AwsTarget } from "../shared-aws/commons";
 
 /**
  * Bucket prefix provided to Terraform must be between 3 and 37 characters.
@@ -119,49 +120,10 @@ export class Bucket extends cloud.Bucket {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
-    host.addPolicyStatements(...calculateBucketPermissions(this.bucket.arn, ops));
+    host.addPolicyStatements(
+      ...calculateBucketPermissions(this.bucket.arn, AwsTarget.TF_AWS, ops)
+    );
 
-    // if (
-    //   ops.includes(cloud.BucketInflightMethods.PUT) ||
-    //   ops.includes(cloud.BucketInflightMethods.PUT_JSON)
-    // ) {
-    //   host.addPolicyStatements({
-    //     effect: "Allow",
-    //     action: ["s3:PutObject*", "s3:Abort*"],
-    //     resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
-    //   });
-    // }
-    // if (
-    //   ops.includes(cloud.BucketInflightMethods.GET) ||
-    //   ops.includes(cloud.BucketInflightMethods.GET_JSON)
-    // ) {
-    //   host.addPolicyStatements({
-    //     effect: "Allow",
-    //     action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
-    //     resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
-    //   });
-    // }
-    // if (
-    //   ops.includes(cloud.BucketInflightMethods.LIST) ||
-    //   ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)
-    // ) {
-    //   host.addPolicyStatements({
-    //     effect: "Allow",
-    //     action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
-    //     resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
-    //   });
-    // }
-    // if (ops.includes(cloud.BucketInflightMethods.DELETE)) {
-    //   host.addPolicyStatements({
-    //     effect: "Allow",
-    //     action: [
-    //       "s3:DeleteObject*",
-    //       "s3:DeleteObjectVersion*",
-    //       "s3:PutLifecycleConfiguration*",
-    //     ],
-    //     resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
-    //   });
-    // }
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucket);
@@ -172,10 +134,15 @@ export class Bucket extends cloud.Bucket {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__dirname.replace("target-tf-aws", "shared-aws"), __filename, "BucketClient", [
-      `process.env["${this.envName()}"]`,
-      `process.env["${this.isPublicEnvName()}"]`,
-    ]);
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-aws", "shared-aws"),
+      __filename,
+      "BucketClient",
+      [
+        `process.env["${this.envName()}"]`,
+        `process.env["${this.isPublicEnvName()}"]`,
+      ]
+    );
   }
 
   private isPublicEnvName(): string {

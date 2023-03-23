@@ -124,8 +124,8 @@ function setupIncMock(opts: MockOptions) {
     Attributes: !opts.responseValue
       ? undefined
       : {
-        counter_value: { N: `${opts.responseValue}` },
-      },
+          counter_value: { N: `${opts.responseValue}` },
+        },
   };
 
   dynamoMock.on(UpdateItemCommand, expectedRequest).resolves(mockResponse);
@@ -140,11 +140,11 @@ function setupPeekMock(opts: MockOptions) {
     $metadata: {},
     Item: !opts.responseValue
       ? {
-        counter_value: { N: "0" },
-      }
+          counter_value: { N: "0" },
+        }
       : {
-        counter_value: { N: `${opts.responseValue}` },
-      },
+          counter_value: { N: `${opts.responseValue}` },
+        },
   };
 
   dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
@@ -166,8 +166,8 @@ function setupResetMock(opts: MockOptions) {
       opts.resetValue === undefined
         ? undefined
         : {
-          counter_value: { N: `${opts.resetValue}` },
-        },
+            counter_value: { N: `${opts.resetValue}` },
+          },
   };
 
   dynamoMock.on(UpdateItemCommand, expectedRequest).resolves(mockResponse);

@@ -4,7 +4,7 @@ import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
-import { COUNTER_HASH_KEY } from "../shared-aws/share";
+import { COUNTER_HASH_KEY } from "../shared-aws/commons";
 
 /**
  * Counter (Table) names must be between 3 and 255 characters.
@@ -68,10 +68,12 @@ export class Counter extends cloud.Counter {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__dirname.replace("target-tf-aws", "shared-aws"), __filename, "CounterClient", [
-      `process.env["${this.envName()}"]`,
-      `${this.initial}`,
-    ]);
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-aws", "shared-aws"),
+      __filename,
+      "CounterClient",
+      [`process.env["${this.envName()}"]`, `${this.initial}`]
+    );
   }
 
   private envName(): string {

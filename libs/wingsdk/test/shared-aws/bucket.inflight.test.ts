@@ -22,7 +22,7 @@ beforeEach(() => {
 // https://github.com/m-radzikowski/aws-sdk-client-mock/issues/131
 function createMockStream(text: string): SdkStream<Readable> {
   const stream = new Readable();
-  stream._read = () => { };
+  stream._read = () => {};
   stream.push(text);
   stream.push(null); // indicate end of file
   const sdkStream = sdkStreamMixin(stream);

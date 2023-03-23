@@ -9,7 +9,8 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { calculateBucketPermissions } from "../shared-aws/share";
+import { calculateBucketPermissions } from "../shared-aws/permissions";
+import { AwsTarget } from "../shared-aws/commons";
 
 /**
  * AWS implementation of `cloud.Bucket`.
@@ -46,42 +47,14 @@ export class Bucket extends cloud.Bucket {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
-    host.addPolicyStatements(...calculateBucketPermissions(this.bucket.bucketArn, ops));
-    // if (ops.includes(cloud.BucketInflightMethods.PUT)) {
-    //   host.addPolicyStatements({
-    //     effect: Effect.ALLOW,
-    //     actions: ["s3:PutObject*", "s3:Abort*"],
-    //     resources: [`${this.bucket.bucketArn}`, `${this.bucket.bucketArn}/*`],
-    //   });
-    // }
-    // if (ops.includes(cloud.BucketInflightMethods.GET)) {
-    //   host.addPolicyStatements({
-    //     effect: Effect.ALLOW,
-    //     actions: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
-    //     resources: [`${this.bucket.bucketArn}`, `${this.bucket.bucketArn}/*`],
-    //   });
-    // }
-    // if (
-    //   ops.includes(cloud.BucketInflightMethods.LIST) ||
-    //   ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)
-    // ) {
-    //   host.addPolicyStatements({
-    //     effect: Effect.ALLOW,
-    //     actions: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
-    //     resources: [`${this.bucket.bucketArn}`, `${this.bucket.bucketArn}/*`],
-    //   });
-    // }
-    // if (ops.includes(cloud.BucketInflightMethods.DELETE)) {
-    //   host.addPolicyStatements({
-    //     effect: Effect.ALLOW,
-    //     actions: [
-    //       "s3:DeleteObject*",
-    //       "s3:DeleteObjectVersion*",
-    //       "s3:PutLifecycleConfiguration*",
-    //     ],
-    //     resources: [`${this.bucket.bucketArn}`, `${this.bucket.bucketArn}/*`],
-    //   });
-    // }
+    host.addPolicyStatements(
+      ...calculateBucketPermissions(
+        this.bucket.bucketArn,
+        AwsTarget.AWSCDK,
+        ops
+      )
+    );
+
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucketName);
