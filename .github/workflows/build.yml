@@ -32,7 +32,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        # TODO REMOVE ME
         with:
           fetch-depth: 0
 
@@ -60,13 +59,9 @@ jobs:
 
       - name: Changelog Generation
         id: changelog
-        # TODO Testing this out
         env:
-          GENERATE_VERSION: 'false' #${{ github.event_name != 'push' }}
+          GENERATE_VERSION: ${{ github.event_name != 'push' || github.repository != 'winglang/wing' }}
         run: npm run changelog
-
-      - name: TEST REMOVE ME
-        run: echo "$PROJEN_BUMP_VERSION"
 
       - name: Build
         run: npm run build:ci
