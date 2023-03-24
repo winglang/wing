@@ -57,8 +57,9 @@ jobs:
 
       - name: Changelog Generation
         id: changelog
-        env:
-          GENERATE_VERSION: ${{ github.event_name != 'push' }}
+        # TODO Testing this out
+        # env:
+        #   GENERATE_VERSION: ${{ github.event_name != 'push' }}
         run: npm run changelog
 
       - name: Build
