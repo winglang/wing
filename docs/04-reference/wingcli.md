@@ -150,6 +150,7 @@ JavaScript bundles that include inflight code that executes on compute platforms
 You can deploy your stack to AWS by installing the [AWS CDK Toolkit](https://docs.aws.amazon.com/cdk/v2/guide/cli.html) and running:
 ```sh
 $ cdk deploy --app target/app.awscdk
+```
 
 ### Plugins
 
