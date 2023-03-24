@@ -184,7 +184,6 @@ impl SymbolEnv {
 		not_after_stmt_idx: Option<usize>,
 	) -> Result<(&SymbolKind, SymbolLookupInfo), TypeError> {
 		let lookup_result = self.try_lookup_ext(&symbol.name, not_after_stmt_idx);
-
 		match lookup_result {
 			LookupResult::Found((kind, symbol_info)) => Ok((kind, symbol_info)),
 			LookupResult::NotFound => Err(TypeError {
