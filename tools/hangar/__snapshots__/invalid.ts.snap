@@ -933,6 +933,37 @@ error: Expected 2 arguments but got 1
 "
 `;
 
+exports[`structs.w > stderr 1`] = `
+"error: Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" but has a conflicting member \\"x\\" (str != str)
+  --> ../../../examples/tests/invalid/structs.w:9:8
+  |
+9 | struct C extends B {
+  |        ^ Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" but has a conflicting member \\"x\\" (str != str)
+
+
+error: \\"x\\" is not initialized
+   --> ../../../examples/tests/invalid/structs.w:14:19
+   |
+14 | let some_struct = B { y: 5 };
+   |                   ^^^^^^^^^^ \\"x\\" is not initialized
+
+
+error: struct fields must be immutable got: MutArray<str>
+   --> ../../../examples/tests/invalid/structs.w:18:3
+   |
+18 |   f: MutArray<str>;
+   |   ^ struct fields must be immutable got: MutArray<str>
+
+
+error: struct fields must be immutable got: Map<Array<MutArray<str>>>
+   --> ../../../examples/tests/invalid/structs.w:23:3
+   |
+23 |   f: Map<Array<MutArray<str>>>;
+   |   ^ struct fields must be immutable got: Map<Array<MutArray<str>>>
+
+"
+`;
+
 exports[`try_no_catch_or_finally.w > stderr 1`] = `
 "error: Missing \`catch\` or \`finally\` blocks for this try statement
   --> ../../../examples/tests/invalid/try_no_catch_or_finally.w:1:1
