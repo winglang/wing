@@ -16,3 +16,20 @@ let y = B {
   field1: 1,
   field2: "world",
 };
+
+resource Foo {
+  data: B;
+
+  init(b: B) {
+    this.data = b;
+  }
+
+  // TODO: Access struct attributes https://github.com/winglang/wing/issues/1604
+  // inflight get_stuff(): str {
+  //   return this.data.field0;
+  // }
+}
+
+// TODO: Access struct attributes https://github.com/winglang/wing/issues/1604
+// assert(x.field0 == "Sup");
+// assert(y.field1 == 1);

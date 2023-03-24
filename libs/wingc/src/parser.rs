@@ -1067,21 +1067,6 @@ impl<'s> Parser<'s> {
 					expression_span,
 				))
 			}
-			"struct_definition" => {
-				let mut fields = BTreeMap::new();
-				let mut cursor = expression_node.walk();
-				for field in expression_node.named_children(&mut cursor) {
-					match field.kind() {
-						"struct_field" => {
-							let field_name = self.node_symbol(&field.named_child(0).unwrap());
-							let field_type = self.build_type_annotation(&field.named_child(1).unwrap());
-							fields.insert(field_name, field_type);
-						}
-						_ => continue, // B4PR: Throw a fucking error!
-					}
-				}
-				Err(())
-			}
 			"json_literal" => {
 				let type_node = expression_node
 					.child_by_field_name("type")
