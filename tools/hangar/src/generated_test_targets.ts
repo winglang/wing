@@ -13,7 +13,12 @@ export async function compileTest(expect: Vi.ExpectStatic, wingFile: string) {
   );
   const tf_json = join(targetDir, "main.tf.json");
 
-  await runWingCommand(validTestDir, join(validTestDir, wingBasename), args, true);
+  await runWingCommand({
+    cwd: validTestDir, 
+    wingFile: join(validTestDir, wingBasename), 
+    args, 
+    shouldSucceed: true
+  });
 
   const npx_tfJson = sanitize_json_paths(tf_json);
 
@@ -42,12 +47,12 @@ export async function testTest(expect: Vi.ExpectStatic, wingFile: string) {
   const testDir = join(tmpDir, `${wingFile}_sim`);
   await mkdir(testDir, { recursive: true });
 
-  const out = await runWingCommand(
-    testDir,
-    join(validTestDir, wingFile),
+  const out = await runWingCommand({
+    cwd: testDir,
+    wingFile: join(validTestDir, wingFile),
     args,
-    true
-  );
+    shouldSucceed: true
+  });
 
   expect(out.stdout).toMatchSnapshot("stdout");
 }

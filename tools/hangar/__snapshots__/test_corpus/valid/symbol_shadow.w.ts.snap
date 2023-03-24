@@ -282,6 +282,40 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         },
         "bucket": "\${aws_s3_bucket.root_A_testinflightinresourceshouldcapturetherightscopedvar_Code_470A0E83.bucket}",
         "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
+      },
+      "root_testinflightnestedshouldnotcapturetheshadowedvar_S3Object_C99A3326": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:inflight nested should not capture the shadowed var/S3Object",
+            "uniqueId": "root_testinflightnestedshouldnotcapturetheshadowedvar_S3Object_C99A3326",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_testinflightnestedshouldnotcapturetheshadowedvar_Code_56F93BD5.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
+      },
+      "root_testinflightontopshouldcapturetop_S3Object_75B26800": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:inflight on top should capture top/S3Object",
+            "uniqueId": "root_testinflightontopshouldcapturetop_S3Object_75B26800",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_testinflightontopshouldcapturetop_Code_F50B9894.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
+      },
+      "root_testinsideinflightshouldcapturetherightscope_S3Object_33BC24EC": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:inside_inflight should capture the right scope/S3Object",
+            "uniqueId": "root_testinsideinflightshouldcapturetherightscope_S3Object_33BC24EC",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_testinsideinflightshouldcapturetherightscope_Code_0FC24998.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
       },
     },
   },

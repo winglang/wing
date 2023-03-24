@@ -126,7 +126,7 @@ exports[`function with a table binding 3`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                   ],
@@ -257,7 +257,7 @@ exports[`function with a table binding 3`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/Function",
                     },
                   ],

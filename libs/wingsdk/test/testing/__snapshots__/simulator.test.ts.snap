@@ -10,7 +10,7 @@ exports[`provides raw tree data 1`] = `
             {
               "direction": "inbound",
               "implicit": true,
-              "relationship": "print",
+              "relationship": "log",
               "resource": "root/test",
             },
           ],
@@ -34,7 +34,7 @@ exports[`provides raw tree data 1`] = `
             {
               "direction": "outbound",
               "implicit": true,
-              "relationship": "print",
+              "relationship": "log",
               "resource": "root/WingLogger",
             },
           ],

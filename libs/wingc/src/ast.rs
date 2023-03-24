@@ -1,10 +1,9 @@
 use std::cell::RefCell;
-use std::collections::BTreeMap;
 use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 
 use derivative::Derivative;
-use indexmap::IndexSet;
+use indexmap::{Equivalent, IndexMap, IndexSet};
 
 use crate::capture::Captures;
 use crate::diagnostic::WingSpan;
@@ -55,9 +54,15 @@ impl PartialEq for Symbol {
 	}
 }
 
-impl std::fmt::Display for Symbol {
+impl Display for Symbol {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		write!(f, "{} (at {})", self.name, self.span)
+	}
+}
+
+impl Equivalent<Symbol> for str {
+	fn equivalent(&self, key: &Symbol) -> bool {
+		self == key.name
 	}
 }
 
@@ -226,7 +231,7 @@ pub struct Stmt {
 
 #[derive(Debug)]
 pub enum UtilityFunctions {
-	Print,
+	Log,
 	Panic,
 	Throw,
 	Assert,
@@ -235,7 +240,7 @@ pub enum UtilityFunctions {
 impl Display for UtilityFunctions {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
-			UtilityFunctions::Print => write!(f, "print"),
+			UtilityFunctions::Log => write!(f, "log"),
 			UtilityFunctions::Panic => write!(f, "panic"),
 			UtilityFunctions::Throw => write!(f, "throw"),
 			UtilityFunctions::Assert => write!(f, "assert"),
@@ -359,13 +364,13 @@ pub enum ExprKind {
 	},
 	StructLiteral {
 		type_: TypeAnnotation,
-		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
-		fields: BTreeMap<String, (Symbol, Expr)>,
+		// We're using a map implementation with reliable iteration to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
+		fields: IndexMap<Symbol, Expr>,
 	},
 	MapLiteral {
 		type_: Option<TypeAnnotation>,
-		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
-		fields: BTreeMap<String, Expr>,
+		// We're using a map implementation with reliable iteration to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
+		fields: IndexMap<String, Expr>,
 	},
 	SetLiteral {
 		type_: Option<TypeAnnotation>,
@@ -403,14 +408,14 @@ impl Expr {
 #[derive(Debug)]
 pub struct ArgList {
 	pub pos_args: Vec<Expr>,
-	pub named_args: BTreeMap<Symbol, Expr>,
+	pub named_args: IndexMap<Symbol, Expr>,
 }
 
 impl ArgList {
 	pub fn new() -> Self {
 		ArgList {
 			pos_args: vec![],
-			named_args: BTreeMap::new(),
+			named_args: IndexMap::new(),
 		}
 	}
 }
