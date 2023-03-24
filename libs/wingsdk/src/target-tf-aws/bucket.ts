@@ -7,13 +7,13 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { AwsTarget } from "../shared-aws/commons";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
 } from "../utils/resource-names";
-import { AwsTarget } from "../shared-aws/commons";
 
 /**
  * Bucket prefix provided to Terraform must be between 3 and 37 characters.

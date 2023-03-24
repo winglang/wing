@@ -1,5 +1,5 @@
-import * as cloud from "../cloud";
 import { AwsTarget } from "./commons";
+import * as cloud from "../cloud";
 
 export function calculateBucketPermissions(
   arn: string,
