@@ -99,7 +99,7 @@ exports[`messages are requeued if the function fails 2`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.js\\")).QueueOnMessageHandlerClient({ handler: new ((function(){
 return class Handler {
@@ -191,7 +191,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_queue-OnMessage-e645076f",
               },
             ],
@@ -244,7 +244,7 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
               {
@@ -402,7 +402,7 @@ exports[`queue with one subscriber, batch size of 5 2`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.js\\")).QueueOnMessageHandlerClient({ handler: new ((function(){
 return class Handler {
@@ -501,7 +501,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_queue-OnMessage-e645076f",
               },
             ],
@@ -554,7 +554,7 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
               {
@@ -628,7 +628,7 @@ exports[`queue with one subscriber, default batch size of 1 2`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.js\\")).QueueOnMessageHandlerClient({ handler: new ((function(){
 return class Handler {
@@ -720,7 +720,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_queue-OnMessage-e645076f",
               },
             ],
@@ -773,7 +773,7 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
               {
