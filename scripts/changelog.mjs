@@ -2,6 +2,7 @@
 
 import * as changelogen from "changelogen";
 import * as semver from "semver";
+import { appendFileSync } from "fs";
 
 const inAction = process.env.GITHUB_ACTIONS === "true";
 
@@ -72,11 +73,17 @@ console.log(resultObj);
 
 if (inAction) {
   // we are running in a github action and we should output some useful stuff
-  console.log(
-    `'data=${JSON.stringify(resultObj)}' >> ${process.env.GITHUB_OUTPUT}`
-  );
-  console.log(`'${resultObj.changelog}' >> ${process.env.GITHUB_STEP_SUMMARY}`);
-  console.log(
-    `'PROJEN_BUMP_VERSION=${resultObj.newVersion}' >> ${process.env.GITHUB_ENV}`
+  const githubOutputFile = process.env.GITHUB_OUTPUT;
+  const githubStepSummaryFile = process.env.GITHUB_STEP_SUMMARY;
+  const githubEnvFile = process.env.GITHUB_ENV;
+  if (!githubOutputFile || !githubStepSummaryFile || !githubEnvFile) {
+    throw new Error("Missing github action environment variables");
+  }
+
+  appendFileSync(githubOutputFile, `data=${JSON.stringify(resultObj)}\n`);
+  appendFileSync(githubStepSummaryFile, `${resultObj.changelog}\n`);
+  appendFileSync(
+    githubEnvFile,
+    `PROJEN_BUMP_VERSION=${resultObj.newVersion}\n`
   );
 }
