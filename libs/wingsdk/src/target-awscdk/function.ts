@@ -94,4 +94,4 @@ export class Function extends cloud.Function {
   }
 }
 
-Function._annotateInflight("invoke", {});
+Function._annotateInflight(cloud.FunctionInflightMethods.INVOKE, {});

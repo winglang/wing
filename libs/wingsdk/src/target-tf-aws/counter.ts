@@ -81,7 +81,7 @@ export class Counter extends cloud.Counter {
   }
 }
 
-Counter._annotateInflight("inc", {});
-Counter._annotateInflight("dec", {});
-Counter._annotateInflight("peek", {});
-Counter._annotateInflight("reset", {});
+Counter._annotateInflight(cloud.CounterInflightMethods.INC, {});
+Counter._annotateInflight(cloud.CounterInflightMethods.DEC, {});
+Counter._annotateInflight(cloud.CounterInflightMethods.PEEK, {});
+Counter._annotateInflight(cloud.CounterInflightMethods.RESET, {});

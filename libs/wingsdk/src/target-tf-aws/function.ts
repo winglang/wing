@@ -258,4 +258,4 @@ export interface PolicyStatement {
   readonly effect?: string;
 }
 
-Function._annotateInflight("invoke", {});
+Function._annotateInflight(cloud.FunctionInflightMethods.INVOKE, {});

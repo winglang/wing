@@ -126,4 +126,4 @@ export class Topic extends cloud.Topic {
   }
 }
 
-Topic._annotateInflight("publish", {});
+Topic._annotateInflight(cloud.TopicInflightMethods.PUBLISH, {});

@@ -151,6 +151,6 @@ export class Queue extends cloud.Queue {
   }
 }
 
-Queue._annotateInflight("push", {});
-Queue._annotateInflight("purge", {});
-Queue._annotateInflight("approx_size", {});
+Queue._annotateInflight(cloud.QueueInflightMethods.PUSH, {});
+Queue._annotateInflight(cloud.QueueInflightMethods.PURGE, {});
+Queue._annotateInflight(cloud.QueueInflightMethods.APPROX_SIZE, {});

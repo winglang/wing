@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
 
@@ -14,6 +15,10 @@ export class Logger extends cloud.Logger {
 
   /** @internal */
   public _bind(host: core.IInflightHost, ops: string[]): void {
+    if (!(host instanceof Function)) {
+      throw new Error("loggers can only be bound by awscdk.Function for now");
+    }
+
     super._bind(host, ops);
   }
 
@@ -28,4 +33,4 @@ export class Logger extends cloud.Logger {
   }
 }
 
-Logger._annotateInflight("print", {});
+Logger._annotateInflight(cloud.LoggerInflightMethods.LOG, {});
