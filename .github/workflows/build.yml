@@ -58,9 +58,12 @@ jobs:
       - name: Changelog Generation
         id: changelog
         # TODO Testing this out
-        # env:
-        #   GENERATE_VERSION: ${{ github.event_name != 'push' }}
+        env:
+          GENERATE_VERSION: 'false' #${{ github.event_name != 'push' }}
         run: npm run changelog
+
+      - name: TEST REMOVE ME
+        run: echo "$PROJEN_BUMP_VERSION"
 
       - name: Build
         run: npm run build:ci
@@ -245,7 +248,7 @@ jobs:
           cd dist
 
           echo '${{ needs.build.outputs.changelog }}'' > ../CHANGELOG.md
-          echo '## SHA-1 Checksums' >> ../CHANGELOG.md
+          echo '### SHA-1 Checksums' >> ../CHANGELOG.md
           echo '```' >> ../CHANGELOG.md
           sha1sum --binary * >> ../CHANGELOG.md
           echo '```' >> ../CHANGELOG.md

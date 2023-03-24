@@ -54,7 +54,6 @@ async function getData() {
       : lastVersion;
   newVersion = process.env.WING_VERSION ?? newVersion;
 
-  config.newVersion = newVersion;
   const md = await changelogen.generateMarkDown(parsed, config);
 
   return {
@@ -62,7 +61,8 @@ async function getData() {
     newVersion,
     bumpType,
     sameVersion: lastVersion === newVersion,
-    changelog: md + "\n",
+    // Remove the first line of the changelog (the title)
+    changelog: md.split("\n").slice(1).join("\n").trimStart() + "\n",
   };
 }
 
@@ -77,6 +77,6 @@ if (inAction) {
   );
   console.log(`'${resultObj.changelog}' >> ${process.env.GITHUB_STEP_SUMMARY}`);
   console.log(
-    `PROJEN_BUMP_VERSION=${resultObj.newVersion} >> ${process.env.GITHUB_ENV}`
+    `'PROJEN_BUMP_VERSION=${resultObj.newVersion}' >> ${process.env.GITHUB_ENV}`
   );
 }
