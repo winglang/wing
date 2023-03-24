@@ -36,6 +36,10 @@ async function getData() {
         title: "🚀 Features",
         semver: "patch",
       },
+      revert: {
+        title: "⏪ Reverts",
+        semver: "patch",
+      },
     },
   });
 
