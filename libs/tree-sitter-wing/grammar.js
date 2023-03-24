@@ -108,7 +108,7 @@ module.exports = grammar({
       seq(
         "struct",
         field("name", $.identifier),
-        optional(seq("extends", commaSep(field("extend", $.identifier)))),
+        optional(seq("extends", commaSep(field("extends", $.identifier)))),
         "{",
         field("field", repeat($.struct_field)),
         "}"

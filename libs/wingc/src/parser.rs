@@ -333,36 +333,26 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_struct_definition_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
-		let name = self.node_symbol(
-			&statement_node
-				.child_by_field_name("name")
-				.expect("struct definitions should always have a name"),
-		)?;
+		let name = self.node_symbol(&self.get_child_field(&statement_node, "name")?)?;
 
 		let mut cursor = statement_node.walk();
 		let mut members = vec![];
 
 		for field_node in statement_node.children_by_field_name("field", &mut cursor) {
-			let identifier = self.node_symbol(
-				&field_node
-					.child_by_field_name("name")
-					.expect("struct definition fields should always have a name"),
-			)?;
-			let type_ = field_node
-				.child_by_field_name("type")
-				.expect("struct definition fields should always have explicit type");
+			let identifier = self.node_symbol(&self.get_child_field(&field_node, "name")?)?;
+			let type_ = &self.get_child_field(&field_node, "type")?;
 			let f = ClassField {
 				name: identifier,
 				member_type: self.build_type_annotation(&type_)?,
 				reassignable: false,
-				phase: Phase::Preflight,
+				phase: Phase::Independent,
 				is_static: false,
 			};
 			members.push(f);
 		}
 
 		let mut extends = vec![];
-		for super_node in statement_node.children_by_field_name("extend", &mut cursor) {
+		for super_node in statement_node.children_by_field_name("extends", &mut cursor) {
 			extends.push(self.node_symbol(&super_node)?);
 		}
 

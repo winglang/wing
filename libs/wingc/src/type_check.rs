@@ -846,6 +846,7 @@ impl TypeRef {
 			Type::Array(v) => v.is_deep_mutable(),
 			Type::Map(v) => v.is_deep_mutable(),
 			Type::Set(v) => v.is_deep_mutable(),
+			Type::Optional(v) => v.is_deep_mutable(),
 			_ => false,
 		}
 	}
