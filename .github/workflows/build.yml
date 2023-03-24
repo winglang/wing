@@ -14,17 +14,16 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.head.ref || github.ref }}
   cancel-in-progress: true
 
-env:
-  # Testing runs out of memory without this
-  NODE_OPTIONS: "--max-old-space-size=4096"
-  RUST_VERSION: "1.67.1"
-  CARGO_TERM_COLOR: always
-
 jobs:
   build:
     name: "Build"
     timeout-minutes: 25
     runs-on: ubuntu-latest
+    env:
+      # Testing runs out of memory without this
+      NODE_OPTIONS: "--max-old-space-size=4096"
+      RUST_VERSION: "1.67.1"
+      CARGO_TERM_COLOR: always
     outputs:
       labels: ${{ steps.pr-labels.outputs.labels }}
       version: ${{ fromJson(steps.changelog.outputs.data).newVersion }}
@@ -60,7 +59,7 @@ jobs:
         id: changelog
         env:
           GENERATE_VERSION: ${{ github.event_name != 'push' }}
-        run: scripts/changelog.mjs
+        run: npm run changelog
 
       - name: Build
         run: npm run build:ci
