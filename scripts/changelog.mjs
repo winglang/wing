@@ -62,7 +62,7 @@ async function getData() {
     newVersion,
     bumpType,
     sameVersion: lastVersion === newVersion,
-    changelog: md.trim(),
+    changelog: md + "\n",
   };
 }
 
