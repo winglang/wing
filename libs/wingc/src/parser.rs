@@ -569,7 +569,7 @@ impl<'s> Parser<'s> {
 			methods,
 			parent,
 			implements,
-			constructor: constructor,
+			constructor,
 			is_resource,
 		}))
 	}

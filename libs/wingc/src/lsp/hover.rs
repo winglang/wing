@@ -148,20 +148,21 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		}
 		self.visit_symbol(&node.name);
 
-		let constructor = node.constructor.as_ref().unwrap();
-		self.visit_constructor(&constructor);
+		if let Some(constructor) = &node.constructor {
+			self.visit_constructor(&constructor);
 
-		self.with_scope(&constructor.statements, |v| {
-			for field in &node.fields {
-				v.visit_symbol(&field.name);
-				v.visit_type_annotation(&field.member_type);
-			}
+			self.with_scope(&constructor.statements, |v| {
+				for field in &node.fields {
+					v.visit_symbol(&field.name);
+					v.visit_type_annotation(&field.member_type);
+				}
 
-			for method in &node.methods {
-				v.visit_symbol(&method.0);
-				v.visit_function_definition(&method.1);
-			}
-		});
+				for method in &node.methods {
+					v.visit_symbol(&method.0);
+					v.visit_function_definition(&method.1);
+				}
+			});
+		}
 	}
 
 	fn visit_constructor(&mut self, node: &'a Constructor) {

@@ -1245,11 +1245,15 @@ impl<'a> TypeChecker<'a> {
 
 				// Lookup the class's type in the env
 				let type_ = self.resolve_type_annotation(class, env, statement_idx);
-				let (class_env, class_symbol) = match &*type_ {
-					Type::Class(ref class) => (&class.env, &class.name),
+				let (class_env, class_symbol, has_fields) = match &*type_ {
+					Type::Class(ref class) => {
+						let fields = class.fields(true).into_iter().count();
+						(&class.env, &class.name, if fields > 0 { true } else { false })
+					}
 					Type::Resource(ref class) => {
 						if matches!(env.phase, Phase::Preflight) {
-							(&class.env, &class.name)
+							let fields = class.fields(true).into_iter().count();
+							(&class.env, &class.name, if fields > 0 { true } else { false })
 						} else {
 							return self.general_type_error(format!(
 								"Cannot create the resource \"{}\" in inflight phase",
@@ -1269,26 +1273,46 @@ impl<'a> TypeChecker<'a> {
 					}
 				};
 
-				// Type check args against constructor
-				let constructor_type = match class_env.lookup(
-					&Symbol {
-						name: WING_CONSTRUCTOR_NAME.into(),
-						span: class_symbol.span.clone(),
-					},
-					None,
-				) {
-					Ok(v) => v.as_variable().expect("Expected constructor to be a variable").type_,
-					Err(_) => self.types.anything(),
-				};
+				if !has_fields && !arg_list.pos_args.is_empty() {
+					self.expr_error(
+						&arg_list.pos_args[0],
+						format!(
+							"{} should be called with no arguments.",
+							if type_.as_resource().is_some() {
+								"Resource"
+							} else {
+								"Class"
+							}
+						),
+					);
+				}
 
-				if let Some(constructor_sig) = constructor_type.as_function_sig() {
+				if has_fields {
+					// Type check args against constructor
+					let constructor_type = match class_env.lookup(
+						&Symbol {
+							name: WING_CONSTRUCTOR_NAME.into(),
+							span: class_symbol.span.clone(),
+						},
+						None,
+					) {
+						Ok(v) => v.as_variable().expect("Expected constructor to be a variable").type_,
+						Err(type_error) => {
+							self.type_error(type_error);
+							return self.types.anything();
+						}
+					};
+					let constructor_sig = constructor_type
+						.as_function_sig()
+						.expect("Expected constructor to be a function signature");
+
 					// Verify return type (This should never fail since we define the constructors return type during AST building)
 					self.validate_type(constructor_sig.return_type, type_, exp);
 
-				if !arg_list.named_args.is_empty() {
-					let last_arg = constructor_sig.parameters.last().unwrap().maybe_unwrap_option();
-					self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
-				}
+					if !arg_list.named_args.is_empty() {
+						let last_arg = constructor_sig.parameters.last().unwrap().maybe_unwrap_option();
+						self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
+					}
 
 					// Verify arity
 					let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
@@ -1309,13 +1333,14 @@ impl<'a> TypeChecker<'a> {
 						self.expr_error(exp, err_text);
 					}
 
-				// Verify passed positional arguments match the constructor
-				for (arg_expr, arg_type, param_type) in izip!(
-					arg_list.pos_args.iter(),
-					arg_list_types.pos_args.iter(),
-					constructor_sig.parameters.iter()
-				) {
-					self.validate_type(*arg_type, *param_type, arg_expr);
+					// Verify passed positional arguments match the constructor
+					for (arg_expr, arg_type, param_type) in izip!(
+						arg_list.pos_args.iter(),
+						arg_list_types.pos_args.iter(),
+						constructor_sig.parameters.iter()
+					) {
+						self.validate_type(*arg_type, *param_type, arg_expr);
+					}
 				}
 
 				// If this is a Resource then create a new type for this resource object
@@ -2206,58 +2231,19 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				if let Some(constructor) = constructor {
-				// Add the constructor to the class env
-				let constructor_type = self.resolve_type_annotation(
-					&TypeAnnotation::FunctionSignature(constructor.signature.clone()),
-					env,
-					stmt.idx,
-				);
-				match class_env.define(
-					&Symbol {
-						name: WING_CONSTRUCTOR_NAME.into(),
-						span: name.span.clone(),
-					},
-					SymbolKind::make_variable(constructor_type, false, constructor.signature.phase),
-					StatementIdx::Top,
-				) {
-					Err(type_error) => {
-						self.type_error(type_error);
-					}
-					_ => {}
-				};
-
-				// Replace the dummy class environment with the real one before type checking the methods
-				class_type.as_mut_class_or_resource().unwrap().env = class_env;
-				let class_env = &class_type.as_class_or_resource().unwrap().env;
-
-				// Type check constructor
-				let constructor_sig = if let Type::Function(ref s) = *constructor_type {
-					s
-				} else {
-					panic!(
-						"Constructor of {} isn't defined as a function in the class environment",
-						name
+					// Add the constructor to the class env
+					let constructor_type = self.resolve_type_annotation(
+						&TypeAnnotation::FunctionSignature(constructor.signature.clone()),
+						env,
+						stmt.idx,
 					);
-				};
 
-				// Create constructor environment and prime it with args
-				let mut constructor_env = SymbolEnv::new(
-					Some(env.get_ref()),
-					constructor_sig.return_type,
-					false,
-					true,
-					constructor.signature.phase,
-					stmt.idx,
-				);
-				self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
-				// Prime the constructor environment with `this`
-				constructor_env
-					.define(
+					match class_env.define(
 						&Symbol {
 							name: WING_CONSTRUCTOR_NAME.into(),
 							span: name.span.clone(),
 						},
-						SymbolKind::make_variable(class_type, false, constructor_env.phase),
+						SymbolKind::make_variable(constructor_type, false, constructor.signature.phase),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -2282,7 +2268,7 @@ impl<'a> TypeChecker<'a> {
 						constructor_sig.return_type,
 						false,
 						true,
-						constructor.signature.flight,
+						constructor.signature.phase,
 						stmt.idx,
 					);
 					self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
@@ -2293,7 +2279,7 @@ impl<'a> TypeChecker<'a> {
 								name: "this".into(),
 								span: name.span.clone(),
 							},
-							SymbolKind::make_variable(class_type, false, constructor_env.flight),
+							SymbolKind::make_variable(class_type, false, constructor_env.phase),
 							StatementIdx::Top,
 						)
 						.expect("Expected `this` to be added to constructor env");

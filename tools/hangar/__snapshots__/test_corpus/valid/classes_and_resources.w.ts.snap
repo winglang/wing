@@ -1,0 +1,132 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`wing compile -t tf-aws > clients/R1.inflight.js 1`] = `
+"class R1  {
+constructor({  }) {
+
+
+}
+}
+exports.R1 = R1;"
+`;
+
+exports[`wing compile -t tf-aws > clients/R2.inflight.js 1`] = `
+"class R2  {
+constructor({  }) {
+
+
+}
+}
+exports.R2 = R2;"
+`;
+
+exports[`wing compile -t tf-aws > main.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+}
+`;
+
+exports[`wing compile -t tf-aws > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		case \\"tf-gcp\\":
+			return $stdlib.tfgcp.App;
+		case \\"tf-azure\\":
+			return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"classes_and_resources\\", plugins: $plugins });
+  
+  class C1
+  {
+  
+  
+  
+  }
+  class C2
+  {
+  constructor()  {
+  	{
+    this.x = 1;
+  }
+  }
+  x;
+  
+  }
+  class C3
+  {
+  constructor(a, b)  {
+  	{
+    this.x = a;
+    this.y = b;
+  }
+  }
+  x;
+  y;
+  
+  }
+  class R1 extends $stdlib.core.Resource {
+  	constructor(scope, id) {{
+  super(scope, id);
+  }}
+  	
+  	_toInflight() {
+  	
+  	const self_client_path = \\"./clients/R1.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R1({}))\`);
+  }
+  }
+  
+  class R2 extends $stdlib.core.Resource {
+  	constructor(scope, id) {{
+  super(scope, id);
+  }}
+  	static m()  {
+  	{
+    return 1;
+  }
+  }
+  	_toInflight() {
+  	
+  	const self_client_path = \\"./clients/R2.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R2({}))\`);
+  }
+  }
+  
+  new C1();
+  new C2();
+  new C3(1,2);
+  new R1(this,\\"R1\\");
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((R2.m()) === 1)'\`)})(((R2.m()) === 1))};
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`wing test > stdout 1`] = `"pass ─ classes_and_resources.w (no tests)"`;
