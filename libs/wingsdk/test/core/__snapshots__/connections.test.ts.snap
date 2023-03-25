@@ -9,7 +9,7 @@ exports[`create a bucket 1`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
@@ -83,7 +83,7 @@ return class Handler {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_function",
               },
             ],
@@ -130,7 +130,7 @@ return class Handler {
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
               {

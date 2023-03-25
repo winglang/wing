@@ -21,7 +21,7 @@ export async function runWingCommand(options: RunWingCommandOptions) {
     env: options.env,
   });
   if (options.shouldSucceed) {
-    if (out.exitCode !== 0) {
+    if (out.exitCode !== 0 || out.stderr !== "") {
       expect.fail(out.stderr);
     }
   } else {
@@ -32,8 +32,8 @@ export async function runWingCommand(options: RunWingCommandOptions) {
 }
 
 export function sanitize_json_paths(path: string) {
-  const assetKeyRegex = /"asset\..+"/g;
-  const assetSourceRegex = /"assets\/.+"/g;
+  const assetKeyRegex = /"asset\..+?"/g;
+  const assetSourceRegex = /"assets\/.+?"/g;
   const json = fs.readJsonSync(path);
 
   const jsonText = JSON.stringify(json);

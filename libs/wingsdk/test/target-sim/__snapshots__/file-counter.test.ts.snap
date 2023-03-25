@@ -9,7 +9,7 @@ exports[`can create sequential files in a bucket 1`] = `
         }
         return $simulator.findInstance(handle);
       })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
+console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.js\\")).QueueOnMessageHandlerClient({ handler: new ((function(){
 return class Handler {
@@ -221,7 +221,7 @@ bucket: (function(env) {
                   {
                     "direction": "outbound",
                     "implicit": true,
-                    "relationship": "print",
+                    "relationship": "log",
                     "resource": "root/WingLogger",
                   },
                   {
@@ -273,7 +273,7 @@ bucket: (function(env) {
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
               },
             ],

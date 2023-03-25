@@ -836,6 +836,21 @@ impl TypeRef {
 		}
 	}
 
+	// returns true if mutable type or if immutable container type contains a mutable type
+	pub fn is_deep_mutable(&self) -> bool {
+		match &**self {
+			Type::MutArray(_) => true,
+			Type::MutMap(_) => true,
+			Type::MutSet(_) => true,
+			Type::MutJson => true,
+			Type::Array(v) => v.is_deep_mutable(),
+			Type::Map(v) => v.is_deep_mutable(),
+			Type::Set(v) => v.is_deep_mutable(),
+			Type::Optional(v) => v.is_deep_mutable(),
+			_ => false,
+		}
+	}
+
 	pub fn is_json_legal_value(&self) -> bool {
 		match **self {
 			Type::Number => true,
@@ -2353,6 +2368,12 @@ impl<'a> TypeChecker<'a> {
 				// Add fields to the struct env
 				for field in members.iter() {
 					let field_type = self.resolve_type_annotation(&field.member_type, env, stmt.idx);
+					if field_type.is_deep_mutable() {
+						self.type_error(TypeError {
+							message: format!("struct fields must be immutable got: {}", field_type),
+							span: field.name.span.clone(),
+						});
+					}
 					match struct_env.define(
 						&field.name,
 						SymbolKind::make_variable(field_type, false, field.phase),
@@ -2809,7 +2830,17 @@ impl<'a> TypeChecker<'a> {
 						})
 					}
 				}
-				Err(type_error) => self.variable_error(type_error),
+				Err(type_error) => {
+					// Give a specific error message if someone tries to write "print" instead of "log"
+					if symbol.name == "print" {
+						self.variable_error(TypeError {
+							message: "Unknown symbol \"print\", did you mean to use \"log\"?".to_string(),
+							span: symbol.span.clone(),
+						})
+					} else {
+						self.variable_error(type_error)
+					}
+				}
 			},
 			Reference::InstanceMember { object, property } => {
 				// There's a special case where the object is actually a type and the property is either a static member or an enum variant.

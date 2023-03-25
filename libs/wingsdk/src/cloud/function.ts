@@ -83,9 +83,9 @@ export abstract class Function extends Resource implements IInflightHost {
     const logger = Logger.of(this);
 
     // indicates that we are calling "handle" on the handler resource
-    // and that we are calling "print" on the logger.
+    // and that we are calling "log" on the logger.
     inflight._registerBind(this, ["handle"]);
-    logger._registerBind(this, ["print"]);
+    logger._registerBind(this, ["log"]);
 
     const inflightClient = inflight._toInflight();
     const loggerClientCode = logger._toInflight();
@@ -94,7 +94,7 @@ export abstract class Function extends Resource implements IInflightHost {
     // create a logger inflight client and attach it to `console.log`.
     // TODO: attach console.error, console.warn, once our logger supports log levels.
     lines.push(`const $logger = ${loggerClientCode.text};`);
-    lines.push(`console.log = (...args) => $logger.print(...args);`);
+    lines.push(`console.log = (...args) => $logger.log(...args);`);
 
     lines.push("exports.handler = async function(event) {");
     lines.push(`  return await (${inflightClient.text}).handle(event);`);
@@ -104,7 +104,7 @@ export abstract class Function extends Resource implements IInflightHost {
     Resource.addConnection({
       from: this,
       to: logger,
-      relationship: "print",
+      relationship: "log",
       implicit: true,
     });
 

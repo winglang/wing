@@ -95,12 +95,12 @@ resource TaskList impl ITaskList {
       title: title, 
       status: "uncompleted"
       };
-    print("adding task ${id} with data: ${j}"); 
+    log("adding task ${id} with data: ${j}"); 
     return this._add(id, j);
   }
       
   inflight remove(id: str) {
-    print("removing task ${id}");
+    log("removing task ${id}");
     this.get_redis_client().del(id);
   }
       

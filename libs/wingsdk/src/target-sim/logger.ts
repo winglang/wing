@@ -4,6 +4,7 @@ import { BaseResourceSchema } from "./schema";
 import { LoggerSchema, LOGGER_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
+import { LoggerInflightMethods } from "../cloud";
 import * as core from "../core";
 
 /**
@@ -38,4 +39,4 @@ export class Logger extends cloud.Logger implements ISimulatorResource {
   }
 }
 
-Logger._annotateInflight("print", {});
+Logger._annotateInflight(LoggerInflightMethods.LOG, {});

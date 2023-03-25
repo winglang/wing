@@ -338,6 +338,18 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         },
         "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
+      },
+    },
+    "aws_sqs_queue": {
+      "root_MyResource_cloudQueue_156CFA11": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/MyResource/cloud.Queue/Default",
+            "uniqueId": "root_MyResource_cloudQueue_156CFA11",
+          },
+        },
+        "name": "cloud-Queue-c8185458",
       },
     },
   },
