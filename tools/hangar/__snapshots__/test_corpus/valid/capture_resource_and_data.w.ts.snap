@@ -140,6 +140,18 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         },
         "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
+      },
+    },
+    "aws_sqs_queue": {
+      "root_cloudQueue_E3597F7A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Queue/Default",
+            "uniqueId": "root_cloudQueue_E3597F7A",
+          },
+        },
+        "name": "cloud-Queue-c86e03d8",
       },
     },
   },
@@ -148,7 +160,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
-const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
 	switch (target) {
@@ -176,7 +188,7 @@ constructor() {
   const res = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
   const queue = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Queue\\",this,\\"cloud.Queue\\");
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.10149a479ee5940e90f4621a2bca78dda7429636b1f235fcd785b3e33c131537/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.10149a479ee5940e90f4621a2bca78dda7429636b1f235fcd785b3e33c131537/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
       data: {
         obj: data,

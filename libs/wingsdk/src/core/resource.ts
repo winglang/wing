@@ -223,24 +223,37 @@ export abstract class Resource extends Construct implements IResource {
     // this is how resources will look:
     // resources = {
     //   "this.bucket": [ "put", "get" ],
+    //   "this.foo.bar.baz": [ "bang" ],
     //   "counter": [ "inc" ]
     // };
 
     // Register the bindings for all child resources
     for (const field of Object.keys(resources)) {
-      if (field.startsWith("this.")) {
-        const key = field.substring(5);
-        const obj: Resource = (this as any)[key];
-        if (obj === undefined) {
-          throw new Error(
-            `Resource ${this.node.path} does not have field ${key}`
-          );
-        }
-
-        this.registerBindObject(obj, host, resources[field]);
-      } else {
+      if (!field.startsWith("this.")) {
         log(`Skipped binding ${field} since it should be bound already.`);
+        continue;
       }
+
+      const key = field.substring(5);
+
+      // traverse the object graph to find the target object we are referencing
+      const resolveReference = (obj: any, parts: string[]): any => {
+        const next = parts.shift();
+        if (!next) {
+          return obj;
+        }
+        return resolveReference(obj[next], parts);
+      };
+
+      // split the key into parts with "." as the separator
+      const obj = resolveReference(this, key.split("."));
+      if (obj === undefined) {
+        throw new Error(
+          `Resource ${this.node.path} does not have field ${key}`
+        );
+      }
+
+      this.registerBindObject(obj, host, resources[field]);
     }
   }
 
@@ -291,11 +304,8 @@ export abstract class Resource extends Construct implements IResource {
         }
 
         // if the object is a resource (i.e. has a "_bind" method"), register a binding between it and the host.
-        if (
-          typeof (obj as IResource)._bind === "function" &&
-          typeof (obj as IResource)._registerBind === "function"
-        ) {
-          (obj as IResource)._registerBind(host, ops);
+        if (isResource(obj)) {
+          obj._registerBind(host, ops);
 
           // add connection metadata
           for (const op of ops) {
@@ -515,4 +525,11 @@ export class Display {
     this.description = props?.description;
     this.hidden = props?.hidden;
   }
+}
+
+function isResource(obj: any): obj is IResource {
+  return (
+    typeof (obj as IResource)._bind === "function" &&
+    typeof (obj as IResource)._registerBind === "function"
+  );
 }

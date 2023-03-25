@@ -1,6 +1,8 @@
 use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
 
-use crate::ast::{Class, Constructor, Expr, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol};
+use crate::ast::{
+	Class, Constructor, Expr, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
+};
 use crate::diagnostic::WingSpan;
 use crate::lsp::sync::FILES;
 use crate::type_check::symbol_env::SymbolLookupInfo;
@@ -120,11 +122,14 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			return;
 		}
 
-		self.with_scope(&node.statements, |v| {
-			for param in &node.parameters {
-				v.visit_symbol(&param.0);
-			}
-		});
+		if let FunctionBody::Statements(scope) = &node.body {
+			self.with_scope(scope, |v| {
+				for param in &node.parameters {
+					v.visit_symbol(&param.0);
+				}
+			});
+		}
+
 		for param_type in &node.signature.parameters {
 			self.visit_type_annotation(param_type);
 		}
@@ -132,7 +137,9 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			self.visit_type_annotation(return_type);
 		}
 
-		self.visit_scope(&node.statements);
+		if let FunctionBody::Statements(scope) = &node.body {
+			self.visit_scope(scope);
+		}
 	}
 
 	fn visit_class(&mut self, node: &'a Class) {
@@ -215,8 +222,6 @@ pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
 		);
 
 		let root_scope = &parse_result.scope;
-		let root_env = root_scope.env.borrow();
-		let root_env = root_env.as_ref().expect("All scopes should have a symbol environment");
 
 		let mut hover_visitor = HoverVisitor::new(params.text_document_position_params.position);
 		hover_visitor.visit_scope(root_scope);
@@ -234,18 +239,9 @@ pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
 				.expect("All symbols must be in a scope")
 				.env
 				.borrow();
+			let env = env.as_ref().expect("All scopes should have a symbol environment");
 
-			let symbol_lookup = root_env.lookup_ext(symbol, None).or_else(|_| {
-				// If the symbol is not found in the root scope, try the given scope
-
-				// NOTE: We lookup in the root scope first because failing to lookup there is much faster than failing to lookup in an inner scope.
-				// The reason for this is due to a current bug in SymbolEnv where the .parent ref gets lost when referencing the root, and becomes bad data.
-				// This bad data sometimes causes the lookup to take a long time (lots of entries), or even panic.
-				// This should not cause incorrect lookups because we do not generally have variable shadowing in Wing.
-				// https://github.com/winglang/wing/issues/1644
-				let env = env.as_ref().expect("All scopes should have a symbol environment");
-				env.lookup_ext(symbol, None)
-			});
+			let symbol_lookup = env.lookup_ext(symbol, None);
 
 			let hover_string = if let Ok(symbol_lookup) = symbol_lookup {
 				format_symbol_with_lookup(&symbol.name, symbol_lookup)
@@ -276,7 +272,7 @@ fn format_symbol_with_lookup(symbol_name: &str, symbol_lookup: (&SymbolKind, Sym
 			format!("**{}**", t)
 		}
 		SymbolKind::Variable(variable_info) => {
-			let flight = match lookup_info.flight {
+			let flight = match lookup_info.phase {
 				Phase::Inflight => "inflight ",
 				Phase::Preflight => "preflight ",
 				Phase::Independent => "",

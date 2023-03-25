@@ -2,7 +2,7 @@
 
 exports[`create a counter 1`] = `
 {
-  "app.wsim/simulator.json": {
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -21,7 +21,7 @@ exports[`create a counter 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {
@@ -72,7 +72,7 @@ exports[`create a counter 1`] = `
 
 exports[`dec 1`] = `
 {
-  "app.wsim/simulator.json": {
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -91,7 +91,7 @@ exports[`dec 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {
@@ -142,7 +142,7 @@ exports[`dec 1`] = `
 
 exports[`inc 1`] = `
 {
-  "app.wsim/simulator.json": {
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -161,7 +161,7 @@ exports[`inc 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {
@@ -212,7 +212,7 @@ exports[`inc 1`] = `
 
 exports[`reset with initial value 1`] = `
 {
-  "app.wsim/simulator.json": {
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -231,7 +231,7 @@ exports[`reset with initial value 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {
@@ -282,7 +282,7 @@ exports[`reset with initial value 1`] = `
 
 exports[`reset without initial value 1`] = `
 {
-  "app.wsim/simulator.json": {
+  "simulator.json": {
     "resources": [
       {
         "attrs": {},
@@ -301,7 +301,7 @@ exports[`reset without initial value 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {

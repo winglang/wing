@@ -1,51 +1,33 @@
-====================
+================================================================================
 Nested identifier
-====================
+================================================================================
 
 test1.test2.test3;
 
----
+--------------------------------------------------------------------------------
 
 (source
   (expression_statement
-    (reference 
-      (nested_identifier
-        object: (reference 
-          (nested_identifier
-            object: (reference (identifier))
-            property: (identifier)
-          )
-        )
-        property: (identifier)
-      )
-    )
-  )
-)
+    (nested_identifier
+      object: (nested_identifier
+        object: (identifier)
+        property: (identifier))
+      property: (identifier))))
 
-====================
+================================================================================
 Nested identifier method call
-====================
+================================================================================
 
 test1.test2.test3();
 
----
+--------------------------------------------------------------------------------
 
 (source
   (expression_statement
     (call
-      caller: (reference
-        (nested_identifier
-          object: (reference 
-            (nested_identifier
-              object: (reference (identifier))
-              property: (identifier)
-            )
-          )
-          property: (identifier)
-        )
-      )
-      args: (argument_list)
-    )
-  )
-)
-
+      caller: (nested_identifier
+        object: (nested_identifier
+          object: (identifier)
+          property: (identifier))
+        property: (identifier))
+      args: (argument_list))))

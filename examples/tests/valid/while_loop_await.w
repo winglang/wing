@@ -9,7 +9,7 @@ let iterator = inflight (j: num): num => {
 let handler = inflight (body: str): str => {
     let i = 0;
     while iterator(i) < 3 {
-        print("${i}");
+        log("${i}");
     }
 };
 

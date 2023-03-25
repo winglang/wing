@@ -1,19 +1,20 @@
 const PREC = {
-  LOGICAL_OR: 1,
-  LOGICAL_AND: 2,
-  INCLUSIVE_OR: 3,
-  EXCLUSIVE_OR: 4,
-  BITWISE_AND: 5,
-  EQUAL: 6,
-  RELATIONAL: 7,
-  SHIFT: 8,
-  ADD: 9,
-  MULTIPLY: 10,
-  UNARY: 11,
-  POWER: 12,
-  NIL_COALESCING: 13,
-  MEMBER: 14,
-  CALL: 15,
+  LOGICAL_OR: 10,
+  LOGICAL_AND: 20,
+  INCLUSIVE_OR: 30,
+  EXCLUSIVE_OR: 40,
+  BITWISE_AND: 50,
+  EQUAL: 60,
+  RELATIONAL: 70,
+  UNWRAP_OR: 80,
+  SHIFT: 90,
+  ADD: 100,
+  MULTIPLY: 110,
+  UNARY: 120,
+  OPTIONAL_TEST: 130,
+  POWER: 140,
+  MEMBER: 150,
+  CALL: 160,
 };
 
 module.exports = grammar({
@@ -27,11 +28,12 @@ module.exports = grammar({
     // Handle ambiguity in case of empty literal: `a = {}`
     // In this case tree-sitter doesn't know if it's a set or a map literal so just assume its a map
     [$.map_literal, $.set_literal],
-    [$.json_container_type, $.stdlib_identifier],
-    [$.json_literal, $.structured_access_expression]
+    [$.json_literal, $.structured_access_expression],
   ],
 
-  conflicts: ($) => [[$.reference, $.custom_type]],
+  conflicts: ($) => [
+    [$.expression, $.custom_type]
+  ],
 
   supertypes: ($) => [$.expression, $._literal],
 
@@ -45,7 +47,7 @@ module.exports = grammar({
       ),
 
     // Identifiers
-    reference: ($) => choice($.stdlib_identifier, $.nested_identifier, $.identifier),
+    reference: ($) => choice($.nested_identifier, $.identifier),
 
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
 
@@ -55,14 +57,18 @@ module.exports = grammar({
         repeat(seq(".", field("fields", $.identifier)))
       ),
 
-    // This is required because of ambiguity with using Json keyword for both instantiation of Json
-    // and Identifier for static methods. Same issue exists for other types like Set, Map, etc.
-    stdlib_identifier: ($) => choice($._json_types, "str", "num", "bool"),
     nested_identifier: ($) =>
       prec(
         PREC.MEMBER,
         seq(
-          field("object", $.expression),
+          field("object", 
+            choice(
+              $.expression, 
+              // This is required because of ambiguity with using Json keyword for both instantiation of Json
+              // and Identifier for static methods.
+              $.json_container_type
+            )
+          ),
           choice(".", "?."),
           optional(field("property", $.identifier))
         )
@@ -102,9 +108,9 @@ module.exports = grammar({
       seq(
         "struct",
         field("name", $.identifier),
-        optional(seq("extends", commaSep($.identifier))),
+        optional(seq("extends", commaSep(field("extends", $.identifier)))),
         "{",
-        repeat($.struct_field),
+        field("field", repeat($.struct_field)),
         "}"
       ),
     struct_field: ($) =>
@@ -278,7 +284,8 @@ module.exports = grammar({
         $.unary_expression,
         $.new_expression,
         $._literal,
-        $.reference,
+        $.identifier,
+        $.nested_identifier,
         $.call,
         $.preflight_closure,
         $.inflight_closure,
@@ -288,7 +295,8 @@ module.exports = grammar({
         $.parenthesized_expression,
         $.structured_access_expression,
         $.json_literal,
-        $.struct_literal
+        $.struct_literal,
+        $.optional_test,
       ),
 
     // Primitives
@@ -333,6 +341,8 @@ module.exports = grammar({
           )
         )
       ),
+
+    optional_test: ($) => prec.right(PREC.OPTIONAL_TEST, seq($.expression, "?")),
 
     call: ($) =>
       prec.left(
@@ -413,6 +423,8 @@ module.exports = grammar({
         field("block", $.block)
       ),
 
+    extern_modifier : ($) => seq("extern", $.string),
+
     method_signature: ($) =>
       seq(
         optional(field("access_modifier", $.access_modifier)),
@@ -426,13 +438,14 @@ module.exports = grammar({
 
     method_definition: ($) =>
       seq(
+        optional(field("extern_modifier", $.extern_modifier)),
         optional(field("access_modifier", $.access_modifier)),
         optional(field("static", $.static)),
         optional(field("async", $.async_modifier)),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         optional(field("return_type", $._type_annotation)),
-        field("block", $.block)
+        choice(field("block", $.block), ";")
       ),
 
     inflight_method_signature: ($) =>
@@ -448,13 +461,14 @@ module.exports = grammar({
 
     inflight_method_definition: ($) =>
       seq(
+        optional(field("extern_modifier", $.extern_modifier)),
         optional(field("access_modifier", $.access_modifier)),
         optional(field("static", $.static)),
         field("phase_modifier", $._inflight_specifier),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         optional(field("return_type", $._type_annotation)),
-        field("block", $.block)
+        choice(field("block", $.block), ";")
       ),
 
     async_modifier: ($) => "async",
@@ -533,7 +547,7 @@ module.exports = grammar({
         //['<<', PREC.SHIFT],
         //['>>', PREC.SHIFT],
         //['>>>', PREC.SHIFT],
-        ["??", PREC.NIL_COALESCING],
+        ["??", PREC.UNWRAP_OR],
       ];
 
       return choice(

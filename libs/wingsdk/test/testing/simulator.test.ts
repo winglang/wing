@@ -167,8 +167,9 @@ function removePathsFromTraceLine(line?: string) {
     return undefined;
   }
 
-  if (line.startsWith("    at ")) {
-    return line.split("(")[0];
+  // replace any paths in the log line with "foo/bar.ts" instead of "/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/foo/bar.ts"
+  if (line.includes("/")) {
+    return "<sanitized>";
   }
 
   return line;

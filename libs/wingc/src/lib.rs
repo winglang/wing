@@ -10,6 +10,7 @@ use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
+use type_check_assert::TypeCheckAssert;
 use visit::Visit;
 use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
@@ -33,6 +34,7 @@ pub mod jsify;
 pub mod lsp;
 pub mod parser;
 pub mod type_check;
+pub mod type_check_assert;
 pub mod utilities;
 pub mod visit;
 mod wasm_util;
@@ -168,7 +170,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> D
 	// note: Globals are emitted here and wrapped in "{ ... }" blocks. Wrapping makes these emissions, actual
 	// statements and not expressions. this makes the runtime panic if these are used in place of expressions.
 	add_builtin(
-		UtilityFunctions::Print.to_string().as_str(),
+		UtilityFunctions::Log.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			parameters: vec![types.string()],
 			return_type: types.void(),
@@ -272,6 +274,10 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 		// empty scope, no type checking needed
 		Diagnostics::new()
 	};
+
+	// Validate that every Expr has an evaluated_type
+	let mut tc_assert = TypeCheckAssert;
+	tc_assert.visit_scope(&scope);
 
 	// Print diagnostics
 	print_diagnostics(&parse_diagnostics);

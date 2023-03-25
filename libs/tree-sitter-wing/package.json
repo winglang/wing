@@ -18,11 +18,9 @@
   "dependencies": {
     "nan": "^2.12.1"
   },
-  "devDependencies": {
-    "tree-sitter-cli": "^0.20.7"
-  },
   "scripts": {
-    "test": "tree-sitter test"
+    "test": "npx tree-sitter-cli test",
+    "test:update": "npx tree-sitter-cli test --update"
   },
   "volta": {
     "node": "18.12.1",

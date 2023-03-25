@@ -200,6 +200,18 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         },
         "bucket": "\${aws_s3_bucket.root_testget_Code_EC989716.bucket}",
         "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
+      },
+      "root_testput_S3Object_30BF1DDD": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:put/S3Object",
+            "uniqueId": "root_testput_S3Object_30BF1DDD",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_testput_Code_DE7653AD.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
       },
     },
   },
@@ -208,7 +220,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
-const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
 	switch (target) {
@@ -234,7 +246,7 @@ constructor() {
   
   const b = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
   this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:put\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.9f10a129b90bc1328dcb1e6194e3902931d1011d95e46825362ef5b06ec17380/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.9f10a129b90bc1328dcb1e6194e3902931d1011d95e46825362ef5b06ec17380/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
       b: {
         obj: b,
@@ -243,7 +255,7 @@ constructor() {
     }
   }));
   this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:get\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1b9abefaef8ce4230db863000273d2c12bacb97e33ac10e6c8b50341e415fdac/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.1b9abefaef8ce4230db863000273d2c12bacb97e33ac10e6c8b50341e415fdac/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
       b: {
         obj: b,

@@ -1,4 +1,4 @@
 assert(false);
-print("W");
+log("W");
 throw("me");
 panic("L");

@@ -201,6 +201,18 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         },
         "bucket": "\${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
         "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
+      },
+      "root_testput_S3Object_30BF1DDD": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/test:put/S3Object",
+            "uniqueId": "root_testput_S3Object_30BF1DDD",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_testput_Code_DE7653AD.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
       },
     },
   },
@@ -209,7 +221,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
-const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
 	switch (target) {
@@ -235,9 +247,9 @@ constructor() {
   
   const b = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
   const file_name = \\"file.json\\";
-  const j = Object.freeze({\\"persons\\":[{\\"age\\":30,\\"fears\\":[\\"heights\\", \\"failure\\"],\\"name\\":\\"hasan\\"}]});
+  const j = Object.freeze({\\"persons\\":[{\\"age\\":30,\\"name\\":\\"hasan\\",\\"fears\\":[\\"heights\\", \\"failure\\"]}]});
   const get_json = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"cloud.Function\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1dabd42192b8d28a57f44a84b644a18eb6fedb868257af123181c0ecec2c2a70/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.1dabd42192b8d28a57f44a84b644a18eb6fedb868257af123181c0ecec2c2a70/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
       b: {
         obj: b,
@@ -250,7 +262,7 @@ constructor() {
     }
   }));
   this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:put\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.742d4f24b17fb7f7f831acbd15487b30d36ad90d44229b79672a09f910cb6619/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.742d4f24b17fb7f7f831acbd15487b30d36ad90d44229b79672a09f910cb6619/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
       b: {
         obj: b,

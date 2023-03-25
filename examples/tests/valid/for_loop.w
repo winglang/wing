@@ -4,7 +4,7 @@ let unique_numbers = { 1, 2, 3 };
 for word in words {
   for number in unique_numbers {
     assert(number > 0);
-    print("${word}: ${number}");
+    log("${word}: ${number}");
   }
 }
 
@@ -15,7 +15,7 @@ for word in words {
   let var post_break_hits = 0;
   for number in unique_numbers {
     assert(number > 0);
-    print("${word}: ${number}");
+    log("${word}: ${number}");
     pre_break_hits = pre_break_hits + 1;
     if (number == 2) {
       break;
@@ -34,7 +34,7 @@ for word in words {
   let var post_continue_hits = 0;
   for number in unique_numbers {
     assert(number > 0);
-    print("${word}: ${number}");
+    log("${word}: ${number}");
     pre_continue_hits = pre_continue_hits + 1;
     if (number > 0) {
       continue;
