@@ -12,7 +12,12 @@ errorWingFiles.forEach((wingFile) => {
       path.join(errorTestDir, wingFile)
     );
 
-    const out = await runWingCommand(tmpDir, relativeWingFile, args, false);
+    const out = await runWingCommand({
+      cwd: tmpDir, 
+      wingFile: relativeWingFile, 
+      args, 
+      shouldSucceed: false
+    });
 
     const stderr = out.stderr;
 

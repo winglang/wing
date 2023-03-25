@@ -14,7 +14,7 @@ resource Foo {
   }
 }
 
-print(Foo.get_greeting("Wingding"));
+log(Foo.get_greeting("Wingding"));
 
 let f = new Foo();
 

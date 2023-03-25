@@ -312,19 +312,19 @@
           "exec": "npm update npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@types/express-serve-static-core,@types/express,@winglang/jsii-docgen,@winglang/wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf,constructs'"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@types/express-serve-static-core,@types/express,@winglang/jsii-docgen,@winglang/wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@types/express-serve-static-core,@types/express,@winglang/jsii-docgen,@winglang/wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf,constructs'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@types/express-serve-static-core,@types/express,@winglang/jsii-docgen,@winglang/wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@types/express-serve-static-core,@types/express,@winglang/jsii-docgen,@winglang/wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf,constructs'"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@types/express-serve-static-core,@types/express,@winglang/jsii-docgen,@winglang/wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@types/express-serve-static-core,@types/express,@winglang/jsii-docgen,@winglang/wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf,constructs'"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@types/express-serve-static-core,@types/express,@winglang/jsii-docgen,@winglang/wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@types/express-serve-static-core,@types/express,@winglang/jsii-docgen,@winglang/wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf,constructs'"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@types/express-serve-static-core,@types/express,@winglang/jsii-docgen,@winglang/wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf,constructs'"
         },
         {
           "exec": "npm install"

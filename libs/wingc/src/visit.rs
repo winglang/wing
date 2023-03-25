@@ -265,7 +265,7 @@ where
 		}
 		ExprKind::StructLiteral { type_, fields } => {
 			v.visit_type_annotation(type_);
-			for (sym, val) in fields.values() {
+			for (sym, val) in fields.iter() {
 				v.visit_symbol(sym);
 				v.visit_expr(val);
 			}

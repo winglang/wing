@@ -1,5 +1,5 @@
 import { BaseResourceAttributes, BaseResourceSchema } from "./schema";
-import { HttpMethod } from "../cloud";
+import { ColumnType, HttpMethod } from "../cloud";
 
 export const API_TYPE = "wingsdk.cloud.Api";
 export const QUEUE_TYPE = "wingsdk.cloud.Queue";
@@ -8,6 +8,7 @@ export const BUCKET_TYPE = "wingsdk.cloud.Bucket";
 export const TOPIC_TYPE = "wingsdk.cloud.Topic";
 export const COUNTER_TYPE = "wingsdk.cloud.Counter";
 export const SCHEDULE_TYPE = "wingsdk.cloud.Schedule";
+export const TABLE_TYPE = "wingsdk.cloud.Table";
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 
 export type FunctionHandle = string;
@@ -94,6 +95,19 @@ export interface TopicAttributes {}
 export interface TopicSubscriber {
   /** Function that should be called */
   readonly functionHandle: FunctionHandle;
+}
+
+/** Runtime attributes for cloud.Table */
+export interface TableAttributes {}
+
+/** Schema for cloud.Table */
+export interface TableSchema extends BaseResourceSchema {
+  readonly type: typeof TABLE_TYPE;
+  readonly props: {
+    readonly name: string;
+    readonly columns: { [key: string]: ColumnType };
+    readonly primaryKey: string;
+  };
 }
 
 /** Schema for cloud.Bucket */

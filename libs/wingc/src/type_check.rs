@@ -1,8 +1,8 @@
 mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{
-	Class as AstClass, Expr, ExprKind, FunctionBody, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt,
-	StmtKind, Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
+	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, InterpolatedStringPart, Literal, Phase,
+	Reference, Scope, Stmt, StmtKind, Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{
@@ -11,11 +11,10 @@ use crate::{
 	WINGSDK_STRING,
 };
 use derivative::Derivative;
-use indexmap::IndexSet;
-use itertools::Itertools;
+use indexmap::{IndexMap, IndexSet};
+use itertools::{izip, Itertools};
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
-use std::collections::BTreeMap;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
@@ -304,6 +303,12 @@ impl ClassLike for Struct {
 	fn get_env(&self) -> &SymbolEnv {
 		&self.env
 	}
+}
+
+/// Intermediate struct for storing the evaluated types of arguments in a function call or constructor call.
+pub struct ArgListTypes {
+	pub pos_args: Vec<TypeRef>,
+	pub named_args: IndexMap<Symbol, TypeRef>,
 }
 
 #[derive(Derivative)]
@@ -831,6 +836,21 @@ impl TypeRef {
 		}
 	}
 
+	// returns true if mutable type or if immutable container type contains a mutable type
+	pub fn is_deep_mutable(&self) -> bool {
+		match &**self {
+			Type::MutArray(_) => true,
+			Type::MutMap(_) => true,
+			Type::MutSet(_) => true,
+			Type::MutJson => true,
+			Type::Array(v) => v.is_deep_mutable(),
+			Type::Map(v) => v.is_deep_mutable(),
+			Type::Set(v) => v.is_deep_mutable(),
+			Type::Optional(v) => v.is_deep_mutable(),
+			_ => false,
+		}
+	}
+
 	pub fn is_json_legal_value(&self) -> bool {
 		match **self {
 			Type::Number => true,
@@ -1124,7 +1144,23 @@ impl<'a> TypeChecker<'a> {
 		statement_idx: usize,
 		context: &TypeCheckerContext,
 	) -> TypeRef {
-		let t = match &exp.kind {
+		let t = self.type_check_exp_helper(&exp, env, statement_idx, context);
+		exp.evaluated_type.replace(Some(t));
+		t
+	}
+
+	/// Helper function for type_check_exp. This is needed because we want to be able to `return`
+	/// and break early, while still setting the evaluated type on the expression.
+	///
+	/// Do not use this function directly, use `type_check_exp` instead.
+	fn type_check_exp_helper(
+		&mut self,
+		exp: &Expr,
+		env: &SymbolEnv,
+		statement_idx: usize,
+		context: &TypeCheckerContext,
+	) -> TypeRef {
+		match &exp.kind {
 			ExprKind::Literal(lit) => match lit {
 				Literal::String(_) => self.types.string(),
 				Literal::InterpolatedString(s) => {
@@ -1144,31 +1180,47 @@ impl<'a> TypeChecker<'a> {
 				let ltype = self.type_check_exp(left, env, statement_idx, context);
 				let rtype = self.type_check_exp(right, env, statement_idx, context);
 
-				if op.boolean_args() {
-					self.validate_type(ltype, self.types.bool(), left);
-					self.validate_type(rtype, self.types.bool(), right);
-				} else if op.numerical_args() {
-					self.validate_type(ltype, self.types.number(), left);
-					self.validate_type(rtype, self.types.number(), right);
-				} else if matches!(op, crate::ast::BinaryOperator::UnwrapOr) {
-					// Left argument must be an optional type
-					if !ltype.is_option() {
-						self.expr_error(left, format!("Expected optional type, found \"{}\"", ltype));
-						return ltype;
-					} else {
-						// Right argument must be a subtype of the inner type of the left argument
-						let inner_type = ltype.maybe_unwrap_option();
-						self.validate_type(rtype, inner_type, right);
-						return inner_type;
+				match op {
+					BinaryOperator::LogicalAnd | BinaryOperator::LogicalOr => {
+						self.validate_type(ltype, self.types.bool(), left);
+						self.validate_type(rtype, self.types.bool(), right);
+						self.types.bool()
 					}
-				} else {
-					self.validate_type(rtype, ltype, exp);
-				}
-
-				if op.boolean_result() {
-					self.types.bool()
-				} else {
-					ltype
+					BinaryOperator::Add
+					| BinaryOperator::Sub
+					| BinaryOperator::Mul
+					| BinaryOperator::Div
+					| BinaryOperator::FloorDiv
+					| BinaryOperator::Mod
+					| BinaryOperator::Power => {
+						self.validate_type(ltype, self.types.number(), left);
+						self.validate_type(rtype, self.types.number(), right);
+						self.types.number()
+					}
+					BinaryOperator::Equal | BinaryOperator::NotEqual => {
+						self.validate_type(rtype, ltype, exp);
+						self.types.bool()
+					}
+					BinaryOperator::Less
+					| BinaryOperator::LessOrEqual
+					| BinaryOperator::Greater
+					| BinaryOperator::GreaterOrEqual => {
+						self.validate_type(ltype, self.types.number(), left);
+						self.validate_type(rtype, self.types.number(), right);
+						self.types.bool()
+					}
+					BinaryOperator::UnwrapOr => {
+						// Left argument must be an optional type
+						if !ltype.is_option() {
+							self.expr_error(left, format!("Expected optional type, found \"{}\"", ltype));
+							ltype
+						} else {
+							// Right argument must be a subtype of the inner type of the left argument
+							let inner_type = ltype.maybe_unwrap_option();
+							self.validate_type(rtype, inner_type, right);
+							inner_type
+						}
+					}
 				}
 			}
 			ExprKind::Unary { op, exp: unary_exp } => {
@@ -1188,7 +1240,10 @@ impl<'a> TypeChecker<'a> {
 			} => {
 				// TODO: obj_id, obj_scope ignored, should use it once we support Type::Resource and then remove it from Classes (fail if a class has an id if grammar doesn't handle this for us)
 
-				// Lookup the type in the env
+				// Type check the arguments
+				let arg_list_types = self.type_check_arg_list(arg_list, env, statement_idx, context);
+
+				// Lookup the class's type in the env
 				let type_ = self.resolve_type_annotation(class, env, statement_idx);
 				let (class_env, class_symbol) = match &*type_ {
 					Type::Class(ref class) => (&class.env, &class.name),
@@ -1203,14 +1258,6 @@ impl<'a> TypeChecker<'a> {
 						}
 					}
 					t => {
-						// Even though the type isn't really constructable, we can still type check the args
-						for arg in &arg_list.pos_args {
-							self.type_check_exp(arg, env, statement_idx, context);
-						}
-						for arg in &arg_list.named_args {
-							self.type_check_exp(arg.1, env, statement_idx, context);
-						}
-
 						if matches!(t, Type::Anything) {
 							return self.types.anything();
 						} else {
@@ -1238,10 +1285,10 @@ impl<'a> TypeChecker<'a> {
 					// Verify return type (This should never fail since we define the constructors return type during AST building)
 					self.validate_type(constructor_sig.return_type, type_, exp);
 
-					if !arg_list.named_args.is_empty() {
-						let last_arg = constructor_sig.parameters.last().unwrap().maybe_unwrap_option();
-						self.validate_structural_type(&arg_list.named_args, &last_arg, exp, env, statement_idx, context);
-					}
+				if !arg_list.named_args.is_empty() {
+					let last_arg = constructor_sig.parameters.last().unwrap().maybe_unwrap_option();
+					self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
+				}
 
 					// Verify arity
 					let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
@@ -1262,12 +1309,14 @@ impl<'a> TypeChecker<'a> {
 						self.expr_error(exp, err_text);
 					}
 
-					// Verify passed arguments match the constructor
-					for (arg_expr, arg_type) in arg_list.pos_args.iter().zip(constructor_sig.parameters.iter()) {
-						let arg_expr_type = self.type_check_exp(arg_expr, env, statement_idx, context);
-						self.validate_type(arg_expr_type, *arg_type, arg_expr);
-					}
-				};
+				// Verify passed positional arguments match the constructor
+				for (arg_expr, arg_type, param_type) in izip!(
+					arg_list.pos_args.iter(),
+					arg_list_types.pos_args.iter(),
+					constructor_sig.parameters.iter()
+				) {
+					self.validate_type(*arg_type, *param_type, arg_expr);
+				}
 
 				// If this is a Resource then create a new type for this resource object
 				if type_.as_resource().is_some() {
@@ -1307,15 +1356,10 @@ impl<'a> TypeChecker<'a> {
 					_ => 0,
 				};
 
+				let arg_list_types = self.type_check_arg_list(arg_list, env, statement_idx, context);
+
 				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud.Bucket().upload())
 				if matches!(*func_type, Type::Anything) {
-					// Even if we don't know the type of the function, we can still type check the arguments
-					for arg in arg_list.pos_args.iter() {
-						self.type_check_exp(arg, env, statement_idx, context);
-					}
-					for arg in arg_list.named_args.values() {
-						self.type_check_exp(arg, env, statement_idx, context);
-					}
 					return self.types.anything();
 				}
 
@@ -1335,7 +1379,7 @@ impl<'a> TypeChecker<'a> {
 
 				if !arg_list.named_args.is_empty() {
 					let last_arg = func_sig.parameters.last().unwrap().maybe_unwrap_option();
-					self.validate_structural_type(&arg_list.named_args, &last_arg, exp, env, statement_idx, context);
+					self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
 				}
 
 				// Count number of optional parameters from the end of the function's params
@@ -1368,11 +1412,11 @@ impl<'a> TypeChecker<'a> {
 					.iter()
 					.skip(this_args)
 					.take(func_sig.parameters.len() - num_optionals);
-				let args = arg_list.pos_args.iter();
 
-				for (arg_type, param_exp) in params.zip(args) {
-					let param_type = self.type_check_exp(param_exp, env, statement_idx, context);
-					self.validate_type(param_type, *arg_type, param_exp);
+				// Verify passed positional arguments match the function's parameter types
+				for (arg_expr, arg_type, param_type) in izip!(arg_list.pos_args.iter(), arg_list_types.pos_args.iter(), params)
+				{
+					self.validate_type(*arg_type, *param_type, arg_expr);
 				}
 
 				func_sig.return_type
@@ -1407,6 +1451,16 @@ impl<'a> TypeChecker<'a> {
 				// Find this struct's type in the environment
 				let struct_type = self.resolve_type_annotation(type_, env, statement_idx);
 
+				// Type check each of the struct's fields
+				let field_types: IndexMap<Symbol, TypeRef> = fields
+					.iter()
+					.map(|(name, exp)| {
+						let t = self.type_check_exp(exp, env, statement_idx, context);
+						(name.clone(), t)
+					})
+					.collect();
+
+				// If the struct type is anything, we don't need to validate the fields
 				if struct_type.is_anything() {
 					return struct_type;
 				}
@@ -1416,22 +1470,29 @@ impl<'a> TypeChecker<'a> {
 					.as_struct()
 					.expect(&format!("Expected \"{}\" to be a struct type", struct_type));
 
-				// Verify that all fields are present and are of the right type
+				// Verify that all expected fields are present and are the right type
 				for (name, kind, _info) in st.env.iter(true) {
 					let field_type = kind
 						.as_variable()
 						.expect("Expected struct field to be a variable in the struct env")
 						.type_;
-					match fields.get(&name) {
-						Some((_, field_exp)) => {
-							let t = self.type_check_exp(field_exp, env, statement_idx, context);
-							self.validate_type(t, field_type, field_exp);
+					match fields.get(name.as_str()) {
+						Some(field_exp) => {
+							let t = field_types.get(name.as_str()).unwrap();
+							self.validate_type(*t, field_type, field_exp);
 						}
 						None => {
 							if !field_type.is_option() {
 								self.expr_error(exp, format!("\"{}\" is not initialized", name));
 							}
 						}
+					}
+				}
+
+				// Verify that no unexpected fields are present
+				for (name, _t) in field_types.iter() {
+					if !st.env.lookup(&name, Some(statement_idx)).is_ok() {
+						self.expr_error(exp, format!("\"{}\" is not a field of \"{}\"", name.name, st.name.name));
 					}
 				}
 
@@ -1540,20 +1601,16 @@ impl<'a> TypeChecker<'a> {
 				}
 				self.types.bool()
 			}
-		};
-		exp.evaluated_type.replace(Some(t));
-		t
+		}
 	}
 
 	/// Validate that a given map can be assigned to a variable of given struct type
 	fn validate_structural_type(
 		&mut self,
-		object: &BTreeMap<Symbol, Expr>,
+		object: &IndexMap<Symbol, Expr>,
+		object_types: &IndexMap<Symbol, TypeRef>,
 		expected_type: &TypeRef,
 		value: &Expr,
-		env: &SymbolEnv,
-		statement_idx: usize,
-		context: &TypeCheckerContext,
 	) {
 		let expected_struct = if let Some(expected_struct) = expected_type.as_struct() {
 			expected_struct
@@ -1564,8 +1621,8 @@ impl<'a> TypeChecker<'a> {
 
 		// Verify that there are no extraneous fields
 		// Also map original field names to the ones in the struct type
-		let mut field_map = BTreeMap::new();
-		for (k, _) in object.iter() {
+		let mut field_map = IndexMap::new();
+		for (k, _) in object_types.iter() {
 			let field = expected_struct.env.try_lookup(&k.name, None);
 			if let Some(field) = field {
 				let field_type = field
@@ -1588,9 +1645,9 @@ impl<'a> TypeChecker<'a> {
 			)
 		}) {
 			if let Some((symb, expected_field_type)) = field_map.get(&k) {
-				let provided_exp = object.get(symb).unwrap();
-				let t = self.type_check_exp(provided_exp, env, statement_idx, context);
-				self.validate_type(t, *expected_field_type, provided_exp);
+				let provided_exp = object.get(*symb).unwrap();
+				let t = object_types.get(*symb).unwrap();
+				self.validate_type(*t, *expected_field_type, provided_exp);
 			} else if !v.is_option() {
 				self.expr_error(
 					value,
@@ -1744,6 +1801,36 @@ impl<'a> TypeChecker<'a> {
 				// TODO: avoid creating a new type for each map resolution
 				self.types.add_type(Type::MutMap(value_type))
 			}
+		}
+	}
+
+	fn type_check_arg_list(
+		&mut self,
+		arg_list: &ArgList,
+		env: &SymbolEnv,
+		statement_idx: usize,
+		context: &TypeCheckerContext,
+	) -> ArgListTypes {
+		// Type check the positional arguments, e.g. fn(exp1, exp2, exp3)
+		let pos_arg_types = arg_list
+			.pos_args
+			.iter()
+			.map(|pos_arg| self.type_check_exp(pos_arg, env, statement_idx, context))
+			.collect();
+
+		// Type check the named arguments, e.g. fn(named_arg1: exp4, named_arg2: exp5)
+		let named_arg_types = arg_list
+			.named_args
+			.iter()
+			.map(|(sym, expr)| {
+				let arg_type = self.type_check_exp(&expr, env, statement_idx, context);
+				(sym.clone(), arg_type)
+			})
+			.collect::<IndexMap<_, _>>();
+
+		ArgListTypes {
+			pos_args: pos_arg_types,
+			named_args: named_arg_types,
 		}
 	}
 
@@ -2318,6 +2405,12 @@ impl<'a> TypeChecker<'a> {
 				// Add fields to the struct env
 				for field in members.iter() {
 					let field_type = self.resolve_type_annotation(&field.member_type, env, stmt.idx);
+					if field_type.is_deep_mutable() {
+						self.type_error(TypeError {
+							message: format!("struct fields must be immutable got: {}", field_type),
+							span: field.name.span.clone(),
+						});
+					}
 					match struct_env.define(
 						&field.name,
 						SymbolKind::make_variable(field_type, false, field.phase),
@@ -2774,7 +2867,17 @@ impl<'a> TypeChecker<'a> {
 						})
 					}
 				}
-				Err(type_error) => self.variable_error(type_error),
+				Err(type_error) => {
+					// Give a specific error message if someone tries to write "print" instead of "log"
+					if symbol.name == "print" {
+						self.variable_error(TypeError {
+							message: "Unknown symbol \"print\", did you mean to use \"log\"?".to_string(),
+							span: symbol.span.clone(),
+						})
+					} else {
+						self.variable_error(type_error)
+					}
+				}
 			},
 			Reference::InstanceMember { object, property } => {
 				// There's a special case where the object is actually a type and the property is either a static member or an enum variant.

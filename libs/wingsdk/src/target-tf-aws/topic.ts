@@ -5,8 +5,8 @@ import { SnsTopicSubscription } from "@cdktf/provider-aws/lib/sns-topic-subscrip
 import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
+import { convertBetweenHandlers } from "../utils/convert";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**

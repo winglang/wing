@@ -67,7 +67,7 @@ exports[`basic function 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                   ],
@@ -165,7 +165,7 @@ exports[`basic function 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/Function",
                     },
                   ],
@@ -296,7 +296,7 @@ exports[`basic function with environment variables 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                   ],
@@ -394,7 +394,7 @@ exports[`basic function with environment variables 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/Function",
                     },
                   ],
@@ -524,7 +524,7 @@ exports[`basic function with memory size specified 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                   ],
@@ -622,7 +622,7 @@ exports[`basic function with memory size specified 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/Function",
                     },
                   ],
@@ -751,7 +751,7 @@ exports[`basic function with timeout explicitly set 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                   ],
@@ -849,7 +849,7 @@ exports[`basic function with timeout explicitly set 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/Function",
                     },
                   ],
@@ -995,7 +995,7 @@ exports[`function name valid 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                   ],
@@ -1076,7 +1076,7 @@ exports[`function name valid 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/The-Mighty_Function-01",
                     },
                   ],
@@ -1222,7 +1222,7 @@ exports[`replace invalid character from function name 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                   ],
@@ -1303,7 +1303,7 @@ exports[`replace invalid character from function name 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/The%Mighty$Function",
                     },
                   ],

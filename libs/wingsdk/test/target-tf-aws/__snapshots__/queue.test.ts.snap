@@ -367,7 +367,7 @@ exports[`queue with a consumer function 3`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                     {
@@ -457,6 +457,9 @@ exports[`queue with a consumer function 3`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
+                "display": {
+                  "hidden": true,
+                },
                 "id": "Queue-OnMessageHandler-c5395e41",
                 "path": "root/Default/Queue-OnMessageHandler-c5395e41",
               },
@@ -466,7 +469,7 @@ exports[`queue with a consumer function 3`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/Queue-OnMessage-c5395e41",
                     },
                   ],

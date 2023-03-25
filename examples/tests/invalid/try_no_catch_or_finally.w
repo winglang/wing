@@ -1,3 +1,3 @@
 try {
-  print("Hello World");
+  log("Hello World");
 }

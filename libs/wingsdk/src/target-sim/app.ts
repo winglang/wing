@@ -9,6 +9,7 @@ import { Logger } from "./logger";
 import { Queue } from "./queue";
 import { isSimulatorResource } from "./resource";
 import { WingSimulatorSchema } from "./schema";
+import { Table } from "./table";
 import { Topic } from "./topic";
 import {
   API_FQN,
@@ -17,6 +18,7 @@ import {
   FUNCTION_FQN,
   LOGGER_FQN,
   QUEUE_FQN,
+  TABLE_FQN,
   TOPIC_FQN,
 } from "../cloud";
 import { SDK_VERSION } from "../constants";
@@ -70,6 +72,9 @@ export class App extends core.App {
 
       case COUNTER_FQN:
         return new Counter(scope, id, args[0]);
+
+      case TABLE_FQN:
+        return new Table(scope, id, args[0]);
 
       case TOPIC_FQN:
         return new Topic(scope, id, args[0]);

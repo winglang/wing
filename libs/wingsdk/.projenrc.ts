@@ -32,6 +32,7 @@ const project = new cdk.JsiiProject({
     // conflict with each other)
     "@aws-sdk/client-cloudwatch-logs@3.256.0",
     "@aws-sdk/client-dynamodb@3.256.0",
+    "@aws-sdk/util-dynamodb@3.256.0",
     "@aws-sdk/client-lambda@3.256.0",
     "@aws-sdk/client-s3@3.256.0",
     "@aws-sdk/client-sqs@3.256.0",
