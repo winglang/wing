@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
-import { IResource, NodeJsCode, Resource } from "./core";
-import { normalPath } from "./util";
+import { IResource, NodeJsCode, Resource } from "../core";
+import { normalPath } from "../util";
 
 /**
  * Convert a resource with a single method into a resource with a different
@@ -24,6 +24,7 @@ export function convertBetweenHandlers(
     constructor(theScope: Construct, theId: string, handler: IResource) {
       super(theScope, theId);
       this.handler = handler;
+      this.display.hidden = true;
     }
 
     public _toInflight(): NodeJsCode {
