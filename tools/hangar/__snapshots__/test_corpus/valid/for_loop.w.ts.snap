@@ -93,7 +93,7 @@ constructor() {
   }
   {console.log(\\"there's no value to iterate\\")};
   {console.log(\\"---\\\\nfor x in 0..=0 { ... }\\")};
-  for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,0,true)) {
+  for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,0,false)) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === 0)'\`)})((x === 0))};
     {console.log(\`\${x}\`)};
   }
@@ -104,7 +104,7 @@ constructor() {
     {console.log(\`\${x}\`)};
   }
   {console.log(\\"---\\\\nfor x in 0..=2 { ... }\\")};
-  for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,2,true)) {
+  for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,2,false)) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x >= 0)'\`)})((x >= 0))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x <= 2)'\`)})((x <= 2))};
     {console.log(\`\${x}\`)};
@@ -116,7 +116,7 @@ constructor() {
     {console.log(\`\${x}\`)};
   }
   {console.log(\\"---\\\\nfor x in 2..=0 { ... }\\")};
-  for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(2,0,true)) {
+  for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(2,0,false)) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x <= 2)'\`)})((x <= 2))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x >= 0)'\`)})((x >= 0))};
     {console.log(\`\${x}\`)};
@@ -128,7 +128,7 @@ constructor() {
     {console.log(\`\${x}\`)};
   }
   {console.log(\\"---\\\\nfor x in 0..=-2 { ... }\\")};
-  for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,(-2),true)) {
+  for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,(-2),false)) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x <= 0)'\`)})((x <= 0))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x > (-3))'\`)})((x > (-3)))};
     {console.log(\`\${x}\`)};
@@ -140,7 +140,7 @@ constructor() {
     {console.log(\`\${x}\`)};
   }
   {console.log(\\"---\\\\nfor x in -2..=0 { ... }\\")};
-  for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })((-2),0,true)) {
+  for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })((-2),0,false)) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x >= (-2))'\`)})((x >= (-2)))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x <= 0)'\`)})((x <= 0))};
     {console.log(\`\${x}\`)};
@@ -153,7 +153,7 @@ constructor() {
     {console.log(\`\${x}\`)};
   }
   {console.log(\\"---\\\\nfor x in 0..=z { ... } <=> x = 2\\")};
-  for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,z,true)) {
+  for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,z,false)) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x >= 0)'\`)})((x >= 0))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x <= 2)'\`)})((x <= 2))};
     {console.log(\`\${x}\`)};
@@ -171,7 +171,7 @@ constructor() {
     {console.log(\`\${x}\`)};
   }
   {console.log(\\"---\\\\nfor x in 0..=(z*2) { ... } <=> x = 2\\")};
-  for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,(z * 2),true)) {
+  for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,(z * 2),false)) {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x >= 0)'\`)})((x >= 0))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x <= 4)'\`)})((x <= 4))};
     {console.log(\`\${x}\`)};
@@ -235,7 +235,6 @@ for x in 0..0 { ... }
 there's no value to iterate
 ---
 for x in 0..=0 { ... }
-0
 ---
 for x in 0..2 { ... }
 0
@@ -244,7 +243,6 @@ for x in 0..2 { ... }
 for x in 0..=2 { ... }
 0
 1
-2
 ---
 for x in 2..0 { ... }
 2
@@ -253,7 +251,6 @@ for x in 2..0 { ... }
 for x in 2..=0 { ... }
 2
 1
-0
 ---
 for x in 0..-2 { ... }
 0
@@ -262,7 +259,6 @@ for x in 0..-2 { ... }
 for x in 0..=-2 { ... }
 0
 -1
--2
 ---
 for x in -2..0 { ... }
 -2
@@ -271,7 +267,6 @@ for x in -2..0 { ... }
 for x in -2..=0 { ... }
 -2
 -1
-0
 ---
 for x in 0..z { ... } <=> x = 2
 0
@@ -280,7 +275,6 @@ for x in 0..z { ... } <=> x = 2
 for x in 0..=z { ... } <=> x = 2
 0
 1
-2
 ---
 for x in z..0 { ... } <=> x = 2
 2
@@ -297,7 +291,6 @@ for x in 0..=(z*2) { ... } <=> x = 2
 1
 2
 3
-4
 ---
 for x in (z*2)..0 { ... } <=> x = 2
 4

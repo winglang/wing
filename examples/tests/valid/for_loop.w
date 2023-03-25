@@ -46,134 +46,134 @@ for word in words {
 }
 assert(j == 3);
 
-print("---\nfor x in 0..0 { ... }");
+log("---\nfor x in 0..0 { ... }");
 for x in 0..0 {
   assert(false);
 }
-print("there's no value to iterate");
+log("there's no value to iterate");
 
-print("---\nfor x in 0..=0 { ... }");
+log("---\nfor x in 0..=0 { ... }");
 for x in 0..=0 {
   assert(x == 0);
-  print("${x}");
+  log("${x}");
 }
 
-print("---\nfor x in 0..2 { ... }");
+log("---\nfor x in 0..2 { ... }");
 for x in 0..2 {
   assert(x >= 0);
   assert(x < 2);
-  print("${x}");
+  log("${x}");
 }
 
-print("---\nfor x in 0..=2 { ... }");
+log("---\nfor x in 0..=2 { ... }");
 for x in 0..=2 {
   assert(x >= 0);
   assert(x <= 2);
-  print("${x}");
+  log("${x}");
 }
 
-print("---\nfor x in 2..0 { ... }");
+log("---\nfor x in 2..0 { ... }");
 for x in 2..0 {
   assert(x <= 2);
   assert(x > 0);
-  print("${x}");
+  log("${x}");
 }
 
-print("---\nfor x in 2..=0 { ... }");
+log("---\nfor x in 2..=0 { ... }");
 for x in 2..=0 {
   assert(x <= 2);
   assert(x >= 0);
-  print("${x}");
+  log("${x}");
 }
 
-print("---\nfor x in 0..-2 { ... }");
+log("---\nfor x in 0..-2 { ... }");
 for x in 0..-2 {
   assert(x <= 0);
   assert(x > -2);
-  print("${x}");
+  log("${x}");
 }
 
-print("---\nfor x in 0..=-2 { ... }");
+log("---\nfor x in 0..=-2 { ... }");
 for x in 0..=-2 {
   assert(x <= 0);
   assert(x > -3);
-  print("${x}");
+  log("${x}");
 }
 
-print("---\nfor x in -2..0 { ... }");
+log("---\nfor x in -2..0 { ... }");
 for x in -2..0 {
   assert(x >= -2);
   assert(x < 0);
-  print("${x}");
+  log("${x}");
 }
 
-print("---\nfor x in -2..=0 { ... }");
+log("---\nfor x in -2..=0 { ... }");
 for x in -2..=0 {
   assert(x >= -2);
   assert(x <= 0);
-  print("${x}");
+  log("${x}");
 }
 
 let z = 2;
-print("---\nfor x in 0..z { ... } <=> x = 2");
+log("---\nfor x in 0..z { ... } <=> x = 2");
 for x in 0..z {
   assert(x >= 0);
   assert(x < 2);
-  print("${x}");
+  log("${x}");
 }
 
-print("---\nfor x in 0..=z { ... } <=> x = 2");
+log("---\nfor x in 0..=z { ... } <=> x = 2");
 for x in 0..=z {
   assert(x >= 0);
   assert(x <= 2);
-  print("${x}");
+  log("${x}");
 }
 
-print("---\nfor x in z..0 { ... } <=> x = 2");
+log("---\nfor x in z..0 { ... } <=> x = 2");
 for x in z..0 {
   assert(x <= 2);
   assert(x > 0);
-  print("${x}");
+  log("${x}");
 }
 
-print("---\nfor x in 0..(z*2) { ... } <=> x = 2");
+log("---\nfor x in 0..(z*2) { ... } <=> x = 2");
 for x in 0..(z*2) {
   assert(x >= 0);
   assert(x < 4);
-  print("${x}");
+  log("${x}");
 }
 
-print("---\nfor x in 0..=(z*2) { ... } <=> x = 2");
+log("---\nfor x in 0..=(z*2) { ... } <=> x = 2");
 for x in 0..=(z*2) {
   assert(x >= 0);
   assert(x <= 4);
-  print("${x}");
+  log("${x}");
 }
 
-print("---\nfor x in (z*2)..0 { ... } <=> x = 2");
+log("---\nfor x in (z*2)..0 { ... } <=> x = 2");
 for x in (z*2)..0 {
   assert(x <= 4);
   assert(x > 0);
-  print("${x}");
+  log("${x}");
 }
 
-print("---\nfor x in std.Range.of(0, 2) { ... }");
+log("---\nfor x in std.Range.of(0, 2) { ... }");
 for x in std.Range.of(0, 2) {
   assert(x >= 0);
   assert(x < 2);
-  print("${x}");
+  log("${x}");
 }
 
-print("---\nfor x in std.Range.of(0, 2, true) { ... }");
+log("---\nfor x in std.Range.of(0, 2, true) { ... }");
 for x in std.Range.of(0, 2, true) {
   assert(x >= 0);
   assert(x <= 2);
-  print("${x}");
+  log("${x}");
 }
 
-print("---\nfor x in std.Range.of(2, 0) { ... }");
+log("---\nfor x in std.Range.of(2, 0) { ... }");
 for x in std.Range.of(2, 0) {
   assert(x <= 2);
   assert(x > 0);
-  print("${x}");
+  log("${x}");
 }

@@ -61,9 +61,9 @@ module.exports = grammar({
       prec(
         PREC.MEMBER,
         seq(
-          field("object", 
+          field("object",
             choice(
-              $.expression, 
+              $.expression,
               // This is required because of ambiguity with using Json keyword for both instantiation of Json
               // and Identifier for static methods.
               $.json_container_type
@@ -226,23 +226,23 @@ module.exports = grammar({
         "}"
       ),
 
+    inclusive_range: ($) => "=",
+
+    loop_range: ($) =>
+      seq(
+        field("start", $.expression),
+        "..",
+        optional(field("inclusive", $.inclusive_range)),
+        field("end", $.expression)
+      ),
+
     for_in_loop: ($) =>
       seq(
         "for",
         field("iterator", $.reference),
         "in",
-        field("iterable", choice($.expression, $.num_sequence)),
+        field("iterable", choice($.expression, $.loop_range)),
         field("block", $.block)
-      ),
-
-    inclusive_sequence: ($) => "=",
-
-    num_sequence: ($) =>
-      seq(
-        field("start", $.expression),
-        "..",
-        optional(field("inclusive_sequence", $.inclusive_sequence)),
-        field("end", $.expression)
       ),
 
     while_statement: ($) =>
@@ -423,7 +423,7 @@ module.exports = grammar({
         field("block", $.block)
       ),
 
-    extern_modifier : ($) => seq("extern", $.string),
+    extern_modifier: ($) => seq("extern", $.string),
 
     method_signature: ($) =>
       seq(

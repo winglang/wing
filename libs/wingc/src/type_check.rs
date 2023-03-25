@@ -1239,6 +1239,18 @@ impl<'a> TypeChecker<'a> {
 					UnaryOperator::Minus => self.validate_type(_type, self.types.number(), unary_exp),
 				}
 			}
+			ExprKind::Range {
+				start,
+				inclusive: _,
+				end,
+			} => {
+				let stype = self.type_check_exp(start, env, statement_idx, context);
+				let etype = self.type_check_exp(end, env, statement_idx, context);
+
+				self.validate_type(stype, self.types.number(), start);
+				self.validate_type(etype, self.types.number(), end);
+				self.types.add_type(Type::Array(stype))
+			}
 			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env, statement_idx, context).type_,
 			ExprKind::New {
 				class,
@@ -1896,38 +1908,21 @@ impl<'a> TypeChecker<'a> {
 				// TODO: Expression must be iterable
 				let exp_type = self.type_check_exp(iterable, env, stmt.idx, context);
 
-				if exp_type.is_iterable() {
-					let iterator_type = match &*exp_type {
-						// These are builtin iterables that have a clear/direct iterable type
-						Type::Array(t) => *t,
-						Type::Set(t) => *t,
-						Type::MutArray(t) => *t,
-						Type::MutSet(t) => *t,
-						_t => self.types.anything(),
-					};
-					let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.flight, stmt.idx);
-					match scope_env.define(
-						&iterator,
-						SymbolKind::make_variable(iterator_type, false, env.flight),
-						StatementIdx::Top,
-					) {
-						Err(type_error) => {
-							self.type_error(type_error);
-						}
-						_ => {}
-					};
-					statements.set_env(scope_env);
+				if !exp_type.is_iterable() {
+					self.type_error(TypeError {
+						message: format!("Unable to iterate over \"{}\"", &exp_type),
+						span: iterable.span.clone(),
+					});
+				}
 
-					// TODO: Handle non-builtin iterables
-					t => {
-						self.type_error(TypeError {
-							message: format!("Unable to iterate over \"{}\"", t),
-							span: iterable.span.clone(),
-						});
-						self.types.anything()
-					}
+				let iterator_type = match &*exp_type {
+					// These are builtin iterables that have a clear/direct iterable type
+					Type::Array(t) => *t,
+					Type::Set(t) => *t,
+					Type::MutArray(t) => *t,
+					Type::MutSet(t) => *t,
+					_t => self.types.anything(),
 				};
-
 				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 				match scope_env.define(
 					&iterator,
