@@ -10,9 +10,9 @@ import {
   simulatorHandleToken,
 } from "./util";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
 import * as std from "../std";
+import { convertBetweenHandlers } from "../utils/convert";
 
 /**
  * Simulator implementation of `cloud.Queue`.
@@ -38,7 +38,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     const hash = inflight.node.addr.slice(-8);
 
     /**
-     * The handle method the user provided (via the `inflight` parameter) needs
+     * The inflight function the user provided (via the `inflight` parameter) needs
      * to be wrapped in some extra logic to handle batching.
      * `convertBetweenHandlers` creates a dummy resource that provides the
      * wrapper code. In Wing psuedocode, this looks like:
@@ -54,10 +54,10 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
      *   }
      * }
      *
-     * It's possible we could optimize this and create one less construct in the
+     * TODO: can we optimize this and create one less construct in the
      * user's tree by creating a single `Handler` resource that subclasses from
      * `cloud.Function` and overrides the `invoke` inflight method with the
-     * wrapper code directly.
+     * wrapper code directly?
      */
     const functionHandler = convertBetweenHandlers(
       this.node.scope!, // ok since we're not a tree root

@@ -11,9 +11,9 @@ import { Function } from "./function";
 import { core } from "..";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
-import { convertBetweenHandlers } from "../convert";
 import { CdktfApp } from "../core";
 import { Code } from "../core/inflight";
+import { convertBetweenHandlers } from "../utils/convert";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
