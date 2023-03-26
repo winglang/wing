@@ -11,8 +11,8 @@ b.on_update(inflight (key: str) => {
     log("updated ${key}");
 });
 
-b.on_upload(inflight (key:str) => {
-    log("uploaded ${key}");
+b.on_create(inflight (key:str) => {
+    log("created ${key}");
 });
 
 b.on_event(inflight (key: str) => {   

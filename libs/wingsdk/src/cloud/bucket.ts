@@ -102,8 +102,8 @@ export abstract class Bucket extends Resource {
     opts?: BucketOnUploadProps
   ) {
     opts;
-    if (eventNames.includes(BucketEventType.PUT)) {
-      this.getTopic(BucketEventType.PUT).onMessage(inflight);
+    if (eventNames.includes(BucketEventType.CREATE)) {
+      this.getTopic(BucketEventType.CREATE).onMessage(inflight);
     }
     if (eventNames.includes(BucketEventType.UPDATE)) {
       this.getTopic(BucketEventType.UPDATE).onMessage(inflight);
@@ -115,11 +115,11 @@ export abstract class Bucket extends Resource {
   /**
    * Run an inflight whenever a file is uploaded to the bucket.
    */
-  public onUpload(fn: IBucketEventHandler, opts?: BucketOnUploadProps): void {
+  public onCreate(fn: IBucketEventHandler, opts?: BucketOnUploadProps): void {
     if (opts) {
-      console.warn("bucket.onUpload does not support props yet");
+      console.warn("bucket.onCreate does not support props yet");
     }
-    this.createBucketEvent([BucketEventType.PUT], fn, opts);
+    this.createBucketEvent([BucketEventType.CREATE], fn, opts);
   }
 
   /**
@@ -150,7 +150,7 @@ export abstract class Bucket extends Resource {
       console.warn("bucket.onEvent does not support props yet");
     }
     this.createBucketEvent(
-      [BucketEventType.PUT, BucketEventType.UPDATE, BucketEventType.DELETE],
+      [BucketEventType.CREATE, BucketEventType.UPDATE, BucketEventType.DELETE],
       fn,
       opts
     );
@@ -262,7 +262,7 @@ export interface BucketEvent {
 }
 
 export enum BucketEventType {
-  PUT = "PUT",
+  CREATE = "CREATE",
   DELETE = "DELETE",
   UPDATE = "UPDATE",
 }

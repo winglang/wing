@@ -19,7 +19,7 @@ import { BucketEventType, Topic } from "../cloud";
 
 const EVENTS = {
   [BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],
-  [BucketEventType.PUT]: ["s3:ObjectCreated:Post"],
+  [BucketEventType.CREATE]: ["s3:ObjectCreated:Post"],
   [BucketEventType.UPDATE]: ["s3:ObjectCreated:Put"],
 };
 

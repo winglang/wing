@@ -46,7 +46,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     await fs.promises.rm(this.fileDir, { recursive: true, force: true });
   }
 
-  private async onChange(actionType: BucketEventType, key: string) {
+  private async notifyListeners(actionType: BucketEventType, key: string) {
     if (!this.topicHandlers[actionType]) {
       return;
     }
@@ -80,10 +80,10 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       activity: async () => {
         const actionType: BucketEventType = (await this.fileExists(key))
           ? BucketEventType.UPDATE
-          : BucketEventType.PUT;
+          : BucketEventType.CREATE;
 
         await this.addFile(key, JSON.stringify(body, null, 2));
-        await this.onChange(actionType, key);
+        await this.notifyListeners(actionType, key);
       },
     });
   }
@@ -163,7 +163,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         const filename = join(this.fileDir, hash);
         await fs.promises.unlink(filename);
         this.objectKeys.delete(key);
-        await this.onChange(BucketEventType.DELETE, key);
+        await this.notifyListeners(BucketEventType.DELETE, key);
       },
     });
   }
@@ -171,14 +171,14 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private async addFile(key: string, value: string): Promise<void> {
     const actionType: BucketEventType = this.objectKeys.has(key)
       ? BucketEventType.UPDATE
-      : BucketEventType.PUT;
+      : BucketEventType.CREATE;
     const hash = this.hashKey(key);
     const filename = join(this.fileDir, hash);
     const dirName = dirname(filename);
     await fs.promises.mkdir(dirName, { recursive: true });
     await fs.promises.writeFile(filename, value);
     this.objectKeys.add(key);
-    await this.onChange(actionType, key);
+    await this.notifyListeners(actionType, key);
   }
 
   private hashKey(key: string): string {

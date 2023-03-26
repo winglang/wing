@@ -132,11 +132,11 @@ export class Bucket extends cloud.Bucket {
   /**
    * Run an inflight whenever a file is uploaded to the bucket.
    */
-  public onUpload(fn: IBucketEventHandler, opts?: BucketOnUploadProps): void {
+  public onCreate(fn: IBucketEventHandler, opts?: BucketOnUploadProps): void {
     fn;
     opts;
     throw new Error(
-      "on_upload method isn't implemented yet on the current target."
+      "on_create method isn't implemented yet on the current target."
     );
   }
 
