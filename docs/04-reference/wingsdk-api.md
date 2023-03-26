@@ -4092,14 +4092,14 @@ Inflight interface for `Logger`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ILoggerClient.print">print</a></code> | Logs a message. The log will be associated with whichever resource is running the inflight code. |
+| <code><a href="#@winglang/sdk.cloud.ILoggerClient.log">log</a></code> | Logs a message. The log will be associated with whichever resource is running the inflight code. |
 
 ---
 
-##### `print` <a name="print" id="@winglang/sdk.cloud.ILoggerClient.print"></a>
+##### `log` <a name="log" id="@winglang/sdk.cloud.ILoggerClient.log"></a>
 
 ```wing
-print(message: str): void
+log(message: str): void
 ```
 
 **Inflight client:** [true](#true)
@@ -4108,11 +4108,11 @@ Logs a message. The log will be associated with whichever resource is running th
 
 NOTICE: this is not an async function because it is wrapped by `console.log()`.
 
-###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.ILoggerClient.print.parameter.message"></a>
+###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.ILoggerClient.log.parameter.message"></a>
 
 - *Type:* str
 
-The message to print.
+The message to log.
 
 ---
 

@@ -361,6 +361,40 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         },
         "bucket": "\${aws_s3_bucket.root_AnotherFunction_Code_B0183137.bucket}",
         "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
+      },
+      "root_cloudFunction_S3Object_C8435368": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Function/S3Object",
+            "uniqueId": "root_cloudFunction_S3Object_C8435368",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
+      },
+      "root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/S3Object",
+            "uniqueId": "root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
+      },
+    },
+    "aws_sqs_queue": {
+      "root_cloudQueue_E3597F7A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/cloud.Queue/Default",
+            "uniqueId": "root_cloudQueue_E3597F7A",
+          },
+        },
+        "name": "cloud-Queue-c86e03d8",
       },
     },
   },

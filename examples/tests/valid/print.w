@@ -1,16 +1,16 @@
 bring cloud;
 
 
-print("preflight print");
+log("preflight log");
 
 new cloud.Function(inflight () => {
-  print("inflight print 1.1");
-  print("inflight print 1.2");
-}) as "test:print1";
+  log("inflight log 1.1");
+  log("inflight log 1.2");
+}) as "test:log1";
 
 
 new cloud.Function(inflight () => {
-  print("inflight print 2.1");
-  print("inflight print 2.2");
-}) as "test:print2";
+  log("inflight log 2.1");
+  log("inflight log 2.2");
+}) as "test:log2";
 

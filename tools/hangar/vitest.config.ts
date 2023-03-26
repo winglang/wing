@@ -5,7 +5,6 @@ export default defineConfig({
   test: {
     testTimeout: 200_000,
     globalSetup: "src/package.setup.ts",
-    update: true,
     resolveSnapshotPath(path, extension) {
       const baseSnapshotPath = join(__dirname, "__snapshots__");
       const srcPath = join(__dirname, "src");

@@ -10,8 +10,8 @@ import {
   simulatorHandleToken,
 } from "./util";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
+import { convertBetweenHandlers } from "../utils/convert";
 
 /**
  * Simulator implementation of `cloud.Topic`
