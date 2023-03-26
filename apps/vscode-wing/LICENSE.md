@@ -1,4 +1,6 @@
-Copyright (c) 2023 Monada
+MIT License
+
+Copyright (c) 2022 
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
