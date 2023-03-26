@@ -136,6 +136,8 @@ impl<'a> JsiiImporter<'a> {
 				match collection_kind {
 					"array" => self.wing_types.add_type(Type::Array(wing_type)),
 					"map" => self.wing_types.add_type(Type::Map(wing_type)),
+					// set is intentionally left out, since in JSII “collection
+					// kind” is only either map or array.
 					_ => panic!("Unsupported collection kind '{}'", collection_kind),
 				}
 			} else if let Some(Value::Object(_)) = obj.get("union") {
