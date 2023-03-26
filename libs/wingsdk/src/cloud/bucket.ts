@@ -3,6 +3,7 @@ import { core } from "..";
 import { fqnForType } from "../constants";
 import { App, IResource, Resource } from "../core";
 import { Json } from "../std";
+import { convertBetweenHandlers } from "../utils/convert";
 import { Topic } from "./topic";
 
 /**
@@ -96,6 +97,27 @@ export abstract class Bucket extends Resource {
     return this.topics.get(actionType) as Topic;
   }
 
+  protected eventHandlerLocation(): string {
+    throw new Error(
+      "please specify under the target file (to get the right relative path)"
+    );
+  }
+
+  private createInflightHandler(
+    eventType: BucketEventType,
+    inflight: IBucketEventHandler
+  ): core.IResource {
+    const hash = inflight.node.addr.slice(-8);
+    return convertBetweenHandlers(
+      this.node.scope!, // ok since we're not a tree root
+      `${this.getTopic(eventType).node.id}-eventHandler-${hash}`,
+      inflight,
+      // since uses __dirname should be specified under the target directory
+      this.eventHandlerLocation(),
+      "BucketEventHandlerClient"
+    );
+  }
+
   private createBucketEvent(
     eventNames: BucketEventType[],
     inflight: IBucketEventHandler,
@@ -103,13 +125,19 @@ export abstract class Bucket extends Resource {
   ) {
     opts;
     if (eventNames.includes(BucketEventType.CREATE)) {
-      this.getTopic(BucketEventType.CREATE).onMessage(inflight);
+      this.getTopic(BucketEventType.CREATE).onMessage(
+        this.createInflightHandler(BucketEventType.CREATE, inflight)
+      );
     }
     if (eventNames.includes(BucketEventType.UPDATE)) {
-      this.getTopic(BucketEventType.UPDATE).onMessage(inflight);
+      this.getTopic(BucketEventType.UPDATE).onMessage(
+        this.createInflightHandler(BucketEventType.UPDATE, inflight)
+      );
     }
     if (eventNames.includes(BucketEventType.DELETE)) {
-      this.getTopic(BucketEventType.DELETE).onMessage(inflight);
+      this.getTopic(BucketEventType.DELETE).onMessage(
+        this.createInflightHandler(BucketEventType.DELETE, inflight)
+      );
     }
   }
   /**
@@ -254,7 +282,7 @@ export interface IBucketEventHandlerClient {
    * Function that will be called when an event notification is fired.
    * @inflight
    */
-  handle(key: string): Promise<void>;
+  handle(key: string, type: BucketEventType): Promise<void>;
 }
 export interface BucketEvent {
   readonly key: string;

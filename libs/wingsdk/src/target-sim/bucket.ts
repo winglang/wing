@@ -5,6 +5,7 @@ import { BucketSchema, BUCKET_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { join } from "path";
 
 /**
  * Simulator implementation of `cloud.Bucket`.
@@ -22,6 +23,10 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
 
   public addObject(key: string, body: string): void {
     this.initialObjects[key] = body;
+  }
+
+  protected eventHandlerLocation(): string {
+    return join(__dirname, "bucket.onevent.inflight.js");
   }
 
   public toSimulator(): BaseResourceSchema {

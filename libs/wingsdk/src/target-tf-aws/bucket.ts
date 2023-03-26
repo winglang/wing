@@ -16,6 +16,7 @@ import {
   ResourceNames,
 } from "../utils/resource-names";
 import { BucketEventType, Topic } from "../cloud";
+import { join } from "path";
 
 const EVENTS = {
   [BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],
@@ -120,6 +121,10 @@ export class Bucket extends cloud.Bucket {
       key,
       content: body,
     });
+  }
+
+  protected eventHandlerLocation(): string {
+    return join(__dirname, "bucket.onevent.inflight.js");
   }
 
   protected createTopic(actionType: BucketEventType): Topic {
