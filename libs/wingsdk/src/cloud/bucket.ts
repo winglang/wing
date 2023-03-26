@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { core } from "..";
 import { fqnForType } from "../constants";
-import { App, Resource } from "../core";
+import { App, IResource, Resource } from "../core";
 import { Json } from "../std";
 import { Topic } from "./topic";
 
@@ -73,10 +73,20 @@ export abstract class Bucket extends Resource {
   protected createTopic(actionType: BucketEventType): Topic {
     const hash = this.node.addr.slice(-8);
 
-    return Topic._newTopic(
+    const topic = Topic._newTopic(
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-on_${actionType.toLowerCase()}-${hash}`
     );
+
+    this.node.addDependency(topic);
+
+    core.Resource.addConnection({
+      from: this,
+      to: topic,
+      relationship: actionType,
+    });
+
+    return topic;
   }
 
   private getTopic(actionType: BucketEventType): Topic {
@@ -88,7 +98,7 @@ export abstract class Bucket extends Resource {
 
   private createBucketEvent(
     eventNames: BucketEventType[],
-    inflight: core.Inflight,
+    inflight: IBucketEventHandler,
     opts?: BucketOnUploadProps
   ) {
     opts;
@@ -105,7 +115,7 @@ export abstract class Bucket extends Resource {
   /**
    * Run an inflight whenever a file is uploaded to the bucket.
    */
-  public onUpload(fn: core.Inflight, opts?: BucketOnUploadProps): void {
+  public onUpload(fn: IBucketEventHandler, opts?: BucketOnUploadProps): void {
     if (opts) {
       console.warn("bucket.onUpload does not support props yet");
     }
@@ -115,7 +125,7 @@ export abstract class Bucket extends Resource {
   /**
    * Run an inflight whenever a file is deleted from the bucket.
    */
-  public onDelete(fn: core.Inflight, opts?: BucketOnDeleteProps): void {
+  public onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteProps): void {
     if (opts) {
       console.warn("bucket.onDelete does not support props yet");
     }
@@ -125,7 +135,7 @@ export abstract class Bucket extends Resource {
   /**
    * Run an inflight whenever a file is updated in the bucket.
    */
-  public onUpdate(fn: core.Inflight, opts?: BucketOnUpdateProps): void {
+  public onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateProps): void {
     if (opts) {
       console.warn("bucket.onUpdate does not support props yet");
     }
@@ -135,7 +145,7 @@ export abstract class Bucket extends Resource {
   /**
    * Run an inflight whenever a file is uploaded, modified, or deleted from the bucket.
    */
-  public onEvent(fn: core.Inflight, opts?: BucketOnEventProps): void {
+  public onEvent(fn: IBucketEventHandler, opts?: BucketOnEventProps): void {
     if (opts) {
       console.warn("bucket.onEvent does not support props yet");
     }
@@ -231,6 +241,21 @@ export interface BucketOnEventProps {
   /* elided */
 }
 
+/**
+ * Represents a resource with an inflight "handle" method that can be passed to
+ * the bucket events.
+ *
+ * @inflight  `@winglang/sdk.cloud.IBucketEventHandlerClient`
+ */
+export interface IBucketEventHandler extends IResource {}
+
+export interface IBucketEventHandlerClient {
+  /**
+   * Function that will be called when an event notification is fired.
+   * @inflight
+   */
+  handle(key: string): Promise<void>;
+}
 export interface BucketEvent {
   readonly key: string;
   readonly type: BucketEventType;

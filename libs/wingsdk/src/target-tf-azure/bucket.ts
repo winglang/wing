@@ -16,6 +16,7 @@ import {
   BucketOnEventProps,
   BucketOnUpdateProps,
   BucketOnUploadProps,
+  IBucketEventHandler,
 } from "../cloud";
 
 /**
@@ -131,7 +132,7 @@ export class Bucket extends cloud.Bucket {
   /**
    * Run an inflight whenever a file is uploaded to the bucket.
    */
-  public onUpload(fn: core.Inflight, opts?: BucketOnUploadProps): void {
+  public onUpload(fn: IBucketEventHandler, opts?: BucketOnUploadProps): void {
     fn;
     opts;
     throw new Error(
@@ -142,7 +143,7 @@ export class Bucket extends cloud.Bucket {
   /**
    * Run an inflight whenever a file is deleted from the bucket.
    */
-  public onDelete(fn: core.Inflight, opts?: BucketOnDeleteProps): void {
+  public onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteProps): void {
     fn;
     opts;
     throw new Error(
@@ -153,7 +154,7 @@ export class Bucket extends cloud.Bucket {
   /**
    * Run an inflight whenever a file is updated in the bucket.
    */
-  public onUpdate(fn: core.Inflight, opts?: BucketOnUpdateProps): void {
+  public onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateProps): void {
     fn;
     opts;
     throw new Error(
@@ -164,7 +165,7 @@ export class Bucket extends cloud.Bucket {
   /**
    * Run an inflight whenever a file is uploaded, modified, or deleted from the bucket.
    */
-  public onEvent(fn: core.Inflight, opts?: BucketOnEventProps): void {
+  public onEvent(fn: IBucketEventHandler, opts?: BucketOnEventProps): void {
     fn;
     opts;
     throw new Error(

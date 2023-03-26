@@ -132,12 +132,6 @@ export class Bucket extends cloud.Bucket {
 
     handler.addPermissionToPublish(this, "s3.amazonaws.com", this.bucket.arn);
 
-    core.Resource.addConnection({
-      from: this,
-      to: handler,
-      relationship: actionType,
-    });
-
     new S3BucketNotification(
       this,
       `S3Object_on_${actionType.toLowerCase()}_notifier`,
