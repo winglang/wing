@@ -15,7 +15,7 @@
     "@babel/core": "^7.21.3",
     "@headlessui/react": "^1.7.13",
     "@heroicons/react": "^2.0.15",
-    "@popperjs/core": "^2.11.6",
+    "@popperjs/core": "^2.11.7",
     "@storybook/addon-actions": "^6.5.16",
     "@storybook/addon-backgrounds": "^6.5.16",
     "@storybook/addon-docs": "^6.5.16",
@@ -31,7 +31,7 @@
     "@storybook/react": "^6.5.16",
     "@storybook/testing-library": "^0.0.13",
     "@testing-library/react": "^14.0.0",
-    "@types/react": "^18.0.28",
+    "@types/react": "^18.0.29",
     "@types/react-dom": "^18.0.10",
     "@vitejs/plugin-react": "^3.1.0",
     "@vitest/coverage-c8": "^0.29.7",
@@ -50,6 +50,6 @@
     "typescript": "^5.0.2",
     "vite": "^4.2.1",
     "vitest": "^0.29.7",
-    "webpack": "^5.76.2"
+    "webpack": "^5.76.3"
   }
 }

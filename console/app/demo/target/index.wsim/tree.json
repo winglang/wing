@@ -12,43 +12,43 @@
           "wing:resource:connections": [
             {
               "direction": "inbound",
-              "relationship": "print",
+              "relationship": "log",
               "resource": "root/cloud.Queue-OnMessage-de95ec56",
               "implicit": true
             },
             {
               "direction": "inbound",
-              "relationship": "print",
+              "relationship": "log",
               "resource": "root/IncrementCounter",
               "implicit": true
             },
             {
               "direction": "inbound",
-              "relationship": "print",
+              "relationship": "log",
               "resource": "root/Topic-OnMessage-90af6456",
               "implicit": true
             },
             {
               "direction": "inbound",
-              "relationship": "print",
+              "relationship": "log",
               "resource": "root/Topic-OnMessage-05ec50df",
               "implicit": true
             },
             {
               "direction": "inbound",
-              "relationship": "print",
+              "relationship": "log",
               "resource": "root/test: Increment counter",
               "implicit": true
             },
             {
               "direction": "inbound",
-              "relationship": "print",
+              "relationship": "log",
               "resource": "root/test: Push message to the queue",
               "implicit": true
             },
             {
               "direction": "inbound",
-              "relationship": "print",
+              "relationship": "log",
               "resource": "root/test: Log",
               "implicit": true
             }
@@ -56,7 +56,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
         },
         "display": {
           "title": "Logger",
@@ -116,7 +116,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
         },
         "display": {
           "title": "Bucket",
@@ -157,7 +157,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
         },
         "display": {
           "title": "Queue",
@@ -180,7 +180,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
         },
         "display": {
           "title": "Inflight",
@@ -197,7 +197,10 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
+        },
+        "display": {
+          "hidden": true
         }
       },
       "cloud.Queue-OnMessage-de95ec56": {
@@ -256,7 +259,7 @@
             },
             {
               "direction": "outbound",
-              "relationship": "print",
+              "relationship": "log",
               "resource": "root/WingLogger",
               "implicit": true
             },
@@ -270,7 +273,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
         },
         "display": {
           "title": "Function",
@@ -335,7 +338,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
         },
         "display": {
           "title": "Counter",
@@ -351,7 +354,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
         },
         "display": {
           "title": "Inflight",
@@ -391,7 +394,7 @@
             },
             {
               "direction": "outbound",
-              "relationship": "print",
+              "relationship": "log",
               "resource": "root/WingLogger",
               "implicit": true
             }
@@ -399,7 +402,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
         },
         "display": {
           "title": "Function",
@@ -428,7 +431,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
         },
         "display": {
           "title": "Topic",
@@ -451,7 +454,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
         },
         "display": {
           "title": "Inflight",
@@ -468,7 +471,10 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
+        },
+        "display": {
+          "hidden": true
         }
       },
       "Topic-OnMessage-90af6456": {
@@ -485,7 +491,7 @@
             },
             {
               "direction": "outbound",
-              "relationship": "print",
+              "relationship": "log",
               "resource": "root/WingLogger",
               "implicit": true
             },
@@ -499,7 +505,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
         },
         "display": {
           "title": "Function",
@@ -522,7 +528,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
         },
         "display": {
           "title": "Inflight",
@@ -539,7 +545,10 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
+        },
+        "display": {
+          "hidden": true
         }
       },
       "Topic-OnMessage-05ec50df": {
@@ -556,7 +565,7 @@
             },
             {
               "direction": "outbound",
-              "relationship": "print",
+              "relationship": "log",
               "resource": "root/WingLogger",
               "implicit": true
             },
@@ -570,7 +579,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
         },
         "display": {
           "title": "Function",
@@ -586,7 +595,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
         },
         "display": {
           "title": "Inflight",
@@ -626,7 +635,7 @@
             },
             {
               "direction": "outbound",
-              "relationship": "print",
+              "relationship": "log",
               "resource": "root/WingLogger",
               "implicit": true
             }
@@ -634,7 +643,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
         },
         "display": {
           "title": "Function",
@@ -650,7 +659,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
         },
         "display": {
           "title": "Inflight",
@@ -684,7 +693,7 @@
             },
             {
               "direction": "outbound",
-              "relationship": "print",
+              "relationship": "log",
               "resource": "root/WingLogger",
               "implicit": true
             }
@@ -692,7 +701,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
         },
         "display": {
           "title": "Function",
@@ -708,7 +717,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
         },
         "display": {
           "title": "Inflight",
@@ -724,7 +733,7 @@
           "wing:resource:connections": [
             {
               "direction": "outbound",
-              "relationship": "print",
+              "relationship": "log",
               "resource": "root/WingLogger",
               "implicit": true
             }
@@ -732,7 +741,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.285"
+          "version": "10.1.292"
         },
         "display": {
           "title": "Function",
@@ -742,7 +751,7 @@
     },
     "constructInfo": {
       "fqn": "constructs.Construct",
-      "version": "10.1.285"
+      "version": "10.1.292"
     }
   }
 }
