@@ -42,6 +42,8 @@ jobs:
       # Reads versions from root package.json "volta" section
       - name: Setup Node/NPM with pinned Volta version
         uses: volta-cli/action@v4.0.0
+      - name: Install redis docker image
+        run: docker pull redis
       - name: Install dependencies
         if: steps.token-check.outputs.HAS_TOKEN == 'true'
         run: npm ci
