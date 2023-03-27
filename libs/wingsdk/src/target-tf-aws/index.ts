@@ -6,4 +6,4 @@ export * from "./function";
 export * from "./queue";
 export * from "./schedule";
 export * from "./table";
-export * from "./test-engine";
+export * from "./test-runner";

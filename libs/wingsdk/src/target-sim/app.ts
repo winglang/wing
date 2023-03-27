@@ -10,7 +10,7 @@ import { Queue } from "./queue";
 import { isSimulatorResource } from "./resource";
 import { WingSimulatorSchema } from "./schema";
 import { Table } from "./table";
-import { TestEngine } from "./test-engine";
+import { TestRunner } from "./test-runner";
 import { Topic } from "./topic";
 import {
   API_FQN,
@@ -20,7 +20,7 @@ import {
   LOGGER_FQN,
   QUEUE_FQN,
   TABLE_FQN,
-  TEST_ENGINE_FQN,
+  TEST_RUNNER_FQN,
   TOPIC_FQN,
 } from "../cloud";
 import { SDK_VERSION } from "../constants";
@@ -81,8 +81,8 @@ export class App extends core.App {
       case TOPIC_FQN:
         return new Topic(scope, id, args[0]);
 
-      case TEST_ENGINE_FQN:
-        return new TestEngine(scope, id);
+      case TEST_RUNNER_FQN:
+        return new TestRunner(scope, id);
     }
 
     return undefined;

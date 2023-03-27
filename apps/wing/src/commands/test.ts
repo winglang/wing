@@ -2,7 +2,7 @@ import { basename } from "path";
 import { compile, CompileOptions } from "./compile";
 import * as chalk from "chalk";
 import * as sdk from "@winglang/sdk";
-import { ITestEngineClient } from "@winglang/sdk/lib/cloud";
+import { ITestRunnerClient } from "@winglang/sdk/lib/cloud";
 
 /**
  * Options for the `test` command.
@@ -22,10 +22,10 @@ async function testOne(entrypoint: string, options: TestOptions) {
   });
 
   // deploy the compiled app (to simulator or to the cloud)
-  // instantiate the cloud-specific test engine client
+  // instantiate the cloud-specific test runner client
   // - for simulator, we probably know how this works
   // - for tf-aws, we need to extract any test-specific config from the
-  //   synthesized app and pass it to the test engine client
+  //   synthesized app and pass it to the test runner client
   //   (maybe via `terraform output` command?)
 
   let results: sdk.cloud.TestResult[];
@@ -123,12 +123,12 @@ async function testSimulator(synthDir: string): Promise<sdk.cloud.TestResult[]> 
   const s = new sdk.testing.Simulator({ simfile: synthDir });
   await s.start();
 
-  const testEngine = s.getResource("root/cloud.TestEngine") as ITestEngineClient;
-  const tests = await testEngine.listTests();
+  const testRunner = s.getResource("root/cloud.TestRunner") as ITestRunnerClient;
+  const tests = await testRunner.listTests();
   const results = new Array<sdk.cloud.TestResult>();
 
   for (const path of tests) {
-    results.push(await testEngine.runTest(path));
+    results.push(await testRunner.runTest(path));
   }
 
   await s.stop();

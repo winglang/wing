@@ -4,11 +4,11 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 
 /**
- * AWS implementation of `cloud.TestEngine`.
+ * AWS implementation of `cloud.TestRunner`.
  *
- * @inflight `@winglang/sdk.cloud.ITestEngineClient`
+ * @inflight `@winglang/sdk.cloud.ITestRunnerClient`
  */
-export class TestEngine extends cloud.TestEngine {
+export class TestRunner extends cloud.TestRunner {
   constructor(scope: Construct, id: string) {
     super(scope, id);
   }
@@ -16,7 +16,7 @@ export class TestEngine extends cloud.TestEngine {
   /** @internal */
   public _bind(host: core.IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
-      throw new Error("TestEngine can only be bound by tfaws.Function for now");
+      throw new Error("TestRunner can only be bound by tfaws.Function for now");
     }
 
     // Collect all of the "test" cloud.Function's and their ARNs, and pass them
@@ -36,7 +36,7 @@ export class TestEngine extends cloud.TestEngine {
       return fn instanceof Function;
     };
     for (const fn of this.node.root.node.findAll().filter(isAwsFunction)) {
-      if (TestEngine.isTest(fn)) {
+      if (TestRunner.isTest(fn)) {
         arns.set(fn.node.path, fn.arn);
       }
     }
@@ -45,12 +45,12 @@ export class TestEngine extends cloud.TestEngine {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__dirname, __filename, "TestEngineClient", [
+    return core.InflightClient.for(__dirname, __filename, "TestRunnerClient", [
       `process.env["${this.envTestFunctionArns()}"]`,
     ]);
   }
 
   private envTestFunctionArns(): string {
-    return `TEST_ENGINE_FUNCTIONS_${this.node.addr.slice(-8)}`;
+    return `TEST_RUNNER_FUNCTIONS_${this.node.addr.slice(-8)}`;
   }
 }

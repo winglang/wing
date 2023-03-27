@@ -1,7 +1,7 @@
 import { FunctionClient } from "./function.inflight";
-import { ITestEngineClient, TestResult } from "../cloud";
+import { ITestRunnerClient, TestResult } from "../cloud";
 
-export class TestEngineClient implements ITestEngineClient {
+export class TestRunnerClient implements ITestRunnerClient {
   // A map from test names to their corresponding function ARNs.
   private readonly tests: Map<string, string>;
 

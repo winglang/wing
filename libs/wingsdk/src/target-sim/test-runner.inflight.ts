@@ -1,21 +1,21 @@
 import { ISimulatorResourceInstance } from "./resource";
-import { TestEngineAttributes, TestEngineSchema } from "./schema-resources";
-import { IFunctionClient, ITestEngineClient, TestResult } from "../cloud";
+import { TestRunnerAttributes, TestRunnerSchema } from "./schema-resources";
+import { IFunctionClient, ITestRunnerClient, TestResult } from "../cloud";
 import { ISimulatorContext } from "../testing";
 
-export class TestEngineClient
-  implements ITestEngineClient, ISimulatorResourceInstance
+export class TestRunnerClient
+  implements ITestRunnerClient, ISimulatorResourceInstance
 {
   // A map from test paths to their corresponding function handles.
   private readonly tests: Map<string, string>;
   private readonly context: ISimulatorContext;
 
-  constructor(props: TestEngineSchema["props"], context: ISimulatorContext) {
+  constructor(props: TestRunnerSchema["props"], context: ISimulatorContext) {
     this.tests = new Map(Object.entries(props.tests));
     this.context = context;
   }
 
-  public async init(): Promise<TestEngineAttributes> {
+  public async init(): Promise<TestRunnerAttributes> {
     return {};
   }
 

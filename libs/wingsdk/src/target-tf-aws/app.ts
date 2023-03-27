@@ -8,7 +8,7 @@ import { Logger } from "./logger";
 import { Queue } from "./queue";
 import { Schedule } from "./schedule";
 import { Table } from "./table";
-import { TestEngine } from "./test-engine";
+import { TestRunner } from "./test-runner";
 import { Topic } from "./topic";
 import {
   API_FQN,
@@ -19,7 +19,7 @@ import {
   QUEUE_FQN,
   SCHEDULE_FQN,
   TABLE_FQN,
-  TEST_ENGINE_FQN,
+  TEST_RUNNER_FQN,
   TOPIC_FQN,
 } from "../cloud";
 import { CdktfApp, AppProps } from "../core";
@@ -71,8 +71,8 @@ export class App extends CdktfApp {
       case TOPIC_FQN:
         return new Topic(scope, id, args[0]);
 
-      case TEST_ENGINE_FQN:
-        return new TestEngine(scope, id);
+      case TEST_RUNNER_FQN:
+        return new TestRunner(scope, id);
     }
 
     return undefined;

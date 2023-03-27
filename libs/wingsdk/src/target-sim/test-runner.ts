@@ -2,25 +2,25 @@ import { Construct, IConstruct } from "constructs";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
-import { TestEngineSchema, TEST_ENGINE_TYPE } from "./schema-resources";
+import { TestRunnerSchema, TEST_RUNNER_TYPE } from "./schema-resources";
 import { simulatorHandleToken } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 
 /**
- * Simulator implementation of `cloud.TestEngine`.
+ * Simulator implementation of `cloud.TestRunner`.
  *
- * @inflight `@winglang/sdk.cloud.ITestEngineClient`
+ * @inflight `@winglang/sdk.cloud.ITestRunnerClient`
  */
-export class TestEngine extends cloud.TestEngine implements ISimulatorResource {
+export class TestRunner extends cloud.TestRunner implements ISimulatorResource {
   constructor(scope: Construct, id: string) {
     super(scope, id);
   }
 
   public toSimulator(): BaseResourceSchema {
     const tests = this.findTestFunctions();
-    const schema: TestEngineSchema = {
-      type: TEST_ENGINE_TYPE,
+    const schema: TestRunnerSchema = {
+      type: TEST_RUNNER_TYPE,
       path: this.node.path,
       props: {
         tests,
@@ -33,7 +33,7 @@ export class TestEngine extends cloud.TestEngine implements ISimulatorResource {
   /** @internal */
   public _bind(host: core.IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
-      throw new Error("TestEngine can only be bound by tfaws.Function for now");
+      throw new Error("TestRunner can only be bound by tfaws.Function for now");
     }
 
     super._bind(host, ops);
@@ -45,7 +45,7 @@ export class TestEngine extends cloud.TestEngine implements ISimulatorResource {
       return fn instanceof Function;
     };
     for (const fn of this.node.root.node.findAll().filter(isSimFunction)) {
-      if (TestEngine.isTest(fn)) {
+      if (TestRunner.isTest(fn)) {
         handles[fn.node.path] = simulatorHandleToken(fn);
       }
     }
@@ -57,7 +57,7 @@ export class TestEngine extends cloud.TestEngine implements ISimulatorResource {
     return core.InflightClient.for(
       __dirname,
       __filename,
-      "TestEngineClient",
+      "TestRunnerClient",
       []
     );
   }

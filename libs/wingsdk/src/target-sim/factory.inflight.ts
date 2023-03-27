@@ -13,11 +13,11 @@ import {
   LOGGER_TYPE,
   QUEUE_TYPE,
   TABLE_TYPE,
-  TEST_ENGINE_TYPE,
+  TEST_RUNNER_TYPE,
   TOPIC_TYPE,
 } from "./schema-resources";
 import { Table } from "./table.inflight";
-import { TestEngineClient } from "./test-engine.inflight";
+import { TestRunnerClient } from "./test-runner.inflight";
 import { Topic } from "./topic.inflight";
 import { ISimulatorFactory, ISimulatorContext } from "../testing/simulator";
 
@@ -51,8 +51,8 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return new Table(props, context);
       case TOPIC_TYPE:
         return new Topic(props, context);
-      case TEST_ENGINE_TYPE:
-        return new TestEngineClient(props, context);
+      case TEST_RUNNER_TYPE:
+        return new TestRunnerClient(props, context);
       default:
         throw new Error(`Type ${type} not implemented by the simulator.`);
     }

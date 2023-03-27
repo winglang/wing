@@ -1104,29 +1104,29 @@ Table primary key name.
 ---
 
 
-### TestEngine <a name="TestEngine" id="@winglang/sdk.cloud.TestEngine"></a>
+### TestRunner <a name="TestRunner" id="@winglang/sdk.cloud.TestRunner"></a>
 
-**Inflight client:** [@winglang/sdk.cloud.ITestEngineClient](#@winglang/sdk.cloud.ITestEngineClient)
+**Inflight client:** [@winglang/sdk.cloud.ITestRunnerClient](#@winglang/sdk.cloud.ITestRunnerClient)
 
 Represents a test engine.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.TestEngine.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.TestRunner.Initializer"></a>
 
 ```wing
 bring cloud;
 
-new cloud.TestEngine(props?: TestEngineProps)
+new cloud.TestRunner(props?: TestRunnerProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.TestEngine.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.TestEngineProps">TestEngineProps</a></code> | *No description.* |
+| <code><a href="#@winglang/sdk.cloud.TestRunner.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.TestRunnerProps">TestRunnerProps</a></code> | *No description.* |
 
 ---
 
-##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.TestEngine.Initializer.parameter.props"></a>
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.TestRunner.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#@winglang/sdk.cloud.TestEngineProps">TestEngineProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.TestRunnerProps">TestRunnerProps</a>
 
 ---
 
@@ -1135,21 +1135,21 @@ new cloud.TestEngine(props?: TestEngineProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.TestEngine.isTest">is_test</a></code> | Returns whether a construct represents a runnable test. |
+| <code><a href="#@winglang/sdk.cloud.TestRunner.isTest">is_test</a></code> | Returns whether a construct represents a runnable test. |
 
 ---
 
-##### `is_test` <a name="is_test" id="@winglang/sdk.cloud.TestEngine.isTest"></a>
+##### `is_test` <a name="is_test" id="@winglang/sdk.cloud.TestRunner.isTest"></a>
 
 ```wing
 bring cloud;
 
-cloud.TestEngine.is_test(c: IConstruct)
+cloud.TestRunner.is_test(c: IConstruct)
 ```
 
 Returns whether a construct represents a runnable test.
 
-###### `c`<sup>Required</sup> <a name="c" id="@winglang/sdk.cloud.TestEngine.isTest.parameter.c"></a>
+###### `c`<sup>Required</sup> <a name="c" id="@winglang/sdk.cloud.TestRunner.isTest.parameter.c"></a>
 
 - *Type:* constructs.IConstruct
 
@@ -1161,13 +1161,13 @@ A construct.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.TestEngine.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.TestEngine.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.cloud.TestEngine.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+| <code><a href="#@winglang/sdk.cloud.TestRunner.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.TestRunner.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.TestRunner.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.TestEngine.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.TestRunner.property.node"></a>
 
 ```wing
 node: Node;
@@ -1179,7 +1179,7 @@ The tree node.
 
 ---
 
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.TestEngine.property.display"></a>
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.TestRunner.property.display"></a>
 
 ```wing
 display: Display;
@@ -1191,7 +1191,7 @@ Information on how to display a resource in the UI.
 
 ---
 
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/sdk.cloud.TestEngine.property.stateful"></a>
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/sdk.cloud.TestRunner.property.stateful"></a>
 
 ```wing
 stateful: bool;
@@ -2060,19 +2060,6 @@ primary key.
 
 ---
 
-### TestEngineProps <a name="TestEngineProps" id="@winglang/sdk.cloud.TestEngineProps"></a>
-
-Properties for `TestEngine`.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.TestEngineProps.Initializer"></a>
-
-```wing
-bring cloud;
-
-let test_engine_props = cloud.TestEngineProps{ ... }
-```
-
-
 ### TestResult <a name="TestResult" id="@winglang/sdk.cloud.TestResult"></a>
 
 A result of a single test.
@@ -2130,6 +2117,19 @@ error: str;
 The error message if the test failed.
 
 ---
+
+### TestRunnerProps <a name="TestRunnerProps" id="@winglang/sdk.cloud.TestRunnerProps"></a>
+
+Properties for `TestRunner`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.TestRunnerProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let test_runner_props = cloud.TestRunnerProps{ ... }
+```
+
 
 ### TopicOnMessageProps <a name="TopicOnMessageProps" id="@winglang/sdk.cloud.TopicOnMessageProps"></a>
 
@@ -4592,22 +4592,22 @@ data to be updated.
 ---
 
 
-### ITestEngineClient <a name="ITestEngineClient" id="@winglang/sdk.cloud.ITestEngineClient"></a>
+### ITestRunnerClient <a name="ITestRunnerClient" id="@winglang/sdk.cloud.ITestRunnerClient"></a>
 
-- *Implemented By:* <a href="#@winglang/sdk.cloud.ITestEngineClient">ITestEngineClient</a>
+- *Implemented By:* <a href="#@winglang/sdk.cloud.ITestRunnerClient">ITestRunnerClient</a>
 
-Inflight interface for `TestEngine`.
+Inflight interface for `TestRunner`.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ITestEngineClient.listTests">list_tests</a></code> | List all tests available for this test engine. |
-| <code><a href="#@winglang/sdk.cloud.ITestEngineClient.runTest">run_test</a></code> | Run a test with a given name and return the result. |
+| <code><a href="#@winglang/sdk.cloud.ITestRunnerClient.listTests">list_tests</a></code> | List all tests available for this test engine. |
+| <code><a href="#@winglang/sdk.cloud.ITestRunnerClient.runTest">run_test</a></code> | Run a test with a given name and return the result. |
 
 ---
 
-##### `list_tests` <a name="list_tests" id="@winglang/sdk.cloud.ITestEngineClient.listTests"></a>
+##### `list_tests` <a name="list_tests" id="@winglang/sdk.cloud.ITestRunnerClient.listTests"></a>
 
 ```wing
 list_tests(): MutArray<str>
@@ -4617,7 +4617,7 @@ list_tests(): MutArray<str>
 
 List all tests available for this test engine.
 
-##### `run_test` <a name="run_test" id="@winglang/sdk.cloud.ITestEngineClient.runTest"></a>
+##### `run_test` <a name="run_test" id="@winglang/sdk.cloud.ITestRunnerClient.runTest"></a>
 
 ```wing
 run_test(name: str): TestResult
@@ -4627,7 +4627,7 @@ run_test(name: str): TestResult
 
 Run a test with a given name and return the result.
 
-###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.cloud.ITestEngineClient.runTest.parameter.name"></a>
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.cloud.ITestRunnerClient.runTest.parameter.name"></a>
 
 - *Type:* str
 

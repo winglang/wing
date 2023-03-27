@@ -3,31 +3,31 @@ import { fqnForType } from "../constants";
 import { App, Resource } from "../core";
 
 /**
- * Global identifier for `TestEngine`.
+ * Global identifier for `TestRunner`.
  */
-export const TEST_ENGINE_FQN = fqnForType("cloud.TestEngine");
+export const TEST_RUNNER_FQN = fqnForType("cloud.TestRunner");
 
 /**
- * Properties for `TestEngine`.
+ * Properties for `TestRunner`.
  */
-export interface TestEngineProps {}
+export interface TestRunnerProps {}
 
 /**
  * Represents a test engine.
  *
- * @inflight `@winglang/sdk.cloud.ITestEngineClient`
+ * @inflight `@winglang/sdk.cloud.ITestRunnerClient`
  */
-export abstract class TestEngine extends Resource {
+export abstract class TestRunner extends Resource {
   /**
    * Create a new test engine.
    * @internal
    */
-  public static _newTestEngine(
+  public static _newTestRunner(
     scope: Construct,
     id: string,
-    props: TestEngineProps = {}
-  ): TestEngine {
-    return App.of(scope).newAbstract(TEST_ENGINE_FQN, scope, id, props);
+    props: TestRunnerProps = {}
+  ): TestRunner {
+    return App.of(scope).newAbstract(TEST_RUNNER_FQN, scope, id, props);
   }
 
   /**
@@ -42,10 +42,10 @@ export abstract class TestEngine extends Resource {
 
   public readonly stateful = false;
 
-  constructor(scope: Construct, id: string, props: TestEngineProps = {}) {
+  constructor(scope: Construct, id: string, props: TestRunnerProps = {}) {
     super(scope, id);
 
-    this.display.title = "TestEngine";
+    this.display.title = "TestRunner";
     this.display.description =
       "A suite of APIs for running tests and collecting results.";
 
@@ -54,9 +54,9 @@ export abstract class TestEngine extends Resource {
 }
 
 /**
- * Inflight interface for `TestEngine`.
+ * Inflight interface for `TestRunner`.
  */
-export interface ITestEngineClient {
+export interface ITestRunnerClient {
   /**
    * List all tests available for this test engine.
    * @inflight
@@ -95,10 +95,10 @@ export interface TestResult {
 }
 
 /**
- * List of inflight operations available for `TestEngine`.
+ * List of inflight operations available for `TestRunner`.
  * @internal
  */
-export enum TestEngineInflightMethods {
-  /** `TestEngine.runTest` */
+export enum TestRunnerInflightMethods {
+  /** `TestRunner.runTest` */
   RUN_TEST = "run_test",
 }
