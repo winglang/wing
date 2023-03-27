@@ -6,7 +6,7 @@ import {
 } from "@aws-sdk/client-sqs";
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, beforeEach } from "vitest";
-import { QueueClient } from "../../src/target-tf-aws/queue.inflight";
+import { QueueClient } from "../../src/shared-aws/queue.inflight";
 
 const sqsMock = mockClient(SQSClient);
 
