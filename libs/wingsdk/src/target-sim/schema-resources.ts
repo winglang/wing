@@ -10,6 +10,7 @@ export const COUNTER_TYPE = "wingsdk.cloud.Counter";
 export const SCHEDULE_TYPE = "wingsdk.cloud.Schedule";
 export const TABLE_TYPE = "wingsdk.cloud.Table";
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
+export const TEST_ENGINE_TYPE = "wingsdk.cloud.TestEngine";
 
 export type FunctionHandle = string;
 
@@ -144,3 +145,15 @@ export interface CounterSchema extends BaseResourceSchema {
 
 /** Runtime attributes for cloud.Counter */
 export interface CounterAttributes {}
+
+/** Schema for cloud.TestEngine */
+export interface TestEngineSchema extends BaseResourceSchema {
+  readonly type: typeof TEST_ENGINE_TYPE;
+  readonly props: {
+    /** A map from test functions to their handles. */
+    readonly tests: Record<string, FunctionHandle>;
+  };
+}
+
+/** Runtime attributes for cloud.TestEngine */
+export interface TestEngineAttributes {}

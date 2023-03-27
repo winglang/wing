@@ -64,6 +64,12 @@ async function main() {
       "Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers"
     )
     .argument("<entrypoint...>", "all entrypoints to test")
+    .addOption(
+      new Option("-t, --target <target>", "Target platform")
+        .choices(["tf-aws", "sim"])
+        .makeOptionMandatory()
+    )
+    .option("-p, --plugins [plugin...]", "Compiler plugins")
     .action(actionErrorHandler(test));
 
   program

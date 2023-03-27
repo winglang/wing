@@ -1,18 +1,23 @@
 import { basename } from "path";
-import { compile, Target } from "./compile";
+import { compile, CompileOptions } from "./compile";
 import * as chalk from "chalk";
 import * as sdk from "@winglang/sdk";
 
-export async function test(entrypoints: string[]) {
+/**
+ * Options for the `test` command.
+ */
+export interface TestOptions extends CompileOptions {}
+
+export async function test(entrypoints: string[], options: TestOptions) {
   for (const entrypoint of entrypoints) {
-    await testOne(entrypoint);
+    await testOne(entrypoint, options);
   }
 }
 
-async function testOne(entrypoint: string) {
-  const simdir = await compile(entrypoint, { target: Target.SIM });
+async function testOne(entrypoint: string, options: TestOptions) {
+  const synthDir = await compile(entrypoint, options);
   
-  const s = new sdk.testing.Simulator({ simfile: simdir });
+  const s = new sdk.testing.Simulator({ simfile: synthDir });
   await s.start();
   const results = await s.runAllTests();
   await s.stop();

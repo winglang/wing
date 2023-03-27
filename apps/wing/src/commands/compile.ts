@@ -39,7 +39,7 @@ const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
  * Compile options for the `compile` command.
  * This is passed from Commander to the `compile` function.
  */
-export interface ICompileOptions {
+export interface CompileOptions {
   readonly target: Target;
   readonly plugins?: string[];
 }
@@ -64,7 +64,7 @@ function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
  * @param options Compile options.
  * @returns the output directory
  */
-export async function compile(entrypoint: string, options: ICompileOptions): Promise<string> {
+export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
   const targetdir = join(dirname(entrypoint), "target");
   const wingFile = entrypoint;
   log("wing file: %s", wingFile);
