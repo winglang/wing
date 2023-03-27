@@ -573,7 +573,7 @@ impl<'s> Parser<'s> {
 			match (interface_element.kind()) {
 				"method_signature" => {
 					let method_name = self.node_symbol(&interface_element.child_by_field_name("name").unwrap());
-					let func_sig = self.build_function_signature(&interface_element, Phase::Preflight)?;
+					let func_sig = self.build_function_signature(&interface_element, Phase::Preflight);
 					match (method_name, func_sig) {
 						(Ok(method_name), Ok(func_sig)) => methods.push((method_name, func_sig)),
 						_ => {}
@@ -581,7 +581,7 @@ impl<'s> Parser<'s> {
 				}
 				"inflight_method_signature" => {
 					let method_name = self.node_symbol(&interface_element.child_by_field_name("name").unwrap());
-					let func_sig = self.build_function_signature(&interface_element, Phase::Inflight)?;
+					let func_sig = self.build_function_signature(&interface_element, Phase::Inflight);
 					match (method_name, func_sig) {
 						(Ok(method_name), Ok(func_sig)) => methods.push((method_name, func_sig)),
 						_ => {}
