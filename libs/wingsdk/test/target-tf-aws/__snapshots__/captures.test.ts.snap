@@ -29,7 +29,7 @@ return class Handler {
     }
 };
 })())({
-function: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_50735b21\\"])
+function: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_50735b21\\"])
 })"
 `;
 
@@ -132,7 +132,7 @@ return class Handler {
   async handle(event) { await this.queue.push(\\"info\\"); }
 };
 })())({
-queue: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/queue.inflight\\")).QueueClient(process.env[\\"QUEUE_URL_1cfcc997\\"])
+queue: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/queue.inflight\\")).QueueClient(process.env[\\"QUEUE_URL_1cfcc997\\"])
 })"
 `;
 
@@ -262,7 +262,7 @@ return class Handler {
   async handle(event) { await this.bucket.put(\\"hello.txt\\", event); }
 };
 })())({
-bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_1357ca3a\\"], process.env[\\"BUCKET_NAME_1357ca3a_IS_PUBLIC\\"])
+bucket: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/bucket.inflight\\")).BucketClient(process.env[\\"BUCKET_NAME_1357ca3a\\"], process.env[\\"BUCKET_NAME_1357ca3a_IS_PUBLIC\\"])
 })"
 `;
 
