@@ -121,39 +121,6 @@ jobs:
         id: pr-labels
         uses: joerick/pr-labels-action@v1.0.7
 
-      # Packaging for the wing playground
-      - name: Webpack Wing CLI
-        uses: sidey79/ncc@v1.3.0
-        with:
-          src: 'apps/wing/dist/cli.js'
-          ncc_args: '-o,apps/wing/dist_webpack,-e,codespan-wasm,-e,@winglang/sdk'
-
-      - name: Webpack Wing SDK
-        uses: sidey79/ncc@v1.3.0
-        with:
-          src: 'libs/wingsdk/lib/index.js'
-          ncc_args: '-o,libs/wingsdk/dist_webpack'
-
-      - name: Compress Wing CLI
-        working-directory: apps/wing/dist_webpack
-        run: tar -czvf ../winglang-webpack.tgz -P . ../package.json ../wingc.wasm
-
-      - name: Compress Wing SDK
-        working-directory: libs/wingsdk/dist_webpack
-        run: tar -czvf ../winglang-sdk-webpack.tgz -P . ../package.json ../.jsii
-
-      - name: Upload Wing CLI Webpack
-        uses: actions/upload-artifact@v3
-        with:
-          name: winglang-webpack
-          path: apps/wing/winglang-webpack.tgz
-
-      - name: Upload Wing SDK Webpack
-        uses: actions/upload-artifact@v3
-        with:
-          name: winglang-sdk-webpack
-          path: libs/wingsdk/winglang-sdk-webpack.tgz
-
   e2e:
     name: "E2E / ${{ matrix.runner }} + Node${{ matrix.node }} [${{ matrix.shard }}]"
     needs:
