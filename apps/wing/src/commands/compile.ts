@@ -1,6 +1,6 @@
 import * as vm from "vm";
 
-import { mkdir, readFile, rm} from "fs/promises";
+import { mkdir, readFile, rm } from "fs/promises";
 import { basename, dirname, join, resolve } from "path";
 
 import * as chalk from "chalk";
@@ -26,6 +26,7 @@ export enum Target {
   TF_AZURE = "tf-azure",
   TF_GCP = "tf-gcp",
   SIM = "sim",
+  AWSCDK = "awscdk",
 }
 
 const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
@@ -33,6 +34,7 @@ const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
   [Target.TF_AZURE]: "tfazure",
   [Target.TF_GCP]: "tfgcp",
   [Target.SIM]: "wsim",
+  [Target.AWSCDK]: "awscdk",
 };
 
 /**
@@ -79,7 +81,7 @@ export async function compile(entrypoint: string, options: ICompileOptions): Pro
   await rm(synthDir, { recursive: true, force: true });
 
   process.env["WING_SYNTH_DIR"] = synthDir;
-  process.env["WING_NODE_MODULES"] = resolve(join(wingDir, "node_modules") );
+  process.env["WING_NODE_MODULES"] = resolve(join(wingDir, "node_modules"));
   process.env["WING_TARGET"] = options.target;
 
   await Promise.all([
@@ -162,7 +164,7 @@ export async function compile(entrypoint: string, options: ICompileOptions): Pro
   // the wing CLI was installed to), but also in the source code directory.
   // This is necessary because the Wing app may have installed dependencies in
   // the project directory.
-  const requireResolve = (path: string) => require.resolve(path, { paths: [workDir, __dirname, wingDir] }); 
+  const requireResolve = (path: string) => require.resolve(path, { paths: [workDir, __dirname, wingDir] });
   const preflightRequire = (path: string) => require(requireResolve(path));
   preflightRequire.resolve = requireResolve;
 
@@ -206,9 +208,9 @@ export async function compile(entrypoint: string, options: ICompileOptions): Pro
       console.log();
       console.log(
         "  " +
-          chalk.bold.white("note:") +
-          " " +
-          chalk.white(`intermediate javascript code (${artifactPath}):`)
+        chalk.bold.white("note:") +
+        " " +
+        chalk.white(`intermediate javascript code (${artifactPath}):`)
       );
       const lineNumber =
         Number.parseInt(
@@ -236,11 +238,11 @@ export async function compile(entrypoint: string, options: ICompileOptions): Pro
     } else {
       console.log(
         "  " +
-          chalk.bold.white("note:") +
-          " " +
-          chalk.white(
-            "run with `NODE_STACKTRACE=1` environment variable to display a stack trace"
-          )
+        chalk.bold.white("note:") +
+        " " +
+        chalk.white(
+          "run with `NODE_STACKTRACE=1` environment variable to display a stack trace"
+        )
       );
     }
 
