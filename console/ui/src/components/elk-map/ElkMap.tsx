@@ -146,61 +146,80 @@ export const ElkMap = <T extends unknown = undefined>({
     [highlighted],
   );
 
-  const renderElk = useCallback(
-    (node: ElkNode, depth = 0) => {
-      if (!nodeRecord) return;
-      const offset = offsets?.get(node.id) ?? { x: 0, y: 0 };
-      const data = nodeRecord[node.id];
-      if (!data) return;
-      const hasEdge = edges?.some(
-        (edge) =>
-          (edge.source === node.id && edge.target === highlighted) ||
-          (edge.source === highlighted && edge.target === node.id),
-      );
-      return (
-        <Fragment key={node.id}>
-          <motion.div
-            className={classNames(
-              "absolute origin-top transition-all",
-              durationClass,
-            )}
-            style={{
-              translateX: offset.x,
-              translateY: offset.y,
-              width: `${node.width}px`,
-              height: `${node.height}px`,
-            }}
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: isHighlighted(node.id) || hasEdge ? 1 : 0.35,
-            }}
-            transition={{ duration: 0.2 }}
-            exit={{
-              opacity: 0,
-            }}
-            onClick={() => onSelectedNodeIdChange?.(node.id)}
-            onMouseEnter={() => setHighlighted(node.id)}
-            onMouseLeave={() => setHighlighted(undefined)}
-          >
-            <NodeItem node={data} depth={depth} />
-          </motion.div>
+  const [nodeList, setNodeList] = useState<
+    {
+      id: string;
+      width: number;
+      height: number;
+      offset: { x: number; y: number };
+      depth: number;
+      hasEdge: boolean;
+      isHighlighted: boolean;
+      data: Node<T>;
+    }[]
+  >([]);
+  useEffect(() => {
+    setNodeList(() => {
+      if (!graph) {
+        return [];
+      }
+      if (!nodeRecord) {
+        return [];
+      }
+      if (!offsets) {
+        return [];
+      }
 
-          {node.children?.map((node) => renderElk(node, depth + 1))}
-        </Fragment>
-      );
-    },
-    [
-      nodeRecord,
-      offsets,
-      edges,
-      isHighlighted,
-      NodeItem,
-      highlighted,
-      onSelectedNodeIdChange,
-    ],
-  );
+      const nodeList: {
+        id: string;
+        width: number;
+        height: number;
+        offset: { x: number; y: number };
+        depth: number;
+        hasEdge: boolean;
+        isHighlighted: boolean;
+        data: Node<T>;
+      }[] = [];
+      const traverse = (node: ElkNode, depth = 0) => {
+        const offset = offsets?.get(node.id) ?? { x: 0, y: 0 };
+        const data = nodeRecord[node.id];
+        if (data) {
+          nodeList.push({
+            id: node.id,
+            width: node.width ?? 0,
+            height: node.height ?? 0,
+            offset,
+            depth,
+            hasEdge:
+              edges?.some(
+                (edge) =>
+                  (edge.source === node.id && edge.target === highlighted) ||
+                  (edge.source === highlighted && edge.target === node.id),
+              ) ?? false,
+            isHighlighted: isHighlighted(node.id),
+            data,
+          });
+        }
+        for (const child of node.children ?? []) {
+          traverse(child, depth + 1);
+        }
+      };
+
+      for (const node of graph.children ?? []) {
+        traverse(node);
+      }
+
+      return nodeList;
+    });
+  }, [
+    graph,
+    nodeRecord,
+    offsets,
+    edges,
+    setNodeList,
+    highlighted,
+    isHighlighted,
+  ]);
 
   return (
     <div
@@ -211,7 +230,36 @@ export const ElkMap = <T extends unknown = undefined>({
       }}
     >
       <AnimatePresence>
-        {graph?.children?.map((node) => renderElk(node))}
+        {nodeList.map((node) => (
+          <motion.div
+            key={node.id}
+            className={classNames(
+              "absolute origin-top transition-all",
+              durationClass,
+            )}
+            style={{
+              translateX: node.offset.x,
+              translateY: node.offset.y,
+              width: `${node.width}px`,
+              height: `${node.height}px`,
+            }}
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: node.isHighlighted || node.hasEdge ? 1 : 0.35,
+            }}
+            transition={{ ease: "easeInOut", duration: 0.2 }}
+            exit={{
+              opacity: 0,
+            }}
+            onClick={() => onSelectedNodeIdChange?.(node.id)}
+            onMouseEnter={() => setHighlighted(node.id)}
+            onMouseLeave={() => setHighlighted(undefined)}
+          >
+            <NodeItem node={node.data} depth={node.depth} />
+          </motion.div>
+        ))}
       </AnimatePresence>
 
       <AnimatePresence>
