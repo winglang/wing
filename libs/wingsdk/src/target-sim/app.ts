@@ -26,7 +26,7 @@ import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
 import { REDIS_FQN } from "../redis";
-import { mkdtemp, SIMULATOR_FILE_PATH } from "../util";
+import { SIMULATOR_FILE_PATH } from "../util";
 
 /**
  * A construct that knows how to synthesize simulator resources into a

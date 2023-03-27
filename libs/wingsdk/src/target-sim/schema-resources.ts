@@ -150,3 +150,5 @@ export interface RedisSchema extends BaseResourceSchema {
   readonly type: typeof REDIS_TYPE;
   readonly props: {};
 }
+
+export interface RedisAttributes {}

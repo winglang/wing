@@ -1,7 +1,7 @@
 import Dockerode from "dockerode";
 import * as portfinder from "portfinder";
 import { ISimulatorResourceInstance } from "./resource";
-import { RedisSchema } from "./schema-resources";
+import { RedisAttributes, RedisSchema } from "./schema-resources";
 import { IRedisClient } from "../redis";
 import { ISimulatorContext } from "../testing/simulator";
 
@@ -30,7 +30,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
     this.base_port = (process.env.REDIS_BASE_PORT ?? 6379) as number;
   }
 
-  public async init(): Promise<void> {
+  public async init(): Promise<RedisAttributes> {
     this.docker = new Dockerode();
     let hostPort: number;
     // Create a redis container
@@ -59,6 +59,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
 
       // redis url based on host port
       this.connection_url = `redis://0.0.0.0:${hostPort!}`;
+      return {};
     } catch (e) {
       throw Error(`Error setting up Redis resource simulation (${e})
       - Make sure you have docker installed and running
