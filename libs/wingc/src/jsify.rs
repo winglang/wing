@@ -1,4 +1,7 @@
+mod code;
+
 use aho_corasick::AhoCorasick;
+use const_format::formatcp;
 use indoc::formatdoc;
 use itertools::Itertools;
 
@@ -28,8 +31,12 @@ use crate::{
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
 };
 
+use self::code::CodeMaker;
+
 const STDLIB: &str = "$stdlib";
+const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
 const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
+
 const INFLIGHT_CLIENTS_DIR: &str = "clients";
 const EXTERN_DIR: &str = "extern";
 
@@ -49,9 +56,16 @@ function __app(target) {
 			throw new Error(`Unknown WING_TARGET value: "${process.env.WING_TARGET ?? ""}"`);
 	}
 }
-const $App = __app(process.env.WING_TARGET);
+const $AppBase = __app(process.env.WING_TARGET);
 "#;
-const TARGET_APP: &str = "$App";
+
+const TEST_ENVIRONMENTS_VAR: &str = "$test_environments";
+const OUTDIR_VAR: &str = "$outdir";
+
+const APP_CLASS: &str = "$App";
+const APP_BASE_CLASS: &str = "$AppBase";
+
+const ROOT_CLASS: &str = "$Root";
 
 const INFLIGHT_OBJ_PREFIX: &str = "$Inflight";
 
@@ -133,26 +147,47 @@ impl<'a> JSifier<'a> {
 
 		if self.shim {
 			output.push(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
-			output.push(format!("const $outdir = process.env.WING_SYNTH_DIR ?? \".\";"));
+			output.push(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
+			output.push(format!(
+				"const {} = parseInt(process.env.WING_TEST_ENVIRONMENTS ?? \"0\");",
+				TEST_ENVIRONMENTS_VAR
+			));
 			output.push(TARGET_CODE.to_owned());
 		}
 
 		output.append(&mut imports);
 
 		if self.shim {
-			js.insert(
-				0,
-				format!(
-					"super({{ outdir: $outdir, name: \"{}\", plugins: $plugins }});\n",
-					self.app_name
-				),
-			);
-			output.push(format!(
-				"class MyApp extends {} {{\nconstructor() {}\n}}",
-				TARGET_APP,
-				JSifier::render_block(js)
+			let mut root_class = CodeMaker::default();
+			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
+			root_class.open("constructor(scope, id) {");
+			root_class.line(format!("super(scope, id);"));
+			root_class.add_lines(js);
+			root_class.close("}");
+			root_class.close("}");
+
+			let mut app_wrapper = CodeMaker::default();
+			app_wrapper.open(format!("class {} extends {} {{", APP_CLASS, APP_BASE_CLASS));
+			app_wrapper.open("constructor() {");
+			app_wrapper.line(format!(
+				"super({{ outdir: {}, name: \"{}\", plugins: $plugins }});",
+				OUTDIR_VAR, self.app_name
 			));
-			output.push(format!("new MyApp().synth();"));
+			app_wrapper.open(format!("if ({} === 0) {{", TEST_ENVIRONMENTS_VAR));
+			app_wrapper.line(format!("new {}(this, \"Default\");", ROOT_CLASS));
+			app_wrapper.unindent();
+			app_wrapper.open("} else {");
+			app_wrapper.open(format!("for (let i = 0; i < {}; i++) {{", TEST_ENVIRONMENTS_VAR));
+			app_wrapper.line(format!("new {}(this, \"test\" + i);", ROOT_CLASS));
+			app_wrapper.close("}");
+			app_wrapper.close("}");
+			app_wrapper.close("}");
+			app_wrapper.close("}");
+
+			output.push(root_class.to_string());
+			output.push(app_wrapper.to_string());
+
+			output.push(format!("new {}().synth();", APP_CLASS));
 		} else {
 			output.append(&mut js);
 		}
@@ -951,7 +986,7 @@ impl<'a> JSifier<'a> {
 			if let Some(parent) = &class.parent {
 				format!(" extends {}", self.jsify_user_defined_type(parent))
 			} else {
-				format!(" extends {}.{}", STDLIB, WINGSDK_RESOURCE)
+				format!(" extends {}", STDLIB_CORE_RESOURCE)
 			},
 			self.jsify_resource_constructor(&class.constructor, class.parent.is_none(), context),
 			preflight_methods
