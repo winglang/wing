@@ -330,7 +330,7 @@ resource Bucket {
    *
    * @throws Will throw if the `src` file doesn't exist.
    */
-  inflight move(src: str, dst: str): void;
+  inflight rename(src: str, dst: str): void;
 
   /**
    * Copy a file to a new location in the bucket. If the destination file already
