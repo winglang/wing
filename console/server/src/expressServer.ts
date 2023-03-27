@@ -25,6 +25,7 @@ export interface CreateExpressServerOptions {
   log: LogInterface;
   testLogger: TestLogger;
   updater?: Updater;
+  requestedPort?: number;
 }
 
 export const createExpressServer = async ({
@@ -36,6 +37,7 @@ export const createExpressServer = async ({
   log,
   testLogger,
   updater,
+  requestedPort,
 }: CreateExpressServerOptions) => {
   const app = express();
   app.use(cors());
@@ -73,7 +75,7 @@ export const createExpressServer = async ({
     }),
   );
   log.info("Looking for an open port");
-  const port = await getPort();
+  const port = await getPort({ port: requestedPort });
   const server = app.listen(port);
   await new Promise<void>((resolve) => {
     server.on("listening", resolve);

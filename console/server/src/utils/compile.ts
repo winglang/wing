@@ -32,7 +32,6 @@ export const compile = async ({
     }
     if (stderr) {
       consoleLogger.error(stderr, "compiler");
-      return "error";
     }
     log.info(`Compilation succeeded`, "compiler");
     return "success";

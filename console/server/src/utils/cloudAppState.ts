@@ -71,7 +71,7 @@ export const createCloudAppState = ({
 
   const cloudAppStateService = interpret(cloudAppState)
     .onTransition((state) => {
-      log.verbose(`cloud app state: ${state.value}`);
+      log.info(`cloud app state: ${state.value}`);
       onChange(state.value as AppStates);
     })
     .start();

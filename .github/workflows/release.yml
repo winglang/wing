@@ -88,19 +88,22 @@ jobs:
         with:
           name: dist
 
+      - name: Pack the Console for the Playground
+        run: tar cvf playground-console.tgz console
+
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_REF: ${{ github.ref }}
-        run: errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi
+        run: errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF playground-console.tgz 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi
 
-      - name: Extract Version
+      - name: Extract version
         id: extract-version
         if: ${{ failure() }}
         run: echo "VERSION=$(cat dist/releasetag.txt)" >> $GITHUB_OUTPUT
 
-      - name: Create Issue
+      - name: Create issue
         if: ${{ failure() }}
         uses: imjohnbo/issue-bot@v3
         env:

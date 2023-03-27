@@ -20,12 +20,14 @@ export interface CreateConsoleServerOptions {
   inputFile: string;
   log: LogInterface;
   updater?: Updater;
+  requestedPort?: number;
 }
 
 export const createConsoleServer = async ({
   inputFile,
   log,
   updater,
+  requestedPort,
 }: CreateConsoleServerOptions) => {
   let lastErrorMessage: string = "";
 
@@ -94,6 +96,7 @@ export const createConsoleServer = async ({
     log,
     testLogger: createTestLogger(),
     updater,
+    requestedPort,
   });
 
   const getSimulator = async () => {
