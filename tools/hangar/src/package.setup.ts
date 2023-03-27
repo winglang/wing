@@ -52,16 +52,19 @@ export default async function () {
     cwd: tmpDir,
   });
 
+
+  console.log(installResult.stdout);
+  
   assert.equal(
     installResult.exitCode,
     0,
     `Failed to install npm deps: \n${installResult.stderr}`
   );
-  // assert.doesNotMatch(
-  //   installResult.stdout,
-  //   />/,
-  //   `Install contains unexpected script hook: \n${installResult.stdout}`
-  // );
+  assert.doesNotMatch(
+    installResult.stdout,
+    />/,
+    `Install contains unexpected script hook: \n${installResult.stdout}`
+  );
   assert.doesNotMatch(
     installResult.stdout,
     / warn /,
