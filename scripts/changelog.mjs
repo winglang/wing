@@ -32,6 +32,14 @@ async function getData() {
         title: "👓 RFC",
         semver: "patch",
       },
+      feat: {
+        title: "🚀 Features",
+        semver: "patch",
+      },
+      revert: {
+        title: "⏪ Reverts",
+        semver: "patch",
+      },
     },
   });
 

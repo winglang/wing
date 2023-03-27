@@ -19,6 +19,7 @@ const project = new cdk.JsiiProject({
   authorAddress: "ping@monada.co",
   repositoryUrl: "https://github.com/winglang/wing.git",
   repositoryDirectory: "libs/wingsdk",
+  license: "MIT",
   stability: "experimental",
   defaultReleaseBranch: "main",
   peerDeps: [...JSII_DEPS],

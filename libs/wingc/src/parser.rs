@@ -26,7 +26,6 @@ pub struct Parser<'a> {
 // this is meant to serve as a bandaide to be removed once wing is further developed.
 // k=grammar, v=optional_message, example: ("generic", "targed impl: 1.0.0")
 static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
-	"struct_definition" => "see https://github.com/winglang/wing/issues/120",
 	"interface_definition" => "see https://github.com/winglang/wing/issues/123",
 	"any" => "see https://github.com/winglang/wing/issues/434",
 	"void" => "see https://github.com/winglang/wing/issues/432",
@@ -196,6 +195,7 @@ impl<'s> Parser<'s> {
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
 			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"try_catch_statement" => self.build_try_catch_statement(statement_node)?,
+			"struct_definition" => self.build_struct_definition_statement(statement_node)?,
 			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -330,6 +330,33 @@ impl<'s> Parser<'s> {
 			variable: self.build_reference(&statement_node.child_by_field_name("name").unwrap())?,
 			value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
 		})
+	}
+
+	fn build_struct_definition_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		let name = self.node_symbol(&self.get_child_field(&statement_node, "name")?)?;
+
+		let mut cursor = statement_node.walk();
+		let mut members = vec![];
+
+		for field_node in statement_node.children_by_field_name("field", &mut cursor) {
+			let identifier = self.node_symbol(&self.get_child_field(&field_node, "name")?)?;
+			let type_ = &self.get_child_field(&field_node, "type")?;
+			let f = ClassField {
+				name: identifier,
+				member_type: self.build_type_annotation(&type_)?,
+				reassignable: false,
+				phase: Phase::Independent,
+				is_static: false,
+			};
+			members.push(f);
+		}
+
+		let mut extends = vec![];
+		for super_node in statement_node.children_by_field_name("extends", &mut cursor) {
+			extends.push(self.node_symbol(&super_node)?);
+		}
+
+		Ok(StmtKind::Struct { name, extends, members })
 	}
 
 	fn build_variable_def_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {

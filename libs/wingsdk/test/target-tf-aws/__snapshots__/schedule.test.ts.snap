@@ -257,6 +257,9 @@ exports[`schedule behavior with cron 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
+                "display": {
+                  "hidden": true,
+                },
                 "id": "Schedule-OnTickHandler-c5395e41",
                 "path": "root/Default/Schedule-OnTickHandler-c5395e41",
               },
@@ -584,6 +587,9 @@ exports[`schedule behavior with rate 2`] = `
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
+                },
+                "display": {
+                  "hidden": true,
                 },
                 "id": "Schedule-OnTickHandler-c5395e41",
                 "path": "root/Default/Schedule-OnTickHandler-c5395e41",
@@ -1097,6 +1103,9 @@ exports[`schedule with two functions 2`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
+                "display": {
+                  "hidden": true,
+                },
                 "id": "Schedule-OnTickHandler-0a615500",
                 "path": "root/Default/Schedule-OnTickHandler-0a615500",
               },
@@ -1108,6 +1117,9 @@ exports[`schedule with two functions 2`] = `
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
+                },
+                "display": {
+                  "hidden": true,
                 },
                 "id": "Schedule-OnTickHandler-7b33bcba",
                 "path": "root/Default/Schedule-OnTickHandler-7b33bcba",

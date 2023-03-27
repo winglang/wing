@@ -245,7 +245,7 @@ jobs:
           mv ./*/*.wasm ./dist
           cd dist
 
-          echo '${{ needs.build.outputs.changelog }}'' > ../CHANGELOG.md
+          echo '${{ needs.build.outputs.changelog }}' > ../CHANGELOG.md
           echo '### SHA-1 Checksums' >> ../CHANGELOG.md
           echo '```' >> ../CHANGELOG.md
           sha1sum --binary * >> ../CHANGELOG.md

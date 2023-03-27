@@ -4,8 +4,8 @@ import { CloudwatchEventTarget } from "@cdktf/provider-aws/lib/cloudwatch-event-
 import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
+import { convertBetweenHandlers } from "../utils/convert";
 
 /**
  * AWS implementation of `cloud.Schedule`.
