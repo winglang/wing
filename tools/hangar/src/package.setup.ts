@@ -53,8 +53,8 @@ export default async function () {
   });
 
 
-  console.log(installResult.stdout);
-  
+  console.log('STDOUT:', installResult.stdout);
+
   assert.equal(
     installResult.exitCode,
     0,
