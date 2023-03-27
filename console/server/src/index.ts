@@ -2,6 +2,7 @@ import Emittery from "emittery";
 
 import { ConsoleLogger, createConsoleLogger } from "./consoleLogger.js";
 import { createExpressServer } from "./expressServer.js";
+import { Updater } from "./updater.js";
 import { createCloudAppState } from "./utils/cloudAppState.js";
 import { RouterEvents } from "./utils/createRouter.js";
 import { createWingApp } from "./utils/createWingApp.js";
@@ -12,20 +13,30 @@ export type { LogEntry, LogLevel } from "./consoleLogger.js";
 export type { ExplorerItem } from "./router/app.js";
 export type { State } from "./types.js";
 export type { WingSimulatorSchema, BaseResourceSchema } from "./wingsdk.js";
+export type { Updater, UpdaterStatus } from "./updater.js";
 export type { Router } from "./router/index.js";
 
 export interface CreateConsoleServerOptions {
   inputFile: string;
   log: LogInterface;
+  updater?: Updater;
 }
 
 export const createConsoleServer = async ({
   inputFile,
   log,
+  updater,
 }: CreateConsoleServerOptions) => {
   let lastErrorMessage: string = "";
 
   const emitter = new Emittery<RouterEvents>();
+
+  const invalidateUpdaterStatus = async () => {
+    await emitter.emit("invalidateQuery", {
+      query: "updater.currentStatus",
+    });
+  };
+  updater?.addEventListener("status-change", invalidateUpdaterStatus);
 
   const consoleLogger: ConsoleLogger = createConsoleLogger({
     onLog: (level, message) => {
@@ -82,6 +93,7 @@ export const createConsoleServer = async ({
     emitter,
     log,
     testLogger: createTestLogger(),
+    updater,
   });
 
   const getSimulator = async () => {
@@ -129,6 +141,7 @@ export const createConsoleServer = async ({
 
   const close = async () => {
     try {
+      updater?.removeEventListener("status-change", invalidateUpdaterStatus);
       await Promise.allSettled([
         server.close(),
         getSimulator().then((simulator) => simulator.stop()),

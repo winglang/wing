@@ -8,6 +8,7 @@ import { WebSocketServer } from "ws";
 
 import { ConsoleLogger } from "./consoleLogger.js";
 import { mergeAllRouters } from "./router/index.js";
+import { Updater } from "./updater.js";
 import { CloudAppStateService } from "./utils/cloudAppState.js";
 import { RouterContext, RouterEvents } from "./utils/createRouter.js";
 import { createSimulator } from "./utils/createSimulator.js";
@@ -23,6 +24,7 @@ export interface CreateExpressServerOptions {
   emitter: Emittery<RouterEvents>;
   log: LogInterface;
   testLogger: TestLogger;
+  updater?: Updater;
 }
 
 export const createExpressServer = async ({
@@ -33,6 +35,7 @@ export const createExpressServer = async ({
   cloudAppStateService,
   log,
   testLogger,
+  updater,
 }: CreateExpressServerOptions) => {
   const app = express();
   app.use(cors());
@@ -55,9 +58,10 @@ export const createExpressServer = async ({
       errorMessage() {
         return errorMessage();
       },
-      testLogger: testLogger,
-      emitter: emitter,
-      cloudAppStateService: cloudAppStateService,
+      testLogger,
+      emitter,
+      cloudAppStateService,
+      updater,
     };
   };
   app.use(

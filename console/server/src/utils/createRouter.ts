@@ -2,6 +2,7 @@ import { initTRPC } from "@trpc/server";
 import Emittery from "emittery";
 
 import { LogEntry } from "../consoleLogger.js";
+import { Updater } from "../updater.js";
 import { Simulator } from "../wingsdk.js";
 
 import { CloudAppStateService } from "./cloudAppState.js";
@@ -13,6 +14,7 @@ export type QueryNames = {
     | "app.logs"
     | "app.state"
     | "queue.approxSize"
+    | "updater.currentStatus"
     | undefined;
 };
 
@@ -30,6 +32,7 @@ export interface RouterContext {
   emitter: Emittery<RouterEvents>;
   cloudAppStateService: CloudAppStateService;
   testLogger: TestLogger;
+  updater?: Updater;
 }
 
 const t = initTRPC.context<RouterContext>().create();

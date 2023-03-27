@@ -49,7 +49,7 @@
             {
               "direction": "inbound",
               "relationship": "print",
-              "resource": "root/test: Print",
+              "resource": "root/test: Log",
               "implicit": true
             }
           ]
@@ -716,9 +716,9 @@
           "hidden": true
         }
       },
-      "test: Print": {
-        "id": "test: Print",
-        "path": "root/test: Print",
+      "test: Log": {
+        "id": "test: Log",
+        "path": "root/test: Log",
         "attributes": {
           "wing:resource:stateful": false,
           "wing:resource:connections": [

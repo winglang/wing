@@ -7,6 +7,7 @@ import { createFunctionRouter } from "./function.js";
 import { createQueueRouter } from "./queue.js";
 import { createTestRouter } from "./test.js";
 import { createTopicRouter } from "./topic.js";
+import { createUpdaterRouter } from "./updater.js";
 
 export const mergeAllRouters = () => {
   const app = createAppRouter();
@@ -19,6 +20,7 @@ export const mergeAllRouters = () => {
     createCounterRouter(),
     createTestRouter(),
     createTopicRouter(),
+    createUpdaterRouter(),
   );
 
   return { router };

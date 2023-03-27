@@ -137,9 +137,9 @@
     },
     {
       "type": "wingsdk.cloud.Function",
-      "path": "root/test: Print",
+      "path": "root/test: Log",
       "props": {
-        "sourceCodeFile": ".wing/test__print_c8ce8953.js",
+        "sourceCodeFile": ".wing/test__log_c8f5fce3.js",
         "sourceCodeLanguage": "javascript",
         "environmentVariables": {
           "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}"

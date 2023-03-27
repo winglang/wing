@@ -26,8 +26,8 @@ export interface TreeViewProps {
 }
 
 export const TreeView = ({
-  expandedItems: expandedItemsProp,
-  selectedItems: selectedItemsProp,
+  expandedItems: expandedItemsProperty,
+  selectedItems: selectedItemsProperty,
   defaultExpandedItems,
   defaultSelectedItems,
   onSelectedItemsChange,
@@ -36,7 +36,7 @@ export const TreeView = ({
   ...props
 }: PropsWithChildren<TreeViewProps>) => {
   const [expandedItems, setExpandedItems] = useControlled({
-    controlled: expandedItemsProp,
+    controlled: expandedItemsProperty,
     default: defaultExpandedItems ?? [],
     onChange: onExpandedItemsChange,
   });
@@ -126,7 +126,7 @@ export const TreeView = ({
 
   const [focusedItem, setFocusedItem] = useState(defaultSelectedItems?.[0]);
   const [selectedItems, setSelectedItems] = useControlled({
-    controlled: selectedItemsProp,
+    controlled: selectedItemsProperty,
     default: defaultSelectedItems ?? [],
     onChange: onSelectedItemsChange,
   });

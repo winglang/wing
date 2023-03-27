@@ -4,11 +4,11 @@ import { createConsoleServer } from "@wingconsole/server";
 import { config } from "dotenv";
 import { app, BrowserWindow, dialog, Menu, screen, shell } from "electron";
 import log from "electron-log";
-import { autoUpdater } from "electron-updater";
 import fixPath from "fix-path";
 
 import { WING_PROTOCOL_SCHEME } from "./protocol.js";
 import { SegmentAnalytics } from "./segmentAnalytics.js";
+import { updater } from "./updater.js";
 
 config();
 fixPath();
@@ -23,21 +23,6 @@ if (process.env.SEGMENT_WRITE_KEY) {
     anonymousId: segment.anonymousId,
     event: "Console Application started",
   });
-}
-
-class AppUpdater {
-  constructor() {
-    log.info("init auto-updater");
-    log.transports.file.level = "info";
-    autoUpdater.logger = log;
-    void autoUpdater.checkForUpdatesAndNotify();
-    autoUpdater.addListener("update-available", () => {
-      log.info("update is available");
-    });
-    autoUpdater.addListener("update-downloaded", () => {
-      log.info("update was downloaded");
-    });
-  }
 }
 
 const ROOT_PATH = {
@@ -125,6 +110,7 @@ function createWindowManager() {
       const server = await createConsoleServer({
         inputFile: simfile,
         log,
+        updater,
       });
 
       newWindow = await createWindow({
@@ -282,6 +268,7 @@ async function main() {
   // remove default Help menu
   defaultMenuItems.pop();
 
+  const checkForUpdatesItemId = "check-for-updates-menu-item";
   const menuTemplateArray = [
     {
       ...defaultMenuItems[0]!,
@@ -345,6 +332,14 @@ async function main() {
             );
           },
         },
+        {
+          label: "Check for Updates",
+          id: checkForUpdatesItemId,
+          enabled: false,
+          click: async () => {
+            await updater.checkForUpdates();
+          },
+        },
       ],
     },
   ];
@@ -354,7 +349,17 @@ async function main() {
     menuTemplateArray.shift();
   }
 
-  Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplateArray as any));
+  const appMenu = Menu.buildFromTemplate(menuTemplateArray as any);
+  Menu.setApplicationMenu(appMenu);
+
+  // update check for updates menu item enabled state
+  updater.addEventListener("status-change", () => {
+    appMenu.getMenuItemById(checkForUpdatesItemId)!.enabled = [
+      "initial",
+      "update-not-available",
+      "error",
+    ].includes(updater.status().status);
+  });
 
   if (import.meta.env.DEV || process.env.PLAYWRIGHT_TEST || process.env.CI) {
     log.info("Running in dev mode, skipping file input window");
@@ -370,8 +375,6 @@ async function main() {
     //   `${__dirname}/../../../../demo/constructHub/index.wsim`,
     // );
   } else {
-    new AppUpdater();
-
     if (shouldShowGetStarted && BrowserWindow.getAllWindows().length === 0) {
       await windowManager.showOpenFileDialog();
     }
