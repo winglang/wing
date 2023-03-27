@@ -3,6 +3,11 @@ import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
 
+/**
+ * AWS implementation of `cloud.TestEngine`.
+ *
+ * @inflight `@winglang/sdk.cloud.ITestEngineClient`
+ */
 export class TestEngine extends cloud.TestEngine {
   constructor(scope: Construct, id: string) {
     super(scope, id);
@@ -32,7 +37,7 @@ export class TestEngine extends cloud.TestEngine {
     };
     for (const fn of this.node.root.node.findAll().filter(isAwsFunction)) {
       if (TestEngine.isTest(fn)) {
-        arns.set(fn.node.id, fn.arn);
+        arns.set(fn.node.path, fn.arn);
       }
     }
     return arns;

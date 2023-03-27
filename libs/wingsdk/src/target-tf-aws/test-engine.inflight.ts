@@ -19,10 +19,10 @@ export class TestEngineClient implements ITestEngineClient {
     return Array.from(this.tests.keys());
   }
 
-  public async runTest(name: string): Promise<TestResult> {
-    let functionArn = this.tests.get(name);
+  public async runTest(path: string): Promise<TestResult> {
+    let functionArn = this.tests.get(path);
     if (!functionArn) {
-      throw new Error(`No test found with name "${name}"`);
+      throw new Error(`No test found with path "${path}"`);
     }
     const client = new FunctionClient(functionArn);
     let pass = false;
@@ -34,7 +34,7 @@ export class TestEngineClient implements ITestEngineClient {
       error = (e as any).message;
     }
     return {
-      name,
+      path,
       pass,
       error,
     };

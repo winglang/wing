@@ -6,8 +6,6 @@ import { ConstructTree } from "../core";
 import { ISimulatorResourceInstance } from "../target-sim";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
-// eslint-disable-next-line import/no-restricted-paths
-import { Function } from "../target-sim/function.inflight";
 import { BaseResourceSchema, WingSimulatorSchema } from "../target-sim/schema";
 import { readJsonSync } from "../util";
 
@@ -410,74 +408,6 @@ export class Simulator {
    */
   public onTrace(subscriber: ITraceSubscriber) {
     this._traceSubscribers.push(subscriber);
-  }
-
-  /**
-   * Lists all resource with identifier "test" or that start with "test:*".
-   * @returns A list of resource paths
-   */
-  public listTests(): string[] {
-    const isTest = /(\/test$|\/test:([^\\/])+$)/;
-    const all = this.listResources();
-    return all.filter((f) => isTest.test(f));
-  }
-
-  /**
-   * Run all tests in the simulation tree.
-   *
-   * A test is a `cloud.Function` resource with an identifier that starts with "test." or is "test".
-   * @returns A list of test results.
-   */
-  public async runAllTests(): Promise<TestResult[]> {
-    const results = new Array<TestResult>();
-    const tests = this.listTests();
-
-    for (const path of tests) {
-      results.push(await this.runTest(path));
-    }
-
-    return results;
-  }
-
-  /**
-   * Runs a single test.
-   * @param path The path to a cloud.Function resource that repersents the test
-   * @returns The result of the test
-   */
-  public async runTest(path: string): Promise<TestResult> {
-    // create a new simulator instance to run this test in isolation
-    const isolated = new Simulator({ simfile: this.simdir });
-    await isolated.start();
-
-    // find the test function and verify it exists and indeed is a function
-    const fn: Function = isolated.tryGetResource(path);
-    if (!fn) {
-      const all = this.listResources();
-      throw new Error(`Resource "${path}" not found. Resources: ${all}`);
-    }
-    if (!("invoke" in fn)) {
-      throw new Error(
-        `Resource "${path}" is not a cloud.Function (expecting "invoke()").`
-      );
-    }
-
-    // run the test and capture any errors
-    let error = undefined;
-    try {
-      await fn.invoke("");
-    } catch (err) {
-      error = (err as any).stack;
-    }
-
-    // stop the simulator
-    await isolated.stop();
-
-    return {
-      path: path,
-      traces: isolated.listTraces(),
-      pass: !error,
-      error: error,
-    };
   }
 
   /**

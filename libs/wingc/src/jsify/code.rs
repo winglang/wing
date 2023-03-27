@@ -32,6 +32,7 @@ impl CodeMaker {
 		}
 	}
 
+	#[allow(dead_code)]
 	pub fn unindent(&mut self) {
 		self.indent -= 1;
 	}

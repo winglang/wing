@@ -42,6 +42,11 @@ const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
 export interface CompileOptions {
   readonly target: Target;
   readonly plugins?: string[];
+  /**
+   * Whether to run the compiler in `wing test` mode. This may create multiple
+   * copies of the application resources in order to run tests in parallel.
+   */
+  readonly testing?: boolean;
 }
 
 /**
@@ -49,13 +54,17 @@ export interface CompileOptions {
  * within the output directory where the SDK app will synthesize its artifacts
  * for the given target.
  */
-function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
+function resolveSynthDir(outDir: string, entrypoint: string, target: Target, testing: boolean) {
   const targetDirSuffix = DEFAULT_SYNTH_DIR_SUFFIX[target];
   if (!targetDirSuffix) {
     throw new Error(`unsupported target ${target}`);
   }
   const entrypointName = basename(entrypoint, ".w");
-  return join(outDir, `${entrypointName}.${targetDirSuffix}`);
+  if (testing) {
+    return join(outDir, "test", `${entrypointName}.${targetDirSuffix}`);
+  } else {
+    return join(outDir, `${entrypointName}.${targetDirSuffix}`);
+  }
 }
 
 /**
@@ -70,7 +79,9 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   log("wing file: %s", wingFile);
   const wingDir = dirname(wingFile);
   log("wing dir: %s", wingDir);
-  const synthDir = resolveSynthDir(targetdir, wingFile, options.target);
+  const testing = options.testing ?? false;
+  log("testing: %s", testing);
+  const synthDir = resolveSynthDir(targetdir, wingFile, options.target, testing);
   log("synth dir: %s", synthDir);
   const workDir = resolve(synthDir, ".wing");
   log("work dir: %s", workDir);
@@ -81,6 +92,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   process.env["WING_SYNTH_DIR"] = synthDir;
   process.env["WING_NODE_MODULES"] = resolve(join(wingDir, "node_modules") );
   process.env["WING_TARGET"] = options.target;
+  process.env["WING_TEST"] = testing.toString();
 
   await Promise.all([
     mkdir(workDir, { recursive: true }),

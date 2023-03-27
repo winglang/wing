@@ -6,7 +6,7 @@ import { ISimulatorContext } from "../testing";
 export class TestEngineClient
   implements ITestEngineClient, ISimulatorResourceInstance
 {
-  // A map from test names to their corresponding function handles.
+  // A map from test paths to their corresponding function handles.
   private readonly tests: Map<string, string>;
   private readonly context: ISimulatorContext;
 
@@ -27,16 +27,16 @@ export class TestEngineClient
     return Array.from(this.tests.keys());
   }
 
-  public async runTest(name: string): Promise<TestResult> {
-    let functionHandle = this.tests.get(name);
+  public async runTest(path: string): Promise<TestResult> {
+    let functionHandle = this.tests.get(path);
     if (!functionHandle) {
-      throw new Error(`No test found with name "${name}"`);
+      throw new Error(`No test found at path "${path}"`);
     }
     const fnClient = this.context.findInstance(
       functionHandle
     ) as IFunctionClient & ISimulatorResourceInstance;
     if (!fnClient) {
-      throw new Error(`No function client found for test "${name}"`);
+      throw new Error(`No function client found for test path "${path}"`);
     }
     let pass = false;
     let error: string | undefined;
@@ -47,7 +47,7 @@ export class TestEngineClient
       error = (e as any).message;
     }
     return {
-      name,
+      path,
       pass,
       error,
     };

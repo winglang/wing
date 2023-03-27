@@ -59,7 +59,7 @@ function __app(target) {
 const $AppBase = __app(process.env.WING_TARGET);
 "#;
 
-const TEST_ENVIRONMENTS_VAR: &str = "$test_environments";
+const ENV_WING_TEST: &str = "$wing_test";
 const OUTDIR_VAR: &str = "$outdir";
 
 const APP_CLASS: &str = "$App";
@@ -148,10 +148,7 @@ impl<'a> JSifier<'a> {
 		if self.shim {
 			output.push(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
 			output.push(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
-			output.push(format!(
-				"const {} = parseInt(process.env.WING_TEST_ENVIRONMENTS ?? \"0\");",
-				TEST_ENVIRONMENTS_VAR
-			));
+			output.push(format!("const {} = process.env.WING_TEST === \"true\";", ENV_WING_TEST));
 			output.push(TARGET_CODE.to_owned());
 		}
 
@@ -173,13 +170,10 @@ impl<'a> JSifier<'a> {
 				"super({{ outdir: {}, name: \"{}\", plugins: $plugins }});",
 				OUTDIR_VAR, self.app_name
 			));
-			app_wrapper.open(format!("if ({} === 0) {{", TEST_ENVIRONMENTS_VAR));
 			app_wrapper.line(format!("new {}(this, \"Default\");", ROOT_CLASS));
-			app_wrapper.unindent();
-			app_wrapper.open("} else {");
-			app_wrapper.open(format!("for (let i = 0; i < {}; i++) {{", TEST_ENVIRONMENTS_VAR));
-			app_wrapper.line(format!("new {}(this, \"test\" + i);", ROOT_CLASS));
-			app_wrapper.close("}");
+			app_wrapper.open(format!("if ({}) {{", ENV_WING_TEST));
+			app_wrapper
+				.line("this.node.root.newAbstract(\"@winglang/sdk.cloud.TestEngine\",this,\"cloud.TestEngine\");".to_string());
 			app_wrapper.close("}");
 			app_wrapper.close("}");
 			app_wrapper.close("}");

@@ -2,6 +2,7 @@ import { basename } from "path";
 import { compile, CompileOptions } from "./compile";
 import * as chalk from "chalk";
 import * as sdk from "@winglang/sdk";
+import { ITestEngineClient } from "@winglang/sdk/lib/cloud";
 
 /**
  * Options for the `test` command.
@@ -15,12 +16,29 @@ export async function test(entrypoints: string[], options: TestOptions) {
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
-  const synthDir = await compile(entrypoint, options);
-  
-  const s = new sdk.testing.Simulator({ simfile: synthDir });
-  await s.start();
-  const results = await s.runAllTests();
-  await s.stop();
+  const synthDir = await compile(entrypoint, {
+    ...options,
+    testing: true,
+  });
+
+  // deploy the compiled app (to simulator or to the cloud)
+  // instantiate the cloud-specific test engine client
+  // - for simulator, we probably know how this works
+  // - for tf-aws, we need to extract any test-specific config from the
+  //   synthesized app and pass it to the test engine client
+  //   (maybe via `terraform output` command?)
+
+  let results: sdk.cloud.TestResult[];
+  switch (options.target) {
+    case "sim":
+      results = await testSimulator(synthDir);
+      break;
+    case "tf-aws":
+      results = await testTfAws(synthDir);
+      break;
+    default:
+      throw new Error(`unsupported target ${options.target}`);
+  }
 
   // print report
   let hasFailures = false;
@@ -38,7 +56,7 @@ async function testOne(entrypoint: string, options: TestOptions) {
     results.push({
       pass: true,
       path: '',
-      traces: [],
+      // traces: [],
     });
   }
 
@@ -48,9 +66,9 @@ async function testOne(entrypoint: string, options: TestOptions) {
     const details = new Array<string>();
 
     // add any log messages that were emitted during the test
-    for (const log of result.traces.filter(t => t.type == "log")) {
-      details.push(chalk.gray(log.data.message));
-    }
+    // for (const log of result.traces.filter(t => t.type == "log")) {
+    //   details.push(chalk.gray(log.data.message));
+    // }
 
     // if the test failed, add the error message and trace
     if (result.error) {
@@ -101,7 +119,27 @@ async function testOne(entrypoint: string, options: TestOptions) {
   }
 }
 
-function sortTests(a: sdk.testing.TestResult, b: sdk.testing.TestResult) {
+async function testSimulator(synthDir: string): Promise<sdk.cloud.TestResult[]> {
+  const s = new sdk.testing.Simulator({ simfile: synthDir });
+  await s.start();
+
+  const testEngine = s.getResource("root/cloud.TestEngine") as ITestEngineClient;
+  const tests = await testEngine.listTests();
+  const results = new Array<sdk.cloud.TestResult>();
+
+  for (const path of tests) {
+    results.push(await testEngine.runTest(path));
+  }
+
+  await s.stop();
+  return results;
+}
+
+async function testTfAws(_synthDir: string): Promise<sdk.cloud.TestResult[]> {
+  throw new Error("not implemented");
+}
+
+function sortTests(a: sdk.cloud.TestResult, b: sdk.cloud.TestResult) {
   if (a.pass && !b.pass) {
     return -1;
   }

@@ -1,12 +1,33 @@
 import { Construct, IConstruct } from "constructs";
 import { Function } from "./function";
+import { ISimulatorResource } from "./resource";
+import { BaseResourceSchema } from "./schema";
+import { TestEngineSchema, TEST_ENGINE_TYPE } from "./schema-resources";
 import { simulatorHandleToken } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 
-export class TestEngine extends cloud.TestEngine {
+/**
+ * Simulator implementation of `cloud.TestEngine`.
+ *
+ * @inflight `@winglang/sdk.cloud.ITestEngineClient`
+ */
+export class TestEngine extends cloud.TestEngine implements ISimulatorResource {
   constructor(scope: Construct, id: string) {
     super(scope, id);
+  }
+
+  public toSimulator(): BaseResourceSchema {
+    const tests = this.findTestFunctions();
+    const schema: TestEngineSchema = {
+      type: TEST_ENGINE_TYPE,
+      path: this.node.path,
+      props: {
+        tests,
+      },
+      attrs: {} as any,
+    };
+    return schema;
   }
 
   /** @internal */
@@ -15,38 +36,29 @@ export class TestEngine extends cloud.TestEngine {
       throw new Error("TestEngine can only be bound by tfaws.Function for now");
     }
 
-    // Collect all of the "test" cloud.Function's and their handles, and pass them
-    // to the test engine so they can be invoked inflight.
-    const testFunctions = this.findTestFunctions();
-    host.addEnvironment(
-      this.envTestFunctionArns(),
-      JSON.stringify([...testFunctions.entries()])
-    );
-
     super._bind(host, ops);
   }
 
-  private findTestFunctions(): Map<string, string> {
-    const arns = new Map<string, string>();
+  private findTestFunctions(): Record<string, string> {
+    const handles: Record<string, string> = {};
     const isSimFunction = (fn: IConstruct): fn is Function => {
       return fn instanceof Function;
     };
     for (const fn of this.node.root.node.findAll().filter(isSimFunction)) {
       if (TestEngine.isTest(fn)) {
-        arns.set(fn.node.id, simulatorHandleToken(fn));
+        handles[fn.node.path] = simulatorHandleToken(fn);
       }
     }
-    return arns;
+    return handles;
   }
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__dirname, __filename, "TestEngineClient", [
-      `process.env["${this.envTestFunctionArns()}"]`,
-    ]);
-  }
-
-  private envTestFunctionArns(): string {
-    return `TEST_ENGINE_FUNCTIONS_${this.node.addr.slice(-8)}`;
+    return core.InflightClient.for(
+      __dirname,
+      __filename,
+      "TestEngineClient",
+      []
+    );
   }
 }

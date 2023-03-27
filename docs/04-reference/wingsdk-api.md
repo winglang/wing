@@ -1104,6 +1104,110 @@ Table primary key name.
 ---
 
 
+### TestEngine <a name="TestEngine" id="@winglang/sdk.cloud.TestEngine"></a>
+
+**Inflight client:** [@winglang/sdk.cloud.ITestEngineClient](#@winglang/sdk.cloud.ITestEngineClient)
+
+Represents a test engine.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.TestEngine.Initializer"></a>
+
+```wing
+bring cloud;
+
+new cloud.TestEngine(props?: TestEngineProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.TestEngine.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.TestEngineProps">TestEngineProps</a></code> | *No description.* |
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.TestEngine.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.TestEngineProps">TestEngineProps</a>
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.TestEngine.isTest">is_test</a></code> | Returns whether a construct represents a runnable test. |
+
+---
+
+##### `is_test` <a name="is_test" id="@winglang/sdk.cloud.TestEngine.isTest"></a>
+
+```wing
+bring cloud;
+
+cloud.TestEngine.is_test(c: IConstruct)
+```
+
+Returns whether a construct represents a runnable test.
+
+###### `c`<sup>Required</sup> <a name="c" id="@winglang/sdk.cloud.TestEngine.isTest.parameter.c"></a>
+
+- *Type:* constructs.IConstruct
+
+A construct.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.TestEngine.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.TestEngine.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.TestEngine.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.TestEngine.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.TestEngine.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* <a href="#@winglang/sdk.core.Display">Display</a>
+
+Information on how to display a resource in the UI.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/sdk.cloud.TestEngine.property.stateful"></a>
+
+```wing
+stateful: bool;
+```
+
+- *Type:* bool
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+
 ### Topic <a name="Topic" id="@winglang/sdk.cloud.Topic"></a>
 
 **Inflight client:** [@winglang/sdk.cloud.ITopicClient](#@winglang/sdk.cloud.ITopicClient)
@@ -1953,6 +2057,77 @@ The table's primary key.
 
 No two rows can have the same value for the
 primary key.
+
+---
+
+### TestEngineProps <a name="TestEngineProps" id="@winglang/sdk.cloud.TestEngineProps"></a>
+
+Properties for `TestEngine`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.TestEngineProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let test_engine_props = cloud.TestEngineProps{ ... }
+```
+
+
+### TestResult <a name="TestResult" id="@winglang/sdk.cloud.TestResult"></a>
+
+A result of a single test.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.TestResult.Initializer"></a>
+
+```wing
+bring cloud;
+
+let test_result = cloud.TestResult{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.TestResult.property.pass">pass</a></code> | <code>bool</code> | Whether the test passed. |
+| <code><a href="#@winglang/sdk.cloud.TestResult.property.path">path</a></code> | <code>str</code> | The path of the test. |
+| <code><a href="#@winglang/sdk.cloud.TestResult.property.error">error</a></code> | <code>str</code> | The error message if the test failed. |
+
+---
+
+##### `pass`<sup>Required</sup> <a name="pass" id="@winglang/sdk.cloud.TestResult.property.pass"></a>
+
+```wing
+pass: bool;
+```
+
+- *Type:* bool
+
+Whether the test passed.
+
+---
+
+##### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.TestResult.property.path"></a>
+
+```wing
+path: str;
+```
+
+- *Type:* str
+
+The path of the test.
+
+---
+
+##### `error`<sup>Optional</sup> <a name="error" id="@winglang/sdk.cloud.TestResult.property.error"></a>
+
+```wing
+error: str;
+```
+
+- *Type:* str
+
+The error message if the test failed.
 
 ---
 
@@ -4413,6 +4588,48 @@ Update a row in the table.
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 data to be updated.
+
+---
+
+
+### ITestEngineClient <a name="ITestEngineClient" id="@winglang/sdk.cloud.ITestEngineClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.ITestEngineClient">ITestEngineClient</a>
+
+Inflight interface for `TestEngine`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ITestEngineClient.listTests">list_tests</a></code> | List all tests available for this test engine. |
+| <code><a href="#@winglang/sdk.cloud.ITestEngineClient.runTest">run_test</a></code> | Run a test with a given name and return the result. |
+
+---
+
+##### `list_tests` <a name="list_tests" id="@winglang/sdk.cloud.ITestEngineClient.listTests"></a>
+
+```wing
+list_tests(): MutArray<str>
+```
+
+**Inflight client:** [true](#true)
+
+List all tests available for this test engine.
+
+##### `run_test` <a name="run_test" id="@winglang/sdk.cloud.ITestEngineClient.runTest"></a>
+
+```wing
+run_test(name: str): TestResult
+```
+
+**Inflight client:** [true](#true)
+
+Run a test with a given name and return the result.
+
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.cloud.ITestEngineClient.runTest.parameter.name"></a>
+
+- *Type:* str
 
 ---
 

@@ -30,9 +30,14 @@ export abstract class TestEngine extends Resource {
     return App.of(scope).newAbstract(TEST_ENGINE_FQN, scope, id, props);
   }
 
+  /**
+   * Returns whether a construct represents a runnable test.
+   * @param c A construct.
+   * @returns Whether the construct is a test.
+   */
   public static isTest(c: IConstruct): boolean {
     const regex = /(\/test$|\/test:([^\\/])+$)/;
-    return regex.test(c.node.id);
+    return regex.test(c.node.path);
   }
 
   public readonly stateful = false;
@@ -74,9 +79,9 @@ export interface ITestEngineClient {
  */
 export interface TestResult {
   /**
-   * The name of the test.
+   * The path of the test.
    */
-  readonly name: string;
+  readonly path: string;
 
   /**
    * Whether the test passed.
