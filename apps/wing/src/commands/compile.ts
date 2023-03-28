@@ -252,10 +252,8 @@ export async function compile(entrypoint: string, options: ICompileOptions): Pro
   }
 
   // clean up before
-  await Promise.all([
-    rm(synthDir, { recursive: true, force: true }),
-    mkdir(synthDir, { recursive: true }),
-  ]);
+  await rm(synthDir, { recursive: true, force: true });
+  await mkdir(synthDir, { recursive: true });
   // move the temporary directory to the final target location in an atomic operation
   await rename(tmpSynthDir, synthDir);
 
