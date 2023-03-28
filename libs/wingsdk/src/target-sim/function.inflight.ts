@@ -109,6 +109,7 @@ async function runInSandbox(code: string, payload: any, opts: RunCodeOptions) {
       ctx[k] = (global as any)[k];
     } catch {
       // ignore unresolvable globals
+      // see https://github.com/winglang/wing/pull/1923
     }
   }
 
