@@ -53,6 +53,7 @@ export default async function () {
   });
 
   const allowedInstallHooks = [
+    // dockerode hooks
     /> cpu-features@.* install/,
     /> ssh2@.* install/,
     /> node install\.js/,

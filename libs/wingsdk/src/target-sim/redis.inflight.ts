@@ -11,7 +11,6 @@ import { ISimulatorContext } from "../testing/simulator";
 const IoRedis = require("ioredis");
 
 export class Redis implements IRedisClient, ISimulatorResourceInstance {
-  private readonly base_port: number;
   private container_name: string;
   private readonly context: ISimulatorContext;
 
@@ -25,13 +24,11 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
       "/",
       "."
     )}-${uuidv4()}`;
-    this.base_port = (process.env.REDIS_BASE_PORT ?? 6379) as number;
   }
 
   public async init(): Promise<RedisAttributes> {
     this.docker = new Dockerode();
     // Create a redis container
-    this.base_port;
     try {
       const container = await this.docker!.createContainer({
         Image: "redis",
