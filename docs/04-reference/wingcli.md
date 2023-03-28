@@ -133,6 +133,25 @@ JavaScript bundles that include inflight code that executes on compute platform 
 
 You can deploy your stack to GCP using Terraform ([example](/getting-started/aws)).
 
+### `awscdk` Target
+
+Compiles your program for AWS CDK with CloudFormation to run on AWS.
+
+Usage:
+
+```sh
+$ export CDK_STACK_NAME="my-project"
+$ wing compile --target awscdk app.w
+```
+
+The output includes both a AWS-CDK configuration file (under `target/<file name>.awscdk`) and
+JavaScript bundles that include inflight code that executes on compute platforms such as AWS Lambda.
+
+You can deploy your stack to AWS by installing the [AWS CDK Toolkit](https://docs.aws.amazon.com/cdk/v2/guide/cli.html) and running:
+```sh
+$ cdk deploy --app target/app.awscdk
+```
+
 ### Plugins
 
 Additionally the `compile` command can be provided an optional list of plugins to use during the compilation process.

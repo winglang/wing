@@ -48,7 +48,10 @@ export class Topic extends cloud.Topic {
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnMessageHandler-${hash}`,
       inflight,
-      join(__dirname, "topic.onmessage.inflight.js"),
+      join(
+        __dirname.replace("target-tf-aws", "shared-aws"),
+        "topic.onmessage.inflight.js"
+      ),
       "TopicOnMessageHandlerClient"
     );
 
@@ -139,9 +142,12 @@ export class Topic extends cloud.Topic {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__dirname, __filename, "TopicClient", [
-      `process.env["${this.envName()}"]`,
-    ]);
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-aws", "shared-aws"),
+      __filename,
+      "TopicClient",
+      [`process.env["${this.envName()}"]`]
+    );
   }
 
   private envName(): string {
@@ -149,4 +155,4 @@ export class Topic extends cloud.Topic {
   }
 }
 
-Topic._annotateInflight("publish", {});
+Topic._annotateInflight(cloud.TopicInflightMethods.PUBLISH, {});

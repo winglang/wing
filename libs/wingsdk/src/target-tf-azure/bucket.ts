@@ -194,10 +194,10 @@ export class Bucket extends cloud.Bucket {
   }
 }
 
-Bucket._annotateInflight("put", {});
-Bucket._annotateInflight("get", {});
-Bucket._annotateInflight("delete", {});
-Bucket._annotateInflight("list", {});
-Bucket._annotateInflight("put_json", {});
-Bucket._annotateInflight("get_json", {});
-Bucket._annotateInflight("public_url", {});
+Bucket._annotateInflight(cloud.BucketInflightMethods.PUT, {});
+Bucket._annotateInflight(cloud.BucketInflightMethods.GET, {});
+Bucket._annotateInflight(cloud.BucketInflightMethods.DELETE, {});
+Bucket._annotateInflight(cloud.BucketInflightMethods.LIST, {});
+Bucket._annotateInflight(cloud.BucketInflightMethods.PUT_JSON, {});
+Bucket._annotateInflight(cloud.BucketInflightMethods.GET_JSON, {});
+Bucket._annotateInflight(cloud.BucketInflightMethods.PUBLIC_URL, {});
