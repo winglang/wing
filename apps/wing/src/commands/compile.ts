@@ -1,6 +1,6 @@
 import * as vm from "vm";
 
-import { mkdir, readFile, rm } from "fs/promises";
+import { mkdir, readFile, mkdtemp, rename, rm } from "fs/promises";
 import { basename, dirname, join, resolve } from "path";
 
 import * as chalk from "chalk";
@@ -8,6 +8,7 @@ import debug from "debug";
 import * as wingCompiler from "../wingc";
 import { normalPath } from "../util";
 import { CHARS_ASCII, emitDiagnostic, Severity, File, Label } from "codespan-wasm";
+import * as os from "os";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -67,39 +68,40 @@ function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
  * @returns the output directory
  */
 export async function compile(entrypoint: string, options: ICompileOptions): Promise<string> {
+  // create a unique temporary directory for the compilation
+  const tmpTargetdir = await mkdtemp(join(os.tmpdir(), "wing-"));
   const targetdir = join(dirname(entrypoint), "target");
   const wingFile = entrypoint;
   log("wing file: %s", wingFile);
   const wingDir = dirname(wingFile);
   log("wing dir: %s", wingDir);
+  const tmpSynthDir = resolveSynthDir(tmpTargetdir, wingFile, options.target);
+  log("temp synth dir: %s", tmpSynthDir);
   const synthDir = resolveSynthDir(targetdir, wingFile, options.target);
   log("synth dir: %s", synthDir);
-  const workDir = resolve(synthDir, ".wing");
+  const workDir = resolve(tmpSynthDir, ".wing");
   log("work dir: %s", workDir);
 
-  // clean up before
-  await rm(synthDir, { recursive: true, force: true });
-
-  process.env["WING_SYNTH_DIR"] = synthDir;
+  process.env["WING_SYNTH_DIR"] = tmpSynthDir;
   process.env["WING_NODE_MODULES"] = resolve(join(wingDir, "node_modules"));
   process.env["WING_TARGET"] = options.target;
 
   await Promise.all([
     mkdir(workDir, { recursive: true }),
-    mkdir(synthDir, { recursive: true }),
+    mkdir(tmpSynthDir, { recursive: true }),
   ]);
 
   const wingc = await wingCompiler.load({
     env: {
       RUST_BACKTRACE: "full",
-      WING_SYNTH_DIR: normalPath(synthDir),
+      WING_SYNTH_DIR: normalPath(tmpSynthDir),
       WINGC_PREFLIGHT,
       CLICOLOR_FORCE: chalk.supportsColor ? "1" : "0",
     },
     preopens: {
       [wingDir]: wingDir, // for Rust's access to the source file
       [workDir]: workDir, // for Rust's access to the work directory
-      [synthDir]: synthDir, // for Rust's access to the synth directory
+      [tmpSynthDir]: tmpSynthDir, // for Rust's access to the synth directory
     },
   });
 
@@ -248,6 +250,14 @@ export async function compile(entrypoint: string, options: ICompileOptions): Pro
 
     return process.exit(1);
   }
+
+  // clean up before
+  await Promise.all([
+    rm(synthDir, { recursive: true, force: true }),
+    mkdir(synthDir, { recursive: true }),
+  ]);
+  // move the temporary directory to the final target location in an atomic operation
+  await rename(tmpSynthDir, synthDir);
 
   return synthDir;
 }
