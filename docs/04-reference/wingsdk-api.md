@@ -1603,7 +1603,7 @@ Check failures on the method and retrieve errors if any.
 
 ### BucketEvent <a name="BucketEvent" id="@winglang/sdk.cloud.BucketEvent"></a>
 
-on_event notification payload- will be in use after solving issue: //TODO.
+on_event notification payload- will be in use after solving issue: https://github.com/winglang/wing/issues/1927.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketEvent.Initializer"></a>
 
