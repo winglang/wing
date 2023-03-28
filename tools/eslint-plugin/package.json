@@ -9,8 +9,8 @@
   },
   "dependencies": {
     "@cloudy-ts/eslint-plugin": "^0.0.260",
-    "@typescript-eslint/eslint-plugin": "^5.56.0",
-    "@typescript-eslint/parser": "^5.56.0",
+    "@typescript-eslint/eslint-plugin": "^5.57.0",
+    "@typescript-eslint/parser": "^5.57.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-import-resolver-node": "^0.3.6",
     "eslint-import-resolver-typescript": "^3.5.2",

@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import ELK, { ElkNode, LayoutOptions } from "elkjs/lib/elk.bundled.js";
 import { AnimatePresence, motion } from "framer-motion";
-import { FC, Fragment, useCallback, useEffect, useState } from "react";
+import { FC, Fragment, useCallback, useEffect, useRef, useState } from "react";
 
 import { Edge } from "./Edge.js";
 import { EdgeItem } from "./EdgeItem.js";
@@ -50,6 +50,70 @@ export type NodeItemProps<T> = {
   depth: number;
 };
 
+interface InvisibleNodeSizeCalculatorProps<T> {
+  nodes: Node<T>[];
+  node: FC<NodeItemProps<T>>;
+  onSizesChange(sizes: Record<string, { width: number; height: number }>): void;
+}
+
+const InvisibleNodeSizeCalculator = <T extends unknown = undefined>({
+  nodes,
+  node: NodeItem,
+  onSizesChange,
+}: InvisibleNodeSizeCalculatorProps<T>) => {
+  const refs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  const [sizes, setSizes] =
+    useState<Record<string, { width: number; height: number }>>();
+  useEffect(() => {
+    setSizes(() => {
+      const sizes: Record<string, { width: number; height: number }> = {};
+      for (const [nodeId, element] of Object.entries(refs.current)) {
+        if (!element) {
+          continue;
+        }
+        const rect = element.getBoundingClientRect();
+        sizes[nodeId] = {
+          width: rect.width,
+          height: rect.height,
+        };
+      }
+      return sizes;
+    });
+  }, [nodes]);
+  useEffect(() => {
+    if (sizes) {
+      onSizesChange(sizes);
+    }
+  }, [sizes, onSizesChange]);
+
+  const renderElkPre = useCallback(
+    (node: ElkNode, depth = 0) => {
+      return (
+        <Fragment key={node.id}>
+          <div className="inline-block">
+            <div
+              className={classNames("h-full relative")}
+              ref={(element) => (refs.current[node.id] = element)}
+            >
+              <NodeItem node={node} depth={depth} />
+            </div>
+          </div>
+
+          {node.children?.map((node) => renderElkPre(node, depth + 1))}
+        </Fragment>
+      );
+    },
+    [NodeItem],
+  );
+
+  return (
+    <div className="absolute w-1 h-1 overflow-hidden invisible">
+      {nodes.map((node) => renderElkPre(node))}
+    </div>
+  );
+};
+
 export interface ElkMapProps<T> {
   nodes: Node<T>[];
   edges?: Edge[];
@@ -65,10 +129,12 @@ export const ElkMap = <T extends unknown = undefined>({
   selectedNodeId,
   onSelectedNodeIdChange,
 }: ElkMapProps<T>) => {
-  const { nodeRecord, sizes } = useNodeStaticData({
+  const { nodeRecord } = useNodeStaticData({
     nodes,
-    node: NodeItem,
   });
+
+  const [sizes, setSizes] =
+    useState<Record<string, { width: number; height: number }>>();
 
   const [offsets, setOffsets] =
     useState<Map<string, { x: number; y: number }>>();
@@ -229,6 +295,12 @@ export const ElkMap = <T extends unknown = undefined>({
         height: graph?.height,
       }}
     >
+      <InvisibleNodeSizeCalculator
+        nodes={nodes}
+        node={NodeItem}
+        onSizesChange={setSizes}
+      />
+
       <AnimatePresence>
         {nodeList.map((node) => (
           <motion.div

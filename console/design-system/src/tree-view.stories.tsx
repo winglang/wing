@@ -5,7 +5,7 @@ import { TreeItem } from "./tree-item.js";
 import { TreeView } from "./tree-view.js";
 
 export default {
-  title: "TreeView",
+  title: "Design System/TreeView",
   component: TreeView,
   parameters: {
     docs: {
