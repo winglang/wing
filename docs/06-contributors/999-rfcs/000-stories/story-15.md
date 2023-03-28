@@ -47,8 +47,8 @@ interface IMyRegExp {
 }
 
 enum Status {
-  Uncompleted,
-  Completed
+  UNCOMPLETED,
+  COMPLETED
 }
 
 interface ITaskList {
@@ -118,7 +118,7 @@ resource TaskList impl ITaskList {
       
   inflight set_status(id: str, status: Status): str {
     let j = Json.clone_mut(this.get(id));
-    if status == Status.Completed {
+    if status == Status.COMPLETED {
       j.set("status", "completed");
     } else {
       j.set("status", "uncompleted");
@@ -161,13 +161,15 @@ resource TaskListApi {
     this.api.put("/tasks/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let id = str.from_json(req.vars.get("id"));
       if req.body.get("estimation_in_days")? { 
-        this.task_list.set_estimation(id, num.from_str(req.body.get("estimation_in_days")));
+        // -1 value of ?? expression is unreachable because of the above if statement
+        this.task_list.set_estimation(id, num.from_json(req.body.get("estimation_in_days") ?? -1 ));
       }
       if req.body.get("completed")? {
-        if bool.from_json(req.body.get("completed")) {
-          this.task_list.set_status(id, Status.Completed);
+        // `false` value of ?? expression is unreachable because of the above if statement
+        if bool.from_json(req.body.get("completed") ?? false) {
+          this.task_list.set_status(id, Status.COMPLETED);
         } else {
-          this.task_list.set_status(id, Status.Uncompleted);
+          this.task_list.set_status(id, Status.UNCOMPLETED);
         }      
       }
       try {
