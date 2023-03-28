@@ -77,7 +77,8 @@ export interface WingCompilerLoadOptions {
 export async function load(options: WingCompilerLoadOptions) {
   const WINGSDK_MANIFEST_ROOT =
     options.wingsdkManifestRoot ??
-    resolve(require.resolve("@winglang/sdk"), "../..");
+    // using resolve.call so webpack will ignore the sdk package
+    resolve(require.resolve.call(null, "@winglang/sdk"), "../..");
 
   const preopens = {
     "/": "/",
