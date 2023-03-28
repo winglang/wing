@@ -778,7 +778,7 @@ error: Capturing collection of resources is not supported yet (type is 'Array<Bu
 `;
 
 exports[`resource_inflight.w > stderr 1`] = `
-"error: Cannot create the resource \\"Bucket (at src/cloud/bucket.ts:29:1)\\" in inflight phase
+"error: Cannot create the resource \\"Bucket (at src/cloud/bucket.ts:30:1)\\" in inflight phase
 
 "
 `;

@@ -19,7 +19,6 @@ export class BucketClient implements IBucketClient {
   ) {
     this._public = isPublic;
     this.bucketName = bucketName;
-    this._public = isPublic;
     this.blobServiceClient =
       blobServiceClient ??
       new BlobServiceClient(
@@ -29,10 +28,6 @@ export class BucketClient implements IBucketClient {
     this.containerClient = this.blobServiceClient.getContainerClient(
       this.bucketName
     );
-  }
-
-  get public(): boolean {
-    return this._public;
   }
 
   /**
