@@ -12,7 +12,8 @@ const IoRedis = require("ioredis");
 
 export class Redis implements IRedisClient, ISimulatorResourceInstance {
   private container_name: string;
-  private readonly REDIS_IMAGE = 'redis@sha256:e50c7e23f79ae81351beacb20e004720d4bed657415e68c2b1a2b5557c075ce0'
+  private readonly REDIS_IMAGE =
+    "redis@sha256:e50c7e23f79ae81351beacb20e004720d4bed657415e68c2b1a2b5557c075ce0";
   private readonly context: ISimulatorContext;
 
   private connection_url?: string = undefined;
@@ -26,13 +27,13 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
       "."
     )}-${uuidv4()}`;
   }
-  
+
   public async init(): Promise<RedisAttributes> {
     this.docker = new Dockerode();
 
     // Pull docker image
     const stream = await this.docker.pull(this.REDIS_IMAGE);
-    await new Promise(res => this.docker?.modem.followProgress(stream, res));
+    await new Promise((res) => this.docker?.modem.followProgress(stream, res));
     // Create a redis container
     try {
       const container = await this.docker!.createContainer({
