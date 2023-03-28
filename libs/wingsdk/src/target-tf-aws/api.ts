@@ -289,7 +289,10 @@ export class Api extends cloud.Api {
       this,
       `${this.node.id}-OnRequestHandler-${inflightNodeHash}`,
       inflight,
-      join(__dirname, "api.onrequest.inflight.js"),
+      join(
+        __dirname.replace("target-tf-aws", "shared-aws"),
+        "api.onrequest.inflight.js"
+      ),
       "ApiOnRequestHandlerClient"
     );
     return Function._newFunction(

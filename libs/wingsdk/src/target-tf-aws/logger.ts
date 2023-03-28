@@ -1,7 +1,6 @@
 import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
-import { LoggerInflightMethods } from "../cloud";
 import * as core from "../core";
 
 /**
@@ -25,8 +24,13 @@ export class Logger extends cloud.Logger {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__dirname, __filename, "LoggerClient", []);
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-aws", "shared-aws"),
+      __filename,
+      "LoggerClient",
+      []
+    );
   }
 }
 
-Logger._annotateInflight(LoggerInflightMethods.LOG, {});
+Logger._annotateInflight(cloud.LoggerInflightMethods.LOG, {});
