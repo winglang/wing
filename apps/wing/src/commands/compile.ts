@@ -1,6 +1,6 @@
 import * as vm from "vm";
 
-import { mkdir, readFile, rename, rm } from "fs/promises";
+import { readFile, move, mkdirp } from "fs-extra";
 import { basename, dirname, join, resolve } from "path";
 
 import * as chalk from "chalk";
@@ -86,8 +86,8 @@ export async function compile(entrypoint: string, options: ICompileOptions): Pro
   process.env["WING_TARGET"] = options.target;
 
   await Promise.all([
-    mkdir(workDir, { recursive: true }),
-    mkdir(tmpSynthDir, { recursive: true }),
+    mkdirp(workDir),
+    mkdirp(tmpSynthDir),
   ]);
 
   const wingc = await wingCompiler.load({
@@ -250,11 +250,8 @@ export async function compile(entrypoint: string, options: ICompileOptions): Pro
     return process.exit(1);
   }
 
-  // clean up before
-  await rm(synthDir, { recursive: true, force: true });
-
   // Move the temporary directory to the final target location in an atomic operation
-  await rename(tmpSynthDir, synthDir);
+  await move(tmpSynthDir, synthDir, { overwrite: true } );
 
   return synthDir;
 }
