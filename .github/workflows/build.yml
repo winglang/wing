@@ -51,7 +51,7 @@ jobs:
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
 
-      - name: Install redis docker image
+      - name: Pull redis docker image
         run: docker pull redis
 
       - name: Install Dependencies
@@ -172,7 +172,7 @@ jobs:
             examples/tests/invalid
           install-command: npm ci --ignore-scripts
 
-      - name: Install redis docker image
+      - name: Pull redis docker image
         run: docker pull redis
 
       - name: Run E2E Tests
