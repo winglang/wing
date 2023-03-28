@@ -62,7 +62,7 @@
     "vscode": "^1.70.0"
   },
   "main": "lib/index.js",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "homepage": "https://winglang.io",
   "version": "0.0.0",
   "bugs": {
