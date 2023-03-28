@@ -36,8 +36,6 @@ export class Redis extends redis.Redis implements ISimulatorResource {
   public _toInflight(): core.Code {
     return makeSimulatorJsClient("redis", this);
   }
-
-  // TODO: kill container on sim shutdown
 }
 
 Redis._annotateInflight("raw_client", {});

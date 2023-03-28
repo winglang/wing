@@ -31,11 +31,13 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
   public async init(): Promise<RedisAttributes> {
     this.docker = new Dockerode();
 
-    // Pull docker image
-    const stream = await this.docker.pull(this.REDIS_IMAGE);
-    await new Promise((res) => this.docker?.modem.followProgress(stream, res));
-    // Create a redis container
     try {
+      // Pull docker image
+      const stream = await this.docker.pull(this.REDIS_IMAGE);
+      await new Promise((res) =>
+        this.docker?.modem.followProgress(stream, res)
+      );
+      // Create a redis container
       const container = await this.docker!.createContainer({
         Image: this.REDIS_IMAGE,
         name: this.container_name,
@@ -62,8 +64,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
       return {};
     } catch (e) {
       throw Error(`Error setting up Redis resource simulation (${e})
-      - Make sure you have docker installed and running
-      - Make sure you have the redis image installed ('docker pull redis')`);
+      - Make sure you have docker installed and running`);
     }
   }
 
@@ -89,6 +90,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
     throw new Error("Redis server not initialized");
   }
 
+  // TODO: refactor these methods into an abstract class (will complete in: https://github.com/winglang/wing/issues/612)
   public async url(): Promise<string> {
     if (this.connection_url != undefined) {
       return this.connection_url;
