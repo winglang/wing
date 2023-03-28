@@ -53,14 +53,15 @@ export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
             <textarea
               id={responseId}
               rows={response ? response.split("\n").length : 1}
-              disabled
               placeholder="No response"
               className={classNames(
-                "flex-1 font-mono max-h-[20rem] py-1 resize-none",
-                "bg-slate-100 border border-slate-300 ease-in-out focus:border-sky-500 focus:ring-2",
-                "focus:ring-sky-500/50 outline-none rounded select-text text-slate-600 text-sm transition",
+                "flex-1 text-xs font-mono max-h-[20rem] min-h-[1.6rem] px-2 py-1 resize-y",
+                "bg-white border border-slate-300 ease-in-out focus:border-sky-500 focus:ring-2",
+                "opacity-70",
+                "focus:ring-sky-500/50 outline-none rounded text-slate-600 transition",
               )}
               value={response}
+              readOnly
             />
           </div>
         </div>

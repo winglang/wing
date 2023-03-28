@@ -23,6 +23,7 @@ export const InspectorSectionHeading = ({
       className={classNames(
         "w-full px-2 py-1 flex items-center gap-1 group relative",
         !subection && "border-t border-slate-300 hover:bg-white bg-slate-50",
+        "focus:outline-sky-500/50",
       )}
       onClick={onClick}
     >

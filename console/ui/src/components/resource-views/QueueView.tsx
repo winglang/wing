@@ -38,6 +38,7 @@ export const QueueView = ({ resourcePath }: QueueViewProps) => {
       <div className="flex flex-col gap-2">
         <TextArea
           id={id}
+          className="text-xs"
           value={message}
           onInput={(event) => setMessage(event.currentTarget.value)}
         />

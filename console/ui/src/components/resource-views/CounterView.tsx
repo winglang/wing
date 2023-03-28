@@ -3,6 +3,7 @@ import {
   MinusSmallIcon,
   PlusSmallIcon,
 } from "@heroicons/react/24/outline";
+import { useId } from "react";
 
 import { Button } from "../../design-system/Button.js";
 import { trpc } from "../../utils/trpc.js";
@@ -17,33 +18,37 @@ export const CounterView = ({ resourcePath }: CounterViewProps) => {
   const counterValue = trpc["counter.peek"].useQuery({ resourcePath });
   const resetCounter = trpc["counter.reset"].useMutation();
 
-  return (
-    <div className="flex-col bg-slate-50">
-      <div className="flex flex-row items-center gap-x-1">
-        <div className="text-slate-500 min-w-[100px]">Counter value</div>
-        <div className="text-slate-600 w-full flex space-x-1 min-w-0">
-          <span className="text-left truncate min-w-[25px]">
-            {counterValue.data}
-          </span>
-          <div className="flex gap-x-1 grow">
-            <Button
-              small
-              icon={MinusSmallIcon}
-              className="px-0.5"
-              onClick={() =>
-                decreaseCounter.mutate({ amount: 1, resourcePath })
-              }
-            />
-            <Button
-              small
-              icon={PlusSmallIcon}
-              className="px-0.5"
-              onClick={() =>
-                incrementCounter.mutate({ amount: 1, resourcePath })
-              }
-            />
+  const actualValueId = useId();
+  const resetValueId = useId();
 
-            <div className="flex grow justify-end">
+  return (
+    <div className="flex flex-col gap-1 bg-slate-50">
+      <div className="flex flex-row items-center">
+        <label htmlFor={actualValueId} className="text-slate-500 min-w-[100px]">
+          Actual value
+        </label>
+
+        <div className="text-slate-600 w-full flex gap-1 min-w-0">
+          <Button
+            small
+            icon={MinusSmallIcon}
+            className="px-0.5"
+            onClick={() => decreaseCounter.mutate({ amount: 1, resourcePath })}
+          />
+          <input
+            id={actualValueId}
+            className="w-full bg-white border border-slate-300 opacity-70 ease-in-out focus:border-sky-500 focus:ring-2 focus:ring-sky-500/50 items-center outline-none px-2 select-text text-slate-600 text-sm transition truncate rounded"
+            value={counterValue.data}
+            readOnly
+          />
+          <Button
+            small
+            icon={PlusSmallIcon}
+            className="px-0.5"
+            onClick={() => incrementCounter.mutate({ amount: 1, resourcePath })}
+          />
+
+          {/* <div className="flex grow justify-end">
               <Button
                 small
                 icon={ArrowPathIcon}
@@ -51,9 +56,23 @@ export const CounterView = ({ resourcePath }: CounterViewProps) => {
                 className="px-0.5"
                 onClick={() => resetCounter.mutate({ resourcePath })}
               />
-            </div>
-          </div>
+            </div> */}
         </div>
+      </div>
+
+      <div className="flex flex-row items-center">
+        <label
+          htmlFor={resetValueId}
+          className="text-slate-500 min-w-[100px] invisible"
+        >
+          Reset value
+        </label>
+        <Button
+          id={resetValueId}
+          title="Reset value"
+          label="Reset value"
+          onClick={() => resetCounter.mutate({ resourcePath })}
+        />
       </div>
     </div>
   );

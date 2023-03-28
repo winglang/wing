@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useId } from "react";
 
 import { Link } from "../design-system/Link.js";
 
@@ -17,19 +17,25 @@ export const AttributeView = ({
   url,
   children,
 }: PropsWithChildren<AttributeViewProps>) => {
+  const id = useId();
   return (
-    <div className="pl-4 flex flex-row items-center gap-x-1">
-      <div className="text-slate-500 min-w-[100px]">{name}</div>
+    <div className="pl-4 flex flex-row items-center">
+      <label htmlFor={id} className="text-slate-500 min-w-[100px]">
+        {name}
+      </label>
       {value !== undefined && type === "url" && (
         <div className="truncate">
-          <Link href={url}>{value}</Link>
+          <Link id={id} href={url}>
+            {value}
+          </Link>
         </div>
       )}
       {value !== undefined && type !== "url" && (
         <input
-          className="w-full bg-transparent ease-in-out focus:border-sky-500 focus:ring-2 focus:ring-sky-500/50 items-center outline-none select-text text-slate-600 text-sm transition truncate"
+          id={id}
+          className="w-full bg-white border border-slate-300 opacity-70 ease-in-out focus:border-sky-500 focus:ring-2 focus:ring-sky-500/50 items-center outline-none px-2 select-text text-slate-600 text-sm transition truncate rounded"
           value={value}
-          disabled
+          readOnly
         />
       )}
       {value === undefined && (

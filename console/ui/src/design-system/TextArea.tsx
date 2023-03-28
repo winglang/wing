@@ -23,6 +23,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           {...props}
           className={classNames(
             "block w-full rounded-md border-slate-300 outline-none focus:ring-2 focus:ring-sky-500/50 focus:ring-sky-500 focus:border-sky-500 transition ease-in-out",
+            "px-2 text-xs",
             className,
             { "bg-slate-50": props.disabled },
           )}

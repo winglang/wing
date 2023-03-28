@@ -2,6 +2,7 @@ import classNames from "classnames";
 import { PropsWithChildren, forwardRef } from "react";
 
 interface ButtonProps {
+  id?: string;
   primary?: boolean;
   label?: string;
   title?: string;
@@ -20,6 +21,7 @@ export const Button = forwardRef<
 >(
   (
     {
+      id,
       primary = false,
       disabled = false,
       title,
@@ -36,6 +38,7 @@ export const Button = forwardRef<
   ) => {
     return (
       <button
+        id={id}
         ref={ref}
         type={type}
         className={classNames(

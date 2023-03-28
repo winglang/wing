@@ -7,9 +7,6 @@ export interface BucketMetadataProps {
 
 export const BucketMetadata = ({ node }: BucketMetadataProps) => {
   return (
-    <AttributeView
-      name="Public"
-      value={node.props?.public ? "True" : "False"}
-    />
+    <AttributeView name="Public" value={node.props?.public ? "Yes" : "No"} />
   );
 };
