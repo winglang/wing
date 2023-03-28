@@ -1,6 +1,6 @@
 import * as vm from "vm";
 
-import { readFile, move, mkdirp } from "fs-extra";
+import { readFile, moveSync, mkdirp } from "fs-extra";
 import { basename, dirname, join, resolve } from "path";
 
 import * as chalk from "chalk";
@@ -251,7 +251,7 @@ export async function compile(entrypoint: string, options: ICompileOptions): Pro
   }
 
   // Move the temporary directory to the final target location in an atomic operation
-  await move(tmpSynthDir, synthDir, { overwrite: true } );
+  moveSync(tmpSynthDir, synthDir, { overwrite: true } );
 
   return synthDir;
 }
