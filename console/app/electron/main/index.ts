@@ -17,7 +17,11 @@ log.info("Application entrypoint");
 
 log.transports.console.bind(process.stdout);
 
-if (process.env.SEGMENT_WRITE_KEY) {
+if (
+  process.env.SEGMENT_WRITE_KEY &&
+  !process.env.CI &&
+  !process.env.PLAYWRIGHT_TEST
+) {
   const segment = new SegmentAnalytics(process.env.SEGMENT_WRITE_KEY);
   segment.analytics.track({
     anonymousId: segment.anonymousId,
