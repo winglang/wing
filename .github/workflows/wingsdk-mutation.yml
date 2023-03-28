@@ -39,8 +39,6 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           token: ${{ secrets.MUTATION_TOKEN }}
-      - name: Pull redis docker image
-        run: docker pull redis
       # Reads versions from root package.json "volta" section
       - name: Setup Node/NPM with pinned Volta version
         uses: volta-cli/action@v4.0.0

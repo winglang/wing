@@ -51,9 +51,6 @@ jobs:
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
 
-      - name: Pull redis docker image
-        run: docker pull redis
-
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
 
@@ -171,9 +168,6 @@ jobs:
             examples/tests/valid
             examples/tests/invalid
           install-command: npm ci --ignore-scripts
-
-      - name: Pull redis docker image
-        run: docker pull redis
 
       - name: Run E2E Tests
         working-directory: tools/hangar
