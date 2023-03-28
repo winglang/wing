@@ -336,7 +336,7 @@ export interface IBucketEventHandlerClient {
 }
 
 /**
- * on_event notification payload- will be in use after solving issue: //TODO
+ * on_event notification payload- will be in use after solving issue: https://github.com/winglang/wing/issues/1927
  */
 export interface BucketEvent {
   /**

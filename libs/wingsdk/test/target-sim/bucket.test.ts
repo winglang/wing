@@ -1,10 +1,10 @@
+import { Construct } from "constructs";
 import { vi, test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
-import { SimApp } from "../../src/testing";
 import { BucketEventType, IBucketEventHandler } from "../../src/cloud";
 import { Inflight, NodeJsCode } from "../../src/core";
-import { Construct } from "constructs";
+import { SimApp } from "../../src/testing";
 
 class InflightBucketEventHandler
   extends Inflight
