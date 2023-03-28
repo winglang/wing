@@ -253,7 +253,8 @@ export async function compile(entrypoint: string, options: ICompileOptions): Pro
 
   // clean up before
   await rm(synthDir, { recursive: true, force: true });
-  await mkdir(synthDir, { recursive: true });
+  // ensure the synth directory will have a parent directory to go into
+  await mkdir(resolve(synthDir, '..'), { recursive: true });
 
   if (process.platform === "win32") {
     // Moving directories on windows can fail if going across drives.
