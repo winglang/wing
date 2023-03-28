@@ -1,7 +1,7 @@
 import { join } from "path";
 import { SnsTopic } from "@cdktf/provider-aws/lib/sns-topic";
-import { SnsTopicSubscription } from "@cdktf/provider-aws/lib/sns-topic-subscription";
 import { SnsTopicPolicy } from "@cdktf/provider-aws/lib/sns-topic-policy";
+import { SnsTopicSubscription } from "@cdktf/provider-aws/lib/sns-topic-subscription";
 import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";

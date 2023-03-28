@@ -5,12 +5,6 @@ import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
 import * as cloud from "../cloud";
-import * as core from "../core";
-import {
-  CaseConventions,
-  NameOptions,
-  ResourceNames,
-} from "../utils/resource-names";
 import {
   BucketOnDeleteProps,
   BucketOnEventProps,
@@ -18,6 +12,12 @@ import {
   BucketOnCreateProps,
   IBucketEventHandler,
 } from "../cloud";
+import * as core from "../core";
+import {
+  CaseConventions,
+  NameOptions,
+  ResourceNames,
+} from "../utils/resource-names";
 
 /**
  * Bucket names must be between 3 and 63 characters.

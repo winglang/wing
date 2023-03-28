@@ -1,3 +1,4 @@
+import { join } from "path";
 import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { S3BucketNotification } from "@cdktf/provider-aws/lib/s3-bucket-notification";
 
@@ -9,6 +10,7 @@ import { Construct } from "constructs";
 import { Function as AWSFunction } from "./function";
 import { Topic as AWSTopic } from "./topic";
 import * as cloud from "../cloud";
+import { BucketEventType, Topic } from "../cloud";
 import * as core from "../core";
 import { AwsTarget } from "../shared-aws/commons";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
@@ -17,8 +19,6 @@ import {
   NameOptions,
   ResourceNames,
 } from "../utils/resource-names";
-import { BucketEventType, Topic } from "../cloud";
-import { join } from "path";
 
 const EVENTS = {
   [BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],

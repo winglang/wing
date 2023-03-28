@@ -5,5 +5,5 @@ export * from "./counter";
 export * from "./function";
 export * from "./queue";
 export * from "./schedule";
-export * from "./topic";
 export * from "./table";
+export * from "./topic";

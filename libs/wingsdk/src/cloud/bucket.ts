@@ -1,9 +1,9 @@
 import { Construct } from "constructs";
+import { Topic } from "./topic";
 import { fqnForType } from "../constants";
 import { App, IResource, Resource } from "../core";
 import { Json } from "../std";
 import { convertBetweenHandlers } from "../utils/convert";
-import { Topic } from "./topic";
 
 /**
  * Global identifier for `Bucket`.
@@ -27,8 +27,6 @@ export interface BucketProps {
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export abstract class Bucket extends Resource {
-  private readonly topics = new Map<BucketEventType, Topic>();
-
   /**
    * Create a new bucket.
    * @internal
@@ -41,6 +39,7 @@ export abstract class Bucket extends Resource {
     return App.of(scope).newAbstract(BUCKET_FQN, scope, id, props);
   }
 
+  private readonly topics = new Map<BucketEventType, Topic>();
   public readonly stateful = true;
 
   constructor(scope: Construct, id: string, props: BucketProps = {}) {

@@ -1,3 +1,4 @@
+import { join } from "path";
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
@@ -5,7 +6,6 @@ import { BucketSchema, BUCKET_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { join } from "path";
 
 /**
  * Simulator implementation of `cloud.Bucket`.
