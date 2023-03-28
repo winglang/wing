@@ -1,6 +1,6 @@
 import * as vm from "vm";
 
-import { mkdir, readFile, mkdtemp, rename, rm } from "fs/promises";
+import { mkdir, readFile, mkdtemp, rename, rm, copyFile } from "fs/promises";
 import { basename, dirname, join, resolve } from "path";
 
 import * as chalk from "chalk";
@@ -254,8 +254,17 @@ export async function compile(entrypoint: string, options: ICompileOptions): Pro
   // clean up before
   await rm(synthDir, { recursive: true, force: true });
   await mkdir(synthDir, { recursive: true });
-  // move the temporary directory to the final target location in an atomic operation
-  await rename(tmpSynthDir, synthDir);
+
+  if (process.platform === "win32") {
+    // Moving directories on windows can fail if going across drives.
+    // So we simulate a move by copying the directory and then deleting the original
+    await copyFile(tmpSynthDir, synthDir);
+    // no need to wait for the deletion to complete, it'll be cleaned up by the OS anyways
+    void rm(tmpSynthDir, { recursive: true, force: true });
+  } else {
+    // Move the temporary directory to the final target location in an atomic operation
+    await rename(tmpSynthDir, synthDir);
+  }
 
   return synthDir;
 }
