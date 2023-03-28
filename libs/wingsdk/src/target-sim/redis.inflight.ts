@@ -1,5 +1,5 @@
 import Dockerode from "dockerode";
-import * as portfinder from "portfinder";
+import { v4 as uuidv4 } from "uuid";
 import { ISimulatorResourceInstance } from "./resource";
 import { RedisAttributes, RedisSchema } from "./schema-resources";
 import { IRedisClient } from "../redis";
@@ -11,9 +11,8 @@ import { ISimulatorContext } from "../testing/simulator";
 const IoRedis = require("ioredis");
 
 export class Redis implements IRedisClient, ISimulatorResourceInstance {
-  static uid = 0;
   private readonly base_port: number;
-  private readonly container_name: string;
+  private container_name: string;
   private readonly context: ISimulatorContext;
 
   private connection_url?: string = undefined;
@@ -25,37 +24,35 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
     this.container_name = `wing-sim-redis-${this.context.resourcePath.replace(
       "/",
       "."
-    )}-${Redis.uid}`;
-    Redis.uid++;
+    )}-${uuidv4()}`;
     this.base_port = (process.env.REDIS_BASE_PORT ?? 6379) as number;
   }
 
   public async init(): Promise<RedisAttributes> {
     this.docker = new Dockerode();
-    let hostPort: number;
     // Create a redis container
+    this.base_port;
     try {
-      await portfinder
-        .getPortPromise({ port: this.base_port })
-        .then(async (port) => {
-          hostPort = port;
-          const container = await this.docker!.createContainer({
-            Image: "redis",
-            name: this.container_name,
-            HostConfig: {
-              PortBindings: {
-                "6379/tcp": [
-                  {
-                    HostPort: `${port}`,
-                  },
-                ],
+      const container = await this.docker!.createContainer({
+        Image: "redis",
+        name: this.container_name,
+        HostConfig: {
+          PortBindings: {
+            "6379/tcp": [
+              {
+                HostPort: "0", // let docker pick a port
               },
-            },
-          });
+            ],
+          },
+        },
+      });
 
-          // Start the redis container
-          await container.start();
-        });
+      // Start the redis container
+      await container.start();
+      // Inspect the container to get the host port
+      const hostPort = (await container.inspect()).NetworkSettings.Ports[
+        "6379/tcp"
+      ][0].HostPort;
 
       // redis url based on host port
       this.connection_url = `redis://0.0.0.0:${hostPort!}`;
@@ -76,7 +73,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
     await container?.remove();
   }
 
-  public async ioredis(): Promise<any> {
+  public async rawClient(): Promise<any> {
     if (this.connection) {
       return this.connection;
     }
@@ -95,5 +92,43 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
     } else {
       throw new Error("Redis server not initialized");
     }
+  }
+
+  public async set(key: string, value: string): Promise<void> {
+    let redis = await this.rawClient();
+    await redis.set(key, value);
+  }
+
+  public async get(key: string): Promise<string> {
+    let redis = await this.rawClient();
+    let result = await redis.get(key);
+    return result ?? "";
+  }
+
+  public async hset(key: string, field: string, value: string): Promise<void> {
+    let redis = await this.rawClient();
+    await redis.hset(key, field, value);
+  }
+
+  public async hget(key: string, field: string): Promise<string> {
+    let redis = await this.rawClient();
+    let result = await redis.hget(key, field);
+    return result ?? "";
+  }
+
+  public async sadd(key: string, value: string): Promise<void> {
+    let redis = await this.rawClient();
+    await redis.sadd(key, value);
+  }
+
+  public async smembers(key: string): Promise<string[]> {
+    let redis = await this.rawClient();
+    let result = await redis.smembers(key);
+    return result ?? [];
+  }
+
+  public async del(key: string): Promise<void> {
+    let redis = await this.rawClient();
+    await redis.del(key);
   }
 }

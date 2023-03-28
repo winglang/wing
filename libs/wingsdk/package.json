@@ -49,6 +49,7 @@
     "@types/jest": "^27",
     "@types/node": "^16",
     "@types/tar": "^6.1.3",
+    "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "@vitest/coverage-c8": "^0.29.2",
@@ -114,9 +115,9 @@
     "esbuild-wasm": "^0.17.4",
     "express": "^4.18.2",
     "ioredis": "^5.3.1",
-    "portfinder": "^1.0.32",
     "safe-stable-stringify": "*",
-    "tar": "^6.1.13"
+    "tar": "^6.1.13",
+    "uuid": "^8.3.2"
   },
   "bundledDependencies": [
     "@aws-sdk/client-cloudwatch-logs",
@@ -137,9 +138,9 @@
     "esbuild-wasm",
     "express",
     "ioredis",
-    "portfinder",
     "safe-stable-stringify",
-    "tar"
+    "tar",
+    "uuid"
   ],
   "engines": {
     "node": ">= 16.16.0"

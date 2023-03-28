@@ -50,7 +50,7 @@ const project = new cdk.JsiiProject({
     "tar",
     "express",
     "dockerode",
-    "portfinder",
+    "uuid",
     // shared client dependencies
     "ioredis",
   ],
@@ -68,6 +68,7 @@ const project = new cdk.JsiiProject({
     "eslint-plugin-sort-exports",
     "patch-package",
     "vitest",
+    "@types/uuid",
     "@vitest/coverage-c8",
     "@types/dockerode",
   ],

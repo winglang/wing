@@ -36,14 +36,73 @@ export abstract class Redis extends Resource {
  */
 export interface IRedisClient {
   /**
-   * Get underlying redis client.
+   * Get raw redis client (currently IoRedis).
    * @inflight
    */
-  ioredis(): Promise<any>;
+  rawClient(): Promise<any>;
 
   /**
    * Get url of redis server.
    * @inflight
    */
   url(): Promise<string>;
+
+  /**
+   * Set key value pair.
+   *
+   * @param key the key to set
+   * @param value the value to store at given key
+   * @inflight
+   */
+  set(key: string, value: string): Promise<void>;
+
+  /**
+   * Get value at given key.
+   * @param key the key to get
+   * @inflight
+   */
+  get(key: string): Promise<string>;
+
+  /**
+   * Sets the specified field to respective value in the hash stored at key
+   *
+   * @param key key to set
+   * @param field field in key to set
+   * @param value value to set at field in key
+   * @inflight
+   */
+  hset(key: string, field: string, value: string): Promise<void>;
+
+  /**
+   * Returns the value associated with field in the hash stored at key
+   *
+   * @param key the key
+   * @param field the field at given key
+   * @inflight
+   */
+  hget(key: string, field: string): Promise<string>;
+
+  /**
+   * Add the specified members to the set stored at key
+   * @param key the key
+   * @param value the value to add to the set at given key
+   * @inflight
+   */
+  sadd(key: string, value: string): Promise<void>;
+
+  /**
+   * Returns all the members of the set value stored at key
+   *
+   * @param key the key
+   * @inflight
+   */
+  smembers(key: string): Promise<string[]>;
+
+  /**
+   * Removes the specified key
+   *
+   * @param key the key
+   * @inflight
+   */
+  del(key: string): Promise<void>;
 }
