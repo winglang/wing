@@ -1,7 +1,8 @@
 import * as vm from "vm";
 
-import { readFile, moveSync, mkdirp } from "fs-extra";
+import { readFile, rmSync, mkdirp, move, mkdirpSync, copySync } from "fs-extra";
 import { basename, dirname, join, resolve } from "path";
+import * as os from "os";
 
 import * as chalk from "chalk";
 import debug from "debug";
@@ -250,8 +251,18 @@ export async function compile(entrypoint: string, options: ICompileOptions): Pro
     return process.exit(1);
   }
 
-  // Move the temporary directory to the final target location in an atomic operation
-  moveSync(tmpSynthDir, synthDir, { overwrite: true } );
+  if(os.platform() === "win32") {
+    // Windows doesn't really support fully atomic moves.
+    // So we just copy the directory instead.
+    // Also only using sync methods to avoid possible async fs issues.
+    rmSync(synthDir, { recursive: true, force: true });
+    mkdirpSync(synthDir);
+    copySync(tmpSynthDir, synthDir);
+    rmSync(tmpSynthDir, { recursive: true, force: true });
+  } else {
+    // Move the temporary directory to the final target location in an atomic operation
+    await move(tmpSynthDir, synthDir, { overwrite: true } );
+  }
 
   return synthDir;
 }
