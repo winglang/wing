@@ -105,7 +105,12 @@ async function runInSandbox(code: string, payload: any, opts: RunCodeOptions) {
 
   // create a copy of all the globals from our current context.
   for (const k of Object.getOwnPropertyNames(global)) {
-    ctx[k] = (global as any)[k];
+    try {
+      ctx[k] = (global as any)[k];
+    } catch {
+      // ignore unresolvable globals
+      // see https://github.com/winglang/wing/pull/1923
+    }
   }
 
   // append the user's context
