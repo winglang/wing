@@ -31,6 +31,7 @@ exports[`can add object in preflight 2`] = `
             "greeting.txt": "Hello world!",
           },
           "public": false,
+          "topics": {},
         },
         "type": "wingsdk.cloud.Bucket",
       },
@@ -102,6 +103,7 @@ exports[`create a bucket 1`] = `
         "props": {
           "initialObjects": {},
           "public": false,
+          "topics": {},
         },
         "type": "wingsdk.cloud.Bucket",
       },
@@ -183,6 +185,7 @@ exports[`get invalid object throws an error 2`] = `
         "props": {
           "initialObjects": {},
           "public": false,
+          "topics": {},
         },
         "type": "wingsdk.cloud.Bucket",
       },
@@ -311,6 +314,7 @@ exports[`put json objects from bucket 2`] = `
         "props": {
           "initialObjects": {},
           "public": false,
+          "topics": {},
         },
         "type": "wingsdk.cloud.Bucket",
       },
@@ -409,6 +413,17 @@ exports[`remove object from a bucket with mustExist as option 1`] = `
   "wingsdk.cloud.Bucket created.",
   "Put (key=unknown.txt).",
   "Delete (key=unknown.txt).",
+  "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`update an object in bucket 1`] = `
+[
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Bucket created.",
+  "Put (key=greeting.txt).",
+  "Put (key=greeting.txt).",
   "wingsdk.cloud.Bucket deleted.",
   "wingsdk.cloud.Logger deleted.",
 ]

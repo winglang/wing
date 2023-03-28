@@ -1,5 +1,4 @@
 import { Construct } from "constructs";
-import { core } from "..";
 import { fqnForType } from "../constants";
 import { App, IResource, Resource } from "../core";
 import { Json } from "../std";
@@ -81,7 +80,7 @@ export abstract class Bucket extends Resource {
 
     this.node.addDependency(topic);
 
-    core.Resource.addConnection({
+    Resource.addConnection({
       from: this,
       to: topic,
       relationship: actionType,
@@ -106,7 +105,7 @@ export abstract class Bucket extends Resource {
   private createInflightHandler(
     eventType: BucketEventType,
     inflight: IBucketEventHandler
-  ): core.IResource {
+  ): IResource {
     const hash = inflight.node.addr.slice(-8);
     return convertBetweenHandlers(
       this.node.scope!, // ok since we're not a tree root
