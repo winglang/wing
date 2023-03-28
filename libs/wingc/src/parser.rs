@@ -940,7 +940,7 @@ impl<'s> Parser<'s> {
 				}
 			}
 			"loop_range" => {
-				let inclusive = if expression_node.child_by_field_name("inclusive_range").is_some() {
+				let inclusive = if expression_node.child_by_field_name("inclusive").is_some() {
 					Some(true)
 				} else {
 					Some(false)
