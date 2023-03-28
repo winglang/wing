@@ -502,7 +502,7 @@ exports[`topic with subscriber function 3`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                     {
@@ -592,6 +592,9 @@ exports[`topic with subscriber function 3`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
+                "display": {
+                  "hidden": true,
+                },
                 "id": "Topic-OnMessageHandler-c5395e41",
                 "path": "root/Default/Topic-OnMessageHandler-c5395e41",
               },
@@ -601,7 +604,7 @@ exports[`topic with subscriber function 3`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/Topic-OnMessage-c5395e41",
                     },
                   ],

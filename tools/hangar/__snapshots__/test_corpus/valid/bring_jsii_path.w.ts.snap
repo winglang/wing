@@ -95,6 +95,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         },
         "bucket": "\${aws_s3_bucket.root_testsayhello_Code_D4453363.bucket}",
         "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
       },
     },
   },
@@ -116,6 +117,8 @@ function __app(target) {
 			return $stdlib.tfgcp.App;
 		case \\"tf-azure\\":
 			return $stdlib.tfazure.App;
+		case \\"awscdk\\":
+			return $stdlib.awscdk.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -131,7 +134,7 @@ constructor() {
   const hello = new jsii_code_samples.HelloWorld();
   const greeting = (hello.sayHello(\\"wingnuts\\"));
   this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:say_hello\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.5d209e0c3acca40c825662cab73c204803d9dd9f7903de90d0da6dc99ea7fa35/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.5d209e0c3acca40c825662cab73c204803d9dd9f7903de90d0da6dc99ea7fa35/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
       greeting: {
         obj: greeting,

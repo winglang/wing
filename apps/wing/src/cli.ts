@@ -2,7 +2,6 @@
 /// <reference lib="dom" />
 
 import { compile, docs, test, upgrade, run } from "./commands";
-import { join } from "path";
 import { satisfies } from "compare-versions";
 
 import { Command, Option } from "commander";
@@ -51,14 +50,9 @@ async function main() {
     .command("compile")
     .description("Compiles a Wing program")
     .argument("<entrypoint>", "program .w entrypoint")
-    .option(
-      "-o, --out-dir <out-dir>",
-      "Output directory - where to place all generated artifacts",
-      join(process.cwd(), "target")
-    )
     .addOption(
       new Option("-t, --target <target>", "Target platform")
-        .choices(["tf-aws", "tf-azure", "tf-gcp", "sim"])
+        .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
         .makeOptionMandatory()
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")

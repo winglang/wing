@@ -24,8 +24,13 @@ export class Logger extends cloud.Logger {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__dirname, __filename, "LoggerClient", []);
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-aws", "shared-aws"),
+      __filename,
+      "LoggerClient",
+      []
+    );
   }
 }
 
-Logger._annotateInflight("print", {});
+Logger._annotateInflight(cloud.LoggerInflightMethods.LOG, {});

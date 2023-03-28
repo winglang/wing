@@ -71,9 +71,9 @@ export class String {
    * @param searchString substring to search for.
    * @returns true if string ends with searchString.
    */
-  public ends(searchString: string): boolean {
+  public endsWith(searchString: string): boolean {
     searchString;
-    throw new Error("Macro");
+    throw new Error("Abstract");
   }
 
   /**
@@ -119,9 +119,9 @@ export class String {
    * @param searchString substring to search for.
    * @returns true if string starts with searchString.
    */
-  public starts(searchString: string): boolean {
+  public startsWith(searchString: string): boolean {
     searchString;
-    throw new Error("Macro");
+    throw new Error("Abstract");
   }
 
   /**

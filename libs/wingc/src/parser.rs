@@ -1,7 +1,7 @@
-use indexmap::IndexSet;
+use indexmap::{IndexMap, IndexSet};
 use phf::phf_map;
 use std::cell::RefCell;
-use std::collections::{BTreeMap, HashSet};
+use std::collections::HashSet;
 use std::{str, vec};
 use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
@@ -26,7 +26,6 @@ pub struct Parser<'a> {
 // this is meant to serve as a bandaide to be removed once wing is further developed.
 // k=grammar, v=optional_message, example: ("generic", "targed impl: 1.0.0")
 static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
-	"struct_definition" => "see https://github.com/winglang/wing/issues/120",
 	"interface_definition" => "see https://github.com/winglang/wing/issues/123",
 	"any" => "see https://github.com/winglang/wing/issues/434",
 	"void" => "see https://github.com/winglang/wing/issues/432",
@@ -196,6 +195,7 @@ impl<'s> Parser<'s> {
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
 			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"try_catch_statement" => self.build_try_catch_statement(statement_node)?,
+			"struct_definition" => self.build_struct_definition_statement(statement_node)?,
 			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -332,6 +332,33 @@ impl<'s> Parser<'s> {
 		})
 	}
 
+	fn build_struct_definition_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		let name = self.node_symbol(&self.get_child_field(&statement_node, "name")?)?;
+
+		let mut cursor = statement_node.walk();
+		let mut members = vec![];
+
+		for field_node in statement_node.children_by_field_name("field", &mut cursor) {
+			let identifier = self.node_symbol(&self.get_child_field(&field_node, "name")?)?;
+			let type_ = &self.get_child_field(&field_node, "type")?;
+			let f = ClassField {
+				name: identifier,
+				member_type: self.build_type_annotation(&type_)?,
+				reassignable: false,
+				phase: Phase::Independent,
+				is_static: false,
+			};
+			members.push(f);
+		}
+
+		let mut extends = vec![];
+		for super_node in statement_node.children_by_field_name("extends", &mut cursor) {
+			extends.push(self.node_symbol(&super_node)?);
+		}
+
+		Ok(StmtKind::Struct { name, extends, members })
+	}
+
 	fn build_variable_def_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		let type_ = if let Some(type_node) = statement_node.child_by_field_name("type") {
 			Some(self.build_type_annotation(&type_node)?)
@@ -441,7 +468,7 @@ impl<'s> Parser<'s> {
 						member_type: self.build_type_annotation(&class_element.child_by_field_name("type").unwrap())?,
 						reassignable: class_element.child_by_field_name("reassignable").is_some(),
 						is_static,
-						flight: match class_element.child_by_field_name("phase_modifier") {
+						phase: match class_element.child_by_field_name("phase_modifier") {
 							Some(n) => {
 								if !is_resource {
 									self
@@ -473,7 +500,7 @@ impl<'s> Parser<'s> {
 								root: name.clone(),
 								fields: vec![],
 							}))),
-							flight: if is_resource { Phase::Preflight } else { Phase::Inflight },
+							phase: if is_resource { Phase::Preflight } else { Phase::Inflight },
 						},
 					})
 				}
@@ -557,11 +584,11 @@ impl<'s> Parser<'s> {
 		}))
 	}
 
-	fn build_anonymous_closure(&self, anon_closure_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
-		self.build_function_definition(anon_closure_node, flight)
+	fn build_anonymous_closure(&self, anon_closure_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
+		self.build_function_definition(anon_closure_node, phase)
 	}
 
-	fn build_function_definition(&self, func_def_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
+	fn build_function_definition(&self, func_def_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
 		let parameters = self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap())?;
 
 		let statements = if let Some(external) = func_def_node.child_by_field_name("extern_modifier") {
@@ -582,7 +609,7 @@ impl<'s> Parser<'s> {
 				} else {
 					None
 				},
-				flight,
+				phase,
 			},
 			is_static: func_def_node.child_by_field_name("static").is_some(),
 			captures: RefCell::new(None),
@@ -641,7 +668,7 @@ impl<'s> Parser<'s> {
 				Ok(TypeAnnotation::FunctionSignature(FunctionSignature {
 					parameters,
 					return_type,
-					flight: if type_node.child_by_field_name("inflight").is_some() {
+					phase: if type_node.child_by_field_name("inflight").is_some() {
 						Phase::Inflight
 					} else {
 						Phase::Preflight
@@ -748,7 +775,7 @@ impl<'s> Parser<'s> {
 
 	fn build_arg_list(&self, arg_list_node: &Node) -> DiagnosticResult<ArgList> {
 		let mut pos_args = vec![];
-		let mut named_args = BTreeMap::new();
+		let mut named_args = IndexMap::new();
 
 		let mut cursor = arg_list_node.walk();
 		let mut seen_keyword_args = false;
@@ -990,7 +1017,7 @@ impl<'s> Parser<'s> {
 					None
 				};
 
-				let mut fields = BTreeMap::new();
+				let mut fields = IndexMap::new();
 				let mut cursor = expression_node.walk();
 				for field_node in expression_node.children_by_field_name("member", &mut cursor) {
 					if field_node.is_extra() {
@@ -1049,7 +1076,7 @@ impl<'s> Parser<'s> {
 			"set_literal" => self.build_set_literal(expression_node),
 			"struct_literal" => {
 				let type_ = self.build_type_annotation(&expression_node.child_by_field_name("type").unwrap());
-				let mut fields = BTreeMap::new();
+				let mut fields = IndexMap::new();
 				let mut cursor = expression_node.walk();
 				for field in expression_node.children_by_field_name("fields", &mut cursor) {
 					if !field.is_named() || field.is_extra() {

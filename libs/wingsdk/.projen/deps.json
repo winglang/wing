@@ -9,6 +9,16 @@
       "type": "build"
     },
     {
+      "name": "@types/express-serve-static-core",
+      "version": "4.17.28",
+      "type": "build"
+    },
+    {
+      "name": "@types/express",
+      "version": "4.17.13",
+      "type": "build"
+    },
+    {
       "name": "@types/fs-extra",
       "type": "build"
     },
@@ -188,6 +198,11 @@
       "type": "bundled"
     },
     {
+      "name": "@aws-sdk/util-dynamodb",
+      "version": "3.256.0",
+      "type": "bundled"
+    },
+    {
       "name": "@aws-sdk/util-stream-node",
       "version": "3.254.0",
       "type": "bundled"
@@ -217,6 +232,10 @@
     },
     {
       "name": "esbuild-wasm",
+      "type": "bundled"
+    },
+    {
+      "name": "express",
       "type": "bundled"
     },
     {
@@ -258,6 +277,11 @@
       "type": "peer"
     },
     {
+      "name": "aws-cdk-lib",
+      "version": "^2.64.0",
+      "type": "peer"
+    },
+    {
       "name": "cdktf",
       "version": "0.15.2",
       "type": "peer"
@@ -285,6 +309,11 @@
     {
       "name": "@cdktf/provider-random",
       "version": "^5.0.0",
+      "type": "runtime"
+    },
+    {
+      "name": "aws-cdk-lib",
+      "version": "^2.64.0",
       "type": "runtime"
     },
     {

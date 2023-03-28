@@ -12,6 +12,7 @@ export type WingCompilerFunction =
   | "wingc_on_did_open_text_document"
   | "wingc_on_did_change_text_document"
   | "wingc_on_completion"
+  | "wingc_on_goto_definition"
   | "wingc_on_document_symbol"
   | "wingc_on_semantic_tokens"
   | "wingc_on_hover";
@@ -76,7 +77,8 @@ export interface WingCompilerLoadOptions {
 export async function load(options: WingCompilerLoadOptions) {
   const WINGSDK_MANIFEST_ROOT =
     options.wingsdkManifestRoot ??
-    resolve(require.resolve("@winglang/sdk"), "../..");
+    // using resolve.call so webpack will ignore the sdk package
+    resolve(require.resolve.call(null, "@winglang/sdk"), "../..");
 
   const preopens = {
     "/": "/",

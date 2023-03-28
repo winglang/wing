@@ -1,6 +1,6 @@
 // Define a function and assign it to a variable
 let myfunc = (var x: num) => {
-  print("${x}");
+  log("${x}");
   x = x + 1;
   if (x > 3.14) {
     return;

@@ -1,10 +1,9 @@
 use std::cell::RefCell;
-use std::collections::BTreeMap;
 use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 
 use derivative::Derivative;
-use indexmap::IndexSet;
+use indexmap::{Equivalent, IndexMap, IndexSet};
 
 use crate::capture::Captures;
 use crate::diagnostic::WingSpan;
@@ -55,9 +54,15 @@ impl PartialEq for Symbol {
 	}
 }
 
-impl std::fmt::Display for Symbol {
+impl Display for Symbol {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		write!(f, "{} (at {})", self.name, self.span)
+	}
+}
+
+impl Equivalent<Symbol> for str {
+	fn equivalent(&self, key: &Symbol) -> bool {
+		self == key.name
 	}
 }
 
@@ -155,7 +160,7 @@ impl Display for TypeAnnotation {
 
 impl Display for FunctionSignature {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let phase_str = match self.flight {
+		let phase_str = match self.phase {
 			Phase::Inflight => "inflight ",
 			Phase::Preflight => "preflight ",
 			Phase::Independent => "",
@@ -179,7 +184,7 @@ impl Display for FunctionSignature {
 pub struct FunctionSignature {
 	pub parameters: Vec<TypeAnnotation>,
 	pub return_type: Option<Box<TypeAnnotation>>,
-	pub flight: Phase,
+	pub phase: Phase,
 }
 
 #[derive(Debug)]
@@ -226,7 +231,7 @@ pub struct Stmt {
 
 #[derive(Debug)]
 pub enum UtilityFunctions {
-	Print,
+	Log,
 	Panic,
 	Throw,
 	Assert,
@@ -235,7 +240,7 @@ pub enum UtilityFunctions {
 impl Display for UtilityFunctions {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
-			UtilityFunctions::Print => write!(f, "print"),
+			UtilityFunctions::Log => write!(f, "log"),
 			UtilityFunctions::Panic => write!(f, "panic"),
 			UtilityFunctions::Throw => write!(f, "throw"),
 			UtilityFunctions::Assert => write!(f, "assert"),
@@ -324,7 +329,7 @@ pub struct ClassField {
 	pub name: Symbol,
 	pub member_type: TypeAnnotation,
 	pub reassignable: bool,
-	pub flight: Phase,
+	pub phase: Phase,
 	pub is_static: bool,
 }
 
@@ -359,13 +364,13 @@ pub enum ExprKind {
 	},
 	StructLiteral {
 		type_: TypeAnnotation,
-		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
-		fields: BTreeMap<Symbol, Expr>,
+		// We're using a map implementation with reliable iteration to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
+		fields: IndexMap<Symbol, Expr>,
 	},
 	MapLiteral {
 		type_: Option<TypeAnnotation>,
-		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
-		fields: BTreeMap<String, Expr>,
+		// We're using a map implementation with reliable iteration to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
+		fields: IndexMap<String, Expr>,
 	},
 	SetLiteral {
 		type_: Option<TypeAnnotation>,
@@ -403,14 +408,14 @@ impl Expr {
 #[derive(Debug)]
 pub struct ArgList {
 	pub pos_args: Vec<Expr>,
-	pub named_args: BTreeMap<Symbol, Expr>,
+	pub named_args: IndexMap<Symbol, Expr>,
 }
 
 impl ArgList {
 	pub fn new() -> Self {
 		ArgList {
 			pos_args: vec![],
-			named_args: BTreeMap::new(),
+			named_args: IndexMap::new(),
 		}
 	}
 }
@@ -476,32 +481,6 @@ pub enum BinaryOperator {
 	LogicalAnd,
 	LogicalOr,
 	UnwrapOr,
-}
-
-impl BinaryOperator {
-	pub fn boolean_result(&self) -> bool {
-		use BinaryOperator::*;
-		match self {
-			Greater | GreaterOrEqual | Less | LessOrEqual | Equal | NotEqual | LogicalAnd | LogicalOr => true,
-			_ => false,
-		}
-	}
-
-	pub fn boolean_args(&self) -> bool {
-		use BinaryOperator::*;
-		match self {
-			LogicalAnd | LogicalOr => true,
-			_ => false,
-		}
-	}
-
-	pub fn numerical_args(&self) -> bool {
-		use BinaryOperator::*;
-		match self {
-			Add | Sub | Mul | Div | FloorDiv | Mod | Power | Greater | GreaterOrEqual | Less | LessOrEqual => true,
-			_ => false,
-		}
-	}
 }
 
 #[derive(Debug)]

@@ -1,5 +1,5 @@
 import { ISimulatorResourceInstance } from "./resource";
-import { CounterSchema } from "./schema-resources";
+import { CounterAttributes, CounterSchema } from "./schema-resources";
 import { ICounterClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
 
@@ -15,7 +15,10 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
     this.context = context;
   }
 
-  public async init(): Promise<void> {}
+  public async init(): Promise<CounterAttributes> {
+    return {};
+  }
+
   public async cleanup(): Promise<void> {}
 
   public async inc(amount: number = 1): Promise<number> {

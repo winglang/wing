@@ -62,9 +62,18 @@ export abstract class App extends Construct {
   }
 
   /**
-   * Directory where artifacts are synthesized to.
+   * The output directory.
    */
-  public abstract readonly workdir: string;
+  public abstract readonly outdir: string;
+
+  /**
+   * The ".wing" directory, which is where the compiler emits its output. We are taking an implicit
+   * assumption here that it is always set to be `$outdir/.wing` which is currently hard coded into
+   * the `cli/compile.ts` file.
+   */
+  public get workdir() {
+    return `${this.outdir}/.wing`;
+  }
 
   /**
    * Synthesize the app into an artifact.
@@ -146,18 +155,14 @@ export abstract class App extends Construct {
  */
 export abstract class CdktfApp extends App {
   /**
-   * Directory where artifacts are synthesized to.
-   */
-  public readonly workdir: string;
-  /**
    * Path to the Terraform manifest file.
    */
   public readonly terraformManifestPath: string;
+  public readonly outdir: string;
 
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
   private readonly pluginManager: PluginManager;
-  private readonly outdir: string;
 
   private synthed: boolean;
   private synthedOutput: string | undefined;
@@ -174,6 +179,8 @@ export abstract class CdktfApp extends App {
     const cdktfStack = new cdktf.TerraformStack(cdktfApp, TERRAFORM_STACK_NAME);
 
     super(cdktfStack, "Default");
+
+    this.outdir = outdir;
 
     // HACK: monkey patch the `new` method on the cdktf app (which is the root of the tree) so that
     // we can intercept the creation of resources and replace them with our own.
@@ -195,7 +202,6 @@ export abstract class CdktfApp extends App {
     this.pluginManager = new PluginManager(props.plugins ?? []);
 
     this.outdir = outdir;
-    this.workdir = cdktfOutdir;
     this.cdktfApp = cdktfApp;
     this.cdktfStack = cdktfStack;
     this.terraformManifestPath = join(this.outdir, "main.tf.json");
@@ -253,7 +259,7 @@ export abstract class CdktfApp extends App {
     );
 
     // delete `outdir/.tmp.cdktf.out`
-    rmSync(this.cdktfApp.outdir, { recursive: true });
+    rmSync(this.cdktfApp.outdir, { recursive: true, force: true });
 
     // write `outdir/tree.json`
     synthesizeTree(this, this.outdir);

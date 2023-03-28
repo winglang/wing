@@ -11,9 +11,9 @@ import { Function } from "./function";
 import { core } from "..";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
-import { convertBetweenHandlers } from "../convert";
 import { CdktfApp } from "../core";
 import { Code } from "../core/inflight";
+import { convertBetweenHandlers } from "../utils/convert";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
@@ -43,7 +43,7 @@ export class Api extends cloud.Api {
    */
   public get(
     route: string,
-    inflight: core.Inflight,
+    inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiGetProps
   ): void {
     if (props) {
@@ -68,7 +68,7 @@ export class Api extends cloud.Api {
    */
   public post(
     route: string,
-    inflight: core.Inflight,
+    inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiPostProps
   ): void {
     if (props) {
@@ -93,7 +93,7 @@ export class Api extends cloud.Api {
    */
   public put(
     route: string,
-    inflight: core.Inflight,
+    inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiPutProps
   ): void {
     if (props) {
@@ -118,7 +118,7 @@ export class Api extends cloud.Api {
    */
   public delete(
     route: string,
-    inflight: core.Inflight,
+    inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiDeleteProps
   ): void {
     if (props) {
@@ -143,7 +143,7 @@ export class Api extends cloud.Api {
    */
   public patch(
     route: string,
-    inflight: core.Inflight,
+    inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiPatchProps
   ): void {
     if (props) {
@@ -168,7 +168,7 @@ export class Api extends cloud.Api {
    */
   public options(
     route: string,
-    inflight: core.Inflight,
+    inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiOptionsProps
   ): void {
     if (props) {
@@ -193,7 +193,7 @@ export class Api extends cloud.Api {
    */
   public head(
     route: string,
-    inflight: core.Inflight,
+    inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiHeadProps
   ): void {
     if (props) {
@@ -218,7 +218,7 @@ export class Api extends cloud.Api {
    */
   public connect(
     route: string,
-    inflight: core.Inflight,
+    inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiConnectProps
   ): void {
     if (props) {
@@ -241,7 +241,7 @@ export class Api extends cloud.Api {
    * @param props Endpoint props
    * @returns AWS Lambda Function
    */
-  private addHandler(inflight: core.Inflight): Function {
+  private addHandler(inflight: cloud.IApiEndpointHandler): Function {
     let fn = this.getExistingOrAddInflightHandler(inflight);
     if (!(fn instanceof Function)) {
       throw new Error("Api only supports creating tfaws.Function right now");
@@ -255,7 +255,7 @@ export class Api extends cloud.Api {
    * @param inflight
    * @returns
    */
-  private getExistingOrAddInflightHandler(inflight: core.Inflight) {
+  private getExistingOrAddInflightHandler(inflight: cloud.IApiEndpointHandler) {
     const existingInflightHandler = this.findExistingInflightHandler(inflight);
     if (existingInflightHandler) {
       return existingInflightHandler;
@@ -268,7 +268,7 @@ export class Api extends cloud.Api {
    * @param inflight Inflight to find
    * @returns
    */
-  private findExistingInflightHandler(inflight: core.Inflight) {
+  private findExistingInflightHandler(inflight: cloud.IApiEndpointHandler) {
     const inflightNodeHash = inflight.node.addr.slice(-8);
 
     let fn = this.node.tryFindChild(
@@ -282,14 +282,17 @@ export class Api extends cloud.Api {
    * @param inflight Inflight to add to the API
    * @returns Inflight handler as a AWS Lambda Function
    */
-  private addInflightHandler(inflight: core.Inflight) {
+  private addInflightHandler(inflight: cloud.IApiEndpointHandler) {
     const inflightNodeHash = inflight.node.addr.slice(-8);
 
     const functionHandler = convertBetweenHandlers(
       this,
       `${this.node.id}-OnRequestHandler-${inflightNodeHash}`,
       inflight,
-      join(__dirname, "api.onrequest.inflight.js"),
+      join(
+        __dirname.replace("target-tf-aws", "shared-aws"),
+        "api.onrequest.inflight.js"
+      ),
       "ApiOnRequestHandlerClient"
     );
     return Function._newFunction(

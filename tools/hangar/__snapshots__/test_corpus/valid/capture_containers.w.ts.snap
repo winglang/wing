@@ -95,6 +95,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         },
         "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
       },
     },
   },
@@ -116,6 +117,8 @@ function __app(target) {
 			return $stdlib.tfgcp.App;
 		case \\"tf-azure\\":
 			return $stdlib.tfazure.App;
+		case \\"awscdk\\":
+			return $stdlib.awscdk.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -133,7 +136,7 @@ constructor() {
   const arr_of_map = Object.freeze([Object.freeze({\\"bang\\":123})]);
   const j = Object.freeze({\\"a\\":\\"hello\\",\\"b\\":\\"world\\"});
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.dc7e5dc23da309970778fe7db4c795e3a6ae63c0d0ddc5e1780d4e2daadf67e1/index.js\\").replace(/\\\\\\\\/g, \\"/\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.dc7e5dc23da309970778fe7db4c795e3a6ae63c0d0ddc5e1780d4e2daadf67e1/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
     bindings: {
       arr: {
         obj: arr,

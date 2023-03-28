@@ -12,6 +12,17 @@ let handler = inflight (event: str): str => {
             //^^^^^^^^^^^^^^^^ Named arguments must be after positional arguments
 };
 
+let x = cloud.ApiResponse {
+  body: Json "Hello, world!",
+};
+// ^^^ "status" is not initialized
+
+let y = cloud.ApiResponse {
+  status: 200,
+  not_a_field: 500,
+// ^^^^^^^^^^^ "not_a_field" is not a field of "ApiResponse"
+};
+
 new cloud.Function(
   handler, 
   cloud.FunctionProps {
