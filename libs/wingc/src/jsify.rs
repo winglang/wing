@@ -45,6 +45,8 @@ function __app(target) {
 			return $stdlib.tfgcp.App;
 		case "tf-azure":
 			return $stdlib.tfazure.App;
+		case "awscdk":
+			return $stdlib.awscdk.App;
 		default:
 			throw new Error(`Unknown WING_TARGET value: "${process.env.WING_TARGET ?? ""}"`);
 	}
@@ -636,28 +638,9 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			StmtKind::Class(class) => self.jsify_class(env, class, context),
-			StmtKind::Struct { name, extends, members } => {
-				format!(
-					"interface {}{} {{\n{}\n}}",
-					self.jsify_symbol(name),
-					if !extends.is_empty() {
-						format!(
-							" extends {}",
-							extends
-								.iter()
-								.map(|s| self.jsify_symbol(s))
-								.collect::<Vec<String>>()
-								.join(", ")
-						)
-					} else {
-						"".to_string()
-					},
-					members
-						.iter()
-						.map(|m| self.jsify_class_member(m))
-						.collect::<Vec<String>>()
-						.join("\n")
-				)
+			StmtKind::Struct { .. } => {
+				// This is a no-op in JS
+				format!("")
 			}
 			StmtKind::Enum { name, values } => {
 				let name = self.jsify_symbol(name);

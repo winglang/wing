@@ -544,7 +544,7 @@ return class Handler {
 }
 };
 })())({
-my_counter: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_6cb5a3a4\\"], 0)
+my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_6cb5a3a4\\"], 0)
 })"
 `;
 

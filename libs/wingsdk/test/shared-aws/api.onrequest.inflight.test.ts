@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { test, expect, beforeEach, describe, vi } from "vitest";
 import { ApiResponse } from "../../src/cloud";
-import { ApiOnRequestHandlerClient } from "../../src/target-tf-aws/api.onrequest.inflight";
+import { ApiOnRequestHandlerClient } from "../../src/shared-aws/api.onrequest.inflight";
 
 beforeEach(() => {
   vi.restoreAllMocks();
