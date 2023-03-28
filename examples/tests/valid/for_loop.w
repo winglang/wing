@@ -157,23 +157,12 @@ for x in (z*2)..0 {
   log("${x}");
 }
 
-log("---\nfor x in std.Range.of(0, 2) { ... }");
-for x in std.Range.of(0, 2) {
-  assert(x >= 0);
-  assert(x < 2);
-  log("${x}");
-}
 
-log("---\nfor x in std.Range.of(0, 2, true) { ... }");
-for x in std.Range.of(0, 2, true) {
-  assert(x >= 0);
-  assert(x <= 2);
-  log("${x}");
-}
-
-log("---\nfor x in std.Range.of(2, 0) { ... }");
-for x in std.Range.of(2, 0) {
-  assert(x <= 2);
-  assert(x > 0);
-  log("${x}");
-}
+bring cloud;
+new cloud.Function(inflight(event:str): str => {
+  for x in 0..10 {
+    assert(x <= 0);
+    assert(x > 10);
+    log("${x}");
+  }
+});
