@@ -1,5 +1,26 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`bucket on event creates 3 topics  1`] = `
+[
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.cloud.Topic created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.cloud.Topic created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.cloud.Topic created.",
+  "wingsdk.cloud.Bucket created.",
+  "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.Topic deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.Topic deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.Topic deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
 exports[`can add object in preflight 1`] = `
 [
   "wingsdk.cloud.Logger created.",
@@ -410,10 +431,37 @@ exports[`remove object from a bucket 1`] = `
 exports[`remove object from a bucket with mustExist as option 1`] = `
 [
   "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.cloud.Topic created.",
   "wingsdk.cloud.Bucket created.",
   "Put (key=unknown.txt).",
+  "Publish (message=unknown.txt).",
+  "Sending message (message=unknown.txt, subscriber=sim-1).",
+  "Invoke (payload=\\"unknown.txt\\").",
+  "Subscriber error: TypeError: this.handler.handle is not a function",
   "Delete (key=unknown.txt).",
   "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.Topic deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`update an object in bucket 1`] = `
+[
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.cloud.Topic created.",
+  "wingsdk.cloud.Bucket created.",
+  "Publish (message=greeting.txt).",
+  "Sending message (message=greeting.txt, subscriber=sim-1).",
+  "Invoke (payload=\\"greeting.txt\\").",
+  "Subscriber error: TypeError: this.handler.handle is not a function",
+  "Put (key=greeting.txt).",
+  "Put (key=greeting.txt).",
+  "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.Topic deleted.",
+  "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
 ]
 `;

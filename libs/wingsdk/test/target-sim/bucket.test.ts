@@ -1,7 +1,20 @@
-import { test, expect } from "vitest";
+import { vi, test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { SimApp } from "../../src/testing";
+import { BucketEventType, IBucketEventHandler } from "../../src/cloud";
+import { Inflight, NodeJsCode } from "../../src/core";
+import { Construct } from "constructs";
+
+class InflightBucketEventHandler
+  extends Inflight
+  implements IBucketEventHandler
+{
+  public stateful: boolean;
+  constructor(scope: Construct, id: string) {
+    super(scope, id, { code: NodeJsCode.fromInline("null") });
+  }
+}
 
 test("create a bucket", async () => {
   // GIVEN
@@ -39,6 +52,8 @@ test("put json objects from bucket", async () => {
   const VALUE = { msg: "Hello world!" };
 
   // WHEN
+
+  const notifyListeners = vi.spyOn(client as any, "notifyListeners");
   await client.putJson(KEY, VALUE as any);
   const response = await client.getJson("greeting.json");
 
@@ -48,6 +63,59 @@ test("put json objects from bucket", async () => {
   expect(response).toEqual(VALUE);
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
+  expect(notifyListeners).toBeCalledWith(cloud.BucketEventType.CREATE, KEY);
+});
+
+test("update an object in bucket", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const bucket = cloud.Bucket._newBucket(app, "my_bucket");
+  const testInflight = new InflightBucketEventHandler(app, "inflight_test");
+  bucket.onCreate(testInflight);
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  const KEY = "greeting.txt";
+  const VALUE = JSON.stringify({ msg: "Hello world!" });
+
+  // WHEN
+  // @ts-expect-error - private method
+  const notifyListeners = vi.spyOn(client, "notifyListeners");
+
+  await client.put(KEY, VALUE);
+  expect(notifyListeners).toBeCalledWith(cloud.BucketEventType.CREATE, KEY);
+
+  await client.put(KEY, JSON.stringify({ msg: "another msg" }));
+  expect(notifyListeners).toBeCalledWith(cloud.BucketEventType.UPDATE, KEY);
+  expect(Object.keys((client as any).topicHandlers)).toMatchObject([
+    BucketEventType.CREATE,
+  ]);
+
+  // THEN
+  await s.stop();
+  expect(notifyListeners).toBeCalledTimes(2);
+  expect(listMessages(s)).toMatchSnapshot();
+});
+
+test("bucket on event creates 3 topics ", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const bucket = cloud.Bucket._newBucket(app, "my_bucket");
+  const testInflight = new InflightBucketEventHandler(app, "inflight_test");
+  bucket.onEvent(testInflight);
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+  expect(Object.keys((client as any).topicHandlers)).toMatchObject([
+    BucketEventType.CREATE,
+    BucketEventType.UPDATE,
+    BucketEventType.DELETE,
+  ]);
+
+  // THEN
+  await s.stop();
+  expect(listMessages(s)).toMatchSnapshot();
 });
 
 test("put multiple json objects and list all from bucket", async () => {
@@ -226,7 +294,10 @@ test("remove object from a bucket with mustExist as option", async () => {
 
   // GIVEN
   const app = new SimApp();
-  cloud.Bucket._newBucket(app, bucketName);
+
+  const bucket = cloud.Bucket._newBucket(app, bucketName);
+  const testInflight = new InflightBucketEventHandler(app, "inflight_test");
+  bucket.onDelete(testInflight);
 
   const s = await app.startSimulator();
 
@@ -238,10 +309,20 @@ test("remove object from a bucket with mustExist as option", async () => {
   await client.put(fileName, JSON.stringify({ msg: "Hello world!" }));
 
   // delete file
+  //@ts-expect-error
+  const notifyListeners = vi.spyOn(client, "notifyListeners");
   const response = await client.delete(fileName, { mustExist: true });
+
+  expect(Object.keys((client as any).topicHandlers)).toMatchObject([
+    BucketEventType.DELETE,
+  ]);
 
   await s.stop();
 
+  expect(notifyListeners).toBeCalledWith(
+    cloud.BucketEventType.DELETE,
+    fileName
+  );
   expect(response).toEqual(undefined);
   expect(listMessages(s)).toMatchSnapshot();
 });

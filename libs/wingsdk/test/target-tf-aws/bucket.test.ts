@@ -17,7 +17,10 @@ import {
   treeJsonOf,
 } from "../util";
 
-class BucketInflight extends Inflight implements IBucketEventHandler {
+class InflightBucketEventHandler
+  extends Inflight
+  implements IBucketEventHandler
+{
   public stateful: boolean;
   constructor(scope: Construct, id: string) {
     super(scope, id, { code: NodeJsCode.fromInline("null") });
@@ -132,7 +135,7 @@ test("bucket with onCreate method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
-  const test = new BucketInflight(app, "inflight");
+  const test = new InflightBucketEventHandler(app, "inflight");
   bucket.onCreate(test);
   const output = app.synth();
 
@@ -161,7 +164,7 @@ test("bucket with onDelete method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
-  const test = new BucketInflight(app, "inflight");
+  const test = new InflightBucketEventHandler(app, "inflight");
   bucket.onDelete(test);
   const output = app.synth();
 
@@ -190,7 +193,7 @@ test("bucket with onUpdate method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
-  const test = new BucketInflight(app, "inflight");
+  const test = new InflightBucketEventHandler(app, "inflight");
   bucket.onUpdate(test);
   const output = app.synth();
 
@@ -219,7 +222,7 @@ test("bucket with onEvent method", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
-  const test = new BucketInflight(app, "inflight");
+  const test = new InflightBucketEventHandler(app, "inflight");
   bucket.onEvent(test);
   const output = app.synth();
 
