@@ -18,6 +18,7 @@ test("create a bucket", async () => {
     props: {
       public: false,
       initialObjects: {},
+      topics: {},
     },
     type: "wingsdk.cloud.Bucket",
   });

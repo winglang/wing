@@ -417,14 +417,3 @@ exports[`remove object from a bucket with mustExist as option 1`] = `
   "wingsdk.cloud.Logger deleted.",
 ]
 `;
-
-exports[`update an object in bucket 1`] = `
-[
-  "wingsdk.cloud.Logger created.",
-  "wingsdk.cloud.Bucket created.",
-  "Put (key=greeting.txt).",
-  "Put (key=greeting.txt).",
-  "wingsdk.cloud.Bucket deleted.",
-  "wingsdk.cloud.Logger deleted.",
-]
-`;

@@ -15,7 +15,7 @@ import {
   BucketOnDeleteProps,
   BucketOnEventProps,
   BucketOnUpdateProps,
-  BucketOnUploadProps,
+  BucketOnCreateProps,
   IBucketEventHandler,
 } from "../cloud";
 
@@ -132,7 +132,7 @@ export class Bucket extends cloud.Bucket {
   /**
    * Run an inflight whenever a file is uploaded to the bucket.
    */
-  public onCreate(fn: IBucketEventHandler, opts?: BucketOnUploadProps): void {
+  public onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateProps): void {
     fn;
     opts;
     throw new Error(

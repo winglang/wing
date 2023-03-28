@@ -24,7 +24,13 @@ const FUNCTION_NAME_OPTS: NameOptions = {
   disallowedRegex: /[^a-zA-Z0-9\_\-]+/g,
 };
 
+/**
+ * options for granting invoke permissions to the current function
+ */
 export interface FunctionPermissionsOptions {
+  /**
+   * used for keeping function's versioning.
+   */
   readonly qualifier?: string;
 }
 

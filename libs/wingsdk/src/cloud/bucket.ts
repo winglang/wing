@@ -60,6 +60,10 @@ export abstract class Bucket extends Resource {
    */
   public abstract addObject(key: string, body: string): void;
 
+  /**
+   * Iterates over the topics and supply their sim handler
+   * @returns an object of Bucket event types (keys) and their topic handlers (values)
+   */
   protected convertTopicsToHandles() {
     const topicMap: Record<string, string> = {};
 
@@ -70,6 +74,11 @@ export abstract class Bucket extends Resource {
     return topicMap;
   }
 
+  /**
+   * creates a topic for subscribing notification event
+   * @param actionType
+   * @returns the created topi
+   */
   protected createTopic(actionType: BucketEventType): Topic {
     const hash = this.node.addr.slice(-8);
 
@@ -89,6 +98,11 @@ export abstract class Bucket extends Resource {
     return topic;
   }
 
+  /**
+   * gets topic form the topics map, or creates if not exists
+   * @param actionType
+   * @returns
+   */
   private getTopic(actionType: BucketEventType): Topic {
     if (!this.topics.has(actionType)) {
       this.topics.set(actionType, this.createTopic(actionType));
@@ -96,12 +110,21 @@ export abstract class Bucket extends Resource {
     return this.topics.get(actionType) as Topic;
   }
 
+  /**
+   * resolves the path to the bucket.onevent.inflight file
+   */
   protected eventHandlerLocation(): string {
     throw new Error(
       "please specify under the target file (to get the right relative path)"
     );
   }
 
+  /**
+   * creates an inflight handler from inflight code
+   * @param eventType
+   * @param inflight
+   * @returns
+   */
   private createInflightHandler(
     eventType: BucketEventType,
     inflight: IBucketEventHandler
@@ -117,10 +140,16 @@ export abstract class Bucket extends Resource {
     );
   }
 
+  /**
+   * creates a bucket event notifier
+   * @param eventNames the events to subscribe the inflight function to
+   * @param inflight the code to run upon event
+   * @param opts
+   */
   private createBucketEvent(
     eventNames: BucketEventType[],
     inflight: IBucketEventHandler,
-    opts?: BucketOnUploadProps
+    opts?: BucketOnCreateProps
   ) {
     opts;
     if (eventNames.includes(BucketEventType.CREATE)) {
@@ -139,10 +168,11 @@ export abstract class Bucket extends Resource {
       );
     }
   }
+
   /**
    * Run an inflight whenever a file is uploaded to the bucket.
    */
-  public onCreate(fn: IBucketEventHandler, opts?: BucketOnUploadProps): void {
+  public onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateProps): void {
     if (opts) {
       console.warn("bucket.onCreate does not support props yet");
     }
@@ -183,6 +213,7 @@ export abstract class Bucket extends Resource {
     );
   }
 }
+
 /** Interface for delete method inside `Bucket` */
 export interface BucketDeleteOptions {
   /**
@@ -255,15 +286,30 @@ export interface IBucketClient {
   delete(key: string, opts?: BucketDeleteOptions): Promise<void>;
 }
 
-export interface BucketOnUploadProps {
+/**
+ * on create event options
+ */
+export interface BucketOnCreateProps {
   /* elided */
 }
+
+/**
+ * on delete event options
+ */
 export interface BucketOnDeleteProps {
   /* elided */
 }
+
+/**
+ * on update event options
+ */
 export interface BucketOnUpdateProps {
   /* elided */
 }
+
+/**
+ * on any event options
+ */
 export interface BucketOnEventProps {
   /* elided */
 }
@@ -276,6 +322,12 @@ export interface BucketOnEventProps {
  */
 export interface IBucketEventHandler extends IResource {}
 
+/**
+ * Represents a resource with an inflight "handle" method that can be passed to
+ * the bucket events.
+ *
+ * @inflight
+ */
 export interface IBucketEventHandlerClient {
   /**
    * Function that will be called when an event notification is fired.
@@ -283,14 +335,36 @@ export interface IBucketEventHandlerClient {
    */
   handle(key: string, type: BucketEventType): Promise<void>;
 }
+
+/**
+ * on_event notification payload- will be in use after solving issue: //TODO
+ */
 export interface BucketEvent {
+  /**
+   * the bucket key that triggered the event
+   */
   readonly key: string;
+  /**
+   * type of event
+   */
   readonly type: BucketEventType;
 }
 
+/**
+ * bucket events to subscribe to
+ */
 export enum BucketEventType {
+  /**
+   * create
+   */
   CREATE = "CREATE",
+  /**
+   * delete
+   */
   DELETE = "DELETE",
+  /**
+   * update
+   */
   UPDATE = "UPDATE",
 }
 

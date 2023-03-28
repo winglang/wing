@@ -25,6 +25,10 @@ const NAME_OPTS: NameOptions = {
  */
 export class Topic extends cloud.Topic {
   private readonly topic: SnsTopic;
+  /**
+   * topic's publishing permissions. can be use as a dependency of another resource.
+   * (the one that got the permissions to publish)
+   * */
   public permissions!: SnsTopicPolicy;
 
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
@@ -35,6 +39,9 @@ export class Topic extends cloud.Topic {
     });
   }
 
+  /**
+   * topic's arn
+   */
   get arn(): string {
     return this.topic.arn;
   }
@@ -87,8 +94,12 @@ export class Topic extends cloud.Topic {
 
     return fn;
   }
-  /* Grants the given identity permissions to publish this topic.
+
+  /**
+   * Grants the given identity permissions to publish this topic.
+   * @param source the resource that will publish to the topic
    * @param principal The AWS principal to grant publish permissions to (e.g. "s3.amazonaws.com", "events.amazonaws.com", "sns.amazonaws.com")
+   * @param sourceArn source arn
    */
   public addPermissionToPublish(
     source: core.Resource,
