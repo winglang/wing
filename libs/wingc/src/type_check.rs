@@ -1,8 +1,8 @@
 mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{
-	Class as AstClass, Expr, ExprKind, FunctionBody, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt,
-	StmtKind, Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
+	Class as AstClass, Expr, ExprKind, FunctionBody, Interface as AstInterface, InterpolatedStringPart, Literal, Phase,
+	Reference, Scope, Stmt, StmtKind, Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{
@@ -730,6 +730,13 @@ impl TypeRef {
 
 	fn as_interface(&self) -> Option<&Interface> {
 		if let Type::Interface(ref iface) = **self {
+			Some(iface)
+		} else {
+			None
+		}
+	}
+	fn as_mut_interface(&mut self) -> Option<&mut Interface> {
+		if let Type::Interface(ref mut iface) = **self {
 			Some(iface)
 		} else {
 			None
@@ -2040,7 +2047,10 @@ impl<'a> TypeChecker<'a> {
 						if t.as_interface().is_some() {
 							Some(t)
 						} else {
-							self.general_type_error(format!("Class {}'s implements \"{}\" is not an interface", name, t));
+							self.general_type_error(format!(
+								"Class \"{}\" implements \"{}\", which is not an interface",
+								name, t
+							));
 							None
 						}
 					})
@@ -2201,6 +2211,7 @@ impl<'a> TypeChecker<'a> {
 					let mut method_env = SymbolEnv::new(
 						Some(env.get_ref()),
 						method_sig.return_type,
+						//TODO urib - why is this false?
 						false,
 						false,
 						method_sig.phase,
@@ -2267,6 +2278,120 @@ impl<'a> TypeChecker<'a> {
 							});
 						}
 					}
+				}
+			}
+			StmtKind::Interface(AstInterface {
+				name,
+				fields,
+				methods,
+				extends,
+			}) => {
+				// Create environment representing this interface, for now it'll be empty just so we can support referencing ourselves from the interface definition.
+				let dummy_env = SymbolEnv::new(None, self.types.void(), false, false, env.phase, stmt.idx);
+
+				let extend_interfaces = extends
+					.iter()
+					.filter_map(|i| {
+						let t = resolve_user_defined_type(i, env, stmt.idx).unwrap_or_else(|e| self.type_error(e));
+						if t.as_interface().is_some() {
+							Some(t)
+						} else {
+							self.general_type_error(format!(
+								"Interface \"{}\" extends \"{}\", which is not an interface",
+								name, t
+							));
+							None
+						}
+					})
+					.collect::<Vec<_>>();
+
+				// Create the interface type and add it to the current environment (so interface implementation can reference itself)
+				let interface_spec = Interface {
+					name: name.clone(),
+					env: dummy_env,
+					extends: extend_interfaces.clone(),
+				};
+				let mut interface_type = self.types.add_type(Type::Interface(interface_spec));
+				match env.define(name, SymbolKind::Type(interface_type), StatementIdx::Top) {
+					Err(type_error) => {
+						self.type_error(type_error);
+					}
+					_ => {}
+				};
+
+				// Create the real interface environment to be filled with the interface AST types
+				let mut interface_env = SymbolEnv::new(None, self.types.void(), false, false, env.phase, stmt.idx);
+
+				// Add fields to the interface env
+				for field in fields.iter() {
+					let field_type = self.resolve_type_annotation(&field.member_type, env, stmt.idx);
+					match interface_env.define(
+						&field.name,
+						//TODO: urib - remove static? I'm guessing interface field is always static, so call make_variable !!!!!!!!!!!!!!!!!!!!!!
+						if field.is_static {
+							SymbolKind::make_variable(field_type, field.reassignable, field.phase)
+						} else {
+							SymbolKind::make_instance_variable(field_type, field.reassignable, field.phase)
+						},
+						StatementIdx::Top,
+					) {
+						Err(type_error) => {
+							self.type_error(type_error);
+						}
+						_ => {}
+					};
+				}
+				// Add methods to the interface env
+				for (method_name, sig) in methods.iter() {
+					let method_type =
+						self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(sig.clone()), env, stmt.idx);
+					match interface_env.define(
+						method_name,
+						//TODO urib - should I use make_variable or make_instance_variable?
+						SymbolKind::make_variable(method_type, false, sig.phase),
+						StatementIdx::Top,
+					) {
+						Err(type_error) => {
+							self.type_error(type_error);
+						}
+						_ => {}
+					};
+				}
+
+				// Replace the dummy interface environment with the real one before type checking the methods
+				interface_type.as_mut_interface().unwrap().env = interface_env;
+				let interface_env = &interface_type.as_interface().unwrap().env;
+
+				// TODO: handle member/method overrides in our env based on whatever rules we define in our spec
+
+				// Type check methods
+				for (method_name, sig) in methods.iter() {
+					// Lookup the method in the interface_env
+					let method_type = interface_env
+						.lookup(method_name, None)
+						.expect("Expected method to be in interface env")
+						.as_variable()
+						.expect("Expected method to be a variable")
+						.type_;
+
+					let method_sig = method_type
+						.as_function_sig()
+						.expect("Expected method type to be a function signature");
+
+					// Create method environment and prime it with args
+					//TODO urib: should we use sig or method_sig?
+					let mut method_env = SymbolEnv::new(
+						Some(env.get_ref()),
+						method_sig.return_type,
+						false,
+						false,
+						method_sig.phase,
+						stmt.idx,
+					);
+					let mut actual_parameters = vec![];
+					actual_parameters.extend(method_sig.parameters.clone());
+					//TODO urib: fix this !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					//self.add_arguments_to_env(&actual_parameters, method_sig, &mut method_env);
 				}
 			}
 			StmtKind::Struct { name, extends, members } => {
@@ -2453,7 +2578,7 @@ impl<'a> TypeChecker<'a> {
 	///
 	/// #Arguments
 	///
-	/// * `args` - List of aruments to add, each element is a tuple of the arugment symbol and whether it's
+	/// * `args` - List of arguments to add, each element is a tuple of the argument symbol and whether it's
 	///   reassignable arg or not. Note that the argument types are figured out from `sig`.
 	/// * `sig` - The function signature (used to figure out the type of each argument).
 	/// * `env` - The function's environment to prime with the args.
