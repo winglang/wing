@@ -5,9 +5,8 @@ use std::{env, path::Path, process};
 use wingc::compile;
 
 pub fn main() {
-	let mut args: Vec<String> = env::args().collect();
+	let args: Vec<String> = env::args().collect();
 
-	args.push("/home/marcio/code/wing/examples/tests/invalid/classes_and_resources.w".to_string());
 	if args.len() < 2 {
 		panic!("Usage: cargo run --example compile <source_file>");
 	}
