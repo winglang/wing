@@ -194,9 +194,9 @@ interface A extends B, C {
 (source
   (interface_definition
     name: (identifier)
-    implements: (custom_type
+    extends: (custom_type
       object: (identifier))
-    implements: (custom_type
+    extends: (custom_type
       object: (identifier))
     implementation: (interface_implementation
       (method_signature
