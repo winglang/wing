@@ -40,7 +40,7 @@ resource TaskList {
    */
   inflight add_task(title: str): str {
     let id = "${this._counter.inc()}";
-    print("adding task ${id} with title: ${title}");
+    log("adding task ${id} with title: ${title}");
     this._bucket.put(id, title);
     return id;
   }
@@ -60,7 +60,7 @@ resource TaskList {
    * @param id - the id of the task to be removed
    */
   inflight remove_tasks(id: str): str {
-    print("removing task ${id}");
+    log("removing task ${id}");
     this._bucket.delete(id);
     return id;
   }
@@ -83,19 +83,19 @@ resource TaskList {
     * @returns set of task id that matches the term
     */
   inflight find_tasks_with(term: str): Array<str> {
-    print("find_tasks_with: ${term}");
+    log("find_tasks_with: ${term}");
     let task_ids = this.list_task_ids();
-    print("found ${task_ids.size} tasks");
+    log("found ${task_ids.size} tasks");
     let output = MutArray<str>[];
     for id in task_ids {
       let title = this.get_task(id); 
       if title.contains(term) { 
-        print("found task ${id} with title \"${title}\" with term \"${term}\"");
+        log("found task ${id} with title \"${title}\" with term \"${term}\"");
         output.push(id);
       }
     }
     
-    print("found ${output.length} tasks which match term '${term}'");
+    log("found ${output.length} tasks which match term '${term}'");
     return output.copy();
   }
 }
