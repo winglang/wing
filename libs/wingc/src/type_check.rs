@@ -228,20 +228,11 @@ impl Display for Interface {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		if let Some(method) = self.get_env().try_lookup("handle", None) {
 			let method = method.as_variable().unwrap();
-			if method.phase != Phase::Inflight {
-				return write!(f, "{}", self.name.name);
+			if method.phase == Phase::Inflight {
+				write!(f, "{} ({})", self.name.name, method.type_)
+			} else {
+				write!(f, "{}", self.name.name)
 			}
-
-			// remove the "this" parameter for the interface method, to avoid recursion
-			// TODO: hack until we implement https://github.com/winglang/wing/issues/1678
-			let method_sig = method.type_.as_function_sig().unwrap();
-			let mut temp_params = method_sig.parameters.clone();
-			temp_params.remove(0);
-			let temp_fn = Type::Function(FunctionSignature {
-				parameters: temp_params,
-				..method_sig.clone()
-			});
-			write!(f, "{} ({})", self.name.name, temp_fn)
 		} else {
 			write!(f, "{}", self.name.name)
 		}
@@ -404,22 +395,10 @@ impl Subtype for Type {
 						return false;
 					}
 
-					// hallucinate a "this" parameter for the function, since the
-					// interface must be implemented on a class-like type
-					// TODO: hack until we implement https://github.com/winglang/wing/issues/1678
-					let temp_params = vec![UnsafeRef(other)]
-						.iter()
-						.chain(l0.parameters.clone().iter())
-						.cloned()
-						.collect::<Vec<_>>();
-					let temp_fn = Self::Function(FunctionSignature {
-						parameters: temp_params,
-						..(l0.clone())
-					});
-					temp_fn.is_subtype_of(&*method.type_)
-				} else {
-					false
+					return self.is_subtype_of(&*method.type_);
 				}
+
+				false
 			}
 			(Self::Function(l0), Self::Function(r0)) => {
 				if !l0.phase.is_subtype_of(&r0.phase) {
@@ -440,25 +419,8 @@ impl Subtype for Type {
 					return false;
 				}
 
-				let mut lparams = l0.parameters.iter().peekable();
-				let mut rparams = r0.parameters.iter().peekable();
-
-				// If the first parameter is a class or resource, then we assume it refers to the `this` parameter
-				// in a class or resource, and skip it.
-				// TODO: remove this after https://github.com/winglang/wing/issues/1678
-				if matches!(
-					lparams.peek().map(|t| &***t),
-					Some(&Type::Class(_)) | Some(&Type::Resource(_)) | Some(&Type::Interface(_))
-				) {
-					lparams.next();
-				}
-
-				if matches!(
-					rparams.peek().map(|t| &***t),
-					Some(&Type::Class(_)) | Some(&Type::Resource(_)) | Some(&Type::Interface(_))
-				) {
-					rparams.next();
-				}
+				let lparams = l0.parameters.iter();
+				let rparams = r0.parameters.iter();
 
 				for (l, r) in lparams.zip(rparams) {
 					// parameter types are contravariant, which means even if Cat is a subtype of Animal,
@@ -588,6 +550,9 @@ impl Subtype for Type {
 
 #[derive(Clone, Debug)]
 pub struct FunctionSignature {
+	/// The type of "this" inside the function, if any. This should be None for
+	/// static or anonymous functions.
+	pub this_type: Option<TypeRef>,
 	pub parameters: Vec<TypeRef>,
 	pub return_type: TypeRef,
 	pub phase: Phase,
@@ -733,7 +698,7 @@ impl TypeRef {
 		}
 	}
 
-	fn as_interface(&self) -> Option<&Interface> {
+	pub fn as_interface(&self) -> Option<&Interface> {
 		if let Type::Interface(ref iface) = **self {
 			Some(iface)
 		} else {
@@ -986,7 +951,13 @@ impl Types {
 	pub fn stringables(&self) -> Vec<TypeRef> {
 		// TODO: This should be more complex and return all types that have some stringification facility
 		// see: https://github.com/winglang/wing/issues/741
-		vec![self.string(), self.number(), self.json(), self.mut_json()]
+		vec![
+			self.string(),
+			self.number(),
+			self.json(),
+			self.mut_json(),
+			self.anything(),
+		]
 	}
 
 	pub fn add_namespace(&mut self, n: Namespace) -> NamespaceRef {
@@ -1355,11 +1326,6 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::Call { function, arg_list } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
 				let func_type = self.type_check_exp(function, env, statement_idx, context);
-				let this_args = match &function.kind {
-					// If this is an instance method then there's a `this` arg
-					ExprKind::Reference(Reference::InstanceMember { .. }) => 1,
-					_ => 0,
-				};
 
 				let arg_list_types = self.type_check_arg_list(arg_list, env, statement_idx, context);
 
@@ -1396,10 +1362,10 @@ impl<'a> TypeChecker<'a> {
 					.take_while(|arg| arg.is_option())
 					.count();
 
-				// Verity arity
+				// Verify arity
 				let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
-				let min_args = func_sig.parameters.len() - num_optionals - this_args;
-				let max_args = func_sig.parameters.len() - this_args;
+				let min_args = func_sig.parameters.len() - num_optionals;
+				let max_args = func_sig.parameters.len();
 				if arg_count < min_args || arg_count > max_args {
 					let err_text = if min_args == max_args {
 						format!("Expected {} arguments but got {}", min_args, arg_count)
@@ -1415,7 +1381,6 @@ impl<'a> TypeChecker<'a> {
 				let params = func_sig
 					.parameters
 					.iter()
-					.skip(this_args)
 					.take(func_sig.parameters.len() - num_optionals);
 
 				// Verify passed positional arguments match the function's parameter types
@@ -1763,6 +1728,7 @@ impl<'a> TypeChecker<'a> {
 					args.push(self.resolve_type_annotation(arg, env, statement_idx));
 				}
 				let sig = FunctionSignature {
+					this_type: None, // TODO?
 					parameters: args,
 					return_type: ast_sig.return_type.as_ref().map_or(self.types.void(), |t| {
 						self.resolve_type_annotation(t, env, statement_idx)
@@ -1894,6 +1860,7 @@ impl<'a> TypeChecker<'a> {
 					Type::Set(t) => *t,
 					Type::MutArray(t) => *t,
 					Type::MutSet(t) => *t,
+					Type::Anything => exp_type,
 
 					// TODO: Handle non-builtin iterables
 					t => {
@@ -2180,20 +2147,11 @@ impl<'a> TypeChecker<'a> {
 				}
 				// Add methods to the class env
 				for (method_name, method_def) in methods.iter() {
-					let mut sig = method_def.signature.clone();
-
-					// Add myself as first parameter to all non static class methods (self)
-					if !method_def.is_static {
-						sig.parameters.insert(
-							0,
-							TypeAnnotation::UserDefined(UserDefinedType {
-								root: name.clone(),
-								fields: vec![],
-							}),
-						);
-					}
-
-					let method_type = self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(sig), env, stmt.idx);
+					let method_type = self.resolve_type_annotation(
+						&TypeAnnotation::FunctionSignature(method_def.signature.clone()),
+						env,
+						stmt.idx,
+					);
 					match class_env.define(
 						method_name,
 						if method_def.is_static {
@@ -2261,7 +2219,7 @@ impl<'a> TypeChecker<'a> {
 							name: "this".into(),
 							span: name.span.clone(),
 						},
-						SymbolKind::make_variable(class_type, false, constructor_env.phase),
+						SymbolKind::make_instance_variable(class_type, false, constructor_env.phase),
 						StatementIdx::Top,
 					)
 					.expect("Expected `this` to be added to constructor env");
@@ -2294,19 +2252,18 @@ impl<'a> TypeChecker<'a> {
 						method_sig.phase,
 						stmt.idx,
 					);
-					// Add `this` as first argument
-					let mut actual_parameters = vec![];
-					if !method_def.is_static {
-						actual_parameters.push((
-							Symbol {
+					// Prime the method environment with `this`
+					method_env
+						.define(
+							&Symbol {
 								name: "this".into(),
-								span: method_name.span.clone(),
+								span: name.span.clone(),
 							},
-							false,
-						));
-					}
-					actual_parameters.extend(method_def.parameters.clone());
-					self.add_arguments_to_env(&actual_parameters, method_sig, &mut method_env);
+							SymbolKind::make_instance_variable(class_type, false, method_env.phase),
+							StatementIdx::Top,
+						)
+						.expect("Expected `this` to be added to constructor env");
+					self.add_arguments_to_env(&method_def.parameters, method_sig, &mut method_env);
 
 					if let FunctionBody::Statements(scope) = &method_def.body {
 						scope.set_env(method_env);
@@ -2648,14 +2605,21 @@ impl<'a> TypeChecker<'a> {
 					if let Some(sig) = v.as_function_sig() {
 						let new_return_type = self.get_concrete_type_for_generic(sig.return_type, &types_map);
 
-						let new_args: Vec<UnsafeRef<Type>> = sig
+						let new_this_type = if let Some(this_type) = sig.this_type {
+							Some(self.get_concrete_type_for_generic(this_type, &types_map))
+						} else {
+							None
+						};
+
+						let new_params: Vec<UnsafeRef<Type>> = sig
 							.parameters
 							.iter()
 							.map(|arg| self.get_concrete_type_for_generic(*arg, &types_map))
 							.collect();
 
 						let new_sig = FunctionSignature {
-							parameters: new_args,
+							this_type: new_this_type,
+							parameters: new_params,
 							return_type: new_return_type,
 							phase: sig.phase,
 							js_override: sig.js_override.clone(),
@@ -3164,6 +3128,7 @@ mod tests {
 
 	fn make_function(params: Vec<TypeRef>, ret: TypeRef, phase: Phase) -> Type {
 		Type::Function(FunctionSignature {
+			this_type: None,
 			parameters: params,
 			return_type: ret,
 			phase,

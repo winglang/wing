@@ -101,6 +101,7 @@ impl<'a> JsiiImporter<'a> {
 			} else if let Some(Value::String(type_fqn)) = obj.get("fqn") {
 				if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_INFLIGHT) {
 					self.wing_types.add_type(Type::Function(FunctionSignature {
+						this_type: Some(self.wing_types.anything()),
 						parameters: vec![self.wing_types.anything()],
 						return_type: self.wing_types.anything(),
 						phase: Phase::Inflight,
@@ -457,11 +458,7 @@ impl<'a> JsiiImporter<'a> {
 					self.wing_types.void()
 				};
 
-				let mut arg_types = vec![];
-				// Add my type (this) as the first argument to all instance (non static) methods
-				if !is_static {
-					arg_types.push(wing_type);
-				}
+				let mut param_types = vec![];
 				// Define the rest of the arguments and create the method signature
 				if let Some(params) = &m.parameters {
 					if self.has_variadic_parameters(params) {
@@ -475,11 +472,12 @@ impl<'a> JsiiImporter<'a> {
 					}
 
 					for param in params {
-						arg_types.push(self.parameter_to_wing_type(&param));
+						param_types.push(self.parameter_to_wing_type(&param));
 					}
 				}
 				let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
-					parameters: arg_types,
+					this_type: Some(wing_type),
+					parameters: param_types,
 					return_type,
 					phase,
 					js_override: m
@@ -712,6 +710,7 @@ impl<'a> JsiiImporter<'a> {
 				}
 			}
 			let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
+				this_type: Some(new_type.clone()),
 				parameters: arg_types,
 				return_type: new_type,
 				phase,
