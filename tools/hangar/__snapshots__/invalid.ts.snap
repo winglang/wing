@@ -145,11 +145,11 @@ exports[`classes_and_resources.w > stderr 1`] = `
   |       ^^ Unknown symbol \\"init\\"
 
 
-error: Class should be called with no arguments.
+error: Expected 0 arguments but got 1 when instantiating C5
   --> ../../../examples/tests/invalid/classes_and_resources.w:6:8
   |
 6 | new C5(1);
-  |        ^ Class should be called with no arguments.
+  |        ^ Expected 0 arguments but got 1 when instantiating C5
 
 "
 `;

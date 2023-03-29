@@ -1247,8 +1247,8 @@ impl<'a> TypeChecker<'a> {
 				let type_ = self.resolve_type_annotation(class, env, statement_idx);
 				let (class_env, class_symbol, has_fields) = match &*type_ {
 					Type::Class(ref class) => {
-						let fields = class.fields(true).into_iter().count();
-						(&class.env, &class.name, if fields > 0 { true } else { false })
+						let _fields = class.fields(true).into_iter().count();
+						(&class.env, &class.name, class.fields(true).peekable().peek().is_some())
 					}
 					Type::Resource(ref class) => {
 						if matches!(env.phase, Phase::Preflight) {
@@ -1276,12 +1276,9 @@ impl<'a> TypeChecker<'a> {
 					self.expr_error(
 						&arg_list.pos_args[0],
 						format!(
-							"{} should be called with no arguments.",
-							if type_.as_resource().is_some() {
-								"Resource"
-							} else {
-								"Class"
-							}
+							"Expected 0 arguments but got {} when instantiating {}",
+							arg_list.pos_args.len(),
+							class_symbol.name.to_string()
 						),
 					);
 				}
@@ -2106,7 +2103,7 @@ impl<'a> TypeChecker<'a> {
 				methods,
 				parent,
 				implements,
-				constructor,
+				initializer,
 				is_resource,
 			}) => {
 				// Resources cannot be defined inflight
@@ -2229,10 +2226,10 @@ impl<'a> TypeChecker<'a> {
 					};
 				}
 
-				if let Some(constructor) = constructor {
-					// Add the constructor to the class env
-					let constructor_type = self.resolve_type_annotation(
-						&TypeAnnotation::FunctionSignature(constructor.signature.clone()),
+				if let Some(initializer) = initializer {
+					// Add the initializer to the class env
+					let initializer_type = self.resolve_type_annotation(
+						&TypeAnnotation::FunctionSignature(initializer.signature.clone()),
 						env,
 						stmt.idx,
 					);
@@ -2242,7 +2239,7 @@ impl<'a> TypeChecker<'a> {
 							name: WING_CONSTRUCTOR_NAME.into(),
 							span: name.span.clone(),
 						},
-						SymbolKind::make_variable(constructor_type, false, constructor.signature.phase),
+						SymbolKind::make_variable(initializer_type, false, initializer.signature.phase),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -2251,8 +2248,8 @@ impl<'a> TypeChecker<'a> {
 						_ => {}
 					};
 
-					// Type check constructor
-					let constructor_sig = if let Type::Function(ref s) = *constructor_type {
+					// Type check initializer_type
+					let initializer_sig = if let Type::Function(ref s) = *initializer_type {
 						s
 					} else {
 						panic!(
@@ -2261,30 +2258,30 @@ impl<'a> TypeChecker<'a> {
 						);
 					};
 
-					// Create constructor environment and prime it with args
-					let mut constructor_env = SymbolEnv::new(
+					// Create initializer environment and prime it with args
+					let mut initializer_env = SymbolEnv::new(
 						Some(env.get_ref()),
-						constructor_sig.return_type,
+						initializer_sig.return_type,
 						false,
 						true,
-						constructor.signature.phase,
+						initializer.signature.phase,
 						stmt.idx,
 					);
-					self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
-					// Prime the constructor environment with `this`
-					constructor_env
+					self.add_arguments_to_env(&initializer.parameters, initializer_sig, &mut initializer_env);
+					// Prime the initializer environment with `this`
+					initializer_env
 						.define(
 							&Symbol {
 								name: "this".into(),
 								span: name.span.clone(),
 							},
-							SymbolKind::make_variable(class_type, false, constructor_env.phase),
+							SymbolKind::make_variable(class_type, false, initializer_env.phase),
 							StatementIdx::Top,
 						)
 						.expect("Expected `this` to be added to constructor env");
-					constructor.statements.set_env(constructor_env);
+					initializer.statements.set_env(initializer_env);
 					// Check function scope
-					self.inner_scopes.push(&constructor.statements);
+					self.inner_scopes.push(&initializer.statements);
 				}
 
 				// Replace the dummy class environment with the real one before type checking the methods

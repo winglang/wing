@@ -148,10 +148,10 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		}
 		self.visit_symbol(&node.name);
 
-		if let Some(constructor) = &node.constructor {
-			self.visit_constructor(&constructor);
+		if let Some(initializer) = &node.initializer {
+			self.visit_constructor(&initializer);
 
-			self.with_scope(&constructor.statements, |v| {
+			self.with_scope(&initializer.statements, |v| {
 				for field in &node.fields {
 					v.visit_symbol(&field.name);
 					v.visit_type_annotation(&field.member_type);

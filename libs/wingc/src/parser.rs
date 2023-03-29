@@ -424,7 +424,7 @@ impl<'s> Parser<'s> {
 		let mut cursor = statement_node.walk();
 		let mut fields = vec![];
 		let mut methods = vec![];
-		let mut constructor = None;
+		let mut initializer = None;
 		let name = self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?;
 		for class_element in statement_node
 			.child_by_field_name("implementation")
@@ -482,7 +482,7 @@ impl<'s> Parser<'s> {
 					})
 				}
 				("constructor", _) => {
-					if let Some(_) = constructor {
+					if let Some(_) = initializer {
 						self
 							.add_error::<Node>(
 								format!("Multiple constructors defined in class {:?}", statement_node),
@@ -491,7 +491,7 @@ impl<'s> Parser<'s> {
 							.err();
 					}
 					let parameters = self.build_parameter_list(&class_element.child_by_field_name("parameter_list").unwrap())?;
-					constructor = Some(Constructor {
+					initializer = Some(Constructor {
 						parameters: parameters.iter().map(|p| (p.0.clone(), p.2)).collect(),
 						statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
 						signature: FunctionSignature {
@@ -569,7 +569,7 @@ impl<'s> Parser<'s> {
 			methods,
 			parent,
 			implements,
-			constructor,
+			initializer,
 			is_resource,
 		}))
 	}
