@@ -44,7 +44,7 @@ resource TaskList {
     let j = Json { 
       title: title, 
     };
-    print("adding task ${id} with data: ${j}"); //j should be printed out nicely 
+    log("adding task ${id} with data: ${j}"); //j should be printed out nicely 
     this._bucket.put_json(id, j);
     return id;
   }
@@ -63,7 +63,7 @@ resource TaskList {
    * @param id - the id of the task to be removed
    */
   inflight remove_tasks(id: str): str {
-    print("removing task ${id}");
+    log("removing task ${id}");
     this._bucket.delete(id);
     return id;
   }
@@ -86,20 +86,20 @@ resource TaskList {
     * @returns set of task id that matches the term
     */
   inflight find_tasks_with(term: str): Array<str> {
-    print("find_tasks_with: ${term}");
+    log("find_tasks_with: ${term}");
     let task_ids = this.list_task_ids();
-    print("found ${task_ids.size} tasks");
+    log("found ${task_ids.size} tasks");
     let output = MutArray<str>[];
     for id in task_ids {
       let j = this.get_task(id); 
       let title = str.from_json(j.get("title"));
       if title.contains(term) { 
-        print("found task ${id} with title \"${title}\" with term \"${term}\"");
+        log("found task ${id} with title \"${title}\" with term \"${term}\"");
         output.push(id);
       }
     }
     
-    print("found ${output.length} tasks which match term '${term}'");
+    log("found ${output.length} tasks which match term '${term}'");
     return output.copy();
   }
 }
