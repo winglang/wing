@@ -1434,6 +1434,14 @@ impl<'a> FieldReferenceVisitor<'a> {
 							.as_variable()
 							.unwrap(),
 					)
+				} else if let Some(s) = object.evaluated_type.borrow().unwrap().as_struct() {
+					Some(
+						s.env
+							.lookup(&property, None)
+							.expect("covered by type checking")
+							.as_variable()
+							.unwrap(),
+					)
 				} else {
 					None
 				};
