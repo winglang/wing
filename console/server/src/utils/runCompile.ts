@@ -77,6 +77,7 @@ export const runCompile = async ({
   return chokidar
     .watch(wingSrcDir, {
       ignored: /(^|[/\\])\../,
+      depth: 0,
       persistent: true,
     })
     .on("change", async () => {

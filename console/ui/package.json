@@ -8,8 +8,8 @@
     "compile": "tsup",
     "tsc": "tsc --build",
     "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix",
-    "storybook": "NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
-    "build-storybook": "NODE_OPTIONS=--openssl-legacy-provider build-storybook"
+    "storybook": "NODE_OPTIONS=\"--openssl-legacy-provider --max_old_space_size=4096\" start-storybook -p 6006",
+    "build-storybook": "NODE_OPTIONS=\"--openssl-legacy-provider --max_old_space_size=4096\" build-storybook"
   },
   "devDependencies": {
     "@babel/core": "^7.21.3",
