@@ -21,9 +21,6 @@ let y = B {
   }
 };
 
-// successful struct access
-assert(x.field0 == "Sup");
-
 resource Foo {
   data: B;
 
@@ -31,15 +28,14 @@ resource Foo {
     this.data = b;
   }
 
-  // TODO: Access struct attributes https://github.com/winglang/wing/issues/1604
-  // inflight get_stuff(): str {
-  //   return this.data.field0;
-  // }
+  inflight get_stuff(): str {
+    return this.data.field0;
+  }
 }
 
-// TODO: Access struct attributes https://github.com/winglang/wing/issues/1604
-// assert(x.field0 == "Sup");
-// assert(y.field1 == 1);
+assert(x.field0 == "Sup");
+assert(y.field1 == 1);
+assert(y.field3.field0 == "foo");
 
 // valid types in struct
 struct lots_of_types {

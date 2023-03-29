@@ -725,7 +725,7 @@ impl TypeRef {
 		}
 	}
 
-	fn as_struct(&self) -> Option<&Struct> {
+	pub fn as_struct(&self) -> Option<&Struct> {
 		if let Type::Struct(ref s) = **self {
 			Some(s)
 		} else {
@@ -3090,7 +3090,7 @@ fn add_parent_members_to_struct_env(
 						name: parent_member_name,
 						span: name.span.clone(),
 					},
-					SymbolKind::make_variable(member_type, false, struct_env.phase),
+					SymbolKind::make_instance_variable(member_type, false, struct_env.phase),
 					StatementIdx::Top,
 				)?;
 			}
