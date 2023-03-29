@@ -2279,12 +2279,7 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 			}
-			StmtKind::Interface(AstInterface {
-				name,
-				fields,
-				methods,
-				extends,
-			}) => {
+			StmtKind::Interface(AstInterface { name, methods, extends }) => {
 				// Create environment representing this interface, for now it'll be empty just so we can support referencing ourselves from the interface definition.
 				let dummy_env = SymbolEnv::new(None, self.types.void(), false, false, env.phase, stmt.idx);
 
@@ -2318,37 +2313,16 @@ impl<'a> TypeChecker<'a> {
 					_ => {}
 				};
 
-				//TODO urib The parent env is None - is that ok?
 				// Create the real interface environment to be filled with the interface AST types
 				let mut interface_env = SymbolEnv::new(None, self.types.void(), false, false, env.phase, stmt.idx);
 
-				// Add fields to the interface env
-				for field in fields.iter() {
-					let field_type = self.resolve_type_annotation(&field.member_type, env, stmt.idx);
-					match interface_env.define(
-						&field.name,
-						//TODO: urib - remove static? I'm guessing interface field is always static, so call make_variable !!!!!!!!!!!!!!!!!!!!!!
-						if field.is_static {
-							SymbolKind::make_variable(field_type, field.reassignable, field.phase)
-						} else {
-							SymbolKind::make_instance_variable(field_type, field.reassignable, field.phase)
-						},
-						StatementIdx::Top,
-					) {
-						Err(type_error) => {
-							self.type_error(type_error);
-						}
-						_ => {}
-					};
-				}
 				// Add methods to the interface env
 				for (method_name, sig) in methods.iter() {
 					let method_type =
 						self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(sig.clone()), env, stmt.idx);
 					match interface_env.define(
 						method_name,
-						//TODO urib - should I use make_variable or make_instance_variable?
-						SymbolKind::make_variable(method_type, false, sig.phase),
+						SymbolKind::make_instance_variable(method_type, false, sig.phase),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -2358,41 +2332,13 @@ impl<'a> TypeChecker<'a> {
 					};
 				}
 
+				// add methods from all extended interfaces to the interface env
+				if let Err(e) = add_parent_members_to_iface_env(&extend_interfaces, name, &mut interface_env) {
+					self.type_error(e);
+				}
+
 				// Replace the dummy interface environment with the real one before type checking the methods
 				interface_type.as_mut_interface().unwrap().env = interface_env;
-				let interface_env = &interface_type.as_interface().unwrap().env;
-
-				// TODO: handle member/method overrides in our env based on whatever rules we define in our spec
-
-				// Type check methods
-				for (method_name, sig) in methods.iter() {
-					// Lookup the method in the interface_env
-					let method_type = interface_env
-						.lookup(method_name, None)
-						.expect("Expected method to be in interface env")
-						.as_variable()
-						.expect("Expected method to be a variable")
-						.type_;
-
-					let method_sig = method_type
-						.as_function_sig()
-						.expect("Expected method type to be a function signature");
-
-					// Create method environment and prime it with args
-					//TODO urib: should we use sig or method_sig?
-					let mut method_env = SymbolEnv::new(
-						Some(env.get_ref()),
-						method_sig.return_type,
-						false,
-						false,
-						method_sig.phase,
-						stmt.idx,
-					);
-					let mut actual_parameters = vec![];
-					actual_parameters.extend(method_sig.parameters.clone());
-					//TODO urib: fix this !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-					//self.add_arguments_to_env(&actual_parameters, method_sig, &mut method_env);
-				}
 			}
 			StmtKind::Struct { name, extends, members } => {
 				// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
@@ -3091,9 +3037,6 @@ fn add_parent_members_to_struct_env(
 				.expect("Expected struct member to be a variable")
 				.type_;
 			if let Some(existing_type) = struct_env.try_lookup(&parent_member_name, None) {
-				// We compare types in both directions to make sure they are exactly the same type and not inheriting from each other
-				// TODO: does this make sense? We should add an `is_a()` methdod to `Type` to check if a type is a subtype and use that
-				//   when we want to check for subtypes and use equality for strict comparisons.
 				let existing_type = existing_type
 					.as_variable()
 					.expect("Expected struct member to be a variable")
@@ -3114,6 +3057,59 @@ fn add_parent_members_to_struct_env(
 						span: name.span.clone(),
 					},
 					SymbolKind::make_variable(member_type, false, struct_env.phase),
+					StatementIdx::Top,
+				)?;
+			}
+		}
+	}
+	Ok(())
+}
+
+fn add_parent_members_to_iface_env(
+	extends_types: &Vec<TypeRef>,
+	name: &Symbol,
+	iface_env: &mut SymbolEnv,
+) -> Result<(), TypeError> {
+	// Add members of all parents to the interface's environment
+	for parent_type in extends_types.iter() {
+		let parent_iface = if let Some(parent_iface) = parent_type.as_interface() {
+			parent_iface
+		} else {
+			return Err(TypeError {
+				message: format!(
+					"Type \"{}\" extends \"{}\" which should be an interface",
+					name.name, parent_type
+				),
+				span: name.span.clone(),
+			});
+		};
+		// Add each member of current parent to the interface's environment (if it wasn't already added by a previous parent)
+		for (parent_member_name, parent_member, _) in parent_iface.env.iter(true) {
+			let member_type = parent_member
+				.as_variable()
+				.expect("Expected interface member to be a variable")
+				.type_;
+			if let Some(existing_type) = iface_env.try_lookup(&parent_member_name, None) {
+				let existing_type = existing_type
+					.as_variable()
+					.expect("Expected interface member to be a variable")
+					.type_;
+				if !existing_type.is_same_type_as(&member_type) {
+					return Err(TypeError {
+						span: name.span.clone(),
+						message: format!(
+							"Interface \"{}\" extends \"{}\" but has a conflicting member \"{}\" ({} != {})",
+							name, parent_type, parent_member_name, member_type, member_type
+						),
+					});
+				}
+			} else {
+				iface_env.define(
+					&Symbol {
+						name: parent_member_name,
+						span: name.span.clone(),
+					},
+					SymbolKind::make_variable(member_type, false, iface_env.phase),
 					StatementIdx::Top,
 				)?;
 			}

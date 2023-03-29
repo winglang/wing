@@ -559,9 +559,10 @@ impl<'s> Parser<'s> {
 
 	fn build_interface_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		let mut cursor = statement_node.walk();
-		let mut fields = vec![];
+		let mut extends = vec![];
 		let mut methods = vec![];
 		let name = self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+
 		for interface_element in statement_node
 			.child_by_field_name("implementation")
 			.unwrap()
@@ -587,29 +588,6 @@ impl<'s> Parser<'s> {
 						_ => {}
 					}
 				}
-				"class_field" => {
-					let is_static = interface_element.child_by_field_name("static").is_some();
-					if is_static {
-						self.diagnostics.borrow_mut().push(Diagnostic {
-							level: DiagnosticLevel::Error,
-							message: format!(
-								"Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668",
-							),
-							span: Some(self.node_span(&interface_element)),
-						});
-					}
-
-					fields.push(ClassField {
-						name: self.node_symbol(&interface_element.child_by_field_name("name").unwrap())?,
-						member_type: self.build_type_annotation(&interface_element.child_by_field_name("type").unwrap())?,
-						reassignable: interface_element.child_by_field_name("reassignable").is_some(),
-						is_static,
-						phase: match interface_element.child_by_field_name("phase_modifier") {
-							Some(n) => Phase::Inflight,
-							None => Phase::Preflight,
-						},
-					})
-				}
 				"ERROR" => {
 					self
 						.add_error::<Node>(format!("Expected interface element node"), &interface_element)
@@ -624,19 +602,18 @@ impl<'s> Parser<'s> {
 			}
 		}
 
-		let mut extends = vec![];
-		for type_node in statement_node.children_by_field_name("extends", &mut cursor) {
+		for extend in statement_node.children_by_field_name("extends", &mut cursor) {
 			// ignore comments
-			if type_node.is_extra() {
+			if extend.is_extra() {
 				continue;
 			}
 
 			// ignore commas
-			if !type_node.is_named() {
+			if !extend.is_named() {
 				continue;
 			}
 
-			let interface_type = self.build_type_annotation(&type_node)?;
+			let interface_type = self.build_udt_annotation(&extend)?;
 			match interface_type {
 				TypeAnnotation::UserDefined(interface_type) => extends.push(interface_type),
 				_ => {
@@ -645,18 +622,13 @@ impl<'s> Parser<'s> {
 							"Extended interface must be a user defined type, found {}",
 							interface_type
 						),
-						&type_node,
+						&extend,
 					)?;
 				}
 			}
 		}
 
-		Ok(StmtKind::Interface(Interface {
-			name,
-			fields,
-			methods,
-			extends,
-		}))
+		Ok(StmtKind::Interface(Interface { name, methods, extends }))
 	}
 
 	fn build_function_signature(&self, func_sig_node: &Node, phase: Phase) -> DiagnosticResult<FunctionSignature> {

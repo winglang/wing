@@ -210,7 +210,7 @@ module.exports = grammar({
       seq(
         "interface",
         field("name", $.identifier),
-        optional(seq("extends", field("implements", commaSep1($.custom_type)))),
+        optional(seq("extends", field("extends", commaSep1($.custom_type)))),
         field("implementation", $.interface_implementation)
       ),
     interface_implementation: ($) =>

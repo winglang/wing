@@ -263,7 +263,6 @@ pub struct Class {
 #[derive(Debug)]
 pub struct Interface {
 	pub name: Symbol,
-	pub fields: Vec<ClassField>,
 	pub methods: Vec<(Symbol, FunctionSignature)>,
 	pub extends: Vec<UserDefinedType>,
 }

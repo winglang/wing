@@ -214,17 +214,11 @@ where
 {
 	v.visit_symbol(&node.name);
 
-	for field in &node.fields {
-		v.visit_symbol(&field.name);
-		v.visit_type_annotation(&field.member_type);
-	}
-
 	for method in &node.methods {
 		v.visit_symbol(&method.0);
 		v.visit_function_signature(&method.1);
 	}
 
-	//TODO: do we need to iterate over extends at all?
 	for extend in &node.extends {
 		v.visit_symbol(&extend.root);
 	}
