@@ -1,5 +1,5 @@
 class C4 { x:num; } // class with field and no init
-//    ^^ Unknown symbol "init"
+//    ^^ Missing class/resource initializer (init)
 new C4();
 
 class C5 {} // class with argument and no init
