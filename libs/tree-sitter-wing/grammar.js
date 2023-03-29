@@ -415,13 +415,15 @@ module.exports = grammar({
 
     extern_modifier : ($) => seq("extern", $.string),
 
+    _return_type: ($) => $._type_annotation,
+
     method_signature: ($) =>
       seq(
         optional(field("static", $.static)),
         optional(field("async", $.async_modifier)),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
-        optional(field("return_type", $._type_annotation)),
+        optional($._return_type),
         ";"
       ),
 
@@ -433,7 +435,7 @@ module.exports = grammar({
         optional(field("async", $.async_modifier)),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
-        optional(field("return_type", $._type_annotation)),
+        optional($._return_type),
         choice(field("block", $.block), ";")
       ),
 
@@ -443,7 +445,7 @@ module.exports = grammar({
         field("phase_modifier", $._inflight_specifier),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
-        optional(field("return_type", $._type_annotation)),
+        optional($._return_type),
         ";"
       ),
 
@@ -455,7 +457,7 @@ module.exports = grammar({
         field("phase_modifier", $._inflight_specifier),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
-        optional(field("return_type", $._type_annotation)),
+        optional($._return_type),
         choice(field("block", $.block), ";")
       ),
 
@@ -555,7 +557,7 @@ module.exports = grammar({
     preflight_closure: ($) =>
       seq(
         field("parameter_list", $.parameter_list),
-        optional(field("return_type", $._type_annotation)),
+        optional($._return_type),
         "=>",
         field("block", $.block)
       ),
@@ -564,7 +566,7 @@ module.exports = grammar({
       seq(
         "inflight",
         field("parameter_list", $.parameter_list),
-        optional(field("return_type", $._type_annotation)),
+        optional($._return_type),
         "=>",
         field("block", $.block)
       ),

@@ -663,7 +663,7 @@ impl<'s> Parser<'s> {
 		let parameters = self.build_parameter_list(&func_sig_node.child_by_field_name("parameter_list").unwrap())?;
 		Ok(FunctionSignature {
 			parameters: parameters.iter().map(|p| p.1.clone()).collect(),
-			return_type: if let Some(rt) = func_sig_node.child_by_field_name("return_type") {
+			return_type: if let Some(rt) = func_sig_node.child_by_field_name("type") {
 				Some(Box::new(self.build_type_annotation(&rt)?))
 			} else {
 				None

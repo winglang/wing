@@ -82,7 +82,7 @@ resource A {
     async preflight_func() {}
     public preflight_func2() {}
     inflight inflight_func() {}
-    public inflight inflight_func2() {}
+    public inflight inflight_func2(): num {}
     pf_member: str;
     inflight if_member: str;
     public inflight var if_member2: str;
@@ -124,6 +124,7 @@ resource A {
                 access_modifier: (access_modifier)
                 name: (identifier)
                 parameter_list: (parameter_list)
+                type: (builtin_type)
                 block: (block)
             )
             (class_field

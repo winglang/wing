@@ -15,8 +15,7 @@ use indexmap::IndexSet;
 use itertools::Itertools;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
-use std::collections::BTreeMap;
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
 use std::path::Path;
@@ -2319,6 +2318,7 @@ impl<'a> TypeChecker<'a> {
 					_ => {}
 				};
 
+				//TODO urib The parent env is None - is that ok?
 				// Create the real interface environment to be filled with the interface AST types
 				let mut interface_env = SymbolEnv::new(None, self.types.void(), false, false, env.phase, stmt.idx);
 
