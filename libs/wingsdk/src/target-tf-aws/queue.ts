@@ -4,8 +4,8 @@ import { SqsQueue } from "@cdktf/provider-aws/lib/sqs-queue";
 import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
+import { convertBetweenHandlers } from "../utils/convert";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
@@ -49,7 +49,12 @@ export class Queue extends cloud.Queue {
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnMessageHandler-${hash}`,
       inflight,
-      join(__dirname, "queue.onmessage.inflight.js"),
+      join(
+        __dirname
+          .replace("target-tf-aws", "shared-aws")
+          .replace("target-tf-aws", "shared-aws"),
+        "queue.onmessage.inflight.js"
+      ),
       "QueueOnMessageHandlerClient"
     );
 
@@ -131,9 +136,14 @@ export class Queue extends cloud.Queue {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__dirname, __filename, "QueueClient", [
-      `process.env["${this.envName()}"]`,
-    ]);
+    return core.InflightClient.for(
+      __dirname
+        .replace("target-tf-aws", "shared-aws")
+        .replace("target-tf-aws", "shared-aws"),
+      __filename,
+      "QueueClient",
+      [`process.env["${this.envName()}"]`]
+    );
   }
 
   private envName(): string {
@@ -141,6 +151,6 @@ export class Queue extends cloud.Queue {
   }
 }
 
-Queue._annotateInflight("push", {});
-Queue._annotateInflight("purge", {});
-Queue._annotateInflight("approx_size", {});
+Queue._annotateInflight(cloud.QueueInflightMethods.PUSH, {});
+Queue._annotateInflight(cloud.QueueInflightMethods.PURGE, {});
+Queue._annotateInflight(cloud.QueueInflightMethods.APPROX_SIZE, {});

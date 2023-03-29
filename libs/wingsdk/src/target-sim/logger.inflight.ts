@@ -30,7 +30,7 @@ export class Logger implements ILoggerClient, ISimulatorResourceInstance {
     return;
   }
 
-  public async print(message: string): Promise<void> {
+  public async log(message: string): Promise<void> {
     if (!fs.existsSync(this.logsDir)) {
       throw new Error(`Logs directory ${this.logsDir} does not exist.`);
     }

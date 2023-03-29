@@ -287,7 +287,7 @@ fn scan_captures_in_expression(
 			res.extend(scan_captures_in_expression(&element, env, statement_idx, diagnostics));
 		}
 		ExprKind::StructLiteral { fields, .. } => {
-			for (_sym, exp) in fields.values() {
+			for exp in fields.values() {
 				res.extend(scan_captures_in_expression(&exp, env, statement_idx, diagnostics));
 			}
 		}

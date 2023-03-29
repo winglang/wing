@@ -105,6 +105,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         },
         "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
       },
     },
   },
@@ -126,6 +127,8 @@ function __app(target) {
 			return $stdlib.tfgcp.App;
 		case \\"tf-azure\\":
 			return $stdlib.tfazure.App;
+		case \\"awscdk\\":
+			return $stdlib.awscdk.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}

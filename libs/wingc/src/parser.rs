@@ -1,7 +1,7 @@
-use indexmap::IndexSet;
+use indexmap::{IndexMap, IndexSet};
 use phf::phf_map;
 use std::cell::RefCell;
-use std::collections::{BTreeMap, HashSet};
+use std::collections::HashSet;
 use std::{str, vec};
 use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
@@ -26,7 +26,6 @@ pub struct Parser<'a> {
 // this is meant to serve as a bandaide to be removed once wing is further developed.
 // k=grammar, v=optional_message, example: ("generic", "targed impl: 1.0.0")
 static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
-	"struct_definition" => "see https://github.com/winglang/wing/issues/120",
 	"any" => "see https://github.com/winglang/wing/issues/434",
 	"void" => "see https://github.com/winglang/wing/issues/432",
 	"nil" => "see https://github.com/winglang/wing/issues/433",
@@ -196,6 +195,7 @@ impl<'s> Parser<'s> {
 			"interface_definition" => self.build_interface_statement(statement_node)?,
 			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"try_catch_statement" => self.build_try_catch_statement(statement_node)?,
+			"struct_definition" => self.build_struct_definition_statement(statement_node)?,
 			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -330,6 +330,33 @@ impl<'s> Parser<'s> {
 			variable: self.build_reference(&statement_node.child_by_field_name("name").unwrap())?,
 			value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
 		})
+	}
+
+	fn build_struct_definition_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		let name = self.node_symbol(&self.get_child_field(&statement_node, "name")?)?;
+
+		let mut cursor = statement_node.walk();
+		let mut members = vec![];
+
+		for field_node in statement_node.children_by_field_name("field", &mut cursor) {
+			let identifier = self.node_symbol(&self.get_child_field(&field_node, "name")?)?;
+			let type_ = &self.get_child_field(&field_node, "type")?;
+			let f = ClassField {
+				name: identifier,
+				member_type: self.build_type_annotation(&type_)?,
+				reassignable: false,
+				phase: Phase::Independent,
+				is_static: false,
+			};
+			members.push(f);
+		}
+
+		let mut extends = vec![];
+		for super_node in statement_node.children_by_field_name("extends", &mut cursor) {
+			extends.push(self.node_symbol(&super_node)?);
+		}
+
+		Ok(StmtKind::Struct { name, extends, members })
 	}
 
 	fn build_variable_def_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
@@ -835,7 +862,7 @@ impl<'s> Parser<'s> {
 
 	fn build_arg_list(&self, arg_list_node: &Node) -> DiagnosticResult<ArgList> {
 		let mut pos_args = vec![];
-		let mut named_args = BTreeMap::new();
+		let mut named_args = IndexMap::new();
 
 		let mut cursor = arg_list_node.walk();
 		let mut seen_keyword_args = false;
@@ -1077,7 +1104,7 @@ impl<'s> Parser<'s> {
 					None
 				};
 
-				let mut fields = BTreeMap::new();
+				let mut fields = IndexMap::new();
 				let mut cursor = expression_node.walk();
 				for field_node in expression_node.children_by_field_name("member", &mut cursor) {
 					if field_node.is_extra() {
@@ -1136,7 +1163,7 @@ impl<'s> Parser<'s> {
 			"set_literal" => self.build_set_literal(expression_node),
 			"struct_literal" => {
 				let type_ = self.build_type_annotation(&expression_node.child_by_field_name("type").unwrap());
-				let mut fields = BTreeMap::new();
+				let mut fields = IndexMap::new();
 				let mut cursor = expression_node.walk();
 				for field in expression_node.children_by_field_name("fields", &mut cursor) {
 					if !field.is_named() || field.is_extra() {
@@ -1146,11 +1173,11 @@ impl<'s> Parser<'s> {
 					let field_value = self.build_expression(&field.named_child(1).unwrap());
 					// Add fields to our struct literal, if some are missing or aren't part of the type we'll fail on type checking
 					if let (Ok(k), Ok(v)) = (field_name, field_value) {
-						if fields.contains_key(&k.name) {
+						if fields.contains_key(&k) {
 							// TODO: ugly, we need to change add_error to not return anything and have a wrapper `raise_error` that returns a Result
 							_ = self.add_error::<()>(format!("Duplicate field {} in struct literal", k), expression_node);
 						} else {
-							fields.insert(k.name.clone(), (k, v));
+							fields.insert(k, v);
 						}
 					}
 				}

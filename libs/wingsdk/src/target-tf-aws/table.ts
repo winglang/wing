@@ -90,11 +90,16 @@ export class Table extends cloud.Table {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__dirname, __filename, "TableClient", [
-      `process.env["${this.envName()}"]`,
-      `process.env["${this.primaryKeyEnvName()}"]`,
-      `process.env["${this.columnsEnvName()}"]`,
-    ]);
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-aws", "shared-aws"),
+      __filename,
+      "TableClient",
+      [
+        `process.env["${this.envName()}"]`,
+        `process.env["${this.primaryKeyEnvName()}"]`,
+        `process.env["${this.columnsEnvName()}"]`,
+      ]
+    );
   }
 
   private envName(): string {
@@ -110,8 +115,8 @@ export class Table extends cloud.Table {
   }
 }
 
-Table._annotateInflight("insert", {});
-Table._annotateInflight("update", {});
-Table._annotateInflight("delete", {});
-Table._annotateInflight("get", {});
-Table._annotateInflight("list", {});
+Table._annotateInflight(cloud.TableInflightMethods.INSERT, {});
+Table._annotateInflight(cloud.TableInflightMethods.UPDATE, {});
+Table._annotateInflight(cloud.TableInflightMethods.DELETE, {});
+Table._annotateInflight(cloud.TableInflightMethods.GET, {});
+Table._annotateInflight(cloud.TableInflightMethods.LIST, {});

@@ -2,6 +2,8 @@
 
 exports[`bool_from_json.w > stderr 1`] = `"preflight error: unable to parse number 123 as a boolean"`;
 
+exports[`num_from_str.w > stderr 1`] = `"preflight error: unable to parse \\"123a\\" as a number"`;
+
 exports[`number_from_json.w > stderr 1`] = `"preflight error: unable to parse string apples as a number"`;
 
 exports[`string_from_json.w > stderr 1`] = `"preflight error: unable to parse number 123 as a string"`;

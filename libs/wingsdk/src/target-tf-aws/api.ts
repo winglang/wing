@@ -11,9 +11,9 @@ import { Function } from "./function";
 import { core } from "..";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
-import { convertBetweenHandlers } from "../convert";
 import { CdktfApp } from "../core";
 import { Code } from "../core/inflight";
+import { convertBetweenHandlers } from "../utils/convert";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
@@ -289,7 +289,10 @@ export class Api extends cloud.Api {
       this,
       `${this.node.id}-OnRequestHandler-${inflightNodeHash}`,
       inflight,
-      join(__dirname, "api.onrequest.inflight.js"),
+      join(
+        __dirname.replace("target-tf-aws", "shared-aws"),
+        "api.onrequest.inflight.js"
+      ),
       "ApiOnRequestHandlerClient"
     );
     return Function._newFunction(
