@@ -138,11 +138,11 @@ exports[`capture_reassignable.w > stderr 1`] = `
 `;
 
 exports[`classes_and_resources.w > stderr 1`] = `
-"error: Unknown symbol \\"init\\"
+"error: Missing class/resource initializer (init)
   --> ../../../examples/tests/invalid/classes_and_resources.w:1:7
   |
 1 | class C4 { x:num; } // class with field and no init
-  |       ^^ Unknown symbol \\"init\\"
+  |       ^^ Missing class/resource initializer (init)
 
 
 error: Expected 0 arguments but got 1 when instantiating C5

@@ -1285,14 +1285,14 @@ impl<'a> TypeChecker<'a> {
 
 				if has_fields {
 					// Type check args against constructor
-					let constructor_type = match class_env.lookup(
+					let constructor_type = match class_env.lookup_initializer(
 						&Symbol {
 							name: WING_CONSTRUCTOR_NAME.into(),
 							span: class_symbol.span.clone(),
 						},
 						None,
 					) {
-						Ok(v) => v.as_variable().expect("Expected constructor to be a variable").type_,
+						Ok(v) => v.0.as_variable().expect("Expected constructor to be a variable").type_,
 						Err(type_error) => {
 							self.type_error(type_error);
 							return self.types.anything();
