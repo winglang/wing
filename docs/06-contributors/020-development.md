@@ -18,8 +18,8 @@ environment:
   * Only needed for integration tests - make sure to do the setup part to create credentials
 * [Terraform CLI]
   * Only needed for integration tests
-* [Docker] or [emscripten]
-  * Only needed for to build the grammar as WASM for the web-based playground
+* [Docker]
+  * Needed to build the grammar as WASM for the web-based playground and to run unit tests
 
 Installation:
 
