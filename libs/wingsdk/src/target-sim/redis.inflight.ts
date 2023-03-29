@@ -110,30 +110,37 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
     return result;
   }
 
-  public async hset(key: string, field: string, value: string): Promise<number> {
-    let redis = await this.rawClient();
-    return await redis.hset(key, field, value);
+  public async hset(
+    key: string,
+    field: string,
+    value: string
+  ): Promise<number> {
+    const redis = await this.rawClient();
+    const result = await redis.hset(key, field, value);
+    return result;
   }
 
   public async hget(key: string, field: string): Promise<string> {
-    let redis = await this.rawClient();
-    let result = await redis.hget(key, field);
+    const redis = await this.rawClient();
+    const result = await redis.hget(key, field);
     return result;
   }
 
   public async sadd(key: string, value: string): Promise<number> {
-    let redis = await this.rawClient();
-    return await redis.sadd(key, value);
+    const redis = await this.rawClient();
+    const result = await redis.sadd(key, value);
+    return result;
   }
 
   public async smembers(key: string): Promise<string[]> {
-    let redis = await this.rawClient();
-    let result = await redis.smembers(key);
+    const redis = await this.rawClient();
+    const result = await redis.smembers(key);
     return result ?? [];
   }
 
   public async del(key: string): Promise<number> {
-    let redis = await this.rawClient();
-    return await redis.del(key);
+    const redis = await this.rawClient();
+    const result = await redis.del(key);
+    return result;
   }
 }
