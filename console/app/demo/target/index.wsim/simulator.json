@@ -7,6 +7,51 @@
       "attrs": {}
     },
     {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/cloud.Api/cloud.Api-OnRequestHandler-de95ec56",
+      "props": {
+        "sourceCodeFile": ".wing/cloud.api-onrequesthandler-de95ec56_c8f1f9c9.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {
+          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}"
+        },
+        "timeout": 60000
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/cloud.Api/cloud.Api-OnRequestHandler-7e186046",
+      "props": {
+        "sourceCodeFile": ".wing/cloud.api-onrequesthandler-7e186046_c8f220b3.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {
+          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}"
+        },
+        "timeout": 60000
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Api",
+      "path": "root/cloud.Api",
+      "props": {
+        "routes": [
+          {
+            "route": "/test-get",
+            "method": "GET",
+            "functionHandle": "${root/cloud.Api/cloud.Api-OnRequestHandler-de95ec56#attrs.handle}"
+          },
+          {
+            "route": "/test-post",
+            "method": "POST",
+            "functionHandle": "${root/cloud.Api/cloud.Api-OnRequestHandler-7e186046#attrs.handle}"
+          }
+        ]
+      },
+      "attrs": {}
+    },
+    {
       "type": "wingsdk.cloud.Counter",
       "path": "root/cloud.Counter",
       "props": {
@@ -30,9 +75,9 @@
     },
     {
       "type": "wingsdk.cloud.Function",
-      "path": "root/Topic-OnMessage-90af6456",
+      "path": "root/Topic-OnMessage-bb32cd80",
       "props": {
-        "sourceCodeFile": ".wing/topic-onmessage-90af6456_c85fef18.js",
+        "sourceCodeFile": ".wing/topic-onmessage-bb32cd80_c8de25e4.js",
         "sourceCodeLanguage": "javascript",
         "environmentVariables": {
           "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}"
@@ -43,9 +88,9 @@
     },
     {
       "type": "wingsdk.cloud.Function",
-      "path": "root/Topic-OnMessage-05ec50df",
+      "path": "root/Topic-OnMessage-9a6492e6",
       "props": {
-        "sourceCodeFile": ".wing/topic-onmessage-05ec50df_c8d9f85e.js",
+        "sourceCodeFile": ".wing/topic-onmessage-9a6492e6_c849d125.js",
         "sourceCodeLanguage": "javascript",
         "environmentVariables": {
           "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}"
@@ -60,10 +105,10 @@
       "props": {
         "subscribers": [
           {
-            "functionHandle": "${root/Topic-OnMessage-90af6456#attrs.handle}"
+            "functionHandle": "${root/Topic-OnMessage-bb32cd80#attrs.handle}"
           },
           {
-            "functionHandle": "${root/Topic-OnMessage-05ec50df#attrs.handle}"
+            "functionHandle": "${root/Topic-OnMessage-9a6492e6#attrs.handle}"
           }
         ]
       },
@@ -94,9 +139,9 @@
     },
     {
       "type": "wingsdk.cloud.Function",
-      "path": "root/cloud.Queue-OnMessage-de95ec56",
+      "path": "root/cloud.Queue-OnMessage-90af6456",
       "props": {
-        "sourceCodeFile": ".wing/cloud.queue-onmessage-de95ec56_c821f89b.js",
+        "sourceCodeFile": ".wing/cloud.queue-onmessage-90af6456_c824b051.js",
         "sourceCodeLanguage": "javascript",
         "environmentVariables": {
           "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}",
@@ -113,7 +158,7 @@
         "timeout": 30,
         "subscribers": [
           {
-            "functionHandle": "${root/cloud.Queue-OnMessage-de95ec56#attrs.handle}",
+            "functionHandle": "${root/cloud.Queue-OnMessage-90af6456#attrs.handle}",
             "batchSize": 1
           }
         ],

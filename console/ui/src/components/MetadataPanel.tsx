@@ -16,10 +16,12 @@ import { ScrollableArea } from "../design-system/ScrollableArea.js";
 import { getResourceIconComponent, ResourceIcon } from "../utils/utils.js";
 
 import { AttributeView } from "./AttributeView.js";
+import { ApiMetadata } from "./resource-metadata/ApiMetadata.js";
 import { BucketMetadata } from "./resource-metadata/BucketMetadata.js";
 import { CounterMetadata } from "./resource-metadata/CounterMetadata.js";
 import { FunctionMetadata } from "./resource-metadata/FunctionMetadata.js";
 import { QueueMetadata } from "./resource-metadata/QueueMetadata.js";
+import { ApiView } from "./resource-views/ApiView.js";
 import { ResourceView } from "./resource-views/ResourceView.js";
 
 interface AttributeGroup {
@@ -121,6 +123,14 @@ export const MetadataPanel = ({
 
           break;
         }
+        case "wingsdk.cloud.Api": {
+          resourceGroup = {
+            groupName: "Api",
+            icon: getResourceIconComponent(node.type),
+          };
+
+          break;
+        }
       }
     }
 
@@ -197,6 +207,7 @@ export const MetadataPanel = ({
             icon={CubeTransparentIcon}
             open={openInspectorSections.includes("node")}
             onClick={() => toggleInspectorSection("node")}
+            headingClassName="pl-2"
           >
             <div className="border-t">
               <div className="px-2 py-1.5 flex flex-col gap-y-1 gap-x-4 bg-slate-50">
@@ -213,6 +224,7 @@ export const MetadataPanel = ({
               open={openInspectorSections.includes("relationships")}
               icon={ArrowPathRoundedSquareIcon}
               onClick={() => toggleInspectorSection("relationships")}
+              headingClassName="pl-2"
             >
               <div className="border-t">
                 {connectionsGroups.map((connectionGroup) => (
@@ -272,9 +284,10 @@ export const MetadataPanel = ({
                 icon={resourceGroup?.icon || CursorArrowRaysIcon}
                 open={openInspectorSections.includes("interact")}
                 onClick={() => toggleInspectorSection("interact")}
+                headingClassName="pl-2"
               >
                 <div className="bg-slate-50 border-t border-slate-200">
-                  {(resourceGroup?.groupName && (
+                  {resourceGroup?.groupName && (
                     <>
                       <div className="px-2 pt-1.5 flex flex-col gap-y-1 gap-x-4 bg-slate-50">
                         {node.type === "wingsdk.cloud.Function" && (
@@ -290,26 +303,31 @@ export const MetadataPanel = ({
                           <CounterMetadata node={node} />
                         )}
                       </div>
-                      <InspectorSection
-                        text={resourceGroup?.actionName || "Actions"}
-                        open={openInspectorSections.includes(
-                          "interact-actions",
-                        )}
-                        onClick={() =>
-                          toggleInspectorSection("interact-actions")
-                        }
-                        subection
-                      >
-                        <div className="pl-6 pr-2 pb-2">
-                          <ResourceView
-                            key={node.path}
-                            resourceType={node.type}
-                            resourcePath={node.path}
-                          />
-                        </div>
-                      </InspectorSection>
+                      {resourceGroup?.actionName && (
+                        <InspectorSection
+                          text={resourceGroup?.actionName}
+                          open={openInspectorSections.includes(
+                            "interact-actions",
+                          )}
+                          onClick={() =>
+                            toggleInspectorSection("interact-actions")
+                          }
+                          subection
+                          headingClassName="pl-2"
+                        >
+                          <div className="pl-6 pr-2 pb-2 h-full">
+                            <ResourceView
+                              key={node.path}
+                              resourceType={node.type}
+                              resourcePath={node.path}
+                            />
+                          </div>
+                        </InspectorSection>
+                      )}
                     </>
-                  )) || (
+                  )}
+                  {(!resourceGroup?.groupName ||
+                    !resourceGroup?.actionName) && (
                     <div className="pl-6 pr-2 py-1">
                       <ResourceView
                         key={node.path}

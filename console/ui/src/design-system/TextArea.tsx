@@ -12,12 +12,18 @@ export interface TextAreaProps {
   disabled?: boolean;
   onInput?: React.FormEventHandler<HTMLTextAreaElement>;
   onFocus?: React.FocusEventHandler<HTMLTextAreaElement>;
+  containerClassName?: string;
 }
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  ({ className, ...props }, ref) => {
+  ({ className, containerClassName, ...props }, ref) => {
     return (
-      <div className="relative rounded-md shadow-sm">
+      <div
+        className={classNames(
+          "relative rounded-md shadow-sm",
+          containerClassName,
+        )}
+      >
         <textarea
           ref={ref}
           {...props}

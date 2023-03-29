@@ -8,6 +8,7 @@ interface AttributeViewProps {
   value?: string;
   type?: "url";
   url?: string;
+  noLeftPadding?: boolean;
 }
 
 export const AttributeView = ({
@@ -16,10 +17,16 @@ export const AttributeView = ({
   type,
   url,
   children,
+  noLeftPadding = false,
 }: PropsWithChildren<AttributeViewProps>) => {
   const id = useId();
   return (
-    <div className="pl-4 flex flex-row items-center">
+    <div
+      className={classNames(
+        "flex flex-row items-center",
+        !noLeftPadding && "pl-4",
+      )}
+    >
       <label htmlFor={id} className="text-slate-500 min-w-[100px]">
         {name}
       </label>

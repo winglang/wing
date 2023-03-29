@@ -9,6 +9,7 @@ export interface Tab {
   name: string;
   icon?: ReactNode;
   panel?: ReactNode | (() => ReactNode);
+  count?: number;
 }
 
 export interface TabsProps {
@@ -17,6 +18,8 @@ export interface TabsProps {
   onTabChange?: (tabId: string) => void;
   renderActiveTabPanelOnly?: boolean;
   tabsWithNotifications?: string[];
+  transparent?: boolean;
+  small?: boolean;
 }
 
 export const Tabs = (props: TabsProps) => {
@@ -36,12 +39,22 @@ export const Tabs = (props: TabsProps) => {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="relative w-full text-sm h-8 bg-slate-100 select-none">
+      <div
+        className={classNames(
+          "relative w-full text-sm select-none",
+          !props.transparent && "bg-slate-100",
+          props.small ? "h-6" : "h-8",
+        )}
+      >
         <ScrollableArea
           overflowX
           overflowY
           scrollbarSize="xs"
-          className="flex gap-px bg-slate-200"
+          className={classNames(
+            "flex gap-px",
+            !props.transparent && "bg-slate-200",
+            props.transparent && "gap-x-2",
+          )}
         >
           {props.tabs.map((tab) => {
             const isCurrent = tab.id === currentTabId;
@@ -51,13 +64,27 @@ export const Tabs = (props: TabsProps) => {
               <div
                 key={tab.id}
                 className={classNames(
-                  "relative flex items-center px-4 cursor-pointer group",
-                  isCurrent ? "bg-slate-50" : "bg-slate-200 hover:bg-slate-100",
+                  "relative flex items-center cursor-pointer group",
+                  props.transparent && {
+                    "text-slate-500 border-b border-slate-500": isCurrent,
+                    "hover:text-slate-500 text-slate-400 border-b border-transparent":
+                      !isCurrent,
+                  },
+                  !props.transparent && {
+                    "px-4": true,
+                    "bg-slate-50": isCurrent,
+                    "bg-slate-200 hover:bg-slate-100": !isCurrent,
+                  },
                 )}
                 onClick={() => setCurrentTabId(tab.id)}
               >
                 {tab.icon && <div className="mr-1.5">{tab.icon}</div>}
-                <div className="whitespace-nowrap">{tab.name}</div>
+                <div className="whitespace-nowrap space-x-1">
+                  <span>{tab.name}</span>
+                  {tab.count !== undefined && (
+                    <span className="text-xs">({tab.count})</span>
+                  )}
+                </div>
 
                 {props.tabsWithNotifications?.includes(tab.id) && (
                   <div className="ml-2">

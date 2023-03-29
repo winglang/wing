@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import {
   FormEventHandler,
   useCallback,
@@ -8,12 +7,10 @@ import {
 } from "react";
 
 import { Button } from "../../design-system/Button.js";
-import { Popover } from "../../design-system/Popover.js";
-import { SpinnerLoader } from "../../design-system/SpinnerLoader.js";
-import { TextHighlight } from "../../design-system/TextHighlight.js";
 import { TreeEntry, Tree } from "../../design-system/Tree.js";
 import { trpc } from "../../utils/trpc.js";
-import { File, useDownloadFile } from "../../utils/useDownloadFile.js";
+import { useDownloadFile } from "../../utils/useDownloadFile.js";
+import { JsonResponseInput } from "../JsonResponseInput.js";
 
 export interface BucketViewProps {
   resourcePath: string;
@@ -180,37 +177,15 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
       {currentFile && (
         <div className="space-y-1 mt-1">
           <div className="text-sm text-slate-500 truncate">{currentFile}</div>
-
-          {!canBePreviewed(currentFile) && (
-            <div
-              className={classNames(
-                "flex-1 text-center text-slate-600 text-xs",
-                "px-2 py-1 border rounded border-slate-200 bg-slate-100",
-              )}
-            >
-              No preview available
-            </div>
-          )}
-
-          {canBePreviewed(currentFile) && currentFileContents.isFetching && (
-            <div className="flex justify-center items-center h-20">
-              <SpinnerLoader className="h-5 w-5" />
-            </div>
-          )}
-
-          {canBePreviewed(currentFile) && currentFileContents.data && (
-            <TextHighlight
-              className={classNames(
-                "flex-1 font-mono w-full",
-                "p-2 border rounded border-slate-200 bg-white",
-                "select-text text-slate-600 text-xs",
-                "break-words whitespace-pre-wrap",
-                "min-h-[6rem] h-48 resize-y overflow-y-auto",
-              )}
-              text={currentFileContents.data}
-              json={getFileType(currentFile) === "json"}
-            />
-          )}
+          <JsonResponseInput
+            value={
+              (canBePreviewed(currentFile) && currentFileContents.data) || ""
+            }
+            loading={currentFileContents.isFetching}
+            json={getFileType(currentFile) === "json"}
+            placeholder="No preview available"
+            className="max-h-[20rem]"
+          />
         </div>
       )}
     </div>

@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 
 export interface TextHighlightProps {
+  id?: string;
   text: string;
   className?: string;
   json?: boolean;
 }
 
 const palette = {
-  key: "text-slate-900",
+  key: "text-slate-500",
   string: "text-orange-600",
   number: "text-lime-600",
   boolean: "text-sky-600",
@@ -17,7 +18,14 @@ const palette = {
 const CHAR_LIMIT = 100_000;
 
 const highlightJson = (value: string) => {
-  return `${value
+  let formatted;
+  try {
+    formatted = JSON.stringify(JSON.parse(value), undefined, 2);
+  } catch {
+    return;
+  }
+
+  return `${formatted
     .slice(0, CHAR_LIMIT)
     .replace(
       /("(\\u[\dA-Za-z]{4}|\\[^u]|[^"\\])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[Ee][+\-]?\d+)?)/g,
@@ -32,23 +40,34 @@ const highlightJson = (value: string) => {
         }
         return `<span class="${className}">${match}</span>`;
       },
-    )}${value.slice(CHAR_LIMIT)}`;
+    )}${formatted.slice(CHAR_LIMIT)}`;
 };
 
 export const TextHighlight = ({
+  id,
   text,
   className = "",
   json = true,
 }: TextHighlightProps) => {
-  const [highlightedText, setHighlightedText] = useState(text);
+  const [highlightedText, setHighlightedText] = useState<string | undefined>(
+    text,
+  );
+
   useEffect(() => {
-    setHighlightedText(json ? highlightJson(text) : text);
+    if (!json) {
+      setHighlightedText(undefined);
+      return;
+    }
+    setHighlightedText(highlightJson(text));
   }, [text, json]);
 
   return (
     <div className={className}>
-      {json ? (
-        <div dangerouslySetInnerHTML={{ __html: highlightedText }}></div>
+      {json && highlightedText ? (
+        <div
+          id={id}
+          dangerouslySetInnerHTML={{ __html: highlightedText }}
+        ></div>
       ) : (
         <div>{text}</div>
       )}

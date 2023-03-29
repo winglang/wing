@@ -12,7 +12,6 @@ const getResourceBorderColor = (
     case "wingsdk.cloud.Bucket": {
       return "border-t-[3px] border-t-orange-500 group-hover:border-t-orange-500 group-focus:border-t-orange-500";
     }
-
     case "wingsdk.cloud.Function": {
       return "border-t-[3px] border-t-sky-500 group-hover:border-t-sky-500 group-focus:border-t-sky-500";
     }
@@ -27,6 +26,9 @@ const getResourceBorderColor = (
     }
     case "wingsdk.cloud.Topic": {
       return "border-t-[3px] border-t-pink-500 group-hover:border-t-pink-500 group-focus:border-t-pink-500";
+    }
+    case "wingsdk.cloud.Api": {
+      return "border-t-[3px] border-t-amber-500 group-hover:border-t-amber-500 group-focus:border-t-amber-500";
     }
   }
 };

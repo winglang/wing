@@ -7,6 +7,7 @@ import {
   GlobeAltIcon,
   QueueListIcon,
   MegaphoneIcon,
+  CloudIcon,
 } from "@heroicons/react/24/outline";
 import {
   ArchiveBoxIcon as SolidArchiveBoxIcon,
@@ -16,6 +17,7 @@ import {
   GlobeAltIcon as SolidGlobeAltIcon,
   QueueListIcon as SolidQueueListIcon,
   MegaphoneIcon as SolidMegaphoneIcon,
+  CloudIcon as SolidCloudIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
 import { BaseResourceSchema, WingSimulatorSchema } from "@wingconsole/server";
@@ -101,6 +103,9 @@ export const getResourceIconComponent = (
     case "wingsdk.cloud.Topic": {
       return solid ? SolidMegaphoneIcon : MegaphoneIcon;
     }
+    case "wingsdk.cloud.Api": {
+      return solid ? SolidCloudIcon : CloudIcon;
+    }
     case "cloud.Cron": {
       return solid ? SolidClockIcon : ClockIcon;
     }
@@ -162,6 +167,14 @@ const getResourceIconColors = (options: {
         options.darkenOnGroupHover &&
           "group-hover:text-pink-600 dark:group-hover:text-pink-300",
         options.forceDarken && "text-pink-600 dark:text-pink-300",
+      ];
+    }
+    case "wingsdk.cloud.Api": {
+      return [
+        "text-amber-500 dark:text-amber-400",
+        options.darkenOnGroupHover &&
+          "group-hover:text-amber-600 dark:group-hover:text-amber-300",
+        options.forceDarken && "text-amber-600 dark:text-amber-300",
       ];
     }
     default: {

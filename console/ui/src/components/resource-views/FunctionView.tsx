@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import { useContext, useId, useState } from "react";
 
 import { AppContext } from "../../AppContext.js";
@@ -6,6 +5,7 @@ import { Button } from "../../design-system/Button.js";
 import { Modal } from "../../design-system/Modal.js";
 import { TextArea } from "../../design-system/TextArea.js";
 import { trpc } from "../../utils/trpc.js";
+import { JsonResponseInput } from "../JsonResponseInput.js";
 
 export interface FunctionViewProps {
   resourcePath: string;
@@ -49,21 +49,12 @@ export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
           <label htmlFor={responseId} className="text-sm text-gray-500">
             Response
           </label>
-          <div className="text-slate-700 space-x-2 min-w-0 flex flex-1">
-            <textarea
-              id={responseId}
-              rows={response ? response.split("\n").length : 1}
-              placeholder="No response"
-              className={classNames(
-                "flex-1 text-xs font-mono max-h-[20rem] min-h-[1.6rem] px-2 py-1 resize-y",
-                "bg-white border border-slate-300 ease-in-out focus:border-sky-500 focus:ring-2",
-                "opacity-70",
-                "focus:ring-sky-500/50 outline-none rounded text-slate-600 transition",
-              )}
-              value={response}
-              readOnly
-            />
-          </div>
+          <JsonResponseInput
+            value={response}
+            loading={invoke.isLoading}
+            placeholder="No response"
+            className="max-h-[20rem]"
+          />
         </div>
       </div>
 

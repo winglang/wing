@@ -13,7 +13,19 @@
             {
               "direction": "inbound",
               "relationship": "log",
-              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "resource": "root/cloud.Api/cloud.Api-OnRequestHandler-de95ec56",
+              "implicit": true
+            },
+            {
+              "direction": "inbound",
+              "relationship": "log",
+              "resource": "root/cloud.Api/cloud.Api-OnRequestHandler-7e186046",
+              "implicit": true
+            },
+            {
+              "direction": "inbound",
+              "relationship": "log",
+              "resource": "root/cloud.Queue-OnMessage-90af6456",
               "implicit": true
             },
             {
@@ -25,13 +37,13 @@
             {
               "direction": "inbound",
               "relationship": "log",
-              "resource": "root/Topic-OnMessage-90af6456",
+              "resource": "root/Topic-OnMessage-bb32cd80",
               "implicit": true
             },
             {
               "direction": "inbound",
               "relationship": "log",
-              "resource": "root/Topic-OnMessage-05ec50df",
+              "resource": "root/Topic-OnMessage-9a6492e6",
               "implicit": true
             },
             {
@@ -73,43 +85,43 @@
             {
               "direction": "inbound",
               "relationship": "delete",
-              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "resource": "root/cloud.Queue-OnMessage-90af6456",
               "implicit": false
             },
             {
               "direction": "inbound",
               "relationship": "get",
-              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "resource": "root/cloud.Queue-OnMessage-90af6456",
               "implicit": false
             },
             {
               "direction": "inbound",
               "relationship": "get_json",
-              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "resource": "root/cloud.Queue-OnMessage-90af6456",
               "implicit": false
             },
             {
               "direction": "inbound",
               "relationship": "list",
-              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "resource": "root/cloud.Queue-OnMessage-90af6456",
               "implicit": false
             },
             {
               "direction": "inbound",
               "relationship": "public_url",
-              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "resource": "root/cloud.Queue-OnMessage-90af6456",
               "implicit": false
             },
             {
               "direction": "inbound",
               "relationship": "put",
-              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "resource": "root/cloud.Queue-OnMessage-90af6456",
               "implicit": false
             },
             {
               "direction": "inbound",
               "relationship": "put_json",
-              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "resource": "root/cloud.Queue-OnMessage-90af6456",
               "implicit": false
             }
           ]
@@ -132,7 +144,7 @@
             {
               "direction": "outbound",
               "relationship": "on_message",
-              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "resource": "root/cloud.Queue-OnMessage-90af6456",
               "implicit": false
             },
             {
@@ -164,16 +176,139 @@
           "description": "A distributed message queue"
         }
       },
+      "cloud.Api": {
+        "id": "cloud.Api",
+        "path": "root/cloud.Api",
+        "children": {
+          "cloud.Api-OnRequestHandler-de95ec56": {
+            "id": "cloud.Api-OnRequestHandler-de95ec56",
+            "path": "root/cloud.Api/cloud.Api-OnRequestHandler-de95ec56",
+            "attributes": {
+              "wing:resource:stateful": false,
+              "wing:resource:connections": [
+                {
+                  "direction": "outbound",
+                  "relationship": "log",
+                  "resource": "root/WingLogger",
+                  "implicit": true
+                },
+                {
+                  "direction": "inbound",
+                  "relationship": "on_get_request",
+                  "resource": "root/cloud.Api",
+                  "implicit": false
+                }
+              ]
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.293"
+            },
+            "display": {
+              "title": "Function",
+              "description": "A cloud function (FaaS)"
+            }
+          },
+          "cloud.Api-OnRequestHandler-7e186046": {
+            "id": "cloud.Api-OnRequestHandler-7e186046",
+            "path": "root/cloud.Api/cloud.Api-OnRequestHandler-7e186046",
+            "attributes": {
+              "wing:resource:stateful": false,
+              "wing:resource:connections": [
+                {
+                  "direction": "outbound",
+                  "relationship": "log",
+                  "resource": "root/WingLogger",
+                  "implicit": true
+                },
+                {
+                  "direction": "inbound",
+                  "relationship": "on_post_request",
+                  "resource": "root/cloud.Api",
+                  "implicit": false
+                }
+              ]
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.293"
+            },
+            "display": {
+              "title": "Function",
+              "description": "A cloud function (FaaS)"
+            }
+          }
+        },
+        "attributes": {
+          "wing:resource:stateful": true,
+          "wing:resource:connections": [
+            {
+              "direction": "outbound",
+              "relationship": "on_get_request",
+              "resource": "root/cloud.Api/cloud.Api-OnRequestHandler-de95ec56",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "on_post_request",
+              "resource": "root/cloud.Api/cloud.Api-OnRequestHandler-7e186046",
+              "implicit": false
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.293"
+        },
+        "display": {
+          "title": "Api",
+          "description": "A REST API endpoint"
+        }
+      },
       "$Inflight1": {
         "id": "$Inflight1",
         "path": "root/$Inflight1",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": []
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.293"
+        },
+        "display": {
+          "title": "Inflight",
+          "description": "An inflight resource",
+          "hidden": true
+        }
+      },
+      "$Inflight2": {
+        "id": "$Inflight2",
+        "path": "root/$Inflight2",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": []
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.293"
+        },
+        "display": {
+          "title": "Inflight",
+          "description": "An inflight resource",
+          "hidden": true
+        }
+      },
+      "$Inflight3": {
+        "id": "$Inflight3",
+        "path": "root/$Inflight3",
         "attributes": {
           "wing:resource:stateful": false,
           "wing:resource:connections": [
             {
               "direction": "inbound",
               "relationship": "handle",
-              "resource": "root/cloud.Queue-OnMessage-de95ec56",
+              "resource": "root/cloud.Queue-OnMessage-90af6456",
               "implicit": false
             }
           ]
@@ -188,9 +323,9 @@
           "hidden": true
         }
       },
-      "cloud.Queue-OnMessageHandler-de95ec56": {
-        "id": "cloud.Queue-OnMessageHandler-de95ec56",
-        "path": "root/cloud.Queue-OnMessageHandler-de95ec56",
+      "cloud.Queue-OnMessageHandler-90af6456": {
+        "id": "cloud.Queue-OnMessageHandler-90af6456",
+        "path": "root/cloud.Queue-OnMessageHandler-90af6456",
         "attributes": {
           "wing:resource:stateful": false,
           "wing:resource:connections": []
@@ -203,9 +338,9 @@
           "hidden": true
         }
       },
-      "cloud.Queue-OnMessage-de95ec56": {
-        "id": "cloud.Queue-OnMessage-de95ec56",
-        "path": "root/cloud.Queue-OnMessage-de95ec56",
+      "cloud.Queue-OnMessage-90af6456": {
+        "id": "cloud.Queue-OnMessage-90af6456",
+        "path": "root/cloud.Queue-OnMessage-90af6456",
         "attributes": {
           "wing:resource:stateful": false,
           "wing:resource:connections": [
@@ -254,7 +389,7 @@
             {
               "direction": "outbound",
               "relationship": "handle",
-              "resource": "root/$Inflight1",
+              "resource": "root/$Inflight3",
               "implicit": false
             },
             {
@@ -345,9 +480,9 @@
           "description": "A distributed atomic counter"
         }
       },
-      "$Inflight2": {
-        "id": "$Inflight2",
-        "path": "root/$Inflight2",
+      "$Inflight4": {
+        "id": "$Inflight4",
+        "path": "root/$Inflight4",
         "attributes": {
           "wing:resource:stateful": false,
           "wing:resource:connections": []
@@ -418,13 +553,13 @@
             {
               "direction": "outbound",
               "relationship": "on_message",
-              "resource": "root/Topic-OnMessage-90af6456",
+              "resource": "root/Topic-OnMessage-bb32cd80",
               "implicit": false
             },
             {
               "direction": "outbound",
               "relationship": "on_message",
-              "resource": "root/Topic-OnMessage-05ec50df",
+              "resource": "root/Topic-OnMessage-9a6492e6",
               "implicit": false
             }
           ]
@@ -438,157 +573,157 @@
           "description": "A pub/sub notification topic"
         }
       },
-      "$Inflight3": {
-        "id": "$Inflight3",
-        "path": "root/$Inflight3",
-        "attributes": {
-          "wing:resource:stateful": false,
-          "wing:resource:connections": [
-            {
-              "direction": "inbound",
-              "relationship": "handle",
-              "resource": "root/Topic-OnMessage-90af6456",
-              "implicit": false
-            }
-          ]
-        },
-        "constructInfo": {
-          "fqn": "constructs.Construct",
-          "version": "10.1.293"
-        },
-        "display": {
-          "title": "Inflight",
-          "description": "An inflight resource",
-          "hidden": true
-        }
-      },
-      "Topic-OnMessageHandler-90af6456": {
-        "id": "Topic-OnMessageHandler-90af6456",
-        "path": "root/Topic-OnMessageHandler-90af6456",
-        "attributes": {
-          "wing:resource:stateful": false,
-          "wing:resource:connections": []
-        },
-        "constructInfo": {
-          "fqn": "constructs.Construct",
-          "version": "10.1.293"
-        },
-        "display": {
-          "hidden": true
-        }
-      },
-      "Topic-OnMessage-90af6456": {
-        "id": "Topic-OnMessage-90af6456",
-        "path": "root/Topic-OnMessage-90af6456",
-        "attributes": {
-          "wing:resource:stateful": false,
-          "wing:resource:connections": [
-            {
-              "direction": "outbound",
-              "relationship": "handle",
-              "resource": "root/$Inflight3",
-              "implicit": false
-            },
-            {
-              "direction": "outbound",
-              "relationship": "log",
-              "resource": "root/WingLogger",
-              "implicit": true
-            },
-            {
-              "direction": "inbound",
-              "relationship": "on_message",
-              "resource": "root/Topic",
-              "implicit": false
-            }
-          ]
-        },
-        "constructInfo": {
-          "fqn": "constructs.Construct",
-          "version": "10.1.293"
-        },
-        "display": {
-          "title": "Function",
-          "description": "A cloud function (FaaS)"
-        }
-      },
-      "$Inflight4": {
-        "id": "$Inflight4",
-        "path": "root/$Inflight4",
-        "attributes": {
-          "wing:resource:stateful": false,
-          "wing:resource:connections": [
-            {
-              "direction": "inbound",
-              "relationship": "handle",
-              "resource": "root/Topic-OnMessage-05ec50df",
-              "implicit": false
-            }
-          ]
-        },
-        "constructInfo": {
-          "fqn": "constructs.Construct",
-          "version": "10.1.293"
-        },
-        "display": {
-          "title": "Inflight",
-          "description": "An inflight resource",
-          "hidden": true
-        }
-      },
-      "Topic-OnMessageHandler-05ec50df": {
-        "id": "Topic-OnMessageHandler-05ec50df",
-        "path": "root/Topic-OnMessageHandler-05ec50df",
-        "attributes": {
-          "wing:resource:stateful": false,
-          "wing:resource:connections": []
-        },
-        "constructInfo": {
-          "fqn": "constructs.Construct",
-          "version": "10.1.293"
-        },
-        "display": {
-          "hidden": true
-        }
-      },
-      "Topic-OnMessage-05ec50df": {
-        "id": "Topic-OnMessage-05ec50df",
-        "path": "root/Topic-OnMessage-05ec50df",
-        "attributes": {
-          "wing:resource:stateful": false,
-          "wing:resource:connections": [
-            {
-              "direction": "outbound",
-              "relationship": "handle",
-              "resource": "root/$Inflight4",
-              "implicit": false
-            },
-            {
-              "direction": "outbound",
-              "relationship": "log",
-              "resource": "root/WingLogger",
-              "implicit": true
-            },
-            {
-              "direction": "inbound",
-              "relationship": "on_message",
-              "resource": "root/Topic",
-              "implicit": false
-            }
-          ]
-        },
-        "constructInfo": {
-          "fqn": "constructs.Construct",
-          "version": "10.1.293"
-        },
-        "display": {
-          "title": "Function",
-          "description": "A cloud function (FaaS)"
-        }
-      },
       "$Inflight5": {
         "id": "$Inflight5",
         "path": "root/$Inflight5",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": [
+            {
+              "direction": "inbound",
+              "relationship": "handle",
+              "resource": "root/Topic-OnMessage-bb32cd80",
+              "implicit": false
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.293"
+        },
+        "display": {
+          "title": "Inflight",
+          "description": "An inflight resource",
+          "hidden": true
+        }
+      },
+      "Topic-OnMessageHandler-bb32cd80": {
+        "id": "Topic-OnMessageHandler-bb32cd80",
+        "path": "root/Topic-OnMessageHandler-bb32cd80",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": []
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.293"
+        },
+        "display": {
+          "hidden": true
+        }
+      },
+      "Topic-OnMessage-bb32cd80": {
+        "id": "Topic-OnMessage-bb32cd80",
+        "path": "root/Topic-OnMessage-bb32cd80",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": [
+            {
+              "direction": "outbound",
+              "relationship": "handle",
+              "resource": "root/$Inflight5",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "log",
+              "resource": "root/WingLogger",
+              "implicit": true
+            },
+            {
+              "direction": "inbound",
+              "relationship": "on_message",
+              "resource": "root/Topic",
+              "implicit": false
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.293"
+        },
+        "display": {
+          "title": "Function",
+          "description": "A cloud function (FaaS)"
+        }
+      },
+      "$Inflight6": {
+        "id": "$Inflight6",
+        "path": "root/$Inflight6",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": [
+            {
+              "direction": "inbound",
+              "relationship": "handle",
+              "resource": "root/Topic-OnMessage-9a6492e6",
+              "implicit": false
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.293"
+        },
+        "display": {
+          "title": "Inflight",
+          "description": "An inflight resource",
+          "hidden": true
+        }
+      },
+      "Topic-OnMessageHandler-9a6492e6": {
+        "id": "Topic-OnMessageHandler-9a6492e6",
+        "path": "root/Topic-OnMessageHandler-9a6492e6",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": []
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.293"
+        },
+        "display": {
+          "hidden": true
+        }
+      },
+      "Topic-OnMessage-9a6492e6": {
+        "id": "Topic-OnMessage-9a6492e6",
+        "path": "root/Topic-OnMessage-9a6492e6",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": [
+            {
+              "direction": "outbound",
+              "relationship": "handle",
+              "resource": "root/$Inflight6",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "log",
+              "resource": "root/WingLogger",
+              "implicit": true
+            },
+            {
+              "direction": "inbound",
+              "relationship": "on_message",
+              "resource": "root/Topic",
+              "implicit": false
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.293"
+        },
+        "display": {
+          "title": "Function",
+          "description": "A cloud function (FaaS)"
+        }
+      },
+      "$Inflight7": {
+        "id": "$Inflight7",
+        "path": "root/$Inflight7",
         "attributes": {
           "wing:resource:stateful": false,
           "wing:resource:connections": []
@@ -650,9 +785,9 @@
           "description": "A cloud function (FaaS)"
         }
       },
-      "$Inflight6": {
-        "id": "$Inflight6",
-        "path": "root/$Inflight6",
+      "$Inflight8": {
+        "id": "$Inflight8",
+        "path": "root/$Inflight8",
         "attributes": {
           "wing:resource:stateful": false,
           "wing:resource:connections": []
@@ -708,9 +843,9 @@
           "description": "A cloud function (FaaS)"
         }
       },
-      "$Inflight7": {
-        "id": "$Inflight7",
-        "path": "root/$Inflight7",
+      "$Inflight9": {
+        "id": "$Inflight9",
+        "path": "root/$Inflight9",
         "attributes": {
           "wing:resource:stateful": false,
           "wing:resource:connections": []

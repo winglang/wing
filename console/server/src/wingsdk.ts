@@ -11,4 +11,7 @@ export type {
   IQueueClient,
   ICounterClient,
   ITopicClient,
+  IApiClient,
 } from "@winglang/sdk/lib/cloud/index.js";
+
+export type { ApiSchema } from "@winglang/sdk/lib/target-sim/schema-resources.js";

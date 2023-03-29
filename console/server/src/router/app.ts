@@ -242,6 +242,7 @@ export const createAppRouter = () => {
             path: node.path,
             type: getResourceType(node, simulator),
             props: config?.props,
+            attributes: config?.attrs,
           },
           inbound: connections
             .filter(({ direction }) => {

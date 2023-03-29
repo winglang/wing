@@ -102,7 +102,7 @@ export default function LogsFilters({
                   className="relative cursor-default select-none py-2 pl-10 pr-4 text-slate-900 hover:bg-sky-50 hover:text-sky-900"
                   onClick={() => onChange?.(["info", "warn", "error"])}
                 >
-                  <span className={`block truncate font-normal`}>Default</span>
+                  <span className="block truncate font-normal">Default</span>
                 </li>
 
                 <div className="relative">

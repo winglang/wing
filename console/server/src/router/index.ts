@@ -1,5 +1,6 @@
 import { mergeRouters } from "../utils/createRouter.js";
 
+import { createApiRouter } from "./api.js";
 import { createAppRouter } from "./app.js";
 import { createBucketRouter } from "./bucket.js";
 import { createCounterRouter } from "./counter.js";
@@ -20,6 +21,7 @@ export const mergeAllRouters = () => {
     createCounterRouter(),
     createTestRouter(),
     createTopicRouter(),
+    createApiRouter(),
     createUpdaterRouter(),
   );
 
