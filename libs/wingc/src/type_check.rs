@@ -726,7 +726,7 @@ impl TypeRef {
 		}
 	}
 
-	fn as_struct(&self) -> Option<&Struct> {
+	pub fn as_struct(&self) -> Option<&Struct> {
 		if let Type::Struct(ref s) = **self {
 			Some(s)
 		} else {
@@ -2448,7 +2448,7 @@ impl<'a> TypeChecker<'a> {
 					}
 					match struct_env.define(
 						&field.name,
-						SymbolKind::make_variable(field_type, false, field.phase),
+						SymbolKind::make_instance_variable(field_type, false, field.phase),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -3027,14 +3027,12 @@ impl<'a> TypeChecker<'a> {
 							.unwrap(),
 						property,
 					),
+					Type::Struct(ref s) => self.get_property_from_class_like(s, property),
 
 					_ => VariableInfo {
 						type_: self.expr_error(
 							object,
-							format!(
-								"Expression must be a class or resource instance to access property \"{}\", instead found type \"{}\"",
-								property.name, instance_type
-							),
+							format!("Property access unsupported on type \"{}\"", instance_type),
 						),
 						reassignable: false,
 						phase: Phase::Independent,
@@ -3161,7 +3159,7 @@ fn add_parent_members_to_struct_env(
 						name: parent_member_name,
 						span: name.span.clone(),
 					},
-					SymbolKind::make_variable(member_type, false, struct_env.phase),
+					SymbolKind::make_instance_variable(member_type, false, struct_env.phase),
 					StatementIdx::Top,
 				)?;
 			}
