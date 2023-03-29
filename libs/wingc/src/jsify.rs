@@ -379,7 +379,10 @@ impl<'a> JSifier<'a> {
 			ExprKind::Call { function, arg_list } => {
 				let function_type = function.evaluated_type.borrow().unwrap();
 				let function_sig = function_type.as_function_sig();
-				assert!(function_sig.is_some() || function_type.is_anything(), "Expected expression to be callable");
+				assert!(
+					function_sig.is_some() || function_type.is_anything(),
+					"Expected expression to be callable"
+				);
 				let mut needs_case_conversion = false;
 
 				let expr_string = match &function.kind {
