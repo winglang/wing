@@ -1,14 +1,14 @@
 import * as vm from "vm";
 
-import { mkdir, readFile, mkdtemp, rename, rm } from "fs/promises";
+import { readFile, rmSync, mkdirp, move, mkdirpSync, copySync } from "fs-extra";
 import { basename, dirname, join, resolve } from "path";
+import * as os from "os";
 
 import * as chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
 import { normalPath } from "../util";
 import { CHARS_ASCII, emitDiagnostic, Severity, File, Label } from "codespan-wasm";
-import * as os from "os";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -52,13 +52,14 @@ export interface ICompileOptions {
  * within the output directory where the SDK app will synthesize its artifacts
  * for the given target.
  */
-function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
+function resolveSynthDir(outDir: string, entrypoint: string, target: Target, tmp: boolean = false) {
   const targetDirSuffix = DEFAULT_SYNTH_DIR_SUFFIX[target];
   if (!targetDirSuffix) {
     throw new Error(`unsupported target ${target}`);
   }
   const entrypointName = basename(entrypoint, ".w");
-  return join(outDir, `${entrypointName}.${targetDirSuffix}`);
+  const tmpSuffix = tmp ? `.${Date.now().toString().slice(-6)}.tmp` : "";
+  return join(outDir, `${entrypointName}.${targetDirSuffix}${tmpSuffix}`);
 }
 
 /**
@@ -69,13 +70,12 @@ function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
  */
 export async function compile(entrypoint: string, options: ICompileOptions): Promise<string> {
   // create a unique temporary directory for the compilation
-  const tmpTargetdir = await mkdtemp(join(os.tmpdir(), "wing-"));
   const targetdir = join(dirname(entrypoint), "target");
   const wingFile = entrypoint;
   log("wing file: %s", wingFile);
   const wingDir = dirname(wingFile);
   log("wing dir: %s", wingDir);
-  const tmpSynthDir = resolveSynthDir(tmpTargetdir, wingFile, options.target);
+  const tmpSynthDir = resolveSynthDir(targetdir, wingFile, options.target, true);
   log("temp synth dir: %s", tmpSynthDir);
   const synthDir = resolveSynthDir(targetdir, wingFile, options.target);
   log("synth dir: %s", synthDir);
@@ -87,8 +87,8 @@ export async function compile(entrypoint: string, options: ICompileOptions): Pro
   process.env["WING_TARGET"] = options.target;
 
   await Promise.all([
-    mkdir(workDir, { recursive: true }),
-    mkdir(tmpSynthDir, { recursive: true }),
+    mkdirp(workDir),
+    mkdirp(tmpSynthDir),
   ]);
 
   const wingc = await wingCompiler.load({
@@ -251,11 +251,18 @@ export async function compile(entrypoint: string, options: ICompileOptions): Pro
     return process.exit(1);
   }
 
-  // clean up before
-  await rm(synthDir, { recursive: true, force: true });
-  await mkdir(synthDir, { recursive: true });
-  // move the temporary directory to the final target location in an atomic operation
-  await rename(tmpSynthDir, synthDir);
+  if(os.platform() === "win32") {
+    // Windows doesn't really support fully atomic moves.
+    // So we just copy the directory instead.
+    // Also only using sync methods to avoid possible async fs issues.
+    rmSync(synthDir, { recursive: true, force: true });
+    mkdirpSync(synthDir);
+    copySync(tmpSynthDir, synthDir);
+    rmSync(tmpSynthDir, { recursive: true, force: true });
+  } else {
+    // Move the temporary directory to the final target location in an atomic operation
+    await move(tmpSynthDir, synthDir, { overwrite: true } );
+  }
 
   return synthDir;
 }
