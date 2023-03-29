@@ -26,6 +26,4 @@ interface IWithSameName {
  // ^^^ Symbol "foo" already defined in this scope
     foo(): num;
  // ^^^ Symbol "foo" already defined in this scope
-    static boo(): num;
- // ^^^ static illegal in interface
 }

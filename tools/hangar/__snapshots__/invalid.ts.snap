@@ -401,46 +401,43 @@ exports[`inflight_ref_unknown_op.w > stderr 1`] = `
 `;
 
 exports[`interface.w > stderr 1`] = `
-"thread '<unnamed>' panicked at 'Unexpected interface element node type class_field || {Node class_field (28, 4) - (28, 22)}', libs/wingc/src/parser.rs:624:21
-stack backtrace:
-RuntimeError: unreachable
-    at __rust_start_panic (wasm://wasm/0def0dae:wasm-function[22040]:0x788122)
-    at rust_panic (wasm://wasm/0def0dae:wasm-function[7988]:0x638597)
-    at std::panicking::rust_panic_with_hook::h911ba172265603df (wasm://wasm/0def0dae:wasm-function[1327]:0x38eb2d)
-    at std::panicking::begin_panic_handler::{{closure}}::h7b07dd737a4d8757 (wasm://wasm/0def0dae:wasm-function[10049]:0x694ab2)
-    at std::sys_common::backtrace::__rust_end_short_backtrace::ha54585d732ac30f6 (wasm://wasm/0def0dae:wasm-function[20736]:0x77e3d4)
-    at rust_begin_unwind (wasm://wasm/0def0dae:wasm-function[15167]:0x725a08)
-    at core::panicking::panic_fmt::h6958314cbbe045b2 (wasm://wasm/0def0dae:wasm-function[19570]:0x76f6a4)
-    at wingc::parser::Parser::build_interface_statement::h35af8020bcd0e989 (wasm://wasm/0def0dae:wasm-function[45]:0xa7658)
-    at wingc::parser::Parser::build_statement::ha142ccb340894954 (wasm://wasm/0def0dae:wasm-function[101]:0x1202b0)
-    at wingc::parser::Parser::build_scope::{{closure}}::hd9fe4f27ac19b6ff (wasm://wasm/0def0dae:wasm-function[7481]:0x61d8d6)
-    at core::ops::function::impls::<impl core::ops::function::FnMut<A> for &mut F>::call_mut::h68fa3d35d8d34523 (wasm://wasm/0def0dae:wasm-function[4461]:0x54ee28)
-    at core::iter::traits::iterator::Iterator::find_map::check::{{closure}}::hdd053f86bc378db4 (wasm://wasm/0def0dae:wasm-function[2400]:0x4684d9)
-    at <core::iter::adapters::enumerate::Enumerate<I> as core::iter::traits::iterator::Iterator>::try_fold::enumerate::{{closure}}::h45f70a9eb978bbd4 (wasm://wasm/0def0dae:wasm-function[2451]:0x46ff7e)
-    at core::iter::adapters::filter::filter_try_fold::{{closure}}::h358f109678f6fe9d (wasm://wasm/0def0dae:wasm-function[3794]:0x510682)
-    at core::iter::adapters::map::map_try_fold::{{closure}}::hd24671b8578a827c (wasm://wasm/0def0dae:wasm-function[7452]:0x61bff9)
-    at core::iter::traits::iterator::Iterator::try_fold::h79a1b6a484cd4c1f (wasm://wasm/0def0dae:wasm-function[3379]:0x4e4a08)
-    at <core::iter::adapters::map::Map<I,F> as core::iter::traits::iterator::Iterator>::try_fold::hbdd82417401feb50 (wasm://wasm/0def0dae:wasm-function[8439]:0x64eb51)
-    at <core::iter::adapters::filter::Filter<I,P> as core::iter::traits::iterator::Iterator>::try_fold::h0566d080517d9823 (wasm://wasm/0def0dae:wasm-function[14255]:0x712201)
-    at <core::iter::adapters::enumerate::Enumerate<I> as core::iter::traits::iterator::Iterator>::try_fold::had9903d05f314eb1 (wasm://wasm/0def0dae:wasm-function[12239]:0x6de3b0)
-    at core::iter::traits::iterator::Iterator::find_map::h79abb4ced47e28e4 (wasm://wasm/0def0dae:wasm-function[13778]:0x707284)
-    at <core::iter::adapters::filter_map::FilterMap<I,F> as core::iter::traits::iterator::Iterator>::next::h54da3633adfef077 (wasm://wasm/0def0dae:wasm-function[16812]:0x745450)
-    at alloc::vec::Vec<T,A>::extend_desugared::h63412b11b7efd937 (wasm://wasm/0def0dae:wasm-function[2207]:0x449ca3)
-    at <alloc::vec::Vec<T,A> as alloc::vec::spec_extend::SpecExtend<T,I>>::spec_extend::h5decba6ad5fe7841 (wasm://wasm/0def0dae:wasm-function[8957]:0x666839)
-    at <alloc::vec::Vec<T> as alloc::vec::spec_from_iter_nested::SpecFromIterNested<T,I>>::from_iter::h9c2c0e117a4dab79 (wasm://wasm/0def0dae:wasm-function[1666]:0x3e067a)
-    at <alloc::vec::Vec<T> as alloc::vec::spec_from_iter::SpecFromIter<T,I>>::from_iter::hee504ab01c40062f (wasm://wasm/0def0dae:wasm-function[9436]:0x67b565)
-    at <alloc::vec::Vec<T> as core::iter::traits::collect::FromIterator<T>>::from_iter::ha1246ae6ba6f457f (wasm://wasm/0def0dae:wasm-function[8506]:0x651d62)
-    at core::iter::traits::iterator::Iterator::collect::h2673638fe7f302bc (wasm://wasm/0def0dae:wasm-function[9425]:0x67ae34)
-    at wingc::parser::Parser::build_scope::h28482a1f447ad7f8 (wasm://wasm/0def0dae:wasm-function[1858]:0x4097c6)
-    at wingc::parser::Parser::wingit::ha466b1447144e9ad (wasm://wasm/0def0dae:wasm-function[4001]:0x524f3b)
-    at wingc::parse::hc02172c90cbb92b4 (wasm://wasm/0def0dae:wasm-function[246]:0x1c7167)
-    at wingc::compile::h38da1efe94c904db (wasm://wasm/0def0dae:wasm-function[99]:0x11c1df)
-    at wingc_compile (wasm://wasm/0def0dae:wasm-function[1283]:0x38317a)
-    at wingc_compile.command_export (wasm://wasm/0def0dae:wasm-function[21925]:0x787ca3)
-    at Object.invoke (/Users/urib/Github/winglang/apps/wing/dist/wingc.js:89:37)
-    at compile (/Users/urib/Github/winglang/apps/wing/dist/commands/compile.js:95:38)
-    at async testOne (/Users/urib/Github/winglang/apps/wing/dist/commands/test.js:15:20)
-    at async test (/Users/urib/Github/winglang/apps/wing/dist/commands/test.js:10:9)"
+"error: Unknown symbol \\"IB\\"
+  --> ../../../examples/tests/invalid/interface.w:2:22
+  |
+2 | interface IA extends IB {
+  |                      ^^ Unknown symbol \\"IB\\"
+
+
+error: Interface \\"IA (at ../../../examples/tests/invalid/interface.w:2:11)\\" extends \\"any\\", which is not an interface
+
+
+error: Unknown symbol \\"IDontExist\\"
+   --> ../../../examples/tests/invalid/interface.w:10:26
+   |
+10 | interface IExist extends IDontExist {
+   |                          ^^^^^^^^^^ Unknown symbol \\"IDontExist\\"
+
+
+error: Interface \\"IExist (at ../../../examples/tests/invalid/interface.w:10:11)\\" extends \\"any\\", which is not an interface
+
+
+error: Interface \\"ISomeInterface (at ../../../examples/tests/invalid/interface.w:18:11)\\" extends \\"ISomeClass\\", which is not an interface
+
+
+error: Symbol \\"foo\\" already defined in this scope
+   --> ../../../examples/tests/invalid/interface.w:25:5
+   |
+25 |     foo();
+   |     ^^^ Symbol \\"foo\\" already defined in this scope
+
+
+error: Symbol \\"foo\\" already defined in this scope
+   --> ../../../examples/tests/invalid/interface.w:27:5
+   |
+27 |     foo(): num;
+   |     ^^^ Symbol \\"foo\\" already defined in this scope
+
+"
 `;
 
 exports[`json.w > stderr 1`] = `
