@@ -107,23 +107,23 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
   public async get(key: string): Promise<string> {
     let redis = await this.rawClient();
     let result = await redis.get(key);
-    return result ?? "";
+    return result;
   }
 
-  public async hset(key: string, field: string, value: string): Promise<void> {
+  public async hset(key: string, field: string, value: string): Promise<number> {
     let redis = await this.rawClient();
-    await redis.hset(key, field, value);
+    return await redis.hset(key, field, value);
   }
 
   public async hget(key: string, field: string): Promise<string> {
     let redis = await this.rawClient();
     let result = await redis.hget(key, field);
-    return result ?? "";
+    return result;
   }
 
-  public async sadd(key: string, value: string): Promise<void> {
+  public async sadd(key: string, value: string): Promise<number> {
     let redis = await this.rawClient();
-    await redis.sadd(key, value);
+    return await redis.sadd(key, value);
   }
 
   public async smembers(key: string): Promise<string[]> {
@@ -132,8 +132,8 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
     return result ?? [];
   }
 
-  public async del(key: string): Promise<void> {
+  public async del(key: string): Promise<number> {
     let redis = await this.rawClient();
-    await redis.del(key);
+    return await redis.del(key);
   }
 }

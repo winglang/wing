@@ -71,7 +71,7 @@ export interface IRedisClient {
    * @param value value to set at field in key
    * @inflight
    */
-  hset(key: string, field: string, value: string): Promise<void>;
+  hset(key: string, field: string, value: string): Promise<number>;
 
   /**
    * Returns the value associated with field in the hash stored at key
@@ -88,7 +88,7 @@ export interface IRedisClient {
    * @param value the value to add to the set at given key
    * @inflight
    */
-  sadd(key: string, value: string): Promise<void>;
+  sadd(key: string, value: string): Promise<number>;
 
   /**
    * Returns all the members of the set value stored at key
@@ -104,5 +104,5 @@ export interface IRedisClient {
    * @param key the key
    * @inflight
    */
-  del(key: string): Promise<void>;
+  del(key: string): Promise<number>;
 }

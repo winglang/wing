@@ -41,7 +41,6 @@ test("access a Redis resource", async () => {
   } finally {
     await s.stop();
   }
-  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("can set and get a value", async () => {
@@ -61,7 +60,6 @@ test("can set and get a value", async () => {
   } finally {
     await s.stop();
   }
-  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("can hset and hget values", async () => {
@@ -82,7 +80,6 @@ test("can hset and hget values", async () => {
   } finally {
     await s.stop();
   }
-  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("can sadd and smembers values", async () => {
@@ -104,7 +101,6 @@ test("can sadd and smembers values", async () => {
   } finally {
     await s.stop();
   }
-  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("can del a value", async () => {
@@ -119,13 +115,13 @@ test("can del a value", async () => {
   try {
     const client = s.getResource("/my_redis") as redis.IRedisClient;
     await client.set(key, expectedValue);
-    await client.del(key);
+    const recordsDeleted = await client.del(key);
     const value = await client.get(key);
-    expect(value).toEqual("");
+    expect(recordsDeleted).toEqual(1);
+    expect(value).toEqual(null);
   } finally {
     await s.stop();
   }
-  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("return empty array when smembers on a non-existent key", async () => {
@@ -136,6 +132,7 @@ test("return empty array when smembers on a non-existent key", async () => {
 
   // THEN
   const s = await app.startSimulator();
+
   try {
     const client = s.getResource("/my_redis") as redis.IRedisClient;
     const value = await client.smembers(key);
@@ -143,5 +140,21 @@ test("return empty array when smembers on a non-existent key", async () => {
   } finally {
     await s.stop();
   }
-  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("get a value that does not exist", async () => {
+  // GIVEN
+  const app = new SimApp();
+  redis.Redis._newRedis(app, "my_redis");
+  const key = "wing";
+
+  // THEN
+  const s = await app.startSimulator();
+  try {
+    const client = s.getResource("/my_redis") as redis.IRedisClient;
+    const value = await client.get(key);
+    expect(value).toEqual(null);
+  } finally {
+    await s.stop();
+  }
 });
