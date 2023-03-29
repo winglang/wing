@@ -1728,7 +1728,7 @@ impl<'a> TypeChecker<'a> {
 					args.push(self.resolve_type_annotation(arg, env, statement_idx));
 				}
 				let sig = FunctionSignature {
-					this_type: None, // TODO?
+					this_type: None,
 					parameters: args,
 					return_type: ast_sig.return_type.as_ref().map_or(self.types.void(), |t| {
 						self.resolve_type_annotation(t, env, statement_idx)
