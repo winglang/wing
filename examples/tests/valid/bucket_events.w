@@ -25,15 +25,9 @@ other.on_event(inflight (key: str) => {
 });
 new cloud.Function(inflight () => {
     b.put("a", "1");
-    // assert(other.get("last_operation_key") == "a");
     b.put("b", "1");
-    // assert(other.get("last_operation_key") == "b");
     b.put("b", "100");
-    // assert(other.get("last_operation_key") == "b");
     b.put("c", "1");
-    // assert(other.get("last_operation_key") == "c");
     b.delete("c");
-    // assert(other.get("last_operation_key") == "c");
-    // assert(b.get("is_tracked") == "True");
 }) as "test"; 
 

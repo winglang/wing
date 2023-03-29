@@ -4120,8 +4120,6 @@ Information on how to display a resource in the UI.
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IBucketEventHandlerClient">IBucketEventHandlerClient</a>
 
-**Inflight client:** [true](#true)
-
 Represents a resource with an inflight "handle" method that can be passed to the bucket events.
 
 #### Methods <a name="Methods" id="Methods"></a>

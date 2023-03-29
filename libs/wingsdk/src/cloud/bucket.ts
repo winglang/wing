@@ -325,7 +325,6 @@ export interface IBucketEventHandler extends IResource {}
  * Represents a resource with an inflight "handle" method that can be passed to
  * the bucket events.
  *
- * @inflight
  */
 export interface IBucketEventHandlerClient {
   /**
