@@ -1,6 +1,5 @@
 import classNames from "classnames";
-import { createRef, ReactNode, useEffect, useState } from "react";
-import { DraggableCore } from "react-draggable";
+import { createRef, ReactNode, useState } from "react";
 
 export interface TopResizableWidgetProps {
   className?: string;
@@ -16,42 +15,36 @@ export function TopResizableWidget(props: TopResizableWidgetProps) {
 
   return (
     <div className={classNames("relative", className)} ref={resizeTarget}>
-      <DraggableCore
-        onStart={(event) => {
+      <div
+        className={classNames(
+          "absolute inset-x-0 -top-0.5 h-1 cursor-row-resize transition-colors ease-in-out hover:bg-sky-500 z-20",
+          "cursor-row-resize",
+        )}
+        onPointerDown={(event) => {
+          event.currentTarget.setPointerCapture(event.pointerId);
+
           if (resizeTarget.current) {
-            document.body.style.cursor = "row-resize";
-
-            setOffset(
-              (event as MouseEvent).clientY + resizeTarget.current.clientHeight,
-            );
-
-            setResizing(true);
+            setOffset(event.clientY + resizeTarget.current.clientHeight);
           }
+          setResizing(true);
         }}
-        onDrag={(event) => {
-          if (resizeTarget.current) {
-            resizeTarget.current.style.height = `${
-              offset - (event as MouseEvent).clientY
-            }px`;
-          }
-        }}
-        onStop={() => {
-          if (resizeTarget.current) {
-            document.body.style.cursor = "";
+        onPointerUp={(event) => {
+          event.currentTarget.releasePointerCapture(event.pointerId);
 
+          if (resizeTarget.current) {
             resizeTarget.current.style.height = `${resizeTarget.current.clientHeight}px`;
-
-            setResizing(false);
+          }
+          setResizing(false);
+        }}
+        onPointerMove={(event) => {
+          if (!isResizing) {
+            return;
+          }
+          if (resizeTarget.current) {
+            resizeTarget.current.style.height = `${offset - event.clientY}px`;
           }
         }}
-      >
-        <div
-          className={classNames(
-            "absolute inset-x-0 -top-0.5 h-1 cursor-row-resize transition-colors ease-in-out hover:bg-sky-500 z-20",
-            isResizing && "bg-sky-500",
-          )}
-        />
-      </DraggableCore>
+      />
 
       {children}
     </div>
