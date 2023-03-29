@@ -75,14 +75,14 @@ test("can sadd and smembers values", async () => {
   const app = new SimApp();
   redis.Redis._newRedis(app, "my_redis");
   const key = "wing";
-  const expectedValues = ["a", "b", "c"];
+  const expectedValues = ["a", "b", "z"];
 
   // THEN
   await app._withSimulator(async (s) => {
     const client = s.getResource("/my_redis") as redis.IRedisClient;
     await client.sadd(key, "a");
     await client.sadd(key, "b");
-    await client.sadd(key, "c");
+    await client.sadd(key, "z");
     const value = await client.smembers(key);
     expect(value.sort()).toEqual(expectedValues);
   });
