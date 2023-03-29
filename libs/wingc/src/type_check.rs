@@ -1252,8 +1252,7 @@ impl<'a> TypeChecker<'a> {
 					}
 					Type::Resource(ref class) => {
 						if matches!(env.phase, Phase::Preflight) {
-							let fields = class.fields(true).into_iter().count();
-							(&class.env, &class.name, if fields > 0 { true } else { false })
+							(&class.env, &class.name, class.fields(true).peekable().peek().is_some())
 						} else {
 							return self.general_type_error(format!(
 								"Cannot create the resource \"{}\" in inflight phase",
