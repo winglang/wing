@@ -24,7 +24,6 @@ struct E {
 //^ struct fields must be immutable got: Map<Array<MutArray<str>>>
 }
 
-
 let a = A {
   x: "Sup"
 };
