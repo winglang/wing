@@ -2376,7 +2376,7 @@ impl<'a> TypeChecker<'a> {
 					}
 					match struct_env.define(
 						&field.name,
-						SymbolKind::make_variable(field_type, false, field.phase),
+						SymbolKind::make_instance_variable(field_type, false, field.phase),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -2955,14 +2955,12 @@ impl<'a> TypeChecker<'a> {
 							.unwrap(),
 						property,
 					),
+					Type::Struct(ref s) => self.get_property_from_class_like(s, property),
 
 					_ => VariableInfo {
 						type_: self.expr_error(
 							object,
-							format!(
-								"Expression must be a class or resource instance to access property \"{}\", instead found type \"{}\"",
-								property.name, instance_type
-							),
+							format!("Property access unsupported on type \"{}\"", instance_type),
 						),
 						reassignable: false,
 						phase: Phase::Independent,

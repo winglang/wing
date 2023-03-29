@@ -43,6 +43,8 @@ function __app(target) {
 			return $stdlib.tfgcp.App;
 		case \\"tf-azure\\":
 			return $stdlib.tfazure.App;
+		case \\"awscdk\\":
+			return $stdlib.awscdk.App;
 		default:
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
@@ -79,6 +81,7 @@ constructor() {
   \\"field0\\": \\"foo\\",}
   ,}
   ;
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x.field0 === \\"Sup\\")'\`)})((x.field0 === \\"Sup\\"))};
 }
 }
 new MyApp().synth();"

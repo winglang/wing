@@ -21,6 +21,9 @@ let y = B {
   }
 };
 
+// successful struct access
+assert(x.field0 == "Sup");
+
 resource Foo {
   data: B;
 
