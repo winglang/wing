@@ -104,7 +104,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
     await redis.set(key, value);
   }
 
-  public async get(key: string): Promise<string> {
+  public async get(key: string): Promise<string | undefined> {
     let redis = await this.rawClient();
     let result = await redis.get(key);
     return result;
@@ -120,7 +120,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
     return result;
   }
 
-  public async hget(key: string, field: string): Promise<string> {
+  public async hget(key: string, field: string): Promise<string | undefined> {
     const redis = await this.rawClient();
     const result = await redis.hget(key, field);
     return result;

@@ -61,7 +61,7 @@ export interface IRedisClient {
    * @param key the key to get
    * @inflight
    */
-  get(key: string): Promise<string>;
+  get(key: string): Promise<string | undefined>;
 
   /**
    * Sets the specified field to respective value in the hash stored at key
@@ -80,7 +80,7 @@ export interface IRedisClient {
    * @param field the field at given key
    * @inflight
    */
-  hget(key: string, field: string): Promise<string>;
+  hget(key: string, field: string): Promise<string | undefined>;
 
   /**
    * Add the specified members to the set stored at key

@@ -9,8 +9,7 @@ test("create a Redis resource", async () => {
   redis.Redis._newRedis(app, "my_redis");
 
   // THEN
-  const s = await app.startSimulator();
-  try {
+  await app._withSimulator(async (s) => {
     expect(s.getResourceConfig("/my_redis")).toEqual({
       attrs: {
         handle: expect.any(String),
@@ -19,9 +18,7 @@ test("create a Redis resource", async () => {
       props: {},
       type: "wingsdk.redis.Redis",
     });
-  } finally {
-    await s.stop();
-  }
+  });
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -31,16 +28,13 @@ test("access a Redis resource", async () => {
   redis.Redis._newRedis(app, "my_redis");
 
   // THEN
-  const s = await app.startSimulator();
-  try {
+  await app._withSimulator(async (s) => {
     const client = s.getResource("/my_redis") as redis.IRedisClient;
     expect((await client.url()).startsWith("redis://")).toBeTruthy();
     const redisClient = (await client.rawClient()) as IoRedis;
     await redisClient.set("foo", "bar");
     expect(await redisClient.get("foo")).toEqual("bar");
-  } finally {
-    await s.stop();
-  }
+  });
 });
 
 test("can set and get a value", async () => {
@@ -51,15 +45,12 @@ test("can set and get a value", async () => {
   const expectedValue = "does redis";
 
   // THEN
-  const s = await app.startSimulator();
-  try {
+  await app._withSimulator(async (s) => {
     const client = s.getResource("/my_redis") as redis.IRedisClient;
     await client.set(key, expectedValue);
     const value = await client.get(key);
     expect(value).toEqual(expectedValue);
-  } finally {
-    await s.stop();
-  }
+  });
 });
 
 test("can hset and hget values", async () => {
@@ -71,15 +62,12 @@ test("can hset and hget values", async () => {
   const expectedValue = "does redis";
 
   // THEN
-  const s = await app.startSimulator();
-  try {
+  await app._withSimulator(async (s) => {
     const client = s.getResource("/my_redis") as redis.IRedisClient;
     await client.hset(key, field, expectedValue);
     const value = await client.hget(key, field);
     expect(value).toEqual(expectedValue);
-  } finally {
-    await s.stop();
-  }
+  });
 });
 
 test("can sadd and smembers values", async () => {
@@ -90,17 +78,14 @@ test("can sadd and smembers values", async () => {
   const expectedValues = ["a", "b", "c"];
 
   // THEN
-  const s = await app.startSimulator();
-  try {
+  await app._withSimulator(async (s) => {
     const client = s.getResource("/my_redis") as redis.IRedisClient;
     await client.sadd(key, "a");
     await client.sadd(key, "b");
     await client.sadd(key, "c");
     const value = await client.smembers(key);
     expect(value.sort()).toEqual(expectedValues);
-  } finally {
-    await s.stop();
-  }
+  });
 });
 
 test("can del a value", async () => {
@@ -111,17 +96,14 @@ test("can del a value", async () => {
   const expectedValue = "does redis";
 
   // THEN
-  const s = await app.startSimulator();
-  try {
+  await app._withSimulator(async (s) => {
     const client = s.getResource("/my_redis") as redis.IRedisClient;
     await client.set(key, expectedValue);
     const recordsDeleted = await client.del(key);
     const value = await client.get(key);
     expect(recordsDeleted).toEqual(1);
     expect(value).toEqual(null);
-  } finally {
-    await s.stop();
-  }
+  });
 });
 
 test("return empty array when smembers on a non-existent key", async () => {
@@ -131,15 +113,11 @@ test("return empty array when smembers on a non-existent key", async () => {
   const key = "wing";
 
   // THEN
-  const s = await app.startSimulator();
-
-  try {
+  await app._withSimulator(async (s) => {
     const client = s.getResource("/my_redis") as redis.IRedisClient;
     const value = await client.smembers(key);
     expect(value).toEqual([]);
-  } finally {
-    await s.stop();
-  }
+  });
 });
 
 test("get a value that does not exist", async () => {
@@ -149,12 +127,9 @@ test("get a value that does not exist", async () => {
   const key = "wing";
 
   // THEN
-  const s = await app.startSimulator();
-  try {
+  await app._withSimulator(async (s) => {
     const client = s.getResource("/my_redis") as redis.IRedisClient;
     const value = await client.get(key);
     expect(value).toEqual(null);
-  } finally {
-    await s.stop();
-  }
+  });
 });
