@@ -8,8 +8,8 @@ use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
 	ArgList, BinaryOperator, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionBody,
-	FunctionDefinition, FunctionSignature, InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope,
-	Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType, Interface,
+	FunctionDefinition, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, Phase,
+	Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 use crate::WINGSDK_STD_MODULE;
@@ -570,7 +570,7 @@ impl<'s> Parser<'s> {
 			if interface_element.is_extra() {
 				continue;
 			}
-			match (interface_element.kind()) {
+			match interface_element.kind() {
 				"method_signature" => {
 					let method_name = self.node_symbol(&interface_element.child_by_field_name("name").unwrap());
 					let func_sig = self.build_function_signature(&interface_element, Phase::Preflight);
@@ -605,9 +605,7 @@ impl<'s> Parser<'s> {
 						reassignable: interface_element.child_by_field_name("reassignable").is_some(),
 						is_static,
 						phase: match interface_element.child_by_field_name("phase_modifier") {
-							Some(n) => {
-								Phase::Inflight
-							}
+							Some(n) => Phase::Inflight,
 							None => Phase::Preflight,
 						},
 					})
@@ -620,8 +618,7 @@ impl<'s> Parser<'s> {
 				other => {
 					panic!(
 						"Unexpected interface element node type {} || {:#?}",
-						other,
-						interface_element
+						other, interface_element
 					);
 				}
 			}
