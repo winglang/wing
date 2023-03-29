@@ -2210,7 +2210,6 @@ impl<'a> TypeChecker<'a> {
 					let mut method_env = SymbolEnv::new(
 						Some(env.get_ref()),
 						method_sig.return_type,
-						//TODO urib - why is this false?
 						false,
 						false,
 						method_sig.phase,
