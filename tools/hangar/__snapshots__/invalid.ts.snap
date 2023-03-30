@@ -343,6 +343,27 @@ error: Expected type to be \\"inflight (IQueueOnMessageHandler (inflight (str): 
 
 error: Class \\"C (at ../../../examples/tests/invalid/impl_interface.w:16:10)\\" implements \\"Bucket\\", which is not an interface
 
+
+error: Resource \\"r\\" does not implement method \\"method_1\\" of interface \\"I3\\"
+   --> ../../../examples/tests/invalid/impl_interface.w:33:10
+   |
+33 | resource r impl I3 {
+   |          ^ Resource \\"r\\" does not implement method \\"method_1\\" of interface \\"I3\\"
+
+
+error: Resource \\"r\\" does not implement method \\"method_2\\" of interface \\"I3\\"
+   --> ../../../examples/tests/invalid/impl_interface.w:33:10
+   |
+33 | resource r impl I3 {
+   |          ^ Resource \\"r\\" does not implement method \\"method_2\\" of interface \\"I3\\"
+
+
+error: Resource \\"r\\" does not implement method \\"method_3\\" of interface \\"I3\\"
+   --> ../../../examples/tests/invalid/impl_interface.w:33:10
+   |
+33 | resource r impl I3 {
+   |          ^ Resource \\"r\\" does not implement method \\"method_3\\" of interface \\"I3\\"
+
 "
 `;
 
