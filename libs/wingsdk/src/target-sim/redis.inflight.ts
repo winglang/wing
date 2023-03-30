@@ -1,4 +1,4 @@
-import { execa } from "execa";
+import { dockerCommand } from "docker-cli-js";
 import { v4 as uuidv4 } from "uuid";
 import { ISimulatorResourceInstance } from "./resource";
 import { RedisAttributes, RedisSchema } from "./schema-resources";
@@ -14,7 +14,6 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
   private readonly REDIS_IMAGE =
     "redis@sha256:e50c7e23f79ae81351beacb20e004720d4bed657415e68c2b1a2b5557c075ce0";
   private readonly context: ISimulatorContext;
-
   private connection_url?: string = undefined;
   private connection?: any;
 
@@ -29,22 +28,14 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
   public async init(): Promise<RedisAttributes> {
     try {
       // Pull docker image
-      await execa("docker", ["pull", this.REDIS_IMAGE]);
+      await dockerCommand(`pull ${this.REDIS_IMAGE}`, {echo: false});
 
       // Run the redis container and dynamically assign a host port to 6379
-      await execa("docker", [
-        "run",
-        "-d",
-        "--name",
-        this.container_name,
-        "-p",
-        "6379",
-        this.REDIS_IMAGE,
-      ]);
+      await dockerCommand(`run --detach --name ${this.container_name} -p 6379 ${this.REDIS_IMAGE}`, {echo: false});
 
       // Inspect the container to get the host port
-      const out = await execa("docker", ["inspect", this.container_name]);
-      const hostPort = JSON.parse(out.stdout)[0].NetworkSettings.Ports[
+      const out = await dockerCommand(`inspect ${this.container_name}`, {echo: false});
+      const hostPort = JSON.parse(out.raw)[0].NetworkSettings.Ports[
         "6379/tcp"
       ][0].HostPort;
 
@@ -60,7 +51,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
   public async cleanup(): Promise<void> {
     // disconnect from the redis server
     await this.connection?.disconnect();
-    await execa("docker", ["rm", "-f", this.container_name]);
+    await dockerCommand(`rm -f ${this.container_name}`, {echo: false});
   }
 
   public async rawClient(): Promise<any> {

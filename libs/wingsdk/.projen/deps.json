@@ -239,12 +239,11 @@
       "type": "bundled"
     },
     {
-      "name": "esbuild-wasm",
+      "name": "docker-cli-js",
       "type": "bundled"
     },
     {
-      "name": "execa",
-      "version": "6.1.0",
+      "name": "esbuild-wasm",
       "type": "bundled"
     },
     {
