@@ -2248,16 +2248,18 @@ impl<'a> TypeChecker<'a> {
 						stmt.idx,
 					);
 					// Prime the method environment with `this`
-					method_env
-						.define(
-							&Symbol {
-								name: "this".into(),
-								span: name.span.clone(),
-							},
-							SymbolKind::make_variable(class_type, false, true, method_env.phase),
-							StatementIdx::Top,
-						)
-						.expect("Expected `this` to be added to constructor env");
+					if !method_def.is_static {
+						method_env
+							.define(
+								&Symbol {
+									name: "this".into(),
+									span: name.span.clone(),
+								},
+								SymbolKind::make_variable(class_type, false, true, method_env.phase),
+								StatementIdx::Top,
+							)
+							.expect("Expected `this` to be added to constructor env");
+					}
 					self.add_arguments_to_env(&method_def.parameters, method_sig, &mut method_env);
 
 					if let FunctionBody::Statements(scope) = &method_def.body {
