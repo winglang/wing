@@ -3143,6 +3143,7 @@ fn add_parent_members_to_struct_env(
 	Ok(())
 }
 
+// TODO: dup code with `add_parent_members_to_struct_env`
 fn add_parent_members_to_iface_env(
 	extends_types: &Vec<TypeRef>,
 	name: &Symbol,
