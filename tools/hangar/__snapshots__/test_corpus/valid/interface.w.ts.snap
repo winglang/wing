@@ -50,4 +50,10 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing test > stdout 1`] = `"pass ─ interface.w (no tests)"`;
+exports[`wing test > stdout 1`] = `
+"Added method method_1 (at /Users/urib/Github/winglang/examples/tests/valid/interface.w:3:5) with signature preflight (IShape): str to interface IShape
+Added method method_2 (at /Users/urib/Github/winglang/examples/tests/valid/interface.w:5:5) with signature preflight (IShape): void to interface IShape
+Added method method_3 (at /Users/urib/Github/winglang/examples/tests/valid/interface.w:7:5) with signature preflight (IShape): IShape to interface IShape
+Added method method_2 (at /Users/urib/Github/winglang/examples/tests/valid/interface.w:11:5) with signature preflight (IPointy): void to interface IPointy
+pass ─ interface.w (no tests)"
+`;

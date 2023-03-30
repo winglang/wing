@@ -2399,6 +2399,16 @@ impl<'a> TypeChecker<'a> {
 
 				// Add methods to the interface env
 				for (method_name, sig) in methods.iter() {
+					let mut sig = sig.clone();
+					// Add myself as first parameter to all interface methods (self) - they are all non static, so no need to check
+					sig.parameters.insert(
+						0,
+						TypeAnnotation::UserDefined(UserDefinedType {
+							root: name.clone(),
+							fields: vec![],
+						}),
+					);
+
 					let method_type =
 						self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(sig.clone()), env, stmt.idx);
 					match interface_env.define(
@@ -2411,6 +2421,10 @@ impl<'a> TypeChecker<'a> {
 						}
 						_ => {}
 					};
+					println!(
+						"Added method {} with signature {} to interface {}",
+						method_name, sig, name.name
+					)
 				}
 
 				// add methods from all extended interfaces to the interface env

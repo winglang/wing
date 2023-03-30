@@ -25,7 +25,6 @@ interface I3 extends I2 {
   method_3(x: Array<num>): Array<num>;
 }
 
-/* TODO: uncomment after we fix 
 resource r impl I3 {
   init() {}
   method_1(x: num): num {
@@ -38,4 +37,3 @@ resource r impl I3 {
     return x;
   }
 }
-*/
