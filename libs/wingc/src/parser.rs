@@ -640,18 +640,8 @@ impl<'s> Parser<'s> {
 				continue;
 			}
 
-			let interface_type = self.build_udt_annotation(&extend)?;
-			match interface_type {
-				TypeAnnotation::UserDefined(interface_type) => extends.push(interface_type),
-				_ => {
-					self.add_error::<Node>(
-						format!(
-							"Extended interface must be a user defined type, found {}",
-							interface_type
-						),
-						&extend,
-					)?;
-				}
+			if let Ok(TypeAnnotation::UserDefined(interface_type)) = self.build_udt_annotation(&extend) {
+				extends.push(interface_type);
 			}
 		}
 

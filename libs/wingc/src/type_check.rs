@@ -2404,10 +2404,6 @@ impl<'a> TypeChecker<'a> {
 						}
 						_ => {}
 					};
-					println!(
-						"Added method {} with signature {} to interface {}",
-						method_name, sig, name.name
-					)
 				}
 
 				// add methods from all extended interfaces to the interface env
