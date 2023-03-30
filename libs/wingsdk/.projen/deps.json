@@ -9,10 +9,6 @@
       "type": "build"
     },
     {
-      "name": "@types/dockerode",
-      "type": "build"
-    },
-    {
       "name": "@types/express-serve-static-core",
       "version": "4.17.28",
       "type": "build"
@@ -38,10 +34,6 @@
     },
     {
       "name": "@types/tar",
-      "type": "build"
-    },
-    {
-      "name": "@types/uuid",
       "type": "build"
     },
     {
@@ -239,10 +231,6 @@
       "type": "bundled"
     },
     {
-      "name": "dockerode",
-      "type": "bundled"
-    },
-    {
       "name": "esbuild-wasm",
       "type": "bundled"
     },
@@ -251,19 +239,11 @@
       "type": "bundled"
     },
     {
-      "name": "ioredis",
-      "type": "bundled"
-    },
-    {
       "name": "safe-stable-stringify",
       "type": "bundled"
     },
     {
       "name": "tar",
-      "type": "bundled"
-    },
-    {
-      "name": "uuid",
       "type": "bundled"
     },
     {

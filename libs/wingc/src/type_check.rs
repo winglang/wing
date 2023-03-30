@@ -7,8 +7,8 @@ use crate::ast::{
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{
 	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_JSON,
-	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE,
-	WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING,
+	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_SET, WINGSDK_STD_MODULE,
+	WINGSDK_STRING,
 };
 use derivative::Derivative;
 use indexmap::{IndexMap, IndexSet};
@@ -78,21 +78,12 @@ pub struct VariableInfo {
 }
 
 impl SymbolKind {
-	pub fn make_variable(type_: TypeRef, reassignable: bool, phase: Phase) -> Self {
+	pub fn make_variable(type_: TypeRef, reassignable: bool, is_static: bool, phase: Phase) -> Self {
 		SymbolKind::Variable(VariableInfo {
 			type_,
 			reassignable,
 			phase,
-			is_static: true,
-		})
-	}
-
-	pub fn make_instance_variable(type_: TypeRef, reassignable: bool, phase: Phase) -> Self {
-		SymbolKind::Variable(VariableInfo {
-			type_,
-			reassignable,
-			phase,
-			is_static: false,
+			is_static,
 		})
 	}
 
@@ -1825,7 +1816,7 @@ impl<'a> TypeChecker<'a> {
 					self.validate_type(inferred_type, explicit_type, initial_value);
 					match env.define(
 						var_name,
-						SymbolKind::make_variable(explicit_type, *reassignable, env.phase),
+						SymbolKind::make_variable(explicit_type, *reassignable, true, env.phase),
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
@@ -1836,7 +1827,7 @@ impl<'a> TypeChecker<'a> {
 				} else {
 					match env.define(
 						var_name,
-						SymbolKind::make_variable(inferred_type, *reassignable, env.phase),
+						SymbolKind::make_variable(inferred_type, *reassignable, true, env.phase),
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
@@ -1875,7 +1866,7 @@ impl<'a> TypeChecker<'a> {
 				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 				match scope_env.define(
 					&iterator,
-					SymbolKind::make_variable(iterator_type, false, env.phase),
+					SymbolKind::make_variable(iterator_type, false, true, env.phase),
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -1999,7 +1990,7 @@ impl<'a> TypeChecker<'a> {
 						// we use the module name as the identifier.
 						// For example, `bring fs` will import the `fs` namespace from @winglang/sdk and assign it
 						// to an identifier named `fs`.
-						WINGSDK_CLOUD_MODULE | WINGSDK_FS_MODULE | WINGSDK_REDIS_MODULE => {
+						WINGSDK_CLOUD_MODULE | WINGSDK_FS_MODULE => {
 							library_name = WINGSDK_ASSEMBLY_NAME.to_string();
 							namespace_filter = vec![module_name.name.clone()];
 							alias = identifier.as_ref().unwrap_or(&module_name);
@@ -2132,11 +2123,7 @@ impl<'a> TypeChecker<'a> {
 					let field_type = self.resolve_type_annotation(&field.member_type, env, stmt.idx);
 					match class_env.define(
 						&field.name,
-						if field.is_static {
-							SymbolKind::make_variable(field_type, field.reassignable, field.phase)
-						} else {
-							SymbolKind::make_instance_variable(field_type, field.reassignable, field.phase)
-						},
+						SymbolKind::make_variable(field_type, field.reassignable, field.is_static, field.phase),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -2160,11 +2147,7 @@ impl<'a> TypeChecker<'a> {
 					}
 					match class_env.define(
 						method_name,
-						if method_def.is_static {
-							SymbolKind::make_variable(method_type, false, method_def.signature.phase)
-						} else {
-							SymbolKind::make_instance_variable(method_type, false, method_def.signature.phase)
-						},
+						SymbolKind::make_variable(method_type, false, method_def.is_static, method_def.signature.phase),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -2191,7 +2174,7 @@ impl<'a> TypeChecker<'a> {
 						name: WING_CONSTRUCTOR_NAME.into(),
 						span: name.span.clone(),
 					},
-					SymbolKind::make_variable(constructor_type, false, constructor.signature.phase),
+					SymbolKind::make_variable(constructor_type, false, true, constructor.signature.phase),
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -2231,7 +2214,7 @@ impl<'a> TypeChecker<'a> {
 							name: "this".into(),
 							span: name.span.clone(),
 						},
-						SymbolKind::make_instance_variable(class_type, false, constructor_env.phase),
+						SymbolKind::make_variable(class_type, false, true, constructor_env.phase),
 						StatementIdx::Top,
 					)
 					.expect("Expected `this` to be added to constructor env");
@@ -2271,7 +2254,7 @@ impl<'a> TypeChecker<'a> {
 								name: "this".into(),
 								span: name.span.clone(),
 							},
-							SymbolKind::make_instance_variable(class_type, false, method_env.phase),
+							SymbolKind::make_variable(class_type, false, true, method_env.phase),
 							StatementIdx::Top,
 						)
 						.expect("Expected `this` to be added to constructor env");
@@ -2345,7 +2328,7 @@ impl<'a> TypeChecker<'a> {
 					}
 					match struct_env.define(
 						&field.name,
-						SymbolKind::make_instance_variable(field_type, false, field.phase),
+						SymbolKind::make_variable(field_type, false, false, field.phase),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -2425,7 +2408,7 @@ impl<'a> TypeChecker<'a> {
 					if let Some(exception_var) = &catch_block.exception_var {
 						match catch_env.define(
 							exception_var,
-							SymbolKind::make_variable(self.types.string(), false, env.phase),
+							SymbolKind::make_variable(self.types.string(), false, true, env.phase),
 							StatementIdx::Top,
 						) {
 							Err(type_error) => {
@@ -2526,7 +2509,7 @@ impl<'a> TypeChecker<'a> {
 		for (arg, arg_type) in args.iter().zip(sig.parameters.iter()) {
 			match env.define(
 				&arg.0,
-				SymbolKind::make_variable(*arg_type, arg.1, env.phase),
+				SymbolKind::make_variable(*arg_type, arg.1, true, env.phase),
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -2640,11 +2623,12 @@ impl<'a> TypeChecker<'a> {
 						match new_type_class.env.define(
 							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
 							&Symbol::global(name),
-							if *is_static {
-								SymbolKind::make_variable(self.types.add_type(Type::Function(new_sig)), *reassignable, *flight)
-							} else {
-								SymbolKind::make_instance_variable(self.types.add_type(Type::Function(new_sig)), *reassignable, *flight)
-							},
+							SymbolKind::make_variable(
+								self.types.add_type(Type::Function(new_sig)),
+								*reassignable,
+								*is_static,
+								*flight,
+							),
 							StatementIdx::Top,
 						) {
 							Err(type_error) => {
@@ -2657,11 +2641,7 @@ impl<'a> TypeChecker<'a> {
 						match new_type_class.env.define(
 							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
 							&Symbol::global(name),
-							if *is_static {
-								SymbolKind::make_variable(new_var_type, *reassignable, *flight)
-							} else {
-								SymbolKind::make_instance_variable(new_var_type, *reassignable, *flight)
-							},
+							SymbolKind::make_variable(new_var_type, *reassignable, *is_static, *flight),
 							StatementIdx::Top,
 						) {
 							Err(type_error) => {
@@ -3066,7 +3046,7 @@ fn add_parent_members_to_struct_env(
 						name: parent_member_name,
 						span: name.span.clone(),
 					},
-					SymbolKind::make_instance_variable(member_type, false, struct_env.phase),
+					SymbolKind::make_variable(member_type, false, false, struct_env.phase),
 					StatementIdx::Top,
 				)?;
 			}

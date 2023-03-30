@@ -43,7 +43,6 @@ const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
 
 const WINGSDK_STD_MODULE: &'static str = "std";
 const WINGSDK_FS_MODULE: &'static str = "fs";
-const WINGSDK_REDIS_MODULE: &'static str = "redis";
 const WINGSDK_CLOUD_MODULE: &'static str = "cloud";
 
 const WINGSDK_DURATION: &'static str = "std.Duration";
@@ -237,7 +236,7 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.unwrap()
 		.define(
 			&sym,
-			SymbolKind::make_variable(types.add_type(typ), false, Phase::Independent),
+			SymbolKind::make_variable(types.add_type(typ), false, true, Phase::Independent),
 			StatementIdx::Top,
 		)
 		.expect("Failed to add builtin");
