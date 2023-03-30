@@ -29,22 +29,6 @@ export class SimApp extends sim.App {
   }
 
   /**
-   * Executes a code block with a simulator, will stop the simulator after the
-   * code block is done.
-   *
-   * @param cb code block closure to execute with the simulator
-   * @internal
-   */
-  public async _withSimulator(cb: (s: Simulator) => Promise<void>) {
-    const s = await this.startSimulator();
-    try {
-      await cb(s);
-    } finally {
-      await s.stop();
-    }
-  }
-
-  /**
    * Takes a snapshot of the output directory, returning a map of filenames to
    * their contents.
    */
