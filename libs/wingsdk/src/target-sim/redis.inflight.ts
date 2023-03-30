@@ -6,7 +6,7 @@ import { IRedisClient } from "../redis";
 import { ISimulatorContext } from "../testing/simulator";
 
 // Issue using types from ioredis with JSII
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+// eslint-disable-next-line @typescript-eslint/no-require-imports 
 const IoRedis = require("ioredis");
 
 export class Redis implements IRedisClient, ISimulatorResourceInstance {
