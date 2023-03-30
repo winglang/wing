@@ -54,7 +54,7 @@ enum Status {
 interface ITaskList {
   inflight get(id: str): Json;
   inflight add(title: str): str;
-  inflight remove(id: str): void; 
+  inflight remove(id: str); 
   inflight find(r: IMyRegExp): Array<str>;
   inflight set_status(id: str, status: Status): str;
   inflight set_estimation(id: str, estimation: duration): str;
@@ -62,9 +62,6 @@ interface ITaskList {
 
 resource TaskList impl ITaskList {
   _redis: redis.Redis;
-  // we are missing inflight init, so I need to create a lazy get_redis_client method  
-  // that creates the _redis_client when it is first called
-  inflight var _redis_client: redis.IRedisClient?; 
   
   extern "./tasklist_helper.js" static inflight uuid(): str; 
   
@@ -72,20 +69,13 @@ resource TaskList impl ITaskList {
     this._redis = new redis.Redis();
   }
   
-  inflight get_redis_client(): redis.IRedisClient { 
-    if !this.redis_client? {
-      this._redis_client = this._redis.ioredis();
-    }
-    return this._redis_client;
-  }
-  
   inflight get(id: str): Json {
-    return Json.parse(this.get_redis_client().get(id));
+    return Json.parse(this._redis.get(id));
   }
   
   inflight _add(id: str, j: Json): str {
-    this.get_redis_client().set(id , Json.stringify(j));
-    this.get_redis_client().sadd("todo", id);
+    this._redis.set(id , Json.stringify(j));
+    this._redis.sadd("todo", id);
     return id;
   } 
     
@@ -101,14 +91,14 @@ resource TaskList impl ITaskList {
       
   inflight remove(id: str) {
     log("removing task ${id}");
-    this.get_redis_client().del(id);
+    this._redis.del(id);
   }
       
   inflight find(r: IMyRegExp): Array<str> { 
     let result = MutArray<str>[]; 
-    let ids = this.get_redis_client().smembers("todo");
+    let ids = this._redis.smembers("todo");
     for id in ids {
-      let j = Json.parse(this.get_redis_client().get(id));
+      let j = Json.parse(this._redis.get(id));
       if r.test(j.get("title")) {
         result.push(id);
       }
