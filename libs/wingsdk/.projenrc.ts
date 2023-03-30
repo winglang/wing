@@ -70,7 +70,6 @@ const project = new cdk.JsiiProject({
     "vitest",
     "@types/uuid",
     "@vitest/coverage-c8",
-    "@types/dockerode",
   ],
   prettier: true,
   npmignoreEnabled: false,

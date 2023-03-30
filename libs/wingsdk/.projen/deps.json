@@ -9,10 +9,6 @@
       "type": "build"
     },
     {
-      "name": "@types/dockerode",
-      "type": "build"
-    },
-    {
       "name": "@types/express-serve-static-core",
       "version": "4.17.28",
       "type": "build"
