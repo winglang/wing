@@ -14,7 +14,6 @@ import { RouterContext, RouterEvents } from "./utils/createRouter.js";
 import { createSimulator } from "./utils/createSimulator.js";
 import { getWingVersion } from "./utils/getWingVersion.js";
 import { LogInterface } from "./utils/LogInterface.js";
-import { TestLogger } from "./utils/testLogger.js";
 
 export interface CreateExpressServerOptions {
   simulatorPromise: Promise<ReturnType<typeof createSimulator>>;
@@ -23,7 +22,6 @@ export interface CreateExpressServerOptions {
   errorMessage: () => string | undefined;
   emitter: Emittery<RouterEvents>;
   log: LogInterface;
-  testLogger: TestLogger;
   updater?: Updater;
   requestedPort?: number;
 }
@@ -35,7 +33,6 @@ export const createExpressServer = async ({
   emitter,
   cloudAppStateService,
   log,
-  testLogger,
   updater,
   requestedPort,
 }: CreateExpressServerOptions) => {
@@ -49,9 +46,6 @@ export const createExpressServer = async ({
         const sim = await simulatorPromise;
         return sim.get();
       },
-      logs() {
-        return consoleLogger.messages;
-      },
       async appDetails() {
         return {
           wingVersion: await getWingVersion(),
@@ -60,7 +54,7 @@ export const createExpressServer = async ({
       errorMessage() {
         return errorMessage();
       },
-      testLogger,
+      logger: consoleLogger,
       emitter,
       cloudAppStateService,
       updater,

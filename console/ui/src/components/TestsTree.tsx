@@ -32,20 +32,16 @@ export interface TestItem {
   label: string;
   status: TestStatus;
   time?: number;
-  onRunAll?: () => void;
   runAllDisabled?: boolean;
-}
-export interface TestsTreeProps {
-  onRunAll?: () => void;
-  onRunTest?: (testPath: string) => void;
 }
 
 type RouterOutput = inferRouterOutputs<Router>;
 
-export const TestsTree = ({ onRunAll, onRunTest }: TestsTreeProps) => {
+export const TestsTree = () => {
   const [testTree, setTestTree] = useState<TestItem[]>([]);
 
   const testListQuery = trpc["test.list"].useQuery();
+
   useEffect(() => {
     if (!testListQuery.data) {
       return;
@@ -108,7 +104,6 @@ export const TestsTree = ({ onRunAll, onRunTest }: TestsTreeProps) => {
     },
     onSuccess: (data) => {
       onRunTestsSuccess(data);
-      onRunAll?.();
     },
   });
 
@@ -118,7 +113,6 @@ export const TestsTree = ({ onRunAll, onRunTest }: TestsTreeProps) => {
     },
     onSuccess: (data) => {
       onRunTestsSuccess([data]);
-      onRunTest?.(data.path);
     },
   });
 

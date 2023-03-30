@@ -78,21 +78,21 @@ export const MetadataPanel = ({
     const connectionsGroupsArray: ConnectionsGroup[] = [];
     let resourceGroup: AttributeGroup | undefined;
     if (node.type.startsWith("wingsdk.cloud") && node.props) {
+      const icon = getResourceIconComponent(node.type, {}, node.id);
       switch (node.type) {
         case "wingsdk.cloud.Function": {
           resourceGroup = {
             groupName: "Function",
             actionName: "Invoke",
-            icon: getResourceIconComponent(node.type),
+            icon,
           };
-
           break;
         }
         case "wingsdk.cloud.Queue": {
           resourceGroup = {
             groupName: "Queue",
             actionName: "Send Message",
-            icon: getResourceIconComponent(node.type),
+            icon,
           };
 
           break;
@@ -101,7 +101,7 @@ export const MetadataPanel = ({
           resourceGroup = {
             groupName: "Bucket",
             actionName: "Files",
-            icon: getResourceIconComponent(node.type),
+            icon,
           };
 
           break;
@@ -109,7 +109,7 @@ export const MetadataPanel = ({
         case "wingsdk.cloud.Counter": {
           resourceGroup = {
             groupName: "Counter",
-            icon: getResourceIconComponent(node.type),
+            icon,
           };
 
           break;
@@ -118,7 +118,7 @@ export const MetadataPanel = ({
           resourceGroup = {
             groupName: "Topic",
             actionName: "Publish Message",
-            icon: getResourceIconComponent(node.type),
+            icon,
           };
 
           break;
@@ -144,6 +144,7 @@ export const MetadataPanel = ({
           icon: (
             <ResourceIcon
               resourceType={relationship.type}
+              resourcePath={relationship.path}
               className="w-4 h-4"
             />
           ),
@@ -160,6 +161,7 @@ export const MetadataPanel = ({
           icon: (
             <ResourceIcon
               resourceType={relationship.type}
+              resourcePath={relationship.path}
               className="w-4 h-4"
             />
           ),
@@ -189,7 +191,11 @@ export const MetadataPanel = ({
     <ScrollableArea overflowY className="h-full text-sm bg-slate-50">
       <div className="flex items-center gap-2 px-2 py-2">
         <div className="flex-shrink-0">
-          <ResourceIcon className="w-6 h-6" resourceType={node.type} />
+          <ResourceIcon
+            className="w-6 h-6"
+            resourceType={node.type}
+            resourcePath={node.path}
+          />
         </div>
 
         <div className="flex flex-col min-w-0">

@@ -17,13 +17,8 @@ const dateTimeFormat = new Intl.DateTimeFormat(undefined, {
   fractionalSecondDigits: 3,
 });
 
-export interface LoggerEntry extends LogEntry {
-  logClassName?: string;
-  labelClassName?: string;
-}
-
 interface LogEntryProps {
-  log: LoggerEntry;
+  log: LogEntry;
   onResourceClick?: (log: LogEntry) => void;
   onRowClick?: (log: LogEntry) => void;
   showIcons?: boolean;
@@ -109,7 +104,7 @@ const LogEntryRow = ({
             "text-red-500 bg-red-100": log.level === "error",
             "hover:text-red-600": log.level === "error" && canBeExpanded,
           },
-          log.logClassName,
+          log.ctx?.messageType === "info" && "bg-slate-100",
         )}
         onClick={() => onRowClick?.(log)}
       >
@@ -127,7 +122,7 @@ const LogEntryRow = ({
           </div>
         )}
 
-        {log.timestamp && (
+        {log.timestamp && !log.ctx?.hideTimestamp && (
           <div className="flex text-slate-500">
             {dateTimeFormat.format(log.timestamp)}
           </div>
@@ -137,7 +132,7 @@ const LogEntryRow = ({
             "cursor-default select-text min-w-0 text-left grow",
             {
               truncate: !expanded,
-              "ml-2": log.timestamp,
+              "ml-2": log.timestamp && !log.ctx?.hideTimestamp,
             },
           )}
         >
@@ -156,14 +151,25 @@ const LogEntryRow = ({
               />
             </button>
           )}
-          <span className={log.labelClassName} ref={expandableRef} />
+          <span
+            className={classNames(
+              log.ctx?.messageType === "info" && "text-slate-400",
+              log.ctx?.messageType === "title" && "text-slate-500",
+              log.ctx?.messageType === "success" && "text-green-700",
+              log.ctx?.messageType === "fail" && "text-red-500",
+              log.ctx?.messageType === "summary" &&
+                "font-medium text-slate-600",
+            )}
+            ref={expandableRef}
+          />
         </div>
 
         {onResourceClick && (
           <div className="justify-end ml-1 flex space-x-1 items-center">
-            {log.ctx?.sourcePath && (
+            {log.ctx?.sourceType && (
               <ResourceIcon
                 resourceType={log.ctx.sourceType}
+                resourcePath={log.ctx.sourcePath}
                 className="h-4 w-4"
               />
             )}
@@ -198,7 +204,7 @@ export const ConsoleLogs = ({
 }: ConsoleLogsProps) => {
   return (
     <div className="w-full gap-x-2 text-2xs font-mono">
-      {logs.map((log, logIndex) => (
+      {logs.map((log) => (
         <LogEntryRow
           key={`${log.id}`}
           log={log}

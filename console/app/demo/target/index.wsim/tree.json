@@ -61,7 +61,19 @@
             {
               "direction": "inbound",
               "relationship": "log",
-              "resource": "root/test: Log",
+              "resource": "root/test: Print",
+              "implicit": true
+            },
+            {
+              "direction": "inbound",
+              "relationship": "log",
+              "resource": "root/test: without assertions nor prints",
+              "implicit": true
+            },
+            {
+              "direction": "inbound",
+              "relationship": "log",
+              "resource": "root/test: Add fixtures",
               "implicit": true
             }
           ]
@@ -122,6 +134,48 @@
               "direction": "inbound",
               "relationship": "put_json",
               "resource": "root/cloud.Queue-OnMessage-90af6456",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "delete",
+              "resource": "root/test: Add fixtures",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "get",
+              "resource": "root/test: Add fixtures",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "get_json",
+              "resource": "root/test: Add fixtures",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "list",
+              "resource": "root/test: Add fixtures",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "public_url",
+              "resource": "root/test: Add fixtures",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "put",
+              "resource": "root/test: Add fixtures",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "put_json",
+              "resource": "root/test: Add fixtures",
               "implicit": false
             }
           ]
@@ -468,6 +522,30 @@
               "relationship": "reset",
               "resource": "root/test: Increment counter",
               "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "dec",
+              "resource": "root/test: Add fixtures",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "inc",
+              "resource": "root/test: Add fixtures",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "peek",
+              "resource": "root/test: Add fixtures",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "reset",
+              "resource": "root/test: Add fixtures",
+              "implicit": false
             }
           ]
         },
@@ -560,6 +638,12 @@
               "direction": "outbound",
               "relationship": "on_message",
               "resource": "root/Topic-OnMessage-9a6492e6",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "publish",
+              "resource": "root/test: Add fixtures",
               "implicit": false
             }
           ]
@@ -860,12 +944,164 @@
           "hidden": true
         }
       },
-      "test: Log": {
-        "id": "test: Log",
-        "path": "root/test: Log",
+      "test: Print": {
+        "id": "test: Print",
+        "path": "root/test: Print",
         "attributes": {
           "wing:resource:stateful": false,
           "wing:resource:connections": [
+            {
+              "direction": "outbound",
+              "relationship": "log",
+              "resource": "root/WingLogger",
+              "implicit": true
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.293"
+        },
+        "display": {
+          "title": "Function",
+          "description": "A cloud function (FaaS)"
+        }
+      },
+      "$Inflight10": {
+        "id": "$Inflight10",
+        "path": "root/$Inflight10",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": []
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.293"
+        },
+        "display": {
+          "title": "Inflight",
+          "description": "An inflight resource",
+          "hidden": true
+        }
+      },
+      "test: without assertions nor prints": {
+        "id": "test: without assertions nor prints",
+        "path": "root/test: without assertions nor prints",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": [
+            {
+              "direction": "outbound",
+              "relationship": "log",
+              "resource": "root/WingLogger",
+              "implicit": true
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.293"
+        },
+        "display": {
+          "title": "Function",
+          "description": "A cloud function (FaaS)"
+        }
+      },
+      "$Inflight11": {
+        "id": "$Inflight11",
+        "path": "root/$Inflight11",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": []
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.293"
+        },
+        "display": {
+          "title": "Inflight",
+          "description": "An inflight resource",
+          "hidden": true
+        }
+      },
+      "test: Add fixtures": {
+        "id": "test: Add fixtures",
+        "path": "root/test: Add fixtures",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": [
+            {
+              "direction": "outbound",
+              "relationship": "delete",
+              "resource": "root/cloud.Bucket",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "get",
+              "resource": "root/cloud.Bucket",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "get_json",
+              "resource": "root/cloud.Bucket",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "list",
+              "resource": "root/cloud.Bucket",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "public_url",
+              "resource": "root/cloud.Bucket",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "put",
+              "resource": "root/cloud.Bucket",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "put_json",
+              "resource": "root/cloud.Bucket",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "dec",
+              "resource": "root/cloud.Counter",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "inc",
+              "resource": "root/cloud.Counter",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "peek",
+              "resource": "root/cloud.Counter",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "reset",
+              "resource": "root/cloud.Counter",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "publish",
+              "resource": "root/Topic",
+              "implicit": false
+            },
             {
               "direction": "outbound",
               "relationship": "log",

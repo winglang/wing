@@ -1,5 +1,6 @@
 import { VscodeLayout } from "./components/VscodeLayout.js";
 import { NotificationsProvider } from "./design-system/Notification.js";
+import { TestsContextProvider } from "./utils/tests-context.js";
 import { trpc } from "./utils/trpc.js";
 
 export interface AppProps {}
@@ -24,10 +25,12 @@ export const App = ({}: AppProps) => {
 
   return (
     <NotificationsProvider>
-      <VscodeLayout
-        cloudAppState={appState.data ?? "loading"}
-        wingVersion={appDetails.data?.wingVersion}
-      />
+      <TestsContextProvider>
+        <VscodeLayout
+          cloudAppState={appState.data ?? "loading"}
+          wingVersion={appDetails.data?.wingVersion}
+        />
+      </TestsContextProvider>
     </NotificationsProvider>
   );
 };

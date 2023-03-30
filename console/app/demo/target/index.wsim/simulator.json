@@ -75,47 +75,6 @@
     },
     {
       "type": "wingsdk.cloud.Function",
-      "path": "root/Topic-OnMessage-bb32cd80",
-      "props": {
-        "sourceCodeFile": ".wing/topic-onmessage-bb32cd80_c8de25e4.js",
-        "sourceCodeLanguage": "javascript",
-        "environmentVariables": {
-          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}"
-        },
-        "timeout": 60000
-      },
-      "attrs": {}
-    },
-    {
-      "type": "wingsdk.cloud.Function",
-      "path": "root/Topic-OnMessage-9a6492e6",
-      "props": {
-        "sourceCodeFile": ".wing/topic-onmessage-9a6492e6_c849d125.js",
-        "sourceCodeLanguage": "javascript",
-        "environmentVariables": {
-          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}"
-        },
-        "timeout": 60000
-      },
-      "attrs": {}
-    },
-    {
-      "type": "wingsdk.cloud.Topic",
-      "path": "root/Topic",
-      "props": {
-        "subscribers": [
-          {
-            "functionHandle": "${root/Topic-OnMessage-bb32cd80#attrs.handle}"
-          },
-          {
-            "functionHandle": "${root/Topic-OnMessage-9a6492e6#attrs.handle}"
-          }
-        ]
-      },
-      "attrs": {}
-    },
-    {
-      "type": "wingsdk.cloud.Function",
       "path": "root/test: Increment counter",
       "props": {
         "sourceCodeFile": ".wing/test__increment_counter_c8257dd6.js",
@@ -182,12 +141,82 @@
     },
     {
       "type": "wingsdk.cloud.Function",
-      "path": "root/test: Log",
+      "path": "root/test: Print",
       "props": {
-        "sourceCodeFile": ".wing/test__log_c8f5fce3.js",
+        "sourceCodeFile": ".wing/test__print_c8ce8953.js",
         "sourceCodeLanguage": "javascript",
         "environmentVariables": {
           "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}"
+        },
+        "timeout": 60000
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/test: without assertions nor prints",
+      "props": {
+        "sourceCodeFile": ".wing/test__without_assertions_nor_prints_c847e63c.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {
+          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}"
+        },
+        "timeout": 60000
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/Topic-OnMessage-bb32cd80",
+      "props": {
+        "sourceCodeFile": ".wing/topic-onmessage-bb32cd80_c8de25e4.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {
+          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}"
+        },
+        "timeout": 60000
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/Topic-OnMessage-9a6492e6",
+      "props": {
+        "sourceCodeFile": ".wing/topic-onmessage-9a6492e6_c849d125.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {
+          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}"
+        },
+        "timeout": 60000
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Topic",
+      "path": "root/Topic",
+      "props": {
+        "subscribers": [
+          {
+            "functionHandle": "${root/Topic-OnMessage-bb32cd80#attrs.handle}"
+          },
+          {
+            "functionHandle": "${root/Topic-OnMessage-9a6492e6#attrs.handle}"
+          }
+        ]
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/test: Add fixtures",
+      "props": {
+        "sourceCodeFile": ".wing/test__add_fixtures_c843d083.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {
+          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}",
+          "BUCKET_HANDLE_2cd0933d": "${root/cloud.Bucket#attrs.handle}",
+          "COUNTER_HANDLE_e5a56560": "${root/cloud.Counter#attrs.handle}",
+          "TOPIC_HANDLE_fec76c28": "${root/Topic#attrs.handle}"
         },
         "timeout": 60000
       },

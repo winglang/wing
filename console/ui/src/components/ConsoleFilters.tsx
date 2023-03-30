@@ -5,8 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "../design-system/Button.js";
 import { Input } from "../design-system/Input.js";
-
-import LogsFilters from "./LogsFilters.js";
+import { Listbox } from "../design-system/Listbox.js";
 
 export interface ConsoleFiltersProps {
   selectedLogTypeFilters: LogLevel[];
@@ -30,6 +29,41 @@ export const ConsoleFilters = ({
     debouncedOnSearch(searchText);
   }, [debouncedOnSearch, searchText]);
 
+  const [defaultSelection, setDefaultSelection] = useState<string[]>();
+  const [combinationName, setCombinationName] = useState<string>();
+
+  const logLevels = ["verbose", "info", "warn", "error"] as const;
+  const logLevelNames: Record<(typeof logLevels)[number], string> = {
+    verbose: "Verbose",
+    info: "Info",
+    warn: "Warnings",
+    error: "Errors",
+  };
+
+  useEffect(() => {
+    if (selectedLogTypeFilters.length === 4) {
+      setCombinationName("All levels");
+    } else if (
+      selectedLogTypeFilters.length === 3 &&
+      selectedLogTypeFilters.includes("verbose") === false
+    ) {
+      setCombinationName("Default levels");
+    } else if (selectedLogTypeFilters.length === 0) {
+      setCombinationName("Hide all");
+    } else if (
+      selectedLogTypeFilters.length === 1 &&
+      selectedLogTypeFilters[0]
+    ) {
+      setCombinationName(`${logLevelNames[selectedLogTypeFilters[0]]} only`);
+    } else {
+      setCombinationName("Custom levels");
+    }
+  }, [selectedLogTypeFilters]);
+
+  useEffect(() => {
+    setDefaultSelection(selectedLogTypeFilters);
+  }, []);
+
   return (
     <div className="flex px-2 space-x-2 pt-1">
       <Button
@@ -48,9 +82,17 @@ export const ConsoleFilters = ({
         onChange={(event) => setSearchText(event.target.value)}
       />
 
-      <LogsFilters
+      <Listbox
+        label={combinationName}
+        items={logLevels.map((type) => ({
+          value: type,
+          label: logLevelNames[type],
+        }))}
         selected={selectedLogTypeFilters}
-        onChange={(types) => setSelectedLogTypeFilters(types)}
+        onChange={(types) => {
+          setSelectedLogTypeFilters(types as LogLevel[]);
+        }}
+        defaultSelection={defaultSelection}
       />
     </div>
   );

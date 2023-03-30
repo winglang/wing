@@ -6,10 +6,12 @@ export type LogLevel = "verbose" | "info" | "warn" | "error";
 
 export type LogSource = "compiler" | "console" | "simulator" | "user";
 
-export interface TracingContext {
+export interface LogContext {
   sourceType?: string;
   sourcePath?: string;
   label?: string;
+  messageType?: MessageType;
+  hideTimestamp?: boolean;
 }
 
 export interface LogEntry {
@@ -18,22 +20,16 @@ export interface LogEntry {
   level: LogLevel;
   message: string;
   source: LogSource;
-  ctx?: TracingContext;
+  ctx?: LogContext;
 }
+
+export type MessageType = "info" | "title" | "summary" | "success" | "fail";
 
 export interface ConsoleLogger {
   messages: LogEntry[];
-  verbose: (
-    message: string,
-    source?: LogSource,
-    context?: TracingContext,
-  ) => void;
-  log: (message: string, source?: LogSource, context?: TracingContext) => void;
-  error: (
-    message: unknown,
-    source?: LogSource,
-    context?: TracingContext,
-  ) => void;
+  verbose: (message: string, source?: LogSource, context?: LogContext) => void;
+  log: (message: string, source?: LogSource, context?: LogContext) => void;
+  error: (message: unknown, source?: LogSource, context?: LogContext) => void;
 }
 
 export interface CreateConsoleLoggerOptions {

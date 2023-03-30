@@ -42,7 +42,7 @@ export const Button = forwardRef<
         ref={ref}
         type={type}
         className={classNames(
-          "inline-flex gap-2 items-center  text-xs font-medium outline-none  transition ease-in-out",
+          "inline-flex gap-2 items-center text-xs font-medium outline-none transition ease-in-out rounded",
           {
             "px-2.5": label || children,
             "py-1.5": !small,
@@ -51,8 +51,7 @@ export const Button = forwardRef<
               primary && !transparent,
             "border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:border-sky-500":
               !primary && !transparent,
-            "border rounded shadow-sm focus:ring-2 focus:ring-sky-500/50":
-              !transparent,
+            "border shadow-sm focus:ring-2 focus:ring-sky-500/50": !transparent,
             "text-slate-700 hover:text-slate-900": transparent,
           },
           className,

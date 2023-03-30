@@ -12,7 +12,11 @@ const createTreeMenuItemFromExplorerTreeItem = (
     id: item.id,
     label: item.label,
     icon: item.type ? (
-      <ResourceIcon resourceType={item.type} className="w-4 h-4" />
+      <ResourceIcon
+        resourceType={item.type}
+        resourcePath={item.id}
+        className="w-4 h-4"
+      />
     ) : undefined,
     children: item.childItems?.map((item) =>
       createTreeMenuItemFromExplorerTreeItem(item),

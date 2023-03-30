@@ -50,31 +50,43 @@ export const createAppRouter = () => {
         }),
       )
       .query(async ({ ctx, input }) => {
-        return ctx
-          .logs()
-          .filter(
-            (entry) =>
-              input.filters.level[entry.level] &&
-              entry.timestamp &&
-              entry.timestamp >= input.filters.timestamp &&
-              (!input.filters.text ||
-                `${entry.message}${entry.ctx?.sourcePath}`
-                  .toLowerCase()
-                  .includes(input.filters.text.toLowerCase())),
-          );
+        return ctx.logger.messages.filter(
+          (entry) =>
+            input.filters.level[entry.level] &&
+            entry.timestamp &&
+            entry.timestamp >= input.filters.timestamp &&
+            (!input.filters.text ||
+              `${entry.message}${entry.ctx?.sourcePath}`
+                .toLowerCase()
+                .includes(input.filters.text.toLowerCase())),
+        );
       }),
     "app.error": createProcedure.query(({ ctx }) => {
       return ctx.errorMessage();
     }),
-    "app.explorerTree": createProcedure.query(async ({ ctx }) => {
-      const simulator = await ctx.simulator();
-      const { tree } = simulator.tree().rawData();
-      return createExplorerItemFromConstructTreeNode(tree, simulator);
-    }),
+    "app.explorerTree": createProcedure
+      .input(
+        z
+          .object({
+            showTests: z.boolean().optional(),
+          })
+          .optional(),
+      )
+      .query(async ({ ctx, input }) => {
+        const simulator = await ctx.simulator();
+
+        const { tree } = simulator.tree().rawData();
+        return createExplorerItemFromConstructTreeNode(
+          tree,
+          simulator,
+          input?.showTests,
+        );
+      }),
     "app.childRelationships": createProcedure
       .input(
         z.object({
           path: z.string().optional(),
+          showTests: z.boolean().optional(),
         }),
       )
       .query(async ({ ctx, input }) => {
@@ -84,9 +96,13 @@ export const createAppRouter = () => {
 
         const node = nodeMap.get(input.path);
         const children = nodeMap.getAll(node?.children ?? []);
+
         return children
           .filter((node) => {
-            return !node.display?.hidden && !isTest.test(node.path);
+            return (
+              !node.display?.hidden &&
+              (input.showTests || !isTest.test(node.path))
+            );
           })
           .map((node) => ({
             node: {
@@ -102,7 +118,10 @@ export const createAppRouter = () => {
                     return;
                   }
                   const node = nodeMap.get(resource)!;
-                  return !node.display?.hidden && !isTest.test(node.path);
+                  return (
+                    !node.display?.hidden &&
+                    (input.showTests || !isTest.test(node.path))
+                  );
                 })
                 .map((connection) => {
                   const node = nodeMap.get(connection.resource)!;
@@ -122,7 +141,10 @@ export const createAppRouter = () => {
                     return;
                   }
                   const node = nodeMap.get(resource)!;
-                  return !node.display?.hidden && !isTest.test(node.path);
+                  return (
+                    !node.display?.hidden &&
+                    (input.showTests || !isTest.test(node.path))
+                  );
                 })
                 .map((connection) => {
                   const node = nodeMap.get(connection.resource)!;
@@ -197,10 +219,11 @@ export const createAppRouter = () => {
       .input(
         z.object({
           path: z.string().optional(),
+          showTests: z.boolean().optional(),
         }),
       )
       .query(async ({ ctx, input }) => {
-        const { path } = input;
+        const { path, showTests } = input;
         if (!path) {
           throw new TRPCError({
             code: "NOT_FOUND",
@@ -209,6 +232,7 @@ export const createAppRouter = () => {
         }
 
         const simulator = await ctx.simulator();
+
         const { tree } = simulator.tree().rawData();
         const nodeMap = buildConstructTreeNodeMap(tree);
         const node = nodeMap.get(path);
@@ -231,7 +255,11 @@ export const createAppRouter = () => {
           },
         ).filter((connection) => {
           const node = nodeMap.get(connection.resource);
-          return !node?.display?.hidden && !isTest.test(node?.path ?? "");
+          return (
+            !node?.display?.hidden &&
+            showTests &&
+            !isTest.test(node?.path ?? "")
+          );
         });
 
         const config = getResourceConfig(path, simulator);
@@ -278,21 +306,32 @@ export const createAppRouter = () => {
         };
       });
     }),
-    "app.map": createProcedure.query(async ({ ctx }) => {
-      const simulator = await ctx.simulator();
-      const { tree } = simulator.tree().rawData();
-      const nodeMap = buildConstructTreeNodeMap(tree);
-      const nodes = [createMapNodeFromConstructTreeNode(tree, simulator)];
-      const edges = uniqby(
-        createMapEdgeFromConstructTreeNode(tree, nodeMap),
-        (edge) => edge.id,
-      );
+    "app.map": createProcedure
+      .input(
+        z
+          .object({
+            showTests: z.boolean().optional(),
+          })
+          .optional(),
+      )
+      .query(async ({ ctx, input }) => {
+        const simulator = await ctx.simulator();
 
-      return {
-        nodes,
-        edges,
-      };
-    }),
+        const { tree } = simulator.tree().rawData();
+        const nodeMap = buildConstructTreeNodeMap(tree);
+        const nodes = [
+          createMapNodeFromConstructTreeNode(tree, simulator, input?.showTests),
+        ];
+        const edges = uniqby(
+          createMapEdgeFromConstructTreeNode(tree, nodeMap, input?.showTests),
+          (edge) => edge.id,
+        );
+
+        return {
+          nodes,
+          edges,
+        };
+      }),
     "app.state": createProcedure.query(async ({ ctx }) => {
       return ctx.cloudAppStateService.getSnapshot().value as AppStates;
     }),
@@ -314,6 +353,7 @@ export const createAppRouter = () => {
 function createExplorerItemFromConstructTreeNode(
   node: ConstructTreeNode,
   simulator: Simulator,
+  showTests = false,
 ): ExplorerItem {
   return {
     id: node.path,
@@ -323,7 +363,9 @@ function createExplorerItemFromConstructTreeNode(
     childItems: node.children
       ? Object.values(node.children)
           .filter((node) => {
-            return !node.display?.hidden && !isTest.test(node.path);
+            return (
+              !node.display?.hidden && (showTests || !isTest.test(node.path))
+            );
           })
           .map((node) =>
             createExplorerItemFromConstructTreeNode(node, simulator),
@@ -345,6 +387,7 @@ interface MapNode {
 function createMapNodeFromConstructTreeNode(
   node: ConstructTreeNode,
   simulator: Simulator,
+  showTests = false,
 ): MapNode {
   return {
     id: node.path,
@@ -356,7 +399,9 @@ function createMapNodeFromConstructTreeNode(
     children: node.children
       ? Object.values(node.children)
           .filter((node) => {
-            return !node.display?.hidden && !isTest.test(node.path);
+            return (
+              !node.display?.hidden && (showTests || !isTest.test(node.path))
+            );
           })
           .map((node) => createMapNodeFromConstructTreeNode(node, simulator))
       : undefined,
@@ -372,8 +417,9 @@ interface MapEdge {
 function createMapEdgeFromConstructTreeNode(
   node: ConstructTreeNode,
   nodeMap: ConstructTreeNodeMap,
+  showTests = false,
 ): MapEdge[] {
-  if (node.display?.hidden || isTest.test(node.path)) {
+  if (node.display?.hidden || (!showTests && isTest.test(node.path))) {
     return [];
   }
 
@@ -381,7 +427,8 @@ function createMapEdgeFromConstructTreeNode(
     ...(node.attributes?.["wing:resource:connections"]
       ?.filter(({ direction, resource }: NodeConnection) => {
         const node = nodeMap.get(resource)!;
-        const shouldRemove = node.display?.hidden || isTest.test(node.path);
+        const shouldRemove =
+          node.display?.hidden || (!showTests && isTest.test(node.path));
         if (direction === "inbound" && !shouldRemove) {
           return true;
         }
@@ -394,7 +441,7 @@ function createMapEdgeFromConstructTreeNode(
         };
       }) ?? []),
     ...(Object.values(node.children ?? {})?.map((child) =>
-      createMapEdgeFromConstructTreeNode(child, nodeMap),
+      createMapEdgeFromConstructTreeNode(child, nodeMap, showTests),
     ) ?? []),
   ].flat();
 }

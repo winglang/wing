@@ -1,12 +1,11 @@
 import { initTRPC } from "@trpc/server";
 import Emittery from "emittery";
 
-import { LogEntry } from "../consoleLogger.js";
+import { ConsoleLogger, LogEntry } from "../consoleLogger.js";
 import { Updater } from "../updater.js";
 import { Simulator } from "../wingsdk.js";
 
 import { CloudAppStateService } from "./cloudAppState.js";
-import { TestLogger } from "./testLogger.js";
 
 export type QueryNames = {
   query:
@@ -24,14 +23,13 @@ export type RouterEvents = {
 
 export interface RouterContext {
   simulator: () => Promise<Simulator>;
-  logs: () => LogEntry[];
   appDetails: () => Promise<{
     wingVersion: string | undefined;
   }>;
   errorMessage: () => string | undefined;
   emitter: Emittery<RouterEvents>;
   cloudAppStateService: CloudAppStateService;
-  testLogger: TestLogger;
+  logger: ConsoleLogger;
   updater?: Updater;
 }
 

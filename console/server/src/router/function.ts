@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
 import { IFunctionClient } from "../wingsdk.js";
 
-type ResponseEnvelope =
+export type ResponseEnvelope =
   | {
       success: true;
       response: string;
@@ -13,11 +13,11 @@ type ResponseEnvelope =
       error: unknown;
     };
 
-interface ErrorLike {
+export interface ErrorLike {
   message: string;
 }
 
-const isErrorLike = (value: unknown): value is ErrorLike => {
+export const isErrorLike = (value: unknown): value is ErrorLike => {
   if (value instanceof Error) {
     return true;
   }

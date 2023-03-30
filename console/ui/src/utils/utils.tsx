@@ -8,6 +8,7 @@ import {
   QueueListIcon,
   MegaphoneIcon,
   CloudIcon,
+  BeakerIcon,
 } from "@heroicons/react/24/outline";
 import {
   ArchiveBoxIcon as SolidArchiveBoxIcon,
@@ -17,6 +18,7 @@ import {
   GlobeAltIcon as SolidGlobeAltIcon,
   QueueListIcon as SolidQueueListIcon,
   MegaphoneIcon as SolidMegaphoneIcon,
+  BeakerIcon as SolidBeakerIcon,
   CloudIcon as SolidCloudIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
@@ -25,6 +27,8 @@ import classNames from "classnames";
 import { SVGProps } from "react";
 
 import { TreeMenuItem } from "./useTreeMenuItems.js";
+
+const isTest = /(\/test$|\/test:([^/\\])+$)/;
 
 export const flattenTreeMenuItems = (items: TreeMenuItem[]): TreeMenuItem[] => {
   return items.flatMap((item) => {
@@ -50,6 +54,7 @@ export const SchemaToTreeMenuItems = (
       icon: (
         <ResourceIcon
           resourceType={node.type}
+          resourcePath={node.path}
           className="w-4 h-4"
           darkenOnGroupHover
         />
@@ -83,7 +88,11 @@ export const CustomResourceIcon = (props: React.SVGProps<SVGSVGElement>) => {
 export const getResourceIconComponent = (
   resourceType: BaseResourceSchema["type"] | undefined,
   { solid = false }: { solid?: boolean } = {},
+  resourceId?: string,
 ) => {
+  if (resourceId && isTest.test(resourceId)) {
+    return solid ? SolidBeakerIcon : BeakerIcon;
+  }
   switch (resourceType) {
     case "wingsdk.cloud.Bucket": {
       return solid ? SolidArchiveBoxIcon : ArchiveBoxIcon;
@@ -108,6 +117,9 @@ export const getResourceIconComponent = (
     }
     case "cloud.Cron": {
       return solid ? SolidClockIcon : ClockIcon;
+    }
+    case "wingsdk.cloud.Test": {
+      return solid ? SolidBeakerIcon : BeakerIcon;
     }
     default: {
       return CubeIcon;
@@ -190,6 +202,7 @@ const getResourceIconColors = (options: {
 
 export interface ResourceIconProps extends SVGProps<SVGSVGElement> {
   resourceType: BaseResourceSchema["type"] | undefined;
+  resourcePath?: string;
   darkenOnGroupHover?: boolean;
   forceDarken?: boolean;
   solid?: boolean;
@@ -197,13 +210,18 @@ export interface ResourceIconProps extends SVGProps<SVGSVGElement> {
 
 export const ResourceIcon = ({
   resourceType,
+  resourcePath,
   darkenOnGroupHover,
   forceDarken,
   className,
   solid,
   ...props
 }: ResourceIconProps) => {
-  const Component = getResourceIconComponent(resourceType, { solid });
+  const Component = getResourceIconComponent(
+    resourceType,
+    { solid },
+    resourcePath,
+  );
   const colors = getResourceIconColors({
     resourceType,
     darkenOnGroupHover,

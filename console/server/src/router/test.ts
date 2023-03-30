@@ -1,71 +1,66 @@
-import { Trace } from "@winglang/sdk/lib/testing/simulator.js";
+import { Simulator, Trace } from "@winglang/sdk/lib/testing/simulator.js";
 import { z } from "zod";
 
+import { ConsoleLogger, MessageType } from "../consoleLogger.js";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { TestLog, TestLogger } from "../utils/testLogger.js";
+import { IFunctionClient } from "../wingsdk.js";
 
-const getTracesMessages = (traces: Trace[]) => {
-  return traces
-    .filter((trace: Trace) => trace.type === "log" && trace.data?.message)
-    .map((trace: Trace) => trace.data?.message);
-};
+import { isErrorLike } from "./function.js";
 
 const getTestName = (testPath: string) => {
   const test = testPath.split("/").pop() ?? testPath;
   return test.replace(/test: /g, "");
 };
 
+const runTest = async (
+  simulator: Simulator,
+  resourcePath: string,
+  logger: ConsoleLogger,
+): Promise<TestResult> => {
+  logger.log("Reloading simulator...", "console", {
+    messageType: "info",
+  });
+  await simulator.reload();
+
+  const client = simulator.getResource(resourcePath) as IFunctionClient;
+  let result: TestResult = {
+    response: "",
+    error: "",
+    path: resourcePath,
+    time: 0,
+  };
+  const startTime = Date.now();
+  try {
+    result.response = await client.invoke("");
+    logger.log(
+      `Test "${getTestName(resourcePath)}" succeeded (${
+        Date.now() - startTime
+      }ms)`,
+      "console",
+      {
+        messageType: "success",
+      },
+    );
+  } catch (error) {
+    result.error = isErrorLike(error) ? error.message : String(error);
+    logger.log(
+      `Test "${getTestName(resourcePath)} failed (${Date.now() - startTime}ms)`,
+      "console",
+      {
+        messageType: "fail",
+      },
+    );
+  }
+  result.time = Date.now() - startTime;
+  return result;
+};
+
 interface TestResult {
+  response: string;
   error: string | undefined;
   path: string;
-  pass: boolean;
-  traces: Trace[];
-  timestamp: number;
   time: number;
 }
-
-const generateLogs = (logger: TestLogger, logs: TestResult[]) => {
-  for (const log of logs) {
-    logger.log({
-      type: "title",
-      message: `Test: ${getTestName(log.path)}`,
-      timestamp: Date.now(),
-    });
-
-    const messages = getTracesMessages(log.traces);
-    for (const message of messages) {
-      if (message) {
-        logger.log({
-          type: "log",
-          message: message,
-          timestamp: log.timestamp,
-        });
-      }
-    }
-    if (log.error) {
-      logger.log({
-        type: "log",
-        message: log.error,
-        timestamp: log.timestamp,
-      });
-    }
-    logger.log({
-      type: log.error ? "fail" : "success",
-      message: `Test ${log.error ? "failed" : "succeeded"} (${log.time}ms)`,
-      timestamp: Date.now(),
-    });
-  }
-
-  const testPassed = logs.filter((output) => !output.error);
-  const time = logs.reduce((value, output) => value + output.time, 0);
-
-  const message = `Tests completed: ${testPassed.length}/${logs.length} passed. (${time}ms)`;
-  logger.log({
-    type: "summary",
-    message,
-    timestamp: Date.now(),
-  });
-};
 
 export const createTestRouter = () => {
   return createRouter({
@@ -80,62 +75,29 @@ export const createTestRouter = () => {
         }),
       )
       .mutation(async ({ input, ctx }) => {
-        const simulator = await ctx.simulator();
-
-        const startTime = Date.now();
-        const result = await simulator.runTest(input.resourcePath);
-        const endTime = Date.now();
-
-        const error = result.error?.split("\n")[0];
-        const log = {
-          timestamp: Date.now(),
-          time: endTime - startTime,
-          ...result,
-          error,
-        };
-
-        generateLogs(ctx.testLogger, [log]);
-        return log;
+        return await runTest(
+          await ctx.simulator(),
+          input.resourcePath,
+          ctx.logger,
+        );
       }),
     "test.runAll": createProcedure.mutation(async ({ ctx }) => {
       const simulator = await ctx.simulator();
       const testList = simulator.listTests();
-
-      const logs = [];
-      for (const testName of testList) {
-        const startTime = Date.now();
-        const result = await simulator.runTest(testName);
-        const endTime = Date.now();
-
-        const error = result.error?.split("\n")[0];
-        logs.push({
-          timestamp: Date.now(),
-          time: endTime - startTime,
-          ...result,
-          error,
-        });
+      const result: TestResult[] = [];
+      for (const resourcePath of testList) {
+        result.push(await runTest(simulator, resourcePath, ctx.logger));
       }
-      generateLogs(ctx.testLogger, logs);
-      return logs;
+
+      const testPassed = result.filter((r) => r.error === "");
+      const time = result.reduce((accumulator, r) => accumulator + r.time, 0);
+
+      const message = `Tests completed: ${testPassed.length}/${testList.length} passed. (${time}ms)`;
+      ctx.logger.log(message, "console", {
+        messageType: "summary",
+      });
+
+      return result;
     }),
-    "test.logs": createProcedure
-      .input(
-        z.object({
-          filters: z.object({
-            timestamp: z.number(),
-            text: z.string(),
-          }),
-        }),
-      )
-      .query(async ({ input, ctx }) => {
-        return ctx.testLogger.messages.filter(
-          (entry) =>
-            (!entry.timestamp || entry.timestamp >= input.filters.timestamp) &&
-            (!input.filters.text ||
-              entry.message
-                .toLowerCase()
-                .includes(input.filters.text.toLowerCase())),
-        );
-      }),
   });
 };

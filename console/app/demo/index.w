@@ -45,9 +45,9 @@ topic.on_message(inflight (message: str): str => {
 });
 
 new cloud.Function(inflight (message: str) => {
-  let value = counter.inc();
-  log("Counter is now ${counter.inc(0)}");
-  assert(value == 1);
+  let previous = counter.inc();
+  log("Assertion should fail: ${previous} === ${counter.peek()}");
+  assert(previous == 1);
 }) as "test: Increment counter";
 
 new cloud.Function(inflight (message: str) => {
@@ -57,4 +57,23 @@ new cloud.Function(inflight (message: str) => {
 new cloud.Function(inflight (message: str) => {
   log("Hello World!");
   assert(true);
-}) as "test: Log";
+}) as "test: Print";
+
+new cloud.Function(inflight (message: str) => {
+}) as "test: without assertions nor prints";
+
+new cloud.Function(inflight (message: str) => {
+  let arr = [1, 2, 3, 4, 5];
+
+  log("Adding ${arr.length} files in the bucket..");
+  for item in arr {
+    bucket.put("fixture_${item}.txt", "Content for the fixture_${item}!");
+  }
+
+  log("Publishing to the topic..");
+  topic.publish("Hello, topic!");
+
+  log("Setting up counter..");
+  counter.reset();
+  counter.inc(100);
+}) as "test: Add fixtures";

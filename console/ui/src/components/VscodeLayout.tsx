@@ -1,6 +1,13 @@
 import { BeakerIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
 import { LogEntry, LogLevel, State } from "@wingconsole/server";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import { BlueScreenOfDeath } from "../design-system/BlueScreenOfDeath.js";
 import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
@@ -9,6 +16,7 @@ import { ScrollableArea } from "../design-system/ScrollableArea.js";
 import { SpinnerLoader } from "../design-system/SpinnerLoader.js";
 import { Tabs } from "../design-system/Tabs.js";
 import { TopResizableWidget } from "../design-system/TopResizableWidget.js";
+import { TestsContext } from "../utils/tests-context.js";
 import { trpc } from "../utils/trpc.js";
 import { useExplorer } from "../utils/use-explorer.js";
 import { ResourceIcon } from "../utils/utils.js";
@@ -18,9 +26,9 @@ import { ConsoleLogs } from "./ConsoleLogs.js";
 import { ElkMap } from "./elk-map/ElkMap.js";
 import { ContainerNode } from "./ElkMapNodes.js";
 import { Explorer } from "./explorer.js";
+import { MapToolbarMenu } from "./MapToolbarMenu.js";
 import { MetadataPanel } from "./MetadataPanel.js";
 import { StatusBar } from "./StatusBar.js";
-import { TestsTab } from "./TestsTab.js";
 import { TestsTree } from "./TestsTree.js";
 
 export interface VscodeLayoutProps {
@@ -45,28 +53,11 @@ export const VscodeLayout = ({
 
   const errorMessage = trpc["app.error"].useQuery();
   const [currentTabId, setCurrentTabId] = useState("logs");
-  const [tabsWithNotifications, setTabsWithNotifications] = useState<string[]>(
-    [],
-  );
+  const { showTests } = useContext(TestsContext);
 
   const openTab = useCallback((tabId: string) => {
     setCurrentTabId(tabId);
-    setTabsWithNotifications((tabsWithNotifications) =>
-      tabsWithNotifications.filter((id) => id !== tabId),
-    );
   }, []);
-
-  const setHasNotifications = useCallback(
-    (tabId: string) => {
-      if (tabId !== currentTabId) {
-        setTabsWithNotifications((tabsWithNotifications) => [
-          ...tabsWithNotifications,
-          tabId,
-        ]);
-      }
-    },
-    [currentTabId],
-  );
 
   const [selectedLogTypeFilters, setSelectedLogTypeFilters] = useState<
     LogLevel[]
@@ -100,13 +91,9 @@ export const VscodeLayout = ({
     if (div) {
       div.scrollTo({ top: div.scrollHeight });
     }
-
     if (!logs.data) {
       return;
     }
-    setHasNotifications("logs");
-    // TODO: Fix the whole notifications thing. If setHasNotifications is added as a dependency, it stops working.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logs.data]);
 
   const onResourceClick = (log: LogEntry) => {
@@ -119,6 +106,7 @@ export const VscodeLayout = ({
   const metadata = trpc["app.nodeMetadata"].useQuery(
     {
       path: selectedItems[0],
+      showTests,
     },
     {
       enabled: selectedItems.length > 0,
@@ -129,7 +117,9 @@ export const VscodeLayout = ({
     return cloudAppState === "loading";
   }, [cloudAppState]);
 
-  const map = trpc["app.map"].useQuery();
+  const map = trpc["app.map"].useQuery({
+    showTests,
+  });
   const mapRefs = useRef<{ [key: string]: HTMLElement | undefined }>({});
   useEffect(() => {
     const [selectedItem] = selectedItems;
@@ -182,21 +172,16 @@ export const VscodeLayout = ({
             />
           </div>
           <TopResizableWidget className="h-1/3 border-t border-slate-300">
-            <TestsTree
-              onRunAll={() => {
-                setHasNotifications("tests");
-              }}
-              onRunTest={() => {
-                setHasNotifications("tests");
-              }}
-            />
+            <TestsTree />
           </TopResizableWidget>
         </RightResizableWidget>
 
         <div className="flex-1 flex flex-col">
           <div className="flex-1 flex">
             <div className="flex-1 flex flex-col">
-              <div className="flex-shrink-0 h-9 bg-gray-50"></div>
+              <div className="flex-shrink-0 h-9 bg-gray-50">
+                <MapToolbarMenu />
+              </div>
               <div className="h-full relative">
                 <ScrollableArea overflowX overflowY className="bg-white">
                   <div
@@ -226,6 +211,7 @@ export const VscodeLayout = ({
                               icon={(props) => (
                                 <ResourceIcon
                                   resourceType={node.data?.type}
+                                  resourcePath={node.id}
                                   solid
                                   {...props}
                                 />
@@ -294,14 +280,7 @@ export const VscodeLayout = ({
                   </div>
                 ),
               },
-              {
-                id: "tests",
-                name: "Tests",
-                icon: <BeakerIcon className="w-4 h-4 text-slate-600 -ml-0.5" />,
-                panel: <TestsTab />,
-              },
             ]}
-            tabsWithNotifications={tabsWithNotifications}
             currentTabId={currentTabId}
             onTabChange={openTab}
           />

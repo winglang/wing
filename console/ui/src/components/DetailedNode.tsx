@@ -56,7 +56,11 @@ const ResourceButton = ({
     >
       <div className="flex text-xs text-slate-900 space-x-2 pt-2 px-2 w-full">
         <div className="flex items-center flex-shrink-0">
-          <ResourceIcon resourceType={node.type} className="w-4 h-4 inline" />
+          <ResourceIcon
+            resourceType={node.type}
+            resourcePath={node.path}
+            className="w-4 h-4 inline"
+          />
         </div>
         <div className="text-left truncate" title={node.id}>
           {node.id}

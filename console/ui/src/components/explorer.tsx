@@ -38,6 +38,7 @@ const createTreeMenuItemFromExplorerTreeItem = (
     icon: item.type ? (
       <ResourceIcon
         resourceType={item.type}
+        resourcePath={item.label}
         className="w-4 h-4"
         // darkenOnGroupHover
       />

@@ -7,7 +7,6 @@ import { createCloudAppState } from "./utils/cloudAppState.js";
 import { RouterEvents } from "./utils/createRouter.js";
 import { createWingApp } from "./utils/createWingApp.js";
 import { LogInterface } from "./utils/LogInterface.js";
-import { createTestLogger } from "./utils/testLogger.js";
 
 export type { LogEntry, LogLevel } from "./consoleLogger.js";
 export type { ExplorerItem } from "./router/app.js";
@@ -94,7 +93,6 @@ export const createConsoleServer = async ({
     },
     emitter,
     log,
-    testLogger: createTestLogger(),
     updater,
     requestedPort,
   });
