@@ -297,11 +297,11 @@ exports[`enums.w > stderr 1`] = `
   |                     ^^^^ Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
 
 
-error: Expression must be a class or resource instance to access property \\"TWO\\", instead found type \\"SomeEnum\\"
+error: Property access unsupported on type \\"SomeEnum\\"
   --> ../../../examples/tests/invalid/enums.w:8:11
   |
 8 | let two = SomeEnum.TWO.TWO;
-  |           ^^^^^^^^^^^^ Expression must be a class or resource instance to access property \\"TWO\\", instead found type \\"SomeEnum\\"
+  |           ^^^^^^^^^^^^ Property access unsupported on type \\"SomeEnum\\"
 
 "
 `;
@@ -973,6 +973,13 @@ error: struct fields must be immutable got: Map<Array<MutArray<str>>>
 23 |   f: Map<Array<MutArray<str>>>;
    |   ^ struct fields must be immutable got: Map<Array<MutArray<str>>>
 
+
+error: Unknown symbol \\"bad_field\\"
+   --> ../../../examples/tests/invalid/structs.w:30:7
+   |
+30 | log(a.bad_field);
+   |       ^^^^^^^^^ Unknown symbol \\"bad_field\\"
+
 "
 `;
 
@@ -1137,11 +1144,11 @@ exports[`variable_scoping.w > stderr 1`] = `
 `;
 
 exports[`void_in_expression_position.w > stderr 1`] = `
-"error: Expression must be a class or resource instance to access property \\"get\\", instead found type \\"void\\"
+"error: Property access unsupported on type \\"void\\"
   --> ../../../examples/tests/invalid/void_in_expression_position.w:1:1
   |
 1 | log(\\"hey\\").get(\\"x\\");
-  | ^^^^^^^^^^ Expression must be a class or resource instance to access property \\"get\\", instead found type \\"void\\"
+  | ^^^^^^^^^^ Property access unsupported on type \\"void\\"
 
 
 error: Expected type to be \\"num\\", but got \\"void\\" instead

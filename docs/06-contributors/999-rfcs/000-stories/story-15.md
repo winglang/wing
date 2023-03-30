@@ -42,6 +42,9 @@ Another option is taking the do-it-yourself approach that require the developer 
 bring cloud;
 bring redis;
 
+
+let EMPTY_JSON = Json { empty: "https://github.com/winglang/wing/issues/1947" };
+
 interface IMyRegExp {
   inflight test(s: str): bool;
 }
@@ -54,17 +57,13 @@ enum Status {
 interface ITaskList {
   inflight get(id: str): Json;
   inflight add(title: str): str;
-  inflight remove(id: str): void; 
+  inflight remove(id: str); 
   inflight find(r: IMyRegExp): Array<str>;
   inflight set_status(id: str, status: Status): str;
-  inflight set_estimation(id: str, estimation: duration): str;
 }
 
 resource TaskList impl ITaskList {
   _redis: redis.Redis;
-  // we are missing inflight init, so I need to create a lazy get_redis_client method  
-  // that creates the _redis_client when it is first called
-  inflight var _redis_client: redis.IRedisClient?; 
   
   extern "./tasklist_helper.js" static inflight uuid(): str; 
   
@@ -72,20 +71,13 @@ resource TaskList impl ITaskList {
     this._redis = new redis.Redis();
   }
   
-  inflight get_redis_client(): redis.IRedisClient { 
-    if !this.redis_client? {
-      this._redis_client = this._redis.ioredis();
-    }
-    return this._redis_client;
-  }
-  
   inflight get(id: str): Json {
-    return Json.parse(this.get_redis_client().get(id));
+    return Json.parse(this._redis.get(id) ?? "");
   }
   
   inflight _add(id: str, j: Json): str {
-    this.get_redis_client().set(id , Json.stringify(j));
-    this.get_redis_client().sadd("todo", id);
+    this._redis.set(id , Json.stringify(j));
+    this._redis.sadd("todo", id);
     return id;
   } 
     
@@ -101,15 +93,15 @@ resource TaskList impl ITaskList {
       
   inflight remove(id: str) {
     log("removing task ${id}");
-    this.get_redis_client().del(id);
+    this._redis.del(id);
   }
       
   inflight find(r: IMyRegExp): Array<str> { 
     let result = MutArray<str>[]; 
-    let ids = this.get_redis_client().smembers("todo");
+    let ids = this._redis.smembers("todo");
     for id in ids {
-      let j = Json.parse(this.get_redis_client().get(id));
-      if r.test(j.get("title")) {
+      let j = Json.parse(this._redis.get(id) ?? "");
+      if r.test(str.from_json(j.get("title"))) {
         result.push(id);
       }
     }
@@ -127,12 +119,6 @@ resource TaskList impl ITaskList {
     return id;
   }
         
-  inflight set_estimation(id: str, estimation: duration): str {
-    let j = Json.clone_mut(this.get(id));
-    j.set("estimated_in_seconds", estimation.seconds);
-    this._add(id, Json.clone(j));
-    return id;
-  }
 }
       
 resource TaskListApi {
@@ -147,7 +133,8 @@ resource TaskListApi {
     this.api = new cloud.Api();
         
     this.api.post("/tasks", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-      let var title = str.from_json(req.body.get("title"));
+      let body = req.body ?? EMPTY_JSON;
+      let var title = str.from_json(body.get("title"));
       // Easter Egg - if you add a todo with the single word "random" as the title, 
       //              the system will fetch a random task from the internet
       if title == "random" {
@@ -159,14 +146,12 @@ resource TaskListApi {
     });
         
     this.api.put("/tasks/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-      let id = str.from_json(req.vars.get("id"));
-      if req.body.get("estimation_in_days")? { 
-        // -1 value of ?? expression is unreachable because of the above if statement
-        this.task_list.set_estimation(id, num.from_json(req.body.get("estimation_in_days") ?? -1 ));
-      }
-      if req.body.get("completed")? {
+      let vars = req.vars ?? Map<str>{};
+      let body = req.body ?? EMPTY_JSON;
+      let id = str.from_json(vars.get("id"));
+      if body.get("completed")? {
         // `false` value of ?? expression is unreachable because of the above if statement
-        if bool.from_json(req.body.get("completed") ?? false) {
+        if bool.from_json(body.get("completed") ?? false) {
           this.task_list.set_status(id, Status.COMPLETED);
         } else {
           this.task_list.set_status(id, Status.UNCOMPLETED);
@@ -181,7 +166,8 @@ resource TaskListApi {
     });
 
     this.api.get("/tasks/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-      let id = str.from_json(req.vars.get("id"));
+      let vars = req.vars ?? Map<str>{};
+      let id = str.from_json(vars.get("id"));
       try {
         let title = this.task_list.get(id);
         return cloud.ApiResponse { status:200, body: title };
@@ -191,9 +177,10 @@ resource TaskListApi {
     });
     
     this.api.delete("/tasks/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-      let id = str.from_json(req.vars.get("id"));
+      let vars = req.vars ?? Map<str>{};
+      let id = str.from_json(vars.get("id"));
       try {
-        this.task_list.delete(id);
+        this.task_list.remove(id);
         return cloud.ApiResponse { status: 204 };
       } catch {
         return cloud.ApiResponse { status: 400 };
@@ -201,7 +188,7 @@ resource TaskListApi {
     });
 
     this.api.get("/tasks", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-      let search = str.from_json(req.query.get("search") ?? Json ".*"); 
+      let search = req.query.get("search");
       let results = this.task_list.find(TaskListApi.create_regex(search));
       return cloud.ApiResponse { status: 200, body: results };
     });
