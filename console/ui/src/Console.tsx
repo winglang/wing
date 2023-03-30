@@ -10,9 +10,12 @@ export const Console = ({ port }: { port?: number }) => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        networkMode: "offlineFirst",
+        networkMode: "always",
         refetchOnWindowFocus: false,
         keepPreviousData: true,
+      },
+      mutations: {
+        networkMode: "always",
       },
     },
   });
