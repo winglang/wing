@@ -52,15 +52,23 @@ export default async function () {
     cwd: tmpDir,
   });
 
+  const allowedInstallHooks: RegExp[] = []; // Leaving this mechanism in place in case we need it in the future
+
+  const installHooks = installResult.stdout.match(/>.*/g)?.filter((hook) => {
+    return !allowedInstallHooks.some((allowedHook) => {
+      return allowedHook.test(hook);
+    });
+  }) ?? [];
+
+  assert.equal(
+    installHooks.length,
+    0,
+    `Install contains unexpected script hooks: \n${installHooks}`
+  );
   assert.equal(
     installResult.exitCode,
     0,
     `Failed to install npm deps: \n${installResult.stderr}`
-  );
-  assert.doesNotMatch(
-    installResult.stdout,
-    />/,
-    `Install contains unexpected script hook: \n${installResult.stdout}`
   );
   assert.doesNotMatch(
     installResult.stdout,

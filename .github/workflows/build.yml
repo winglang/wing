@@ -211,15 +211,6 @@ jobs:
       - name: Login to NPM registry
         run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
 
-      - name: Check published Wing version
-        id: wing-version
-        run: echo "version=$(npm view winglang version)" >> $GITHUB_OUTPUT
-
-      - name: Publish Wing
-        if: ${{ steps.wing-version.outputs.version != needs.build.outputs.version }}
-        working-directory: wing
-        run: npm publish *.tgz --access public
-
       - name: Check published WingSDK version
         id: wingsdk-version
         run: echo "version=$(npm view @winglang/sdk version)" >> $GITHUB_OUTPUT
@@ -227,6 +218,15 @@ jobs:
       - name: Publish Wing SDK
         if: ${{ steps.wingsdk-version.outputs.version != needs.build.outputs.version }}
         working-directory: wingsdk
+        run: npm publish *.tgz --access public
+
+      - name: Check published Wing version
+        id: wing-version
+        run: echo "version=$(npm view winglang version)" >> $GITHUB_OUTPUT
+
+      - name: Publish Wing
+        if: ${{ steps.wing-version.outputs.version != needs.build.outputs.version }}
+        working-directory: wing
         run: npm publish *.tgz --access public
 
       - name: Rename Docs
