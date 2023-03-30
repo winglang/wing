@@ -48,6 +48,7 @@
     "@types/jest": "^27",
     "@types/node": "^16",
     "@types/tar": "^6.1.3",
+    "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "@vitest/coverage-c8": "^0.29.2",
@@ -83,6 +84,7 @@
     "@cdktf/provider-azurerm": "^5.0.1",
     "@cdktf/provider-google": "^5.0.2",
     "@cdktf/provider-random": "^5.0.0",
+    "aws-cdk-lib": "^2.64.0",
     "cdktf": "0.15.2",
     "constructs": "~10.1.228"
   },
@@ -104,13 +106,16 @@
     "@cdktf/provider-azurerm": "^5.0.1",
     "@cdktf/provider-google": "^5.0.2",
     "@cdktf/provider-random": "^5.0.0",
+    "aws-cdk-lib": "^2.64.0",
     "cdktf": "0.15.2",
     "constructs": "~10.1.228",
     "debug": "^4.3.4",
     "esbuild-wasm": "^0.17.4",
     "express": "^4.18.2",
+    "ioredis": "^5.3.1",
     "safe-stable-stringify": "*",
-    "tar": "^6.1.13"
+    "tar": "^6.1.13",
+    "uuid": "^8.3.2"
   },
   "bundledDependencies": [
     "@aws-sdk/client-cloudwatch-logs",
@@ -129,8 +134,10 @@
     "debug",
     "esbuild-wasm",
     "express",
+    "ioredis",
     "safe-stable-stringify",
-    "tar"
+    "tar",
+    "uuid"
   ],
   "engines": {
     "node": ">= 16.16.0"

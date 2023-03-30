@@ -21,6 +21,9 @@
   <a href="https://docs.winglang.io/contributors/">Contribute</a>
 </p>
 
+[![Short demo](./logo/demo.gif)](https://youtu.be/_c4U6ffumw8)
+
+
 # Welcome! :wave:
 
 **Wing** is a [cloud-oriented programming language]. It is a modern,

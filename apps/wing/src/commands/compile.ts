@@ -1,7 +1,8 @@
 import * as vm from "vm";
 
-import { mkdir, readFile, rm} from "fs/promises";
+import { readFile, rmSync, mkdirp, move, mkdirpSync, copySync } from "fs-extra";
 import { basename, dirname, join, resolve } from "path";
+import * as os from "os";
 
 import * as chalk from "chalk";
 import debug from "debug";
@@ -26,6 +27,7 @@ export enum Target {
   TF_AZURE = "tf-azure",
   TF_GCP = "tf-gcp",
   SIM = "sim",
+  AWSCDK = "awscdk",
 }
 
 const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
@@ -33,6 +35,7 @@ const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
   [Target.TF_AZURE]: "tfazure",
   [Target.TF_GCP]: "tfgcp",
   [Target.SIM]: "wsim",
+  [Target.AWSCDK]: "awscdk",
 };
 
 /**
@@ -54,16 +57,17 @@ export interface CompileOptions {
  * within the output directory where the SDK app will synthesize its artifacts
  * for the given target.
  */
-function resolveSynthDir(outDir: string, entrypoint: string, target: Target, testing: boolean) {
+function resolveSynthDir(outDir: string, entrypoint: string, target: Target, testing: boolean = false, tmp: boolean = false) {
   const targetDirSuffix = DEFAULT_SYNTH_DIR_SUFFIX[target];
   if (!targetDirSuffix) {
     throw new Error(`unsupported target ${target}`);
   }
   const entrypointName = basename(entrypoint, ".w");
+  const tmpSuffix = tmp ? `.${Date.now().toString().slice(-6)}.tmp` : "";
   if (testing) {
-    return join(outDir, "test", `${entrypointName}.${targetDirSuffix}`);
+    return join(outDir, "test", `${entrypointName}.${targetDirSuffix}${tmpSuffix}`);
   } else {
-    return join(outDir, `${entrypointName}.${targetDirSuffix}`);
+    return join(outDir, `${entrypointName}.${targetDirSuffix}${tmpSuffix}`);
   }
 }
 
@@ -74,6 +78,7 @@ function resolveSynthDir(outDir: string, entrypoint: string, target: Target, tes
  * @returns the output directory
  */
 export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
+  // create a unique temporary directory for the compilation
   const targetdir = join(dirname(entrypoint), "target");
   const wingFile = entrypoint;
   log("wing file: %s", wingFile);
@@ -81,35 +86,34 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   log("wing dir: %s", wingDir);
   const testing = options.testing ?? false;
   log("testing: %s", testing);
+  const tmpSynthDir = resolveSynthDir(targetdir, wingFile, options.target, testing, true);
+  log("temp synth dir: %s", tmpSynthDir);
   const synthDir = resolveSynthDir(targetdir, wingFile, options.target, testing);
   log("synth dir: %s", synthDir);
-  const workDir = resolve(synthDir, ".wing");
+  const workDir = resolve(tmpSynthDir, ".wing");
   log("work dir: %s", workDir);
 
-  // clean up before
-  await rm(synthDir, { recursive: true, force: true });
-
-  process.env["WING_SYNTH_DIR"] = synthDir;
-  process.env["WING_NODE_MODULES"] = resolve(join(wingDir, "node_modules") );
+  process.env["WING_SYNTH_DIR"] = tmpSynthDir;
+  process.env["WING_NODE_MODULES"] = resolve(join(wingDir, "node_modules"));
   process.env["WING_TARGET"] = options.target;
   process.env["WING_TEST"] = testing.toString();
 
   await Promise.all([
-    mkdir(workDir, { recursive: true }),
-    mkdir(synthDir, { recursive: true }),
+    mkdirp(workDir),
+    mkdirp(tmpSynthDir),
   ]);
 
   const wingc = await wingCompiler.load({
     env: {
       RUST_BACKTRACE: "full",
-      WING_SYNTH_DIR: normalPath(synthDir),
+      WING_SYNTH_DIR: normalPath(tmpSynthDir),
       WINGC_PREFLIGHT,
       CLICOLOR_FORCE: chalk.supportsColor ? "1" : "0",
     },
     preopens: {
       [wingDir]: wingDir, // for Rust's access to the source file
       [workDir]: workDir, // for Rust's access to the work directory
-      [synthDir]: synthDir, // for Rust's access to the synth directory
+      [tmpSynthDir]: tmpSynthDir, // for Rust's access to the synth directory
     },
   });
 
@@ -174,7 +178,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   // the wing CLI was installed to), but also in the source code directory.
   // This is necessary because the Wing app may have installed dependencies in
   // the project directory.
-  const requireResolve = (path: string) => require.resolve(path, { paths: [workDir, __dirname, wingDir] }); 
+  const requireResolve = (path: string) => require.resolve(path, { paths: [workDir, __dirname, wingDir] });
   const preflightRequire = (path: string) => require(requireResolve(path));
   preflightRequire.resolve = requireResolve;
 
@@ -218,9 +222,9 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       console.log();
       console.log(
         "  " +
-          chalk.bold.white("note:") +
-          " " +
-          chalk.white(`intermediate javascript code (${artifactPath}):`)
+        chalk.bold.white("note:") +
+        " " +
+        chalk.white(`intermediate javascript code (${artifactPath}):`)
       );
       const lineNumber =
         Number.parseInt(
@@ -248,15 +252,28 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     } else {
       console.log(
         "  " +
-          chalk.bold.white("note:") +
-          " " +
-          chalk.white(
-            "run with `NODE_STACKTRACE=1` environment variable to display a stack trace"
-          )
+        chalk.bold.white("note:") +
+        " " +
+        chalk.white(
+          "run with `NODE_STACKTRACE=1` environment variable to display a stack trace"
+        )
       );
     }
 
     return process.exit(1);
+  }
+
+  if(os.platform() === "win32") {
+    // Windows doesn't really support fully atomic moves.
+    // So we just copy the directory instead.
+    // Also only using sync methods to avoid possible async fs issues.
+    rmSync(synthDir, { recursive: true, force: true });
+    mkdirpSync(synthDir);
+    copySync(tmpSynthDir, synthDir);
+    rmSync(tmpSynthDir, { recursive: true, force: true });
+  } else {
+    // Move the temporary directory to the final target location in an atomic operation
+    await move(tmpSynthDir, synthDir, { overwrite: true } );
   }
 
   return synthDir;

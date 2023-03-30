@@ -28,7 +28,7 @@ let counter = new cloud.Counter();
  */
 let add_task = new cloud.Function(inflight (title: str): str => {
   let id = counter.inc();
-  print("adding task ${id} with title: ${title}");
+  log("adding task ${id} with title: ${title}");
   bucket.put("${id}", title);
   return "${id}";
 }) as "add_task";
@@ -60,7 +60,7 @@ let delete_task = new cloud.Function(inflight (id: str): str => {
 let find_task = new cloud.Function(inflight (title: str): str => {
   for id in bucket.list() {
     let content = get_task.invoke(id);
-    print("Found task #${id} with '${content}'");
+    log("Found task #${id} with '${content}'");
     if title == content {
       return id;
     }
@@ -74,16 +74,16 @@ new cloud.Function(inflight (s: str): str => {
     let counter_value = counter.inc(0);
     let expected = "${counter_value}";
     let id = add_task.invoke("Add inflight resource functions");
-    print("added new task with id ${id}");
+    log("added new task with id ${id}");
     assert(expected == id);
 }) as "test: add a new task";
 
 new cloud.Function(inflight (s: str): str => {
     let expected = "task 42";
     let id = add_task.invoke(expected);
-    print("added new task with id ${id}");
+    log("added new task with id ${id}");
     let content = get_task.invoke(id);
-    print("The content that was added as task #${id} is '${content}'");
+    log("The content that was added as task #${id} is '${content}'");
     assert(content == expected);
 }) as "test: get a task";
 
@@ -92,24 +92,24 @@ new cloud.Function(inflight (s: str): str => {
     delete_task.invoke(id); 
   }
   let bucket_size = bucket.list().length;
-  print("bucket_size is ${bucket_size}");
+  log("bucket_size is ${bucket_size}");
   assert(0 == bucket_size);
 }) as "test: delete all tasks";
 
 
 new cloud.Function(inflight (s: str): str => {
-  print("------ test: find ------");
+  log("------ test: find ------");
   let value = counter.inc(0);
-  print("Initial counter is #${value}");
+  log("Initial counter is #${value}");
   add_task.invoke("counter(${value}) counter"); 
   add_task.invoke("counter(${value}) + 1");
   add_task.invoke("counter(${value}) + 2");
   add_task.invoke("counter(${value}) + 3");
   add_task.invoke("counter(${value}) + 4");
-  print("------ Running Find ------");
+  log("------ Running Find ------");
   let id = find_task.invoke("counter(${value}) + 2");
   let expected = "${value + 2}"; 
-  print("found task with id ${id} (expected ${value + 2})");
+  log("found task with id ${id} (expected ${value + 2})");
   assert(id == expected);
 }) as "test: find task by content";
 ```

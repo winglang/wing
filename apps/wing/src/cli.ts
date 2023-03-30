@@ -52,7 +52,7 @@ async function main() {
     .argument("<entrypoint>", "program .w entrypoint")
     .addOption(
       new Option("-t, --target <target>", "Target platform")
-        .choices(["tf-aws", "tf-azure", "tf-gcp", "sim"])
+        .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
         .makeOptionMandatory()
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
