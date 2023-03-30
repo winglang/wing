@@ -1,4 +1,4 @@
-import { exec } from "child_process";
+import { execFile } from "child_process";
 import { mkdtempSync, readdirSync, readFileSync, statSync } from "fs";
 import { tmpdir } from "os";
 import { extname, join } from "path";
@@ -163,9 +163,12 @@ export function sanitizeCode(code: Code): string {
   return sanitizeCodeText(code.text);
 }
 
-export async function runCommand(cmd: string): Promise<any> {
+/**
+ * Just a helpful wrapper around `execFile` that returns a promise.
+ */
+export async function runCommand(cmd: string, args: string[]): Promise<any> {
   const raw = await new Promise((resolve, reject) => {
-    exec(cmd, (error, stdout, stderr) => {
+    execFile(cmd, args, (error, stdout, stderr) => {
       if (error) {
         stderr;
         reject(error);

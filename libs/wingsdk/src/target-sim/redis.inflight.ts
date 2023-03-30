@@ -13,6 +13,7 @@ const IoRedis = require("ioredis");
 export class Redis implements IRedisClient, ISimulatorResourceInstance {
   private container_name: string;
   private readonly REDIS_IMAGE =
+    process.env.REDIS_IMAGE ??
     "redis@sha256:e50c7e23f79ae81351beacb20e004720d4bed657415e68c2b1a2b5557c075ce0";
   private readonly context: ISimulatorContext;
 
@@ -30,15 +31,24 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
   public async init(): Promise<RedisAttributes> {
     try {
       // Pull docker image
-      await runCommand(`docker pull ${this.REDIS_IMAGE}`);
+      await runCommand("docker", ["pull", `${this.REDIS_IMAGE}`]);
 
       // Run the container and allow docker to assign a host port dynamically
-      await runCommand(
-        `docker run --detach --name ${this.container_name} -p 6379 ${this.REDIS_IMAGE}`
-      );
+      await runCommand("docker", [
+        "run",
+        "--detach",
+        "--name",
+        `${this.container_name}`,
+        "-p",
+        "6379",
+        `${this.REDIS_IMAGE}`,
+      ]);
 
       // Inspect the container to get the host port
-      const out = await runCommand(`docker inspect ${this.container_name}`);
+      const out = await runCommand("docker", [
+        "inspect",
+        `${this.container_name}`,
+      ]);
       const hostPort =
         JSON.parse(out)[0].NetworkSettings.Ports["6379/tcp"][0].HostPort;
 
@@ -55,7 +65,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
     // disconnect from the redis server
     await this.connection?.disconnect();
     // stop the redis container
-    await runCommand(`docker rm -f ${this.container_name}`);
+    await runCommand("docker", ["rm", "-f", `${this.container_name}`]);
   }
 
   public async rawClient(): Promise<any> {
