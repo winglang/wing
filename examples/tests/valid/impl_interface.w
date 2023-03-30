@@ -37,3 +37,17 @@ resource r impl I3 {
     return x;
   }
 }
+
+// a variable of some interface type can be assigned a class instance that implements it.
+interface IAnimal {
+  inflight eat();
+}
+
+resource Dog impl IAnimal {
+  init(){}
+  inflight eat() {
+    return;
+  }
+}
+
+let z: IAnimal = new Dog();

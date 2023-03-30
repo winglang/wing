@@ -19,7 +19,7 @@ interface ISomeInterface extends ISomeClass {
                       // Interface "ISomeInterface (at ../../examples/tests/invalid/interface.w:21:11)" extends "ISomeClass", which is not an interface
 }
 
-// interface with 2 methods having the same name, different signature
+// interface with multiple methods having the same name, different signature
 interface IWithSameName {
     foo();
     foo();

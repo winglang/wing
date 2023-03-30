@@ -14,6 +14,20 @@ async handle(msg)  {
 exports.A = A;"
 `;
 
+exports[`wing compile -t tf-aws > clients/Dog.inflight.js 1`] = `
+"class Dog  {
+constructor({  }) {
+
+
+}
+async eat()  {
+	{
+  return;
+}
+}}
+exports.Dog = Dog;"
+`;
+
 exports[`wing compile -t tf-aws > clients/r.inflight.js 1`] = `
 "class r  {
 constructor({  }) {
@@ -111,6 +125,20 @@ constructor() {
   }
   }
   r._annotateInflight(\\"method_2\\", {});
+  class Dog extends $stdlib.core.Resource {
+  	constructor(scope, id, ) {
+  	super(scope, id);
+  {
+  }
+  }
+  	
+  	_toInflight() {
+  	
+  	const self_client_path = \\"./clients/Dog.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
+  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Dog({}))\`);
+  }
+  }
+  Dog._annotateInflight(\\"eat\\", {});
   const x = new A(this,\\"A\\");
   const y = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
     code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.a5455e5c5848cfc293fcb861d9393d32e29a39f8dc8ac79c19dd5289279762fe/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
@@ -121,6 +149,7 @@ constructor() {
       },
     }
   });
+  const z = new Dog(this,\\"Dog\\");
 }
 }
 new MyApp().synth();"
@@ -132,9 +161,4 @@ exports[`wing compile -t tf-aws > proc.a5455e5c5848cfc293fcb861d9393d32e29a39f8d
 } };"
 `;
 
-exports[`wing test > stdout 1`] = `
-"Added method method_1 (at /Users/urib/Github/winglang/examples/tests/valid/impl_interface.w:17:3) with signature preflight (I1, num): num to interface I1
-Added method method_2 (at /Users/urib/Github/winglang/examples/tests/valid/impl_interface.w:21:12) with signature inflight (I2, str): str to interface I2
-Added method method_3 (at /Users/urib/Github/winglang/examples/tests/valid/impl_interface.w:25:3) with signature preflight (I3, Array<num>): Array<num> to interface I3
-pass ─ impl_interface.w (no tests)"
-`;
+exports[`wing test > stdout 1`] = `"pass ─ impl_interface.w (no tests)"`;
