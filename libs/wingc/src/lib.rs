@@ -233,7 +233,7 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.unwrap()
 		.define(
 			&sym,
-			SymbolKind::make_variable(types.add_type(typ), false, Phase::Independent),
+			SymbolKind::make_variable(types.add_type(typ), false, true, Phase::Independent),
 			StatementIdx::Top,
 		)
 		.expect("Failed to add builtin");
