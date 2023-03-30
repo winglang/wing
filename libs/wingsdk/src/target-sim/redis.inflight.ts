@@ -1,9 +1,9 @@
-import { dockerCommand } from "docker-cli-js";
 import { v4 as uuidv4 } from "uuid";
 import { ISimulatorResourceInstance } from "./resource";
 import { RedisAttributes, RedisSchema } from "./schema-resources";
 import { IRedisClient } from "../redis";
 import { ISimulatorContext } from "../testing/simulator";
+import { runCommand } from "../util";
 
 // Issue using types from ioredis with JSII
 //import { Redis as IoRedis } from "ioredis";
@@ -30,23 +30,17 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
   public async init(): Promise<RedisAttributes> {
     try {
       // Pull docker image
-      await dockerCommand(`pull ${this.REDIS_IMAGE}`, { echo: false });
-      // await new Promise((res) =>
-      //   this.docker?.modem.followProgress(stream, res)
-      // );
-      // Create a redis container
-      await dockerCommand(
-        `run --detach --name ${this.container_name} -p 6379 ${this.REDIS_IMAGE}`,
-        { echo: false }
+      await runCommand(`docker pull ${this.REDIS_IMAGE}`);
+
+      // Run the container and allow docker to assign a host port dynamically
+      await runCommand(
+        `docker run --detach --name ${this.container_name} -p 6379 ${this.REDIS_IMAGE}`
       );
 
       // Inspect the container to get the host port
-      const out = await dockerCommand(`inspect ${this.container_name}`, {
-        echo: false,
-      });
-      const hostPort = JSON.parse(out.raw)[0].NetworkSettings.Ports[
-        "6379/tcp"
-      ][0].HostPort;
+      const out = await runCommand(`docker inspect ${this.container_name}`);
+      const hostPort =
+        JSON.parse(out)[0].NetworkSettings.Ports["6379/tcp"][0].HostPort;
 
       // redis url based on host port
       this.connection_url = `redis://0.0.0.0:${hostPort}`;
@@ -61,7 +55,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
     // disconnect from the redis server
     await this.connection?.disconnect();
     // stop the redis container
-    await dockerCommand(`rm -f ${this.container_name}`, { echo: false });
+    await runCommand(`docker rm -f ${this.container_name}`);
   }
 
   public async rawClient(): Promise<any> {

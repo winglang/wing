@@ -1,3 +1,4 @@
+import { exec } from "child_process";
 import { mkdtempSync, readdirSync, readFileSync, statSync } from "fs";
 import { tmpdir } from "os";
 import { extname, join } from "path";
@@ -160,4 +161,17 @@ export function sanitizeCodeText(code: string): string {
 
 export function sanitizeCode(code: Code): string {
   return sanitizeCodeText(code.text);
+}
+
+export async function runCommand(cmd: string): Promise<any> {
+  const raw = await new Promise((resolve, reject) => {
+    exec(cmd, (error, stdout, stderr) => {
+      if (error) {
+        stderr;
+        reject(error);
+      }
+      resolve(stdout);
+    });
+  });
+  return raw;
 }

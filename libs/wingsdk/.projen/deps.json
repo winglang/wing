@@ -235,10 +235,6 @@
       "type": "bundled"
     },
     {
-      "name": "docker-cli-js",
-      "type": "bundled"
-    },
-    {
       "name": "esbuild-wasm",
       "type": "bundled"
     },
