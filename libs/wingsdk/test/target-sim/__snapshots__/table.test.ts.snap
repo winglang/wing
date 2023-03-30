@@ -6,6 +6,14 @@ exports[`create a table 1`] = `
     "resources": [
       {
         "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
         "path": "root/WingLogger",
         "props": {},
         "type": "wingsdk.cloud.Logger",
@@ -46,6 +54,23 @@ exports[`create a table 1`] = `
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
         "my_table": {
           "attributes": {
             "wing:resource:connections": [],
@@ -76,9 +101,30 @@ exports[`create a table 1`] = `
 `;
 
 exports[`get row 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Table created.",
+  "insert row joe-id into the table my_get_table.",
+  "get row joe-id from table my_get_table.",
+  "wingsdk.cloud.Table deleted.",
+  "wingsdk.cloud.Logger deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`get row 2`] = `
 {
   "simulator.json": {
     "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
       {
         "attrs": {},
         "path": "root/WingLogger",
@@ -121,6 +167,23 @@ exports[`get row 1`] = `
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
         "my_table": {
           "attributes": {
             "wing:resource:connections": [],
@@ -151,9 +214,29 @@ exports[`get row 1`] = `
 `;
 
 exports[`insert row 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Table created.",
+  "insert row joe-id into the table my_insert_table.",
+  "wingsdk.cloud.Table deleted.",
+  "wingsdk.cloud.Logger deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`insert row 2`] = `
 {
   "simulator.json": {
     "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
       {
         "attrs": {},
         "path": "root/WingLogger",
@@ -196,6 +279,23 @@ exports[`insert row 1`] = `
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
         "my_table": {
           "attributes": {
             "wing:resource:connections": [],
@@ -226,9 +326,31 @@ exports[`insert row 1`] = `
 `;
 
 exports[`list table 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Table created.",
+  "insert row joe-id into the table my_list_table.",
+  "insert row jane-id into the table my_list_table.",
+  "list all rows from table my_list_table.",
+  "wingsdk.cloud.Table deleted.",
+  "wingsdk.cloud.Logger deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`list table 2`] = `
 {
   "simulator.json": {
     "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
       {
         "attrs": {},
         "path": "root/WingLogger",
@@ -271,6 +393,23 @@ exports[`list table 1`] = `
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
         "my_table": {
           "attributes": {
             "wing:resource:connections": [],
@@ -301,9 +440,33 @@ exports[`list table 1`] = `
 `;
 
 exports[`update row 1`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Table created.",
+  "insert row joe-id into the table my_update_table.",
+  "get row joe-id from table my_update_table.",
+  "get row joe-id from table my_update_table.",
+  "update row joe-id in table my_update_table.",
+  "get row joe-id from table my_update_table.",
+  "wingsdk.cloud.Table deleted.",
+  "wingsdk.cloud.Logger deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
+`;
+
+exports[`update row 2`] = `
 {
   "simulator.json": {
     "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
       {
         "attrs": {},
         "path": "root/WingLogger",
@@ -345,6 +508,23 @@ exports[`update row 1`] = `
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "my_table": {
           "attributes": {

@@ -1130,6 +1130,25 @@ new cloud.TestRunner(props?: TestRunnerProps)
 
 ---
 
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.TestRunner.findTests">find_tests</a></code> | Find all tests in the construct tree. |
+
+---
+
+##### `find_tests` <a name="find_tests" id="@winglang/sdk.cloud.TestRunner.findTests"></a>
+
+```wing
+find_tests(): MutArray<Function>
+```
+
+Find all tests in the construct tree.
+
+Currently these are all
+`cloud.Function` resources with a path that ends in `/test` or
+`/test:<name>`.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -4603,7 +4622,7 @@ Inflight interface for `TestRunner`.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ITestRunnerClient.listTests">list_tests</a></code> | List all tests available for this test engine. |
-| <code><a href="#@winglang/sdk.cloud.ITestRunnerClient.runTest">run_test</a></code> | Run a test with a given name and return the result. |
+| <code><a href="#@winglang/sdk.cloud.ITestRunnerClient.runTest">run_test</a></code> | Run a test with a given path and return the result. |
 
 ---
 
@@ -4620,14 +4639,14 @@ List all tests available for this test engine.
 ##### `run_test` <a name="run_test" id="@winglang/sdk.cloud.ITestRunnerClient.runTest"></a>
 
 ```wing
-run_test(name: str): TestResult
+run_test(path: str): TestResult
 ```
 
 **Inflight client:** [true](#true)
 
-Run a test with a given name and return the result.
+Run a test with a given path and return the result.
 
-###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.cloud.ITestRunnerClient.runTest.parameter.name"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.ITestRunnerClient.runTest.parameter.path"></a>
 
 - *Type:* str
 

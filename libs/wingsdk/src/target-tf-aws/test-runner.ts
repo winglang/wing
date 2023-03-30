@@ -1,4 +1,4 @@
-import { Construct, IConstruct } from "constructs";
+import { Construct } from "constructs";
 import { Function as AwsFunction } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
@@ -33,27 +33,22 @@ export class TestRunner extends cloud.TestRunner {
   /** @internal */
   public _preSynthesize(): void {
     // add a dependency on each test function
-    for (const fn of this.findTestFunctions()) {
+    for (const fn of this.findTests()) {
       this.node.addDependency(fn);
     }
 
     super._preSynthesize();
   }
 
-  private findTestFunctions(): AwsFunction[] {
-    const isAwsFunction = (fn: IConstruct): fn is AwsFunction => {
-      return fn instanceof Function;
-    };
-    return this.node.root.node
-      .findAll()
-      .filter(TestRunner.isTest)
-      .filter(isAwsFunction);
-  }
-
   private getTestFunctionArns(): Map<string, string> {
     const arns = new Map<string, string>();
-    for (const fn of this.findTestFunctions()) {
-      arns.set(fn.node.path, fn.arn);
+    for (const fn of this.findTests()) {
+      if (!(fn instanceof AwsFunction)) {
+        throw new Error(
+          `Unsupported test function type, ${fn.node.path} was not a tfaws.Function`
+        );
+      }
+      arns.set(fn.node.path, (fn as AwsFunction).arn);
     }
     return arns;
   }

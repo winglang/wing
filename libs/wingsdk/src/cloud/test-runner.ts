@@ -1,4 +1,5 @@
 import { Construct, IConstruct } from "constructs";
+import { Function } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core/app";
 import { Resource } from "../core/resource";
@@ -46,11 +47,28 @@ export abstract class TestRunner extends Resource {
   constructor(scope: Construct, id: string, props: TestRunnerProps = {}) {
     super(scope, id);
 
+    this.display.hidden = true;
     this.display.title = "TestRunner";
     this.display.description =
       "A suite of APIs for running tests and collecting results.";
 
     props;
+  }
+
+  /**
+   * Find all tests in the construct tree. Currently these are all
+   * `cloud.Function` resources with a path that ends in `/test` or
+   * `/test:<name>`.
+   * @returns A list of tests.
+   */
+  public findTests(): Function[] {
+    const isFunction = (fn: any): fn is Function => {
+      return fn instanceof Function;
+    };
+    return this.node.root.node
+      .findAll()
+      .filter(TestRunner.isTest)
+      .filter(isFunction);
   }
 }
 

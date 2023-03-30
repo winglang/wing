@@ -1,5 +1,4 @@
 import { Construct } from "constructs";
-import { Function as SimFunction } from "./function";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { TestRunnerSchema, TEST_RUNNER_TYPE } from "./schema-resources";
@@ -42,26 +41,16 @@ export class TestRunner extends cloud.TestRunner implements ISimulatorResource {
   /** @internal */
   public _preSynthesize(): void {
     // add a dependency on each test function
-    for (const fn of this.findTestFunctions()) {
+    for (const fn of this.findTests()) {
       this.node.addDependency(fn);
     }
 
     super._preSynthesize();
   }
 
-  private findTestFunctions(): SimFunction[] {
-    const isSimFunction = (fn: any): fn is SimFunction => {
-      return fn instanceof SimFunction;
-    };
-    return this.node.root.node
-      .findAll()
-      .filter(TestRunner.isTest)
-      .filter(isSimFunction);
-  }
-
   private getTestFunctionHandles(): Record<string, string> {
     const handles: Record<string, string> = {};
-    for (const fn of this.findTestFunctions()) {
+    for (const fn of this.findTests()) {
       handles[fn.node.path] = simulatorHandleToken(fn);
     }
     return handles;

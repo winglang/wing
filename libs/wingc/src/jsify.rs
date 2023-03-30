@@ -174,8 +174,11 @@ impl<'a> JSifier<'a> {
 			));
 			app_wrapper.line(format!("new {}(this, \"Default\");", ROOT_CLASS));
 			app_wrapper.open(format!("if ({}) {{", ENV_WING_TEST));
-			app_wrapper
-				.line("this.node.root.newAbstract(\"@winglang/sdk.cloud.TestRunner\",this,\"cloud.TestRunner\");".to_string());
+			app_wrapper.line("const $test_runner = $root.node.findChild(\"cloud.TestRunner\");".to_string());
+			app_wrapper.line("const $tests = $test_runner.findTests();".to_string());
+			app_wrapper.open("for (let $i = 0; $i < $tests.length; $i++) {");
+			app_wrapper.line(format!("new {}(this, \"test\" + $i);", ROOT_CLASS));
+			app_wrapper.close("}");
 			app_wrapper.close("}");
 			app_wrapper.close("}");
 			app_wrapper.close("}");

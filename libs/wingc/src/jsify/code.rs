@@ -27,6 +27,7 @@ impl CodeMaker {
 
 	#[allow(dead_code)]
 	pub fn add_code(&mut self, code: CodeMaker) {
+		assert_eq!(code.indent, 0, "Cannot add code with indent");
 		for (indent, line) in code.lines {
 			self.lines.push((indent + self.indent, line));
 		}

@@ -9,7 +9,6 @@ import { PluginManager } from "./plugin-manager";
 import { IResource } from "./resource";
 import { synthesizeTree } from "./tree";
 import { Logger } from "../cloud/logger";
-import { TestRunner } from "../cloud/test-runner";
 
 const TERRAFORM_STACK_NAME = "root";
 
@@ -207,8 +206,6 @@ export abstract class CdktfApp extends App {
     this.cdktfStack = cdktfStack;
     this.terraformManifestPath = join(this.outdir, "main.tf.json");
     this.synthed = false;
-
-    TestRunner._newTestRunner(this, "cloud.TestRunner");
 
     // register a logger for this app.
     Logger.register(this);

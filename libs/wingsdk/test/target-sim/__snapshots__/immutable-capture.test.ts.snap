@@ -33,6 +33,14 @@ my_capture: [\\"hello\\",\\"dude\\"]
     "resources": [
       {
         "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
         "path": "root/WingLogger",
         "props": {},
         "type": "wingsdk.cloud.Logger",
@@ -102,6 +110,23 @@ my_capture: [\\"hello\\",\\"dude\\"]
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "foo": {
           "attributes": {
@@ -181,6 +206,14 @@ my_buckets: [(function(env) {
     "resources": [
       {
         "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
         "path": "root/WingLogger",
         "props": {},
         "type": "wingsdk.cloud.Logger",
@@ -303,6 +336,23 @@ my_buckets: [(function(env) {
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
         "foo": {
           "attributes": {
             "wing:resource:connections": [],
@@ -366,6 +416,14 @@ my_array: [{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200
     "resources": [
       {
         "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
         "path": "root/WingLogger",
         "props": {},
         "type": "wingsdk.cloud.Logger",
@@ -435,6 +493,23 @@ my_array: [{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "foo": {
           "attributes": {
@@ -498,6 +573,14 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
     "resources": [
       {
         "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
         "path": "root/WingLogger",
         "props": {},
         "type": "wingsdk.cloud.Logger",
@@ -567,6 +650,23 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "foo": {
           "attributes": {
@@ -629,6 +729,14 @@ my_capture: false
     "resources": [
       {
         "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
         "path": "root/WingLogger",
         "props": {},
         "type": "wingsdk.cloud.Logger",
@@ -698,6 +806,23 @@ my_capture: false
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "foo": {
           "attributes": {
@@ -762,6 +887,14 @@ my_capture: {seconds: 7200,minutes: 120,hours: 2,}
     "resources": [
       {
         "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
         "path": "root/WingLogger",
         "props": {},
         "type": "wingsdk.cloud.Logger",
@@ -831,6 +964,23 @@ my_capture: {seconds: 7200,minutes: 120,hours: 2,}
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "foo": {
           "attributes": {
@@ -897,6 +1047,14 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
     "resources": [
       {
         "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
         "path": "root/WingLogger",
         "props": {},
         "type": "wingsdk.cloud.Logger",
@@ -966,6 +1124,23 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "foo": {
           "attributes": {
@@ -1034,6 +1209,14 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
     "resources": [
       {
         "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
         "path": "root/WingLogger",
         "props": {},
         "type": "wingsdk.cloud.Logger",
@@ -1103,6 +1286,23 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "foo": {
           "attributes": {
@@ -1168,6 +1368,14 @@ my_map: new Map([[\\"foo\\",[{seconds: 600,minutes: 10,hours: 0.1666666666666666
     "resources": [
       {
         "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
         "path": "root/WingLogger",
         "props": {},
         "type": "wingsdk.cloud.Logger",
@@ -1237,6 +1445,23 @@ my_map: new Map([[\\"foo\\",[{seconds: 600,minutes: 10,hours: 0.1666666666666666
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "foo": {
           "attributes": {
@@ -1313,6 +1538,14 @@ my_map: new Map([[\\"foo\\",(function(env) {
     "resources": [
       {
         "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
         "path": "root/WingLogger",
         "props": {},
         "type": "wingsdk.cloud.Logger",
@@ -1435,6 +1668,23 @@ my_map: new Map([[\\"foo\\",(function(env) {
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
         "foo": {
           "attributes": {
             "wing:resource:connections": [],
@@ -1494,6 +1744,14 @@ my_capture: 123
 };",
   "simulator.json": {
     "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
       {
         "attrs": {},
         "path": "root/WingLogger",
@@ -1565,6 +1823,23 @@ my_capture: 123
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "foo": {
           "attributes": {
@@ -1630,6 +1905,14 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
     "resources": [
       {
         "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
         "path": "root/WingLogger",
         "props": {},
         "type": "wingsdk.cloud.Logger",
@@ -1699,6 +1982,23 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "foo": {
           "attributes": {
@@ -1763,6 +2063,14 @@ my_set: new Set([{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds
     "resources": [
       {
         "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
         "path": "root/WingLogger",
         "props": {},
         "type": "wingsdk.cloud.Logger",
@@ -1832,6 +2140,23 @@ my_set: new Set([{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "foo": {
           "attributes": {
@@ -1895,6 +2220,14 @@ my_capture: \\"bam bam bam\\"
     "resources": [
       {
         "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
         "path": "root/WingLogger",
         "props": {},
         "type": "wingsdk.cloud.Logger",
@@ -1964,6 +2297,23 @@ my_capture: \\"bam bam bam\\"
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "foo": {
           "attributes": {
@@ -2029,6 +2379,14 @@ my_capture: {hello: \\"dude\\",world: \\"cup\\",foo: \\"bar\\",}
     "resources": [
       {
         "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
         "path": "root/WingLogger",
         "props": {},
         "type": "wingsdk.cloud.Logger",
@@ -2098,6 +2456,23 @@ my_capture: {hello: \\"dude\\",world: \\"cup\\",foo: \\"bar\\",}
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "foo": {
           "attributes": {
@@ -2163,6 +2538,14 @@ my_struct: {foo: new Map([[\\"foo\\",1],[\\"bar\\",2]]),bar: new Map([[\\"foo\\"
     "resources": [
       {
         "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
+      {
+        "attrs": {},
         "path": "root/WingLogger",
         "props": {},
         "type": "wingsdk.cloud.Logger",
@@ -2232,6 +2615,23 @@ my_struct: {foo: new Map([[\\"foo\\",1],[\\"bar\\",2]]),bar: new Map([[\\"foo\\"
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "foo": {
           "attributes": {
@@ -2329,6 +2729,14 @@ my_struct: {bucky: (function(env) {
 };",
   "simulator.json": {
     "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
       {
         "attrs": {},
         "path": "root/WingLogger",
@@ -2530,6 +2938,23 @@ my_struct: {bucky: (function(env) {
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "foo": {
           "attributes": {

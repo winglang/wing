@@ -32,6 +32,8 @@ export class App extends CdktfApp {
   constructor(props: AppProps = {}) {
     super(props);
     new AwsProvider(this, "aws", {});
+
+    new TestRunner(this, "cloud.TestRunner");
   }
 
   protected tryNew(
