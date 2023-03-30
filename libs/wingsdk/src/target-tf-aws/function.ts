@@ -57,7 +57,6 @@ export class Function extends cloud.Function {
   private policyStatements?: any[];
   private subnets?: string[];
   private securityGroups?: string[];
-  private addVpcConfig?: boolean = false;
 
   /**
    * Unqualified Function ARN
@@ -132,7 +131,7 @@ export class Function extends cloud.Function {
       role: this.role.name,
       policy: Lazy.stringValue({
         produce: () => {
-          if (this.addVpcConfig === true) {
+          if ((this.subnets ?? []).length > 0) {
             this.policyStatements?.push({
               Effect: "Allow",
               Action: [
@@ -207,13 +206,6 @@ export class Function extends cloud.Function {
       memorySize: props.memory ? props.memory : undefined,
     });
 
-    const subnetIds = Lazy.anyValue({
-      produce: () => this.subnets ?? [],
-    }) as any;
-    const securityGroupIds = Lazy.anyValue({
-      produce: () => this.securityGroups ?? [],
-    }) as any;
-
     this.arn = this.function.arn;
     this.qualifiedArn = this.function.qualifiedArn;
     this.invokeArn = this.function.invokeArn;
@@ -261,7 +253,6 @@ export class Function extends cloud.Function {
       this.subnets = [];
       this.securityGroups = [];
     }
-    this.addVpcConfig = true;
     this.subnets.push(...vpcConfig.subnetIds);
     this.securityGroups.push(...vpcConfig.securityGroupIds);
   }
