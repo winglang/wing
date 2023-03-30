@@ -31,5 +31,8 @@ interface I3 extends I2 {
 }
 
 resource r impl I3 {
+      // ^ Resource "r" does not implement method "method_1" of interface "I3"
+      // ^ Resource "r" does not implement method "method_2" of interface "I3"
+      // ^ Resource "r" does not implement method "method_3" of interface "I3"
   init() {}
 }
