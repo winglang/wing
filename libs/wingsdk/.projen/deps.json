@@ -239,7 +239,7 @@
       "type": "bundled"
     },
     {
-      "name": "dockerode",
+      "name": "docker-cli-js",
       "type": "bundled"
     },
     {
