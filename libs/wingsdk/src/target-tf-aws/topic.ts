@@ -42,7 +42,7 @@ export class Topic extends cloud.Topic {
   /**
    * topic's arn
    */
-  get arn(): string {
+  public get arn(): string {
     return this.topic.arn;
   }
 

@@ -295,6 +295,33 @@ test("remove object from a bucket with mustExist as option", async () => {
   // GIVEN
   const app = new SimApp();
 
+  cloud.Bucket._newBucket(app, bucketName);
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource(`/${bucketName}`) as cloud.IBucketClient;
+
+  // THEN
+
+  // create file
+  await client.put(fileName, JSON.stringify({ msg: "Hello world!" }));
+
+  // delete file
+  const response = await client.delete(fileName, { mustExist: true });
+
+  await s.stop();
+
+  expect(response).toEqual(undefined);
+  expect(listMessages(s)).toMatchSnapshot();
+});
+
+test("removing a key will call onDelete method", async () => {
+  const bucketName = "my_bucket";
+  const fileName = "unknown.txt";
+
+  // GIVEN
+  const app = new SimApp();
+
   const bucket = cloud.Bucket._newBucket(app, bucketName);
   const testInflight = new InflightBucketEventHandler(app, "inflight_test");
   bucket.onDelete(testInflight);
@@ -311,7 +338,7 @@ test("remove object from a bucket with mustExist as option", async () => {
   // delete file
   //@ts-expect-error
   const notifyListeners = vi.spyOn(client, "notifyListeners");
-  const response = await client.delete(fileName, { mustExist: true });
+  const response = await client.delete(fileName);
 
   expect(Object.keys((client as any).topicHandlers)).toMatchObject([
     BucketEventType.DELETE,

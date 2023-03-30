@@ -79,11 +79,9 @@ export abstract class Bucket extends Resource {
    * @returns the created topi
    */
   protected createTopic(actionType: BucketEventType): Topic {
-    const hash = this.node.addr.slice(-8);
-
     const topic = Topic._newTopic(
-      this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-on_${actionType.toLowerCase()}-${hash}`
+      this,
+      `${this.node.id}-on_${actionType.toLowerCase()}`
     );
 
     this.node.addDependency(topic);
