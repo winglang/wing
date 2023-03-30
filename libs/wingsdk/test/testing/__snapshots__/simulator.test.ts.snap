@@ -28,6 +28,22 @@ exports[`provides raw tree data 1`] = `
         "id": "WingLogger",
         "path": "root/WingLogger",
       },
+      "cloud.TestRunner": {
+        "attributes": {
+          "wing:resource:connections": [],
+          "wing:resource:stateful": false,
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.245",
+        },
+        "display": {
+          "description": "A suite of APIs for running tests and collecting results.",
+          "title": "TestRunner",
+        },
+        "id": "cloud.TestRunner",
+        "path": "root/cloud.TestRunner",
+      },
       "test": {
         "attributes": {
           "wing:resource:connections": [
@@ -77,5 +93,34 @@ exports[`provides raw tree data 1`] = `
     "path": "root",
   },
   "version": "tree-0.1",
+}
+`;
+
+exports[`run all tests > single test 1`] = `
+[
+  {
+    "error": undefined,
+    "pass": true,
+    "path": "root/test",
+    "traces": [],
+  },
+]
+`;
+
+exports[`run single test > happy path 1`] = `
+{
+  "error": undefined,
+  "pass": true,
+  "path": "root/test",
+  "traces": [],
+}
+`;
+
+exports[`run single test > test failure 1`] = `
+{
+  "error": "test failed",
+  "pass": false,
+  "path": "root/test",
+  "traces": [],
 }
 `;

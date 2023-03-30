@@ -46,6 +46,8 @@ export class App extends core.App {
     super(undefined as any, "root");
     this.outdir = props.outdir ?? ".";
 
+    new TestRunner(this, "cloud.TestRunner");
+
     Logger.register(this);
   }
 
@@ -84,7 +86,7 @@ export class App extends core.App {
         return new Topic(scope, id, args[0]);
 
       case TEST_RUNNER_FQN:
-        return new TestRunner(scope, id);
+        return new TestRunner(scope, id, args[0]);
 
       case REDIS_FQN:
         return new Redis(scope, id);
@@ -95,7 +97,7 @@ export class App extends core.App {
 
   /**
    * Synthesize the app. This creates a tree.json file and a .wsim file in the
-   * app's outdir, and returns a path to the .wsim file.
+   * app's outdir, and returns a path to the .wsim directory.
    */
   public synth(): string {
     if (this.synthed) {

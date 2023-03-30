@@ -72,7 +72,7 @@ export class App extends CdktfApp {
         return new Topic(scope, id, args[0]);
 
       case TEST_RUNNER_FQN:
-        return new TestRunner(scope, id);
+        return new TestRunner(scope, id, args[0]);
     }
 
     return undefined;

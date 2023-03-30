@@ -1,5 +1,5 @@
-import { Construct, IConstruct } from "constructs";
-import { Function } from "./function";
+import { Construct } from "constructs";
+import { Function as SimFunction } from "./function";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { TestRunnerSchema, TEST_RUNNER_TYPE } from "./schema-resources";
@@ -13,12 +13,12 @@ import * as core from "../core";
  * @inflight `@winglang/sdk.cloud.ITestRunnerClient`
  */
 export class TestRunner extends cloud.TestRunner implements ISimulatorResource {
-  constructor(scope: Construct, id: string) {
-    super(scope, id);
+  constructor(scope: Construct, id: string, props: cloud.TestRunnerProps = {}) {
+    super(scope, id, props);
   }
 
   public toSimulator(): BaseResourceSchema {
-    const tests = this.findTestFunctions();
+    const tests = this.getTestFunctionHandles();
     const schema: TestRunnerSchema = {
       type: TEST_RUNNER_TYPE,
       path: this.node.path,
@@ -39,15 +39,30 @@ export class TestRunner extends cloud.TestRunner implements ISimulatorResource {
     super._bind(host, ops);
   }
 
-  private findTestFunctions(): Record<string, string> {
-    const handles: Record<string, string> = {};
-    const isSimFunction = (fn: IConstruct): fn is Function => {
-      return fn instanceof Function;
+  /** @internal */
+  public _preSynthesize(): void {
+    // add a dependency on each test function
+    for (const fn of this.findTestFunctions()) {
+      this.node.addDependency(fn);
+    }
+
+    super._preSynthesize();
+  }
+
+  private findTestFunctions(): SimFunction[] {
+    const isSimFunction = (fn: any): fn is SimFunction => {
+      return fn instanceof SimFunction;
     };
-    for (const fn of this.node.root.node.findAll().filter(isSimFunction)) {
-      if (TestRunner.isTest(fn)) {
-        handles[fn.node.path] = simulatorHandleToken(fn);
-      }
+    return this.node.root.node
+      .findAll()
+      .filter(TestRunner.isTest)
+      .filter(isSimFunction);
+  }
+
+  private getTestFunctionHandles(): Record<string, string> {
+    const handles: Record<string, string> = {};
+    for (const fn of this.findTestFunctions()) {
+      handles[fn.node.path] = simulatorHandleToken(fn);
     }
     return handles;
   }

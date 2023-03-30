@@ -1,6 +1,7 @@
 import { Construct, IConstruct } from "constructs";
 import { fqnForType } from "../constants";
-import { App, Resource } from "../core";
+import { App } from "../core/app";
+import { Resource } from "../core/resource";
 
 /**
  * Global identifier for `TestRunner`.
