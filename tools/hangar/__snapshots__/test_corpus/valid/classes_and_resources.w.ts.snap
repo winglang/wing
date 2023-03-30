@@ -67,7 +67,10 @@ constructor() {
   
   class C1
   {
-  
+  constructor()  {
+  	{
+  }
+  }
   
   
   }
@@ -94,9 +97,11 @@ constructor() {
   
   }
   class R1 extends $stdlib.core.Resource {
-  	constructor(scope, id) {{
-  super(scope, id);
-  }}
+  	constructor(scope, id, ) {
+  	super(scope, id);
+  {
+  }
+  }
   	
   	_toInflight() {
   	
@@ -106,9 +111,11 @@ constructor() {
   }
   
   class R2 extends $stdlib.core.Resource {
-  	constructor(scope, id) {{
-  super(scope, id);
-  }}
+  	constructor(scope, id, ) {
+  	super(scope, id);
+  {
+  }
+  }
   	static m()  {
   	{
     return 1;

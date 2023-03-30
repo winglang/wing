@@ -163,22 +163,6 @@ impl SymbolEnv {
 		}
 	}
 
-	pub fn lookup_initializer(
-		&self,
-		symbol: &Symbol,
-		not_after_stmt_idx: Option<usize>,
-	) -> Result<(&SymbolKind, SymbolLookupInfo), TypeError> {
-		let lookup_result = self.try_lookup_ext(&symbol.name, not_after_stmt_idx);
-
-		match lookup_result {
-			LookupResult::Found((kind, symbol_info)) => Ok((kind, symbol_info)),
-			_ => Err(TypeError {
-				message: format!("Missing class/resource initializer (init)"),
-				span: symbol.span.clone(),
-			}),
-		}
-	}
-
 	pub fn lookup(&self, symbol: &Symbol, not_after_stmt_idx: Option<usize>) -> Result<&SymbolKind, TypeError> {
 		Ok(self.lookup_ext(symbol, not_after_stmt_idx)?.0)
 	}

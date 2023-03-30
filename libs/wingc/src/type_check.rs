@@ -1272,71 +1272,58 @@ impl<'a> TypeChecker<'a> {
 					}
 				};
 
-				if !has_fields && !arg_list.pos_args.is_empty() {
-					self.expr_error(
-						&arg_list.pos_args[0],
-						format!(
-							"Expected 0 arguments but got {} when instantiating {}",
-							arg_list.pos_args.len(),
-							class_symbol.name.to_string()
-						),
-					);
+				// Type check args against constructor
+				let constructor_type = match class_env.lookup(
+					&Symbol {
+						name: WING_CONSTRUCTOR_NAME.into(),
+						span: class_symbol.span.clone(),
+					},
+					None,
+				) {
+					Ok(v) => v.as_variable().expect("Expected constructor to be a variable").type_,
+					Err(type_error) => {
+						self.type_error(type_error);
+						return self.types.anything();
+					}
+				};
+				let constructor_sig = constructor_type
+					.as_function_sig()
+					.expect("Expected constructor to be a function signature");
+
+				// Verify return type (This should never fail since we define the constructors return type during AST building)
+				self.validate_type(constructor_sig.return_type, type_, exp);
+
+				if !arg_list.named_args.is_empty() {
+					let last_arg = constructor_sig.parameters.last().unwrap().maybe_unwrap_option();
+					self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
 				}
 
-				if has_fields {
-					// Type check args against constructor
-					let constructor_type = match class_env.lookup_initializer(
-						&Symbol {
-							name: WING_CONSTRUCTOR_NAME.into(),
-							span: class_symbol.span.clone(),
-						},
-						None,
-					) {
-						Ok(v) => v.0.as_variable().expect("Expected constructor to be a variable").type_,
-						Err(type_error) => {
-							self.type_error(type_error);
-							return self.types.anything();
-						}
+				// Verify arity
+				let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
+				let min_args = constructor_sig.min_parameters();
+				let max_args = constructor_sig.max_parameters();
+				if arg_count < min_args || arg_count > max_args {
+					let err_text = if min_args == max_args {
+						format!(
+							"Expected {} arguments but got {} when instantiating \"{}\"",
+							min_args, arg_count, type_
+						)
+					} else {
+						format!(
+							"Expected between {} and {} arguments but got {} when instantiating \"{}\"",
+							min_args, max_args, arg_count, type_
+						)
 					};
-					let constructor_sig = constructor_type
-						.as_function_sig()
-						.expect("Expected constructor to be a function signature");
+					self.expr_error(exp, err_text);
+				}
 
-					// Verify return type (This should never fail since we define the constructors return type during AST building)
-					self.validate_type(constructor_sig.return_type, type_, exp);
-
-					if !arg_list.named_args.is_empty() {
-						let last_arg = constructor_sig.parameters.last().unwrap().maybe_unwrap_option();
-						self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
-					}
-
-					// Verify arity
-					let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
-					let min_args = constructor_sig.min_parameters();
-					let max_args = constructor_sig.max_parameters();
-					if arg_count < min_args || arg_count > max_args {
-						let err_text = if min_args == max_args {
-							format!(
-								"Expected {} arguments but got {} when instantiating \"{}\"",
-								min_args, arg_count, type_
-							)
-						} else {
-							format!(
-								"Expected between {} and {} arguments but got {} when instantiating \"{}\"",
-								min_args, max_args, arg_count, type_
-							)
-						};
-						self.expr_error(exp, err_text);
-					}
-
-					// Verify passed positional arguments match the constructor
-					for (arg_expr, arg_type, param_type) in izip!(
-						arg_list.pos_args.iter(),
-						arg_list_types.pos_args.iter(),
-						constructor_sig.parameters.iter()
-					) {
-						self.validate_type(*arg_type, *param_type, arg_expr);
-					}
+				// Verify passed positional arguments match the constructor
+				for (arg_expr, arg_type, param_type) in izip!(
+					arg_list.pos_args.iter(),
+					arg_list_types.pos_args.iter(),
+					constructor_sig.parameters.iter()
+				) {
+					self.validate_type(*arg_type, *param_type, arg_expr);
 				}
 
 				// If this is a Resource then create a new type for this resource object
@@ -2226,67 +2213,65 @@ impl<'a> TypeChecker<'a> {
 					};
 				}
 
-				if let Some(initializer) = initializer {
-					// Add the initializer to the class env
-					let initializer_type = self.resolve_type_annotation(
-						&TypeAnnotation::FunctionSignature(initializer.signature.clone()),
-						env,
-						stmt.idx,
-					);
+				// Add the initializer to the class env
+				let initializer_type = self.resolve_type_annotation(
+					&TypeAnnotation::FunctionSignature(initializer.signature.clone()),
+					env,
+					stmt.idx,
+				);
 
-					match class_env.define(
-						&Symbol {
-							name: WING_CONSTRUCTOR_NAME.into(),
-							span: name.span.clone(),
-						},
-						SymbolKind::make_variable(initializer_type, false, initializer.signature.phase),
-						StatementIdx::Top,
-					) {
-						Err(type_error) => {
-							self.type_error(type_error);
-						}
-						_ => {}
-					};
-
-					// Type check initializer_type
-					let initializer_sig = if let Type::Function(ref s) = *initializer_type {
-						s
-					} else {
-						panic!(
-							"Constructor of {} isn't defined as a function in the class environment",
-							name
-						);
-					};
-
-					// Create initializer environment and prime it with args
-					let mut initializer_env = SymbolEnv::new(
-						Some(env.get_ref()),
-						initializer_sig.return_type,
-						false,
-						true,
-						initializer.signature.phase,
-						stmt.idx,
-					);
-					self.add_arguments_to_env(&initializer.parameters, initializer_sig, &mut initializer_env);
-					// Prime the initializer environment with `this`
-					initializer_env
-						.define(
-							&Symbol {
-								name: "this".into(),
-								span: name.span.clone(),
-							},
-							SymbolKind::make_variable(class_type, false, initializer_env.phase),
-							StatementIdx::Top,
-						)
-						.expect("Expected `this` to be added to constructor env");
-					initializer.statements.set_env(initializer_env);
-					// Check function scope
-					self.inner_scopes.push(&initializer.statements);
-				}
+				match class_env.define(
+					&Symbol {
+						name: WING_CONSTRUCTOR_NAME.into(),
+						span: name.span.clone(),
+					},
+					SymbolKind::make_variable(initializer_type, false, initializer.signature.phase),
+					StatementIdx::Top,
+				) {
+					Err(type_error) => {
+						self.type_error(type_error);
+					}
+					_ => {}
+				};
 
 				// Replace the dummy class environment with the real one before type checking the methods
 				class_type.as_mut_class_or_resource().unwrap().env = class_env;
 				let class_env = &class_type.as_class_or_resource().unwrap().env;
+
+				// Type check initializer_type
+				let initializer_sig = if let Type::Function(ref s) = *initializer_type {
+					s
+				} else {
+					panic!(
+						"Constructor of {} isn't defined as a function in the class environment",
+						name
+					);
+				};
+
+				// Create initializer environment and prime it with args
+				let mut initializer_env = SymbolEnv::new(
+					Some(env.get_ref()),
+					initializer_sig.return_type,
+					false,
+					true,
+					initializer.signature.phase,
+					stmt.idx,
+				);
+				self.add_arguments_to_env(&initializer.parameters, initializer_sig, &mut initializer_env);
+				// Prime the initializer environment with `this`
+				initializer_env
+					.define(
+						&Symbol {
+							name: "this".into(),
+							span: name.span.clone(),
+						},
+						SymbolKind::make_variable(class_type, false, initializer_env.phase),
+						StatementIdx::Top,
+					)
+					.expect("Expected `this` to be added to constructor env");
+				initializer.statements.set_env(initializer_env);
+				// Check function scope
+				self.inner_scopes.push(&initializer.statements);
 
 				// TODO: handle member/method overrides in our env based on whatever rules we define in our spec
 

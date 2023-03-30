@@ -186,9 +186,7 @@ where
 {
 	v.visit_symbol(&node.name);
 
-	if let Some(initializer) = &node.initializer {
-		v.visit_constructor(&initializer);
-	}
+	v.visit_constructor(&node.initializer);
 
 	for field in &node.fields {
 		v.visit_symbol(&field.name);
