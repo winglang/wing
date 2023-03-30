@@ -485,7 +485,7 @@ impl<'s> Parser<'s> {
 					if let Some(_) = initializer {
 						self
 							.add_error::<Node>(
-								format!("Multiple constructors defined in class {:?}", statement_node),
+								format!("Multiple initializers defined in class {:?}", statement_node),
 								&class_element,
 							)
 							.err();
@@ -519,6 +519,27 @@ impl<'s> Parser<'s> {
 				}
 			}
 		}
+
+		let initializer = match initializer {
+			Some(init) => init,
+			// add a default constructor if none is defined
+			None => Constructor {
+				parameters: vec![],
+				statements: Scope {
+					statements: vec![],
+					span: name.span.clone(),
+					env: RefCell::new(None),
+				},
+				signature: FunctionSignature {
+					parameters: vec![],
+					return_type: Some(Box::new(TypeAnnotation::UserDefined(UserDefinedType {
+						root: name.clone(),
+						fields: vec![],
+					}))),
+					phase: if is_resource { Phase::Preflight } else { Phase::Inflight },
+				},
+			},
+		};
 
 		let parent = if let Some(parent_node) = statement_node.child_by_field_name("parent") {
 			let parent_type = self.build_type_annotation(&parent_node)?;
