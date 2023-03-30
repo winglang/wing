@@ -57,8 +57,7 @@ export default async function () {
     /> cpu-features@.* install/,
     /> ssh2@.* install/,
     /> node install\.js/,
-    /> node buildcheck\.js/,
-    /> .*sshcrypto.node/
+    /> node buildcheck\.js/
   ];
 
   const installHooks = installResult.stdout.match(/>.*/g)?.filter((hook) => {
