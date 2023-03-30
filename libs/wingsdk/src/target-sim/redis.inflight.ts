@@ -28,13 +28,18 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
   public async init(): Promise<RedisAttributes> {
     try {
       // Pull docker image
-      await dockerCommand(`pull ${this.REDIS_IMAGE}`, {echo: false});
+      await dockerCommand(`pull ${this.REDIS_IMAGE}`, { echo: false });
 
       // Run the redis container and dynamically assign a host port to 6379
-      await dockerCommand(`run --detach --name ${this.container_name} -p 6379 ${this.REDIS_IMAGE}`, {echo: false});
+      await dockerCommand(
+        `run --detach --name ${this.container_name} -p 6379 ${this.REDIS_IMAGE}`,
+        { echo: false }
+      );
 
       // Inspect the container to get the host port
-      const out = await dockerCommand(`inspect ${this.container_name}`, {echo: false});
+      const out = await dockerCommand(`inspect ${this.container_name}`, {
+        echo: false,
+      });
       const hostPort = JSON.parse(out.raw)[0].NetworkSettings.Ports[
         "6379/tcp"
       ][0].HostPort;
@@ -51,7 +56,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
   public async cleanup(): Promise<void> {
     // disconnect from the redis server
     await this.connection?.disconnect();
-    await dockerCommand(`rm -f ${this.container_name}`, {echo: false});
+    await dockerCommand(`rm -f ${this.container_name}`, { echo: false });
   }
 
   public async rawClient(): Promise<any> {
