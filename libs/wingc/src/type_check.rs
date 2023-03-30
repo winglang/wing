@@ -2396,7 +2396,7 @@ impl<'a> TypeChecker<'a> {
 						self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(sig.clone()), env, stmt.idx);
 					match interface_env.define(
 						method_name,
-						SymbolKind::make_instance_variable(method_type, false, sig.phase),
+						SymbolKind::make_variable(method_type, false, false, sig.phase),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -3191,7 +3191,7 @@ fn add_parent_members_to_iface_env(
 						name: parent_member_name,
 						span: name.span.clone(),
 					},
-					SymbolKind::make_variable(member_type, false, iface_env.phase),
+					SymbolKind::make_variable(member_type, false, true, iface_env.phase),
 					StatementIdx::Top,
 				)?;
 			}
