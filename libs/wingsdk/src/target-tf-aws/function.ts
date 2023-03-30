@@ -24,6 +24,11 @@ const FUNCTION_NAME_OPTS: NameOptions = {
   disallowedRegex: /[^a-zA-Z0-9\_\-]+/g,
 };
 
+export interface FunctionNetworkConfig {
+  readonly subnetIds: string[];
+  readonly securityGroupIds: string[];
+}
+
 /**
  * options for granting invoke permissions to the current function
  */
@@ -43,6 +48,9 @@ export class Function extends cloud.Function {
   private readonly function: LambdaFunction;
   private readonly role: IamRole;
   private policyStatements?: any[];
+  private subnets?: string[];
+  private securityGroups?: string[];
+
   /**
    * Unqualified Function ARN
    * @returns Unqualified ARN of the function
@@ -172,6 +180,36 @@ export class Function extends cloud.Function {
       memorySize: props.memory ? props.memory : undefined,
     });
 
+    const subnetIds = Lazy.listValue({ produce: () => this.subnets });
+    const securityGroupIds = Lazy.listValue({ produce: () => this.securityGroups });
+    if (subnetIds) {
+      this.function.putVpcConfig({
+        subnetIds,
+        securityGroupIds,
+      })
+
+      // Give lambda VPC permissions
+      new IamRolePolicy(this, "IamRolePolicyVpc", {
+        role: this.role.name,
+        policy: JSON.stringify({
+          Version: "2012-10-17",
+          Statement: [
+            {
+              Effect: "Allow",
+              Action: [
+                "ec2:CreateNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DeleteNetworkInterface",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeSecurityGroups",
+              ],
+              Resource: "*",
+            },
+          ],
+        })
+      });
+    }
+
     this.arn = this.function.arn;
     this.qualifiedArn = this.function.qualifiedArn;
     this.invokeArn = this.function.invokeArn;
@@ -209,6 +247,18 @@ export class Function extends cloud.Function {
       "FunctionClient",
       [`process.env["${this.envName()}"]`]
     );
+  }
+
+  /**
+   * Add VPC configurations to lambda function
+   */
+  public addNetworkConfig(vpcConfig: FunctionNetworkConfig) {
+    if (!this.subnets || !this.securityGroups) {
+      this.subnets = [];
+      this.securityGroups = [];
+    }
+    this.subnets.push(...vpcConfig.subnetIds);
+    this.securityGroups.push(...vpcConfig.securityGroupIds);
   }
 
   /**
