@@ -12,8 +12,9 @@ const IoRedis = require("ioredis");
 
 export class Redis implements IRedisClient, ISimulatorResourceInstance {
   private container_name: string;
-  private readonly REDIS_IMAGE =
-    process.env.REDIS_IMAGE ??
+  private readonly WING_REDIS_IMAGE =
+    process.env.WING_REDIS_IMAGE ??
+    // Redis version 7.0.9
     "redis@sha256:e50c7e23f79ae81351beacb20e004720d4bed657415e68c2b1a2b5557c075ce0";
   private readonly context: ISimulatorContext;
 
@@ -31,7 +32,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
   public async init(): Promise<RedisAttributes> {
     try {
       // Pull docker image
-      await runCommand("docker", ["pull", `${this.REDIS_IMAGE}`]);
+      await runCommand("docker", ["pull", `${this.WING_REDIS_IMAGE}`]);
 
       // Run the container and allow docker to assign a host port dynamically
       await runCommand("docker", [
@@ -41,7 +42,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
         `${this.container_name}`,
         "-p",
         "6379",
-        `${this.REDIS_IMAGE}`,
+        `${this.WING_REDIS_IMAGE}`,
       ]);
 
       // Inspect the container to get the host port

@@ -170,7 +170,7 @@ export async function runCommand(cmd: string, args: string[]): Promise<any> {
   const raw = await new Promise((resolve, reject) => {
     execFile(cmd, args, (error, stdout, stderr) => {
       if (error) {
-        stderr;
+        console.error(stderr);
         reject(error);
       }
       resolve(stdout);
