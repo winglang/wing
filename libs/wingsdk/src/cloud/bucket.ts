@@ -74,7 +74,7 @@ export abstract class Bucket extends Resource {
   }
 
   /**
-   * creates a topic for subscribing notification event
+   * creates a topic for subscribing to notification events
    * @param actionType
    * @returns the created topi
    */
