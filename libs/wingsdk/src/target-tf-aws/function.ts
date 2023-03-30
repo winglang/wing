@@ -24,8 +24,15 @@ const FUNCTION_NAME_OPTS: NameOptions = {
   disallowedRegex: /[^a-zA-Z0-9\_\-]+/g,
 };
 
+/**
+ * Function network configuration
+ * used to hold data on subnets and security groups
+ * that should be used when a function is deployed within a VPC.
+ */
 export interface FunctionNetworkConfig {
+  /** list of subnets to attach on function */
   readonly subnetIds: string[];
+  /** list of security groups to place function in */
   readonly securityGroupIds: string[];
 }
 
@@ -50,6 +57,7 @@ export class Function extends cloud.Function {
   private policyStatements?: any[];
   private subnets?: string[];
   private securityGroups?: string[];
+  private addVpcConfig?: boolean = false;
 
   /**
    * Unqualified Function ARN
@@ -124,6 +132,19 @@ export class Function extends cloud.Function {
       role: this.role.name,
       policy: Lazy.stringValue({
         produce: () => {
+          if (this.addVpcConfig === true) {
+            this.policyStatements?.push({
+              Effect: "Allow",
+              Action: [
+                "ec2:CreateNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DeleteNetworkInterface",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeSecurityGroups",
+              ],
+              Resource: "*",
+            });
+          }
           if ((this.policyStatements ?? []).length > 0) {
             return JSON.stringify({
               Version: "2012-10-17",
@@ -171,6 +192,12 @@ export class Function extends cloud.Function {
       runtime: "nodejs16.x",
       role: this.role.arn,
       publish: true,
+      vpcConfig: {
+        subnetIds: Lazy.listValue({ produce: () => this.subnets ?? [] }),
+        securityGroupIds: Lazy.listValue({
+          produce: () => this.securityGroups ?? [],
+        }),
+      },
       environment: {
         variables: Lazy.anyValue({ produce: () => this.env }) as any,
       },
@@ -180,35 +207,12 @@ export class Function extends cloud.Function {
       memorySize: props.memory ? props.memory : undefined,
     });
 
-    const subnetIds = Lazy.listValue({ produce: () => this.subnets });
-    const securityGroupIds = Lazy.listValue({ produce: () => this.securityGroups });
-    if (subnetIds) {
-      this.function.putVpcConfig({
-        subnetIds,
-        securityGroupIds,
-      })
-
-      // Give lambda VPC permissions
-      new IamRolePolicy(this, "IamRolePolicyVpc", {
-        role: this.role.name,
-        policy: JSON.stringify({
-          Version: "2012-10-17",
-          Statement: [
-            {
-              Effect: "Allow",
-              Action: [
-                "ec2:CreateNetworkInterface",
-                "ec2:DescribeNetworkInterfaces",
-                "ec2:DeleteNetworkInterface",
-                "ec2:DescribeSubnets",
-                "ec2:DescribeSecurityGroups",
-              ],
-              Resource: "*",
-            },
-          ],
-        })
-      });
-    }
+    const subnetIds = Lazy.anyValue({
+      produce: () => this.subnets ?? [],
+    }) as any;
+    const securityGroupIds = Lazy.anyValue({
+      produce: () => this.securityGroups ?? [],
+    }) as any;
 
     this.arn = this.function.arn;
     this.qualifiedArn = this.function.qualifiedArn;
@@ -257,6 +261,7 @@ export class Function extends cloud.Function {
       this.subnets = [];
       this.securityGroups = [];
     }
+    this.addVpcConfig = true;
     this.subnets.push(...vpcConfig.subnetIds);
     this.securityGroups.push(...vpcConfig.securityGroupIds);
   }

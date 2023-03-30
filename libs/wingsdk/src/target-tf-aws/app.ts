@@ -1,14 +1,14 @@
 import { DataAwsCallerIdentity } from "@cdktf/provider-aws/lib/data-aws-caller-identity";
 import { DataAwsRegion } from "@cdktf/provider-aws/lib/data-aws-region";
-import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { Vpc } from "@cdktf/provider-aws/lib/vpc";
 import { Subnet } from "@cdktf/provider-aws/lib/subnet";
 import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
+import { Eip } from "@cdktf/provider-aws/lib/eip";
 import { InternetGateway } from "@cdktf/provider-aws/lib/internet-gateway";
+import { NatGateway } from "@cdktf/provider-aws/lib/nat-gateway";
+import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { RouteTable } from "@cdktf/provider-aws/lib/route-table";
 import { RouteTableAssociation } from "@cdktf/provider-aws/lib/route-table-association";
-import { NatGateway } from "@cdktf/provider-aws/lib/nat-gateway";
-import { Eip } from "@cdktf/provider-aws/lib/eip";
 import { Construct } from "constructs";
 import { Api } from "./api";
 import { Bucket } from "./bucket";
@@ -16,6 +16,7 @@ import { Counter } from "./counter";
 import { Function } from "./function";
 import { Logger } from "./logger";
 import { Queue } from "./queue";
+import { Redis } from "./redis";
 import { Schedule } from "./schedule";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
@@ -34,7 +35,6 @@ import {
 } from "../cloud";
 import { CdktfApp, AppProps } from "../core";
 import { REDIS_FQN } from "../redis";
-import { Redis } from "./redis";
 
 /**
  * An app that knows how to synthesize constructs into a Terraform configuration
@@ -49,9 +49,10 @@ export class App extends CdktfApp {
   private awsRegionProvider?: DataAwsRegion;
   private awsAccountIdProvider?: DataAwsCallerIdentity;
   private _vpc?: Vpc;
-  // TODO: think about how to handle multiple subnets and security groups (maybe a map)
-  public subnets: {[key: string]: Subnet}
-  public securityGroups: {[key: string]: SecurityGroup};
+  /** Subnets shared across app */
+  public subnets: { [key: string]: Subnet };
+  /** Security groups shared across app */
+  public securityGroups: { [key: string]: SecurityGroup };
 
   constructor(props: AppProps = {}) {
     super(props);
@@ -129,6 +130,9 @@ export class App extends CdktfApp {
     return this.awsRegionProvider.name;
   }
   
+  /**
+   * Returns the VPC for this app. Will create a new VPC if one does not exist.
+   */
   public get vpc(): Vpc {
     if (this._vpc) {
       return this._vpc;
@@ -142,7 +146,7 @@ export class App extends CdktfApp {
       enableDnsSupport: true,
       tags: {
         Name: `${identifier}-vpc`,
-      } 
+      },
     });
 
     // Create the subnets for the VPC, in order to ensure internet egress there
@@ -152,16 +156,16 @@ export class App extends CdktfApp {
     // gateway is required to allow the NAT gateway to route traffic to the
     // internet.
 
-    // Create the public subnet. 
+    // Create the public subnet.
     // This subnet is intentionally small since we should not
-    // make by default be deploying things to publicly accessible subnets. Most resources 
+    // make by default be deploying things to publicly accessible subnets. Most resources
     // will be behind private subnet. This leaves room for 3 more /24 public subnets (if needed)
     const publicSubnet = new Subnet(this, "PublicSubnet", {
       vpcId: this._vpc.id,
       cidrBlock: "10.0.0.0/24", // 10.0.0.0 - 10.0.0.255
       tags: {
         Name: `${identifier}-public-subnet-1`,
-      }
+      },
     });
 
     // Create the private subnet
@@ -170,7 +174,7 @@ export class App extends CdktfApp {
       cidrBlock: "10.0.4.0/22", // 10.0.4.0 - 10.0.7.255
       tags: {
         Name: `${identifier}-private-subnet-1`,
-      }
+      },
     });
 
     // Create the internet gateway
@@ -178,7 +182,7 @@ export class App extends CdktfApp {
       vpcId: this._vpc.id,
       tags: {
         Name: `${identifier}-internet-gateway`,
-      }
+      },
     });
 
     // Create NAT gateway and Elastic IP for NAT
@@ -188,7 +192,7 @@ export class App extends CdktfApp {
       subnetId: publicSubnet.id,
       tags: {
         Name: `${identifier}-nat-gateway`,
-      }
+      },
     });
 
     // Create route tables for public and private subnets
@@ -199,11 +203,11 @@ export class App extends CdktfApp {
           // This will route all traffic to the internet gateway
           cidrBlock: "0.0.0.0/0",
           gatewayId: internetGateway.id,
-        }
+        },
       ],
       tags: {
         Name: `${identifier}-public-route-table-1`,
-      }
+      },
     });
 
     const privateRouteTable = new RouteTable(this, "PrivateRouteTable", {
@@ -213,11 +217,11 @@ export class App extends CdktfApp {
           // This will route all traffic to the NAT gateway
           cidrBlock: "0.0.0.0/0",
           natGatewayId: nat.id,
-        }
+        },
       ],
       tags: {
         Name: `${identifier}-private-route-table-1`,
-      }
+      },
     });
 
     // Associate route tables with subnets

@@ -10,7 +10,10 @@ import { runCommand } from "../util";
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const IoRedis = require("ioredis");
 
-export class Redis extends RedisClientBase implements ISimulatorResourceInstance {
+export class Redis
+  extends RedisClientBase
+  implements ISimulatorResourceInstance
+{
   private container_name: string;
   private readonly WING_REDIS_IMAGE =
     process.env.WING_REDIS_IMAGE ??

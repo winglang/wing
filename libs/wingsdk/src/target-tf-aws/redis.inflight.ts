@@ -1,5 +1,8 @@
+import {
+  DescribeCacheClustersCommand,
+  ElastiCacheClient,
+} from "@aws-sdk/client-elasticache";
 import { RedisClientBase } from "../redis";
-import { DescribeCacheClustersCommand, ElastiCacheClient } from "@aws-sdk/client-elasticache";
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const IoRedis = require("ioredis");
@@ -17,10 +20,10 @@ export class RedisClient extends RedisClientBase {
   private async getEndpoint(): Promise<string> {
     const command = new DescribeCacheClustersCommand({
       CacheClusterId: this.clusterId,
-      ShowCacheNodeInfo: true
+      ShowCacheNodeInfo: true,
     });
     const resp = await this.elasticacheClient.send(command);
-    
+
     if (!resp.CacheClusters) {
       throw new Error("No Redis cache clusters found");
     }

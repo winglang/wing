@@ -107,6 +107,9 @@ export interface IRedisClient {
   del(key: string): Promise<number>;
 }
 
+/**
+ * Base class for `Redis` Client.
+ */
 export abstract class RedisClientBase implements IRedisClient {
   public abstract rawClient(): Promise<any>;
   public abstract url(): Promise<string>;

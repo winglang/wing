@@ -1,20 +1,20 @@
-import { Construct } from 'constructs';
-import { Code } from '../core';
-import { App } from './app';
-import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
-import { Subnet } from "@cdktf/provider-aws/lib/subnet";
 import { ElasticacheCluster } from "@cdktf/provider-aws/lib/elasticache-cluster";
 import { ElasticacheSubnetGroup } from "@cdktf/provider-aws/lib/elasticache-subnet-group";
-import * as redis from '../redis';
-import { Function } from './function';
-import * as core from '../core';
-import { NameOptions, ResourceNames } from '../utils/resource-names';
+import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
+import { Subnet } from "@cdktf/provider-aws/lib/subnet";
+import { Construct } from "constructs";
+import { App } from "./app";
+import { Function } from "./function";
+import { Code } from "../core";
+import * as core from "../core";
+import * as redis from "../redis";
+import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 // The cluster name must contain alphanumeric characters or hyphens, should start with a letter, and cannot end with a hyphen or contain two consecutive hyphens.
 const ELASTICACHE_NAME_OPTS: NameOptions = {
   maxLen: 50,
-  disallowedRegex: /([^a-z0-9]+)/g
-}
+  disallowedRegex: /([^a-z0-9]+)/g,
+};
 
 export class Redis extends redis.Redis {
   private readonly engine: string;
@@ -30,22 +30,26 @@ export class Redis extends redis.Redis {
     super(scope, id);
 
     if (
-      process.env.REDIS_ENGINE_VERSION && 
+      process.env.REDIS_ENGINE_VERSION &&
       !process.env.REDIS_PARAMETER_GROUP_NAME
     ) {
-      throw new Error("REDIS_PARAMETER_GROUP_NAME must be set if REDIS_ENGINE_VERSION is set");
-    };
+      throw new Error(
+        "REDIS_PARAMETER_GROUP_NAME must be set if REDIS_ENGINE_VERSION is set"
+      );
+    }
 
     this.engine = "redis";
     this.engineVersion = process.env.REDIS_ENGINE_VERSION ?? "6.2";
-    this.clusterNodeType = process.env.REDIS_CLUSTER_NODE_TYPE ?? "cache.t4g.small";
-    this.parameterGroupName = process.env.REDIS_PARAMETER_GROUP_NAME ?? "default.redis6.x";
+    this.clusterNodeType =
+      process.env.REDIS_CLUSTER_NODE_TYPE ?? "cache.t4g.small";
+    this.parameterGroupName =
+      process.env.REDIS_PARAMETER_GROUP_NAME ?? "default.redis6.x";
 
     const app = App.of(this) as App;
     const vpc = app.vpc;
     this.subnet = app.subnets.private;
     const clusterName = ResourceNames.generateName(this, ELASTICACHE_NAME_OPTS);
-    
+
     this.securityGroup = new SecurityGroup(this, "securityGroup", {
       vpcId: vpc.id,
       name: `${this.node.addr.slice(-8)}-securityGroup`,
@@ -55,8 +59,8 @@ export class Redis extends redis.Redis {
           fromPort: 0,
           toPort: 0,
           protocol: "-1",
-          selfAttribute: true
-        }
+          selfAttribute: true,
+        },
       ],
       egress: [
         {
@@ -64,14 +68,14 @@ export class Redis extends redis.Redis {
           fromPort: 0,
           toPort: 0,
           protocol: "-1",
-        }
-      ]
+        },
+      ],
     });
 
     const subnetGroup = new ElasticacheSubnetGroup(this, "RedisSubnetGroup", {
       name: `${clusterName}-subnetGroup`,
-      subnetIds: [this.subnet.id]
-    })
+      subnetIds: [this.subnet.id],
+    });
 
     const cluster = new ElasticacheCluster(this, "RedisCluster", {
       clusterId: clusterName,
@@ -98,17 +102,15 @@ export class Redis extends redis.Redis {
     const env = this.envName();
     host.addPolicyStatements({
       effect: "Allow",
-      action: [
-        "*"
-      ],
-      resource: this.clusterArn
-    })
+      action: ["*"],
+      resource: this.clusterArn,
+    });
 
     host.addEnvironment(env, this.clusterId);
     host.addNetworkConfig({
       securityGroupIds: [this.securityGroup.id],
-      subnetIds: [this.subnet.id]
-    })
+      subnetIds: [this.subnet.id],
+    });
 
     super._bind(host, ops);
   }
@@ -116,7 +118,7 @@ export class Redis extends redis.Redis {
   /** @internal */
   public _toInflight(): Code {
     return core.InflightClient.for(__dirname, __filename, "RedisClient", [
-      `process.env["${this.envName()}"]`
+      `process.env["${this.envName()}"]`,
     ]);
   }
 
