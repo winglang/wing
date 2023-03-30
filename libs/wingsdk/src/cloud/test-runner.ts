@@ -65,10 +65,10 @@ export interface ITestRunnerClient {
   listTests(): Promise<string[]>;
 
   /**
-   * Run a test with a given name and return the result.
+   * Run a test with a given path and return the result.
    * @inflight
    */
-  runTest(name: string): Promise<TestResult>;
+  runTest(path: string): Promise<TestResult>;
 }
 
 // TODO: include test traces? (e.g. for debugging)

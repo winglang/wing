@@ -1,6 +1,7 @@
 import { existsSync } from "fs";
 import { join } from "path";
 import { Tree } from "./tree";
+import { ITestRunnerClient } from "../cloud";
 import { SDK_VERSION } from "../constants";
 import { ConstructTree } from "../core";
 import { ISimulatorResourceInstance } from "../target-sim";
@@ -408,6 +409,56 @@ export class Simulator {
    */
   public onTrace(subscriber: ITraceSubscriber) {
     this._traceSubscribers.push(subscriber);
+  }
+
+  private findTestRunner(): ITestRunnerClient {
+    let testRunnerClient = this.tryGetResource("root/cloud.TestRunner");
+    if (!testRunnerClient) {
+      throw new Error(
+        "Could not find a cloud.TestRunner resource in the simulation tree."
+      );
+    }
+    return testRunnerClient;
+  }
+
+  /**
+   * Lists all resource with identifier "test" or that start with "test:*".
+   * @returns A list of resource paths
+   */
+  public async listTests(): Promise<string[]> {
+    let testRunner = this.findTestRunner();
+    return testRunner.listTests();
+  }
+
+  /**
+   * Run all tests in the simulation tree.
+   *
+   * A test is a `cloud.Function` resource with an identifier that starts with "test." or is "test".
+   * @returns A list of test results.
+   */
+  public async runAllTests(): Promise<TestResult[]> {
+    const results = new Array<TestResult>();
+    const tests = await this.listTests();
+
+    for (const path of tests) {
+      results.push(await this.runTest(path));
+    }
+
+    return results;
+  }
+
+  /**
+   * Runs a single test.
+   * @param path The path to a cloud.Function resource that repersents the test
+   * @returns The result of the test
+   */
+  public async runTest(path: string): Promise<TestResult> {
+    let testRunner = this.findTestRunner();
+    const result = await testRunner.runTest(path);
+    return {
+      ...result,
+      traces: [], // TODO? how to model traces in a cloud-agnostic way?
+    };
   }
 
   /**
