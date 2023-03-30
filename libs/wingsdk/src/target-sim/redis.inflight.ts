@@ -1,4 +1,4 @@
-import Dockerode from "dockerode";
+import { execa } from "execa";
 import { v4 as uuidv4 } from "uuid";
 import { ISimulatorResourceInstance } from "./resource";
 import { RedisAttributes, RedisSchema } from "./schema-resources";
@@ -6,7 +6,6 @@ import { IRedisClient } from "../redis";
 import { ISimulatorContext } from "../testing/simulator";
 
 // Issue using types from ioredis with JSII
-//import { Redis as IoRedis } from "ioredis";
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const IoRedis = require("ioredis");
 
@@ -17,7 +16,6 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
   private readonly context: ISimulatorContext;
 
   private connection_url?: string = undefined;
-  private docker?: Dockerode = undefined;
   private connection?: any;
 
   public constructor(_props: RedisSchema["props"], context: ISimulatorContext) {
@@ -29,38 +27,29 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
   }
 
   public async init(): Promise<RedisAttributes> {
-    this.docker = new Dockerode();
-
     try {
       // Pull docker image
-      const stream = await this.docker.pull(this.REDIS_IMAGE);
-      await new Promise((res) =>
-        this.docker?.modem.followProgress(stream, res)
-      );
-      // Create a redis container
-      const container = await this.docker!.createContainer({
-        Image: this.REDIS_IMAGE,
-        name: this.container_name,
-        HostConfig: {
-          PortBindings: {
-            "6379/tcp": [
-              {
-                HostPort: "0", // let docker pick a port
-              },
-            ],
-          },
-        },
-      });
+      await execa("docker", ["pull", this.REDIS_IMAGE]);
 
-      // Start the redis container
-      await container.start();
+      // Run the redis container and dynamically assign a host port to 6379
+      await execa("docker", [
+        "run",
+        "-d",
+        "--name",
+        this.container_name,
+        "-p",
+        "6379",
+        this.REDIS_IMAGE,
+      ]);
+
       // Inspect the container to get the host port
-      const hostPort = (await container.inspect()).NetworkSettings.Ports[
+      const out = await execa("docker", ["inspect", this.container_name]);
+      const hostPort = JSON.parse(out.stdout)[0].NetworkSettings.Ports[
         "6379/tcp"
       ][0].HostPort;
 
       // redis url based on host port
-      this.connection_url = `redis://0.0.0.0:${hostPort!}`;
+      this.connection_url = `redis://0.0.0.0:${hostPort}`;
       return {};
     } catch (e) {
       throw Error(`Error setting up Redis resource simulation (${e})
@@ -71,10 +60,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
   public async cleanup(): Promise<void> {
     // disconnect from the redis server
     await this.connection?.disconnect();
-    // stop the redis container
-    let container = this.docker?.getContainer(this.container_name);
-    await container?.stop();
-    await container?.remove();
+    await execa("docker", ["rm", "-f", this.container_name]);
   }
 
   public async rawClient(): Promise<any> {

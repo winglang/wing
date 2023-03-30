@@ -49,7 +49,7 @@ const project = new cdk.JsiiProject({
     // simulator dependencies
     "tar",
     "express",
-    "dockerode",
+    "execa@6.1.0",
     "uuid",
     // shared client dependencies
     "ioredis",

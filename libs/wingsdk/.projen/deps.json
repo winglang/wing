@@ -239,11 +239,12 @@
       "type": "bundled"
     },
     {
-      "name": "dockerode",
+      "name": "esbuild-wasm",
       "type": "bundled"
     },
     {
-      "name": "esbuild-wasm",
+      "name": "execa",
+      "version": "6.1.0",
       "type": "bundled"
     },
     {

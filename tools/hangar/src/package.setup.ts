@@ -52,14 +52,7 @@ export default async function () {
     cwd: tmpDir,
   });
 
-  const allowedInstallHooks = [
-    // dockerode hooks
-    /> cpu-features@.* install/,
-    /> ssh2@.* install/,
-    /> node install\.js/,
-    /> node buildcheck\.js/,
-    /> .*sshcrypto.node/
-  ];
+  const allowedInstallHooks: RegExp[] = []; // Leaving this mechanism in place in case we need it in the future
 
   const installHooks = installResult.stdout.match(/>.*/g)?.filter((hook) => {
     return !allowedInstallHooks.some((allowedHook) => {
