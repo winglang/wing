@@ -165,7 +165,7 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 }
 
 pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> Diagnostics {
-	let env = SymbolEnv::new(None, types.void(), false, false, Phase::Preflight, 0);
+	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
 	scope.set_env(env);
 
 	// note: Globals are emitted here and wrapped in "{ ... }" blocks. Wrapping makes these emissions, actual
