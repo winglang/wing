@@ -1,3 +1,4 @@
+import { join } from "path";
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
@@ -24,6 +25,10 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
     this.initialObjects[key] = body;
   }
 
+  protected eventHandlerLocation(): string {
+    return join(__dirname, "bucket.onevent.inflight.js");
+  }
+
   public toSimulator(): BaseResourceSchema {
     const schema: BucketSchema = {
       type: BUCKET_TYPE,
@@ -31,6 +36,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
       props: {
         public: this.public,
         initialObjects: this.initialObjects,
+        topics: this.convertTopicsToHandles(),
       },
       attrs: {} as any,
     };

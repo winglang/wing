@@ -1,6 +1,8 @@
 import * as cdktf from "cdktf";
+import { Construct } from "constructs";
 import { test, expect } from "vitest";
-import { Bucket } from "../../src/cloud";
+import { Bucket, IBucketEventHandler } from "../../src/cloud";
+import { Inflight, NodeJsCode } from "../../src/core";
 import * as tfazure from "../../src/target-tf-azure";
 import { mkdtemp } from "../../src/util";
 import {
@@ -9,6 +11,16 @@ import {
   tfSanitize,
   treeJsonOf,
 } from "../util";
+
+class InflightBucketEventHandler
+  extends Inflight
+  implements IBucketEventHandler
+{
+  public stateful: boolean;
+  constructor(scope: Construct, id: string) {
+    super(scope, id, { code: NodeJsCode.fromInline("null") });
+  }
+}
 
 test("create a bucket", () => {
   // GIVEN
@@ -120,4 +132,23 @@ test("bucket name valid", () => {
 
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("bucket onEvent is not implemented yet", () => {
+  // GIVEN
+  let error;
+  try {
+    const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
+    const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
+    const testInflight = new InflightBucketEventHandler(app, "bucket-inflight");
+    bucket.onEvent(testInflight);
+    app.synth();
+  } catch (err) {
+    error = err.message;
+  }
+
+  // THEN
+  expect(error).toBe(
+    "on_event method isn't implemented yet on the current target."
+  );
 });
