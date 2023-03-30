@@ -475,8 +475,9 @@ impl<'a> JsiiImporter<'a> {
 						param_types.push(self.parameter_to_wing_type(&param));
 					}
 				}
+				let this_type = if is_static { None } else { Some(wing_type) };
 				let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
-					this_type: Some(wing_type),
+					this_type,
 					parameters: param_types,
 					return_type,
 					phase,
@@ -702,7 +703,7 @@ impl<'a> JsiiImporter<'a> {
 				}
 			}
 			let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
-				this_type: Some(new_type.clone()),
+				this_type: None, // Initializers are considered static so they have no `this_type`
 				parameters: arg_types,
 				return_type: new_type,
 				phase,

@@ -2141,7 +2141,9 @@ impl<'a> TypeChecker<'a> {
 					);
 					// use the class type as the function's "this" type
 					if let Type::Function(ref mut f) = *method_type {
-						f.this_type = Some(class_type.clone());
+						if !method_def.is_static {
+							f.this_type = Some(class_type.clone());
+						}
 					} else {
 						panic!("Expected method type to be a function");
 					}
@@ -2158,17 +2160,11 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Add the constructor to the class env
-				let mut constructor_type = self.resolve_type_annotation(
+				let constructor_type = self.resolve_type_annotation(
 					&TypeAnnotation::FunctionSignature(constructor.signature.clone()),
 					env,
 					stmt.idx,
 				);
-				// use the class type as the constructor's "this" type
-				if let Type::Function(ref mut f) = *constructor_type {
-					f.this_type = Some(class_type.clone());
-				} else {
-					panic!("Expected constructor type to be a function");
-				}
 				match class_env.define(
 					&Symbol {
 						name: WING_CONSTRUCTOR_NAME.into(),
