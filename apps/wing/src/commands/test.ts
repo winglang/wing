@@ -125,14 +125,61 @@ async function testSimulator(synthDir: string): Promise<sdk.cloud.TestResult[]> 
 
   const testRunner = s.getResource("root/cloud.TestRunner") as ITestRunnerClient;
   const tests = await testRunner.listTests();
+  const filteredTests = pickTests(tests);
   const results = new Array<sdk.cloud.TestResult>();
 
-  for (const path of tests) {
+  for (const path of filteredTests) {
     results.push(await testRunner.runTest(path));
   }
 
   await s.stop();
   return results;
+}
+
+function pickTests(testPaths: string[]) {
+  // Given a list of test paths like so:
+  //
+  // root/env0/a/b/test:test1
+  // root/env0/d/e/f/test:test2
+  // root/env0/g/test:test3
+  // root/env1/a/b/test:test1
+  // root/env1/d/e/f/test:test2
+  // root/env1/g/test:test3
+  // root/env2/a/b/test:test1
+  // root/env2/d/e/f/test:test2
+  // root/env2/g/test:test3
+  //
+  // This function returns a list of test paths which uses each test name
+  // exactly once and each "env" exactly once. In this case, the result would
+  // be:
+  //
+  // root/env0/a/b/test:test1
+  // root/env1/d/e/f/test:test2
+  // root/env2/g/test:test3
+
+  const tests = new Map<string, string>();
+  const envs = new Set<string>();
+
+  for (const testPath of testPaths) {
+    const [_root, env, test] = testPath.split("/");
+
+    if (env === "Default") {
+      continue;
+    }
+
+    if (envs.has(env)) {
+      continue;
+    }
+
+    if (tests.has(test)) {
+      continue;
+    }
+
+    tests.set(test, testPath);
+    envs.add(env);
+  }
+
+  return Array.from(tests.values());
 }
 
 async function testTfAws(_synthDir: string): Promise<sdk.cloud.TestResult[]> {

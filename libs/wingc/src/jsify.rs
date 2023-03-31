@@ -172,12 +172,12 @@ impl<'a> JSifier<'a> {
 				"super({{ outdir: {}, name: \"{}\", plugins: $plugins }});",
 				OUTDIR_VAR, self.app_name
 			));
-			app_wrapper.line(format!("new {}(this, \"Default\");", ROOT_CLASS));
+			app_wrapper.line(format!("const $root = new {}(this, \"Default\");", ROOT_CLASS));
 			app_wrapper.open(format!("if ({}) {{", ENV_WING_TEST));
-			app_wrapper.line("const $test_runner = $root.node.findChild(\"cloud.TestRunner\");".to_string());
+			app_wrapper.line("const $test_runner = this.node.findChild(\"cloud.TestRunner\");".to_string());
 			app_wrapper.line("const $tests = $test_runner.findTests();".to_string());
 			app_wrapper.open("for (let $i = 0; $i < $tests.length; $i++) {");
-			app_wrapper.line(format!("new {}(this, \"test\" + $i);", ROOT_CLASS));
+			app_wrapper.line(format!("new {}(this, \"env\" + $i);", ROOT_CLASS));
 			app_wrapper.close("}");
 			app_wrapper.close("}");
 			app_wrapper.close("}");
