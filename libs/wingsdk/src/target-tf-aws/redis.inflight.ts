@@ -8,10 +8,10 @@ import { RedisClientBase } from "../redis";
 const IoRedis = require("ioredis");
 
 export class RedisClient extends RedisClientBase {
-  private connection?: any;
   private connectionUrl?: string;
   constructor(
     private readonly clusterId: string,
+    private connection?: any,
     private readonly elasticacheClient = new ElastiCacheClient({})
   ) {
     super();
@@ -54,7 +54,8 @@ export class RedisClient extends RedisClientBase {
       this.connectionUrl = await this.getEndpoint();
     }
 
-    return new IoRedis(this.connectionUrl);
+    this.connection = new IoRedis(this.connectionUrl);
+    return this.connection;
   }
 
   public async url(): Promise<string> {

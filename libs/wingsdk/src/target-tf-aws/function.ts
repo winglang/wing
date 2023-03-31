@@ -131,6 +131,8 @@ export class Function extends cloud.Function {
       role: this.role.name,
       policy: Lazy.stringValue({
         produce: () => {
+          // If there are subnets to attach then the role needs to be able to
+          // create network interfaces
           if ((this.subnets ?? []).length > 0) {
             this.policyStatements?.push({
               Effect: "Allow",
