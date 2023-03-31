@@ -28,13 +28,6 @@ async function testOne(entrypoint: string, options: TestOptions) {
     testing: true,
   }));
 
-  // deploy the compiled app (to simulator or to the cloud)
-  // instantiate the cloud-specific test runner client
-  // - for simulator, we probably know how this works
-  // - for tf-aws, we need to extract any test-specific config from the
-  //   synthesized app and pass it to the test runner client
-  //   (maybe via `terraform output` command?)
-
   switch (options.target) {
     case "sim":
       await testSimulator(synthDir);
