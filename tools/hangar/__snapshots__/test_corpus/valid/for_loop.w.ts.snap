@@ -125,7 +125,7 @@ new $App().synth();"
 `;
 
 exports[`wing test -t sim > stdout 1`] = `
-"- Compiling /Users/chrisr/dev/wing1/examples/tests/valid/for_loop.w...
+"- Compiling to sim...
 wing: 1
 wing: 2
 wing: 3
@@ -150,6 +150,6 @@ lang: 3
 dang: 1
 dang: 2
 dang: 3
-✔ Compiling /Users/chrisr/dev/wing1/examples/tests/valid/for_loop.w...
+✔ Compiling to sim...
 pass ─ for_loop.wsim (no tests)"
 `;

@@ -261,10 +261,14 @@ exports[`wing compile -t tf-aws > proc.bf0feaf1bc98afc8eb1ba94d506b4dcd46af0da75
 `;
 
 exports[`wing test -t sim > stdout 1`] = `
-"- Compiling /Users/chrisr/dev/wing1/examples/tests/valid/print.w...
+"- Compiling to sim...
 preflight log
 preflight log
-✔ Compiling /Users/chrisr/dev/wing1/examples/tests/valid/print.w...
-pass ─ print.wsim » root/env0/test:log1
-pass ─ print.wsim » root/env1/test:log2"
+✔ Compiling to sim...
+pass ┌ print.wsim » root/env0/test:log1
+     │ inflight log 1.1
+     └ inflight log 1.2
+pass ┌ print.wsim » root/env1/test:log2
+     │ inflight log 2.1
+     └ inflight log 2.2"
 `;
