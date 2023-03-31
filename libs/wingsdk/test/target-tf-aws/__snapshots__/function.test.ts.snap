@@ -2,6 +2,11 @@
 
 exports[`basic function 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_iam_role\\": {
       \\"root_Function_IamRole_88AD864C\\": {
@@ -196,6 +201,16 @@ exports[`basic function 2`] = `
                   "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
@@ -246,6 +261,11 @@ exports[`basic function 2`] = `
 
 exports[`basic function with environment variables 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_iam_role\\": {
       \\"root_Function_IamRole_88AD864C\\": {
@@ -442,6 +462,16 @@ exports[`basic function with environment variables 2`] = `
                   "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
@@ -492,6 +522,11 @@ exports[`basic function with environment variables 2`] = `
 
 exports[`basic function with memory size specified 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_iam_role\\": {
       \\"root_Function_IamRole_88AD864C\\": {
@@ -687,6 +722,16 @@ exports[`basic function with memory size specified 2`] = `
                   "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
@@ -737,6 +782,11 @@ exports[`basic function with memory size specified 2`] = `
 
 exports[`basic function with timeout explicitly set 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_iam_role\\": {
       \\"root_Function_IamRole_88AD864C\\": {
@@ -931,6 +981,16 @@ exports[`basic function with timeout explicitly set 2`] = `
                   "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
@@ -981,6 +1041,11 @@ exports[`basic function with timeout explicitly set 2`] = `
 
 exports[`function name valid 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_iam_role\\": {
       \\"root_TheMightyFunction01_IamRole_34EB69E9\\": {
@@ -1175,6 +1240,16 @@ exports[`function name valid 2`] = `
                   "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
@@ -1225,6 +1300,11 @@ exports[`function name valid 2`] = `
 
 exports[`replace invalid character from function name 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_iam_role\\": {
       \\"root_TheMightyFunction_IamRole_DF8277B4\\": {
@@ -1418,6 +1498,16 @@ exports[`replace invalid character from function name 2`] = `
                 "attributes": {
                   "wing:resource:connections": [],
                   "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",

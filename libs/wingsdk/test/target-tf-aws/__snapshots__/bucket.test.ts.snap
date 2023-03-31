@@ -2,10 +2,16 @@
 
 exports[`bucket is public 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
-        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\"
+        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
+        \\"force_destroy\\": true
       }
     },
     \\"aws_s3_bucket_policy\\": {
@@ -67,6 +73,16 @@ exports[`bucket is public 2`] = `
                 "attributes": {
                   "wing:resource:connections": [],
                   "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -160,10 +176,16 @@ exports[`bucket is public 2`] = `
 
 exports[`bucket prefix must be lowercase 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
       \\"root_TheUncannyBucket_9FBBB2ED\\": {
-        \\"bucket_prefix\\": \\"the-uncanny-bucket-c88a0953-\\"
+        \\"bucket_prefix\\": \\"the-uncanny-bucket-c88a0953-\\",
+        \\"force_destroy\\": true
       }
     },
     \\"aws_s3_bucket_public_access_block\\": {
@@ -271,6 +293,16 @@ exports[`bucket prefix must be lowercase 2`] = `
                   "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
@@ -321,10 +353,16 @@ exports[`bucket prefix must be lowercase 2`] = `
 
 exports[`bucket prefix valid 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
       \\"root_theuncannybucket_03A74E00\\": {
-        \\"bucket_prefix\\": \\"the-uncanny-bucket-c8e2755c-\\"
+        \\"bucket_prefix\\": \\"the-uncanny-bucket-c8e2755c-\\",
+        \\"force_destroy\\": true
       }
     },
     \\"aws_s3_bucket_public_access_block\\": {
@@ -389,6 +427,16 @@ exports[`bucket prefix valid 2`] = `
                 "attributes": {
                   "wing:resource:connections": [],
                   "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -482,10 +530,16 @@ exports[`bucket prefix valid 2`] = `
 
 exports[`bucket with two preflight objects 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
-        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\"
+        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
+        \\"force_destroy\\": true
       }
     },
     \\"aws_s3_bucket_policy\\": {
@@ -559,6 +613,16 @@ exports[`bucket with two preflight objects 2`] = `
                 "attributes": {
                   "wing:resource:connections": [],
                   "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -668,10 +732,16 @@ exports[`bucket with two preflight objects 2`] = `
 
 exports[`create a bucket 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
-        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\"
+        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
+        \\"force_destroy\\": true
       }
     },
     \\"aws_s3_bucket_public_access_block\\": {
@@ -736,6 +806,16 @@ exports[`create a bucket 2`] = `
                 "attributes": {
                   "wing:resource:connections": [],
                   "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",

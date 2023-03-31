@@ -2,6 +2,11 @@
 
 exports[`schedule behavior with cron 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_cloudwatch_event_rule\\": {
       \\"root_Schedule_85A4458B\\": {
@@ -300,6 +305,16 @@ exports[`schedule behavior with cron 2`] = `
                   "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
@@ -350,6 +365,11 @@ exports[`schedule behavior with cron 2`] = `
 
 exports[`schedule behavior with rate 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_cloudwatch_event_rule\\": {
       \\"root_Schedule_85A4458B\\": {
@@ -648,6 +668,16 @@ exports[`schedule behavior with rate 2`] = `
                   "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
@@ -698,6 +728,11 @@ exports[`schedule behavior with rate 2`] = `
 
 exports[`schedule with two functions 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_cloudwatch_event_rule\\": {
       \\"root_Schedule_85A4458B\\": {
@@ -1200,6 +1235,16 @@ exports[`schedule with two functions 2`] = `
                 "attributes": {
                   "wing:resource:connections": [],
                   "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",

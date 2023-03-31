@@ -2,6 +2,11 @@
 
 exports[`default table behavior 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
       \\"root_Table_C50359A8\\": {
@@ -39,6 +44,11 @@ my_table: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/table.inflight\\")).
 
 exports[`function with a table binding 2`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
       \\"root_Table_C50359A8\\": {
@@ -287,6 +297,16 @@ exports[`function with a table binding 3`] = `
                 "attributes": {
                   "wing:resource:connections": [],
                   "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",

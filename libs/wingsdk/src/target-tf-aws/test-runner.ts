@@ -16,7 +16,7 @@ export class TestRunner extends cloud.TestRunner {
   constructor(scope: Construct, id: string, props: cloud.TestRunnerProps = {}) {
     super(scope, id, props);
 
-    const output = new TerraformOutput(this, "testFunctionArns", {
+    const output = new TerraformOutput(this, "TestFunctionArns", {
       value: Lazy.stringValue({
         produce: () => {
           return JSON.stringify([...this.getTestFunctionArns().entries()]);
