@@ -3,6 +3,13 @@ import { compile, CompileOptions } from "./compile";
 import * as chalk from "chalk";
 import * as sdk from "@winglang/sdk";
 import { ITestRunnerClient } from "@winglang/sdk/lib/cloud";
+import { TestRunnerClient as TfawsTestRunnerClient } from "@winglang/sdk/lib/target-tf-aws/test-runner.inflight";
+import * as cp from "child_process";
+import debug from "debug";
+import * as ora from "ora";
+import { promisify } from "util";
+
+const log = debug("wing:test");
 
 /**
  * Options for the `test` command.
@@ -16,10 +23,10 @@ export async function test(entrypoints: string[], options: TestOptions) {
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
-  const synthDir = await compile(entrypoint, {
+  const synthDir = await withSpinner("Compiling application...", () => compile(entrypoint, {
     ...options,
     testing: true,
-  });
+  }));
 
   // deploy the compiled app (to simulator or to the cloud)
   // instantiate the cloud-specific test runner client
@@ -28,18 +35,23 @@ async function testOne(entrypoint: string, options: TestOptions) {
   //   synthesized app and pass it to the test runner client
   //   (maybe via `terraform output` command?)
 
-  let results: sdk.cloud.TestResult[];
   switch (options.target) {
     case "sim":
-      results = await testSimulator(synthDir);
+      await testSimulator(synthDir);
       break;
     case "tf-aws":
-      results = await testTfAws(synthDir);
+      await testTfAws(synthDir);
       break;
     default:
       throw new Error(`unsupported target ${options.target}`);
   }
+}
 
+/**
+ * Print out a test report to the console.
+ * @returns `true` if any tests failed, `false` otherwise.
+ */
+function printTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): boolean {
   // print report
   let hasFailures = false;
 
@@ -114,18 +126,16 @@ async function testOne(entrypoint: string, options: TestOptions) {
     }
   }
 
-  if (hasFailures) {
-    process.exit(1);
-  }
-}
+  return hasFailures;
+};
 
-async function testSimulator(synthDir: string): Promise<sdk.cloud.TestResult[]> {
+async function testSimulator(synthDir: string) {
   const s = new sdk.testing.Simulator({ simfile: synthDir });
   await s.start();
 
   const testRunner = s.getResource("root/cloud.TestRunner") as ITestRunnerClient;
   const tests = await testRunner.listTests();
-  const filteredTests = pickTests(tests);
+  const filteredTests = pickOneTestPerEnvironment(tests);
   const results = new Array<sdk.cloud.TestResult>();
 
   for (const path of filteredTests) {
@@ -133,10 +143,84 @@ async function testSimulator(synthDir: string): Promise<sdk.cloud.TestResult[]> 
   }
 
   await s.stop();
+
+  const hasFailures = printTestReport(synthDir, results);
+  if (hasFailures) {
+    process.exit(1);
+  }
+}
+
+async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[]> {
+  if (!isTerraformInstalled(synthDir)) {
+    throw new Error(
+      "Terraform is not installed. Please install Terraform to run tests in the cloud."
+    );
+  }
+
+  // TODO: check if there was a previous test run, and if so ask the user if they want to destroy
+  // the previous test run before starting a new one
+
+  await withSpinner("terraform init", () => terraformInit(synthDir));
+  await withSpinner("terraform apply", () => terraformApply(synthDir));
+
+  const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
+    const testArns = await terraformOutput(synthDir, "WING_TEST_RUNNER_FUNCTION_ARNS");
+    const testRunner = new TfawsTestRunnerClient(testArns);
+
+    const tests = await testRunner.listTests();
+    return [testRunner, pickOneTestPerEnvironment(tests)];
+  });
+
+  const results = await withSpinner("Running tests...", async () => {
+    const results = new Array<sdk.cloud.TestResult>();
+    for (const path of tests) {
+      results.push(await testRunner.runTest(path));
+    }
+    return results;
+  });
+
+  const hasFailures = printTestReport(synthDir, results);
+
+  if (hasFailures) {
+    // TODO: in the future we can add a `--destroy` flag to the `test` command that will
+    // destroy the resources from a test, and then we can print this message:
+    // "Run `wing test --target tf-aws --destroy` to clean up resources."
+    console.log("One or more tests failed. Skipping test cleanup.");
+    process.exit(1);
+  }
+
+  await withSpinner("terraform destroy", () => terraformDestroy(synthDir));
+
   return results;
 }
 
-function pickTests(testPaths: string[]) {
+async function isTerraformInstalled(synthDir: string) {
+  const output = await execCapture("terraform version", { cwd: synthDir });
+  return output.startsWith("Terraform v");
+}
+
+async function terraformInit(synthDir: string) {
+  await execCapture("terraform init", { cwd: synthDir });
+}
+
+async function terraformApply(synthDir: string) {
+  await execCapture("terraform apply -auto-approve", { cwd: synthDir });
+}
+
+async function terraformDestroy(synthDir: string) {
+  await execCapture("terraform destroy -auto-approve", { cwd: synthDir });
+}
+
+async function terraformOutput(synthDir: string, name: string) {
+  const output = await execCapture("terraform output -json", { cwd: synthDir });
+  const parsed = JSON.parse(output);
+  if (!parsed[name]) {
+    throw new Error(`terraform output ${name} not found`);
+  }
+  return parsed[name].value;
+}
+
+function pickOneTestPerEnvironment(testPaths: string[]) {
   // Given a list of test paths like so:
   //
   // root/env0/a/b/test:test1
@@ -182,10 +266,6 @@ function pickTests(testPaths: string[]) {
   return Array.from(tests.values());
 }
 
-async function testTfAws(_synthDir: string): Promise<sdk.cloud.TestResult[]> {
-  throw new Error("not implemented");
-}
-
 function sortTests(a: sdk.cloud.TestResult, b: sdk.cloud.TestResult) {
   if (a.pass && !b.pass) {
     return -1;
@@ -194,4 +274,37 @@ function sortTests(a: sdk.cloud.TestResult, b: sdk.cloud.TestResult) {
     return 1;
   }
   return a.path.localeCompare(b.path);
+}
+
+const MAX_BUFFER = 10 * 1024 * 1024;
+
+/**
+ * Executes command and returns STDOUT. If the command fails (non-zero), throws an error.
+ */
+async function execCapture(command: string, options: { cwd: string }) {
+  log(command);
+  const exec = promisify(cp.exec);
+  const { stdout, stderr } = await exec(command, {
+    cwd: options.cwd,
+    maxBuffer: MAX_BUFFER,
+  });
+  if (stderr) {
+    throw new Error(stderr);
+  }
+  return stdout;
+}
+
+async function withSpinner<T>(
+  message: string,
+  fn: () => Promise<T>,
+): Promise<T> {
+  const spinner = ora(message).start();
+  try {
+    const result = await fn();
+    spinner.succeed();
+    return result;
+  } catch (e) {
+    spinner.fail();
+    throw e;
+  }
 }

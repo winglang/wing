@@ -5,7 +5,7 @@ import { ApiGatewayRestApi } from "@cdktf/provider-aws/lib/api-gateway-rest-api"
 import { ApiGatewayStage } from "@cdktf/provider-aws/lib/api-gateway-stage";
 import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
 
-import { Lazy } from "cdktf";
+import { Lazy } from "cdktf/lib/tokens";
 import { Construct } from "constructs";
 import { Function } from "./function";
 import { core } from "..";

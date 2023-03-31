@@ -2,6 +2,10 @@ import { Construct } from "constructs";
 import { Function as AwsFunction } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { TerraformOutput } from "cdktf/lib/terraform-output";
+import { Lazy } from "cdktf/lib/tokens";
+
+const OUTPUT_TEST_RUNNER_FUNCTION_ARNS = "WING_TEST_RUNNER_FUNCTION_ARNS";
 
 /**
  * AWS implementation of `cloud.TestRunner`.
@@ -11,6 +15,16 @@ import * as core from "../core";
 export class TestRunner extends cloud.TestRunner {
   constructor(scope: Construct, id: string, props: cloud.TestRunnerProps = {}) {
     super(scope, id, props);
+
+    const output = new TerraformOutput(this, "testFunctionArns", {
+      value: Lazy.stringValue({
+        produce: () => {
+          return JSON.stringify([...this.getTestFunctionArns().entries()]);
+        },
+      }),
+    });
+
+    output.overrideLogicalId(OUTPUT_TEST_RUNNER_FUNCTION_ARNS);
   }
 
   /** @internal */
@@ -21,6 +35,10 @@ export class TestRunner extends cloud.TestRunner {
 
     // Collect all of the "test" cloud.Function's and their ARNs, and pass them
     // to the test engine so they can be invoked inflight.
+    // TODO: are we going to run into AWS's 4KB limit here?
+    // some solutions:
+    // - move the logic for picking one test from each isolated environment to here
+    // - base64 encode the JSON
     const testFunctions = this.getTestFunctionArns();
     host.addEnvironment(
       this.envTestFunctionArns(),

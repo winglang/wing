@@ -8,8 +8,8 @@ export class TestRunnerClient implements ITestRunnerClient {
   constructor(tests: string) {
     // Expects a JSON string of the form:
     // [
-    //   ["testName1", "functionArn1"],
-    //   ["testName2", "functionArn2"],
+    //   ["testPath1", "functionArn1"],
+    //   ["testPath2", "functionArn2"],
     //   ...
     // ]
     this.tests = new Map(JSON.parse(tests) as [string, string][]);
