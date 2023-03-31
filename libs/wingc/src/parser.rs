@@ -947,9 +947,21 @@ impl<'s> Parser<'s> {
 				};
 				Ok(Expr::new(
 					ExprKind::Range {
-						start: Box::new(self.build_expression(&expression_node.child_by_field_name("start").expect("range expression should always include start"))?),
+						start: Box::new(
+							self.build_expression(
+								&expression_node
+									.child_by_field_name("start")
+									.expect("range expression should always include start"),
+							)?,
+						),
 						inclusive: inclusive,
-						end: Box::new(self.build_expression(&expression_node.child_by_field_name("end").expect("range expression should always include end"))?),
+						end: Box::new(
+							self.build_expression(
+								&expression_node
+									.child_by_field_name("end")
+									.expect("range expression should always include end"),
+							)?,
+						),
 					},
 					expression_span,
 				))
