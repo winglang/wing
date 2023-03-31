@@ -2,7 +2,11 @@ import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { TestRunnerSchema, TEST_RUNNER_TYPE } from "./schema-resources";
-import { simulatorHandleToken } from "./util";
+import {
+  bindSimulatorResource,
+  makeSimulatorJsClient,
+  simulatorHandleToken,
+} from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 
@@ -31,10 +35,7 @@ export class TestRunner extends cloud.TestRunner implements ISimulatorResource {
 
   /** @internal */
   public _bind(host: core.IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
-      throw new Error("TestRunner can only be bound by tfaws.Function for now");
-    }
-
+    bindSimulatorResource("test-runner", this, host);
     super._bind(host, ops);
   }
 
@@ -58,11 +59,6 @@ export class TestRunner extends cloud.TestRunner implements ISimulatorResource {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(
-      __dirname,
-      __filename,
-      "TestRunnerClient",
-      []
-    );
+    return makeSimulatorJsClient("test-runner", this);
   }
 }

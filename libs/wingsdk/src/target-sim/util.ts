@@ -33,7 +33,7 @@ export async function exists(filePath: string): Promise<boolean> {
 function makeEnvVarName(type: string, resource: IConstruct): string {
   return `${type
     .toUpperCase()
-    .replace(/\./g, "_")}_HANDLE_${resource.node.addr.slice(-8)}`;
+    .replace(/\.|\-/g, "_")}_HANDLE_${resource.node.addr.slice(-8)}`;
 }
 
 export function bindSimulatorResource(

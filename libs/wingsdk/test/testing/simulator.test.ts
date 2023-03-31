@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { test, expect, describe } from "vitest";
 import { Bucket, TestResult } from "../../src/cloud";
 import { Code, InflightBindings } from "../../src/core";
-import { Function } from "../../src/target-sim/function";
+import { Function } from "../../src/target-sim";
 import { SimApp, Testing } from "../../src/testing";
 
 describe("run single test", () => {
