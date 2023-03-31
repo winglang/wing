@@ -16,6 +16,8 @@ export class TestRunner extends cloud.TestRunner {
   constructor(scope: Construct, id: string, props: cloud.TestRunnerProps = {}) {
     super(scope, id, props);
 
+    // This output is created so the CLI's `wing test` command can obtain a list
+    // of all ARNs of test functions by running `terraform output`.
     const output = new TerraformOutput(this, "TestFunctionArns", {
       value: Lazy.stringValue({
         produce: () => {
@@ -33,12 +35,15 @@ export class TestRunner extends cloud.TestRunner {
       throw new Error("TestRunner can only be bound by tfaws.Function for now");
     }
 
-    // Collect all of the "test" cloud.Function's and their ARNs, and pass them
-    // to the test engine so they can be invoked inflight.
-    // TODO: are we going to run into AWS's 4KB limit here?
+    // Collect all of the test functions and their ARNs, and pass them to the
+    // test engine so they can be invoked inflight.
+    // TODO: are we going to run into AWS's 4KB environment variable limit here?
     // some solutions:
-    // - move the logic for picking one test from each isolated environment to here
-    // - base64 encode the JSON
+    // - base64 encode the string value
+    // - move the logic for picking one test from each isolated environment to
+    //   here so that if there are N tests in the original app and N
+    //   environments, we only need to output N test function ARNs instead of
+    //   N * N
     const testFunctions = this.getTestFunctionArns();
     host.addEnvironment(
       this.envTestFunctionArns(),
