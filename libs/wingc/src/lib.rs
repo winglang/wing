@@ -173,6 +173,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> D
 	add_builtin(
 		UtilityFunctions::Log.to_string().as_str(),
 		Type::Function(FunctionSignature {
+			this_type: None,
 			parameters: vec![types.string()],
 			return_type: types.void(),
 			phase: Phase::Independent,
@@ -184,6 +185,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> D
 	add_builtin(
 		UtilityFunctions::Assert.to_string().as_str(),
 		Type::Function(FunctionSignature {
+			this_type: None,
 			parameters: vec![types.bool()],
 			return_type: types.void(),
 			phase: Phase::Independent,
@@ -195,6 +197,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> D
 	add_builtin(
 		UtilityFunctions::Throw.to_string().as_str(),
 		Type::Function(FunctionSignature {
+			this_type: None,
 			parameters: vec![types.string()],
 			return_type: types.void(),
 			phase: Phase::Independent,
@@ -206,6 +209,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> D
 	add_builtin(
 		UtilityFunctions::Panic.to_string().as_str(),
 		Type::Function(FunctionSignature {
+			this_type: None,
 			parameters: vec![types.string()],
 			return_type: types.void(),
 			phase: Phase::Independent,
