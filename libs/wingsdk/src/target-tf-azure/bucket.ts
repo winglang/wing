@@ -5,6 +5,13 @@ import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
 import * as cloud from "../cloud";
+import {
+  BucketOnDeleteProps,
+  BucketOnEventProps,
+  BucketOnUpdateProps,
+  BucketOnCreateProps,
+  IBucketEventHandler,
+} from "../cloud";
 import * as core from "../core";
 import {
   CaseConventions,
@@ -120,6 +127,50 @@ export class Bucket extends cloud.Bucket {
     host.addEnvironment(this.envStorageAccountName(), this.storageAccount.name);
     host.addEnvironment(this.isPublicEnvName(), `${this.public}`);
     super._bind(host, ops);
+  }
+
+  /**
+   * Run an inflight whenever a file is uploaded to the bucket.
+   */
+  public onCreate(fn: IBucketEventHandler, opts?: BucketOnCreateProps): void {
+    fn;
+    opts;
+    throw new Error(
+      "on_create method isn't implemented yet on the current target."
+    );
+  }
+
+  /**
+   * Run an inflight whenever a file is deleted from the bucket.
+   */
+  public onDelete(fn: IBucketEventHandler, opts?: BucketOnDeleteProps): void {
+    fn;
+    opts;
+    throw new Error(
+      "on_delete method isn't implemented yet on the current target."
+    );
+  }
+
+  /**
+   * Run an inflight whenever a file is updated in the bucket.
+   */
+  public onUpdate(fn: IBucketEventHandler, opts?: BucketOnUpdateProps): void {
+    fn;
+    opts;
+    throw new Error(
+      "on_update method isn't implemented yet on the current target."
+    );
+  }
+
+  /**
+   * Run an inflight whenever a file is uploaded, modified, or deleted from the bucket.
+   */
+  public onEvent(fn: IBucketEventHandler, opts?: BucketOnEventProps): void {
+    fn;
+    opts;
+    throw new Error(
+      "on_event method isn't implemented yet on the current target."
+    );
   }
 
   /** @internal */

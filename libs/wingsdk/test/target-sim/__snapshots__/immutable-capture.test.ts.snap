@@ -224,6 +224,7 @@ my_buckets: [(function(env) {
         "props": {
           "initialObjects": {},
           "public": false,
+          "topics": {},
         },
         "type": "wingsdk.cloud.Bucket",
       },
@@ -233,6 +234,7 @@ my_buckets: [(function(env) {
         "props": {
           "initialObjects": {},
           "public": false,
+          "topics": {},
         },
         "type": "wingsdk.cloud.Bucket",
       },
@@ -1556,6 +1558,7 @@ my_map: new Map([[\\"foo\\",(function(env) {
         "props": {
           "initialObjects": {},
           "public": false,
+          "topics": {},
         },
         "type": "wingsdk.cloud.Bucket",
       },
@@ -1565,6 +1568,7 @@ my_map: new Map([[\\"foo\\",(function(env) {
         "props": {
           "initialObjects": {},
           "public": false,
+          "topics": {},
         },
         "type": "wingsdk.cloud.Bucket",
       },
@@ -2749,6 +2753,7 @@ my_struct: {bucky: (function(env) {
         "props": {
           "initialObjects": {},
           "public": false,
+          "topics": {},
         },
         "type": "wingsdk.cloud.Bucket",
       },
@@ -2758,6 +2763,7 @@ my_struct: {bucky: (function(env) {
         "props": {
           "initialObjects": {},
           "public": false,
+          "topics": {},
         },
         "type": "wingsdk.cloud.Bucket",
       },
@@ -2767,6 +2773,7 @@ my_struct: {bucky: (function(env) {
         "props": {
           "initialObjects": {},
           "public": false,
+          "topics": {},
         },
         "type": "wingsdk.cloud.Bucket",
       },
@@ -2776,6 +2783,7 @@ my_struct: {bucky: (function(env) {
         "props": {
           "initialObjects": {},
           "public": false,
+          "topics": {},
         },
         "type": "wingsdk.cloud.Bucket",
       },
@@ -2785,6 +2793,7 @@ my_struct: {bucky: (function(env) {
         "props": {
           "initialObjects": {},
           "public": false,
+          "topics": {},
         },
         "type": "wingsdk.cloud.Bucket",
       },

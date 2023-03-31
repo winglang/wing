@@ -71,6 +71,7 @@ bucket: (function(env) {
         "props": {
           "initialObjects": {},
           "public": false,
+          "topics": {},
         },
         "type": "wingsdk.cloud.Bucket",
       },

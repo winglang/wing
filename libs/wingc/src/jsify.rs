@@ -1460,7 +1460,8 @@ impl<'a> FieldReferenceVisitor<'a> {
 			}
 
 			ExprKind::Reference(Reference::InstanceMember { object, property }) => {
-				let var = if let Some(cls) = object.evaluated_type.borrow().unwrap().as_class_or_resource() {
+				let obj_type = object.evaluated_type.borrow().unwrap();
+				let var = if let Some(cls) = obj_type.as_class_or_resource() {
 					Some(
 						cls
 							.env
@@ -1469,7 +1470,16 @@ impl<'a> FieldReferenceVisitor<'a> {
 							.as_variable()
 							.unwrap(),
 					)
-				} else if let Some(s) = object.evaluated_type.borrow().unwrap().as_struct() {
+				} else if let Some(iface) = obj_type.as_interface() {
+					Some(
+						iface
+							.env
+							.lookup(&property, None)
+							.expect("covered by type checking")
+							.as_variable()
+							.unwrap(),
+					)
+				} else if let Some(s) = obj_type.as_struct() {
 					Some(
 						s.env
 							.lookup(&property, None)

@@ -25,6 +25,16 @@ const FUNCTION_NAME_OPTS: NameOptions = {
 };
 
 /**
+ * options for granting invoke permissions to the current function
+ */
+export interface FunctionPermissionsOptions {
+  /**
+   * used for keeping function's versioning.
+   */
+  readonly qualifier?: string;
+}
+
+/**
  * AWS implementation of `cloud.Function`.
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
@@ -45,6 +55,8 @@ export class Function extends cloud.Function {
   public readonly qualifiedArn: string;
   /** Function INVOKE_ARN */
   public readonly invokeArn: string;
+  /** Permissions  */
+  public permissions!: LambdaPermission;
 
   constructor(
     scope: Construct,
@@ -226,15 +238,20 @@ export class Function extends cloud.Function {
   public addPermissionToInvoke(
     source: core.Resource,
     principal: string,
-    sourceArn: string
-  ) {
-    new LambdaPermission(this, `InvokePermission-${source.node.addr}`, {
-      functionName: this._functionName,
-      qualifier: this.function.version,
-      action: "lambda:InvokeFunction",
-      principal: principal,
-      sourceArn: sourceArn,
-    });
+    sourceArn: string,
+    options: FunctionPermissionsOptions = { qualifier: this.function.version }
+  ): void {
+    this.permissions = new LambdaPermission(
+      this,
+      `InvokePermission-${source.node.addr}`,
+      {
+        functionName: this._functionName,
+        action: "lambda:InvokeFunction",
+        principal: principal,
+        sourceArn: sourceArn,
+        ...options,
+      }
+    );
   }
 
   /** @internal */
