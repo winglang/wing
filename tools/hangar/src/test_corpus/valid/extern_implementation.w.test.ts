@@ -7,6 +7,6 @@ test("wing compile -t tf-aws", async ({ expect }) => {
   await compileTest(expect, "extern_implementation.w");
 });
 
-test("wing test", async ({ expect }) => {
+test("wing test -t sim", async ({ expect }) => {
   await testTest(expect, "extern_implementation.w");
 });

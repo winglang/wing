@@ -20,7 +20,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_Bucket_966015A6": {
         "//": {
           "metadata": {
-            "path": "root/Default/Bucket",
+            "path": "root/Default/Default/Bucket",
             "uniqueId": "root_Bucket_966015A6",
           },
         },
@@ -37,6 +37,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
+const $wing_test = process.env.WING_TEST === \\"true\\";
 
 function __app(target) {
 	switch (target) {
@@ -55,20 +56,34 @@ function __app(target) {
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
 }
-const $App = __app(process.env.WING_TARGET);
+const $AppBase = __app(process.env.WING_TARGET);
 
 const aws = require(\\"@cdktf/provider-aws\\");
-class MyApp extends $App {
-constructor() {
-  super({ outdir: $outdir, name: \\"bring_cdktf\\", plugins: $plugins });
-  
-  this.node.root.new(\\"@cdktf/provider-aws.s3Bucket.S3Bucket\\",aws.s3Bucket.S3Bucket,this,\\"Bucket\\",{ bucketPrefix: \\"hello\\", versioning: {
-  \\"enabled\\": true,
-  \\"mfa_delete\\": true,}
-   });
+class $Root extends $stdlib.core.Resource {
+	constructor(scope, id) {
+		super(scope, id);
+		this.node.root.new(\\"@cdktf/provider-aws.s3Bucket.S3Bucket\\",aws.s3Bucket.S3Bucket,this,\\"Bucket\\",{ bucketPrefix: \\"hello\\", versioning: {
+\\"enabled\\": true,
+\\"mfa_delete\\": true,}
+ });
+	}
 }
+
+class $App extends $AppBase {
+	constructor() {
+		super({ outdir: $outdir, name: \\"bring_cdktf\\", plugins: $plugins });
+		const $root = new $Root(this, \\"Default\\");
+		if ($wing_test) {
+			const $test_runner = this.node.findChild(\\"cloud.TestRunner\\");
+			const $tests = $test_runner.findTests();
+			for (let $i = 0; $i < $tests.length; $i++) {
+				new $Root(this, \\"env\\" + $i);
+			}
+		}
+	}
 }
-new MyApp().synth();"
+
+new $App().synth();"
 `;
 
-exports[`wing test > stdout 1`] = `"pass ─ bring_cdktf.w (no tests)"`;
+exports[`wing test -t sim > stdout 1`] = `"pass ─ bring_cdktf.w (no tests)"`;

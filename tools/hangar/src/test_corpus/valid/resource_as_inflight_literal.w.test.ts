@@ -7,6 +7,6 @@ test("wing compile -t tf-aws", async ({ expect }) => {
   await compileTest(expect, "resource_as_inflight_literal.w");
 });
 
-test("wing test", async ({ expect }) => {
+test("wing test -t sim", async ({ expect }) => {
   await testTest(expect, "resource_as_inflight_literal.w");
 });

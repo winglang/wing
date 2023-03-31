@@ -57,7 +57,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_Bar_Foo_cloudCounter_616CF239": {
         "//": {
           "metadata": {
-            "path": "root/Default/Bar/Foo/cloud.Counter/Default",
+            "path": "root/Default/Default/Bar/Foo/cloud.Counter/Default",
             "uniqueId": "root_Bar_Foo_cloudCounter_616CF239",
           },
         },
@@ -76,7 +76,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_IamRole_6CDC2D16": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/IamRole",
+            "path": "root/Default/Default/test/IamRole",
             "uniqueId": "root_test_IamRole_6CDC2D16",
           },
         },
@@ -87,7 +87,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_IamRolePolicy_474A6820": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/IamRolePolicy",
+            "path": "root/Default/Default/test/IamRolePolicy",
             "uniqueId": "root_test_IamRolePolicy_474A6820",
           },
         },
@@ -99,7 +99,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_IamRolePolicyAttachment_1102A28A": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/IamRolePolicyAttachment",
+            "path": "root/Default/Default/test/IamRolePolicyAttachment",
             "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
           },
         },
@@ -111,7 +111,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_AAE85061": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/Default",
+            "path": "root/Default/Default/test/Default",
             "uniqueId": "root_test_AAE85061",
           },
         },
@@ -137,7 +137,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudBucket_4F3C4F53": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Bucket/Default",
+            "path": "root/Default/Default/cloud.Bucket/Default",
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
@@ -146,7 +146,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_Code_2D131EC2": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/Code",
+            "path": "root/Default/Default/test/Code",
             "uniqueId": "root_test_Code_2D131EC2",
           },
         },
@@ -157,7 +157,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudBucket_PublicAccessBlock_319C1C2E": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Bucket/PublicAccessBlock",
+            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
             "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
           },
         },
@@ -172,7 +172,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudBucket_Encryption_8ED0CD9C": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Bucket/Encryption",
+            "path": "root/Default/Default/cloud.Bucket/Encryption",
             "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
           },
         },
@@ -190,7 +190,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_S3Object_A16CD789": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/S3Object",
+            "path": "root/Default/Default/test/S3Object",
             "uniqueId": "root_test_S3Object_A16CD789",
           },
         },
@@ -206,6 +206,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
+const $wing_test = process.env.WING_TEST === \\"true\\";
 
 function __app(target) {
 	switch (target) {
@@ -224,66 +225,80 @@ function __app(target) {
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
 }
-const $App = __app(process.env.WING_TARGET);
+const $AppBase = __app(process.env.WING_TARGET);
 
 const cloud = require('@winglang/sdk').cloud;
-class MyApp extends $App {
-constructor() {
-  super({ outdir: $outdir, name: \\"resource\\", plugins: $plugins });
-  
-  class Foo extends $stdlib.core.Resource {
-  	constructor(scope, id, ) {
-  	super(scope, id);
-  {
-    this.c = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Counter\\",this,\\"cloud.Counter\\");
-  }
-  }
-  	
-  	_toInflight() {
-  	const c_client = this._lift(this.c);
-  	const self_client_path = \\"./clients/Foo.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo({c: \${c_client}}))\`);
-  }
-  }
-  Foo._annotateInflight(\\"foo_inc\\", {\\"this.c\\": { ops: [\\"inc\\"] }});
-  Foo._annotateInflight(\\"foo_get\\", {\\"this.c\\": { ops: [\\"peek\\"] }});
-  class Bar extends $stdlib.core.Resource {
-  	constructor(scope, id, name, b) {
-  	super(scope, id);
-  {
-    this.name = name;
-    this.b = b;
-    this.foo = new Foo(this,\\"Foo\\");
-  }
-  }
-  	
-  	_toInflight() {
-  	const b_client = this._lift(this.b);
-  const foo_client = this._lift(this.foo);
-  const name_client = this._lift(this.name);
-  	const self_client_path = \\"./clients/Bar.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Bar({b: \${b_client}, foo: \${foo_client}, name: \${name_client}}))\`);
-  }
-  }
-  Bar._annotateInflight(\\"my_method\\", {\\"this.b\\": { ops: [\\"get\\",\\"put\\"] },\\"this.foo\\": { ops: [\\"foo_get\\",\\"foo_inc\\"] }});
-  const bucket = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
-  const res = new Bar(this,\\"Bar\\",\\"Arr\\",bucket);
-  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.e50bc85b13df379286b4aa72aa88788422e26d9146adbc9bba989a8a59253a73/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-    bindings: {
-      bucket: {
-        obj: bucket,
-        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"public_url\\",\\"put\\",\\"put_json\\"]
-      },
-      res: {
-        obj: res,
-        ops: [\\"my_method\\"]
-      },
-    }
-  }));
+class $Root extends $stdlib.core.Resource {
+	constructor(scope, id) {
+		super(scope, id);
+		class Foo extends $stdlib.core.Resource {
+	constructor(scope, id, ) {
+	super(scope, id);
+{
+  this.c = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Counter\\",this,\\"cloud.Counter\\");
 }
 }
-new MyApp().synth();"
+	
+	_toInflight() {
+	const c_client = this._lift(this.c);
+	const self_client_path = \\"./clients/Foo.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
+	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo({c: \${c_client}}))\`);
+}
+}
+Foo._annotateInflight(\\"foo_inc\\", {\\"this.c\\": { ops: [\\"inc\\"] }});
+Foo._annotateInflight(\\"foo_get\\", {\\"this.c\\": { ops: [\\"peek\\"] }});
+		class Bar extends $stdlib.core.Resource {
+	constructor(scope, id, name, b) {
+	super(scope, id);
+{
+  this.name = name;
+  this.b = b;
+  this.foo = new Foo(this,\\"Foo\\");
+}
+}
+	
+	_toInflight() {
+	const b_client = this._lift(this.b);
+const foo_client = this._lift(this.foo);
+const name_client = this._lift(this.name);
+	const self_client_path = \\"./clients/Bar.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
+	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Bar({b: \${b_client}, foo: \${foo_client}, name: \${name_client}}))\`);
+}
+}
+Bar._annotateInflight(\\"my_method\\", {\\"this.b\\": { ops: [\\"get\\",\\"put\\"] },\\"this.foo\\": { ops: [\\"foo_get\\",\\"foo_inc\\"] }});
+		const bucket = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
+		const res = new Bar(this,\\"Bar\\",\\"Arr\\",bucket);
+		this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.e50bc85b13df379286b4aa72aa88788422e26d9146adbc9bba989a8a59253a73/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+  bindings: {
+    bucket: {
+      obj: bucket,
+      ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"public_url\\",\\"put\\",\\"put_json\\"]
+    },
+    res: {
+      obj: res,
+      ops: [\\"my_method\\"]
+    },
+  }
+}));
+	}
+}
+
+class $App extends $AppBase {
+	constructor() {
+		super({ outdir: $outdir, name: \\"resource\\", plugins: $plugins });
+		const $root = new $Root(this, \\"Default\\");
+		if ($wing_test) {
+			const $test_runner = this.node.findChild(\\"cloud.TestRunner\\");
+			const $tests = $test_runner.findTests();
+			for (let $i = 0; $i < $tests.length; $i++) {
+				new $Root(this, \\"env\\" + $i);
+			}
+		}
+	}
+}
+
+new $App().synth();"
 `;
 
 exports[`wing compile -t tf-aws > proc.e50bc85b13df379286b4aa72aa88788422e26d9146adbc9bba989a8a59253a73/index.js 1`] = `
@@ -294,4 +309,4 @@ exports[`wing compile -t tf-aws > proc.e50bc85b13df379286b4aa72aa88788422e26d914
 } };"
 `;
 
-exports[`wing test > stdout 1`] = `"pass ─ resource.w » root/test"`;
+exports[`wing test -t sim > stdout 1`] = `"pass ─ resource.w » root/env0/test"`;

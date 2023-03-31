@@ -20,7 +20,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_IamRole_6CDC2D16": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/IamRole",
+            "path": "root/Default/Default/test/IamRole",
             "uniqueId": "root_test_IamRole_6CDC2D16",
           },
         },
@@ -31,7 +31,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_IamRolePolicy_474A6820": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/IamRolePolicy",
+            "path": "root/Default/Default/test/IamRolePolicy",
             "uniqueId": "root_test_IamRolePolicy_474A6820",
           },
         },
@@ -43,7 +43,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_IamRolePolicyAttachment_1102A28A": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/IamRolePolicyAttachment",
+            "path": "root/Default/Default/test/IamRolePolicyAttachment",
             "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
           },
         },
@@ -55,7 +55,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_AAE85061": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/Default",
+            "path": "root/Default/Default/test/Default",
             "uniqueId": "root_test_AAE85061",
           },
         },
@@ -78,7 +78,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_Code_2D131EC2": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/Code",
+            "path": "root/Default/Default/test/Code",
             "uniqueId": "root_test_Code_2D131EC2",
           },
         },
@@ -89,7 +89,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_S3Object_A16CD789": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/S3Object",
+            "path": "root/Default/Default/test/S3Object",
             "uniqueId": "root_test_S3Object_A16CD789",
           },
         },
@@ -105,6 +105,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
+const $wing_test = process.env.WING_TEST === \\"true\\";
 
 function __app(target) {
 	switch (target) {
@@ -123,47 +124,61 @@ function __app(target) {
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
 }
-const $App = __app(process.env.WING_TARGET);
+const $AppBase = __app(process.env.WING_TARGET);
 
 const cloud = require('@winglang/sdk').cloud;
-class MyApp extends $App {
-constructor() {
-  super({ outdir: $outdir, name: \\"capture_containers\\", plugins: $plugins });
-  
-  const arr = Object.freeze([\\"hello\\", \\"world\\"]);
-  const my_set = Object.freeze(new Set([\\"my\\", \\"my\\", \\"set\\"]));
-  const my_map = Object.freeze({\\"hello\\":123,\\"world\\":999});
-  const arr_of_map = Object.freeze([Object.freeze({\\"bang\\":123})]);
-  const j = Object.freeze({\\"a\\":\\"hello\\",\\"b\\":\\"world\\"});
-  const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.dc7e5dc23da309970778fe7db4c795e3a6ae63c0d0ddc5e1780d4e2daadf67e1/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-    bindings: {
-      arr: {
-        obj: arr,
-        ops: []
-      },
-      arr_of_map: {
-        obj: arr_of_map,
-        ops: []
-      },
-      j: {
-        obj: j,
-        ops: []
-      },
-      my_map: {
-        obj: my_map,
-        ops: []
-      },
-      my_set: {
-        obj: my_set,
-        ops: []
-      },
-    }
-  });
-  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",handler);
+class $Root extends $stdlib.core.Resource {
+	constructor(scope, id) {
+		super(scope, id);
+		const arr = Object.freeze([\\"hello\\", \\"world\\"]);
+		const my_set = Object.freeze(new Set([\\"my\\", \\"my\\", \\"set\\"]));
+		const my_map = Object.freeze({\\"hello\\":123,\\"world\\":999});
+		const arr_of_map = Object.freeze([Object.freeze({\\"bang\\":123})]);
+		const j = Object.freeze({\\"a\\":\\"hello\\",\\"b\\":\\"world\\"});
+		const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.dc7e5dc23da309970778fe7db4c795e3a6ae63c0d0ddc5e1780d4e2daadf67e1/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+  bindings: {
+    arr: {
+      obj: arr,
+      ops: []
+    },
+    arr_of_map: {
+      obj: arr_of_map,
+      ops: []
+    },
+    j: {
+      obj: j,
+      ops: []
+    },
+    my_map: {
+      obj: my_map,
+      ops: []
+    },
+    my_set: {
+      obj: my_set,
+      ops: []
+    },
+  }
+});
+		this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",handler);
+	}
 }
+
+class $App extends $AppBase {
+	constructor() {
+		super({ outdir: $outdir, name: \\"capture_containers\\", plugins: $plugins });
+		const $root = new $Root(this, \\"Default\\");
+		if ($wing_test) {
+			const $test_runner = this.node.findChild(\\"cloud.TestRunner\\");
+			const $tests = $test_runner.findTests();
+			for (let $i = 0; $i < $tests.length; $i++) {
+				new $Root(this, \\"env\\" + $i);
+			}
+		}
+	}
 }
-new MyApp().synth();"
+
+new $App().synth();"
 `;
 
 exports[`wing compile -t tf-aws > proc.dc7e5dc23da309970778fe7db4c795e3a6ae63c0d0ddc5e1780d4e2daadf67e1/index.js 1`] = `
@@ -180,4 +195,4 @@ exports[`wing compile -t tf-aws > proc.dc7e5dc23da309970778fe7db4c795e3a6ae63c0d
 } };"
 `;
 
-exports[`wing test > stdout 1`] = `"pass ─ capture_containers.w » root/test"`;
+exports[`wing test -t sim > stdout 1`] = `"pass ─ capture_containers.w » root/env0/test"`;

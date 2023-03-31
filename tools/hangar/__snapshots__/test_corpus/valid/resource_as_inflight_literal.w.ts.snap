@@ -34,7 +34,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudFunction_IamRole_DAEC3578": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Function/IamRole",
+            "path": "root/Default/Default/cloud.Function/IamRole",
             "uniqueId": "root_cloudFunction_IamRole_DAEC3578",
           },
         },
@@ -43,7 +43,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_IamRole_6CDC2D16": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/IamRole",
+            "path": "root/Default/Default/test/IamRole",
             "uniqueId": "root_test_IamRole_6CDC2D16",
           },
         },
@@ -54,7 +54,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudFunction_IamRolePolicy_AAE6C0C0": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Function/IamRolePolicy",
+            "path": "root/Default/Default/cloud.Function/IamRolePolicy",
             "uniqueId": "root_cloudFunction_IamRolePolicy_AAE6C0C0",
           },
         },
@@ -64,7 +64,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_IamRolePolicy_474A6820": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/IamRolePolicy",
+            "path": "root/Default/Default/test/IamRolePolicy",
             "uniqueId": "root_test_IamRolePolicy_474A6820",
           },
         },
@@ -76,7 +76,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Function/IamRolePolicyAttachment",
+            "path": "root/Default/Default/cloud.Function/IamRolePolicyAttachment",
             "uniqueId": "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C",
           },
         },
@@ -86,7 +86,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_IamRolePolicyAttachment_1102A28A": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/IamRolePolicyAttachment",
+            "path": "root/Default/Default/test/IamRolePolicyAttachment",
             "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
           },
         },
@@ -98,7 +98,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudFunction_6A57BA0A": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Function/Default",
+            "path": "root/Default/Default/cloud.Function/Default",
             "uniqueId": "root_cloudFunction_6A57BA0A",
           },
         },
@@ -119,7 +119,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_AAE85061": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/Default",
+            "path": "root/Default/Default/test/Default",
             "uniqueId": "root_test_AAE85061",
           },
         },
@@ -143,7 +143,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudFunction_Code_2F6A7948": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Function/Code",
+            "path": "root/Default/Default/cloud.Function/Code",
             "uniqueId": "root_cloudFunction_Code_2F6A7948",
           },
         },
@@ -152,7 +152,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_Code_2D131EC2": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/Code",
+            "path": "root/Default/Default/test/Code",
             "uniqueId": "root_test_Code_2D131EC2",
           },
         },
@@ -163,7 +163,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudFunction_S3Object_C8435368": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Function/S3Object",
+            "path": "root/Default/Default/cloud.Function/S3Object",
             "uniqueId": "root_cloudFunction_S3Object_C8435368",
           },
         },
@@ -174,7 +174,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_S3Object_A16CD789": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/S3Object",
+            "path": "root/Default/Default/test/S3Object",
             "uniqueId": "root_test_S3Object_A16CD789",
           },
         },
@@ -190,6 +190,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
+const $wing_test = process.env.WING_TEST === \\"true\\";
 
 function __app(target) {
 	switch (target) {
@@ -208,40 +209,54 @@ function __app(target) {
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
 }
-const $App = __app(process.env.WING_TARGET);
+const $AppBase = __app(process.env.WING_TARGET);
 
 const cloud = require('@winglang/sdk').cloud;
-class MyApp extends $App {
-constructor() {
-  super({ outdir: $outdir, name: \\"resource_as_inflight_literal\\", plugins: $plugins });
-  
-  class Foo extends $stdlib.core.Resource {
-  	constructor(scope, id, ) {
-  	super(scope, id);
-  {
-  }
-  }
-  	
-  	_toInflight() {
-  	
-  	const self_client_path = \\"./clients/Foo.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo({}))\`);
-  }
-  }
-  Foo._annotateInflight(\\"handle\\", {});
-  const fn = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"cloud.Function\\",new Foo(this,\\"Foo\\"));
-  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.917572587cf19c37eec89740530b1f8d71072e09ccaeb9cbd4a3121ba0794d2a/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-    bindings: {
-      fn: {
-        obj: fn,
-        ops: [\\"invoke\\"]
-      },
-    }
-  }));
+class $Root extends $stdlib.core.Resource {
+	constructor(scope, id) {
+		super(scope, id);
+		class Foo extends $stdlib.core.Resource {
+	constructor(scope, id, ) {
+	super(scope, id);
+{
 }
 }
-new MyApp().synth();"
+	
+	_toInflight() {
+	
+	const self_client_path = \\"./clients/Foo.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
+	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo({}))\`);
+}
+}
+Foo._annotateInflight(\\"handle\\", {});
+		const fn = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"cloud.Function\\",new Foo(this,\\"Foo\\"));
+		this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.917572587cf19c37eec89740530b1f8d71072e09ccaeb9cbd4a3121ba0794d2a/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+  bindings: {
+    fn: {
+      obj: fn,
+      ops: [\\"invoke\\"]
+    },
+  }
+}));
+	}
+}
+
+class $App extends $AppBase {
+	constructor() {
+		super({ outdir: $outdir, name: \\"resource_as_inflight_literal\\", plugins: $plugins });
+		const $root = new $Root(this, \\"Default\\");
+		if ($wing_test) {
+			const $test_runner = this.node.findChild(\\"cloud.TestRunner\\");
+			const $tests = $test_runner.findTests();
+			for (let $i = 0; $i < $tests.length; $i++) {
+				new $Root(this, \\"env\\" + $i);
+			}
+		}
+	}
+}
+
+new $App().synth();"
 `;
 
 exports[`wing compile -t tf-aws > proc.917572587cf19c37eec89740530b1f8d71072e09ccaeb9cbd4a3121ba0794d2a/index.js 1`] = `
@@ -250,4 +265,4 @@ exports[`wing compile -t tf-aws > proc.917572587cf19c37eec89740530b1f8d71072e09c
 } };"
 `;
 
-exports[`wing test > stdout 1`] = `"pass ─ resource_as_inflight_literal.w » root/test"`;
+exports[`wing test -t sim > stdout 1`] = `"pass ─ resource_as_inflight_literal.w » root/env0/test"`;

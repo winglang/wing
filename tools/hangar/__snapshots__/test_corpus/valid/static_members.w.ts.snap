@@ -34,7 +34,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_IamRole_6CDC2D16": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/IamRole",
+            "path": "root/Default/Default/test/IamRole",
             "uniqueId": "root_test_IamRole_6CDC2D16",
           },
         },
@@ -45,7 +45,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_IamRolePolicy_474A6820": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/IamRolePolicy",
+            "path": "root/Default/Default/test/IamRolePolicy",
             "uniqueId": "root_test_IamRolePolicy_474A6820",
           },
         },
@@ -57,7 +57,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_IamRolePolicyAttachment_1102A28A": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/IamRolePolicyAttachment",
+            "path": "root/Default/Default/test/IamRolePolicyAttachment",
             "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
           },
         },
@@ -69,7 +69,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_AAE85061": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/Default",
+            "path": "root/Default/Default/test/Default",
             "uniqueId": "root_test_AAE85061",
           },
         },
@@ -92,7 +92,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_Code_2D131EC2": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/Code",
+            "path": "root/Default/Default/test/Code",
             "uniqueId": "root_test_Code_2D131EC2",
           },
         },
@@ -103,7 +103,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_S3Object_A16CD789": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/S3Object",
+            "path": "root/Default/Default/test/S3Object",
             "uniqueId": "root_test_S3Object_A16CD789",
           },
         },
@@ -119,6 +119,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
+const $wing_test = process.env.WING_TEST === \\"true\\";
 
 function __app(target) {
 	switch (target) {
@@ -137,43 +138,57 @@ function __app(target) {
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
 }
-const $App = __app(process.env.WING_TARGET);
+const $AppBase = __app(process.env.WING_TARGET);
 
 const cloud = require('@winglang/sdk').cloud;
-class MyApp extends $App {
-constructor() {
-  super({ outdir: $outdir, name: \\"static_members\\", plugins: $plugins });
-  
-  class Foo extends $stdlib.core.Resource {
-  	constructor(scope, id, ) {
-  	super(scope, id);
-  {
-    this.instance_field = 100;
-  }
-  }
-  	static m()  {
-  	{
-    return 99;
-  }
-  }
-  	_toInflight() {
-  	const instance_field_client = this._lift(this.instance_field);
-  	const self_client_path = \\"./clients/Foo.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo({instance_field: \${instance_field_client}}))\`);
-  }
-  }
-  Foo._annotateInflight(\\"get_123\\", {});
-  const foo = new Foo(this,\\"Foo\\");
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(foo.instance_field === 100)'\`)})((foo.instance_field === 100))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((Foo.m()) === 99)'\`)})(((Foo.m()) === 99))};
-  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.3e3ded5aab7ad84970aba71e51b0f5571a6ab4ed41f41ae3461d977097e72746/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-    bindings: {
-    }
-  }));
+class $Root extends $stdlib.core.Resource {
+	constructor(scope, id) {
+		super(scope, id);
+		class Foo extends $stdlib.core.Resource {
+	constructor(scope, id, ) {
+	super(scope, id);
+{
+  this.instance_field = 100;
 }
 }
-new MyApp().synth();"
+	static m()  {
+	{
+  return 99;
+}
+}
+	_toInflight() {
+	const instance_field_client = this._lift(this.instance_field);
+	const self_client_path = \\"./clients/Foo.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
+	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo({instance_field: \${instance_field_client}}))\`);
+}
+}
+Foo._annotateInflight(\\"get_123\\", {});
+		const foo = new Foo(this,\\"Foo\\");
+		{((cond) => {if (!cond) throw new Error(\`assertion failed: '(foo.instance_field === 100)'\`)})((foo.instance_field === 100))};
+		{((cond) => {if (!cond) throw new Error(\`assertion failed: '((Foo.m()) === 99)'\`)})(((Foo.m()) === 99))};
+		this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.3e3ded5aab7ad84970aba71e51b0f5571a6ab4ed41f41ae3461d977097e72746/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+  bindings: {
+  }
+}));
+	}
+}
+
+class $App extends $AppBase {
+	constructor() {
+		super({ outdir: $outdir, name: \\"static_members\\", plugins: $plugins });
+		const $root = new $Root(this, \\"Default\\");
+		if ($wing_test) {
+			const $test_runner = this.node.findChild(\\"cloud.TestRunner\\");
+			const $tests = $test_runner.findTests();
+			for (let $i = 0; $i < $tests.length; $i++) {
+				new $Root(this, \\"env\\" + $i);
+			}
+		}
+	}
+}
+
+new $App().synth();"
 `;
 
 exports[`wing compile -t tf-aws > proc.3e3ded5aab7ad84970aba71e51b0f5571a6ab4ed41f41ae3461d977097e72746/index.js 1`] = `
@@ -202,4 +217,4 @@ exports[`wing compile -t tf-aws > proc.3e3ded5aab7ad84970aba71e51b0f5571a6ab4ed4
 } };"
 `;
 
-exports[`wing test > stdout 1`] = `"pass ─ static_members.w » root/test"`;
+exports[`wing test -t sim > stdout 1`] = `"pass ─ static_members.w » root/env0/test"`;
