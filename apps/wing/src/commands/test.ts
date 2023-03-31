@@ -23,7 +23,7 @@ export async function test(entrypoints: string[], options: TestOptions) {
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
-  const synthDir = await withSpinner("Compiling application...", () => compile(entrypoint, {
+  const synthDir = await withSpinner(`Compiling ${entrypoint}...`, () => compile(entrypoint, {
     ...options,
     testing: true,
   }));
@@ -77,6 +77,7 @@ function printTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): b
 
     const details = new Array<string>();
 
+    // TODO
     // add any log messages that were emitted during the test
     // for (const log of result.traces.filter(t => t.type == "log")) {
     //   details.push(chalk.gray(log.data.message));
@@ -223,33 +224,31 @@ async function terraformOutput(synthDir: string, name: string) {
 function pickOneTestPerEnvironment(testPaths: string[]) {
   // Given a list of test paths like so:
   //
-  // root/env0/a/b/test:test1
-  // root/env0/d/e/f/test:test2
-  // root/env0/g/test:test3
-  // root/env1/a/b/test:test1
-  // root/env1/d/e/f/test:test2
-  // root/env1/g/test:test3
-  // root/env2/a/b/test:test1
-  // root/env2/d/e/f/test:test2
-  // root/env2/g/test:test3
+  // root/Default/env0/a/b/test:test1
+  // root/Default/env0/d/e/f/test:test2
+  // root/Default/env0/g/test:test3
+  // root/Default/env1/a/b/test:test1
+  // root/Default/env1/d/e/f/test:test2
+  // root/Default/env1/g/test:test3
+  // root/Default/env2/a/b/test:test1
+  // root/Default/env2/d/e/f/test:test2
+  // root/Default/env2/g/test:test3
   //
   // This function returns a list of test paths which uses each test name
   // exactly once and each "env" exactly once. In this case, the result would
   // be:
   //
-  // root/env0/a/b/test:test1
-  // root/env1/d/e/f/test:test2
-  // root/env2/g/test:test3
+  // root/Default/env0/a/b/test:test1
+  // root/Default/env1/d/e/f/test:test2
+  // root/Default/env2/g/test:test3
 
   const tests = new Map<string, string>();
   const envs = new Set<string>();
 
   for (const testPath of testPaths) {
-    const [_root, env, test] = testPath.split("/");
-
-    if (env === "Default") {
-      continue;
-    }
+    const testSuffix = testPath.substring(testPath.indexOf('env') + 1); // "<env #>/<path to test>"
+    const env = testSuffix.substring(0, testSuffix.indexOf('/')); // "<env #>"
+    const test = testSuffix.substring(testSuffix.indexOf('/') + 1); // "<path to test>"
 
     if (envs.has(env)) {
       continue;

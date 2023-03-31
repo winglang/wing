@@ -38,7 +38,6 @@ impl CodeMaker {
 		self.indent -= 1;
 	}
 
-	#[allow(dead_code)]
 	pub fn indent(&mut self) {
 		self.indent += 1;
 	}

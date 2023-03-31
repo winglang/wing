@@ -40,13 +40,18 @@ export class App extends core.App {
    */
   public readonly outdir: string;
 
+  /**
+   * The test runner for this app.
+   */
+  protected readonly testRunner: TestRunner;
+
   private synthed = false;
 
   constructor(props: core.AppProps) {
     super(undefined as any, "root");
     this.outdir = props.outdir ?? ".";
 
-    new TestRunner(this, "cloud.TestRunner");
+    this.testRunner = new TestRunner(this, "cloud.TestRunner");
 
     Logger.register(this);
   }

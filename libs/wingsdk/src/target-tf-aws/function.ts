@@ -64,6 +64,7 @@ export class Function extends cloud.Function {
     });
 
     // Create unique S3 bucket for hosting Lambda code
+    // TODO: share all code in a single bucket https://github.com/winglang/wing/issues/178
     const bucket = new S3Bucket(this, "Code");
     const bucketPrefix = ResourceNames.generateName(bucket, BUCKET_PREFIX_OPTS);
     bucket.bucketPrefix = bucketPrefix;

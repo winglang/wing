@@ -1,9 +1,9 @@
+import { TerraformOutput } from "cdktf/lib/terraform-output";
+import { Lazy } from "cdktf/lib/tokens";
 import { Construct } from "constructs";
 import { Function as AwsFunction } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { TerraformOutput } from "cdktf/lib/terraform-output";
-import { Lazy } from "cdktf/lib/tokens";
 
 const OUTPUT_TEST_RUNNER_FUNCTION_ARNS = "WING_TEST_RUNNER_FUNCTION_ARNS";
 

@@ -29,11 +29,16 @@ import { CdktfApp, AppProps } from "../core";
  * for AWS resources.
  */
 export class App extends CdktfApp {
+  /**
+   * The test runner for this app.
+   */
+  protected readonly testRunner: TestRunner;
+
   constructor(props: AppProps = {}) {
     super(props);
     new AwsProvider(this, "aws", {});
 
-    new TestRunner(this, "cloud.TestRunner");
+    this.testRunner = new TestRunner(this, "cloud.TestRunner");
   }
 
   protected tryNew(

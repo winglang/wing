@@ -65,6 +65,7 @@ export class Bucket extends cloud.Bucket {
 
     this.bucket = new S3Bucket(this, "Default", {
       bucketPrefix,
+      forceDestroy: true, // TODO: this should only be true when compiled in test mode
     });
 
     // best practice: (at-rest) data encryption with Amazon S3-managed keys
