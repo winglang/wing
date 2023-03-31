@@ -59,6 +59,7 @@ constructor() {
   	constructor(scope, id, ) {
   	super(scope, id);
   {
+    this.f = \\"test\\";
   }
   }
   	 method2()  {

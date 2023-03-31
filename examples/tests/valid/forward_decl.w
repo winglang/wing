@@ -17,6 +17,8 @@ resource R {
     this.method2(); // we can call ourselves because we are defined in an outer scope
   }
   f: str;
-  init(/* empty */) {}
+  init(/* empty */) {
+    this.f = "test";
+  }
   method1() {}
 }
