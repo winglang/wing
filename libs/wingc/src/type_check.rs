@@ -1,8 +1,8 @@
 mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{
-	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, InterpolatedStringPart, Literal, Phase,
-	Reference, Scope, Stmt, StmtKind, Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
+	ArgList, BinaryOperator, Class as AstClass, ClassField, Expr, ExprKind, FunctionBody, InterpolatedStringPart,
+	Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{
@@ -1236,14 +1236,11 @@ impl<'a> TypeChecker<'a> {
 
 				// Lookup the class's type in the env
 				let type_ = self.resolve_type_annotation(class, env, statement_idx);
-				let (class_env, class_symbol, has_fields) = match &*type_ {
-					Type::Class(ref class) => {
-						let _fields = class.fields(true).into_iter().count();
-						(&class.env, &class.name, class.fields(true).peekable().peek().is_some())
-					}
+				let (class_env, class_symbol) = match &*type_ {
+					Type::Class(ref class) => (&class.env, &class.name),
 					Type::Resource(ref class) => {
 						if matches!(env.phase, Phase::Preflight) {
-							(&class.env, &class.name, class.fields(true).peekable().peek().is_some())
+							(&class.env, &class.name)
 						} else {
 							return self.general_type_error(format!(
 								"Cannot create the resource \"{}\" in inflight phase",
@@ -1655,6 +1652,75 @@ impl<'a> TypeChecker<'a> {
 						k, expected_struct.name.name
 					),
 				);
+			}
+		}
+	}
+
+	fn list_fields_on_init(&mut self, statements: &Scope) -> Vec<String> {
+		let mut fields: Vec<String> = Vec::new();
+		for stmt in &statements.statements {
+			match &stmt.kind {
+				StmtKind::Assignment { variable, value: _ } => match &variable {
+					Reference::InstanceMember { property, object: _ } => {
+						fields.push(property.name.clone());
+					}
+					_ => (),
+				},
+				StmtKind::If {
+					condition: _,
+					statements,
+					elif_statements,
+					else_statements,
+				} => {
+					fields.append(&mut self.list_fields_on_init(&statements));
+					for elif_scope in elif_statements {
+						fields.append(&mut self.list_fields_on_init(&elif_scope.statements));
+					}
+					if let Some(else_statements) = else_statements {
+						fields.append(&mut self.list_fields_on_init(&else_statements));
+					}
+				}
+				StmtKind::While {
+					condition: _,
+					statements,
+				} => {
+					fields.append(&mut self.list_fields_on_init(&statements));
+				}
+				StmtKind::ForLoop {
+					iterator: _,
+					iterable: _,
+					statements,
+				} => {
+					fields.append(&mut self.list_fields_on_init(&statements));
+				}
+				StmtKind::TryCatch {
+					try_statements,
+					catch_block,
+					finally_statements,
+				} => {
+					fields.append(&mut self.list_fields_on_init(&try_statements));
+					if let Some(catch_block) = catch_block {
+						fields.append(&mut self.list_fields_on_init(&catch_block.statements));
+					}
+					if let Some(finally_statements) = finally_statements {
+						fields.append(&mut self.list_fields_on_init(&finally_statements));
+					}
+				}
+				_ => (),
+			}
+		}
+		return fields;
+	}
+
+	fn check_class_field_initialization(&mut self, statements: &Scope, fields: &Vec<ClassField>) {
+		let init_fields = self.list_fields_on_init(statements);
+		for field in fields.clone() {
+			if !init_fields.contains(&field.name.name) {
+				self.type_error(TypeError {
+					message: format!("\"{}\" is not initialized", field.name.name),
+					span: field.name.span.clone(),
+				});
+			} else {
 			}
 		}
 	}
@@ -2208,7 +2274,7 @@ impl<'a> TypeChecker<'a> {
 						name: WING_CONSTRUCTOR_NAME.into(),
 						span: name.span.clone(),
 					},
-					SymbolKind::make_variable(initializer_type, false, initializer.signature.phase),
+					SymbolKind::make_variable(initializer_type, false, true, initializer.signature.phase),
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -2248,11 +2314,13 @@ impl<'a> TypeChecker<'a> {
 							name: "this".into(),
 							span: name.span.clone(),
 						},
-						SymbolKind::make_variable(class_type, false, initializer_env.phase),
+						SymbolKind::make_variable(class_type, false, true, initializer_env.phase),
 						StatementIdx::Top,
 					)
 					.expect("Expected `this` to be added to constructor env");
 				initializer.statements.set_env(initializer_env);
+				// Verify if all fields of a class/resource are initialized in the initializer.
+				self.check_class_field_initialization(&initializer.statements, fields);
 				// Check function scope
 				self.inner_scopes.push(&initializer.statements);
 

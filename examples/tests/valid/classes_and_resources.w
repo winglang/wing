@@ -17,7 +17,9 @@ class C3 {
   y: num;
   init(a: num, b: num) {
     this.x = a;
-    this.y = b;
+    if true {
+      this.y = b;
+    }
   }
 }
 new C3(1, 2);
