@@ -1714,7 +1714,11 @@ impl<'a> TypeChecker<'a> {
 
 	fn check_class_field_initialization(&mut self, statements: &Scope, fields: &Vec<ClassField>) {
 		let init_fields = self.list_fields_on_init(statements);
-		for field in fields {
+		for field in fields.iter() {
+			// inflight or static fields cannot be initialized in the initializer
+			if field.phase == Phase::Inflight || field.is_static {
+				continue;
+			}
 			if !init_fields.contains(&field.name.name) {
 				self.type_error(TypeError {
 					message: format!("\"{}\" is not initialized", field.name.name),

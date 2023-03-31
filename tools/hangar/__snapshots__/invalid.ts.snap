@@ -138,11 +138,18 @@ exports[`capture_reassignable.w > stderr 1`] = `
 `;
 
 exports[`classes_and_resources.w > stderr 1`] = `
-"error: Expected 0 arguments but got 1 when instantiating C5
-  --> ../../../examples/tests/invalid/classes_and_resources.w:6:8
+"error: \\"x\\" is not initialized
+  --> ../../../examples/tests/invalid/classes_and_resources.w:2:5
   |
-6 | new C5(1);
-  |        ^ Expected 0 arguments but got 1 when instantiating C5
+2 |     x:num;
+  |     ^ \\"x\\" is not initialized
+
+
+error: Expected 0 arguments but got 1 when instantiating \\"C5\\"
+  --> ../../../examples/tests/invalid/classes_and_resources.w:7:1
+  |
+7 | new C5(1);
+  | ^^^^^^^^^ Expected 0 arguments but got 1 when instantiating \\"C5\\"
 
 "
 `;
@@ -747,7 +754,14 @@ error: Variable arg is not reassignable
 `;
 
 exports[`resource_access_field_as_method.w > stderr 1`] = `
-"error: should be a function or method
+"error: \\"name\\" is not initialized
+  --> ../../../examples/tests/invalid/resource_access_field_as_method.w:2:5
+  |
+2 |     name: str;
+  |     ^^^^ \\"name\\" is not initialized
+
+
+error: should be a function or method
   --> ../../../examples/tests/invalid/resource_access_field_as_method.w:8:1
   |
 8 | x.name();
@@ -758,30 +772,30 @@ exports[`resource_access_field_as_method.w > stderr 1`] = `
 
 exports[`resource_captures.w > stderr 1`] = `
 "error: Cannot capture reassignable field 'reassignable'
-   --> ../../../examples/tests/invalid/resource_captures.w:17:12
+   --> ../../../examples/tests/invalid/resource_captures.w:18:12
    |
-17 |     log(\\"\${this.reassignable}\\");
+18 |     log(\\"\${this.reassignable}\\");
    |            ^^^^^^^^^^^^^^^^^ Cannot capture reassignable field 'reassignable'
 
 
 error: Cannot capture field 'mut_array' with non-capturable type 'MutArray<str>'
-   --> ../../../examples/tests/invalid/resource_captures.w:19:9
+   --> ../../../examples/tests/invalid/resource_captures.w:20:9
    |
-19 |     log(this.mut_array.at(0));
+20 |     log(this.mut_array.at(0));
    |         ^^^^^^^^^^^^^^ Cannot capture field 'mut_array' with non-capturable type 'MutArray<str>'
 
 
 error: Unable to qualify which operations are performed on 'this.bucket' of type 'Bucket'. This is not supported yet.
-   --> ../../../examples/tests/invalid/resource_captures.w:22:13
+   --> ../../../examples/tests/invalid/resource_captures.w:23:13
    |
-22 |     let b = this.bucket;
+23 |     let b = this.bucket;
    |             ^^^^^^^^^^^ Unable to qualify which operations are performed on 'this.bucket' of type 'Bucket'. This is not supported yet.
 
 
 error: Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
-   --> ../../../examples/tests/invalid/resource_captures.w:26:5
+   --> ../../../examples/tests/invalid/resource_captures.w:27:5
    |
-26 |     this.collection_of_resources.at(0).put(\\"hello\\", \\"world\\");
+27 |     this.collection_of_resources.at(0).put(\\"hello\\", \\"world\\");
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Capturing collection of resources is not supported yet (type is 'Array<Bucket>')
 
 "

@@ -4,7 +4,7 @@ new C1();
 
 // class with init and no arguments
 class C2 {
-  x:num;
+  x: num;
   init() {
     this.x = 1;
   }
@@ -30,6 +30,7 @@ new R1();
 
 // resource with static method and no init
 resource R2 {
+  inflight var y: num;
   static m():num {return 1;}
 }
 assert(R2.m() == 1);
