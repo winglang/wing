@@ -389,9 +389,10 @@ export class Simulator {
    * @returns A list of resource paths
    * @deprecated use the "cloud.TestRunner" resource client instead.
    */
-  public async listTests(): Promise<string[]> {
-    let testRunner = this.findTestRunner();
-    return testRunner.listTests();
+  public listTests(): string[] {
+    const isTest = /(\/test$|\/test:([^\\/])+$)/;
+    const all = this.listResources();
+    return all.filter((f) => isTest.test(f));
   }
 
   /**
@@ -404,7 +405,7 @@ export class Simulator {
    */
   public async runAllTests(): Promise<TestResult[]> {
     const results = new Array<TestResult>();
-    const tests = await this.listTests();
+    const tests = this.listTests();
 
     for (const path of tests) {
       results.push(await this.runTest(path));
