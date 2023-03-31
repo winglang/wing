@@ -23,7 +23,7 @@ export async function test(entrypoints: string[], options: TestOptions) {
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
-  const synthDir = await withSpinner(`Compiling ${entrypoint}...`, () => compile(entrypoint, {
+  const synthDir = await withSpinner(`Compiling to ${options.target}...`, () => compile(entrypoint, {
     ...options,
     testing: true,
   }));
@@ -138,6 +138,7 @@ async function testSimulator(synthDir: string) {
   const filteredTests = pickOneTestPerEnvironment(tests);
   const results = new Array<sdk.cloud.TestResult>();
 
+  // TODO: run these tests in parallel
   for (const path of filteredTests) {
     results.push(await testRunner.runTest(path));
   }
@@ -157,10 +158,10 @@ async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[]> {
     );
   }
 
-  // TODO: check if there was a previous test run, and if so ask the user if they want to destroy
-  // the previous test run before starting a new one
-
   await withSpinner("terraform init", () => terraformInit(synthDir));
+
+  await checkTerraformStateIsEmpty(synthDir);
+
   await withSpinner("terraform apply", () => terraformApply(synthDir));
 
   const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
@@ -197,6 +198,15 @@ async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[]> {
 async function isTerraformInstalled(synthDir: string) {
   const output = await execCapture("terraform version", { cwd: synthDir });
   return output.startsWith("Terraform v");
+}
+
+async function checkTerraformStateIsEmpty(synthDir: string) {
+  const output = await execCapture("terraform state list", { cwd: synthDir });
+  if (output.length > 0) {
+    throw new Error(
+      `Terraform state is not empty. Please run \`terraform destroy\` inside ${synthDir} to clean up any previous test runs.`
+    );
+  }
 }
 
 async function terraformInit(synthDir: string) {
