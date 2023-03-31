@@ -8,7 +8,20 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "stackName": "root",
       "version": "0.15.2",
     },
-    "outputs": {},
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
   "provider": {
     "aws": [
@@ -223,6 +236,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
           },
         },
         "bucket_prefix": "privatebucket-c8a9b08c-",
+        "force_destroy": true,
       },
       "root_PublicBucket_73AE6C59": {
         "//": {
@@ -232,6 +246,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
           },
         },
         "bucket_prefix": "publicbucket-c8fea5d9-",
+        "force_destroy": true,
       },
       "root_cloudBucket_4F3C4F53": {
         "//": {
@@ -241,6 +256,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
           },
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
+        "force_destroy": true,
       },
       "root_cloudFunction_Code_2F6A7948": {
         "//": {
@@ -462,13 +478,15 @@ class $Root extends $stdlib.core.Resource {
 class $App extends $AppBase {
 	constructor() {
 		super({ outdir: $outdir, name: \\"captures\\", plugins: $plugins });
-		const $root = new $Root(this, \\"Default\\");
 		if ($wing_test) {
-			const $test_runner = this.node.findChild(\\"cloud.TestRunner\\");
+			new $Root(this, \\"env0\\");
+			const $test_runner = this.testRunner;
 			const $tests = $test_runner.findTests();
-			for (let $i = 0; $i < $tests.length; $i++) {
+			for (let $i = 1; $i < $tests.length; $i++) {
 				new $Root(this, \\"env\\" + $i);
 			}
+		} else {
+			new $Root(this, \\"Default\\");
 		}
 	}
 }
@@ -501,4 +519,8 @@ exports[`wing compile -t tf-aws > proc.7117cacac13b5aec2868af198145d060294a0f8c3
 } };"
 `;
 
-exports[`wing test -t sim > stdout 1`] = `"pass ─ captures.w (no tests)"`;
+exports[`wing test -t sim > stdout 1`] = `
+"- Compiling /Users/chrisr/dev/wing1/examples/tests/valid/captures.w...
+✔ Compiling /Users/chrisr/dev/wing1/examples/tests/valid/captures.w...
+pass ─ captures.wsim (no tests)"
+`;

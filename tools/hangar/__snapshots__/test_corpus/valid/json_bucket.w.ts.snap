@@ -8,7 +8,20 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "stackName": "root",
       "version": "0.15.2",
     },
-    "outputs": {},
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[[\\"root/Default/Default/test:put\\",\\"\${aws_lambda_function.root_testput_449428F9.arn}\\"]]",
+    },
   },
   "provider": {
     "aws": [
@@ -138,6 +151,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
           },
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
+        "force_destroy": true,
       },
       "root_cloudFunction_Code_2F6A7948": {
         "//": {
@@ -290,13 +304,15 @@ class $Root extends $stdlib.core.Resource {
 class $App extends $AppBase {
 	constructor() {
 		super({ outdir: $outdir, name: \\"json_bucket\\", plugins: $plugins });
-		const $root = new $Root(this, \\"Default\\");
 		if ($wing_test) {
-			const $test_runner = this.node.findChild(\\"cloud.TestRunner\\");
+			new $Root(this, \\"env0\\");
+			const $test_runner = this.testRunner;
 			const $tests = $test_runner.findTests();
-			for (let $i = 0; $i < $tests.length; $i++) {
+			for (let $i = 1; $i < $tests.length; $i++) {
 				new $Root(this, \\"env\\" + $i);
 			}
+		} else {
+			new $Root(this, \\"Default\\");
 		}
 	}
 }
@@ -318,4 +334,8 @@ exports[`wing compile -t tf-aws > proc.742d4f24b17fb7f7f831acbd15487b30d36ad90d4
 } };"
 `;
 
-exports[`wing test -t sim > stdout 1`] = `"pass ─ json_bucket.w » root/env0/test:put"`;
+exports[`wing test -t sim > stdout 1`] = `
+"- Compiling /Users/chrisr/dev/wing1/examples/tests/valid/json_bucket.w...
+✔ Compiling /Users/chrisr/dev/wing1/examples/tests/valid/json_bucket.w...
+pass ─ json_bucket.wsim » root/env0/test:put"
+`;

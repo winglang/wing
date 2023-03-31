@@ -46,7 +46,20 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "stackName": "root",
       "version": "0.15.2",
     },
-    "outputs": {},
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[[\\"root/Default/Default/test:call\\",\\"\${aws_lambda_function.root_testcall_517ABBF6.arn}\\"]]",
+    },
   },
   "provider": {
     "aws": [
@@ -203,13 +216,15 @@ Foo._annotateInflight(\\"call\\", {});
 class $App extends $AppBase {
 	constructor() {
 		super({ outdir: $outdir, name: \\"extern_implementation\\", plugins: $plugins });
-		const $root = new $Root(this, \\"Default\\");
 		if ($wing_test) {
-			const $test_runner = this.node.findChild(\\"cloud.TestRunner\\");
+			new $Root(this, \\"env0\\");
+			const $test_runner = this.testRunner;
 			const $tests = $test_runner.findTests();
-			for (let $i = 0; $i < $tests.length; $i++) {
+			for (let $i = 1; $i < $tests.length; $i++) {
 				new $Root(this, \\"env\\" + $i);
 			}
+		} else {
+			new $Root(this, \\"Default\\");
 		}
 	}
 }
@@ -224,7 +239,8 @@ exports[`wing compile -t tf-aws > proc.07843d13880528eb093c8438f86267f529c160bc2
 `;
 
 exports[`wing test -t sim > stdout 1`] = `
-"Hello, Wingding!
+"- Compiling /Users/chrisr/dev/wing1/examples/tests/valid/extern_implementation.w...
 Hello, Wingding!
-pass ─ extern_implementation.w » root/env0/test:call"
+✔ Compiling /Users/chrisr/dev/wing1/examples/tests/valid/extern_implementation.w...
+pass ─ extern_implementation.wsim » root/env0/test:call"
 `;

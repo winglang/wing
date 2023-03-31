@@ -8,7 +8,20 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "stackName": "root",
       "version": "0.15.2",
     },
-    "outputs": {},
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
   "provider": {
     "aws": [
@@ -118,6 +131,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
           },
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
+        "force_destroy": true,
       },
       "root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0": {
         "//": {
@@ -242,13 +256,15 @@ class $Root extends $stdlib.core.Resource {
 class $App extends $AppBase {
 	constructor() {
 		super({ outdir: $outdir, name: \\"file_counter\\", plugins: $plugins });
-		const $root = new $Root(this, \\"Default\\");
 		if ($wing_test) {
-			const $test_runner = this.node.findChild(\\"cloud.TestRunner\\");
+			new $Root(this, \\"env0\\");
+			const $test_runner = this.testRunner;
 			const $tests = $test_runner.findTests();
-			for (let $i = 0; $i < $tests.length; $i++) {
+			for (let $i = 1; $i < $tests.length; $i++) {
 				new $Root(this, \\"env\\" + $i);
 			}
+		} else {
+			new $Root(this, \\"Default\\");
 		}
 	}
 }
@@ -264,4 +280,8 @@ exports[`wing compile -t tf-aws > proc.1ece6a476239c44d64d8b687b9e4389715198c495
 } };"
 `;
 
-exports[`wing test -t sim > stdout 1`] = `"pass ─ file_counter.w (no tests)"`;
+exports[`wing test -t sim > stdout 1`] = `
+"- Compiling /Users/chrisr/dev/wing1/examples/tests/valid/file_counter.w...
+✔ Compiling /Users/chrisr/dev/wing1/examples/tests/valid/file_counter.w...
+pass ─ file_counter.wsim (no tests)"
+`;

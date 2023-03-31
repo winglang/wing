@@ -8,7 +8,20 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "stackName": "root",
       "version": "0.15.2",
     },
-    "outputs": {},
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[[\\"root/Default/Default/test:say_hello\\",\\"\${aws_lambda_function.root_testsayhello_8E3F8CF7.arn}\\"]]",
+    },
   },
   "provider": {
     "aws": [
@@ -148,13 +161,15 @@ class $Root extends $stdlib.core.Resource {
 class $App extends $AppBase {
 	constructor() {
 		super({ outdir: $outdir, name: \\"bring_jsii\\", plugins: $plugins });
-		const $root = new $Root(this, \\"Default\\");
 		if ($wing_test) {
-			const $test_runner = this.node.findChild(\\"cloud.TestRunner\\");
+			new $Root(this, \\"env0\\");
+			const $test_runner = this.testRunner;
 			const $tests = $test_runner.findTests();
-			for (let $i = 0; $i < $tests.length; $i++) {
+			for (let $i = 1; $i < $tests.length; $i++) {
 				new $Root(this, \\"env\\" + $i);
 			}
+		} else {
+			new $Root(this, \\"Default\\");
 		}
 	}
 }
@@ -168,4 +183,8 @@ exports[`wing compile -t tf-aws > proc.5d209e0c3acca40c825662cab73c204803d9dd9f7
 } };"
 `;
 
-exports[`wing test -t sim > stdout 1`] = `"pass ─ bring_jsii.w » root/env0/test:say_hello"`;
+exports[`wing test -t sim > stdout 1`] = `
+"- Compiling /Users/chrisr/dev/wing1/examples/tests/valid/bring_jsii.w...
+✔ Compiling /Users/chrisr/dev/wing1/examples/tests/valid/bring_jsii.w...
+pass ─ bring_jsii.wsim » root/env0/test:say_hello"
+`;

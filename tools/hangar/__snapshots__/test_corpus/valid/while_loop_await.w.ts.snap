@@ -8,7 +8,20 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "stackName": "root",
       "version": "0.15.2",
     },
-    "outputs": {},
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
   "provider": {
     "aws": [
@@ -172,13 +185,15 @@ class $Root extends $stdlib.core.Resource {
 class $App extends $AppBase {
 	constructor() {
 		super({ outdir: $outdir, name: \\"while_loop_await\\", plugins: $plugins });
-		const $root = new $Root(this, \\"Default\\");
 		if ($wing_test) {
-			const $test_runner = this.node.findChild(\\"cloud.TestRunner\\");
+			new $Root(this, \\"env0\\");
+			const $test_runner = this.testRunner;
 			const $tests = $test_runner.findTests();
-			for (let $i = 0; $i < $tests.length; $i++) {
+			for (let $i = 1; $i < $tests.length; $i++) {
 				new $Root(this, \\"env\\" + $i);
 			}
+		} else {
+			new $Root(this, \\"Default\\");
 		}
 	}
 }
@@ -201,4 +216,8 @@ exports[`wing compile -t tf-aws > proc.f259e8d1edc5d47946ec1a1f3aa23e59fe550255e
 } };"
 `;
 
-exports[`wing test -t sim > stdout 1`] = `"pass ─ while_loop_await.w (no tests)"`;
+exports[`wing test -t sim > stdout 1`] = `
+"- Compiling /Users/chrisr/dev/wing1/examples/tests/valid/while_loop_await.w...
+✔ Compiling /Users/chrisr/dev/wing1/examples/tests/valid/while_loop_await.w...
+pass ─ while_loop_await.wsim (no tests)"
+`;

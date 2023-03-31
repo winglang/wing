@@ -8,7 +8,20 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "stackName": "root",
       "version": "0.15.2",
     },
-    "outputs": {},
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[[\\"root/Default/Default/test\\",\\"\${aws_lambda_function.root_test_AAE85061.arn}\\"]]",
+    },
   },
   "provider": {
     "aws": [
@@ -88,6 +101,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
           },
         },
         "bucket_prefix": "b1-c88fb896-",
+        "force_destroy": true,
       },
       "root_b2_26383A0E": {
         "//": {
@@ -97,6 +111,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
           },
         },
         "bucket_prefix": "b2-c844cd88-",
+        "force_destroy": true,
       },
       "root_test_Code_2D131EC2": {
         "//": {
@@ -252,13 +267,15 @@ class $Root extends $stdlib.core.Resource {
 class $App extends $AppBase {
 	constructor() {
 		super({ outdir: $outdir, name: \\"capture_containers_of_resources\\", plugins: $plugins });
-		const $root = new $Root(this, \\"Default\\");
 		if ($wing_test) {
-			const $test_runner = this.node.findChild(\\"cloud.TestRunner\\");
+			new $Root(this, \\"env0\\");
+			const $test_runner = this.testRunner;
 			const $tests = $test_runner.findTests();
-			for (let $i = 0; $i < $tests.length; $i++) {
+			for (let $i = 1; $i < $tests.length; $i++) {
 				new $Root(this, \\"env\\" + $i);
 			}
+		} else {
+			new $Root(this, \\"Default\\");
 		}
 	}
 }
@@ -280,4 +297,8 @@ exports[`wing compile -t tf-aws > proc.e204fa6fba10aa68396c0fe4d920796b1ec739609
 } };"
 `;
 
-exports[`wing test -t sim > stdout 1`] = `"pass ─ capture_containers_of_resources.w » root/env0/test"`;
+exports[`wing test -t sim > stdout 1`] = `
+"- Compiling /Users/chrisr/dev/wing1/examples/tests/valid/capture_containers_of_resources.w...
+✔ Compiling /Users/chrisr/dev/wing1/examples/tests/valid/capture_containers_of_resources.w...
+pass ─ capture_containers_of_resources.wsim » root/env0/test"
+`;

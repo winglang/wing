@@ -126,7 +126,20 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "stackName": "root",
       "version": "0.15.2",
     },
-    "outputs": {},
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[[\\"root/Default/Default/test\\",\\"\${aws_lambda_function.root_test_AAE85061.arn}\\"]]",
+    },
   },
   "provider": {
     "aws": [
@@ -208,6 +221,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
           },
         },
         "bucket_prefix": "cloud-bucket-c8e81a49-",
+        "force_destroy": true,
       },
       "root_MyResource_cloudBucket_AF30D75E": {
         "//": {
@@ -217,6 +231,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
           },
         },
         "bucket_prefix": "cloud-bucket-c8f3d54f-",
+        "force_destroy": true,
       },
       "root_cloudBucket_4F3C4F53": {
         "//": {
@@ -226,6 +241,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
           },
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
+        "force_destroy": true,
       },
       "root_test_Code_2D131EC2": {
         "//": {
@@ -482,13 +498,15 @@ MyResource._annotateInflight(\\"test_inflight_field\\", {});
 class $App extends $AppBase {
 	constructor() {
 		super({ outdir: $outdir, name: \\"resource_captures\\", plugins: $plugins });
-		const $root = new $Root(this, \\"Default\\");
 		if ($wing_test) {
-			const $test_runner = this.node.findChild(\\"cloud.TestRunner\\");
+			new $Root(this, \\"env0\\");
+			const $test_runner = this.testRunner;
 			const $tests = $test_runner.findTests();
-			for (let $i = 0; $i < $tests.length; $i++) {
+			for (let $i = 1; $i < $tests.length; $i++) {
 				new $Root(this, \\"env\\" + $i);
 			}
+		} else {
+			new $Root(this, \\"Default\\");
 		}
 	}
 }
@@ -512,8 +530,10 @@ exports[`wing compile -t tf-aws > proc.036fd96aa6897235ab34914959c244c2e2cd336a5
 `;
 
 exports[`wing test -t sim > stdout 1`] = `
-"array.len=3
+"- Compiling /Users/chrisr/dev/wing1/examples/tests/valid/resource_captures.w...
+✔ Compiling /Users/chrisr/dev/wing1/examples/tests/valid/resource_captures.w...
+array.len=3
 field=hello!
 this.another.first.my_resource:my_string
-pass ─ resource_captures.w » root/env0/test"
+pass ─ resource_captures.wsim » root/env0/test"
 `;

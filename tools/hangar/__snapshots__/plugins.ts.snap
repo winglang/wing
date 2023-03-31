@@ -8,7 +8,20 @@ exports[`Plugin examples > AWS target plugins > permission-boundary.js 1`] = `
       "stackName": "root",
       "version": "0.15.2",
     },
-    "outputs": {},
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
   "provider": {
     "aws": [
@@ -99,6 +112,7 @@ exports[`Plugin examples > AWS target plugins > permission-boundary.js 1`] = `
           },
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
+        "force_destroy": true,
       },
       "root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0": {
         "//": {
@@ -179,7 +193,20 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
       "stackName": "root",
       "version": "0.15.2",
     },
-    "outputs": {},
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
   "provider": {
     "aws": [
@@ -339,6 +366,7 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
           },
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
+        "force_destroy": true,
       },
       "root_cloudBucket_ReplicaDefault_FAA1B938": {
         "//": {
@@ -537,7 +565,20 @@ exports[`Plugin examples > AWS target plugins > tf-s3-backend.js 1`] = `
       "stackName": "root",
       "version": "0.15.2",
     },
-    "outputs": {},
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
   "provider": {
     "aws": [
@@ -627,6 +668,7 @@ exports[`Plugin examples > AWS target plugins > tf-s3-backend.js 1`] = `
           },
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
+        "force_destroy": true,
       },
       "root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0": {
         "//": {

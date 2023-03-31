@@ -297,7 +297,10 @@ async function withSpinner<T>(
   message: string,
   fn: () => Promise<T>,
 ): Promise<T> {
-  const spinner = ora(message).start();
+  const spinner = ora({
+    stream: process.stdout, // hangar tests currently expect stderr to be empty or else they fail
+    text: message,
+  }).start();
   try {
     const result = await fn();
     spinner.succeed();
