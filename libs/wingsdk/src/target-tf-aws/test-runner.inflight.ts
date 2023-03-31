@@ -37,6 +37,7 @@ export class TestRunnerClient implements ITestRunnerClient {
       path,
       pass,
       error,
+      traces: [], // TODO
     };
   }
 }

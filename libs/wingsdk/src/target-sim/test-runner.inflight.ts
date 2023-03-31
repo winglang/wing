@@ -40,16 +40,20 @@ export class TestRunnerClient
     }
     let pass = false;
     let error: string | undefined;
+    const previousTraces = this.context.listTraces().length;
     try {
       await fnClient.invoke("");
       pass = true;
     } catch (e) {
       error = (e as any).message;
     }
+    // only return traces that were added after the test was run
+    const newTraces = this.context.listTraces().slice(previousTraces);
     return {
       path,
       pass,
       error,
+      traces: newTraces,
     };
   }
 }

@@ -103,7 +103,28 @@ exports[`run all tests > single test 1`] = `
     "error": undefined,
     "pass": true,
     "path": "root/test",
-    "traces": [],
+    "traces": [
+      {
+        "data": {
+          "message": "hi",
+        },
+        "sourcePath": "root/test",
+        "sourceType": "wingsdk.cloud.Function",
+        "timestamp": "<TIMESTAMP>",
+        "type": "log",
+      },
+      {
+        "data": {
+          "message": "Invoke (payload=\\"\\").",
+          "result": undefined,
+          "status": "success",
+        },
+        "sourcePath": "root/test",
+        "sourceType": "wingsdk.cloud.Function",
+        "timestamp": "<TIMESTAMP>",
+        "type": "resource",
+      },
+    ],
   },
 ]
 `;
@@ -113,7 +134,28 @@ exports[`run single test > happy path 1`] = `
   "error": undefined,
   "pass": true,
   "path": "root/test",
-  "traces": [],
+  "traces": [
+    {
+      "data": {
+        "message": "hi",
+      },
+      "sourcePath": "root/test",
+      "sourceType": "wingsdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "log",
+    },
+    {
+      "data": {
+        "message": "Invoke (payload=\\"\\").",
+        "result": undefined,
+        "status": "success",
+      },
+      "sourcePath": "root/test",
+      "sourceType": "wingsdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "resource",
+    },
+  ],
 }
 `;
 
@@ -122,6 +164,27 @@ exports[`run single test > test failure 1`] = `
   "error": "test failed",
   "pass": false,
   "path": "root/test",
-  "traces": [],
+  "traces": [
+    {
+      "data": {
+        "message": "I am about to fail",
+      },
+      "sourcePath": "root/test",
+      "sourceType": "wingsdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "log",
+    },
+    {
+      "data": {
+        "error": [Error: test failed],
+        "message": "Invoke (payload=\\"\\").",
+        "status": "failure",
+      },
+      "sourcePath": "root/test",
+      "sourceType": "wingsdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "resource",
+    },
+  ],
 }
 `;

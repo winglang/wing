@@ -68,7 +68,7 @@ function printTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): b
     results.push({
       pass: true,
       path: '',
-      // traces: [],
+      traces: [],
     });
   }
 
@@ -77,11 +77,10 @@ function printTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): b
 
     const details = new Array<string>();
 
-    // TODO
     // add any log messages that were emitted during the test
-    // for (const log of result.traces.filter(t => t.type == "log")) {
-    //   details.push(chalk.gray(log.data.message));
-    // }
+    for (const log of result.traces.filter(t => t.type == "log")) {
+      details.push(chalk.gray(log.data.message));
+    }
 
     // if the test failed, add the error message and trace
     if (result.error) {

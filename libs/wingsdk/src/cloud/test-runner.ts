@@ -90,7 +90,6 @@ export interface ITestRunnerClient {
   runTest(path: string): Promise<TestResult>;
 }
 
-// TODO: include test traces? (e.g. for debugging)
 // TODO: include test duration?
 
 /**
@@ -111,6 +110,56 @@ export interface TestResult {
    * The error message if the test failed.
    */
   readonly error?: string;
+
+  /**
+   * List of traces emitted during the test.
+   */
+  readonly traces: Trace[];
+}
+
+/**
+ * Represents an trace emitted during simulation.
+ */
+export interface Trace {
+  /**
+   * A JSON blob with structured data.
+   */
+  readonly data: any;
+
+  /**
+   * The type of the source that emitted the trace.
+   */
+  readonly sourceType: string;
+
+  /**
+   * The path of the resource that emitted the trace.
+   */
+  readonly sourcePath: string;
+
+  /**
+   * The type of a trace.
+   */
+  readonly type: TraceType;
+
+  /**
+   * The timestamp of the event, in ISO 8601 format.
+   * @example 2020-01-01T00:00:00.000Z
+   */
+  readonly timestamp: string;
+}
+
+/**
+ * The type of a trace.
+ */
+export enum TraceType {
+  /**
+   * A trace representing a resource activity.
+   */
+  RESOURCE = "resource",
+  /**
+   * A trace representing a message emitted by the logger.
+   */
+  LOG = "log",
 }
 
 /**

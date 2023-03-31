@@ -1,9 +1,9 @@
 import { Construct } from "constructs";
 import { test, expect, describe } from "vitest";
-import { Bucket } from "../../src/cloud";
+import { Bucket, TestResult } from "../../src/cloud";
 import { Code, InflightBindings } from "../../src/core";
 import { Function } from "../../src/target-sim/function";
-import { SimApp, Testing, TestResult } from "../../src/testing";
+import { SimApp, Testing } from "../../src/testing";
 
 describe("run single test", () => {
   test("test not found", async () => {
@@ -80,54 +80,54 @@ describe("run all tests", () => {
     ]);
   });
 
-  //   test("each test runs in a separate simulator instance", async () => {
-  //     const app = new SimApp();
-  //     const bucket = Bucket._newBucket(app, "bucket");
+  test("each test runs in a separate simulator instance", async () => {
+    const app = new SimApp();
+    const bucket = Bucket._newBucket(app, "bucket");
 
-  //     new Test(
-  //       app,
-  //       "test:bucket1",
-  //       [
-  //         "await this.bucket.put('hello1', 'world');",
-  //         "await this.bucket.put('hello2', 'world');",
-  //         "await this.bucket.put('hello3', 'world');",
-  //         "await this.bucket.put('hello4', 'world');",
-  //         "await this.bucket.put('hello5', 'world');",
-  //         "const keys = await this.bucket.list();",
-  //         "const assert = condition => { if (!condition) throw new Error('assertion failed'); };",
-  //         "assert(keys.length === 5);",
-  //       ],
-  //       {
-  //         bucket: {
-  //           obj: bucket,
-  //           ops: ["put"],
-  //         },
-  //       }
-  //     );
+    new Test(
+      app,
+      "test:bucket1",
+      [
+        "await this.bucket.put('hello1', 'world');",
+        "await this.bucket.put('hello2', 'world');",
+        "await this.bucket.put('hello3', 'world');",
+        "await this.bucket.put('hello4', 'world');",
+        "await this.bucket.put('hello5', 'world');",
+        "const keys = await this.bucket.list();",
+        "const assert = condition => { if (!condition) throw new Error('assertion failed'); };",
+        "assert(keys.length === 5);",
+      ],
+      {
+        bucket: {
+          obj: bucket,
+          ops: ["put"],
+        },
+      }
+    );
 
-  //     new Test(
-  //       app,
-  //       "test:bucket2",
-  //       [
-  //         "await this.bucket.put('hello', 'world');",
-  //         "const keys = await this.bucket.list();",
-  //         "const assert = condition => { if (!condition) throw new Error('assertion failed'); };",
-  //         "assert(keys.length === 1);",
-  //       ],
-  //       {
-  //         bucket: {
-  //           obj: bucket,
-  //           ops: ["put", "list"],
-  //         },
-  //       }
-  //     );
+    new Test(
+      app,
+      "test:bucket2",
+      [
+        "await this.bucket.put('hello', 'world');",
+        "const keys = await this.bucket.list();",
+        "const assert = condition => { if (!condition) throw new Error('assertion failed'); };",
+        "assert(keys.length === 1);",
+      ],
+      {
+        bucket: {
+          obj: bucket,
+          ops: ["put", "list"],
+        },
+      }
+    );
 
-  //     const sim = await app.startSimulator();
-  //     const results = await sim.runAllTests();
+    const sim = await app.startSimulator();
+    const results = await sim.runAllTests();
 
-  //     // expect no failtures
-  //     expect(results.filter((r) => !r.pass)).toEqual([]);
-  //   });
+    // expect no failtures
+    expect(results.filter((r) => !r.pass)).toEqual([]);
+  });
 });
 
 test("provides raw tree data", async () => {
