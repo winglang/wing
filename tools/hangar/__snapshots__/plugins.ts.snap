@@ -101,6 +101,10 @@ exports[`Plugin examples > AWS target plugins > permission-boundary.js 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
     },
     "aws_s3_bucket": {
@@ -355,6 +359,10 @@ exports[`Plugin examples > AWS target plugins > replicate-s3.js 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
     },
     "aws_s3_bucket": {
@@ -657,6 +665,10 @@ exports[`Plugin examples > AWS target plugins > tf-s3-backend.js 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
     },
     "aws_s3_bucket": {

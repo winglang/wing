@@ -182,6 +182,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_A_testinflightinresourceshouldcapturetherightscopedvar_Code_470A0E83.bucket}",
         "s3_key": "\${aws_s3_object.root_A_testinflightinresourceshouldcapturetherightscopedvar_S3Object_4C07FA3E.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_testinflightnestedshouldnotcapturetheshadowedvar_9382E411": {
         "//": {
@@ -203,6 +207,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_testinflightnestedshouldnotcapturetheshadowedvar_Code_56F93BD5.bucket}",
         "s3_key": "\${aws_s3_object.root_testinflightnestedshouldnotcapturetheshadowedvar_S3Object_C99A3326.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_testinflightontopshouldcapturetop_A36CE723": {
         "//": {
@@ -224,6 +232,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_testinflightontopshouldcapturetop_Code_F50B9894.bucket}",
         "s3_key": "\${aws_s3_object.root_testinflightontopshouldcapturetop_S3Object_75B26800.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_testinsideinflightshouldcapturetherightscope_AB987B89": {
         "//": {
@@ -245,6 +257,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_testinsideinflightshouldcapturetherightscope_Code_0FC24998.bucket}",
         "s3_key": "\${aws_s3_object.root_testinsideinflightshouldcapturetherightscope_S3Object_33BC24EC.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
     },
     "aws_s3_bucket": {

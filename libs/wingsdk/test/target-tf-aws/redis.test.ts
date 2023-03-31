@@ -1,12 +1,16 @@
-import { describe, it, expect } from "vitest";
-import * as tfaws from "../../src/target-tf-aws";
-import { Function } from "../../src/cloud";
-import * as redis from "../../src/target-tf-aws/redis";
-import { mkdtemp } from "../../src/util";
-import { getTfResource, tfResourcesOf, tfResourcesOfCount, tfSanitize } from "../util";
-import { Testing } from "../../src/testing";
 import * as cdktf from "cdktf";
-
+import { describe, it, expect } from "vitest";
+import { Function } from "../../src/cloud";
+import * as tfaws from "../../src/target-tf-aws";
+import * as redis from "../../src/target-tf-aws/redis";
+import { Testing } from "../../src/testing";
+import { mkdtemp } from "../../src/util";
+import {
+  getTfResource,
+  tfResourcesOf,
+  tfResourcesOfCount,
+  tfSanitize,
+} from "../util";
 
 const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
 
@@ -15,7 +19,7 @@ describe("When creating a Redis resource", () => {
     // GIVEN
     const app = new tfaws.App({ outdir: mkdtemp() });
     redis.Redis._newRedis(app, "Redis");
-    
+
     // WHEN
     const output = app.synth();
 
@@ -65,11 +69,11 @@ describe("When creating a Redis resource", () => {
 
       const lambda = getTfResource(output, "aws_lambda_function");
       const vpcConfig = lambda.vpc_config;
-      
+
       // THEN
       expect(vpcConfig.security_group_ids).toBeDefined();
       expect(vpcConfig.subnet_ids).toBeDefined();
-    })
+    });
   });
 });
 
@@ -99,7 +103,10 @@ describe("When creating multiple Redis resources", () => {
       // GIVEN
       const app = new tfaws.App({ outdir: mkdtemp() });
       const redisCluster = redis.Redis._newRedis(app, "Redis") as redis.Redis;
-      const otherCluster = redis.Redis._newRedis(app, "OtherRedis") as redis.Redis;
+      const otherCluster = redis.Redis._newRedis(
+        app,
+        "OtherRedis"
+      ) as redis.Redis;
       const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
       const func = Function._newFunction(app, "Function", inflight);
       redisCluster._bind(func, ["set", "get"]);
@@ -110,11 +117,10 @@ describe("When creating multiple Redis resources", () => {
 
       const lambda = getTfResource(output, "aws_lambda_function");
       const vpcConfig = JSON.parse(JSON.stringify(lambda.vpc_config));
-      
+
       // THEN
       expect(vpcConfig.security_group_ids.length).toEqual(2);
       expect(vpcConfig.subnet_ids.length).toEqual(2);
-    })
-  })
+    });
+  });
 });
-

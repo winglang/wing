@@ -98,6 +98,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessageb3f3d188_Code_4D451A84.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueOnMessageb3f3d188_S3Object_18BDF7F0.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
     },
     "aws_s3_bucket": {

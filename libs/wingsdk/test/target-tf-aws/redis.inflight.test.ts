@@ -1,7 +1,10 @@
+import {
+  ElastiCacheClient,
+  DescribeCacheClustersCommand,
+} from "@aws-sdk/client-elasticache";
+import { mockClient } from "aws-sdk-client-mock";
 import { test, vi, beforeEach, expect } from "vitest";
 import { RedisClient } from "../../src/target-tf-aws/redis.inflight";
-import { mockClient } from "aws-sdk-client-mock";
-import { ElastiCacheClient, DescribeCacheClustersCommand } from "@aws-sdk/client-elasticache";
 
 beforeEach(() => {
   mockElastiCache.reset();
@@ -14,11 +17,11 @@ beforeEach(() => {
           {
             Endpoint: {
               Address: "fake-cluster.1234567890.us-east-1.cache.amazonaws.com",
-            }
-          }
-        ]
-      }
-    ]
+            },
+          },
+        ],
+      },
+    ],
   });
 });
 
@@ -29,7 +32,7 @@ test("can set and get a value", async () => {
 
   // WHEN
   const client = new RedisClient("fake-cluster", fakeRedisClient);
-  client.set(key, expectedValue);
+  await client.set(key, expectedValue);
   const value = await client.get(key);
 
   // THEN
@@ -46,8 +49,8 @@ test("can hset and hget values", async () => {
 
   // WHEN
   const client = new RedisClient("fake-cluster", fakeRedisClient);
-  client.hset(key, field1, expectedValue1);
-  client.hset(key, field2, expectedValue2);
+  await client.hset(key, field1, expectedValue1);
+  await client.hset(key, field2, expectedValue2);
   const value1 = await client.hget(key, field1);
   const value2 = await client.hget(key, field2);
 
