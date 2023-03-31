@@ -2090,6 +2090,7 @@ let test_result = cloud.TestResult{ ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.TestResult.property.pass">pass</a></code> | <code>bool</code> | Whether the test passed. |
 | <code><a href="#@winglang/sdk.cloud.TestResult.property.path">path</a></code> | <code>str</code> | The path of the test. |
+| <code><a href="#@winglang/sdk.cloud.TestResult.property.traces">traces</a></code> | <code>MutArray&lt;<a href="#@winglang/sdk.cloud.Trace">Trace</a>&gt;</code> | List of traces emitted during the test. |
 | <code><a href="#@winglang/sdk.cloud.TestResult.property.error">error</a></code> | <code>str</code> | The error message if the test failed. |
 
 ---
@@ -2115,6 +2116,18 @@ path: str;
 - *Type:* str
 
 The path of the test.
+
+---
+
+##### `traces`<sup>Required</sup> <a name="traces" id="@winglang/sdk.cloud.TestResult.property.traces"></a>
+
+```wing
+traces: MutArray<Trace>;
+```
+
+- *Type:* MutArray&lt;<a href="#@winglang/sdk.cloud.Trace">Trace</a>&gt;
+
+List of traces emitted during the test.
 
 ---
 
@@ -2168,6 +2181,97 @@ bring cloud;
 let topic_props = cloud.TopicProps{ ... }
 ```
 
+
+### Trace <a name="Trace" id="@winglang/sdk.cloud.Trace"></a>
+
+Represents an trace emitted during simulation.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.Trace.Initializer"></a>
+
+```wing
+bring cloud;
+
+let trace = cloud.Trace{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Trace.property.data">data</a></code> | <code>any</code> | A JSON blob with structured data. |
+| <code><a href="#@winglang/sdk.cloud.Trace.property.sourcePath">source_path</a></code> | <code>str</code> | The path of the resource that emitted the trace. |
+| <code><a href="#@winglang/sdk.cloud.Trace.property.sourceType">source_type</a></code> | <code>str</code> | The type of the source that emitted the trace. |
+| <code><a href="#@winglang/sdk.cloud.Trace.property.timestamp">timestamp</a></code> | <code>str</code> | The timestamp of the event, in ISO 8601 format. |
+| <code><a href="#@winglang/sdk.cloud.Trace.property.type">type</a></code> | <code><a href="#@winglang/sdk.cloud.TraceType">TraceType</a></code> | The type of a trace. |
+
+---
+
+##### `data`<sup>Required</sup> <a name="data" id="@winglang/sdk.cloud.Trace.property.data"></a>
+
+```wing
+data: any;
+```
+
+- *Type:* any
+
+A JSON blob with structured data.
+
+---
+
+##### `source_path`<sup>Required</sup> <a name="source_path" id="@winglang/sdk.cloud.Trace.property.sourcePath"></a>
+
+```wing
+source_path: str;
+```
+
+- *Type:* str
+
+The path of the resource that emitted the trace.
+
+---
+
+##### `source_type`<sup>Required</sup> <a name="source_type" id="@winglang/sdk.cloud.Trace.property.sourceType"></a>
+
+```wing
+source_type: str;
+```
+
+- *Type:* str
+
+The type of the source that emitted the trace.
+
+---
+
+##### `timestamp`<sup>Required</sup> <a name="timestamp" id="@winglang/sdk.cloud.Trace.property.timestamp"></a>
+
+```wing
+timestamp: str;
+```
+
+- *Type:* str
+
+The timestamp of the event, in ISO 8601 format.
+
+---
+
+*Example*
+
+```wing
+2020-01-01T00:00:00.000Z
+```
+
+
+##### `type`<sup>Required</sup> <a name="type" id="@winglang/sdk.cloud.Trace.property.type"></a>
+
+```wing
+type: TraceType;
+```
+
+- *Type:* <a href="#@winglang/sdk.cloud.TraceType">TraceType</a>
+
+The type of a trace.
+
+---
 
 ## Classes <a name="Classes" id="Classes"></a>
 
@@ -4878,6 +4982,33 @@ Options.
 ##### `PATCH` <a name="PATCH" id="@winglang/sdk.cloud.HttpMethod.PATCH"></a>
 
 Patch.
+
+---
+
+
+### TraceType <a name="TraceType" id="@winglang/sdk.cloud.TraceType"></a>
+
+The type of a trace.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.TraceType.RESOURCE">RESOURCE</a></code> | A trace representing a resource activity. |
+| <code><a href="#@winglang/sdk.cloud.TraceType.LOG">LOG</a></code> | A trace representing a message emitted by the logger. |
+
+---
+
+##### `RESOURCE` <a name="RESOURCE" id="@winglang/sdk.cloud.TraceType.RESOURCE"></a>
+
+A trace representing a resource activity.
+
+---
+
+
+##### `LOG` <a name="LOG" id="@winglang/sdk.cloud.TraceType.LOG"></a>
+
+A trace representing a message emitted by the logger.
 
 ---
 
