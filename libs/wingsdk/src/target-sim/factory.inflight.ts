@@ -4,6 +4,7 @@ import { Counter } from "./counter.inflight";
 import { Function } from "./function.inflight";
 import { Logger } from "./logger.inflight";
 import { Queue } from "./queue.inflight";
+import { Redis } from "./redis.inflight";
 import { ISimulatorResourceInstance } from "./resource";
 import {
   API_TYPE,
@@ -14,6 +15,7 @@ import {
   QUEUE_TYPE,
   TABLE_TYPE,
   TOPIC_TYPE,
+  REDIS_TYPE,
 } from "./schema-resources";
 import { Table } from "./table.inflight";
 import { Topic } from "./topic.inflight";
@@ -49,6 +51,8 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return new Table(props, context);
       case TOPIC_TYPE:
         return new Topic(props, context);
+      case REDIS_TYPE:
+        return new Redis(props, context);
       default:
         throw new Error(`Type ${type} not implemented.`);
     }

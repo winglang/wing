@@ -49,6 +49,9 @@ const project = new cdk.JsiiProject({
     // simulator dependencies
     "tar",
     "express",
+    "uuid",
+    // shared client dependencies
+    "ioredis",
   ],
   devDeps: [
     "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
@@ -64,6 +67,7 @@ const project = new cdk.JsiiProject({
     "eslint-plugin-sort-exports",
     "patch-package",
     "vitest",
+    "@types/uuid",
     "@vitest/coverage-c8",
   ],
   prettier: true,
