@@ -374,7 +374,7 @@ exports[`topic with subscriber function 2`] = `
       }
     },
     \\"aws_lambda_permission\\": {
-      \\"root_Topic_TopicTopicInvokePermissionc5395e41_58F47125\\": {
+      \\"root_TopicOnMessagec5395e41_InvokePermissionc8228fb70d825c2a5610c610e5246d5313ea6bd1a2_032AF00D\\": {
         \\"action\\": \\"lambda:InvokeFunction\\",
         \\"function_name\\": \\"\${aws_lambda_function.root_TopicOnMessagec5395e41_379EBC3E.function_name}\\",
         \\"principal\\": \\"sns.amazonaws.com\\",
@@ -461,14 +461,6 @@ exports[`topic with subscriber function 3`] = `
                     },
                     "id": "Default",
                     "path": "root/Default/Topic/Default",
-                  },
-                  "Topic-TopicInvokePermission-c5395e41": {
-                    "constructInfo": {
-                      "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
-                      "version": "12.0.2",
-                    },
-                    "id": "Topic-TopicInvokePermission-c5395e41",
-                    "path": "root/Default/Topic/Topic-TopicInvokePermission-c5395e41",
                   },
                   "Topic-TopicSubscription-c5395e41": {
                     "constructInfo": {
@@ -562,6 +554,14 @@ exports[`topic with subscriber function 3`] = `
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Topic-OnMessage-c5395e41/IamRolePolicyAttachment",
+                  },
+                  "InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2": {
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
+                      "version": "12.0.2",
+                    },
+                    "id": "InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2",
+                    "path": "root/Default/Topic-OnMessage-c5395e41/InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2",
                   },
                   "S3Object": {
                     "constructInfo": {

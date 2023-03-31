@@ -23,3 +23,9 @@ struct E {
   f: Map<Array<MutArray<str>>>;
 //^ struct fields must be immutable got: Map<Array<MutArray<str>>>
 }
+
+let a = A {
+  x: "Sup"
+};
+log(a.bad_field);
+//      ^^^^^^ Unknown symbol "bad_field"

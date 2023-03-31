@@ -18,6 +18,7 @@ const project = new TypeScriptAppProject({
   homepage: "https://winglang.io",
   description: "Wing language support for VSCode",
   keywords: ["wing", "language", "cloud", "cdk", "infrastructure"],
+  license: "MIT",
 
   packageManager: NodePackageManager.NPM,
   projenrcTs: true,
