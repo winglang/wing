@@ -56,9 +56,9 @@ export class Redis extends redis.Redis {
       ingress: [
         {
           cidrBlocks: [this.subnet.cidrBlock],
-          fromPort: 0,
-          toPort: 0,
-          protocol: "-1",
+          fromPort: 6379,
+          toPort: 6379,
+          protocol: "tcp",
           selfAttribute: true,
         },
       ],
