@@ -351,11 +351,11 @@ exports[`impl_interface.w > stderr 1`] = `
   |          ^ Resource \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueOnMessageHandler\\"
 
 
-error: Expected type to be \\"inflight (IQueueOnMessageHandler (inflight (str): void), str): void\\", but got \\"inflight (B, num): void\\" instead
+error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
   --> ../../../examples/tests/invalid/impl_interface.w:8:10
   |
 8 | resource B impl cloud.IQueueOnMessageHandler {
-  |          ^ Expected type to be \\"inflight (IQueueOnMessageHandler (inflight (str): void), str): void\\", but got \\"inflight (B, num): void\\" instead
+  |          ^ Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
 
 
 error: Class C (at ../../../examples/tests/invalid/impl_interface.w:16:10)'s implements \\"Bucket\\" is not an interface
