@@ -296,7 +296,7 @@ module.exports = grammar({
         $.structured_access_expression,
         $.json_literal,
         $.struct_literal,
-        $.optional_test,
+        $.optional_test
       ),
 
     // Primitives
