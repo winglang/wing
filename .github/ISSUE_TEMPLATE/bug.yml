@@ -44,7 +44,7 @@ body:
     label: "Is there a workaround?"
     placeholder: "What's the workaround to avoid this issue?"
   validations:
-    required: true
+    required: false
 - type: dropdown
   id: Component
   attributes:
