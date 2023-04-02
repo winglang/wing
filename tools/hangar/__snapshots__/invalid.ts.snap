@@ -429,20 +429,11 @@ exports[`interface.w > stderr 1`] = `
   |                      ^^ Unknown symbol \\"IB\\"
 
 
-error: Expected an interface, instead found type \\"any\\"
-
-
 error: Unknown symbol \\"IDontExist\\"
    --> ../../../examples/tests/invalid/interface.w:10:26
    |
 10 | interface IExist extends IDontExist {
    |                          ^^^^^^^^^^ Unknown symbol \\"IDontExist\\"
-
-
-error: Expected an interface, instead found type \\"any\\"
-
-
-error: Expected an interface, instead found type \\"ISomeClass\\"
 
 
 error: Symbol \\"foo\\" already defined in this scope
