@@ -1099,7 +1099,7 @@
                 },
                 {
                   "type": "FIELD",
-                  "name": "implements",
+                  "name": "extends",
                   "content": {
                     "type": "SEQ",
                     "members": [
@@ -2420,41 +2420,13 @@
         }
       ]
     },
+    "_return_type": {
+      "type": "SYMBOL",
+      "name": "_type_annotation"
+    },
     "method_signature": {
       "type": "SEQ",
       "members": [
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "FIELD",
-              "name": "access_modifier",
-              "content": {
-                "type": "SYMBOL",
-                "name": "access_modifier"
-              }
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "FIELD",
-              "name": "static",
-              "content": {
-                "type": "SYMBOL",
-                "name": "static"
-              }
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
         {
           "type": "CHOICE",
           "members": [
@@ -2491,12 +2463,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "FIELD",
-              "name": "return_type",
-              "content": {
-                "type": "SYMBOL",
-                "name": "_type_annotation"
-              }
+              "type": "SYMBOL",
+              "name": "_return_type"
             },
             {
               "type": "BLANK"
@@ -2596,12 +2564,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "FIELD",
-              "name": "return_type",
-              "content": {
-                "type": "SYMBOL",
-                "name": "_type_annotation"
-              }
+              "type": "SYMBOL",
+              "name": "_return_type"
             },
             {
               "type": "BLANK"
@@ -2631,38 +2595,6 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "FIELD",
-              "name": "access_modifier",
-              "content": {
-                "type": "SYMBOL",
-                "name": "access_modifier"
-              }
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "FIELD",
-              "name": "static",
-              "content": {
-                "type": "SYMBOL",
-                "name": "static"
-              }
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
           "type": "FIELD",
           "name": "phase_modifier",
           "content": {
@@ -2690,12 +2622,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "FIELD",
-              "name": "return_type",
-              "content": {
-                "type": "SYMBOL",
-                "name": "_type_annotation"
-              }
+              "type": "SYMBOL",
+              "name": "_return_type"
             },
             {
               "type": "BLANK"
@@ -2787,12 +2715,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "FIELD",
-              "name": "return_type",
-              "content": {
-                "type": "SYMBOL",
-                "name": "_type_annotation"
-              }
+              "type": "SYMBOL",
+              "name": "_return_type"
             },
             {
               "type": "BLANK"
@@ -3661,12 +3585,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "FIELD",
-              "name": "return_type",
-              "content": {
-                "type": "SYMBOL",
-                "name": "_type_annotation"
-              }
+              "type": "SYMBOL",
+              "name": "_return_type"
             },
             {
               "type": "BLANK"
@@ -3706,12 +3626,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "FIELD",
-              "name": "return_type",
-              "content": {
-                "type": "SYMBOL",
-                "name": "_type_annotation"
-              }
+              "type": "SYMBOL",
+              "name": "_return_type"
             },
             {
               "type": "BLANK"
