@@ -313,13 +313,6 @@ exports[`for_loop.w > stderr 1`] = `
 5 | for test in bucket {
   |             ^^^^^^ Unable to iterate over \\"Bucket\\"
 
-
-error: Unable to iterate over \\"Bucket\\"
-  --> ../../../examples/tests/invalid/for_loop.w:5:13
-  |
-5 | for test in bucket {
-  |             ^^^^^^ Unable to iterate over \\"Bucket\\"
-
 "
 `;
 
