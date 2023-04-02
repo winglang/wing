@@ -43,8 +43,6 @@ body:
   attributes:
     label: "Is there a workaround?"
     placeholder: "What's the workaround to avoid this issue?"
-  validations:
-    required: false
 - type: dropdown
   id: Component
   attributes:
