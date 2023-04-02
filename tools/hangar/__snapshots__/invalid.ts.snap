@@ -341,7 +341,28 @@ error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (num)
   |          ^ Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
 
 
-error: Class C (at ../../../examples/tests/invalid/impl_interface.w:16:10)'s implements \\"Bucket\\" is not an interface
+error: Expected an interface, instead found type \\"Bucket\\"
+
+
+error: Resource \\"r\\" does not implement method \\"method_1\\" of interface \\"I3\\"
+   --> ../../../examples/tests/invalid/impl_interface.w:33:10
+   |
+33 | resource r impl I3 {
+   |          ^ Resource \\"r\\" does not implement method \\"method_1\\" of interface \\"I3\\"
+
+
+error: Resource \\"r\\" does not implement method \\"method_2\\" of interface \\"I3\\"
+   --> ../../../examples/tests/invalid/impl_interface.w:33:10
+   |
+33 | resource r impl I3 {
+   |          ^ Resource \\"r\\" does not implement method \\"method_2\\" of interface \\"I3\\"
+
+
+error: Resource \\"r\\" does not implement method \\"method_3\\" of interface \\"I3\\"
+   --> ../../../examples/tests/invalid/impl_interface.w:33:10
+   |
+33 | resource r impl I3 {
+   |          ^ Resource \\"r\\" does not implement method \\"method_3\\" of interface \\"I3\\"
 
 "
 `;
@@ -396,6 +417,40 @@ exports[`inflight_ref_unknown_op.w > stderr 1`] = `
    |
 11 |     let x = this.b;
    |             ^^^^^^ Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
+
+"
+`;
+
+exports[`interface.w > stderr 1`] = `
+"error: Unknown symbol \\"IB\\"
+  --> ../../../examples/tests/invalid/interface.w:2:22
+  |
+2 | interface IA extends IB {
+  |                      ^^ Unknown symbol \\"IB\\"
+
+
+error: Unknown symbol \\"IDontExist\\"
+   --> ../../../examples/tests/invalid/interface.w:10:26
+   |
+10 | interface IExist extends IDontExist {
+   |                          ^^^^^^^^^^ Unknown symbol \\"IDontExist\\"
+
+
+error: Expected an interface, instead found type \\"ISomeClass\\"
+
+
+error: Symbol \\"foo\\" already defined in this scope
+   --> ../../../examples/tests/invalid/interface.w:25:5
+   |
+25 |     foo();
+   |     ^^^ Symbol \\"foo\\" already defined in this scope
+
+
+error: Symbol \\"foo\\" already defined in this scope
+   --> ../../../examples/tests/invalid/interface.w:27:5
+   |
+27 |     foo(): num;
+   |     ^^^ Symbol \\"foo\\" already defined in this scope
 
 "
 `;

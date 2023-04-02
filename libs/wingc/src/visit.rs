@@ -1,6 +1,6 @@
 use crate::ast::{
-	ArgList, Class, Constructor, Expr, ExprKind, FunctionBody, FunctionDefinition, InterpolatedStringPart, Literal,
-	Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
+	ArgList, Class, Constructor, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionSignature, Interface,
+	InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
 };
 
 /// Visitor pattern inspired by implementation from https://docs.rs/syn/latest/syn/visit/index.html
@@ -38,6 +38,9 @@ pub trait Visit<'ast> {
 	fn visit_class(&mut self, node: &'ast Class) {
 		visit_class(self, node);
 	}
+	fn visit_interface(&mut self, node: &'ast Interface) {
+		visit_interface(self, node);
+	}
 	fn visit_constructor(&mut self, node: &'ast Constructor) {
 		visit_constructor(self, node);
 	}
@@ -52,6 +55,9 @@ pub trait Visit<'ast> {
 	}
 	fn visit_function_definition(&mut self, node: &'ast FunctionDefinition) {
 		visit_function_definition(self, node);
+	}
+	fn visit_function_signature(&mut self, node: &'ast FunctionSignature) {
+		visit_function_signature(self, node);
 	}
 	fn visit_args(&mut self, node: &'ast ArgList) {
 		visit_args(self, node);
@@ -145,6 +151,9 @@ where
 		StmtKind::Class(class) => {
 			v.visit_class(class);
 		}
+		StmtKind::Interface(interface) => {
+			v.visit_interface(interface);
+		}
 		StmtKind::Struct { name, extends, members } => {
 			v.visit_symbol(name);
 			for extend in extends {
@@ -196,6 +205,22 @@ where
 	for method in &node.methods {
 		v.visit_symbol(&method.0);
 		v.visit_function_definition(&method.1);
+	}
+}
+
+pub fn visit_interface<'ast, V>(v: &mut V, node: &'ast Interface)
+where
+	V: Visit<'ast> + ?Sized,
+{
+	v.visit_symbol(&node.name);
+
+	for method in &node.methods {
+		v.visit_symbol(&method.0);
+		v.visit_function_signature(&method.1);
+	}
+
+	for extend in &node.extends {
+		v.visit_symbol(&extend.root);
 	}
 }
 
@@ -342,19 +367,25 @@ pub fn visit_function_definition<'ast, V>(v: &mut V, node: &'ast FunctionDefinit
 where
 	V: Visit<'ast> + ?Sized,
 {
+	v.visit_function_signature(&node.signature);
 	for param in &node.parameters {
 		v.visit_symbol(&param.0);
 	}
-	for param_type in &node.signature.parameters {
-		v.visit_type_annotation(param_type);
-	}
-	if let Some(return_type) = &node.signature.return_type {
-		v.visit_type_annotation(return_type);
-	}
-
 	if let FunctionBody::Statements(scope) = &node.body {
 		v.visit_scope(scope);
 	};
+}
+
+pub fn visit_function_signature<'ast, V>(v: &mut V, node: &'ast FunctionSignature)
+where
+	V: Visit<'ast> + ?Sized,
+{
+	for param_type in &node.parameters {
+		v.visit_type_annotation(param_type);
+	}
+	if let Some(return_type) = &node.return_type {
+		v.visit_type_annotation(return_type);
+	}
 }
 
 pub fn visit_args<'ast, V>(v: &mut V, node: &'ast ArgList)

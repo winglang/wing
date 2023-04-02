@@ -8,8 +8,8 @@ use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
 	ArgList, BinaryOperator, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionBody,
-	FunctionDefinition, FunctionSignature, InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope,
-	Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
+	FunctionDefinition, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, Phase,
+	Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 use crate::WINGSDK_STD_MODULE;
@@ -26,7 +26,6 @@ pub struct Parser<'a> {
 // this is meant to serve as a bandaide to be removed once wing is further developed.
 // k=grammar, v=optional_message, example: ("generic", "targed impl: 1.0.0")
 static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
-	"interface_definition" => "see https://github.com/winglang/wing/issues/123",
 	"any" => "see https://github.com/winglang/wing/issues/434",
 	"void" => "see https://github.com/winglang/wing/issues/432",
 	"nil" => "see https://github.com/winglang/wing/issues/433",
@@ -193,6 +192,7 @@ impl<'s> Parser<'s> {
 			"return_statement" => self.build_return_statement(statement_node)?,
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
+			"interface_definition" => self.build_interface_statement(statement_node)?,
 			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"try_catch_statement" => self.build_try_catch_statement(statement_node)?,
 			"struct_definition" => self.build_struct_definition_statement(statement_node)?,
@@ -582,6 +582,83 @@ impl<'s> Parser<'s> {
 			constructor: constructor.unwrap(),
 			is_resource,
 		}))
+	}
+
+	fn build_interface_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		let mut cursor = statement_node.walk();
+		let mut extends = vec![];
+		let mut methods = vec![];
+		let name = self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?;
+
+		for interface_element in statement_node
+			.child_by_field_name("implementation")
+			.unwrap()
+			.named_children(&mut cursor)
+		{
+			if interface_element.is_extra() {
+				continue;
+			}
+			match interface_element.kind() {
+				"method_signature" => {
+					let method_name = self.node_symbol(&interface_element.child_by_field_name("name").unwrap());
+					let func_sig = self.build_function_signature(&interface_element, Phase::Preflight);
+					match (method_name, func_sig) {
+						(Ok(method_name), Ok(func_sig)) => methods.push((method_name, func_sig)),
+						_ => {}
+					}
+				}
+				"inflight_method_signature" => {
+					let method_name = self.node_symbol(&interface_element.child_by_field_name("name").unwrap());
+					let func_sig = self.build_function_signature(&interface_element, Phase::Inflight);
+					match (method_name, func_sig) {
+						(Ok(method_name), Ok(func_sig)) => methods.push((method_name, func_sig)),
+						_ => {}
+					}
+				}
+				"ERROR" => {
+					self
+						.add_error::<Node>(format!("Expected interface element node"), &interface_element)
+						.err();
+				}
+				other => {
+					panic!(
+						"Unexpected interface element node type {} || {:#?}",
+						other, interface_element
+					);
+				}
+			}
+		}
+
+		for extend in statement_node.children_by_field_name("extends", &mut cursor) {
+			// ignore comments
+			if extend.is_extra() {
+				continue;
+			}
+
+			// ignore commas
+			if !extend.is_named() {
+				continue;
+			}
+
+			if let Ok(TypeAnnotation::UserDefined(interface_type)) = self.build_udt_annotation(&extend) {
+				extends.push(interface_type);
+			}
+		}
+
+		Ok(StmtKind::Interface(Interface { name, methods, extends }))
+	}
+
+	fn build_function_signature(&self, func_sig_node: &Node, phase: Phase) -> DiagnosticResult<FunctionSignature> {
+		let parameters = self.build_parameter_list(&func_sig_node.child_by_field_name("parameter_list").unwrap())?;
+		Ok(FunctionSignature {
+			parameters: parameters.iter().map(|p| p.1.clone()).collect(),
+			return_type: if let Some(rt) = func_sig_node.child_by_field_name("type") {
+				Some(Box::new(self.build_type_annotation(&rt)?))
+			} else {
+				None
+			},
+			phase,
+		})
 	}
 
 	fn build_anonymous_closure(&self, anon_closure_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
