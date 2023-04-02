@@ -970,10 +970,6 @@ impl Types {
 	}
 }
 
-pub struct TypeCheckerContext {
-	in_json: bool,
-}
-
 pub struct TypeChecker<'a> {
 	types: &'a mut Types,
 
@@ -991,6 +987,8 @@ pub struct TypeChecker<'a> {
 	source_path: &'a Path,
 
 	pub diagnostics: RefCell<Diagnostics>,
+
+	in_json: bool,
 	// generated_resource_counter: usize,
 }
 
@@ -1001,6 +999,7 @@ impl<'a> TypeChecker<'a> {
 			inner_scopes: vec![],
 			source_path,
 			diagnostics: RefCell::new(Diagnostics::new()),
+			in_json: false,
 		}
 	}
 
@@ -1108,14 +1107,8 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	// Validates types in the expression make sense and returns the expression's inferred type
-	fn type_check_exp(
-		&mut self,
-		exp: &Expr,
-		env: &SymbolEnv,
-		statement_idx: usize,
-		context: &TypeCheckerContext,
-	) -> TypeRef {
-		let t = self.type_check_exp_helper(&exp, env, statement_idx, context);
+	fn type_check_exp(&mut self, exp: &Expr, env: &SymbolEnv, statement_idx: usize) -> TypeRef {
+		let t = self.type_check_exp_helper(&exp, env, statement_idx);
 		exp.evaluated_type.replace(Some(t));
 		t
 	}
@@ -1124,20 +1117,14 @@ impl<'a> TypeChecker<'a> {
 	/// and break early, while still setting the evaluated type on the expression.
 	///
 	/// Do not use this function directly, use `type_check_exp` instead.
-	fn type_check_exp_helper(
-		&mut self,
-		exp: &Expr,
-		env: &SymbolEnv,
-		statement_idx: usize,
-		context: &TypeCheckerContext,
-	) -> TypeRef {
+	fn type_check_exp_helper(&mut self, exp: &Expr, env: &SymbolEnv, statement_idx: usize) -> TypeRef {
 		match &exp.kind {
 			ExprKind::Literal(lit) => match lit {
 				Literal::String(_) => self.types.string(),
 				Literal::InterpolatedString(s) => {
 					s.parts.iter().for_each(|part| {
 						if let InterpolatedStringPart::Expr(interpolated_expr) = part {
-							let exp_type = self.type_check_exp(interpolated_expr, env, statement_idx, context);
+							let exp_type = self.type_check_exp(interpolated_expr, env, statement_idx);
 							self.validate_type_in(exp_type, &self.types.stringables(), interpolated_expr);
 						}
 					});
@@ -1148,8 +1135,8 @@ impl<'a> TypeChecker<'a> {
 				Literal::Boolean(_) => self.types.bool(),
 			},
 			ExprKind::Binary { op, left, right } => {
-				let ltype = self.type_check_exp(left, env, statement_idx, context);
-				let rtype = self.type_check_exp(right, env, statement_idx, context);
+				let ltype = self.type_check_exp(left, env, statement_idx);
+				let rtype = self.type_check_exp(right, env, statement_idx);
 
 				match op {
 					BinaryOperator::LogicalAnd | BinaryOperator::LogicalOr => {
@@ -1195,14 +1182,14 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 			ExprKind::Unary { op, exp: unary_exp } => {
-				let _type = self.type_check_exp(unary_exp, env, statement_idx, context);
+				let _type = self.type_check_exp(unary_exp, env, statement_idx);
 
 				match op {
 					UnaryOperator::Not => self.validate_type(_type, self.types.bool(), unary_exp),
 					UnaryOperator::Minus => self.validate_type(_type, self.types.number(), unary_exp),
 				}
 			}
-			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env, statement_idx, context).type_,
+			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env, statement_idx).type_,
 			ExprKind::New {
 				class,
 				obj_id: _, // TODO
@@ -1212,7 +1199,7 @@ impl<'a> TypeChecker<'a> {
 				// TODO: obj_id, obj_scope ignored, should use it once we support Type::Resource and then remove it from Classes (fail if a class has an id if grammar doesn't handle this for us)
 
 				// Type check the arguments
-				let arg_list_types = self.type_check_arg_list(arg_list, env, statement_idx, context);
+				let arg_list_types = self.type_check_arg_list(arg_list, env, statement_idx);
 
 				// Lookup the class's type in the env
 				let type_ = self.resolve_type_annotation(class, env, statement_idx);
@@ -1298,7 +1285,7 @@ impl<'a> TypeChecker<'a> {
 				if type_.as_resource().is_some() {
 					// Get reference to resource object's scope
 					let obj_scope_type = if let Some(obj_scope) = obj_scope {
-						Some(self.type_check_exp(obj_scope, env, statement_idx, context))
+						Some(self.type_check_exp(obj_scope, env, statement_idx))
 					} else {
 						// If this returns None, this means we're instantiating a resource object in the global scope, which is valid
 						env
@@ -1325,9 +1312,9 @@ impl<'a> TypeChecker<'a> {
 			}
 			ExprKind::Call { function, arg_list } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
-				let func_type = self.type_check_exp(function, env, statement_idx, context);
+				let func_type = self.type_check_exp(function, env, statement_idx);
 
-				let arg_list_types = self.type_check_arg_list(arg_list, env, statement_idx, context);
+				let arg_list_types = self.type_check_arg_list(arg_list, env, statement_idx);
 
 				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud.Bucket().upload())
 				if matches!(*func_type, Type::Anything) {
@@ -1396,7 +1383,7 @@ impl<'a> TypeChecker<'a> {
 				let container_type = if let Some(type_) = type_ {
 					self.resolve_type_annotation(type_, env, statement_idx)
 				} else if !items.is_empty() {
-					let some_val_type = self.type_check_exp(items.iter().next().unwrap(), env, statement_idx, context);
+					let some_val_type = self.type_check_exp(items.iter().next().unwrap(), env, statement_idx);
 					self.types.add_type(Type::Array(some_val_type))
 				} else {
 					self.expr_error(exp, "Cannot infer type of empty array".to_owned());
@@ -1411,8 +1398,8 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify all types are the same as the inferred type
 				for v in items.iter() {
-					let t = self.type_check_exp(v, env, statement_idx, context);
-					self.check_json_serializable_or_validate_type(t, element_type, v, context);
+					let t = self.type_check_exp(v, env, statement_idx);
+					self.check_json_serializable_or_validate_type(t, element_type, v);
 				}
 
 				container_type
@@ -1425,7 +1412,7 @@ impl<'a> TypeChecker<'a> {
 				let field_types: IndexMap<Symbol, TypeRef> = fields
 					.iter()
 					.map(|(name, exp)| {
-						let t = self.type_check_exp(exp, env, statement_idx, context);
+						let t = self.type_check_exp(exp, env, statement_idx);
 						(name.clone(), t)
 					})
 					.collect();
@@ -1469,7 +1456,9 @@ impl<'a> TypeChecker<'a> {
 				struct_type
 			}
 			ExprKind::JsonLiteral { is_mut, element } => {
-				self.type_check_exp(&element, env, statement_idx, &TypeCheckerContext { in_json: true });
+				self.in_json = true;
+				self.type_check_exp(&element, env, statement_idx);
+				self.in_json = false;
 				if *is_mut {
 					self.types.mut_json()
 				} else {
@@ -1481,7 +1470,7 @@ impl<'a> TypeChecker<'a> {
 				let container_type = if let Some(type_) = type_ {
 					self.resolve_type_annotation(type_, env, statement_idx)
 				} else if !fields.is_empty() {
-					let some_val_type = self.type_check_exp(fields.iter().next().unwrap().1, env, statement_idx, context);
+					let some_val_type = self.type_check_exp(fields.iter().next().unwrap().1, env, statement_idx);
 					self.types.add_type(Type::Map(some_val_type))
 				} else {
 					self.expr_error(exp, "Cannot infer type of empty map".to_owned());
@@ -1496,8 +1485,8 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify all types are the same as the inferred type
 				for (_, v) in fields.iter() {
-					let t = self.type_check_exp(v, env, statement_idx, context);
-					self.check_json_serializable_or_validate_type(t, value_type, v, context);
+					let t = self.type_check_exp(v, env, statement_idx);
+					self.check_json_serializable_or_validate_type(t, value_type, v);
 				}
 
 				container_type
@@ -1507,7 +1496,7 @@ impl<'a> TypeChecker<'a> {
 				let container_type = if let Some(type_) = type_ {
 					self.resolve_type_annotation(type_, env, statement_idx)
 				} else if !items.is_empty() {
-					let some_val_type = self.type_check_exp(items.iter().next().unwrap(), env, statement_idx, context);
+					let some_val_type = self.type_check_exp(items.iter().next().unwrap(), env, statement_idx);
 					self.types.add_type(Type::Set(some_val_type))
 				} else {
 					self.expr_error(exp, "Cannot infer type of empty set".to_owned());
@@ -1522,7 +1511,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify all types are the same as the inferred type
 				for v in items.iter() {
-					let t = self.type_check_exp(v, env, statement_idx, context);
+					let t = self.type_check_exp(v, env, statement_idx);
 					self.validate_type(t, element_type, v);
 				}
 
@@ -1540,7 +1529,7 @@ impl<'a> TypeChecker<'a> {
 				//				}
 			}
 			ExprKind::OptionalTest { optional } => {
-				let t = self.type_check_exp(optional, env, statement_idx, context);
+				let t = self.type_check_exp(optional, env, statement_idx);
 				if !t.is_option() {
 					self.expr_error(optional, format!("Expected optional type, found \"{}\"", t));
 				}
@@ -1700,10 +1689,9 @@ impl<'a> TypeChecker<'a> {
 		actual_type: TypeRef,
 		expected_type: TypeRef,
 		exp: &Expr,
-		context: &TypeCheckerContext,
 	) -> TypeRef {
 		// Skip validate if in Json
-		if !context.in_json {
+		if !self.in_json {
 			return self.validate_type(actual_type, expected_type, exp);
 		}
 
@@ -1765,9 +1753,8 @@ impl<'a> TypeChecker<'a> {
 
 	pub fn type_check_scope(&mut self, scope: &Scope) {
 		assert!(self.inner_scopes.is_empty());
-		let context = TypeCheckerContext { in_json: false };
 		for statement in scope.statements.iter() {
-			self.type_check_statement(statement, scope.env.borrow_mut().as_mut().unwrap(), &context);
+			self.type_check_statement(statement, scope.env.borrow_mut().as_mut().unwrap());
 		}
 		let inner_scopes = self.inner_scopes.drain(..).collect::<Vec<_>>();
 		for inner_scope in inner_scopes {
@@ -1840,18 +1827,12 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_arg_list(
-		&mut self,
-		arg_list: &ArgList,
-		env: &SymbolEnv,
-		statement_idx: usize,
-		context: &TypeCheckerContext,
-	) -> ArgListTypes {
+	fn type_check_arg_list(&mut self, arg_list: &ArgList, env: &SymbolEnv, statement_idx: usize) -> ArgListTypes {
 		// Type check the positional arguments, e.g. fn(exp1, exp2, exp3)
 		let pos_arg_types = arg_list
 			.pos_args
 			.iter()
-			.map(|pos_arg| self.type_check_exp(pos_arg, env, statement_idx, context))
+			.map(|pos_arg| self.type_check_exp(pos_arg, env, statement_idx))
 			.collect();
 
 		// Type check the named arguments, e.g. fn(named_arg1: exp4, named_arg2: exp5)
@@ -1859,7 +1840,7 @@ impl<'a> TypeChecker<'a> {
 			.named_args
 			.iter()
 			.map(|(sym, expr)| {
-				let arg_type = self.type_check_exp(&expr, env, statement_idx, context);
+				let arg_type = self.type_check_exp(&expr, env, statement_idx);
 				(sym.clone(), arg_type)
 			})
 			.collect::<IndexMap<_, _>>();
@@ -1870,7 +1851,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_statement(&mut self, stmt: &Stmt, env: &mut SymbolEnv, context: &TypeCheckerContext) {
+	fn type_check_statement(&mut self, stmt: &Stmt, env: &mut SymbolEnv) {
 		match &stmt.kind {
 			StmtKind::VariableDef {
 				reassignable,
@@ -1879,7 +1860,7 @@ impl<'a> TypeChecker<'a> {
 				type_,
 			} => {
 				let explicit_type = type_.as_ref().map(|t| self.resolve_type_annotation(t, env, stmt.idx));
-				let inferred_type = self.type_check_exp(initial_value, env, stmt.idx, context);
+				let inferred_type = self.type_check_exp(initial_value, env, stmt.idx);
 				if inferred_type.is_void() {
 					self.type_error(TypeError {
 						message: format!("Cannot assign expression of type \"{}\" to a variable", inferred_type),
@@ -1917,7 +1898,7 @@ impl<'a> TypeChecker<'a> {
 				statements,
 			} => {
 				// TODO: Expression must be iterable
-				let exp_type = self.type_check_exp(iterable, env, stmt.idx, context);
+				let exp_type = self.type_check_exp(iterable, env, stmt.idx);
 
 				let iterator_type = match &*exp_type {
 					// These are builtin iterables that have a clear/direct iterable type
@@ -1953,7 +1934,7 @@ impl<'a> TypeChecker<'a> {
 				self.inner_scopes.push(statements);
 			}
 			StmtKind::While { condition, statements } => {
-				let cond_type = self.type_check_exp(condition, env, stmt.idx, context);
+				let cond_type = self.type_check_exp(condition, env, stmt.idx);
 				self.validate_type(cond_type, self.types.bool(), condition);
 
 				statements.set_env(SymbolEnv::new(
@@ -1974,7 +1955,7 @@ impl<'a> TypeChecker<'a> {
 				elif_statements,
 				else_statements,
 			} => {
-				let cond_type = self.type_check_exp(condition, env, stmt.idx, context);
+				let cond_type = self.type_check_exp(condition, env, stmt.idx);
 				self.validate_type(cond_type, self.types.bool(), condition);
 
 				statements.set_env(SymbolEnv::new(
@@ -1988,7 +1969,7 @@ impl<'a> TypeChecker<'a> {
 				self.inner_scopes.push(statements);
 
 				for elif_scope in elif_statements {
-					let cond_type = self.type_check_exp(&elif_scope.condition, env, stmt.idx, context);
+					let cond_type = self.type_check_exp(&elif_scope.condition, env, stmt.idx);
 					self.validate_type(cond_type, self.types.bool(), condition);
 
 					(&elif_scope.statements).set_env(SymbolEnv::new(
@@ -2015,11 +1996,11 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 			StmtKind::Expression(e) => {
-				self.type_check_exp(e, env, stmt.idx, context);
+				self.type_check_exp(e, env, stmt.idx);
 			}
 			StmtKind::Assignment { variable, value } => {
-				let exp_type = self.type_check_exp(value, env, stmt.idx, context);
-				let var_info = self.resolve_reference(variable, env, stmt.idx, context);
+				let exp_type = self.type_check_exp(value, env, stmt.idx);
+				let var_info = self.resolve_reference(variable, env, stmt.idx);
 				if !var_info.reassignable {
 					self.stmt_error(stmt, format!("Variable {} is not reassignable ", variable));
 				}
@@ -2095,7 +2076,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			StmtKind::Return(exp) => {
 				if let Some(return_expression) = exp {
-					let return_type = self.type_check_exp(return_expression, env, stmt.idx, context);
+					let return_type = self.type_check_exp(return_expression, env, stmt.idx);
 					if !env.return_type.is_void() {
 						self.validate_type(return_type, env.return_type, return_expression);
 					} else {
@@ -2428,16 +2409,17 @@ impl<'a> TypeChecker<'a> {
 			.expect("Expected method type to be a function signature");
 
 		// Create method environment and prime it with args
+		let is_init = method_name.name == WING_CONSTRUCTOR_NAME;
 		let mut method_env = SymbolEnv::new(
 			Some(env.get_ref()),
 			method_sig.return_type,
 			false,
-			method_name.name == WING_CONSTRUCTOR_NAME,
+			is_init,
 			method_sig.phase,
 			statement_idx,
 		);
 		// Prime the method environment with `this`
-		if !method_def.is_static() {
+		if !method_def.is_static() || is_init {
 			method_env
 				.define(
 					&Symbol {
@@ -2825,13 +2807,7 @@ impl<'a> TypeChecker<'a> {
 			.map(|_| user_type_annotation)
 	}
 
-	fn resolve_reference(
-		&mut self,
-		reference: &Reference,
-		env: &SymbolEnv,
-		statement_idx: usize,
-		context: &TypeCheckerContext,
-	) -> VariableInfo {
+	fn resolve_reference(&mut self, reference: &Reference, env: &SymbolEnv, statement_idx: usize) -> VariableInfo {
 		match reference {
 			Reference::Identifier(symbol) => match env.lookup(symbol, Some(statement_idx)) {
 				Ok(var) => {
@@ -2877,7 +2853,7 @@ impl<'a> TypeChecker<'a> {
 						// We don't use the return value but need to call replace so it'll drop the old value
 						_ = std::mem::replace(&mut *mut_ptr, new_ref);
 					}
-					return self.resolve_reference(reference, env, statement_idx, context);
+					return self.resolve_reference(reference, env, statement_idx);
 				}
 
 				// Special case: if the object expression is a simple reference to `this` and we're inside the init function then
@@ -2893,7 +2869,7 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 
-				let instance_type = self.type_check_exp(object, env, statement_idx, context);
+				let instance_type = self.type_check_exp(object, env, statement_idx);
 				let res = match *instance_type {
 					Type::Class(ref class) | Type::Resource(ref class) => self.get_property_from_class_like(class, property),
 					Type::Interface(ref interface) => self.get_property_from_class_like(interface, property),
