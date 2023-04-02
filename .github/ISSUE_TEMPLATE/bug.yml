@@ -38,6 +38,11 @@ body:
     placeholder: "What happend instead of what you've expected?"
   validations:
     required: true
+- type: textarea
+  id: workaround
+  attributes:
+    label: "Is there a workaround?"
+    placeholder: "What's the workaround to avoid this issue?"
 - type: dropdown
   id: Component
   attributes:
