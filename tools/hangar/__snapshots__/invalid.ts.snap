@@ -436,6 +436,9 @@ error: Unknown symbol \\"IDontExist\\"
    |                          ^^^^^^^^^^ Unknown symbol \\"IDontExist\\"
 
 
+error: Expected an interface, instead found type \\"ISomeClass\\"
+
+
 error: Symbol \\"foo\\" already defined in this scope
    --> ../../../examples/tests/invalid/interface.w:25:5
    |
