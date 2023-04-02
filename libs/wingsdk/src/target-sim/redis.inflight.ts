@@ -24,7 +24,7 @@ export class Redis implements IRedisClient, ISimulatorResourceInstance {
   public constructor(_props: RedisSchema["props"], context: ISimulatorContext) {
     this.context = context;
     this.container_name = `wing-sim-redis-${this.context.resourcePath.replace(
-      "/",
+      /\//g,
       "."
     )}-${uuidv4()}`;
   }
