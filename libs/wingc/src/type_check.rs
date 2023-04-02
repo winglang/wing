@@ -2318,7 +2318,10 @@ impl<'a> TypeChecker<'a> {
 						if t.as_interface().is_some() {
 							Some(t)
 						} else {
-							self.general_type_error(format!("Expected an interface, instead found type \"{}\"", t));
+							// The type checker resolves non-existing definitions to `any`, so we avoid duplicate errors by checking for that here
+							if !t.is_same_type_as(&self.types.anything()) {
+								self.general_type_error(format!("Expected an interface, instead found type \"{}\"", t));
+							}
 							None
 						}
 					})
