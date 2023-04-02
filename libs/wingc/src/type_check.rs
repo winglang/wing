@@ -1221,18 +1221,6 @@ impl<'a> TypeChecker<'a> {
 				self.validate_type(etype, self.types.number(), end);
 				self.types.add_type(Type::Array(stype))
 			}
-			ExprKind::Range {
-				start,
-				inclusive: _,
-				end,
-			} => {
-				let stype = self.type_check_exp(start, env, statement_idx, context);
-				let etype = self.type_check_exp(end, env, statement_idx, context);
-
-				self.validate_type(stype, self.types.number(), start);
-				self.validate_type(etype, self.types.number(), end);
-				self.types.add_type(Type::Array(stype))
-			}
 			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env, statement_idx, context).type_,
 			ExprKind::New {
 				class,
