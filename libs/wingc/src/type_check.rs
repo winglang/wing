@@ -790,14 +790,6 @@ impl TypeRef {
 		}
 	}
 
-	pub fn is_iterable(&self) -> bool {
-		if let Type::Array(_) | Type::Set(_) | Type::MutArray(_) | Type::MutSet(_) = **self {
-			true
-		} else {
-			false
-		}
-	}
-
 	pub fn is_capturable(&self) -> bool {
 		match &**self {
 			Type::Resource(_) => true,
