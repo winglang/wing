@@ -1899,7 +1899,7 @@ impl<'a> TypeChecker<'a> {
 					});
 				}
 
-				let iterator_type = match &*exp_type {
+				let _iterator_type = match &*exp_type {
 					// These are builtin iterables that have a clear/direct iterable type
 					Type::Array(t) => *t,
 					Type::Set(t) => *t,
@@ -1909,7 +1909,7 @@ impl<'a> TypeChecker<'a> {
 					_t => self.types.anything(),
 				};
 
-				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
+				let _scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
 				if !exp_type.is_iterable() {
 					self.type_error(TypeError {
 						message: format!("Unable to iterate over \"{}\"", &exp_type),
@@ -1925,7 +1925,8 @@ impl<'a> TypeChecker<'a> {
 					Type::MutSet(t) => *t,
 					_t => self.types.anything(),
 				};
-				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
+				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
+
 				match scope_env.define(
 					&iterator,
 					SymbolKind::make_variable(iterator_type, false, true, env.phase),
