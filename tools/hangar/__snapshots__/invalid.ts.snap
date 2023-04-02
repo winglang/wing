@@ -341,7 +341,7 @@ error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (num)
   |          ^ Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
 
 
-error: Class \\"C (at ../../../examples/tests/invalid/impl_interface.w:16:10)\\" implements \\"Bucket\\", which is not an interface
+error: Expected an interface, instead found type \\"Bucket\\"
 
 
 error: Resource \\"r\\" does not implement method \\"method_1\\" of interface \\"I3\\"
@@ -429,7 +429,7 @@ exports[`interface.w > stderr 1`] = `
   |                      ^^ Unknown symbol \\"IB\\"
 
 
-error: Interface \\"IA (at ../../../examples/tests/invalid/interface.w:2:11)\\" extends \\"any\\", which is not an interface
+error: Expected an interface, instead found type \\"any\\"
 
 
 error: Unknown symbol \\"IDontExist\\"
@@ -439,10 +439,10 @@ error: Unknown symbol \\"IDontExist\\"
    |                          ^^^^^^^^^^ Unknown symbol \\"IDontExist\\"
 
 
-error: Interface \\"IExist (at ../../../examples/tests/invalid/interface.w:10:11)\\" extends \\"any\\", which is not an interface
+error: Expected an interface, instead found type \\"any\\"
 
 
-error: Interface \\"ISomeInterface (at ../../../examples/tests/invalid/interface.w:18:11)\\" extends \\"ISomeClass\\", which is not an interface
+error: Expected an interface, instead found type \\"ISomeClass\\"
 
 
 error: Symbol \\"foo\\" already defined in this scope

@@ -2088,10 +2088,7 @@ impl<'a> TypeChecker<'a> {
 						if t.as_interface().is_some() {
 							Some(t)
 						} else {
-							self.general_type_error(format!(
-								"Class \"{}\" implements \"{}\", which is not an interface",
-								name, t
-							));
+							self.general_type_error(format!("Expected an interface, instead found type \"{}\"", t));
 							None
 						}
 					})
@@ -2321,10 +2318,7 @@ impl<'a> TypeChecker<'a> {
 						if t.as_interface().is_some() {
 							Some(t)
 						} else {
-							self.general_type_error(format!(
-								"Interface \"{}\" extends \"{}\", which is not an interface",
-								name, t
-							));
+							self.general_type_error(format!("Expected an interface, instead found type \"{}\"", t));
 							None
 						}
 					})
@@ -2349,18 +2343,15 @@ impl<'a> TypeChecker<'a> {
 
 				// Add methods to the interface env
 				for (method_name, sig) in methods.iter() {
-					let mut sig = sig.clone();
-					// Add myself as first parameter to all interface methods (self) - they are all non static, so no need to check
-					sig.parameters.insert(
-						0,
-						TypeAnnotation::UserDefined(UserDefinedType {
-							root: name.clone(),
-							fields: vec![],
-						}),
-					);
-
-					let method_type =
+					let mut method_type =
 						self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(sig.clone()), env, stmt.idx);
+					// use the interface type as the function's "this" type
+					if let Type::Function(ref mut f) = *method_type {
+						f.this_type = Some(interface_type.clone());
+					} else {
+						panic!("Expected method type to be a function");
+					}
+
 					match interface_env.define(
 						method_name,
 						SymbolKind::make_variable(method_type, false, false, sig.phase),
