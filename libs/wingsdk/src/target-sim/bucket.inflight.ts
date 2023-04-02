@@ -4,7 +4,12 @@ import * as os from "os";
 import { dirname, join } from "path";
 import { ISimulatorResourceInstance } from "./resource";
 import { BucketAttributes, BucketSchema } from "./schema-resources";
-import { BucketDeleteOptions, IBucketClient } from "../cloud";
+import {
+  BucketDeleteOptions,
+  BucketEventType,
+  IBucketClient,
+  ITopicClient,
+} from "../cloud";
 import { Json } from "../std";
 import { ISimulatorContext } from "../testing/simulator";
 
@@ -14,6 +19,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private readonly context: ISimulatorContext;
   private readonly initialObjects: Record<string, string>;
   private readonly _public: boolean;
+  private readonly topicHandlers: Partial<Record<BucketEventType, string>>;
 
   public constructor(props: BucketSchema["props"], context: ISimulatorContext) {
     this.objectKeys = new Set();
@@ -21,6 +27,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     this.context = context;
     this.initialObjects = props.initialObjects ?? {};
     this._public = props.public ?? false;
+    this.topicHandlers = props.topics;
   }
 
   public async init(): Promise<BucketAttributes> {
@@ -39,6 +46,25 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     await fs.promises.rm(this.fileDir, { recursive: true, force: true });
   }
 
+  private async notifyListeners(actionType: BucketEventType, key: string) {
+    if (!this.topicHandlers[actionType]) {
+      return;
+    }
+
+    const topicClient = this.context.findInstance(
+      this.topicHandlers[actionType]!
+    ) as ITopicClient & ISimulatorResourceInstance;
+
+    return topicClient.publish(key);
+  }
+
+  private async fileExists(key: string): Promise<boolean> {
+    return fs.promises
+      .access(join(this.fileDir, key))
+      .then(() => true)
+      .catch(() => false);
+  }
+
   public async put(key: string, value: string): Promise<void> {
     return this.context.withTrace({
       message: `Put (key=${key}).`,
@@ -52,7 +78,12 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Put Json (key=${key}).`,
       activity: async () => {
+        const actionType: BucketEventType = (await this.fileExists(key))
+          ? BucketEventType.UPDATE
+          : BucketEventType.CREATE;
+
         await this.addFile(key, JSON.stringify(body, null, 2));
+        await this.notifyListeners(actionType, key);
       },
     });
   }
@@ -132,17 +163,22 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         const filename = join(this.fileDir, hash);
         await fs.promises.unlink(filename);
         this.objectKeys.delete(key);
+        await this.notifyListeners(BucketEventType.DELETE, key);
       },
     });
   }
 
   private async addFile(key: string, value: string): Promise<void> {
+    const actionType: BucketEventType = this.objectKeys.has(key)
+      ? BucketEventType.UPDATE
+      : BucketEventType.CREATE;
     const hash = this.hashKey(key);
     const filename = join(this.fileDir, hash);
     const dirName = dirname(filename);
     await fs.promises.mkdir(dirName, { recursive: true });
     await fs.promises.writeFile(filename, value);
     this.objectKeys.add(key);
+    await this.notifyListeners(actionType, key);
   }
 
   private hashKey(key: string): string {

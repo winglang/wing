@@ -7,6 +7,7 @@ import { Counter } from "./counter";
 import { Function } from "./function";
 import { Logger } from "./logger";
 import { Queue } from "./queue";
+import { Redis } from "./redis";
 import { isSimulatorResource } from "./resource";
 import { WingSimulatorSchema } from "./schema";
 import { Table } from "./table";
@@ -24,6 +25,7 @@ import {
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
+import { REDIS_FQN } from "../redis";
 import { SIMULATOR_FILE_PATH } from "../util";
 
 /**
@@ -78,6 +80,9 @@ export class App extends core.App {
 
       case TOPIC_FQN:
         return new Topic(scope, id, args[0]);
+
+      case REDIS_FQN:
+        return new Redis(scope, id);
     }
 
     return undefined;

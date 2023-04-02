@@ -1,6 +1,6 @@
 import { join } from "path";
-import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
 import { SnsTopic } from "@cdktf/provider-aws/lib/sns-topic";
+import { SnsTopicPolicy } from "@cdktf/provider-aws/lib/sns-topic-policy";
 import { SnsTopicSubscription } from "@cdktf/provider-aws/lib/sns-topic-subscription";
 import { Construct } from "constructs";
 import { Function } from "./function";
@@ -25,6 +25,11 @@ const NAME_OPTS: NameOptions = {
  */
 export class Topic extends cloud.Topic {
   private readonly topic: SnsTopic;
+  /**
+   * topic's publishing permissions. can be use as a dependency of another resource.
+   * (the one that got the permissions to publish)
+   * */
+  public permissions!: SnsTopicPolicy;
 
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
     super(scope, id, props);
@@ -32,6 +37,13 @@ export class Topic extends cloud.Topic {
     this.topic = new SnsTopic(this, "Default", {
       name: ResourceNames.generateName(this, NAME_OPTS),
     });
+  }
+
+  /**
+   * topic's arn
+   */
+  public get arn(): string {
+    return this.topic.arn;
   }
 
   public onMessage(
@@ -72,16 +84,7 @@ export class Topic extends cloud.Topic {
       }
     );
 
-    new LambdaPermission(
-      this,
-      `${this.node.id}-TopicInvokePermission-${hash}`,
-      {
-        action: "lambda:InvokeFunction",
-        functionName: fn._functionName,
-        principal: "sns.amazonaws.com",
-        sourceArn: this.topic.arn,
-      }
-    );
+    fn.addPermissionToInvoke(this, "sns.amazonaws.com", this.topic.arn, {});
 
     core.Resource.addConnection({
       from: this,
@@ -90,6 +93,43 @@ export class Topic extends cloud.Topic {
     });
 
     return fn;
+  }
+
+  /**
+   * Grants the given identity permissions to publish this topic.
+   * @param source the resource that will publish to the topic
+   * @param principal The AWS principal to grant publish permissions to (e.g. "s3.amazonaws.com", "events.amazonaws.com", "sns.amazonaws.com")
+   * @param sourceArn source arn
+   */
+  public addPermissionToPublish(
+    source: core.Resource,
+    principal: string,
+    sourceArn: string
+  ): void {
+    this.permissions = new SnsTopicPolicy(
+      this,
+      `PublishPermission-${source.node.addr}`,
+      {
+        arn: this.topic.arn,
+        policy: JSON.stringify({
+          Statement: [
+            {
+              Effect: "Allow",
+              Principal: {
+                Service: principal,
+              },
+              Action: "sns:Publish",
+              Resource: this.topic.arn,
+              Condition: {
+                ArnEquals: {
+                  "aws:SourceArn": sourceArn,
+                },
+              },
+            },
+          ],
+        }),
+      }
+    );
   }
 
   /** @internal */
