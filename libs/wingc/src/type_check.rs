@@ -1,8 +1,8 @@
 mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{
-	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, InterpolatedStringPart, Literal, Phase,
-	Reference, Scope, Stmt, StmtKind, Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
+	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, InterpolatedStringPart, Literal,
+	MethodLike, Phase, Reference, Scope, Stmt, StmtKind, Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{
@@ -713,6 +713,14 @@ impl TypeRef {
 		}
 	}
 
+	pub fn as_mut_function_sig(&mut self) -> Option<&mut FunctionSignature> {
+		if let Type::Function(ref mut sig) = **self {
+			Some(sig)
+		} else {
+			None
+		}
+	}
+
 	pub fn is_anything(&self) -> bool {
 		if let Type::Anything = **self {
 			true
@@ -983,6 +991,7 @@ pub struct TypeChecker<'a> {
 	source_path: &'a Path,
 
 	pub diagnostics: RefCell<Diagnostics>,
+	// generated_resource_counter: usize,
 }
 
 impl<'a> TypeChecker<'a> {
@@ -1522,38 +1531,13 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::FunctionClosure(func_def) => {
 				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 
-				if matches!(func_def.signature.phase, Phase::Inflight) {
-					self.unimplemented_type("Inflight function signature"); // TODO: what typechecking do we need here?self??
-				}
-
-				// Create a type_checker function signature from the AST function definition, assuming success we can add this function to the env
-				let function_type = self.resolve_type_annotation(
-					&TypeAnnotation::FunctionSignature(func_def.signature.clone()),
-					env,
-					statement_idx,
-				);
-				let sig = function_type.as_function_sig().unwrap();
-
-				// Create an environment for the function
-				let mut function_env = SymbolEnv::new(
-					Some(env.get_ref()),
-					sig.return_type,
-					false,
-					false,
-					func_def.signature.phase,
-					statement_idx,
-				);
-				self.add_arguments_to_env(&func_def.parameters, &sig, &mut function_env);
-
-				if let FunctionBody::Statements(scope) = &func_def.body {
-					scope.set_env(function_env);
-
-					self.inner_scopes.push(scope);
-
-					function_type
-				} else {
-					function_type
-				}
+				// When defining an inflight closure in and preflight env we need to generate a custom resource with a `handle` method for the closure's content
+				// and evaluate this expression to and instance of that custom resource.
+				/*				if func_def.signature.phase == Phase::Inflight && env.phase == Phase::Preflight {
+					self.type_check_inflight_closure(func_def, env, statement_idx)
+				} else {*/
+				self.type_check_closure(func_def, env, statement_idx)
+				//				}
 			}
 			ExprKind::OptionalTest { optional } => {
 				let t = self.type_check_exp(optional, env, statement_idx, context);
@@ -1562,6 +1546,96 @@ impl<'a> TypeChecker<'a> {
 				}
 				self.types.bool()
 			}
+		}
+	}
+
+	// fn type_check_inflight_closure(
+	// 	&mut self,
+	// 	func_def: &crate::ast::FunctionDefinition,
+	// 	env: &SymbolEnv,
+	// 	statement_idx: usize,
+	// ) {
+	// 	// Validate we're in preflight
+	// 	assert!(env.phase == Phase::Preflight);
+	// 	// Create a a name for the generated resource
+	// 	self.generated_resource_counter += 1;
+	// 	let generated_resoruce_symb = Symbol {
+	// 		name: format!("_$GeneratedResource{}", self.generated_resource_counter),
+	// 		span: func_def.span,
+	// 	};
+	// 	// Create environment for the generated resource
+	// 	let generated_resource_env = SymbolEnv::new(None, self.types.void(), true, false, Phase::Preflight, statement_idx);
+	// 	// Add a single `handle` method to the env
+	// 	let handle_method_symb = Symbol {
+	// 		name: "handle".to_string(),
+	// 		span: func_def.span,
+	// 	};
+	// 	generated_resource_env.define(
+	// 		&handle_method_symb,
+	// 		SymbolKind::Variable(VariableInfo {
+	// 			type_: self.type_check_closure(func_def, env, statement_idx),
+	// 			reassignable: false,
+	// 			phase: Phase::Inflight,
+	// 			is_static: false,
+	// 		}),
+	// 		StatementIdx::Index(1),
+	// 	);
+	// 	// Create a resource type for the inflight closure
+	// 	let closure_resource_type = self.types.add_type(Type::Resource(Class {
+	// 		name: generated_resoruce_symb,
+	// 		parent: None,
+	// 		implements: vec![],
+	// 		env: generated_resource_env,
+	// 		should_case_convert_jsii: false,
+	// 		fqn: None,
+	// 		is_abstract: false,
+	// 		type_parameters: None,
+	// 	}));
+	// 	// Type check the `handle` method body
+	// 	self.type_check_method(
+	// 		&generated_resource_env,
+	// 		&handle_method_symb,
+	// 		env,
+	// 		statement_idx,
+	// 		func_def,
+	// 		closure_resource_type,
+	// 	)
+	// }
+
+	fn type_check_closure(
+		&mut self,
+		func_def: &crate::ast::FunctionDefinition,
+		env: &SymbolEnv,
+		statement_idx: usize,
+	) -> UnsafeRef<Type> {
+		// Create a type_checker function signature from the AST function definition
+		let function_type = self.resolve_type_annotation(
+			&TypeAnnotation::FunctionSignature(func_def.signature.clone()),
+			env,
+			statement_idx,
+		);
+		let sig = function_type.as_function_sig().unwrap();
+
+		// Create an environment for the function
+		let mut function_env = SymbolEnv::new(
+			Some(env.get_ref()),
+			sig.return_type,
+			false,
+			false,
+			func_def.signature.phase,
+			statement_idx,
+		);
+		self.add_arguments_to_env(&func_def.parameters, &sig, &mut function_env);
+
+		// Type check the function body
+		if let FunctionBody::Statements(scope) = &func_def.body {
+			scope.set_env(function_env);
+
+			self.inner_scopes.push(scope);
+
+			function_type
+		} else {
+			function_type
 		}
 	}
 
@@ -2134,134 +2208,35 @@ impl<'a> TypeChecker<'a> {
 				}
 				// Add methods to the class env
 				for (method_name, method_def) in methods.iter() {
-					let mut method_type = self.resolve_type_annotation(
-						&TypeAnnotation::FunctionSignature(method_def.signature.clone()),
+					self.add_method_to_class_env(
+						&method_def.signature,
 						env,
 						stmt.idx,
-					);
-					// use the class type as the function's "this" type
-					if let Type::Function(ref mut f) = *method_type {
-						if !method_def.is_static {
-							f.this_type = Some(class_type.clone());
-						}
-					} else {
-						panic!("Expected method type to be a function");
-					}
-					match class_env.define(
+						if method_def.is_static { None } else { Some(class_type) },
+						&mut class_env,
 						method_name,
-						SymbolKind::make_variable(method_type, false, method_def.is_static, method_def.signature.phase),
-						StatementIdx::Top,
-					) {
-						Err(type_error) => {
-							self.type_error(type_error);
-						}
-						_ => {}
-					};
+					);
 				}
 
 				// Add the constructor to the class env
-				let constructor_type = self.resolve_type_annotation(
-					&TypeAnnotation::FunctionSignature(constructor.signature.clone()),
-					env,
-					stmt.idx,
-				);
-				match class_env.define(
-					&Symbol {
-						name: WING_CONSTRUCTOR_NAME.into(),
-						span: name.span.clone(),
-					},
-					SymbolKind::make_variable(constructor_type, false, true, constructor.signature.phase),
-					StatementIdx::Top,
-				) {
-					Err(type_error) => {
-						self.type_error(type_error);
-					}
-					_ => {}
+				let init_symb = Symbol {
+					name: WING_CONSTRUCTOR_NAME.into(),
+					span: name.span.clone(),
 				};
+				self.add_method_to_class_env(&constructor.signature, env, stmt.idx, None, &mut class_env, &init_symb);
 
 				// Replace the dummy class environment with the real one before type checking the methods
 				class_type.as_mut_class_or_resource().unwrap().env = class_env;
 				let class_env = &class_type.as_class_or_resource().unwrap().env;
 
 				// Type check constructor
-				let constructor_sig = if let Type::Function(ref s) = *constructor_type {
-					s
-				} else {
-					panic!(
-						"Constructor of {} isn't defined as a function in the class environment",
-						name
-					);
-				};
-
-				// Create constructor environment and prime it with args
-				let mut constructor_env = SymbolEnv::new(
-					Some(env.get_ref()),
-					constructor_sig.return_type,
-					false,
-					true,
-					constructor.signature.phase,
-					stmt.idx,
-				);
-				self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
-				// Prime the constructor environment with `this`
-				constructor_env
-					.define(
-						&Symbol {
-							name: "this".into(),
-							span: name.span.clone(),
-						},
-						SymbolKind::make_variable(class_type, false, true, constructor_env.phase),
-						StatementIdx::Top,
-					)
-					.expect("Expected `this` to be added to constructor env");
-				constructor.statements.set_env(constructor_env);
-				// Check function scope
-				self.inner_scopes.push(&constructor.statements);
+				self.type_check_method(class_env, &init_symb, env, stmt.idx, constructor, class_type);
 
 				// TODO: handle member/method overrides in our env based on whatever rules we define in our spec
 
 				// Type check methods
 				for (method_name, method_def) in methods.iter() {
-					// Lookup the method in the class_env
-					let method_type = class_env
-						.lookup(method_name, None)
-						.expect("Expected method to be in class env")
-						.as_variable()
-						.expect("Expected method to be a variable")
-						.type_;
-
-					let method_sig = method_type
-						.as_function_sig()
-						.expect("Expected method type to be a function signature");
-
-					// Create method environment and prime it with args
-					let mut method_env = SymbolEnv::new(
-						Some(env.get_ref()),
-						method_sig.return_type,
-						false,
-						false,
-						method_sig.phase,
-						stmt.idx,
-					);
-					// Prime the method environment with `this`
-					if !method_def.is_static {
-						method_env
-							.define(
-								&Symbol {
-									name: "this".into(),
-									span: name.span.clone(),
-								},
-								SymbolKind::make_variable(class_type, false, true, method_env.phase),
-								StatementIdx::Top,
-							)
-							.expect("Expected `this` to be added to constructor env");
-					}
-					self.add_arguments_to_env(&method_def.parameters, method_sig, &mut method_env);
-
-					if let FunctionBody::Statements(scope) = &method_def.body {
-						scope.set_env(method_env);
-						self.inner_scopes.push(scope);
-					}
+					self.type_check_method(class_env, method_name, env, stmt.idx, method_def, class_type);
 				}
 
 				// Check that the class satisfies all of its interfaces
@@ -2427,6 +2402,91 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 		}
+	}
+
+	fn type_check_method<T>(
+		&mut self,
+		class_env: &SymbolEnv,
+		method_name: &Symbol,
+		env: &SymbolEnv,
+		statement_idx: usize,
+		method_def: &T,
+		class_type: UnsafeRef<Type>,
+	) where
+		T: MethodLike,
+	{
+		// Lookup the method in the class_env
+		let method_type = class_env
+			.lookup(method_name, None)
+			.expect("Expected method to be in class env")
+			.as_variable()
+			.expect("Expected method to be a variable")
+			.type_;
+
+		let method_sig = method_type
+			.as_function_sig()
+			.expect("Expected method type to be a function signature");
+
+		// Create method environment and prime it with args
+		let mut method_env = SymbolEnv::new(
+			Some(env.get_ref()),
+			method_sig.return_type,
+			false,
+			method_name.name == WING_CONSTRUCTOR_NAME,
+			method_sig.phase,
+			statement_idx,
+		);
+		// Prime the method environment with `this`
+		if !method_def.is_static() {
+			method_env
+				.define(
+					&Symbol {
+						name: "this".into(),
+						span: method_name.span.clone(),
+					},
+					SymbolKind::make_variable(class_type, false, true, method_env.phase),
+					StatementIdx::Top,
+				)
+				.expect("Expected `this` to be added to constructor env");
+		}
+		self.add_arguments_to_env(&method_def.parameters(), method_sig, &mut method_env);
+
+		if let Some(scope) = method_def.statements() {
+			scope.set_env(method_env);
+			self.inner_scopes.push(scope);
+		}
+	}
+
+	fn add_method_to_class_env(
+		&mut self,
+		method_sig: &crate::ast::FunctionSignature,
+		env: &mut SymbolEnv,
+		statement_idx: usize,
+		instance_type: Option<TypeRef>,
+		class_env: &mut SymbolEnv,
+		method_name: &Symbol,
+	) {
+		let mut method_type = self.resolve_type_annotation(
+			&TypeAnnotation::FunctionSignature(method_sig.clone()),
+			env,
+			statement_idx,
+		);
+		// use the class type as the function's "this" type (or None if static)
+		method_type
+			.as_mut_function_sig()
+			.expect("Expected method type to be a function")
+			.this_type = instance_type;
+
+		match class_env.define(
+			method_name,
+			SymbolKind::make_variable(method_type, false, instance_type.is_none(), method_sig.phase),
+			StatementIdx::Top,
+		) {
+			Err(type_error) => {
+				self.type_error(type_error);
+			}
+			_ => {}
+		};
 	}
 
 	fn add_module_to_env(
