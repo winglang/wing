@@ -52,7 +52,6 @@ pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
 
 			let mut borrowed_file = files.borrow_mut();
 			let mut borrowed_map = jsii_import_map.borrow_mut();
-			let current_jsii = borrowed_map.get(&path.to_string());
 			let mut current_jsii = borrowed_map.get(&path.to_string()).unwrap_or(vec![].as_mut()).to_vec();
 
 			let result = partial_compile(path, params.text_document.text.as_bytes(), &mut current_jsii);
