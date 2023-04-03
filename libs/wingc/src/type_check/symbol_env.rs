@@ -67,7 +67,6 @@ impl SymbolEnv {
 	pub fn new(
 		parent: Option<SymbolEnvRef>,
 		return_type: TypeRef,
-		_is_class: bool,
 		is_init: bool,
 		phase: Phase,
 		statement_idx: usize,

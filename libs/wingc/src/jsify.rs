@@ -642,6 +642,10 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			StmtKind::Class(class) => self.jsify_class(env, class, context),
+			StmtKind::Interface { .. } => {
+				// This is a no-op in JS
+				format!("")
+			}
 			StmtKind::Struct { .. } => {
 				// This is a no-op in JS
 				format!("")

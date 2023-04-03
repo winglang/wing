@@ -314,6 +314,13 @@ pub struct Class {
 }
 
 #[derive(Debug)]
+pub struct Interface {
+	pub name: Symbol,
+	pub methods: Vec<(Symbol, FunctionSignature)>,
+	pub extends: Vec<UserDefinedType>,
+}
+
+#[derive(Debug)]
 pub enum StmtKind {
 	Bring {
 		module_name: Symbol, // Reference?
@@ -350,6 +357,7 @@ pub enum StmtKind {
 	Return(Option<Expr>),
 	Scope(Scope),
 	Class(Class),
+	Interface(Interface),
 	Struct {
 		name: Symbol,
 		extends: Vec<Symbol>,

@@ -696,6 +696,13 @@ impl TypeRef {
 			None
 		}
 	}
+	fn as_mut_interface(&mut self) -> Option<&mut Interface> {
+		if let Type::Interface(ref mut iface) = **self {
+			Some(iface)
+		} else {
+			None
+		}
+	}
 
 	fn maybe_unwrap_option(&self) -> TypeRef {
 		if let Type::Optional(ref t) = **self {
@@ -888,7 +895,7 @@ impl Types {
 		// TODO: this is hack to create the top-level mapping from lib names to symbols
 		// We construct a void ref by hand since we can't call self.void() while constructing the Types struct
 		let void_ref = UnsafeRef::<Type>(&*types[void_idx] as *const Type);
-		let libraries = SymbolEnv::new(None, void_ref, false, false, Phase::Preflight, 0);
+		let libraries = SymbolEnv::new(None, void_ref, false, Phase::Preflight, 0);
 
 		Self {
 			types,
@@ -1914,7 +1921,7 @@ impl<'a> TypeChecker<'a> {
 					}
 				};
 
-				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
+				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
 				match scope_env.define(
 					&iterator,
 					SymbolKind::make_variable(iterator_type, false, true, env.phase),
@@ -1937,7 +1944,6 @@ impl<'a> TypeChecker<'a> {
 					Some(env.get_ref()),
 					env.return_type,
 					false,
-					false,
 					env.phase,
 					stmt.idx,
 				));
@@ -1958,7 +1964,6 @@ impl<'a> TypeChecker<'a> {
 					Some(env.get_ref()),
 					env.return_type,
 					false,
-					false,
 					env.phase,
 					stmt.idx,
 				));
@@ -1972,7 +1977,6 @@ impl<'a> TypeChecker<'a> {
 						Some(env.get_ref()),
 						env.return_type,
 						false,
-						false,
 						env.phase,
 						stmt.idx,
 					));
@@ -1983,7 +1987,6 @@ impl<'a> TypeChecker<'a> {
 					else_scope.set_env(SymbolEnv::new(
 						Some(env.get_ref()),
 						env.return_type,
-						false,
 						false,
 						env.phase,
 						stmt.idx,
@@ -2064,7 +2067,6 @@ impl<'a> TypeChecker<'a> {
 					Some(env.get_ref()),
 					env.return_type,
 					false,
-					false,
 					env.phase,
 					stmt.idx,
 				));
@@ -2128,7 +2130,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-				let dummy_env = SymbolEnv::new(None, self.types.void(), true, false, env.phase, stmt.idx);
+				let dummy_env = SymbolEnv::new(None, self.types.void(), false, env.phase, stmt.idx);
 
 				let impl_interfaces = implements
 					.iter()
@@ -2137,7 +2139,7 @@ impl<'a> TypeChecker<'a> {
 						if t.as_interface().is_some() {
 							Some(t)
 						} else {
-							self.general_type_error(format!("Class {}'s implements \"{}\" is not an interface", name, t));
+							self.general_type_error(format!("Expected an interface, instead found type \"{}\"", t));
 							None
 						}
 					})
@@ -2167,7 +2169,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create a the real class environment to be filled with the class AST types
-				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), true, false, env.phase, stmt.idx);
+				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), false, env.phase, stmt.idx);
 
 				// Add fields to the class env
 				for field in fields.iter() {
@@ -2258,13 +2260,81 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 			}
+			StmtKind::Interface(AstInterface { name, methods, extends }) => {
+				// Create environment representing this interface, for now it'll be empty just so we can support referencing ourselves from the interface definition.
+				let dummy_env = SymbolEnv::new(None, self.types.void(), false, env.phase, stmt.idx);
+
+				let extend_interfaces = extends
+					.iter()
+					.filter_map(|i| {
+						let t = resolve_user_defined_type(i, env, stmt.idx).unwrap_or_else(|e| self.type_error(e));
+						if t.as_interface().is_some() {
+							Some(t)
+						} else {
+							// The type checker resolves non-existing definitions to `any`, so we avoid duplicate errors by checking for that here
+							if !t.is_anything() {
+								self.general_type_error(format!("Expected an interface, instead found type \"{}\"", t));
+							}
+							None
+						}
+					})
+					.collect::<Vec<_>>();
+
+				// Create the interface type and add it to the current environment (so interface implementation can reference itself)
+				let interface_spec = Interface {
+					name: name.clone(),
+					env: dummy_env,
+					extends: extend_interfaces.clone(),
+				};
+				let mut interface_type = self.types.add_type(Type::Interface(interface_spec));
+				match env.define(name, SymbolKind::Type(interface_type), StatementIdx::Top) {
+					Err(type_error) => {
+						self.type_error(type_error);
+					}
+					_ => {}
+				};
+
+				// Create the real interface environment to be filled with the interface AST types
+				let mut interface_env = SymbolEnv::new(None, self.types.void(), false, env.phase, stmt.idx);
+
+				// Add methods to the interface env
+				for (method_name, sig) in methods.iter() {
+					let mut method_type =
+						self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(sig.clone()), env, stmt.idx);
+					// use the interface type as the function's "this" type
+					if let Type::Function(ref mut f) = *method_type {
+						f.this_type = Some(interface_type.clone());
+					} else {
+						panic!("Expected method type to be a function");
+					}
+
+					match interface_env.define(
+						method_name,
+						SymbolKind::make_variable(method_type, false, false, sig.phase),
+						StatementIdx::Top,
+					) {
+						Err(type_error) => {
+							self.type_error(type_error);
+						}
+						_ => {}
+					};
+				}
+
+				// add methods from all extended interfaces to the interface env
+				if let Err(e) = add_parent_members_to_iface_env(&extend_interfaces, name, &mut interface_env) {
+					self.type_error(e);
+				}
+
+				// Replace the dummy interface environment with the real one before type checking the methods
+				interface_type.as_mut_interface().unwrap().env = interface_env;
+			}
 			StmtKind::Struct { name, extends, members } => {
 				// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
 				//   If we encounter an existing member with the same name and type we skip it, if the types are different we
 				//   fail type checking.
 
 				// Create an environment for the struct
-				let mut struct_env = SymbolEnv::new(None, self.types.void(), true, false, env.phase, stmt.idx);
+				let mut struct_env = SymbolEnv::new(None, self.types.void(), false, env.phase, stmt.idx);
 
 				// Add fields to the struct env
 				for field in members.iter() {
@@ -2345,13 +2415,13 @@ impl<'a> TypeChecker<'a> {
 				finally_statements,
 			} => {
 				// Create a new environment for the try block
-				let try_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
+				let try_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
 				try_statements.set_env(try_env);
 				self.inner_scopes.push(try_statements);
 
 				// Create a new environment for the catch block
 				if let Some(catch_block) = catch_block {
-					let mut catch_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
+					let mut catch_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
 
 					// Add the exception variable to the catch block
 					if let Some(exception_var) = &catch_block.exception_var {
@@ -2372,7 +2442,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Create a new environment for the finally block
 				if let Some(finally_statements) = finally_statements {
-					let finally_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
+					let finally_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
 					finally_statements.set_env(finally_env);
 					self.inner_scopes.push(finally_statements);
 				}
@@ -2529,7 +2599,7 @@ impl<'a> TypeChecker<'a> {
 	///
 	/// #Arguments
 	///
-	/// * `args` - List of aruments to add, each element is a tuple of the arugment symbol and whether it's
+	/// * `args` - List of arguments to add, each element is a tuple of the argument symbol and whether it's
 	///   reassignable arg or not. Note that the argument types are figured out from `sig`.
 	/// * `sig` - The function signature (used to figure out the type of each argument).
 	/// * `env` - The function's environment to prime with the args.
@@ -2593,14 +2663,7 @@ impl<'a> TypeChecker<'a> {
 			types_map.insert(format!("{o}"), (*o, *n));
 		}
 
-		let new_env = SymbolEnv::new(
-			None,
-			original_type_class.env.return_type,
-			true,
-			false,
-			Phase::Independent,
-			0,
-		);
+		let new_env = SymbolEnv::new(None, original_type_class.env.return_type, false, Phase::Independent, 0);
 		let tt = Type::Class(Class {
 			name: original_type_class.name.clone(),
 			env: new_env,
@@ -3048,9 +3111,6 @@ fn add_parent_members_to_struct_env(
 				.expect("Expected struct member to be a variable")
 				.type_;
 			if let Some(existing_type) = struct_env.try_lookup(&parent_member_name, None) {
-				// We compare types in both directions to make sure they are exactly the same type and not inheriting from each other
-				// TODO: does this make sense? We should add an `is_a()` methdod to `Type` to check if a type is a subtype and use that
-				//   when we want to check for subtypes and use equality for strict comparisons.
 				let existing_type = existing_type
 					.as_variable()
 					.expect("Expected struct member to be a variable")
@@ -3071,6 +3131,60 @@ fn add_parent_members_to_struct_env(
 						span: name.span.clone(),
 					},
 					SymbolKind::make_variable(member_type, false, false, struct_env.phase),
+					StatementIdx::Top,
+				)?;
+			}
+		}
+	}
+	Ok(())
+}
+
+// TODO: dup code with `add_parent_members_to_struct_env`
+fn add_parent_members_to_iface_env(
+	extends_types: &Vec<TypeRef>,
+	name: &Symbol,
+	iface_env: &mut SymbolEnv,
+) -> Result<(), TypeError> {
+	// Add members of all parents to the interface's environment
+	for parent_type in extends_types.iter() {
+		let parent_iface = if let Some(parent_iface) = parent_type.as_interface() {
+			parent_iface
+		} else {
+			return Err(TypeError {
+				message: format!(
+					"Type \"{}\" extends \"{}\" which should be an interface",
+					name.name, parent_type
+				),
+				span: name.span.clone(),
+			});
+		};
+		// Add each member of current parent to the interface's environment (if it wasn't already added by a previous parent)
+		for (parent_member_name, parent_member, _) in parent_iface.env.iter(true) {
+			let member_type = parent_member
+				.as_variable()
+				.expect("Expected interface member to be a variable")
+				.type_;
+			if let Some(existing_type) = iface_env.try_lookup(&parent_member_name, None) {
+				let existing_type = existing_type
+					.as_variable()
+					.expect("Expected interface member to be a variable")
+					.type_;
+				if !existing_type.is_same_type_as(&member_type) {
+					return Err(TypeError {
+						span: name.span.clone(),
+						message: format!(
+							"Interface \"{}\" extends \"{}\" but has a conflicting member \"{}\" ({} != {})",
+							name, parent_type, parent_member_name, member_type, member_type
+						),
+					});
+				}
+			} else {
+				iface_env.define(
+					&Symbol {
+						name: parent_member_name,
+						span: name.span.clone(),
+					},
+					SymbolKind::make_variable(member_type, false, true, iface_env.phase),
 					StatementIdx::Top,
 				)?;
 			}
