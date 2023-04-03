@@ -203,7 +203,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
-const $wing_test = process.env.WING_TEST === \\"true\\";
+const $wing_is_test = process.env.WING_IS_TEST === \\"true\\";
 
 function __app(target) {
 	switch (target) {
@@ -226,9 +226,9 @@ const $AppBase = __app(process.env.WING_TARGET);
 
 const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.core.Resource {
-	constructor(scope, id) {
-		super(scope, id);
-		class Foo extends $stdlib.core.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    class Foo extends $stdlib.core.Resource {
 	constructor(scope, id, ) {
 	super(scope, id);
 {
@@ -242,8 +242,8 @@ class $Root extends $stdlib.core.Resource {
 }
 }
 Foo._annotateInflight(\\"handle\\", {});
-		const fn = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"cloud.Function\\",new Foo(this,\\"Foo\\"));
-		this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    const fn = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"cloud.Function\\",new Foo(this,\\"Foo\\"));
+    this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
   code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.917572587cf19c37eec89740530b1f8d71072e09ccaeb9cbd4a3121ba0794d2a/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
   bindings: {
     fn: {
@@ -252,23 +252,23 @@ Foo._annotateInflight(\\"handle\\", {});
     },
   }
 }));
-	}
+  }
 }
 
 class $App extends $AppBase {
-	constructor() {
-		super({ outdir: $outdir, name: \\"resource_as_inflight_literal\\", plugins: $plugins });
-		if ($wing_test) {
-			new $Root(this, \\"env0\\");
-			const $test_runner = this.testRunner;
-			const $tests = $test_runner.findTests();
-			for (let $i = 1; $i < $tests.length; $i++) {
-				new $Root(this, \\"env\\" + $i);
-			}
-		} else {
-			new $Root(this, \\"Default\\");
-		}
-	}
+  constructor() {
+    super({ outdir: $outdir, name: \\"resource_as_inflight_literal\\", plugins: $plugins });
+    if ($wing_is_test) {
+      new $Root(this, \\"env0\\");
+      const $test_runner = this.testRunner;
+      const $tests = $test_runner.findTests();
+      for (let $i = 1; $i < $tests.length; $i++) {
+        new $Root(this, \\"env\\" + $i);
+      }
+    } else {
+      new $Root(this, \\"Default\\");
+    }
+  }
 }
 
 new $App().synth();"

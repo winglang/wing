@@ -34,7 +34,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
-const $wing_test = process.env.WING_TEST === \\"true\\";
+const $wing_is_test = process.env.WING_IS_TEST === \\"true\\";
 
 function __app(target) {
 	switch (target) {
@@ -56,10 +56,10 @@ function __app(target) {
 const $AppBase = __app(process.env.WING_TARGET);
 
 class $Root extends $stdlib.core.Resource {
-	constructor(scope, id) {
-		super(scope, id);
-		let x = \\"\\";
-		try {
+  constructor(scope, id) {
+    super(scope, id);
+    let x = \\"\\";
+    try {
 	{
   {((msg) => {throw new Error(msg)})(\\"hello\\")};
   x = \\"no way I got here\\";
@@ -76,8 +76,8 @@ class $Root extends $stdlib.core.Resource {
   x = \\"finally\\";
 };
 }
-		{((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === \\"finally\\")'\`)})((x === \\"finally\\"))};
-		try {
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === \\"finally\\")'\`)})((x === \\"finally\\"))};
+    try {
 	{
   x = \\"I got here\\";
 }
@@ -92,8 +92,8 @@ class $Root extends $stdlib.core.Resource {
   x = \\"finally\\";
 };
 }
-		{((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === \\"finally\\")'\`)})((x === \\"finally\\"))};
-		try {
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === \\"finally\\")'\`)})((x === \\"finally\\"))};
+    try {
 	{
   {((msg) => {throw new Error(msg)})(\\"hello\\")};
 }
@@ -105,8 +105,8 @@ class $Root extends $stdlib.core.Resource {
   x = \\"finally with no catch\\";
 };
 }
-		{((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === \\"finally with no catch\\")'\`)})((x === \\"finally with no catch\\"))};
-		try {
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === \\"finally with no catch\\")'\`)})((x === \\"finally with no catch\\"))};
+    try {
 	{
 }
 } catch  {
@@ -117,8 +117,8 @@ class $Root extends $stdlib.core.Resource {
   x = \\"finally with no catch and no exception\\";
 };
 }
-		{((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === \\"finally with no catch and no exception\\")'\`)})((x === \\"finally with no catch and no exception\\"))};
-		{((cond) => {if (!cond) throw new Error(\`assertion failed: '((( () =>  {
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === \\"finally with no catch and no exception\\")'\`)})((x === \\"finally with no catch and no exception\\"))};
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '((( () =>  {
 	{
   try {
   	{
@@ -147,7 +147,7 @@ class $Root extends $stdlib.core.Resource {
   }
 }
 })()) === 1))};
-		{((cond) => {if (!cond) throw new Error(\`assertion failed: '((( () =>  {
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '((( () =>  {
 	{
   try {
   	{
@@ -178,7 +178,7 @@ class $Root extends $stdlib.core.Resource {
   }
 }
 })()) === 2))};
-		{((cond) => {if (!cond) throw new Error(\`assertion failed: '((( () =>  {
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '((( () =>  {
 	{
   try {
   	{
@@ -207,23 +207,23 @@ class $Root extends $stdlib.core.Resource {
   }
 }
 })()) === 3))};
-	}
+  }
 }
 
 class $App extends $AppBase {
-	constructor() {
-		super({ outdir: $outdir, name: \\"try_catch\\", plugins: $plugins });
-		if ($wing_test) {
-			new $Root(this, \\"env0\\");
-			const $test_runner = this.testRunner;
-			const $tests = $test_runner.findTests();
-			for (let $i = 1; $i < $tests.length; $i++) {
-				new $Root(this, \\"env\\" + $i);
-			}
-		} else {
-			new $Root(this, \\"Default\\");
-		}
-	}
+  constructor() {
+    super({ outdir: $outdir, name: \\"try_catch\\", plugins: $plugins });
+    if ($wing_is_test) {
+      new $Root(this, \\"env0\\");
+      const $test_runner = this.testRunner;
+      const $tests = $test_runner.findTests();
+      for (let $i = 1; $i < $tests.length; $i++) {
+        new $Root(this, \\"env\\" + $i);
+      }
+    } else {
+      new $Root(this, \\"Default\\");
+    }
+  }
 }
 
 new $App().synth();"

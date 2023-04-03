@@ -49,7 +49,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
-const $wing_test = process.env.WING_TEST === \\"true\\";
+const $wing_is_test = process.env.WING_IS_TEST === \\"true\\";
 
 function __app(target) {
 	switch (target) {
@@ -72,9 +72,9 @@ const $AppBase = __app(process.env.WING_TARGET);
 
 const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.core.Resource {
-	constructor(scope, id) {
-		super(scope, id);
-		class Doubler extends $stdlib.core.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    class Doubler extends $stdlib.core.Resource {
 	constructor(scope, id, func) {
 	super(scope, id);
 {
@@ -89,28 +89,28 @@ class $Root extends $stdlib.core.Resource {
 }
 }
 Doubler._annotateInflight(\\"invoke\\", {\\"this.func\\": { ops: [\\"handle\\"] }});
-		const fn = new Doubler(this,\\"Doubler\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    const fn = new Doubler(this,\\"Doubler\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
   code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.0f7e6b0c659cb020f4ca84ac6c8de140b582a9fb74aaffae876e8edba62812f1/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
   bindings: {
   }
 }));
-	}
+  }
 }
 
 class $App extends $AppBase {
-	constructor() {
-		super({ outdir: $outdir, name: \\"doubler\\", plugins: $plugins });
-		if ($wing_test) {
-			new $Root(this, \\"env0\\");
-			const $test_runner = this.testRunner;
-			const $tests = $test_runner.findTests();
-			for (let $i = 1; $i < $tests.length; $i++) {
-				new $Root(this, \\"env\\" + $i);
-			}
-		} else {
-			new $Root(this, \\"Default\\");
-		}
-	}
+  constructor() {
+    super({ outdir: $outdir, name: \\"doubler\\", plugins: $plugins });
+    if ($wing_is_test) {
+      new $Root(this, \\"env0\\");
+      const $test_runner = this.testRunner;
+      const $tests = $test_runner.findTests();
+      for (let $i = 1; $i < $tests.length; $i++) {
+        new $Root(this, \\"env\\" + $i);
+      }
+    } else {
+      new $Root(this, \\"Default\\");
+    }
+  }
 }
 
 new $App().synth();"

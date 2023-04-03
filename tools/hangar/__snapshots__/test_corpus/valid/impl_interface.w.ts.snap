@@ -76,7 +76,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
-const $wing_test = process.env.WING_TEST === \\"true\\";
+const $wing_is_test = process.env.WING_IS_TEST === \\"true\\";
 
 function __app(target) {
 	switch (target) {
@@ -99,9 +99,9 @@ const $AppBase = __app(process.env.WING_TARGET);
 
 const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.core.Resource {
-	constructor(scope, id) {
-		super(scope, id);
-		class A extends $stdlib.core.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    class A extends $stdlib.core.Resource {
 	constructor(scope, id, ) {
 	super(scope, id);
 {
@@ -115,7 +115,7 @@ class $Root extends $stdlib.core.Resource {
 }
 }
 A._annotateInflight(\\"handle\\", {});
-		class r extends $stdlib.core.Resource {
+    class r extends $stdlib.core.Resource {
 	constructor(scope, id, ) {
 	super(scope, id);
 {
@@ -138,7 +138,7 @@ A._annotateInflight(\\"handle\\", {});
 }
 }
 r._annotateInflight(\\"method_2\\", {});
-		class Dog extends $stdlib.core.Resource {
+    class Dog extends $stdlib.core.Resource {
 	constructor(scope, id, ) {
 	super(scope, id);
 {
@@ -152,8 +152,8 @@ r._annotateInflight(\\"method_2\\", {});
 }
 }
 Dog._annotateInflight(\\"eat\\", {});
-		const x = new A(this,\\"A\\");
-		const y = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    const x = new A(this,\\"A\\");
+    const y = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
   code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.a5455e5c5848cfc293fcb861d9393d32e29a39f8dc8ac79c19dd5289279762fe/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
   bindings: {
     x: {
@@ -162,24 +162,24 @@ Dog._annotateInflight(\\"eat\\", {});
     },
   }
 });
-		const z = new Dog(this,\\"Dog\\");
-	}
+    const z = new Dog(this,\\"Dog\\");
+  }
 }
 
 class $App extends $AppBase {
-	constructor() {
-		super({ outdir: $outdir, name: \\"impl_interface\\", plugins: $plugins });
-		if ($wing_test) {
-			new $Root(this, \\"env0\\");
-			const $test_runner = this.testRunner;
-			const $tests = $test_runner.findTests();
-			for (let $i = 1; $i < $tests.length; $i++) {
-				new $Root(this, \\"env\\" + $i);
-			}
-		} else {
-			new $Root(this, \\"Default\\");
-		}
-	}
+  constructor() {
+    super({ outdir: $outdir, name: \\"impl_interface\\", plugins: $plugins });
+    if ($wing_is_test) {
+      new $Root(this, \\"env0\\");
+      const $test_runner = this.testRunner;
+      const $tests = $test_runner.findTests();
+      for (let $i = 1; $i < $tests.length; $i++) {
+        new $Root(this, \\"env\\" + $i);
+      }
+    } else {
+      new $Root(this, \\"Default\\");
+    }
+  }
 }
 
 new $App().synth();"

@@ -375,7 +375,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
-const $wing_test = process.env.WING_TEST === \\"true\\";
+const $wing_is_test = process.env.WING_IS_TEST === \\"true\\";
 
 function __app(target) {
 	switch (target) {
@@ -398,9 +398,9 @@ const $AppBase = __app(process.env.WING_TARGET);
 
 const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.core.Resource {
-	constructor(scope, id) {
-		super(scope, id);
-		class First extends $stdlib.core.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    class First extends $stdlib.core.Resource {
 	constructor(scope, id, ) {
 	super(scope, id);
 {
@@ -415,7 +415,7 @@ class $Root extends $stdlib.core.Resource {
 }
 }
 
-		class Another extends $stdlib.core.Resource {
+    class Another extends $stdlib.core.Resource {
 	constructor(scope, id, ) {
 	super(scope, id);
 {
@@ -433,7 +433,7 @@ const my_field_client = this._lift(this.my_field);
 }
 Another._annotateInflight(\\"meaning_of_life\\", {});
 Another._annotateInflight(\\"another_func\\", {});
-		class MyResource extends $stdlib.core.Resource {
+    class MyResource extends $stdlib.core.Resource {
 	constructor(scope, id, external_bucket, external_num) {
 	super(scope, id);
 {
@@ -481,9 +481,9 @@ MyResource._annotateInflight(\\"test_expression_recursive\\", {\\"this.my_queue\
 MyResource._annotateInflight(\\"test_external\\", {\\"this.ext_bucket\\": { ops: [\\"list\\"] },\\"this.ext_num\\": { ops: [] }});
 MyResource._annotateInflight(\\"test_user_defined_resource\\", {\\"this.another\\": { ops: [\\"another_func\\",\\"meaning_of_life\\"] }});
 MyResource._annotateInflight(\\"test_inflight_field\\", {});
-		const b = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
-		const r = new MyResource(this,\\"MyResource\\",b,12);
-		this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    const b = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
+    const r = new MyResource(this,\\"MyResource\\",b,12);
+    this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
   code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.036fd96aa6897235ab34914959c244c2e2cd336a59d3482f555cb6f4da320b4c/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
   bindings: {
     r: {
@@ -492,23 +492,23 @@ MyResource._annotateInflight(\\"test_inflight_field\\", {});
     },
   }
 }));
-	}
+  }
 }
 
 class $App extends $AppBase {
-	constructor() {
-		super({ outdir: $outdir, name: \\"resource_captures\\", plugins: $plugins });
-		if ($wing_test) {
-			new $Root(this, \\"env0\\");
-			const $test_runner = this.testRunner;
-			const $tests = $test_runner.findTests();
-			for (let $i = 1; $i < $tests.length; $i++) {
-				new $Root(this, \\"env\\" + $i);
-			}
-		} else {
-			new $Root(this, \\"Default\\");
-		}
-	}
+  constructor() {
+    super({ outdir: $outdir, name: \\"resource_captures\\", plugins: $plugins });
+    if ($wing_is_test) {
+      new $Root(this, \\"env0\\");
+      const $test_runner = this.testRunner;
+      const $tests = $test_runner.findTests();
+      for (let $i = 1; $i < $tests.length; $i++) {
+        new $Root(this, \\"env\\" + $i);
+      }
+    } else {
+      new $Root(this, \\"Default\\");
+    }
+  }
 }
 
 new $App().synth();"
