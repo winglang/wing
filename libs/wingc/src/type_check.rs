@@ -1526,9 +1526,7 @@ impl<'a> TypeChecker<'a> {
 
 				container_type
 			}
-			ExprKind::FunctionClosure(func_def) => {
-				self.type_check_closure(func_def, env)
-			}
+			ExprKind::FunctionClosure(func_def) => self.type_check_closure(func_def, env),
 			ExprKind::OptionalTest { optional } => {
 				let t = self.type_check_exp(optional, env);
 				if !t.is_option() {
