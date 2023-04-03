@@ -8,6 +8,7 @@ use crate::capture::CaptureVisitor;
 use crate::lsp::notifications::send_diagnostics;
 use crate::parser::Parser;
 use crate::type_check;
+use crate::type_check::jsii_importer::JsiiImportSpec;
 use crate::visit::Visit;
 use crate::{ast::Scope, diagnostic::Diagnostics, type_check::Types, wasm_util::ptr_to_string};
 
@@ -23,6 +24,7 @@ pub struct FileData {
 	pub scope: Box<Scope>,
 	/// The universal type collection for the scope. This is saved to ensure references live long enough.
 	pub types: Types,
+	pub jsii_imports: Vec<JsiiImportSpec>,
 }
 
 thread_local! {
@@ -46,9 +48,16 @@ pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
 		let uri = params.text_document.uri;
 		let uri_path = uri.to_file_path().unwrap();
 		let path = uri_path.to_str().unwrap();
-		let result = partial_compile(path, params.text_document.text.as_bytes());
+
+		let mut borrowed_file = files.borrow_mut();
+		let current_data = borrowed_file.get(&uri);
+		let result = partial_compile(
+			path,
+			params.text_document.text.as_bytes(),
+			&current_data.map(|data| &data.jsii_imports),
+		);
 		send_diagnostics(&uri, &result.diagnostics);
-		files.borrow_mut().insert(uri, result);
+		borrowed_file.insert(uri, result);
 	});
 }
 
@@ -67,15 +76,21 @@ pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
 		let uri_path = uri.to_file_path().unwrap();
 		let path = uri_path.to_str().unwrap();
 
-		let result = partial_compile(path, params.content_changes[0].text.as_bytes());
+		let mut borrowed_file = files.borrow_mut();
+		let current_data = borrowed_file.get(&uri);
+		let result = partial_compile(
+			path,
+			params.content_changes[0].text.as_bytes(),
+			&current_data.map(|data| &data.jsii_imports),
+		);
 
 		send_diagnostics(&uri, &result.diagnostics);
-		files.borrow_mut().insert(uri, result);
+		borrowed_file.insert(uri, result);
 	});
 }
 
 /// Runs several phases of the wing compile on a file, including: parsing, type checking, and capturing
-fn partial_compile(source_file: &str, text: &[u8]) -> FileData {
+fn partial_compile(source_file: &str, text: &[u8], existing_data: &Option<&Vec<JsiiImportSpec>>) -> FileData {
 	let mut types = type_check::Types::new();
 
 	let language = tree_sitter_wing::language();
@@ -95,7 +110,13 @@ fn partial_compile(source_file: &str, text: &[u8]) -> FileData {
 	// Otherwise, the scope will be moved and we'll be left with dangling references elsewhere
 	let mut scope = Box::new(wing_parser.wingit(&tree.root_node()));
 
-	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file));
+	let existing_jsii_imports = existing_data.map(|data| data);
+	// make new vec
+	let empty = vec![];
+	let mut new_dev: Vec<&JsiiImportSpec> = vec![];
+	new_dev.extend(existing_jsii_imports.unwrap_or(&empty).iter());
+
+	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file), Some(new_dev));
 
 	// Analyze inflight captures
 	let mut capture_visitor = CaptureVisitor::new();
@@ -103,7 +124,7 @@ fn partial_compile(source_file: &str, text: &[u8]) -> FileData {
 
 	let mut diagnostics = Diagnostics::new();
 	diagnostics.extend(wing_parser.diagnostics.into_inner());
-	diagnostics.extend(type_diag);
+	diagnostics.extend(type_diag.0);
 	diagnostics.extend(capture_visitor.diagnostics);
 
 	return FileData {
@@ -112,5 +133,6 @@ fn partial_compile(source_file: &str, text: &[u8]) -> FileData {
 		diagnostics,
 		scope,
 		types,
+		jsii_imports: type_diag.1,
 	};
 }

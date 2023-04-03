@@ -42,6 +42,7 @@ impl JsiiInterface for jsii::InterfaceType {
 	}
 }
 
+#[derive(Clone)]
 pub struct JsiiImportSpec {
 	/// An interface to access the types in the JSII library loaded with wingii.
 	pub type_system: TypeSystem,
@@ -792,7 +793,7 @@ impl<'a> JsiiImporter<'a> {
 			// Import type
 			self.setup_namespaces_for(&type_fqn);
 
-			break;
+			// break;
 		}
 
 		// Create a symbol in the environment for the imported module

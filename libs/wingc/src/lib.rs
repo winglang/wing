@@ -8,6 +8,7 @@ use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use capture::CaptureVisitor;
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
 use jsify::JSifier;
+use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
@@ -164,7 +165,12 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 	(scope, wing_parser.diagnostics.into_inner())
 }
 
-pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> Diagnostics {
+pub fn type_check(
+	scope: &mut Scope,
+	types: &mut Types,
+	source_path: &Path,
+	jsii_imports: Option<Vec<&JsiiImportSpec>>,
+) -> (Diagnostics, Vec<JsiiImportSpec>) {
 	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
 	scope.set_env(env);
 
@@ -220,11 +226,14 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> D
 	);
 
 	let mut tc = TypeChecker::new(types, source_path);
+	for import in jsii_imports.unwrap_or_default() {
+		tc.add_jsii_import_spec(import.to_owned());
+	}
 	tc.add_globals(scope);
 
 	tc.type_check_scope(scope);
 
-	tc.diagnostics.into_inner()
+	(tc.diagnostics.into_inner(), tc.jsii_imports)
 }
 
 // TODO: refactor this (why is scope needed?) (move to separate module?)
@@ -273,11 +282,11 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 	let (mut scope, parse_diagnostics) = parse(&source_path);
 
 	// Type check everything and build typed symbol environment
-	let type_check_diagnostics = if scope.statements.len() > 0 {
-		type_check(&mut scope, &mut types, &source_path)
+	let type_check_data = if scope.statements.len() > 0 {
+		type_check(&mut scope, &mut types, &source_path, None)
 	} else {
 		// empty scope, no type checking needed
-		Diagnostics::new()
+		(Diagnostics::new(), vec![])
 	};
 
 	// Validate that every Expr has an evaluated_type
@@ -286,11 +295,11 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 
 	// Print diagnostics
 	print_diagnostics(&parse_diagnostics);
-	print_diagnostics(&type_check_diagnostics);
+	print_diagnostics(&type_check_data.0);
 
 	// Collect all diagnostics
 	let mut diagnostics = parse_diagnostics;
-	diagnostics.extend(type_check_diagnostics);
+	diagnostics.extend(type_check_data.0);
 
 	// Analyze inflight captures
 	let mut capture_visitor = CaptureVisitor::new();

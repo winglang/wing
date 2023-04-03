@@ -1,4 +1,4 @@
-mod jsii_importer;
+pub(crate) mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, Interface as AstInterface,
@@ -993,7 +993,7 @@ pub struct TypeChecker<'a> {
 	source_path: &'a Path,
 
 	pub diagnostics: RefCell<Diagnostics>,
-	jsii_imports: Vec<JsiiImportSpec>,
+	pub jsii_imports: Vec<JsiiImportSpec>,
 }
 
 impl<'a> TypeChecker<'a> {
@@ -2520,64 +2520,76 @@ impl<'a> TypeChecker<'a> {
 		// the statement that initiated the bring, if any
 		stmt: Option<&Stmt>,
 	) {
-		let mut wingii_types = wingii::type_system::TypeSystem::new();
+		let mut jsii = self
+			.jsii_imports
+			.iter()
+			.find(|j| j.assembly_name == library_name && j.alias.name == alias.name);
 
-		// Loading the SDK is handled different from loading any other jsii modules because with the SDK we provide an exact
-		// location to locate the SDK, whereas for the other modules we need to search for them from the source directory.
-		let assembly_name = if library_name == WINGSDK_ASSEMBLY_NAME {
-			// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
-			let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
-			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
-				root: true,
-				deps: false,
+		if jsii.is_none() {
+			let mut wingii_types = wingii::type_system::TypeSystem::new();
+
+			// Loading the SDK is handled different from loading any other jsii modules because with the SDK we provide an exact
+			// location to locate the SDK, whereas for the other modules we need to search for them from the source directory.
+			let assembly_name = if library_name == WINGSDK_ASSEMBLY_NAME {
+				// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
+				let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
+				let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
+					root: true,
+					deps: false,
+				};
+				let assembly_name = match wingii_types.load(manifest_root.as_str(), Some(wingii_loader_options)) {
+					Ok(name) => name,
+					Err(type_error) => {
+						self.type_error(TypeError {
+							message: format!("Cannot locate Wing standard library (checking \"{}\"", manifest_root),
+							span: stmt.map(|s| s.span.clone()).unwrap_or_default(),
+						});
+						debug!("{:?}", type_error);
+						return;
+					}
+				};
+
+				assembly_name
+			} else {
+				let wingii_loader_options = wingii::type_system::AssemblyLoadOptions { root: true, deps: true };
+				let source_dir = self.source_path.parent().unwrap().to_str().unwrap();
+				let assembly_name = match wingii_types.load_dep(library_name.as_str(), source_dir, &wingii_loader_options) {
+					Ok(name) => name,
+					Err(type_error) => {
+						self.type_error(TypeError {
+							message: format!("Cannot find module \"{}\" in source directory", library_name),
+							span: stmt.map(|s| s.span.clone()).unwrap_or_default(),
+						});
+						debug!("{:?}", type_error);
+						return;
+					}
+				};
+				assembly_name
 			};
-			let assembly_name = match wingii_types.load(manifest_root.as_str(), Some(wingii_loader_options)) {
-				Ok(name) => name,
-				Err(type_error) => {
-					self.type_error(TypeError {
-						message: format!("Cannot locate Wing standard library (checking \"{}\"", manifest_root),
-						span: stmt.map(|s| s.span.clone()).unwrap_or_default(),
-					});
-					debug!("{:?}", type_error);
-					return;
-				}
-			};
 
-			assembly_name
-		} else {
-			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions { root: true, deps: true };
-			let source_dir = self.source_path.parent().unwrap().to_str().unwrap();
-			let assembly_name = match wingii_types.load_dep(library_name.as_str(), source_dir, &wingii_loader_options) {
-				Ok(name) => name,
-				Err(type_error) => {
-					self.type_error(TypeError {
-						message: format!("Cannot find module \"{}\" in source directory", library_name),
-						span: stmt.map(|s| s.span.clone()).unwrap_or_default(),
-					});
-					debug!("{:?}", type_error);
-					return;
-				}
-			};
-			assembly_name
-		};
+			debug!("Loaded JSII assembly {}", assembly_name);
 
-		debug!("Loaded JSII assembly {}", assembly_name);
+			self.jsii_imports.push(JsiiImportSpec {
+				type_system: wingii_types,
+				assembly_name: assembly_name.to_string(),
+				namespace_filter,
+				alias: alias.clone(),
+				import_statement_idx: stmt.map(|s| s.idx).unwrap_or(0),
+			});
 
-		let jsii = JsiiImportSpec {
-			type_system: wingii_types,
-			assembly_name: assembly_name.to_string(),
-			namespace_filter,
-			alias: alias.clone(),
-			import_statement_idx: stmt.map(|s| s.idx).unwrap_or(0),
-		};
-		let mut importer = JsiiImporter::new(&jsii, self.types);
+			jsii = self
+				.jsii_imports
+				.iter()
+				.find(|j| j.assembly_name == assembly_name && j.alias.name == alias.name)
+		}
 
-		if assembly_name == WINGSDK_ASSEMBLY_NAME {
+		let jsii = jsii.expect("JSII Loaded");
+		let mut importer = JsiiImporter::new(jsii, self.types);
+
+		if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME {
 			importer.deep_import_submodule_to_env(WINGSDK_STD_MODULE);
 		}
 		importer.import_submodules_to_env(env);
-
-		self.jsii_imports.push(jsii);
 	}
 
 	/// Add function arguments to the function's environment
