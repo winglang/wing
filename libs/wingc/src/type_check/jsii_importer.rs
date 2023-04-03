@@ -61,9 +61,6 @@ pub struct JsiiImporter<'a> {
 	/// If type definitions in wing are always location agnostic this doesn't really matter and we
 	/// might be able to remove this.
 	import_statement_idx: usize,
-	/// The symbol environment to add imported symbols to. Note that all symbols will be added to
-	/// some `Namespace` under this `env`.
-	env: &'a mut SymbolEnv,
 }
 
 impl<'a> JsiiImporter<'a> {
@@ -74,7 +71,6 @@ impl<'a> JsiiImporter<'a> {
 		alias: &'a Symbol,
 		wing_types: &'a mut Types,
 		import_statement_idx: usize,
-		env: &'a mut SymbolEnv,
 	) -> Self {
 		Self {
 			jsii_types,
@@ -83,7 +79,6 @@ impl<'a> JsiiImporter<'a> {
 			alias,
 			wing_types,
 			import_statement_idx,
-			env,
 		}
 	}
 
@@ -172,13 +167,23 @@ impl<'a> JsiiImporter<'a> {
 			.unwrap()
 	}
 
-	fn import_type(&mut self, type_fqn: &FQN) {
+	pub fn import_type(&mut self, type_fqn: &FQN) {
 		// Hack: if the class name is a construct base then we treat this class as a resource and don't need to define it
 		if is_construct_base(&type_fqn) {
 			return;
 		}
 
 		self.setup_namespaces_for(&type_fqn);
+
+		// check if type is already imported
+		if self
+			.wing_types
+			.libraries
+			.lookup_nested_str(type_fqn.as_str(), None)
+			.is_ok()
+		{
+			return;
+		}
 
 		// Hack: if the type is "constructs.IConstruct", we import it manually
 		// this is done so we can avoid loading the constructs module
@@ -212,7 +217,7 @@ impl<'a> JsiiImporter<'a> {
 		panic!("Type {} was not found in the type system", type_fqn);
 	}
 
-	fn setup_namespaces_for(&mut self, type_name: &FQN) {
+	pub fn setup_namespaces_for(&mut self, type_name: &FQN) {
 		// First, create a namespace in the Wing type system (if there isn't one already) corresponding to the JSII assembly
 		// the type belongs to.
 		debug!("Setting up namespaces for {}", type_name);
@@ -232,7 +237,7 @@ impl<'a> JsiiImporter<'a> {
 		} else {
 			let ns = self.wing_types.add_namespace(Namespace {
 				name: type_name.assembly().to_string(),
-				env: SymbolEnv::new(None, self.wing_types.void(), false, self.env.phase, 0),
+				env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
 			});
 			self
 				.wing_types
@@ -245,7 +250,7 @@ impl<'a> JsiiImporter<'a> {
 				.unwrap();
 		};
 
-		let flight = self.env.phase;
+		let flight = Phase::Preflight;
 
 		// Next, ensure there is a namespace for each of the namespaces in the type name
 		for (ns_idx, namespace_name) in type_name.namespaces().enumerate() {
@@ -342,7 +347,7 @@ impl<'a> JsiiImporter<'a> {
 			None,
 			self.wing_types.void(),
 			false,
-			self.env.phase,
+			Phase::Preflight,
 			self.import_statement_idx,
 		);
 		let new_type_symbol = Self::jsii_name_to_symbol(&type_name, &jsii_interface.location_in_module);
@@ -608,7 +613,7 @@ impl<'a> JsiiImporter<'a> {
 		};
 
 		let phase = if is_resource {
-			self.env.phase
+			Phase::Preflight
 		} else {
 			Phase::Independent
 		};
@@ -771,11 +776,21 @@ impl<'a> JsiiImporter<'a> {
 		}
 	}
 
-	pub fn import_to_env(&mut self) {
+	pub fn deep_import_submodule_to_env(&mut self, submodule: &str) {
 		let assembly = self.jsii_types.find_assembly(self.assembly_name).unwrap();
+		let start_string = format!("{}.{}", assembly.name, submodule);
+		assembly.types.as_ref().unwrap().keys().for_each(|type_fqn| {
+			if type_fqn.as_str().starts_with(&start_string) {
+				self.import_type(&FQN::from(type_fqn.as_str()));
+			}
+		});
+	}
 
-		for type_fqn in assembly.types.as_ref().unwrap().keys() {
-			let type_fqn = FQN::from(type_fqn.as_str());
+	pub fn import_submodules_to_env(&mut self, env: &mut SymbolEnv) {
+		let assembly = self.jsii_types.find_assembly(self.assembly_name).unwrap();
+		for type_fqn in assembly.submodules.as_ref().unwrap().keys() {
+			let fake_type = format!("{}.{}", type_fqn, "x");
+			let type_fqn = FQN::from(fake_type.as_str());
 
 			// Skip types outside the imported namespace
 			if !type_fqn.is_in_namespace(self.namespace_filter) {
@@ -786,22 +801,10 @@ impl<'a> JsiiImporter<'a> {
 				continue;
 			}
 
-			// Lookup type before we attempt to import it, this is required because `import_jsii_type` is recursive
-			// and might have already defined the current type internally
-			if self
-				.wing_types
-				.libraries
-				.lookup_nested_str(type_fqn.as_str(), None)
-				.is_ok()
-			{
-				debug!("Already imported {}.", type_fqn.as_str().blue());
-				continue;
-			}
-
-			debug!("Importing {}...", type_fqn.as_str().blue());
-
 			// Import type
-			self.import_type(&type_fqn);
+			self.setup_namespaces_for(&type_fqn);
+
+			break;
 		}
 
 		// Create a symbol in the environment for the imported module
@@ -820,8 +823,7 @@ impl<'a> JsiiImporter<'a> {
 			.unwrap()
 			.as_namespace_ref()
 			.unwrap();
-		self
-			.env
+		env
 			.define(
 				self.alias,
 				SymbolKind::Namespace(ns),

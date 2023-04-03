@@ -21,6 +21,8 @@ use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
 use std::path::Path;
 use symbol_env::{StatementIdx, SymbolEnv};
+use wingii::fqn::FQN;
+use wingii::type_system::TypeSystem;
 
 use self::symbol_env::SymbolEnvIter;
 
@@ -991,6 +993,7 @@ pub struct TypeChecker<'a> {
 	source_path: &'a Path,
 
 	pub diagnostics: RefCell<Diagnostics>,
+	jsii_imports: Vec<(TypeSystem, String, Vec<String>, Symbol, usize)>,
 }
 
 impl<'a> TypeChecker<'a> {
@@ -1000,6 +1003,7 @@ impl<'a> TypeChecker<'a> {
 			inner_scopes: vec![],
 			source_path,
 			diagnostics: RefCell::new(Diagnostics::new()),
+			jsii_imports: vec![],
 		}
 	}
 
@@ -1737,9 +1741,9 @@ impl<'a> TypeChecker<'a> {
 				// TODO: avoid creating a new type for each function_sig resolution
 				self.types.add_type(Type::Function(sig))
 			}
-			TypeAnnotation::UserDefined(user_defined_type) => {
-				resolve_user_defined_type(user_defined_type, env, statement_idx).unwrap_or_else(|e| self.type_error(e))
-			}
+			TypeAnnotation::UserDefined(user_defined_type) => self
+				.resolve_user_defined_type(user_defined_type, env, statement_idx)
+				.unwrap_or_else(|e| self.type_error(e)),
 			TypeAnnotation::Array(v) => {
 				let value_type = self.resolve_type_annotation(v, env, statement_idx);
 				// TODO: avoid creating a new type for each array resolution
@@ -2059,7 +2063,9 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify parent is actually a known Class/Resource and get their env
 				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {
-					let t = resolve_user_defined_type(parent_type, env, stmt.idx).unwrap_or_else(|e| self.type_error(e));
+					let t = self
+						.resolve_user_defined_type(parent_type, env, stmt.idx)
+						.unwrap_or_else(|e| self.type_error(e));
 					if *is_resource {
 						if let Type::Resource(ref class) = *t {
 							(Some(t), Some(class.env.get_ref()))
@@ -2084,7 +2090,9 @@ impl<'a> TypeChecker<'a> {
 				let impl_interfaces = implements
 					.iter()
 					.filter_map(|i| {
-						let t = resolve_user_defined_type(i, env, stmt.idx).unwrap_or_else(|e| self.type_error(e));
+						let t = self
+							.resolve_user_defined_type(i, env, stmt.idx)
+							.unwrap_or_else(|e| self.type_error(e));
 						if t.as_interface().is_some() {
 							Some(t)
 						} else {
@@ -2314,7 +2322,9 @@ impl<'a> TypeChecker<'a> {
 				let extend_interfaces = extends
 					.iter()
 					.filter_map(|i| {
-						let t = resolve_user_defined_type(i, env, stmt.idx).unwrap_or_else(|e| self.type_error(e));
+						let t = self
+							.resolve_user_defined_type(i, env, stmt.idx)
+							.unwrap_or_else(|e| self.type_error(e));
 						if t.as_interface().is_some() {
 							Some(t)
 						} else {
@@ -2549,16 +2559,21 @@ impl<'a> TypeChecker<'a> {
 
 		debug!("Loaded JSII assembly {}", assembly_name);
 
-		let mut jsii_importer = JsiiImporter::new(
-			&wingii_types,
-			&assembly_name,
-			&namespace_filter,
-			&alias,
-			self.types,
+		let jsii = (
+			wingii_types,
+			assembly_name.to_string(),
+			namespace_filter,
+			alias.clone(),
 			stmt.map(|s| s.idx).unwrap_or(0),
-			env,
 		);
-		jsii_importer.import_to_env();
+		let mut importer = JsiiImporter::new(&jsii.0, &jsii.1, &jsii.2, &jsii.3, self.types, jsii.4);
+
+		if assembly_name == WINGSDK_ASSEMBLY_NAME {
+			importer.deep_import_submodule_to_env(WINGSDK_STD_MODULE);
+		}
+		importer.import_submodules_to_env(env);
+
+		self.jsii_imports.push(jsii);
 	}
 
 	/// Add function arguments to the function's environment
@@ -2821,7 +2836,8 @@ impl<'a> TypeChecker<'a> {
 		path.reverse();
 		let user_type_annotation = UserDefinedType { root, fields: path };
 
-		resolve_user_defined_type(&user_type_annotation, env, statement_idx)
+		self
+			.resolve_user_defined_type(&user_type_annotation, env, statement_idx)
 			.ok()
 			.map(|_| user_type_annotation)
 	}
@@ -2993,7 +3009,8 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 			Reference::TypeMember { type_, property } => {
-				let type_ = resolve_user_defined_type(type_, env, statement_idx)
+				let type_ = self
+					.resolve_user_defined_type(type_, env, statement_idx)
 					.expect("Type annotation should have been verified by `expr_maybe_type`");
 				return match *type_ {
 					Type::Enum(ref e) => {
@@ -3055,6 +3072,36 @@ impl<'a> TypeChecker<'a> {
 			}
 			Err(type_error) => self.variable_error(type_error),
 		}
+	}
+
+	fn resolve_user_defined_type(
+		&mut self,
+		user_defined_type: &UserDefinedType,
+		env: &SymbolEnv,
+		statement_idx: usize,
+	) -> Result<TypeRef, TypeError> {
+		let res = resolve_user_defined_type(user_defined_type, env, statement_idx);
+		if res.is_ok() {
+			return res;
+		}
+
+		for jsii in &self.jsii_imports {
+			if jsii.3.name == user_defined_type.root.name {
+				let mut importer = JsiiImporter::new(&jsii.0, &jsii.1, &jsii.2, &jsii.3, self.types, jsii.4);
+
+				let mut udt_string = if jsii.1 == WINGSDK_ASSEMBLY_NAME {
+					// when importing from the std lib, the "alias" is the submodule
+					format!("{}.{}.", jsii.1, jsii.3.name)
+				} else {
+					format!("{}.", jsii.1)
+				};
+				udt_string.push_str(&user_defined_type.fields.iter().map(|g| g.name.clone()).join("."));
+
+				importer.import_type(&FQN::from(udt_string.as_str()));
+			}
+		}
+
+		return resolve_user_defined_type(user_defined_type, env, statement_idx);
 	}
 }
 
