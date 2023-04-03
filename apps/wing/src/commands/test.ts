@@ -178,11 +178,7 @@ async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[]> {
   const hasFailures = printTestReport(synthDir, results);
 
   if (hasFailures) {
-    // TODO: in the future we can add a `--destroy` flag to the `test` command that will
-    // destroy the resources from a test, and then we can print this message:
-    // "Run `wing test --target tf-aws --destroy` to clean up resources."
-    console.log("One or more tests failed. Skipping test cleanup.");
-    process.exit(1);
+    console.log("One or more tests failed. Cleaning up resources...");
   }
 
   await withSpinner("terraform destroy", () => terraformDestroy(synthDir));
