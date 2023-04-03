@@ -194,9 +194,13 @@ export class Function extends cloud.Function {
       role: this.role.arn,
       publish: true,
       vpcConfig: {
-        subnetIds: Lazy.listValue({ produce: () => this.subnets ? Array.from(this.subnets.values()) : []}),
+        subnetIds: Lazy.listValue({
+          produce: () =>
+            this.subnets ? Array.from(this.subnets.values()) : [],
+        }),
         securityGroupIds: Lazy.listValue({
-          produce: () => this.securityGroups ? Array.from(this.securityGroups.values()) : [],
+          produce: () =>
+            this.securityGroups ? Array.from(this.securityGroups.values()) : [],
         }),
       },
       environment: {

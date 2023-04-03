@@ -32,7 +32,7 @@ exports[`When creating a Redis resource > should create an elasticache cluster a
     \\"aws_internet_gateway\\": {
       \\"root_InternetGateway_8BBAF39E\\": {
         \\"tags\\": {
-          \\"Name\\": \\"7dc22579-internet-gateway\\"
+          \\"Name\\": \\"Default-c82bf964-internet-gateway\\"
         },
         \\"vpc_id\\": \\"\${aws_vpc.root_VPC_15726F37.id}\\"
       }
@@ -42,7 +42,7 @@ exports[`When creating a Redis resource > should create an elasticache cluster a
         \\"allocation_id\\": \\"\${aws_eip.root_EIP_ED59AD4B.id}\\",
         \\"subnet_id\\": \\"\${aws_subnet.root_PublicSubnet_C9666BAA.id}\\",
         \\"tags\\": {
-          \\"Name\\": \\"7dc22579-nat-gateway\\"
+          \\"Name\\": \\"Default-c82bf964-nat-gateway\\"
         }
       }
     },
@@ -67,7 +67,7 @@ exports[`When creating a Redis resource > should create an elasticache cluster a
           }
         ],
         \\"tags\\": {
-          \\"Name\\": \\"7dc22579-private-route-table-1\\"
+          \\"Name\\": \\"Default-c82bf964-private-route-table-1\\"
         },
         \\"vpc_id\\": \\"\${aws_vpc.root_VPC_15726F37.id}\\"
       },
@@ -91,7 +91,7 @@ exports[`When creating a Redis resource > should create an elasticache cluster a
           }
         ],
         \\"tags\\": {
-          \\"Name\\": \\"7dc22579-public-route-table-1\\"
+          \\"Name\\": \\"Default-c82bf964-public-route-table-1\\"
         },
         \\"vpc_id\\": \\"\${aws_vpc.root_VPC_15726F37.id}\\"
       }
@@ -129,13 +129,13 @@ exports[`When creating a Redis resource > should create an elasticache cluster a
               \\"\${aws_subnet.root_PrivateSubnet_8A5D9DDE.cidr_block}\\"
             ],
             \\"description\\": null,
-            \\"from_port\\": 0,
+            \\"from_port\\": 6379,
             \\"ipv6_cidr_blocks\\": null,
             \\"prefix_list_ids\\": null,
-            \\"protocol\\": \\"-1\\",
+            \\"protocol\\": \\"tcp\\",
             \\"security_groups\\": null,
             \\"self\\": true,
-            \\"to_port\\": 0
+            \\"to_port\\": 6379
           }
         ],
         \\"name\\": \\"3542402a-securityGroup\\",
@@ -146,14 +146,14 @@ exports[`When creating a Redis resource > should create an elasticache cluster a
       \\"root_PrivateSubnet_8A5D9DDE\\": {
         \\"cidr_block\\": \\"10.0.4.0/22\\",
         \\"tags\\": {
-          \\"Name\\": \\"7dc22579-private-subnet-1\\"
+          \\"Name\\": \\"Default-c82bf964-private-subnet-1\\"
         },
         \\"vpc_id\\": \\"\${aws_vpc.root_VPC_15726F37.id}\\"
       },
       \\"root_PublicSubnet_C9666BAA\\": {
         \\"cidr_block\\": \\"10.0.0.0/24\\",
         \\"tags\\": {
-          \\"Name\\": \\"7dc22579-public-subnet-1\\"
+          \\"Name\\": \\"Default-c82bf964-public-subnet-1\\"
         },
         \\"vpc_id\\": \\"\${aws_vpc.root_VPC_15726F37.id}\\"
       }
@@ -164,7 +164,7 @@ exports[`When creating a Redis resource > should create an elasticache cluster a
         \\"enable_dns_hostnames\\": true,
         \\"enable_dns_support\\": true,
         \\"tags\\": {
-          \\"Name\\": \\"7dc22579-vpc\\"
+          \\"Name\\": \\"Default-c82bf964-vpc\\"
         }
       }
     }

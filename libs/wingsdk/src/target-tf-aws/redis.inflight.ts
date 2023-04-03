@@ -21,7 +21,7 @@ export class RedisClient extends RedisClientBase {
    * The Redis cluster endpoint is not available to inject from the cdktf resource,
    * therefore we need to query the AWS API to get it. This is a helper function that will
    * use the cluster id to get the endpoint.
-   * 
+   *
    * @returns The Redis cluster endpoint
    */
   private async getEndpoint(): Promise<string> {

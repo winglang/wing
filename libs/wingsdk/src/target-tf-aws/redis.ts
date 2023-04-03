@@ -35,8 +35,7 @@ export class Redis extends redis.Redis {
 
     const engine = "redis";
     const engineVersion = process.env.REDIS_ENGINE_VERSION ?? "6.2";
-    const nodeType =
-      process.env.REDIS_CLUSTER_NODE_TYPE ?? "cache.t4g.small";
+    const nodeType = process.env.REDIS_CLUSTER_NODE_TYPE ?? "cache.t4g.small";
     const parameterGroupName =
       process.env.REDIS_PARAMETER_GROUP_NAME ?? "default.redis6.x";
 
@@ -76,7 +75,7 @@ export class Redis extends redis.Redis {
       clusterId: clusterName,
       engine,
       engineVersion,
-      nodeType, 
+      nodeType,
       parameterGroupName,
       availabilityZone: this.subnet.availabilityZone,
       subnetGroupName: subnetGroup.name,
