@@ -47,7 +47,7 @@ impl ToString for CodeMaker {
 	fn to_string(&self) -> String {
 		let mut code = String::new();
 		for (indent, line) in &self.lines {
-			code.push_str(&"\t".repeat(*indent));
+			code.push_str(&"  ".repeat(*indent));
 			code.push_str(&line);
 			code.push_str(&"\n");
 		}
@@ -78,10 +78,10 @@ mod tests {
 			indoc! {r#"
 				let a = 1;
 				if (a === 1) {
-					console.log('a is 1');
+				  console.log('a is 1');
 				}
 				let b = 2;
-					let c = 3;
+				  let c = 3;
 				let d = 4;
 			"#}
 		);
@@ -97,8 +97,8 @@ mod tests {
 			code.to_string(),
 			indoc! {r#"
 			{
-				let a = 1;
-				let b = 2;
+			  let a = 1;
+			  let b = 2;
 			}
 		"#}
 		);
@@ -117,8 +117,8 @@ mod tests {
 			code2.to_string(),
 			indoc! {r#"
 			{
-				let a = 1;
-				let b = 2;
+			  let a = 1;
+			  let b = 2;
 			}
 		"#}
 		);
