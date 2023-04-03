@@ -11,6 +11,8 @@ import { promisify } from "util";
 
 const log = debug("wing:test");
 
+const ENV_WING_TEST_RUNNER_FUNCTION_ARNS = "WING_TEST_RUNNER_FUNCTION_ARNS";
+
 /**
  * Options for the `test` command.
  */
@@ -158,7 +160,7 @@ async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[]> {
   await withSpinner("terraform apply", () => terraformApply(synthDir));
 
   const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
-    const testArns = await terraformOutput(synthDir, "WING_TEST_RUNNER_FUNCTION_ARNS");
+    const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS);
     const testRunner = new TfawsTestRunnerClient(testArns);
 
     const tests = await testRunner.listTests();
