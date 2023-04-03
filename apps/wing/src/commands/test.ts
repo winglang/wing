@@ -6,8 +6,8 @@ import { ITestRunnerClient } from "@winglang/sdk/lib/cloud";
 import { TestRunnerClient as TfawsTestRunnerClient } from "@winglang/sdk/lib/target-tf-aws/test-runner.inflight";
 import * as cp from "child_process";
 import debug from "debug";
-import * as ora from "ora";
 import { promisify } from "util";
+import { withSpinner } from "../util";
 
 const log = debug("wing:test");
 
@@ -295,22 +295,4 @@ async function execCapture(command: string, options: { cwd: string }) {
     throw new Error(stderr);
   }
   return stdout;
-}
-
-async function withSpinner<T>(
-  message: string,
-  fn: () => Promise<T>,
-): Promise<T> {
-  const spinner = ora({
-    stream: process.stdout, // hangar tests currently expect stderr to be empty or else they fail
-    text: message,
-  }).start();
-  try {
-    const result = await fn();
-    spinner.succeed();
-    return result;
-  } catch (e) {
-    spinner.fail();
-    throw e;
-  }
 }
