@@ -161,8 +161,8 @@ export class App extends CdktfApp {
     // internet.
 
     // Create the public subnet.
-    // This subnet is intentionally small since most things by default most resources
-    // will be behind private subnet. Incase that assumption is wrong this leaves room for 3 more /24 public subnets
+    // This subnet is intentionally small since most resources will be behind 
+    // private subnets. Incase that assumption is wrong this leaves room for 3 more /24 public subnets
     const publicSubnet = new Subnet(this, "PublicSubnet", {
       vpcId: this._vpc.id,
       cidrBlock: "10.0.0.0/24", // 10.0.0.0 - 10.0.0.255
