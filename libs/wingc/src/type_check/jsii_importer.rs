@@ -777,23 +777,38 @@ impl<'a> JsiiImporter<'a> {
 			.type_system
 			.find_assembly(&self.jsii_spec.assembly_name)
 			.unwrap();
-		for type_fqn in assembly.submodules.as_ref().unwrap().keys() {
-			let fake_type = format!("{}.{}", type_fqn, "x");
-			let type_fqn = FQN::from(fake_type.as_str());
+		if let Some(submodules) = assembly.submodules.as_ref() {
+			for type_fqn in submodules.keys() {
+				let fake_type = format!("{}.{}", type_fqn, "x");
+				let type_fqn = FQN::from(fake_type.as_str());
 
-			// Skip types outside the imported namespace
-			if !type_fqn.is_in_namespace(self.jsii_spec.namespace_filter.as_slice()) {
-				debug!(
-					"Skipped importing {} (outside of namespace filter).",
-					type_fqn.as_str().blue()
-				);
-				continue;
+				// Skip types outside the imported namespace
+				if !type_fqn.is_in_namespace(self.jsii_spec.namespace_filter.as_slice()) {
+					debug!(
+						"Skipped importing {} (outside of namespace filter).",
+						type_fqn.as_str().blue()
+					);
+					continue;
+				}
+
+				// Import type
+				self.setup_namespaces_for(&type_fqn);
 			}
-
-			// Import type
-			self.setup_namespaces_for(&type_fqn);
-
-			// break;
+		} else {
+			// No submodules, so lets manually setup a root namespace for the module
+			let ns = self.wing_types.add_namespace(Namespace {
+				name: assembly.name.clone(),
+				env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
+			});
+			self
+				.wing_types
+				.libraries
+				.define(
+					&Symbol::global(assembly.name.clone()),
+					SymbolKind::Namespace(ns),
+					StatementIdx::Top,
+				)
+				.unwrap();
 		}
 
 		// Create a symbol in the environment for the imported module
