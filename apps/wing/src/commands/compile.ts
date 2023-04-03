@@ -64,10 +64,11 @@ function resolveSynthDir(outDir: string, entrypoint: string, target: Target, tes
   }
   const entrypointName = basename(entrypoint, ".w");
   const tmpSuffix = tmp ? `.${Date.now().toString().slice(-6)}.tmp` : "";
+  const lastPart = `${entrypointName}.${targetDirSuffix}${tmpSuffix}`
   if (testing) {
-    return join(outDir, "test", `${entrypointName}.${targetDirSuffix}${tmpSuffix}`);
+    return join(outDir, "test", lastPart);
   } else {
-    return join(outDir, `${entrypointName}.${targetDirSuffix}${tmpSuffix}`);
+    return join(outDir, lastPart);
   }
 }
 
