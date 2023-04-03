@@ -43,13 +43,13 @@ pub mod spec {
 	}
 
 	pub fn load_assembly_from_file(path_to_file: &str) -> Result<Assembly> {
-		// dbg!("START");
+		dbg!("START");
 		let path = Path::new(path_to_file);
-		// let start = std::time::Instant::now();
+		let start = std::time::Instant::now();
 		let manifest = fs::read_to_string(path)?;
-		// dbg!(start.elapsed());
+		dbg!(start.elapsed());
 		let manifest = serde_json::from_str(&manifest)?;
-		// dbg!(start.elapsed());
+		dbg!(start.elapsed());
 		match manifest {
 			JsiiFile::Assembly(asm) => Ok(asm),
 			JsiiFile::AssemblyRedirect(asm_redirect) => load_assembly_from_file(&asm_redirect.filename),

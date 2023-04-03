@@ -46,12 +46,6 @@ pub struct Assembly {
 	#[doc = " assembly name, and the value is a SemVer expression."]
 	#[serde(skip_serializing_if = "Option::is_none")]
 	pub dependencies: Option<::std::collections::BTreeMap<String, String>>,
-	#[doc = " Target configuration for all the assemblies that are direct or transitive"]
-	#[doc = " dependencies of this assembly. This is needed to generate correct native"]
-	#[doc = " type names for any transitively inherited member, in certain languages."]
-	#[serde(skip_serializing_if = "Option::is_none")]
-	#[serde(rename = "dependencyClosure")]
-	pub dependency_closure: Option<::std::collections::BTreeMap<String, DependencyConfiguration>>,
 	#[doc = " Description of the assembly, maps to \"description\" from package.json"]
 	#[doc = " This is required since some package managers (like Maven) require it."]
 	pub description: String,
@@ -74,11 +68,6 @@ pub struct Assembly {
 	pub keywords: Option<Vec<String>>,
 	#[doc = " The SPDX name of the license this assembly is distributed on."]
 	pub license: String,
-	#[doc = " Arbitrary key-value pairs of metadata, which the maintainer chose to"]
-	#[doc = " document with the assembly. These entries do not carry normative"]
-	#[doc = " semantics and their interpretation is up to the assembly maintainer."]
-	#[serde(skip_serializing_if = "Option::is_none")]
-	pub metadata: Option<::std::collections::BTreeMap<String, serde_json::Value>>,
 	#[doc = " The name of the assembly"]
 	pub name: String,
 	#[doc = " The readme document for this module (if any)."]
@@ -92,19 +81,12 @@ pub struct Assembly {
 	#[doc = " Submodules declared in this assembly."]
 	#[serde(skip_serializing_if = "Option::is_none")]
 	pub submodules: Option<::std::collections::BTreeMap<String, Submodule>>,
-	#[doc = " A map of target name to configuration, which is used when generating"]
-	#[doc = " packages for various languages."]
-	#[serde(skip_serializing_if = "Option::is_none")]
-	pub targets: Option<AssemblyTargets>,
 	#[doc = " All types in the assembly, keyed by their fully-qualified-name"]
 	#[serde(skip_serializing_if = "Option::is_none")]
 	pub types: Option<::std::collections::BTreeMap<String, Type>>,
 	#[doc = " The version of the assembly"]
 	pub version: String,
 }
-#[doc = " Configurable targets for an asembly."]
-pub type AssemblyTargets =
-	::std::collections::BTreeMap<String, ::std::collections::BTreeMap<String, serde_json::Value>>;
 #[doc = " An Initializer or a Method."]
 #[derive(Clone, PartialEq, Debug, Default, Deserialize, Serialize)]
 pub struct Callable {
@@ -217,15 +199,7 @@ pub struct CollectionTypeReferenceCollection {
 pub struct CollectionTypeReference {
 	pub collection: CollectionTypeReferenceCollection,
 }
-#[derive(Clone, PartialEq, Debug, Default, Deserialize, Serialize)]
-pub struct DependencyConfiguration {
-	#[serde(skip_serializing_if = "Option::is_none")]
-	pub submodules: Option<::std::collections::BTreeMap<String, Targetable>>,
-	#[doc = " A map of target name to configuration, which is used when generating"]
-	#[doc = " packages for various languages."]
-	#[serde(skip_serializing_if = "Option::is_none")]
-	pub targets: Option<AssemblyTargets>,
-}
+
 #[doc = " Key value pairs of documentation nodes."]
 #[doc = " Based on TSDoc."]
 #[derive(Clone, PartialEq, Debug, Default, Deserialize, Serialize)]
@@ -624,21 +598,8 @@ pub struct Submodule {
 	#[serde(skip_serializing_if = "Option::is_none")]
 	#[serde(rename = "symbolId")]
 	pub symbol_id: Option<String>,
-	#[doc = " A map of target name to configuration, which is used when generating"]
-	#[doc = " packages for various languages."]
-	#[serde(skip_serializing_if = "Option::is_none")]
-	pub targets: Option<AssemblyTargets>,
 }
-#[doc = " A targetable module-like thing"]
-#[doc = " "]
-#[doc = " Has targets and a readme. Used for Assemblies and Submodules."]
-#[derive(Clone, PartialEq, Debug, Default, Deserialize, Serialize)]
-pub struct Targetable {
-	#[doc = " A map of target name to configuration, which is used when generating"]
-	#[doc = " packages for various languages."]
-	#[serde(skip_serializing_if = "Option::is_none")]
-	pub targets: Option<AssemblyTargets>,
-}
+
 #[doc = " Represents a type definition (not a type reference)."]
 #[derive(Clone, PartialEq, Debug, Deserialize, Serialize)]
 #[serde(tag = "kind")]
@@ -681,16 +642,4 @@ pub struct UnionTypeReference {
 	#[doc = " Indicates that this is a union type, which means it can be one of a set"]
 	#[doc = " of types."]
 	pub union: UnionTypeReferenceUnion,
-}
-#[derive(Clone, PartialEq, Debug, Deserialize, Serialize)]
-pub struct JsiiRepository {
-	#[doc = " If the package is not in the root directory (for example, when part"]
-	#[doc = " of a monorepo), you should specify the directory in which it lives."]
-	#[serde(skip_serializing_if = "Option::is_none")]
-	pub directory: Option<String>,
-	#[doc = " The type of the repository (``git``, ``svn``, ...)"]
-	#[serde(rename = "type")]
-	pub type_: String,
-	#[doc = " The URL of the repository."]
-	pub url: String,
 }
