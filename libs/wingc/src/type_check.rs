@@ -1,8 +1,9 @@
 mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{
-	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, InterpolatedStringPart, Literal,
-	MethodLike, Phase, Reference, Scope, Stmt, StmtKind, Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
+	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, Interface as AstInterface,
+	InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind, Symbol, ToSpan, TypeAnnotation,
+	UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{
@@ -1611,7 +1612,6 @@ impl<'a> TypeChecker<'a> {
 			Some(env.get_ref()),
 			sig.return_type,
 			false,
-			false,
 			func_def.signature.phase,
 			self.statement_idx,
 		);
@@ -2299,8 +2299,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Add methods to the interface env
 				for (method_name, sig) in methods.iter() {
-					let mut method_type =
-						self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(sig.clone()), env, stmt.idx);
+					let mut method_type = self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(sig.clone()), env);
 					// use the interface type as the function's "this" type
 					if let Type::Function(ref mut f) = *method_type {
 						f.this_type = Some(interface_type.clone());
@@ -2478,7 +2477,6 @@ impl<'a> TypeChecker<'a> {
 		let mut method_env = SymbolEnv::new(
 			Some(env.get_ref()),
 			method_sig.return_type,
-			false,
 			is_init,
 			method_sig.phase,
 			statement_idx,
