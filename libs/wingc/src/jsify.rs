@@ -1,4 +1,4 @@
-mod code;
+mod codemaker;
 
 use aho_corasick::AhoCorasick;
 use const_format::formatcp;
@@ -31,7 +31,7 @@ use crate::{
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
 };
 
-use self::code::CodeMaker;
+use self::codemaker::CodeMaker;
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
