@@ -998,7 +998,6 @@ pub struct TypeChecker<'a> {
 
 	in_json: bool,
 	statement_idx: usize,
-	// generated_resource_counter: usize,
 }
 
 impl<'a> TypeChecker<'a> {
@@ -1528,15 +1527,7 @@ impl<'a> TypeChecker<'a> {
 				container_type
 			}
 			ExprKind::FunctionClosure(func_def) => {
-				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
-
-				// When defining an inflight closure in and preflight env we need to generate a custom resource with a `handle` method for the closure's content
-				// and evaluate this expression to and instance of that custom resource.
-				/*				if func_def.signature.phase == Phase::Inflight && env.phase == Phase::Preflight {
-					self.type_check_inflight_closure(func_def, env, statement_idx)
-				} else {*/
 				self.type_check_closure(func_def, env)
-				//				}
 			}
 			ExprKind::OptionalTest { optional } => {
 				let t = self.type_check_exp(optional, env);
@@ -1548,60 +1539,8 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	// fn type_check_inflight_closure(
-	// 	&mut self,
-	// 	func_def: &crate::ast::FunctionDefinition,
-	// 	env: &SymbolEnv,
-	// 	statement_idx: usize,
-	// ) {
-	// 	// Validate we're in preflight
-	// 	assert!(env.phase == Phase::Preflight);
-	// 	// Create a a name for the generated resource
-	// 	self.generated_resource_counter += 1;
-	// 	let generated_resoruce_symb = Symbol {
-	// 		name: format!("_$GeneratedResource{}", self.generated_resource_counter),
-	// 		span: func_def.span,
-	// 	};
-	// 	// Create environment for the generated resource
-	// 	let generated_resource_env = SymbolEnv::new(None, self.types.void(), true, false, Phase::Preflight, statement_idx);
-	// 	// Add a single `handle` method to the env
-	// 	let handle_method_symb = Symbol {
-	// 		name: "handle".to_string(),
-	// 		span: func_def.span,
-	// 	};
-	// 	generated_resource_env.define(
-	// 		&handle_method_symb,
-	// 		SymbolKind::Variable(VariableInfo {
-	// 			type_: self.type_check_closure(func_def, env, statement_idx),
-	// 			reassignable: false,
-	// 			phase: Phase::Inflight,
-	// 			is_static: false,
-	// 		}),
-	// 		StatementIdx::Index(1),
-	// 	);
-	// 	// Create a resource type for the inflight closure
-	// 	let closure_resource_type = self.types.add_type(Type::Resource(Class {
-	// 		name: generated_resoruce_symb,
-	// 		parent: None,
-	// 		implements: vec![],
-	// 		env: generated_resource_env,
-	// 		should_case_convert_jsii: false,
-	// 		fqn: None,
-	// 		is_abstract: false,
-	// 		type_parameters: None,
-	// 	}));
-	// 	// Type check the `handle` method body
-	// 	self.type_check_method(
-	// 		&generated_resource_env,
-	// 		&handle_method_symb,
-	// 		env,
-	// 		statement_idx,
-	// 		func_def,
-	// 		closure_resource_type,
-	// 	)
-	// }
-
 	fn type_check_closure(&mut self, func_def: &crate::ast::FunctionDefinition, env: &SymbolEnv) -> UnsafeRef<Type> {
+		// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 		// Create a type_checker function signature from the AST function definition
 		let function_type =
 			self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(func_def.signature.clone()), env);
@@ -2460,6 +2399,7 @@ impl<'a> TypeChecker<'a> {
 	) where
 		T: MethodLike,
 	{
+		// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 		// Lookup the method in the class_env
 		let method_type = class_env
 			.lookup(method_name, None)

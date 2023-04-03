@@ -273,8 +273,6 @@ pub struct Stmt {
 	pub kind: StmtKind,
 	pub span: WingSpan,
 	pub idx: usize,
-	// #[derivative(Debug = "ignore")]
-	// pub generated_resources: RefCell<Option<Vec<TypeRef>>>,
 }
 
 #[derive(Debug)]
