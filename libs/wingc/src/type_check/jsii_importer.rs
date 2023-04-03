@@ -14,6 +14,7 @@ use colored::Colorize;
 use wingii::{
 	fqn::FQN,
 	jsii::{self, CollectionKind, PrimitiveType, TypeReference},
+	type_system::TypeSystem,
 };
 
 use super::{symbol_env::SymbolEnv, Enum, Namespace};
@@ -41,11 +42,11 @@ impl JsiiInterface for jsii::InterfaceType {
 	}
 }
 
-pub struct JsiiImporter<'a> {
+pub struct JsiiImportSpec {
 	/// An interface to access the types in the JSII library loaded with wingii.
-	jsii_types: &'a wingii::type_system::TypeSystem,
+	pub type_system: TypeSystem,
 	/// The assembly to import from the JSII library. This is typically the name of the NPM package.
-	assembly_name: &'a str,
+	pub assembly_name: String,
 	/// This is a namespace filter on the imported JSII assembly.
 	/// For example:
 	/// - ["cloud"] will only (publicly) import types prefixed with `cloud.` from the assembly
@@ -53,35 +54,25 @@ pub struct JsiiImporter<'a> {
 	/// - [] will import all types from the assembly
 	/// Note that other types might be still get implicitly imported
 	/// if they are referenced from a type in the specified `module_name`.
-	namespace_filter: &'a [String],
+	pub namespace_filter: Vec<String>,
 	/// The name to assign to the module in the Wing type system.
-	alias: &'a Symbol,
-	/// The wing type system: all imported types are added to `wing_types.libraries`.
-	wing_types: &'a mut Types,
+	pub alias: Symbol,
 	/// The index of the import statement that triggered this import. This is required so we'll know
 	/// later on if types defined by this import come before or after other statements in the code.
 	/// If type definitions in wing are always location agnostic this doesn't really matter and we
 	/// might be able to remove this.
-	import_statement_idx: usize,
+	pub import_statement_idx: usize,
+}
+
+pub struct JsiiImporter<'a> {
+	jsii_spec: &'a JsiiImportSpec,
+	/// The wing type system: all imported types are added to `wing_types.libraries`.
+	wing_types: &'a mut Types,
 }
 
 impl<'a> JsiiImporter<'a> {
-	pub fn new(
-		jsii_types: &'a wingii::type_system::TypeSystem,
-		assembly_name: &'a str,
-		namespace_filter: &'a [String],
-		alias: &'a Symbol,
-		wing_types: &'a mut Types,
-		import_statement_idx: usize,
-	) -> Self {
-		Self {
-			jsii_types,
-			assembly_name,
-			namespace_filter,
-			alias,
-			wing_types,
-			import_statement_idx,
-		}
+	pub fn new(jsii_spec: &'a JsiiImportSpec, wing_types: &'a mut Types) -> Self {
+		Self { jsii_spec, wing_types }
 	}
 
 	fn type_ref_to_wing_type(&mut self, jsii_type_ref: &TypeReference) -> TypeRef {
@@ -183,21 +174,21 @@ impl<'a> JsiiImporter<'a> {
 		}
 
 		// Check if this is a JSII interface and import it if it is
-		let jsii_interface = self.jsii_types.find_interface(type_fqn);
+		let jsii_interface = self.jsii_spec.type_system.find_interface(type_fqn);
 		if let Some(jsii_interface) = jsii_interface {
 			self.import_interface(jsii_interface);
 			return;
 		}
 
 		// Check if this is a JSII class and import it if it is
-		let jsii_class = self.jsii_types.find_class(type_fqn);
+		let jsii_class = self.jsii_spec.type_system.find_class(type_fqn);
 		if let Some(jsii_class) = jsii_class {
 			self.import_class(jsii_class);
 			return;
 		}
 
 		// Check if this is a JSII enum and import it if it is
-		let jsii_enum = self.jsii_types.find_enum(type_fqn);
+		let jsii_enum = self.jsii_spec.type_system.find_enum(type_fqn);
 		if let Some(jsii_enum) = jsii_enum {
 			self.import_enum(jsii_enum);
 			return;
@@ -337,7 +328,7 @@ impl<'a> JsiiImporter<'a> {
 			self.wing_types.void(),
 			false,
 			Phase::Preflight,
-			self.import_statement_idx,
+			self.jsii_spec.import_statement_idx,
 		);
 		let new_type_symbol = Self::jsii_name_to_symbol(&type_name, &jsii_interface.location_in_module);
 		let mut wing_type = match is_struct {
@@ -349,7 +340,7 @@ impl<'a> JsiiImporter<'a> {
 					self.wing_types.void(),
 					false,
 					iface_env.phase,
-					self.import_statement_idx,
+					self.jsii_spec.import_statement_idx,
 				), // Dummy env, will be replaced below
 			})),
 			false => self.wing_types.add_type(Type::Interface(Interface {
@@ -360,7 +351,7 @@ impl<'a> JsiiImporter<'a> {
 					self.wing_types.void(),
 					false,
 					iface_env.phase,
-					self.import_statement_idx,
+					self.jsii_spec.import_statement_idx,
 				), // Dummy env, will be replaced below
 			})),
 		};
@@ -395,7 +386,7 @@ impl<'a> JsiiImporter<'a> {
 						fqn
 					}
 				})
-				.and_then(|fqn| self.jsii_types.find_interface(&FQN::from(fqn)));
+				.and_then(|fqn| self.jsii_spec.type_system.find_interface(&FQN::from(fqn)));
 
 			if let Some(client_interface) = client_interface {
 				// Add client interface's methods to the class environment
@@ -720,7 +711,7 @@ impl<'a> JsiiImporter<'a> {
 						fqn
 					}
 				})
-				.and_then(|fqn| self.jsii_types.find_interface(&FQN::from(fqn)));
+				.and_then(|fqn| self.jsii_spec.type_system.find_interface(&FQN::from(fqn)));
 
 			if let Some(client_interface) = client_interface {
 				// Add client interface's methods to the class environment
@@ -766,7 +757,11 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	pub fn deep_import_submodule_to_env(&mut self, submodule: &str) {
-		let assembly = self.jsii_types.find_assembly(self.assembly_name).unwrap();
+		let assembly = self
+			.jsii_spec
+			.type_system
+			.find_assembly(&self.jsii_spec.assembly_name)
+			.unwrap();
 		let start_string = format!("{}.{}", assembly.name, submodule);
 		assembly.types.as_ref().unwrap().keys().for_each(|type_fqn| {
 			if type_fqn.as_str().starts_with(&start_string) {
@@ -776,13 +771,17 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	pub fn import_submodules_to_env(&mut self, env: &mut SymbolEnv) {
-		let assembly = self.jsii_types.find_assembly(self.assembly_name).unwrap();
+		let assembly = self
+			.jsii_spec
+			.type_system
+			.find_assembly(&self.jsii_spec.assembly_name)
+			.unwrap();
 		for type_fqn in assembly.submodules.as_ref().unwrap().keys() {
 			let fake_type = format!("{}.{}", type_fqn, "x");
 			let type_fqn = FQN::from(fake_type.as_str());
 
 			// Skip types outside the imported namespace
-			if !type_fqn.is_in_namespace(self.namespace_filter) {
+			if !type_fqn.is_in_namespace(self.jsii_spec.namespace_filter.as_slice()) {
 				debug!(
 					"Skipped importing {} (outside of namespace filter).",
 					type_fqn.as_str().blue()
@@ -799,9 +798,9 @@ impl<'a> JsiiImporter<'a> {
 		// Create a symbol in the environment for the imported module
 		// For example, `bring cloud` will create a symbol named `cloud` in the environment
 		// that points to the `@winglang/sdk.cloud` NamespaceRef
-		let lookup_str = vec![self.assembly_name.to_string()]
+		let lookup_str = vec![self.jsii_spec.assembly_name.to_string()]
 			.iter()
-			.chain(self.namespace_filter)
+			.chain(self.jsii_spec.namespace_filter.iter())
 			.map(|x| x.as_str())
 			.collect::<Vec<_>>()
 			.join(".");
@@ -814,9 +813,9 @@ impl<'a> JsiiImporter<'a> {
 			.unwrap();
 		env
 			.define(
-				self.alias,
+				&self.jsii_spec.alias,
 				SymbolKind::Namespace(ns),
-				StatementIdx::Index(self.import_statement_idx),
+				StatementIdx::Index(self.jsii_spec.import_statement_idx),
 			)
 			.unwrap();
 	}

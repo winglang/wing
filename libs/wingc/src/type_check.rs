@@ -22,8 +22,8 @@ use std::iter::FilterMap;
 use std::path::Path;
 use symbol_env::{StatementIdx, SymbolEnv};
 use wingii::fqn::FQN;
-use wingii::type_system::TypeSystem;
 
+use self::jsii_importer::JsiiImportSpec;
 use self::symbol_env::SymbolEnvIter;
 
 pub struct UnsafeRef<T>(*const T);
@@ -993,7 +993,7 @@ pub struct TypeChecker<'a> {
 	source_path: &'a Path,
 
 	pub diagnostics: RefCell<Diagnostics>,
-	jsii_imports: Vec<(TypeSystem, String, Vec<String>, Symbol, usize)>,
+	jsii_imports: Vec<JsiiImportSpec>,
 }
 
 impl<'a> TypeChecker<'a> {
@@ -1005,6 +1005,10 @@ impl<'a> TypeChecker<'a> {
 			diagnostics: RefCell::new(Diagnostics::new()),
 			jsii_imports: vec![],
 		}
+	}
+
+	pub fn add_jsii_import_spec(&mut self, spec: JsiiImportSpec) {
+		self.jsii_imports.push(spec);
 	}
 
 	pub fn add_globals(&mut self, scope: &Scope) {
@@ -2559,14 +2563,14 @@ impl<'a> TypeChecker<'a> {
 
 		debug!("Loaded JSII assembly {}", assembly_name);
 
-		let jsii = (
-			wingii_types,
-			assembly_name.to_string(),
+		let jsii = JsiiImportSpec {
+			type_system: wingii_types,
+			assembly_name: assembly_name.to_string(),
 			namespace_filter,
-			alias.clone(),
-			stmt.map(|s| s.idx).unwrap_or(0),
-		);
-		let mut importer = JsiiImporter::new(&jsii.0, &jsii.1, &jsii.2, &jsii.3, self.types, jsii.4);
+			alias: alias.clone(),
+			import_statement_idx: stmt.map(|s| s.idx).unwrap_or(0),
+		};
+		let mut importer = JsiiImporter::new(&jsii, self.types);
 
 		if assembly_name == WINGSDK_ASSEMBLY_NAME {
 			importer.deep_import_submodule_to_env(WINGSDK_STD_MODULE);
@@ -3080,20 +3084,22 @@ impl<'a> TypeChecker<'a> {
 		env: &SymbolEnv,
 		statement_idx: usize,
 	) -> Result<TypeRef, TypeError> {
+		// Attempt to resolve the type from the current environment
+		// otherwise, attempt to resolve the type from any jsii libs
 		let res = resolve_user_defined_type(user_defined_type, env, statement_idx);
 		if res.is_ok() {
 			return res;
 		}
 
 		for jsii in &self.jsii_imports {
-			if jsii.3.name == user_defined_type.root.name {
-				let mut importer = JsiiImporter::new(&jsii.0, &jsii.1, &jsii.2, &jsii.3, self.types, jsii.4);
+			if jsii.alias.name == user_defined_type.root.name {
+				let mut importer = JsiiImporter::new(&jsii, self.types);
 
-				let mut udt_string = if jsii.1 == WINGSDK_ASSEMBLY_NAME {
+				let mut udt_string = if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME {
 					// when importing from the std lib, the "alias" is the submodule
-					format!("{}.{}.", jsii.1, jsii.3.name)
+					format!("{}.{}.", jsii.assembly_name, jsii.alias.name)
 				} else {
-					format!("{}.", jsii.1)
+					format!("{}.", jsii.assembly_name)
 				};
 				udt_string.push_str(&user_defined_type.fields.iter().map(|g| g.name.clone()).join("."));
 
