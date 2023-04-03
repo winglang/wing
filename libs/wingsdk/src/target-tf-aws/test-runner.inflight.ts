@@ -37,7 +37,7 @@ export class TestRunnerClient implements ITestRunnerClient {
       path,
       pass,
       error,
-      traces: [], // TODO
+      traces: [], // TODO: https://github.com/winglang/wing/issues/1973
     };
   }
 }
