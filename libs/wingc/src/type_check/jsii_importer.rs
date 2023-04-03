@@ -11,8 +11,10 @@ use crate::{
 	WINGSDK_JSON, WINGSDK_MUT_JSON, WINGSDK_RESOURCE,
 };
 use colored::Colorize;
-use serde_json::Value;
-use wingii::{fqn::FQN, jsii};
+use wingii::{
+	fqn::FQN,
+	jsii::{self, CollectionKind, PrimitiveType, TypeReference},
+};
 
 use super::{symbol_env::SymbolEnv, Enum, Namespace};
 
@@ -82,18 +84,18 @@ impl<'a> JsiiImporter<'a> {
 		}
 	}
 
-	fn type_ref_to_wing_type(&mut self, jsii_type_ref: &jsii::TypeReference) -> TypeRef {
-		if let serde_json::Value::Object(obj) = jsii_type_ref {
-			if let Some(Value::String(primitive_name)) = obj.get("primitive") {
-				match primitive_name.as_str() {
-					"string" => self.wing_types.string(),
-					"number" => self.wing_types.number(),
-					"boolean" => self.wing_types.bool(),
-					"any" => self.wing_types.anything(),
-					"json" => self.wing_types.json(),
-					_ => panic!("TODO: handle primitive type {}", primitive_name),
-				}
-			} else if let Some(Value::String(type_fqn)) = obj.get("fqn") {
+	fn type_ref_to_wing_type(&mut self, jsii_type_ref: &TypeReference) -> TypeRef {
+		match jsii_type_ref {
+			TypeReference::PrimitiveTypeReference(primitive_ref) => match primitive_ref.primitive {
+				PrimitiveType::String => self.wing_types.string(),
+				PrimitiveType::Number => self.wing_types.number(),
+				PrimitiveType::Boolean => self.wing_types.bool(),
+				PrimitiveType::Any => self.wing_types.anything(),
+				PrimitiveType::Json => self.wing_types.json(),
+				PrimitiveType::Date => todo!(),
+			},
+			TypeReference::NamedTypeReference(named_ref) => {
+				let type_fqn = &named_ref.fqn;
 				if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_INFLIGHT) {
 					self.wing_types.add_type(Type::Function(FunctionSignature {
 						this_type: Some(self.wing_types.anything()),
@@ -114,40 +116,27 @@ impl<'a> JsiiImporter<'a> {
 				} else {
 					self.lookup_or_create_type(&FQN::from(type_fqn.as_str()))
 				}
-			} else if let Some(Value::Object(d)) = obj.get("collection") {
-				let collection_kind = d
-					.get("kind")
-					.expect("'kind' is required for collection types")
-					.as_str()
-					.expect("'kind' must be a string");
+			}
+			TypeReference::CollectionTypeReference(collection_ref) => {
+				let collection_kind = &collection_ref.collection.kind;
 
-				let element_type = d
-					.get("elementtype")
-					.expect("'elementtype' is required for collection types")
-					.as_object()
-					.expect("'elementtype' must be an object");
+				let element_type = &collection_ref.collection.elementtype;
 
-				let wing_type = self.type_ref_to_wing_type(&Value::Object(element_type.clone()));
+				let wing_type = self.type_ref_to_wing_type(element_type);
 
 				match collection_kind {
-					"array" => self.wing_types.add_type(Type::Array(wing_type)),
-					"map" => self.wing_types.add_type(Type::Map(wing_type)),
+					CollectionKind::Array => self.wing_types.add_type(Type::Array(wing_type)),
+					CollectionKind::Map => self.wing_types.add_type(Type::Map(wing_type)),
 					// set is intentionally left out, since in JSII “collection
 					// kind” is only either map or array.
-					_ => panic!("Unsupported collection kind '{}'", collection_kind),
 				}
-			} else if let Some(Value::Object(_)) = obj.get("union") {
-				// Wing does not support union types, so we'll model it the same way as if
-				// we saw an "any" in a JSII library
-				self.wing_types.anything()
-			} else {
-				panic!(
-					"Expected JSII type reference {:?} to be a collection, fqn or primitive",
-					jsii_type_ref
-				);
 			}
-		} else {
-			panic!("Expected JSII type reference {:?} to be an object", jsii_type_ref);
+			TypeReference::UnionTypeReference(..) =>
+			// Wing does not support union types, so we'll model it the same way as if
+			// we saw an "any" in a JSII library
+			{
+				self.wing_types.anything()
+			}
 		}
 	}
 

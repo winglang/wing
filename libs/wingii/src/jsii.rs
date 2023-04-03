@@ -611,8 +611,18 @@ pub enum Type {
 	#[serde(rename = "interface")]
 	InterfaceType(InterfaceType),
 }
+
+#[derive(Clone, PartialEq, Debug, Deserialize, Serialize)]
 #[doc = " A reference to a type (primitive, collection or fqn)."]
-pub type TypeReference = serde_json::Value;
+#[serde(untagged)]
+
+pub enum TypeReference {
+	PrimitiveTypeReference(PrimitiveTypeReference),
+	CollectionTypeReference(Box<CollectionTypeReference>),
+	NamedTypeReference(NamedTypeReference),
+	UnionTypeReference(UnionTypeReference),
+}
+
 #[doc = " Indicates that a jsii entity's origin can be traced to TypeScript code"]
 #[doc = " "]
 #[doc = " This is interface is not the same as `SourceLocatable`. SourceLocatable"]
