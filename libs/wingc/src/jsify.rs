@@ -61,7 +61,7 @@ function __app(target) {
 const $AppBase = __app(process.env.WING_TARGET);
 "#;
 
-const ENV_WING_TEST: &str = "$wing_test";
+const ENV_WING_IS_TEST: &str = "$wing_is_test";
 const OUTDIR_VAR: &str = "$outdir";
 
 const APP_CLASS: &str = "$App";
@@ -150,7 +150,10 @@ impl<'a> JSifier<'a> {
 		if self.shim {
 			output.push(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
 			output.push(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
-			output.push(format!("const {} = process.env.WING_TEST === \"true\";", ENV_WING_TEST));
+			output.push(format!(
+				"const {} = process.env.WING_IS_TEST === \"true\";",
+				ENV_WING_IS_TEST
+			));
 			output.push(TARGET_CODE.to_owned());
 		}
 
@@ -172,7 +175,7 @@ impl<'a> JSifier<'a> {
 				"super({{ outdir: {}, name: \"{}\", plugins: $plugins }});",
 				OUTDIR_VAR, self.app_name
 			));
-			app_wrapper.open(format!("if ({}) {{", ENV_WING_TEST));
+			app_wrapper.open(format!("if ({}) {{", ENV_WING_IS_TEST));
 			app_wrapper.line(format!("new {}(this, \"env0\");", ROOT_CLASS));
 			app_wrapper.line("const $test_runner = this.testRunner;".to_string());
 			app_wrapper.line("const $tests = $test_runner.findTests();".to_string());

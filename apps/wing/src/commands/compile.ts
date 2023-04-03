@@ -97,7 +97,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   process.env["WING_SYNTH_DIR"] = tmpSynthDir;
   process.env["WING_NODE_MODULES"] = resolve(join(wingDir, "node_modules"));
   process.env["WING_TARGET"] = options.target;
-  process.env["WING_TEST"] = testing.toString();
+  process.env["WING_IS_TEST"] = testing.toString();
 
   await Promise.all([
     mkdirp(workDir),
