@@ -1,4 +1,4 @@
-use lsp_types::{DidChangeTextDocumentParams, DidOpenTextDocumentParams, Url};
+use lsp_types::{DidChangeTextDocumentParams, DidOpenTextDocumentParams};
 
 use std::path::Path;
 use std::{cell::RefCell, collections::HashMap};
@@ -24,14 +24,14 @@ pub struct FileData {
 	pub scope: Box<Scope>,
 	/// The universal type collection for the scope. This is saved to ensure references live long enough.
 	pub types: Types,
-	pub jsii_imports: Vec<JsiiImportSpec>,
 }
 
 thread_local! {
 	/// When consumed as a WASM library, wingc is not in control of the process/memory in which it is running.
 	/// This means that it cannot reliably manage stateful data like this between function calls.
 	/// Here we will assume the process is single threaded, and use thread_local to store this data.
-	pub static FILES: RefCell<HashMap<Url,FileData>> = RefCell::new(HashMap::new());
+	pub static FILES: RefCell<HashMap<String,FileData>> = RefCell::new(HashMap::new());
+	pub static JSII_IMPORTS: RefCell<HashMap<String,Vec<JsiiImportSpec>>> = RefCell::new(HashMap::new());
 }
 
 #[no_mangle]
@@ -44,21 +44,23 @@ pub unsafe extern "C" fn wingc_on_did_open_text_document(ptr: u32, len: u32) {
 	}
 }
 pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
-	FILES.with(|files| {
-		let uri = params.text_document.uri;
-		let uri_path = uri.to_file_path().unwrap();
-		let path = uri_path.to_str().unwrap();
+	JSII_IMPORTS.with(|jsii_import_map| {
+		FILES.with(|files| {
+			let uri = params.text_document.uri;
+			let uri_path = uri.to_file_path().unwrap();
+			let path = uri_path.to_str().unwrap();
 
-		let mut borrowed_file = files.borrow_mut();
-		let current_data = borrowed_file.get(&uri);
-		let result = partial_compile(
-			path,
-			params.text_document.text.as_bytes(),
-			&current_data.map(|data| &data.jsii_imports),
-		);
-		send_diagnostics(&uri, &result.diagnostics);
-		borrowed_file.insert(uri, result);
-	});
+			let mut borrowed_file = files.borrow_mut();
+			let mut borrowed_map = jsii_import_map.borrow_mut();
+			let current_jsii = borrowed_map.get(&path.to_string());
+			let mut current_jsii = borrowed_map.get(&path.to_string()).unwrap_or(vec![].as_mut()).to_vec();
+
+			let result = partial_compile(path, params.text_document.text.as_bytes(), &mut current_jsii);
+			send_diagnostics(&uri, &result.diagnostics);
+			borrowed_file.insert(path.to_string(), result);
+			borrowed_map.insert(path.to_string(), current_jsii);
+		});
+	})
 }
 
 #[no_mangle]
@@ -71,26 +73,30 @@ pub unsafe extern "C" fn wingc_on_did_change_text_document(ptr: u32, len: u32) {
 	}
 }
 pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
-	FILES.with(|files| {
-		let uri = params.text_document.uri;
-		let uri_path = uri.to_file_path().unwrap();
-		let path = uri_path.to_str().unwrap();
+	JSII_IMPORTS.with(|jsii_import_map| {
+		FILES.with(|files| {
+			let uri = params.text_document.uri;
+			let uri_path = uri.to_file_path().unwrap();
+			let path = uri_path.to_str().unwrap();
 
-		let mut borrowed_file = files.borrow_mut();
-		let current_data = borrowed_file.get(&uri);
-		let result = partial_compile(
-			path,
-			params.content_changes[0].text.as_bytes(),
-			&current_data.map(|data| &data.jsii_imports),
-		);
+			let mut borrowed_file = files.borrow_mut();
+			let mut borrowed_map = jsii_import_map.borrow_mut();
+			let current_jsii = borrowed_map.get(&path.to_string());
+			let was_empty = current_jsii.is_none();
+			let mut current_jsii = borrowed_map.get(&path.to_string()).unwrap_or(vec![].as_mut()).to_vec();
 
-		send_diagnostics(&uri, &result.diagnostics);
-		borrowed_file.insert(uri, result);
-	});
+			let result = partial_compile(path, params.content_changes[0].text.as_bytes(), &mut current_jsii);
+			send_diagnostics(&uri, &result.diagnostics);
+			borrowed_file.insert(path.to_string(), result);
+			if was_empty {
+				borrowed_map.insert(path.to_string(), current_jsii);
+			}
+		});
+	})
 }
 
 /// Runs several phases of the wing compile on a file, including: parsing, type checking, and capturing
-fn partial_compile(source_file: &str, text: &[u8], existing_data: &Option<&Vec<JsiiImportSpec>>) -> FileData {
+fn partial_compile(source_file: &str, text: &[u8], jsii_imports: &mut Vec<JsiiImportSpec>) -> FileData {
 	let mut types = type_check::Types::new();
 
 	let language = tree_sitter_wing::language();
@@ -110,13 +116,7 @@ fn partial_compile(source_file: &str, text: &[u8], existing_data: &Option<&Vec<J
 	// Otherwise, the scope will be moved and we'll be left with dangling references elsewhere
 	let mut scope = Box::new(wing_parser.wingit(&tree.root_node()));
 
-	let existing_jsii_imports = existing_data.map(|data| data);
-	// make new vec
-	let empty = vec![];
-	let mut new_dev: Vec<&JsiiImportSpec> = vec![];
-	new_dev.extend(existing_jsii_imports.unwrap_or(&empty).iter());
-
-	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file), Some(new_dev));
+	let type_diag = type_check(&mut scope, &mut types, &Path::new(source_file), jsii_imports);
 
 	// Analyze inflight captures
 	let mut capture_visitor = CaptureVisitor::new();
@@ -124,7 +124,7 @@ fn partial_compile(source_file: &str, text: &[u8], existing_data: &Option<&Vec<J
 
 	let mut diagnostics = Diagnostics::new();
 	diagnostics.extend(wing_parser.diagnostics.into_inner());
-	diagnostics.extend(type_diag.0);
+	diagnostics.extend(type_diag);
 	diagnostics.extend(capture_visitor.diagnostics);
 
 	return FileData {
@@ -133,6 +133,5 @@ fn partial_compile(source_file: &str, text: &[u8], existing_data: &Option<&Vec<J
 		diagnostics,
 		scope,
 		types,
-		jsii_imports: type_diag.1,
 	};
 }

@@ -29,7 +29,9 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 	CompletionResponse::Array(FILES.with(|files| {
 		let files = files.borrow();
 		let uri = params.text_document_position.text_document.uri;
-		let result = files.get(&uri).expect("File must be open to get completions");
+		let result = files
+			.get(&uri.to_file_path().unwrap().to_str().unwrap().to_string())
+			.expect("File must be open to get completions");
 		let wing_source = result.contents.as_bytes();
 
 		let types = &result.types;

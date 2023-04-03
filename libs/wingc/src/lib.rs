@@ -169,8 +169,8 @@ pub fn type_check(
 	scope: &mut Scope,
 	types: &mut Types,
 	source_path: &Path,
-	jsii_imports: Option<Vec<&JsiiImportSpec>>,
-) -> (Diagnostics, Vec<JsiiImportSpec>) {
+	jsii_imports: &mut Vec<JsiiImportSpec>,
+) -> Diagnostics {
 	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
 	scope.set_env(env);
 
@@ -225,15 +225,12 @@ pub fn type_check(
 		types,
 	);
 
-	let mut tc = TypeChecker::new(types, source_path);
-	for import in jsii_imports.unwrap_or_default() {
-		tc.add_jsii_import_spec(import.to_owned());
-	}
+	let mut tc = TypeChecker::new(types, source_path, jsii_imports);
 	tc.add_globals(scope);
 
 	tc.type_check_scope(scope);
 
-	(tc.diagnostics.into_inner(), tc.jsii_imports)
+	tc.diagnostics.into_inner()
 }
 
 // TODO: refactor this (why is scope needed?) (move to separate module?)
@@ -280,13 +277,14 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 	let mut types = Types::new();
 	// Build our AST
 	let (mut scope, parse_diagnostics) = parse(&source_path);
+	let mut jsii_imports = Vec::new();
 
 	// Type check everything and build typed symbol environment
 	let type_check_data = if scope.statements.len() > 0 {
-		type_check(&mut scope, &mut types, &source_path, None)
+		type_check(&mut scope, &mut types, &source_path, &mut jsii_imports)
 	} else {
 		// empty scope, no type checking needed
-		(Diagnostics::new(), vec![])
+		Diagnostics::new()
 	};
 
 	// Validate that every Expr has an evaluated_type
@@ -295,11 +293,11 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 
 	// Print diagnostics
 	print_diagnostics(&parse_diagnostics);
-	print_diagnostics(&type_check_data.0);
+	print_diagnostics(&type_check_data);
 
 	// Collect all diagnostics
 	let mut diagnostics = parse_diagnostics;
-	diagnostics.extend(type_check_data.0);
+	diagnostics.extend(type_check_data);
 
 	// Analyze inflight captures
 	let mut capture_visitor = CaptureVisitor::new();

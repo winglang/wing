@@ -993,17 +993,17 @@ pub struct TypeChecker<'a> {
 	source_path: &'a Path,
 
 	pub diagnostics: RefCell<Diagnostics>,
-	pub jsii_imports: Vec<JsiiImportSpec>,
+	pub jsii_imports: &'a mut Vec<JsiiImportSpec>,
 }
 
 impl<'a> TypeChecker<'a> {
-	pub fn new(types: &'a mut Types, source_path: &'a Path) -> Self {
+	pub fn new(types: &'a mut Types, source_path: &'a Path, jsii_imports: &'a mut Vec<JsiiImportSpec>) -> Self {
 		Self {
-			types: types,
+			types,
 			inner_scopes: vec![],
 			source_path,
 			diagnostics: RefCell::new(Diagnostics::new()),
-			jsii_imports: vec![],
+			jsii_imports,
 		}
 	}
 
@@ -3103,7 +3103,7 @@ impl<'a> TypeChecker<'a> {
 			return res;
 		}
 
-		for jsii in &self.jsii_imports {
+		for jsii in &*self.jsii_imports {
 			if jsii.alias.name == user_defined_type.root.name {
 				let mut importer = JsiiImporter::new(&jsii, self.types);
 

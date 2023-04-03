@@ -19,7 +19,9 @@ pub fn on_goto_definition<'a>(params: lsp_types::GotoDefinitionParams) -> Vec<ls
 	FILES.with(|files| {
 		let files = files.borrow();
 		let uri = params.text_document_position_params.text_document.uri;
-		let result = files.get(&uri).expect("File must be open to get completions");
+		let result = files
+			.get(&uri.to_file_path().unwrap().to_str().unwrap().to_string())
+			.expect("File must be open to get completions");
 		let wing_source = result.contents.as_bytes();
 
 		let point = Point::new(
