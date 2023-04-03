@@ -1,3 +1,7 @@
+/// A helper for generating code snippets with indentation.
+///
+/// TODO: add `open_block` or `close_block` methods that automatically add
+/// `{` and `}`?
 #[derive(Default)]
 pub struct CodeMaker {
 	lines: Vec<(usize, String)>,
@@ -5,26 +9,31 @@ pub struct CodeMaker {
 }
 
 impl CodeMaker {
+	/// Emits a line of code and then increases the indent by one.
 	pub fn open<S: Into<String>>(&mut self, line: S) {
 		self.line(line);
 		self.indent += 1;
 	}
 
+	/// Decreases the indent by one and then emits a line of code.
 	pub fn close<S: Into<String>>(&mut self, line: S) {
 		self.indent -= 1;
 		self.line(line);
 	}
 
+	/// Emits a line of code with the current indent.
 	pub fn line<S: Into<String>>(&mut self, line: S) {
 		self.lines.push((self.indent, line.into()));
 	}
 
+	/// Emits multiple lines of code starting with the current indent.
 	pub fn add_lines<S: Into<String>>(&mut self, lines: Vec<S>) {
 		for line in lines {
 			self.line(line);
 		}
 	}
 
+	/// Emits multiple lines of code starting with the current indent.
 	#[allow(dead_code)]
 	pub fn add_code(&mut self, code: CodeMaker) {
 		assert_eq!(code.indent, 0, "Cannot add code with indent");
@@ -33,11 +42,13 @@ impl CodeMaker {
 		}
 	}
 
+	/// Decreases the current indent by one.
 	#[allow(dead_code)]
 	pub fn unindent(&mut self) {
 		self.indent -= 1;
 	}
 
+	/// Increases the current indent by one.
 	pub fn indent(&mut self) {
 		self.indent += 1;
 	}
