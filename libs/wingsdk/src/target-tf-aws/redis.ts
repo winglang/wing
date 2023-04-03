@@ -10,19 +10,14 @@ import * as core from "../core";
 import * as redis from "../redis";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
 
-// The cluster name must contain alphanumeric characters or hyphens, should start with a letter, and cannot end with a hyphen or contain two consecutive hyphens.
 const ELASTICACHE_NAME_OPTS: NameOptions = {
   maxLen: 50,
   disallowedRegex: /([^a-z0-9]+)/g,
 };
 
 export class Redis extends redis.Redis {
-  private readonly engine: string;
   private readonly clusterId: string;
   private readonly clusterArn: string;
-  private readonly engineVersion: string;
-  private readonly clusterNodeType: string;
-  private readonly parameterGroupName: string;
   private readonly securityGroup: SecurityGroup;
   private readonly subnet: Subnet;
 
@@ -38,11 +33,11 @@ export class Redis extends redis.Redis {
       );
     }
 
-    this.engine = "redis";
-    this.engineVersion = process.env.REDIS_ENGINE_VERSION ?? "6.2";
-    this.clusterNodeType =
+    const engine = "redis";
+    const engineVersion = process.env.REDIS_ENGINE_VERSION ?? "6.2";
+    const nodeType =
       process.env.REDIS_CLUSTER_NODE_TYPE ?? "cache.t4g.small";
-    this.parameterGroupName =
+    const parameterGroupName =
       process.env.REDIS_PARAMETER_GROUP_NAME ?? "default.redis6.x";
 
     const app = App.of(this) as App;
@@ -79,10 +74,10 @@ export class Redis extends redis.Redis {
 
     const cluster = new ElasticacheCluster(this, "RedisCluster", {
       clusterId: clusterName,
-      engine: this.engine,
-      engineVersion: this.engineVersion,
-      nodeType: this.clusterNodeType,
-      parameterGroupName: this.parameterGroupName,
+      engine,
+      engineVersion,
+      nodeType, 
+      parameterGroupName,
       availabilityZone: this.subnet.availabilityZone,
       subnetGroupName: subnetGroup.name,
       securityGroupIds: [this.securityGroup.id],
@@ -100,9 +95,12 @@ export class Redis extends redis.Redis {
     }
 
     const env = this.envName();
+    // Ops do not matter here since the client connects directly to the cluster.
+    // The only thing that we need to use AWS API for is to get the cluster endpoint
+    // from the cluster ID.
     host.addPolicyStatements({
       effect: "Allow",
-      action: ["*"],
+      action: ["elasticache:Describe*"],
       resource: this.clusterArn,
     });
 
@@ -123,7 +121,7 @@ export class Redis extends redis.Redis {
   }
 
   private envName(): string {
-    return `REDIS_URL_${this.node.addr.slice(-8)}`;
+    return `REDIS_CLUSTER_ID_${this.node.addr.slice(-8)}`;
   }
 }
 

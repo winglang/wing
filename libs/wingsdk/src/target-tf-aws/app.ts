@@ -35,6 +35,7 @@ import {
 } from "../cloud";
 import { CdktfApp, AppProps } from "../core";
 import { REDIS_FQN } from "../redis";
+import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
  * An app that knows how to synthesize constructs into a Terraform configuration
@@ -51,8 +52,6 @@ export class App extends CdktfApp {
   private _vpc?: Vpc;
   /** Subnets shared across app */
   public subnets: { [key: string]: Subnet };
-  /** Security groups shared across app */
-  public securityGroups: { [key: string]: SecurityGroup };
 
   constructor(props: AppProps = {}) {
     super(props);
@@ -60,7 +59,6 @@ export class App extends CdktfApp {
 
     this.testRunner = new TestRunner(this, "cloud.TestRunner");
     this.subnets = {};
-    this.securityGroups = {};
   }
 
   protected tryNew(
@@ -137,7 +135,13 @@ export class App extends CdktfApp {
     if (this._vpc) {
       return this._vpc;
     }
-    const identifier = `${this.node.addr.slice(-8)}`;
+
+    const VPC_NAME_OPTS: NameOptions = {
+      maxLen: 32,
+      disallowedRegex: /[^a-zA-Z0-9-]/,
+    };
+
+    const identifier = ResourceNames.generateName(this, VPC_NAME_OPTS) //`${this.node.addr.slice(-8)}`;
 
     // create the app wide VPC
     this._vpc = new Vpc(this, "VPC", {
@@ -157,9 +161,8 @@ export class App extends CdktfApp {
     // internet.
 
     // Create the public subnet.
-    // This subnet is intentionally small since we should not
-    // make by default be deploying things to publicly accessible subnets. Most resources
-    // will be behind private subnet. This leaves room for 3 more /24 public subnets (if needed)
+    // This subnet is intentionally small since most things by default most resources
+    // will be behind private subnet. Incase that assumption is wrong this leaves room for 3 more /24 public subnets
     const publicSubnet = new Subnet(this, "PublicSubnet", {
       vpcId: this._vpc.id,
       cidrBlock: "10.0.0.0/24", // 10.0.0.0 - 10.0.0.255

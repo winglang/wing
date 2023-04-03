@@ -55,8 +55,8 @@ export class Function extends cloud.Function {
   private readonly function: LambdaFunction;
   private readonly role: IamRole;
   private policyStatements?: any[];
-  private subnets?: string[];
-  private securityGroups?: string[];
+  private subnets?: Set<string>;
+  private securityGroups?: Set<string>;
 
   /**
    * Unqualified Function ARN
@@ -133,7 +133,7 @@ export class Function extends cloud.Function {
         produce: () => {
           // If there are subnets to attach then the role needs to be able to
           // create network interfaces
-          if ((this.subnets ?? []).length > 0) {
+          if ((this.subnets?.size ?? 0) > 0) {
             this.policyStatements?.push({
               Effect: "Allow",
               Action: [
@@ -194,9 +194,9 @@ export class Function extends cloud.Function {
       role: this.role.arn,
       publish: true,
       vpcConfig: {
-        subnetIds: Lazy.listValue({ produce: () => this.subnets ?? [] }),
+        subnetIds: Lazy.listValue({ produce: () => this.subnets ? Array.from(this.subnets.values()) : []}),
         securityGroupIds: Lazy.listValue({
-          produce: () => this.securityGroups ?? [],
+          produce: () => this.securityGroups ? Array.from(this.securityGroups.values()) : [],
         }),
       },
       environment: {
@@ -252,11 +252,11 @@ export class Function extends cloud.Function {
    */
   public addNetworkConfig(vpcConfig: FunctionNetworkConfig) {
     if (!this.subnets || !this.securityGroups) {
-      this.subnets = [];
-      this.securityGroups = [];
+      this.subnets = new Set();
+      this.securityGroups = new Set();
     }
-    this.subnets.push(...vpcConfig.subnetIds);
-    this.securityGroups.push(...vpcConfig.securityGroupIds);
+    vpcConfig.subnetIds.forEach((subnet) => this.subnets!.add(subnet));
+    vpcConfig.securityGroupIds.forEach((sg) => this.securityGroups!.add(sg));
   }
 
   /**
