@@ -1647,22 +1647,24 @@ separated with commas.
 All methods of an interface are implicitly public and cannot be of any other
 type of visibility (private, protected, etc.).
 
+Interface fields are not supported.
+
 > ```TS
 > // Wing program:
 > interface IMyInterface1 {
->   field1: num;
 >   method1(x: num): str;
 > };
 > interface IMyInterface2 {
->   inflight field2: str;
 >   inflight method2(): str;
 > };
 > resource MyResource impl IMyInterface1, IMyInterface2 {
->   inflight field2: str;
+>   field1: num;
+>   field2: str;
+>
 >   inflight init(x: num) {
 >     // inflight client initialization
->     this.field2 = "sample";
 >     this.field1 = x;
+>     this.field2 = "sample";
 >   }
 >   method1(x: num): str {
 >     return "sample: ${x}";

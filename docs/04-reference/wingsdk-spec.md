@@ -733,13 +733,13 @@ resource Schedule {
    * Trigger events according to a cron schedule.
    * @example "0 0 * * *" - midnight every day
    */
-  static fromCron(cron: str): Schedule;
+  static from_cron(cron: str): Schedule;
 
   /**
    * Trigger events at a periodic rate.
    * @example 1 hour
    */
-  static fromRate(rate: duration): Schedule;
+  static from_rate(rate: duration): Schedule;
 
   private init(/* elided */): Schedule;
 
