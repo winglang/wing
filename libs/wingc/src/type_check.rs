@@ -2518,12 +2518,13 @@ impl<'a> TypeChecker<'a> {
 		// the statement that initiated the bring, if any
 		stmt: Option<&Stmt>,
 	) {
-		let mut jsii = self
+		let jsii = if let Some(jsii) = self
 			.jsii_imports
 			.iter()
-			.find(|j| j.assembly_name == library_name && j.alias.name == alias.name);
-
-		if jsii.is_none() {
+			.find(|j| j.assembly_name == library_name && j.alias.name == alias.name)
+		{
+			jsii
+		} else {
 			let mut wingii_types = wingii::type_system::TypeSystem::new();
 
 			// Loading the SDK is handled different from loading any other jsii modules because with the SDK we provide an exact
@@ -2575,13 +2576,13 @@ impl<'a> TypeChecker<'a> {
 				import_statement_idx: stmt.map(|s| s.idx).unwrap_or(0),
 			});
 
-			jsii = self
+			self
 				.jsii_imports
 				.iter()
 				.find(|j| j.assembly_name == assembly_name && j.alias.name == alias.name)
-		}
+				.unwrap()
+		};
 
-		let jsii = jsii.expect("JSII Loaded");
 		let mut importer = JsiiImporter::new(jsii, self.types);
 
 		if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME && jsii.alias.name == WINGSDK_STD_MODULE {
