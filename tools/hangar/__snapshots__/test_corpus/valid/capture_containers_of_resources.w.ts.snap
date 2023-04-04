@@ -101,7 +101,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
           },
         },
         "bucket_prefix": "b1-c88fb896-",
-        "force_destroy": true,
+        "force_destroy": false,
       },
       "root_b2_26383A0E": {
         "//": {
@@ -111,7 +111,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
           },
         },
         "bucket_prefix": "b2-c844cd88-",
-        "force_destroy": true,
+        "force_destroy": false,
       },
       "root_test_Code_2D131EC2": {
         "//": {
@@ -266,7 +266,7 @@ class $Root extends $stdlib.core.Resource {
 
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: \\"capture_containers_of_resources\\", plugins: $plugins });
+    super({ outdir: $outdir, name: \\"capture_containers_of_resources\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, \\"env0\\");
       const $test_runner = this.testRunner;

@@ -150,7 +150,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
           },
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
-        "force_destroy": true,
+        "force_destroy": false,
       },
       "root_testget_Code_EC989716": {
         "//": {
@@ -284,7 +284,7 @@ class $Root extends $stdlib.core.Resource {
 
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: \\"test_bucket\\", plugins: $plugins });
+    super({ outdir: $outdir, name: \\"test_bucket\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, \\"env0\\");
       const $test_runner = this.testRunner;

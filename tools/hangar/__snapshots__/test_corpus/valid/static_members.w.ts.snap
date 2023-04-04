@@ -189,7 +189,7 @@ Foo._annotateInflight(\\"get_123\\", {});
 
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: \\"static_members\\", plugins: $plugins });
+    super({ outdir: $outdir, name: \\"static_members\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, \\"env0\\");
       const $test_runner = this.testRunner;

@@ -155,7 +155,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
           },
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
-        "force_destroy": true,
+        "force_destroy": false,
       },
       "root_test_Code_2D131EC2": {
         "//": {
@@ -300,7 +300,7 @@ Bar._annotateInflight(\\"my_method\\", {\\"this.b\\": { ops: [\\"get\\",\\"put\\
 
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: \\"resource\\", plugins: $plugins });
+    super({ outdir: $outdir, name: \\"resource\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, \\"env0\\");
       const $test_runner = this.testRunner;

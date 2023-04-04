@@ -215,7 +215,7 @@ Foo._annotateInflight(\\"call\\", {});
 
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: \\"extern_implementation\\", plugins: $plugins });
+    super({ outdir: $outdir, name: \\"extern_implementation\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, \\"env0\\");
       const $test_runner = this.testRunner;

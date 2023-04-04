@@ -106,7 +106,7 @@ Foo._annotateInflight(\\"get_stuff\\", {\\"this.data.field0\\": { ops: [] }});
 
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: \\"structs\\", plugins: $plugins });
+    super({ outdir: $outdir, name: \\"structs\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, \\"env0\\");
       const $test_runner = this.testRunner;
