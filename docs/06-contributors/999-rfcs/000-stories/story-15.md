@@ -139,6 +139,7 @@ resource TaskListApi {
       // Easter Egg - if you add a todo with the single word "random" as the title, 
       //              the system will fetch a random task from the internet
       if title == "random" {
+        // Workaround for https://github.com/winglang/wing/issues/1969 - calling task_list directly instead of via `this.`
         let data: Json = task_list.get_data("https://www.boredapi.com/api/activity");
         title = str.from_json(data.get("activity")); 
       } 
