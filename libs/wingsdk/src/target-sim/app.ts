@@ -35,10 +35,8 @@ import { SIMULATOR_FILE_PATH } from "../util";
  * Wing simulator (.wsim) file.
  */
 export class App extends core.App {
-  /**
-   * The output directory of this app.
-   */
   public readonly outdir: string;
+  public readonly isTestEnvironment: boolean;
 
   /**
    * The test runner for this app.
@@ -50,6 +48,7 @@ export class App extends core.App {
   constructor(props: core.AppProps) {
     super(undefined as any, "root");
     this.outdir = props.outdir ?? ".";
+    this.isTestEnvironment = props.isTestEnvironment ?? false;
 
     this.testRunner = new TestRunner(this, "cloud.TestRunner");
 

@@ -40,6 +40,12 @@ export interface AppProps {
    * @default - [] no plugins
    */
   readonly plugins?: string[];
+
+  /**
+   * Whether or not this app is being synthesized into a test environment.
+   * @default false
+   */
+  readonly isTestEnvironment?: boolean;
 }
 
 /**
@@ -65,6 +71,11 @@ export abstract class App extends Construct {
    * The output directory.
    */
   public abstract readonly outdir: string;
+
+  /**
+   * Whether or not this app is being synthesized into a test environment.
+   */
+  public abstract readonly isTestEnvironment: boolean;
 
   /**
    * The ".wing" directory, which is where the compiler emits its output. We are taking an implicit
@@ -159,6 +170,7 @@ export abstract class CdktfApp extends App {
    */
   public readonly terraformManifestPath: string;
   public readonly outdir: string;
+  public readonly isTestEnvironment: boolean;
 
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
@@ -181,6 +193,7 @@ export abstract class CdktfApp extends App {
     super(cdktfStack, "Default");
 
     this.outdir = outdir;
+    this.isTestEnvironment = props.isTestEnvironment ?? false;
 
     // HACK: monkey patch the `new` method on the cdktf app (which is the root of the tree) so that
     // we can intercept the creation of resources and replace them with our own.

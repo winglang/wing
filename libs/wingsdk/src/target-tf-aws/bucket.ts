@@ -7,6 +7,7 @@ import { S3BucketPublicAccessBlock } from "@cdktf/provider-aws/lib/s3-bucket-pub
 import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/lib/s3-bucket-server-side-encryption-configuration";
 import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { Construct } from "constructs";
+import { App } from "./app";
 import { Function as AWSFunction } from "./function";
 import { Topic as AWSTopic } from "./topic";
 import * as cloud from "../cloud";
@@ -74,9 +75,11 @@ export class Bucket extends cloud.Bucket {
     // but we do not need to handle these cases since we are generating the
     // prefix only
 
+    const isTestEnvironment = App.of(this).isTestEnvironment;
+
     this.bucket = new S3Bucket(this, "Default", {
       bucketPrefix,
-      forceDestroy: true, // TODO: this should only be true when compiled in test mode
+      forceDestroy: isTestEnvironment ? true : false,
     });
 
     // best practice: (at-rest) data encryption with Amazon S3-managed keys

@@ -11,7 +11,7 @@ exports[`bucket is public 1`] = `
     \\"aws_s3_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
         \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
-        \\"force_destroy\\": true
+        \\"force_destroy\\": false
       }
     },
     \\"aws_s3_bucket_policy\\": {
@@ -185,7 +185,7 @@ exports[`bucket prefix must be lowercase 1`] = `
     \\"aws_s3_bucket\\": {
       \\"root_TheUncannyBucket_9FBBB2ED\\": {
         \\"bucket_prefix\\": \\"the-uncanny-bucket-c88a0953-\\",
-        \\"force_destroy\\": true
+        \\"force_destroy\\": false
       }
     },
     \\"aws_s3_bucket_public_access_block\\": {
@@ -362,7 +362,7 @@ exports[`bucket prefix valid 1`] = `
     \\"aws_s3_bucket\\": {
       \\"root_theuncannybucket_03A74E00\\": {
         \\"bucket_prefix\\": \\"the-uncanny-bucket-c8e2755c-\\",
-        \\"force_destroy\\": true
+        \\"force_destroy\\": false
       }
     },
     \\"aws_s3_bucket_public_access_block\\": {
@@ -581,7 +581,7 @@ exports[`bucket with onCreate method 1`] = `
     \\"aws_s3_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
         \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
-        \\"force_destroy\\": true
+        \\"force_destroy\\": false
       },
       \\"root_mybucket_mybucketoncreateOnMessage2c90a36b_Code_3804774D\\": {
         \\"bucket_prefix\\": \\"code-c8663a19-\\"
@@ -1086,7 +1086,7 @@ exports[`bucket with onDelete method 1`] = `
     \\"aws_s3_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
         \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
-        \\"force_destroy\\": true
+        \\"force_destroy\\": false
       },
       \\"root_mybucket_mybucketondeleteOnMessagef22c8a47_Code_23AF5F43\\": {
         \\"bucket_prefix\\": \\"code-c8ee90a3-\\"
@@ -1655,7 +1655,7 @@ exports[`bucket with onEvent method 1`] = `
     \\"aws_s3_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
         \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
-        \\"force_destroy\\": true
+        \\"force_destroy\\": false
       },
       \\"root_mybucket_mybucketoncreateOnMessage2c90a36b_Code_3804774D\\": {
         \\"bucket_prefix\\": \\"code-c8663a19-\\"
@@ -2678,7 +2678,7 @@ exports[`bucket with onUpdate method 1`] = `
     \\"aws_s3_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
         \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
-        \\"force_destroy\\": true
+        \\"force_destroy\\": false
       },
       \\"root_mybucket_mybucketonupdateOnMessage32b7a290_Code_0DCA9F7A\\": {
         \\"bucket_prefix\\": \\"code-c8864029-\\"
@@ -3141,7 +3141,7 @@ exports[`bucket with two preflight objects 1`] = `
     \\"aws_s3_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
         \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
-        \\"force_destroy\\": true
+        \\"force_destroy\\": false
       }
     },
     \\"aws_s3_bucket_policy\\": {
@@ -3343,7 +3343,7 @@ exports[`create a bucket 1`] = `
     \\"aws_s3_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
         \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
-        \\"force_destroy\\": true
+        \\"force_destroy\\": false
       }
     },
     \\"aws_s3_bucket_public_access_block\\": {
