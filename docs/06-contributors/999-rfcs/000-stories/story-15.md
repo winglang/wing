@@ -68,6 +68,7 @@ resource TaskList impl ITaskList {
   extern "./tasklist_helper.js" static inflight uuid(): str; 
   // Workaround for https://github.com/winglang/wing/issues/1669 - changed method to be non-static
   extern "./tasklist_helper.js" inflight get_data(url: str): Json;
+  extern "./tasklist_helper.js" inflight create_regex(s: str): IMyRegExp;
 
   init() {
     this._redis = new redis.Redis();
@@ -126,8 +127,6 @@ resource TaskList impl ITaskList {
 resource TaskListApi {
   api: cloud.Api;
   task_list: TaskList;
-        
-  extern "./tasklist_helper.js" static inflight create_regex(s: str): IMyRegExp;
         
   init(task_list: TaskList) {
     this.task_list = task_list;
@@ -188,7 +187,7 @@ resource TaskListApi {
 
     this.api.get("/tasks", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let search = req.query.get("search");
-      let results = task_list.find(TaskListApi.create_regex(search));
+      let results = task_list.find(task_list.create_regex(search));
       return cloud.ApiResponse { status: 200, body: results };
     });
   }
