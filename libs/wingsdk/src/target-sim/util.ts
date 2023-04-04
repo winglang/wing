@@ -3,16 +3,8 @@ import { basename } from "path";
 import { promisify } from "util";
 import { IConstruct } from "constructs";
 import { Function } from "./function";
-import { IInflightHost, IResource, NodeJsCode, Resource } from "../core";
-
-/**
- * Produce a token that will be replaced with the handle of a resource
- * when the simulator is run. This can be inserted to an environment variable
- * so that the real value can be used by the function.
- */
-export function simulatorHandleToken(resource: IResource): string {
-  return `\${${resource.node.path}#attrs.handle}`;
-}
+import { simulatorHandleToken } from "./tokens";
+import { IInflightHost, NodeJsCode, Resource } from "../core";
 
 /**
  * Check if a file exists for an specific path

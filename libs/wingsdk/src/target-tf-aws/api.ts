@@ -7,11 +7,11 @@ import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
 
 import { Lazy } from "cdktf";
 import { Construct } from "constructs";
+import { App } from "./app";
 import { Function } from "./function";
 import { core } from "..";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
-import { CdktfApp } from "../core";
 import { Code } from "../core/inflight";
 import { convertBetweenHandlers } from "../utils/convert";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
@@ -33,6 +33,12 @@ export class Api extends cloud.Api {
     this.api = new WingRestApi(this, "api", {
       apiSpec: this._getApiSpec(),
     });
+  }
+
+  public get url(): string {
+    const region = (App.of(this) as App).region;
+    const awsSuffix = "amazonaws.com"; // TODO: use dns_suffix from https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition
+    return `https://${this.api.api.id}.execute-api.${region}.${awsSuffix}/`;
   }
 
   /**
@@ -329,7 +335,7 @@ class WingRestApi extends Construct {
   ) {
     super(scope, id);
 
-    this.region = (CdktfApp.of(scope) as CdktfApp).region;
+    this.region = (App.of(this) as App).region;
     this.api = new ApiGatewayRestApi(this, "api", {
       name: ResourceNames.generateName(this, NAME_OPTS),
       // Lazy generation of the api spec because routes can be added after the API is created

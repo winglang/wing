@@ -2,11 +2,8 @@ import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { ApiSchema, API_TYPE } from "./schema-resources";
-import {
-  bindSimulatorResource,
-  makeSimulatorJsClient,
-  simulatorHandleToken,
-} from "./util";
+import { simulatorAttrToken, simulatorHandleToken } from "./tokens";
+import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 
@@ -17,6 +14,10 @@ import * as core from "../core";
  */
 export class Api extends cloud.Api implements ISimulatorResource {
   private _routes: ApiSchema["props"]["routes"] = [];
+
+  public get url(): string {
+    return simulatorAttrToken(this, "url");
+  }
 
   private createOrGetFunction(
     inflight: cloud.IApiEndpointHandler,

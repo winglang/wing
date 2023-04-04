@@ -4,11 +4,8 @@ import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { TopicSchema, TopicSubscriber, TOPIC_TYPE } from "./schema-resources";
-import {
-  bindSimulatorResource,
-  makeSimulatorJsClient,
-  simulatorHandleToken,
-} from "./util";
+import { simulatorHandleToken } from "./tokens";
+import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../utils/convert";

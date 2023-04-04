@@ -44,6 +44,11 @@ export abstract class Api extends Resource {
 
   public readonly stateful = true;
 
+  /**
+   * The base URL of the API endpoint.
+   */
+  public abstract readonly url: string;
+
   // https://spec.openapis.org/oas/v3.0.3
   private apiSpec: any = {
     openapi: "3.0.3",

@@ -326,6 +326,35 @@ test("api handler can set response headers", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
+test("api url can be used as environment variable", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const handler = Testing.makeHandler(
+    app,
+    "Handler",
+    `async handle(req) { return process.env["API_URL"]; }`
+  );
+  cloud.Function._newFunction(app, "my_function", handler, {
+    env: {
+      API_URL: api.url,
+    },
+  });
+
+  // WHEN
+  const s = await app.startSimulator();
+  const fnEnvironmentValue =
+    s.getResourceConfig("/my_function").props.environmentVariables.API_URL;
+
+  const fnClient = s.getResource("/my_function") as cloud.IFunctionClient;
+  const response = await fnClient.invoke("");
+
+  // THEN
+  await s.stop();
+  expect(fnEnvironmentValue).toEqual("${root/my_api#attrs.url}");
+  expect(response.startsWith("http://")).toEqual(true);
+});
+
 function getApiUrl(s: Simulator, path: string): string {
   const apiAttrs = s.getResourceConfig(path).attrs as ApiAttributes;
   return apiAttrs.url;
