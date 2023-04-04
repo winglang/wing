@@ -155,6 +155,8 @@ impl<'a> JsiiImporter<'a> {
 
 		let type_str = type_fqn.as_str();
 
+		self.setup_namespaces_for(&type_fqn);
+
 		// Hack: if the type is "constructs.IConstruct", we import it manually
 		// this is done so we can avoid loading the constructs module
 		if type_str == CONSTRUCT_BASE_INTERFACE {
@@ -167,8 +169,6 @@ impl<'a> JsiiImporter<'a> {
 		if self.wing_types.libraries.lookup_nested_str(type_str, None).is_ok() {
 			return;
 		}
-
-		self.setup_namespaces_for(&type_fqn);
 
 		// Check if this is a JSII interface and import it if it is
 		let jsii_interface = self.jsii_spec.type_system.find_interface(type_fqn);

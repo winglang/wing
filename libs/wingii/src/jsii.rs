@@ -615,7 +615,6 @@ pub enum Type {
 #[derive(Clone, PartialEq, Debug, Deserialize, Serialize)]
 #[doc = " A reference to a type (primitive, collection or fqn)."]
 #[serde(untagged)]
-
 pub enum TypeReference {
 	PrimitiveTypeReference(PrimitiveTypeReference),
 	CollectionTypeReference(Box<CollectionTypeReference>),

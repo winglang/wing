@@ -992,8 +992,10 @@ pub struct TypeChecker<'a> {
 	/// The path to the source file being type checked.
 	source_path: &'a Path,
 
+	/// JSII Manifest descriptions to be imported
+	jsii_imports: &'a mut Vec<JsiiImportSpec>,
+
 	pub diagnostics: RefCell<Diagnostics>,
-	pub jsii_imports: &'a mut Vec<JsiiImportSpec>,
 }
 
 impl<'a> TypeChecker<'a> {
@@ -2582,7 +2584,7 @@ impl<'a> TypeChecker<'a> {
 		let jsii = jsii.expect("JSII Loaded");
 		let mut importer = JsiiImporter::new(jsii, self.types);
 
-		if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME {
+		if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME && jsii.alias.name == WINGSDK_STD_MODULE {
 			importer.deep_import_submodule_to_env(WINGSDK_STD_MODULE);
 		}
 		importer.import_submodules_to_env(env);
