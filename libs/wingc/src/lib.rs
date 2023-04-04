@@ -280,7 +280,7 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 	let mut jsii_imports = Vec::new();
 
 	// Type check everything and build typed symbol environment
-	let type_check_data = if scope.statements.len() > 0 {
+	let type_check_diagnostics = if scope.statements.len() > 0 {
 		type_check(&mut scope, &mut types, &source_path, &mut jsii_imports)
 	} else {
 		// empty scope, no type checking needed
@@ -293,11 +293,11 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 
 	// Print diagnostics
 	print_diagnostics(&parse_diagnostics);
-	print_diagnostics(&type_check_data);
+	print_diagnostics(&type_check_diagnostics);
 
 	// Collect all diagnostics
 	let mut diagnostics = parse_diagnostics;
-	diagnostics.extend(type_check_data);
+	diagnostics.extend(type_check_diagnostics);
 
 	// Analyze inflight captures
 	let mut capture_visitor = CaptureVisitor::new();

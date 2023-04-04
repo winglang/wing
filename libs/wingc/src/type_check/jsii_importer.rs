@@ -190,6 +190,8 @@ impl<'a> JsiiImporter<'a> {
 			self.import_enum(jsii_enum);
 			return;
 		}
+
+		debug!("Type {} was not found in the type system", type_fqn);
 	}
 
 	pub fn setup_namespaces_for(&mut self, type_name: &FQN) {
@@ -751,6 +753,7 @@ impl<'a> JsiiImporter<'a> {
 		}
 	}
 
+	/// Imports all types within a given submodule
 	pub fn deep_import_submodule_to_env(&mut self, submodule: &str) {
 		let assembly = self
 			.jsii_spec
@@ -765,6 +768,7 @@ impl<'a> JsiiImporter<'a> {
 		});
 	}
 
+	/// Imports submodules of the assembly, preparing each as an available namespace
 	pub fn import_submodules_to_env(&mut self, env: &mut SymbolEnv) {
 		let assembly = self
 			.jsii_spec
