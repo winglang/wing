@@ -11,7 +11,7 @@ resource JSHelper {
 }
 
 
-q.on_message(inflight (msg: str): str => {
+q.on_message(inflight () => {
   c.inc();
 });
 

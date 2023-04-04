@@ -9,7 +9,7 @@ resource JSHelper {
 }
 
 // TODO: wont work without: https://github.com/winglang/wing/issues/1384
-q.add_consumer(inflight (msg: str): str => {
+q.add_consumer(inflight () => {
   c.inc();
 });
 

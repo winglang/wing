@@ -9,13 +9,13 @@ resource JSHelper {
 
 let js = new JSHelper();
 
-q.on_message(inflight (msg: str): str => {
+q.on_message(inflight () => {
   js.sleep(2000);
 });
 
 
 // TODO: this test fails sim due to issue: https://github.com/winglang/wing/issues/165
-new cloud.Function(inflight (msg: str): str => {
+new cloud.Function(inflight ()=> {
   // each push should result in a timeout
   q.push("foo");
   q.push("foo");
