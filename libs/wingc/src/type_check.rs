@@ -1794,7 +1794,11 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn type_check_statement(&mut self, stmt: &Stmt, env: &mut SymbolEnv) {
+		// Set the current statement index for symbol lookup checks. We can safely assume we're
+		// not overwriting the current statement index because `type_check_statement` is never
+		// recursively called (we use a breadth-first traversal of the AST statements).
 		self.statement_idx = stmt.idx;
+
 		match &stmt.kind {
 			StmtKind::VariableDef {
 				reassignable,
