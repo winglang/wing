@@ -3,6 +3,7 @@ import { BucketView } from "./BucketView.js";
 import { CounterView } from "./CounterView.js";
 import { FunctionView } from "./FunctionView.js";
 import { QueueView } from "./QueueView.js";
+import { RedisView } from "./RedisView.js";
 import { TopicView } from "./TopicView.js";
 import { UnsupportedView } from "./UnsupportedView.js";
 
@@ -33,6 +34,9 @@ export const ResourceView = ({
       }
       case "wingsdk.cloud.Topic": {
         return <TopicView resourcePath={resourcePath} />;
+      }
+      case "wingsdk.redis.Redis": {
+        return <RedisView resourcePath={resourcePath} />;
       }
       default: {
         return (

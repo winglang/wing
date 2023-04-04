@@ -8,26 +8,28 @@ import {
   CursorArrowRaysIcon,
 } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import { ForwardRefExoticComponent, SVGProps, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { InspectorSection } from "../design-system/InspectorSection.js";
 import { Pill } from "../design-system/Pill.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
-import { getResourceIconComponent, ResourceIcon } from "../utils/utils.js";
+import {
+  getResourceIconComponent,
+  IconComponent,
+  ResourceIcon,
+} from "../utils/utils.js";
 
 import { AttributeView } from "./AttributeView.js";
-import { ApiMetadata } from "./resource-metadata/ApiMetadata.js";
 import { BucketMetadata } from "./resource-metadata/BucketMetadata.js";
 import { CounterMetadata } from "./resource-metadata/CounterMetadata.js";
 import { FunctionMetadata } from "./resource-metadata/FunctionMetadata.js";
 import { QueueMetadata } from "./resource-metadata/QueueMetadata.js";
-import { ApiView } from "./resource-views/ApiView.js";
 import { ResourceView } from "./resource-views/ResourceView.js";
 
 interface AttributeGroup {
   groupName: string;
   actionName?: string;
-  icon?: ForwardRefExoticComponent<SVGProps<SVGSVGElement>>;
+  icon?: IconComponent;
 }
 
 interface ConnectionsGroup {
@@ -78,7 +80,7 @@ export const MetadataPanel = ({
     const connectionsGroupsArray: ConnectionsGroup[] = [];
     let resourceGroup: AttributeGroup | undefined;
     if (node.type.startsWith("wingsdk.cloud") && node.props) {
-      const icon = getResourceIconComponent(node.type, {}, node.id);
+      const icon = getResourceIconComponent(node.type, { resourceId: node.id });
       switch (node.type) {
         case "wingsdk.cloud.Function": {
           resourceGroup = {
@@ -127,6 +129,13 @@ export const MetadataPanel = ({
           resourceGroup = {
             groupName: "Api",
             icon: getResourceIconComponent(node.type),
+          };
+
+          break;
+        }
+        case "wingsdk.redis.Redis": {
+          resourceGroup = {
+            groupName: "Connection",
           };
 
           break;
@@ -283,7 +292,8 @@ export const MetadataPanel = ({
             </InspectorSection>
           )}
 
-          {node.type.startsWith("wingsdk.cloud") && (
+          {(node.type.startsWith("wingsdk.cloud") ||
+            node.type.startsWith("wingsdk.redis")) && (
             <>
               <InspectorSection
                 text={resourceGroup?.groupName || "Interact"}
@@ -295,23 +305,21 @@ export const MetadataPanel = ({
                 <div className="bg-slate-50 border-t border-slate-200">
                   {resourceGroup?.groupName && (
                     <>
-                      <div className="px-2 pt-1.5 flex flex-col gap-y-1 gap-x-4 bg-slate-50">
-                        {node.type === "wingsdk.cloud.Function" && (
-                          <FunctionMetadata node={node} />
-                        )}
-                        {node.type === "wingsdk.cloud.Queue" && (
-                          <QueueMetadata node={node} />
-                        )}
-                        {node.type === "wingsdk.cloud.Bucket" && (
-                          <BucketMetadata node={node} />
-                        )}
-                        {node.type === "wingsdk.cloud.Counter" && (
-                          <CounterMetadata node={node} />
-                        )}
-                      </div>
+                      {node.type === "wingsdk.cloud.Function" && (
+                        <FunctionMetadata node={node} />
+                      )}
+                      {node.type === "wingsdk.cloud.Queue" && (
+                        <QueueMetadata node={node} />
+                      )}
+                      {node.type === "wingsdk.cloud.Bucket" && (
+                        <BucketMetadata node={node} />
+                      )}
+                      {node.type === "wingsdk.cloud.Counter" && (
+                        <CounterMetadata node={node} />
+                      )}
                       {resourceGroup?.actionName && (
                         <InspectorSection
-                          text={resourceGroup?.actionName}
+                          text={resourceGroup.actionName}
                           open={openInspectorSections.includes(
                             "interact-actions",
                           )}

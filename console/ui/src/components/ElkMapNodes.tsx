@@ -1,9 +1,8 @@
 import { BaseResourceSchema } from "@wingconsole/server";
 import classNames from "classnames";
-import { FunctionComponent, PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 
-export interface IconComponent
-  extends FunctionComponent<React.SVGProps<SVGSVGElement>> {}
+import { IconComponent } from "../utils/utils.js";
 
 const getResourceBorderColor = (
   resourceType: BaseResourceSchema["type"] | undefined,
@@ -29,6 +28,9 @@ const getResourceBorderColor = (
     }
     case "wingsdk.cloud.Api": {
       return "border-t-[3px] border-t-amber-500 group-hover:border-t-amber-500 group-focus:border-t-amber-500";
+    }
+    case "wingsdk.redis.Redis": {
+      return "border-t-[3px] border-t-[#C6302B] group-hover:border-t-[#C6302B] group-focus:border-t-[#C6302B]";
     }
   }
 };

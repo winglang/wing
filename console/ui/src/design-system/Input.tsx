@@ -1,6 +1,8 @@
 import classNames from "classnames";
 import { forwardRef } from "react";
 
+import { IconComponent } from "../utils/utils.js";
+
 export interface InputProps {
   id?: string;
   name?: string;
@@ -12,7 +14,7 @@ export interface InputProps {
   readOnly?: boolean;
   disabled?: boolean;
   onFocus?: React.FocusEventHandler<HTMLInputElement>;
-  leftIcon?: React.ForwardRefExoticComponent<React.SVGProps<SVGSVGElement>>;
+  leftIcon?: IconComponent;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
 }

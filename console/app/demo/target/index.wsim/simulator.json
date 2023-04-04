@@ -74,6 +74,26 @@
       "attrs": {}
     },
     {
+      "type": "wingsdk.redis.Redis",
+      "path": "root/redis.Redis",
+      "props": {},
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/Redis interaction",
+      "props": {
+        "sourceCodeFile": ".wing/redis_interaction_c896e1b4.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {
+          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}",
+          "REDIS_HANDLE_df778c45": "${root/redis.Redis#attrs.handle}"
+        },
+        "timeout": 60000
+      },
+      "attrs": {}
+    },
+    {
       "type": "wingsdk.cloud.Function",
       "path": "root/test: Increment counter",
       "props": {
@@ -92,7 +112,8 @@
       "path": "root/cloud.Bucket",
       "props": {
         "public": false,
-        "initialObjects": {}
+        "initialObjects": {},
+        "topics": {}
       },
       "attrs": {}
     },
@@ -223,5 +244,5 @@
       "attrs": {}
     }
   ],
-  "sdkVersion": "0.8.5"
+  "sdkVersion": "0.8.24"
 }

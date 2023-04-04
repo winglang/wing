@@ -1,11 +1,12 @@
 import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import classNames from "classnames";
-import { ForwardRefExoticComponent, SVGProps } from "react";
+
+import { IconComponent } from "../utils/utils.js";
 
 export interface InspectorSectionHeadingProps {
   open?: boolean;
   text: string;
-  icon?: ForwardRefExoticComponent<SVGProps<SVGSVGElement>>;
+  icon?: IconComponent;
   onClick?: () => void;
   subection?: boolean;
   className?: string;

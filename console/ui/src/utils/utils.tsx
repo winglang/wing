@@ -22,9 +22,11 @@ import {
   CloudIcon as SolidCloudIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
-import { BaseResourceSchema, WingSimulatorSchema } from "@wingconsole/server";
+import { BaseResourceSchema } from "@wingconsole/server";
 import classNames from "classnames";
-import { SVGProps } from "react";
+import { FunctionComponent, SVGProps } from "react";
+
+import { RedisIcon } from "../design-system/icons/RedisIcon.js";
 
 import { TreeMenuItem } from "./useTreeMenuItems.js";
 
@@ -39,37 +41,11 @@ export const flattenTreeMenuItems = (items: TreeMenuItem[]): TreeMenuItem[] => {
   });
 };
 
-export const SchemaToTreeMenuItems = (
-  schema: WingSimulatorSchema,
-): TreeMenuItem[] => {
-  const tree: TreeMenuItem[] = [];
-  const buildTree = (
-    node: BaseResourceSchema,
-    parent: TreeMenuItem | undefined,
-  ) => {
-    const item: TreeMenuItem = {
-      id: node.path ?? "",
-      label: node.path?.split("/").pop() ?? "",
-      children: [],
-      icon: (
-        <ResourceIcon
-          resourceType={node.type}
-          resourcePath={node.path}
-          className="w-4 h-4"
-          darkenOnGroupHover
-        />
-      ),
-    };
-    if (parent) {
-      parent.children?.push(item);
-    } else {
-      tree.push(item);
-    }
-  };
-  return tree;
-};
+export interface IconProps extends Omit<SVGProps<SVGSVGElement>, "ref"> {}
 
-export const CustomResourceIcon = (props: React.SVGProps<SVGSVGElement>) => {
+export interface IconComponent extends FunctionComponent<IconProps> {}
+
+export const CustomResourceIcon = (props: IconProps) => {
   return (
     <div className="relative">
       <CubeIcon {...props} />
@@ -87,8 +63,7 @@ export const CustomResourceIcon = (props: React.SVGProps<SVGSVGElement>) => {
 
 export const getResourceIconComponent = (
   resourceType: BaseResourceSchema["type"] | undefined,
-  { solid = false }: { solid?: boolean } = {},
-  resourceId?: string,
+  { solid = true, resourceId }: { solid?: boolean; resourceId?: string } = {},
 ) => {
   if (resourceId && isTest.test(resourceId)) {
     return solid ? SolidBeakerIcon : BeakerIcon;
@@ -117,6 +92,9 @@ export const getResourceIconComponent = (
     }
     case "cloud.Cron": {
       return solid ? SolidClockIcon : ClockIcon;
+    }
+    case "wingsdk.redis.Redis": {
+      return RedisIcon;
     }
     case "wingsdk.cloud.Test": {
       return solid ? SolidBeakerIcon : BeakerIcon;
@@ -200,7 +178,7 @@ const getResourceIconColors = (options: {
   }
 };
 
-export interface ResourceIconProps extends SVGProps<SVGSVGElement> {
+export interface ResourceIconProps extends IconProps {
   resourceType: BaseResourceSchema["type"] | undefined;
   resourcePath?: string;
   darkenOnGroupHover?: boolean;
@@ -217,11 +195,10 @@ export const ResourceIcon = ({
   solid,
   ...props
 }: ResourceIconProps) => {
-  const Component = getResourceIconComponent(
-    resourceType,
-    { solid },
-    resourcePath,
-  );
+  const Component = getResourceIconComponent(resourceType, {
+    solid,
+    resourceId: resourcePath,
+  });
   const colors = getResourceIconColors({
     resourceType,
     darkenOnGroupHover,

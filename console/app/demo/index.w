@@ -1,4 +1,5 @@
 bring cloud;
+bring redis;
 
 let bucket = new cloud.Bucket();
 let queue = new cloud.Queue();
@@ -43,6 +44,15 @@ topic.on_message(inflight (message: str): str => {
   log("Topic subscriber #2: ${message}");
   return message;
 });
+
+let r = new redis.Redis();
+new cloud.Function(inflight (message :str) :str => {
+  log("${r.url()}");
+  r.set("wing", message);
+  let value = r.get("wing");
+  log("${value}");
+  return r.url();
+}) as "Redis interaction";
 
 new cloud.Function(inflight (message: str) => {
   let previous = counter.inc();

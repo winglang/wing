@@ -23,7 +23,7 @@ export const QueueMetadata = ({ node }: QueueMetadataProps) => {
   });
 
   return (
-    <>
+    <div className="px-2 pt-1.5 flex flex-col gap-y-1 gap-x-4 bg-slate-50">
       <AttributeView name="Timeout" value={`${node.props?.timeout}s`} />
       <AttributeView name="Approx size">
         <div className="flex gap-2">
@@ -36,6 +36,6 @@ export const QueueMetadata = ({ node }: QueueMetadataProps) => {
           />
         </div>
       </AttributeView>
-    </>
+    </div>
   );
 };

@@ -1,6 +1,8 @@
 import classNames from "classnames";
 import { PropsWithChildren, forwardRef } from "react";
 
+import { IconComponent } from "../utils/utils.js";
+
 interface ButtonProps {
   id?: string;
   primary?: boolean;
@@ -9,7 +11,7 @@ interface ButtonProps {
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
   className?: string;
-  icon?: React.ForwardRefExoticComponent<React.SVGProps<SVGSVGElement>>;
+  icon?: IconComponent;
   onClick?: (event: React.MouseEvent<HTMLElement>) => void;
   small?: boolean;
   transparent?: boolean;

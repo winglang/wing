@@ -1,11 +1,13 @@
-import { ForwardRefExoticComponent, PropsWithChildren, SVGProps } from "react";
+import { PropsWithChildren } from "react";
+
+import { IconComponent } from "../utils/utils.js";
 
 import { InspectorSectionHeading } from "./InspectorSectionHeading.js";
 
 export interface InspectorSectionProps {
   open?: boolean;
   text: string;
-  icon?: ForwardRefExoticComponent<SVGProps<SVGSVGElement>>;
+  icon?: IconComponent;
   onClick?: () => void;
   subection?: boolean;
   bold?: boolean;

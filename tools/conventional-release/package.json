@@ -14,9 +14,9 @@
   },
   "devDependencies": {
     "@types/standard-version": "^7.0.1",
-    "@wingconsole/eslint-plugin": "workspace:^0.0.0",
-    "@wingconsole/tsconfig": "workspace:^0.0.0",
-    "typescript": "^5.0.2"
+    "@wingconsole/eslint-plugin": "workspace:^",
+    "@wingconsole/tsconfig": "workspace:^",
+    "typescript": "^5.0.3"
   },
   "dependencies": {
     "npm-which": "^3.0.1",

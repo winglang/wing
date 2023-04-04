@@ -14,4 +14,6 @@ export type {
   IApiClient,
 } from "@winglang/sdk/lib/cloud/index.js";
 
+export type { IRedisClient } from "@winglang/sdk/lib/redis/index.js";
+
 export type { ApiSchema } from "@winglang/sdk/lib/target-sim/schema-resources.js";

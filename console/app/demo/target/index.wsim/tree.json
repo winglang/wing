@@ -49,6 +49,12 @@
             {
               "direction": "inbound",
               "relationship": "log",
+              "resource": "root/Redis interaction",
+              "implicit": true
+            },
+            {
+              "direction": "inbound",
+              "relationship": "log",
               "resource": "root/test: Increment counter",
               "implicit": true
             },
@@ -80,7 +86,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Logger",
@@ -182,7 +188,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Bucket",
@@ -223,7 +229,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Queue",
@@ -256,7 +262,7 @@
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.293"
+              "version": "10.1.299"
             },
             "display": {
               "title": "Function",
@@ -285,7 +291,7 @@
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
-              "version": "10.1.293"
+              "version": "10.1.299"
             },
             "display": {
               "title": "Function",
@@ -312,7 +318,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Api",
@@ -328,7 +334,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Inflight",
@@ -345,7 +351,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Inflight",
@@ -369,7 +375,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Inflight",
@@ -386,7 +392,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "hidden": true
@@ -462,7 +468,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Function",
@@ -551,7 +557,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Counter",
@@ -567,7 +573,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Inflight",
@@ -615,7 +621,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Function",
@@ -650,7 +656,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Topic",
@@ -673,7 +679,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Inflight",
@@ -690,7 +696,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "hidden": true
@@ -724,7 +730,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Function",
@@ -747,7 +753,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Inflight",
@@ -764,7 +770,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "hidden": true
@@ -798,11 +804,82 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Function",
           "description": "A cloud function (FaaS)"
+        }
+      },
+      "redis.Redis": {
+        "id": "redis.Redis",
+        "path": "root/redis.Redis",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": [
+            {
+              "direction": "inbound",
+              "relationship": "del",
+              "resource": "root/Redis interaction",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "get",
+              "resource": "root/Redis interaction",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "hget",
+              "resource": "root/Redis interaction",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "hset",
+              "resource": "root/Redis interaction",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "raw_client",
+              "resource": "root/Redis interaction",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "sadd",
+              "resource": "root/Redis interaction",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "set",
+              "resource": "root/Redis interaction",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "smembers",
+              "resource": "root/Redis interaction",
+              "implicit": false
+            },
+            {
+              "direction": "inbound",
+              "relationship": "url",
+              "resource": "root/Redis interaction",
+              "implicit": false
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.299"
+        },
+        "display": {
+          "title": "Redis",
+          "description": "A Redis server"
         }
       },
       "$Inflight7": {
@@ -814,7 +891,101 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
+        },
+        "display": {
+          "title": "Inflight",
+          "description": "An inflight resource",
+          "hidden": true
+        }
+      },
+      "Redis interaction": {
+        "id": "Redis interaction",
+        "path": "root/Redis interaction",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": [
+            {
+              "direction": "outbound",
+              "relationship": "del",
+              "resource": "root/redis.Redis",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "get",
+              "resource": "root/redis.Redis",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "hget",
+              "resource": "root/redis.Redis",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "hset",
+              "resource": "root/redis.Redis",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "raw_client",
+              "resource": "root/redis.Redis",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "sadd",
+              "resource": "root/redis.Redis",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "set",
+              "resource": "root/redis.Redis",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "smembers",
+              "resource": "root/redis.Redis",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "url",
+              "resource": "root/redis.Redis",
+              "implicit": false
+            },
+            {
+              "direction": "outbound",
+              "relationship": "log",
+              "resource": "root/WingLogger",
+              "implicit": true
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.299"
+        },
+        "display": {
+          "title": "Function",
+          "description": "A cloud function (FaaS)"
+        }
+      },
+      "$Inflight8": {
+        "id": "$Inflight8",
+        "path": "root/$Inflight8",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": []
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.299"
         },
         "display": {
           "title": "Inflight",
@@ -862,23 +1033,23 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Function",
           "description": "A cloud function (FaaS)"
         }
       },
-      "$Inflight8": {
-        "id": "$Inflight8",
-        "path": "root/$Inflight8",
+      "$Inflight9": {
+        "id": "$Inflight9",
+        "path": "root/$Inflight9",
         "attributes": {
           "wing:resource:stateful": false,
           "wing:resource:connections": []
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Inflight",
@@ -920,23 +1091,23 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Function",
           "description": "A cloud function (FaaS)"
         }
       },
-      "$Inflight9": {
-        "id": "$Inflight9",
-        "path": "root/$Inflight9",
+      "$Inflight10": {
+        "id": "$Inflight10",
+        "path": "root/$Inflight10",
         "attributes": {
           "wing:resource:stateful": false,
           "wing:resource:connections": []
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Inflight",
@@ -960,23 +1131,23 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Function",
           "description": "A cloud function (FaaS)"
         }
       },
-      "$Inflight10": {
-        "id": "$Inflight10",
-        "path": "root/$Inflight10",
+      "$Inflight11": {
+        "id": "$Inflight11",
+        "path": "root/$Inflight11",
         "attributes": {
           "wing:resource:stateful": false,
           "wing:resource:connections": []
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Inflight",
@@ -1000,23 +1171,23 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Function",
           "description": "A cloud function (FaaS)"
         }
       },
-      "$Inflight11": {
-        "id": "$Inflight11",
-        "path": "root/$Inflight11",
+      "$Inflight12": {
+        "id": "$Inflight12",
+        "path": "root/$Inflight12",
         "attributes": {
           "wing:resource:stateful": false,
           "wing:resource:connections": []
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Inflight",
@@ -1112,7 +1283,7 @@
         },
         "constructInfo": {
           "fqn": "constructs.Construct",
-          "version": "10.1.293"
+          "version": "10.1.299"
         },
         "display": {
           "title": "Function",
@@ -1122,7 +1293,7 @@
     },
     "constructInfo": {
       "fqn": "constructs.Construct",
-      "version": "10.1.293"
+      "version": "10.1.299"
     }
   }
 }
