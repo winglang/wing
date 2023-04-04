@@ -996,7 +996,10 @@ pub struct TypeChecker<'a> {
 
 	pub diagnostics: RefCell<Diagnostics>,
 
-	in_json: bool,
+	// Nesting level within JSON literals, a value larger than 0 means we're currently in a JSON literal
+	in_json: u64,
+
+	/// Index of the current statement being type checked within the current scope
 	statement_idx: usize,
 }
 
@@ -1007,7 +1010,7 @@ impl<'a> TypeChecker<'a> {
 			inner_scopes: vec![],
 			source_path,
 			diagnostics: RefCell::new(Diagnostics::new()),
-			in_json: false,
+			in_json: 0,
 			statement_idx: 0,
 		}
 	}
@@ -1465,9 +1468,9 @@ impl<'a> TypeChecker<'a> {
 				struct_type
 			}
 			ExprKind::JsonLiteral { is_mut, element } => {
-				self.in_json = true;
+				self.in_json += 1;
 				self.type_check_exp(&element, env);
-				self.in_json = false;
+				self.in_json -= 1;
 				if *is_mut {
 					self.types.mut_json()
 				} else {
@@ -1629,7 +1632,7 @@ impl<'a> TypeChecker<'a> {
 		exp: &Expr,
 	) -> TypeRef {
 		// Skip validate if in Json
-		if !self.in_json {
+		if self.in_json == 0 {
 			return self.validate_type(actual_type, expected_type, exp);
 		}
 
