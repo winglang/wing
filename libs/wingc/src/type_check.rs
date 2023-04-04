@@ -2,7 +2,7 @@ pub(crate) mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, Interface as AstInterface,
-	InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, ToSpan, TypeAnnotation,
+	InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind, Symbol, ToSpan, TypeAnnotation,
 	UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
@@ -723,6 +723,14 @@ impl TypeRef {
 		}
 	}
 
+	pub fn as_mut_function_sig(&mut self) -> Option<&mut FunctionSignature> {
+		if let Type::Function(ref mut sig) = **self {
+			Some(sig)
+		} else {
+			None
+		}
+	}
+
 	pub fn is_anything(&self) -> bool {
 		if let Type::Anything = **self {
 			true
@@ -972,10 +980,6 @@ impl Types {
 	}
 }
 
-pub struct TypeCheckerContext {
-	in_json: bool,
-}
-
 pub struct TypeChecker<'a> {
 	types: &'a mut Types,
 
@@ -996,6 +1000,12 @@ pub struct TypeChecker<'a> {
 	jsii_imports: &'a mut Vec<JsiiImportSpec>,
 
 	pub diagnostics: RefCell<Diagnostics>,
+
+	// Nesting level within JSON literals, a value larger than 0 means we're currently in a JSON literal
+	in_json: u64,
+
+	/// Index of the current statement being type checked within the current scope
+	statement_idx: usize,
 }
 
 impl<'a> TypeChecker<'a> {
@@ -1006,6 +1016,8 @@ impl<'a> TypeChecker<'a> {
 			source_path,
 			diagnostics: RefCell::new(Diagnostics::new()),
 			jsii_imports,
+			in_json: 0,
+			statement_idx: 0,
 		}
 	}
 
@@ -1113,14 +1125,8 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	// Validates types in the expression make sense and returns the expression's inferred type
-	fn type_check_exp(
-		&mut self,
-		exp: &Expr,
-		env: &SymbolEnv,
-		statement_idx: usize,
-		context: &TypeCheckerContext,
-	) -> TypeRef {
-		let t = self.type_check_exp_helper(&exp, env, statement_idx, context);
+	fn type_check_exp(&mut self, exp: &Expr, env: &SymbolEnv) -> TypeRef {
+		let t = self.type_check_exp_helper(&exp, env);
 		exp.evaluated_type.replace(Some(t));
 		t
 	}
@@ -1129,20 +1135,14 @@ impl<'a> TypeChecker<'a> {
 	/// and break early, while still setting the evaluated type on the expression.
 	///
 	/// Do not use this function directly, use `type_check_exp` instead.
-	fn type_check_exp_helper(
-		&mut self,
-		exp: &Expr,
-		env: &SymbolEnv,
-		statement_idx: usize,
-		context: &TypeCheckerContext,
-	) -> TypeRef {
+	fn type_check_exp_helper(&mut self, exp: &Expr, env: &SymbolEnv) -> TypeRef {
 		match &exp.kind {
 			ExprKind::Literal(lit) => match lit {
 				Literal::String(_) => self.types.string(),
 				Literal::InterpolatedString(s) => {
 					s.parts.iter().for_each(|part| {
 						if let InterpolatedStringPart::Expr(interpolated_expr) = part {
-							let exp_type = self.type_check_exp(interpolated_expr, env, statement_idx, context);
+							let exp_type = self.type_check_exp(interpolated_expr, env);
 							self.validate_type_in(exp_type, &self.types.stringables(), interpolated_expr);
 						}
 					});
@@ -1153,8 +1153,8 @@ impl<'a> TypeChecker<'a> {
 				Literal::Boolean(_) => self.types.bool(),
 			},
 			ExprKind::Binary { op, left, right } => {
-				let ltype = self.type_check_exp(left, env, statement_idx, context);
-				let rtype = self.type_check_exp(right, env, statement_idx, context);
+				let ltype = self.type_check_exp(left, env);
+				let rtype = self.type_check_exp(right, env);
 
 				match op {
 					BinaryOperator::LogicalAnd | BinaryOperator::LogicalOr => {
@@ -1200,14 +1200,14 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 			ExprKind::Unary { op, exp: unary_exp } => {
-				let _type = self.type_check_exp(unary_exp, env, statement_idx, context);
+				let _type = self.type_check_exp(unary_exp, env);
 
 				match op {
 					UnaryOperator::Not => self.validate_type(_type, self.types.bool(), unary_exp),
 					UnaryOperator::Minus => self.validate_type(_type, self.types.number(), unary_exp),
 				}
 			}
-			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env, statement_idx, context).type_,
+			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env).type_,
 			ExprKind::New {
 				class,
 				obj_id: _, // TODO
@@ -1217,10 +1217,10 @@ impl<'a> TypeChecker<'a> {
 				// TODO: obj_id, obj_scope ignored, should use it once we support Type::Resource and then remove it from Classes (fail if a class has an id if grammar doesn't handle this for us)
 
 				// Type check the arguments
-				let arg_list_types = self.type_check_arg_list(arg_list, env, statement_idx, context);
+				let arg_list_types = self.type_check_arg_list(arg_list, env);
 
 				// Lookup the class's type in the env
-				let type_ = self.resolve_type_annotation(class, env, statement_idx);
+				let type_ = self.resolve_type_annotation(class, env);
 				let (class_env, class_symbol) = match &*type_ {
 					Type::Class(ref class) => (&class.env, &class.name),
 					Type::Resource(ref class) => {
@@ -1303,11 +1303,11 @@ impl<'a> TypeChecker<'a> {
 				if type_.as_resource().is_some() {
 					// Get reference to resource object's scope
 					let obj_scope_type = if let Some(obj_scope) = obj_scope {
-						Some(self.type_check_exp(obj_scope, env, statement_idx, context))
+						Some(self.type_check_exp(obj_scope, env))
 					} else {
 						// If this returns None, this means we're instantiating a resource object in the global scope, which is valid
 						env
-							.try_lookup("this".into(), Some(statement_idx))
+							.try_lookup("this".into(), Some(self.statement_idx))
 							.map(|v| v.as_variable().expect("Expected \"this\" to be a variable").type_)
 					};
 
@@ -1330,9 +1330,9 @@ impl<'a> TypeChecker<'a> {
 			}
 			ExprKind::Call { function, arg_list } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
-				let func_type = self.type_check_exp(function, env, statement_idx, context);
+				let func_type = self.type_check_exp(function, env);
 
-				let arg_list_types = self.type_check_arg_list(arg_list, env, statement_idx, context);
+				let arg_list_types = self.type_check_arg_list(arg_list, env);
 
 				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud.Bucket().upload())
 				if matches!(*func_type, Type::Anything) {
@@ -1399,9 +1399,9 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::ArrayLiteral { type_, items } => {
 				// Infer type based on either the explicit type or the value in one of the items
 				let container_type = if let Some(type_) = type_ {
-					self.resolve_type_annotation(type_, env, statement_idx)
+					self.resolve_type_annotation(type_, env)
 				} else if !items.is_empty() {
-					let some_val_type = self.type_check_exp(items.iter().next().unwrap(), env, statement_idx, context);
+					let some_val_type = self.type_check_exp(items.iter().next().unwrap(), env);
 					self.types.add_type(Type::Array(some_val_type))
 				} else {
 					self.expr_error(exp, "Cannot infer type of empty array".to_owned());
@@ -1416,21 +1416,21 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify all types are the same as the inferred type
 				for v in items.iter() {
-					let t = self.type_check_exp(v, env, statement_idx, context);
-					self.check_json_serializable_or_validate_type(t, element_type, v, context);
+					let t = self.type_check_exp(v, env);
+					self.check_json_serializable_or_validate_type(t, element_type, v);
 				}
 
 				container_type
 			}
 			ExprKind::StructLiteral { type_, fields } => {
 				// Find this struct's type in the environment
-				let struct_type = self.resolve_type_annotation(type_, env, statement_idx);
+				let struct_type = self.resolve_type_annotation(type_, env);
 
 				// Type check each of the struct's fields
 				let field_types: IndexMap<Symbol, TypeRef> = fields
 					.iter()
 					.map(|(name, exp)| {
-						let t = self.type_check_exp(exp, env, statement_idx, context);
+						let t = self.type_check_exp(exp, env);
 						(name.clone(), t)
 					})
 					.collect();
@@ -1466,7 +1466,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify that no unexpected fields are present
 				for (name, _t) in field_types.iter() {
-					if !st.env.lookup(&name, Some(statement_idx)).is_ok() {
+					if !st.env.lookup(&name, Some(self.statement_idx)).is_ok() {
 						self.expr_error(exp, format!("\"{}\" is not a field of \"{}\"", name.name, st.name.name));
 					}
 				}
@@ -1474,7 +1474,9 @@ impl<'a> TypeChecker<'a> {
 				struct_type
 			}
 			ExprKind::JsonLiteral { is_mut, element } => {
-				self.type_check_exp(&element, env, statement_idx, &TypeCheckerContext { in_json: true });
+				self.in_json += 1;
+				self.type_check_exp(&element, env);
+				self.in_json -= 1;
 				if *is_mut {
 					self.types.mut_json()
 				} else {
@@ -1484,9 +1486,9 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::MapLiteral { fields, type_ } => {
 				// Infer type based on either the explicit type or the value in one of the fields
 				let container_type = if let Some(type_) = type_ {
-					self.resolve_type_annotation(type_, env, statement_idx)
+					self.resolve_type_annotation(type_, env)
 				} else if !fields.is_empty() {
-					let some_val_type = self.type_check_exp(fields.iter().next().unwrap().1, env, statement_idx, context);
+					let some_val_type = self.type_check_exp(fields.iter().next().unwrap().1, env);
 					self.types.add_type(Type::Map(some_val_type))
 				} else {
 					self.expr_error(exp, "Cannot infer type of empty map".to_owned());
@@ -1501,8 +1503,8 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify all types are the same as the inferred type
 				for (_, v) in fields.iter() {
-					let t = self.type_check_exp(v, env, statement_idx, context);
-					self.check_json_serializable_or_validate_type(t, value_type, v, context);
+					let t = self.type_check_exp(v, env);
+					self.check_json_serializable_or_validate_type(t, value_type, v);
 				}
 
 				container_type
@@ -1510,9 +1512,9 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::SetLiteral { type_, items } => {
 				// Infer type based on either the explicit type or the value in one of the items
 				let container_type = if let Some(type_) = type_ {
-					self.resolve_type_annotation(type_, env, statement_idx)
+					self.resolve_type_annotation(type_, env)
 				} else if !items.is_empty() {
-					let some_val_type = self.type_check_exp(items.iter().next().unwrap(), env, statement_idx, context);
+					let some_val_type = self.type_check_exp(items.iter().next().unwrap(), env);
 					self.types.add_type(Type::Set(some_val_type))
 				} else {
 					self.expr_error(exp, "Cannot infer type of empty set".to_owned());
@@ -1527,54 +1529,49 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify all types are the same as the inferred type
 				for v in items.iter() {
-					let t = self.type_check_exp(v, env, statement_idx, context);
+					let t = self.type_check_exp(v, env);
 					self.validate_type(t, element_type, v);
 				}
 
 				container_type
 			}
-			ExprKind::FunctionClosure(func_def) => {
-				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
-
-				if matches!(func_def.signature.phase, Phase::Inflight) {
-					self.unimplemented_type("Inflight function signature"); // TODO: what typechecking do we need here?self??
-				}
-
-				// Create a type_checker function signature from the AST function definition, assuming success we can add this function to the env
-				let function_type = self.resolve_type_annotation(
-					&TypeAnnotation::FunctionSignature(func_def.signature.clone()),
-					env,
-					statement_idx,
-				);
-				let sig = function_type.as_function_sig().unwrap();
-
-				// Create an environment for the function
-				let mut function_env = SymbolEnv::new(
-					Some(env.get_ref()),
-					sig.return_type,
-					false,
-					func_def.signature.phase,
-					statement_idx,
-				);
-				self.add_arguments_to_env(&func_def.parameters, &sig, &mut function_env);
-
-				if let FunctionBody::Statements(scope) = &func_def.body {
-					scope.set_env(function_env);
-
-					self.inner_scopes.push(scope);
-
-					function_type
-				} else {
-					function_type
-				}
-			}
+			ExprKind::FunctionClosure(func_def) => self.type_check_closure(func_def, env),
 			ExprKind::OptionalTest { optional } => {
-				let t = self.type_check_exp(optional, env, statement_idx, context);
+				let t = self.type_check_exp(optional, env);
 				if !t.is_option() {
 					self.expr_error(optional, format!("Expected optional type, found \"{}\"", t));
 				}
 				self.types.bool()
 			}
+		}
+	}
+
+	fn type_check_closure(&mut self, func_def: &crate::ast::FunctionDefinition, env: &SymbolEnv) -> UnsafeRef<Type> {
+		// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
+		// Create a type_checker function signature from the AST function definition
+		let function_type =
+			self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(func_def.signature.clone()), env);
+		let sig = function_type.as_function_sig().unwrap();
+
+		// Create an environment for the function
+		let mut function_env = SymbolEnv::new(
+			Some(env.get_ref()),
+			sig.return_type,
+			false,
+			func_def.signature.phase,
+			self.statement_idx,
+		);
+		self.add_arguments_to_env(&func_def.parameters, &sig, &mut function_env);
+
+		// Type check the function body
+		if let FunctionBody::Statements(scope) = &func_def.body {
+			scope.set_env(function_env);
+
+			self.inner_scopes.push(scope);
+
+			function_type
+		} else {
+			function_type
 		}
 	}
 
@@ -1639,10 +1636,9 @@ impl<'a> TypeChecker<'a> {
 		actual_type: TypeRef,
 		expected_type: TypeRef,
 		exp: &Expr,
-		context: &TypeCheckerContext,
 	) -> TypeRef {
 		// Skip validate if in Json
-		if !context.in_json {
+		if self.in_json == 0 {
 			return self.validate_type(actual_type, expected_type, exp);
 		}
 
@@ -1704,9 +1700,8 @@ impl<'a> TypeChecker<'a> {
 
 	pub fn type_check_scope(&mut self, scope: &Scope) {
 		assert!(self.inner_scopes.is_empty());
-		let context = TypeCheckerContext { in_json: false };
 		for statement in scope.statements.iter() {
-			self.type_check_statement(statement, scope.env.borrow_mut().as_mut().unwrap(), &context);
+			self.type_check_statement(statement, scope.env.borrow_mut().as_mut().unwrap());
 		}
 		let inner_scopes = self.inner_scopes.drain(..).collect::<Vec<_>>();
 		for inner_scope in inner_scopes {
@@ -1714,7 +1709,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn resolve_type_annotation(&mut self, annotation: &TypeAnnotation, env: &SymbolEnv, statement_idx: usize) -> TypeRef {
+	fn resolve_type_annotation(&mut self, annotation: &TypeAnnotation, env: &SymbolEnv) -> TypeRef {
 		match annotation {
 			TypeAnnotation::Number => self.types.number(),
 			TypeAnnotation::String => self.types.string(),
@@ -1723,20 +1718,21 @@ impl<'a> TypeChecker<'a> {
 			TypeAnnotation::Json => self.types.json(),
 			TypeAnnotation::MutJson => self.types.mut_json(),
 			TypeAnnotation::Optional(v) => {
-				let value_type = self.resolve_type_annotation(v, env, statement_idx);
+				let value_type = self.resolve_type_annotation(v, env);
 				self.types.add_type(Type::Optional(value_type))
 			}
 			TypeAnnotation::FunctionSignature(ast_sig) => {
 				let mut args = vec![];
 				for arg in ast_sig.parameters.iter() {
-					args.push(self.resolve_type_annotation(arg, env, statement_idx));
+					args.push(self.resolve_type_annotation(arg, env));
 				}
 				let sig = FunctionSignature {
 					this_type: None,
 					parameters: args,
-					return_type: ast_sig.return_type.as_ref().map_or(self.types.void(), |t| {
-						self.resolve_type_annotation(t, env, statement_idx)
-					}),
+					return_type: ast_sig
+						.return_type
+						.as_ref()
+						.map_or(self.types.void(), |t| self.resolve_type_annotation(t, env)),
 					phase: ast_sig.phase,
 					js_override: None,
 				};
@@ -1744,53 +1740,47 @@ impl<'a> TypeChecker<'a> {
 				self.types.add_type(Type::Function(sig))
 			}
 			TypeAnnotation::UserDefined(user_defined_type) => self
-				.resolve_user_defined_type(user_defined_type, env, statement_idx)
+				.resolve_user_defined_type(user_defined_type, env, self.statement_idx)
 				.unwrap_or_else(|e| self.type_error(e)),
 			TypeAnnotation::Array(v) => {
-				let value_type = self.resolve_type_annotation(v, env, statement_idx);
+				let value_type = self.resolve_type_annotation(v, env);
 				// TODO: avoid creating a new type for each array resolution
 				self.types.add_type(Type::Array(value_type))
 			}
 			TypeAnnotation::MutArray(v) => {
-				let value_type = self.resolve_type_annotation(v, env, statement_idx);
+				let value_type = self.resolve_type_annotation(v, env);
 				// TODO: avoid creating a new type for each array resolution
 				self.types.add_type(Type::MutArray(value_type))
 			}
 			TypeAnnotation::Set(v) => {
-				let value_type = self.resolve_type_annotation(v, env, statement_idx);
+				let value_type = self.resolve_type_annotation(v, env);
 				// TODO: avoid creating a new type for each set resolution
 				self.types.add_type(Type::Set(value_type))
 			}
 			TypeAnnotation::MutSet(v) => {
-				let value_type = self.resolve_type_annotation(v, env, statement_idx);
+				let value_type = self.resolve_type_annotation(v, env);
 				// TODO: avoid creating a new type for each set resolution
 				self.types.add_type(Type::MutSet(value_type))
 			}
 			TypeAnnotation::Map(v) => {
-				let value_type = self.resolve_type_annotation(v, env, statement_idx);
+				let value_type = self.resolve_type_annotation(v, env);
 				// TODO: avoid creating a new type for each map resolution
 				self.types.add_type(Type::Map(value_type))
 			}
 			TypeAnnotation::MutMap(v) => {
-				let value_type = self.resolve_type_annotation(v, env, statement_idx);
+				let value_type = self.resolve_type_annotation(v, env);
 				// TODO: avoid creating a new type for each map resolution
 				self.types.add_type(Type::MutMap(value_type))
 			}
 		}
 	}
 
-	fn type_check_arg_list(
-		&mut self,
-		arg_list: &ArgList,
-		env: &SymbolEnv,
-		statement_idx: usize,
-		context: &TypeCheckerContext,
-	) -> ArgListTypes {
+	fn type_check_arg_list(&mut self, arg_list: &ArgList, env: &SymbolEnv) -> ArgListTypes {
 		// Type check the positional arguments, e.g. fn(exp1, exp2, exp3)
 		let pos_arg_types = arg_list
 			.pos_args
 			.iter()
-			.map(|pos_arg| self.type_check_exp(pos_arg, env, statement_idx, context))
+			.map(|pos_arg| self.type_check_exp(pos_arg, env))
 			.collect();
 
 		// Type check the named arguments, e.g. fn(named_arg1: exp4, named_arg2: exp5)
@@ -1798,7 +1788,7 @@ impl<'a> TypeChecker<'a> {
 			.named_args
 			.iter()
 			.map(|(sym, expr)| {
-				let arg_type = self.type_check_exp(&expr, env, statement_idx, context);
+				let arg_type = self.type_check_exp(&expr, env);
 				(sym.clone(), arg_type)
 			})
 			.collect::<IndexMap<_, _>>();
@@ -1809,7 +1799,12 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_statement(&mut self, stmt: &Stmt, env: &mut SymbolEnv, context: &TypeCheckerContext) {
+	fn type_check_statement(&mut self, stmt: &Stmt, env: &mut SymbolEnv) {
+		// Set the current statement index for symbol lookup checks. We can safely assume we're
+		// not overwriting the current statement index because `type_check_statement` is never
+		// recursively called (we use a breadth-first traversal of the AST statements).
+		self.statement_idx = stmt.idx;
+
 		match &stmt.kind {
 			StmtKind::VariableDef {
 				reassignable,
@@ -1817,8 +1812,8 @@ impl<'a> TypeChecker<'a> {
 				initial_value,
 				type_,
 			} => {
-				let explicit_type = type_.as_ref().map(|t| self.resolve_type_annotation(t, env, stmt.idx));
-				let inferred_type = self.type_check_exp(initial_value, env, stmt.idx, context);
+				let explicit_type = type_.as_ref().map(|t| self.resolve_type_annotation(t, env));
+				let inferred_type = self.type_check_exp(initial_value, env);
 				if inferred_type.is_void() {
 					self.type_error(TypeError {
 						message: format!("Cannot assign expression of type \"{}\" to a variable", inferred_type),
@@ -1856,7 +1851,7 @@ impl<'a> TypeChecker<'a> {
 				statements,
 			} => {
 				// TODO: Expression must be iterable
-				let exp_type = self.type_check_exp(iterable, env, stmt.idx, context);
+				let exp_type = self.type_check_exp(iterable, env);
 
 				let iterator_type = match &*exp_type {
 					// These are builtin iterables that have a clear/direct iterable type
@@ -1892,7 +1887,7 @@ impl<'a> TypeChecker<'a> {
 				self.inner_scopes.push(statements);
 			}
 			StmtKind::While { condition, statements } => {
-				let cond_type = self.type_check_exp(condition, env, stmt.idx, context);
+				let cond_type = self.type_check_exp(condition, env);
 				self.validate_type(cond_type, self.types.bool(), condition);
 
 				statements.set_env(SymbolEnv::new(
@@ -1912,7 +1907,7 @@ impl<'a> TypeChecker<'a> {
 				elif_statements,
 				else_statements,
 			} => {
-				let cond_type = self.type_check_exp(condition, env, stmt.idx, context);
+				let cond_type = self.type_check_exp(condition, env);
 				self.validate_type(cond_type, self.types.bool(), condition);
 
 				statements.set_env(SymbolEnv::new(
@@ -1925,7 +1920,7 @@ impl<'a> TypeChecker<'a> {
 				self.inner_scopes.push(statements);
 
 				for elif_scope in elif_statements {
-					let cond_type = self.type_check_exp(&elif_scope.condition, env, stmt.idx, context);
+					let cond_type = self.type_check_exp(&elif_scope.condition, env);
 					self.validate_type(cond_type, self.types.bool(), condition);
 
 					(&elif_scope.statements).set_env(SymbolEnv::new(
@@ -1950,11 +1945,11 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 			StmtKind::Expression(e) => {
-				self.type_check_exp(e, env, stmt.idx, context);
+				self.type_check_exp(e, env);
 			}
 			StmtKind::Assignment { variable, value } => {
-				let exp_type = self.type_check_exp(value, env, stmt.idx, context);
-				let var_info = self.resolve_reference(variable, env, stmt.idx, context);
+				let exp_type = self.type_check_exp(value, env);
+				let var_info = self.resolve_reference(variable, env);
 				if !var_info.reassignable {
 					self.stmt_error(stmt, format!("Variable {} is not reassignable ", variable));
 				}
@@ -2029,7 +2024,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			StmtKind::Return(exp) => {
 				if let Some(return_expression) = exp {
-					let return_type = self.type_check_exp(return_expression, env, stmt.idx, context);
+					let return_type = self.type_check_exp(return_expression, env);
 					if !env.return_type.is_void() {
 						self.validate_type(return_type, env.return_type, return_expression);
 					} else {
@@ -2132,7 +2127,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Add fields to the class env
 				for field in fields.iter() {
-					let field_type = self.resolve_type_annotation(&field.member_type, env, stmt.idx);
+					let field_type = self.resolve_type_annotation(&field.member_type, env);
 					match class_env.define(
 						&field.name,
 						SymbolKind::make_variable(field_type, field.reassignable, field.is_static, field.phase),
@@ -2146,132 +2141,34 @@ impl<'a> TypeChecker<'a> {
 				}
 				// Add methods to the class env
 				for (method_name, method_def) in methods.iter() {
-					let mut method_type = self.resolve_type_annotation(
-						&TypeAnnotation::FunctionSignature(method_def.signature.clone()),
+					self.add_method_to_class_env(
+						&method_def.signature,
 						env,
-						stmt.idx,
-					);
-					// use the class type as the function's "this" type
-					if let Type::Function(ref mut f) = *method_type {
-						if !method_def.is_static {
-							f.this_type = Some(class_type.clone());
-						}
-					} else {
-						panic!("Expected method type to be a function");
-					}
-					match class_env.define(
+						if method_def.is_static { None } else { Some(class_type) },
+						&mut class_env,
 						method_name,
-						SymbolKind::make_variable(method_type, false, method_def.is_static, method_def.signature.phase),
-						StatementIdx::Top,
-					) {
-						Err(type_error) => {
-							self.type_error(type_error);
-						}
-						_ => {}
-					};
+					);
 				}
 
 				// Add the constructor to the class env
-				let constructor_type = self.resolve_type_annotation(
-					&TypeAnnotation::FunctionSignature(constructor.signature.clone()),
-					env,
-					stmt.idx,
-				);
-				match class_env.define(
-					&Symbol {
-						name: WING_CONSTRUCTOR_NAME.into(),
-						span: name.span.clone(),
-					},
-					SymbolKind::make_variable(constructor_type, false, true, constructor.signature.phase),
-					StatementIdx::Top,
-				) {
-					Err(type_error) => {
-						self.type_error(type_error);
-					}
-					_ => {}
+				let init_symb = Symbol {
+					name: WING_CONSTRUCTOR_NAME.into(),
+					span: name.span.clone(),
 				};
+				self.add_method_to_class_env(&constructor.signature, env, None, &mut class_env, &init_symb);
 
 				// Replace the dummy class environment with the real one before type checking the methods
 				class_type.as_mut_class_or_resource().unwrap().env = class_env;
 				let class_env = &class_type.as_class_or_resource().unwrap().env;
 
 				// Type check constructor
-				let constructor_sig = if let Type::Function(ref s) = *constructor_type {
-					s
-				} else {
-					panic!(
-						"Constructor of {} isn't defined as a function in the class environment",
-						name
-					);
-				};
-
-				// Create constructor environment and prime it with args
-				let mut constructor_env = SymbolEnv::new(
-					Some(env.get_ref()),
-					constructor_sig.return_type,
-					true,
-					constructor.signature.phase,
-					stmt.idx,
-				);
-				self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
-				// Prime the constructor environment with `this`
-				constructor_env
-					.define(
-						&Symbol {
-							name: "this".into(),
-							span: name.span.clone(),
-						},
-						SymbolKind::make_variable(class_type, false, true, constructor_env.phase),
-						StatementIdx::Top,
-					)
-					.expect("Expected `this` to be added to constructor env");
-				constructor.statements.set_env(constructor_env);
-				// Check function scope
-				self.inner_scopes.push(&constructor.statements);
+				self.type_check_method(class_env, &init_symb, env, stmt.idx, constructor, class_type);
 
 				// TODO: handle member/method overrides in our env based on whatever rules we define in our spec
 
 				// Type check methods
 				for (method_name, method_def) in methods.iter() {
-					// Lookup the method in the class_env
-					let method_type = class_env
-						.lookup(method_name, None)
-						.expect("Expected method to be in class env")
-						.as_variable()
-						.expect("Expected method to be a variable")
-						.type_;
-
-					let method_sig = method_type
-						.as_function_sig()
-						.expect("Expected method type to be a function signature");
-
-					// Create method environment and prime it with args
-					let mut method_env = SymbolEnv::new(
-						Some(env.get_ref()),
-						method_sig.return_type,
-						false,
-						method_sig.phase,
-						stmt.idx,
-					);
-					// Prime the method environment with `this`
-					if !method_def.is_static {
-						method_env
-							.define(
-								&Symbol {
-									name: "this".into(),
-									span: name.span.clone(),
-								},
-								SymbolKind::make_variable(class_type, false, true, method_env.phase),
-								StatementIdx::Top,
-							)
-							.expect("Expected `this` to be added to constructor env");
-					}
-					self.add_arguments_to_env(&method_def.parameters, method_sig, &mut method_env);
-
-					if let FunctionBody::Statements(scope) = &method_def.body {
-						scope.set_env(method_env);
-						self.inner_scopes.push(scope);
-					}
+					self.type_check_method(class_env, method_name, env, stmt.idx, method_def, class_type);
 				}
 
 				// Check that the class satisfies all of its interfaces
@@ -2358,8 +2255,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Add methods to the interface env
 				for (method_name, sig) in methods.iter() {
-					let mut method_type =
-						self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(sig.clone()), env, stmt.idx);
+					let mut method_type = self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(sig.clone()), env);
 					// use the interface type as the function's "this" type
 					if let Type::Function(ref mut f) = *method_type {
 						f.this_type = Some(interface_type.clone());
@@ -2397,7 +2293,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Add fields to the struct env
 				for field in members.iter() {
-					let field_type = self.resolve_type_annotation(&field.member_type, env, stmt.idx);
+					let field_type = self.resolve_type_annotation(&field.member_type, env);
 					if field_type.is_deep_mutable() {
 						self.type_error(TypeError {
 							message: format!("struct fields must be immutable got: {}", field_type),
@@ -2507,6 +2403,87 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 		}
+	}
+
+	fn type_check_method<T>(
+		&mut self,
+		class_env: &SymbolEnv,
+		method_name: &Symbol,
+		env: &SymbolEnv,
+		statement_idx: usize,
+		method_def: &T,
+		class_type: UnsafeRef<Type>,
+	) where
+		T: MethodLike,
+	{
+		// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
+		// Lookup the method in the class_env
+		let method_type = class_env
+			.lookup(method_name, None)
+			.expect("Expected method to be in class env")
+			.as_variable()
+			.expect("Expected method to be a variable")
+			.type_;
+
+		let method_sig = method_type
+			.as_function_sig()
+			.expect("Expected method type to be a function signature");
+
+		// Create method environment and prime it with args
+		let is_init = method_name.name == WING_CONSTRUCTOR_NAME;
+		let mut method_env = SymbolEnv::new(
+			Some(env.get_ref()),
+			method_sig.return_type,
+			is_init,
+			method_sig.phase,
+			statement_idx,
+		);
+		// Prime the method environment with `this`
+		if !method_def.is_static() || is_init {
+			method_env
+				.define(
+					&Symbol {
+						name: "this".into(),
+						span: method_name.span.clone(),
+					},
+					SymbolKind::make_variable(class_type, false, true, method_env.phase),
+					StatementIdx::Top,
+				)
+				.expect("Expected `this` to be added to constructor env");
+		}
+		self.add_arguments_to_env(&method_def.parameters(), method_sig, &mut method_env);
+
+		if let Some(scope) = method_def.statements() {
+			scope.set_env(method_env);
+			self.inner_scopes.push(scope);
+		}
+	}
+
+	fn add_method_to_class_env(
+		&mut self,
+		method_sig: &crate::ast::FunctionSignature,
+		env: &mut SymbolEnv,
+		instance_type: Option<TypeRef>,
+		class_env: &mut SymbolEnv,
+		method_name: &Symbol,
+	) {
+		let mut method_type = self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(method_sig.clone()), env);
+		// use the class type as the function's "this" type (or None if static)
+		method_type
+			.as_mut_function_sig()
+			.expect("Expected method type to be a function")
+			.this_type = instance_type;
+
+		match class_env.define(
+			method_name,
+			SymbolKind::make_variable(method_type, false, instance_type.is_none(), method_sig.phase),
+			StatementIdx::Top,
+		) {
+			Err(type_error) => {
+				self.type_error(type_error);
+			}
+			_ => {}
+		};
 	}
 
 	fn add_module_to_env(
@@ -2812,7 +2789,7 @@ impl<'a> TypeChecker<'a> {
 
 	/// Check if this expression is actually a reference to a type. The parser doesn't distinguish between a `some_expression.field` and `SomeType.field`.
 	/// This function checks if the expression is a reference to a user define type and if it is it returns it. If not it returns `None`.
-	fn expr_maybe_type(&mut self, expr: &Expr, env: &SymbolEnv, statement_idx: usize) -> Option<UserDefinedType> {
+	fn expr_maybe_type(&mut self, expr: &Expr, env: &SymbolEnv) -> Option<UserDefinedType> {
 		// TODO: we currently don't handle parenthesized expressions correctly so something like `(MyEnum).A` or `std.(namespace.submodule).A` will return true, is this a problem?
 		let mut path = vec![];
 		let mut curr_expr = expr;
@@ -2852,20 +2829,14 @@ impl<'a> TypeChecker<'a> {
 		let user_type_annotation = UserDefinedType { root, fields: path };
 
 		self
-			.resolve_user_defined_type(&user_type_annotation, env, statement_idx)
+			.resolve_user_defined_type(&user_type_annotation, env, self.statement_idx)
 			.ok()
 			.map(|_| user_type_annotation)
 	}
 
-	fn resolve_reference(
-		&mut self,
-		reference: &Reference,
-		env: &SymbolEnv,
-		statement_idx: usize,
-		context: &TypeCheckerContext,
-	) -> VariableInfo {
+	fn resolve_reference(&mut self, reference: &Reference, env: &SymbolEnv) -> VariableInfo {
 		match reference {
-			Reference::Identifier(symbol) => match env.lookup(symbol, Some(statement_idx)) {
+			Reference::Identifier(symbol) => match env.lookup(symbol, Some(self.statement_idx)) {
 				Ok(var) => {
 					if let Some(var) = var.as_variable() {
 						var
@@ -2892,7 +2863,7 @@ impl<'a> TypeChecker<'a> {
 				// There's a special case where the object is actually a type and the property is either a static member or an enum variant.
 				// In this case the type might even be namespaced (recursive nested reference). We need to detect this and transform this
 				// reference into a type reference.
-				if let Some(user_type_annotation) = self.expr_maybe_type(object, env, statement_idx) {
+				if let Some(user_type_annotation) = self.expr_maybe_type(object, env) {
 					// We can't get here twice, we can safely assume that if we're here the `object` part of the reference doesn't have and evaluated type yet.
 					assert!(object.evaluated_type.borrow().is_none());
 
@@ -2909,7 +2880,7 @@ impl<'a> TypeChecker<'a> {
 						// We don't use the return value but need to call replace so it'll drop the old value
 						_ = std::mem::replace(&mut *mut_ptr, new_ref);
 					}
-					return self.resolve_reference(reference, env, statement_idx, context);
+					return self.resolve_reference(reference, env);
 				}
 
 				// Special case: if the object expression is a simple reference to `this` and we're inside the init function then
@@ -2917,7 +2888,7 @@ impl<'a> TypeChecker<'a> {
 				let mut force_reassignable = false;
 				if let ExprKind::Reference(Reference::Identifier(symb)) = &object.kind {
 					if symb.name == "this" {
-						if let Ok((kind, info)) = env.lookup_ext(symb, Some(statement_idx)) {
+						if let Ok((kind, info)) = env.lookup_ext(symb, Some(self.statement_idx)) {
 							// `this` resreved symbol should always be a variable
 							assert!(matches!(kind, SymbolKind::Variable(_)));
 							force_reassignable = info.init;
@@ -2925,7 +2896,7 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 
-				let instance_type = self.type_check_exp(object, env, statement_idx, context);
+				let instance_type = self.type_check_exp(object, env);
 				let res = match *instance_type {
 					Type::Class(ref class) | Type::Resource(ref class) => self.get_property_from_class_like(class, property),
 					Type::Interface(ref interface) => self.get_property_from_class_like(interface, property),
@@ -3025,7 +2996,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			Reference::TypeMember { type_, property } => {
 				let type_ = self
-					.resolve_user_defined_type(type_, env, statement_idx)
+					.resolve_user_defined_type(type_, env, self.statement_idx)
 					.expect("Type annotation should have been verified by `expr_maybe_type`");
 				return match *type_ {
 					Type::Enum(ref e) => {
