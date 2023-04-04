@@ -131,6 +131,9 @@ resource TaskListApi {
   init(task_list: ITaskList) {
     this.task_list = task_list;
     this.api = new cloud.Api();
+
+    //Workaround for https://github.com/winglang/wing/issues/1966
+    let self = this;
         
     this.api.post("/tasks", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let body = req.body ?? EMPTY_JSON;
@@ -141,7 +144,7 @@ resource TaskListApi {
         let data: Json = TaskListApi.get_data("https://www.boredapi.com/api/activity");
         title = str.from_json(data.get("activity")); 
       } 
-      let id = this.task_list.add(title);
+      let id = self.task_list.add(title);
       return cloud.ApiResponse { status:201, body: id };
     });
         
@@ -149,16 +152,13 @@ resource TaskListApi {
       let vars = req.vars ?? Map<str>{};
       let body = req.body ?? EMPTY_JSON;
       let id = str.from_json(vars.get("id"));
-      if body.get("completed")? {
-        // `false` value of ?? expression is unreachable because of the above if statement
-        if bool.from_json(body.get("completed") ?? false) {
-          this.task_list.set_status(id, Status.COMPLETED);
-        } else {
-          this.task_list.set_status(id, Status.UNCOMPLETED);
-        }      
+      if bool.from_json(body.get("completed")) {
+        self.task_list.set_status(id, Status.COMPLETED);
+      } else {
+        self.task_list.set_status(id, Status.UNCOMPLETED);
       }
       try {
-        let title = this.task_list.get(id);
+        let title = self.task_list.get(id);
         return cloud.ApiResponse { status:200, body: title };
       } catch {
         return cloud.ApiResponse { status: 400 };
@@ -169,7 +169,7 @@ resource TaskListApi {
       let vars = req.vars ?? Map<str>{};
       let id = str.from_json(vars.get("id"));
       try {
-        let title = this.task_list.get(id);
+        let title = self.task_list.get(id);
         return cloud.ApiResponse { status:200, body: title };
       } catch {
         return cloud.ApiResponse { status: 400 };
@@ -180,7 +180,7 @@ resource TaskListApi {
       let vars = req.vars ?? Map<str>{};
       let id = str.from_json(vars.get("id"));
       try {
-        this.task_list.remove(id);
+        self.task_list.remove(id);
         return cloud.ApiResponse { status: 204 };
       } catch {
         return cloud.ApiResponse { status: 400 };
@@ -189,7 +189,7 @@ resource TaskListApi {
 
     this.api.get("/tasks", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let search = req.query.get("search");
-      let results = this.task_list.find(TaskListApi.create_regex(search));
+      let results = self.task_list.find(TaskListApi.create_regex(search));
       return cloud.ApiResponse { status: 200, body: results };
     });
   }
