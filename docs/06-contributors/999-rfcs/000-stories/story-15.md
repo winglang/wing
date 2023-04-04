@@ -66,7 +66,9 @@ resource TaskList impl ITaskList {
   _redis: redis.Redis;
   
   extern "./tasklist_helper.js" static inflight uuid(): str; 
-  
+  // Workaround for https://github.com/winglang/wing/issues/1669 - changed method to be non-static
+  extern "./tasklist_helper.js" inflight get_data(url: str): Json;
+
   init() {
     this._redis = new redis.Redis();
   }
@@ -126,7 +128,6 @@ resource TaskListApi {
   task_list: TaskList;
         
   extern "./tasklist_helper.js" static inflight create_regex(s: str): IMyRegExp;
-  extern "./tasklist_helper.js" static inflight get_data(url: str): Json;
         
   init(task_list: TaskList) {
     this.task_list = task_list;
@@ -138,7 +139,7 @@ resource TaskListApi {
       // Easter Egg - if you add a todo with the single word "random" as the title, 
       //              the system will fetch a random task from the internet
       if title == "random" {
-        let data: Json = TaskListApi.get_data("https://www.boredapi.com/api/activity");
+        let data: Json = task_list.get_data("https://www.boredapi.com/api/activity");
         title = str.from_json(data.get("activity")); 
       } 
       let id = task_list.add(title);
