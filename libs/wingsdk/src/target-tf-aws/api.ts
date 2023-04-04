@@ -14,7 +14,17 @@ import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
 import { Code } from "../core/inflight";
 import { convertBetweenHandlers } from "../utils/convert";
-import { NameOptions, ResourceNames } from "../utils/resource-names";
+import {
+  CaseConventions,
+  NameOptions,
+  ResourceNames,
+} from "../utils/resource-names";
+
+/**
+ * The stage name for the API, used in its url.
+ * @see https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html
+ */
+const STAGE_NAME = "prod";
 
 /**
  * RestApi names are alphanumeric characters, hyphens (-) and underscores (_).
@@ -38,7 +48,7 @@ export class Api extends cloud.Api {
   public get url(): string {
     const region = (App.of(this) as App).region;
     const awsSuffix = "amazonaws.com"; // TODO: use dns_suffix from https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition
-    return `https://${this.api.api.id}.execute-api.${region}.${awsSuffix}/`;
+    return `https://${this.api.api.id}.execute-api.${region}.${awsSuffix}/${STAGE_NAME}`;
   }
 
   /**
@@ -309,13 +319,32 @@ export class Api extends cloud.Api {
   }
 
   /** @internal */
-  public _bind(): void {
-    throw new Error("Method not implemented.");
+  public _bind(host: core.IInflightHost, ops: string[]): void {
+    if (!(host instanceof Function)) {
+      throw new Error("topics can only be bound by tfaws.Function for now");
+    }
+
+    host.addEnvironment(this.urlEnvName(), this.url);
+
+    super._bind(host, ops);
   }
 
   /** @internal */
   public _toInflight(): Code {
-    throw new Error("Method not implemented.");
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-aws", "shared-aws"),
+      __filename,
+      "ApiClient",
+      [`process.env["${this.urlEnvName()}"]`]
+    );
+  }
+
+  private urlEnvName(): string {
+    return ResourceNames.generateName(this, {
+      disallowedRegex: /[^a-zA-Z0-9_]/,
+      sep: "_",
+      case: CaseConventions.UPPERCASE,
+    });
   }
 }
 
@@ -366,7 +395,7 @@ class WingRestApi extends Construct {
 
     new ApiGatewayStage(this, "stage", {
       restApiId: this.api.id,
-      stageName: "prod",
+      stageName: STAGE_NAME,
       deploymentId: this.deployment.id,
     });
   }

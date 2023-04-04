@@ -106,6 +106,7 @@ constructor() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr)[0] === 1)'\`)})(((arr)[0] === 1))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr)[2] === b)'\`)})(((arr)[2] === b))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((arr)[7])[0] === \\"shut\\")'\`)})((((arr)[7])[0] === \\"shut\\"))};
+  Object.freeze({\\"a\\":[1, 2, \\"world\\"],\\"b\\":[1, 2, \\"world\\"]});
 }
 }
 new MyApp().synth();"

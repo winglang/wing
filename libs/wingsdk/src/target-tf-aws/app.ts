@@ -78,10 +78,6 @@ export class App extends CdktfApp {
     return undefined;
   }
 
-  public get foo(): string {
-    return "bar";
-  }
-
   /**
    * The AWS account ID of the App
    */
