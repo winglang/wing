@@ -50,18 +50,17 @@ pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
 			let uri_path = uri.to_file_path().unwrap();
 			let path = uri_path.to_str().unwrap();
 
-			let mut borrowed_file = files.borrow_mut();
 			let mut borrowed_map = jsii_import_map.borrow_mut();
-			let mut current_jsii = borrowed_map.get_mut(&path.to_string());
-			if current_jsii.is_none() {
+			let current_jsii = if let Some(jsii) = borrowed_map.get_mut(path) {
+				jsii
+			} else {
 				borrowed_map.insert(path.to_string(), vec![]);
-				current_jsii = borrowed_map.get_mut(&path.to_string());
-			}
-			let current_jsii = current_jsii.unwrap();
+				borrowed_map.get_mut(path).unwrap()
+			};
 
 			let result = partial_compile(path, params.text_document.text.as_bytes(), current_jsii);
 			send_diagnostics(&uri, &result.diagnostics);
-			borrowed_file.insert(uri, result);
+			files.borrow_mut().insert(uri, result);
 		});
 	})
 }
@@ -82,18 +81,17 @@ pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
 			let uri_path = uri.to_file_path().unwrap();
 			let path = uri_path.to_str().unwrap();
 
-			let mut borrowed_file = files.borrow_mut();
 			let mut borrowed_map = jsii_import_map.borrow_mut();
-			let mut current_jsii = borrowed_map.get_mut(&path.to_string());
-			if current_jsii.is_none() {
+			let current_jsii = if let Some(jsii) = borrowed_map.get_mut(path) {
+				jsii
+			} else {
 				borrowed_map.insert(path.to_string(), vec![]);
-				current_jsii = borrowed_map.get_mut(&path.to_string());
-			}
-			let current_jsii = current_jsii.unwrap();
+				borrowed_map.get_mut(path).unwrap()
+			};
 
 			let result = partial_compile(path, params.content_changes[0].text.as_bytes(), current_jsii);
 			send_diagnostics(&uri, &result.diagnostics);
-			borrowed_file.insert(uri, result);
+			files.borrow_mut().insert(uri, result);
 		});
 	})
 }
