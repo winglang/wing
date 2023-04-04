@@ -66,16 +66,16 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
           this.addTrace(
             `Processing "${route.method} ${route.route}" (body=${JSON.stringify(
               body
-            )}).`
+            )}, params=${JSON.stringify(req.params)}).`
           );
 
           const apiRequest = transformRequest(req);
 
-          if (Object.keys(req.params).length > 0) {
-            throw new Error(
-              "Path variables are not yet supported in the simulator."
-            );
-          }
+          // if (Object.keys(req.params).length > 0) {
+          //   throw new Error(
+          //     "Path variables are not yet supported in the simulator."
+          //   );
+          // }
 
           try {
             const response = await fnClient.invoke(
@@ -162,6 +162,10 @@ function transformRequest(req: express.Request): ApiRequest {
     method: parseHttpMethod(req.method),
     path: req.path,
     query: sanitizeParamLikeObject(req.query as any),
-    vars: {}, // TODO: not supported in simulator yet
+    vars: req.params,
   };
 }
+
+// function transformRoutePath(route: string): string {
+//   return route.replace(/{/g, ":").replace(/}/g, "");
+// }
