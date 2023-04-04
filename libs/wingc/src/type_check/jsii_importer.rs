@@ -42,7 +42,6 @@ impl JsiiInterface for jsii::InterfaceType {
 	}
 }
 
-#[derive(Clone)]
 pub struct JsiiImportSpec {
 	/// An interface to access the types in the JSII library loaded with wingii.
 	pub type_system: TypeSystem,
@@ -154,25 +153,22 @@ impl<'a> JsiiImporter<'a> {
 			return;
 		}
 
-		self.setup_namespaces_for(&type_fqn);
-
-		// check if type is already imported
-		if self
-			.wing_types
-			.libraries
-			.lookup_nested_str(type_fqn.as_str(), None)
-			.is_ok()
-		{
-			return;
-		}
+		let type_str = type_fqn.as_str();
 
 		// Hack: if the type is "constructs.IConstruct", we import it manually
 		// this is done so we can avoid loading the constructs module
-		if type_fqn.as_str() == CONSTRUCT_BASE_INTERFACE {
+		if type_str == CONSTRUCT_BASE_INTERFACE {
 			let symbol = Symbol::global(type_fqn.type_name());
 			self.register_jsii_type(&type_fqn, &symbol, self.wing_types.anything());
 			return;
 		}
+
+		// check if type is already imported
+		if self.wing_types.libraries.lookup_nested_str(type_str, None).is_ok() {
+			return;
+		}
+
+		self.setup_namespaces_for(&type_fqn);
 
 		// Check if this is a JSII interface and import it if it is
 		let jsii_interface = self.jsii_spec.type_system.find_interface(type_fqn);
@@ -194,8 +190,6 @@ impl<'a> JsiiImporter<'a> {
 			self.import_enum(jsii_enum);
 			return;
 		}
-
-		panic!("Type {} was not found in the type system", type_fqn);
 	}
 
 	pub fn setup_namespaces_for(&mut self, type_name: &FQN) {

@@ -70,7 +70,6 @@ pub mod type_system {
 	use std::collections::HashMap;
 	use std::path::Path;
 
-	#[derive(Clone)]
 	pub struct TypeSystem {
 		assemblies: HashMap<String, Assembly>,
 		roots: Vec<String>,

@@ -1007,10 +1007,6 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	pub fn add_jsii_import_spec(&mut self, spec: JsiiImportSpec) {
-		self.jsii_imports.push(spec);
-	}
-
 	pub fn add_globals(&mut self, scope: &Scope) {
 		self.add_module_to_env(
 			scope.env.borrow_mut().as_mut().unwrap(),
