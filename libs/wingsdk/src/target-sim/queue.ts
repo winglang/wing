@@ -108,13 +108,13 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
   /** @internal */
   public _bind(host: core.IInflightHost, ops: string[]): void {
-    bindSimulatorResource("queue", this, host);
+    bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }
 
   /** @internal */
   public _toInflight(): core.Code {
-    return makeSimulatorJsClient("queue", this);
+    return makeSimulatorJsClient(__filename, this);
   }
 }
 

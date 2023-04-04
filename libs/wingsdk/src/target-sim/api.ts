@@ -188,13 +188,13 @@ export class Api extends cloud.Api implements ISimulatorResource {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
-    return makeSimulatorJsClient("bucket", this);
+  public _bind(host: core.IInflightHost, ops: string[]): void {
+    bindSimulatorResource(__filename, this, host);
+    super._bind(host, ops);
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
-    bindSimulatorResource("api", this, host);
-    super._bind(host, ops);
+  public _toInflight(): core.Code {
+    return makeSimulatorJsClient(__filename, this);
   }
 }

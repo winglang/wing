@@ -43,11 +43,13 @@ export abstract class Api extends Resource {
   }
 
   public readonly stateful = true;
+
   // https://spec.openapis.org/oas/v3.0.3
   private apiSpec: any = {
     openapi: "3.0.3",
     paths: {},
   };
+
   constructor(scope: Construct, id: string, props: ApiProps = {}) {
     super(scope, id);
 

@@ -31,13 +31,13 @@ export class Table extends cloud.Table implements ISimulatorResource {
 
   /** @internal */
   public _bind(host: core.IInflightHost, ops: string[]): void {
-    bindSimulatorResource("table", this, host);
+    bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }
 
   /** @internal */
   public _toInflight(): core.Code {
-    return makeSimulatorJsClient("table", this);
+    return makeSimulatorJsClient(__filename, this);
   }
 }
 

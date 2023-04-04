@@ -1,4 +1,5 @@
 import { access, constants } from "fs";
+import { basename } from "path";
 import { promisify } from "util";
 import { IConstruct } from "constructs";
 import { Function } from "./function";
@@ -33,14 +34,15 @@ export async function exists(filePath: string): Promise<boolean> {
 function makeEnvVarName(type: string, resource: IConstruct): string {
   return `${type
     .toUpperCase()
-    .replace(/\./g, "_")}_HANDLE_${resource.node.addr.slice(-8)}`;
+    .replace(/[^A-Z]+/g, "_")}_HANDLE_${resource.node.addr.slice(-8)}`;
 }
 
 export function bindSimulatorResource(
-  type: string,
+  filename: string,
   resource: Resource,
   host: IInflightHost
 ) {
+  const type = basename(filename).split(".")[0];
   if (!(host instanceof Function)) {
     throw new Error(
       `Resources of ${type} can only be bound by a sim.Function for now`
@@ -53,7 +55,8 @@ export function bindSimulatorResource(
   host.node.addDependency(resource);
 }
 
-export function makeSimulatorJsClient(type: string, resource: Resource) {
+export function makeSimulatorJsClient(filename: string, resource: Resource) {
+  const type = basename(filename).split(".")[0];
   const env = makeEnvVarName(type, resource);
   return NodeJsCode.fromInline(
     `(function(env) {
