@@ -1,4 +1,4 @@
-use lsp_types::{DidChangeTextDocumentParams, DidOpenTextDocumentParams};
+use lsp_types::{DidChangeTextDocumentParams, DidOpenTextDocumentParams, Url};
 
 use std::path::Path;
 use std::{cell::RefCell, collections::HashMap};
@@ -30,7 +30,7 @@ thread_local! {
 	/// When consumed as a WASM library, wingc is not in control of the process/memory in which it is running.
 	/// This means that it cannot reliably manage stateful data like this between function calls.
 	/// Here we will assume the process is single threaded, and use thread_local to store this data.
-	pub static FILES: RefCell<HashMap<String,FileData>> = RefCell::new(HashMap::new());
+	pub static FILES: RefCell<HashMap<Url,FileData>> = RefCell::new(HashMap::new());
 	pub static JSII_IMPORTS: RefCell<HashMap<String,Vec<JsiiImportSpec>>> = RefCell::new(HashMap::new());
 }
 
@@ -56,7 +56,7 @@ pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
 
 			let result = partial_compile(path, params.text_document.text.as_bytes(), &mut current_jsii);
 			send_diagnostics(&uri, &result.diagnostics);
-			borrowed_file.insert(path.to_string(), result);
+			borrowed_file.insert(uri, result);
 			borrowed_map.insert(path.to_string(), current_jsii);
 		});
 	})
@@ -86,7 +86,7 @@ pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
 
 			let result = partial_compile(path, params.content_changes[0].text.as_bytes(), &mut current_jsii);
 			send_diagnostics(&uri, &result.diagnostics);
-			borrowed_file.insert(path.to_string(), result);
+			borrowed_file.insert(uri, result);
 			if was_empty {
 				borrowed_map.insert(path.to_string(), current_jsii);
 			}

@@ -212,17 +212,7 @@ pub unsafe extern "C" fn wingc_on_hover(ptr: u32, len: u32) -> u64 {
 pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
 	FILES.with(|files| {
 		let files = files.borrow();
-		let parse_result = files.get(
-			&params
-				.text_document_position_params
-				.text_document
-				.uri
-				.to_file_path()
-				.unwrap()
-				.to_str()
-				.unwrap()
-				.to_string(),
-		);
+		let parse_result = files.get(&params.text_document_position_params.text_document.uri.clone());
 		let parse_result = parse_result.expect(
 			format!(
 				"Compiled data not found for \"{}\"",
