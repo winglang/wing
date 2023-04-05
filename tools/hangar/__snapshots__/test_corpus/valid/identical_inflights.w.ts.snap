@@ -8,7 +8,20 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "stackName": "root",
       "version": "0.15.2",
     },
-    "outputs": {},
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
   "provider": {
     "aws": [
@@ -21,6 +34,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
+const $wing_is_test = process.env.WING_IS_TEST === \\"true\\";
 
 function __app(target) {
 	switch (target) {
@@ -39,25 +53,41 @@ function __app(target) {
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
 }
-const $App = __app(process.env.WING_TARGET);
+const $AppBase = __app(process.env.WING_TARGET);
 
-class MyApp extends $App {
-constructor() {
-  super({ outdir: $outdir, name: \\"identical_inflights\\", plugins: $plugins });
-  
-  const x = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-    bindings: {
-    }
-  });
-  const y = new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-    bindings: {
-    }
-  });
+class $Root extends $stdlib.core.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    const x = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+  bindings: {
+  }
+});
+    const y = new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
+  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+  bindings: {
+  }
+});
+  }
 }
+
+class $App extends $AppBase {
+  constructor() {
+    super({ outdir: $outdir, name: \\"identical_inflights\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    if ($wing_is_test) {
+      new $Root(this, \\"env0\\");
+      const $test_runner = this.testRunner;
+      const $tests = $test_runner.findTests();
+      for (let $i = 1; $i < $tests.length; $i++) {
+        new $Root(this, \\"env\\" + $i);
+      }
+    } else {
+      new $Root(this, \\"Default\\");
+    }
+  }
 }
-new MyApp().synth();"
+
+new $App().synth();"
 `;
 
 exports[`wing compile -t tf-aws > proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js 1`] = `
@@ -65,4 +95,8 @@ exports[`wing compile -t tf-aws > proc.8eb95bcbc154530931e15fc418c8b1fe991095671
 } };"
 `;
 
-exports[`wing test > stdout 1`] = `"pass ─ identical_inflights.w (no tests)"`;
+exports[`wing test -t sim > stdout 1`] = `
+"- Compiling to sim...
+✔ Compiling to sim...
+pass ─ identical_inflights.wsim (no tests)"
+`;

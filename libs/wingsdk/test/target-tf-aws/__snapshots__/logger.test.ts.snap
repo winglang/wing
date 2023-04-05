@@ -19,6 +19,11 @@ return class Handler {
 
 exports[`inflight function uses a logger 2`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_iam_role\\": {
       \\"root_Function_IamRole_88AD864C\\": {

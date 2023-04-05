@@ -2,6 +2,7 @@
 
 exports[`inflight uses a logger 1`] = `
 [
+  "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "Hello, Alice",
@@ -9,6 +10,7 @@ exports[`inflight uses a logger 1`] = `
   "Invoke (payload=\\"Alice\\").",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
@@ -42,6 +44,14 @@ async handle(event) {
 };",
   "simulator.json": {
     "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
       {
         "attrs": {},
         "path": "root/WingLogger",
@@ -107,6 +117,23 @@ async handle(event) {
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "my_function": {
           "attributes": {

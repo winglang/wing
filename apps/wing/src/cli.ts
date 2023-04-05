@@ -53,7 +53,7 @@ async function main() {
     .addOption(
       new Option("-t, --target <target>", "Target platform")
         .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
-        .makeOptionMandatory()
+        .default("sim")
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .action(actionErrorHandler(compile));
@@ -64,6 +64,12 @@ async function main() {
       "Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers"
     )
     .argument("<entrypoint...>", "all entrypoints to test")
+    .addOption(
+      new Option("-t, --target <target>", "Target platform")
+        .choices(["tf-aws", "sim"])
+        .default("sim")
+    )
+    .option("-p, --plugins [plugin...]", "Compiler plugins")
     .action(actionErrorHandler(test));
 
   program
