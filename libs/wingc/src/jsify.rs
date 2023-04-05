@@ -845,11 +845,7 @@ impl<'a> JSifier<'a> {
 		let body = match &func_def.body {
 			FunctionBody::Statements(scope) => self.jsify_scope(scope, context),
 			FunctionBody::External(external_spec) => {
-				let new_path = self.prepare_extern(
-					matches!(func_def.signature.phase, Phase::Inflight),
-					external_spec,
-					&func_def.span.file_id,
-				);
+				let new_path = self.prepare_extern(matches!(func_def.signature.phase, Phase::Inflight), external_spec);
 				format!("return require({new_path})[\"{name}\"]({parameters})")
 			}
 		};
@@ -872,21 +868,18 @@ impl<'a> JSifier<'a> {
 
 	/// Retrieves the contents of the extern file and copies it to the intermediate directory.
 	/// Returns the path to the copied file
-	fn prepare_extern(&self, is_inflight: bool, path: &String, current_wing_file: &String) -> String {
-		let current_wing_file_dir = Path::new(current_wing_file).parent().unwrap();
-		let path_relative_to_wing = current_wing_file_dir.join(&path);
-		let path_relative_to_wing = path_relative_to_wing.to_str().expect("Converting path to string");
+	fn prepare_extern(&self, is_inflight: bool, extern_spec: &String) -> String {
+		let wrapper_text =
+			format!("const r = require(require.resolve(`{extern_spec}`, {{paths: [process.env.WING_FILE_DIR]}}));console.log(r);module.exports = r;");
 
-		let contents = std::fs::read_to_string(path_relative_to_wing).expect("Copying extern file");
-
-		let id = base16ct::lower::encode_string(&Sha256::new().chain_update(&contents).finalize());
+		let id = base16ct::lower::encode_string(&Sha256::new().chain_update(&wrapper_text).finalize());
 		let id_file = format!("{}.js", id);
 		let extern_id_path = Path::new(EXTERN_DIR).join(&id_file);
 
 		let final_dir = self.out_dir.join(EXTERN_DIR);
 		let final_path = self.out_dir.join(&extern_id_path);
 		fs::create_dir_all(final_dir).expect("Creating extern dir");
-		std::fs::write(&final_path, contents).expect("Copying extern file");
+		std::fs::write(&final_path, wrapper_text).expect("Copying extern file");
 
 		if is_inflight {
 			let relative_path = Path::new("..").join(&extern_id_path);
