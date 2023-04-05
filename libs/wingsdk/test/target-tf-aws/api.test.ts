@@ -316,7 +316,5 @@ test("api url can be used as environment variable", () => {
   expect(
     tfConfig.resource.aws_lambda_function.root_Fn_2A5D440A.environment.variables
       .API_URL
-  ).toEqual(
-    "https://${aws_api_gateway_rest_api.root_Api_api_0637EF1E.id}.execute-api.${data.aws_region.root_Region_A2D17352.name}.amazonaws.com/prod"
-  );
+  ).toEqual("${aws_api_gateway_stage.root_Api_api_stage_3E2E462A.invoke_url}");
 });

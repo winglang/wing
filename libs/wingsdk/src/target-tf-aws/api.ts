@@ -46,9 +46,7 @@ export class Api extends cloud.Api {
   }
 
   public get url(): string {
-    const region = (App.of(this) as App).region;
-    const awsSuffix = "amazonaws.com"; // TODO: use dns_suffix from https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition
-    return `https://${this.api.api.id}.execute-api.${region}.${awsSuffix}/${STAGE_NAME}`;
+    return this.api.stage.invokeUrl;
   }
 
   /**
@@ -353,6 +351,7 @@ export class Api extends cloud.Api {
  */
 class WingRestApi extends Construct {
   public readonly api: ApiGatewayRestApi;
+  public readonly stage: ApiGatewayStage;
   private readonly deployment: ApiGatewayDeployment;
   private readonly region: string;
   constructor(
@@ -393,7 +392,7 @@ class WingRestApi extends Construct {
       },
     });
 
-    new ApiGatewayStage(this, "stage", {
+    this.stage = new ApiGatewayStage(this, "stage", {
       restApiId: this.api.id,
       stageName: STAGE_NAME,
       deploymentId: this.deployment.id,
