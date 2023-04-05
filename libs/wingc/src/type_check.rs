@@ -1,4 +1,4 @@
-mod jsii_importer;
+pub(crate) mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, Interface as AstInterface,
@@ -21,7 +21,9 @@ use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
 use std::path::Path;
 use symbol_env::{StatementIdx, SymbolEnv};
+use wingii::fqn::FQN;
 
+use self::jsii_importer::JsiiImportSpec;
 use self::symbol_env::SymbolEnvIter;
 
 pub struct UnsafeRef<T>(*const T);
@@ -994,6 +996,10 @@ pub struct TypeChecker<'a> {
 	/// The path to the source file being type checked.
 	source_path: &'a Path,
 
+	/// JSII Manifest descriptions to be imported.
+	/// May be reused between compilations
+	jsii_imports: &'a mut Vec<JsiiImportSpec>,
+
 	pub diagnostics: RefCell<Diagnostics>,
 
 	// Nesting level within JSON literals, a value larger than 0 means we're currently in a JSON literal
@@ -1004,12 +1010,13 @@ pub struct TypeChecker<'a> {
 }
 
 impl<'a> TypeChecker<'a> {
-	pub fn new(types: &'a mut Types, source_path: &'a Path) -> Self {
+	pub fn new(types: &'a mut Types, source_path: &'a Path, jsii_imports: &'a mut Vec<JsiiImportSpec>) -> Self {
 		Self {
-			types: types,
+			types,
 			inner_scopes: vec![],
 			source_path,
 			diagnostics: RefCell::new(Diagnostics::new()),
+			jsii_imports,
 			in_json: 0,
 			statement_idx: 0,
 		}
@@ -1733,9 +1740,9 @@ impl<'a> TypeChecker<'a> {
 				// TODO: avoid creating a new type for each function_sig resolution
 				self.types.add_type(Type::Function(sig))
 			}
-			TypeAnnotation::UserDefined(user_defined_type) => {
-				resolve_user_defined_type(user_defined_type, env, self.statement_idx).unwrap_or_else(|e| self.type_error(e))
-			}
+			TypeAnnotation::UserDefined(user_defined_type) => self
+				.resolve_user_defined_type(user_defined_type, env, self.statement_idx)
+				.unwrap_or_else(|e| self.type_error(e)),
 			TypeAnnotation::Array(v) => {
 				let value_type = self.resolve_type_annotation(v, env);
 				// TODO: avoid creating a new type for each array resolution
@@ -2054,7 +2061,9 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify parent is actually a known Class/Resource and get their env
 				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {
-					let t = resolve_user_defined_type(parent_type, env, stmt.idx).unwrap_or_else(|e| self.type_error(e));
+					let t = self
+						.resolve_user_defined_type(parent_type, env, stmt.idx)
+						.unwrap_or_else(|e| self.type_error(e));
 					if *is_resource {
 						if let Type::Resource(ref class) = *t {
 							(Some(t), Some(class.env.get_ref()))
@@ -2079,7 +2088,9 @@ impl<'a> TypeChecker<'a> {
 				let impl_interfaces = implements
 					.iter()
 					.filter_map(|i| {
-						let t = resolve_user_defined_type(i, env, stmt.idx).unwrap_or_else(|e| self.type_error(e));
+						let t = self
+							.resolve_user_defined_type(i, env, stmt.idx)
+							.unwrap_or_else(|e| self.type_error(e));
 						if t.as_interface().is_some() {
 							Some(t)
 						} else {
@@ -2211,7 +2222,9 @@ impl<'a> TypeChecker<'a> {
 				let extend_interfaces = extends
 					.iter()
 					.filter_map(|i| {
-						let t = resolve_user_defined_type(i, env, stmt.idx).unwrap_or_else(|e| self.type_error(e));
+						let t = self
+							.resolve_user_defined_type(i, env, stmt.idx)
+							.unwrap_or_else(|e| self.type_error(e));
 						if t.as_interface().is_some() {
 							Some(t)
 						} else {
@@ -2483,59 +2496,80 @@ impl<'a> TypeChecker<'a> {
 		// the statement that initiated the bring, if any
 		stmt: Option<&Stmt>,
 	) {
-		let mut wingii_types = wingii::type_system::TypeSystem::new();
-
-		// Loading the SDK is handled different from loading any other jsii modules because with the SDK we provide an exact
-		// location to locate the SDK, whereas for the other modules we need to search for them from the source directory.
-		let assembly_name = if library_name == WINGSDK_ASSEMBLY_NAME {
-			// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
-			let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
-			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
-				root: true,
-				deps: false,
-			};
-			let assembly_name = match wingii_types.load(manifest_root.as_str(), Some(wingii_loader_options)) {
-				Ok(name) => name,
-				Err(type_error) => {
-					self.type_error(TypeError {
-						message: format!("Cannot locate Wing standard library (checking \"{}\"", manifest_root),
-						span: stmt.map(|s| s.span.clone()).unwrap_or_default(),
-					});
-					debug!("{:?}", type_error);
-					return;
-				}
-			};
-
-			assembly_name
+		let jsii = if let Some(jsii) = self
+			.jsii_imports
+			.iter()
+			.find(|j| j.assembly_name == library_name && j.alias.name == alias.name)
+		{
+			// This spec has already been pre-supplied to the typechecker, so we'll still use this to populate the symbol environment
+			jsii
 		} else {
-			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions { root: true, deps: true };
-			let source_dir = self.source_path.parent().unwrap().to_str().unwrap();
-			let assembly_name = match wingii_types.load_dep(library_name.as_str(), source_dir, &wingii_loader_options) {
-				Ok(name) => name,
-				Err(type_error) => {
-					self.type_error(TypeError {
-						message: format!("Cannot find module \"{}\" in source directory", library_name),
-						span: stmt.map(|s| s.span.clone()).unwrap_or_default(),
-					});
-					debug!("{:?}", type_error);
-					return;
-				}
+			let mut wingii_types = wingii::type_system::TypeSystem::new();
+
+			// Loading the SDK is handled different from loading any other jsii modules because with the SDK we provide an exact
+			// location to locate the SDK, whereas for the other modules we need to search for them from the source directory.
+			let assembly_name = if library_name == WINGSDK_ASSEMBLY_NAME {
+				// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
+				let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
+				let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
+					root: true,
+					deps: false,
+				};
+				let assembly_name = match wingii_types.load(manifest_root.as_str(), Some(wingii_loader_options)) {
+					Ok(name) => name,
+					Err(type_error) => {
+						self.type_error(TypeError {
+							message: format!("Cannot locate Wing standard library (checking \"{}\"", manifest_root),
+							span: stmt.map(|s| s.span.clone()).unwrap_or_default(),
+						});
+						debug!("{:?}", type_error);
+						return;
+					}
+				};
+
+				assembly_name
+			} else {
+				let wingii_loader_options = wingii::type_system::AssemblyLoadOptions { root: true, deps: true };
+				let source_dir = self.source_path.parent().unwrap().to_str().unwrap();
+				let assembly_name = match wingii_types.load_dep(library_name.as_str(), source_dir, &wingii_loader_options) {
+					Ok(name) => name,
+					Err(type_error) => {
+						self.type_error(TypeError {
+							message: format!("Cannot find module \"{}\" in source directory", library_name),
+							span: stmt.map(|s| s.span.clone()).unwrap_or_default(),
+						});
+						debug!("{:?}", type_error);
+						return;
+					}
+				};
+				assembly_name
 			};
-			assembly_name
+
+			debug!("Loaded JSII assembly {}", assembly_name);
+
+			self.jsii_imports.push(JsiiImportSpec {
+				type_system: wingii_types,
+				assembly_name: assembly_name.to_string(),
+				namespace_filter,
+				alias: alias.clone(),
+				import_statement_idx: stmt.map(|s| s.idx).unwrap_or(0),
+			});
+
+			self
+				.jsii_imports
+				.iter()
+				.find(|j| j.assembly_name == assembly_name && j.alias.name == alias.name)
+				.expect("Expected to find the just-added jsii import spec")
 		};
 
-		debug!("Loaded JSII assembly {}", assembly_name);
+		let mut importer = JsiiImporter::new(jsii, self.types);
 
-		let mut jsii_importer = JsiiImporter::new(
-			&wingii_types,
-			&assembly_name,
-			&namespace_filter,
-			&alias,
-			self.types,
-			stmt.map(|s| s.idx).unwrap_or(0),
-			env,
-		);
-		jsii_importer.import_to_env();
+		// if we're importing the standard module from the wing sdk, we want to eagerly import all the types within it
+		// because they aren't typically resolved through the same process as other types
+		if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME && jsii.alias.name == WINGSDK_STD_MODULE {
+			importer.deep_import_submodule_to_env(WINGSDK_STD_MODULE);
+		}
+		importer.import_submodules_to_env(env);
 	}
 
 	/// Add function arguments to the function's environment
@@ -2798,7 +2832,8 @@ impl<'a> TypeChecker<'a> {
 		path.reverse();
 		let user_type_annotation = UserDefinedType { root, fields: path };
 
-		resolve_user_defined_type(&user_type_annotation, env, self.statement_idx)
+		self
+			.resolve_user_defined_type(&user_type_annotation, env, self.statement_idx)
 			.ok()
 			.map(|_| user_type_annotation)
 	}
@@ -2964,7 +2999,8 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 			Reference::TypeMember { type_, property } => {
-				let type_ = resolve_user_defined_type(type_, env, self.statement_idx)
+				let type_ = self
+					.resolve_user_defined_type(type_, env, self.statement_idx)
 					.expect("Type annotation should have been verified by `expr_maybe_type`");
 				return match *type_ {
 					Type::Enum(ref e) => {
@@ -3026,6 +3062,46 @@ impl<'a> TypeChecker<'a> {
 			}
 			Err(type_error) => self.variable_error(type_error),
 		}
+	}
+
+	/// Resolves a user defined type (e.g. `Foo.Bar.Baz`) to a type reference
+	/// If needed, this method can also resolve types from jsii libraries that have yet to be imported
+	fn resolve_user_defined_type(
+		&mut self,
+		user_defined_type: &UserDefinedType,
+		env: &SymbolEnv,
+		statement_idx: usize,
+	) -> Result<TypeRef, TypeError> {
+		// Attempt to resolve the type from the current environment
+		let res = resolve_user_defined_type(user_defined_type, env, statement_idx);
+		if res.is_ok() {
+			return res;
+		}
+
+		// If the type is not found, attempt to import it from a jsii library
+		for jsii in &*self.jsii_imports {
+			if jsii.alias.name == user_defined_type.root.name {
+				let mut importer = JsiiImporter::new(&jsii, self.types);
+
+				let mut udt_string = if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME {
+					// when importing from the std lib, the "alias" is the submodule
+					format!("{}.{}.", jsii.assembly_name, jsii.alias.name)
+				} else {
+					format!("{}.", jsii.assembly_name)
+				};
+				udt_string.push_str(&user_defined_type.fields.iter().map(|g| g.name.clone()).join("."));
+
+				if importer.import_type(&FQN::from(udt_string.as_str())) {
+					return resolve_user_defined_type(user_defined_type, env, statement_idx);
+				} else {
+					// if the import failed, don't bother trying to do any more lookups
+					break;
+				}
+			}
+		}
+
+		// If the type is still not found, return the original error
+		res
 	}
 }
 
@@ -3136,6 +3212,7 @@ fn add_parent_members_to_iface_env(
 	Ok(())
 }
 
+/// Resolves a user defined type (e.g. `Foo.Bar.Baz`) to a type reference
 pub fn resolve_user_defined_type(
 	user_defined_type: &UserDefinedType,
 	env: &SymbolEnv,
