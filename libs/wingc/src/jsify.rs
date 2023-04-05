@@ -21,7 +21,7 @@ use sha2::{Digest, Sha256};
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, ClassField, Constructor, Expr, ExprKind, FunctionBody,
-		FunctionDefinition, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
+		FunctionDefinition, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
 		TypeAnnotation, UnaryOperator, UserDefinedType,
 	},
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
@@ -748,7 +748,11 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_inflight_function(&mut self, func_def: &FunctionDefinition, context: &JSifyContext) -> String {
-		let parameters = func_def.parameters.iter().map(|p| &p.0.name).join(", ");
+		let parameters = func_def
+			.parameters()
+			.iter()
+			.map(|p| self.jsify_symbol(&p.name))
+			.join(", ");
 
 		let block = match &func_def.body {
 			FunctionBody::Statements(scope) => self.jsify_scope(
@@ -808,8 +812,8 @@ impl<'a> JSifier<'a> {
 	fn jsify_constructor(&mut self, name: Option<&str>, func_def: &Constructor, context: &JSifyContext) -> String {
 		let mut parameter_list = vec![];
 
-		for p in func_def.parameters.iter() {
-			parameter_list.push(self.jsify_symbol(&p.0));
+		for p in func_def.parameters().iter() {
+			parameter_list.push(self.jsify_symbol(&p.name));
 		}
 
 		let (name, arrow) = match name {
@@ -831,8 +835,8 @@ impl<'a> JSifier<'a> {
 	fn jsify_function(&mut self, name: Option<&str>, func_def: &FunctionDefinition, context: &JSifyContext) -> String {
 		let mut parameter_list = vec![];
 
-		for p in func_def.parameters.iter() {
-			parameter_list.push(self.jsify_symbol(&p.0));
+		for p in func_def.parameters().iter() {
+			parameter_list.push(self.jsify_symbol(&p.name));
 		}
 
 		let (name, arrow) = match name {
@@ -1014,7 +1018,7 @@ impl<'a> JSifier<'a> {
 		for (method_name, refs) in refs {
 			inflight_annotations.push(format!(
 				"{}._annotateInflight(\"{}\", {{{}}});",
-				class.name.name,
+				self.jsify_symbol(&class.name),
 				method_name,
 				refs
 					.iter()
@@ -1040,9 +1044,9 @@ impl<'a> JSifier<'a> {
 		format!(
 			"constructor(scope, id, {}) {{\n{}\n{}\n}}",
 			constructor
-				.parameters
+				.parameters()
 				.iter()
-				.map(|(name, _)| name.name.clone())
+				.map(|p| self.jsify_symbol(&p.name))
 				.collect::<Vec<_>>()
 				.join(", "),
 			// If there's no parent then this resource is derived from the base resource class (core.Resource) and we need
