@@ -2,7 +2,6 @@ import { DataAwsCallerIdentity } from "@cdktf/provider-aws/lib/data-aws-caller-i
 import { DataAwsRegion } from "@cdktf/provider-aws/lib/data-aws-region";
 import { Vpc } from "@cdktf/provider-aws/lib/vpc";
 import { Subnet } from "@cdktf/provider-aws/lib/subnet";
-import { SecurityGroup } from "@cdktf/provider-aws/lib/security-group";
 import { Eip } from "@cdktf/provider-aws/lib/eip";
 import { InternetGateway } from "@cdktf/provider-aws/lib/internet-gateway";
 import { NatGateway } from "@cdktf/provider-aws/lib/nat-gateway";
