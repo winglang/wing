@@ -1218,17 +1218,17 @@ impl<'a> JSifier<'a> {
 			self.diagnostics.extend(find_diags);
 
 			// Add no-ops for fields that are not referenced
-			resource_class
+			let resource_fields = resource_class
 				.fields
 				.iter()
-        .filter(|f| f.phase == Phase::Preflight)
-				.map(|f| format!("this.{}", f.name.name))
-				.filter(|f| !refs.contains_key(f.as_str()))
-				.collect::<Vec<String>>()
-				.iter()
-				.for_each(|f| {
-					refs.insert(String::from(f.clone()), BTreeSet::new());
-				});
+				.filter(|f| f.phase == Phase::Preflight)
+				.map(|f| format!("this.{}", f.name.name));
+
+			for f in resource_fields {
+				if !refs.contains_key(f.as_str()) {
+					refs.insert(f, BTreeSet::new());
+				}
+			}
 
 			// add the references to the result
 			result.push((method_name.name.clone(), refs));
