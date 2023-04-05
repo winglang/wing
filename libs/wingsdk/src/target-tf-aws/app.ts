@@ -1,13 +1,13 @@
 import { DataAwsCallerIdentity } from "@cdktf/provider-aws/lib/data-aws-caller-identity";
 import { DataAwsRegion } from "@cdktf/provider-aws/lib/data-aws-region";
-import { Vpc } from "@cdktf/provider-aws/lib/vpc";
-import { Subnet } from "@cdktf/provider-aws/lib/subnet";
 import { Eip } from "@cdktf/provider-aws/lib/eip";
 import { InternetGateway } from "@cdktf/provider-aws/lib/internet-gateway";
 import { NatGateway } from "@cdktf/provider-aws/lib/nat-gateway";
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { RouteTable } from "@cdktf/provider-aws/lib/route-table";
 import { RouteTableAssociation } from "@cdktf/provider-aws/lib/route-table-association";
+import { Subnet } from "@cdktf/provider-aws/lib/subnet";
+import { Vpc } from "@cdktf/provider-aws/lib/vpc";
 import { Construct } from "constructs";
 import { Api } from "./api";
 import { Bucket } from "./bucket";
@@ -126,7 +126,7 @@ export class App extends CdktfApp {
     }
     return this.awsRegionProvider.name;
   }
-  
+
   /**
    * Returns the VPC for this app. Will create a new VPC if one does not exist.
    */
