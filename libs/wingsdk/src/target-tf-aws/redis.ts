@@ -8,11 +8,12 @@ import { Function } from "./function";
 import { Code } from "../core";
 import * as core from "../core";
 import * as redis from "../redis";
-import { NameOptions, ResourceNames } from "../utils/resource-names";
+import { CaseConventions, NameOptions, ResourceNames } from "../utils/resource-names";
 
 const ELASTICACHE_NAME_OPTS: NameOptions = {
   maxLen: 50,
-  disallowedRegex: /([^a-z0-9]+)/g,
+  disallowedRegex: /([^a-zA-Z0-9]+)/g,
+  case: CaseConventions.LOWERCASE,
 };
 
 export class Redis extends redis.Redis {
@@ -38,7 +39,8 @@ export class Redis extends redis.Redis {
     const nodeType = process.env.REDIS_CLUSTER_NODE_TYPE ?? "cache.t4g.small";
     const parameterGroupName =
       process.env.REDIS_PARAMETER_GROUP_NAME ?? "default.redis6.x";
-
+    const REDIS_PORT = 6379;
+    
     const app = App.of(this) as App;
     const vpc = app.vpc;
     this.subnet = app.subnets.private;
@@ -50,8 +52,8 @@ export class Redis extends redis.Redis {
       ingress: [
         {
           cidrBlocks: [this.subnet.cidrBlock],
-          fromPort: 6379,
-          toPort: 6379,
+          fromPort: REDIS_PORT,
+          toPort: REDIS_PORT,
           protocol: "tcp",
           selfAttribute: true,
         },
