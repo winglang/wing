@@ -667,8 +667,7 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_function_definition(&self, func_def_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
-		let parameters = self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap())?;
-
+		let signature = self.build_function_signature(func_def_node, phase)?;
 		let statements = if let Some(external) = func_def_node.child_by_field_name("extern_modifier") {
 			let node_text = self.node_text(&external.named_child(0).unwrap());
 			let node_text = &node_text[1..node_text.len() - 1];
@@ -679,16 +678,7 @@ impl<'s> Parser<'s> {
 
 		Ok(FunctionDefinition {
 			body: statements,
-			// TODO: duplicated?
-			signature: FunctionSignature {
-				parameters,
-				return_type: if let Some(rt) = func_def_node.child_by_field_name("type") {
-					Some(Box::new(self.build_type_annotation(&rt)?))
-				} else {
-					None
-				},
-				phase,
-			},
+			signature,
 			is_static: func_def_node.child_by_field_name("static").is_some(),
 			captures: RefCell::new(None),
 			span: self.node_span(func_def_node),
