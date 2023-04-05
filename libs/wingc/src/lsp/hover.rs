@@ -124,15 +124,12 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 
 		if let FunctionBody::Statements(scope) = &node.body {
 			self.with_scope(scope, |v| {
-				for param in &node.parameters {
-					v.visit_symbol(&param.0);
+				for param in &node.signature.parameters {
+					v.visit_function_parameter(&param);
 				}
 			});
 		}
 
-		for param_type in &node.signature.parameters {
-			self.visit_type_annotation(param_type);
-		}
 		if let Some(return_type) = &node.signature.return_type {
 			self.visit_type_annotation(return_type);
 		}
@@ -168,16 +165,13 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			return;
 		}
 
-		for param_type in &node.signature.parameters {
-			self.visit_type_annotation(param_type);
-		}
 		if let Some(return_type) = &node.signature.return_type {
 			self.visit_type_annotation(return_type);
 		}
 
 		self.with_scope(&node.statements, |v| {
-			for param in &node.parameters {
-				v.visit_symbol(&param.0);
+			for param in &node.signature.parameters {
+				v.visit_function_parameter(&param);
 			}
 		});
 
