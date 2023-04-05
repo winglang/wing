@@ -147,51 +147,50 @@ impl<'a> JsiiImporter<'a> {
 			.unwrap()
 	}
 
-	pub fn import_type(&mut self, type_fqn: &FQN) {
+	pub fn import_type(&mut self, type_fqn: &FQN) -> bool {
 		// Hack: if the class name is a construct base then we treat this class as a resource and don't need to define it
 		if is_construct_base(&type_fqn) {
-			return;
+			return true;
 		}
-
-		let type_str = type_fqn.as_str();
 
 		self.setup_namespaces_for(&type_fqn);
 
 		// Hack: if the type is "constructs.IConstruct", we import it manually
 		// this is done so we can avoid loading the constructs module
+		let type_str = type_fqn.as_str();
 		if type_str == CONSTRUCT_BASE_INTERFACE {
 			let symbol = Symbol::global(type_fqn.type_name());
 			self.register_jsii_type(&type_fqn, &symbol, self.wing_types.anything());
-			return;
+			return true;
 		}
 
 		// check if type is already imported
 		if self.wing_types.libraries.lookup_nested_str(type_str, None).is_ok() {
-			return;
+			return true;
 		}
 
 		// Check if this is a JSII interface and import it if it is
 		let jsii_interface = self.jsii_spec.type_system.find_interface(type_fqn);
 		if let Some(jsii_interface) = jsii_interface {
 			self.import_interface(jsii_interface);
-			return;
+			return true;
 		}
 
 		// Check if this is a JSII class and import it if it is
 		let jsii_class = self.jsii_spec.type_system.find_class(type_fqn);
 		if let Some(jsii_class) = jsii_class {
 			self.import_class(jsii_class);
-			return;
+			return true;
 		}
 
 		// Check if this is a JSII enum and import it if it is
 		let jsii_enum = self.jsii_spec.type_system.find_enum(type_fqn);
 		if let Some(jsii_enum) = jsii_enum {
 			self.import_enum(jsii_enum);
-			return;
+			return true;
 		}
 
-		debug!("Type {} was not found in the type system", type_fqn);
+		false
 	}
 
 	pub fn setup_namespaces_for(&mut self, type_name: &FQN) {
