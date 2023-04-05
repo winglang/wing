@@ -134,7 +134,7 @@ test("invoke function fails", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[2].data.error).toMatchObject({
+  expect(s.listTraces()[3].data.error).toMatchObject({
     message: "Name must start with uppercase letter",
   });
   expect(app.snapshot()).toMatchSnapshot();
@@ -199,7 +199,7 @@ test("invoke function with process.exit(1)", async () => {
   // THEN
   await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[2].data.error).toMatchObject({
+  expect(s.listTraces()[3].data.error).toMatchObject({
     message: "process.exit() was called with exit code 1",
   });
   expect(app.snapshot()).toMatchSnapshot();
@@ -222,7 +222,7 @@ test("invoke function exceeds timeout", async () => {
   // THEN
   await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[2].data.error).toMatchObject({
+  expect(s.listTraces()[3].data.error).toMatchObject({
     message: "Script execution timed out after 1000ms",
   });
   expect(app.snapshot()).toMatchSnapshot();

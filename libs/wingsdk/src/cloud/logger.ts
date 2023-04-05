@@ -1,6 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App } from "../core/app";
 import { Resource } from "../core/resource";
 
 export const LOGGER_FQN = fqnForType("cloud.Logger");

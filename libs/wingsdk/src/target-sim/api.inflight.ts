@@ -13,10 +13,11 @@ import {
   ApiResponse,
   IApiClient,
   IFunctionClient,
+  TraceType,
   parseHttpMethod,
   sanitizeParamLikeObject,
 } from "../cloud";
-import { ISimulatorContext, TraceType } from "../testing/simulator";
+import { ISimulatorContext } from "../testing/simulator";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 

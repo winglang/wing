@@ -2,6 +2,11 @@
 
 exports[`default topic behavior 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_sns_topic\\": {
       \\"root_Topic_18CB51FA\\": {
@@ -71,6 +76,33 @@ exports[`default topic behavior 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -109,6 +141,11 @@ exports[`default topic behavior 2`] = `
 
 exports[`replace invalid character from queue name 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_sns_topic\\": {
       \\"root_TheSpectacularTopic_460D3DDF\\": {
@@ -178,6 +215,33 @@ exports[`replace invalid character from queue name 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -216,6 +280,11 @@ exports[`replace invalid character from queue name 2`] = `
 
 exports[`topic name valid 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_sns_topic\\": {
       \\"root_TheSpectacularTopic01_2487D43E\\": {
@@ -285,6 +354,33 @@ exports[`topic name valid 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -338,6 +434,11 @@ return class Handler {
 
 exports[`topic with subscriber function 2`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_iam_role\\": {
       \\"root_TopicOnMessagec5395e41_IamRole_9BB6BE88\\": {
@@ -629,6 +730,33 @@ exports[`topic with subscriber function 3`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {

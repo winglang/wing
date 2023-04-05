@@ -35,6 +35,11 @@ function: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\"
 
 exports[`function with a function binding 3`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_iam_role\\": {
       \\"root_Function1_IamRole_7017166A\\": {
@@ -153,6 +158,11 @@ return class Handler {
 
 exports[`function with a queue binding 3`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_iam_role\\": {
       \\"root_Function_IamRole_88AD864C\\": {
@@ -268,6 +278,11 @@ bucket: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/bucket.inflight\\")).B
 
 exports[`function with bucket binding > put operation 2`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_iam_role\\": {
       \\"root_Function_IamRole_88AD864C\\": {
@@ -307,7 +322,8 @@ exports[`function with bucket binding > put operation 2`] = `
     },
     \\"aws_s3_bucket\\": {
       \\"root_Bucket_966015A6\\": {
-        \\"bucket_prefix\\": \\"bucket-c88fdc5f-\\"
+        \\"bucket_prefix\\": \\"bucket-c88fdc5f-\\",
+        \\"force_destroy\\": false
       },
       \\"root_Function_Code_794C2A8A\\": {
         \\"bucket_prefix\\": \\"code-c87cd513-\\"
@@ -347,6 +363,11 @@ exports[`function with bucket binding > put operation 2`] = `
 
 exports[`two functions reusing the same IFunctionHandler 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_iam_role\\": {
       \\"root_Function1_IamRole_7017166A\\": {

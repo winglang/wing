@@ -8,7 +8,20 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "stackName": "root",
       "version": "0.15.2",
     },
-    "outputs": {},
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
   "provider": {
     "aws": [
@@ -20,7 +33,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_AnotherFunction_IamRole_09A4D8EF": {
         "//": {
           "metadata": {
-            "path": "root/Default/AnotherFunction/IamRole",
+            "path": "root/Default/Default/AnotherFunction/IamRole",
             "uniqueId": "root_AnotherFunction_IamRole_09A4D8EF",
           },
         },
@@ -29,7 +42,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudFunction_IamRole_DAEC3578": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Function/IamRole",
+            "path": "root/Default/Default/cloud.Function/IamRole",
             "uniqueId": "root_cloudFunction_IamRole_DAEC3578",
           },
         },
@@ -38,7 +51,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_IamRole_D8F85094": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/IamRole",
+            "path": "root/Default/Default/cloud.Queue-OnMessage-e46e5cb7/IamRole",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_IamRole_D8F85094",
           },
         },
@@ -49,7 +62,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_AnotherFunction_IamRolePolicy_5B37F663": {
         "//": {
           "metadata": {
-            "path": "root/Default/AnotherFunction/IamRolePolicy",
+            "path": "root/Default/Default/AnotherFunction/IamRolePolicy",
             "uniqueId": "root_AnotherFunction_IamRolePolicy_5B37F663",
           },
         },
@@ -59,7 +72,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudFunction_IamRolePolicy_AAE6C0C0": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Function/IamRolePolicy",
+            "path": "root/Default/Default/cloud.Function/IamRolePolicy",
             "uniqueId": "root_cloudFunction_IamRolePolicy_AAE6C0C0",
           },
         },
@@ -69,7 +82,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_IamRolePolicy_99F6B872": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/IamRolePolicy",
+            "path": "root/Default/Default/cloud.Queue-OnMessage-e46e5cb7/IamRolePolicy",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_IamRolePolicy_99F6B872",
           },
         },
@@ -81,7 +94,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_AnotherFunction_IamRolePolicyAttachment_8AF040CB": {
         "//": {
           "metadata": {
-            "path": "root/Default/AnotherFunction/IamRolePolicyAttachment",
+            "path": "root/Default/Default/AnotherFunction/IamRolePolicyAttachment",
             "uniqueId": "root_AnotherFunction_IamRolePolicyAttachment_8AF040CB",
           },
         },
@@ -91,7 +104,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Function/IamRolePolicyAttachment",
+            "path": "root/Default/Default/cloud.Function/IamRolePolicyAttachment",
             "uniqueId": "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C",
           },
         },
@@ -101,7 +114,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_IamRolePolicyAttachment_D3D5C118": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/IamRolePolicyAttachment",
+            "path": "root/Default/Default/cloud.Queue-OnMessage-e46e5cb7/IamRolePolicyAttachment",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_IamRolePolicyAttachment_D3D5C118",
           },
         },
@@ -113,7 +126,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudQueue_EventSourceMapping_A2041279": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Queue/EventSourceMapping",
+            "path": "root/Default/Default/cloud.Queue/EventSourceMapping",
             "uniqueId": "root_cloudQueue_EventSourceMapping_A2041279",
           },
         },
@@ -126,7 +139,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_AnotherFunction_1D5A4455": {
         "//": {
           "metadata": {
-            "path": "root/Default/AnotherFunction/Default",
+            "path": "root/Default/Default/AnotherFunction/Default",
             "uniqueId": "root_AnotherFunction_1D5A4455",
           },
         },
@@ -153,7 +166,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudFunction_6A57BA0A": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Function/Default",
+            "path": "root/Default/Default/cloud.Function/Default",
             "uniqueId": "root_cloudFunction_6A57BA0A",
           },
         },
@@ -180,7 +193,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_C394DE2A": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/Default",
+            "path": "root/Default/Default/cloud.Queue-OnMessage-e46e5cb7/Default",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_C394DE2A",
           },
         },
@@ -209,7 +222,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_AnotherFunction_Code_B0183137": {
         "//": {
           "metadata": {
-            "path": "root/Default/AnotherFunction/Code",
+            "path": "root/Default/Default/AnotherFunction/Code",
             "uniqueId": "root_AnotherFunction_Code_B0183137",
           },
         },
@@ -218,34 +231,37 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_PrivateBucket_82B4DCC5": {
         "//": {
           "metadata": {
-            "path": "root/Default/PrivateBucket/Default",
+            "path": "root/Default/Default/PrivateBucket/Default",
             "uniqueId": "root_PrivateBucket_82B4DCC5",
           },
         },
         "bucket_prefix": "privatebucket-c8a9b08c-",
+        "force_destroy": false,
       },
       "root_PublicBucket_73AE6C59": {
         "//": {
           "metadata": {
-            "path": "root/Default/PublicBucket/Default",
+            "path": "root/Default/Default/PublicBucket/Default",
             "uniqueId": "root_PublicBucket_73AE6C59",
           },
         },
         "bucket_prefix": "publicbucket-c8fea5d9-",
+        "force_destroy": false,
       },
       "root_cloudBucket_4F3C4F53": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Bucket/Default",
+            "path": "root/Default/Default/cloud.Bucket/Default",
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
+        "force_destroy": false,
       },
       "root_cloudFunction_Code_2F6A7948": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Function/Code",
+            "path": "root/Default/Default/cloud.Function/Code",
             "uniqueId": "root_cloudFunction_Code_2F6A7948",
           },
         },
@@ -254,7 +270,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/Code",
+            "path": "root/Default/Default/cloud.Queue-OnMessage-e46e5cb7/Code",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0",
           },
         },
@@ -265,7 +281,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_PublicBucket_PublicPolicy_98DDAE96": {
         "//": {
           "metadata": {
-            "path": "root/Default/PublicBucket/PublicPolicy",
+            "path": "root/Default/Default/PublicBucket/PublicPolicy",
             "uniqueId": "root_PublicBucket_PublicPolicy_98DDAE96",
           },
         },
@@ -277,7 +293,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_PrivateBucket_PublicAccessBlock_DB813250": {
         "//": {
           "metadata": {
-            "path": "root/Default/PrivateBucket/PublicAccessBlock",
+            "path": "root/Default/Default/PrivateBucket/PublicAccessBlock",
             "uniqueId": "root_PrivateBucket_PublicAccessBlock_DB813250",
           },
         },
@@ -290,7 +306,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudBucket_PublicAccessBlock_319C1C2E": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Bucket/PublicAccessBlock",
+            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
             "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
           },
         },
@@ -305,7 +321,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_PrivateBucket_Encryption_F9F2144A": {
         "//": {
           "metadata": {
-            "path": "root/Default/PrivateBucket/Encryption",
+            "path": "root/Default/Default/PrivateBucket/Encryption",
             "uniqueId": "root_PrivateBucket_Encryption_F9F2144A",
           },
         },
@@ -321,7 +337,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_PublicBucket_Encryption_FB9A8400": {
         "//": {
           "metadata": {
-            "path": "root/Default/PublicBucket/Encryption",
+            "path": "root/Default/Default/PublicBucket/Encryption",
             "uniqueId": "root_PublicBucket_Encryption_FB9A8400",
           },
         },
@@ -337,7 +353,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudBucket_Encryption_8ED0CD9C": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Bucket/Encryption",
+            "path": "root/Default/Default/cloud.Bucket/Encryption",
             "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
           },
         },
@@ -355,7 +371,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_AnotherFunction_S3Object_5AD7E879": {
         "//": {
           "metadata": {
-            "path": "root/Default/AnotherFunction/S3Object",
+            "path": "root/Default/Default/AnotherFunction/S3Object",
             "uniqueId": "root_AnotherFunction_S3Object_5AD7E879",
           },
         },
@@ -366,7 +382,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudFunction_S3Object_C8435368": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Function/S3Object",
+            "path": "root/Default/Default/cloud.Function/S3Object",
             "uniqueId": "root_cloudFunction_S3Object_C8435368",
           },
         },
@@ -377,7 +393,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Queue-OnMessage-e46e5cb7/S3Object",
+            "path": "root/Default/Default/cloud.Queue-OnMessage-e46e5cb7/S3Object",
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B",
           },
         },
@@ -390,7 +406,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudQueue_E3597F7A": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Queue/Default",
+            "path": "root/Default/Default/cloud.Queue/Default",
             "uniqueId": "root_cloudQueue_E3597F7A",
           },
         },
@@ -404,6 +420,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
+const $wing_is_test = process.env.WING_IS_TEST === \\"true\\";
 
 function __app(target) {
 	switch (target) {
@@ -422,43 +439,59 @@ function __app(target) {
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
 }
-const $App = __app(process.env.WING_TARGET);
+const $AppBase = __app(process.env.WING_TARGET);
 
 const cloud = require('@winglang/sdk').cloud;
-class MyApp extends $App {
-constructor() {
-  super({ outdir: $outdir, name: \\"captures\\", plugins: $plugins });
-  
-  const bucket1 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
-  const bucket2 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"PublicBucket\\",{
-  \\"public\\": true,}
-  );
-  const bucket3 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"PrivateBucket\\",{ public: false });
-  const queue = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Queue\\",this,\\"cloud.Queue\\");
-  const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.7117cacac13b5aec2868af198145d060294a0f8c3a40444eeae5b1f6002f9e77/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-    bindings: {
-      bucket1: {
-        obj: bucket1,
-        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"public_url\\",\\"put\\",\\"put_json\\"]
-      },
-      bucket2: {
-        obj: bucket2,
-        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"public_url\\",\\"put\\",\\"put_json\\"]
-      },
-      bucket3: {
-        obj: bucket3,
-        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"public_url\\",\\"put\\",\\"put_json\\"]
-      },
+class $Root extends $stdlib.core.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    const bucket1 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
+    const bucket2 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"PublicBucket\\",{
+\\"public\\": true,}
+);
+    const bucket3 = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"PrivateBucket\\",{ public: false });
+    const queue = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Queue\\",this,\\"cloud.Queue\\");
+    const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.7117cacac13b5aec2868af198145d060294a0f8c3a40444eeae5b1f6002f9e77/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+  bindings: {
+    bucket1: {
+      obj: bucket1,
+      ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"public_url\\",\\"put\\",\\"put_json\\"]
+    },
+    bucket2: {
+      obj: bucket2,
+      ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"public_url\\",\\"put\\",\\"put_json\\"]
+    },
+    bucket3: {
+      obj: bucket3,
+      ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"public_url\\",\\"put\\",\\"put_json\\"]
+    },
+  }
+});
+    (queue.onMessage(handler,{ batchSize: 5 }));
+    this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"cloud.Function\\",handler,{ env: Object.freeze({}) });
+    const empty_env = Object.freeze({});
+    this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"AnotherFunction\\",handler,{ env: empty_env });
+  }
+}
+
+class $App extends $AppBase {
+  constructor() {
+    super({ outdir: $outdir, name: \\"captures\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    if ($wing_is_test) {
+      new $Root(this, \\"env0\\");
+      const $test_runner = this.testRunner;
+      const $tests = $test_runner.findTests();
+      for (let $i = 1; $i < $tests.length; $i++) {
+        new $Root(this, \\"env\\" + $i);
+      }
+    } else {
+      new $Root(this, \\"Default\\");
     }
-  });
-  (queue.onMessage(handler,{ batchSize: 5 }));
-  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"cloud.Function\\",handler,{ env: Object.freeze({}) });
-  const empty_env = Object.freeze({});
-  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"AnotherFunction\\",handler,{ env: empty_env });
+  }
 }
-}
-new MyApp().synth();"
+
+new $App().synth();"
 `;
 
 exports[`wing compile -t tf-aws > proc.7117cacac13b5aec2868af198145d060294a0f8c3a40444eeae5b1f6002f9e77/index.js 1`] = `
@@ -486,4 +519,8 @@ exports[`wing compile -t tf-aws > proc.7117cacac13b5aec2868af198145d060294a0f8c3
 } };"
 `;
 
-exports[`wing test > stdout 1`] = `"pass ─ captures.w (no tests)"`;
+exports[`wing test -t sim > stdout 1`] = `
+"- Compiling to sim...
+✔ Compiling to sim...
+pass ─ captures.wsim (no tests)"
+`;

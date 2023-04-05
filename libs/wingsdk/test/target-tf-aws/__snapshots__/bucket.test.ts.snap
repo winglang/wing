@@ -2,10 +2,16 @@
 
 exports[`bucket is public 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
-        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\"
+        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
+        \\"force_destroy\\": false
       }
     },
     \\"aws_s3_bucket_policy\\": {
@@ -62,6 +68,33 @@ exports[`bucket is public 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
                 "attributes": {
@@ -143,10 +176,16 @@ exports[`bucket is public 2`] = `
 
 exports[`bucket prefix must be lowercase 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
       \\"root_TheUncannyBucket_9FBBB2ED\\": {
-        \\"bucket_prefix\\": \\"the-uncanny-bucket-c88a0953-\\"
+        \\"bucket_prefix\\": \\"the-uncanny-bucket-c88a0953-\\",
+        \\"force_destroy\\": false
       }
     },
     \\"aws_s3_bucket_public_access_block\\": {
@@ -249,6 +288,33 @@ exports[`bucket prefix must be lowercase 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -287,10 +353,16 @@ exports[`bucket prefix must be lowercase 2`] = `
 
 exports[`bucket prefix valid 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
       \\"root_theuncannybucket_03A74E00\\": {
-        \\"bucket_prefix\\": \\"the-uncanny-bucket-c8e2755c-\\"
+        \\"bucket_prefix\\": \\"the-uncanny-bucket-c8e2755c-\\",
+        \\"force_destroy\\": false
       }
     },
     \\"aws_s3_bucket_public_access_block\\": {
@@ -350,6 +422,33 @@ exports[`bucket prefix valid 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
               "the-uncanny.bucket": {
                 "attributes": {
@@ -431,6 +530,11 @@ exports[`bucket prefix valid 2`] = `
 
 exports[`bucket with onCreate method 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_iam_role\\": {
       \\"root_mybucket_mybucketoncreateOnMessage2c90a36b_IamRole_048D6026\\": {
@@ -476,7 +580,8 @@ exports[`bucket with onCreate method 1`] = `
     },
     \\"aws_s3_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
-        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\"
+        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
+        \\"force_destroy\\": false
       },
       \\"root_mybucket_mybucketoncreateOnMessage2c90a36b_Code_3804774D\\": {
         \\"bucket_prefix\\": \\"code-c8663a19-\\"
@@ -584,6 +689,33 @@ exports[`bucket with onCreate method 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
               "inflight": {
                 "attributes": {
@@ -903,6 +1035,11 @@ exports[`bucket with onCreate method 2`] = `
 
 exports[`bucket with onDelete method 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_iam_role\\": {
       \\"root_mybucket_mybucketondeleteOnMessagef22c8a47_IamRole_86A910D1\\": {
@@ -948,7 +1085,8 @@ exports[`bucket with onDelete method 1`] = `
     },
     \\"aws_s3_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
-        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\"
+        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
+        \\"force_destroy\\": false
       },
       \\"root_mybucket_mybucketondeleteOnMessagef22c8a47_Code_23AF5F43\\": {
         \\"bucket_prefix\\": \\"code-c8ee90a3-\\"
@@ -1056,6 +1194,33 @@ exports[`bucket with onDelete method 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
               "inflight": {
                 "attributes": {
@@ -1375,6 +1540,11 @@ exports[`bucket with onDelete method 2`] = `
 
 exports[`bucket with onEvent method 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_iam_role\\": {
       \\"root_mybucket_mybucketoncreateOnMessage2c90a36b_IamRole_048D6026\\": {
@@ -1484,7 +1654,8 @@ exports[`bucket with onEvent method 1`] = `
     },
     \\"aws_s3_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
-        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\"
+        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
+        \\"force_destroy\\": false
       },
       \\"root_mybucket_mybucketoncreateOnMessage2c90a36b_Code_3804774D\\": {
         \\"bucket_prefix\\": \\"code-c8663a19-\\"
@@ -1672,6 +1843,33 @@ exports[`bucket with onEvent method 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
               "inflight": {
                 "attributes": {
@@ -2429,6 +2627,11 @@ exports[`bucket with onEvent method 2`] = `
 
 exports[`bucket with onUpdate method 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_iam_role\\": {
       \\"root_mybucket_mybucketonupdateOnMessage32b7a290_IamRole_C2D0AC31\\": {
@@ -2474,7 +2677,8 @@ exports[`bucket with onUpdate method 1`] = `
     },
     \\"aws_s3_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
-        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\"
+        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
+        \\"force_destroy\\": false
       },
       \\"root_mybucket_mybucketonupdateOnMessage32b7a290_Code_0DCA9F7A\\": {
         \\"bucket_prefix\\": \\"code-c8864029-\\"
@@ -2582,6 +2786,33 @@ exports[`bucket with onUpdate method 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
               "inflight": {
                 "attributes": {
@@ -2901,10 +3132,16 @@ exports[`bucket with onUpdate method 2`] = `
 
 exports[`bucket with two preflight objects 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
-        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\"
+        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
+        \\"force_destroy\\": false
       }
     },
     \\"aws_s3_bucket_policy\\": {
@@ -2973,6 +3210,33 @@ exports[`bucket with two preflight objects 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
                 "attributes": {
@@ -3070,10 +3334,16 @@ exports[`bucket with two preflight objects 2`] = `
 
 exports[`create a bucket 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
-        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\"
+        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
+        \\"force_destroy\\": false
       }
     },
     \\"aws_s3_bucket_public_access_block\\": {
@@ -3133,6 +3403,33 @@ exports[`create a bucket 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
                 "attributes": {

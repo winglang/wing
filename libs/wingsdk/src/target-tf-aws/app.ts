@@ -10,6 +10,7 @@ import { Logger } from "./logger";
 import { Queue } from "./queue";
 import { Schedule } from "./schedule";
 import { Table } from "./table";
+import { TestRunner } from "./test-runner";
 import { Topic } from "./topic";
 import {
   API_FQN,
@@ -20,6 +21,7 @@ import {
   QUEUE_FQN,
   SCHEDULE_FQN,
   TABLE_FQN,
+  TEST_RUNNER_FQN,
   TOPIC_FQN,
 } from "../cloud";
 import { CdktfApp, AppProps } from "../core";
@@ -29,12 +31,19 @@ import { CdktfApp, AppProps } from "../core";
  * for AWS resources.
  */
 export class App extends CdktfApp {
+  /**
+   * The test runner for this app.
+   */
+  protected readonly testRunner: TestRunner;
+
   private awsRegionProvider?: DataAwsRegion;
   private awsAccountIdProvider?: DataAwsCallerIdentity;
 
   constructor(props: AppProps = {}) {
     super(props);
     new AwsProvider(this, "aws", {});
+
+    this.testRunner = new TestRunner(this, "cloud.TestRunner");
   }
 
   protected tryNew(
@@ -73,6 +82,9 @@ export class App extends CdktfApp {
 
       case TOPIC_FQN:
         return new Topic(scope, id, args[0]);
+
+      case TEST_RUNNER_FQN:
+        return new TestRunner(scope, id, args[0]);
     }
 
     return undefined;

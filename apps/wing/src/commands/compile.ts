@@ -42,9 +42,14 @@ const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
  * Compile options for the `compile` command.
  * This is passed from Commander to the `compile` function.
  */
-export interface ICompileOptions {
+export interface CompileOptions {
   readonly target: Target;
   readonly plugins?: string[];
+  /**
+   * Whether to run the compiler in `wing test` mode. This may create multiple
+   * copies of the application resources in order to run tests in parallel.
+   */
+  readonly testing?: boolean;
 }
 
 /**
@@ -52,14 +57,19 @@ export interface ICompileOptions {
  * within the output directory where the SDK app will synthesize its artifacts
  * for the given target.
  */
-function resolveSynthDir(outDir: string, entrypoint: string, target: Target, tmp: boolean = false) {
+function resolveSynthDir(outDir: string, entrypoint: string, target: Target, testing: boolean = false, tmp: boolean = false) {
   const targetDirSuffix = DEFAULT_SYNTH_DIR_SUFFIX[target];
   if (!targetDirSuffix) {
     throw new Error(`unsupported target ${target}`);
   }
   const entrypointName = basename(entrypoint, ".w");
   const tmpSuffix = tmp ? `.${Date.now().toString().slice(-6)}.tmp` : "";
-  return join(outDir, `${entrypointName}.${targetDirSuffix}${tmpSuffix}`);
+  const lastPart = `${entrypointName}.${targetDirSuffix}${tmpSuffix}`
+  if (testing) {
+    return join(outDir, "test", lastPart);
+  } else {
+    return join(outDir, lastPart);
+  }
 }
 
 /**
@@ -68,16 +78,18 @@ function resolveSynthDir(outDir: string, entrypoint: string, target: Target, tmp
  * @param options Compile options.
  * @returns the output directory
  */
-export async function compile(entrypoint: string, options: ICompileOptions): Promise<string> {
+export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
   // create a unique temporary directory for the compilation
   const targetdir = join(dirname(entrypoint), "target");
   const wingFile = entrypoint;
   log("wing file: %s", wingFile);
   const wingDir = dirname(wingFile);
   log("wing dir: %s", wingDir);
-  const tmpSynthDir = resolveSynthDir(targetdir, wingFile, options.target, true);
+  const testing = options.testing ?? false;
+  log("testing: %s", testing);
+  const tmpSynthDir = resolveSynthDir(targetdir, wingFile, options.target, testing, true);
   log("temp synth dir: %s", tmpSynthDir);
-  const synthDir = resolveSynthDir(targetdir, wingFile, options.target);
+  const synthDir = resolveSynthDir(targetdir, wingFile, options.target, testing);
   log("synth dir: %s", synthDir);
   const workDir = resolve(tmpSynthDir, ".wing");
   log("work dir: %s", workDir);
@@ -85,6 +97,7 @@ export async function compile(entrypoint: string, options: ICompileOptions): Pro
   process.env["WING_SYNTH_DIR"] = tmpSynthDir;
   process.env["WING_NODE_MODULES"] = resolve(join(wingDir, "node_modules"));
   process.env["WING_TARGET"] = options.target;
+  process.env["WING_IS_TEST"] = testing.toString();
 
   await Promise.all([
     mkdirp(workDir),
