@@ -227,8 +227,6 @@ impl<'a> JsiiImporter<'a> {
 				.unwrap();
 		};
 
-		let flight = Phase::Preflight;
-
 		// Next, ensure there is a namespace for each of the namespaces in the type name
 		for (ns_idx, namespace_name) in type_name.namespaces().enumerate() {
 			let mut lookup_str = vec![type_name.assembly()];
@@ -256,7 +254,13 @@ impl<'a> JsiiImporter<'a> {
 			} else {
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: namespace_name.to_string(),
-					env: SymbolEnv::new(Some(parent_ns.env.get_ref()), self.wing_types.void(), false, flight, 0),
+					env: SymbolEnv::new(
+						Some(parent_ns.env.get_ref()),
+						self.wing_types.void(),
+						false,
+						Phase::Preflight,
+						0,
+					),
 				});
 				parent_ns
 					.env
@@ -774,7 +778,7 @@ impl<'a> JsiiImporter<'a> {
 			.jsii_spec
 			.type_system
 			.find_assembly(&self.jsii_spec.assembly_name)
-			.unwrap();
+			.expect("Assembly not found");
 		if let Some(submodules) = assembly.submodules.as_ref() {
 			for type_fqn in submodules.keys() {
 				let fake_type = format!("{}.{}", type_fqn, "x");
@@ -806,7 +810,7 @@ impl<'a> JsiiImporter<'a> {
 					SymbolKind::Namespace(ns),
 					StatementIdx::Top,
 				)
-				.unwrap();
+				.expect("Failed to define jsii root namespace");
 		}
 
 		// Create a symbol in the environment for the imported module

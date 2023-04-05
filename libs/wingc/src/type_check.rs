@@ -996,7 +996,8 @@ pub struct TypeChecker<'a> {
 	/// The path to the source file being type checked.
 	source_path: &'a Path,
 
-	/// JSII Manifest descriptions to be imported
+	/// JSII Manifest descriptions to be imported.
+	/// May be reused between compilations
 	jsii_imports: &'a mut Vec<JsiiImportSpec>,
 
 	pub diagnostics: RefCell<Diagnostics>,
@@ -2500,6 +2501,7 @@ impl<'a> TypeChecker<'a> {
 			.iter()
 			.find(|j| j.assembly_name == library_name && j.alias.name == alias.name)
 		{
+			// This spec has already been pre-supplied to the typechecker, so we'll still use this to populate the symbol environment
 			jsii
 		} else {
 			let mut wingii_types = wingii::type_system::TypeSystem::new();
@@ -2557,11 +2559,13 @@ impl<'a> TypeChecker<'a> {
 				.jsii_imports
 				.iter()
 				.find(|j| j.assembly_name == assembly_name && j.alias.name == alias.name)
-				.unwrap()
+				.expect("Expected to find the just-added jsii import spec")
 		};
 
 		let mut importer = JsiiImporter::new(jsii, self.types);
 
+		// if we're importing the standard module from the wing sdk, we want to eagerly import all the types within it
+		// because they aren't typically resolved through the same process as other types
 		if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME && jsii.alias.name == WINGSDK_STD_MODULE {
 			importer.deep_import_submodule_to_env(WINGSDK_STD_MODULE);
 		}
@@ -3060,6 +3064,8 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	/// Resolves a user defined type (e.g. `Foo.Bar.Baz`) to a type reference
+	/// If needed, this method can also resolve types from jsii libraries that have yet to be imported
 	fn resolve_user_defined_type(
 		&mut self,
 		user_defined_type: &UserDefinedType,
@@ -3067,12 +3073,12 @@ impl<'a> TypeChecker<'a> {
 		statement_idx: usize,
 	) -> Result<TypeRef, TypeError> {
 		// Attempt to resolve the type from the current environment
-		// otherwise, attempt to resolve the type from any jsii libs
 		let res = resolve_user_defined_type(user_defined_type, env, statement_idx);
 		if res.is_ok() {
 			return res;
 		}
 
+		// If the type is not found, attempt to import it from a jsii library
 		for jsii in &*self.jsii_imports {
 			if jsii.alias.name == user_defined_type.root.name {
 				let mut importer = JsiiImporter::new(&jsii, self.types);
@@ -3086,10 +3092,13 @@ impl<'a> TypeChecker<'a> {
 				udt_string.push_str(&user_defined_type.fields.iter().map(|g| g.name.clone()).join("."));
 
 				importer.import_type(&FQN::from(udt_string.as_str()));
+
+				return resolve_user_defined_type(user_defined_type, env, statement_idx);
 			}
 		}
 
-		return resolve_user_defined_type(user_defined_type, env, statement_idx);
+		// If the type is still not found, return the original error
+		res
 	}
 }
 
@@ -3200,6 +3209,7 @@ fn add_parent_members_to_iface_env(
 	Ok(())
 }
 
+/// Resolves a user defined type (e.g. `Foo.Bar.Baz`) to a type reference
 pub fn resolve_user_defined_type(
 	user_defined_type: &UserDefinedType,
 	env: &SymbolEnv,
