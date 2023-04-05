@@ -963,7 +963,6 @@ impl<'a> JSifier<'a> {
 
 		// Get all references between inflight methods and preflight fields
 		let refs = self.find_inflight_references(class);
-
 		// Get fields to be captured by resource's client
 		let captured_fields = self.get_captures(resource_type);
 
@@ -1062,14 +1061,10 @@ impl<'a> JSifier<'a> {
 		)
 	}
 
-	fn jsify_toinflight_method(
-		&mut self,
-		resource_name: &Symbol,
-		captured_fields: &[(String, TypeRef, Vec<String>)],
-	) -> String {
+	fn jsify_toinflight_method(&mut self, resource_name: &Symbol, captured_fields: &[String]) -> String {
 		let inner_clients = captured_fields
 			.iter()
-			.map(|(inner_member_name, _, _)| {
+			.map(|inner_member_name| {
 				format!(
 					"const {}_client = this._lift(this.{});",
 					inner_member_name, inner_member_name,
@@ -1081,7 +1076,7 @@ impl<'a> JSifier<'a> {
 		let client_path = Self::js_resolve_path(&format!("{}/{}.inflight.js", INFLIGHT_CLIENTS_DIR, resource_name.name));
 		let captured_fields = captured_fields
 			.iter()
-			.map(|(inner_member_name, _, _)| format!("{}: ${{{}_client}}", inner_member_name, inner_member_name))
+			.map(|inner_member_name| format!("{}: ${{{}_client}}", inner_member_name, inner_member_name))
 			.join(", ");
 		formatdoc!("
 			_toInflight() {{
@@ -1098,7 +1093,7 @@ impl<'a> JSifier<'a> {
 		&mut self,
 		env: &SymbolEnv,
 		name: &Symbol,
-		captured_fields: &[(String, TypeRef, Vec<String>)],
+		captured_fields: &[String],
 		inflight_methods: &[&(Symbol, FunctionDefinition)],
 		parent: &Option<UserDefinedType>,
 		context: &JSifyContext,
@@ -1113,17 +1108,13 @@ impl<'a> JSifier<'a> {
 		// Get the fields that are captured by this resource but not by its parent, they will be initialized in the generated constructor
 		let my_captures = captured_fields
 			.iter()
-			.filter(|(name, _, _)| !parent_captures.iter().any(|(n, _, _)| n == name))
+			.filter(|name| !parent_captures.iter().any(|n| n == *name))
 			.collect_vec();
 
 		let super_call = if parent.is_some() {
 			format!(
 				"  super({});",
-				parent_captures
-					.iter()
-					.map(|(name, _, _)| name.clone())
-					.collect_vec()
-					.join(", ")
+				parent_captures.iter().map(|name| name.clone()).collect_vec().join(", ")
 			)
 		} else {
 			"".to_string()
@@ -1135,13 +1126,13 @@ impl<'a> JSifier<'a> {
 			"constructor({{ {} }}) {{\n{}\n{}\n}}",
 			captured_fields
 				.iter()
-				.map(|(name, _, _)| { name.clone() })
+				.map(|name| { name.clone() })
 				.collect_vec()
 				.join(", "),
 			super_call,
 			my_captures
 				.iter()
-				.map(|(name, _, _)| { format!("  this.{} = {};", name, name) })
+				.map(|name| { format!("  this.{} = {};", name, name) })
 				.collect_vec()
 				.join("\n")
 		);
@@ -1226,9 +1217,22 @@ impl<'a> JSifier<'a> {
 		for (method_name, function_def) in inflight_methods {
 			// visit statements of method and find all references to fields ("this.xxx")
 			let visitor = FieldReferenceVisitor::new(&function_def);
-			let (refs, find_diags) = visitor.find_refs();
+			let (mut refs, find_diags) = visitor.find_refs();
 
 			self.diagnostics.extend(find_diags);
+
+			// Add no-ops for fields that are not referenced
+			let resource_fields = resource_class
+				.fields
+				.iter()
+				.filter(|f| f.phase == Phase::Preflight)
+				.map(|f| format!("this.{}", f.name.name));
+
+			for f in resource_fields {
+				if !refs.contains_key(f.as_str()) {
+					refs.insert(f, BTreeSet::new());
+				}
+			}
 
 			// add the references to the result
 			result.push((method_name.name.clone(), refs));
@@ -1238,7 +1242,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	// Get the type and capture info for fields that are captured in the client of the given resource
-	fn get_captures(&self, resource_type: TypeRef) -> Vec<(String, TypeRef, Vec<String>)> {
+	fn get_captures(&self, resource_type: TypeRef) -> Vec<String> {
 		resource_type
 			.as_resource()
 			.unwrap()
@@ -1249,29 +1253,7 @@ impl<'a> JSifier<'a> {
 				// We capture preflight non-reassignable fields
 				var.phase != Phase::Inflight && !var.reassignable && var.type_.is_capturable()
 			})
-			.map(|(name, kind, _)| {
-				let _type = kind.as_variable().unwrap().type_;
-				// TODO: For now we collect all the inflight methods in the resource (in the future we
-				// we'll need to analyze each inflight method to see what it does with the captured resource)
-				let methods = if _type.as_resource().is_some() {
-					_type
-						.as_resource()
-						.unwrap()
-						.methods(true)
-						.filter_map(|(name, sig)| {
-							if sig.as_function_sig().unwrap().phase == Phase::Inflight {
-								Some(name)
-							} else {
-								None
-							}
-						})
-						.collect_vec()
-				} else {
-					vec![]
-				};
-
-				(name, _type, methods)
-			})
+			.map(|(name, ..)| name)
 			.collect_vec()
 	}
 }
