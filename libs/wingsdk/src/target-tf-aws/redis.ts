@@ -8,7 +8,11 @@ import { Function } from "./function";
 import { Code } from "../core";
 import * as core from "../core";
 import * as redis from "../redis";
-import { CaseConventions, NameOptions, ResourceNames } from "../utils/resource-names";
+import {
+  CaseConventions,
+  NameOptions,
+  ResourceNames,
+} from "../utils/resource-names";
 
 const ELASTICACHE_NAME_OPTS: NameOptions = {
   maxLen: 50,
@@ -40,7 +44,7 @@ export class Redis extends redis.Redis {
     const parameterGroupName =
       process.env.REDIS_PARAMETER_GROUP_NAME ?? "default.redis6.x";
     const REDIS_PORT = 6379;
-    
+
     const app = App.of(this) as App;
     const vpc = app.vpc;
     this.subnet = app.subnets.private;
