@@ -172,8 +172,8 @@ impl<'a> JSifier<'a> {
 			app_wrapper.open(format!("class {} extends {} {{", APP_CLASS, APP_BASE_CLASS));
 			app_wrapper.open("constructor() {");
 			app_wrapper.line(format!(
-				"super({{ outdir: {}, name: \"{}\", plugins: $plugins }});",
-				OUTDIR_VAR, self.app_name
+				"super({{ outdir: {}, name: \"{}\", plugins: $plugins, isTestEnvironment: {} }});",
+				OUTDIR_VAR, self.app_name, ENV_WING_IS_TEST
 			));
 			app_wrapper.open(format!("if ({}) {{", ENV_WING_IS_TEST));
 			app_wrapper.line(format!("new {}(this, \"env0\");", ROOT_CLASS));

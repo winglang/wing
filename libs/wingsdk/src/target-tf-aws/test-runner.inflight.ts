@@ -31,7 +31,7 @@ export class TestRunnerClient implements ITestRunnerClient {
       await client.invoke("");
       pass = true;
     } catch (e) {
-      error = (e as any).message;
+      error = (e as any).stack;
     }
     return {
       path,
