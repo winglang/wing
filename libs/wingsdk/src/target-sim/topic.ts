@@ -4,11 +4,8 @@ import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { TopicSchema, TopicSubscriber, TOPIC_TYPE } from "./schema-resources";
-import {
-  bindSimulatorResource,
-  makeSimulatorJsClient,
-  simulatorHandleToken,
-} from "./util";
+import { simulatorHandleToken } from "./tokens";
+import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../utils/convert";
@@ -63,13 +60,13 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
 
   /** @internal */
   public _bind(host: core.IInflightHost, ops: string[]): void {
-    bindSimulatorResource("topic", this, host);
+    bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }
 
   /** @internal */
   public _toInflight(): core.Code {
-    return makeSimulatorJsClient("topic", this);
+    return makeSimulatorJsClient(__filename, this);
   }
 
   public toSimulator(): BaseResourceSchema {
