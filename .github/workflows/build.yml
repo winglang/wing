@@ -232,7 +232,7 @@ jobs:
       - name: Rename Docs
         run: mv docs "docs-${{ needs.build.outputs.version }}.tgz"
 
-      - name: Write File
+      - name: Write Changelog
         uses: DamianReeves/write-file-action@v1.2
         with:
           path: "CHANGELOG.md"
