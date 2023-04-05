@@ -189,13 +189,6 @@ impl Display for FunctionTypeAnnotation {
 	}
 }
 
-impl Display for FunctionParameter {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		let reassignable_str = if self.reassignable { "var " } else { "" };
-		write!(f, "{}{}: {}", reassignable_str, self.name, self.type_annotation)
-	}
-}
-
 #[derive(Debug, Clone)]
 pub struct FunctionSignature {
 	pub parameters: Vec<FunctionParameter>,

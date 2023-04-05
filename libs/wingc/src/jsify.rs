@@ -812,7 +812,7 @@ impl<'a> JSifier<'a> {
 	fn jsify_constructor(&mut self, name: Option<&str>, func_def: &Constructor, context: &JSifyContext) -> String {
 		let mut parameter_list = vec![];
 
-		for p in func_def.parameters().iter() {
+		for p in func_def.parameters() {
 			parameter_list.push(self.jsify_symbol(&p.name));
 		}
 
@@ -835,7 +835,7 @@ impl<'a> JSifier<'a> {
 	fn jsify_function(&mut self, name: Option<&str>, func_def: &FunctionDefinition, context: &JSifyContext) -> String {
 		let mut parameter_list = vec![];
 
-		for p in func_def.parameters().iter() {
+		for p in func_def.parameters() {
 			parameter_list.push(self.jsify_symbol(&p.name));
 		}
 
