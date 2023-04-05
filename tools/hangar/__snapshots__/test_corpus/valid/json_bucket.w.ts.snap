@@ -116,6 +116,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudFunction_S3Object_C8435368.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_testput_449428F9": {
         "//": {
@@ -140,6 +144,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_testput_Code_DE7653AD.bucket}",
         "s3_key": "\${aws_s3_object.root_testput_S3Object_30BF1DDD.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
     },
     "aws_s3_bucket": {

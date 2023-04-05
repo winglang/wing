@@ -348,6 +348,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_b_boncreateOnMessage8588493f_Code_1C657564.bucket}",
         "s3_key": "\${aws_s3_object.root_b_boncreateOnMessage8588493f_S3Object_B05EA5EC.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_b_boncreateOnMessage88f6f7aa_A82C913D": {
         "//": {
@@ -369,6 +373,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_b_boncreateOnMessage88f6f7aa_Code_9A928412.bucket}",
         "s3_key": "\${aws_s3_object.root_b_boncreateOnMessage88f6f7aa_S3Object_27A1B997.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_b_bondeleteOnMessage6e8b2f6c_82C0984B": {
         "//": {
@@ -390,6 +398,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_b_bondeleteOnMessage6e8b2f6c_Code_71B9ABD7.bucket}",
         "s3_key": "\${aws_s3_object.root_b_bondeleteOnMessage6e8b2f6c_S3Object_AA587BEA.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_b_bondeleteOnMessagedece1815_8EEE19F8": {
         "//": {
@@ -413,6 +425,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_b_bondeleteOnMessagedece1815_Code_A146A488.bucket}",
         "s3_key": "\${aws_s3_object.root_b_bondeleteOnMessagedece1815_S3Object_9F2FF12D.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_b_bonupdateOnMessage8b441417_03208454": {
         "//": {
@@ -434,6 +450,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_b_bonupdateOnMessage8b441417_Code_FEEDBA8A.bucket}",
         "s3_key": "\${aws_s3_object.root_b_bonupdateOnMessage8b441417_S3Object_E72D02CB.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_b_bonupdateOnMessagec7d8cc3e_D4965D04": {
         "//": {
@@ -457,6 +477,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_b_bonupdateOnMessagec7d8cc3e_Code_45CB7D01.bucket}",
         "s3_key": "\${aws_s3_object.root_b_bonupdateOnMessagec7d8cc3e_S3Object_A082E479.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_other_otheroncreateOnMessage1a259cac_F29A80F6": {
         "//": {
@@ -478,6 +502,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_other_otheroncreateOnMessage1a259cac_Code_743CAA28.bucket}",
         "s3_key": "\${aws_s3_object.root_other_otheroncreateOnMessage1a259cac_S3Object_61C37281.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_other_otherondeleteOnMessage2e31a750_AC9B5F07": {
         "//": {
@@ -499,6 +527,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_other_otherondeleteOnMessage2e31a750_Code_8A4E099A.bucket}",
         "s3_key": "\${aws_s3_object.root_other_otherondeleteOnMessage2e31a750_S3Object_5A3687E9.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_other_otheronupdateOnMessage02fb2142_389A5E43": {
         "//": {
@@ -520,6 +552,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_other_otheronupdateOnMessage02fb2142_Code_A21BB0DF.bucket}",
         "s3_key": "\${aws_s3_object.root_other_otheronupdateOnMessage02fb2142_S3Object_7641A6CE.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_test_AAE85061": {
         "//": {
@@ -543,6 +579,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
     },
     "aws_lambda_permission": {

@@ -162,6 +162,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_AnotherFunction_Code_B0183137.bucket}",
         "s3_key": "\${aws_s3_object.root_AnotherFunction_S3Object_5AD7E879.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_cloudFunction_6A57BA0A": {
         "//": {
@@ -189,6 +193,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudFunction_S3Object_C8435368.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_cloudQueueOnMessagee46e5cb7_C394DE2A": {
         "//": {
@@ -216,6 +224,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
     },
     "aws_s3_bucket": {
