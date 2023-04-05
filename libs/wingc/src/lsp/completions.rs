@@ -178,8 +178,10 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			completions.push(format_symbol_kind_as_completion(symbol_data.0, symbol_kind));
 		}
 
-		for data in found_env.iter(true) {
-			completions.push(format_symbol_kind_as_completion(&data.0, &data.1));
+		if let Some(parent) = found_env.parent {
+			for data in parent.iter(true) {
+				completions.push(format_symbol_kind_as_completion(&data.0, &data.1));
+			}
 		}
 
 		completions
