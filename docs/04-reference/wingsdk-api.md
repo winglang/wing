@@ -312,6 +312,7 @@ Options for the route.
 | <code><a href="#@winglang/sdk.cloud.Api.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Api.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Api.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+| <code><a href="#@winglang/sdk.cloud.Api.property.url">url</a></code> | <code>str</code> | The base URL of the API endpoint. |
 
 ---
 
@@ -352,6 +353,18 @@ Whether a resource is stateful, i.e. it stores information that is not defined b
 A non-stateful resource does not remember information about past
 transactions or events, and can typically be replaced by a cloud provider
 with a fresh copy without any consequences.
+
+---
+
+##### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.cloud.Api.property.url"></a>
+
+```wing
+url: str;
+```
+
+- *Type:* str
+
+The base URL of the API endpoint.
 
 ---
 

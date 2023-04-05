@@ -1,3 +1,5 @@
+import { DataAwsCallerIdentity } from "@cdktf/provider-aws/lib/data-aws-caller-identity";
+import { DataAwsRegion } from "@cdktf/provider-aws/lib/data-aws-region";
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { Construct } from "constructs";
 import { Api } from "./api";
@@ -33,6 +35,9 @@ export class App extends CdktfApp {
    * The test runner for this app.
    */
   protected readonly testRunner: TestRunner;
+
+  private awsRegionProvider?: DataAwsRegion;
+  private awsAccountIdProvider?: DataAwsCallerIdentity;
 
   constructor(props: AppProps = {}) {
     super(props);
@@ -83,5 +88,25 @@ export class App extends CdktfApp {
     }
 
     return undefined;
+  }
+
+  /**
+   * The AWS account ID of the App
+   */
+  public get accountId(): string {
+    if (!this.awsAccountIdProvider) {
+      this.awsAccountIdProvider = new DataAwsCallerIdentity(this, "account");
+    }
+    return this.awsAccountIdProvider.accountId;
+  }
+
+  /**
+   * The AWS region of the App
+   */
+  public get region(): string {
+    if (!this.awsRegionProvider) {
+      this.awsRegionProvider = new DataAwsRegion(this, "Region");
+    }
+    return this.awsRegionProvider.name;
   }
 }
