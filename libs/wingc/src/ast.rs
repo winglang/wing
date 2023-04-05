@@ -195,6 +195,13 @@ pub enum FunctionBody {
 	External(String),
 }
 
+pub trait MethodLike {
+	fn statements(&self) -> Option<&Scope>;
+	fn parameters(&self) -> &Vec<(Symbol, bool)>;
+	fn signature(&self) -> &FunctionSignature;
+	fn is_static(&self) -> bool;
+}
+
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct FunctionDefinition {
@@ -213,6 +220,27 @@ pub struct FunctionDefinition {
 	pub captures: RefCell<Option<Captures>>,
 }
 
+impl MethodLike for FunctionDefinition {
+	fn statements(&self) -> Option<&Scope> {
+		match &self.body {
+			FunctionBody::Statements(statements) => Some(statements),
+			FunctionBody::External(_) => None,
+		}
+	}
+
+	fn parameters(&self) -> &Vec<(Symbol, bool)> {
+		&self.parameters
+	}
+
+	fn signature(&self) -> &FunctionSignature {
+		&self.signature
+	}
+
+	fn is_static(&self) -> bool {
+		self.is_static
+	}
+}
+
 #[derive(Debug)]
 pub struct Constructor {
 	/// List of names of constructor parameters and whether they are reassignable (`var`) or not.
@@ -222,7 +250,25 @@ pub struct Constructor {
 	pub signature: FunctionSignature,
 }
 
-#[derive(Debug)]
+impl MethodLike for Constructor {
+	fn statements(&self) -> Option<&Scope> {
+		Some(&self.statements)
+	}
+
+	fn parameters(&self) -> &Vec<(Symbol, bool)> {
+		&self.parameters
+	}
+
+	fn signature(&self) -> &FunctionSignature {
+		&self.signature
+	}
+
+	fn is_static(&self) -> bool {
+		true
+	}
+}
+
+#[derive(Derivative, Debug)]
 pub struct Stmt {
 	pub kind: StmtKind,
 	pub span: WingSpan,
