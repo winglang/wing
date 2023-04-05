@@ -8,7 +8,20 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "stackName": "root",
       "version": "0.15.2",
     },
-    "outputs": {},
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[[\\"root/Default/Default/test\\",\\"\${aws_lambda_function.root_test_AAE85061.arn}\\"]]",
+    },
   },
   "provider": {
     "aws": [
@@ -30,7 +43,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_r2_RedisCluster_EB1F5CD1": {
         "//": {
           "metadata": {
-            "path": "root/Default/r2/RedisCluster",
+            "path": "root/Default/Default/r2/RedisCluster",
             "uniqueId": "root_r2_RedisCluster_EB1F5CD1",
           },
         },
@@ -49,12 +62,12 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_redisRedis_RedisCluster_2049056C": {
         "//": {
           "metadata": {
-            "path": "root/Default/redis.Redis/RedisCluster",
+            "path": "root/Default/Default/redis.Redis/RedisCluster",
             "uniqueId": "root_redisRedis_RedisCluster_2049056C",
           },
         },
         "availability_zone": "\${aws_subnet.root_PrivateSubnet_8A5D9DDE.availability_zone}",
-        "cluster_id": "redis-edis-c811048b",
+        "cluster_id": "redis-redis-c811048b",
         "engine": "redis",
         "engine_version": "6.2",
         "node_type": "cache.t4g.small",
@@ -70,7 +83,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_r2_RedisSubnetGroup_873E9A00": {
         "//": {
           "metadata": {
-            "path": "root/Default/r2/RedisSubnetGroup",
+            "path": "root/Default/Default/r2/RedisSubnetGroup",
             "uniqueId": "root_r2_RedisSubnetGroup_873E9A00",
           },
         },
@@ -82,11 +95,11 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_redisRedis_RedisSubnetGroup_6ED92583": {
         "//": {
           "metadata": {
-            "path": "root/Default/redis.Redis/RedisSubnetGroup",
+            "path": "root/Default/Default/redis.Redis/RedisSubnetGroup",
             "uniqueId": "root_redisRedis_RedisSubnetGroup_6ED92583",
           },
         },
-        "name": "redis-edis-c811048b-subnetGroup",
+        "name": "redis-redis-c811048b-subnetGroup",
         "subnet_ids": [
           "\${aws_subnet.root_PrivateSubnet_8A5D9DDE.id}",
         ],
@@ -96,7 +109,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_IamRole_6CDC2D16": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/IamRole",
+            "path": "root/Default/Default/test/IamRole",
             "uniqueId": "root_test_IamRole_6CDC2D16",
           },
         },
@@ -107,7 +120,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_IamRolePolicy_474A6820": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/IamRolePolicy",
+            "path": "root/Default/Default/test/IamRolePolicy",
             "uniqueId": "root_test_IamRolePolicy_474A6820",
           },
         },
@@ -119,7 +132,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_IamRolePolicyAttachment_1102A28A": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/IamRolePolicyAttachment",
+            "path": "root/Default/Default/test/IamRolePolicyAttachment",
             "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
           },
         },
@@ -145,7 +158,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_AAE85061": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/Default",
+            "path": "root/Default/Default/test/Default",
             "uniqueId": "root_test_AAE85061",
           },
         },
@@ -279,7 +292,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_Code_2D131EC2": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/Code",
+            "path": "root/Default/Default/test/Code",
             "uniqueId": "root_test_Code_2D131EC2",
           },
         },
@@ -290,7 +303,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_S3Object_A16CD789": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/S3Object",
+            "path": "root/Default/Default/test/S3Object",
             "uniqueId": "root_test_S3Object_A16CD789",
           },
         },
@@ -303,7 +316,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_r2_securityGroup_EC7D0A0D": {
         "//": {
           "metadata": {
-            "path": "root/Default/r2/securityGroup",
+            "path": "root/Default/Default/r2/securityGroup",
             "uniqueId": "root_r2_securityGroup_EC7D0A0D",
           },
         },
@@ -343,7 +356,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_redisRedis_securityGroup_C278C668": {
         "//": {
           "metadata": {
-            "path": "root/Default/redis.Redis/securityGroup",
+            "path": "root/Default/Default/redis.Redis/securityGroup",
             "uniqueId": "root_redisRedis_securityGroup_C278C668",
           },
         },
@@ -432,6 +445,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
+const $wing_is_test = process.env.WING_IS_TEST === \\"true\\";
 
 function __app(target) {
 	switch (target) {
@@ -450,32 +464,48 @@ function __app(target) {
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
 }
-const $App = __app(process.env.WING_TARGET);
+const $AppBase = __app(process.env.WING_TARGET);
 
 const cloud = require('@winglang/sdk').cloud;
 const redis = require('@winglang/sdk').redis;
-class MyApp extends $App {
-constructor() {
-  super({ outdir: $outdir, name: \\"redis\\", plugins: $plugins });
-  
-  const r = this.node.root.newAbstract(\\"@winglang/sdk.redis.Redis\\",this,\\"redis.Redis\\");
-  const r2 = this.node.root.newAbstract(\\"@winglang/sdk.redis.Redis\\",this,\\"r2\\");
-  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.688f52a0df0aa6a192cac76b359ea0e230467a7e397877c650abb8c2aec4251a/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-    bindings: {
-      r: {
-        obj: r,
-        ops: [\\"del\\",\\"get\\",\\"hget\\",\\"hset\\",\\"raw_client\\",\\"sadd\\",\\"set\\",\\"smembers\\",\\"url\\"]
-      },
-      r2: {
-        obj: r2,
-        ops: [\\"del\\",\\"get\\",\\"hget\\",\\"hset\\",\\"raw_client\\",\\"sadd\\",\\"set\\",\\"smembers\\",\\"url\\"]
-      },
+class $Root extends $stdlib.core.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    const r = this.node.root.newAbstract(\\"@winglang/sdk.redis.Redis\\",this,\\"redis.Redis\\");
+    const r2 = this.node.root.newAbstract(\\"@winglang/sdk.redis.Redis\\",this,\\"r2\\");
+    this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.688f52a0df0aa6a192cac76b359ea0e230467a7e397877c650abb8c2aec4251a/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+  bindings: {
+    r: {
+      obj: r,
+      ops: [\\"del\\",\\"get\\",\\"hget\\",\\"hset\\",\\"raw_client\\",\\"sadd\\",\\"set\\",\\"smembers\\",\\"url\\"]
+    },
+    r2: {
+      obj: r2,
+      ops: [\\"del\\",\\"get\\",\\"hget\\",\\"hset\\",\\"raw_client\\",\\"sadd\\",\\"set\\",\\"smembers\\",\\"url\\"]
+    },
+  }
+}));
+  }
+}
+
+class $App extends $AppBase {
+  constructor() {
+    super({ outdir: $outdir, name: \\"redis\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    if ($wing_is_test) {
+      new $Root(this, \\"env0\\");
+      const $test_runner = this.testRunner;
+      const $tests = $test_runner.findTests();
+      for (let $i = 1; $i < $tests.length; $i++) {
+        new $Root(this, \\"env\\" + $i);
+      }
+    } else {
+      new $Root(this, \\"Default\\");
     }
-  }));
+  }
 }
-}
-new MyApp().synth();"
+
+new $App().synth();"
 `;
 
 exports[`wing compile -t tf-aws > proc.688f52a0df0aa6a192cac76b359ea0e230467a7e397877c650abb8c2aec4251a/index.js 1`] = `
@@ -490,4 +520,8 @@ exports[`wing compile -t tf-aws > proc.688f52a0df0aa6a192cac76b359ea0e230467a7e3
 } };"
 `;
 
-exports[`wing test > stdout 1`] = `"pass ─ redis.w » root/test"`;
+exports[`wing test -t sim > stdout 1`] = `
+"- Compiling to sim...
+✔ Compiling to sim...
+pass ─ redis.wsim » root/env0/test"
+`;

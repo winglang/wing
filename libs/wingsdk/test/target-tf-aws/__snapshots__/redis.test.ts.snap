@@ -2,6 +2,11 @@
 
 exports[`When creating a Redis resource > should create an elasticache cluster and required vpc networking resources 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_eip\\": {
       \\"root_EIP_ED59AD4B\\": {}

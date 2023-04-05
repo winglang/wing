@@ -54,7 +54,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         },
         "rest_api_id": "\${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.id}",
         "triggers": {
-          "redeployment": "dc0ddbb8396730b19fbe708649b205a7a51a01b7",
+          "redeployment": "06d5d79d88a464ffe5666fff8744c6bcc926732c",
         },
       },
     },
