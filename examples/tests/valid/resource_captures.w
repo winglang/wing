@@ -36,9 +36,11 @@ resource MyResource {
   set_of_str: Set<str>;
   another: Another;
   my_queue: cloud.Queue;
+  unused_resource: cloud.Counter;
 
   ext_bucket: cloud.Bucket;
   ext_num: num;
+
 
   // Needs to be var since we don't support inflight inits yet.
   inflight var inflight_field: num;
@@ -59,6 +61,7 @@ resource MyResource {
     this.my_queue = new cloud.Queue();
     this.ext_bucket = external_bucket;
     this.ext_num = external_num;
+    this.unused_resource = new cloud.Counter();
   }
 
   inflight test_no_capture() {

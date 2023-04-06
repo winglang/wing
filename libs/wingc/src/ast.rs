@@ -113,8 +113,17 @@ pub enum TypeAnnotation {
 	MutMap(Box<TypeAnnotation>),
 	Set(Box<TypeAnnotation>),
 	MutSet(Box<TypeAnnotation>),
-	FunctionSignature(FunctionSignature),
+	Function(FunctionTypeAnnotation),
 	UserDefined(UserDefinedType),
+}
+
+/// Unlike a FunctionSignature, a FunctionTypeAnnotation doesn't include the names
+/// of parameters or whether they are reassignable.
+#[derive(Debug, Clone)]
+pub struct FunctionTypeAnnotation {
+	pub param_types: Vec<TypeAnnotation>,
+	pub return_type: Option<Box<TypeAnnotation>>,
+	pub phase: Phase,
 }
 
 // In the future this may be an enum for type-alias, class, etc. For now its just a nested name.
@@ -152,13 +161,13 @@ impl Display for TypeAnnotation {
 			TypeAnnotation::MutMap(t) => write!(f, "MutMap<{}>", t),
 			TypeAnnotation::Set(t) => write!(f, "Set<{}>", t),
 			TypeAnnotation::MutSet(t) => write!(f, "MutSet<{}>", t),
-			TypeAnnotation::FunctionSignature(sig) => write!(f, "{}", sig),
+			TypeAnnotation::Function(t) => write!(f, "{}", t),
 			TypeAnnotation::UserDefined(user_defined_type) => write!(f, "{}", user_defined_type),
 		}
 	}
 }
 
-impl Display for FunctionSignature {
+impl Display for FunctionTypeAnnotation {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		let phase_str = match self.phase {
 			Phase::Inflight => "inflight ",
@@ -166,7 +175,7 @@ impl Display for FunctionSignature {
 			Phase::Independent => "",
 		};
 		let params_str = self
-			.parameters
+			.param_types
 			.iter()
 			.map(|a| format!("{}", a))
 			.collect::<Vec<String>>()
@@ -182,9 +191,26 @@ impl Display for FunctionSignature {
 
 #[derive(Debug, Clone)]
 pub struct FunctionSignature {
-	pub parameters: Vec<TypeAnnotation>,
+	pub parameters: Vec<FunctionParameter>,
 	pub return_type: Option<Box<TypeAnnotation>>,
 	pub phase: Phase,
+}
+
+impl FunctionSignature {
+	pub fn to_type_annotation(&self) -> TypeAnnotation {
+		TypeAnnotation::Function(FunctionTypeAnnotation {
+			param_types: self.parameters.iter().map(|p| p.type_annotation.clone()).collect(),
+			return_type: self.return_type.clone(),
+			phase: self.phase.clone(),
+		})
+	}
+}
+
+#[derive(Debug, Clone)]
+pub struct FunctionParameter {
+	pub name: Symbol,
+	pub type_annotation: TypeAnnotation,
+	pub reassignable: bool,
 }
 
 #[derive(Debug)]
@@ -195,11 +221,16 @@ pub enum FunctionBody {
 	External(String),
 }
 
+pub trait MethodLike {
+	fn statements(&self) -> Option<&Scope>;
+	fn parameters(&self) -> &Vec<FunctionParameter>;
+	fn signature(&self) -> &FunctionSignature;
+	fn is_static(&self) -> bool;
+}
+
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct FunctionDefinition {
-	/// List of names of function parameters and whether they are reassignable (`var`) or not.
-	pub parameters: Vec<(Symbol, bool)>, // TODO: move into FunctionSignature and make optional
 	/// The function implementation.
 	pub body: FunctionBody,
 	/// The function signature, including the return type.
@@ -213,16 +244,52 @@ pub struct FunctionDefinition {
 	pub captures: RefCell<Option<Captures>>,
 }
 
-#[derive(Debug)]
-pub struct Constructor {
-	/// List of names of constructor parameters and whether they are reassignable (`var`) or not.
-	pub parameters: Vec<(Symbol, bool)>,
+impl MethodLike for FunctionDefinition {
+	fn statements(&self) -> Option<&Scope> {
+		match &self.body {
+			FunctionBody::Statements(statements) => Some(statements),
+			FunctionBody::External(_) => None,
+		}
+	}
 
-	pub statements: Scope,
-	pub signature: FunctionSignature,
+	fn parameters(&self) -> &Vec<FunctionParameter> {
+		&self.signature.parameters
+	}
+
+	fn signature(&self) -> &FunctionSignature {
+		&self.signature
+	}
+
+	fn is_static(&self) -> bool {
+		self.is_static
+	}
 }
 
 #[derive(Debug)]
+pub struct Constructor {
+	pub signature: FunctionSignature,
+	pub statements: Scope,
+}
+
+impl MethodLike for Constructor {
+	fn statements(&self) -> Option<&Scope> {
+		Some(&self.statements)
+	}
+
+	fn parameters(&self) -> &Vec<FunctionParameter> {
+		&self.signature.parameters
+	}
+
+	fn signature(&self) -> &FunctionSignature {
+		&self.signature
+	}
+
+	fn is_static(&self) -> bool {
+		true
+	}
+}
+
+#[derive(Derivative, Debug)]
 pub struct Stmt {
 	pub kind: StmtKind,
 	pub span: WingSpan,

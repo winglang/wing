@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
-import { SimApp, Testing, TraceType } from "../../src/testing";
+import { SimApp, Testing } from "../../src/testing";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -52,7 +52,7 @@ test("pushing messages through a queue", async () => {
 
   // THEN
   await s.stop();
-  expect(s.listTraces().filter((t) => t.type === TraceType.LOG)).toEqual([
+  expect(s.listTraces().filter((t) => t.type === cloud.TraceType.LOG)).toEqual([
     {
       data: { message: "Hello, world!" },
       sourcePath: "root/HelloWorld/Function",

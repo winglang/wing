@@ -22,7 +22,20 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "stackName": "root",
       "version": "0.15.2",
     },
-    "outputs": {},
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
   "provider": {
     "aws": [
@@ -35,6 +48,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
+const $wing_is_test = process.env.WING_IS_TEST === \\"true\\";
 
 function __app(target) {
 	switch (target) {
@@ -53,44 +67,64 @@ function __app(target) {
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
 }
-const $App = __app(process.env.WING_TARGET);
+const $AppBase = __app(process.env.WING_TARGET);
 
-class MyApp extends $App {
-constructor() {
-  super({ outdir: $outdir, name: \\"structs\\", plugins: $plugins });
-  
-  class Foo extends $stdlib.core.Resource {
-  	constructor(scope, id, b) {
-  	super(scope, id);
-  {
-    this.data = b;
-  }
-  }
-  	
-  	_toInflight() {
-  	const data_client = this._lift(this.data);
-  	const self_client_path = \\"./clients/Foo.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo({data: \${data_client}}))\`);
-  }
-  }
-  Foo._annotateInflight(\\"get_stuff\\", {\\"this.data.field0\\": { ops: [] }});
-  const x = {
-  \\"field0\\": \\"Sup\\",}
-  ;
-  const y = {
-  \\"field0\\": \\"hello\\",
-  \\"field1\\": 1,
-  \\"field2\\": \\"world\\",
-  \\"field3\\": {
-  \\"field0\\": \\"foo\\",}
-  ,}
-  ;
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x.field0 === \\"Sup\\")'\`)})((x.field0 === \\"Sup\\"))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(y.field1 === 1)'\`)})((y.field1 === 1))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(y.field3.field0 === \\"foo\\")'\`)})((y.field3.field0 === \\"foo\\"))};
+class $Root extends $stdlib.core.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    class Foo extends $stdlib.core.Resource {
+	constructor(scope, id, b) {
+	super(scope, id);
+{
+  this.data = b;
 }
 }
-new MyApp().synth();"
+	
+	_toInflight() {
+	const data_client = this._lift(this.data);
+	const self_client_path = \\"./clients/Foo.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
+	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo({data: \${data_client}}))\`);
+}
+}
+Foo._annotateInflight(\\"get_stuff\\", {\\"this.data\\": { ops: [] },\\"this.data.field0\\": { ops: [] }});
+    const x = {
+\\"field0\\": \\"Sup\\",}
+;
+    const y = {
+\\"field0\\": \\"hello\\",
+\\"field1\\": 1,
+\\"field2\\": \\"world\\",
+\\"field3\\": {
+\\"field0\\": \\"foo\\",}
+,}
+;
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x.field0 === \\"Sup\\")'\`)})((x.field0 === \\"Sup\\"))};
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(y.field1 === 1)'\`)})((y.field1 === 1))};
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(y.field3.field0 === \\"foo\\")'\`)})((y.field3.field0 === \\"foo\\"))};
+  }
+}
+
+class $App extends $AppBase {
+  constructor() {
+    super({ outdir: $outdir, name: \\"structs\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    if ($wing_is_test) {
+      new $Root(this, \\"env0\\");
+      const $test_runner = this.testRunner;
+      const $tests = $test_runner.findTests();
+      for (let $i = 1; $i < $tests.length; $i++) {
+        new $Root(this, \\"env\\" + $i);
+      }
+    } else {
+      new $Root(this, \\"Default\\");
+    }
+  }
+}
+
+new $App().synth();"
 `;
 
-exports[`wing test > stdout 1`] = `"pass ─ structs.w (no tests)"`;
+exports[`wing test -t sim > stdout 1`] = `
+"- Compiling to sim...
+✔ Compiling to sim...
+pass ─ structs.wsim (no tests)"
+`;

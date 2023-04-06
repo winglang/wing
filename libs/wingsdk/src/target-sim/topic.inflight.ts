@@ -5,8 +5,8 @@ import {
   TopicSubscriber,
   TOPIC_TYPE,
 } from "./schema-resources";
-import { IFunctionClient, ITopicClient } from "../cloud";
-import { ISimulatorContext, TraceType } from "../testing/simulator";
+import { IFunctionClient, ITopicClient, TraceType } from "../cloud";
+import { ISimulatorContext } from "../testing/simulator";
 
 export class Topic implements ITopicClient, ISimulatorResourceInstance {
   private readonly subscribers = new Array<TopicSubscriber>();

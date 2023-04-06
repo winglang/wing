@@ -8,6 +8,7 @@ use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use capture::CaptureVisitor;
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
 use jsify::JSifier;
+use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
@@ -164,7 +165,12 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 	(scope, wing_parser.diagnostics.into_inner())
 }
 
-pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> Diagnostics {
+pub fn type_check(
+	scope: &mut Scope,
+	types: &mut Types,
+	source_path: &Path,
+	jsii_imports: &mut Vec<JsiiImportSpec>,
+) -> Diagnostics {
 	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
 	scope.set_env(env);
 
@@ -219,7 +225,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> D
 		types,
 	);
 
-	let mut tc = TypeChecker::new(types, source_path);
+	let mut tc = TypeChecker::new(types, source_path, jsii_imports);
 	tc.add_globals(scope);
 
 	tc.type_check_scope(scope);
@@ -271,10 +277,11 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 	let mut types = Types::new();
 	// Build our AST
 	let (mut scope, parse_diagnostics) = parse(&source_path);
+	let mut jsii_imports = Vec::new();
 
 	// Type check everything and build typed symbol environment
 	let type_check_diagnostics = if scope.statements.len() > 0 {
-		type_check(&mut scope, &mut types, &source_path)
+		type_check(&mut scope, &mut types, &source_path, &mut jsii_imports)
 	} else {
 		// empty scope, no type checking needed
 		Diagnostics::new()

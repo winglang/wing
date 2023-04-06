@@ -8,7 +8,20 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "stackName": "root",
       "version": "0.15.2",
     },
-    "outputs": {},
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
   "provider": {
     "aws": [
@@ -105,6 +118,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
+const $wing_is_test = process.env.WING_IS_TEST === \\"true\\";
 
 function __app(target) {
 	switch (target) {
@@ -123,55 +137,71 @@ function __app(target) {
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
 }
-const $App = __app(process.env.WING_TARGET);
+const $AppBase = __app(process.env.WING_TARGET);
 
-const cloud = require('@winglang/sdk').cloud;
-class MyApp extends $App {
-constructor() {
-  super({ outdir: $outdir, name: \\"for_loop\\", plugins: $plugins });
-  
-  const words = Object.freeze([\\"wing\\", \\"lang\\", \\"dang\\"]);
-  const unique_numbers = Object.freeze(new Set([1, 2, 3]));
-  for (const word of words) {
-    for (const number of unique_numbers) {
-      {((cond) => {if (!cond) throw new Error(\`assertion failed: '(number > 0)'\`)})((number > 0))};
-      {console.log(\`\${word}: \${number}\`)};
-    }
+class $Root extends $stdlib.core.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    const words = Object.freeze([\\"wing\\", \\"lang\\", \\"dang\\"]);
+    const unique_numbers = Object.freeze(new Set([1, 2, 3]));
+    for (const word of words) {
+  for (const number of unique_numbers) {
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(number > 0)'\`)})((number > 0))};
+    {console.log(\`\${word}: \${number}\`)};
   }
-  let i = 0;
-  for (const word of words) {
-    i = (i + 1);
-    let pre_break_hits = 0;
-    let post_break_hits = 0;
-    for (const number of unique_numbers) {
-      {((cond) => {if (!cond) throw new Error(\`assertion failed: '(number > 0)'\`)})((number > 0))};
-      {console.log(\`\${word}: \${number}\`)};
-      pre_break_hits = (pre_break_hits + 1);
-      if ((number === 2)) {
-        break;
-      }
-      post_break_hits = (post_break_hits + 1);
+}
+    let i = 0;
+    for (const word of words) {
+  i = (i + 1);
+  let pre_break_hits = 0;
+  let post_break_hits = 0;
+  for (const number of unique_numbers) {
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(number > 0)'\`)})((number > 0))};
+    {console.log(\`\${word}: \${number}\`)};
+    pre_break_hits = (pre_break_hits + 1);
+    if ((number === 2)) {
+      break;
     }
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(pre_break_hits === 2)'\`)})((pre_break_hits === 2))};
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(post_break_hits === 1)'\`)})((post_break_hits === 1))};
+    post_break_hits = (post_break_hits + 1);
   }
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i === 3)'\`)})((i === 3))};
-  let j = 0;
-  for (const word of words) {
-    j = (j + 1);
-    let pre_continue_hits = 0;
-    let post_continue_hits = 0;
-    for (const number of unique_numbers) {
-      {((cond) => {if (!cond) throw new Error(\`assertion failed: '(number > 0)'\`)})((number > 0))};
-      {console.log(\`\${word}: \${number}\`)};
-      pre_continue_hits = (pre_continue_hits + 1);
-      if ((number > 0)) {
-        continue;
-      }
-      post_continue_hits = (post_continue_hits + 1);
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(pre_break_hits === 2)'\`)})((pre_break_hits === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(post_break_hits === 1)'\`)})((post_break_hits === 1))};
+}
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(i === 3)'\`)})((i === 3))};
+    let j = 0;
+    for (const word of words) {
+  j = (j + 1);
+  let pre_continue_hits = 0;
+  let post_continue_hits = 0;
+  for (const number of unique_numbers) {
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(number > 0)'\`)})((number > 0))};
+    {console.log(\`\${word}: \${number}\`)};
+    pre_continue_hits = (pre_continue_hits + 1);
+    if ((number > 0)) {
+      continue;
     }
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(pre_continue_hits === 3)'\`)})((pre_continue_hits === 3))};
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(post_continue_hits === 0)'\`)})((post_continue_hits === 0))};
+    post_continue_hits = (post_continue_hits + 1);
+  }
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(pre_continue_hits === 3)'\`)})((pre_continue_hits === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(post_continue_hits === 0)'\`)})((post_continue_hits === 0))};
+}
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(j === 3)'\`)})((j === 3))};
+  }
+}
+
+class $App extends $AppBase {
+  constructor() {
+    super({ outdir: $outdir, name: \\"for_loop\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    if ($wing_is_test) {
+      new $Root(this, \\"env0\\");
+      const $test_runner = this.testRunner;
+      const $tests = $test_runner.findTests();
+      for (let $i = 1; $i < $tests.length; $i++) {
+        new $Root(this, \\"env\\" + $i);
+      }
+    } else {
+      new $Root(this, \\"Default\\");
+    }
   }
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(j === 3)'\`)})((j === 3))};
   {console.log(\\"---\\\\nfor x in 0..0 { ... }\\")};
@@ -275,8 +305,8 @@ constructor() {
     }
   }));
 }
-}
-new MyApp().synth();"
+
+new $App().synth();"
 `;
 
 exports[`wing compile -t tf-aws > proc.789cc11d9e18f97e881bce27c1f0d4cb6b1398d336aab52ba014674443c189ca/index.js 1`] = `
@@ -389,4 +419,5 @@ for x in (z*2)..0 { ... } <=> x = 2
 2
 1
 pass ─ for_loop.w (no tests)"
+
 `;

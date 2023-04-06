@@ -42,9 +42,7 @@ wing compile --target tf-aws hello.w
 
 ## Examine the output
 
-Our target directory now contains a `cdktf.out` directory which is the output of
-[CDK for Terraform](https://developer.hashicorp.com/terraform/cdktf) used under
-the hood to produce the Terraform configuration for this application.
+Our `target` directory now contains a `hello.tfaws` directory which has all of the Terraform configuration for this application.
 
 ## Initialize Terraform state
 

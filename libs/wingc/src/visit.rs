@@ -1,6 +1,6 @@
 use crate::ast::{
-	ArgList, Class, Constructor, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionSignature, Interface,
-	InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
+	ArgList, Class, Constructor, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
+	Interface, InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
 };
 
 /// Visitor pattern inspired by implementation from https://docs.rs/syn/latest/syn/visit/index.html
@@ -58,6 +58,9 @@ pub trait Visit<'ast> {
 	}
 	fn visit_function_signature(&mut self, node: &'ast FunctionSignature) {
 		visit_function_signature(self, node);
+	}
+	fn visit_function_parameter(&mut self, node: &'ast FunctionParameter) {
+		visit_function_parameter(self, node);
 	}
 	fn visit_args(&mut self, node: &'ast ArgList) {
 		visit_args(self, node);
@@ -228,16 +231,7 @@ pub fn visit_constructor<'ast, V>(v: &mut V, node: &'ast Constructor)
 where
 	V: Visit<'ast> + ?Sized,
 {
-	for param in &node.parameters {
-		v.visit_symbol(&param.0);
-	}
-	for param_type in &node.signature.parameters {
-		v.visit_type_annotation(param_type);
-	}
-	if let Some(return_type) = &node.signature.return_type {
-		v.visit_type_annotation(return_type);
-	}
-
+	v.visit_function_signature(&node.signature);
 	v.visit_scope(&node.statements);
 }
 
@@ -368,9 +362,6 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	v.visit_function_signature(&node.signature);
-	for param in &node.parameters {
-		v.visit_symbol(&param.0);
-	}
 	if let FunctionBody::Statements(scope) = &node.body {
 		v.visit_scope(scope);
 	};
@@ -380,12 +371,20 @@ pub fn visit_function_signature<'ast, V>(v: &mut V, node: &'ast FunctionSignatur
 where
 	V: Visit<'ast> + ?Sized,
 {
-	for param_type in &node.parameters {
-		v.visit_type_annotation(param_type);
+	for param in &node.parameters {
+		v.visit_function_parameter(param);
 	}
 	if let Some(return_type) = &node.return_type {
 		v.visit_type_annotation(return_type);
 	}
+}
+
+pub fn visit_function_parameter<'ast, V>(v: &mut V, node: &'ast FunctionParameter)
+where
+	V: Visit<'ast> + ?Sized,
+{
+	v.visit_symbol(&node.name);
+	v.visit_type_annotation(&node.type_annotation);
 }
 
 pub fn visit_args<'ast, V>(v: &mut V, node: &'ast ArgList)
@@ -419,9 +418,9 @@ where
 		TypeAnnotation::MutMap(t) => v.visit_type_annotation(t),
 		TypeAnnotation::Set(t) => v.visit_type_annotation(t),
 		TypeAnnotation::MutSet(t) => v.visit_type_annotation(t),
-		TypeAnnotation::FunctionSignature(f) => {
-			for arg_type in &f.parameters {
-				v.visit_type_annotation(&arg_type);
+		TypeAnnotation::Function(f) => {
+			for param in &f.param_types {
+				v.visit_type_annotation(&param);
 			}
 			if let Some(return_type) = &f.return_type {
 				v.visit_type_annotation(return_type);

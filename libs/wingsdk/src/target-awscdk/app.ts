@@ -27,10 +27,8 @@ export interface CdkAppProps extends AppProps {
  * An app that knows how to synthesize constructs into CDK configuration.
  */
 export class App extends CoreApp {
-  /**
-   * Directory where artifacts are synthesized to.
-   */
   public readonly outdir: string;
+  public readonly isTestEnvironment: boolean;
 
   private readonly cdkApp: cdk.App;
   private readonly cdkStack: cdk.Stack;
@@ -80,6 +78,7 @@ export class App extends CoreApp {
     this.cdkApp = cdkApp;
     this.cdkStack = cdkStack;
     this.synthed = false;
+    this.isTestEnvironment = props.isTestEnvironment ?? false;
 
     // register a logger for this app.
     Logger.register(this);
