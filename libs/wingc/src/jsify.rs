@@ -848,7 +848,7 @@ impl<'a> JSifier<'a> {
 		let body = match &func_def.body {
 			FunctionBody::Statements(scope) => self.jsify_scope(scope, context),
 			FunctionBody::External(external_spec) => 
-				format!("return (require(require.resolve(\"{external_spec}\", {{paths: [process.env.WING_FILE_DIR]}}))[\"{name}\"])({parameters})")
+				format!("return (require(require.resolve(\"{external_spec}\", {{paths: [process.env.WING_PROJECT_DIR]}}))[\"{name}\"])({parameters})")
 		};
 		let mut modifiers = vec![];
 		if func_def.is_static {
