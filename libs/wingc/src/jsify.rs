@@ -25,7 +25,7 @@ use crate::{
 		TypeAnnotation, UnaryOperator, UserDefinedType,
 	},
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
-	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, VariableInfo},
+	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, Type, TypeRef, VariableInfo},
 	utilities::snake_case_to_camel_case,
 	visit::{self, Visit},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
@@ -870,26 +870,32 @@ impl<'a> JSifier<'a> {
 		)
 	}
 
-	/// Retrieves the contents of the extern file and copies it to the intermediate directory.
-	/// Returns the path to the copied file
+	/// Creates a file that wraps a require to the given extern spec.
+	/// Returns the path to that wrapper module.
 	fn prepare_extern(&self, is_inflight: bool, extern_spec: &String) -> String {
 		let wrapper_text =
-			format!("const r = require(require.resolve(`{extern_spec}`, {{paths: [process.env.WING_FILE_DIR]}}));console.log(r);module.exports = r;");
+			format!("module.exports = require(require.resolve(`{extern_spec}`, {{paths: [process.env.WING_FILE_DIR]}}));");
 
 		let id = base16ct::lower::encode_string(&Sha256::new().chain_update(&wrapper_text).finalize());
 		let id_file = format!("{}.js", id);
-		let extern_id_path = Path::new(EXTERN_DIR).join(&id_file);
+		let relative_wrapper_path = Path::new(EXTERN_DIR).join(&id_file);
 
-		let final_dir = self.out_dir.join(EXTERN_DIR);
-		let final_path = self.out_dir.join(&extern_id_path);
-		fs::create_dir_all(final_dir).expect("Creating extern dir");
-		std::fs::write(&final_path, wrapper_text).expect("Copying extern file");
+		let extern_dir = self.out_dir.join(EXTERN_DIR);
+		let wrapper_path = self.out_dir.join(&relative_wrapper_path);
+		fs::create_dir_all(extern_dir).expect("Creating extern dir");
+		std::fs::write(&wrapper_path, wrapper_text).expect("Writing extern wrapper");
 
 		if is_inflight {
-			let relative_path = Path::new("..").join(&extern_id_path);
+			// When inflight, this will be required from within a client in a subfolder, so we need to go up one level
+			let relative_path = Path::new("..").join(&relative_wrapper_path);
 			format!("\"{}\"", relative_path.to_str().expect("Converting path to string"))
 		} else {
-			Self::js_resolve_path(&extern_id_path.to_str().expect("Converting path to string").to_string())
+			Self::js_resolve_path(
+				&relative_wrapper_path
+					.to_str()
+					.expect("Converting path to string")
+					.to_string(),
+			)
 		}
 	}
 
