@@ -95,6 +95,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   log("work dir: %s", workDir);
 
   process.env["WING_SYNTH_DIR"] = tmpSynthDir;
+  process.env["WING_PROJECT_DIR"] = resolve(wingDir);
   process.env["WING_NODE_MODULES"] = resolve(join(wingDir, "node_modules"));
   process.env["WING_TARGET"] = options.target;
   process.env["WING_IS_TEST"] = testing.toString();
