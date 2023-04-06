@@ -8,7 +8,7 @@
     },
     {
       "type": "wingsdk.cloud.Function",
-      "path": "root/cloud.Api/cloud.Api-OnRequestHandler-de95ec56",
+      "path": "root/Default/cloud.Api/cloud.Api-OnRequestHandler-de95ec56",
       "props": {
         "sourceCodeFile": ".wing/cloud.api-onrequesthandler-de95ec56_c8f1f9c9.js",
         "sourceCodeLanguage": "javascript",
@@ -21,7 +21,7 @@
     },
     {
       "type": "wingsdk.cloud.Function",
-      "path": "root/cloud.Api/cloud.Api-OnRequestHandler-7e186046",
+      "path": "root/Default/cloud.Api/cloud.Api-OnRequestHandler-7e186046",
       "props": {
         "sourceCodeFile": ".wing/cloud.api-onrequesthandler-7e186046_c8f220b3.js",
         "sourceCodeLanguage": "javascript",
@@ -34,18 +34,18 @@
     },
     {
       "type": "wingsdk.cloud.Api",
-      "path": "root/cloud.Api",
+      "path": "root/Default/cloud.Api",
       "props": {
         "routes": [
           {
             "route": "/test-get",
             "method": "GET",
-            "functionHandle": "${root/cloud.Api/cloud.Api-OnRequestHandler-de95ec56#attrs.handle}"
+            "functionHandle": "${root/Default/cloud.Api/cloud.Api-OnRequestHandler-de95ec56#attrs.handle}"
           },
           {
             "route": "/test-post",
             "method": "POST",
-            "functionHandle": "${root/cloud.Api/cloud.Api-OnRequestHandler-7e186046#attrs.handle}"
+            "functionHandle": "${root/Default/cloud.Api/cloud.Api-OnRequestHandler-7e186046#attrs.handle}"
           }
         ]
       },
@@ -53,7 +53,7 @@
     },
     {
       "type": "wingsdk.cloud.Counter",
-      "path": "root/cloud.Counter",
+      "path": "root/Default/cloud.Counter",
       "props": {
         "initial": 0
       },
@@ -61,13 +61,13 @@
     },
     {
       "type": "wingsdk.cloud.Function",
-      "path": "root/IncrementCounter",
+      "path": "root/Default/IncrementCounter",
       "props": {
         "sourceCodeFile": ".wing/incrementcounter_c8945e06.js",
         "sourceCodeLanguage": "javascript",
         "environmentVariables": {
           "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}",
-          "COUNTER_HANDLE_e5a56560": "${root/cloud.Counter#attrs.handle}"
+          "COUNTER_HANDLE_e5a56560": "${root/Default/cloud.Counter#attrs.handle}"
         },
         "timeout": 60000
       },
@@ -75,19 +75,19 @@
     },
     {
       "type": "wingsdk.redis.Redis",
-      "path": "root/redis.Redis",
+      "path": "root/Default/redis.Redis",
       "props": {},
       "attrs": {}
     },
     {
       "type": "wingsdk.cloud.Function",
-      "path": "root/Redis interaction",
+      "path": "root/Default/Redis interaction",
       "props": {
         "sourceCodeFile": ".wing/redis_interaction_c896e1b4.js",
         "sourceCodeLanguage": "javascript",
         "environmentVariables": {
           "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}",
-          "REDIS_HANDLE_df778c45": "${root/redis.Redis#attrs.handle}"
+          "REDIS_HANDLE_df778c45": "${root/Default/redis.Redis#attrs.handle}"
         },
         "timeout": 60000
       },
@@ -95,13 +95,13 @@
     },
     {
       "type": "wingsdk.cloud.Function",
-      "path": "root/test: Increment counter",
+      "path": "root/Default/test: Increment counter",
       "props": {
         "sourceCodeFile": ".wing/test__increment_counter_c8257dd6.js",
         "sourceCodeLanguage": "javascript",
         "environmentVariables": {
           "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}",
-          "COUNTER_HANDLE_e5a56560": "${root/cloud.Counter#attrs.handle}"
+          "COUNTER_HANDLE_e5a56560": "${root/Default/cloud.Counter#attrs.handle}"
         },
         "timeout": 60000
       },
@@ -109,7 +109,7 @@
     },
     {
       "type": "wingsdk.cloud.Bucket",
-      "path": "root/cloud.Bucket",
+      "path": "root/Default/cloud.Bucket",
       "props": {
         "public": false,
         "initialObjects": {},
@@ -119,13 +119,13 @@
     },
     {
       "type": "wingsdk.cloud.Function",
-      "path": "root/cloud.Queue-OnMessage-90af6456",
+      "path": "root/Default/cloud.Queue-OnMessage-90af6456",
       "props": {
         "sourceCodeFile": ".wing/cloud.queue-onmessage-90af6456_c824b051.js",
         "sourceCodeLanguage": "javascript",
         "environmentVariables": {
           "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}",
-          "BUCKET_HANDLE_2cd0933d": "${root/cloud.Bucket#attrs.handle}"
+          "BUCKET_HANDLE_2cd0933d": "${root/Default/cloud.Bucket#attrs.handle}"
         },
         "timeout": 60000
       },
@@ -133,12 +133,12 @@
     },
     {
       "type": "wingsdk.cloud.Queue",
-      "path": "root/cloud.Queue",
+      "path": "root/Default/cloud.Queue",
       "props": {
         "timeout": 30,
         "subscribers": [
           {
-            "functionHandle": "${root/cloud.Queue-OnMessage-90af6456#attrs.handle}",
+            "functionHandle": "${root/Default/cloud.Queue-OnMessage-90af6456#attrs.handle}",
             "batchSize": 1
           }
         ],
@@ -148,13 +148,13 @@
     },
     {
       "type": "wingsdk.cloud.Function",
-      "path": "root/test: Push message to the queue",
+      "path": "root/Default/test: Push message to the queue",
       "props": {
         "sourceCodeFile": ".wing/test__push_message_to_the_queue_c844f3de.js",
         "sourceCodeLanguage": "javascript",
         "environmentVariables": {
           "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}",
-          "QUEUE_HANDLE_25e0ce1c": "${root/cloud.Queue#attrs.handle}"
+          "QUEUE_HANDLE_25e0ce1c": "${root/Default/cloud.Queue#attrs.handle}"
         },
         "timeout": 60000
       },
@@ -162,7 +162,7 @@
     },
     {
       "type": "wingsdk.cloud.Function",
-      "path": "root/test: Print",
+      "path": "root/Default/test: Print",
       "props": {
         "sourceCodeFile": ".wing/test__print_c8ce8953.js",
         "sourceCodeLanguage": "javascript",
@@ -175,7 +175,7 @@
     },
     {
       "type": "wingsdk.cloud.Function",
-      "path": "root/test: without assertions nor prints",
+      "path": "root/Default/test: without assertions nor prints",
       "props": {
         "sourceCodeFile": ".wing/test__without_assertions_nor_prints_c847e63c.js",
         "sourceCodeLanguage": "javascript",
@@ -188,7 +188,7 @@
     },
     {
       "type": "wingsdk.cloud.Function",
-      "path": "root/Topic-OnMessage-bb32cd80",
+      "path": "root/Default/Topic-OnMessage-bb32cd80",
       "props": {
         "sourceCodeFile": ".wing/topic-onmessage-bb32cd80_c8de25e4.js",
         "sourceCodeLanguage": "javascript",
@@ -201,7 +201,7 @@
     },
     {
       "type": "wingsdk.cloud.Function",
-      "path": "root/Topic-OnMessage-9a6492e6",
+      "path": "root/Default/Topic-OnMessage-9a6492e6",
       "props": {
         "sourceCodeFile": ".wing/topic-onmessage-9a6492e6_c849d125.js",
         "sourceCodeLanguage": "javascript",
@@ -214,14 +214,14 @@
     },
     {
       "type": "wingsdk.cloud.Topic",
-      "path": "root/Topic",
+      "path": "root/Default/Topic",
       "props": {
         "subscribers": [
           {
-            "functionHandle": "${root/Topic-OnMessage-bb32cd80#attrs.handle}"
+            "functionHandle": "${root/Default/Topic-OnMessage-bb32cd80#attrs.handle}"
           },
           {
-            "functionHandle": "${root/Topic-OnMessage-9a6492e6#attrs.handle}"
+            "functionHandle": "${root/Default/Topic-OnMessage-9a6492e6#attrs.handle}"
           }
         ]
       },
@@ -229,15 +229,15 @@
     },
     {
       "type": "wingsdk.cloud.Function",
-      "path": "root/test: Add fixtures",
+      "path": "root/Default/test: Add fixtures",
       "props": {
         "sourceCodeFile": ".wing/test__add_fixtures_c843d083.js",
         "sourceCodeLanguage": "javascript",
         "environmentVariables": {
           "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}",
-          "BUCKET_HANDLE_2cd0933d": "${root/cloud.Bucket#attrs.handle}",
-          "COUNTER_HANDLE_e5a56560": "${root/cloud.Counter#attrs.handle}",
-          "TOPIC_HANDLE_fec76c28": "${root/Topic#attrs.handle}"
+          "BUCKET_HANDLE_2cd0933d": "${root/Default/cloud.Bucket#attrs.handle}",
+          "COUNTER_HANDLE_e5a56560": "${root/Default/cloud.Counter#attrs.handle}",
+          "TOPIC_HANDLE_fec76c28": "${root/Default/Topic#attrs.handle}"
         },
         "timeout": 60000
       },

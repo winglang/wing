@@ -36,10 +36,13 @@ export const BlueScreenOfDeath = ({
         <div className="w-full flex justify-center">
           <span className="bg-slate-400 px-4 text-[#004295]">Wing</span>
         </div>
-        <div className="leading-[40px]">
+        <div className="space-y-4">
           <div>{title}</div>
           <div className="py-4">
-            <span className="outline-none select-text" ref={errorRef} />
+            <span
+              className="outline-none select-text whitespace-pre-wrap"
+              ref={errorRef}
+            />
           </div>
           <div className="w-full text-center py-4">
             Click on any error reference to navigate to your IDE{" "}
