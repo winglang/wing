@@ -321,9 +321,6 @@ fn scan_captures_in_expression(
 				)));
 			}
 		}
-		ExprKind::OptionalTest { optional } => {
-			res.extend(scan_captures_in_expression(optional, env, statement_idx, diagnostics));
-		}
 	}
 	res
 }

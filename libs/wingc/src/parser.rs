@@ -1196,8 +1196,9 @@ impl<'s> Parser<'s> {
 			"optional_test" => {
 				let expression = self.build_expression(&expression_node.named_child(0).unwrap());
 				Ok(Expr::new(
-					ExprKind::OptionalTest {
-						optional: Box::new(expression?),
+					ExprKind::Unary {
+						op: UnaryOperator::OptionalTest,
+						exp: Box::new(expression?),
 					},
 					expression_span,
 				))

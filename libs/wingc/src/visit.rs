@@ -314,9 +314,6 @@ where
 		ExprKind::FunctionClosure(def) => {
 			v.visit_function_definition(def);
 		}
-		ExprKind::OptionalTest { optional } => {
-			v.visit_expr(optional);
-		}
 	}
 }
 

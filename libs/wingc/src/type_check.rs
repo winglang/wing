@@ -1210,11 +1210,17 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 			ExprKind::Unary { op, exp: unary_exp } => {
-				let _type = self.type_check_exp(unary_exp, env);
+				let type_ = self.type_check_exp(unary_exp, env);
 
 				match op {
-					UnaryOperator::Not => self.validate_type(_type, self.types.bool(), unary_exp),
-					UnaryOperator::Minus => self.validate_type(_type, self.types.number(), unary_exp),
+					UnaryOperator::Not => self.validate_type(type_, self.types.bool(), unary_exp),
+					UnaryOperator::Minus => self.validate_type(type_, self.types.number(), unary_exp),
+					UnaryOperator::OptionalTest => {
+						if !type_.is_option() {
+							self.expr_error(unary_exp, format!("Expected optional type, found \"{}\"", type_));
+						}
+						self.types.bool()
+					}
 				}
 			}
 			ExprKind::Range {
@@ -1558,13 +1564,6 @@ impl<'a> TypeChecker<'a> {
 				container_type
 			}
 			ExprKind::FunctionClosure(func_def) => self.type_check_closure(func_def, env),
-			ExprKind::OptionalTest { optional } => {
-				let t = self.type_check_exp(optional, env);
-				if !t.is_option() {
-					self.expr_error(optional, format!("Expected optional type, found \"{}\"", t));
-				}
-				self.types.bool()
-			}
 		}
 	}
 
