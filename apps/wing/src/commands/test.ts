@@ -192,11 +192,20 @@ async function isTerraformInstalled(synthDir: string) {
 }
 
 async function checkTerraformStateIsEmpty(synthDir: string) {
-  const output = await execCapture("terraform state list", { cwd: synthDir });
-  if (output.length > 0) {
-    throw new Error(
-      `Terraform state is not empty. Please run \`terraform destroy\` inside ${synthDir} to clean up any previous test runs.`
-    );
+  try {
+    const output = await execCapture("terraform state list", { cwd: synthDir });
+    if (output.length > 0) {
+      throw new Error(
+        `Terraform state is not empty. Please run \`terraform destroy\` inside ${synthDir} to clean up any previous test runs.`
+      );
+    }
+  } catch (err) {
+    if ((err as any).stderr.includes("No state file was found")) {
+      return;
+    }
+
+    // An unexpected error occurred, rethrow it
+    throw err;
   }
 }
 
