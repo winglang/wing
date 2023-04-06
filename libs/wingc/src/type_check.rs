@@ -2302,7 +2302,7 @@ impl<'a> TypeChecker<'a> {
 				// Replace the dummy interface environment with the real one before type checking the methods
 				interface_type.as_mut_interface().unwrap().env = interface_env;
 			}
-			StmtKind::Struct { name, extends, members } => {
+			StmtKind::Struct { name, extends, fields } => {
 				// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
 				//   If we encounter an existing member with the same name and type we skip it, if the types are different we
 				//   fail type checking.
@@ -2311,7 +2311,7 @@ impl<'a> TypeChecker<'a> {
 				let mut struct_env = SymbolEnv::new(None, self.types.void(), false, env.phase, stmt.idx);
 
 				// Add fields to the struct env
-				for field in members.iter() {
+				for field in fields.iter() {
 					let field_type = self.resolve_type_annotation(&field.member_type, env);
 					if field_type.is_deep_mutable() {
 						self.type_error(TypeError {
@@ -2334,19 +2334,14 @@ impl<'a> TypeChecker<'a> {
 				// Add members from the structs parents
 				let extends_types = extends
 					.iter()
-					.filter_map(|parent| match env.lookup(&parent, Some(stmt.idx)) {
-						Ok(kind) => match &*kind {
-							SymbolKind::Type(_type) => Some(*_type),
-							_ => {
-								self.type_error(TypeError {
-									message: format!("Expected {} to be a type", parent),
-									span: parent.span.clone(),
-								});
-								None
-							}
-						},
-						Err(type_error) => {
-							self.type_error(type_error);
+					.filter_map(|ext| {
+						let t = self
+							.resolve_user_defined_type(ext, env, stmt.idx)
+							.unwrap_or_else(|e| self.type_error(e));
+						if t.as_struct().is_some() {
+							Some(t)
+						} else {
+							self.general_type_error(format!("Expected a struct, instead found type \"{}\"", t));
 							None
 						}
 					})

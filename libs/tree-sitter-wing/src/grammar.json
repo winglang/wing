@@ -344,7 +344,7 @@
                           "name": "extends",
                           "content": {
                             "type": "SYMBOL",
-                            "name": "identifier"
+                            "name": "custom_type"
                           }
                         },
                         {
@@ -361,7 +361,7 @@
                                 "name": "extends",
                                 "content": {
                                   "type": "SYMBOL",
-                                  "name": "identifier"
+                                  "name": "custom_type"
                                 }
                               }
                             ]

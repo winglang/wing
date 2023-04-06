@@ -2319,7 +2319,7 @@
         "required": false,
         "types": [
           {
-            "type": "identifier",
+            "type": "custom_type",
             "named": true
           }
         ]
