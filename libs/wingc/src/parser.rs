@@ -1007,7 +1007,33 @@ impl<'s> Parser<'s> {
 					))
 				}
 			}
-
+			"loop_range" => {
+				let inclusive = if expression_node.child_by_field_name("inclusive").is_some() {
+					Some(true)
+				} else {
+					Some(false)
+				};
+				Ok(Expr::new(
+					ExprKind::Range {
+						start: Box::new(
+							self.build_expression(
+								&expression_node
+									.child_by_field_name("start")
+									.expect("range expression should always include start"),
+							)?,
+						),
+						inclusive: inclusive,
+						end: Box::new(
+							self.build_expression(
+								&expression_node
+									.child_by_field_name("end")
+									.expect("range expression should always include end"),
+							)?,
+						),
+					},
+					expression_span,
+				))
+			}
 			"number" => Ok(Expr::new(
 				ExprKind::Literal(Literal::Number(
 					self.node_text(&expression_node).parse().expect("Number string"),

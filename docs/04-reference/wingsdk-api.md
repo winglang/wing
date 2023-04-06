@@ -3864,6 +3864,27 @@ to parse number from.
 
 
 
+### Range <a name="Range" id="@winglang/sdk.std.Range"></a>
+
+Range.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.std.Range.Initializer"></a>
+
+```wing
+bring std;
+
+new std.Range()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+
+
+
 ### String <a name="String" id="@winglang/sdk.std.String"></a>
 
 String.
