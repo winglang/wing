@@ -7,13 +7,13 @@ constructor({  }) {
 
 }
 static async regex_inflight(pattern, text)  {
-	return require(\\"../extern/09e024cf966860b34adf9cbfd8a494763760f871b1f5c00bbc98853b9989078e.js\\")[\\"regex_inflight\\"](pattern, text)
+	return (require(require.resolve(\\"./external_js.js\\", {paths: [process.env.WING_FILE_DIR]}))[\\"regex_inflight\\"])(pattern, text)
 }
 static async get_uuid()  {
-	return require(\\"../extern/09e024cf966860b34adf9cbfd8a494763760f871b1f5c00bbc98853b9989078e.js\\")[\\"get_uuid\\"]()
+	return (require(require.resolve(\\"./external_js.js\\", {paths: [process.env.WING_FILE_DIR]}))[\\"get_uuid\\"])()
 }
 static async get_data()  {
-	return require(\\"../extern/09e024cf966860b34adf9cbfd8a494763760f871b1f5c00bbc98853b9989078e.js\\")[\\"get_data\\"]()
+	return (require(require.resolve(\\"./external_js.js\\", {paths: [process.env.WING_FILE_DIR]}))[\\"get_data\\"])()
 }
 async call()  {
 	{
@@ -25,10 +25,6 @@ async call()  {
 }}
 exports.Foo = Foo;"
 `;
-
-exports[`wing compile -t tf-aws > extern/09e024cf966860b34adf9cbfd8a494763760f871b1f5c00bbc98853b9989078e.js 1`] = `"module.exports = require(require.resolve(\`./external_js.js\`, {paths: [process.env.WING_FILE_DIR]}));"`;
-
-exports[`wing compile -t tf-aws > extern/2c41b1032eefee4bc97cd959b0c8939dbd37e8ee608b1f219434c02440c00346.js 1`] = `"module.exports = require(require.resolve(\`uuid\`, {paths: [process.env.WING_FILE_DIR]}));"`;
 
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 {
@@ -184,10 +180,10 @@ class $Root extends $stdlib.core.Resource {
 }
 }
 	static get_greeting(name)  {
-	return require(\\"./extern/09e024cf966860b34adf9cbfd8a494763760f871b1f5c00bbc98853b9989078e.js\\".replace(/\\\\\\\\/g, \\"/\\"))[\\"get_greeting\\"](name)
+	return (require(require.resolve(\`./external_js.js\`, {paths: [process.env.WING_FILE_DIR]}))[\\"get_greeting\\"])(name)
 }
 static v4()  {
-	return require(\\"./extern/2c41b1032eefee4bc97cd959b0c8939dbd37e8ee608b1f219434c02440c00346.js\\".replace(/\\\\\\\\/g, \\"/\\"))[\\"v4\\"]()
+	return (require(require.resolve(\`uuid\`, {paths: [process.env.WING_FILE_DIR]}))[\\"v4\\"])()
 }
 	_toInflight() {
 	

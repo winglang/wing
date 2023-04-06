@@ -38,7 +38,6 @@ const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
 const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 
 const INFLIGHT_CLIENTS_DIR: &str = "clients";
-const EXTERN_DIR: &str = "extern";
 
 const TARGET_CODE: &str = r#"
 function __app(target) {
@@ -848,10 +847,8 @@ impl<'a> JSifier<'a> {
 
 		let body = match &func_def.body {
 			FunctionBody::Statements(scope) => self.jsify_scope(scope, context),
-			FunctionBody::External(external_spec) => {
-				let new_path = self.prepare_extern(matches!(func_def.signature.phase, Phase::Inflight), external_spec);
-				format!("return require({new_path})[\"{name}\"]({parameters})")
-			}
+			FunctionBody::External(external_spec) => 
+				format!("return (require(require.resolve(\"{external_spec}\", {{paths: [process.env.WING_FILE_DIR]}}))[\"{name}\"])({parameters})")
 		};
 		let mut modifiers = vec![];
 		if func_def.is_static {
@@ -868,35 +865,6 @@ impl<'a> JSifier<'a> {
 				{body}
 			}}"
 		)
-	}
-
-	/// Creates a file that wraps a require to the given extern spec.
-	/// Returns the path to that wrapper module.
-	fn prepare_extern(&self, is_inflight: bool, extern_spec: &String) -> String {
-		let wrapper_text =
-			format!("module.exports = require(require.resolve(`{extern_spec}`, {{paths: [process.env.WING_FILE_DIR]}}));");
-
-		let id = base16ct::lower::encode_string(&Sha256::new().chain_update(&wrapper_text).finalize());
-		let id_file = format!("{}.js", id);
-		let relative_wrapper_path = Path::new(EXTERN_DIR).join(&id_file);
-
-		let extern_dir = self.out_dir.join(EXTERN_DIR);
-		let wrapper_path = self.out_dir.join(&relative_wrapper_path);
-		fs::create_dir_all(extern_dir).expect("Creating extern dir");
-		std::fs::write(&wrapper_path, wrapper_text).expect("Writing extern wrapper");
-
-		if is_inflight {
-			// When inflight, this will be required from within a client in a subfolder, so we need to go up one level
-			let relative_path = Path::new("..").join(&relative_wrapper_path);
-			format!("\"{}\"", relative_path.to_str().expect("Converting path to string"))
-		} else {
-			Self::js_resolve_path(
-				&relative_wrapper_path
-					.to_str()
-					.expect("Converting path to string")
-					.to_string(),
-			)
-		}
 	}
 
 	fn jsify_class_member(&mut self, member: &ClassField) -> String {
