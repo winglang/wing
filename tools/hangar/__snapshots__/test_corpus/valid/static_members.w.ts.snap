@@ -99,6 +99,10 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
     },
     "aws_s3_bucket": {
@@ -175,7 +179,7 @@ class $Root extends $stdlib.core.Resource {
 	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo({instance_field: \${instance_field_client}}))\`);
 }
 }
-Foo._annotateInflight(\\"get_123\\", {});
+Foo._annotateInflight(\\"get_123\\", {\\"this.instance_field\\": { ops: [] }});
     const foo = new Foo(this,\\"Foo\\");
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(foo.instance_field === 100)'\`)})((foo.instance_field === 100))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '((Foo.m()) === 99)'\`)})(((Foo.m()) === 99))};
