@@ -1222,8 +1222,8 @@ impl<'a> TypeChecker<'a> {
 				inclusive: _,
 				end,
 			} => {
-				let stype = self.type_check_exp(start, env, statement_idx, context);
-				let etype = self.type_check_exp(end, env, statement_idx, context);
+				let stype = self.type_check_exp(start, env);
+				let etype = self.type_check_exp(end, env);
 
 				self.validate_type(stype, self.types.number(), start);
 				self.validate_type(etype, self.types.number(), end);
