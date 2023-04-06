@@ -461,9 +461,6 @@ pub enum ExprKind {
 		element: Box<Expr>,
 	},
 	FunctionClosure(FunctionDefinition),
-	OptionalTest {
-		optional: Box<Expr>,
-	},
 }
 
 #[derive(Derivative)]
@@ -541,6 +538,7 @@ impl Scope {
 pub enum UnaryOperator {
 	Minus,
 	Not,
+	OptionalTest,
 }
 
 #[derive(Debug)]
