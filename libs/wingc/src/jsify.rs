@@ -478,11 +478,15 @@ impl<'a> JSifier<'a> {
 				format!("({}{}({}))", auto_await, expr_string, arg_string)
 			}
 			ExprKind::Unary { op, exp } => {
-				let op = match op {
-					UnaryOperator::Minus => "-",
-					UnaryOperator::Not => "!",
-				};
-				format!("({}{})", op, self.jsify_expression(exp, context))
+				let js_exp = self.jsify_expression(exp, context);
+				match op {
+					UnaryOperator::Minus => format!("(-{})", js_exp),
+					UnaryOperator::Not => format!("(!{})", js_exp),
+					UnaryOperator::OptionalTest => {
+						// We use the abstract inequality operator here because we want to check for null or undefined
+						format!("(({}) != null)", js_exp)
+					}
+				}
 			}
 			ExprKind::Binary { op, left, right } => {
 				let js_left = self.jsify_expression(left, context);
@@ -587,10 +591,6 @@ impl<'a> JSifier<'a> {
 				Phase::Independent => unimplemented!(),
 				Phase::Preflight => self.jsify_function(None, func_def, context),
 			},
-			ExprKind::OptionalTest { optional } => {
-				// We use the abstract inequality operator here because we want to check for null or undefined
-				format!("(({}) != null)", self.jsify_expression(optional, context))
-			}
 		}
 	}
 
