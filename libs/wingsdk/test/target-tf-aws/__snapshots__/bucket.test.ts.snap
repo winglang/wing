@@ -567,7 +567,11 @@ exports[`bucket with onCreate method 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_mybucket_mybucketoncreateOnMessage2c90a36b_Code_3804774D.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_mybucket_mybucketoncreateOnMessage2c90a36b_S3Object_DDC97BAE.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       }
     },
     \\"aws_lambda_permission\\": {
@@ -1072,7 +1076,11 @@ exports[`bucket with onDelete method 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_mybucket_mybucketondeleteOnMessagef22c8a47_Code_23AF5F43.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_mybucket_mybucketondeleteOnMessagef22c8a47_S3Object_2F148230.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       }
     },
     \\"aws_lambda_permission\\": {
@@ -1599,7 +1607,11 @@ exports[`bucket with onEvent method 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_mybucket_mybucketoncreateOnMessage2c90a36b_Code_3804774D.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_mybucket_mybucketoncreateOnMessage2c90a36b_S3Object_DDC97BAE.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       },
       \\"root_mybucket_mybucketondeleteOnMessagef22c8a47_43EA3B17\\": {
         \\"environment\\": {
@@ -1614,7 +1626,11 @@ exports[`bucket with onEvent method 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_mybucket_mybucketondeleteOnMessagef22c8a47_Code_23AF5F43.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_mybucket_mybucketondeleteOnMessagef22c8a47_S3Object_2F148230.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       },
       \\"root_mybucket_mybucketonupdateOnMessage32b7a290_F83D69C0\\": {
         \\"environment\\": {
@@ -1629,7 +1645,11 @@ exports[`bucket with onEvent method 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_mybucket_mybucketonupdateOnMessage32b7a290_Code_0DCA9F7A.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_mybucket_mybucketonupdateOnMessage32b7a290_S3Object_DD9A4CB9.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       }
     },
     \\"aws_lambda_permission\\": {
@@ -2664,7 +2684,11 @@ exports[`bucket with onUpdate method 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_mybucket_mybucketonupdateOnMessage32b7a290_Code_0DCA9F7A.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_mybucket_mybucketonupdateOnMessage32b7a290_S3Object_DD9A4CB9.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       }
     },
     \\"aws_lambda_permission\\": {

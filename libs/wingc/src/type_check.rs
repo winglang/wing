@@ -1,9 +1,10 @@
 pub(crate) mod jsii_importer;
 pub mod symbol_env;
+use crate::ast;
 use crate::ast::{
-	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, Interface as AstInterface,
-	InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind, Symbol, ToSpan, TypeAnnotation,
-	UnaryOperator, UserDefinedType,
+	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter,
+	Interface as AstInterface, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind,
+	Symbol, ToSpan, TypeAnnotation, UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{
@@ -792,6 +793,14 @@ impl TypeRef {
 		}
 	}
 
+	pub fn is_iterable(&self) -> bool {
+		if let Type::Array(_) | Type::Set(_) | Type::MutArray(_) | Type::MutSet(_) = **self {
+			true
+		} else {
+			false
+		}
+	}
+
 	pub fn is_capturable(&self) -> bool {
 		match &**self {
 			Type::Resource(_) => true,
@@ -1208,6 +1217,18 @@ impl<'a> TypeChecker<'a> {
 					UnaryOperator::Minus => self.validate_type(_type, self.types.number(), unary_exp),
 				}
 			}
+			ExprKind::Range {
+				start,
+				inclusive: _,
+				end,
+			} => {
+				let stype = self.type_check_exp(start, env);
+				let etype = self.type_check_exp(end, env);
+
+				self.validate_type(stype, self.types.number(), start);
+				self.validate_type(etype, self.types.number(), end);
+				self.types.add_type(Type::Array(stype))
+			}
 			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env).type_,
 			ExprKind::New {
 				class,
@@ -1547,11 +1568,10 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_closure(&mut self, func_def: &crate::ast::FunctionDefinition, env: &SymbolEnv) -> UnsafeRef<Type> {
+	fn type_check_closure(&mut self, func_def: &ast::FunctionDefinition, env: &SymbolEnv) -> UnsafeRef<Type> {
 		// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 		// Create a type_checker function signature from the AST function definition
-		let function_type =
-			self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(func_def.signature.clone()), env);
+		let function_type = self.resolve_type_annotation(&func_def.signature.to_type_annotation(), env);
 		let sig = function_type.as_function_sig().unwrap();
 
 		// Create an environment for the function
@@ -1562,7 +1582,7 @@ impl<'a> TypeChecker<'a> {
 			func_def.signature.phase,
 			self.statement_idx,
 		);
-		self.add_arguments_to_env(&func_def.parameters, &sig, &mut function_env);
+		self.add_arguments_to_env(&func_def.signature.parameters, &sig, &mut function_env);
 
 		// Type check the function body
 		if let FunctionBody::Statements(scope) = &func_def.body {
@@ -1722,9 +1742,9 @@ impl<'a> TypeChecker<'a> {
 				let value_type = self.resolve_type_annotation(v, env);
 				self.types.add_type(Type::Optional(value_type))
 			}
-			TypeAnnotation::FunctionSignature(ast_sig) => {
+			TypeAnnotation::Function(ast_sig) => {
 				let mut args = vec![];
-				for arg in ast_sig.parameters.iter() {
+				for arg in ast_sig.param_types.iter() {
 					args.push(self.resolve_type_annotation(arg, env));
 				}
 				let sig = FunctionSignature {
@@ -1854,6 +1874,13 @@ impl<'a> TypeChecker<'a> {
 				// TODO: Expression must be iterable
 				let exp_type = self.type_check_exp(iterable, env);
 
+				if !exp_type.is_iterable() {
+					self.type_error(TypeError {
+						message: format!("Unable to iterate over \"{}\"", &exp_type),
+						span: iterable.span.clone(),
+					});
+				}
+
 				let iterator_type = match &*exp_type {
 					// These are builtin iterables that have a clear/direct iterable type
 					Type::Array(t) => *t,
@@ -1861,15 +1888,7 @@ impl<'a> TypeChecker<'a> {
 					Type::MutArray(t) => *t,
 					Type::MutSet(t) => *t,
 					Type::Anything => exp_type,
-
-					// TODO: Handle non-builtin iterables
-					t => {
-						self.type_error(TypeError {
-							message: format!("Unable to iterate over \"{}\"", t),
-							span: iterable.span.clone(),
-						});
-						self.types.anything()
-					}
+					_t => self.types.anything(),
 				};
 
 				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);
@@ -2256,7 +2275,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Add methods to the interface env
 				for (method_name, sig) in methods.iter() {
-					let mut method_type = self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(sig.clone()), env);
+					let mut method_type = self.resolve_type_annotation(&sig.to_type_annotation(), env);
 					// use the interface type as the function's "this" type
 					if let Type::Function(ref mut f) = *method_type {
 						f.this_type = Some(interface_type.clone());
@@ -2462,13 +2481,13 @@ impl<'a> TypeChecker<'a> {
 
 	fn add_method_to_class_env(
 		&mut self,
-		method_sig: &crate::ast::FunctionSignature,
+		method_sig: &ast::FunctionSignature,
 		env: &mut SymbolEnv,
 		instance_type: Option<TypeRef>,
 		class_env: &mut SymbolEnv,
 		method_name: &Symbol,
 	) {
-		let mut method_type = self.resolve_type_annotation(&TypeAnnotation::FunctionSignature(method_sig.clone()), env);
+		let mut method_type = self.resolve_type_annotation(&method_sig.to_type_annotation(), env);
 		// use the class type as the function's "this" type (or None if static)
 		method_type
 			.as_mut_function_sig()
@@ -2581,12 +2600,12 @@ impl<'a> TypeChecker<'a> {
 	/// * `sig` - The function signature (used to figure out the type of each argument).
 	/// * `env` - The function's environment to prime with the args.
 	///
-	fn add_arguments_to_env(&mut self, args: &Vec<(Symbol, bool)>, sig: &FunctionSignature, env: &mut SymbolEnv) {
+	fn add_arguments_to_env(&mut self, args: &Vec<FunctionParameter>, sig: &FunctionSignature, env: &mut SymbolEnv) {
 		assert!(args.len() == sig.parameters.len());
 		for (arg, arg_type) in args.iter().zip(sig.parameters.iter()) {
 			match env.define(
-				&arg.0,
-				SymbolKind::make_variable(*arg_type, arg.1, true, env.phase),
+				&arg.name,
+				SymbolKind::make_variable(*arg_type, arg.reassignable, true, env.phase),
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {

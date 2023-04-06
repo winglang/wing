@@ -8,8 +8,9 @@ use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
 	ArgList, BinaryOperator, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionBody,
-	FunctionDefinition, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, Phase,
-	Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
+	FunctionDefinition, FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Interface, InterpolatedString,
+	InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator,
+	UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 use crate::WINGSDK_STD_MODULE;
@@ -492,10 +493,9 @@ impl<'s> Parser<'s> {
 					}
 					let parameters = self.build_parameter_list(&class_element.child_by_field_name("parameter_list").unwrap())?;
 					constructor = Some(Constructor {
-						parameters: parameters.iter().map(|p| (p.0.clone(), p.2)).collect(),
 						statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
 						signature: FunctionSignature {
-							parameters: parameters.iter().map(|p| p.1.clone()).collect(),
+							parameters,
 							return_type: Some(Box::new(TypeAnnotation::UserDefined(UserDefinedType {
 								root: name.clone(),
 								fields: vec![],
@@ -650,13 +650,14 @@ impl<'s> Parser<'s> {
 
 	fn build_function_signature(&self, func_sig_node: &Node, phase: Phase) -> DiagnosticResult<FunctionSignature> {
 		let parameters = self.build_parameter_list(&func_sig_node.child_by_field_name("parameter_list").unwrap())?;
+		let return_type = if let Some(rt) = func_sig_node.child_by_field_name("type") {
+			Some(Box::new(self.build_type_annotation(&rt)?))
+		} else {
+			None
+		};
 		Ok(FunctionSignature {
-			parameters: parameters.iter().map(|p| p.1.clone()).collect(),
-			return_type: if let Some(rt) = func_sig_node.child_by_field_name("type") {
-				Some(Box::new(self.build_type_annotation(&rt)?))
-			} else {
-				None
-			},
+			parameters,
+			return_type,
 			phase,
 		})
 	}
@@ -666,8 +667,7 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_function_definition(&self, func_def_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
-		let parameters = self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap())?;
-
+		let signature = self.build_function_signature(func_def_node, phase)?;
 		let statements = if let Some(external) = func_def_node.child_by_field_name("extern_modifier") {
 			let node_text = self.node_text(&external.named_child(0).unwrap());
 			let node_text = &node_text[1..node_text.len() - 1];
@@ -677,17 +677,8 @@ impl<'s> Parser<'s> {
 		};
 
 		Ok(FunctionDefinition {
-			parameters: parameters.iter().map(|p| (p.0.clone(), p.2)).collect(),
 			body: statements,
-			signature: FunctionSignature {
-				parameters: parameters.iter().map(|p| p.1.clone()).collect(),
-				return_type: if let Some(rt) = func_def_node.child_by_field_name("type") {
-					Some(Box::new(self.build_type_annotation(&rt)?))
-				} else {
-					None
-				},
-				phase,
-			},
+			signature,
 			is_static: func_def_node.child_by_field_name("static").is_some(),
 			captures: RefCell::new(None),
 			span: self.node_span(func_def_node),
@@ -699,7 +690,7 @@ impl<'s> Parser<'s> {
 	/// # Returns
 	/// A vector of tuples for each parameter in the list. The tuples are the name, type and a bool letting
 	/// us know whether the parameter is reassignable or not respectively.
-	fn build_parameter_list(&self, parameter_list_node: &Node) -> DiagnosticResult<Vec<(Symbol, TypeAnnotation, bool)>> {
+	fn build_parameter_list(&self, parameter_list_node: &Node) -> DiagnosticResult<Vec<FunctionParameter>> {
 		let mut res = vec![];
 		let mut cursor = parameter_list_node.walk();
 		for parameter_definition_node in parameter_list_node.named_children(&mut cursor) {
@@ -707,11 +698,11 @@ impl<'s> Parser<'s> {
 				continue;
 			}
 
-			res.push((
-				self.node_symbol(&parameter_definition_node.child_by_field_name("name").unwrap())?,
-				self.build_type_annotation(&parameter_definition_node.child_by_field_name("type").unwrap())?,
-				parameter_definition_node.child_by_field_name("reassignable").is_some(),
-			))
+			res.push(FunctionParameter {
+				name: self.node_symbol(&parameter_definition_node.child_by_field_name("name").unwrap())?,
+				type_annotation: self.build_type_annotation(&parameter_definition_node.child_by_field_name("type").unwrap())?,
+				reassignable: parameter_definition_node.child_by_field_name("reassignable").is_some(),
+			});
 		}
 
 		Ok(res)
@@ -735,15 +726,15 @@ impl<'s> Parser<'s> {
 			"function_type" => {
 				let param_type_list_node = type_node.child_by_field_name("parameter_types").unwrap();
 				let mut cursor = param_type_list_node.walk();
-				let parameters = param_type_list_node
+				let param_types = param_type_list_node
 					.named_children(&mut cursor)
 					.filter_map(|param_type| self.build_type_annotation(&param_type).ok())
 					.collect::<Vec<TypeAnnotation>>();
 				let return_type = type_node
 					.child_by_field_name("return_type")
 					.map(|n| Box::new(self.build_type_annotation(&n).unwrap()));
-				Ok(TypeAnnotation::FunctionSignature(FunctionSignature {
-					parameters,
+				Ok(TypeAnnotation::Function(FunctionTypeAnnotation {
+					param_types,
 					return_type,
 					phase: if type_node.child_by_field_name("inflight").is_some() {
 						Phase::Inflight
@@ -1016,7 +1007,33 @@ impl<'s> Parser<'s> {
 					))
 				}
 			}
-
+			"loop_range" => {
+				let inclusive = if expression_node.child_by_field_name("inclusive").is_some() {
+					Some(true)
+				} else {
+					Some(false)
+				};
+				Ok(Expr::new(
+					ExprKind::Range {
+						start: Box::new(
+							self.build_expression(
+								&expression_node
+									.child_by_field_name("start")
+									.expect("range expression should always include start"),
+							)?,
+						),
+						inclusive: inclusive,
+						end: Box::new(
+							self.build_expression(
+								&expression_node
+									.child_by_field_name("end")
+									.expect("range expression should always include end"),
+							)?,
+						),
+					},
+					expression_span,
+				))
+			}
 			"number" => Ok(Expr::new(
 				ExprKind::Literal(Literal::Number(
 					self.node_text(&expression_node).parse().expect("Number string"),

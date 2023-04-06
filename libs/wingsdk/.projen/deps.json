@@ -177,6 +177,11 @@
       "type": "bundled"
     },
     {
+      "name": "@aws-sdk/client-elasticache",
+      "version": "3.256.0",
+      "type": "bundled"
+    },
+    {
       "name": "@aws-sdk/client-lambda",
       "version": "3.256.0",
       "type": "bundled"

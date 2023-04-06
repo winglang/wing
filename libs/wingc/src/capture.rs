@@ -146,6 +146,10 @@ fn scan_captures_in_expression(
 				res.extend(scan_captures_in_expression(e, env, statement_idx, diagnostics));
 			}
 		}
+		ExprKind::Range { start, end, .. } => {
+			res.extend(scan_captures_in_expression(start, env, statement_idx, diagnostics));
+			res.extend(scan_captures_in_expression(end, env, statement_idx, diagnostics));
+		}
 		ExprKind::Reference(r) => match r {
 			Reference::Identifier(symbol) => {
 				// Lookup the symbol
