@@ -2073,7 +2073,7 @@ supported languages.
 
 ## 5.2 JavaScript
 
-The `extern "<cjs module>"` modifier can be used on method declarations (in classes and resources) to indicate that a method is backed by an implementation imported from a JavaScript module. The module can either be a relative path or a name and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
+The `extern "<commonjs module path or name>"` modifier can be used on method declarations (in classes and resources) to indicate that a method is backed by an implementation imported from a JavaScript module. The module can either be a relative path or a name and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
 
 In the following example, the static inflight method `make_id` is implemented
 in `helper.js`:
