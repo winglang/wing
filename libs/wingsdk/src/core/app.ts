@@ -188,6 +188,11 @@ export abstract class CdktfApp extends App {
 
     super(cdktfStack, "Default");
 
+    // TODO: allow the user to specify custom backends
+    new cdktf.LocalBackend(cdktfStack, {
+      path: "./terraform.tfstate",
+    });
+
     this.outdir = outdir;
     this.isTestEnvironment = props.isTestEnvironment ?? false;
 
