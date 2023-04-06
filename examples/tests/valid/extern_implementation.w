@@ -1,9 +1,5 @@
 bring cloud;
 
-interface IUuidModule {
-    inflight v4(): str;
-}
-
 resource Foo {
   extern "./external_js.js" static get_greeting(name: str): str;
   extern "./external_js.js" static inflight regex_inflight(pattern: str, text: str): bool;

@@ -180,10 +180,10 @@ class $Root extends $stdlib.core.Resource {
 }
 }
 	static get_greeting(name)  {
-	return (require(require.resolve(\`./external_js.js\`, {paths: [process.env.WING_PROJECT_DIR]}))[\\"get_greeting\\"])(name)
+	return (require(require.resolve(\\"./external_js.js\\", {paths: [process.env.WING_PROJECT_DIR]}))[\\"get_greeting\\"])(name)
 }
 static v4()  {
-	return (require(require.resolve(\`uuid\`, {paths: [process.env.WING_PROJECT_DIR]}))[\\"v4\\"])()
+	return (require(require.resolve(\\"uuid\\", {paths: [process.env.WING_PROJECT_DIR]}))[\\"v4\\"])()
 }
 	_toInflight() {
 	
