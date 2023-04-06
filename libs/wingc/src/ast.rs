@@ -417,6 +417,11 @@ pub enum ExprKind {
 		arg_list: ArgList,
 	},
 	Literal(Literal),
+	Range {
+		start: Box<Expr>,
+		inclusive: Option<bool>,
+		end: Box<Expr>,
+	},
 	Reference(Reference),
 	Call {
 		function: Box<Expr>,

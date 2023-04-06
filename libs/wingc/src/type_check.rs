@@ -793,6 +793,14 @@ impl TypeRef {
 		}
 	}
 
+	pub fn is_iterable(&self) -> bool {
+		if let Type::Array(_) | Type::Set(_) | Type::MutArray(_) | Type::MutSet(_) = **self {
+			true
+		} else {
+			false
+		}
+	}
+
 	pub fn is_capturable(&self) -> bool {
 		match &**self {
 			Type::Resource(_) => true,
@@ -1208,6 +1216,18 @@ impl<'a> TypeChecker<'a> {
 					UnaryOperator::Not => self.validate_type(_type, self.types.bool(), unary_exp),
 					UnaryOperator::Minus => self.validate_type(_type, self.types.number(), unary_exp),
 				}
+			}
+			ExprKind::Range {
+				start,
+				inclusive: _,
+				end,
+			} => {
+				let stype = self.type_check_exp(start, env);
+				let etype = self.type_check_exp(end, env);
+
+				self.validate_type(stype, self.types.number(), start);
+				self.validate_type(etype, self.types.number(), end);
+				self.types.add_type(Type::Array(stype))
 			}
 			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env).type_,
 			ExprKind::New {
@@ -1854,6 +1874,13 @@ impl<'a> TypeChecker<'a> {
 				// TODO: Expression must be iterable
 				let exp_type = self.type_check_exp(iterable, env);
 
+				if !exp_type.is_iterable() {
+					self.type_error(TypeError {
+						message: format!("Unable to iterate over \"{}\"", &exp_type),
+						span: iterable.span.clone(),
+					});
+				}
+
 				let iterator_type = match &*exp_type {
 					// These are builtin iterables that have a clear/direct iterable type
 					Type::Array(t) => *t,
@@ -1861,15 +1888,7 @@ impl<'a> TypeChecker<'a> {
 					Type::MutArray(t) => *t,
 					Type::MutSet(t) => *t,
 					Type::Anything => exp_type,
-
-					// TODO: Handle non-builtin iterables
-					t => {
-						self.type_error(TypeError {
-							message: format!("Unable to iterate over \"{}\"", t),
-							span: iterable.span.clone(),
-						});
-						self.types.anything()
-					}
+					_t => self.types.anything(),
 				};
 
 				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.phase, stmt.idx);

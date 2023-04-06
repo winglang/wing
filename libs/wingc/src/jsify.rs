@@ -412,6 +412,23 @@ impl<'a> JSifier<'a> {
 				Literal::Duration(sec) => format!("{}.std.Duration.fromSeconds({})", STDLIB, sec),
 				Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 			},
+			ExprKind::Range { start, inclusive, end } => {
+				match context.phase {
+					Phase::Inflight => format!(
+						"((s,e,i) => {{ function* iterator(start,end,inclusive) {{ let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }}; return iterator(s,e,i); }})({},{},{})",
+						self.jsify_expression(start, context),
+						self.jsify_expression(end, context),
+						inclusive.unwrap()
+					),
+					_ => format!(
+						"{}.std.Range.of({}, {}, {})",
+						STDLIB,
+						self.jsify_expression(start, context),
+						self.jsify_expression(end, context),
+						inclusive.unwrap()
+					)
+				}
+			}
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None, context),
 			ExprKind::Call { function, arg_list } => {
 				let function_type = function.evaluated_type.borrow().unwrap();
