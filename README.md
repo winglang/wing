@@ -21,11 +21,24 @@ It has [distributed computing primitives], a [resource system] that represents c
 
 [![Same object - different interfaces](./logo/diff-interfaces.gif)](https://youtu.be/y7OGRC2f5gk)
 
+## Compilation to Terraform and Javascript
+Wing applications compile to Terraform and JavaScript that are ready to deploy
+to your favorite cloud provider. Support for more provisioning engines and clouds is planned.
+Wing's [compiler plugins] can be used to customize the compilation output. For example, make all buckets that are exposed to the internet encrypted.
+
+[![Compile to different clouds](./logo/compile-diff-clouds.gif)](https://youtu.be/gr4ewOJGkfo)
+
+## Local simuation
+Wing provides a built-in local simulator, and an observability & debugging [console] for easy testing and fast iteration loops.
+
+[![Compile to different clouds](./logo/console.gif)](https://youtu.be/Gqn1hYPEwqg)
+
+## Cloud abstraction
 While most programming languages think about computers as machines, in Wing, **_the cloud is the computer_**.
-Like traditional languages abstract the computer, wing abstarcts the cloud with a [standard library] of the basic cloud services. The Wing compiler uses a dependency injection mechanism to convert these abstract services into the configured ones for each target cloud. It is possible to create and use external libraries too, including import of any Terraform resource.
+Similar to how traditional languages abstract the computer, wing abstarcts the cloud with a [standard library] of the basic cloud services. The Wing compiler uses a dependency injection mechanism to convert these abstract services into the configured ones for each target cloud. It is possible to create and use external libraries too, including import of any Terraform resource.
 
 ```js
-// This line imports the standard library"
+// This line imports the standard library.
 bring cloud;
 
 // We are instantiating an abstract bucket here.
@@ -38,12 +51,12 @@ Since the Wing compiler sees the entire application, including its infrastrucrur
 ```js
 bring cloud;
 
-// This code runs at compile time to provision the bucket
+// This code runs at compile time to provision the bucket.
 let bucket = new cloud.Bucket();
 
-// This code runs at compile time to provision the function
+// This code runs at compile time to provision the function.
 new cloud.Function(inflight () => {
-  // This code runs later, on other machines, and interacts with the provisioned bucket
+  // This code runs later, on other machines, and interacts with the provisioned bucket.
   // The compiler knows to generate the network topology and IAM policies needed for the function to be able to put
   // a file in the bucket. It also knows to capture the bucket at deployment time and pass the info that is needed
   // for the function to interact with it at runtime.
@@ -51,21 +64,13 @@ new cloud.Function(inflight () => {
 });
 ```
 
-**The compilation artifacts are JavaScript and Terraform** (with more provisioning engines on the way).
-Wing's [compiler plugins] can be used to customize the compilation output. For example, make all buckets that are exposed to the internet encrypted.
-
-[![Compile to different clouds](./logo/compile-diff-clouds.gif)](https://youtu.be/gr4ewOJGkfo)
-
-Wing provides a built-in local simulator, and an observability & debugging [console] to reduce cognitive load and context switching, enabling developers to stay in their creative flow.
-
-[![Compile to different clouds](./logo/console.gif)](https://youtu.be/Gqn1hYPEwqg)
-
-Wing's creator is [Elad Ben-Israel], who is also the creator of the [AWS CDK].
+## Wing's creator
+While there are many developers [contributing](#contributors) to the project, it started with the vision of [Elad Ben-Israel], who is also the creator of the [AWS CDK].
 
 [cloud-oriented programming language]: https://docs.winglang.io/#what-is-a-cloud-oriented-language
 [distributed computing primitives]: https://docs.winglang.io/concepts/inflights
 [resource system]: https://docs.winglang.io/concepts/resources
-[other optimizations for cloud programming]: #what-are-the-main-features-of-wing-that-make-it-suitable-for-cloud-development
+[other optimizations for cloud programming]: #main-features-that-make-wing-tailored-for-cloud-development
 [compiler plugins]: https://docs.winglang.io/reference/compiler-plugins
 [Elad Ben-Israel]: https://github.com/eladb
 [AWS CDK]: https://github.com/aws/aws-cdk
@@ -85,7 +90,7 @@ As seen below, Wing has phase modifiers that are understood by the language serv
 
 As can be seen in the below section, creating a new language that is tailored to the cloud from the ground up also allows us to assemble a variety of features (some of which exist in other languages, of course) that, when put together, offer a delightful cloud development experience.
 
-## What are the main features of Wing that make it suitable for cloud development
+## Main features that make Wing tailored for cloud development
 1. [Cloud services](https://docs.winglang.io/concepts/resources) are first-class citizens.
     - They have [phase modifiers](https://docs.winglang.io/reference/spec#13-phase-modifiers) with different interfaces for config or runtime (preflight and inflight).
 2. Higher level of cloud abstraction.
@@ -103,7 +108,7 @@ As can be seen in the below section, creating a new language that is tailored to
 ## What does the development flow look like with Wing
 1. Write code that targets an abstract cloud.
 2. Visualize, test, and interact with it using the Wing console and its instant hot reloading.
-3. Compile to JS and Terraform, targeting the desired cloud and provisioning engine
+3. Compile to JS and Terraform, targeting the desired cloud and provisioning engine.
 4. Deploy and manage with your existing tools.
 
 [![Short demo](./logo/demo.gif)](https://youtu.be/x0xfIoY5y6E)
