@@ -96,10 +96,6 @@ Some of these features include:
 
 For a more in-depth look at Wing's features and benefits, check out our [documentation](https://docs.winglang.io/).
 
-## Demo 🎬
-
-[![Short demo](./logo/demo.gif)](https://youtu.be/_c4U6ffumw8)
-
 ## FAQs ❓
 
 ### Why Wing, not just another library or framework? 🤔
