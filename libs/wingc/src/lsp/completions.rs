@@ -300,17 +300,14 @@ fn get_completions_from_class(
 			} else {
 				Some(CompletionItemKind::FIELD)
 			};
+			let insert_text = if kind == Some(CompletionItemKind::METHOD) {
+				Some(format!("{}($0)", symbol_data.0))
+			} else {
+				Some(symbol_data.0.to_string())
+			};
 
 			Some(CompletionItem {
-				insert_text: Some(format!(
-					"{}{}",
-					symbol_data.0,
-					if kind == Some(CompletionItemKind::METHOD) {
-						"($0)"
-					} else {
-						""
-					}
-				)),
+				insert_text,
 				label: symbol_data.0.clone(),
 				detail: Some(variable.type_.to_string()),
 				kind,
@@ -358,9 +355,16 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 			} else {
 				Some(CompletionItemKind::VARIABLE)
 			};
+			let insert_text = if kind == Some(CompletionItemKind::FUNCTION) {
+				Some(format!("{}($0)", name))
+			} else {
+				Some(name.to_string())
+			};
 			CompletionItem {
 				label: name.to_string(),
+				insert_text,
 				detail: Some(v.type_.to_string()),
+				insert_text_format: Some(InsertTextFormat::SNIPPET),
 				kind,
 				..Default::default()
 			}
