@@ -195,6 +195,7 @@ Foo._annotateInflight(\\"regex_inflight\\", {});
 Foo._annotateInflight(\\"get_uuid\\", {});
 Foo._annotateInflight(\\"get_data\\", {});
 Foo._annotateInflight(\\"call\\", {});
+Foo._annotateInflight(\\"$init\\", {});
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '((Foo.get_greeting(\\"Wingding\\")) === \\"Hello, Wingding!\\")'\`)})(((Foo.get_greeting(\\"Wingding\\")) === \\"Hello, Wingding!\\"))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '((Foo.v4()).length === 36)'\`)})(((Foo.v4()).length === 36))};
     const f = new Foo(this,\\"Foo\\");

@@ -945,9 +945,14 @@ impl<'a> JSifier<'a> {
 		let resource_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
 		// Get all references between inflight methods and preflight fields
-		let refs = self.find_inflight_references(class);
+		let mut refs = self.find_inflight_references(class);
+
 		// Get fields to be captured by resource's client
 		let captured_fields = self.get_captures(resource_type);
+
+		// Add init's refs
+		let init_refs = BTreeMap::from_iter(captured_fields.iter().map(|f| (format!("this.{f}"), BTreeSet::new())));
+		refs.push(("$init".to_string(), init_refs));
 
 		// Jsify inflight client
 		let inflight_methods = class
@@ -1200,22 +1205,9 @@ impl<'a> JSifier<'a> {
 		for (method_name, function_def) in inflight_methods {
 			// visit statements of method and find all references to fields ("this.xxx")
 			let visitor = FieldReferenceVisitor::new(&function_def);
-			let (mut refs, find_diags) = visitor.find_refs();
+			let (refs, find_diags) = visitor.find_refs();
 
 			self.diagnostics.extend(find_diags);
-
-			// Add no-ops for fields that are not referenced
-			let resource_fields = resource_class
-				.fields
-				.iter()
-				.filter(|f| f.phase == Phase::Preflight)
-				.map(|f| format!("this.{}", f.name.name));
-
-			for f in resource_fields {
-				if !refs.contains_key(f.as_str()) {
-					refs.insert(f, BTreeSet::new());
-				}
-			}
 
 			// add the references to the result
 			result.push((method_name.name.clone(), refs));
