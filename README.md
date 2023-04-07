@@ -16,7 +16,7 @@
 
 # Welcome! :wave:
 
-**Wing** is a new open-source, statically-typed, [cloud-oriented programming language]. 
+**Wing** is an open-source, statically-typed, [cloud-oriented programming language]. 
 It has [distributed computing primitives], a [resource system] that represents cloud services with their 2 different phases (configuration & runtime), and [other optimizations for cloud programming].
 
 [![Same object - different interfaces](./logo/diff-interfaces.gif)](https://youtu.be/y7OGRC2f5gk)
@@ -77,7 +77,7 @@ While there are many developers [contributing](#contributors) to the project, it
 [console]: https://docs.winglang.io/getting-started/console
 [Standard library]: https://docs.winglang.io/reference/wingsdk-spec
 
-## Why a language? (and not an SDK or platform)
+## Why a language? (and not a library or platform)
 We believe that the cloud is a new kind of computer that requires a [new programming paradigm](https://docs.winglang.io/#what-is-a-cloud-oriented-language) to fully utilize it.
 
 While it is possible to use this new paradigm with existing languages, we believe that a language that natively supports it will take it to the next level, in a way that is impossible to accomplish with existing ones.
