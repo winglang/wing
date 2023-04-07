@@ -920,10 +920,18 @@ impl<'a> JSifier<'a> {
 		let resource_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
 		// Get all references between inflight methods and preflight fields
-		let refs = self.find_inflight_references(class);
+		let mut refs = self.find_inflight_references(class);
 
 		// Get fields to be captured by resource's client
 		let captured_fields = self.get_captures(resource_type);
+
+		// Add init's refs
+		let init_refs = BTreeMap::from_iter(
+			captured_fields
+				.iter()
+				.map(|(f, ..)| (format!("this.{f}"), BTreeSet::new())),
+		);
+		refs.push(("$init".to_string(), init_refs));
 
 		// Jsify inflight client
 		let inflight_methods = class
