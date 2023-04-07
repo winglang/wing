@@ -1,6 +1,6 @@
 use std::cmp::max;
 
-use lsp_types::{CompletionItem, CompletionItemKind, CompletionResponse};
+use lsp_types::{CompletionItem, CompletionItemKind, CompletionResponse, InsertTextFormat};
 use tree_sitter::Point;
 
 use crate::ast::{Expr, ExprKind, Phase, Reference, Scope};
@@ -302,9 +302,19 @@ fn get_completions_from_class(
 			};
 
 			Some(CompletionItem {
+				insert_text: Some(format!(
+					"{}{}",
+					symbol_data.0,
+					if kind == Some(CompletionItemKind::METHOD) {
+						"($0)"
+					} else {
+						""
+					}
+				)),
 				label: symbol_data.0.clone(),
 				detail: Some(variable.type_.to_string()),
 				kind,
+				insert_text_format: Some(InsertTextFormat::SNIPPET),
 				..Default::default()
 			})
 		})
@@ -315,7 +325,7 @@ fn get_completions_from_class(
 fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> CompletionItem {
 	match symbol_kind {
 		SymbolKind::Type(t) => CompletionItem {
-			label: t.to_string(),
+			label: name.to_string(),
 			kind: Some(match **t {
 				Type::Array(_)
 				| Type::MutArray(_)
@@ -339,13 +349,7 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 				Type::Enum(_) => CompletionItemKind::ENUM,
 				Type::Interface(_) => CompletionItemKind::INTERFACE,
 			}),
-			detail: Some(
-				symbol_kind
-					.as_type()
-					.map(|t| if t.as_resource().is_some() { "resource" } else { "class" })
-					.unwrap_or("class")
-					.to_string(),
-			),
+			detail: Some(if t.as_resource().is_some() { "resource" } else { "class" }.to_string()),
 			..Default::default()
 		},
 		SymbolKind::Variable(v) => {
@@ -362,7 +366,7 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 			}
 		}
 		SymbolKind::Namespace(n) => CompletionItem {
-			label: n.name.clone(),
+			label: name.to_string(),
 			detail: Some(format!("bring {}", n.name)),
 			kind: Some(CompletionItemKind::MODULE),
 			..Default::default()
