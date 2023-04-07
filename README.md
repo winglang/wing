@@ -26,16 +26,14 @@
 Introducing **Wing**, an open-source, statically-typed, cloud-oriented programming language that is ready to give your cloud development a lift! 💨
 We're here to make your journey through the skies of AWS and other cloud providers more enjoyable and productive. 😎
 
-Wing understands that the cloud is the computer 💻, so it abstracts the cloud to let developers work at a higher level of abstraction and select their target cloud at compile time. The result? The compilation artifacts are JavaScript and Terraform! 🎯
-
 Created by [Elad Ben-Israel](https://github.com/eladb), the mastermind behind the [AWS CDK](https://github.com/aws/aws-cdk), Wing is designed to make your cloud development soar! 🦅
 
 ## What's so special about Wing? 🤔
 
-Wing takes a unique approach to cloud development - instead of thinking about computers as machines, it treats the ***cloud as the computer***. ☁️
+Wing takes a unique approach to cloud development - instead of thinking about computers as individuals machines 💻, it treats the ***entire cloud as the computer***. ☁️
 By abstracting the cloud, Wing allows anyone building cloud applications to focus on their business logic and choose the target cloud at compile time.
 
-While your main code is written in Wing, the compilation artifacts are JavaScript and Terraform, with more provisioning engines on the way.
+The result? While your main code is written in Wing, the compilation artifacts are JavaScript and Terraform (with more provisioning engines on the way), meaning Wing can fit seamlessly into your existing stack! 🎯
 
 In addition, Wing provides a built-in local simulator, and an observability & debugging [console](https://docs.winglang.io/getting-started/console), making it easier for you to reduce cognitive load and context switching, enabling you to stay in your creative flow. 🎨
 
@@ -50,7 +48,7 @@ let bucket = new cloud.Bucket();
 // Here we are able to interact with infra config of the bucket
 bucket.stateful = true;
 
-// An `inflight` represents code that runs later, on other machines
+// An `inflight` represents code that runs later, on other machines,
 // and can interact with any cloud resources
 let hello_world = inflight () => {
   bucket.put("hello.txt", "Hello, World!");
@@ -63,14 +61,15 @@ new cloud.Function(hello_world);
 
 Ready to take off? 🛫
 
-## Getting started 🛠️
+### Under Construction 🚧
 
-> **Warning**
-> Wing is in its alpha stage, and is not recommended for production yet.
-> Many features are still missing, and APIs will dramatically evolve.
-> However, we're excited for you to take part in influencing every aspect of this project!
->
-> Our <a href="https://docs.winglang.io/status">Project Status</a> page includes more information about our roadmap. 👷‍♀️
+Wing is in its very early stages of development and not recommended for production use.
+Many features are still missing, and APIs will dramatically evolve in the coming months.
+But we're excited for you to take part in influencing every aspect of this project!
+
+Our [project status](https://docs.winglang.io/status) page includes more information about stability and roadmap. 👷‍♀️
+
+## Getting started 🛠️
 
 You can install Wing in a few simple steps:
 
@@ -121,7 +120,7 @@ Want to help Wing take flight?
 Check out our [contribution guide](https://github.com/winglang/wing/blob/main/CONTRIBUTING.md) to learn how to set up a development environment and contribute to the project.
 We appreciate your support and look forward to soaring to new heights together! 🚀
 
-We are grateful to our entire community 🙏 for contributing bug fixes and improvements:
+We are incredibly grateful to our entire community 🙏 for contributing bug fixes and improvements:
 
 <a href="https://github.com/winglang/wing/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=winglang/wing" />
