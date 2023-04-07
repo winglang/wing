@@ -86,7 +86,8 @@ class $Root extends $stdlib.core.Resource {
 	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Foo({data: \${data_client}}))\`);
 }
 }
-Foo._annotateInflight(\\"get_stuff\\", {\\"this.data\\": { ops: [] },\\"this.data.field0\\": { ops: [] }});
+Foo._annotateInflight(\\"get_stuff\\", {\\"this.data.field0\\": { ops: [] }});
+Foo._annotateInflight(\\"$init\\", {\\"this.data\\": { ops: [] }});
     const x = {
 \\"field0\\": \\"Sup\\",}
 ;
