@@ -64,13 +64,10 @@ new cloud.Function(inflight () => {
 });
 ```
 
-## Wing's creator
-While there are many developers [contributing](#contributors) to the project, it started with the vision of [Elad Ben-Israel], who is also the creator of the [AWS CDK].
-
 [cloud-oriented programming language]: https://docs.winglang.io/#what-is-a-cloud-oriented-language
 [distributed computing primitives]: https://docs.winglang.io/concepts/inflights
 [resource system]: https://docs.winglang.io/concepts/resources
-[other optimizations for cloud programming]: #main-features-that-make-wing-tailored-for-cloud-development
+[other optimizations for cloud programming]: what-are-the-main-features-that-make-wing-tailored-for-cloud-development
 [compiler plugins]: https://docs.winglang.io/reference/compiler-plugins
 [Elad Ben-Israel]: https://github.com/eladb
 [AWS CDK]: https://github.com/aws/aws-cdk
@@ -78,7 +75,6 @@ While there are many developers [contributing](#contributors) to the project, it
 [Standard library]: https://docs.winglang.io/reference/wingsdk-spec
 
 ## This is Alpha
-
 Wing is in its very early stages of development and not recommended for
 production use. Many features are still missing, and APIs will dramatically
 evolve in the coming months. We are excited for anyone to take part in
@@ -87,7 +83,11 @@ influencing the direction of every part of this project.
 Our <a href="https://docs.winglang.io/status">Project Status</a> page includes
 more information about stability and roadmap 👷‍♀️
 
-## Why a language? (and not a library or platform)
+</br>
+
+## FAQ
+
+### Why is this a language (and not a library or platform)?
 We believe that the cloud is a new kind of computer that requires a [new programming paradigm](https://docs.winglang.io/#what-is-a-cloud-oriented-language) to fully utilize it.
 
 While it is possible to use this new paradigm with existing languages, we believe that a language that natively supports it will take it to the next level, in a way that is impossible to accomplish with existing ones.
@@ -101,7 +101,9 @@ As seen below, Wing has phase modifiers that are understood by the language serv
 
 As can be seen in the below section, creating a new language that is tailored to the cloud from the ground up also allows us to assemble a variety of features (some of which exist in other languages, of course) that, when put together, offer a delightful cloud development experience.
 
-## Main features that make Wing tailored for cloud development
+</br>
+
+### What are the main features that make Wing tailored for cloud development?
 1. [Cloud services](https://docs.winglang.io/concepts/resources) are first-class citizens.
     - They have [phase modifiers](https://docs.winglang.io/reference/spec#13-phase-modifiers) with different interfaces for config or runtime (`preflight` and `inflight`).
 2. Higher level of cloud abstraction.
@@ -116,7 +118,9 @@ As can be seen in the below section, creating a new language that is tailored to
 7. [Native JSON support](https://docs.winglang.io/reference/spec#114-json-type).
 8. More in the [spec](https://docs.winglang.io/reference/spec).
 
-## What does the development flow look like with Wing
+</br>
+
+### What does the development flow look like with Wing?
 1. Write code that targets an abstract cloud.
 2. Visualize, test, and interact with it using the Wing console and its instant hot reloading.
 3. Compile to JS and Terraform, targeting the desired cloud and provisioning engine.
@@ -124,7 +128,14 @@ As can be seen in the below section, creating a new language that is tailored to
 
 [![Short demo](./logo/demo.gif)](https://youtu.be/x0xfIoY5y6E)
 
-## Is there a company behind Wing / what is the business model
+</br>
+
+### Who created Wing?
+While there are many developers [contributing](#contributors) to the project, it started with the vision of [Elad Ben-Israel], who is also the creator of the [AWS CDK].
+
+</br>
+
+### Is there a company behind Wing / what is the business model?
 [Monada](https://monada.co) is leading the development of Winglang.
 The language and local simulator will always remain open-source and free to use, with plans to eventually contribute them to a dedicated foundation.
 Monada's business model is planned around connecting the Wing console to production applications and charging for the enhanced management and observability experience it will provide. Use of the console for development will always remain free.
@@ -133,8 +144,12 @@ By choosing this approach, Monada aligns its interests with those of the communi
 
 Since Wing is compiled to Javascript and Terraform, developers will always be able to continue to use their existing management and observability solutions with it. We believe that because the Wing compiler sees the "entire picture" of the application, a management console that taps into that knowledge can offer very competitive features. As the compiler is open-source, other companies will be able to offer competing consoles with the same features.
 
-## Why you should consider Wing
+</br>
+
+### Why you should consider Wing?
 [Details here.](https://docs.winglang.io/#why-you-should-consider-wing)
+
+</br>
 
 ## Installation
 
@@ -142,6 +157,8 @@ Since Wing is compiled to Javascript and Terraform, developers will always be ab
 - [Wing CLI](https://docs.winglang.io/getting-started/installation#wing-cli)
 - [Wing IDE Extension](https://docs.winglang.io/getting-started/installation#wing-ide-extension)
 - [Wing Console](https://docs.winglang.io/getting-started/installation#wing-console)
+
+</br>
 
 ## Getting Started
 
@@ -157,11 +174,15 @@ For a comprehensive reference of the language, check out the [Wing Language
 Specification](https://docs.winglang.io/reference/spec) and the [API
 Reference](https://docs.winglang.io/reference/sdk).
 
+</br>
+
 ## Community
 
 We all hang out on [Wing Slack]. Come as you are, say hi, ask questions, help
 friends, geek out! Alternatively, post any question you have on [GitHub
 Discussions](https://github.com/winglang/wing/discussions).
+
+</br>
 
 ## Contributing
 
@@ -175,11 +196,15 @@ We are also actively tracking planned features in our roadmap:
 - [Wing Language Roadmap](https://github.com/orgs/winglang/projects/1/views/1)
 - [Wing SDK Roadmap](https://github.com/orgs/winglang/projects/3/views/1)
 
+</br>
+
 ## Contributors
 
 <a href="https://github.com/winglang/wing/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=winglang/wing" />
 </a>
+
+</br>
 
 ## License
 
