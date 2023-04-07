@@ -32,7 +32,7 @@ arch -arm64 /bin/zsh
 ```
 Install node with `arm64` executable via [nvm](https://github.com/nvm-sh/nvm):
 ```sh
-nvm use <NODE_VERSION>
+nvm install <NODE_VERSION>
 ```
 Check the installed node runtime architecture:
 ```sh
