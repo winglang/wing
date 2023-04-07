@@ -61,6 +61,8 @@ let hello_world = inflight () => {
 new cloud.Function(hello_world);
 ```
 
+Ready to take off? 🛫
+
 ## Getting started 🛠️
 
 You can install Wing in a few simple steps:
