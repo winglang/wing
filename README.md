@@ -42,14 +42,17 @@ By providing a built-in local simulator, and an observability & debugging [conso
 
 [![Compile to different clouds](./logo/console.gif)](https://youtu.be/Gqn1hYPEwqg)
 
-Wing's creator is Elad Ben-Israel, who was the creator of the AWS CDK.
+Wing's creator is [Elad Ben-Israel], who is the creator of the [AWS CDK].
 
 [console]: https://docs.winglang.io/getting-started/console
 [cloud-oriented programming language]: https://docs.winglang.io/#what-is-a-cloud-oriented-language
 [distributed computing primitives]: https://docs.winglang.io/concepts/inflights
-[resource system]:https://docs.winglang.io/concepts/resources
+[resource system]: https://docs.winglang.io/concepts/resources
 [other optimizations for cloud programming]: #what-are-the-main-features-of-wing-that-make-it-suitable-for-cloud-development
 [compiler plugins]: https://docs.winglang.io/reference/compiler-plugins
+[Elad Ben-Israel]: https://github.com/eladb
+[AWS CDK]: https://github.com/aws/aws-cdk
+
 
 Sample wing code:
 
@@ -71,21 +74,40 @@ new cloud.Function(inflight () => {
 ```
 
 ## Why a language? (and not an SDK or platform)
-We believe that the cloud is a new kind of computer that requires a [new programming paradigm](https://docs.winglang.io/#what-is-a-cloud-oriented-language) in order to fully utilize it.
-This new paradigm needs a language that natively supports it in order to give the best development experience.
+We believe that the cloud is a new kind of computer that requires a [new programming paradigm](https://docs.winglang.io/#what-is-a-cloud-oriented-language) to fully utilize it.
 
-For example, 
-unlike a regular computer, the cloud is a big distributed machine, and it needs strong distributed programming primitives to fully leverage the power of a distributed system. Wing's inflight functions serve that purpose in wing 
+While it is possible to use this new paradigm with existing languages, we believe that a language that natively supports it will take it to the next level, in a way that is impossible to accomplish with existing ones.
+
+Inflight functions and resources are a great example. We believe it is impossible to ensure this level of isolation and interaction semantics in existing languages through a library, or even through a compiler extension. We've seen some worthy efforts in projects like [Pulumi's Function Serialization](https://www.pulumi.com/docs/intro/concepts/function-serialization/), [Punchcard](https://github.com/sam-goodwin/punchcard) and [Functionless](https://functionless.org/), and in all of these cases, there are either compromises in safety (e.g. it is possible to capture mutable objects) or in the programming model (e.g. type system is too complex).
+
+With Wing we believe we can provide a very elgant solution for both.
+As seen below, wing has phase modifiers that are understood by the language server, which allows it to suggest different completion options for the same object, based on the execution phase from which is it accessed.
+[![Same object - different interfaces](./logo/diff-interfaces.gif)](https://youtu.be/y7OGRC2f5gk)
+
+As can be seen in the below section, creating a new language that is tailored to the cloud from the groud up also allows us to assemble a variety of features (some of which exist in other languages of course), that put together offer a delightful cloud development experience.
 
 ## What are the main features of wing that make it suitable for cloud development
+1. [Cloud services](https://docs.winglang.io/concepts/resources) are first-class citizens.
+    - They have [phase modifiers](https://docs.winglang.io/reference/spec#13-phase-modifiers) with different interfaces for config or runtime (preflight and inflight).
+2. Higher level of cloud abstarction.
+    - [Standard library](https://docs.winglang.io/reference/wingsdk-spec) that abstracts main cloud services.
+    - Built-in dependency injection system that resolves services to specific clouds at compile time.
+3. [Distributed computing primitives](https://docs.winglang.io/concepts/inflights).
+    - [Default immutability](https://docs.winglang.io/blog/2023/02/02/good-cognitive-friction#immutable-by-default).
+    - [Implicit async](https://docs.winglang.io/reference/spec#113-asynchronous-model), explicit deffer.
+4. [compiler plugins](https://docs.winglang.io/reference/compiler-plugins) that can be used to customize to the compilation output, such as infrastructure definitions
+5. [Javascript interoperability](https://docs.winglang.io/reference/spec#5-interoperability)
+6. Automatic generation of IAM policies and other cloud mechanics based on intent.
+7. [Native JSON support](https://docs.winglang.io/reference/spec#114-json-type).
+8. More in the [spec](https://docs.winglang.io/reference/spec).
 
 ## What does the development flow look like with wing
 1. Write code that targets an abstract cloud.
 2. Visualize, test, and interact with it using the Wing console and its instant hot reloading.
 3. Compile to JS and Terraform, targeting the desired cloud and provisioning engine.
 4. Deploy and manage with your existing tools.
-[![Short demo](./logo/demo.gif)](https://youtu.be/x0xfIoY5y6E)
 
+[![Short demo](./logo/demo.gif)](https://youtu.be/x0xfIoY5y6E)
 
 ## Is there a company behind wing / what is the business model
 Monada inc. is leading the development of winglang.
