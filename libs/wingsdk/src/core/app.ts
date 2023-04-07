@@ -189,6 +189,7 @@ export abstract class CdktfApp extends App {
     super(cdktfStack, "Default");
 
     // TODO: allow the user to specify custom backends
+    // https://github.com/winglang/wing/issues/2003
     new cdktf.LocalBackend(cdktfStack, {
       path: "./terraform.tfstate",
     });
