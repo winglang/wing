@@ -23,7 +23,7 @@ It has [distributed computing primitives], a [resource system] that represents c
 
 ## Compilation to Terraform and Javascript
 Wing applications compile to Terraform and JavaScript that are ready to deploy
-to your favorite cloud provider. Support for more provisioning engines and clouds is planned.
+to your favorite cloud provider. Support for more provisioning engines is planned.
 Wing's [compiler plugins] can be used to customize the compilation output. For example, make all buckets that are exposed to the internet encrypted.
 
 [![Compile to different clouds](./logo/compile-diff-clouds.gif)](https://youtu.be/gr4ewOJGkfo)
