@@ -77,22 +77,33 @@ While there are many developers [contributing](#contributors) to the project, it
 [console]: https://docs.winglang.io/getting-started/console
 [Standard library]: https://docs.winglang.io/reference/wingsdk-spec
 
+## This is Alpha
+
+Wing is in its very early stages of development and not recommended for
+production use. Many features are still missing, and APIs will dramatically
+evolve in the coming months. We are excited for anyone to take part in
+influencing the direction of every part of this project.
+
+Our <a href="https://docs.winglang.io/status">Project Status</a> page includes
+more information about stability and roadmap 👷‍♀️
+
 ## Why a language? (and not a library or platform)
 We believe that the cloud is a new kind of computer that requires a [new programming paradigm](https://docs.winglang.io/#what-is-a-cloud-oriented-language) to fully utilize it.
 
 While it is possible to use this new paradigm with existing languages, we believe that a language that natively supports it will take it to the next level, in a way that is impossible to accomplish with existing ones.
 
-Inflight functions and resources are a great example. We believe it is impossible to ensure this level of isolation and interaction semantics in existing languages through a library, or even through a compiler extension. We've seen some worthy efforts in projects like [Pulumi's Function Serialization](https://www.pulumi.com/docs/intro/concepts/function-serialization/), [Punchcard](https://github.com/sam-goodwin/punchcard) and [Functionless](https://functionless.org/), and in all of these cases, there are either compromises in safety (e.g. it is possible to capture mutable objects) or in the programming model (e.g. type system is too complex).
+`Inflight` functions and resources are a great example. We believe it is impossible to ensure this level of isolation and interaction semantics in existing languages through a library, or even through a compiler extension. We've seen some worthy efforts in projects like [Pulumi's Function Serialization](https://www.pulumi.com/docs/intro/concepts/function-serialization/) and [Functionless](https://functionless.org/), and in all of these cases, there are either compromises in safety (e.g. it is possible to capture mutable objects) or in the programming model (e.g. type system is too complex).
 
 With Wing, we believe we can provide a very elegant solution for both.
 As seen below, Wing has phase modifiers that are understood by the language server, which allows it to suggest different completion options for the same object, based on the execution phase from which is it accessed.
+
 [![Same object - different interfaces](./logo/diff-interfaces.gif)](https://youtu.be/y7OGRC2f5gk)
 
 As can be seen in the below section, creating a new language that is tailored to the cloud from the ground up also allows us to assemble a variety of features (some of which exist in other languages, of course) that, when put together, offer a delightful cloud development experience.
 
 ## Main features that make Wing tailored for cloud development
 1. [Cloud services](https://docs.winglang.io/concepts/resources) are first-class citizens.
-    - They have [phase modifiers](https://docs.winglang.io/reference/spec#13-phase-modifiers) with different interfaces for config or runtime (preflight and inflight).
+    - They have [phase modifiers](https://docs.winglang.io/reference/spec#13-phase-modifiers) with different interfaces for config or runtime (`preflight` and `inflight`).
 2. Higher level of cloud abstraction.
     - [Standard library](https://docs.winglang.io/reference/wingsdk-spec) that abstracts main cloud services.
     - Built-in dependency injection system that resolves services to specific clouds at compile time.
@@ -121,16 +132,6 @@ Monada's business model is planned around connecting the Wing console to product
 By choosing this approach, Monada aligns its interests with those of the community, incentivizing itself to actively support the Wing ecosystem. As Wing usage increases, it creates a potential user base for the production console's monetizable management and observability features, which are reliant on the managed app's code being written in Wing.
 
 Since Wing is compiled to Javascript and Terraform, developers will always be able to continue to use their existing management and observability solutions with it. We believe that because the Wing compiler sees the "entire picture" of the application, a management console that taps into that knowledge can offer very competitive features. As the compiler is open-source, other companies will be able to offer competing consoles with the same features.
-
-## This is Alpha
-
-Wing is in its very early stages of development and not recommended for
-production use. Many features are still missing, and APIs will dramatically
-evolve in the coming months. We are excited for anyone to take part in
-influencing the direction of every part of this project.
-
-Our <a href="https://docs.winglang.io/status">Project Status</a> page includes
-more information about stability and roadmap 👷‍♀️
 
 ## Why you should consider Wing
 [Details here.](https://docs.winglang.io/#why-you-should-consider-wing)
