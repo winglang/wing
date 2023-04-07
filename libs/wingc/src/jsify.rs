@@ -1,4 +1,7 @@
+mod codemaker;
+
 use aho_corasick::AhoCorasick;
+use const_format::formatcp;
 use indoc::formatdoc;
 use itertools::Itertools;
 
@@ -18,20 +21,23 @@ use sha2::{Digest, Sha256};
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, ClassField, Constructor, Expr, ExprKind, FunctionBody,
-		FunctionDefinition, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
+		FunctionDefinition, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
 		TypeAnnotation, UnaryOperator, UserDefinedType,
 	},
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
-	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, VariableInfo},
+	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, Type, TypeRef, VariableInfo},
 	utilities::snake_case_to_camel_case,
 	visit::{self, Visit},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
 };
 
+use self::codemaker::CodeMaker;
+
 const STDLIB: &str = "$stdlib";
+const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
 const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
+
 const INFLIGHT_CLIENTS_DIR: &str = "clients";
-const EXTERN_DIR: &str = "extern";
 
 const TARGET_CODE: &str = r#"
 function __app(target) {
@@ -51,9 +57,16 @@ function __app(target) {
 			throw new Error(`Unknown WING_TARGET value: "${process.env.WING_TARGET ?? ""}"`);
 	}
 }
-const $App = __app(process.env.WING_TARGET);
+const $AppBase = __app(process.env.WING_TARGET);
 "#;
-const TARGET_APP: &str = "$App";
+
+const ENV_WING_IS_TEST: &str = "$wing_is_test";
+const OUTDIR_VAR: &str = "$outdir";
+
+const APP_CLASS: &str = "$App";
+const APP_BASE_CLASS: &str = "$AppBase";
+
+const ROOT_CLASS: &str = "$Root";
 
 const INFLIGHT_OBJ_PREFIX: &str = "$Inflight";
 
@@ -135,26 +148,50 @@ impl<'a> JSifier<'a> {
 
 		if self.shim {
 			output.push(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
-			output.push(format!("const $outdir = process.env.WING_SYNTH_DIR ?? \".\";"));
+			output.push(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
+			output.push(format!(
+				"const {} = process.env.WING_IS_TEST === \"true\";",
+				ENV_WING_IS_TEST
+			));
 			output.push(TARGET_CODE.to_owned());
 		}
 
 		output.append(&mut imports);
 
 		if self.shim {
-			js.insert(
-				0,
-				format!(
-					"super({{ outdir: $outdir, name: \"{}\", plugins: $plugins }});\n",
-					self.app_name
-				),
-			);
-			output.push(format!(
-				"class MyApp extends {} {{\nconstructor() {}\n}}",
-				TARGET_APP,
-				JSifier::render_block(js)
+			let mut root_class = CodeMaker::default();
+			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
+			root_class.open("constructor(scope, id) {");
+			root_class.line(format!("super(scope, id);"));
+			root_class.add_lines(js);
+			root_class.close("}");
+			root_class.close("}");
+
+			let mut app_wrapper = CodeMaker::default();
+			app_wrapper.open(format!("class {} extends {} {{", APP_CLASS, APP_BASE_CLASS));
+			app_wrapper.open("constructor() {");
+			app_wrapper.line(format!(
+				"super({{ outdir: {}, name: \"{}\", plugins: $plugins, isTestEnvironment: {} }});",
+				OUTDIR_VAR, self.app_name, ENV_WING_IS_TEST
 			));
-			output.push(format!("new MyApp().synth();"));
+			app_wrapper.open(format!("if ({}) {{", ENV_WING_IS_TEST));
+			app_wrapper.line(format!("new {}(this, \"env0\");", ROOT_CLASS));
+			app_wrapper.line("const $test_runner = this.testRunner;".to_string());
+			app_wrapper.line("const $tests = $test_runner.findTests();".to_string());
+			app_wrapper.open("for (let $i = 1; $i < $tests.length; $i++) {");
+			app_wrapper.line(format!("new {}(this, \"env\" + $i);", ROOT_CLASS));
+			app_wrapper.close("}");
+			app_wrapper.close("} else {");
+			app_wrapper.indent();
+			app_wrapper.line(format!("new {}(this, \"Default\");", ROOT_CLASS));
+			app_wrapper.close("}");
+			app_wrapper.close("}");
+			app_wrapper.close("}");
+
+			output.push(root_class.to_string());
+			output.push(app_wrapper.to_string());
+
+			output.push(format!("new {}().synth();", APP_CLASS));
 		} else {
 			output.append(&mut js);
 		}
@@ -375,6 +412,23 @@ impl<'a> JSifier<'a> {
 				Literal::Duration(sec) => format!("{}.std.Duration.fromSeconds({})", STDLIB, sec),
 				Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 			},
+			ExprKind::Range { start, inclusive, end } => {
+				match context.phase {
+					Phase::Inflight => format!(
+						"((s,e,i) => {{ function* iterator(start,end,inclusive) {{ let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }}; return iterator(s,e,i); }})({},{},{})",
+						self.jsify_expression(start, context),
+						self.jsify_expression(end, context),
+						inclusive.unwrap()
+					),
+					_ => format!(
+						"{}.std.Range.of({}, {}, {})",
+						STDLIB,
+						self.jsify_expression(start, context),
+						self.jsify_expression(end, context),
+						inclusive.unwrap()
+					)
+				}
+			}
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None, context),
 			ExprKind::Call { function, arg_list } => {
 				let function_type = function.evaluated_type.borrow().unwrap();
@@ -424,11 +478,15 @@ impl<'a> JSifier<'a> {
 				format!("({}{}({}))", auto_await, expr_string, arg_string)
 			}
 			ExprKind::Unary { op, exp } => {
-				let op = match op {
-					UnaryOperator::Minus => "-",
-					UnaryOperator::Not => "!",
-				};
-				format!("({}{})", op, self.jsify_expression(exp, context))
+				let js_exp = self.jsify_expression(exp, context);
+				match op {
+					UnaryOperator::Minus => format!("(-{})", js_exp),
+					UnaryOperator::Not => format!("(!{})", js_exp),
+					UnaryOperator::OptionalTest => {
+						// We use the abstract inequality operator here because we want to check for null or undefined
+						format!("(({}) != null)", js_exp)
+					}
+				}
 			}
 			ExprKind::Binary { op, left, right } => {
 				let js_left = self.jsify_expression(left, context);
@@ -533,10 +591,6 @@ impl<'a> JSifier<'a> {
 				Phase::Independent => unimplemented!(),
 				Phase::Preflight => self.jsify_function(None, func_def, context),
 			},
-			ExprKind::OptionalTest { optional } => {
-				// We use the abstract inequality operator here because we want to check for null or undefined
-				format!("(({}) != null)", self.jsify_expression(optional, context))
-			}
 		}
 	}
 
@@ -710,7 +764,11 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_inflight_function(&mut self, func_def: &FunctionDefinition, context: &JSifyContext) -> String {
-		let parameters = func_def.parameters.iter().map(|p| &p.0.name).join(", ");
+		let parameters = func_def
+			.parameters()
+			.iter()
+			.map(|p| self.jsify_symbol(&p.name))
+			.join(", ");
 
 		let block = match &func_def.body {
 			FunctionBody::Statements(scope) => self.jsify_scope(
@@ -770,8 +828,8 @@ impl<'a> JSifier<'a> {
 	fn jsify_constructor(&mut self, name: Option<&str>, func_def: &Constructor, context: &JSifyContext) -> String {
 		let mut parameter_list = vec![];
 
-		for p in func_def.parameters.iter() {
-			parameter_list.push(self.jsify_symbol(&p.0));
+		for p in func_def.parameters() {
+			parameter_list.push(self.jsify_symbol(&p.name));
 		}
 
 		let (name, arrow) = match name {
@@ -793,8 +851,8 @@ impl<'a> JSifier<'a> {
 	fn jsify_function(&mut self, name: Option<&str>, func_def: &FunctionDefinition, context: &JSifyContext) -> String {
 		let mut parameter_list = vec![];
 
-		for p in func_def.parameters.iter() {
-			parameter_list.push(self.jsify_symbol(&p.0));
+		for p in func_def.parameters() {
+			parameter_list.push(self.jsify_symbol(&p.name));
 		}
 
 		let (name, arrow) = match name {
@@ -806,14 +864,7 @@ impl<'a> JSifier<'a> {
 
 		let body = match &func_def.body {
 			FunctionBody::Statements(scope) => self.jsify_scope(scope, context),
-			FunctionBody::External(external_spec) => {
-				let new_path = self.prepare_extern(
-					matches!(func_def.signature.phase, Phase::Inflight),
-					external_spec,
-					&func_def.span.file_id,
-				);
-				format!("return require({new_path})[\"{name}\"]({parameters})")
-			}
+			FunctionBody::External(external_spec) => format!("return (require(require.resolve(\"{external_spec}\", {{paths: [process.env.WING_PROJECT_DIR]}}))[\"{name}\"])({parameters})")
 		};
 		let mut modifiers = vec![];
 		if func_def.is_static {
@@ -830,32 +881,6 @@ impl<'a> JSifier<'a> {
 				{body}
 			}}"
 		)
-	}
-
-	/// Retrieves the contents of the extern file and copies it to the intermediate directory.
-	/// Returns the path to the copied file
-	fn prepare_extern(&self, is_inflight: bool, path: &String, current_wing_file: &String) -> String {
-		let current_wing_file_dir = Path::new(current_wing_file).parent().unwrap();
-		let path_relative_to_wing = current_wing_file_dir.join(&path);
-		let path_relative_to_wing = path_relative_to_wing.to_str().expect("Converting path to string");
-
-		let contents = std::fs::read_to_string(path_relative_to_wing).expect("Copying extern file");
-
-		let id = base16ct::lower::encode_string(&Sha256::new().chain_update(&contents).finalize());
-		let id_file = format!("{}.js", id);
-		let extern_id_path = Path::new(EXTERN_DIR).join(&id_file);
-
-		let final_dir = self.out_dir.join(EXTERN_DIR);
-		let final_path = self.out_dir.join(&extern_id_path);
-		fs::create_dir_all(final_dir).expect("Creating extern dir");
-		std::fs::write(&final_path, contents).expect("Copying extern file");
-
-		if is_inflight {
-			let relative_path = Path::new("..").join(&extern_id_path);
-			format!("\"{}\"", relative_path.to_str().expect("Converting path to string"))
-		} else {
-			Self::js_resolve_path(&extern_id_path.to_str().expect("Converting path to string").to_string())
-		}
 	}
 
 	fn jsify_class_member(&mut self, member: &ClassField) -> String {
@@ -926,11 +951,7 @@ impl<'a> JSifier<'a> {
 		let captured_fields = self.get_captures(resource_type);
 
 		// Add init's refs
-		let init_refs = BTreeMap::from_iter(
-			captured_fields
-				.iter()
-				.map(|(f, ..)| (format!("this.{f}"), BTreeSet::new())),
-		);
+		let init_refs = BTreeMap::from_iter(captured_fields.iter().map(|f| (format!("this.{f}"), BTreeSet::new())));
 		refs.push(("$init".to_string(), init_refs));
 
 		// Jsify inflight client
@@ -969,7 +990,7 @@ impl<'a> JSifier<'a> {
 			if let Some(parent) = &class.parent {
 				format!(" extends {}", self.jsify_user_defined_type(parent))
 			} else {
-				format!(" extends {}.{}", STDLIB, WINGSDK_RESOURCE)
+				format!(" extends {}", STDLIB_CORE_RESOURCE)
 			},
 			self.jsify_resource_constructor(&class.constructor, class.parent.is_none(), context),
 			preflight_methods
@@ -984,7 +1005,7 @@ impl<'a> JSifier<'a> {
 		for (method_name, refs) in refs {
 			inflight_annotations.push(format!(
 				"{}._annotateInflight(\"{}\", {{{}}});",
-				class.name.name,
+				self.jsify_symbol(&class.name),
 				method_name,
 				refs
 					.iter()
@@ -1010,9 +1031,9 @@ impl<'a> JSifier<'a> {
 		format!(
 			"constructor(scope, id, {}) {{\n{}\n{}\n}}",
 			constructor
-				.parameters
+				.parameters()
 				.iter()
-				.map(|(name, _)| name.name.clone())
+				.map(|p| self.jsify_symbol(&p.name))
 				.collect::<Vec<_>>()
 				.join(", "),
 			// If there's no parent then this resource is derived from the base resource class (core.Resource) and we need
@@ -1028,14 +1049,10 @@ impl<'a> JSifier<'a> {
 		)
 	}
 
-	fn jsify_toinflight_method(
-		&mut self,
-		resource_name: &Symbol,
-		captured_fields: &[(String, TypeRef, Vec<String>)],
-	) -> String {
+	fn jsify_toinflight_method(&mut self, resource_name: &Symbol, captured_fields: &[String]) -> String {
 		let inner_clients = captured_fields
 			.iter()
-			.map(|(inner_member_name, _, _)| {
+			.map(|inner_member_name| {
 				format!(
 					"const {}_client = this._lift(this.{});",
 					inner_member_name, inner_member_name,
@@ -1047,7 +1064,7 @@ impl<'a> JSifier<'a> {
 		let client_path = Self::js_resolve_path(&format!("{}/{}.inflight.js", INFLIGHT_CLIENTS_DIR, resource_name.name));
 		let captured_fields = captured_fields
 			.iter()
-			.map(|(inner_member_name, _, _)| format!("{}: ${{{}_client}}", inner_member_name, inner_member_name))
+			.map(|inner_member_name| format!("{}: ${{{}_client}}", inner_member_name, inner_member_name))
 			.join(", ");
 		formatdoc!("
 			_toInflight() {{
@@ -1064,7 +1081,7 @@ impl<'a> JSifier<'a> {
 		&mut self,
 		env: &SymbolEnv,
 		name: &Symbol,
-		captured_fields: &[(String, TypeRef, Vec<String>)],
+		captured_fields: &[String],
 		inflight_methods: &[&(Symbol, FunctionDefinition)],
 		parent: &Option<UserDefinedType>,
 		context: &JSifyContext,
@@ -1079,17 +1096,13 @@ impl<'a> JSifier<'a> {
 		// Get the fields that are captured by this resource but not by its parent, they will be initialized in the generated constructor
 		let my_captures = captured_fields
 			.iter()
-			.filter(|(name, _, _)| !parent_captures.iter().any(|(n, _, _)| n == name))
+			.filter(|name| !parent_captures.iter().any(|n| n == *name))
 			.collect_vec();
 
 		let super_call = if parent.is_some() {
 			format!(
 				"  super({});",
-				parent_captures
-					.iter()
-					.map(|(name, _, _)| name.clone())
-					.collect_vec()
-					.join(", ")
+				parent_captures.iter().map(|name| name.clone()).collect_vec().join(", ")
 			)
 		} else {
 			"".to_string()
@@ -1101,13 +1114,13 @@ impl<'a> JSifier<'a> {
 			"constructor({{ {} }}) {{\n{}\n{}\n}}",
 			captured_fields
 				.iter()
-				.map(|(name, _, _)| { name.clone() })
+				.map(|name| { name.clone() })
 				.collect_vec()
 				.join(", "),
 			super_call,
 			my_captures
 				.iter()
-				.map(|(name, _, _)| { format!("  this.{} = {};", name, name) })
+				.map(|name| { format!("  this.{} = {};", name, name) })
 				.collect_vec()
 				.join("\n")
 		);
@@ -1204,7 +1217,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	// Get the type and capture info for fields that are captured in the client of the given resource
-	fn get_captures(&self, resource_type: TypeRef) -> Vec<(String, TypeRef, Vec<String>)> {
+	fn get_captures(&self, resource_type: TypeRef) -> Vec<String> {
 		resource_type
 			.as_resource()
 			.unwrap()
@@ -1215,29 +1228,7 @@ impl<'a> JSifier<'a> {
 				// We capture preflight non-reassignable fields
 				var.phase != Phase::Inflight && !var.reassignable && var.type_.is_capturable()
 			})
-			.map(|(name, kind, _)| {
-				let _type = kind.as_variable().unwrap().type_;
-				// TODO: For now we collect all the inflight methods in the resource (in the future we
-				// we'll need to analyze each inflight method to see what it does with the captured resource)
-				let methods = if _type.as_resource().is_some() {
-					_type
-						.as_resource()
-						.unwrap()
-						.methods(true)
-						.filter_map(|(name, sig)| {
-							if sig.as_function_sig().unwrap().phase == Phase::Inflight {
-								Some(name)
-							} else {
-								None
-							}
-						})
-						.collect_vec()
-				} else {
-					vec![]
-				};
-
-				(name, _type, methods)
-			})
+			.map(|(name, ..)| name)
 			.collect_vec()
 	}
 }

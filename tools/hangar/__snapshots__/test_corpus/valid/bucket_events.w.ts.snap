@@ -8,7 +8,20 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "stackName": "root",
       "version": "0.15.2",
     },
-    "outputs": {},
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[[\\"root/Default/Default/test\\",\\"\${aws_lambda_function.root_test_AAE85061.arn}\\"]]",
+    },
   },
   "provider": {
     "aws": [
@@ -20,7 +33,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_boncreateOnMessage8588493f_IamRole_F4D6A039": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_create-OnMessage-8588493f/IamRole",
+            "path": "root/Default/Default/b/b-on_create-OnMessage-8588493f/IamRole",
             "uniqueId": "root_b_boncreateOnMessage8588493f_IamRole_F4D6A039",
           },
         },
@@ -29,7 +42,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_boncreateOnMessage88f6f7aa_IamRole_94993205": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_create-OnMessage-88f6f7aa/IamRole",
+            "path": "root/Default/Default/b/b-on_create-OnMessage-88f6f7aa/IamRole",
             "uniqueId": "root_b_boncreateOnMessage88f6f7aa_IamRole_94993205",
           },
         },
@@ -38,7 +51,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bondeleteOnMessage6e8b2f6c_IamRole_935D5999": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_delete-OnMessage-6e8b2f6c/IamRole",
+            "path": "root/Default/Default/b/b-on_delete-OnMessage-6e8b2f6c/IamRole",
             "uniqueId": "root_b_bondeleteOnMessage6e8b2f6c_IamRole_935D5999",
           },
         },
@@ -47,7 +60,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bondeleteOnMessagedece1815_IamRole_0A3F666E": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_delete-OnMessage-dece1815/IamRole",
+            "path": "root/Default/Default/b/b-on_delete-OnMessage-dece1815/IamRole",
             "uniqueId": "root_b_bondeleteOnMessagedece1815_IamRole_0A3F666E",
           },
         },
@@ -56,7 +69,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bonupdateOnMessage8b441417_IamRole_5980156B": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_update-OnMessage-8b441417/IamRole",
+            "path": "root/Default/Default/b/b-on_update-OnMessage-8b441417/IamRole",
             "uniqueId": "root_b_bonupdateOnMessage8b441417_IamRole_5980156B",
           },
         },
@@ -65,7 +78,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bonupdateOnMessagec7d8cc3e_IamRole_1B0D38A4": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_update-OnMessage-c7d8cc3e/IamRole",
+            "path": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e/IamRole",
             "uniqueId": "root_b_bonupdateOnMessagec7d8cc3e_IamRole_1B0D38A4",
           },
         },
@@ -74,7 +87,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otheroncreateOnMessage1a259cac_IamRole_B903D23C": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_create-OnMessage-1a259cac/IamRole",
+            "path": "root/Default/Default/other/other-on_create-OnMessage-1a259cac/IamRole",
             "uniqueId": "root_other_otheroncreateOnMessage1a259cac_IamRole_B903D23C",
           },
         },
@@ -83,7 +96,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otherondeleteOnMessage2e31a750_IamRole_45188816": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_delete-OnMessage-2e31a750/IamRole",
+            "path": "root/Default/Default/other/other-on_delete-OnMessage-2e31a750/IamRole",
             "uniqueId": "root_other_otherondeleteOnMessage2e31a750_IamRole_45188816",
           },
         },
@@ -92,7 +105,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otheronupdateOnMessage02fb2142_IamRole_9D20DEAB": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_update-OnMessage-02fb2142/IamRole",
+            "path": "root/Default/Default/other/other-on_update-OnMessage-02fb2142/IamRole",
             "uniqueId": "root_other_otheronupdateOnMessage02fb2142_IamRole_9D20DEAB",
           },
         },
@@ -101,7 +114,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_IamRole_6CDC2D16": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/IamRole",
+            "path": "root/Default/Default/test/IamRole",
             "uniqueId": "root_test_IamRole_6CDC2D16",
           },
         },
@@ -112,7 +125,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_boncreateOnMessage8588493f_IamRolePolicy_369E4FFE": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_create-OnMessage-8588493f/IamRolePolicy",
+            "path": "root/Default/Default/b/b-on_create-OnMessage-8588493f/IamRolePolicy",
             "uniqueId": "root_b_boncreateOnMessage8588493f_IamRolePolicy_369E4FFE",
           },
         },
@@ -122,7 +135,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_boncreateOnMessage88f6f7aa_IamRolePolicy_78821956": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_create-OnMessage-88f6f7aa/IamRolePolicy",
+            "path": "root/Default/Default/b/b-on_create-OnMessage-88f6f7aa/IamRolePolicy",
             "uniqueId": "root_b_boncreateOnMessage88f6f7aa_IamRolePolicy_78821956",
           },
         },
@@ -132,7 +145,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bondeleteOnMessage6e8b2f6c_IamRolePolicy_B77008FA": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_delete-OnMessage-6e8b2f6c/IamRolePolicy",
+            "path": "root/Default/Default/b/b-on_delete-OnMessage-6e8b2f6c/IamRolePolicy",
             "uniqueId": "root_b_bondeleteOnMessage6e8b2f6c_IamRolePolicy_B77008FA",
           },
         },
@@ -142,7 +155,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bondeleteOnMessagedece1815_IamRolePolicy_211100A3": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_delete-OnMessage-dece1815/IamRolePolicy",
+            "path": "root/Default/Default/b/b-on_delete-OnMessage-dece1815/IamRolePolicy",
             "uniqueId": "root_b_bondeleteOnMessagedece1815_IamRolePolicy_211100A3",
           },
         },
@@ -152,7 +165,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bonupdateOnMessage8b441417_IamRolePolicy_BD9C58B6": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_update-OnMessage-8b441417/IamRolePolicy",
+            "path": "root/Default/Default/b/b-on_update-OnMessage-8b441417/IamRolePolicy",
             "uniqueId": "root_b_bonupdateOnMessage8b441417_IamRolePolicy_BD9C58B6",
           },
         },
@@ -162,7 +175,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bonupdateOnMessagec7d8cc3e_IamRolePolicy_F62B56EB": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_update-OnMessage-c7d8cc3e/IamRolePolicy",
+            "path": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e/IamRolePolicy",
             "uniqueId": "root_b_bonupdateOnMessagec7d8cc3e_IamRolePolicy_F62B56EB",
           },
         },
@@ -172,7 +185,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otheroncreateOnMessage1a259cac_IamRolePolicy_09BCADB5": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_create-OnMessage-1a259cac/IamRolePolicy",
+            "path": "root/Default/Default/other/other-on_create-OnMessage-1a259cac/IamRolePolicy",
             "uniqueId": "root_other_otheroncreateOnMessage1a259cac_IamRolePolicy_09BCADB5",
           },
         },
@@ -182,7 +195,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otherondeleteOnMessage2e31a750_IamRolePolicy_E49F85EF": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_delete-OnMessage-2e31a750/IamRolePolicy",
+            "path": "root/Default/Default/other/other-on_delete-OnMessage-2e31a750/IamRolePolicy",
             "uniqueId": "root_other_otherondeleteOnMessage2e31a750_IamRolePolicy_E49F85EF",
           },
         },
@@ -192,7 +205,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otheronupdateOnMessage02fb2142_IamRolePolicy_88E0A249": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_update-OnMessage-02fb2142/IamRolePolicy",
+            "path": "root/Default/Default/other/other-on_update-OnMessage-02fb2142/IamRolePolicy",
             "uniqueId": "root_other_otheronupdateOnMessage02fb2142_IamRolePolicy_88E0A249",
           },
         },
@@ -202,7 +215,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_IamRolePolicy_474A6820": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/IamRolePolicy",
+            "path": "root/Default/Default/test/IamRolePolicy",
             "uniqueId": "root_test_IamRolePolicy_474A6820",
           },
         },
@@ -214,7 +227,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_boncreateOnMessage8588493f_IamRolePolicyAttachment_AB6CFD0F": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_create-OnMessage-8588493f/IamRolePolicyAttachment",
+            "path": "root/Default/Default/b/b-on_create-OnMessage-8588493f/IamRolePolicyAttachment",
             "uniqueId": "root_b_boncreateOnMessage8588493f_IamRolePolicyAttachment_AB6CFD0F",
           },
         },
@@ -224,7 +237,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_boncreateOnMessage88f6f7aa_IamRolePolicyAttachment_30B89166": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_create-OnMessage-88f6f7aa/IamRolePolicyAttachment",
+            "path": "root/Default/Default/b/b-on_create-OnMessage-88f6f7aa/IamRolePolicyAttachment",
             "uniqueId": "root_b_boncreateOnMessage88f6f7aa_IamRolePolicyAttachment_30B89166",
           },
         },
@@ -234,7 +247,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bondeleteOnMessage6e8b2f6c_IamRolePolicyAttachment_921DE1E1": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_delete-OnMessage-6e8b2f6c/IamRolePolicyAttachment",
+            "path": "root/Default/Default/b/b-on_delete-OnMessage-6e8b2f6c/IamRolePolicyAttachment",
             "uniqueId": "root_b_bondeleteOnMessage6e8b2f6c_IamRolePolicyAttachment_921DE1E1",
           },
         },
@@ -244,7 +257,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bondeleteOnMessagedece1815_IamRolePolicyAttachment_CB99281E": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_delete-OnMessage-dece1815/IamRolePolicyAttachment",
+            "path": "root/Default/Default/b/b-on_delete-OnMessage-dece1815/IamRolePolicyAttachment",
             "uniqueId": "root_b_bondeleteOnMessagedece1815_IamRolePolicyAttachment_CB99281E",
           },
         },
@@ -254,7 +267,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bonupdateOnMessage8b441417_IamRolePolicyAttachment_C0FFE64D": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_update-OnMessage-8b441417/IamRolePolicyAttachment",
+            "path": "root/Default/Default/b/b-on_update-OnMessage-8b441417/IamRolePolicyAttachment",
             "uniqueId": "root_b_bonupdateOnMessage8b441417_IamRolePolicyAttachment_C0FFE64D",
           },
         },
@@ -264,7 +277,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bonupdateOnMessagec7d8cc3e_IamRolePolicyAttachment_7397C827": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_update-OnMessage-c7d8cc3e/IamRolePolicyAttachment",
+            "path": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e/IamRolePolicyAttachment",
             "uniqueId": "root_b_bonupdateOnMessagec7d8cc3e_IamRolePolicyAttachment_7397C827",
           },
         },
@@ -274,7 +287,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otheroncreateOnMessage1a259cac_IamRolePolicyAttachment_BEB96B79": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_create-OnMessage-1a259cac/IamRolePolicyAttachment",
+            "path": "root/Default/Default/other/other-on_create-OnMessage-1a259cac/IamRolePolicyAttachment",
             "uniqueId": "root_other_otheroncreateOnMessage1a259cac_IamRolePolicyAttachment_BEB96B79",
           },
         },
@@ -284,7 +297,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otherondeleteOnMessage2e31a750_IamRolePolicyAttachment_3DF2EE2E": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_delete-OnMessage-2e31a750/IamRolePolicyAttachment",
+            "path": "root/Default/Default/other/other-on_delete-OnMessage-2e31a750/IamRolePolicyAttachment",
             "uniqueId": "root_other_otherondeleteOnMessage2e31a750_IamRolePolicyAttachment_3DF2EE2E",
           },
         },
@@ -294,7 +307,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otheronupdateOnMessage02fb2142_IamRolePolicyAttachment_C33C61C5": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_update-OnMessage-02fb2142/IamRolePolicyAttachment",
+            "path": "root/Default/Default/other/other-on_update-OnMessage-02fb2142/IamRolePolicyAttachment",
             "uniqueId": "root_other_otheronupdateOnMessage02fb2142_IamRolePolicyAttachment_C33C61C5",
           },
         },
@@ -304,7 +317,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_IamRolePolicyAttachment_1102A28A": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/IamRolePolicyAttachment",
+            "path": "root/Default/Default/test/IamRolePolicyAttachment",
             "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
           },
         },
@@ -316,7 +329,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_boncreateOnMessage8588493f_6AF46AC5": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_create-OnMessage-8588493f/Default",
+            "path": "root/Default/Default/b/b-on_create-OnMessage-8588493f/Default",
             "uniqueId": "root_b_boncreateOnMessage8588493f_6AF46AC5",
           },
         },
@@ -335,11 +348,15 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_b_boncreateOnMessage8588493f_Code_1C657564.bucket}",
         "s3_key": "\${aws_s3_object.root_b_boncreateOnMessage8588493f_S3Object_B05EA5EC.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_b_boncreateOnMessage88f6f7aa_A82C913D": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_create-OnMessage-88f6f7aa/Default",
+            "path": "root/Default/Default/b/b-on_create-OnMessage-88f6f7aa/Default",
             "uniqueId": "root_b_boncreateOnMessage88f6f7aa_A82C913D",
           },
         },
@@ -356,11 +373,15 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_b_boncreateOnMessage88f6f7aa_Code_9A928412.bucket}",
         "s3_key": "\${aws_s3_object.root_b_boncreateOnMessage88f6f7aa_S3Object_27A1B997.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_b_bondeleteOnMessage6e8b2f6c_82C0984B": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_delete-OnMessage-6e8b2f6c/Default",
+            "path": "root/Default/Default/b/b-on_delete-OnMessage-6e8b2f6c/Default",
             "uniqueId": "root_b_bondeleteOnMessage6e8b2f6c_82C0984B",
           },
         },
@@ -377,11 +398,15 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_b_bondeleteOnMessage6e8b2f6c_Code_71B9ABD7.bucket}",
         "s3_key": "\${aws_s3_object.root_b_bondeleteOnMessage6e8b2f6c_S3Object_AA587BEA.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_b_bondeleteOnMessagedece1815_8EEE19F8": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_delete-OnMessage-dece1815/Default",
+            "path": "root/Default/Default/b/b-on_delete-OnMessage-dece1815/Default",
             "uniqueId": "root_b_bondeleteOnMessagedece1815_8EEE19F8",
           },
         },
@@ -400,11 +425,15 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_b_bondeleteOnMessagedece1815_Code_A146A488.bucket}",
         "s3_key": "\${aws_s3_object.root_b_bondeleteOnMessagedece1815_S3Object_9F2FF12D.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_b_bonupdateOnMessage8b441417_03208454": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_update-OnMessage-8b441417/Default",
+            "path": "root/Default/Default/b/b-on_update-OnMessage-8b441417/Default",
             "uniqueId": "root_b_bonupdateOnMessage8b441417_03208454",
           },
         },
@@ -421,11 +450,15 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_b_bonupdateOnMessage8b441417_Code_FEEDBA8A.bucket}",
         "s3_key": "\${aws_s3_object.root_b_bonupdateOnMessage8b441417_S3Object_E72D02CB.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_b_bonupdateOnMessagec7d8cc3e_D4965D04": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_update-OnMessage-c7d8cc3e/Default",
+            "path": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e/Default",
             "uniqueId": "root_b_bonupdateOnMessagec7d8cc3e_D4965D04",
           },
         },
@@ -444,11 +477,15 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_b_bonupdateOnMessagec7d8cc3e_Code_45CB7D01.bucket}",
         "s3_key": "\${aws_s3_object.root_b_bonupdateOnMessagec7d8cc3e_S3Object_A082E479.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_other_otheroncreateOnMessage1a259cac_F29A80F6": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_create-OnMessage-1a259cac/Default",
+            "path": "root/Default/Default/other/other-on_create-OnMessage-1a259cac/Default",
             "uniqueId": "root_other_otheroncreateOnMessage1a259cac_F29A80F6",
           },
         },
@@ -465,11 +502,15 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_other_otheroncreateOnMessage1a259cac_Code_743CAA28.bucket}",
         "s3_key": "\${aws_s3_object.root_other_otheroncreateOnMessage1a259cac_S3Object_61C37281.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_other_otherondeleteOnMessage2e31a750_AC9B5F07": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_delete-OnMessage-2e31a750/Default",
+            "path": "root/Default/Default/other/other-on_delete-OnMessage-2e31a750/Default",
             "uniqueId": "root_other_otherondeleteOnMessage2e31a750_AC9B5F07",
           },
         },
@@ -486,11 +527,15 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_other_otherondeleteOnMessage2e31a750_Code_8A4E099A.bucket}",
         "s3_key": "\${aws_s3_object.root_other_otherondeleteOnMessage2e31a750_S3Object_5A3687E9.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_other_otheronupdateOnMessage02fb2142_389A5E43": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_update-OnMessage-02fb2142/Default",
+            "path": "root/Default/Default/other/other-on_update-OnMessage-02fb2142/Default",
             "uniqueId": "root_other_otheronupdateOnMessage02fb2142_389A5E43",
           },
         },
@@ -507,11 +552,15 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_other_otheronupdateOnMessage02fb2142_Code_A21BB0DF.bucket}",
         "s3_key": "\${aws_s3_object.root_other_otheronupdateOnMessage02fb2142_S3Object_7641A6CE.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
       "root_test_AAE85061": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/Default",
+            "path": "root/Default/Default/test/Default",
             "uniqueId": "root_test_AAE85061",
           },
         },
@@ -530,13 +579,17 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
     },
     "aws_lambda_permission": {
       "root_b_boncreateOnMessage8588493f_InvokePermissionc8c7ecaf2af41d192271c693adb3c6463c67766a7c_697A4844": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_create-OnMessage-8588493f/InvokePermission-c8c7ecaf2af41d192271c693adb3c6463c67766a7c",
+            "path": "root/Default/Default/b/b-on_create-OnMessage-8588493f/InvokePermission-c8c7ecaf2af41d192271c693adb3c6463c67766a7c",
             "uniqueId": "root_b_boncreateOnMessage8588493f_InvokePermissionc8c7ecaf2af41d192271c693adb3c6463c67766a7c_697A4844",
           },
         },
@@ -548,7 +601,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_boncreateOnMessage88f6f7aa_InvokePermissionc8c7ecaf2af41d192271c693adb3c6463c67766a7c_04CC6615": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_create-OnMessage-88f6f7aa/InvokePermission-c8c7ecaf2af41d192271c693adb3c6463c67766a7c",
+            "path": "root/Default/Default/b/b-on_create-OnMessage-88f6f7aa/InvokePermission-c8c7ecaf2af41d192271c693adb3c6463c67766a7c",
             "uniqueId": "root_b_boncreateOnMessage88f6f7aa_InvokePermissionc8c7ecaf2af41d192271c693adb3c6463c67766a7c_04CC6615",
           },
         },
@@ -560,7 +613,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bondeleteOnMessage6e8b2f6c_InvokePermissionc8f3ce18433e918d0e14bd6cd9c27a768f92348b01_63066867": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_delete-OnMessage-6e8b2f6c/InvokePermission-c8f3ce18433e918d0e14bd6cd9c27a768f92348b01",
+            "path": "root/Default/Default/b/b-on_delete-OnMessage-6e8b2f6c/InvokePermission-c8f3ce18433e918d0e14bd6cd9c27a768f92348b01",
             "uniqueId": "root_b_bondeleteOnMessage6e8b2f6c_InvokePermissionc8f3ce18433e918d0e14bd6cd9c27a768f92348b01_63066867",
           },
         },
@@ -572,7 +625,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bondeleteOnMessagedece1815_InvokePermissionc8f3ce18433e918d0e14bd6cd9c27a768f92348b01_43CFBAB3": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_delete-OnMessage-dece1815/InvokePermission-c8f3ce18433e918d0e14bd6cd9c27a768f92348b01",
+            "path": "root/Default/Default/b/b-on_delete-OnMessage-dece1815/InvokePermission-c8f3ce18433e918d0e14bd6cd9c27a768f92348b01",
             "uniqueId": "root_b_bondeleteOnMessagedece1815_InvokePermissionc8f3ce18433e918d0e14bd6cd9c27a768f92348b01_43CFBAB3",
           },
         },
@@ -584,7 +637,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bonupdateOnMessage8b441417_InvokePermissionc8d765d031212754dea0aa3cfb7d3227a296fffd4f_4524D46D": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_update-OnMessage-8b441417/InvokePermission-c8d765d031212754dea0aa3cfb7d3227a296fffd4f",
+            "path": "root/Default/Default/b/b-on_update-OnMessage-8b441417/InvokePermission-c8d765d031212754dea0aa3cfb7d3227a296fffd4f",
             "uniqueId": "root_b_bonupdateOnMessage8b441417_InvokePermissionc8d765d031212754dea0aa3cfb7d3227a296fffd4f_4524D46D",
           },
         },
@@ -596,7 +649,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bonupdateOnMessagec7d8cc3e_InvokePermissionc8d765d031212754dea0aa3cfb7d3227a296fffd4f_8C1620C4": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_update-OnMessage-c7d8cc3e/InvokePermission-c8d765d031212754dea0aa3cfb7d3227a296fffd4f",
+            "path": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e/InvokePermission-c8d765d031212754dea0aa3cfb7d3227a296fffd4f",
             "uniqueId": "root_b_bonupdateOnMessagec7d8cc3e_InvokePermissionc8d765d031212754dea0aa3cfb7d3227a296fffd4f_8C1620C4",
           },
         },
@@ -608,7 +661,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otheroncreateOnMessage1a259cac_InvokePermissionc89c79376e17b283a7d691aa1bda7fc8588302362f_55950F7F": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_create-OnMessage-1a259cac/InvokePermission-c89c79376e17b283a7d691aa1bda7fc8588302362f",
+            "path": "root/Default/Default/other/other-on_create-OnMessage-1a259cac/InvokePermission-c89c79376e17b283a7d691aa1bda7fc8588302362f",
             "uniqueId": "root_other_otheroncreateOnMessage1a259cac_InvokePermissionc89c79376e17b283a7d691aa1bda7fc8588302362f_55950F7F",
           },
         },
@@ -620,7 +673,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otherondeleteOnMessage2e31a750_InvokePermissionc861917e84992c81ed683a3edeae66ebc879e0682a_2906F667": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_delete-OnMessage-2e31a750/InvokePermission-c861917e84992c81ed683a3edeae66ebc879e0682a",
+            "path": "root/Default/Default/other/other-on_delete-OnMessage-2e31a750/InvokePermission-c861917e84992c81ed683a3edeae66ebc879e0682a",
             "uniqueId": "root_other_otherondeleteOnMessage2e31a750_InvokePermissionc861917e84992c81ed683a3edeae66ebc879e0682a_2906F667",
           },
         },
@@ -632,7 +685,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otheronupdateOnMessage02fb2142_InvokePermissionc8f0227611913f709ca5218e4a4dd4cb2475593882_BA1E9B29": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_update-OnMessage-02fb2142/InvokePermission-c8f0227611913f709ca5218e4a4dd4cb2475593882",
+            "path": "root/Default/Default/other/other-on_update-OnMessage-02fb2142/InvokePermission-c8f0227611913f709ca5218e4a4dd4cb2475593882",
             "uniqueId": "root_other_otheronupdateOnMessage02fb2142_InvokePermissionc8f0227611913f709ca5218e4a4dd4cb2475593882_BA1E9B29",
           },
         },
@@ -646,16 +699,17 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_6D0D1E6D": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/Default",
+            "path": "root/Default/Default/b/Default",
             "uniqueId": "root_b_6D0D1E6D",
           },
         },
         "bucket_prefix": "b-c81aa40d-",
+        "force_destroy": false,
       },
       "root_b_boncreateOnMessage8588493f_Code_1C657564": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_create-OnMessage-8588493f/Code",
+            "path": "root/Default/Default/b/b-on_create-OnMessage-8588493f/Code",
             "uniqueId": "root_b_boncreateOnMessage8588493f_Code_1C657564",
           },
         },
@@ -664,7 +718,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_boncreateOnMessage88f6f7aa_Code_9A928412": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_create-OnMessage-88f6f7aa/Code",
+            "path": "root/Default/Default/b/b-on_create-OnMessage-88f6f7aa/Code",
             "uniqueId": "root_b_boncreateOnMessage88f6f7aa_Code_9A928412",
           },
         },
@@ -673,7 +727,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bondeleteOnMessage6e8b2f6c_Code_71B9ABD7": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_delete-OnMessage-6e8b2f6c/Code",
+            "path": "root/Default/Default/b/b-on_delete-OnMessage-6e8b2f6c/Code",
             "uniqueId": "root_b_bondeleteOnMessage6e8b2f6c_Code_71B9ABD7",
           },
         },
@@ -682,7 +736,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bondeleteOnMessagedece1815_Code_A146A488": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_delete-OnMessage-dece1815/Code",
+            "path": "root/Default/Default/b/b-on_delete-OnMessage-dece1815/Code",
             "uniqueId": "root_b_bondeleteOnMessagedece1815_Code_A146A488",
           },
         },
@@ -691,7 +745,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bonupdateOnMessage8b441417_Code_FEEDBA8A": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_update-OnMessage-8b441417/Code",
+            "path": "root/Default/Default/b/b-on_update-OnMessage-8b441417/Code",
             "uniqueId": "root_b_bonupdateOnMessage8b441417_Code_FEEDBA8A",
           },
         },
@@ -700,7 +754,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bonupdateOnMessagec7d8cc3e_Code_45CB7D01": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_update-OnMessage-c7d8cc3e/Code",
+            "path": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e/Code",
             "uniqueId": "root_b_bonupdateOnMessagec7d8cc3e_Code_45CB7D01",
           },
         },
@@ -709,16 +763,17 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_26932ECB": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/Default",
+            "path": "root/Default/Default/other/Default",
             "uniqueId": "root_other_26932ECB",
           },
         },
         "bucket_prefix": "other-c87420a2-",
+        "force_destroy": false,
       },
       "root_other_otheroncreateOnMessage1a259cac_Code_743CAA28": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_create-OnMessage-1a259cac/Code",
+            "path": "root/Default/Default/other/other-on_create-OnMessage-1a259cac/Code",
             "uniqueId": "root_other_otheroncreateOnMessage1a259cac_Code_743CAA28",
           },
         },
@@ -727,7 +782,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otherondeleteOnMessage2e31a750_Code_8A4E099A": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_delete-OnMessage-2e31a750/Code",
+            "path": "root/Default/Default/other/other-on_delete-OnMessage-2e31a750/Code",
             "uniqueId": "root_other_otherondeleteOnMessage2e31a750_Code_8A4E099A",
           },
         },
@@ -736,7 +791,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otheronupdateOnMessage02fb2142_Code_A21BB0DF": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_update-OnMessage-02fb2142/Code",
+            "path": "root/Default/Default/other/other-on_update-OnMessage-02fb2142/Code",
             "uniqueId": "root_other_otheronupdateOnMessage02fb2142_Code_A21BB0DF",
           },
         },
@@ -745,7 +800,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_Code_2D131EC2": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/Code",
+            "path": "root/Default/Default/test/Code",
             "uniqueId": "root_test_Code_2D131EC2",
           },
         },
@@ -756,7 +811,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_S3Objectoncreatenotifier_37FBDD2C": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/S3Object_on_create_notifier",
+            "path": "root/Default/Default/b/S3Object_on_create_notifier",
             "uniqueId": "root_b_S3Objectoncreatenotifier_37FBDD2C",
           },
         },
@@ -776,7 +831,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_S3Objectondeletenotifier_2BF59546": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/S3Object_on_delete_notifier",
+            "path": "root/Default/Default/b/S3Object_on_delete_notifier",
             "uniqueId": "root_b_S3Objectondeletenotifier_2BF59546",
           },
         },
@@ -796,7 +851,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_S3Objectonupdatenotifier_BF419C65": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/S3Object_on_update_notifier",
+            "path": "root/Default/Default/b/S3Object_on_update_notifier",
             "uniqueId": "root_b_S3Objectonupdatenotifier_BF419C65",
           },
         },
@@ -816,7 +871,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_S3Objectoncreatenotifier_245EEBFA": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/S3Object_on_create_notifier",
+            "path": "root/Default/Default/other/S3Object_on_create_notifier",
             "uniqueId": "root_other_S3Objectoncreatenotifier_245EEBFA",
           },
         },
@@ -836,7 +891,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_S3Objectondeletenotifier_723A6B77": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/S3Object_on_delete_notifier",
+            "path": "root/Default/Default/other/S3Object_on_delete_notifier",
             "uniqueId": "root_other_S3Objectondeletenotifier_723A6B77",
           },
         },
@@ -856,7 +911,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_S3Objectonupdatenotifier_10BD12E1": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/S3Object_on_update_notifier",
+            "path": "root/Default/Default/other/S3Object_on_update_notifier",
             "uniqueId": "root_other_S3Objectonupdatenotifier_10BD12E1",
           },
         },
@@ -878,7 +933,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_PublicAccessBlock_F66C0464": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/PublicAccessBlock",
+            "path": "root/Default/Default/b/PublicAccessBlock",
             "uniqueId": "root_b_PublicAccessBlock_F66C0464",
           },
         },
@@ -891,7 +946,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_PublicAccessBlock_E919F15F": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/PublicAccessBlock",
+            "path": "root/Default/Default/other/PublicAccessBlock",
             "uniqueId": "root_other_PublicAccessBlock_E919F15F",
           },
         },
@@ -906,7 +961,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_Encryption_2316317F": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/Encryption",
+            "path": "root/Default/Default/b/Encryption",
             "uniqueId": "root_b_Encryption_2316317F",
           },
         },
@@ -922,7 +977,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_Encryption_9AA7D331": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/Encryption",
+            "path": "root/Default/Default/other/Encryption",
             "uniqueId": "root_other_Encryption_9AA7D331",
           },
         },
@@ -940,7 +995,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_boncreateOnMessage8588493f_S3Object_B05EA5EC": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_create-OnMessage-8588493f/S3Object",
+            "path": "root/Default/Default/b/b-on_create-OnMessage-8588493f/S3Object",
             "uniqueId": "root_b_boncreateOnMessage8588493f_S3Object_B05EA5EC",
           },
         },
@@ -951,7 +1006,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_boncreateOnMessage88f6f7aa_S3Object_27A1B997": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_create-OnMessage-88f6f7aa/S3Object",
+            "path": "root/Default/Default/b/b-on_create-OnMessage-88f6f7aa/S3Object",
             "uniqueId": "root_b_boncreateOnMessage88f6f7aa_S3Object_27A1B997",
           },
         },
@@ -962,7 +1017,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bondeleteOnMessage6e8b2f6c_S3Object_AA587BEA": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_delete-OnMessage-6e8b2f6c/S3Object",
+            "path": "root/Default/Default/b/b-on_delete-OnMessage-6e8b2f6c/S3Object",
             "uniqueId": "root_b_bondeleteOnMessage6e8b2f6c_S3Object_AA587BEA",
           },
         },
@@ -973,7 +1028,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bondeleteOnMessagedece1815_S3Object_9F2FF12D": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_delete-OnMessage-dece1815/S3Object",
+            "path": "root/Default/Default/b/b-on_delete-OnMessage-dece1815/S3Object",
             "uniqueId": "root_b_bondeleteOnMessagedece1815_S3Object_9F2FF12D",
           },
         },
@@ -984,7 +1039,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bonupdateOnMessage8b441417_S3Object_E72D02CB": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_update-OnMessage-8b441417/S3Object",
+            "path": "root/Default/Default/b/b-on_update-OnMessage-8b441417/S3Object",
             "uniqueId": "root_b_bonupdateOnMessage8b441417_S3Object_E72D02CB",
           },
         },
@@ -995,7 +1050,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bonupdateOnMessagec7d8cc3e_S3Object_A082E479": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_update-OnMessage-c7d8cc3e/S3Object",
+            "path": "root/Default/Default/b/b-on_update-OnMessage-c7d8cc3e/S3Object",
             "uniqueId": "root_b_bonupdateOnMessagec7d8cc3e_S3Object_A082E479",
           },
         },
@@ -1006,7 +1061,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otheroncreateOnMessage1a259cac_S3Object_61C37281": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_create-OnMessage-1a259cac/S3Object",
+            "path": "root/Default/Default/other/other-on_create-OnMessage-1a259cac/S3Object",
             "uniqueId": "root_other_otheroncreateOnMessage1a259cac_S3Object_61C37281",
           },
         },
@@ -1017,7 +1072,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otherondeleteOnMessage2e31a750_S3Object_5A3687E9": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_delete-OnMessage-2e31a750/S3Object",
+            "path": "root/Default/Default/other/other-on_delete-OnMessage-2e31a750/S3Object",
             "uniqueId": "root_other_otherondeleteOnMessage2e31a750_S3Object_5A3687E9",
           },
         },
@@ -1028,7 +1083,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otheronupdateOnMessage02fb2142_S3Object_7641A6CE": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_update-OnMessage-02fb2142/S3Object",
+            "path": "root/Default/Default/other/other-on_update-OnMessage-02fb2142/S3Object",
             "uniqueId": "root_other_otheronupdateOnMessage02fb2142_S3Object_7641A6CE",
           },
         },
@@ -1039,7 +1094,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_test_S3Object_A16CD789": {
         "//": {
           "metadata": {
-            "path": "root/Default/test/S3Object",
+            "path": "root/Default/Default/test/S3Object",
             "uniqueId": "root_test_S3Object_A16CD789",
           },
         },
@@ -1052,7 +1107,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_boncreate_9124D168": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_create/Default",
+            "path": "root/Default/Default/b/b-on_create/Default",
             "uniqueId": "root_b_boncreate_9124D168",
           },
         },
@@ -1061,7 +1116,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bondelete_357A37C8": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_delete/Default",
+            "path": "root/Default/Default/b/b-on_delete/Default",
             "uniqueId": "root_b_bondelete_357A37C8",
           },
         },
@@ -1070,7 +1125,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bonupdate_F11B4439": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_update/Default",
+            "path": "root/Default/Default/b/b-on_update/Default",
             "uniqueId": "root_b_bonupdate_F11B4439",
           },
         },
@@ -1079,7 +1134,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otheroncreate_DCA3D2DD": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_create/Default",
+            "path": "root/Default/Default/other/other-on_create/Default",
             "uniqueId": "root_other_otheroncreate_DCA3D2DD",
           },
         },
@@ -1088,7 +1143,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otherondelete_7CCB8682": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_delete/Default",
+            "path": "root/Default/Default/other/other-on_delete/Default",
             "uniqueId": "root_other_otherondelete_7CCB8682",
           },
         },
@@ -1097,7 +1152,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otheronupdate_3B763057": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_update/Default",
+            "path": "root/Default/Default/other/other-on_update/Default",
             "uniqueId": "root_other_otheronupdate_3B763057",
           },
         },
@@ -1108,7 +1163,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_boncreate_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_C218A49E": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_create/PublishPermission-c81aa40d099e0812205448708df27e482b34279ead",
+            "path": "root/Default/Default/b/b-on_create/PublishPermission-c81aa40d099e0812205448708df27e482b34279ead",
             "uniqueId": "root_b_boncreate_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_C218A49E",
           },
         },
@@ -1118,7 +1173,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bondelete_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_5700B364": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_delete/PublishPermission-c81aa40d099e0812205448708df27e482b34279ead",
+            "path": "root/Default/Default/b/b-on_delete/PublishPermission-c81aa40d099e0812205448708df27e482b34279ead",
             "uniqueId": "root_b_bondelete_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_5700B364",
           },
         },
@@ -1128,7 +1183,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bonupdate_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_53C55984": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_update/PublishPermission-c81aa40d099e0812205448708df27e482b34279ead",
+            "path": "root/Default/Default/b/b-on_update/PublishPermission-c81aa40d099e0812205448708df27e482b34279ead",
             "uniqueId": "root_b_bonupdate_PublishPermissionc81aa40d099e0812205448708df27e482b34279ead_53C55984",
           },
         },
@@ -1138,7 +1193,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otheroncreate_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_432AF88B": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_create/PublishPermission-c87420a27eeb4720af7eb13d276c8124ea73fd1ead",
+            "path": "root/Default/Default/other/other-on_create/PublishPermission-c87420a27eeb4720af7eb13d276c8124ea73fd1ead",
             "uniqueId": "root_other_otheroncreate_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_432AF88B",
           },
         },
@@ -1148,7 +1203,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otherondelete_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_029C6FE9": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_delete/PublishPermission-c87420a27eeb4720af7eb13d276c8124ea73fd1ead",
+            "path": "root/Default/Default/other/other-on_delete/PublishPermission-c87420a27eeb4720af7eb13d276c8124ea73fd1ead",
             "uniqueId": "root_other_otherondelete_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_029C6FE9",
           },
         },
@@ -1158,7 +1213,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otheronupdate_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_18B527D9": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_update/PublishPermission-c87420a27eeb4720af7eb13d276c8124ea73fd1ead",
+            "path": "root/Default/Default/other/other-on_update/PublishPermission-c87420a27eeb4720af7eb13d276c8124ea73fd1ead",
             "uniqueId": "root_other_otheronupdate_PublishPermissionc87420a27eeb4720af7eb13d276c8124ea73fd1ead_18B527D9",
           },
         },
@@ -1170,7 +1225,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_boncreate_boncreateTopicSubscription8588493f_C085779F": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_create/b-on_create-TopicSubscription-8588493f",
+            "path": "root/Default/Default/b/b-on_create/b-on_create-TopicSubscription-8588493f",
             "uniqueId": "root_b_boncreate_boncreateTopicSubscription8588493f_C085779F",
           },
         },
@@ -1181,7 +1236,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_boncreate_boncreateTopicSubscription88f6f7aa_DBAF4927": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_create/b-on_create-TopicSubscription-88f6f7aa",
+            "path": "root/Default/Default/b/b-on_create/b-on_create-TopicSubscription-88f6f7aa",
             "uniqueId": "root_b_boncreate_boncreateTopicSubscription88f6f7aa_DBAF4927",
           },
         },
@@ -1192,7 +1247,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bondelete_bondeleteTopicSubscription6e8b2f6c_298F9511": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_delete/b-on_delete-TopicSubscription-6e8b2f6c",
+            "path": "root/Default/Default/b/b-on_delete/b-on_delete-TopicSubscription-6e8b2f6c",
             "uniqueId": "root_b_bondelete_bondeleteTopicSubscription6e8b2f6c_298F9511",
           },
         },
@@ -1203,7 +1258,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bondelete_bondeleteTopicSubscriptiondece1815_43815558": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_delete/b-on_delete-TopicSubscription-dece1815",
+            "path": "root/Default/Default/b/b-on_delete/b-on_delete-TopicSubscription-dece1815",
             "uniqueId": "root_b_bondelete_bondeleteTopicSubscriptiondece1815_43815558",
           },
         },
@@ -1214,7 +1269,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bonupdate_bonupdateTopicSubscription8b441417_158B25AC": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_update/b-on_update-TopicSubscription-8b441417",
+            "path": "root/Default/Default/b/b-on_update/b-on_update-TopicSubscription-8b441417",
             "uniqueId": "root_b_bonupdate_bonupdateTopicSubscription8b441417_158B25AC",
           },
         },
@@ -1225,7 +1280,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_b_bonupdate_bonupdateTopicSubscriptionc7d8cc3e_113BB07E": {
         "//": {
           "metadata": {
-            "path": "root/Default/b/b-on_update/b-on_update-TopicSubscription-c7d8cc3e",
+            "path": "root/Default/Default/b/b-on_update/b-on_update-TopicSubscription-c7d8cc3e",
             "uniqueId": "root_b_bonupdate_bonupdateTopicSubscriptionc7d8cc3e_113BB07E",
           },
         },
@@ -1236,7 +1291,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otheroncreate_otheroncreateTopicSubscription1a259cac_194B9C27": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_create/other-on_create-TopicSubscription-1a259cac",
+            "path": "root/Default/Default/other/other-on_create/other-on_create-TopicSubscription-1a259cac",
             "uniqueId": "root_other_otheroncreate_otheroncreateTopicSubscription1a259cac_194B9C27",
           },
         },
@@ -1247,7 +1302,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otherondelete_otherondeleteTopicSubscription2e31a750_5FE2D81D": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_delete/other-on_delete-TopicSubscription-2e31a750",
+            "path": "root/Default/Default/other/other-on_delete/other-on_delete-TopicSubscription-2e31a750",
             "uniqueId": "root_other_otherondelete_otherondeleteTopicSubscription2e31a750_5FE2D81D",
           },
         },
@@ -1258,7 +1313,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_other_otheronupdate_otheronupdateTopicSubscription02fb2142_AA407751": {
         "//": {
           "metadata": {
-            "path": "root/Default/other/other-on_update/other-on_update-TopicSubscription-02fb2142",
+            "path": "root/Default/Default/other/other-on_update/other-on_update-TopicSubscription-02fb2142",
             "uniqueId": "root_other_otheronupdate_otheronupdateTopicSubscription02fb2142_AA407751",
           },
         },
@@ -1274,6 +1329,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
+const $wing_is_test = process.env.WING_IS_TEST === \\"true\\";
 
 function __app(target) {
 	switch (target) {
@@ -1292,56 +1348,72 @@ function __app(target) {
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
 }
-const $App = __app(process.env.WING_TARGET);
+const $AppBase = __app(process.env.WING_TARGET);
 
 const cloud = require('@winglang/sdk').cloud;
-class MyApp extends $App {
-constructor() {
-  super({ outdir: $outdir, name: \\"bucket_events\\", plugins: $plugins });
-  
-  const other = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"other\\");
-  const b = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"b\\");
-  (b.onDelete(new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.e0895e35017839af19c4cdf5e5752ce00b8bee3a6425933fc1349d037cf9ed23/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-    bindings: {
-    }
-  })));
-  (b.onUpdate(new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.4c20a426ba35d2bc9530ee9673d6111365502af4b9943b5993189fef4c9cbb24/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-    bindings: {
-    }
-  })));
-  (b.onCreate(new $stdlib.core.Inflight(this, \\"$Inflight3\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.fea0ccbdf726c314d7bdccef2e9a3af2667b14bbf90b08535bc3b8531676a5f7/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-    bindings: {
-    }
-  })));
-  (b.onEvent(new $stdlib.core.Inflight(this, \\"$Inflight4\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.dbe235d917909459004bd5b4ee5f5c116451dd314d6afb668f81aca7412c951c/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-    bindings: {
-      other: {
-        obj: other,
-        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"public_url\\",\\"put\\",\\"put_json\\"]
-      },
-    }
-  })));
-  (other.onEvent(new $stdlib.core.Inflight(this, \\"$Inflight5\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.1077abc4fd9d2c1dcaf67fa6bfcd127520e9da3f7cb638866ee99e8ac058bb04/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-    bindings: {
-    }
-  })));
-  this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight6\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.bd899ae09cdb75ce681c2be5132db5f8fbc54bd45d0a438077f48809708c05a6/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-    bindings: {
-      b: {
-        obj: b,
-        ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"public_url\\",\\"put\\",\\"put_json\\"]
-      },
-    }
-  }));
+class $Root extends $stdlib.core.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    const other = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"other\\");
+    const b = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"b\\");
+    (b.onDelete(new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.e0895e35017839af19c4cdf5e5752ce00b8bee3a6425933fc1349d037cf9ed23/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+  bindings: {
+  }
+})));
+    (b.onUpdate(new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
+  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.4c20a426ba35d2bc9530ee9673d6111365502af4b9943b5993189fef4c9cbb24/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+  bindings: {
+  }
+})));
+    (b.onCreate(new $stdlib.core.Inflight(this, \\"$Inflight3\\", {
+  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.fea0ccbdf726c314d7bdccef2e9a3af2667b14bbf90b08535bc3b8531676a5f7/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+  bindings: {
+  }
+})));
+    (b.onEvent(new $stdlib.core.Inflight(this, \\"$Inflight4\\", {
+  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.dbe235d917909459004bd5b4ee5f5c116451dd314d6afb668f81aca7412c951c/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+  bindings: {
+    other: {
+      obj: other,
+      ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"public_url\\",\\"put\\",\\"put_json\\"]
+    },
+  }
+})));
+    (other.onEvent(new $stdlib.core.Inflight(this, \\"$Inflight5\\", {
+  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.1077abc4fd9d2c1dcaf67fa6bfcd127520e9da3f7cb638866ee99e8ac058bb04/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+  bindings: {
+  }
+})));
+    this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight6\\", {
+  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.bd899ae09cdb75ce681c2be5132db5f8fbc54bd45d0a438077f48809708c05a6/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+  bindings: {
+    b: {
+      obj: b,
+      ops: [\\"delete\\",\\"get\\",\\"get_json\\",\\"list\\",\\"public_url\\",\\"put\\",\\"put_json\\"]
+    },
+  }
+}));
+  }
 }
+
+class $App extends $AppBase {
+  constructor() {
+    super({ outdir: $outdir, name: \\"bucket_events\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    if ($wing_is_test) {
+      new $Root(this, \\"env0\\");
+      const $test_runner = this.testRunner;
+      const $tests = $test_runner.findTests();
+      for (let $i = 1; $i < $tests.length; $i++) {
+        new $Root(this, \\"env\\" + $i);
+      }
+    } else {
+      new $Root(this, \\"Default\\");
+    }
+  }
 }
-new MyApp().synth();"
+
+new $App().synth();"
 `;
 
 exports[`wing compile -t tf-aws > proc.4c20a426ba35d2bc9530ee9673d6111365502af4b9943b5993189fef4c9cbb24/index.js 1`] = `
@@ -1385,8 +1457,10 @@ exports[`wing compile -t tf-aws > proc.fea0ccbdf726c314d7bdccef2e9a3af2667b14bbf
 } };"
 `;
 
-exports[`wing test > stdout 1`] = `
-"pass ┌ bucket_events.w » root/test
+exports[`wing test -t sim > stdout 1`] = `
+"- Compiling to sim...
+✔ Compiling to sim...
+pass ┌ bucket_events.wsim » root/env0/test
      │ created a
      │ last key a
      │ other bucket event called!

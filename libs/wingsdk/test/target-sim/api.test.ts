@@ -60,7 +60,7 @@ test("api with one GET route", async () => {
   await s.stop();
 
   expect(response.status).toEqual(200);
-  expect(await response.text()).toEqual(RESPONSE);
+  expect(await response.json()).toEqual(RESPONSE);
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
@@ -115,12 +115,12 @@ test("api supports every method type", async () => {
   // THEN
   await s.stop();
 
-  await Promise.all(
-    zip(METHODS, responses).map(async ([method, response]) => {
-      expect(response.status).toEqual(200);
-      expect(await response.text()).toEqual(method === "HEAD" ? "" : method);
-    })
-  );
+  for (const [method, response] of zip(METHODS, responses)) {
+    expect(response.status).toEqual(200);
+    if (method !== "HEAD") {
+      expect(await response.json()).toEqual(method);
+    }
+  }
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
@@ -156,10 +156,10 @@ test("api with multiple methods on same route", async () => {
   await s.stop();
 
   expect(getResponse.status).toEqual(200);
-  expect(await getResponse.text()).toEqual(GET_RESPONSE);
+  expect(await getResponse.json()).toEqual(GET_RESPONSE);
 
   expect(postResponse.status).toEqual(200);
-  expect(await postResponse.text()).toEqual(POST_RESPONSE);
+  expect(await postResponse.json()).toEqual(POST_RESPONSE);
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
@@ -196,10 +196,10 @@ test("api with multiple routes", async () => {
   await s.stop();
 
   expect(response1.status).toEqual(200);
-  expect(await response1.text()).toEqual(RESPONSE1);
+  expect(await response1.json()).toEqual(RESPONSE1);
 
   expect(response2.status).toEqual(200);
-  expect(await response2.text()).toEqual(RESPONSE2);
+  expect(await response2.json()).toEqual(RESPONSE2);
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
@@ -254,7 +254,7 @@ test("api handler can read the request path", async () => {
   await s.stop();
 
   expect(response.status).toEqual(200);
-  expect(await response.text()).toEqual(ROUTE);
+  expect(await response.json()).toEqual(ROUTE);
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
@@ -324,6 +324,35 @@ test("api handler can set response headers", async () => {
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("api url can be used as environment variable", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const handler = Testing.makeHandler(
+    app,
+    "Handler",
+    `async handle(req) { return process.env["API_URL"]; }`
+  );
+  cloud.Function._newFunction(app, "my_function", handler, {
+    env: {
+      API_URL: api.url,
+    },
+  });
+
+  // WHEN
+  const s = await app.startSimulator();
+  const fnEnvironmentValue =
+    s.getResourceConfig("/my_function").props.environmentVariables.API_URL;
+
+  const fnClient = s.getResource("/my_function") as cloud.IFunctionClient;
+  const response = await fnClient.invoke("");
+
+  // THEN
+  await s.stop();
+  expect(fnEnvironmentValue).toEqual("${root/my_api#attrs.url}");
+  expect(response.startsWith("http://")).toEqual(true);
 });
 
 function getApiUrl(s: Simulator, path: string): string {

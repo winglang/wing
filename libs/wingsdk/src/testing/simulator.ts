@@ -1,13 +1,12 @@
 import { existsSync } from "fs";
 import { join } from "path";
 import { Tree } from "./tree";
+import { ITestRunnerClient, TestResult, Trace, TraceType } from "../cloud";
 import { SDK_VERSION } from "../constants";
 import { ConstructTree } from "../core";
 import { ISimulatorResourceInstance } from "../target-sim";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
-// eslint-disable-next-line import/no-restricted-paths
-import { Function } from "../target-sim/function.inflight";
 import { BaseResourceSchema, WingSimulatorSchema } from "../target-sim/schema";
 import { readJsonSync } from "../util";
 
@@ -64,51 +63,6 @@ export interface IWithTraceProps {
 }
 
 /**
- * Represents an trace emitted during simulation.
- */
-export interface Trace {
-  /**
-   * A JSON blob with structured data.
-   */
-  readonly data: any;
-
-  /**
-   * The type of the source that emitted the trace.
-   */
-  readonly sourceType: string;
-
-  /**
-   * The path of the resource that emitted the trace.
-   */
-  readonly sourcePath: string;
-
-  /**
-   * The type of a trace.
-   */
-  readonly type: TraceType;
-
-  /**
-   * The timestamp of the event, in ISO 8601 format.
-   * @example 2020-01-01T00:00:00.000Z
-   */
-  readonly timestamp: string;
-}
-
-/**
- * The type of a trace.
- */
-export enum TraceType {
-  /**
-   * A trace representing a resource activity.
-   */
-  RESOURCE = "resource",
-  /**
-   * A trace representing information emitted by the logger.
-   */
-  LOG = "log",
-}
-
-/**
  * Context that is passed to individual resource simulations.
  */
 export interface ISimulatorContext {
@@ -139,6 +93,11 @@ export interface ISimulatorContext {
    * run, and the trace will be populated with the result's success or failure.
    */
   withTrace(trace: IWithTraceProps): Promise<any>;
+
+  /**
+   * Get a list of all traces until this point.
+   */
+  listTraces(): Trace[];
 }
 
 /**
@@ -263,6 +222,9 @@ export class Simulator {
             });
             throw err;
           }
+        },
+        listTraces: () => {
+          return [...this._traces];
         },
       };
 
@@ -412,9 +374,20 @@ export class Simulator {
     this._traceSubscribers.push(subscriber);
   }
 
+  private findTestRunner(): ITestRunnerClient {
+    let testRunnerClient = this.tryGetResource("root/cloud.TestRunner");
+    if (!testRunnerClient) {
+      throw new Error(
+        `Could not find a cloud.TestRunner resource in the simulation tree. Resources ${this.listResources()}}`
+      );
+    }
+    return testRunnerClient;
+  }
+
   /**
    * Lists all resource with identifier "test" or that start with "test:*".
    * @returns A list of resource paths
+   * @deprecated use the "cloud.TestRunner" resource client instead.
    */
   public listTests(): string[] {
     const isTest = /(\/test$|\/test:([^\\/])+$)/;
@@ -427,6 +400,8 @@ export class Simulator {
    *
    * A test is a `cloud.Function` resource with an identifier that starts with "test." or is "test".
    * @returns A list of test results.
+   *
+   * @deprecated use the "cloud.TestRunner" resource client instead.
    */
   public async runAllTests(): Promise<TestResult[]> {
     const results = new Array<TestResult>();
@@ -441,43 +416,26 @@ export class Simulator {
 
   /**
    * Runs a single test.
-   * @param path The path to a cloud.Function resource that repersents the test
+   * @param path The path to a cloud.Function resource that represents the test
    * @returns The result of the test
+   *
+   * @deprecated create a fresh simulator instance and invoke a test through the "cloud.TestRunner" resource client instead.
    */
   public async runTest(path: string): Promise<TestResult> {
     // create a new simulator instance to run this test in isolation
     const isolated = new Simulator({ simfile: this.simdir });
     await isolated.start();
 
-    // find the test function and verify it exists and indeed is a function
-    const fn: Function = isolated.tryGetResource(path);
-    if (!fn) {
-      const all = this.listResources();
-      throw new Error(`Resource "${path}" not found. Resources: ${all}`);
-    }
-    if (!("invoke" in fn)) {
-      throw new Error(
-        `Resource "${path}" is not a cloud.Function (expecting "invoke()").`
-      );
-    }
+    // find the test runner
+    const testRunner = isolated.findTestRunner();
 
-    // run the test and capture any errors
-    let error = undefined;
-    try {
-      await fn.invoke("");
-    } catch (err) {
-      error = (err as any).stack;
-    }
+    // run the test
+    const result = await testRunner.runTest(path);
 
     // stop the simulator
     await isolated.stop();
 
-    return {
-      path: path,
-      traces: isolated.listTraces(),
-      pass: !error,
-      error: error,
-    };
+    return result;
   }
 
   /**
@@ -609,29 +567,4 @@ class HandleManager {
     this.handles.clear();
     this.nextHandle = 0;
   }
-}
-
-/**
- * A result of a single test.
- */
-export interface TestResult {
-  /**
-   * The path to the test function.
-   */
-  readonly path: string;
-
-  /**
-   * Whether the test passed.
-   */
-  readonly pass: boolean;
-
-  /**
-   * The error message if the test failed.
-   */
-  readonly error?: string;
-
-  /**
-   * List of traces emitted during the test.
-   */
-  readonly traces: Trace[];
 }

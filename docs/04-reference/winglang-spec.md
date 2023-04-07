@@ -2073,7 +2073,7 @@ supported languages.
 
 ## 5.2 JavaScript
 
-The `extern "file.js"` modifier can be used on method declarations (in classes and resources) to indicate that a method is backed by an implementation imported from a JavaScript file.
+The `extern "<commonjs module path or name>"` modifier can be used on method declarations (in classes and resources) to indicate that a method is backed by an implementation imported from a JavaScript module. The module can either be a relative path or a name and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
 
 In the following example, the static inflight method `make_id` is implemented
 in `helper.js`:
@@ -2084,15 +2084,18 @@ resource TaskList {
   // ...
 
   inflight add_task(title: str) {
-    let id = TaskList.uuid();
+    let id = TaskList.make_id(); // or TaskList.v6();
     this.bucket.put(id, title);
   }
 
   extern "./helpers.js" static inflight make_id(): str;
+
+  // Alternatively, you can use a module name
+  extern "uuid" static inflight v6(): str;
 } 
 
 // helpers.js
-const uuid = require('uuid');
+const uuid = require("uuid");
 
 exports.make_id = function() {
   return uuid.v6();

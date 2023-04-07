@@ -8,7 +8,15 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "stackName": "root",
       "version": "0.15.2",
     },
-    "outputs": {},
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
   },
   "data": {
     "aws_region": {
@@ -22,6 +30,11 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       },
     },
   },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
+  },
   "provider": {
     "aws": [
       {},
@@ -32,7 +45,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudApi_api_deployment_E29F699A": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Api/api/deployment",
+            "path": "root/Default/Default/cloud.Api/api/deployment",
             "uniqueId": "root_cloudApi_api_deployment_E29F699A",
           },
         },
@@ -41,7 +54,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         },
         "rest_api_id": "\${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.id}",
         "triggers": {
-          "redeployment": "5180f619b1ca231e0d7bdc247b65a37d32c2d561",
+          "redeployment": "06d5d79d88a464ffe5666fff8744c6bcc926732c",
         },
       },
     },
@@ -49,7 +62,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudApi_api_8C9FE51E": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Api/api/api",
+            "path": "root/Default/Default/cloud.Api/api/api",
             "uniqueId": "root_cloudApi_api_8C9FE51E",
           },
         },
@@ -61,7 +74,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudApi_api_stage_57D6284A": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Api/api/stage",
+            "path": "root/Default/Default/cloud.Api/api/stage",
             "uniqueId": "root_cloudApi_api_stage_57D6284A",
           },
         },
@@ -74,7 +87,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudCounter_E0AC1263": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Counter/Default",
+            "path": "root/Default/Default/cloud.Counter/Default",
             "uniqueId": "root_cloudCounter_E0AC1263",
           },
         },
@@ -93,7 +106,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudApi_cloudApiOnRequeste46e5cb7_IamRole_15046B29": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Api/cloud.Api-OnRequest-e46e5cb7/IamRole",
+            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-e46e5cb7/IamRole",
             "uniqueId": "root_cloudApi_cloudApiOnRequeste46e5cb7_IamRole_15046B29",
           },
         },
@@ -104,7 +117,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudApi_cloudApiOnRequeste46e5cb7_IamRolePolicy_0281983F": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Api/cloud.Api-OnRequest-e46e5cb7/IamRolePolicy",
+            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-e46e5cb7/IamRolePolicy",
             "uniqueId": "root_cloudApi_cloudApiOnRequeste46e5cb7_IamRolePolicy_0281983F",
           },
         },
@@ -116,7 +129,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudApi_cloudApiOnRequeste46e5cb7_IamRolePolicyAttachment_3D2A6333": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Api/cloud.Api-OnRequest-e46e5cb7/IamRolePolicyAttachment",
+            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-e46e5cb7/IamRolePolicyAttachment",
             "uniqueId": "root_cloudApi_cloudApiOnRequeste46e5cb7_IamRolePolicyAttachment_3D2A6333",
           },
         },
@@ -128,7 +141,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Api/cloud.Api-OnRequest-e46e5cb7/Default",
+            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-e46e5cb7/Default",
             "uniqueId": "root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E",
           },
         },
@@ -146,13 +159,17 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "s3_bucket": "\${aws_s3_bucket.root_cloudApi_cloudApiOnRequeste46e5cb7_Code_42BF847C.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudApi_cloudApiOnRequeste46e5cb7_S3Object_69EE2256.key}",
         "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
       },
     },
     "aws_lambda_permission": {
       "root_cloudApi_api_permissionGETceca4943_C84933C8": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Api/api/permission-GET-ceca4943",
+            "path": "root/Default/Default/cloud.Api/api/permission-GET-ceca4943",
             "uniqueId": "root_cloudApi_api_permissionGETceca4943_C84933C8",
           },
         },
@@ -167,7 +184,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudApi_cloudApiOnRequeste46e5cb7_Code_42BF847C": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Api/cloud.Api-OnRequest-e46e5cb7/Code",
+            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-e46e5cb7/Code",
             "uniqueId": "root_cloudApi_cloudApiOnRequeste46e5cb7_Code_42BF847C",
           },
         },
@@ -178,7 +195,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "root_cloudApi_cloudApiOnRequeste46e5cb7_S3Object_69EE2256": {
         "//": {
           "metadata": {
-            "path": "root/Default/cloud.Api/cloud.Api-OnRequest-e46e5cb7/S3Object",
+            "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-e46e5cb7/S3Object",
             "uniqueId": "root_cloudApi_cloudApiOnRequeste46e5cb7_S3Object_69EE2256",
           },
         },
@@ -194,6 +211,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
+const $wing_is_test = process.env.WING_IS_TEST === \\"true\\";
 
 function __app(target) {
 	switch (target) {
@@ -212,28 +230,44 @@ function __app(target) {
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
 }
-const $App = __app(process.env.WING_TARGET);
+const $AppBase = __app(process.env.WING_TARGET);
 
 const cloud = require('@winglang/sdk').cloud;
-class MyApp extends $App {
-constructor() {
-  super({ outdir: $outdir, name: \\"api\\", plugins: $plugins });
-  
-  const api = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Api\\",this,\\"cloud.Api\\");
-  const counter = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Counter\\",this,\\"cloud.Counter\\");
-  const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.c83263b121750e827ffc19b09e3c0813a9accb33e17a19eae0dbc2680135a09e/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-    bindings: {
-      counter: {
-        obj: counter,
-        ops: [\\"dec\\",\\"inc\\",\\"peek\\",\\"reset\\"]
-      },
+class $Root extends $stdlib.core.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    const api = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Api\\",this,\\"cloud.Api\\");
+    const counter = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Counter\\",this,\\"cloud.Counter\\");
+    const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.c83263b121750e827ffc19b09e3c0813a9accb33e17a19eae0dbc2680135a09e/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+  bindings: {
+    counter: {
+      obj: counter,
+      ops: [\\"dec\\",\\"inc\\",\\"peek\\",\\"reset\\"]
+    },
+  }
+});
+    (api.get(\\"/hello/world\\",handler));
+  }
+}
+
+class $App extends $AppBase {
+  constructor() {
+    super({ outdir: $outdir, name: \\"api\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    if ($wing_is_test) {
+      new $Root(this, \\"env0\\");
+      const $test_runner = this.testRunner;
+      const $tests = $test_runner.findTests();
+      for (let $i = 1; $i < $tests.length; $i++) {
+        new $Root(this, \\"env\\" + $i);
+      }
+    } else {
+      new $Root(this, \\"Default\\");
     }
-  });
-  (api.get(\\"/hello/world\\",handler));
+  }
 }
-}
-new MyApp().synth();"
+
+new $App().synth();"
 `;
 
 exports[`wing compile -t tf-aws > proc.c83263b121750e827ffc19b09e3c0813a9accb33e17a19eae0dbc2680135a09e/index.js 1`] = `
@@ -248,4 +282,8 @@ exports[`wing compile -t tf-aws > proc.c83263b121750e827ffc19b09e3c0813a9accb33e
 } };"
 `;
 
-exports[`wing test > stdout 1`] = `"pass ─ api.w (no tests)"`;
+exports[`wing test -t sim > stdout 1`] = `
+"- Compiling to sim...
+✔ Compiling to sim...
+pass ─ api.wsim (no tests)"
+`;

@@ -2,6 +2,11 @@
 
 exports[`schedule behavior with cron 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_cloudwatch_event_rule\\": {
       \\"root_Schedule_85A4458B\\": {
@@ -46,7 +51,11 @@ exports[`schedule behavior with cron 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_ScheduleOnTickc5395e41_Code_C7AC6B0A.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_ScheduleOnTickc5395e41_S3Object_DE498BA0.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       }
     },
     \\"aws_lambda_permission\\": {
@@ -295,6 +304,33 @@ exports[`schedule behavior with cron 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -333,6 +369,11 @@ exports[`schedule behavior with cron 2`] = `
 
 exports[`schedule behavior with rate 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_cloudwatch_event_rule\\": {
       \\"root_Schedule_85A4458B\\": {
@@ -377,7 +418,11 @@ exports[`schedule behavior with rate 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_ScheduleOnTickc5395e41_Code_C7AC6B0A.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_ScheduleOnTickc5395e41_S3Object_DE498BA0.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       }
     },
     \\"aws_lambda_permission\\": {
@@ -626,6 +671,33 @@ exports[`schedule behavior with rate 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -664,6 +736,11 @@ exports[`schedule behavior with rate 2`] = `
 
 exports[`schedule with two functions 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_cloudwatch_event_rule\\": {
       \\"root_Schedule_85A4458B\\": {
@@ -723,7 +800,11 @@ exports[`schedule with two functions 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_ScheduleOnTick0a615500_Code_12A9FE62.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_ScheduleOnTick0a615500_S3Object_EB395932.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       },
       \\"root_ScheduleOnTick7b33bcba_F513E6E2\\": {
         \\"environment\\": {
@@ -738,7 +819,11 @@ exports[`schedule with two functions 1`] = `
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_ScheduleOnTick7b33bcba_Code_4537EF5B.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_ScheduleOnTick7b33bcba_S3Object_4D569B28.key}\\",
-        \\"timeout\\": 30
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       }
     },
     \\"aws_lambda_permission\\": {
@@ -1161,6 +1246,33 @@ exports[`schedule with two functions 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {

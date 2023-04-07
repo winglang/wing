@@ -38,6 +38,19 @@ test("create a bucket", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
+test("bucket has force_destroy if App is a test environment", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp(), isTestEnvironment: true });
+  Bucket._newBucket(app, "my_bucket");
+  const output = app.synth();
+
+  // THEN
+  expect(
+    JSON.parse(output).resource.aws_s3_bucket.root_mybucket_E5DAA363
+      .force_destroy
+  ).toBe(true);
+});
+
 test("bucket is public", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
