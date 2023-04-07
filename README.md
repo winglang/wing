@@ -80,7 +80,8 @@ You can install Wing in a few simple steps:
 3. Get the [Wing IDE Extension](https://docs.winglang.io/getting-started/installation#wing-ide-extension) for your favorite editor.
 4. Launch the [Wing Console](https://docs.winglang.io/getting-started/installation#wing-console) and take it for a spin!
 
-For a step-by-step guide, head over to our [Getting Started](https://docs.winglang.io/getting-started) guide. It's a once-in-a-lifetime adventure into the Wing rabbit hole. 🕳️
+For a step-by-step guide, head over to our [Getting Started](https://docs.winglang.io/getting-started) guide.
+It's a once-in-a-lifetime adventure into the Wing rabbit hole. 🕳️
 
 ## Why choose Wing? 🌟
 
