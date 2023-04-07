@@ -131,7 +131,8 @@ We are incredibly grateful to our entire community 🙏 for contributing bug fix
 
 ## License 📜
 
-Wing is licensed under the  [MIT License](./LICENSE.md). Contributions are made under our [contribution license](https://docs.winglang.io/terms-and-policies/contribution-license.html).
+Wing is licensed under the  [MIT License](./LICENSE.md).
+Contributions are made under our [contribution license](https://docs.winglang.io/terms-and-policies/contribution-license.html).
 
 Happy coding, and remember: the sky's the limit with Wing! 🌤️🚀
 
