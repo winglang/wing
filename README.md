@@ -67,7 +67,6 @@ Ready to take off? 🛫
 
 > **Warning**
 > Wing is in its alpha stage, and is not recommended for production yet.
-> Many features are still missing, and APIs will dramatically evolve.
 > However, we're excited for you to take part in influencing every aspect of this project!
 >
 > Our <a href="https://docs.winglang.io/status">Project Status</a> page includes more information about our roadmap. 👷‍♀️
