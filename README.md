@@ -114,7 +114,7 @@ As can be seen in the below section, creating a new language that is tailored to
 [![Short demo](./logo/demo.gif)](https://youtu.be/x0xfIoY5y6E)
 
 ## Is there a company behind Wing / what is the business model
-Monada Inc. is leading the development of Winglang.
+[Monada](https://monada.co) is leading the development of Winglang.
 The language and local simulator will always remain open-source and free to use, with plans to eventually contribute them to a dedicated foundation.
 Monada's business model is planned around connecting the Wing console to production applications and charging for the enhanced management and observability experience it will provide. Use of the console for development will always remain free.
 
