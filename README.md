@@ -16,6 +16,8 @@
   ▪︎
   <a href="https://github.com/winglang/wing/discussions">Discussions</a>
   ▪︎
+  <a href="https://stackoverflow.com/questions/tagged/winglang">Stack Overflow</a>
+  ▪︎
   <a href="https://docs.winglang.io/contributors/">Contribute</a>
 </p>
 
