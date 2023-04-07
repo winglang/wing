@@ -65,6 +65,13 @@ Ready to take off? 🛫
 
 ## Getting started 🛠️
 
+> **Warning**
+> Wing is in its alpha stage, and is not recommended for production yet.
+> Many features are still missing, and APIs will dramatically evolve.
+> However, we're excited for you to take part in influencing every aspect of this project!
+>
+> Our <a href="https://docs.winglang.io/status">Project Status</a> page includes more information about our roadmap. 👷‍♀️
+
 You can install Wing in a few simple steps:
 
 1. Check out the [Prerequisites](https://docs.winglang.io/getting-started/installation#prerequisites).
@@ -73,12 +80,6 @@ You can install Wing in a few simple steps:
 4. Launch the [Wing Console](https://docs.winglang.io/getting-started/installation#wing-console) and take it for a spin!
 
 For a step-by-step guide, head over to our [Getting Started](https://docs.winglang.io/getting-started) guide. It's a once-in-a-lifetime adventure into the Wing rabbit hole. 🕳️
-
-> Wing is in its early stages, and is not recommended for production use yet.
-> Many features are still missing, and APIs will dramatically evolve.
-> However, we're excited for you to take part in influencing every aspect of this project!
->
-> Our <a href="https://docs.winglang.io/status">Project Status</a> page includes more information about stability and roadmap 👷‍♀️
 
 ## Why choose Wing? 🌟
 
