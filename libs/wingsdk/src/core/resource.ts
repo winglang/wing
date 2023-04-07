@@ -394,7 +394,7 @@ export abstract class Resource extends Construct implements IResource {
   }
 }
 
-// The `init` op is a placeholder for any annotations needed for an instnace of a resource's client to be instantiated
+// The `init` op is a placeholder for any annotations needed for an instance of a resource's client to be instantiated
 Resource._annotateInflight("$init", {});
 
 /**
