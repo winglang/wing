@@ -21,7 +21,7 @@
   <a href="https://docs.winglang.io/contributors/">Contribute</a>
 </p>
 
-[![Short demo](./logo/demo.gif)](https://youtu.be/_c4U6ffumw8)
+[![Short demo](./logo/demo.gif)](https://youtu.be/x0xfIoY5y6E)
 
 # Welcome! :wave:
 
@@ -30,34 +30,28 @@ It has [distributed computing primitives], a [resource system] that represents c
 
 [![Same object - different interfaces](./logo/diff-interfaces.gif)](https://youtu.be/y7OGRC2f5gk)
 
-Wing compiles to JavaScript and Terraform (with more provisioning engines on the way).
-The compiler generates least privilege IAM policies based on intent.
-
 While most programming languages think about computers as machines, in Wing, **_the cloud is the computer_**.
 So like traditional languages abstract the computer, wing abstarcts the cloud to allow developers to work at a higher level of abstraction and choose the target cloud at compile time.
+The compiler generates least privilege IAM policies based on intent, and other cloud mechanics.
+**The compilation artifacts are JavaScript and Terraform** (with more provisioning engines on the way).
+Wing's [compiler plugins] can be used to customize to the compilation output, such as infrastructure definitions.
 
-[![Compile to different clouds](./logo/compile-diff-clouds.gif)](https://youtu.be/y7OGRC2f5gk)
+[![Compile to different clouds](./logo/compile-diff-clouds.gif)](https://youtu.be/gr4ewOJGkfo)
 
-By providing a built-in local simulator, and an observability & debugging console, Wing aims to reduce cognitive load and context switching, enabling developers to stay in their creative flow. 
+By providing a built-in local simulator, and an observability & debugging [console], Wing aims to reduce cognitive load and context switching, enabling developers to stay in their creative flow. 
 
-Wing supports backend developers with advanced self-service capabilities to minimize dependency on DevOps, improve code quality and security, accelerate delivery, and easily move code between clouds and platforms. 
+[![Compile to different clouds](./logo/console.gif)](https://youtu.be/Gqn1hYPEwqg)
 
+Wing's creator is Elad Ben-Israel, who was the creator of the AWS CDK.
 
-
-This means that wing has distributed computing primitives and it treats cloud services as first-class citizens.
-We also have some 
-
-Wing applications compile to Terraform and JavaScript that are ready to deploy
-to your favorite cloud provider, and can also be tested in your local
-environment using the [Wing Console]
-
-
-
-[Wing Console]: https://docs.winglang.io/getting-started/console
+[console]: https://docs.winglang.io/getting-started/console
 [cloud-oriented programming language]: https://docs.winglang.io/#what-is-a-cloud-oriented-language
 [distributed computing primitives]: https://docs.winglang.io/concepts/inflights
 [resource system]:https://docs.winglang.io/concepts/resources
 [other optimizations for cloud programming]: #what-are-the-main-features-of-wing-that-make-it-suitable-for-cloud-development
+[compiler plugins]: https://docs.winglang.io/reference/compiler-plugins
+
+Sample wing code:
 
 ```js
 bring cloud;
@@ -86,8 +80,17 @@ unlike a regular computer, the cloud is a big distributed machine, and it needs 
 ## What are the main features of wing that make it suitable for cloud development
 
 ## What does the development flow look like with wing
+1. Write code that targets an abstract cloud.
+2. Visualize, test, and interact with it using the Wing console and its instant hot reloading.
+3. Compile to JS and Terraform, targeting the desired cloud and provisioning engine.
+4. Deploy and manage with your existing tools.
+[![Short demo](./logo/demo.gif)](https://youtu.be/x0xfIoY5y6E)
+
 
 ## Is there a company behind wing / what is the business model
+Monada inc. is leading the development of winglang.
+The language and local sumulator will always be open-source and free and are planed to be donated to a foundation.
+Monada's business model is planned around connecting the Wing console to production applications and charging for the enhanced management and observability experience it will provide.
 
 ## This is Alpha
 
@@ -100,6 +103,7 @@ Our <a href="https://docs.winglang.io/status">Project Status</a> page includes
 more information about stability and roadmap 👷‍♀️
 
 ## Why you should consider wing
+[Details here.](https://docs.winglang.io/#why-you-should-consider-wing)
 
 ## Installation
 
