@@ -30,9 +30,11 @@ Make sure that your current terminal session is on `arm64`:
 ```sh
 arch -arm64 /bin/zsh
 ```
-Install node with `arm64` executable via [nvm](https://github.com/nvm-sh/nvm):
+Reinstall node with `arm64` executable via [nvm](https://github.com/nvm-sh/nvm):
 ```sh
-nvm install <NODE_VERSION>
+nvm use system
+nvm uninstall <NODE_VERSION>
+nvm use <NODE_VERSION>
 ```
 Check the installed node runtime architecture:
 ```sh
