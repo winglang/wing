@@ -5,10 +5,10 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { AwsTarget } from "../shared-aws/commons";
+import { calculateQueuePermissions } from "../shared-aws/permissions";
 import { convertBetweenHandlers } from "../utils/convert";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
-import { calculateQueuePermissions } from "../shared-aws/permissions";
-import { AwsTarget } from "../shared-aws/commons";
 
 /**
  * Queue names are limited to 80 characters.
@@ -52,8 +52,7 @@ export class Queue extends cloud.Queue {
       `${this.node.id}-OnMessageHandler-${hash}`,
       inflight,
       join(
-        __dirname
-          .replace("target-tf-aws", "shared-aws"),
+        __dirname.replace("target-tf-aws", "shared-aws"),
         "queue.onmessage.inflight.js"
       ),
       "QueueOnMessageHandlerClient"
@@ -107,11 +106,7 @@ export class Queue extends cloud.Queue {
     const env = this.envName();
 
     host.addPolicyStatements(
-      ...calculateQueuePermissions(
-        this.queue.arn,
-        AwsTarget.TF_AWS,
-        ops
-      )
+      ...calculateQueuePermissions(this.queue.arn, AwsTarget.TF_AWS, ops)
     );
 
     // The queue url needs to be passed through an environment variable since
@@ -124,8 +119,7 @@ export class Queue extends cloud.Queue {
   /** @internal */
   public _toInflight(): core.Code {
     return core.InflightClient.for(
-      __dirname
-        .replace("target-tf-aws", "shared-aws"),
+      __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "QueueClient",
       [`process.env["${this.envName()}"]`]

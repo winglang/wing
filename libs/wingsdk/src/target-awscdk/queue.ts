@@ -1,14 +1,14 @@
+import { join } from "path";
+import { Duration } from "aws-cdk-lib";
+import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import { Queue as SQSQueue } from "aws-cdk-lib/aws-sqs";
 import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Duration } from "aws-cdk-lib";
-import { convertBetweenHandlers } from "../utils/convert";
-import { join } from "path";
-import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
-import { calculateQueuePermissions } from "../shared-aws/permissions";
 import { AwsTarget } from "../shared-aws/commons";
+import { calculateQueuePermissions } from "../shared-aws/permissions";
+import { convertBetweenHandlers } from "../utils/convert";
 
 /**
  * AWS implementation of `cloud.Queue`.
@@ -22,7 +22,9 @@ export class Queue extends cloud.Queue {
     super(scope, id, props);
 
     this.queue = new SQSQueue(this, "Default", {
-      visibilityTimeout: props.timeout ? Duration.seconds(props.timeout?.seconds) : undefined,
+      visibilityTimeout: props.timeout
+        ? Duration.seconds(props.timeout?.seconds)
+        : undefined,
     });
 
     if ((props.initialMessages ?? []).length) {
@@ -32,15 +34,17 @@ export class Queue extends cloud.Queue {
     }
   }
 
-  public onMessage(inflight: cloud.IQueueOnMessageHandler, props: cloud.QueueOnMessageProps = {}): cloud.Function {
+  public onMessage(
+    inflight: cloud.IQueueOnMessageHandler,
+    props: cloud.QueueOnMessageProps = {}
+  ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnMessageHandler-${hash}`,
       inflight,
       join(
-        __dirname
-          .replace("target-awscdk", "shared-aws"),
+        __dirname.replace("target-awscdk", "shared-aws"),
         "queue.onmessage.inflight.js"
       ),
       "QueueOnMessageHandlerClient"
@@ -75,11 +79,7 @@ export class Queue extends cloud.Queue {
     const env = this.envName();
 
     host.addPolicyStatements(
-      ...calculateQueuePermissions(
-        this.queue.queueArn,
-        AwsTarget.AWSCDK,
-        ops
-      )
+      ...calculateQueuePermissions(this.queue.queueArn, AwsTarget.AWSCDK, ops)
     );
 
     // The queue url needs to be passed through an environment variable since
@@ -92,8 +92,7 @@ export class Queue extends cloud.Queue {
   /** @internal */
   public _toInflight(): core.Code {
     return core.InflightClient.for(
-      __dirname
-        .replace("target-awscdk", "shared-aws"),
+      __dirname.replace("target-awscdk", "shared-aws"),
       __filename,
       "QueueClient",
       [`process.env["${this.envName()}"]`]
