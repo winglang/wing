@@ -255,6 +255,14 @@ where
 		ExprKind::Literal(lit) => {
 			v.visit_literal(lit);
 		}
+		ExprKind::Range {
+			start,
+			inclusive: _,
+			end,
+		} => {
+			v.visit_expr(start);
+			v.visit_expr(end);
+		}
 		ExprKind::Reference(ref_) => {
 			v.visit_reference(ref_);
 		}
@@ -305,9 +313,6 @@ where
 		}
 		ExprKind::FunctionClosure(def) => {
 			v.visit_function_definition(def);
-		}
-		ExprKind::OptionalTest { optional } => {
-			v.visit_expr(optional);
 		}
 	}
 }

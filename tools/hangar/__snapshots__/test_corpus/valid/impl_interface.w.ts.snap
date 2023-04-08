@@ -115,6 +115,7 @@ class $Root extends $stdlib.core.Resource {
 }
 }
 A._annotateInflight(\\"handle\\", {});
+A._annotateInflight(\\"$init\\", {});
     class r extends $stdlib.core.Resource {
 	constructor(scope, id, ) {
 	super(scope, id);
@@ -138,6 +139,7 @@ A._annotateInflight(\\"handle\\", {});
 }
 }
 r._annotateInflight(\\"method_2\\", {});
+r._annotateInflight(\\"$init\\", {});
     class Dog extends $stdlib.core.Resource {
 	constructor(scope, id, ) {
 	super(scope, id);
@@ -152,6 +154,7 @@ r._annotateInflight(\\"method_2\\", {});
 }
 }
 Dog._annotateInflight(\\"eat\\", {});
+Dog._annotateInflight(\\"$init\\", {});
     const x = new A(this,\\"A\\");
     const y = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
   code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.a5455e5c5848cfc293fcb861d9393d32e29a39f8dc8ac79c19dd5289279762fe/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),

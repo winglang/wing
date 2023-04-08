@@ -89,7 +89,7 @@ class $Root extends $stdlib.core.Resource {
 	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R({f1: \${f1_client}}))\`);
 }
 }
-
+R._annotateInflight(\\"$init\\", {\\"this.f1\\": { ops: [] }});
     let x = 5;
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === 5)'\`)})((x === 5))};
     x = (x + 1);

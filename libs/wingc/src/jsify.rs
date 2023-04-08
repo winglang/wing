@@ -25,7 +25,7 @@ use crate::{
 		TypeAnnotation, UnaryOperator, UserDefinedType,
 	},
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
-	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, VariableInfo},
+	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, Type, TypeRef, VariableInfo},
 	utilities::snake_case_to_camel_case,
 	visit::{self, Visit},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
@@ -38,7 +38,6 @@ const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
 const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 
 const INFLIGHT_CLIENTS_DIR: &str = "clients";
-const EXTERN_DIR: &str = "extern";
 
 const TARGET_CODE: &str = r#"
 function __app(target) {
@@ -413,6 +412,23 @@ impl<'a> JSifier<'a> {
 				Literal::Duration(sec) => format!("{}.std.Duration.fromSeconds({})", STDLIB, sec),
 				Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 			},
+			ExprKind::Range { start, inclusive, end } => {
+				match context.phase {
+					Phase::Inflight => format!(
+						"((s,e,i) => {{ function* iterator(start,end,inclusive) {{ let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }}; return iterator(s,e,i); }})({},{},{})",
+						self.jsify_expression(start, context),
+						self.jsify_expression(end, context),
+						inclusive.unwrap()
+					),
+					_ => format!(
+						"{}.std.Range.of({}, {}, {})",
+						STDLIB,
+						self.jsify_expression(start, context),
+						self.jsify_expression(end, context),
+						inclusive.unwrap()
+					)
+				}
+			}
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None, context),
 			ExprKind::Call { function, arg_list } => {
 				let function_type = function.evaluated_type.borrow().unwrap();
@@ -462,11 +478,15 @@ impl<'a> JSifier<'a> {
 				format!("({}{}({}))", auto_await, expr_string, arg_string)
 			}
 			ExprKind::Unary { op, exp } => {
-				let op = match op {
-					UnaryOperator::Minus => "-",
-					UnaryOperator::Not => "!",
-				};
-				format!("({}{})", op, self.jsify_expression(exp, context))
+				let js_exp = self.jsify_expression(exp, context);
+				match op {
+					UnaryOperator::Minus => format!("(-{})", js_exp),
+					UnaryOperator::Not => format!("(!{})", js_exp),
+					UnaryOperator::OptionalTest => {
+						// We use the abstract inequality operator here because we want to check for null or undefined
+						format!("(({}) != null)", js_exp)
+					}
+				}
 			}
 			ExprKind::Binary { op, left, right } => {
 				let js_left = self.jsify_expression(left, context);
@@ -571,10 +591,6 @@ impl<'a> JSifier<'a> {
 				Phase::Independent => unimplemented!(),
 				Phase::Preflight => self.jsify_function(None, func_def, context),
 			},
-			ExprKind::OptionalTest { optional } => {
-				// We use the abstract inequality operator here because we want to check for null or undefined
-				format!("(({}) != null)", self.jsify_expression(optional, context))
-			}
 		}
 	}
 
@@ -848,14 +864,7 @@ impl<'a> JSifier<'a> {
 
 		let body = match &func_def.body {
 			FunctionBody::Statements(scope) => self.jsify_scope(scope, context),
-			FunctionBody::External(external_spec) => {
-				let new_path = self.prepare_extern(
-					matches!(func_def.signature.phase, Phase::Inflight),
-					external_spec,
-					&func_def.span.file_id,
-				);
-				format!("return require({new_path})[\"{name}\"]({parameters})")
-			}
+			FunctionBody::External(external_spec) => format!("return (require(require.resolve(\"{external_spec}\", {{paths: [process.env.WING_PROJECT_DIR]}}))[\"{name}\"])({parameters})")
 		};
 		let mut modifiers = vec![];
 		if func_def.is_static {
@@ -872,32 +881,6 @@ impl<'a> JSifier<'a> {
 				{body}
 			}}"
 		)
-	}
-
-	/// Retrieves the contents of the extern file and copies it to the intermediate directory.
-	/// Returns the path to the copied file
-	fn prepare_extern(&self, is_inflight: bool, path: &String, current_wing_file: &String) -> String {
-		let current_wing_file_dir = Path::new(current_wing_file).parent().unwrap();
-		let path_relative_to_wing = current_wing_file_dir.join(&path);
-		let path_relative_to_wing = path_relative_to_wing.to_str().expect("Converting path to string");
-
-		let contents = std::fs::read_to_string(path_relative_to_wing).expect("Copying extern file");
-
-		let id = base16ct::lower::encode_string(&Sha256::new().chain_update(&contents).finalize());
-		let id_file = format!("{}.js", id);
-		let extern_id_path = Path::new(EXTERN_DIR).join(&id_file);
-
-		let final_dir = self.out_dir.join(EXTERN_DIR);
-		let final_path = self.out_dir.join(&extern_id_path);
-		fs::create_dir_all(final_dir).expect("Creating extern dir");
-		std::fs::write(&final_path, contents).expect("Copying extern file");
-
-		if is_inflight {
-			let relative_path = Path::new("..").join(&extern_id_path);
-			format!("\"{}\"", relative_path.to_str().expect("Converting path to string"))
-		} else {
-			Self::js_resolve_path(&extern_id_path.to_str().expect("Converting path to string").to_string())
-		}
 	}
 
 	fn jsify_class_member(&mut self, member: &ClassField) -> String {
@@ -962,9 +945,14 @@ impl<'a> JSifier<'a> {
 		let resource_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
 		// Get all references between inflight methods and preflight fields
-		let refs = self.find_inflight_references(class);
+		let mut refs = self.find_inflight_references(class);
+
 		// Get fields to be captured by resource's client
 		let captured_fields = self.get_captures(resource_type);
+
+		// Add init's refs
+		let init_refs = BTreeMap::from_iter(captured_fields.iter().map(|f| (format!("this.{f}"), BTreeSet::new())));
+		refs.push(("$init".to_string(), init_refs));
 
 		// Jsify inflight client
 		let inflight_methods = class
@@ -1217,22 +1205,9 @@ impl<'a> JSifier<'a> {
 		for (method_name, function_def) in inflight_methods {
 			// visit statements of method and find all references to fields ("this.xxx")
 			let visitor = FieldReferenceVisitor::new(&function_def);
-			let (mut refs, find_diags) = visitor.find_refs();
+			let (refs, find_diags) = visitor.find_refs();
 
 			self.diagnostics.extend(find_diags);
-
-			// Add no-ops for fields that are not referenced
-			let resource_fields = resource_class
-				.fields
-				.iter()
-				.filter(|f| f.phase == Phase::Preflight)
-				.map(|f| format!("this.{}", f.name.name));
-
-			for f in resource_fields {
-				if !refs.contains_key(f.as_str()) {
-					refs.insert(f, BTreeSet::new());
-				}
-			}
 
 			// add the references to the result
 			result.push((method_name.name.clone(), refs));
