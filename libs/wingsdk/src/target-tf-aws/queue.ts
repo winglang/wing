@@ -40,7 +40,7 @@ export class Queue extends cloud.Queue {
     }
   }
 
-  public onMessage(
+  public addConsumer(
     inflight: cloud.IQueueOnMessageHandler,
     props: cloud.QueueOnMessageProps = {}
   ): cloud.Function {
@@ -91,7 +91,7 @@ export class Queue extends cloud.Queue {
     core.Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "on_message",
+      relationship: "add_consumer",
     });
 
     return fn;

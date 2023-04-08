@@ -894,25 +894,25 @@ new cloud.Queue(props?: QueueProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Queue.onMessage">on_message</a></code> | Create a function to consume messages from this queue. |
+| <code><a href="#@winglang/sdk.cloud.Queue.addConsumer">add_consumer</a></code> | Create a function to consume messages from this queue. |
 
 ---
 
-##### `on_message` <a name="on_message" id="@winglang/sdk.cloud.Queue.onMessage"></a>
+##### `add_consumer` <a name="add_consumer" id="@winglang/sdk.cloud.Queue.addConsumer"></a>
 
 ```wing
-on_message(handler: IQueueOnMessageHandler, props?: QueueOnMessageProps): Function
+add_consumer(handler: IQueueOnMessageHandler, props?: QueueOnMessageProps): Function
 ```
 
 Create a function to consume messages from this queue.
 
-###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.cloud.Queue.onMessage.parameter.handler"></a>
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.cloud.Queue.addConsumer.parameter.handler"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.IQueueOnMessageHandler">IQueueOnMessageHandler</a>
 
 ---
 
-###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.onMessage.parameter.props"></a>
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.addConsumer.parameter.props"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.QueueOnMessageProps">QueueOnMessageProps</a>
 
@@ -1958,7 +1958,7 @@ The maximum amount of time the function can run.
 
 ### QueueOnMessageProps <a name="QueueOnMessageProps" id="@winglang/sdk.cloud.QueueOnMessageProps"></a>
 
-Options for Queue.onMessage.
+Options for Queue.addConsumer.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.QueueOnMessageProps.Initializer"></a>
 
@@ -4767,7 +4767,7 @@ Payload to send to the queue.
 
 **Inflight client:** [@winglang/sdk.cloud.IQueueOnMessageHandlerClient](#@winglang/sdk.cloud.IQueueOnMessageHandlerClient)
 
-Represents a resource with an inflight "handle" method that can be passed to `Queue.on_message`.
+Represents a resource with an inflight "handle" method that can be passed to `Queue.add_consumer`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>

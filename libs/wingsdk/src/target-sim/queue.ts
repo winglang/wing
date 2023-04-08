@@ -28,7 +28,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     this.initialMessages.push(...(props.initialMessages ?? []));
   }
 
-  public onMessage(
+  public addConsumer(
     inflight: cloud.IQueueOnMessageHandler,
     props: cloud.QueueOnMessageProps = {}
   ): cloud.Function {
@@ -83,7 +83,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     core.Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "on_message",
+      relationship: "add_consumer",
     });
 
     return fn;

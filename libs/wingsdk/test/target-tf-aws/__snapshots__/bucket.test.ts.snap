@@ -802,7 +802,7 @@ exports[`bucket with onCreate method 2`] = `
                         {
                           "direction": "outbound",
                           "implicit": false,
-                          "relationship": "on_message",
+                          "relationship": "add_consumer",
                           "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
                         },
                       ],
@@ -869,7 +869,7 @@ exports[`bucket with onCreate method 2`] = `
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "on_message",
+                          "relationship": "add_consumer",
                           "resource": "root/Default/my_bucket/my_bucket-on_create",
                         },
                       ],
@@ -1311,7 +1311,7 @@ exports[`bucket with onDelete method 2`] = `
                         {
                           "direction": "outbound",
                           "implicit": false,
-                          "relationship": "on_message",
+                          "relationship": "add_consumer",
                           "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
                         },
                       ],
@@ -1378,7 +1378,7 @@ exports[`bucket with onDelete method 2`] = `
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "on_message",
+                          "relationship": "add_consumer",
                           "resource": "root/Default/my_bucket/my_bucket-on_delete",
                         },
                       ],
@@ -2012,7 +2012,7 @@ exports[`bucket with onEvent method 2`] = `
                         {
                           "direction": "outbound",
                           "implicit": false,
-                          "relationship": "on_message",
+                          "relationship": "add_consumer",
                           "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
                         },
                       ],
@@ -2079,7 +2079,7 @@ exports[`bucket with onEvent method 2`] = `
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "on_message",
+                          "relationship": "add_consumer",
                           "resource": "root/Default/my_bucket/my_bucket-on_create",
                         },
                       ],
@@ -2189,7 +2189,7 @@ exports[`bucket with onEvent method 2`] = `
                         {
                           "direction": "outbound",
                           "implicit": false,
-                          "relationship": "on_message",
+                          "relationship": "add_consumer",
                           "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
                         },
                       ],
@@ -2256,7 +2256,7 @@ exports[`bucket with onEvent method 2`] = `
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "on_message",
+                          "relationship": "add_consumer",
                           "resource": "root/Default/my_bucket/my_bucket-on_delete",
                         },
                       ],
@@ -2366,7 +2366,7 @@ exports[`bucket with onEvent method 2`] = `
                         {
                           "direction": "outbound",
                           "implicit": false,
-                          "relationship": "on_message",
+                          "relationship": "add_consumer",
                           "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
                         },
                       ],
@@ -2433,7 +2433,7 @@ exports[`bucket with onEvent method 2`] = `
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "on_message",
+                          "relationship": "add_consumer",
                           "resource": "root/Default/my_bucket/my_bucket-on_update",
                         },
                       ],
@@ -2919,7 +2919,7 @@ exports[`bucket with onUpdate method 2`] = `
                         {
                           "direction": "outbound",
                           "implicit": false,
-                          "relationship": "on_message",
+                          "relationship": "add_consumer",
                           "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
                         },
                       ],
@@ -2986,7 +2986,7 @@ exports[`bucket with onUpdate method 2`] = `
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "on_message",
+                          "relationship": "add_consumer",
                           "resource": "root/Default/my_bucket/my_bucket-on_update",
                         },
                       ],

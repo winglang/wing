@@ -89,7 +89,7 @@ export class Topic extends cloud.Topic {
     core.Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "on_message",
+      relationship: "add_consumer",
     });
 
     return fn;
