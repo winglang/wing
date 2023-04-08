@@ -58,18 +58,6 @@ export class Queue extends cloud.Queue {
       throw new Error("Queue only supports creating awscdk.Function right now");
     }
 
-    // fn.addPolicyStatements({
-    //   effect: Effect.ALLOW,
-    //   actions: [
-    //     "sqs:ReceiveMessage",
-    //     "sqs:ChangeMessageVisibility",
-    //     "sqs:GetQueueUrl",
-    //     "sqs:DeleteMessage",
-    //     "sqs:GetQueueAttributes",
-    //   ],
-    //   resources: [this.queue.queueArn],
-    // });
-
     const eventSource = new SqsEventSource(this.queue, {
       batchSize: props.batchSize ?? 1,
     });
@@ -107,7 +95,7 @@ export class Queue extends cloud.Queue {
       __dirname
         .replace("target-awscdk", "shared-aws"),
       __filename,
-      "ScheduleClient",
+      "QueueClient",
       [`process.env["${this.envName()}"]`]
     );
   }
