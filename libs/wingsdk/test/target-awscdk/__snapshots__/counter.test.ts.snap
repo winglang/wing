@@ -62,6 +62,24 @@ exports[`counter with initial value 1`] = `
 `;
 
 exports[`dec() policy statement 1`] = `
+"new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(event) {
+  const val = await this.my_counter.dec(2);
+  console.log(val);
+}
+};
+})())({
+my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
+})"
+`;
+
+exports[`dec() policy statement 2`] = `
 {
   "Parameters": {
     "BootstrapVersion": {
@@ -272,6 +290,24 @@ exports[`default counter behavior 1`] = `
 `;
 
 exports[`function with a counter binding 1`] = `
+"new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(event) {
+  const val = await this.my_counter.inc(2);
+  console.log(val);
+}
+};
+})())({
+my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
+})"
+`;
+
+exports[`function with a counter binding 2`] = `
 {
   "Parameters": {
     "BootstrapVersion": {
@@ -421,6 +457,24 @@ exports[`function with a counter binding 1`] = `
 `;
 
 exports[`inc() policy statement 1`] = `
+"new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(event) {
+  const val = await this.my_counter.inc(2);
+  console.log(val);
+}
+};
+})())({
+my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
+})"
+`;
+
+exports[`inc() policy statement 2`] = `
 {
   "Parameters": {
     "BootstrapVersion": {
@@ -570,6 +624,24 @@ exports[`inc() policy statement 1`] = `
 `;
 
 exports[`peek() policy statement 1`] = `
+"new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(event) {
+  const val = await this.my_counter.peek();
+  console.log(val);
+}
+};
+})())({
+my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
+})"
+`;
+
+exports[`peek() policy statement 2`] = `
 {
   "Parameters": {
     "BootstrapVersion": {
@@ -719,6 +791,24 @@ exports[`peek() policy statement 1`] = `
 `;
 
 exports[`reset() policy statement 1`] = `
+"new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle(event) {
+  const val = await this.my_counter.reset();
+  console.log(val);
+}
+};
+})())({
+my_counter: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/counter.inflight\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_c7ebcb7a\\"], 0)
+})"
+`;
+
+exports[`reset() policy statement 2`] = `
 {
   "Parameters": {
     "BootstrapVersion": {

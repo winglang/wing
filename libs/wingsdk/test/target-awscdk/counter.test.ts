@@ -3,7 +3,7 @@ import { test, expect } from "vitest";
 import { Counter, Function, CounterInflightMethods } from "../../src/cloud";
 import * as awscdk from "../../src/target-awscdk";
 import { Testing } from "../../src/testing";
-import { mkdtemp } from "../../src/util";
+import { mkdtemp, sanitizeCode } from "../../src/util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
@@ -65,6 +65,7 @@ test("function with a counter binding", () => {
   Function._newFunction(app, "Function", inflight);
   const output = app.synth();
 
+  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::DynamoDB::Table", 1);
   template.resourceCountIs("AWS::IAM::Role", 1);
@@ -93,6 +94,7 @@ test("inc() policy statement", () => {
   Function._newFunction(app, "Function", inflight);
   const output = app.synth();
 
+  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   const template = Template.fromJSON(JSON.parse(output));
   template.hasResourceProperties("AWS::IAM::Policy", {
     PolicyDocument: {
@@ -127,6 +129,7 @@ test("dec() policy statement", () => {
   Function._newFunction(app, "Function", inflight);
   const output = app.synth();
 
+  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   const template = Template.fromJSON(JSON.parse(output));
   template.hasResourceProperties("AWS::IAM::Policy", {
     PolicyDocument: {
@@ -161,6 +164,7 @@ test("peek() policy statement", () => {
   Function._newFunction(app, "Function", inflight);
   const output = app.synth();
 
+  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   const template = Template.fromJSON(JSON.parse(output));
   template.hasResourceProperties("AWS::IAM::Policy", {
     PolicyDocument: {
@@ -195,6 +199,7 @@ test("reset() policy statement", () => {
   Function._newFunction(app, "Function", inflight);
   const output = app.synth();
 
+  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   const template = Template.fromJSON(JSON.parse(output));
   template.hasResourceProperties("AWS::IAM::Policy", {
     PolicyDocument: {
