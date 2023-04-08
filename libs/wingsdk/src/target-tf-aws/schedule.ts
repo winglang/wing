@@ -66,7 +66,6 @@ export class Schedule extends cloud.Schedule {
       inflight,
       join(
         __dirname
-          .replace("target-tf-aws", "shared-aws")
           .replace("target-tf-aws", "shared-aws"),
         "schedule.ontick.inflight.js"
       ),
@@ -107,7 +106,6 @@ export class Schedule extends cloud.Schedule {
   public _toInflight(): core.Code {
     return core.InflightClient.for(
       __dirname
-        .replace("target-tf-aws", "shared-aws")
         .replace("target-tf-aws", "shared-aws"),
       __filename,
       "ScheduleClient",
