@@ -267,7 +267,7 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "on_message",
+                "relationship": "add_consumer",
                 "resource": "root/my_queue-OnMessage-e645076f",
               },
             ],
@@ -302,7 +302,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "on_message",
+                "relationship": "add_consumer",
                 "resource": "root/my_queue",
               },
             ],
@@ -634,7 +634,7 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "on_message",
+                "relationship": "add_consumer",
                 "resource": "root/my_queue-OnMessage-e645076f",
               },
             ],
@@ -669,7 +669,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "on_message",
+                "relationship": "add_consumer",
                 "resource": "root/my_queue",
               },
             ],
@@ -883,7 +883,7 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "on_message",
+                "relationship": "add_consumer",
                 "resource": "root/my_queue-OnMessage-e645076f",
               },
             ],
@@ -918,7 +918,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "on_message",
+                "relationship": "add_consumer",
                 "resource": "root/my_queue",
               },
             ],

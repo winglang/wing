@@ -41,7 +41,7 @@ test("queue with one subscriber, default batch size of 1", async () => {
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const queue = cloud.Queue._newQueue(app, "my_queue");
-  queue.onMessage(handler);
+  queue.addConsumer(handler);
   const s = await app.startSimulator();
 
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
@@ -97,7 +97,7 @@ test("queue with one subscriber, batch size of 5", async () => {
   const queue = cloud.Queue._newQueue(app, "my_queue", {
     initialMessages: ["A", "B", "C", "D", "E", "F"],
   });
-  queue.onMessage(handler, { batchSize: 5 });
+  queue.addConsumer(handler, { batchSize: 5 });
   const s = await app.startSimulator();
 
   // WHEN
@@ -115,7 +115,7 @@ test("messages are requeued if the function fails", async () => {
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const queue = cloud.Queue._newQueue(app, "my_queue");
-  queue.onMessage(handler);
+  queue.addConsumer(handler);
   const s = await app.startSimulator();
 
   // WHEN

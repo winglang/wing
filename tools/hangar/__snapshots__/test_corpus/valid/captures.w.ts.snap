@@ -480,7 +480,7 @@ class $Root extends $stdlib.core.Resource {
     },
   }
 });
-    (queue.onMessage(handler,{ batchSize: 5 }));
+    (queue.addConsumer(handler,{ batchSize: 5 }));
     this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"cloud.Function\\",handler,{ env: Object.freeze({}) });
     const empty_env = Object.freeze({});
     this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"AnotherFunction\\",handler,{ env: empty_env });

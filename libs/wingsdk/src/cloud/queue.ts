@@ -57,14 +57,14 @@ export abstract class Queue extends Resource {
   /**
    * Create a function to consume messages from this queue.
    */
-  public abstract onMessage(
+  public abstract addConsumer(
     handler: IQueueOnMessageHandler,
     props?: QueueOnMessageProps
   ): Function;
 }
 
 /**
- * Options for Queue.onMessage.
+ * Options for Queue.addConsumer.
  */
 export interface QueueOnMessageProps extends FunctionProps {
   /**
@@ -100,7 +100,7 @@ export interface IQueueClient {
 
 /**
  * Represents a resource with an inflight "handle" method that can be passed to
- * `Queue.on_message`.
+ * `Queue.add_consumer`.
  *
  * @inflight `@winglang/sdk.cloud.IQueueOnMessageHandlerClient`
  */
