@@ -5,7 +5,12 @@ import {
   PolicyStatement,
   PolicyStatementProps,
 } from "aws-cdk-lib/aws-iam";
-import { Function as CdkFunction, Code, IEventSource, Runtime } from "aws-cdk-lib/aws-lambda";
+import {
+  Function as CdkFunction,
+  Code,
+  IEventSource,
+  Runtime,
+} from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
