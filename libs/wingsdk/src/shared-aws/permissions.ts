@@ -46,6 +46,9 @@ export function calculateQueuePermissions(
     }
     policies.push(policy);
   }
+
+  return policies;
+}
   
 export function calculateCounterPermissions(
   arn: string,
