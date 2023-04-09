@@ -140,7 +140,7 @@ export class App extends CoreApp {
 
       case QUEUE_FQN:
         return new Queue(scope, id, args[0]);
-        
+
       case TOPIC_FQN:
         return new Topic(scope, id, args[0]);
     }
