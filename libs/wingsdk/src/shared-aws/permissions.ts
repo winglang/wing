@@ -31,6 +31,55 @@ export function calculateTopicPermissions(
   return policies;
 }
 
+export function calculateQueuePermissions(
+  arn: string,
+  target: AwsTarget,
+  ops: string[]
+): { [key: string]: any }[] {
+  let policy = {};
+  let policies = [];
+  if (ops.includes(cloud.QueueInflightMethods.PUSH)) {
+    switch (target) {
+      case AwsTarget.AWSCDK:
+        policy = {
+          effect: "Allow",
+          actions: ["sqs:SendMessage"],
+          resources: [arn],
+        };
+        break;
+      case AwsTarget.TF_AWS:
+        policy = {
+          effect: "Allow",
+          action: ["sqs:SendMessage"],
+          resource: arn,
+        };
+        break;
+    }
+    policies.push(policy);
+  }
+  if (ops.includes(cloud.QueueInflightMethods.PURGE)) {
+    switch (target) {
+      case AwsTarget.AWSCDK:
+        policy = {
+          effect: "Allow",
+          actions: ["sqs:PurgeQueue"],
+          resources: [arn],
+        };
+        break;
+      case AwsTarget.TF_AWS:
+        policy = {
+          effect: "Allow",
+          action: ["sqs:PurgeQueue"],
+          resource: arn,
+        };
+        break;
+    }
+    policies.push(policy);
+  }
+
+  return policies;
+}
+
 export function calculateCounterPermissions(
   arn: string,
   target: AwsTarget,
@@ -75,6 +124,25 @@ export function calculateCounterPermissions(
           effect: "Allow",
           action: ["dynamodb:GetItem"],
           resource: `${arn}`,
+        };
+        break;
+    }
+    policies.push(policy);
+  }
+  if (ops.includes(cloud.QueueInflightMethods.APPROX_SIZE)) {
+    switch (target) {
+      case AwsTarget.AWSCDK:
+        policy = {
+          effect: "Allow",
+          actions: ["sqs:GetQueueAttributes"],
+          resources: [arn],
+        };
+        break;
+      case AwsTarget.TF_AWS:
+        policy = {
+          effect: "Allow",
+          action: ["sqs:GetQueueAttributes"],
+          resource: arn,
         };
         break;
     }
