@@ -95,6 +95,11 @@ export class Function extends cloud.Function {
   }
 
   /** @internal */
+  public get _function() {
+    return this.function;
+  }
+
+  /** @internal */
   public _addEventSource(eventSource: IEventSource) {
     this.function.addEventSource(eventSource);
   }
