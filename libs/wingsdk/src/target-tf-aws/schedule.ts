@@ -65,9 +65,7 @@ export class Schedule extends cloud.Schedule {
       `${this.node.id}-OnTickHandler-${hash}`,
       inflight,
       join(
-        __dirname
-          .replace("target-tf-aws", "shared-aws")
-          .replace("target-tf-aws", "shared-aws"),
+        __dirname.replace("target-tf-aws", "shared-aws"),
         "schedule.ontick.inflight.js"
       ),
       "ScheduleOnTickHandlerClient"
@@ -106,9 +104,7 @@ export class Schedule extends cloud.Schedule {
   /** @internal */
   public _toInflight(): core.Code {
     return core.InflightClient.for(
-      __dirname
-        .replace("target-tf-aws", "shared-aws")
-        .replace("target-tf-aws", "shared-aws"),
+      __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "ScheduleClient",
       [`process.env["${this.envName()}"]`]

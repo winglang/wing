@@ -5,6 +5,8 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { AwsTarget } from "../shared-aws/commons";
+import { calculateQueuePermissions } from "../shared-aws/permissions";
 import { convertBetweenHandlers } from "../utils/convert";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
 
@@ -50,9 +52,7 @@ export class Queue extends cloud.Queue {
       `${this.node.id}-OnMessageHandler-${hash}`,
       inflight,
       join(
-        __dirname
-          .replace("target-tf-aws", "shared-aws")
-          .replace("target-tf-aws", "shared-aws"),
+        __dirname.replace("target-tf-aws", "shared-aws"),
         "queue.onmessage.inflight.js"
       ),
       "QueueOnMessageHandlerClient"
@@ -105,27 +105,9 @@ export class Queue extends cloud.Queue {
 
     const env = this.envName();
 
-    if (ops.includes(cloud.QueueInflightMethods.PUSH)) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["sqs:SendMessage"],
-        resource: this.queue.arn,
-      });
-    }
-    if (ops.includes(cloud.QueueInflightMethods.PURGE)) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["sqs:PurgeQueue"],
-        resource: this.queue.arn,
-      });
-    }
-    if (ops.includes(cloud.QueueInflightMethods.APPROX_SIZE)) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["sqs:GetQueueAttributes"],
-        resource: this.queue.arn,
-      });
-    }
+    host.addPolicyStatements(
+      ...calculateQueuePermissions(this.queue.arn, AwsTarget.TF_AWS, ops)
+    );
 
     // The queue url needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
@@ -137,9 +119,7 @@ export class Queue extends cloud.Queue {
   /** @internal */
   public _toInflight(): core.Code {
     return core.InflightClient.for(
-      __dirname
-        .replace("target-tf-aws", "shared-aws")
-        .replace("target-tf-aws", "shared-aws"),
+      __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "QueueClient",
       [`process.env["${this.envName()}"]`]
