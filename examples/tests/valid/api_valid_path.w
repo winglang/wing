@@ -42,12 +42,6 @@ api.get("/test/path/{unclosed", handler);
 }
 
 try {
-api.get("/test/path/{unclosed", handler);
-} catch error {
-  assert(error == "Invalid route /test/path/{unclosed. Routes and params should consist of alpha-numeric characters only.");
-}
-
-try {
 api.get("/test/m{issplaced}", handler);
 } catch error {
   assert(error == "Invalid route /test/m{issplaced}. Routes and params should consist of alpha-numeric characters only.");

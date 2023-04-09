@@ -54,7 +54,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         },
         "rest_api_id": "\${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.id}",
         "triggers": {
-          "redeployment": "093784791eb833c2a271a7c01303cdac2f29f2c8",
+          "redeployment": "a203ba79dec7077e4ead3daf0e79daa0f30c5d85",
         },
       },
     },
@@ -66,7 +66,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
             "uniqueId": "root_cloudApi_api_8C9FE51E",
           },
         },
-        "body": "{\\"openapi\\":\\"3.0.3\\",\\"paths\\":{\\"/test/{sup:er/:annoying//path}\\":{\\"get\\":{\\"operationId\\":\\"get-test/{sup:er/:annoying//path}\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[{\\"name\\":\\"sup:er/:annoying//path\\",\\"in\\":\\"path\\",\\"required\\":true,\\"schema\\":{\\"type\\":\\"string\\"}}],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test/{::another:annoying:path}\\":{\\"get\\":{\\"operationId\\":\\"get-test/{::another:annoying:path}\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[{\\"name\\":\\"::another:annoying:path\\",\\"in\\":\\"path\\",\\"required\\":true,\\"schema\\":{\\"type\\":\\"string\\"}}],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test/n0t_alphanumer1cPa:th\\":{\\"get\\":{\\"operationId\\":\\"get-test/n0t_alphanumer1cPa:th\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test/path/{with}/{two:invali4d#}/variables\\":{\\"get\\":{\\"operationId\\":\\"get-test/path/{with}/{two:invali4d#}/variables\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[{\\"name\\":\\"with\\",\\"in\\":\\"path\\",\\"required\\":true,\\"schema\\":{\\"type\\":\\"string\\"}},{\\"name\\":\\"two:invali4d#\\",\\"in\\":\\"path\\",\\"required\\":true,\\"schema\\":{\\"type\\":\\"string\\"}}],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test/path/{unclosed\\":{\\"get\\":{\\"operationId\\":\\"get-test/path/{unclosed\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test\\":{\\"get\\":{\\"operationId\\":\\"get-test\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test/alphanumer1cPa_th\\":{\\"get\\":{\\"operationId\\":\\"get-test/alphanumer1cPa_th\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test/regular/path\\":{\\"get\\":{\\"operationId\\":\\"get-test/regular/path\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test/path/{with}/two/{variable_s}/f?bla=5&b=6\\":{\\"get\\":{\\"operationId\\":\\"get-test/path/{with}/two/{variable_s}/f?bla=5&b=6\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[{\\"name\\":\\"with\\",\\"in\\":\\"path\\",\\"required\\":true,\\"schema\\":{\\"type\\":\\"string\\"}},{\\"name\\":\\"variable_s\\",\\"in\\":\\"path\\",\\"required\\":true,\\"schema\\":{\\"type\\":\\"string\\"}}],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}}}}",
+        "body": "{\\"openapi\\":\\"3.0.3\\",\\"paths\\":{\\"/test/{sup:er/:annoying//path}\\":{\\"get\\":{\\"operationId\\":\\"get-test/{sup:er/:annoying//path}\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[{\\"name\\":\\"sup:er/:annoying//path\\",\\"in\\":\\"path\\",\\"required\\":true,\\"schema\\":{\\"type\\":\\"string\\"}}],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test/{::another:annoying:path}\\":{\\"get\\":{\\"operationId\\":\\"get-test/{::another:annoying:path}\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[{\\"name\\":\\"::another:annoying:path\\",\\"in\\":\\"path\\",\\"required\\":true,\\"schema\\":{\\"type\\":\\"string\\"}}],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test/n0t_alphanumer1cPa:th\\":{\\"get\\":{\\"operationId\\":\\"get-test/n0t_alphanumer1cPa:th\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test/path/{with}/{two:invali4d#}/variables\\":{\\"get\\":{\\"operationId\\":\\"get-test/path/{with}/{two:invali4d#}/variables\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[{\\"name\\":\\"with\\",\\"in\\":\\"path\\",\\"required\\":true,\\"schema\\":{\\"type\\":\\"string\\"}},{\\"name\\":\\"two:invali4d#\\",\\"in\\":\\"path\\",\\"required\\":true,\\"schema\\":{\\"type\\":\\"string\\"}}],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test/path/{unclosed\\":{\\"get\\":{\\"operationId\\":\\"get-test/path/{unclosed\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test/m{issplaced}\\":{\\"get\\":{\\"operationId\\":\\"get-test/m{issplaced}\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[{\\"name\\":\\"issplaced\\",\\"in\\":\\"path\\",\\"required\\":true,\\"schema\\":{\\"type\\":\\"string\\"}}],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test/{misspla}ced\\":{\\"get\\":{\\"operationId\\":\\"get-test/{misspla}ced\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[{\\"name\\":\\"misspla\\",\\"in\\":\\"path\\",\\"required\\":true,\\"schema\\":{\\"type\\":\\"string\\"}}],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test/{}/empty\\":{\\"get\\":{\\"operationId\\":\\"get-test/{}/empty\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[{\\"name\\":\\"\\",\\"in\\":\\"path\\",\\"required\\":true,\\"schema\\":{\\"type\\":\\"string\\"}}],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test\\":{\\"get\\":{\\"operationId\\":\\"get-test\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test/alphanumer1cPa_th\\":{\\"get\\":{\\"operationId\\":\\"get-test/alphanumer1cPa_th\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test/regular/path\\":{\\"get\\":{\\"operationId\\":\\"get-test/regular/path\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test/path/{with}/two/{variable_s}/f?bla=5&b=6\\":{\\"get\\":{\\"operationId\\":\\"get-test/path/{with}/two/{variable_s}/f?bla=5&b=6\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[{\\"name\\":\\"with\\",\\"in\\":\\"path\\",\\"required\\":true,\\"schema\\":{\\"type\\":\\"string\\"}},{\\"name\\":\\"variable_s\\",\\"in\\":\\"path\\",\\"required\\":true,\\"schema\\":{\\"type\\":\\"string\\"}}],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}},\\"/test/param/is/{last}\\":{\\"get\\":{\\"operationId\\":\\"get-test/param/is/{last}\\",\\"responses\\":{\\"200\\":{\\"description\\":\\"200 response\\",\\"content\\":{}}},\\"parameters\\":[{\\"name\\":\\"last\\",\\"in\\":\\"path\\",\\"required\\":true,\\"schema\\":{\\"type\\":\\"string\\"}}],\\"x-amazon-apigateway-integration\\":{\\"uri\\":\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.arn}/invocations\\",\\"type\\":\\"aws_proxy\\",\\"httpMethod\\":\\"POST\\",\\"responses\\":{\\"default\\":{\\"statusCode\\":\\"200\\"}},\\"passthroughBehavior\\":\\"when_no_match\\",\\"contentHandling\\":\\"CONVERT_TO_TEXT\\"}}}}}",
         "name": "api-c895068c",
       },
     },
@@ -146,6 +146,19 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       },
     },
     "aws_lambda_permission": {
+      "root_cloudApi_api_permissionGET07951ede_249FE441": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/api/permission-GET-07951ede",
+            "uniqueId": "root_cloudApi_api_permissionGET07951ede_249FE441",
+          },
+        },
+        "action": "lambda:InvokeFunction",
+        "function_name": "\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.function_name}",
+        "principal": "apigateway.amazonaws.com",
+        "source_arn": "\${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.execution_arn}/*/GET/test/m{issplaced}",
+        "statement_id": "AllowExecutionFromAPIGateway-GET-07951ede",
+      },
       "root_cloudApi_api_permissionGET16ebe06a_BB5BEA20": {
         "//": {
           "metadata": {
@@ -171,6 +184,19 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "principal": "apigateway.amazonaws.com",
         "source_arn": "\${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.execution_arn}/*/GET/test/{sup:er/:annoying//path}",
         "statement_id": "AllowExecutionFromAPIGateway-GET-499a6b13",
+      },
+      "root_cloudApi_api_permissionGET4f9e0421_17C291C0": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/api/permission-GET-4f9e0421",
+            "uniqueId": "root_cloudApi_api_permissionGET4f9e0421_17C291C0",
+          },
+        },
+        "action": "lambda:InvokeFunction",
+        "function_name": "\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.function_name}",
+        "principal": "apigateway.amazonaws.com",
+        "source_arn": "\${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.execution_arn}/*/GET/test/{misspla}ced",
+        "statement_id": "AllowExecutionFromAPIGateway-GET-4f9e0421",
       },
       "root_cloudApi_api_permissionGET8d6a8a39_56BCB29B": {
         "//": {
@@ -210,6 +236,19 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "principal": "apigateway.amazonaws.com",
         "source_arn": "\${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.execution_arn}/*/GET/test/n0t_alphanumer1cPa:th",
         "statement_id": "AllowExecutionFromAPIGateway-GET-9d1bf5b8",
+      },
+      "root_cloudApi_api_permissionGETb53ce5f6_3164D41C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/api/permission-GET-b53ce5f6",
+            "uniqueId": "root_cloudApi_api_permissionGETb53ce5f6_3164D41C",
+          },
+        },
+        "action": "lambda:InvokeFunction",
+        "function_name": "\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.function_name}",
+        "principal": "apigateway.amazonaws.com",
+        "source_arn": "\${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.execution_arn}/*/GET/test/param/is/{last}",
+        "statement_id": "AllowExecutionFromAPIGateway-GET-b53ce5f6",
       },
       "root_cloudApi_api_permissionGETd53c4dff_B4647AFF": {
         "//": {
@@ -262,6 +301,19 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "principal": "apigateway.amazonaws.com",
         "source_arn": "\${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.execution_arn}/*/GET/test/{::another:annoying:path}",
         "statement_id": "AllowExecutionFromAPIGateway-GET-f5c474aa",
+      },
+      "root_cloudApi_api_permissionGETf687b472_5E672097": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/api/permission-GET-f687b472",
+            "uniqueId": "root_cloudApi_api_permissionGETf687b472_5E672097",
+          },
+        },
+        "action": "lambda:InvokeFunction",
+        "function_name": "\${aws_lambda_function.root_cloudApi_cloudApiOnRequeste46e5cb7_489FDB7E.function_name}",
+        "principal": "apigateway.amazonaws.com",
+        "source_arn": "\${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.execution_arn}/*/GET/test/{}/empty",
+        "statement_id": "AllowExecutionFromAPIGateway-GET-f687b472",
       },
     },
     "aws_s3_bucket": {
@@ -386,10 +438,47 @@ class $Root extends $stdlib.core.Resource {
 } finally {
 	
 }
+    try {
+	{
+  (api.get(\\"/test/m{issplaced}\\",handler));
+}
+} catch ($error_error) {
+	const error = $error_error.message;
+	{
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(error === \\"Invalid route /test/m{issplaced}. Routes and params should consist of alpha-numeric characters only.\\")'\`)})((error === \\"Invalid route /test/m{issplaced}. Routes and params should consist of alpha-numeric characters only.\\"))};
+}
+} finally {
+	
+}
+    try {
+	{
+  (api.get(\\"/test/{misspla}ced\\",handler));
+}
+} catch ($error_error) {
+	const error = $error_error.message;
+	{
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(error === \\"Invalid route /test/{misspla}ced. Routes and params should consist of alpha-numeric characters only.\\")'\`)})((error === \\"Invalid route /test/{misspla}ced. Routes and params should consist of alpha-numeric characters only.\\"))};
+}
+} finally {
+	
+}
+    try {
+	{
+  (api.get(\\"/test/{}/empty\\",handler));
+}
+} catch ($error_error) {
+	const error = $error_error.message;
+	{
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(error === \\"Invalid route /test/{}/empty. Routes and params should consist of alpha-numeric characters only.\\")'\`)})((error === \\"Invalid route /test/{}/empty. Routes and params should consist of alpha-numeric characters only.\\"))};
+}
+} finally {
+	
+}
     (api.get(\\"/test\\",handler));
     (api.get(\\"/test/alphanumer1cPa_th\\",handler));
     (api.get(\\"/test/regular/path\\",handler));
     (api.get(\\"/test/path/{with}/two/{variable_s}/f?bla=5&b=6\\",handler));
+    (api.get(\\"/test/param/is/{last}\\",handler));
   }
 }
 
