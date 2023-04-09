@@ -15,13 +15,66 @@ export function calculateTopicPermissions(
           effect: "Allow",
           actions: ["sns:Publish"],
           resources: [arn],
-        };
+          };
         break;
       case AwsTarget.TF_AWS:
         policy = {
           effect: "Allow",
           action: ["sns:Publish"],
           resource: arn,
+        };
+        break;
+    }
+    policies.push(policy);
+  }
+
+  return policies;
+}
+
+export function calculateCounterPermissions(
+  arn: string,
+  target: AwsTarget,
+  ops: string[]
+): { [ley: string]: any }[] {
+  let policy = {};
+  let policies = [];
+  if (
+    ops.includes(cloud.CounterInflightMethods.INC) ||
+    ops.includes(cloud.CounterInflightMethods.DEC) ||
+    ops.includes(cloud.CounterInflightMethods.RESET)
+  ) {
+    switch (target) {
+      case AwsTarget.AWSCDK:
+        policy = {
+          effect: "Allow",
+          actions: ["dynamodb:UpdateItem"],
+          resources: [`${arn}`],
+        };
+        break;
+      case AwsTarget.TF_AWS:
+        policy = {
+          effect: "Allow",  
+          action: ["dynamodb:UpdateItem"],
+          resource: `${arn}`,
+        };
+        break;
+    }
+    policies.push(policy);
+  }
+  if (ops.includes(cloud.CounterInflightMethods.PEEK)) {
+    switch (target) {
+      case AwsTarget.AWSCDK:
+        policy = {
+          effect: "Allow",
+          actions: ["dynamodb:GetItem"],
+          resources: [`${arn}`],
+        };
+        break;
+      case AwsTarget.TF_AWS:
+        policy = {
+          effect: "Allow",
+          action: ["dynamodb:GetItem"],
+          resource: `${arn}`,
         };
         break;
     }
