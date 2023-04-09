@@ -89,6 +89,11 @@ export class Function extends cloud.Function {
     return this.function.functionName;
   }
 
+  /** @internal */
+  public get _function() {
+    return this.function;
+  }
+
   private envName(): string {
     return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }

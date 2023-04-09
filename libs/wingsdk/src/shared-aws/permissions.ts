@@ -1,6 +1,36 @@
 import { AwsTarget } from "./commons";
 import * as cloud from "../cloud";
 
+export function calculateTopicPermissions(
+  arn: string,
+  target: AwsTarget,
+  ops: string[]
+): { [key: string]: any }[] {
+  let policy = {};
+  let policies = [];
+  if (ops.includes(cloud.TopicInflightMethods.PUBLISH)) {
+    switch (target) {
+      case AwsTarget.AWSCDK:
+        policy = {
+          effect: "Allow",
+          actions: ["sns:Publish"],
+          resources: [arn],
+        };
+        break;
+      case AwsTarget.TF_AWS:
+        policy = {
+          effect: "Allow",
+          action: ["sns:Publish"],
+          resource: arn,
+        };
+        break;
+    }
+    policies.push(policy);
+  }
+
+  return policies;
+}
+
 export function calculateBucketPermissions(
   arn: string,
   target: AwsTarget,
