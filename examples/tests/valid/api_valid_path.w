@@ -41,8 +41,32 @@ api.get("/test/path/{unclosed", handler);
   assert(error == "Invalid route /test/path/{unclosed. Routes and params should consist of alpha-numeric characters only.");
 }
 
+try {
+api.get("/test/path/{unclosed", handler);
+} catch error {
+  assert(error == "Invalid route /test/path/{unclosed. Routes and params should consist of alpha-numeric characters only.");
+}
+
+try {
+api.get("/test/m{issplaced}", handler);
+} catch error {
+  assert(error == "Invalid route /test/m{issplaced}. Routes and params should consist of alpha-numeric characters only.");
+}
+
+try {
+api.get("/test/{misspla}ced", handler);
+} catch error {
+  assert(error == "Invalid route /test/{misspla}ced. Routes and params should consist of alpha-numeric characters only.");
+}
+try {
+api.get("/test/{}/empty", handler);
+} catch error {
+  assert(error == "Invalid route /test/{}/empty. Routes and params should consist of alpha-numeric characters only.");
+}
+
 // valid paths
 api.get("/test", handler);
 api.get("/test/alphanumer1cPa_th", handler);
 api.get("/test/regular/path", handler);
 api.get("/test/path/{with}/two/{variable_s}/f?bla=5&b=6", handler);
+api.get("/test/param/is/{last}", handler);
