@@ -15,7 +15,7 @@ export function calculateTopicPermissions(
           effect: "Allow",
           actions: ["sns:Publish"],
           resources: [arn],
-          };
+        };
         break;
       case AwsTarget.TF_AWS:
         policy = {
@@ -53,7 +53,7 @@ export function calculateCounterPermissions(
         break;
       case AwsTarget.TF_AWS:
         policy = {
-          effect: "Allow",  
+          effect: "Allow",
           action: ["dynamodb:UpdateItem"],
           resource: `${arn}`,
         };

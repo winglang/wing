@@ -10,7 +10,13 @@ import { Function } from "./function";
 import { Logger } from "./logger";
 import { Topic } from "./topic";
 
-import { BUCKET_FQN, COUNTER_FQN, FUNCTION_FQN, LOGGER_FQN, TOPIC_FQN } from "../cloud";
+import {
+  BUCKET_FQN,
+  COUNTER_FQN,
+  FUNCTION_FQN,
+  LOGGER_FQN,
+  TOPIC_FQN,
+} from "../cloud";
 import { App as CoreApp, AppProps, preSynthesizeAllConstructs } from "../core";
 import { PluginManager } from "../core/plugin-manager";
 
