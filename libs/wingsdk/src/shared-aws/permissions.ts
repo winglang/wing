@@ -49,7 +49,7 @@ export function calculateQueuePermissions(
 
   return policies;
 }
-  
+
 export function calculateCounterPermissions(
   arn: string,
   target: AwsTarget,
