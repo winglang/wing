@@ -67,6 +67,12 @@ export class Queue extends cloud.Queue {
     });
     fn._addEventSource(eventSource);
 
+    core.Resource.addConnection({
+      from: this,
+      to: fn,
+      relationship: "on_message",
+    });
+
     return fn;
   }
 
