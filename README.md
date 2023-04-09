@@ -162,8 +162,6 @@ As seen below, Wing has phase modifiers that are understood by the language serv
 
 As can be seen in the below section, creating a new language that is tailored to the cloud from the ground up also allows us to assemble a variety of features (some of which exist in other languages, of course) that, when put together, offer a delightful cloud development experience. 😍
 
-<br/>
-
 ### What are the main features that make Wing tailored for cloud development? 🌟
 1. [Cloud services](https://docs.winglang.io/concepts/resources) are first-class citizens.
     - They have [phase modifiers](https://docs.winglang.io/reference/spec#13-phase-modifiers) with different interfaces for config or runtime (`preflight` and `inflight`).
