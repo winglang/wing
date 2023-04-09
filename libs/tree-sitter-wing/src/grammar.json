@@ -1049,6 +1049,10 @@
             "members": [
               {
                 "type": "SYMBOL",
+                "name": "inflight_initializer"
+              },
+              {
+                "type": "SYMBOL",
                 "name": "constructor"
               },
               {
@@ -2396,6 +2400,35 @@
             "type": "SYMBOL",
             "name": "parameter_list"
           }
+        },
+        {
+          "type": "FIELD",
+          "name": "block",
+          "content": {
+            "type": "SYMBOL",
+            "name": "block"
+          }
+        }
+      ]
+    },
+    "inflight_initializer": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_inflight_specifier"
+        },
+        {
+          "type": "STRING",
+          "value": "init"
+        },
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "STRING",
+          "value": ")"
         },
         {
           "type": "FIELD",

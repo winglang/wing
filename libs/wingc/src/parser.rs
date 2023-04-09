@@ -426,6 +426,7 @@ impl<'s> Parser<'s> {
 		let mut fields = vec![];
 		let mut methods = vec![];
 		let mut constructor = None;
+		let mut inflight_initializer = None;
 		let name = self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?;
 		for class_element in statement_node
 			.child_by_field_name("implementation")
@@ -486,7 +487,7 @@ impl<'s> Parser<'s> {
 					if let Some(_) = constructor {
 						self
 							.add_error::<Node>(
-								format!("Multiple constructors defined in class {:?}", statement_node),
+								format!("Multiple initializers defined in class {:?}", statement_node),
 								&class_element,
 							)
 							.err();
@@ -502,6 +503,27 @@ impl<'s> Parser<'s> {
 							}))),
 							phase: if is_resource { Phase::Preflight } else { Phase::Inflight },
 						},
+					})
+				}
+				("inflight_initializer", true) => {
+					if let Some(_) = inflight_initializer {
+						self
+							.add_error::<Node>(
+								format!("Multiple inflight initializers defined in class {:?}", statement_node),
+								&class_element,
+							)
+							.err();
+					}
+					inflight_initializer = Some(FunctionDefinition {
+						body: FunctionBody::Statements(self.build_scope(&class_element.child_by_field_name("block").unwrap())),
+						signature: FunctionSignature {
+							parameters: vec![], // Inflight initializers cannot have parameters
+							return_type: None,
+							phase: Phase::Inflight,
+						},
+						is_static: false,
+						span: self.node_span(&class_element),
+						captures: RefCell::new(None),
 					})
 				}
 				("ERROR", _) => {
@@ -581,6 +603,7 @@ impl<'s> Parser<'s> {
 			implements,
 			constructor: constructor.unwrap(),
 			is_resource,
+			inflight_initializer,
 		}))
 	}
 

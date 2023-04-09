@@ -1,6 +1,6 @@
 pub(crate) mod jsii_importer;
 pub mod symbol_env;
-use crate::ast;
+use crate::ast::{self, FunctionBodyRef};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter,
 	Interface as AstInterface, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind,
@@ -159,7 +159,8 @@ pub enum Type {
 	Enum(Enum),
 }
 
-const WING_CONSTRUCTOR_NAME: &'static str = "init";
+const WING_INIT_NAME: &'static str = "init";
+pub const WING_INFLIGHT_INIT_NAME: &'static str = "$inflight_init";
 
 #[derive(Derivative)]
 #[derivative(Debug)]
@@ -1276,7 +1277,7 @@ impl<'a> TypeChecker<'a> {
 				// Type check args against constructor
 				let constructor_type = match class_env.lookup(
 					&Symbol {
-						name: WING_CONSTRUCTOR_NAME.into(),
+						name: WING_INIT_NAME.into(),
 						span: class_symbol.span.clone(),
 					},
 					None,
@@ -2069,6 +2070,7 @@ impl<'a> TypeChecker<'a> {
 				implements,
 				constructor,
 				is_resource,
+				inflight_initializer,
 			}) => {
 				// Resources cannot be defined inflight
 				assert!(!*is_resource || env.phase == Phase::Preflight);
@@ -2171,10 +2173,25 @@ impl<'a> TypeChecker<'a> {
 
 				// Add the constructor to the class env
 				let init_symb = Symbol {
-					name: WING_CONSTRUCTOR_NAME.into(),
-					span: name.span.clone(),
+					name: WING_INIT_NAME.into(),
+					span: name.span.clone(), // TODO: change to init's span
 				};
 				self.add_method_to_class_env(&constructor.signature, env, None, &mut class_env, &init_symb);
+
+				// Add the inflight initializer to the class env
+				let inflight_init_symb = Symbol {
+					name: WING_INFLIGHT_INIT_NAME.into(),
+					span: name.span.clone(), // TODO: change to inflight init's span
+				};
+				if let Some(inflight_initializer) = inflight_initializer {
+					self.add_method_to_class_env(
+						&inflight_initializer.signature,
+						env,
+						Some(class_type),
+						&mut class_env,
+						&inflight_init_symb,
+					);
+				}
 
 				// Replace the dummy class environment with the real one before type checking the methods
 				class_type.as_mut_class_or_resource().unwrap().env = class_env;
@@ -2182,6 +2199,18 @@ impl<'a> TypeChecker<'a> {
 
 				// Type check constructor
 				self.type_check_method(class_env, &init_symb, env, stmt.idx, constructor, class_type);
+
+				// Type check the inflight initializer
+				if let Some(inflight_initializer) = inflight_initializer {
+					self.type_check_method(
+						class_env,
+						&inflight_init_symb,
+						env,
+						stmt.idx,
+						inflight_initializer,
+						class_type,
+					);
+				}
 
 				// TODO: handle member/method overrides in our env based on whatever rules we define in our spec
 
@@ -2433,7 +2462,7 @@ impl<'a> TypeChecker<'a> {
 		method_def: &T,
 		class_type: UnsafeRef<Type>,
 	) where
-		T: MethodLike,
+		T: MethodLike<'a>,
 	{
 		// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 		// Lookup the method in the class_env
@@ -2449,7 +2478,7 @@ impl<'a> TypeChecker<'a> {
 			.expect("Expected method type to be a function signature");
 
 		// Create method environment and prime it with args
-		let is_init = method_name.name == WING_CONSTRUCTOR_NAME;
+		let is_init = method_name.name == WING_INIT_NAME;
 		let mut method_env = SymbolEnv::new(
 			Some(env.get_ref()),
 			method_sig.return_type,
@@ -2472,7 +2501,7 @@ impl<'a> TypeChecker<'a> {
 		}
 		self.add_arguments_to_env(&method_def.parameters(), method_sig, &mut method_env);
 
-		if let Some(scope) = method_def.statements() {
+		if let FunctionBodyRef::Statements(scope) = method_def.body() {
 			scope.set_env(method_env);
 			self.inner_scopes.push(scope);
 		}

@@ -197,6 +197,7 @@ module.exports = grammar({
         "{",
         repeat(
           choice(
+            $.inflight_initializer,
             $.constructor,
             $.method_definition,
             $.inflight_method_definition,
@@ -422,6 +423,15 @@ module.exports = grammar({
         field("parameter_list", $.parameter_list),
         field("block", $.block)
       ),
+
+    inflight_initializer: ($) =>
+      seq(
+        $._inflight_specifier,
+        "init",
+        "(", ")",
+        field("block", $.block)
+      ),
+
 
     extern_modifier: ($) => seq("extern", $.string),
 

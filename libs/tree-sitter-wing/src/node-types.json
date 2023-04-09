@@ -1028,6 +1028,22 @@
     }
   },
   {
+    "type": "inflight_initializer",
+    "named": true,
+    "fields": {
+      "block": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "inflight_method_definition",
     "named": true,
     "fields": {
@@ -2115,6 +2131,10 @@
         },
         {
           "type": "constructor",
+          "named": true
+        },
+        {
+          "type": "inflight_initializer",
           "named": true
         },
         {
