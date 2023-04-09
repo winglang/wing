@@ -46,6 +46,14 @@ export class Api extends cloud.Api implements ISimulatorResource {
     inflight: cloud.IApiEndpointHandler,
     props: any
   ): void {
+    // validating route:
+    // checks if a string consists only from letters, digits, =, ?, or if has curly brackets- the part that inside the brackets is only letter or _
+    if (!/^([\w/1-9\?\=\&]|.+\{\w*\})*$/.test(route)) {
+      throw new Error(
+        `Invalid route ${route}. Routes and params should consist of alpha-numeric characters only.`
+      );
+    }
+
     this._addToSpec(route, method, undefined);
 
     const fn = this.createOrGetFunction(inflight, props);

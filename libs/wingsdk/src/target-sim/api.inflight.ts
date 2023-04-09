@@ -57,7 +57,7 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
       }
 
       this.app[method](
-        route.route,
+        transformRoutePath(route.route),
         async (
           req: express.Request,
           res: express.Response,
@@ -71,12 +71,6 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
           );
 
           const apiRequest = transformRequest(req);
-
-          // if (Object.keys(req.params).length > 0) {
-          //   throw new Error(
-          //     "Path variables are not yet supported in the simulator."
-          //   );
-          // }
 
           try {
             const response = await fnClient.invoke(
@@ -167,6 +161,7 @@ function transformRequest(req: express.Request): ApiRequest {
   };
 }
 
-// function transformRoutePath(route: string): string {
-//   return route.replace(/{/g, ":").replace(/}/g, "");
-// }
+function transformRoutePath(route: string): string {
+  // route validation is done in the preflight file
+  return route.replace(/{/g, ":").replace(/}/g, "");
+}
