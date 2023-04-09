@@ -7,89 +7,10 @@
       "attrs": {}
     },
     {
-      "type": "wingsdk.cloud.Function",
-      "path": "root/Default/cloud.Api/cloud.Api-OnRequestHandler-de95ec56",
-      "props": {
-        "sourceCodeFile": ".wing/cloud.api-onrequesthandler-de95ec56_c8f1f9c9.js",
-        "sourceCodeLanguage": "javascript",
-        "environmentVariables": {
-          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}"
-        },
-        "timeout": 60000
-      },
-      "attrs": {}
-    },
-    {
-      "type": "wingsdk.cloud.Function",
-      "path": "root/Default/cloud.Api/cloud.Api-OnRequestHandler-7e186046",
-      "props": {
-        "sourceCodeFile": ".wing/cloud.api-onrequesthandler-7e186046_c8f220b3.js",
-        "sourceCodeLanguage": "javascript",
-        "environmentVariables": {
-          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}"
-        },
-        "timeout": 60000
-      },
-      "attrs": {}
-    },
-    {
-      "type": "wingsdk.cloud.Api",
-      "path": "root/Default/cloud.Api",
-      "props": {
-        "routes": [
-          {
-            "route": "/test-get",
-            "method": "GET",
-            "functionHandle": "${root/Default/cloud.Api/cloud.Api-OnRequestHandler-de95ec56#attrs.handle}"
-          },
-          {
-            "route": "/test-post",
-            "method": "POST",
-            "functionHandle": "${root/Default/cloud.Api/cloud.Api-OnRequestHandler-7e186046#attrs.handle}"
-          }
-        ]
-      },
-      "attrs": {}
-    },
-    {
       "type": "wingsdk.cloud.Counter",
       "path": "root/Default/cloud.Counter",
       "props": {
         "initial": 0
-      },
-      "attrs": {}
-    },
-    {
-      "type": "wingsdk.cloud.Function",
-      "path": "root/Default/IncrementCounter",
-      "props": {
-        "sourceCodeFile": ".wing/incrementcounter_c8945e06.js",
-        "sourceCodeLanguage": "javascript",
-        "environmentVariables": {
-          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}",
-          "COUNTER_HANDLE_e5a56560": "${root/Default/cloud.Counter#attrs.handle}"
-        },
-        "timeout": 60000
-      },
-      "attrs": {}
-    },
-    {
-      "type": "wingsdk.redis.Redis",
-      "path": "root/Default/redis.Redis",
-      "props": {},
-      "attrs": {}
-    },
-    {
-      "type": "wingsdk.cloud.Function",
-      "path": "root/Default/Redis interaction",
-      "props": {
-        "sourceCodeFile": ".wing/redis_interaction_c896e1b4.js",
-        "sourceCodeLanguage": "javascript",
-        "environmentVariables": {
-          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}",
-          "REDIS_HANDLE_df778c45": "${root/Default/redis.Redis#attrs.handle}"
-        },
-        "timeout": 60000
       },
       "attrs": {}
     },
@@ -242,7 +163,100 @@
         "timeout": 60000
       },
       "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.TestRunner",
+      "path": "root/cloud.TestRunner",
+      "props": {
+        "tests": {
+          "root/Default/test: Increment counter": "${root/Default/test: Increment counter#attrs.handle}",
+          "root/Default/test: Push message to the queue": "${root/Default/test: Push message to the queue#attrs.handle}",
+          "root/Default/test: Print": "${root/Default/test: Print#attrs.handle}",
+          "root/Default/test: without assertions nor prints": "${root/Default/test: without assertions nor prints#attrs.handle}",
+          "root/Default/test: Add fixtures": "${root/Default/test: Add fixtures#attrs.handle}"
+        }
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/Default/cloud.Api/cloud.Api-OnRequestHandler-de95ec56",
+      "props": {
+        "sourceCodeFile": ".wing/cloud.api-onrequesthandler-de95ec56_c8f1f9c9.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {
+          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}"
+        },
+        "timeout": 60000
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/Default/cloud.Api/cloud.Api-OnRequestHandler-7e186046",
+      "props": {
+        "sourceCodeFile": ".wing/cloud.api-onrequesthandler-7e186046_c8f220b3.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {
+          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}"
+        },
+        "timeout": 60000
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Api",
+      "path": "root/Default/cloud.Api",
+      "props": {
+        "routes": [
+          {
+            "route": "/test-get",
+            "method": "GET",
+            "functionHandle": "${root/Default/cloud.Api/cloud.Api-OnRequestHandler-de95ec56#attrs.handle}"
+          },
+          {
+            "route": "/test-post",
+            "method": "POST",
+            "functionHandle": "${root/Default/cloud.Api/cloud.Api-OnRequestHandler-7e186046#attrs.handle}"
+          }
+        ]
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/Default/IncrementCounter",
+      "props": {
+        "sourceCodeFile": ".wing/incrementcounter_c8945e06.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {
+          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}",
+          "COUNTER_HANDLE_e5a56560": "${root/Default/cloud.Counter#attrs.handle}"
+        },
+        "timeout": 60000
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.redis.Redis",
+      "path": "root/Default/redis.Redis",
+      "props": {},
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/Default/Redis interaction",
+      "props": {
+        "sourceCodeFile": ".wing/redis_interaction_c896e1b4.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {
+          "LOGGER_HANDLE_76f7e65b": "${root/WingLogger#attrs.handle}",
+          "REDIS_HANDLE_df778c45": "${root/Default/redis.Redis#attrs.handle}"
+        },
+        "timeout": 60000
+      },
+      "attrs": {}
     }
   ],
-  "sdkVersion": "0.8.24"
+  "sdkVersion": "0.8.43"
 }

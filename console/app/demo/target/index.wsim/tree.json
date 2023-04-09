@@ -4,6 +4,23 @@
     "id": "root",
     "path": "root",
     "children": {
+      "cloud.TestRunner": {
+        "id": "cloud.TestRunner",
+        "path": "root/cloud.TestRunner",
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": []
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.299"
+        },
+        "display": {
+          "title": "TestRunner",
+          "description": "A suite of APIs for running tests and collecting results.",
+          "hidden": true
+        }
+      },
       "WingLogger": {
         "id": "WingLogger",
         "path": "root/WingLogger",

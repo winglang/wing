@@ -1,15 +1,21 @@
-import { Simulator, Trace } from "@winglang/sdk/lib/testing/simulator.js";
 import { z } from "zod";
 
 import { ConsoleLogger, MessageType } from "../consoleLogger.js";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import { IFunctionClient } from "../wingsdk.js";
+import { IFunctionClient, ITestRunnerClient, Simulator } from "../wingsdk.js";
 
 import { isErrorLike } from "./function.js";
 
 const getTestName = (testPath: string) => {
   const test = testPath.split("/").pop() ?? testPath;
   return test.replace(/test: /g, "");
+};
+
+const listTests = (simulator: Simulator): Promise<string[]> => {
+  const testRunner = simulator.getResource(
+    "root/cloud.TestRunner",
+  ) as ITestRunnerClient;
+  return testRunner.listTests();
 };
 
 const runTest = async (
@@ -66,7 +72,7 @@ export const createTestRouter = () => {
   return createRouter({
     "test.list": createProcedure.query(async ({ input, ctx }) => {
       const simulator = await ctx.simulator();
-      return simulator.listTests();
+      return listTests(simulator);
     }),
     "test.run": createProcedure
       .input(
@@ -83,7 +89,7 @@ export const createTestRouter = () => {
       }),
     "test.runAll": createProcedure.mutation(async ({ ctx }) => {
       const simulator = await ctx.simulator();
-      const testList = simulator.listTests();
+      const testList = await listTests(simulator);
       const result: TestResult[] = [];
       for (const resourcePath of testList) {
         result.push(await runTest(simulator, resourcePath, ctx.logger));
