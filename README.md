@@ -21,9 +21,7 @@ We're here to make your journey through the skies of the different cloud provide
 
 [![Same object - different interfaces](./logo/diff-interfaces.gif)](https://youtu.be/y7OGRC2f5gk)
 
-Designed by [Elad Ben-Israel](https://github.com/eladb), the mastermind behind the [AWS CDK](https://github.com/aws/aws-cdk), Wing is designed to make your cloud development soar! 🦅
-
-</br>
+Designed by [Elad Ben-Israel](https://github.com/eladb), the mastermind behind the [AWS CDK](https://github.com/aws/aws-cdk), Wing aims to elevate your cloud development experience and help your ideas take flight! 🦅
 
 # What's so special about Wing? 🤔
 
@@ -53,7 +51,7 @@ let hello_world = inflight () => {
 new cloud.Function(hello_world);
 ```
 
-> **Note** The Wing compiler uses a dependency injection mechanism to convert these abstract services into the configured ones for each target cloud. It is possible to create and use external libraries too, including import of any Terraform resource🔌.
+> **Note** The Wing compiler uses a dependency injection mechanism to convert these abstract services into the configured ones for each target cloud. It is possible to create and use external libraries too, including import of any Terraform resource 🔌.
 ```js
 // This line imports the standard library.
 bring cloud;
@@ -62,8 +60,6 @@ bring cloud;
 // At compile time, it will be substituted by the configured implementation for the target cloud.
 let bucket = new cloud.Bucket();
 ```
-
-</br>
 
 ## Compilation to Terraform and JavaScript 📚
 The result? While your main code is written in Wing, the compilation artifacts are JavaScript and Terraform (with more provisioning engines on the way 🚚), meaning Wing can fit seamlessly into your existing stack! 🎯
@@ -106,8 +102,6 @@ Ready to take off? 🛫
 [console]: https://docs.winglang.io/getting-started/console
 [Standard library]: https://docs.winglang.io/reference/wingsdk-spec
 
-</br>
-
 ## Under Construction 🚧
 Wing is in its very early stages of development and not recommended for production use. 
 Many features are still missing, and APIs will dramatically
@@ -117,13 +111,7 @@ influencing the direction of every aspect of this project! 🎉
 Our [Project Status](https://docs.winglang.io/status) page includes
 more information about stability and roadmap. 👷‍♀️
 
-<br/>
-
-
-
-
 ## Getting started 🛠️
-
 You can install Wing in a few simple steps:
 
 1. Check out the [Prerequisites](https://docs.winglang.io/getting-started/installation#prerequisites).
@@ -144,8 +132,6 @@ For a comprehensive reference of the language, check out the [Wing Language
 Specification](https://docs.winglang.io/reference/spec) and the [API
 Reference](https://docs.winglang.io/reference/sdk). 📚
 
-<br>
-
 ## Why choose Wing? 🏆
 Wing was built from the ground up to cater to cloud development, offering features that make it an ideal choice for building applications on AWS or other cloud providers.
 Some of these features include:
@@ -159,8 +145,6 @@ Some of these features include:
 * [Native JSON](https://docs.winglang.io/reference/spec#114-json-type) and schema validation support.
 
 For a more in-depth look at Wing's features and benefits, check out our [documentation](https://docs.winglang.io/), and specifically this piece named [why you should consider Wing?](https://docs.winglang.io/#why-you-should-consider-wing).
-
-<br/>
 
 ## FAQ ❓
 
@@ -195,8 +179,6 @@ As can be seen in the below section, creating a new language that is tailored to
 7. [Native JSON support](https://docs.winglang.io/reference/spec#114-json-type).
 8. More in the [spec](https://docs.winglang.io/reference/spec).
 
-<br/>
-
 ### What does the development flow look like with Wing? 🛠️
 1. Write code that targets an abstract cloud. ☁️
 2. Visualize, test, and interact with it using the Wing console and its instant hot reloading.
@@ -205,12 +187,8 @@ As can be seen in the below section, creating a new language that is tailored to
 
 [![Short demo](./logo/demo.gif)](https://youtu.be/x0xfIoY5y6E)
 
-<br/>
-
 ### Who created Wing? 🦸
 While there are many developers [contributing](#contributors) to the project, it started with the vision of [Elad Ben-Israel], who is also the creator of the [AWS CDK].
-
-<br/>
 
 ### Is there a company behind Wing / what is the business model? 💼
 [Monada](https://monada.co) is leading the development of Winglang.
@@ -221,19 +199,12 @@ By choosing this approach, Monada aligns its interests with those of the communi
 
 Since Wing is compiled to Javascript and Terraform, developers will always be able to continue to use their existing management and observability solutions with it. We believe that because the Wing compiler sees the "entire picture" of the application, a management console that taps into that knowledge can offer very competitive features. As the compiler is open-source, other companies will be able to offer competing consoles with the same features.
 
-<br/>
-
-
 ## Community 💬
-
 Join our flock in the [Wing Slack](https://t.winglang.io/slack) community!
 We're here to help each other, answer questions, and share our cloud adventures.
 Alternatively, post any questions on [GitHub Discussions](https://github.com/winglang/wing/discussions).
 
-</br>
-
 ## Contributing 🤝
-
 Want to help Wing take flight?
 Check out our [contribution guide](https://github.com/winglang/wing/blob/main/CONTRIBUTING.md) to learn how to set up a development environment and contribute to the project.
 We appreciate your support and look forward to soaring to new heights together! 🚀
@@ -242,8 +213,6 @@ We are also actively tracking planned features in our roadmap:
 
 - [Wing Language Roadmap](https://github.com/orgs/winglang/projects/1/views/1)
 - [Wing SDK Roadmap](https://github.com/orgs/winglang/projects/3/views/1)
-
-<br/>
 
 ## Contributors
 We are incredibly grateful to our entire community 🙏 for contributing bug fixes and improvements:
@@ -255,9 +224,6 @@ We are incredibly grateful to our entire community 🙏 for contributing bug fix
 <br/>
 
 ## License 📜
-
 Wing is licensed under the [MIT License](./LICENSE.md). Contributions are made under our [contribution license](https://docs.winglang.io/terms-and-policies/contribution-license.html). 🔏
-
 Happy coding, and remember: the sky's the limit with Wing! 🌤️🚀
-
 [wing slack]: https://t.winglang.io/slack
