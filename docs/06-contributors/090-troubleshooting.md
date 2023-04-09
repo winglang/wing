@@ -42,3 +42,13 @@ node -e 'console.log(process.arch)'
 > arm64
 ```
 Your previously installed `esbuild/darwin-x64` package needs to be replaced by `esbuild/darwin-arm64`. Therefore, remove `esbuild` folder from `./libs/wing/wingsdk/node_modules` and run `npm install`.
+
+## `This version of rustfmt is deprecated. Use rustfmt-nightly.`
+
+Try to move to [rustup]:
+
+- Uninstall Rust (e.g. `brew uninstall rust`).
+- Clear `~/.cargo` 
+- Install `rustup` (via `brew install rustup` or https://sh.rustup.rs)
+
+[rustup]: https://sh.rustup.rs
