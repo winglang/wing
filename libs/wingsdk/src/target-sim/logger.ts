@@ -29,13 +29,13 @@ export class Logger extends cloud.Logger implements ISimulatorResource {
 
   /** @internal */
   public _bind(host: core.IInflightHost, ops: string[]): void {
-    bindSimulatorResource("logger", this, host);
+    bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }
 
   /** @internal */
   public _toInflight(): core.Code {
-    return makeSimulatorJsClient("logger", this);
+    return makeSimulatorJsClient(__filename, this);
   }
 }
 

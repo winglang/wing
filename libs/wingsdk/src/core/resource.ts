@@ -305,6 +305,10 @@ export abstract class Resource extends Construct implements IResource {
 
         // if the object is a resource (i.e. has a "_bind" method"), register a binding between it and the host.
         if (isResource(obj)) {
+          // Explicitly register the resource's `$init` op, which is a special op that can be used to makes sure
+          // the host can instantiate a client for this resource.
+          obj._registerBind(host, ["$init"]);
+
           obj._registerBind(host, ops);
 
           // add connection metadata
@@ -389,6 +393,9 @@ export abstract class Resource extends Construct implements IResource {
     return serializeImmutableData(value);
   }
 }
+
+// The `init` op is a placeholder for any annotations needed for an instance of a resource's client to be instantiated
+Resource._annotateInflight("$init", {});
 
 /**
  * The direction of a connection.

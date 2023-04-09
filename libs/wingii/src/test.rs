@@ -8,7 +8,7 @@ use std::path::PathBuf;
 
 #[cfg(test)]
 mod tests {
-	use crate::{fqn::FQN, type_system::TypeSystem};
+	use crate::{fqn::FQN, jsii::JsiiFile, type_system::TypeSystem};
 
 	use super::*;
 	use std::fs;
@@ -22,9 +22,8 @@ mod tests {
 	#[test]
 	fn can_correctly_tell_redirects() {
 		let assembly_path = create_temp_assembly();
-		let manifest: serde_json::Value =
-			serde_json::from_str(&fs::read_to_string(assembly_path.clone()).unwrap()).unwrap();
-		assert_eq!(spec::is_assembly_redirect(&manifest), false);
+		let manifest: JsiiFile = serde_json::from_str(&fs::read_to_string(assembly_path.clone()).unwrap()).unwrap();
+		assert_eq!(matches!(manifest, JsiiFile::AssemblyRedirect(..)), false);
 		remove_temp_assembly(assembly_path);
 	}
 

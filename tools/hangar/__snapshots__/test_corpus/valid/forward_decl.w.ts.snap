@@ -18,7 +18,20 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       "stackName": "root",
       "version": "0.15.2",
     },
-    "outputs": {},
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
   "provider": {
     "aws": [
@@ -31,6 +44,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
 exports[`wing compile -t tf-aws > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? \\".\\";
+const $wing_is_test = process.env.WING_IS_TEST === \\"true\\";
 
 function __app(target) {
 	switch (target) {
@@ -49,47 +63,65 @@ function __app(target) {
 			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
 	}
 }
-const $App = __app(process.env.WING_TARGET);
+const $AppBase = __app(process.env.WING_TARGET);
 
-class MyApp extends $App {
-constructor() {
-  super({ outdir: $outdir, name: \\"forward_decl\\", plugins: $plugins });
-  
-  class R extends $stdlib.core.Resource {
-  	constructor(scope, id, ) {
-  	super(scope, id);
-  {
-  }
-  }
-  	 method2()  {
-  	{
-    (this.method1());
-    {console.log(\`\${this.f}\`)};
-    (this.method2());
-  }
-  }
-   method1()  {
-  	{
-  }
-  }
-  	_toInflight() {
-  	const f_client = this._lift(this.f);
-  	const self_client_path = \\"./clients/R.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
-  	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R({f: \${f_client}}))\`);
-  }
-  }
-  
-  const x = \\"hi\\";
-  if (true) {
-    {console.log(\`\${x}\`)};
-    const y = new R(this,\\"R\\");
-  }
+class $Root extends $stdlib.core.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    class R extends $stdlib.core.Resource {
+	constructor(scope, id, ) {
+	super(scope, id);
+{
 }
 }
-new MyApp().synth();"
+	 method2()  {
+	{
+  (this.method1());
+  {console.log(\`\${this.f}\`)};
+  (this.method2());
+}
+}
+ method1()  {
+	{
+}
+}
+	_toInflight() {
+	const f_client = this._lift(this.f);
+	const self_client_path = \\"./clients/R.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
+	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).R({f: \${f_client}}))\`);
+}
+}
+R._annotateInflight(\\"$init\\", {\\"this.f\\": { ops: [] }});
+    const x = \\"hi\\";
+    if (true) {
+  {console.log(\`\${x}\`)};
+  const y = new R(this,\\"R\\");
+}
+  }
+}
+
+class $App extends $AppBase {
+  constructor() {
+    super({ outdir: $outdir, name: \\"forward_decl\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    if ($wing_is_test) {
+      new $Root(this, \\"env0\\");
+      const $test_runner = this.testRunner;
+      const $tests = $test_runner.findTests();
+      for (let $i = 1; $i < $tests.length; $i++) {
+        new $Root(this, \\"env\\" + $i);
+      }
+    } else {
+      new $Root(this, \\"Default\\");
+    }
+  }
+}
+
+new $App().synth();"
 `;
 
-exports[`wing test > stdout 1`] = `
-"hi
-pass ─ forward_decl.w (no tests)"
+exports[`wing test -t sim > stdout 1`] = `
+"- Compiling to sim...
+hi
+✔ Compiling to sim...
+pass ─ forward_decl.wsim (no tests)"
 `;

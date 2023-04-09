@@ -284,7 +284,7 @@ test("get invalid object throws an error", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[2].data.status).toEqual("failure");
+  expect(s.listTraces()[3].data.status).toEqual("failure");
   expect(app.snapshot()).toMatchSnapshot();
 });
 

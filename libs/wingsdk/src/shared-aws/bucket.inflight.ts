@@ -3,8 +3,8 @@ import * as consumers from "stream/consumers";
 import {
   DeleteObjectCommand,
   GetObjectCommand,
-  ListObjectsCommand,
-  ListObjectsCommandOutput,
+  ListObjectsV2Command,
+  ListObjectsV2CommandOutput,
   PutObjectCommand,
   GetBucketLocationCommand,
   S3Client,
@@ -47,12 +47,12 @@ export class BucketClient implements IBucketClient {
   }
 
   private async exists(key: string): Promise<boolean> {
-    const command = new ListObjectsCommand({
+    const command = new ListObjectsV2Command({
       Bucket: this.bucketName,
       Prefix: key,
       MaxKeys: 1,
     });
-    const resp: ListObjectsCommandOutput = await this.s3Client.send(command);
+    const resp: ListObjectsV2CommandOutput = await this.s3Client.send(command);
     return !!resp.Contents && resp.Contents.length > 0;
   }
 
@@ -111,12 +111,14 @@ export class BucketClient implements IBucketClient {
     let fetchMore = true;
     let marker: string | undefined = undefined;
     while (fetchMore) {
-      const command = new ListObjectsCommand({
+      const command = new ListObjectsV2Command({
         Bucket: this.bucketName,
         Prefix: prefix,
-        Marker: marker,
+        StartAfter: marker,
       });
-      const resp: ListObjectsCommandOutput = await this.s3Client.send(command);
+      const resp: ListObjectsV2CommandOutput = await this.s3Client.send(
+        command
+      );
       for (const content of resp.Contents ?? []) {
         if (content.Key === undefined) {
           continue;

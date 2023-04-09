@@ -25,6 +25,18 @@ const FUNCTION_NAME_OPTS: NameOptions = {
 };
 
 /**
+ * Function network configuration
+ * used to hold data on subnets and security groups
+ * that should be used when a function is deployed within a VPC.
+ */
+export interface FunctionNetworkConfig {
+  /** list of subnets to attach on function */
+  readonly subnetIds: string[];
+  /** list of security groups to place function in */
+  readonly securityGroupIds: string[];
+}
+
+/**
  * options for granting invoke permissions to the current function
  */
 export interface FunctionPermissionsOptions {
@@ -43,6 +55,9 @@ export class Function extends cloud.Function {
   private readonly function: LambdaFunction;
   private readonly role: IamRole;
   private policyStatements?: any[];
+  private subnets?: Set<string>;
+  private securityGroups?: Set<string>;
+
   /**
    * Unqualified Function ARN
    * @returns Unqualified ARN of the function
@@ -76,6 +91,7 @@ export class Function extends cloud.Function {
     });
 
     // Create unique S3 bucket for hosting Lambda code
+    // TODO: share all code in a single bucket https://github.com/winglang/wing/issues/178
     const bucket = new S3Bucket(this, "Code");
     const bucketPrefix = ResourceNames.generateName(bucket, BUCKET_PREFIX_OPTS);
     bucket.bucketPrefix = bucketPrefix;
@@ -115,6 +131,21 @@ export class Function extends cloud.Function {
       role: this.role.name,
       policy: Lazy.stringValue({
         produce: () => {
+          // If there are subnets to attach then the role needs to be able to
+          // create network interfaces
+          if ((this.subnets?.size ?? 0) > 0) {
+            this.policyStatements?.push({
+              Effect: "Allow",
+              Action: [
+                "ec2:CreateNetworkInterface",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:DeleteNetworkInterface",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeSecurityGroups",
+              ],
+              Resource: "*",
+            });
+          }
           if ((this.policyStatements ?? []).length > 0) {
             return JSON.stringify({
               Version: "2012-10-17",
@@ -162,6 +193,16 @@ export class Function extends cloud.Function {
       runtime: "nodejs16.x",
       role: this.role.arn,
       publish: true,
+      vpcConfig: {
+        subnetIds: Lazy.listValue({
+          produce: () =>
+            this.subnets ? Array.from(this.subnets.values()) : [],
+        }),
+        securityGroupIds: Lazy.listValue({
+          produce: () =>
+            this.securityGroups ? Array.from(this.securityGroups.values()) : [],
+        }),
+      },
       environment: {
         variables: Lazy.anyValue({ produce: () => this.env }) as any,
       },
@@ -208,6 +249,18 @@ export class Function extends cloud.Function {
       "FunctionClient",
       [`process.env["${this.envName()}"]`]
     );
+  }
+
+  /**
+   * Add VPC configurations to lambda function
+   */
+  public addNetworkConfig(vpcConfig: FunctionNetworkConfig) {
+    if (!this.subnets || !this.securityGroups) {
+      this.subnets = new Set();
+      this.securityGroups = new Set();
+    }
+    vpcConfig.subnetIds.forEach((subnet) => this.subnets!.add(subnet));
+    vpcConfig.securityGroupIds.forEach((sg) => this.securityGroups!.add(sg));
   }
 
   /**

@@ -43,7 +43,7 @@ export async function compileTest(expect: Vi.ExpectStatic, wingFile: string) {
 }
 
 export async function testTest(expect: Vi.ExpectStatic, wingFile: string) {
-  const args = ["test"];
+  const args = ["test", "-t", "sim"];
   const testDir = join(tmpDir, `${wingFile}_sim`);
   await mkdir(testDir, { recursive: true });
 
