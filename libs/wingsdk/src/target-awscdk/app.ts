@@ -5,10 +5,11 @@ import { Template } from "aws-cdk-lib/assertions";
 import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
 import { Bucket } from "./bucket";
+import { Counter } from "./counter";
 import { Function } from "./function";
 import { Logger } from "./logger";
 
-import { BUCKET_FQN, FUNCTION_FQN, LOGGER_FQN } from "../cloud";
+import { BUCKET_FQN, COUNTER_FQN, FUNCTION_FQN, LOGGER_FQN } from "../cloud";
 import { App as CoreApp, AppProps, preSynthesizeAllConstructs } from "../core";
 import { PluginManager } from "../core/plugin-manager";
 
@@ -121,6 +122,9 @@ export class App extends CoreApp {
 
       case BUCKET_FQN:
         return new Bucket(scope, id, args[0]);
+
+      case COUNTER_FQN:
+        return new Counter(scope, id, args[0]);
 
       case LOGGER_FQN:
         return new Logger(scope, id);
