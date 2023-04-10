@@ -63,13 +63,13 @@ body:
        ## Environment
 
 - type: input
-  id: version
+  id: wing-version
   attributes:
     label: "Wing Version"
     placeholder: "wing --version"
 
 - type: input
-  id: version
+  id: console-version
   attributes:
     label: "Wing Console Version"
     placeholder: "Wing Console > About Wing Console (if relevant)"
