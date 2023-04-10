@@ -7,6 +7,8 @@ extern crate lazy_static;
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use capture::CaptureVisitor;
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
+use fold::Fold;
+use inflight_transform::InflightTransformer;
 use jsify::JSifier;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
@@ -32,6 +34,7 @@ pub mod capture;
 pub mod debug;
 pub mod diagnostic;
 pub mod fold;
+pub mod inflight_transform;
 pub mod jsify;
 pub mod lsp;
 pub mod parser;
@@ -274,10 +277,15 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
+	// Build our AST
+	let (scope, parse_diagnostics) = parse(&source_path);
+
+	// Transform all inflight closures defined in preflight into single-method resources
+	let mut inflight_transformer = InflightTransformer::new();
+	let mut scope = inflight_transformer.fold_scope(scope);
+
 	// Create universal types collection (need to keep this alive during entire compilation)
 	let mut types = Types::new();
-	// Build our AST
-	let (mut scope, parse_diagnostics) = parse(&source_path);
 	let mut jsii_imports = Vec::new();
 
 	// Type check everything and build typed symbol environment
