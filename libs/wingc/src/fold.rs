@@ -182,6 +182,7 @@ where
 			.map(|interface| f.fold_user_defined_type(interface))
 			.collect(),
 		is_resource: node.is_resource,
+		inflight_initializer: node.inflight_initializer.map(|init| f.fold_function_definition(init)),
 	}
 }
 
