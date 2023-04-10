@@ -58,7 +58,7 @@ body:
 
 - type: textarea
   attributes:
-    label: Community Note
+    label: Community Notes
     value: |
       <!-- Please keep this note for the community -->
       * Please vote by adding a 👍 reaction to the issue to help us prioritize.
