@@ -78,6 +78,7 @@ Resource definition
 
 resource A {
     init() {}
+    inflight init() {}
     preflight_func() {}
     async preflight_func() {}
     public preflight_func2() {}
@@ -98,6 +99,9 @@ resource A {
             (constructor
                 parameter_list: (parameter_list)
                 block: (block))
+            (inflight_initializer
+                block: (block)
+            )
             (method_definition
                 name: (identifier)
                 parameter_list: (parameter_list)

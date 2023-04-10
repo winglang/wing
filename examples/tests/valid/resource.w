@@ -3,9 +3,14 @@ bring cloud;
 // User defined resource
 resource Foo {
   c: cloud.Counter; // Use SDK built in resource in the user defined resource
+  inflight inflight_field: num;
 
   init() {
     this.c = new cloud.Counter();
+  }
+
+  inflight init() {
+    this.inflight_field = 123;
   }
 
   // Our resource has an inflight method
@@ -46,4 +51,5 @@ new cloud.Function(inflight () => {
   let s = res.my_method();
   assert(s == "counter is: 1");
   assert(bucket.list().length == 1);
+  assert(res.foo.inflight_field == 123);
 }) as "test";
