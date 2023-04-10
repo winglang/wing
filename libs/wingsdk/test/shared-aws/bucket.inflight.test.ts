@@ -3,7 +3,7 @@ import {
   DeleteObjectCommand,
   GetBucketLocationCommand,
   GetObjectCommand,
-  ListObjectsCommand,
+  ListObjectsV2Command,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
@@ -108,7 +108,7 @@ test("list bucket objects", async () => {
   const KEY2 = "KEY2";
   const client = new BucketClient(BUCKET_NAME);
   s3Mock
-    .on(ListObjectsCommand, { Bucket: BUCKET_NAME })
+    .on(ListObjectsV2Command, { Bucket: BUCKET_NAME })
     .resolves({ Contents: [{ Key: KEY1 }, { Key: KEY2 }] });
   const response = await client.list();
   // THEN
@@ -183,7 +183,7 @@ test("Given a public bucket when reaching to a non existent key, public url it s
     .on(GetBucketLocationCommand, { Bucket: BUCKET_NAME })
     .resolves({ LocationConstraint: "us-east-2" });
   s3Mock
-    .on(ListObjectsCommand, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
+    .on(ListObjectsV2Command, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
     .resolves({ Contents: [] });
 
   //WHEN
@@ -209,7 +209,7 @@ test("Given a public bucket, when giving one of its keys, we should get it's pub
     .on(GetBucketLocationCommand, { Bucket: BUCKET_NAME })
     .resolves({ LocationConstraint: REGION });
   s3Mock
-    .on(ListObjectsCommand, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
+    .on(ListObjectsV2Command, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
     .resolves({ Contents: [{}] });
 
   // WHEN
