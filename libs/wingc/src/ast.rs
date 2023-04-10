@@ -380,19 +380,19 @@ pub enum StmtKind {
 	},
 	Break,
 	Continue,
+	Return(Option<Expr>),
 	Expression(Expr),
 	Assignment {
 		variable: Reference,
 		value: Expr,
 	},
-	Return(Option<Expr>),
 	Scope(Scope),
 	Class(Class),
 	Interface(Interface),
 	Struct {
 		name: Symbol,
-		extends: Vec<Symbol>,
-		members: Vec<ClassField>,
+		extends: Vec<UserDefinedType>,
+		fields: Vec<ClassField>,
 	},
 	Enum {
 		name: Symbol,

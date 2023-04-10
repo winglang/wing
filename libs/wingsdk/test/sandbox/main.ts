@@ -20,7 +20,7 @@ class HelloWorld extends Construct {
     );
     // cloud.Function._newFunction(this, "Function", handler);
     const queue = cloud.Queue._newQueue(this, "Queue");
-    queue.onMessage(handler);
+    queue.addConsumer(handler);
   }
 }
 

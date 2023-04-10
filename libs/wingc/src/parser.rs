@@ -354,10 +354,25 @@ impl<'s> Parser<'s> {
 
 		let mut extends = vec![];
 		for super_node in statement_node.children_by_field_name("extends", &mut cursor) {
-			extends.push(self.node_symbol(&super_node)?);
+			let super_type = self.build_type_annotation(&super_node)?;
+			match super_type {
+				TypeAnnotation::UserDefined(t) => {
+					extends.push(t);
+				}
+				_ => {
+					self.add_error::<Node>(
+						format!("Extended type must be a user defined type, found {}", super_type),
+						&super_node,
+					)?;
+				}
+			}
 		}
 
-		Ok(StmtKind::Struct { name, extends, members })
+		Ok(StmtKind::Struct {
+			name,
+			extends,
+			fields: members,
+		})
 	}
 
 	fn build_variable_def_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {

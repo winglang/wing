@@ -31,7 +31,7 @@ resource SafeQueue extends cloud.Queue {
   init() {
     let dlq = new cloud.Queue();
 
-    dlq.on_message(inflight (m: str) => {
+    dlq.add_consumer(inflight (m: str) => {
       log.error("dead-letter: ${m}");
     });
 

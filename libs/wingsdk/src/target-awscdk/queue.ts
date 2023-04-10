@@ -34,25 +34,25 @@ export class Queue extends cloud.Queue {
     }
   }
 
-  public onMessage(
-    inflight: cloud.IQueueOnMessageHandler,
-    props: cloud.QueueOnMessageProps = {}
+  public addConsumer(
+    inflight: cloud.IQueueAddConsumerHandler,
+    props: cloud.QueueAddConsumerProps = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessageHandler-${hash}`,
+      `${this.node.id}-AddConsumerHandler-${hash}`,
       inflight,
       join(
         __dirname.replace("target-awscdk", "shared-aws"),
-        "queue.onmessage.inflight.js"
+        "queue.addconsumer.inflight.js"
       ),
-      "QueueOnMessageHandlerClient"
+      "QueueAddConsumerHandlerClient"
     );
 
     const fn = Function._newFunction(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessage-${hash}`,
+      `${this.node.id}-AddConsumer-${hash}`,
       functionHandler,
       props
     );
@@ -70,7 +70,7 @@ export class Queue extends cloud.Queue {
     core.Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "on_message",
+      relationship: "add_consumer",
     });
 
     return fn;
