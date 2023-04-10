@@ -13,7 +13,7 @@ body:
 - type: textarea
   id: i-tried-this
   attributes:
-    label: "I tried this:"
+    label: "I tried this"
     placeholder: "What did you try to do? A code snippet or exact command line is ideal."
   validations:
     required: true
@@ -27,7 +27,7 @@ body:
 - type: textarea
   id: instead-what-happened
   attributes:
-    label: "Instead, this happened:"
+    label: "Instead, this happened"
     placeholder: "What happend instead of what you've expected?"
   validations:
     required: true
@@ -39,7 +39,7 @@ body:
 - type: dropdown
   id: Component
   attributes:
-    label: "Component:"
+    label: "Component"
     description: "Which component(s) in the toolchain is this related to?"
     multiple: true
     options:
@@ -61,20 +61,29 @@ body:
   attributes:
     value: |
        ## Environment
+
 - type: input
   id: version
   attributes:
-    label: "Wing Version:"
+    label: "Wing Version"
     placeholder: "wing --version"
+
+- type: input
+  id: version
+  attributes:
+    label: "Wing Console Version"
+    placeholder: "Wing Console > About Wing Console (if relevant)"
+
 - type: input
   id: node
   attributes:
-    label: "Node.js Version:"
+    label: "Node.js Version"
     placeholder: "node --version"
+
 - type: dropdown
   id: platform
   attributes:
-    label: "Platform(s):"
+    label: "Platform(s)"
     multiple: true
     options:
       - MacOS
@@ -98,7 +107,7 @@ body:
 
 - type: textarea
   attributes:
-    label: Community Note
+    label: Community Notes
     value: |
       <!-- Please keep this note for the community -->
       * Please vote by adding a 👍 reaction to the issue to help us prioritize.
