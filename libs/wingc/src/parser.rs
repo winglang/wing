@@ -487,7 +487,7 @@ impl<'s> Parser<'s> {
 					if let Some(_) = constructor {
 						self
 							.add_error::<Node>(
-								format!("Multiple initializers defined in class {:?}", statement_node),
+								format!("Multiple initializers defined in class {}", name.name),
 								&class_element,
 							)
 							.err();
@@ -509,7 +509,7 @@ impl<'s> Parser<'s> {
 					if let Some(_) = inflight_initializer {
 						self
 							.add_error::<Node>(
-								format!("Multiple inflight initializers defined in class {:?}", statement_node),
+								format!("Multiple inflight initializers defined in class {}", name.name),
 								&class_element,
 							)
 							.err();

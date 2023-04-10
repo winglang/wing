@@ -845,6 +845,44 @@ exports[`resource_inflight.w > stderr 1`] = `
 "
 `;
 
+exports[`resource_init.w > stderr 1`] = `
+"error: Multiple initializers defined in class R
+  --> ../../../examples/tests/invalid/resource_init.w:3:3
+  |
+3 |   init() {}
+  |   ^^^^^^^^^ Multiple initializers defined in class R
+
+
+error: Multiple inflight initializers defined in class R
+  --> ../../../examples/tests/invalid/resource_init.w:6:3
+  |
+6 |   inflight init() {}
+  |   ^^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
+
+
+error: Unexpected 'ERROR'.
+  --> ../../../examples/tests/invalid/resource_init.w:9:12
+  |
+9 |   inflight init(x: num) {}
+  |            ^^^^^ Unexpected 'ERROR'.
+
+
+error: Unexpected 'identifier'.
+  --> ../../../examples/tests/invalid/resource_init.w:9:17
+  |
+9 |   inflight init(x: num) {}
+  |                 ^ Unexpected 'identifier'.
+
+
+error: Unexpected 'builtin_type'.
+  --> ../../../examples/tests/invalid/resource_init.w:9:20
+  |
+9 |   inflight init(x: num) {}
+  |                    ^^^ Unexpected 'builtin_type'.
+
+"
+`;
+
 exports[`sorted_errors_no_span.w > stderr 1`] = `
 "error: Expected type to be \\"num\\", but got \\"str\\" instead
   --> ../../../examples/tests/invalid/sorted_errors_no_span.w:1:14
