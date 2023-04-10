@@ -65,12 +65,13 @@ new cloud.Function(hello_world);
 
 > ### Note for cloud experts 🤓
 >
-> If you or someone on your team wants to tweak how the application is deployed, Wing lets you customize the **operational details** in a few ways:
+> To give full control over how applications are deployed, Wing lets you customize **operational details** in a few ways:
 >
 > 1. by creating a [compiler plugin](https://docs.winglang.io/reference/compiler-plugins) that modifies the generated Terraform, or 
-> 2. by providing implementations of built-in resources like `cloud.Bucket` or your own custom resources.
+> 2. by providing implementations of built-in resources like `cloud.Bucket`, or
+> 3. by developing your own custom resources.
 >
-> This layer of separation allows you to refactor code and write tests that focus on the business logic, while still having the flexibility to make changes under the hood.
+> This layer of separation allows you to refactor code and write unit tests that focus on the business logic, while still having the flexibility to make changes under the hood.
 
 ### Under Construction 🚧
 
