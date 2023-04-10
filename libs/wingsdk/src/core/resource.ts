@@ -12,7 +12,7 @@ import { log } from "../util";
 /**
  * A resource that can run inflight code.
  */
-export interface IInflightHost extends IResource {}
+export interface IInflightHost extends IResource { }
 
 /**
  * Abstract interface for `Resource`.
@@ -191,8 +191,7 @@ export abstract class Resource extends Construct implements IResource {
    */
   public _registerBind(host: IInflightHost, ops: string[]) {
     log(
-      `Registering a binding for a resource (${this.node.path}) to a host (${
-        host.node.path
+      `Registering a binding for a resource (${this.node.path}) to a host (${host.node.path
       }) with ops: ${JSON.stringify(ops)}`
     );
 
@@ -305,9 +304,9 @@ export abstract class Resource extends Construct implements IResource {
 
         // if the object is a resource (i.e. has a "_bind" method"), register a binding between it and the host.
         if (isResource(obj)) {
-          // Explicitly register the resource's `$init` op, which is a special op that can be used to makes sure
+          // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
           // the host can instantiate a client for this resource.
-          obj._registerBind(host, ["$init"]);
+          obj._registerBind(host, ["$inflight_init"]);
 
           obj._registerBind(host, ops);
 
@@ -395,7 +394,7 @@ export abstract class Resource extends Construct implements IResource {
 }
 
 // The `init` op is a placeholder for any annotations needed for an instance of a resource's client to be instantiated
-Resource._annotateInflight("$init", {});
+Resource._annotateInflight("$inflight_init", {});
 
 /**
  * The direction of a connection.
