@@ -1,0 +1,2 @@
+async handle() { const {  } = this; {
+} };

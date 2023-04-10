@@ -14,6 +14,8 @@ export const npmCacheDir = path.join(tmpDir, ".npm");
 export const npmBin = path.join(hangarDir, "node_modules/.bin/npm");
 export const wingBin = path.join(tmpDir, "node_modules/.bin/wing");
 
+export const snapshotDir = path.join(hangarDir, "__snapshots__");
+
 export const targetWingSpec =
   process.env.HANGAR_WING_SPEC ?? `file:${path.join(repoRoot, `apps/wing`)}`;
 export const targetWingSDKSpec =
