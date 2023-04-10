@@ -110,7 +110,7 @@ bring cloud;
 
 let queue = new cloud.Queue();
 
-queue.on_message(inflight (message) => {
+queue.add_consumer(inflight (message) => {
   log("Hello, ${message}!");
 });
 ```
