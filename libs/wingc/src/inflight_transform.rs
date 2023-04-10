@@ -21,13 +21,25 @@ impl InflightTransformer {
 }
 
 impl Fold for InflightTransformer {
+	fn fold_function_definition(&mut self, node: FunctionDefinition) -> FunctionDefinition {
+		let old_phase = self.curr_phase;
+		self.curr_phase = node.signature.phase;
+		let new_node = fold::fold_function_definition(self, node);
+		self.curr_phase = old_phase;
+		new_node
+	}
+
 	fn fold_expr(&mut self, expr: Expr) -> Expr {
 		// No preflight scopes can exist inside an inflight scope, so
-		//
+		// we know that if we encounter any inflight closures, they won't
+		// need to be transformed.
 		if self.curr_phase == Phase::Inflight {
 			return expr;
 		}
 
+		// If we encounter a non-inflight closure, we can don't need to
+		// transform it into a resource, but we still want to recurse
+		// in case its body contains any inflight closures.
 		if let ExprKind::FunctionClosure(ref def) = expr.kind {
 			if def.signature.phase != Phase::Inflight {
 				return fold::fold_expr(self, expr);
