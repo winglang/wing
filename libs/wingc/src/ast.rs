@@ -115,6 +115,7 @@ pub enum TypeAnnotation {
 	MutSet(Box<TypeAnnotation>),
 	Function(FunctionTypeAnnotation),
 	UserDefined(UserDefinedType),
+	Resource, // TODO: keep this?
 }
 
 /// Unlike a FunctionSignature, a FunctionTypeAnnotation doesn't include the names
@@ -163,6 +164,7 @@ impl Display for TypeAnnotation {
 			TypeAnnotation::MutSet(t) => write!(f, "MutSet<{}>", t),
 			TypeAnnotation::Function(t) => write!(f, "{}", t),
 			TypeAnnotation::UserDefined(user_defined_type) => write!(f, "{}", user_defined_type),
+			TypeAnnotation::Resource => write!(f, "resource"),
 		}
 	}
 }
@@ -424,7 +426,7 @@ pub enum ExprKind {
 	},
 	Reference(Reference),
 	Call {
-		function: Box<Expr>,
+		callee: Box<Expr>,
 		arg_list: ArgList,
 	},
 	Unary {
@@ -527,6 +529,14 @@ pub struct Scope {
 }
 
 impl Scope {
+	pub fn new(statements: Vec<Stmt>, span: WingSpan) -> Self {
+		Self {
+			statements,
+			span,
+			env: RefCell::new(None),
+		}
+	}
+
 	pub fn set_env(&self, new_env: SymbolEnv) {
 		let mut env = self.env.borrow_mut();
 		assert!((*env).is_none());

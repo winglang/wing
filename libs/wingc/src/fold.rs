@@ -250,8 +250,11 @@ where
 			end: Box::new(f.fold_expr(*end)),
 		},
 		ExprKind::Reference(reference) => ExprKind::Reference(f.fold_reference(reference)),
-		ExprKind::Call { function, arg_list } => ExprKind::Call {
-			function: Box::new(f.fold_expr(*function)),
+		ExprKind::Call {
+			callee: function,
+			arg_list,
+		} => ExprKind::Call {
+			callee: Box::new(f.fold_expr(*function)),
 			arg_list: f.fold_args(arg_list),
 		},
 		ExprKind::Unary { op, exp } => ExprKind::Unary {
@@ -417,6 +420,7 @@ where
 			phase: t.phase,
 		}),
 		TypeAnnotation::UserDefined(t) => TypeAnnotation::UserDefined(f.fold_user_defined_type(t)),
+		TypeAnnotation::Resource => TypeAnnotation::Resource,
 	}
 }
 

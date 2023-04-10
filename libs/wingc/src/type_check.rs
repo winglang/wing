@@ -1356,7 +1356,10 @@ impl<'a> TypeChecker<'a> {
 				}
 				type_
 			}
-			ExprKind::Call { function, arg_list } => {
+			ExprKind::Call {
+				callee: function,
+				arg_list,
+			} => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
 				let func_type = self.type_check_exp(function, env);
 
@@ -1792,6 +1795,7 @@ impl<'a> TypeChecker<'a> {
 				// TODO: avoid creating a new type for each map resolution
 				self.types.add_type(Type::MutMap(value_type))
 			}
+			TypeAnnotation::Resource => self.types.anything(), // TODO: add resource type
 		}
 	}
 

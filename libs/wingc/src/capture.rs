@@ -249,7 +249,10 @@ fn scan_captures_in_expression(
 				// TODO: handle access to static preflight memebers from inflight (https://github.com/winglang/wing/issues/1669)
 			}
 		},
-		ExprKind::Call { function, arg_list } => res.extend(scan_captures_in_call(
+		ExprKind::Call {
+			callee: function,
+			arg_list,
+		} => res.extend(scan_captures_in_call(
 			&function,
 			&arg_list,
 			env,
