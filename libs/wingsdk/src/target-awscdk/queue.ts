@@ -1,6 +1,7 @@
 import { join } from "path";
-import { LambdaEventSourceMapping } from "@cdktf/provider-aws/lib/lambda-event-source-mapping";
-import { SqsQueue } from "@cdktf/provider-aws/lib/sqs-queue";
+import { Duration } from "aws-cdk-lib";
+import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
+import { Queue as SQSQueue } from "aws-cdk-lib/aws-sqs";
 import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
@@ -8,16 +9,6 @@ import * as core from "../core";
 import { AwsTarget } from "../shared-aws/commons";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
 import { convertBetweenHandlers } from "../utils/convert";
-import { NameOptions, ResourceNames } from "../utils/resource-names";
-
-/**
- * Queue names are limited to 80 characters.
- * You can use alphanumeric characters, hyphens (-), and underscores (_).
- */
-const NAME_OPTS: NameOptions = {
-  maxLen: 80,
-  disallowedRegex: /[^a-zA-Z0-9\_\-]+/g,
-};
 
 /**
  * AWS implementation of `cloud.Queue`.
@@ -25,14 +16,15 @@ const NAME_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
 export class Queue extends cloud.Queue {
-  private readonly queue: SqsQueue;
+  private readonly queue: SQSQueue;
 
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
-    this.queue = new SqsQueue(this, "Default", {
-      visibilityTimeoutSeconds: props.timeout?.seconds,
-      name: ResourceNames.generateName(this, NAME_OPTS),
+    this.queue = new SQSQueue(this, "Default", {
+      visibilityTimeout: props.timeout
+        ? Duration.seconds(props.timeout?.seconds)
+        : undefined,
     });
 
     if ((props.initialMessages ?? []).length) {
@@ -42,56 +34,43 @@ export class Queue extends cloud.Queue {
     }
   }
 
-  public addConsumer(
-    inflight: cloud.IQueueAddConsumerHandler,
-    props: cloud.QueueAddConsumerProps = {}
+  public onMessage(
+    inflight: cloud.IQueueOnMessageHandler,
+    props: cloud.QueueOnMessageProps = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-AddConsumerHandler-${hash}`,
+      `${this.node.id}-OnMessageHandler-${hash}`,
       inflight,
       join(
-        __dirname.replace("target-tf-aws", "shared-aws"),
-        "queue.addconsumer.inflight.js"
+        __dirname.replace("target-awscdk", "shared-aws"),
+        "queue.onmessage.inflight.js"
       ),
-      "QueueAddConsumerHandlerClient"
+      "QueueOnMessageHandlerClient"
     );
 
     const fn = Function._newFunction(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-AddConsumer-${hash}`,
+      `${this.node.id}-OnMessage-${hash}`,
       functionHandler,
       props
     );
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
     if (!(fn instanceof Function)) {
-      throw new Error("Queue only supports creating tfaws.Function right now");
+      throw new Error("Queue only supports creating awscdk.Function right now");
     }
 
-    fn.addPolicyStatements({
-      effect: "Allow",
-      action: [
-        "sqs:ReceiveMessage",
-        "sqs:ChangeMessageVisibility",
-        "sqs:GetQueueUrl",
-        "sqs:DeleteMessage",
-        "sqs:GetQueueAttributes",
-      ],
-      resource: this.queue.arn,
-    });
-
-    new LambdaEventSourceMapping(this, "EventSourceMapping", {
-      functionName: fn._functionName,
-      eventSourceArn: this.queue.arn,
+    const eventSource = new SqsEventSource(this.queue, {
       batchSize: props.batchSize ?? 1,
     });
+    fn._addEventSource(eventSource);
 
     core.Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "add_consumer",
+      relationship: "on_message",
     });
 
     return fn;
@@ -106,12 +85,12 @@ export class Queue extends cloud.Queue {
     const env = this.envName();
 
     host.addPolicyStatements(
-      ...calculateQueuePermissions(this.queue.arn, AwsTarget.TF_AWS, ops)
+      ...calculateQueuePermissions(this.queue.queueArn, AwsTarget.AWSCDK, ops)
     );
 
     // The queue url needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
-    host.addEnvironment(env, this.queue.url);
+    host.addEnvironment(env, this.queue.queueUrl);
 
     super._bind(host, ops);
   }
@@ -119,7 +98,7 @@ export class Queue extends cloud.Queue {
   /** @internal */
   public _toInflight(): core.Code {
     return core.InflightClient.for(
-      __dirname.replace("target-tf-aws", "shared-aws"),
+      __dirname.replace("target-awscdk", "shared-aws"),
       __filename,
       "QueueClient",
       [`process.env["${this.envName()}"]`]
@@ -127,7 +106,7 @@ export class Queue extends cloud.Queue {
   }
 
   private envName(): string {
-    return `QUEUE_URL_${this.node.addr.slice(-8)}`;
+    return `SCHEDULE_EVENT_${this.node.addr.slice(-8)}`;
   }
 }
 
