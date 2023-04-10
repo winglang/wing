@@ -2341,7 +2341,7 @@ impl<'a> TypeChecker<'a> {
 						if t.as_struct().is_some() {
 							Some(t)
 						} else {
-							self.general_type_error(format!("Expected a struct, instead found type \"{}\"", t));
+							self.general_type_error(format!("Expected a struct, found type \"{}\"", t));
 							None
 						}
 					})
