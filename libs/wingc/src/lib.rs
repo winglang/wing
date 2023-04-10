@@ -10,11 +10,13 @@ use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
 use fold::Fold;
 use inflight_transform::InflightTransformer;
 use jsify::JSifier;
+use reset::EnvResetter;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
 use visit::Visit;
+use visit_mut::VisitMut;
 use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
 use crate::parser::Parser;
@@ -38,10 +40,12 @@ pub mod inflight_transform;
 pub mod jsify;
 pub mod lsp;
 pub mod parser;
+pub mod reset;
 pub mod type_check;
 pub mod type_check_assert;
 pub mod utilities;
 pub mod visit;
+pub mod visit_mut;
 mod wasm_util;
 
 const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
@@ -277,19 +281,15 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
-	// Build our AST
-	let (scope, parse_diagnostics) = parse(&source_path);
-
-	// Transform all inflight closures defined in preflight into single-method resources
-	let mut inflight_transformer = InflightTransformer::new();
-	let mut scope = inflight_transformer.fold_scope(scope);
-
 	// Create universal types collection (need to keep this alive during entire compilation)
 	let mut types = Types::new();
+	// Build our AST
+	let (mut scope, parse_diagnostics) = parse(&source_path);
+
 	let mut jsii_imports = Vec::new();
 
 	// Type check everything and build typed symbol environment
-	let type_check_diagnostics = if scope.statements.len() > 0 {
+	if scope.statements.len() > 0 {
 		type_check(&mut scope, &mut types, &source_path, &mut jsii_imports)
 	} else {
 		// empty scope, no type checking needed
@@ -297,6 +297,26 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 	};
 
 	// Validate that every Expr has an evaluated_type
+	let mut tc_assert = TypeCheckAssert;
+	tc_assert.visit_scope(&scope);
+
+	// Transform all inflight closures defined in preflight into single-method resources
+	let mut inflight_transformer = InflightTransformer::new();
+	let mut scope = inflight_transformer.fold_scope(scope);
+
+	// Reset symbol environments
+	let mut env_resetter = EnvResetter;
+	env_resetter.visit_scope_mut(&mut scope);
+
+	// Type check everything again
+	let type_check_diagnostics = if scope.statements.len() > 0 {
+		type_check(&mut scope, &mut types, &source_path, &mut jsii_imports)
+	} else {
+		// empty scope, no type checking needed
+		Diagnostics::new()
+	};
+
+	// Validate again that every Expr has an evaluated_type
 	let mut tc_assert = TypeCheckAssert;
 	tc_assert.visit_scope(&scope);
 
