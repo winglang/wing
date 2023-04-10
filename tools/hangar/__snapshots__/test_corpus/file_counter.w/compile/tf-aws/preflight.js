@@ -41,7 +41,7 @@ class $Root extends $stdlib.core.Resource {
     },
   }
 });
-    (queue.onMessage(handler));
+    (queue.addConsumer(handler));
   }
 }
 
