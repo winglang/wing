@@ -5,7 +5,7 @@ use crate::ast::{
 };
 
 /// Similar to the `visit` module in `wingc` except each method takes ownership of an
-/// AST node instance of a reference to it, and returns a new AST node instance.
+/// AST node instead of a reference to it, and returns a new AST node instance.
 /// This trait can be useful for AST transformations.
 pub trait Fold {
 	fn fold_scope(&mut self, node: Scope) -> Scope {
