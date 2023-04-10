@@ -5,7 +5,12 @@ import {
   PolicyStatement,
   PolicyStatementProps,
 } from "aws-cdk-lib/aws-iam";
-import { Function as CdkFunction, Code, Runtime } from "aws-cdk-lib/aws-lambda";
+import {
+  Function as CdkFunction,
+  Code,
+  IEventSource,
+  Runtime,
+} from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
@@ -87,6 +92,16 @@ export class Function extends cloud.Function {
   /** @internal */
   public get _functionName(): string {
     return this.function.functionName;
+  }
+
+  /** @internal */
+  public get _function() {
+    return this.function;
+  }
+
+  /** @internal */
+  public _addEventSource(eventSource: IEventSource) {
+    this.function.addEventSource(eventSource);
   }
 
   private envName(): string {
