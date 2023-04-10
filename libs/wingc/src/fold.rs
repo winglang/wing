@@ -7,6 +7,7 @@ use crate::ast::{
 /// Similar to the `visit` module in `wingc` except each method takes ownership of an
 /// AST node instead of a reference to it, and returns a new AST node instance.
 /// This trait can be useful for AST transformations.
+/// See https://rust-unofficial.github.io/patterns/patterns/creational/fold.html
 pub trait Fold {
 	fn fold_scope(&mut self, node: Scope) -> Scope {
 		fold_scope(self, node)

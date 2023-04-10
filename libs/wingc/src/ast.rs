@@ -3,7 +3,7 @@ use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 
 use derivative::Derivative;
-use indexmap::{Equivalent, IndexMap, IndexSet};
+use indexmap::{Equivalent, IndexSet};
 
 use crate::capture::Captures;
 use crate::diagnostic::WingSpan;
@@ -60,9 +60,9 @@ impl Display for Symbol {
 	}
 }
 
-impl Equivalent<Symbol> for str {
-	fn equivalent(&self, key: &Symbol) -> bool {
-		self == key.name
+impl Equivalent<str> for Symbol {
+	fn equivalent(&self, key: &str) -> bool {
+		self.name == key
 	}
 }
 
