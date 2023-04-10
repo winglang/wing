@@ -1144,7 +1144,14 @@ impl<'a> JSifier<'a> {
 			.collect_vec();
 
 		if let Some(inflight_init) = inflight_init {
-			let inflight_init = self.jsify_function(Some(WING_INFLIGHT_INIT_NAME), inflight_init, context);
+			let inflight_init = self.jsify_function(
+				Some(WING_INFLIGHT_INIT_NAME),
+				inflight_init,
+				&JSifyContext {
+					in_json: context.in_json.clone(),
+					phase: inflight_init.signature.phase,
+				},
+			);
 			client_methods.push(inflight_init);
 		}
 
