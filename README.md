@@ -99,9 +99,9 @@ To learn more about Wing concepts such as resources and inflights, jump over to 
 
 For a comprehensive reference of the language, check out the [Wing Language Specification](https://docs.winglang.io/reference/spec) and the [API Reference](https://docs.winglang.io/reference/sdk).
 
-## Why choose Wing? 🌟
+## What makes Wing a good fit for cloud development? 🌟
 
-Wing was built from the ground up to cater to cloud development, offering features that make it an ideal choice for building applications on AWS or other cloud providers.
+Wing was built from the ground up to make it an ideal choice for building applications on AWS or other cloud providers.
 Some of these features include:
 
 * [Cloud services](https://docs.winglang.io/concepts/resources) as first-class citizens.
