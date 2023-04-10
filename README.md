@@ -25,10 +25,10 @@
 
 ## Welcome to the Wing Language! :wave:
 
-Introducing **Wing**, an open-source, statically-typed, cloud-oriented programming language that is ready to give your cloud development a lift! 💨
-We're here to make your journey through the skies of AWS and other cloud providers more enjoyable and productive. 😎
+Introducing **Wing**, an open-source, statically-typed, cloud-oriented programming language that puts the whole cloud at your command!
+We're here to make your journey through the skies of AWS and other cloud providers more enjoyable and productive.
 
-Created by [Elad Ben-Israel](https://github.com/eladb), the mastermind behind the [AWS CDK](https://github.com/aws/aws-cdk), Wing is designed to make your cloud development soar! 🦅
+Created by [Elad Ben-Israel](https://github.com/eladb), the mastermind behind the [AWS CDK](https://github.com/aws/aws-cdk), Wing is crafted to bridge the gap between imagination and creation, and elevate your cloud development experience! 🚀
 
 ## What's so special about Wing? 🤔
 
