@@ -2478,7 +2478,7 @@ impl<'a> TypeChecker<'a> {
 			.expect("Expected method type to be a function signature");
 
 		// Create method environment and prime it with args
-		let is_init = method_name.name == WING_INIT_NAME;
+		let is_init = method_name.name == WING_INIT_NAME || method_name.name == WING_INFLIGHT_INIT_NAME;
 		let mut method_env = SymbolEnv::new(
 			Some(env.get_ref()),
 			method_sig.return_type,
