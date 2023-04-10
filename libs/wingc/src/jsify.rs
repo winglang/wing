@@ -1127,8 +1127,6 @@ impl<'a> JSifier<'a> {
 			"".to_string()
 		};
 
-		// TODO jsify inflight fields: https://github.com/winglang/wing/issues/864
-
 		let mut client_methods = inflight_methods
 			.iter()
 			.map(|(name, def)| {
