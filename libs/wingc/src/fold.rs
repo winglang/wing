@@ -1,7 +1,7 @@
 use crate::ast::{
 	ArgList, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
 	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Interface, InterpolatedString, InterpolatedStringPart,
-	Literal, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UserDefinedType,
+	Literal, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, UserDefinedType,
 };
 
 /// Similar to the `visit` module in `wingc` except each method takes ownership of an
@@ -19,6 +19,9 @@ pub trait Fold {
 	}
 	fn fold_class_field(&mut self, node: ClassField) -> ClassField {
 		fold_class_field(self, node)
+	}
+	fn fold_struct_field(&mut self, node: StructField) -> StructField {
+		fold_struct_field(self, node)
 	}
 	fn fold_interface(&mut self, node: Interface) -> Interface {
 		fold_interface(self, node)
@@ -136,7 +139,7 @@ where
 		StmtKind::Struct { name, extends, fields } => StmtKind::Struct {
 			name: f.fold_symbol(name),
 			extends: extends.into_iter().map(|e| f.fold_user_defined_type(e)).collect(),
-			fields: fields.into_iter().map(|field| f.fold_class_field(field)).collect(),
+			fields: fields.into_iter().map(|field| f.fold_struct_field(field)).collect(),
 		},
 		StmtKind::Enum { name, values } => StmtKind::Enum {
 			name: f.fold_symbol(name),
@@ -195,6 +198,16 @@ where
 		reassignable: node.reassignable,
 		phase: node.phase,
 		is_static: node.is_static,
+	}
+}
+
+pub fn fold_struct_field<F>(f: &mut F, node: StructField) -> StructField
+where
+	F: Fold + ?Sized,
+{
+	StructField {
+		name: f.fold_symbol(node.name),
+		member_type: f.fold_type_annotation(node.member_type),
 	}
 }
 
