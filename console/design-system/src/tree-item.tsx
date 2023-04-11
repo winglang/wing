@@ -59,7 +59,7 @@ export const TreeItem = ({
                 invisible: !item.canBeExpanded,
               },
             )}
-            onClick={item.toggleExpanded}
+            onClickCapture={item.toggleExpanded}
             title={`Toggle ${label} expanded`}
           >
             <ChevronRightIcon

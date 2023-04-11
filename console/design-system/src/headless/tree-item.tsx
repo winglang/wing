@@ -131,7 +131,7 @@ export const TreeItem = ({
       tabIndex={focused ? 0 : -1}
       aria-selected={selected}
       aria-expanded={canBeExpanded ? expanded : undefined}
-      onClickCapture={() => {
+      onClick={() => {
         setFocused();
         setSelected();
       }}
