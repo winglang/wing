@@ -368,19 +368,19 @@ pub enum StmtKind {
 	},
 	Break,
 	Continue,
+	Return(Option<Expr>),
 	Expression(Expr),
 	Assignment {
 		variable: Reference,
 		value: Expr,
 	},
-	Return(Option<Expr>),
 	Scope(Scope),
 	Class(Class),
 	Interface(Interface),
 	Struct {
 		name: Symbol,
-		extends: Vec<Symbol>,
-		members: Vec<ClassField>,
+		extends: Vec<UserDefinedType>,
+		fields: Vec<StructField>,
 	},
 	Enum {
 		name: Symbol,
@@ -406,6 +406,12 @@ pub struct ClassField {
 	pub reassignable: bool,
 	pub phase: Phase,
 	pub is_static: bool,
+}
+
+#[derive(Debug)]
+pub struct StructField {
+	pub name: Symbol,
+	pub member_type: TypeAnnotation,
 }
 
 #[derive(Debug)]

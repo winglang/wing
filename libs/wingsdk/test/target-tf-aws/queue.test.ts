@@ -47,7 +47,7 @@ async handle(event) {
   console.log("Received " + event.name);
 }`
   );
-  const processorFn = queue.onMessage(processor);
+  const processorFn = queue.addConsumer(processor);
   const output = app.synth();
 
   // THEN

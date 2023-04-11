@@ -1,6 +1,7 @@
 use crate::ast::{
 	ArgList, Class, Constructor, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
 	Interface, InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
+	UserDefinedType,
 };
 
 /// Visitor pattern inspired by implementation from https://docs.rs/syn/latest/syn/visit/index.html
@@ -64,6 +65,9 @@ pub trait Visit<'ast> {
 	}
 	fn visit_args(&mut self, node: &'ast ArgList) {
 		visit_args(self, node);
+	}
+	fn visit_user_defined_type(&mut self, node: &'ast UserDefinedType) {
+		visit_user_defined_type(self, node);
 	}
 	fn visit_type_annotation(&mut self, node: &'ast TypeAnnotation) {
 		visit_type_annotation(self, node)
@@ -157,10 +161,14 @@ where
 		StmtKind::Interface(interface) => {
 			v.visit_interface(interface);
 		}
-		StmtKind::Struct { name, extends, members } => {
+		StmtKind::Struct {
+			name,
+			extends,
+			fields: members,
+		} => {
 			v.visit_symbol(name);
 			for extend in extends {
-				v.visit_symbol(extend);
+				v.visit_user_defined_type(extend);
 			}
 			for member in members {
 				v.visit_symbol(&member.name);
@@ -209,6 +217,14 @@ where
 		v.visit_symbol(&method.0);
 		v.visit_function_definition(&method.1);
 	}
+
+	if let Some(extend) = &node.parent {
+		v.visit_user_defined_type(&extend);
+	}
+
+	for implement in &node.implements {
+		v.visit_user_defined_type(&implement);
+	}
 }
 
 pub fn visit_interface<'ast, V>(v: &mut V, node: &'ast Interface)
@@ -223,7 +239,7 @@ where
 	}
 
 	for extend in &node.extends {
-		v.visit_symbol(&extend.root);
+		v.visit_user_defined_type(extend);
 	}
 }
 
@@ -341,14 +357,15 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match node {
+		Reference::Identifier(s) => {
+			v.visit_symbol(s);
+		}
 		Reference::InstanceMember { property, object } => {
 			v.visit_expr(object);
 			v.visit_symbol(property);
 		}
-		Reference::Identifier(s) => {
-			v.visit_symbol(s);
-		}
-		Reference::TypeMember { type_: _, property } => {
+		Reference::TypeMember { type_, property } => {
+			v.visit_user_defined_type(type_);
 			v.visit_symbol(property);
 		}
 	}
@@ -429,5 +446,15 @@ where
 				v.visit_symbol(field);
 			}
 		}
+	}
+}
+
+pub fn visit_user_defined_type<'ast, V>(v: &mut V, node: &'ast UserDefinedType)
+where
+	V: Visit<'ast> + ?Sized,
+{
+	v.visit_symbol(&node.root);
+	for field in &node.fields {
+		v.visit_symbol(field);
 	}
 }

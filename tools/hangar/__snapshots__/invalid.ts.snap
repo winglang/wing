@@ -148,15 +148,15 @@ exports[`cloud_function_expects_inflight.w > stderr 1`] = `
   | \\\\-^ Expected type to be \\"IFunctionHandler (inflight (str): void)\\", but got \\"preflight (str): str\\" instead
 
 
-error: Expected type to be \\"IQueueOnMessageHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
-   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:9:14
+error: Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
+   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:9:16
    |  
- 9 |   q.on_message(inflight (x: num) => {
-   | /--------------^
+ 9 |   q.add_consumer(inflight (x: num) => {
+   | /----------------^
 10 | |                     // ^ \\"num\\" doesn't match the expected type \\"str\\"
 11 | |     return;
 12 | | });
-   | \\\\-^ Expected type to be \\"IQueueOnMessageHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
+   | \\\\-^ Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
 
 "
 `;
@@ -327,17 +327,17 @@ exports[`immutable_container_types.w > stderr 1`] = `
 `;
 
 exports[`impl_interface.w > stderr 1`] = `
-"error: Resource \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueOnMessageHandler\\"
+"error: Resource \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueAddConsumerHandler\\"
   --> ../../../examples/tests/invalid/impl_interface.w:3:10
   |
-3 | resource A impl cloud.IQueueOnMessageHandler {
-  |          ^ Resource \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueOnMessageHandler\\"
+3 | resource A impl cloud.IQueueAddConsumerHandler {
+  |          ^ Resource \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueAddConsumerHandler\\"
 
 
 error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
   --> ../../../examples/tests/invalid/impl_interface.w:8:10
   |
-8 | resource B impl cloud.IQueueOnMessageHandler {
+8 | resource B impl cloud.IQueueAddConsumerHandler {
   |          ^ Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
 
 
@@ -535,18 +535,18 @@ exports[`missing_semicolon.w > stderr 1`] = `
 "error: Syntax error
    --> ../../../examples/tests/invalid/missing_semicolon.w:7:1
    |  
- 7 | / q1.on_message(inflight (m:str): str => {
+ 7 | / q1.add_consumer(inflight (m:str): str => {
  8 | |   b.put(\\"1.txt\\", \\"Hello, \${m}\\"); 
  9 | | })
 10 | | 
-11 | | q2.on_message(inflight (m:str): str => {
-   | \\\\-------------^ Syntax error
+11 | | q2.add_consumer(inflight (m:str): str => {
+   | \\\\---------------^ Syntax error
 
 
 error: Unexpected 'identifier'.
    --> ../../../examples/tests/invalid/missing_semicolon.w:11:1
    |
-11 | q2.on_message(inflight (m:str): str => {
+11 | q2.add_consumer(inflight (m:str): str => {
    | ^^ Unexpected 'identifier'.
 
 
@@ -1001,11 +1001,11 @@ error: Expected 2 arguments but got 1
 `;
 
 exports[`structs.w > stderr 1`] = `
-"error: Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" but has a conflicting member \\"x\\" (str != str)
+"error: Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
   --> ../../../examples/tests/invalid/structs.w:9:8
   |
 9 | struct C extends B {
-  |        ^ Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" but has a conflicting member \\"x\\" (str != str)
+  |        ^ Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
 
 
 error: \\"x\\" is not initialized
@@ -1034,6 +1034,13 @@ error: Unknown symbol \\"bad_field\\"
    |
 30 | log(a.bad_field);
    |       ^^^^^^^^^ Unknown symbol \\"bad_field\\"
+
+
+error: Struct \\"Showtime (at ../../../examples/tests/invalid/structs.w:42:8)\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
+   --> ../../../examples/tests/invalid/structs.w:42:8
+   |
+42 | struct Showtime extends Razzle, Dazzle {}
+   |        ^^^^^^^^ Struct \\"Showtime (at ../../../examples/tests/invalid/structs.w:42:8)\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
 
 "
 `;

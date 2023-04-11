@@ -31,6 +31,7 @@ pub mod ast;
 pub mod capture;
 pub mod debug;
 pub mod diagnostic;
+pub mod fold;
 pub mod jsify;
 pub mod lsp;
 pub mod parser;

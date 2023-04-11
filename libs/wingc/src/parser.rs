@@ -9,8 +9,8 @@ use tree_sitter_traversal::{traverse, Order};
 use crate::ast::{
 	ArgList, BinaryOperator, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionBody,
 	FunctionDefinition, FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Interface, InterpolatedString,
-	InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator,
-	UserDefinedType,
+	InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
+	UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 use crate::WINGSDK_STD_MODULE;
@@ -342,22 +342,34 @@ impl<'s> Parser<'s> {
 		for field_node in statement_node.children_by_field_name("field", &mut cursor) {
 			let identifier = self.node_symbol(&self.get_child_field(&field_node, "name")?)?;
 			let type_ = &self.get_child_field(&field_node, "type")?;
-			let f = ClassField {
+			let f = StructField {
 				name: identifier,
 				member_type: self.build_type_annotation(&type_)?,
-				reassignable: false,
-				phase: Phase::Independent,
-				is_static: false,
 			};
 			members.push(f);
 		}
 
 		let mut extends = vec![];
 		for super_node in statement_node.children_by_field_name("extends", &mut cursor) {
-			extends.push(self.node_symbol(&super_node)?);
+			let super_type = self.build_type_annotation(&super_node)?;
+			match super_type {
+				TypeAnnotation::UserDefined(t) => {
+					extends.push(t);
+				}
+				_ => {
+					self.add_error::<Node>(
+						format!("Extended type must be a user defined type, found {}", super_type),
+						&super_node,
+					)?;
+				}
+			}
 		}
 
-		Ok(StmtKind::Struct { name, extends, members })
+		Ok(StmtKind::Struct {
+			name,
+			extends,
+			fields: members,
+		})
 	}
 
 	fn build_variable_def_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {

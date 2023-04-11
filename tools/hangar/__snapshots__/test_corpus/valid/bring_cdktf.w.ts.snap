@@ -40,6 +40,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "bucket_prefix": "hello",
         "versioning": {
           "enabled": true,
+          "mfa_delete": true,
         },
       },
     },
@@ -77,7 +78,7 @@ class $Root extends $stdlib.core.Resource {
     super(scope, id);
     this.node.root.new(\\"@cdktf/provider-aws.s3Bucket.S3Bucket\\",aws.s3Bucket.S3Bucket,this,\\"Bucket\\",{ bucketPrefix: \\"hello\\", versioning: {
 \\"enabled\\": true,
-\\"mfa_delete\\": true,}
+\\"mfaDelete\\": true,}
  });
   }
 }
