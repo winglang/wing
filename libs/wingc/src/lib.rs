@@ -369,7 +369,8 @@ mod sanity {
 				fs::remove_dir_all(&out_dir).expect("remove out dir");
 			}
 
-			std::env::set_var("WING_PROJECT_DIR", test_file.parent().unwrap().canonicalize().unwrap());
+			// set WING_PROJECT_DIR to the directory of the test file
+			std::env::set_var("WING_PROJECT_DIR", test_file.canonicalize().unwrap().parent().unwrap());
 
 			let result = compile(&test_file, Some(&out_dir));
 

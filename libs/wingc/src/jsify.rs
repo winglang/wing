@@ -874,9 +874,7 @@ impl<'a> JSifier<'a> {
 		let body = match &func_def.body {
 			FunctionBody::Statements(scope) => self.jsify_scope(scope, context),
 			FunctionBody::External(external_spec) => {
-				let wing_project_dir = std::env::var("WING_PROJECT_DIR")
-					.expect("WING_PROJECT_DIR not set")
-					.replace("\\", "/");
+				let wing_project_dir = std::env::var("WING_PROJECT_DIR").expect("WING_PROJECT_DIR not set");
 				let resolved_path = match wingii::node_resolve::resolve_from(&external_spec, Path::new(&wing_project_dir)) {
 					Ok(resolved_path) => resolved_path
 						.to_str()
