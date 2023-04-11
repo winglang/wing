@@ -256,7 +256,7 @@ pub trait ClassLike {
 	) -> FilterMap<SymbolEnvIter<'_>, fn(<SymbolEnvIter as Iterator>::Item) -> Option<(String, TypeRef)>> {
 		self.get_env().iter(with_ancestry).filter_map(|(s, t, ..)| {
 			if t.as_variable().unwrap().type_.as_function_sig().is_none() {
-				Some((s.clone(), t.as_variable().unwrap().type_.clone()))
+				Some((s, t.as_variable().unwrap().type_.clone()))
 			} else {
 				None
 			}
@@ -1257,7 +1257,7 @@ impl<'a> TypeChecker<'a> {
 						} else {
 							return self.general_type_error(format!(
 								"Cannot create the resource \"{}\" in inflight phase",
-								class.name.to_string()
+								class.name
 							));
 						}
 					}
@@ -1267,7 +1267,7 @@ impl<'a> TypeChecker<'a> {
 						} else {
 							return self.general_type_error(format!(
 								"Cannot instantiate type \"{}\" because it is not a class or resource",
-								type_.to_string()
+								type_
 							));
 						}
 					}
@@ -2662,7 +2662,7 @@ impl<'a> TypeChecker<'a> {
 			implements: original_type_class.implements.clone(),
 			should_case_convert_jsii: original_type_class.should_case_convert_jsii,
 			is_abstract: original_type_class.is_abstract,
-			type_parameters: Some(type_params.clone()),
+			type_parameters: Some(type_params),
 		});
 
 		// TODO: here we add a new type regardless whether we already "hydrated" `original_type` with these `type_params`. Cache!
@@ -3005,7 +3005,7 @@ impl<'a> TypeChecker<'a> {
 				if force_reassignable {
 					VariableInfo {
 						reassignable: true,
-						..res.clone()
+						..res
 					}
 				} else {
 					res

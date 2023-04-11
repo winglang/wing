@@ -308,7 +308,7 @@ fn get_completions_from_class(
 
 			Some(CompletionItem {
 				insert_text,
-				label: symbol_data.0.clone(),
+				label: symbol_data.0,
 				detail: Some(variable.type_.to_string()),
 				kind,
 				insert_text_format: Some(InsertTextFormat::SNIPPET),

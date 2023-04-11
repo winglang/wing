@@ -463,7 +463,7 @@ impl<'a> JSifier<'a> {
 							// for "loose" macros, e.g. `print()`, $self$ is the global object
 							ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
 							ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
-								self.jsify_expression(object, context).clone()
+								self.jsify_expression(object, context)
 							}
 
 							_ => expr_string,
@@ -1398,7 +1398,7 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 		let key = format!("this.{}", fmt(capture.iter()).join("."));
 		let ops = fmt(qualification);
 
-		self.references.entry(key.to_string()).or_default().extend(ops);
+		self.references.entry(key).or_default().extend(ops);
 	}
 }
 

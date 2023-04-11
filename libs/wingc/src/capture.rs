@@ -193,7 +193,7 @@ fn scan_captures_in_expression(
 										.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().phase, Phase::Inflight))
 										.map(|(name, _)| Capture {
 											symbol: symbol.clone(),
-											ops: vec![CaptureOperation { member: name.clone() }],
+											ops: vec![CaptureOperation { member: name }],
 										})
 										.collect::<Vec<Capture>>(),
 								);
