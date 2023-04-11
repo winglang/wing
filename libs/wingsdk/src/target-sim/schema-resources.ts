@@ -63,7 +63,7 @@ export interface FunctionAttributes {}
 export interface QueueSchema extends BaseResourceSchema {
   readonly type: typeof QUEUE_TYPE;
   readonly props: {
-    /** How long a queue's consumers have to process a message, in milliseconds */
+    /** How long a queue's consumers have to process a message, in seconds */
     readonly timeout: number;
     /** Function that should process queue messages. */
     readonly subscribers: QueueSubscriber[];

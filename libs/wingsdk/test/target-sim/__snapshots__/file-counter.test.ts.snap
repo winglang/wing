@@ -101,7 +101,7 @@ bucket: (function(env) {
               "functionHandle": "\${root/HelloWorld/Queue-OnMessage-401ee792#attrs.handle}",
             },
           ],
-          "timeout": 30,
+          "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
       },

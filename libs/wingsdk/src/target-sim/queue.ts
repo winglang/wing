@@ -23,7 +23,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
-    this.timeout = props.timeout ?? std.Duration.fromSeconds(30);
+    this.timeout = props.timeout ?? std.Duration.fromSeconds(10);
     this.subscribers = [];
     this.initialMessages.push(...(props.initialMessages ?? []));
   }
