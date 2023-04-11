@@ -7,7 +7,7 @@
       "dependsOn": ["lint"],
       "executor": "nx:run-commands",
       "options": {
-        "command": "cargo test",
+        "command": "DEBUG='*' cargo test",
         "cwd": "libs/wingc"
       }
     },

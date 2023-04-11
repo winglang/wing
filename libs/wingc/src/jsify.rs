@@ -24,6 +24,7 @@ use crate::{
 		FunctionDefinition, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
 		TypeAnnotation, UnaryOperator, UserDefinedType,
 	},
+	debug,
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
 	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, Type, TypeRef, VariableInfo},
 	utilities::snake_case_to_camel_case,
@@ -875,6 +876,7 @@ impl<'a> JSifier<'a> {
 			FunctionBody::Statements(scope) => self.jsify_scope(scope, context),
 			FunctionBody::External(external_spec) => {
 				let wing_project_dir = std::env::var("WING_PROJECT_DIR").expect("WING_PROJECT_DIR not set");
+				debug!("Resolving extern \"{}\" from \"{}\"", external_spec, wing_project_dir);
 				let resolved_path = match wingii::node_resolve::resolve_from(&external_spec, Path::new(&wing_project_dir)) {
 					Ok(resolved_path) => resolved_path
 						.to_str()
