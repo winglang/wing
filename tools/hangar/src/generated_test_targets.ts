@@ -38,7 +38,15 @@ export async function compileTest(expect: Vi.ExpectStatic, wingFile: string) {
     if (!include.find((f) => subpath.startsWith(f))) {
       continue;
     }
-    expect(await readFile(dotFile, "utf8")).toMatchSnapshot(subpath);
+    let fileContents = await readFile(dotFile, "utf8");
+
+    // remove requires with absolute paths
+    fileContents = fileContents.replace(
+      /require\("[/\\].*[/\\](.+)"\)/g,
+      'require("<ABSOLUTE_PATH>/$1"'
+    );
+    
+    expect(fileContents).toMatchSnapshot(subpath);
   }
 }
 

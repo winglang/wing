@@ -7,13 +7,13 @@ constructor({  }) {
 
 }
 static async regex_inflight(pattern, text)  {
-	return (require(require.resolve(\\"./external_js.js\\", {paths: [process.env.WING_PROJECT_DIR]}))[\\"regex_inflight\\"])(pattern, text)
+	return (require(\\"/Users/markm/Documents/GitHub/winglang/examples/tests/valid/./external_js.js\\")[\\"regex_inflight\\"])(pattern, text)
 }
 static async get_uuid()  {
-	return (require(require.resolve(\\"./external_js.js\\", {paths: [process.env.WING_PROJECT_DIR]}))[\\"get_uuid\\"])()
+	return (require(\\"/Users/markm/Documents/GitHub/winglang/examples/tests/valid/./external_js.js\\")[\\"get_uuid\\"])()
 }
 static async get_data()  {
-	return (require(require.resolve(\\"./external_js.js\\", {paths: [process.env.WING_PROJECT_DIR]}))[\\"get_data\\"])()
+	return (require(\\"/Users/markm/Documents/GitHub/winglang/examples/tests/valid/./external_js.js\\")[\\"get_data\\"])()
 }
 async call()  {
 	{
@@ -180,10 +180,10 @@ class $Root extends $stdlib.core.Resource {
 }
 }
 	static get_greeting(name)  {
-	return (require(require.resolve(\\"./external_js.js\\", {paths: [process.env.WING_PROJECT_DIR]}))[\\"get_greeting\\"])(name)
+	return (require(\\"/Users/markm/Documents/GitHub/winglang/examples/tests/valid/./external_js.js\\")[\\"get_greeting\\"])(name)
 }
 static v4()  {
-	return (require(require.resolve(\\"uuid\\", {paths: [process.env.WING_PROJECT_DIR]}))[\\"v4\\"])()
+	return (require(\\"/Users/markm/Documents/GitHub/winglang/examples/tests/valid/node_modules/uuid/./dist/index.js\\")[\\"v4\\"])()
 }
 	_toInflight() {
 	

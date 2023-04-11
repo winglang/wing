@@ -864,7 +864,26 @@ impl<'a> JSifier<'a> {
 
 		let body = match &func_def.body {
 			FunctionBody::Statements(scope) => self.jsify_scope(scope, context),
-			FunctionBody::External(external_spec) => format!("return (require(require.resolve(\"{external_spec}\", {{paths: [process.env.WING_PROJECT_DIR]}}))[\"{name}\"])({parameters})")
+			FunctionBody::External(external_spec) => {
+				let wing_project_dir = std::env::var("WING_PROJECT_DIR")
+					.expect("WING_PROJECT_DIR not set")
+					.replace("\\", "/");
+				let resolved_path = match wingii::node_resolve::resolve_from(&external_spec, Path::new(&wing_project_dir)) {
+					Ok(resolved_path) => resolved_path
+						.to_str()
+						.expect("Converting extern path to string")
+						.replace("\\", "/"),
+					Err(err) => {
+						self.diagnostics.push(Diagnostic {
+							message: format!("Failed to resolve extern \"{external_spec}\": {err}"),
+							span: Some(func_def.span.clone()),
+							level: DiagnosticLevel::Error,
+						});
+						format!("/* unresolved: \"{external_spec}\" */")
+					}
+				};
+				format!("return (require(\"{resolved_path}\")[\"{name}\"])({parameters})")
+			}
 		};
 		let mut modifiers = vec![];
 		if func_def.is_static {
