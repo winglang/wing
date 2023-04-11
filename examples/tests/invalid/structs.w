@@ -30,7 +30,7 @@ let a = A {
 log(a.bad_field);
 //      ^^^^^^ Unknown symbol "bad_field"
 
-// two inherits with same field name and type
+// two inherits with same field name but different type
 struct Razzle {
   a: str;
 }
