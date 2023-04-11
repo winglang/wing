@@ -1,29 +1,23 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 
 import { ProgressBar } from "./progress-bar.js";
 
-export default {
+const meta = {
   title: "Design System/ProgressBar",
   component: ProgressBar,
+  tags: ["autodocs"],
   parameters: {
-    docs: {
-      description: {
-        component: "Progress bar component.",
-      },
-    },
+    layout: "centered",
   },
-} as ComponentMeta<typeof ProgressBar>;
+} as Meta<typeof ProgressBar>;
 
-const Template: ComponentStory<typeof ProgressBar> = (props) => {
-  return (
-    <div className={"w-[250px]"}>
-      <ProgressBar progress={props.progress} size={props.size} />
-    </div>
-  );
-};
+export default meta;
 
-export const Default = Template.bind({});
-Default.args = {
-  progress: 25,
-  size: "sm",
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: {
+    progress: 25,
+    size: "sm",
+  },
 };

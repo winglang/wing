@@ -42,11 +42,9 @@ pnpm run playwright:update
 ## Compile and bundle
 
 ```sh
-# Build
 pnpm run compile
 pnpm exec vite-node scripts/bundle.mts
-# Open the included demo/target/index.wsim
-open demo/target/index.wsim -a $(pwd)/release/mac-arm64/Wing\ Console.app
+open demo/index.w -a $(pwd)/release/mac-arm64/Wing\ Console.app
 ```
 
 OR run:
@@ -59,20 +57,11 @@ The Console with auto compile on each change you make
 
 ## Deeplinks
 
-Once installed, the Wing Console will be able to process deeplinks with the `wing-console://` protocol. It expects an absolute path to a `.wsim` file, as follows: `wing-console:///Users/winglang/app.wsim`
+Once installed, the Wing Console will be able to process deeplinks with the `wing-console://` protocol. It expects an absolute path to a `.w` file, as follows: `wing-console:///Users/winglang/app.w`
 
 ## Build the Wing demo file
 
 ```sh
 cd demo
 wing compile -t sim index.w
-# Extract the wsim, for debugging purposes
-cd target
-tar -xf index.wsim
-```
-
-## Build the Construct Hub demo file
-
-```sh
-npx vite-node scripts/generateConstructHubWsim.mts
 ```

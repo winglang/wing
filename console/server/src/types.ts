@@ -1,1 +1,1 @@
-export type State = "loading" | "error" | "success" | "compilerSuccess";
+export type State = "compiling" | "loadingSimulator" | "success" | "error";

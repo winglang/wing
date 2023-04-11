@@ -66,7 +66,6 @@ try {
           },
         ],
         protocols: [{ name: "Wing Console", schemes: [WING_PROTOCOL_SCHEME] }],
-        fileAssociations: [{ ext: "wsim", name: "Wing Sim File" }],
         directories: {
           output: "release",
           buildResources: "electron/resources",

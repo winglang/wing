@@ -1,3 +1,4 @@
+import { errorMessage } from "@wingconsole/error-message";
 import { nanoid } from "nanoid";
 
 import { LogInterface } from "./utils/LogInterface.js";
@@ -69,7 +70,7 @@ export const createConsoleLogger = ({
     },
     error(error, source, context) {
       log.error(error);
-      const message = error instanceof Error ? error.message : `${error}`;
+      const message = errorMessage(error);
       if (source === "user") {
         this.messages.push({
           id: `${nanoid()}`,

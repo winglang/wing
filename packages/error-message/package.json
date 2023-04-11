@@ -1,11 +1,9 @@
 {
-  "name": "@wingconsole/conventional-release",
+  "name": "@wingconsole/error-message",
   "version": "0.0.0",
   "private": true,
-  "bin": {
-    "conventional-release": "./bin/conventional-release.cjs"
-  },
-  "exports": null,
+  "exports": "./src/index.ts",
+  "types": "./src/index.ts",
   "sideEffects": false,
   "type": "module",
   "scripts": {
@@ -13,15 +11,8 @@
     "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix"
   },
   "devDependencies": {
-    "@types/standard-version": "^7.0.1",
     "@wingconsole/eslint-plugin": "workspace:^",
     "@wingconsole/tsconfig": "workspace:^",
     "typescript": "^5.0.4"
-  },
-  "dependencies": {
-    "npm-which": "^3.0.1",
-    "standard-version": "^9.5.0",
-    "tsx": "^3.12.6",
-    "yoctocolors": "^1.0.0"
   }
 }

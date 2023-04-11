@@ -1,3 +1,4 @@
 packages:
-    - console/*
-    - tools/*
+  - console/*
+  - packages/*
+  - tools/*

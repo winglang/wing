@@ -1,10 +1,21 @@
 import classNames from "classnames";
 
 export interface ProgressBarProps {
+  /**
+   * The progress percentage. Must be between 0 and 100.
+   * @default 0
+   */
   progress: number;
+
+  /**
+   * The size of the progress bar.
+   */
   size: "sm" | "md" | "lg";
 }
 
+/**
+ * A progress bar component.
+ */
 export const ProgressBar = ({
   progress = 0,
   size = "md",
@@ -15,14 +26,15 @@ export const ProgressBar = ({
     lg: "h-4",
   };
 
-  const ceilProgress = Math.ceil(progress);
+  const ceilProgress = Math.min(progress, 100);
 
   return (
     <div
       role={"progressbar"}
-      className={
-        "relative self-center w-full bg-slate-300 rounded-full " + height[size]
-      }
+      className={classNames(
+        "relative self-center w-full bg-slate-300 rounded-full min-w-[4rem]",
+        height[size],
+      )}
     >
       <div
         className={classNames([

@@ -1,12 +1,14 @@
+import { inferRouterInputs } from "@trpc/server";
 import Emittery from "emittery";
 
 import { ConsoleLogger, createConsoleLogger } from "./consoleLogger.js";
 import { createExpressServer } from "./expressServer.js";
+import { Router } from "./router/index.js";
+import { State } from "./types.js";
 import { Updater } from "./updater.js";
-import { createCloudAppState } from "./utils/cloudAppState.js";
-import { RouterEvents } from "./utils/createRouter.js";
-import { createWingApp } from "./utils/createWingApp.js";
+import { createCompiler } from "./utils/compiler.js";
 import { LogInterface } from "./utils/LogInterface.js";
+import { createSimulator } from "./utils/simulator.js";
 
 export type { LogEntry, LogLevel } from "./consoleLogger.js";
 export type { ExplorerItem } from "./router/app.js";
@@ -15,69 +17,74 @@ export type { WingSimulatorSchema, BaseResourceSchema } from "./wingsdk.js";
 export type { Updater, UpdaterStatus } from "./updater.js";
 export type { Router } from "./router/index.js";
 
+type RouteNames = keyof inferRouterInputs<Router> | undefined;
+
 export interface CreateConsoleServerOptions {
-  inputFile: string;
+  wingfile: string;
   log: LogInterface;
   updater?: Updater;
   requestedPort?: number;
 }
 
 export const createConsoleServer = async ({
-  inputFile,
+  wingfile,
   log,
   updater,
   requestedPort,
 }: CreateConsoleServerOptions) => {
-  let lastErrorMessage: string = "";
+  const emitter = new Emittery<{
+    invalidateQuery: RouteNames;
+  }>();
 
-  const emitter = new Emittery<RouterEvents>();
+  const invalidateQuery = async (query: RouteNames) => {
+    await emitter.emit("invalidateQuery", query);
+  };
 
   const invalidateUpdaterStatus = async () => {
-    await emitter.emit("invalidateQuery", {
-      query: "updater.currentStatus",
-    });
+    await invalidateQuery("updater.currentStatus");
   };
   updater?.addEventListener("status-change", invalidateUpdaterStatus);
 
   const consoleLogger: ConsoleLogger = createConsoleLogger({
     onLog: (level, message) => {
-      lastErrorMessage = "";
-      if (level === "error") {
-        lastErrorMessage = message;
-        void emitter.emit("invalidateQuery", {
-          query: "app.error",
-        });
-      }
-      void emitter.emit("invalidateQuery", {
-        query: "app.logs",
-      });
+      invalidateQuery("app.logs");
     },
     log,
   });
 
-  const cloudAppStateService = createCloudAppState({
-    onChange: (state) => {
-      log.info("cloud app new state was sent to renderer process", state);
-      void emitter.emit("invalidateQuery", {
-        query: "app.state",
-      });
-      if (state === "success") {
-        log.info("simulator loaded, invalidate trpc queries");
-        // Clear the logs.
-        consoleLogger.messages = [];
-        void emitter.emit("invalidateQuery", {
-          query: undefined,
-        });
-      }
-    },
-    log,
+  const compiler = createCompiler(wingfile);
+  const simulator = createSimulator();
+  compiler.on("compiled", ({ simfile }) => {
+    simulator.start(simfile);
   });
 
-  const simulatorPromise = createWingApp({
-    inputFile,
-    sendCloudAppStateEvent: cloudAppStateService.send,
-    consoleLogger,
-    log,
+  let lastErrorMessage = "";
+  let appState: State = "compiling";
+  compiler.on("compiling", () => {
+    lastErrorMessage = "";
+    appState = "compiling";
+    invalidateQuery("app.state");
+    invalidateQuery("app.error");
+  });
+  compiler.on("error", (error) => {
+    lastErrorMessage = error.message;
+    appState = "error";
+    invalidateQuery("app.state");
+    invalidateQuery("app.error");
+  });
+  simulator.on("starting", () => {
+    appState = "loadingSimulator";
+    invalidateQuery("app.state");
+  });
+  simulator.on("started", () => {
+    appState = "success";
+    invalidateQuery(undefined);
+  });
+  simulator.on("error", (error) => {
+    lastErrorMessage = error.message;
+    appState = "error";
+    invalidateQuery("app.state");
+    invalidateQuery("app.error");
   });
 
   // Create the express server and router for the simulator. Start
@@ -85,24 +92,23 @@ export const createConsoleServer = async ({
   log.info("Starting the dev server...");
 
   const { server, port } = await createExpressServer({
-    cloudAppStateService,
     consoleLogger,
-    simulatorPromise,
+    simulatorInstance() {
+      return simulator.instance();
+    },
     errorMessage() {
       return lastErrorMessage;
     },
-    emitter,
+    emitter: emitter as Emittery<{ invalidateQuery: string | undefined }>,
     log,
     updater,
     requestedPort,
+    appState() {
+      return appState;
+    },
   });
 
-  const getSimulator = async () => {
-    const simulatorPromiseResolved = await simulatorPromise;
-    return await simulatorPromiseResolved.get();
-  };
-
-  getSimulator().then(async (simulatorInstance) => {
+  simulator.instance().then(async (simulatorInstance) => {
     simulatorInstance.onTrace({
       callback(event) {
         // TODO: Refactor the whole logs and events so we support all of the fields that the simulator uses.
@@ -132,9 +138,7 @@ export const createConsoleServer = async ({
           // TODO: Change implementation after https://github.com/winglang/wing/issues/1713 is done
           event.data.message?.includes("Sending messages")
         ) {
-          void emitter.emit("invalidateQuery", {
-            query: "queue.approxSize",
-          });
+          invalidateQuery("queue.approxSize");
         }
       },
     });
@@ -145,7 +149,8 @@ export const createConsoleServer = async ({
       updater?.removeEventListener("status-change", invalidateUpdaterStatus);
       await Promise.allSettled([
         server.close(),
-        getSimulator().then((simulator) => simulator.stop()),
+        compiler.stop(),
+        simulator.stop(),
       ]);
     } catch (error) {
       log.error(error);

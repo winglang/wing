@@ -9,11 +9,11 @@ export const App = ({}: AppProps) => {
   const trpcContext = trpc.useContext();
 
   trpc["app.invalidateQuery"].useSubscription(undefined, {
-    async onData({ query }) {
+    async onData(query) {
       console.debug("app.invalidateQuery", { query });
       // eslint-disable-next-line unicorn/prefer-ternary
       if (query) {
-        await trpcContext[query].invalidate();
+        await (trpcContext as any)[query]?.invalidate();
       } else {
         await trpcContext.invalidate();
       }
@@ -27,7 +27,7 @@ export const App = ({}: AppProps) => {
     <NotificationsProvider>
       <TestsContextProvider>
         <VscodeLayout
-          cloudAppState={appState.data ?? "loading"}
+          cloudAppState={appState.data ?? "compiling"}
           wingVersion={appDetails.data?.wingVersion}
         />
       </TestsContextProvider>

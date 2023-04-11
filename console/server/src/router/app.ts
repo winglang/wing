@@ -3,7 +3,7 @@ import { observable } from "@trpc/server/observable";
 import uniqby from "lodash.uniqby";
 import { z } from "zod";
 
-import { AppStates } from "../utils/cloudAppState.js";
+import { ConstructTreeNode } from "../utils/construct-tree.js";
 import {
   Node,
   NodeDisplay,
@@ -11,12 +11,7 @@ import {
   NodeConnection,
   ConstructTreeNodeMap,
 } from "../utils/constructTreeNodeMap.js";
-import {
-  QueryNames,
-  createProcedure,
-  createRouter,
-} from "../utils/createRouter.js";
-import { ConstructTreeNode } from "../utils/createSimulator.js";
+import { createProcedure, createRouter } from "../utils/createRouter.js";
 import { BaseResourceSchema, Simulator } from "../wingsdk.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
@@ -205,7 +200,7 @@ export const createAppRouter = () => {
           });
         }
 
-        const config = getResourceConfig(node.path, simulator);
+        const config = simulator.tryGetResourceConfig(node.path);
 
         return {
           id: node.id,
@@ -262,7 +257,7 @@ export const createAppRouter = () => {
           );
         });
 
-        const config = getResourceConfig(path, simulator);
+        const config = simulator.tryGetResourceConfig(node.path);
 
         return {
           node: {
@@ -299,7 +294,7 @@ export const createAppRouter = () => {
         };
       }),
     "app.invalidateQuery": createProcedure.subscription(({ ctx }) => {
-      return observable<QueryNames>((emit) => {
+      return observable<string | undefined>((emit) => {
         ctx.emitter.on("invalidateQuery", emit.next);
         return () => {
           ctx.emitter.off("invalidateQuery", emit.next);
@@ -333,7 +328,7 @@ export const createAppRouter = () => {
         };
       }),
     "app.state": createProcedure.query(async ({ ctx }) => {
-      return ctx.cloudAppStateService.getSnapshot().value as AppStates;
+      return ctx.appState();
     }),
     "app.openExternal": createProcedure
       .input(
@@ -446,28 +441,6 @@ function createMapEdgeFromConstructTreeNode(
   ].flat();
 }
 
-/**
- * Return the config for a specific resource, or undefined if it doesn't exist.ç
- */
-function getResourceConfig(
-  path: string,
-  simulator: Simulator,
-): BaseResourceSchema | undefined {
-  try {
-    return simulator.getResourceConfig(path);
-  } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message.startsWith("Resource ") &&
-      error.message.endsWith(" not found.")
-    ) {
-      // Just ignore this error.
-    } else {
-      throw error;
-    }
-  }
-}
-
 function getResourceType(
   node: Node | ConstructTreeNode,
   simulator: Simulator,
@@ -478,7 +451,7 @@ function getResourceType(
     // we use a fake wing:console:type attribute. We should remove it at some
     // point.
     node.attributes?.["wing:console:type"] ??
-    getResourceConfig(node.path, simulator)?.type ??
+    simulator.tryGetResourceConfig(node.path)?.type ??
     node.constructInfo?.fqn ??
     "constructs.Construct"
   );

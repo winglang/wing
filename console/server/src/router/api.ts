@@ -1,3 +1,4 @@
+import { errorMessage } from "@wingconsole/error-message";
 import fetch from "node-fetch";
 import { z } from "zod";
 
@@ -59,14 +60,12 @@ export const createApiRouter = () => {
             duration: Date.now() - startTime,
           };
         } catch (error) {
-          const errorMessage =
-            error instanceof Error ? error.message : "Unknown error";
           return {
             url: `${input.url}${input.route}`,
             status: 500,
             statusText: "Internal Server Error",
             headers: [],
-            textResponse: errorMessage,
+            textResponse: errorMessage(error),
             duration: Date.now() - startTime,
           };
         }

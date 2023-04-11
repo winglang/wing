@@ -96,10 +96,10 @@ function createWindowManager() {
   };
 
   return {
-    async open(simfile: string) {
-      simfile = path.resolve(process.cwd(), simfile);
-      log.info("window manager open()", { simfile });
-      const window = windows.get(simfile);
+    async open(wingfile: string) {
+      wingfile = path.resolve(process.cwd(), wingfile);
+      log.info("window manager open()", { wingfile });
+      const window = windows.get(wingfile);
       if (window) {
         log.info("window already exists, focusing");
         if (window.isMinimized()) {
@@ -112,13 +112,13 @@ function createWindowManager() {
       let newWindow: BrowserWindow | undefined;
 
       const server = await createConsoleServer({
-        inputFile: simfile,
+        wingfile,
         log,
         updater,
       });
 
       newWindow = await createWindow({
-        title: path.basename(simfile),
+        title: path.basename(wingfile),
         port: server.port,
       });
 
@@ -129,12 +129,12 @@ function createWindowManager() {
         newWindow.hide();
       }
 
-      newWindow.setRepresentedFilename(simfile);
-      windows.set(simfile, newWindow);
+      newWindow.setRepresentedFilename(wingfile);
+      windows.set(wingfile, newWindow);
 
       newWindow.on("closed", async () => {
-        log.info("window closed", simfile);
-        windows.delete(simfile);
+        log.info("window closed", wingfile);
+        windows.delete(wingfile);
         await server.close();
       });
 
@@ -153,12 +153,12 @@ function createWindowManager() {
         return;
       }
 
-      const [simfile] = filePaths;
-      if (!simfile) {
+      const [wingfile] = filePaths;
+      if (!wingfile) {
         return;
       }
 
-      return this.open(simfile);
+      return this.open(wingfile);
     },
   };
 }
@@ -296,9 +296,9 @@ async function main() {
               return;
             }
 
-            const [simfile] = filePaths;
-            if (simfile) {
-              void windowManager.open(simfile);
+            const [wingfile] = filePaths;
+            if (wingfile) {
+              void windowManager.open(wingfile);
             }
           },
         },
@@ -373,11 +373,6 @@ async function main() {
     }
     // Open the demo Wing file (includes compiling).
     await windowManager.open(`${__dirname}/../../../../demo/index.w`);
-
-    // Open the Construct Hub.
-    // await windowManager.open(
-    //   `${__dirname}/../../../../demo/constructHub/index.wsim`,
-    // );
   } else {
     if (shouldShowGetStarted && BrowserWindow.getAllWindows().length === 0) {
       await windowManager.showOpenFileDialog();

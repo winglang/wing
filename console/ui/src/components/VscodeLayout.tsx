@@ -114,8 +114,8 @@ export const VscodeLayout = ({
   );
 
   const loading = useMemo(() => {
-    return cloudAppState === "loading";
-  }, [cloudAppState]);
+    return cloudAppState === "loadingSimulator" || items.length === 0;
+  }, [cloudAppState, items.length]);
 
   const map = trpc["app.map"].useQuery({
     showTests,

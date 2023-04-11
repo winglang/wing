@@ -1,5 +1,6 @@
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { applyWSSHandler } from "@trpc/server/adapters/ws";
+import { testing } from "@winglang/sdk";
 import cors from "cors";
 import Emittery from "emittery";
 import express from "express";
@@ -8,33 +9,32 @@ import { WebSocketServer } from "ws";
 
 import { ConsoleLogger } from "./consoleLogger.js";
 import { mergeAllRouters } from "./router/index.js";
+import { State } from "./types.js";
 import { Updater } from "./updater.js";
-import { CloudAppStateService } from "./utils/cloudAppState.js";
-import { RouterContext, RouterEvents } from "./utils/createRouter.js";
-import { createSimulator } from "./utils/createSimulator.js";
+import { RouterContext } from "./utils/createRouter.js";
 import { getWingVersion } from "./utils/getWingVersion.js";
 import { LogInterface } from "./utils/LogInterface.js";
 
 export interface CreateExpressServerOptions {
-  simulatorPromise: Promise<ReturnType<typeof createSimulator>>;
+  simulatorInstance(): Promise<testing.Simulator>;
   consoleLogger: ConsoleLogger;
-  cloudAppStateService: CloudAppStateService;
-  errorMessage: () => string | undefined;
-  emitter: Emittery<RouterEvents>;
+  errorMessage(): string | undefined;
+  emitter: Emittery<{ invalidateQuery: string | undefined }>;
   log: LogInterface;
   updater?: Updater;
   requestedPort?: number;
+  appState(): State;
 }
 
 export const createExpressServer = async ({
-  simulatorPromise,
+  simulatorInstance,
   consoleLogger,
   errorMessage,
   emitter,
-  cloudAppStateService,
   log,
   updater,
   requestedPort,
+  appState,
 }: CreateExpressServerOptions) => {
   const app = express();
   app.use(cors());
@@ -43,8 +43,7 @@ export const createExpressServer = async ({
   const createContext = (): RouterContext => {
     return {
       async simulator() {
-        const sim = await simulatorPromise;
-        return sim.get();
+        return await simulatorInstance();
       },
       async appDetails() {
         return {
@@ -56,8 +55,8 @@ export const createExpressServer = async ({
       },
       logger: consoleLogger,
       emitter,
-      cloudAppStateService,
       updater,
+      appState,
     };
   };
   app.use(
@@ -81,10 +80,6 @@ export const createExpressServer = async ({
     wss,
     router,
     createContext,
-  });
-
-  cloudAppStateService.subscribe(() => {
-    void emitter.emit("invalidateQuery", { query: "app.state" });
   });
 
   return { port, server };

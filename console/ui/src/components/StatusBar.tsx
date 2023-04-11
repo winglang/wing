@@ -16,6 +16,8 @@ export const StatusBar = ({
   cloudAppState,
   isError = false,
 }: StatusBarProps) => {
+  const loading =
+    cloudAppState === "loadingSimulator" || cloudAppState === "compiling";
   return (
     <footer className="bg-slate-50 py-1 px-4 flex text-2xs w-full text-slate-500 relative border-t border-slate-300">
       {/*left side*/}
@@ -34,7 +36,7 @@ export const StatusBar = ({
                 "flex",
               ])}
             >
-              {cloudAppState === "loading" && <Loader size="1rem" />}
+              {loading && <Loader size="1rem" />}
               {cloudAppState}
             </span>
           </span>

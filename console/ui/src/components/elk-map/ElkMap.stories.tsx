@@ -1,32 +1,34 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 
 import { ElkMap } from "./ElkMap.js";
 
-export default {
+const meta = {
   title: "UI/ElkMap",
   component: ElkMap,
-} satisfies ComponentMeta<typeof ElkMap>;
+  tags: ["autodocs"],
+} satisfies Meta<typeof ElkMap>;
 
-const Template: ComponentStory<typeof ElkMap> = (props) => (
-  <ElkMap {...props} />
-);
+export default meta;
 
-export const Default = Template.bind({});
-Default.args = {
-  nodes: [
-    {
-      id: "1",
-      data: {
-        className: "w-4 h-4 bg-red-500",
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {
+  args: {
+    nodes: [
+      {
+        id: "1",
+        data: {
+          className: "w-4 h-4 bg-red-500",
+        },
       },
-    },
-    {
-      id: "2",
-      data: {
-        className: "w-12 h-4 bg-blue-500",
+      {
+        id: "2",
+        data: {
+          className: "w-12 h-4 bg-blue-500",
+        },
       },
-    },
-  ],
-  // @ts-ignore
-  node: (props) => <div className={props.node.data.className} />,
+    ],
+    // @ts-ignore
+    node: (props) => <div className={props.node.data.className} />,
+  },
 };
