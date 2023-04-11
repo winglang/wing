@@ -55,7 +55,7 @@ let queue = new cloud.Queue();
 /**
  * An example handler to work with two shared resources.
  */
-queue.on_message(inflight (message: str) => {
+queue.add_consumer(inflight (message: str) => {
   let is_resource_1_acquired = resource_1.try_acquire();
   if !is_resource_1_acquired {
     // brutally error out to re-enqueue

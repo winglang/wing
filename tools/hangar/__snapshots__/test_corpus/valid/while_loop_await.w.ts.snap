@@ -30,38 +30,38 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
   },
   "resource": {
     "aws_iam_role": {
-      "root_cloudQueueOnMessageb3f3d188_IamRole_2EDE9980": {
+      "root_cloudQueueAddConsumerb3f3d188_IamRole_DE9F8DCD": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-OnMessage-b3f3d188/IamRole",
-            "uniqueId": "root_cloudQueueOnMessageb3f3d188_IamRole_2EDE9980",
+            "path": "root/Default/Default/cloud.Queue-AddConsumer-b3f3d188/IamRole",
+            "uniqueId": "root_cloudQueueAddConsumerb3f3d188_IamRole_DE9F8DCD",
           },
         },
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
     },
     "aws_iam_role_policy": {
-      "root_cloudQueueOnMessageb3f3d188_IamRolePolicy_F06A54DE": {
+      "root_cloudQueueAddConsumerb3f3d188_IamRolePolicy_5C4AAB82": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-OnMessage-b3f3d188/IamRolePolicy",
-            "uniqueId": "root_cloudQueueOnMessageb3f3d188_IamRolePolicy_F06A54DE",
+            "path": "root/Default/Default/cloud.Queue-AddConsumer-b3f3d188/IamRolePolicy",
+            "uniqueId": "root_cloudQueueAddConsumerb3f3d188_IamRolePolicy_5C4AAB82",
           },
         },
         "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
-        "role": "\${aws_iam_role.root_cloudQueueOnMessageb3f3d188_IamRole_2EDE9980.name}",
+        "role": "\${aws_iam_role.root_cloudQueueAddConsumerb3f3d188_IamRole_DE9F8DCD.name}",
       },
     },
     "aws_iam_role_policy_attachment": {
-      "root_cloudQueueOnMessageb3f3d188_IamRolePolicyAttachment_6D0B5E93": {
+      "root_cloudQueueAddConsumerb3f3d188_IamRolePolicyAttachment_9EBE30CE": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-OnMessage-b3f3d188/IamRolePolicyAttachment",
-            "uniqueId": "root_cloudQueueOnMessageb3f3d188_IamRolePolicyAttachment_6D0B5E93",
+            "path": "root/Default/Default/cloud.Queue-AddConsumer-b3f3d188/IamRolePolicyAttachment",
+            "uniqueId": "root_cloudQueueAddConsumerb3f3d188_IamRolePolicyAttachment_9EBE30CE",
           },
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "\${aws_iam_role.root_cloudQueueOnMessageb3f3d188_IamRole_2EDE9980.name}",
+        "role": "\${aws_iam_role.root_cloudQueueAddConsumerb3f3d188_IamRole_DE9F8DCD.name}",
       },
     },
     "aws_lambda_event_source_mapping": {
@@ -74,29 +74,29 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         },
         "batch_size": 1,
         "event_source_arn": "\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}",
-        "function_name": "\${aws_lambda_function.root_cloudQueueOnMessageb3f3d188_29346340.function_name}",
+        "function_name": "\${aws_lambda_function.root_cloudQueueAddConsumerb3f3d188_BA732820.function_name}",
       },
     },
     "aws_lambda_function": {
-      "root_cloudQueueOnMessageb3f3d188_29346340": {
+      "root_cloudQueueAddConsumerb3f3d188_BA732820": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-OnMessage-b3f3d188/Default",
-            "uniqueId": "root_cloudQueueOnMessageb3f3d188_29346340",
+            "path": "root/Default/Default/cloud.Queue-AddConsumer-b3f3d188/Default",
+            "uniqueId": "root_cloudQueueAddConsumerb3f3d188_BA732820",
           },
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "cloud-Queue-OnMessage-b3f3d188-c87e2d03",
+            "WING_FUNCTION_NAME": "cloud-Queue-AddConsumer-b3f3d188-c80328fd",
           },
         },
-        "function_name": "cloud-Queue-OnMessage-b3f3d188-c87e2d03",
+        "function_name": "cloud-Queue-AddConsumer-b3f3d188-c80328fd",
         "handler": "index.handler",
         "publish": true,
-        "role": "\${aws_iam_role.root_cloudQueueOnMessageb3f3d188_IamRole_2EDE9980.arn}",
+        "role": "\${aws_iam_role.root_cloudQueueAddConsumerb3f3d188_IamRole_DE9F8DCD.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessageb3f3d188_Code_4D451A84.bucket}",
-        "s3_key": "\${aws_s3_object.root_cloudQueueOnMessageb3f3d188_S3Object_18BDF7F0.key}",
+        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueAddConsumerb3f3d188_Code_84147B09.bucket}",
+        "s3_key": "\${aws_s3_object.root_cloudQueueAddConsumerb3f3d188_S3Object_E185C166.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -105,25 +105,25 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
       },
     },
     "aws_s3_bucket": {
-      "root_cloudQueueOnMessageb3f3d188_Code_4D451A84": {
+      "root_cloudQueueAddConsumerb3f3d188_Code_84147B09": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-OnMessage-b3f3d188/Code",
-            "uniqueId": "root_cloudQueueOnMessageb3f3d188_Code_4D451A84",
+            "path": "root/Default/Default/cloud.Queue-AddConsumer-b3f3d188/Code",
+            "uniqueId": "root_cloudQueueAddConsumerb3f3d188_Code_84147B09",
           },
         },
-        "bucket_prefix": "code-c8b6a338-",
+        "bucket_prefix": "code-c84c4bec-",
       },
     },
     "aws_s3_object": {
-      "root_cloudQueueOnMessageb3f3d188_S3Object_18BDF7F0": {
+      "root_cloudQueueAddConsumerb3f3d188_S3Object_E185C166": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Queue-OnMessage-b3f3d188/S3Object",
-            "uniqueId": "root_cloudQueueOnMessageb3f3d188_S3Object_18BDF7F0",
+            "path": "root/Default/Default/cloud.Queue-AddConsumer-b3f3d188/S3Object",
+            "uniqueId": "root_cloudQueueAddConsumerb3f3d188_S3Object_E185C166",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessageb3f3d188_Code_4D451A84.bucket}",
+        "bucket": "\${aws_s3_bucket.root_cloudQueueAddConsumerb3f3d188_Code_84147B09.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>",
       },
@@ -182,7 +182,7 @@ class $Root extends $stdlib.core.Resource {
   bindings: {
   }
 });
-    (queue.onMessage(handler));
+    (queue.addConsumer(handler));
   }
 }
 
