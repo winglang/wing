@@ -159,9 +159,7 @@ fn scan_captures_in_expression(
 				// wasn't found, a error diagnostic is already emitted
 				// the type checker.
 
-				if x.is_ok() {
-					let (var, si) = x.unwrap();
-
+				if let Ok((var, si)) = x {
 					if var.as_variable().is_none() {
 						diagnostics.push(Diagnostic {
 							level: DiagnosticLevel::Error,

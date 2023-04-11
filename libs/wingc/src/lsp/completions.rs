@@ -98,7 +98,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 							types,
 							scope_visitor
 								.found_scope
-								.and_then(|s| Some(s.env.borrow().as_ref().expect("Scopes must have an environment").phase)),
+								.map(|s| s.env.borrow().as_ref().expect("Scopes must have an environment").phase),
 							true,
 						);
 					}

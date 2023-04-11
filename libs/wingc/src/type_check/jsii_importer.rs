@@ -20,8 +20,8 @@ use wingii::{
 use super::{symbol_env::SymbolEnv, Enum, Namespace};
 
 trait JsiiInterface {
-	fn methods<'a>(&'a self) -> &'a Option<Vec<jsii::Method>>;
-	fn properties<'a>(&'a self) -> &'a Option<Vec<jsii::Property>>;
+	fn methods(&self) -> &Option<Vec<jsii::Method>>;
+	fn properties(&self) -> &Option<Vec<jsii::Property>>;
 }
 
 impl JsiiInterface for jsii::ClassType {
@@ -461,8 +461,7 @@ impl<'a> JsiiImporter<'a> {
 					js_override: m
 						.docs
 						.as_ref()
-						.map(|d| d.custom.as_ref().map(|c| c.get("macro").map(|j| j.clone())))
-						.flatten()
+						.and_then(|d| d.custom.as_ref().map(|c| c.get("macro").map(|j| j.clone())))
 						.flatten(),
 				}));
 				let name = camel_case_to_snake_case(&m.name);
@@ -609,18 +608,16 @@ impl<'a> JsiiImporter<'a> {
 			// `@typeparam <types>` - where <types> is a comma separated list of type parameters, referencing a class in the same namespace
 			// e.g. `@typeparam T1, T2` - T1 and T2 are type parameters of the class and will be replaced with the actual types when the class is used
 			docs.custom.as_ref().and_then(|c| {
-				c.get("typeparam").and_then(|type_param_name| {
+				c.get("typeparam").map(|type_param_name| {
 					let args = type_param_name.split(",").map(|s| s.trim()).collect::<Vec<&str>>();
-					Some(
-						args
-							.iter()
-							.map(|a| {
-								self.lookup_or_create_type(&FQN::from(
-									format!("{}.{}", jsii_class_fqn.as_str_without_type_name(), a).as_str(),
-								))
-							})
-							.collect::<Vec<_>>(),
-					)
+					args
+						.iter()
+						.map(|a| {
+							self.lookup_or_create_type(&FQN::from(
+								format!("{}.{}", jsii_class_fqn.as_str_without_type_name(), a).as_str(),
+							))
+						})
+						.collect::<Vec<_>>()
 				})
 			})
 		});

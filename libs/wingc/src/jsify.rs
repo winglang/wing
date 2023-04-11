@@ -162,7 +162,7 @@ impl<'a> JSifier<'a> {
 			let mut root_class = CodeMaker::default();
 			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
 			root_class.open("constructor(scope, id) {");
-			root_class.line(format!("super(scope, id);"));
+			root_class.line("super(scope, id);");
 			root_class.add_lines(js);
 			root_class.close("}");
 			root_class.close("}");
@@ -176,8 +176,8 @@ impl<'a> JSifier<'a> {
 			));
 			app_wrapper.open(format!("if ({}) {{", ENV_WING_IS_TEST));
 			app_wrapper.line(format!("new {}(this, \"env0\");", ROOT_CLASS));
-			app_wrapper.line("const $test_runner = this.testRunner;".to_string());
-			app_wrapper.line("const $tests = $test_runner.findTests();".to_string());
+			app_wrapper.line("const $test_runner = this.testRunner;");
+			app_wrapper.line("const $tests = $test_runner.findTests();");
 			app_wrapper.open("for (let $i = 1; $i < $tests.length; $i++) {");
 			app_wrapper.line(format!("new {}(this, \"env\" + $i);", ROOT_CLASS));
 			app_wrapper.close("}");
@@ -233,13 +233,12 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_symbol_case_converted(&self, symbol: &Symbol) -> String {
-		let mut result = symbol.name.clone();
-		result = snake_case_to_camel_case(&result);
-		return format!("{}", result);
+		let result = symbol.name.clone();
+		return snake_case_to_camel_case(&result);
 	}
 
 	fn jsify_symbol(&self, symbol: &Symbol) -> String {
-		return format!("{}", symbol.name);
+		return symbol.name.to_string();
 	}
 
 	fn jsify_arg_list(
@@ -277,7 +276,7 @@ impl<'a> JSifier<'a> {
 				self.jsify_expression(
 					arg.1,
 					&JSifyContext {
-						in_json: context.in_json.clone(),
+						in_json: context.in_json,
 						phase: Phase::Independent,
 					}
 				)
@@ -389,13 +388,13 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			ExprKind::Literal(lit) => match lit {
-				Literal::String(s) => format!("{}", s),
+				Literal::String(s) => s.to_string(),
 				Literal::InterpolatedString(s) => format!(
 					"`{}`",
 					s.parts
 						.iter()
 						.map(|p| match p {
-							InterpolatedStringPart::Static(l) => format!("{}", l),
+							InterpolatedStringPart::Static(l) => l.to_string(),
 							InterpolatedStringPart::Expr(e) => {
 								match *e.evaluated_type.borrow().expect("Should have type") {
 									Type::Json | Type::MutJson => {
@@ -410,7 +409,7 @@ impl<'a> JSifier<'a> {
 				),
 				Literal::Number(n) => format!("{}", n),
 				Literal::Duration(sec) => format!("{}.std.Duration.fromSeconds({})", STDLIB, sec),
-				Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
+				Literal::Boolean(b) => (if *b { "true" } else { "false" }).to_string(),
 			},
 			ExprKind::Range { start, inclusive, end } => {
 				match context.phase {
@@ -545,17 +544,17 @@ impl<'a> JSifier<'a> {
 			ExprKind::JsonLiteral { is_mut, element } => {
 				let json_context = &JSifyContext {
 					in_json: true,
-					phase: context.phase.clone(),
+					phase: context.phase,
 				};
 				let js_out = match &element.kind {
 					ExprKind::MapLiteral { .. } => {
 						if *is_mut {
-							format!("{}", self.jsify_expression(element, json_context))
+							self.jsify_expression(element, json_context)
 						} else {
 							format!("Object.freeze({})", self.jsify_expression(element, json_context))
 						}
 					}
-					_ => format!("{}", self.jsify_expression(element, json_context)),
+					_ => self.jsify_expression(element, json_context)
 				};
 				js_out
 			}
@@ -698,11 +697,11 @@ impl<'a> JSifier<'a> {
 			StmtKind::Class(class) => self.jsify_class(env, class, context),
 			StmtKind::Interface { .. } => {
 				// This is a no-op in JS
-				format!("")
+				String::new()
 			}
 			StmtKind::Struct { .. } => {
 				// This is a no-op in JS
-				format!("")
+				String::new()
 			}
 			StmtKind::Enum { name, values } => {
 				let name = self.jsify_symbol(name);
@@ -774,11 +773,11 @@ impl<'a> JSifier<'a> {
 			FunctionBody::Statements(scope) => self.jsify_scope(
 				scope,
 				&JSifyContext {
-					in_json: context.in_json.clone(),
+					in_json: context.in_json,
 					phase: Phase::Inflight,
 				},
 			),
-			FunctionBody::External(_) => format!("{{ throw new Error(\"extern with closures is not supported\") }}"),
+			FunctionBody::External(_) => "{ throw new Error(\"extern with closures is not supported\") }".to_string(),
 		};
 
 		let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
@@ -1042,7 +1041,7 @@ impl<'a> JSifier<'a> {
 			self.jsify_scope(
 				&constructor.statements,
 				&JSifyContext {
-					in_json: context.in_json.clone(),
+					in_json: context.in_json,
 					phase: Phase::Preflight,
 				}
 			)
@@ -1132,7 +1131,7 @@ impl<'a> JSifier<'a> {
 					Some(&name.name),
 					&def,
 					&JSifyContext {
-						in_json: context.in_json.clone(),
+						in_json: context.in_json,
 						phase: def.signature.phase,
 					},
 				)
@@ -1272,7 +1271,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 
 impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 	fn visit_expr(&mut self, node: &'ast Expr) {
-		let parts = self.analyze_expr(node);
+		let parts = Self::analyze_expr(node);
 
 		let is_field_reference = match parts.first() {
 			Some(first) => first.text == "this" && parts.len() > 1,
@@ -1394,7 +1393,7 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 			}
 		}
 
-		let fmt = |x: Iter<&Component>| x.map(|f| format!("{}", f.text)).collect_vec();
+		let fmt = |x: Iter<&Component>| x.map(|f| f.text.to_string()).collect_vec();
 		let key = format!("this.{}", fmt(capture.iter()).join("."));
 		let ops = fmt(qualification);
 
@@ -1417,7 +1416,7 @@ impl Display for Component<'_> {
 }
 
 impl<'a> FieldReferenceVisitor<'a> {
-	fn analyze_expr(&self, node: &'a Expr) -> Vec<Component> {
+	fn analyze_expr(node: &'a Expr) -> Vec<Component> {
 		match &node.kind {
 			ExprKind::Reference(Reference::Identifier(x)) => {
 				return vec![Component {
@@ -1465,7 +1464,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 					text: property.name.to_string(),
 				}];
 
-				let obj = self.analyze_expr(&object);
+				let obj = Self::analyze_expr(&object);
 				return [obj, prop].concat();
 			}
 
