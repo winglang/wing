@@ -3153,7 +3153,7 @@ fn add_parent_members_to_struct_env(
 					return Err(TypeError {
 						span: name.span.clone(),
 						message: format!(
-							"Struct \"{}\" extends \"{}\" but has a conflicting member \"{}\" ({} != {})",
+							"Struct \"{}\" extends \"{}\" which introduces a conflicting member \"{}\" ({} != {})",
 							name, parent_type, parent_member_name, member_type, member_type
 						),
 					});

@@ -40,4 +40,4 @@ struct Dazzle {
 }
 
 struct Showtime extends Razzle, Dazzle {}
-//     ^^^^^^^^ struct "Showtime" extends "Dazzle" but has a conflicting member "a"
+//     ^^^^^^^^ struct "Showtime" extends "Dazzle" which introduces a conflicting member "a"
