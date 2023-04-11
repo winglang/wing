@@ -29,3 +29,15 @@ let a = A {
 };
 log(a.bad_field);
 //      ^^^^^^ Unknown symbol "bad_field"
+
+// two inherits with same field name and type
+struct Razzle {
+  a: str;
+}
+
+struct Dazzle {
+  a: num;
+}
+
+struct Showtime extends Razzle, Dazzle {}
+//     ^^^^^^^^ struct "Showtime" extends "Dazzle" but has a conflicting member "a"

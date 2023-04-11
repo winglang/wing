@@ -821,16 +821,16 @@ impl TypeRef {
 	}
 
 	// returns true if mutable type or if immutable container type contains a mutable type
-	pub fn is_deep_mutable(&self) -> bool {
+	pub fn is_mutable(&self) -> bool {
 		match &**self {
 			Type::MutArray(_) => true,
 			Type::MutMap(_) => true,
 			Type::MutSet(_) => true,
 			Type::MutJson => true,
-			Type::Array(v) => v.is_deep_mutable(),
-			Type::Map(v) => v.is_deep_mutable(),
-			Type::Set(v) => v.is_deep_mutable(),
-			Type::Optional(v) => v.is_deep_mutable(),
+			Type::Array(v) => v.is_mutable(),
+			Type::Map(v) => v.is_mutable(),
+			Type::Set(v) => v.is_mutable(),
+			Type::Optional(v) => v.is_mutable(),
 			_ => false,
 		}
 	}
@@ -2314,7 +2314,7 @@ impl<'a> TypeChecker<'a> {
 				// Add fields to the struct env
 				for field in fields.iter() {
 					let field_type = self.resolve_type_annotation(&field.member_type, env);
-					if field_type.is_deep_mutable() {
+					if field_type.is_mutable() {
 						self.type_error(TypeError {
 							message: format!("struct fields must be immutable got: {}", field_type),
 							span: field.name.span.clone(),
