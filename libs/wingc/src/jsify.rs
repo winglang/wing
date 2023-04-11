@@ -1141,6 +1141,7 @@ impl<'a> JSifier<'a> {
 			})
 			.collect_vec();
 
+		// add the inflight init method to the list of client methods
 		if let Some(inflight_init) = inflight_init {
 			let inflight_init = self.jsify_function(
 				Some(WING_INFLIGHT_INIT_NAME),
