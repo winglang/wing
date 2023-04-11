@@ -523,3 +523,9 @@ exports[`wing compile -t tf-aws > proc.49c3e197119f2b404767dc4503ee7e474362ecc4d
 };
 "
 `;
+
+exports[`wing test -t sim > stdout 1`] = `
+"- Compiling to sim...
+✔ Compiling to sim...
+pass ─ redis.wsim » root/env0/test"
+`;

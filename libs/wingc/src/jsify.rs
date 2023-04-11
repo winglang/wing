@@ -1216,7 +1216,7 @@ impl<'a> JSifier<'a> {
 
 		let mut code = CodeMaker::default();
 		code.open(format!(
-			"class {}{}\n{{",
+			"class {}{} {{",
 			self.jsify_symbol(&class.name),
 			if let Some(parent) = &class.parent {
 				format!(" extends {}", self.jsify_user_defined_type(parent))

@@ -58,21 +58,18 @@ const $AppBase = __app(process.env.WING_TARGET);
 class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class Super
-    {
+    class Super {
       constructor()  {
         this.name = \\"Super\\";
       }
       name;
     }
-    class Sub extends Super
-    {
+    class Sub extends Super {
       constructor()  {
         this.name = \\"Sub\\";
       }
     }
-    class Sub1 extends Super
-    {
+    class Sub1 extends Super {
       constructor()  {
         this.name = \\"Sub\\";
       }
