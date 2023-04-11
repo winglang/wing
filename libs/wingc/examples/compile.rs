@@ -14,7 +14,10 @@ pub fn main() {
 	let source_path = &args[1];
 	let source_path = Path::new(source_path);
 
-	std::env::set_var("WING_PROJECT_DIR", source_path.parent().unwrap());
+	std::env::set_var(
+		"WING_PROJECT_DIR",
+		source_path.parent().unwrap().canonicalize().unwrap(),
+	);
 
 	let results = compile(source_path, None);
 	if let Err(mut err) = results {
