@@ -5,6 +5,7 @@ export * from "./function";
 export * from "./logger";
 export * from "./queue";
 export * from "./schedule";
+export * from "./secret";
 export * from "./table";
 export * from "./test-runner";
 export * from "./topic";

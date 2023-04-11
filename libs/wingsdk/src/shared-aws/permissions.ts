@@ -235,3 +235,36 @@ export function calculateBucketPermissions(
 
   return policies;
 }
+
+export function calculateSecretPermissions(
+  arn: string,
+  target: AwsTarget,
+  ops: string[]
+): { [key: string]: any }[] {
+  let policy = {};
+  let policies = [];
+  if (
+    ops.includes(cloud.SecretInflightMethods.VALUE) ||
+    ops.includes(cloud.SecretInflightMethods.VALUE_JSON)
+  ) {
+    switch (target) {
+      case AwsTarget.AWSCDK:
+        policy = {
+          effect: "Allow",
+          actions: ["secretsmanager:GetSecretValue"],
+          resources: [arn],
+        };
+        break;
+      case AwsTarget.TF_AWS:
+        policy = {
+          effect: "Allow",
+          action: ["secretsmanager:GetSecretValue"],
+          resource: arn,
+        };
+        break;
+    }
+    policies.push(policy);
+  }
+
+  return policies;
+}
