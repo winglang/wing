@@ -159,6 +159,17 @@ export abstract class Api extends Resource {
     props?: ApiConnectProps
   ): void;
 
+  protected validateRoute(route: string) {
+    // validating route:
+    // checks if a string consists only from letters, digits, =, ?,
+    // or if has curly brackets- the part that inside the brackets is only letter or _, not empty and placed before and after "/"
+    if (!/^([\w/1-9\?\=\&]|.+\/\{\w+\}(\/|$))*$/.test(route)) {
+      throw new Error(
+        `Invalid route ${route}. Routes and params should consist of alpha-numeric characters only.`
+      );
+    }
+  }
+
   /**
    * Add a route to the api spec.
    * @param route The route to add.

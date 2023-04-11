@@ -205,12 +205,3 @@ exports[`wing compile -t tf-aws > proc.0fb01e81c63b003d77d6245e36ba84561e3e2d326
   {console.log((await s1.concat(s2)))};
 } };"
 `;
-
-exports[`wing test -t sim > stdout 1`] = `
-"- Compiling to sim...
-✔ Compiling to sim...
-pass ┌ std_string.wsim » root/env0/test:string
-     │ index of \\"s\\" in s1 is 0
-     │ string
-     └ some strings are immutable"
-`;
