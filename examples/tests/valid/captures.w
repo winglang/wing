@@ -26,7 +26,7 @@ let handler = inflight (event: str): str => {
   }
 };
 
-queue.on_message(handler, batch_size: 5);
+queue.add_consumer(handler, batch_size: 5);
 
 new cloud.Function(
   handler, 

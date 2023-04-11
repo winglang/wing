@@ -533,11 +533,20 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			ExprKind::StructLiteral { fields, .. } => {
+        let st_type = expression.evaluated_type.borrow().unwrap();
+        let st = st_type.as_struct().unwrap();
+
 				format!(
 					"{{\n{}}}\n",
 					fields
 						.iter()
-						.map(|(name, expr)| format!("\"{}\": {},", name.name, self.jsify_expression(expr, context)))
+						.map(|(name, expr)| format!("\"{}\": {},", {
+              if st.should_case_convert_jsii {
+                snake_case_to_camel_case(&name.name)
+              } else {
+                name.name.clone()
+              }
+            }, self.jsify_expression(expr, context)))
 						.collect::<Vec<String>>()
 						.join("\n")
 				)

@@ -119,7 +119,7 @@ exports[`messages are requeued if the function fails 1`] = `
 
 exports[`messages are requeued if the function fails 2`] = `
 {
-  ".wing/my_queue-onmessage-e645076f_c89a8f49.js": "const $logger = (function(env) {
+  ".wing/my_queue-addconsumer-e645076f_c817d361.js": "const $logger = (function(env) {
         let handle = process.env[env];
         if (!handle) {
           throw new Error(\\"Missing environment variable: \\" + env);
@@ -128,7 +128,7 @@ exports[`messages are requeued if the function fails 2`] = `
       })(\\"LOGGER_HANDLE_76f7e65b\\");
 console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.js\\")).QueueOnMessageHandlerClient({ handler: new ((function(){
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -164,12 +164,12 @@ async handle(message) {
       },
       {
         "attrs": {},
-        "path": "root/my_queue-OnMessage-e645076f",
+        "path": "root/my_queue-AddConsumer-e645076f",
         "props": {
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": ".wing/my_queue-onmessage-e645076f_c89a8f49.js",
+          "sourceCodeFile": ".wing/my_queue-addconsumer-e645076f_c817d361.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -183,7 +183,7 @@ async handle(message) {
           "subscribers": [
             {
               "batchSize": 1,
-              "functionHandle": "\${root/my_queue-OnMessage-e645076f#attrs.handle}",
+              "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -203,7 +203,7 @@ async handle(message) {
                 "direction": "inbound",
                 "implicit": false,
                 "relationship": "handle",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": false,
@@ -227,7 +227,7 @@ async handle(message) {
                 "direction": "inbound",
                 "implicit": true,
                 "relationship": "log",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": true,
@@ -267,8 +267,8 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "on_message",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "relationship": "add_consumer",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": true,
@@ -284,7 +284,7 @@ async handle(message) {
           "id": "my_queue",
           "path": "root/my_queue",
         },
-        "my_queue-OnMessage-e645076f": {
+        "my_queue-AddConsumer-e645076f": {
           "attributes": {
             "wing:resource:connections": [
               {
@@ -302,7 +302,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "on_message",
+                "relationship": "add_consumer",
                 "resource": "root/my_queue",
               },
             ],
@@ -316,10 +316,10 @@ async handle(message) {
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
-          "id": "my_queue-OnMessage-e645076f",
-          "path": "root/my_queue-OnMessage-e645076f",
+          "id": "my_queue-AddConsumer-e645076f",
+          "path": "root/my_queue-AddConsumer-e645076f",
         },
-        "my_queue-OnMessageHandler-e645076f": {
+        "my_queue-AddConsumerHandler-e645076f": {
           "attributes": {
             "wing:resource:connections": [],
             "wing:resource:stateful": false,
@@ -331,8 +331,8 @@ async handle(message) {
           "display": {
             "hidden": true,
           },
-          "id": "my_queue-OnMessageHandler-e645076f",
-          "path": "root/my_queue-OnMessageHandler-e645076f",
+          "id": "my_queue-AddConsumerHandler-e645076f",
+          "path": "root/my_queue-AddConsumerHandler-e645076f",
         },
       },
       "constructInfo": {
@@ -479,7 +479,7 @@ exports[`queue with one subscriber, batch size of 5 1`] = `
 
 exports[`queue with one subscriber, batch size of 5 2`] = `
 {
-  ".wing/my_queue-onmessage-e645076f_c89a8f49.js": "const $logger = (function(env) {
+  ".wing/my_queue-addconsumer-e645076f_c817d361.js": "const $logger = (function(env) {
         let handle = process.env[env];
         if (!handle) {
           throw new Error(\\"Missing environment variable: \\" + env);
@@ -488,7 +488,7 @@ exports[`queue with one subscriber, batch size of 5 2`] = `
       })(\\"LOGGER_HANDLE_76f7e65b\\");
 console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.js\\")).QueueOnMessageHandlerClient({ handler: new ((function(){
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -524,12 +524,12 @@ async handle(message) {
       },
       {
         "attrs": {},
-        "path": "root/my_queue-OnMessage-e645076f",
+        "path": "root/my_queue-AddConsumer-e645076f",
         "props": {
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": ".wing/my_queue-onmessage-e645076f_c89a8f49.js",
+          "sourceCodeFile": ".wing/my_queue-addconsumer-e645076f_c817d361.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -550,7 +550,7 @@ async handle(message) {
           "subscribers": [
             {
               "batchSize": 5,
-              "functionHandle": "\${root/my_queue-OnMessage-e645076f#attrs.handle}",
+              "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -570,7 +570,7 @@ async handle(message) {
                 "direction": "inbound",
                 "implicit": false,
                 "relationship": "handle",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": false,
@@ -594,7 +594,7 @@ async handle(message) {
                 "direction": "inbound",
                 "implicit": true,
                 "relationship": "log",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": true,
@@ -634,8 +634,8 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "on_message",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "relationship": "add_consumer",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": true,
@@ -651,7 +651,7 @@ async handle(message) {
           "id": "my_queue",
           "path": "root/my_queue",
         },
-        "my_queue-OnMessage-e645076f": {
+        "my_queue-AddConsumer-e645076f": {
           "attributes": {
             "wing:resource:connections": [
               {
@@ -669,7 +669,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "on_message",
+                "relationship": "add_consumer",
                 "resource": "root/my_queue",
               },
             ],
@@ -683,10 +683,10 @@ async handle(message) {
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
-          "id": "my_queue-OnMessage-e645076f",
-          "path": "root/my_queue-OnMessage-e645076f",
+          "id": "my_queue-AddConsumer-e645076f",
+          "path": "root/my_queue-AddConsumer-e645076f",
         },
-        "my_queue-OnMessageHandler-e645076f": {
+        "my_queue-AddConsumerHandler-e645076f": {
           "attributes": {
             "wing:resource:connections": [],
             "wing:resource:stateful": false,
@@ -698,8 +698,8 @@ async handle(message) {
           "display": {
             "hidden": true,
           },
-          "id": "my_queue-OnMessageHandler-e645076f",
-          "path": "root/my_queue-OnMessageHandler-e645076f",
+          "id": "my_queue-AddConsumerHandler-e645076f",
+          "path": "root/my_queue-AddConsumerHandler-e645076f",
         },
       },
       "constructInfo": {
@@ -735,7 +735,7 @@ exports[`queue with one subscriber, default batch size of 1 1`] = `
 
 exports[`queue with one subscriber, default batch size of 1 2`] = `
 {
-  ".wing/my_queue-onmessage-e645076f_c89a8f49.js": "const $logger = (function(env) {
+  ".wing/my_queue-addconsumer-e645076f_c817d361.js": "const $logger = (function(env) {
         let handle = process.env[env];
         if (!handle) {
           throw new Error(\\"Missing environment variable: \\" + env);
@@ -744,7 +744,7 @@ exports[`queue with one subscriber, default batch size of 1 2`] = `
       })(\\"LOGGER_HANDLE_76f7e65b\\");
 console.log = (...args) => $logger.log(...args);
 exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.js\\")).QueueOnMessageHandlerClient({ handler: new ((function(){
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -780,12 +780,12 @@ async handle(message) {
       },
       {
         "attrs": {},
-        "path": "root/my_queue-OnMessage-e645076f",
+        "path": "root/my_queue-AddConsumer-e645076f",
         "props": {
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": ".wing/my_queue-onmessage-e645076f_c89a8f49.js",
+          "sourceCodeFile": ".wing/my_queue-addconsumer-e645076f_c817d361.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -799,7 +799,7 @@ async handle(message) {
           "subscribers": [
             {
               "batchSize": 1,
-              "functionHandle": "\${root/my_queue-OnMessage-e645076f#attrs.handle}",
+              "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -819,7 +819,7 @@ async handle(message) {
                 "direction": "inbound",
                 "implicit": false,
                 "relationship": "handle",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": false,
@@ -843,7 +843,7 @@ async handle(message) {
                 "direction": "inbound",
                 "implicit": true,
                 "relationship": "log",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": true,
@@ -883,8 +883,8 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "on_message",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "relationship": "add_consumer",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": true,
@@ -900,7 +900,7 @@ async handle(message) {
           "id": "my_queue",
           "path": "root/my_queue",
         },
-        "my_queue-OnMessage-e645076f": {
+        "my_queue-AddConsumer-e645076f": {
           "attributes": {
             "wing:resource:connections": [
               {
@@ -918,7 +918,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "on_message",
+                "relationship": "add_consumer",
                 "resource": "root/my_queue",
               },
             ],
@@ -932,10 +932,10 @@ async handle(message) {
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
-          "id": "my_queue-OnMessage-e645076f",
-          "path": "root/my_queue-OnMessage-e645076f",
+          "id": "my_queue-AddConsumer-e645076f",
+          "path": "root/my_queue-AddConsumer-e645076f",
         },
-        "my_queue-OnMessageHandler-e645076f": {
+        "my_queue-AddConsumerHandler-e645076f": {
           "attributes": {
             "wing:resource:connections": [],
             "wing:resource:stateful": false,
@@ -947,8 +947,8 @@ async handle(message) {
           "display": {
             "hidden": true,
           },
-          "id": "my_queue-OnMessageHandler-e645076f",
-          "path": "root/my_queue-OnMessageHandler-e645076f",
+          "id": "my_queue-AddConsumerHandler-e645076f",
+          "path": "root/my_queue-AddConsumerHandler-e645076f",
         },
       },
       "constructInfo": {
