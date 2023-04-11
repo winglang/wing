@@ -1035,6 +1035,13 @@ error: Unknown symbol \\"bad_field\\"
 30 | log(a.bad_field);
    |       ^^^^^^^^^ Unknown symbol \\"bad_field\\"
 
+
+error: Struct \\"Showtime (at ../../../examples/tests/invalid/structs.w:42:8)\\" extends \\"Dazzle\\" but has a conflicting member \\"a\\" (num != num)
+   --> ../../../examples/tests/invalid/structs.w:42:8
+   |
+42 | struct Showtime extends Razzle, Dazzle {}
+   |        ^^^^^^^^ Struct \\"Showtime (at ../../../examples/tests/invalid/structs.w:42:8)\\" extends \\"Dazzle\\" but has a conflicting member \\"a\\" (num != num)
+
 "
 `;
 
