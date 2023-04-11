@@ -2,44 +2,44 @@
 
 exports[`wing compile -t tf-aws > clients/A.inflight.js 1`] = `
 "class A  {
-constructor({  }) {
-
-
+  constructor({  }) {
+  }
+  async handle(msg)  {
+    {
+      return;
+    }
+  }
 }
-async handle(msg)  {
-	{
-  return;
-}
-}}
-exports.A = A;"
+exports.A = A;
+"
 `;
 
 exports[`wing compile -t tf-aws > clients/Dog.inflight.js 1`] = `
 "class Dog  {
-constructor({  }) {
-
-
+  constructor({  }) {
+  }
+  async eat()  {
+    {
+      return;
+    }
+  }
 }
-async eat()  {
-	{
-  return;
-}
-}}
-exports.Dog = Dog;"
+exports.Dog = Dog;
+"
 `;
 
 exports[`wing compile -t tf-aws > clients/r.inflight.js 1`] = `
 "class r  {
-constructor({  }) {
-
-
+  constructor({  }) {
+  }
+  async method_2(x)  {
+    {
+      return x;
+    }
+  }
 }
-async method_2(x)  {
-	{
-  return x;
-}
-}}
-exports.r = r;"
+exports.r = r;
+"
 `;
 
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
@@ -102,73 +102,71 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     class A extends $stdlib.core.Resource {
-	constructor(scope, id, ) {
-	super(scope, id);
-{
-}
-}
-	
-	_toInflight() {
-	
-	const self_client_path = \\"./clients/A.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
-	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).A({}))\`);
-}
-}
-A._annotateInflight(\\"handle\\", {});
-A._annotateInflight(\\"$init\\", {});
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      _toInflight() {
+        const self_client_path = \\"./clients/A.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
+        return $stdlib.core.NodeJsCode.fromInline(\`
+          (new (require(\\"\${self_client_path}\\")).A({
+          }))
+        \`);
+      }
+    }
+    A._annotateInflight(\\"handle\\", {});
+    A._annotateInflight(\\"$init\\", {});
     class r extends $stdlib.core.Resource {
-	constructor(scope, id, ) {
-	super(scope, id);
-{
-}
-}
-	 method_1(x)  {
-	{
-  return x;
-}
-}
- method_3(x)  {
-	{
-  return x;
-}
-}
-	_toInflight() {
-	
-	const self_client_path = \\"./clients/r.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
-	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).r({}))\`);
-}
-}
-r._annotateInflight(\\"method_2\\", {});
-r._annotateInflight(\\"$init\\", {});
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+       method_1(x)  {
+        {
+          return x;
+        }
+      }
+       method_3(x)  {
+        {
+          return x;
+        }
+      }
+      _toInflight() {
+        const self_client_path = \\"./clients/r.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
+        return $stdlib.core.NodeJsCode.fromInline(\`
+          (new (require(\\"\${self_client_path}\\")).r({
+          }))
+        \`);
+      }
+    }
+    r._annotateInflight(\\"method_2\\", {});
+    r._annotateInflight(\\"$init\\", {});
     class Dog extends $stdlib.core.Resource {
-	constructor(scope, id, ) {
-	super(scope, id);
-{
-}
-}
-	
-	_toInflight() {
-	
-	const self_client_path = \\"./clients/Dog.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
-	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Dog({}))\`);
-}
-}
-Dog._annotateInflight(\\"eat\\", {});
-Dog._annotateInflight(\\"$init\\", {});
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      _toInflight() {
+        const self_client_path = \\"./clients/Dog.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
+        return $stdlib.core.NodeJsCode.fromInline(\`
+          (new (require(\\"\${self_client_path}\\")).Dog({
+          }))
+        \`);
+      }
+    }
+    Dog._annotateInflight(\\"eat\\", {});
+    Dog._annotateInflight(\\"$init\\", {});
     const x = new A(this,\\"A\\");
     const y = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.a5455e5c5848cfc293fcb861d9393d32e29a39f8dc8ac79c19dd5289279762fe/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-  bindings: {
-    x: {
-      obj: x,
-      ops: []
-    },
-  }
-});
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.b4d79c39e5924e356f79589c2d4a3f0e55ebd13f7fbdeeec43c9e0c3f7633564/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+      bindings: {
+        x: {
+          obj: x,
+          ops: []
+        },
+      }
+    })
+    ;
     const z = new Dog(this,\\"Dog\\");
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: \\"impl_interface\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -184,14 +182,18 @@ class $App extends $AppBase {
     }
   }
 }
-
-new $App().synth();"
+new $App().synth();
+"
 `;
 
-exports[`wing compile -t tf-aws > proc.a5455e5c5848cfc293fcb861d9393d32e29a39f8dc8ac79c19dd5289279762fe/index.js 1`] = `
-"async handle() { const { x } = this; {
-  (await x.handle(\\"hello world!\\"));
-} };"
+exports[`wing compile -t tf-aws > proc.b4d79c39e5924e356f79589c2d4a3f0e55ebd13f7fbdeeec43c9e0c3f7633564/index.js 1`] = `
+"async handle() {
+  const { x } = this;
+  {
+    (await x.handle(\\"hello world!\\"));
+  }
+};
+"
 `;
 
 exports[`wing test -t sim > stdout 1`] = `

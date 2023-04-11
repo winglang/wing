@@ -1,3 +1,5 @@
+use indoc::indoc;
+
 /// A helper for generating code snippets with indentation.
 ///
 /// TODO: add `open_block` or `close_block` methods that automatically add
@@ -23,13 +25,9 @@ impl CodeMaker {
 
 	/// Emits a line of code with the current indent.
 	pub fn line<S: Into<String>>(&mut self, line: S) {
-		self.lines.push((self.indent, line.into()));
-	}
-
-	/// Emits multiple lines of code starting with the current indent.
-	pub fn add_lines<S: Into<String>>(&mut self, lines: Vec<S>) {
-		for line in lines {
-			self.line(line);
+		// if the line has newlines in it, consider each line separately
+		for subline in line.into().split('\n') {
+			self.lines.push((self.indent, subline.into()));
 		}
 	}
 
@@ -51,6 +49,12 @@ impl CodeMaker {
 	/// Increases the current indent by one.
 	pub fn indent(&mut self) {
 		self.indent += 1;
+	}
+
+	pub fn one_line<S: Into<String>>(s: S) -> CodeMaker {
+		let mut code = CodeMaker::default();
+		code.line(s);
+		code
 	}
 }
 
@@ -97,24 +101,6 @@ mod tests {
 			"#}
 		);
 	}
-
-	#[test]
-	fn codemaker_add_lines() {
-		let mut code = CodeMaker::default();
-		code.open("{");
-		code.add_lines(vec!["let a = 1;", "let b = 2;"]);
-		code.close("}");
-		assert_eq!(
-			code.to_string(),
-			indoc! {r#"
-			{
-			  let a = 1;
-			  let b = 2;
-			}
-		"#}
-		);
-	}
-
 	#[test]
 	fn codemaker_add_code() {
 		let mut code1 = CodeMaker::default();
@@ -134,4 +120,21 @@ mod tests {
 		"#}
 		);
 	}
+}
+
+#[test]
+fn codemaker_line_with_newlines() {
+	let mut code = CodeMaker::default();
+	code.open("<");
+	code.line("hello\nworld");
+	code.close(">");
+	assert_eq!(
+		code.to_string(),
+		indoc! {r#"
+			<
+			  hello
+			  world
+			>
+		"#}
+	);
 }
