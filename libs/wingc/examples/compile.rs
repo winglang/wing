@@ -14,12 +14,11 @@ pub fn main() {
 	let source_path = &args[1];
 	let source_path = Path::new(source_path);
 
-	std::env::set_var(
-		"WING_PROJECT_DIR",
-		source_path.canonicalize().unwrap().parent().unwrap(),
+	let results = compile(
+		source_path,
+		None,
+		Some(source_path.canonicalize().unwrap().parent().unwrap()),
 	);
-
-	let results = compile(source_path, None);
 	if let Err(mut err) = results {
 		// Sort error messages by line number (ascending)
 		err.sort();
