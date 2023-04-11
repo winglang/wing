@@ -1018,11 +1018,11 @@ error: Expected 2 arguments but got 1
 `;
 
 exports[`structs.w > stderr 1`] = `
-"error: Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" but has a conflicting member \\"x\\" (str != str)
+"error: Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
   --> ../../../examples/tests/invalid/structs.w:9:8
   |
 9 | struct C extends B {
-  |        ^ Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" but has a conflicting member \\"x\\" (str != str)
+  |        ^ Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
 
 
 error: \\"x\\" is not initialized
@@ -1051,6 +1051,13 @@ error: Unknown symbol \\"bad_field\\"
    |
 30 | log(a.bad_field);
    |       ^^^^^^^^^ Unknown symbol \\"bad_field\\"
+
+
+error: Struct \\"Showtime (at ../../../examples/tests/invalid/structs.w:42:8)\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
+   --> ../../../examples/tests/invalid/structs.w:42:8
+   |
+42 | struct Showtime extends Razzle, Dazzle {}
+   |        ^^^^^^^^ Struct \\"Showtime (at ../../../examples/tests/invalid/structs.w:42:8)\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
 
 "
 `;
