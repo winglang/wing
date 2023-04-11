@@ -761,14 +761,7 @@ error: Expected type to be \\"str\\", but got \\"num\\" instead
 `;
 
 exports[`reassign_to_nonreassignable.w > stderr 1`] = `
-"error: ';' expected.
-   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:31:2
-   |
-31 | }
-   |  ^ ';' expected.
-
-
-error: Variable x is not reassignable 
+"error: Variable x is not reassignable 
   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:3:1
   |
 3 | x = x + 1;
@@ -783,16 +776,16 @@ error: Variable this.f is not reassignable
 
 
 error: Variable this.inflight_f is not reassignable 
-   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:23:5
+   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:24:5
    |
-23 |     this.inflight_f = this.inflight_f + 1;
+24 |     this.inflight_f = this.inflight_f + 1;
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Variable this.inflight_f is not reassignable 
 
 
 error: Variable arg is not reassignable 
-   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:29:3
+   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:31:3
    |
-29 |   arg = 0;
+31 |   arg = 0;
    |   ^^^^^^^^ Variable arg is not reassignable 
 
 "
