@@ -57,7 +57,7 @@ export interface ISecretClient {
 
   /**
    * Retrieve the Json value of the secret.
-   * @Throws if the secret doesn't exist.
+   * @Throws if the secret doesn't exist or cannot be parsed as Json
    * @Returns the secret value parsed as Json.
    * @inflight
    */

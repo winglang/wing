@@ -20,6 +20,9 @@ export class Secret extends cloud.Secret {
     this.secret = new CdkSecret(this, "Default");
   }
 
+  /**
+   * Secret's arn
+   */
   public get arn(): string {
     return this.secret.secretArn;
   }
