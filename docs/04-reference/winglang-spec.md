@@ -869,31 +869,39 @@ let f = (arg1: num, var arg2: num) => {
 
 ### 1.7 Optionality
 
-Nullity (`null`, `undefined`, `nil`) is a primary source of bugs in software.
-Being able to guarantee that a value will never be null makes it easier to write safe
-code without constantly having to take nullity into account.
+Nullity is a primary source of bugs in software. Being able to guarantee that a value will never be
+null makes it easier to write safe code without constantly having to take nullity into account.
 
-We are going to try and design Wing without allowing users to explicitly assign or use the `nil`
-value. Instead, the language offers syntax to support the various use cases that arise when dealing
-with *optionality*.
+In order to allow the compiler to offer stronger guarantees, Wing includes a higher-level concept
+called "optionality" which requires developers to be more intentional about working with the concept
+of "lack of value".
 
 Here's a quick summary of how optionality works in Wing:
 
-* `x: T?` marks `x` as "optional of T". This means that `x` can store a value of type `T` but it can also be in a state where there is no value stored there.
-* To test if `x` has a value or not, use `x?`, which returns a `bool`. If x has a value, `x?` will be `true`, otherwise it will be `false`.
-* The `if let y = opt { } else { }` is a special if statement that binds `y` inside the block only if `x` includes a value. Otherwise, the `else` block will be executed.
-
--------------
-* The `let x = opt else { }` can be used to <<<<<<>>>>>>???
--------------
-
-* The `x?.y` notation can be used to access object fields only if there is a value. It returns an empty optional if the value is not defined.
-* The `x ?? y` notation will return the value in `x` (if there is one) or `y` otherwise (`y` must be of type `T`, not `T?`).
-* A default value can also be supplied using `= y` in the declaration of the field or argument, which implies that the type will always be defined.
+* `x: T?` marks `x` as "optional of T". This means that `x` can either be `nil` (without a value) or
+  have a value of type `T`.
+* To test for a value, the unary expression `x?` returns a `true` if `x` has a value and `false`
+  otherwise.
+* `if let y = x { } else { }` is a special control flow statement which binds `y` inside the first
+  block only if `x` has a value. Otherwise, the `else` block will be executed.
+* The `x?.y?.z` notation can be used to access fields only if they have a value. The type of this
+  expression is `Z?` (an optional based on the type of the last component).
+* The `x ?? y ?? z` notation will return the value in `x` if there is one, `y` otherwise or `z`. The
+  last expression in a `??` chain (e.g. `z`) must be of type `T` (not `T?`).
+* The default value notation (`= y`) in declarations of struct fields or function arguments will use
+  this value if a value is not provided, and implies type is `T` (not `T?`).
+* The `x ??= y` notation returns `x` if it has a value or assigns `x` with `y` and returns the value
+  of `y`.
+* The `x ?? throw(message)` and `x ?? return val` are special cases of `??` which can be used for
+  unwrapping (if a value exists) or early bailout.
+* The keyword `nil` can be used in assignment scenarios to indicate that an optional doesn't have a
+  value. It cannot be used to test if an optional has a value or not.
 
 #### 1.7.1 Declaration
 
-##### 1.7.1.1 Declaration in struct fields
+##### 1.7.1.1 Struct fields
+
+One of the more common use cases for optionals is to use them in struct declarations.
 
 ```js
 struct Person {
@@ -902,18 +910,20 @@ struct Person {
 }
 ```
 
-In the above struct, the `address` field, the `foo` argument and the `my_opt` field are all marked
-as optionals using `?`.
-
-This means, for example, that a `Person` can be initialized without defining the `address`
-field:
+In the `Person` struct above, the `address` field is marked as optional using `?`. This means that
+we can initialize without defining the `address` field:
 
 ```js
-let my_person = Person { name: "david" };
-assert(my_person.address? == false);
+let david = Person { name: "david" };
+let jonathan = Person { name: "jonathan", address: "earth" };
+assert(david.address? == false);
+assert(jonathan.address? == true);
 ```
 
-It is also possible to use `=` in the field declaration to indicate the default value (similar to function arguments). If a default value is provided in a struct declaration, the field is not required in a struct literal definition. It also implies that the type of the field is `T` and not `T?` (because we can ensure it has a value). In the example below the field `radix` as a type of `num`.
+The *default value notation* (`=`) can also be used in struct declarations. If provided, the field
+is also not required in a struct literal definition, and the default value will be implied. It also
+means that the type of the field must be `T` and not `T?`, because we can ensure it has a value (in
+the example below the field `radix` as a type of `num`).
 
 ```js
 struct FormatOpts {
@@ -926,30 +936,42 @@ assert(opts.radix == 10);
 assert(opts.some_optional? == false); // <-- no value inside `some_optional`
 ```
 
-A value can be omitted from a struct literal if the field is optional _or_ if it has a default value in the struct
-declaration. If the field is optional, it's type is `T?`. If it has a default value it's type is `T` (since we know it will always have a value).
-In the above example the type of `radix` is `num`.
+A value can be omitted from a struct literal if the field is optional _or_ if it has a default value
+in the struct declaration. If an optional field doesn't have a default value, its type must be `T?`
+(`some_optional` above). If it has a default value it's type must be `T` (`radix` above).
 
-##### 1.7.1.2 Declaration in variables
-
-Use `T?` to indicate that a variable is optional:
+This is a compilation error:
 
 ```js
-let var y: num?;
+struct Test {
+  hello: str? = "hello";
+//       ^^^^ type should be `str` since a default value is provided
+}
+```
+
+> NOTE: Default values can only be serializable values (immutable primitives, collections of
+> primitives or other serializable structs). This limitation exists because we will evaluate the
+> expression of the default value only upon struct initialization (it is stored in the type system).
+
+##### 1.7.1.2 Variables
+
+Use `T?` to indicate that a variable is optional. To initialize it without a value use `= nil`.
+
+```js
+let var x: num? = 12;
+let var y: num? = nil;
 assert(y? == false); // y doesn't have a value
+assert(x? == true); // x has a value
 
 // ok to reassign another value because `y` is reassignable (`var`)
 y = 123;
 assert(y? == true);
+
+x = nil;
+assert(x? == false);
 ```
 
-It is okay to initialize a value:
-
-```js
-let var y: num? = 12;
-```
-
-##### 1.7.1.3 Declaration in class fields
+##### 1.7.1.3 Class fields
 
 Similarly to struct fields, fields of classes can be also defined as optional using `T?`:
 
@@ -960,6 +982,7 @@ class Foo {
 
   init(opt: num?) {
     this.my_opt = opt;
+    this.my_var = nil; // everything must be initialized, so you can use `nil` to indicate that there is no value
   }
 
   set_my_var(x: str) {
@@ -968,23 +991,23 @@ class Foo {
 }
 ```
 
-##### 1.7.1.4 Declaration in function arguments
+##### 1.7.1.4 Function arguments
 
-In the following example, the argument `by` is optional, so it is possible to call `x()` without
-supplying a value for `by`:
+In the following example, the argument `by` is optional, so it is possible to call `increment()`
+without supplying a value for `by`:
 
 ```js
 let increment = (x: num, by: num?): num => {
   return x + (by ?? 1);
 };
 
-assert(my_function(88) == 89);
-assert(my_function(88, 2) == 90);
+assert(increment(88) == 89);
+assert(increment(88, 2) == 90);
 ```
 
-Alternatively, specifying a default value will also make an argument optional. Using a default value
-in the function declaration ensures that `by` always has a value so there is no need to unwrap it
-(this is why its type is `num` and not `num?`):
+Alternatively, using the default value notation can be used to allow an parameter not to be assigned
+when calling the function. Using a default value in the function declaration ensures that `by`
+always has a value so there is no need to unwrap it (this is why its type is `num` and not `num?`):
 
 ```js
 let increment = (x: num, by: num = 1): num {
@@ -999,8 +1022,8 @@ let my_fun = (a: str, x?: num, y: str): void = { /* ... */ };
 //-----------------------------^^^^^^ ERROR: cannot declare a non-optional argument after an optional
 ```
 
-If a function uses a keyword argument struct as the last argument, and there are other optional arguments before,
-it also has to be declared as optional:
+If a function uses a keyword argument struct as the last argument, and there are other optional
+arguments before, it also has to be declared as optional.
 
 ```js
 let parse_int = (x: str, radix: num?, opts?: ParseOpts): num { /* ... */ };
@@ -1008,12 +1031,26 @@ let parse_int = (x: str, radix: num?, opts?: ParseOpts): num { /* ... */ };
 let parse_int = (x: str, radix: num = 10, opts: ParseOpts = ParseOpts {}): num { /* ... */ };
 ```
 
-##### 1.7.1.5 Declaration in function return types
+The optionality of keyword arguments is determined by the struct field's optionality:
 
-If a function returns an optional type, use the `return nil;` statement to indicate that the value is
-not defined.
+```js
+struct Options {
+  my_required: str;
+  my_optional: num?;
+  implicit_optional: bool = false;
+}
 
-> This is currently the only scenario in the language where `nil` is allowed.
+let f = (opts: Options) => { }
+
+f(my_required: "hello");
+f(my_optional: 12, my_required: "dang");
+f(my_required: "dude", implicit_optional: true);
+```
+
+##### 1.7.1.5 Function return types
+
+If a function returns an optional type, use the `return nil;` statement to indicate that the value
+is not defined.
 
 ```js
 struct Name { first: str, last: str };
@@ -1026,29 +1063,38 @@ let try_parse_name = (full_name: str): Name? => {
 
   return Name { first: parts.at(0), last: parts.at(1) };
 }
+
+// since result is optional, it needs to be unwrapped in order to be used
+if let name = try_parse_name("Neo Matrix") {
+  print("Hello, ${name.first}!");
+}
 ```
 
 #### 1.7.2 Testing using `x?`
 
-Object of type `str?` cannot be used within `==` or `!=` expressions because we don't have a null
-value. Instead, use the the `?` operator to get a `bool` that indicates if the optional is defined
-or not:
+To test if an optional has a value or not, you can either use `x == nil` or `x != nil` or the
+special syntax `x?`.
 
 ```js
 let is_address_defined = my_person.address?; // type is `bool`
+let is_address_really_defined = my_person.address != nil; // equivalent
 
 // or within a condition
 if my_person.address? {
-  print("address is defined but i do not care what it is");
+  log("address is defined but i do not care what it is");
 }
 
 // can be negated
 if !my_person.address? {
-  print("address is not defined");
+  log("address is not defined");
+}
+
+if my_person.address == nil {
+  log("no address")
 }
 ```
 
-#### 1.7.3 Unwrapping using `if let` and `let else`
+#### 1.7.3 Unwrapping using `if let`
 
 The `if let` statement can be used to test if an optional is defined and *unwrap* it into a
 non-optional variable defined inside the block:
@@ -1060,34 +1106,38 @@ if let address = my_person.address {
 }
 ```
 
-> NOTE: `if let` is not the same as `if`. For example, we currently don't support specifying multiple conditions, or unwrapping multiple optionals. This is something we might consider in the future.
-
-The `let .. else` statement can be used to conditionally execute a block if an optional
-does not have a value:
-
-```js
-let address = my_person.address else {
-  throw("address is required");
-};
-
-print("address is ${address}");
-```
+> NOTE: `if let` is not the same as `if`. For example, we currently don't support specifying
+> multiple conditions, or unwrapping multiple optionals. This is something we might consider in the
+> future.
 
 #### 1.7.4 Unwrapping or default value using `??`
 
-The `??` operator can be used to unwrap or provide a default value. This returns a value of `T` that can safely be used.
+The `??` operator can be used to unwrap or provide a default value. This returns a value of `T` that
+can safely be used.
 
 ```js
 let address: str = my_person.address ?? "Planet Earth";
 ```
 
-#### 1.7.5 Optional chaining using `?.`
-
-The `?.` syntax can be used for optional chaining. Optional chaining returns a value of type `T?` which must be unwrapped in order to be used.
+`??` can be chained:
 
 ```js
-if let ip_address = options.networking?.ip_address {
-  print("the ip address is defined and it is: ${ip_address}");
+let address = my_person.address ?? your_person.address ?? "No address";
+//            <----- str? ---->    <----- str? ------>    <-- str --->
+```
+
+The last element in a `??` chain must be a non-optional type `T`.
+
+#### 1.7.5 Optional chaining using `?.`
+
+The `?.` syntax can be used for optional chaining. Optional chaining returns a value of type `T?`
+which must be unwrapped in order to be used.
+
+```js
+let ip_address: str? = options.networking?.ip_address;
+
+if let ip = ip_address {
+  print("the ip address is defined and it is: ${ip}");
 }
 ```
 
@@ -1096,7 +1146,10 @@ if let ip_address = options.networking?.ip_address {
 In the future we will consider the following additional sugar syntax:
 
 * `x ?? throw("message")` to unwrap `x` or throw if `x` is not defined.
-* `x ??= value` returns `x` or assigns a value to it and returns it to support lazy evaluation/memoization (inspired by [Nullish coalescing assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_assignment)).
+* `x ??= value` returns `x` or assigns a value to it and returns it to support lazy
+  evaluation/memoization (inspired by [Nullish coalescing
+  assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_assignment)).
+* Support `??` for different types if they have a common ancestor (and also think of interfaces).
 
 [`▲ top`][top]
 
