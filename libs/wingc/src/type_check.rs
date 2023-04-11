@@ -305,6 +305,7 @@ pub struct Struct {
 	extends: Vec<TypeRef>, // Must be a Type::Struct type
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
+	pub should_case_convert_jsii: bool,
 }
 
 #[derive(Debug)]
@@ -2383,6 +2384,7 @@ impl<'a> TypeChecker<'a> {
 					name,
 					SymbolKind::Type(self.types.add_type(Type::Struct(Struct {
 						name: name.clone(),
+						should_case_convert_jsii: false,
 						extends: extends_types,
 						env: struct_env,
 					}))),
