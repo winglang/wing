@@ -2069,7 +2069,7 @@ impl<'a> TypeChecker<'a> {
 				methods,
 				parent,
 				implements,
-				constructor,
+				initializer: constructor,
 				is_resource,
 				inflight_initializer,
 			}) => {

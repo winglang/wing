@@ -337,7 +337,7 @@ pub struct Class {
 	pub name: Symbol,
 	pub fields: Vec<ClassField>,
 	pub methods: Vec<(Symbol, FunctionDefinition)>,
-	pub constructor: Constructor,
+	pub initializer: Constructor,
 	pub inflight_initializer: Option<FunctionDefinition>,
 	pub parent: Option<UserDefinedType>,
 	pub implements: Vec<UserDefinedType>,

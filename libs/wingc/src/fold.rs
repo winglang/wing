@@ -174,7 +174,7 @@ where
 			.into_iter()
 			.map(|(name, def)| (f.fold_symbol(name), f.fold_function_definition(def)))
 			.collect(),
-		constructor: f.fold_constructor(node.constructor),
+		initializer: f.fold_constructor(node.initializer),
 		parent: node.parent.map(|parent| f.fold_user_defined_type(parent)),
 		implements: node
 			.implements

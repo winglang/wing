@@ -145,9 +145,9 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		}
 		self.visit_symbol(&node.name);
 
-		self.visit_constructor(&node.constructor);
+		self.visit_constructor(&node.initializer);
 
-		self.with_scope(&node.constructor.statements, |v| {
+		self.with_scope(&node.initializer.statements, |v| {
 			for field in &node.fields {
 				v.visit_symbol(&field.name);
 				v.visit_type_annotation(&field.member_type);

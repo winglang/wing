@@ -1012,7 +1012,7 @@ impl<'a> JSifier<'a> {
 			} else {
 				format!(" extends {}", STDLIB_CORE_RESOURCE)
 			},
-			self.jsify_resource_constructor(&class.constructor, class.parent.is_none(), context),
+			self.jsify_resource_constructor(&class.initializer, class.parent.is_none(), context),
 			preflight_methods
 				.iter()
 				.map(|(n, m)| self.jsify_function(Some(&n.name), m, context))
@@ -1212,7 +1212,7 @@ impl<'a> JSifier<'a> {
 			} else {
 				"".to_string()
 			},
-			self.jsify_constructor(Some("constructor"), &class.constructor, context),
+			self.jsify_constructor(Some("constructor"), &class.initializer, context),
 			class
 				.fields
 				.iter()

@@ -616,7 +616,7 @@ impl<'s> Parser<'s> {
 			methods,
 			parent,
 			implements,
-			constructor: constructor.unwrap(),
+			initializer: constructor.unwrap(),
 			is_resource,
 			inflight_initializer,
 		}))

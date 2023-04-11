@@ -206,7 +206,7 @@ where
 {
 	v.visit_symbol(&node.name);
 
-	v.visit_constructor(&node.constructor);
+	v.visit_constructor(&node.initializer);
 
 	for field in &node.fields {
 		v.visit_symbol(&field.name);
