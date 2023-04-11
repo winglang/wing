@@ -403,7 +403,7 @@ where
 	match node {
 		TypeAnnotation::Number => TypeAnnotation::Number,
 		TypeAnnotation::String => TypeAnnotation::String,
-		TypeAnnotation::Bool => TypeAnnotation::Bool,
+		TypeAnnotation::Boolean => TypeAnnotation::Boolean,
 		TypeAnnotation::Duration => TypeAnnotation::Duration,
 		TypeAnnotation::Json => TypeAnnotation::Json,
 		TypeAnnotation::MutJson => TypeAnnotation::MutJson,

@@ -1,13 +1,15 @@
 use std::cell::RefCell;
 
-use indexmap::IndexSet;
+use indexmap::{IndexMap, IndexSet};
 
 use crate::{
 	ast::{
-		ArgList, CatchBlock, Class, Constructor, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionSignature,
-		Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UserDefinedType, UtilityFunctions,
+		ArgList, CatchBlock, Class, ClassField, Constructor, Expr, ExprKind, FunctionBody, FunctionDefinition,
+		FunctionParameter, FunctionSignature, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
+		UserDefinedType, UtilityFunctions,
 	},
 	fold::{self, Fold},
+	type_check::SymbolKind,
 };
 
 pub struct InflightTransformer {
@@ -70,10 +72,50 @@ impl Fold for InflightTransformer {
 					Symbol::global(UtilityFunctions::Throw.to_string()),
 					Symbol::global(UtilityFunctions::Panic.to_string()),
 				]);
-				let (transformed_def, _free_vars) = free_var_transformer.transform_def(def);
+				let (transformed_def, free_vars) = free_var_transformer.transform_def(def);
+
+				let mut resource_fields: Vec<ClassField> = vec![];
+				let mut resource_init_params: Vec<FunctionParameter> = vec![];
+				for var in free_vars.iter() {
+					if let FunctionBody::Statements(scope) = &transformed_def.body {
+						// look up the type of the free variable in the function's environment
+						let env = scope.env.borrow();
+						let (result, extra_info) = env
+							.as_ref()
+							.unwrap()
+							.lookup_ext(&var, None)
+							.expect("free variable not found in environment");
+
+						assert!(
+							extra_info.phase == Phase::Preflight,
+							"free variable didn't come from preflight scope"
+						);
+
+						match result {
+							SymbolKind::Variable(var_info) => {
+								let type_annotation: TypeAnnotation = var_info.type_.try_into().unwrap();
+								resource_init_params.push(FunctionParameter {
+									name: var.clone(),
+									type_annotation: type_annotation.clone(),
+									reassignable: false,
+								});
+								resource_fields.push(ClassField {
+									name: var.clone(),
+									is_static: false,
+									member_type: type_annotation,
+									phase: Phase::Preflight,
+									reassignable: false,
+								});
+							}
+							SymbolKind::Type(_) => continue,
+							SymbolKind::Namespace(_) => continue,
+						}
+					}
+				}
 
 				// resource_def = resource {
-				//   init() {}
+				//   <resource_fields>
+				//   init(<resource_init_params>) {<resource_init_body>}
 				//   inflight handle() {
 				//     <transformed_def>
 				//   }
@@ -84,13 +126,13 @@ impl Fold for InflightTransformer {
 						is_resource: true,
 						constructor: Constructor {
 							signature: FunctionSignature {
-								parameters: vec![],
+								parameters: resource_init_params,
 								return_type: Some(Box::new(resource_type_annotation.clone())),
 								phase: Phase::Preflight,
 							},
 							statements: Scope::new(vec![], expr.span.clone()),
 						},
-						fields: vec![],
+						fields: resource_fields,
 						implements: vec![],
 						parent: None,
 						methods: vec![(handle_name.clone(), transformed_def)],
@@ -104,7 +146,18 @@ impl Fold for InflightTransformer {
 					kind: StmtKind::Return(Some(Expr::new(
 						ExprKind::New {
 							class: resource_type_annotation,
-							arg_list: ArgList::new(),
+							arg_list: ArgList {
+								named_args: IndexMap::new(),
+								pos_args: free_vars
+									.iter()
+									.map(|var| {
+										Expr::new(
+											ExprKind::Reference(Reference::Identifier(var.clone())),
+											expr.span.clone(),
+										)
+									})
+									.collect(),
+							},
 							obj_id: None,
 							obj_scope: None,
 						},
@@ -155,7 +208,7 @@ impl Fold for InflightTransformer {
 // prefixed with "this.".
 struct FreeVariableTransformer {
 	bound_vars: Vec<Symbol>,
-	free_vars: IndexSet<String>,
+	free_vars: IndexSet<Symbol>,
 }
 
 impl FreeVariableTransformer {
@@ -166,7 +219,7 @@ impl FreeVariableTransformer {
 		}
 	}
 
-	pub fn transform_def(&mut self, def: FunctionDefinition) -> (FunctionDefinition, Vec<String>) {
+	pub fn transform_def(&mut self, def: FunctionDefinition) -> (FunctionDefinition, Vec<Symbol>) {
 		let new_def = self.fold_function_definition(def);
 		let free_vars = self.free_vars.iter().cloned().collect();
 		(new_def, free_vars)
@@ -176,14 +229,20 @@ impl FreeVariableTransformer {
 impl Fold for FreeVariableTransformer {
 	fn fold_reference(&mut self, node: Reference) -> Reference {
 		if let Reference::Identifier(ref x) = node {
-			if self.bound_vars.contains(x) || x.name == "this" {
+			if self.bound_vars.contains(x) {
 				return node;
 			} else {
-				self.free_vars.insert(x.name.clone());
-				return Reference::Identifier(Symbol {
-					name: format!("this.{}", x.name),
-					span: x.span.clone(),
-				});
+				self.free_vars.insert(x.clone());
+				return Reference::InstanceMember {
+					object: Box::new(Expr::new(
+						ExprKind::Reference(Reference::Identifier(Symbol {
+							name: "this".to_string(),
+							span: x.span.clone(),
+						})),
+						x.span.clone(),
+					)),
+					property: x.clone(),
+				};
 			}
 		};
 

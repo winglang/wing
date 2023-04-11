@@ -424,7 +424,7 @@ where
 	match node {
 		TypeAnnotation::Number => {}
 		TypeAnnotation::String => {}
-		TypeAnnotation::Bool => {}
+		TypeAnnotation::Boolean => {}
 		TypeAnnotation::Duration => {}
 		TypeAnnotation::Json => {}
 		TypeAnnotation::MutJson => {}

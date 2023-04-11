@@ -1,6 +1,6 @@
 pub(crate) mod jsii_importer;
 pub mod symbol_env;
-use crate::ast;
+use crate::ast::{self, FunctionTypeAnnotation};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter,
 	Interface as AstInterface, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind,
@@ -1736,7 +1736,7 @@ impl<'a> TypeChecker<'a> {
 		match annotation {
 			TypeAnnotation::Number => self.types.number(),
 			TypeAnnotation::String => self.types.string(),
-			TypeAnnotation::Bool => self.types.bool(),
+			TypeAnnotation::Boolean => self.types.bool(),
 			TypeAnnotation::Duration => self.types.duration(),
 			TypeAnnotation::Json => self.types.json(),
 			TypeAnnotation::MutJson => self.types.mut_json(),
@@ -3267,6 +3267,59 @@ pub fn resolve_user_defined_type_by_fqn(
 	let root = fields.remove(0);
 	let user_defined_type = UserDefinedType { root, fields };
 	resolve_user_defined_type(&user_defined_type, env, statement_idx)
+}
+
+impl TryInto<TypeAnnotation> for TypeRef {
+	type Error = ();
+	fn try_into(self) -> Result<TypeAnnotation, Self::Error> {
+		match &*self {
+			Type::Anything => Err(()),
+			Type::Number => Ok(TypeAnnotation::Number),
+			Type::String => Ok(TypeAnnotation::String),
+			Type::Duration => Ok(TypeAnnotation::Duration),
+			Type::Boolean => Ok(TypeAnnotation::Boolean),
+			Type::Void => Err(()),
+			Type::Json => Ok(TypeAnnotation::Json),
+			Type::MutJson => Ok(TypeAnnotation::MutJson),
+			Type::Optional(t) => Ok(TypeAnnotation::Optional(Box::new((*t).try_into()?))),
+			Type::Array(t) => Ok(TypeAnnotation::Array(Box::new((*t).try_into()?))),
+			Type::MutArray(t) => Ok(TypeAnnotation::MutArray(Box::new((*t).try_into()?))),
+			Type::Map(t) => Ok(TypeAnnotation::Map(Box::new((*t).try_into()?))),
+			Type::MutMap(t) => Ok(TypeAnnotation::MutMap(Box::new((*t).try_into()?))),
+			Type::Set(t) => Ok(TypeAnnotation::Set(Box::new((*t).try_into()?))),
+			Type::MutSet(t) => Ok(TypeAnnotation::MutSet(Box::new((*t).try_into()?))),
+			Type::Function(t) => Ok(TypeAnnotation::Function(FunctionTypeAnnotation {
+				param_types: t
+					.parameters
+					.iter()
+					.cloned()
+					.map(|p| p.try_into())
+					.collect::<Result<Vec<_>, _>>()?,
+				return_type: match t.return_type.try_into() {
+					Ok(t) => Some(Box::new(t)),
+					Err(_) => None,
+				},
+				phase: t.phase,
+			})),
+			Type::Class(t) => Ok(TypeAnnotation::UserDefined({
+				let fqn = t.fqn.as_ref().unwrap();
+				UserDefinedType {
+					root: Symbol::global(fqn.split('.').nth(1).unwrap()),
+					fields: fqn.split('.').skip(2).map(|s| Symbol::global(s)).collect_vec(),
+				}
+			})),
+			Type::Resource(t) => Ok(TypeAnnotation::UserDefined({
+				let fqn = t.fqn.as_ref().unwrap();
+				UserDefinedType {
+					root: Symbol::global(fqn.split('.').nth(1).unwrap()),
+					fields: fqn.split('.').skip(2).map(|s| Symbol::global(s)).collect_vec(),
+				}
+			})),
+			Type::Interface(_) => todo!(),
+			Type::Struct(_) => todo!(),
+			Type::Enum(_) => todo!(),
+		}
+	}
 }
 
 #[cfg(test)]

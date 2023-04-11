@@ -728,7 +728,7 @@ impl<'s> Parser<'s> {
 			"builtin_type" => match self.node_text(type_node) {
 				"num" => Ok(TypeAnnotation::Number),
 				"str" => Ok(TypeAnnotation::String),
-				"bool" => Ok(TypeAnnotation::Bool),
+				"bool" => Ok(TypeAnnotation::Boolean),
 				"duration" => Ok(TypeAnnotation::Duration),
 				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
 				other => return self.report_unimplemented_grammar(other, "builtin", type_node),

@@ -102,7 +102,7 @@ impl Display for Phase {
 pub enum TypeAnnotation {
 	Number,
 	String,
-	Bool,
+	Boolean,
 	Duration,
 	Json,
 	MutJson,
@@ -115,7 +115,7 @@ pub enum TypeAnnotation {
 	MutSet(Box<TypeAnnotation>),
 	Function(FunctionTypeAnnotation),
 	UserDefined(UserDefinedType),
-	Resource, // TODO: keep this?
+	Resource, // TODO: remove this?
 }
 
 /// Unlike a FunctionSignature, a FunctionTypeAnnotation doesn't include the names
@@ -151,7 +151,7 @@ impl Display for TypeAnnotation {
 		match self {
 			TypeAnnotation::Number => write!(f, "num"),
 			TypeAnnotation::String => write!(f, "str"),
-			TypeAnnotation::Bool => write!(f, "bool"),
+			TypeAnnotation::Boolean => write!(f, "bool"),
 			TypeAnnotation::Duration => write!(f, "duration"),
 			TypeAnnotation::Json => write!(f, "Json"),
 			TypeAnnotation::MutJson => write!(f, "MutJson"),
