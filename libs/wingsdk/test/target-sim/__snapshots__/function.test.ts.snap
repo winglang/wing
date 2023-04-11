@@ -2,8 +2,51 @@
 
 exports[`create a function 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_function_c85c4e0e.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.log(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  
+async handle(event) {
+  event = JSON.parse(event);
+  let msg;
+  if (event.name[0] !== event.name[0].toUpperCase()) {
+    throw new Error(\\"Name must start with uppercase letter\\");
+  }
+  if (process.env.PIG_LATIN) {
+    msg = \\"Ellohay, \\" + event.name + \\"!\\";
+  } else {
+    msg = \\"Hello, \\" + event.name + \\"!\\";
+  }
+  return JSON.stringify({ msg });
+}
+};
+})())({
+
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
       {
         "attrs": {},
         "path": "root/WingLogger",
@@ -18,7 +61,7 @@ exports[`create a function 1`] = `
             "ENV_VAR1": "true",
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_function_c85c4e0e/index.js",
+          "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -27,7 +70,7 @@ exports[`create a function 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -53,7 +96,7 @@ exports[`create a function 1`] = `
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_function",
               },
             ],
@@ -71,13 +114,30 @@ exports[`create a function 1`] = `
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
         "my_function": {
           "attributes": {
             "wing:resource:connections": [
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
             ],
@@ -104,56 +164,59 @@ exports[`create a function 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_function_c85c4e0e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(event2) {
-        event2 = JSON.parse(event2);
-        let msg;
-        if (event2.name[0] !== event2.name[0].toUpperCase()) {
-          throw new Error(\\"Name must start with uppercase letter\\");
-        }
-        if (process.env.PIG_LATIN) {
-          msg = \\"Ellohay, \\" + event2.name + \\"!\\";
-        } else {
-          msg = \\"Hello, \\" + event2.name + \\"!\\";
-        }
-        return JSON.stringify({ msg });
-      }
-    };
-  }())({}).handle(event);
-};
-",
 }
 `;
 
 exports[`invoke function exceeds timeout 1`] = `
 [
+  "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "Invoke (payload=\\"{}\\").",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`invoke function exceeds timeout 2`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_function_c85c4e0e.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.log(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  
+async handle() {
+  while (true) {
+  };
+}
+};
+})())({
+
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
       {
         "attrs": {},
         "path": "root/WingLogger",
@@ -167,7 +230,7 @@ exports[`invoke function exceeds timeout 2`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_function_c85c4e0e/index.js",
+          "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 1000,
         },
@@ -176,7 +239,7 @@ exports[`invoke function exceeds timeout 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -202,7 +265,7 @@ exports[`invoke function exceeds timeout 2`] = `
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_function",
               },
             ],
@@ -220,13 +283,30 @@ exports[`invoke function exceeds timeout 2`] = `
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
         "my_function": {
           "attributes": {
             "wing:resource:connections": [
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
             ],
@@ -253,48 +333,68 @@ exports[`invoke function exceeds timeout 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_function_c85c4e0e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        while (true) {
-        }
-        ;
-      }
-    };
-  }())({}).handle(event);
-};
-",
 }
 `;
 
 exports[`invoke function fails 1`] = `
 [
+  "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"alice\\\\\\"}\\").",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`invoke function fails 2`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_function_c85c4e0e.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.log(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  
+async handle(event) {
+  event = JSON.parse(event);
+  let msg;
+  if (event.name[0] !== event.name[0].toUpperCase()) {
+    throw new Error(\\"Name must start with uppercase letter\\");
+  }
+  if (process.env.PIG_LATIN) {
+    msg = \\"Ellohay, \\" + event.name + \\"!\\";
+  } else {
+    msg = \\"Hello, \\" + event.name + \\"!\\";
+  }
+  return JSON.stringify({ msg });
+}
+};
+})())({
+
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
       {
         "attrs": {},
         "path": "root/WingLogger",
@@ -308,7 +408,7 @@ exports[`invoke function fails 2`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_function_c85c4e0e/index.js",
+          "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -317,7 +417,7 @@ exports[`invoke function fails 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -343,7 +443,7 @@ exports[`invoke function fails 2`] = `
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_function",
               },
             ],
@@ -361,13 +461,30 @@ exports[`invoke function fails 2`] = `
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
         "my_function": {
           "attributes": {
             "wing:resource:connections": [
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
             ],
@@ -394,56 +511,68 @@ exports[`invoke function fails 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_function_c85c4e0e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(event2) {
-        event2 = JSON.parse(event2);
-        let msg;
-        if (event2.name[0] !== event2.name[0].toUpperCase()) {
-          throw new Error(\\"Name must start with uppercase letter\\");
-        }
-        if (process.env.PIG_LATIN) {
-          msg = \\"Ellohay, \\" + event2.name + \\"!\\";
-        } else {
-          msg = \\"Hello, \\" + event2.name + \\"!\\";
-        }
-        return JSON.stringify({ msg });
-      }
-    };
-  }())({}).handle(event);
-};
-",
 }
 `;
 
 exports[`invoke function succeeds 1`] = `
 [
+  "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\").",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`invoke function succeeds 2`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_function_c85c4e0e.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.log(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  
+async handle(event) {
+  event = JSON.parse(event);
+  let msg;
+  if (event.name[0] !== event.name[0].toUpperCase()) {
+    throw new Error(\\"Name must start with uppercase letter\\");
+  }
+  if (process.env.PIG_LATIN) {
+    msg = \\"Ellohay, \\" + event.name + \\"!\\";
+  } else {
+    msg = \\"Hello, \\" + event.name + \\"!\\";
+  }
+  return JSON.stringify({ msg });
+}
+};
+})())({
+
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
       {
         "attrs": {},
         "path": "root/WingLogger",
@@ -457,7 +586,7 @@ exports[`invoke function succeeds 2`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_function_c85c4e0e/index.js",
+          "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -466,7 +595,7 @@ exports[`invoke function succeeds 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -492,7 +621,7 @@ exports[`invoke function succeeds 2`] = `
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_function",
               },
             ],
@@ -510,13 +639,30 @@ exports[`invoke function succeeds 2`] = `
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
         "my_function": {
           "attributes": {
             "wing:resource:connections": [
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
             ],
@@ -543,56 +689,68 @@ exports[`invoke function succeeds 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_function_c85c4e0e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(event2) {
-        event2 = JSON.parse(event2);
-        let msg;
-        if (event2.name[0] !== event2.name[0].toUpperCase()) {
-          throw new Error(\\"Name must start with uppercase letter\\");
-        }
-        if (process.env.PIG_LATIN) {
-          msg = \\"Ellohay, \\" + event2.name + \\"!\\";
-        } else {
-          msg = \\"Hello, \\" + event2.name + \\"!\\";
-        }
-        return JSON.stringify({ msg });
-      }
-    };
-  }())({}).handle(event);
-};
-",
 }
 `;
 
 exports[`invoke function with environment variables 1`] = `
 [
+  "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\").",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`invoke function with environment variables 2`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_function_c85c4e0e.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.log(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  
+async handle(event) {
+  event = JSON.parse(event);
+  let msg;
+  if (event.name[0] !== event.name[0].toUpperCase()) {
+    throw new Error(\\"Name must start with uppercase letter\\");
+  }
+  if (process.env.PIG_LATIN) {
+    msg = \\"Ellohay, \\" + event.name + \\"!\\";
+  } else {
+    msg = \\"Hello, \\" + event.name + \\"!\\";
+  }
+  return JSON.stringify({ msg });
+}
+};
+})())({
+
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
       {
         "attrs": {},
         "path": "root/WingLogger",
@@ -607,7 +765,7 @@ exports[`invoke function with environment variables 2`] = `
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
             "PIG_LATIN": "true",
           },
-          "sourceCodeFile": "assets/my_function_c85c4e0e/index.js",
+          "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -616,7 +774,7 @@ exports[`invoke function with environment variables 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -642,7 +800,7 @@ exports[`invoke function with environment variables 2`] = `
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_function",
               },
             ],
@@ -660,13 +818,30 @@ exports[`invoke function with environment variables 2`] = `
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
         "my_function": {
           "attributes": {
             "wing:resource:connections": [
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
             ],
@@ -693,56 +868,58 @@ exports[`invoke function with environment variables 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_function_c85c4e0e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(event2) {
-        event2 = JSON.parse(event2);
-        let msg;
-        if (event2.name[0] !== event2.name[0].toUpperCase()) {
-          throw new Error(\\"Name must start with uppercase letter\\");
-        }
-        if (process.env.PIG_LATIN) {
-          msg = \\"Ellohay, \\" + event2.name + \\"!\\";
-        } else {
-          msg = \\"Hello, \\" + event2.name + \\"!\\";
-        }
-        return JSON.stringify({ msg });
-      }
-    };
-  }())({}).handle(event);
-};
-",
 }
 `;
 
 exports[`invoke function with process.exit(1) 1`] = `
 [
+  "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "Invoke (payload=\\"{}\\").",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`invoke function with process.exit(1) 2`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_function_c85c4e0e.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.log(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  
+async handle() {
+  process.exit(1);
+}
+};
+})())({
+
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
       {
         "attrs": {},
         "path": "root/WingLogger",
@@ -756,7 +933,7 @@ exports[`invoke function with process.exit(1) 2`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_function_c85c4e0e/index.js",
+          "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -765,7 +942,7 @@ exports[`invoke function with process.exit(1) 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -791,7 +968,7 @@ exports[`invoke function with process.exit(1) 2`] = `
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_function",
               },
             ],
@@ -809,13 +986,30 @@ exports[`invoke function with process.exit(1) 2`] = `
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
         "my_function": {
           "attributes": {
             "wing:resource:connections": [
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
             ],
@@ -842,28 +1036,5 @@ exports[`invoke function with process.exit(1) 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_function_c85c4e0e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        process.exit(1);
-      }
-    };
-  }())({}).handle(event);
-};
-",
 }
 `;

@@ -42,9 +42,7 @@ wing compile --target tf-aws hello.w
 
 ## Examine the output
 
-Our target directory now contains a `cdktf.out` directory which is the output of
-[CDK for Terraform](https://developer.hashicorp.com/terraform/cdktf) used under
-the hood to produce the Terraform configuration for this application.
+Our `target` directory now contains a `hello.tfaws` directory which has all of the Terraform configuration for this application.
 
 ## Initialize Terraform state
 
@@ -78,16 +76,16 @@ terraform apply
 You'll be asked to confirm the provisioning of all of these resources:
 
 ```
-aws_iam_role.root_cloudQueue_OnMessagef9e5f4b154bf0692_IamRole_0F5B0FAB
-aws_iam_role_policy.root_cloudQueue_OnMessagef9e5f4b154bf0692_IamRolePolicy_D4EB5385
-aws_iam_role_policy_attachment.root_cloudQueue_OnMessagef9e5f4b154bf0692_IamRolePolicyAttachment_EEE67DAF
+aws_iam_role.root_cloudQueue_AddConsumerf9e5f4b154bf0692_IamRole_0F5B0FAB
+aws_iam_role_policy.root_cloudQueue_AddConsumerf9e5f4b154bf0692_IamRolePolicy_D4EB5385
+aws_iam_role_policy_attachment.root_cloudQueue_AddConsumerf9e5f4b154bf0692_IamRolePolicyAttachment_EEE67DAF
 aws_lambda_event_source_mapping.root_cloudQueue_EventSourceMapping_A2041279
-aws_lambda_function.root_cloudQueue_OnMessagef9e5f4b154bf0692_7D66EFB8
+aws_lambda_function.root_cloudQueue_AddConsumerf9e5f4b154bf0692_7D66EFB8
 aws_s3_bucket.root_cloudBucket_4F3C4F53
-aws_s3_bucket.root_cloudQueue_OnMessagef9e5f4b154bf0692_Bucket_22152053
+aws_s3_bucket.root_cloudQueue_AddConsumerf9e5f4b154bf0692_Bucket_22152053
 aws_s3_bucket_public_access_block.root_cloudBucket_PublicAccessBlock_319C1C2E
 aws_s3_bucket_server_side_encryption_configuration.root_cloudBucket_Encryption_8ED0CD9C
-aws_s3_object.root_cloudQueue_OnMessagef9e5f4b154bf0692_S3Object_A34E0128
+aws_s3_object.root_cloudQueue_AddConsumerf9e5f4b154bf0692_S3Object_A34E0128
 aws_sqs_queue.root_cloudQueue_E3597F7A
 ```
 

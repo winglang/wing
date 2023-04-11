@@ -9,6 +9,7 @@ const JSII_DEPS = [
   "@cdktf/provider-aws@^12.0.1",
   "@cdktf/provider-azurerm@^5.0.1",
   "@cdktf/provider-google@^5.0.2",
+  "aws-cdk-lib@^2.64.0",
 ];
 
 const project = new cdk.JsiiProject({
@@ -18,6 +19,7 @@ const project = new cdk.JsiiProject({
   authorAddress: "ping@monada.co",
   repositoryUrl: "https://github.com/winglang/wing.git",
   repositoryDirectory: "libs/wingsdk",
+  license: "MIT",
   stability: "experimental",
   defaultReleaseBranch: "main",
   peerDeps: [...JSII_DEPS],
@@ -32,6 +34,8 @@ const project = new cdk.JsiiProject({
     // conflict with each other)
     "@aws-sdk/client-cloudwatch-logs@3.256.0",
     "@aws-sdk/client-dynamodb@3.256.0",
+    "@aws-sdk/client-elasticache@3.256.0",
+    "@aws-sdk/util-dynamodb@3.256.0",
     "@aws-sdk/client-lambda@3.256.0",
     "@aws-sdk/client-s3@3.256.0",
     "@aws-sdk/client-sqs@3.256.0",
@@ -46,6 +50,9 @@ const project = new cdk.JsiiProject({
     // simulator dependencies
     "tar",
     "express",
+    "uuid",
+    // shared client dependencies
+    "ioredis",
   ],
   devDeps: [
     "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
@@ -61,6 +68,7 @@ const project = new cdk.JsiiProject({
     "eslint-plugin-sort-exports",
     "patch-package",
     "vitest",
+    "@types/uuid",
     "@vitest/coverage-c8",
   ],
   prettier: true,
@@ -254,5 +262,7 @@ project.addFields({
 project.addFields({
   files: ["lib", ".jsii", "API.md", "patches"],
 });
+
+project.gitignore.addPatterns("src/**/*.js", "src/**/*.d.ts");
 
 project.synth();

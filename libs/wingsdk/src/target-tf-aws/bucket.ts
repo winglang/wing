@@ -1,17 +1,31 @@
+import { join } from "path";
 import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
+import { S3BucketNotification } from "@cdktf/provider-aws/lib/s3-bucket-notification";
+
 import { S3BucketPolicy } from "@cdktf/provider-aws/lib/s3-bucket-policy";
 import { S3BucketPublicAccessBlock } from "@cdktf/provider-aws/lib/s3-bucket-public-access-block";
 import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/lib/s3-bucket-server-side-encryption-configuration";
 import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { Construct } from "constructs";
-import { Function } from "./function";
+import { App } from "./app";
+import { Function as AWSFunction } from "./function";
+import { Topic as AWSTopic } from "./topic";
 import * as cloud from "../cloud";
+import { BucketEventType, Topic } from "../cloud";
 import * as core from "../core";
+import { AwsTarget } from "../shared-aws/commons";
+import { calculateBucketPermissions } from "../shared-aws/permissions";
 import {
   CaseConventions,
   NameOptions,
   ResourceNames,
 } from "../utils/resource-names";
+
+const EVENTS = {
+  [BucketEventType.DELETE]: ["s3:ObjectRemoved:*"],
+  [BucketEventType.CREATE]: ["s3:ObjectCreated:Post"],
+  [BucketEventType.UPDATE]: ["s3:ObjectCreated:Put"],
+};
 
 /**
  * Bucket prefix provided to Terraform must be between 3 and 37 characters.
@@ -61,8 +75,11 @@ export class Bucket extends cloud.Bucket {
     // but we do not need to handle these cases since we are generating the
     // prefix only
 
+    const isTestEnvironment = App.of(this).isTestEnvironment;
+
     this.bucket = new S3Bucket(this, "Default", {
       bucketPrefix,
+      forceDestroy: isTestEnvironment ? true : false,
     });
 
     // best practice: (at-rest) data encryption with Amazon S3-managed keys
@@ -112,53 +129,48 @@ export class Bucket extends cloud.Bucket {
     });
   }
 
+  protected eventHandlerLocation(): string {
+    return join(__dirname, "bucket.onevent.inflight.js");
+  }
+
+  protected createTopic(actionType: BucketEventType): Topic {
+    const handler = super.createTopic(actionType);
+
+    // TODO: remove this constraint by adding generic permission APIs to cloud.Function
+    if (!(handler instanceof AWSTopic)) {
+      throw new Error("Topic only supports creating tfaws.Function right now");
+    }
+
+    handler.addPermissionToPublish(this, "s3.amazonaws.com", this.bucket.arn);
+
+    new S3BucketNotification(
+      this,
+      `S3Object_on_${actionType.toLowerCase()}_notifier`,
+      {
+        bucket: this.bucket.id,
+        topic: [
+          {
+            events: EVENTS[actionType],
+            topicArn: handler.arn,
+          },
+        ],
+        dependsOn: [handler.permissions],
+      }
+    );
+
+    return handler;
+  }
+
   /** @internal */
   public _bind(host: core.IInflightHost, ops: string[]): void {
-    if (!(host instanceof Function)) {
+    if (!(host instanceof AWSFunction)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
-    if (
-      ops.includes(cloud.BucketInflightMethods.PUT) ||
-      ops.includes(cloud.BucketInflightMethods.PUT_JSON)
-    ) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["s3:PutObject*", "s3:Abort*"],
-        resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
-      });
-    }
-    if (
-      ops.includes(cloud.BucketInflightMethods.GET) ||
-      ops.includes(cloud.BucketInflightMethods.GET_JSON)
-    ) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
-        resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
-      });
-    }
-    if (
-      ops.includes(cloud.BucketInflightMethods.LIST) ||
-      ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)
-    ) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
-        resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
-      });
-    }
-    if (ops.includes(cloud.BucketInflightMethods.DELETE)) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: [
-          "s3:DeleteObject*",
-          "s3:DeleteObjectVersion*",
-          "s3:PutLifecycleConfiguration*",
-        ],
-        resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
-      });
-    }
+    host.addPolicyStatements(
+      ...calculateBucketPermissions(this.bucket.arn, AwsTarget.TF_AWS, ops)
+    );
+
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucket);
@@ -169,10 +181,15 @@ export class Bucket extends cloud.Bucket {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__dirname, __filename, "BucketClient", [
-      `process.env["${this.envName()}"]`,
-      `process.env["${this.isPublicEnvName()}"]`,
-    ]);
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-aws", "shared-aws"),
+      __filename,
+      "BucketClient",
+      [
+        `process.env["${this.envName()}"]`,
+        `process.env["${this.isPublicEnvName()}"]`,
+      ]
+    );
   }
 
   private isPublicEnvName(): string {
@@ -184,10 +201,10 @@ export class Bucket extends cloud.Bucket {
   }
 }
 
-Bucket._annotateInflight("put", {});
-Bucket._annotateInflight("get", {});
-Bucket._annotateInflight("delete", {});
-Bucket._annotateInflight("list", {});
-Bucket._annotateInflight("put_json", {});
-Bucket._annotateInflight("get_json", {});
-Bucket._annotateInflight("public_url", {});
+Bucket._annotateInflight(cloud.BucketInflightMethods.PUT, {});
+Bucket._annotateInflight(cloud.BucketInflightMethods.GET, {});
+Bucket._annotateInflight(cloud.BucketInflightMethods.DELETE, {});
+Bucket._annotateInflight(cloud.BucketInflightMethods.LIST, {});
+Bucket._annotateInflight(cloud.BucketInflightMethods.PUT_JSON, {});
+Bucket._annotateInflight(cloud.BucketInflightMethods.GET_JSON, {});
+Bucket._annotateInflight(cloud.BucketInflightMethods.PUBLIC_URL, {});

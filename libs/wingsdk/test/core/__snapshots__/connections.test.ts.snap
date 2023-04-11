@@ -2,14 +2,45 @@
 
 exports[`create a bucket 1`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_function_c85c4e0e.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.log(...args);
+exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() { return 'hello'; }
+};
+})())({
+
+})).handle(event);
+};",
+  "simulator.json": {
     "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
       {
         "attrs": {},
         "path": "root/my_bucket",
         "props": {
           "initialObjects": {},
           "public": false,
+          "topics": {},
         },
         "type": "wingsdk.cloud.Bucket",
       },
@@ -26,7 +57,7 @@ exports[`create a bucket 1`] = `
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_function_c85c4e0e/index.js",
+          "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -35,7 +66,7 @@ exports[`create a bucket 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -61,7 +92,7 @@ exports[`create a bucket 1`] = `
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/my_function",
               },
             ],
@@ -78,6 +109,23 @@ exports[`create a bucket 1`] = `
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "my_bucket": {
           "attributes": {
@@ -108,7 +156,7 @@ exports[`create a bucket 1`] = `
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
               {
@@ -141,28 +189,5 @@ exports[`create a bucket 1`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_function_c85c4e0e/index.js": "var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle() {
-        return \\"hello\\";
-      }
-    };
-  }())({}).handle(event);
-};
-",
 }
 `;

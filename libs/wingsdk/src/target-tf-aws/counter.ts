@@ -3,9 +3,9 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { AwsTarget, COUNTER_HASH_KEY } from "../shared-aws/commons";
+import { calculateCounterPermissions } from "../shared-aws/permissions";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
-
-export const HASH_KEY = "id";
 
 /**
  * Counter (Table) names must be between 3 and 255 characters.
@@ -30,8 +30,8 @@ export class Counter extends cloud.Counter {
 
     this.table = new DynamodbTable(this, "Default", {
       name: ResourceNames.generateName(this, NAME_OPTS),
-      attribute: [{ name: HASH_KEY, type: "S" }],
-      hashKey: HASH_KEY,
+      attribute: [{ name: COUNTER_HASH_KEY, type: "S" }],
+      hashKey: COUNTER_HASH_KEY,
       billingMode: "PAY_PER_REQUEST",
     });
   }
@@ -42,25 +42,9 @@ export class Counter extends cloud.Counter {
       throw new Error("counters can only be bound by tfaws.Function for now");
     }
 
-    if (
-      ops.includes(cloud.CounterInflightMethods.INC) ||
-      ops.includes(cloud.CounterInflightMethods.DEC) ||
-      ops.includes(cloud.CounterInflightMethods.RESET)
-    ) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["dynamodb:UpdateItem"],
-        resource: this.table.arn,
-      });
-    }
-
-    if (ops.includes(cloud.CounterInflightMethods.PEEK)) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["dynamodb:GetItem"],
-        resource: this.table.arn,
-      });
-    }
+    host.addPolicyStatements(
+      ...calculateCounterPermissions(this.table.arn, AwsTarget.TF_AWS, ops)
+    );
 
     host.addEnvironment(this.envName(), this.table.name);
 
@@ -69,10 +53,12 @@ export class Counter extends cloud.Counter {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__dirname, __filename, "CounterClient", [
-      `process.env["${this.envName()}"]`,
-      `${this.initial}`,
-    ]);
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-aws", "shared-aws"),
+      __filename,
+      "CounterClient",
+      [`process.env["${this.envName()}"]`, `${this.initial}`]
+    );
   }
 
   private envName(): string {
@@ -80,7 +66,7 @@ export class Counter extends cloud.Counter {
   }
 }
 
-Counter._annotateInflight("inc", {});
-Counter._annotateInflight("dec", {});
-Counter._annotateInflight("peek", {});
-Counter._annotateInflight("reset", {});
+Counter._annotateInflight(cloud.CounterInflightMethods.INC, {});
+Counter._annotateInflight(cloud.CounterInflightMethods.DEC, {});
+Counter._annotateInflight(cloud.CounterInflightMethods.PEEK, {});
+Counter._annotateInflight(cloud.CounterInflightMethods.RESET, {});

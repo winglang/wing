@@ -146,6 +146,10 @@ fn scan_captures_in_expression(
 				res.extend(scan_captures_in_expression(e, env, statement_idx, diagnostics));
 			}
 		}
+		ExprKind::Range { start, end, .. } => {
+			res.extend(scan_captures_in_expression(start, env, statement_idx, diagnostics));
+			res.extend(scan_captures_in_expression(end, env, statement_idx, diagnostics));
+		}
 		ExprKind::Reference(r) => match r {
 			Reference::Identifier(symbol) => {
 				// Lookup the symbol
@@ -287,7 +291,7 @@ fn scan_captures_in_expression(
 			res.extend(scan_captures_in_expression(&element, env, statement_idx, diagnostics));
 		}
 		ExprKind::StructLiteral { fields, .. } => {
-			for (_sym, exp) in fields.values() {
+			for exp in fields.values() {
 				res.extend(scan_captures_in_expression(&exp, env, statement_idx, diagnostics));
 			}
 		}
@@ -316,9 +320,6 @@ fn scan_captures_in_expression(
 					diagnostics,
 				)));
 			}
-		}
-		ExprKind::OptionalTest { optional } => {
-			res.extend(scan_captures_in_expression(optional, env, statement_idx, diagnostics));
 		}
 	}
 	res
@@ -399,7 +400,11 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 				todo!()
 			}
 			// Type definitions with no expressions in them can't capture anything
-			StmtKind::Struct { .. } | StmtKind::Enum { .. } | StmtKind::Break | StmtKind::Continue => {}
+			StmtKind::Struct { .. }
+			| StmtKind::Interface { .. }
+			| StmtKind::Enum { .. }
+			| StmtKind::Break
+			| StmtKind::Continue => {}
 			StmtKind::TryCatch {
 				try_statements,
 				catch_block,

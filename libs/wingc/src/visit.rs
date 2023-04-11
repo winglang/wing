@@ -1,6 +1,7 @@
 use crate::ast::{
-	ArgList, Class, Constructor, Expr, ExprKind, FunctionBody, FunctionDefinition, InterpolatedStringPart, Literal,
-	Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
+	ArgList, Class, Constructor, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
+	Interface, InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
+	UserDefinedType,
 };
 
 /// Visitor pattern inspired by implementation from https://docs.rs/syn/latest/syn/visit/index.html
@@ -38,6 +39,9 @@ pub trait Visit<'ast> {
 	fn visit_class(&mut self, node: &'ast Class) {
 		visit_class(self, node);
 	}
+	fn visit_interface(&mut self, node: &'ast Interface) {
+		visit_interface(self, node);
+	}
 	fn visit_constructor(&mut self, node: &'ast Constructor) {
 		visit_constructor(self, node);
 	}
@@ -53,8 +57,17 @@ pub trait Visit<'ast> {
 	fn visit_function_definition(&mut self, node: &'ast FunctionDefinition) {
 		visit_function_definition(self, node);
 	}
+	fn visit_function_signature(&mut self, node: &'ast FunctionSignature) {
+		visit_function_signature(self, node);
+	}
+	fn visit_function_parameter(&mut self, node: &'ast FunctionParameter) {
+		visit_function_parameter(self, node);
+	}
 	fn visit_args(&mut self, node: &'ast ArgList) {
 		visit_args(self, node);
+	}
+	fn visit_user_defined_type(&mut self, node: &'ast UserDefinedType) {
+		visit_user_defined_type(self, node);
 	}
 	fn visit_type_annotation(&mut self, node: &'ast TypeAnnotation) {
 		visit_type_annotation(self, node)
@@ -145,10 +158,17 @@ where
 		StmtKind::Class(class) => {
 			v.visit_class(class);
 		}
-		StmtKind::Struct { name, extends, members } => {
+		StmtKind::Interface(interface) => {
+			v.visit_interface(interface);
+		}
+		StmtKind::Struct {
+			name,
+			extends,
+			fields: members,
+		} => {
 			v.visit_symbol(name);
 			for extend in extends {
-				v.visit_symbol(extend);
+				v.visit_user_defined_type(extend);
 			}
 			for member in members {
 				v.visit_symbol(&member.name);
@@ -197,22 +217,37 @@ where
 		v.visit_symbol(&method.0);
 		v.visit_function_definition(&method.1);
 	}
+
+	if let Some(extend) = &node.parent {
+		v.visit_user_defined_type(&extend);
+	}
+
+	for implement in &node.implements {
+		v.visit_user_defined_type(&implement);
+	}
+}
+
+pub fn visit_interface<'ast, V>(v: &mut V, node: &'ast Interface)
+where
+	V: Visit<'ast> + ?Sized,
+{
+	v.visit_symbol(&node.name);
+
+	for method in &node.methods {
+		v.visit_symbol(&method.0);
+		v.visit_function_signature(&method.1);
+	}
+
+	for extend in &node.extends {
+		v.visit_user_defined_type(extend);
+	}
 }
 
 pub fn visit_constructor<'ast, V>(v: &mut V, node: &'ast Constructor)
 where
 	V: Visit<'ast> + ?Sized,
 {
-	for param in &node.parameters {
-		v.visit_symbol(&param.0);
-	}
-	for param_type in &node.signature.parameters {
-		v.visit_type_annotation(param_type);
-	}
-	if let Some(return_type) = &node.signature.return_type {
-		v.visit_type_annotation(return_type);
-	}
-
+	v.visit_function_signature(&node.signature);
 	v.visit_scope(&node.statements);
 }
 
@@ -235,6 +270,14 @@ where
 		}
 		ExprKind::Literal(lit) => {
 			v.visit_literal(lit);
+		}
+		ExprKind::Range {
+			start,
+			inclusive: _,
+			end,
+		} => {
+			v.visit_expr(start);
+			v.visit_expr(end);
 		}
 		ExprKind::Reference(ref_) => {
 			v.visit_reference(ref_);
@@ -263,7 +306,7 @@ where
 		}
 		ExprKind::StructLiteral { type_, fields } => {
 			v.visit_type_annotation(type_);
-			for (sym, val) in fields.values() {
+			for (sym, val) in fields.iter() {
 				v.visit_symbol(sym);
 				v.visit_expr(val);
 			}
@@ -286,9 +329,6 @@ where
 		}
 		ExprKind::FunctionClosure(def) => {
 			v.visit_function_definition(def);
-		}
-		ExprKind::OptionalTest { optional } => {
-			v.visit_expr(optional);
 		}
 	}
 }
@@ -317,14 +357,15 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match node {
+		Reference::Identifier(s) => {
+			v.visit_symbol(s);
+		}
 		Reference::InstanceMember { property, object } => {
 			v.visit_expr(object);
 			v.visit_symbol(property);
 		}
-		Reference::Identifier(s) => {
-			v.visit_symbol(s);
-		}
-		Reference::TypeMember { type_: _, property } => {
+		Reference::TypeMember { type_, property } => {
+			v.visit_user_defined_type(type_);
 			v.visit_symbol(property);
 		}
 	}
@@ -334,19 +375,30 @@ pub fn visit_function_definition<'ast, V>(v: &mut V, node: &'ast FunctionDefinit
 where
 	V: Visit<'ast> + ?Sized,
 {
-	for param in &node.parameters {
-		v.visit_symbol(&param.0);
-	}
-	for param_type in &node.signature.parameters {
-		v.visit_type_annotation(param_type);
-	}
-	if let Some(return_type) = &node.signature.return_type {
-		v.visit_type_annotation(return_type);
-	}
-
+	v.visit_function_signature(&node.signature);
 	if let FunctionBody::Statements(scope) = &node.body {
 		v.visit_scope(scope);
 	};
+}
+
+pub fn visit_function_signature<'ast, V>(v: &mut V, node: &'ast FunctionSignature)
+where
+	V: Visit<'ast> + ?Sized,
+{
+	for param in &node.parameters {
+		v.visit_function_parameter(param);
+	}
+	if let Some(return_type) = &node.return_type {
+		v.visit_type_annotation(return_type);
+	}
+}
+
+pub fn visit_function_parameter<'ast, V>(v: &mut V, node: &'ast FunctionParameter)
+where
+	V: Visit<'ast> + ?Sized,
+{
+	v.visit_symbol(&node.name);
+	v.visit_type_annotation(&node.type_annotation);
 }
 
 pub fn visit_args<'ast, V>(v: &mut V, node: &'ast ArgList)
@@ -380,9 +432,9 @@ where
 		TypeAnnotation::MutMap(t) => v.visit_type_annotation(t),
 		TypeAnnotation::Set(t) => v.visit_type_annotation(t),
 		TypeAnnotation::MutSet(t) => v.visit_type_annotation(t),
-		TypeAnnotation::FunctionSignature(f) => {
-			for arg_type in &f.parameters {
-				v.visit_type_annotation(&arg_type);
+		TypeAnnotation::Function(f) => {
+			for param in &f.param_types {
+				v.visit_type_annotation(&param);
 			}
 			if let Some(return_type) = &f.return_type {
 				v.visit_type_annotation(return_type);
@@ -394,5 +446,15 @@ where
 				v.visit_symbol(field);
 			}
 		}
+	}
+}
+
+pub fn visit_user_defined_type<'ast, V>(v: &mut V, node: &'ast UserDefinedType)
+where
+	V: Visit<'ast> + ?Sized,
+{
+	v.visit_symbol(&node.root);
+	for field in &node.fields {
+		v.visit_symbol(field);
 	}
 }

@@ -1,23 +1,21 @@
 import { existsSync } from "fs";
 import { join } from "path";
-import * as tar from "tar";
 import { Tree } from "./tree";
+import { ITestRunnerClient, TestResult, Trace, TraceType } from "../cloud";
 import { SDK_VERSION } from "../constants";
 import { ConstructTree } from "../core";
 import { ISimulatorResourceInstance } from "../target-sim";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
-// eslint-disable-next-line import/no-restricted-paths
-import { Function } from "../target-sim/function.inflight";
 import { BaseResourceSchema, WingSimulatorSchema } from "../target-sim/schema";
-import { mkdtemp, readJsonSync } from "../util";
+import { readJsonSync } from "../util";
 
 /**
  * Props for `Simulator`.
  */
 export interface SimulatorProps {
   /**
-   * Path to a Wing simulator file (.wsim).
+   * Path to a Wing simulator output directory (.wsim).
    */
   readonly simfile: string;
 
@@ -65,59 +63,13 @@ export interface IWithTraceProps {
 }
 
 /**
- * Represents an trace emitted during simulation.
- */
-export interface Trace {
-  /**
-   * A JSON blob with structured data.
-   */
-  readonly data: any;
-
-  /**
-   * The type of the source that emitted the trace.
-   */
-  readonly sourceType: string;
-
-  /**
-   * The path of the resource that emitted the trace.
-   */
-  readonly sourcePath: string;
-
-  /**
-   * The type of a trace.
-   */
-  readonly type: TraceType;
-
-  /**
-   * The timestamp of the event, in ISO 8601 format.
-   * @example 2020-01-01T00:00:00.000Z
-   */
-  readonly timestamp: string;
-}
-
-/**
- * The type of a trace.
- */
-export enum TraceType {
-  /**
-   * A trace representing a resource activity.
-   */
-  RESOURCE = "resource",
-  /**
-   * A trace representing information emitted by the logger.
-   */
-  LOG = "log",
-}
-
-/**
  * Context that is passed to individual resource simulations.
  */
 export interface ISimulatorContext {
   /**
-   * The directory where all assets extracted from `.wsim` file are stored
-   * during the simulation run.
+   * This directory where the compilation output is
    */
-  readonly assetsDir: string;
+  readonly simdir: string;
 
   /**
    * The path of the resource that is being simulated.
@@ -141,6 +93,11 @@ export interface ISimulatorContext {
    * run, and the trace will be populated with the result's success or failure.
    */
   withTrace(trace: IWithTraceProps): Promise<any>;
+
+  /**
+   * Get a list of all traces until this point.
+   */
+  listTraces(): Trace[];
 }
 
 /**
@@ -160,8 +117,7 @@ export class Simulator {
   // fields that are same between simulation runs / reloads
   private readonly _factory: ISimulatorFactory;
   private _config: WingSimulatorSchema;
-  private readonly _simfile: string;
-  private _assetsDir: string;
+  private readonly simdir: string;
 
   // fields that change between simulation runs / reloads
   private _running: boolean;
@@ -171,10 +127,9 @@ export class Simulator {
   private _tree: Tree;
 
   constructor(props: SimulatorProps) {
-    this._simfile = props.simfile;
-    const { assetsDir, config, treeData } = this._loadApp(props.simfile);
+    this.simdir = props.simfile;
+    const { config, treeData } = this._loadApp(props.simfile);
     this._config = config;
-    this._assetsDir = assetsDir;
     this._tree = new Tree(treeData);
 
     this._running = false;
@@ -184,23 +139,14 @@ export class Simulator {
     this._traceSubscribers = new Array();
   }
 
-  private _loadApp(simfile: string): {
-    assetsDir: string;
+  private _loadApp(simdir: string): {
     config: any;
     treeData: ConstructTree;
   } {
-    // create a temporary directory to store extracted files
-    const workdir = mkdtemp();
-    tar.extract({
-      cwd: workdir,
-      sync: true,
-      file: simfile,
-    });
-
-    const simJson = join(workdir, "simulator.json");
+    const simJson = join(this.simdir, "simulator.json");
     if (!existsSync(simJson)) {
       throw new Error(
-        `Invalid Wing app (${simfile}) - simulator.json not found.`
+        `Invalid Wing app (${simdir}) - simulator.json not found.`
       );
     }
 
@@ -210,22 +156,22 @@ export class Simulator {
     const expectedVersion = SDK_VERSION;
     if (foundVersion !== expectedVersion) {
       console.error(
-        `WARNING: The simulator file (${simfile}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
+        `WARNING: The simulator directory (${simdir}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
       );
     }
     if (config.resources === undefined) {
       throw new Error(
-        `Incompatible .wsim file. The simulator file (${simfile}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
+        `Incompatible .wsim file. The simulator directory (${simdir}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
       );
     }
 
-    const treeJson = join(workdir, "tree.json");
+    const treeJson = join(this.simdir, "tree.json");
     if (!existsSync(treeJson)) {
-      throw new Error(`Invalid Wing app (${simfile}) - tree.json not found.`);
+      throw new Error(`Invalid Wing app (${simdir}) - tree.json not found.`);
     }
     const treeData = readJsonSync(treeJson);
 
-    return { assetsDir: workdir, config, treeData };
+    return { config, treeData };
   }
 
   /**
@@ -242,7 +188,7 @@ export class Simulator {
 
     for (const resourceConfig of this._config.resources) {
       const context: ISimulatorContext = {
-        assetsDir: this._assetsDir,
+        simdir: this.simdir,
         resourcePath: resourceConfig.path,
         findInstance: (handle: string) => {
           return this._handles.find(handle);
@@ -276,6 +222,9 @@ export class Simulator {
             });
             throw err;
           }
+        },
+        listTraces: () => {
+          return [...this._traces];
         },
       };
 
@@ -347,9 +296,8 @@ export class Simulator {
   public async reload(): Promise<void> {
     await this.stop();
 
-    const { assetsDir, config, treeData } = this._loadApp(this._simfile);
+    const { config, treeData } = this._loadApp(this.simdir);
     this._config = config;
-    this._assetsDir = assetsDir;
     this._tree = new Tree(treeData);
 
     await this.start();
@@ -426,9 +374,20 @@ export class Simulator {
     this._traceSubscribers.push(subscriber);
   }
 
+  private findTestRunner(): ITestRunnerClient {
+    let testRunnerClient = this.tryGetResource("root/cloud.TestRunner");
+    if (!testRunnerClient) {
+      throw new Error(
+        `Could not find a cloud.TestRunner resource in the simulation tree. Resources ${this.listResources()}}`
+      );
+    }
+    return testRunnerClient;
+  }
+
   /**
    * Lists all resource with identifier "test" or that start with "test:*".
    * @returns A list of resource paths
+   * @deprecated use the "cloud.TestRunner" resource client instead.
    */
   public listTests(): string[] {
     const isTest = /(\/test$|\/test:([^\\/])+$)/;
@@ -441,6 +400,8 @@ export class Simulator {
    *
    * A test is a `cloud.Function` resource with an identifier that starts with "test." or is "test".
    * @returns A list of test results.
+   *
+   * @deprecated use the "cloud.TestRunner" resource client instead.
    */
   public async runAllTests(): Promise<TestResult[]> {
     const results = new Array<TestResult>();
@@ -455,43 +416,26 @@ export class Simulator {
 
   /**
    * Runs a single test.
-   * @param path The path to a cloud.Function resource that repersents the test
+   * @param path The path to a cloud.Function resource that represents the test
    * @returns The result of the test
+   *
+   * @deprecated create a fresh simulator instance and invoke a test through the "cloud.TestRunner" resource client instead.
    */
   public async runTest(path: string): Promise<TestResult> {
     // create a new simulator instance to run this test in isolation
-    const isolated = new Simulator({ simfile: this._simfile });
+    const isolated = new Simulator({ simfile: this.simdir });
     await isolated.start();
 
-    // find the test function and verify it exists and indeed is a function
-    const fn: Function = isolated.tryGetResource(path);
-    if (!fn) {
-      const all = this.listResources();
-      throw new Error(`Resource "${path}" not found. Resources: ${all}`);
-    }
-    if (!("invoke" in fn)) {
-      throw new Error(
-        `Resource "${path}" is not a cloud.Function (expecting "invoke()").`
-      );
-    }
+    // find the test runner
+    const testRunner = isolated.findTestRunner();
 
-    // run the test and capture any errors
-    let error = undefined;
-    try {
-      await fn.invoke("");
-    } catch (err) {
-      error = (err as any).stack;
-    }
+    // run the test
+    const result = await testRunner.runTest(path);
 
     // stop the simulator
     await isolated.stop();
 
-    return {
-      path: path,
-      traces: isolated.listTraces(),
-      pass: !error,
-      error: error,
-    };
+    return result;
   }
 
   /**
@@ -623,29 +567,4 @@ class HandleManager {
     this.handles.clear();
     this.nextHandle = 0;
   }
-}
-
-/**
- * A result of a single test.
- */
-export interface TestResult {
-  /**
-   * The path to the test function.
-   */
-  readonly path: string;
-
-  /**
-   * Whether the test passed.
-   */
-  readonly pass: boolean;
-
-  /**
-   * The error message if the test failed.
-   */
-  readonly error?: string;
-
-  /**
-   * List of traces emitted during the test.
-   */
-  readonly traces: Trace[];
 }

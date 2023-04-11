@@ -7,4 +7,6 @@ export * from "./logger";
 export * from "./queue";
 export * from "./resource";
 export * from "./schema";
+export * from "./table";
+export * from "./test-runner";
 export * from "./topic";

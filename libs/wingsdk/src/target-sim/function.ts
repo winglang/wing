@@ -20,7 +20,6 @@ export const ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE =
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
 export class Function extends cloud.Function implements ISimulatorResource {
-  private readonly code: core.Code;
   private readonly timeout: Duration;
   constructor(
     scope: Construct,
@@ -32,16 +31,15 @@ export class Function extends cloud.Function implements ISimulatorResource {
 
     // props.memory is unused since we are not simulating it
     this.timeout = props.timeout ?? Duration.fromMinutes(1);
-    this.code = core.NodeJsCode.fromFile(this.assetPath);
   }
 
   public toSimulator(): BaseResourceSchema {
-    const workdir = App.of(this).workdir;
+    const outdir = App.of(this).outdir;
     const schema: FunctionSchema = {
       type: FUNCTION_TYPE,
       path: this.node.path,
       props: {
-        sourceCodeFile: relative(workdir, this.code.path),
+        sourceCodeFile: relative(outdir, this.entrypoint),
         sourceCodeLanguage: "javascript",
         environmentVariables: this.env,
         timeout: this.timeout.seconds * 1000,
@@ -53,13 +51,13 @@ export class Function extends cloud.Function implements ISimulatorResource {
 
   /** @internal */
   public _bind(host: core.IInflightHost, ops: string[]): void {
-    bindSimulatorResource("function", this, host);
+    bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }
 
   /** @internal */
   public _toInflight(): core.Code {
-    return makeSimulatorJsClient("function", this);
+    return makeSimulatorJsClient(__filename, this);
   }
 }
 

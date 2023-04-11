@@ -19,7 +19,7 @@ mod util;
 pub type Result<T> = std::result::Result<T, Box<dyn Error>>;
 
 pub mod spec {
-	use crate::jsii::Assembly;
+	use crate::jsii::{Assembly, JsiiFile};
 	use crate::Result;
 	use std::fs;
 	use std::path::Path;
@@ -42,30 +42,13 @@ pub mod spec {
 		}
 	}
 
-	pub fn is_assembly_redirect(obj: &serde_json::Value) -> bool {
-		if let Some(schema) = obj.get("schema") {
-			schema.as_str().unwrap() == REDIRECT_FIELD
-		} else {
-			false
-		}
-	}
-
 	pub fn load_assembly_from_file(path_to_file: &str) -> Result<Assembly> {
 		let path = Path::new(path_to_file);
 		let manifest = fs::read_to_string(path)?;
 		let manifest = serde_json::from_str(&manifest)?;
-		if is_assembly_redirect(&manifest) {
-			let redirect = manifest
-				.get("filename")
-				.expect("redirect assembly found but no filename is provided")
-				.as_str()
-				.unwrap();
-			let redirect_path = Path::new(redirect);
-			let redirect_manifest = fs::read_to_string(redirect_path)?;
-			let redirect_manifest = serde_json::from_str(&redirect_manifest)?;
-			Ok(serde_json::from_value(redirect_manifest)?)
-		} else {
-			Ok(serde_json::from_value(manifest)?)
+		match manifest {
+			JsiiFile::Assembly(asm) => Ok(asm),
+			JsiiFile::AssemblyRedirect(asm_redirect) => load_assembly_from_file(&asm_redirect.filename),
 		}
 	}
 

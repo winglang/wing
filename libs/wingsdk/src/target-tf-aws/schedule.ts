@@ -4,8 +4,8 @@ import { CloudwatchEventTarget } from "@cdktf/provider-aws/lib/cloudwatch-event-
 import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
+import { convertBetweenHandlers } from "../utils/convert";
 
 /**
  * AWS implementation of `cloud.Schedule`.
@@ -64,7 +64,10 @@ export class Schedule extends cloud.Schedule {
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnTickHandler-${hash}`,
       inflight,
-      join(__dirname, "schedule.ontick.inflight.js"),
+      join(
+        __dirname.replace("target-tf-aws", "shared-aws"),
+        "schedule.ontick.inflight.js"
+      ),
       "ScheduleOnTickHandlerClient"
     );
 
@@ -100,9 +103,12 @@ export class Schedule extends cloud.Schedule {
 
   /** @internal */
   public _toInflight(): core.Code {
-    return core.InflightClient.for(__dirname, __filename, "ScheduleClient", [
-      `process.env["${this.envName()}"]`,
-    ]);
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-aws", "shared-aws"),
+      __filename,
+      "ScheduleClient",
+      [`process.env["${this.envName()}"]`]
+    );
   }
 
   private envName(): string {

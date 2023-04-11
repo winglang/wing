@@ -28,8 +28,8 @@ bring cloud;
 
 let queue = new cloud.Queue();
 
-queue.on_message(inflight (message) => {
-  print("Hello, ${message}!");
+queue.add_consumer(inflight (message) => {
+  log("Hello, ${message}!");
 });
 ```
 
@@ -91,4 +91,4 @@ If you need help either using or contributing to this project, please join us on
 
 ## ⚖️ License
 
-This library is licensed under the Apache-2.0 license.
+This library is licensed under the MIT license.

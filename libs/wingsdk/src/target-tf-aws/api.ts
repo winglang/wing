@@ -5,16 +5,26 @@ import { ApiGatewayRestApi } from "@cdktf/provider-aws/lib/api-gateway-rest-api"
 import { ApiGatewayStage } from "@cdktf/provider-aws/lib/api-gateway-stage";
 import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
 
-import { Lazy } from "cdktf";
+import { Lazy } from "cdktf/lib/tokens";
 import { Construct } from "constructs";
+import { App } from "./app";
 import { Function } from "./function";
 import { core } from "..";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
-import { convertBetweenHandlers } from "../convert";
-import { CdktfApp } from "../core";
 import { Code } from "../core/inflight";
-import { NameOptions, ResourceNames } from "../utils/resource-names";
+import { convertBetweenHandlers } from "../utils/convert";
+import {
+  CaseConventions,
+  NameOptions,
+  ResourceNames,
+} from "../utils/resource-names";
+
+/**
+ * The stage name for the API, used in its url.
+ * @see https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html
+ */
+const STAGE_NAME = "prod";
 
 /**
  * RestApi names are alphanumeric characters, hyphens (-) and underscores (_).
@@ -33,6 +43,10 @@ export class Api extends cloud.Api {
     this.api = new WingRestApi(this, "api", {
       apiSpec: this._getApiSpec(),
     });
+  }
+
+  public get url(): string {
+    return this.api.stage.invokeUrl;
   }
 
   /**
@@ -289,7 +303,10 @@ export class Api extends cloud.Api {
       this,
       `${this.node.id}-OnRequestHandler-${inflightNodeHash}`,
       inflight,
-      join(__dirname, "api.onrequest.inflight.js"),
+      join(
+        __dirname.replace("target-tf-aws", "shared-aws"),
+        "api.onrequest.inflight.js"
+      ),
       "ApiOnRequestHandlerClient"
     );
     return Function._newFunction(
@@ -300,13 +317,32 @@ export class Api extends cloud.Api {
   }
 
   /** @internal */
-  public _bind(): void {
-    throw new Error("Method not implemented.");
+  public _bind(host: core.IInflightHost, ops: string[]): void {
+    if (!(host instanceof Function)) {
+      throw new Error("topics can only be bound by tfaws.Function for now");
+    }
+
+    host.addEnvironment(this.urlEnvName(), this.url);
+
+    super._bind(host, ops);
   }
 
   /** @internal */
   public _toInflight(): Code {
-    throw new Error("Method not implemented.");
+    return core.InflightClient.for(
+      __dirname.replace("target-tf-aws", "shared-aws"),
+      __filename,
+      "ApiClient",
+      [`process.env["${this.urlEnvName()}"]`]
+    );
+  }
+
+  private urlEnvName(): string {
+    return ResourceNames.generateName(this, {
+      disallowedRegex: /[^a-zA-Z0-9_]/,
+      sep: "_",
+      case: CaseConventions.UPPERCASE,
+    });
   }
 }
 
@@ -315,6 +351,7 @@ export class Api extends cloud.Api {
  */
 class WingRestApi extends Construct {
   public readonly api: ApiGatewayRestApi;
+  public readonly stage: ApiGatewayStage;
   private readonly deployment: ApiGatewayDeployment;
   private readonly region: string;
   constructor(
@@ -326,7 +363,7 @@ class WingRestApi extends Construct {
   ) {
     super(scope, id);
 
-    this.region = (CdktfApp.of(scope) as CdktfApp).region;
+    this.region = (App.of(this) as App).region;
     this.api = new ApiGatewayRestApi(this, "api", {
       name: ResourceNames.generateName(this, NAME_OPTS),
       // Lazy generation of the api spec because routes can be added after the API is created
@@ -355,9 +392,9 @@ class WingRestApi extends Construct {
       },
     });
 
-    new ApiGatewayStage(this, "stage", {
+    this.stage = new ApiGatewayStage(this, "stage", {
       restApiId: this.api.id,
-      stageName: "prod",
+      stageName: STAGE_NAME,
       deploymentId: this.deployment.id,
     });
   }

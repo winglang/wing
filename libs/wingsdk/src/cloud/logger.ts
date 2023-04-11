@@ -1,6 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App } from "../core/app";
 import { Resource } from "../core/resource";
 
 export const LOGGER_FQN = fqnForType("cloud.Logger");
@@ -73,10 +73,10 @@ export interface ILoggerClient {
    *
    * NOTICE: this is not an async function because it is wrapped by `console.log()`.
    *
-   * @param message The message to print
+   * @param message The message to log
    * @inflight
    */
-  print(message: string): void;
+  log(message: string): void;
 }
 
 /**
@@ -84,6 +84,6 @@ export interface ILoggerClient {
  * @internal
  */
 export enum LoggerInflightMethods {
-  /** `Logger.print` */
-  PRINT = "print",
+  /** `Logger.log` */
+  LOG = "log",
 }

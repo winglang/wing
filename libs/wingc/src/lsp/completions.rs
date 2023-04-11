@@ -1,6 +1,6 @@
 use std::cmp::max;
 
-use lsp_types::{CompletionItem, CompletionItemKind, CompletionResponse};
+use lsp_types::{CompletionItem, CompletionItemKind, CompletionResponse, InsertTextFormat};
 use tree_sitter::Point;
 
 use crate::ast::{Expr, ExprKind, Phase, Reference, Scope};
@@ -178,23 +178,10 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			completions.push(format_symbol_kind_as_completion(symbol_data.0, symbol_kind));
 		}
 
-		// The following iteration logic is needed due to a bug:
-		// The root environment is not properly accessible from .parent
-		// https://github.com/winglang/wing/issues/1644
-		// So we can't use the normal iteration logic with ancestry
-		let mut parent_env = found_env.parent;
-		while let Some(current_env) = parent_env {
-			if current_env.is_root() {
-				for symbol_data in root_env.symbol_map.iter() {
-					completions.push(format_symbol_kind_as_completion(symbol_data.0, &symbol_data.1 .1));
-				}
-				break;
-			} else {
-				for data in current_env.iter(false) {
-					completions.push(format_symbol_kind_as_completion(&data.0, &data.1));
-				}
+		if let Some(parent) = found_env.parent {
+			for data in parent.iter(true) {
+				completions.push(format_symbol_kind_as_completion(&data.0, &data.1));
 			}
-			parent_env = current_env.parent;
 		}
 
 		completions
@@ -313,11 +300,18 @@ fn get_completions_from_class(
 			} else {
 				Some(CompletionItemKind::FIELD)
 			};
+			let insert_text = if kind == Some(CompletionItemKind::METHOD) {
+				Some(format!("{}($0)", symbol_data.0))
+			} else {
+				Some(symbol_data.0.to_string())
+			};
 
 			Some(CompletionItem {
+				insert_text,
 				label: symbol_data.0.clone(),
 				detail: Some(variable.type_.to_string()),
 				kind,
+				insert_text_format: Some(InsertTextFormat::SNIPPET),
 				..Default::default()
 			})
 		})
@@ -328,7 +322,7 @@ fn get_completions_from_class(
 fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> CompletionItem {
 	match symbol_kind {
 		SymbolKind::Type(t) => CompletionItem {
-			label: t.to_string(),
+			label: name.to_string(),
 			kind: Some(match **t {
 				Type::Array(_)
 				| Type::MutArray(_)
@@ -352,13 +346,7 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 				Type::Enum(_) => CompletionItemKind::ENUM,
 				Type::Interface(_) => CompletionItemKind::INTERFACE,
 			}),
-			detail: Some(
-				symbol_kind
-					.as_type()
-					.map(|t| if t.as_resource().is_some() { "resource" } else { "class" })
-					.unwrap_or("class")
-					.to_string(),
-			),
+			detail: Some(if t.as_resource().is_some() { "resource" } else { "class" }.to_string()),
 			..Default::default()
 		},
 		SymbolKind::Variable(v) => {
@@ -367,15 +355,22 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Com
 			} else {
 				Some(CompletionItemKind::VARIABLE)
 			};
+			let insert_text = if kind == Some(CompletionItemKind::FUNCTION) {
+				Some(format!("{}($0)", name))
+			} else {
+				Some(name.to_string())
+			};
 			CompletionItem {
 				label: name.to_string(),
+				insert_text,
 				detail: Some(v.type_.to_string()),
+				insert_text_format: Some(InsertTextFormat::SNIPPET),
 				kind,
 				..Default::default()
 			}
 		}
 		SymbolKind::Namespace(n) => CompletionItem {
-			label: n.name.clone(),
+			label: name.to_string(),
 			detail: Some(format!("bring {}", n.name)),
 			kind: Some(CompletionItemKind::MODULE),
 			..Default::default()

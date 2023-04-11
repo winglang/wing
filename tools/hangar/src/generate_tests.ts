@@ -23,7 +23,7 @@ test${skipText}("wing compile -t tf-aws", async ({ expect }) => {
   await compileTest(expect, "${filename}");
 });
 
-test${skipText}("wing test", async ({ expect }) => {
+test${skipText}("wing test -t sim", async ({ expect }) => {
   await testTest(expect, "${filename}");
 });`;
 

@@ -8,8 +8,10 @@ use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use capture::CaptureVisitor;
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
 use jsify::JSifier;
+use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
+use type_check_assert::TypeCheckAssert;
 use visit::Visit;
 use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
@@ -29,10 +31,12 @@ pub mod ast;
 pub mod capture;
 pub mod debug;
 pub mod diagnostic;
+pub mod fold;
 pub mod jsify;
 pub mod lsp;
 pub mod parser;
 pub mod type_check;
+pub mod type_check_assert;
 pub mod utilities;
 pub mod visit;
 mod wasm_util;
@@ -41,6 +45,7 @@ const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
 
 const WINGSDK_STD_MODULE: &'static str = "std";
 const WINGSDK_FS_MODULE: &'static str = "fs";
+const WINGSDK_REDIS_MODULE: &'static str = "redis";
 const WINGSDK_CLOUD_MODULE: &'static str = "cloud";
 
 const WINGSDK_DURATION: &'static str = "std.Duration";
@@ -161,15 +166,21 @@ pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 	(scope, wing_parser.diagnostics.into_inner())
 }
 
-pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> Diagnostics {
-	let env = SymbolEnv::new(None, types.void(), false, false, Phase::Preflight, 0);
+pub fn type_check(
+	scope: &mut Scope,
+	types: &mut Types,
+	source_path: &Path,
+	jsii_imports: &mut Vec<JsiiImportSpec>,
+) -> Diagnostics {
+	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
 	scope.set_env(env);
 
 	// note: Globals are emitted here and wrapped in "{ ... }" blocks. Wrapping makes these emissions, actual
 	// statements and not expressions. this makes the runtime panic if these are used in place of expressions.
 	add_builtin(
-		UtilityFunctions::Print.to_string().as_str(),
+		UtilityFunctions::Log.to_string().as_str(),
 		Type::Function(FunctionSignature {
+			this_type: None,
 			parameters: vec![types.string()],
 			return_type: types.void(),
 			phase: Phase::Independent,
@@ -181,6 +192,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> D
 	add_builtin(
 		UtilityFunctions::Assert.to_string().as_str(),
 		Type::Function(FunctionSignature {
+			this_type: None,
 			parameters: vec![types.bool()],
 			return_type: types.void(),
 			phase: Phase::Independent,
@@ -192,6 +204,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> D
 	add_builtin(
 		UtilityFunctions::Throw.to_string().as_str(),
 		Type::Function(FunctionSignature {
+			this_type: None,
 			parameters: vec![types.string()],
 			return_type: types.void(),
 			phase: Phase::Independent,
@@ -203,6 +216,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> D
 	add_builtin(
 		UtilityFunctions::Panic.to_string().as_str(),
 		Type::Function(FunctionSignature {
+			this_type: None,
 			parameters: vec![types.string()],
 			return_type: types.void(),
 			phase: Phase::Independent,
@@ -212,7 +226,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> D
 		types,
 	);
 
-	let mut tc = TypeChecker::new(types, source_path);
+	let mut tc = TypeChecker::new(types, source_path, jsii_imports);
 	tc.add_globals(scope);
 
 	tc.type_check_scope(scope);
@@ -230,7 +244,7 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.unwrap()
 		.define(
 			&sym,
-			SymbolKind::make_variable(types.add_type(typ), false, Phase::Independent),
+			SymbolKind::make_variable(types.add_type(typ), false, true, Phase::Independent),
 			StatementIdx::Top,
 		)
 		.expect("Failed to add builtin");
@@ -264,14 +278,19 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 	let mut types = Types::new();
 	// Build our AST
 	let (mut scope, parse_diagnostics) = parse(&source_path);
+	let mut jsii_imports = Vec::new();
 
 	// Type check everything and build typed symbol environment
 	let type_check_diagnostics = if scope.statements.len() > 0 {
-		type_check(&mut scope, &mut types, &source_path)
+		type_check(&mut scope, &mut types, &source_path, &mut jsii_imports)
 	} else {
 		// empty scope, no type checking needed
 		Diagnostics::new()
 	};
+
+	// Validate that every Expr has an evaluated_type
+	let mut tc_assert = TypeCheckAssert;
+	tc_assert.visit_scope(&scope);
 
 	// Print diagnostics
 	print_diagnostics(&parse_diagnostics);

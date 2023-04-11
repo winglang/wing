@@ -1,7 +1,5 @@
 import { mkdirSync, readdirSync, renameSync, rmSync, existsSync } from "fs";
 import { join } from "path";
-import { DataAwsCallerIdentity } from "@cdktf/provider-aws/lib/data-aws-caller-identity";
-import { DataAwsRegion } from "@cdktf/provider-aws/lib/data-aws-region";
 import * as cdktf from "cdktf";
 import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
@@ -40,6 +38,12 @@ export interface AppProps {
    * @default - [] no plugins
    */
   readonly plugins?: string[];
+
+  /**
+   * Whether or not this app is being synthesized into a test environment.
+   * @default false
+   */
+  readonly isTestEnvironment?: boolean;
 }
 
 /**
@@ -62,9 +66,23 @@ export abstract class App extends Construct {
   }
 
   /**
-   * Directory where artifacts are synthesized to.
+   * The output directory.
    */
-  public abstract readonly workdir: string;
+  public abstract readonly outdir: string;
+
+  /**
+   * Whether or not this app is being synthesized into a test environment.
+   */
+  public abstract readonly isTestEnvironment: boolean;
+
+  /**
+   * The ".wing" directory, which is where the compiler emits its output. We are taking an implicit
+   * assumption here that it is always set to be `$outdir/.wing` which is currently hard coded into
+   * the `cli/compile.ts` file.
+   */
+  public get workdir() {
+    return `${this.outdir}/.wing`;
+  }
 
   /**
    * Synthesize the app into an artifact.
@@ -146,23 +164,18 @@ export abstract class App extends Construct {
  */
 export abstract class CdktfApp extends App {
   /**
-   * Directory where artifacts are synthesized to.
-   */
-  public readonly workdir: string;
-  /**
    * Path to the Terraform manifest file.
    */
   public readonly terraformManifestPath: string;
+  public readonly outdir: string;
+  public readonly isTestEnvironment: boolean;
 
   private readonly cdktfApp: cdktf.App;
   private readonly cdktfStack: cdktf.TerraformStack;
   private readonly pluginManager: PluginManager;
-  private readonly outdir: string;
 
   private synthed: boolean;
   private synthedOutput: string | undefined;
-  private awsRegionProvider?: DataAwsRegion;
-  private awsAccountIdProvider?: DataAwsCallerIdentity;
 
   constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
@@ -174,6 +187,15 @@ export abstract class CdktfApp extends App {
     const cdktfStack = new cdktf.TerraformStack(cdktfApp, TERRAFORM_STACK_NAME);
 
     super(cdktfStack, "Default");
+
+    // TODO: allow the user to specify custom backends
+    // https://github.com/winglang/wing/issues/2003
+    new cdktf.LocalBackend(cdktfStack, {
+      path: "./terraform.tfstate",
+    });
+
+    this.outdir = outdir;
+    this.isTestEnvironment = props.isTestEnvironment ?? false;
 
     // HACK: monkey patch the `new` method on the cdktf app (which is the root of the tree) so that
     // we can intercept the creation of resources and replace them with our own.
@@ -195,7 +217,6 @@ export abstract class CdktfApp extends App {
     this.pluginManager = new PluginManager(props.plugins ?? []);
 
     this.outdir = outdir;
-    this.workdir = cdktfOutdir;
     this.cdktfApp = cdktfApp;
     this.cdktfStack = cdktfStack;
     this.terraformManifestPath = join(this.outdir, "main.tf.json");
@@ -203,26 +224,6 @@ export abstract class CdktfApp extends App {
 
     // register a logger for this app.
     Logger.register(this);
-  }
-
-  /**
-   * The AWS account ID of the App
-   */
-  public get accountId(): string {
-    if (!this.awsAccountIdProvider) {
-      this.awsAccountIdProvider = new DataAwsCallerIdentity(this, "account");
-    }
-    return this.awsAccountIdProvider.accountId;
-  }
-
-  /**
-   * The AWS region of the App
-   */
-  public get region(): string {
-    if (!this.awsRegionProvider) {
-      this.awsRegionProvider = new DataAwsRegion(this, "Region");
-    }
-    return this.awsRegionProvider.name;
   }
 
   /**
@@ -253,7 +254,7 @@ export abstract class CdktfApp extends App {
     );
 
     // delete `outdir/.tmp.cdktf.out`
-    rmSync(this.cdktfApp.outdir, { recursive: true });
+    rmSync(this.cdktfApp.outdir, { recursive: true, force: true });
 
     // write `outdir/tree.json`
     synthesizeTree(this, this.outdir);

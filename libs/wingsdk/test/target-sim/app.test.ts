@@ -1,4 +1,4 @@
-import { basename } from "path";
+import { basename, join } from "path";
 import { test, expect } from "vitest";
 import { simulatorJsonOf } from "./util";
 import { Bucket } from "../../src/cloud";
@@ -10,7 +10,8 @@ test("app name can be customized", async () => {
   const APP_NAME = "my-app";
 
   // WHEN
-  const app = new sim.App({ outdir: mkdtemp(), name: APP_NAME });
+  const outdir = join(mkdtemp(), `${APP_NAME}.wsim`);
+  const app = new sim.App({ outdir, name: APP_NAME });
   Bucket._newBucket(app, "my_bucket");
   const simfile = app.synth();
 

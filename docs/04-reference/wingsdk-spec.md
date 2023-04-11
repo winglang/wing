@@ -256,32 +256,32 @@ resource Bucket {
   get public(): bool;
 
   /**
-   * Run an inflight whenever a file is uploaded to the bucket.
+   * Run an inflight whenever an object is uploaded to the bucket.
    */
   on_upload(fn: inflight (key: str) => void, opts: BucketOnUploadProps?): void;
 
   /**
-   * Run an inflight whenever a file is deleted from the bucket.
+   * Run an inflight whenever an object is deleted from the bucket.
    */
   on_delete(fn: inflight (key: str) => void, opts: BucketOnDeleteProps?): void;
 
   /**
-   * Run an inflight whenever a file is updated in the bucket.
+   * Run an inflight whenever an object is updated in the bucket.
    */
   on_update(fn: inflight (key: str) => void, opts: BucketOnUpdateProps?): void;
 
   /**
-   * Run an inflight whenever a file is uploaded, modified, or deleted from the bucket.
+   * Run an inflight whenever an object is uploaded, modified, or deleted from the bucket.
    */
   on_event(fn: inflight (event: BucketEvent) => void, opts: BucketOnEventProps?): void;
 
   /**
-   * Add a file to the bucket that is uploaded when the app is deployed.
+   * Add an object to the bucket that is uploaded when the app is deployed.
    */
   add_object(key: str, value: Blob): void;
 
   /**
-   * Upload a file to the bucket.
+   * Upload an object to the bucket.
    */
   inflight put(key: str, value: Blob): void;
 
@@ -291,31 +291,81 @@ resource Bucket {
   inflight put_json(key: str, value: Json): void;
 
   /**
-   * Get a file from the bucket.
+   * Get an object from the bucket.
+   *
+   * @throws Will throw if the object doesn't exist.
    */
   inflight get(key: str): Blob;
 
   /**
-   * Delete a file from the bucket.
+   * Get an object from the bucket if it exists.
+   */
+  inflight try_get(key: str): Blob?;
+
+  /**
+   * Delete an object from the bucket.
+   *
+   * @throws Will throw if the object doesn't exist.
    */
   inflight delete(key: str): void;
 
   /**
-   * List all files in the bucket with the given prefix.
+   * Delete an object from the bucket if it exists.
+   */
+  inflight try_delete(key: str): bool;
+
+  /**
+   * Check if an object exists in the bucket.
+   */
+  inflight exists(key: str): bool;
+
+  /**
+   * Get the metadata of an object in the bucket.
+   */
+  inflight metadata(key: str): ObjectMetadata;
+
+  /**
+   * Move an object to a new location in the bucket. If an object already exists
+   * at the destination key, it will be overwritten.
+   *
+   * @throws Will throw if the `src` object doesn't exist.
+   */
+  inflight rename(src: str, dst: str): void;
+
+  /**
+   * Copy an object to a new location in the bucket. If the destination object
+   * already exists, it will be overwritten.
+   *
+   * @throws Will throw if the `src` object doesn't exist.
+   */
+  inflight copy(src: str, dst: str): void;
+
+  /**
+   * List all objects in the bucket with the given prefix.
    */
   inflight list(prefix: str?): Iterator<str>;
 
   /**
-   * Returns a url to the given file.
-   * @throws Will throw if the file is not public.
+   * Returns a url to the given object key. Does not check if the object exists.
+   *
+   * @throws Will throw if the bucket is not public.
    */
   inflight public_url(key: str): str;
 
   /**
-   * Returns a signed url to the given file. This URL can be used by anyone to
-   * access the file until the link expires (defaults to 24 hours).
+   * Returns a signed url to the given object. This URL can be used by anyone to
+   * access the object until the link expires (defaults to 24 hours).
    */
   inflight signed_url(key: str, duration?: duration): str;
+}
+
+struct ObjectMetadata {
+  /** The size of the object in bytes. */
+  size: Size;
+  /** The time the object was last modified. */
+  last_modified: Date; // or an ISO timestamp `str` until we have Date API support
+  /** The content type of the object, if it is known. */
+  content_type: str?;
 }
 
 struct BucketOnUploadProps { /* elided */ }
@@ -454,7 +504,7 @@ struct FunctionProps {
    * The environment variables to pass to the function.
    * @default {}
    */
-  env: Map<str, str>?;
+  env: Map<str>?;
 }
 
 resource Function {
@@ -683,13 +733,13 @@ resource Schedule {
    * Trigger events according to a cron schedule.
    * @example "0 0 * * *" - midnight every day
    */
-  static fromCron(cron: str): Schedule;
+  static from_cron(cron: str): Schedule;
 
   /**
    * Trigger events at a periodic rate.
    * @example 1 hour
    */
-  static fromRate(rate: duration): Schedule;
+  static from_rate(rate: duration): Schedule;
 
   private init(/* elided */): Schedule;
 
@@ -869,14 +919,14 @@ struct ApiRequest {
   method: HttpMethod;
   /** The request's path. */
   path: str;
-  /** The request's query string. */
-  query: str?;
+  /** The request's query parameters. */
+  query: Map<str>?;
   /** The path variables. */
-  vars: Map<str, str>?;
+  vars: Map<str>?;
   /** The request's body. */
   body: Json?;
   /** The request's headers. */
-  headers: Map<str, str>?;
+  headers: Map<str>?;
 }
 
 struct ApiResponse {
@@ -885,7 +935,7 @@ struct ApiResponse {
   /** The response's body. */
   body: Json?;
   /** The response's headers. */
-  headers: Map<str, str>?;
+  headers: Map<str>?;
 }
 
 enum HttpMethod {
@@ -906,16 +956,16 @@ Example:
 // wing
 let api = new cloud.Api();
 
-api.get("/hello", inflight (req: cloud.ApiRequest) => {
+api.get("/hello", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
-    status_code: 200,
+    status: 200,
     body: "Hello, world!"
   };
 });
 
-api.post("/hello", inflight (req: cloud.ApiRequest) => {
+api.post("/hello", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
-    status_code: 200,
+    status: 200,
     body: "Hello, " + req.body + "!"
   };
 });
@@ -1079,7 +1129,7 @@ struct ServiceProps {
    * The service's environment variables.
    * @default {}
    */
-  env: Map<str, str>;
+  env: Map<str>;
 
   /**
    * The service's command.
@@ -1170,7 +1220,7 @@ struct ServiceRequestOptions {
    * The request's headers.
    * @default {}
    */
-  headers: Map<str, str>;
+  headers: Map<str>;
 
   /**
    * The request's body.
@@ -1188,7 +1238,7 @@ struct ServiceResponse {
   /**
    * The response's headers.
    */
-  headers: Map<str, str>;
+  headers: Map<str>;
 
   /**
    * The response's body.
@@ -1221,7 +1271,7 @@ struct TableProps {
   /**
    * The table's columns.
    */
-  columns: Map<str, ColumnType>;
+  columns: Map<ColumnType>;
 
   /**
    * The table's primary key. No two rows can have the same value for the
@@ -1249,7 +1299,7 @@ resource Table {
   /**
    * The table's columns.
    */
-  columns: Map<str, ColumnType>;
+  columns: Map<ColumnType>;
 
   /**
    * The table's primary key.
@@ -1259,12 +1309,12 @@ resource Table {
   /**
    * Insert a row into the table.
    */
-  inflight insert(row: Map<str, Json>): void;
+  inflight insert(row: Map<Json>): void;
 
   /**
    * Update a row in the table.
    */
-  inflight update(row: Map<str, Json>): void;
+  inflight update(row: Map<Json>): void;
 
   /**
    * Delete a row from the table, by primary key.
@@ -1274,17 +1324,17 @@ resource Table {
   /**
    * Get a row from the table, by primary key.
    */
-  inflight get(key: str): Map<str, Json>;
+  inflight get(key: str): Map<Json>;
 
   /**
    * List all rows in the table.
    */
-  inflight list(): Iterator<Map<str, Json>>;
+  inflight list(): Iterator<Map<Json>>;
 }
 ```
 
 Future extensions:
 
-- `on_insert(fn: inflight (row: Map<str, Json>) => void): cloud.Function;`
-- `on_update(fn: inflight (row: Map<str, Json>) => void): cloud.Function;`
-- `on_delete(fn: inflight (row: Map<str, Json>) => void): cloud.Function;`
+- `on_insert(fn: inflight (row: Map<Json>) => void): cloud.Function;`
+- `on_update(fn: inflight (row: Map<Json>) => void): cloud.Function;`
+- `on_delete(fn: inflight (row: Map<Json>) => void): cloud.Function;`

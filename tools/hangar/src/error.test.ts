@@ -5,14 +5,19 @@ import { runWingCommand } from "./utils";
 
 errorWingFiles.forEach((wingFile) => {
   test(wingFile, async ({ expect }) => {
-    const args = ["test"];
+    const args = ["test", "-t", "sim"];
 
     const relativeWingFile = path.relative(
       tmpDir,
       path.join(errorTestDir, wingFile)
     );
 
-    const out = await runWingCommand(tmpDir, relativeWingFile, args, false);
+    const out = await runWingCommand({
+      cwd: tmpDir, 
+      wingFile: relativeWingFile, 
+      args, 
+      shouldSucceed: false
+    });
 
     const stderr = out.stderr;
 

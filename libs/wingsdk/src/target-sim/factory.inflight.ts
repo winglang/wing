@@ -4,6 +4,7 @@ import { Counter } from "./counter.inflight";
 import { Function } from "./function.inflight";
 import { Logger } from "./logger.inflight";
 import { Queue } from "./queue.inflight";
+import { Redis } from "./redis.inflight";
 import { ISimulatorResourceInstance } from "./resource";
 import {
   API_TYPE,
@@ -12,8 +13,13 @@ import {
   FUNCTION_TYPE,
   LOGGER_TYPE,
   QUEUE_TYPE,
+  TABLE_TYPE,
+  TEST_RUNNER_TYPE,
   TOPIC_TYPE,
+  REDIS_TYPE,
 } from "./schema-resources";
+import { Table } from "./table.inflight";
+import { TestRunnerClient } from "./test-runner.inflight";
 import { Topic } from "./topic.inflight";
 import { ISimulatorFactory, ISimulatorContext } from "../testing/simulator";
 
@@ -43,10 +49,16 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return new Logger(props, context);
       case COUNTER_TYPE:
         return new Counter(props, context);
+      case TABLE_TYPE:
+        return new Table(props, context);
       case TOPIC_TYPE:
         return new Topic(props, context);
+      case TEST_RUNNER_TYPE:
+        return new TestRunnerClient(props, context);
+      case REDIS_TYPE:
+        return new Redis(props, context);
       default:
-        throw new Error(`Type ${type} not implemented.`);
+        throw new Error(`Type ${type} not implemented by the simulator.`);
     }
   }
 }

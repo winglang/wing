@@ -2,8 +2,16 @@
 
 exports[`create a queue 1`] = `
 {
-  "app.wsim/simulator.json": {
+  "simulator.json": {
     "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
       {
         "attrs": {},
         "path": "root/WingLogger",
@@ -23,7 +31,7 @@ exports[`create a queue 1`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {
@@ -42,6 +50,23 @@ exports[`create a queue 1`] = `
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "my_queue": {
           "attributes": {
@@ -74,26 +99,63 @@ exports[`create a queue 1`] = `
 
 exports[`messages are requeued if the function fails 1`] = `
 [
+  "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
   "Push (message=BAD MESSAGE).",
-  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-2).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
-  "Subscriber error - returning 1 messages to queue.",
-  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+  "Subscriber error - returning 1 messages to queue: ERROR",
+  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-2).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
-  "Subscriber error - returning 1 messages to queue.",
+  "Subscriber error - returning 1 messages to queue: ERROR",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`messages are requeued if the function fails 2`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_queue-addconsumer-e645076f_c817d361.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.log(...args);
+exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  
+async handle(message) {
+    if (message === \\"BAD MESSAGE\\") {
+        throw new Error(\\"ERROR\\");
+    }
+}
+};
+})())({
+
+}) })).handle(event);
+};",
+  "simulator.json": {
     "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
       {
         "attrs": {},
         "path": "root/WingLogger",
@@ -102,12 +164,12 @@ exports[`messages are requeued if the function fails 2`] = `
       },
       {
         "attrs": {},
-        "path": "root/my_queue-OnMessage-e645076f",
+        "path": "root/my_queue-AddConsumer-e645076f",
         "props": {
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_queue-onmessage-e645076f_c89a8f49/index.js",
+          "sourceCodeFile": ".wing/my_queue-addconsumer-e645076f_c817d361.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -121,7 +183,7 @@ exports[`messages are requeued if the function fails 2`] = `
           "subscribers": [
             {
               "batchSize": 1,
-              "functionHandle": "\${root/my_queue-OnMessage-e645076f#attrs.handle}",
+              "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -131,7 +193,7 @@ exports[`messages are requeued if the function fails 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -141,7 +203,7 @@ exports[`messages are requeued if the function fails 2`] = `
                 "direction": "inbound",
                 "implicit": false,
                 "relationship": "handle",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": false,
@@ -164,8 +226,8 @@ exports[`messages are requeued if the function fails 2`] = `
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "relationship": "log",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": true,
@@ -182,14 +244,31 @@ exports[`messages are requeued if the function fails 2`] = `
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
         "my_queue": {
           "attributes": {
             "wing:resource:connections": [
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "on_message",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "relationship": "add_consumer",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": true,
@@ -205,7 +284,7 @@ exports[`messages are requeued if the function fails 2`] = `
           "id": "my_queue",
           "path": "root/my_queue",
         },
-        "my_queue-OnMessage-e645076f": {
+        "my_queue-AddConsumer-e645076f": {
           "attributes": {
             "wing:resource:connections": [
               {
@@ -217,13 +296,13 @@ exports[`messages are requeued if the function fails 2`] = `
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "on_message",
+                "relationship": "add_consumer",
                 "resource": "root/my_queue",
               },
             ],
@@ -237,10 +316,10 @@ exports[`messages are requeued if the function fails 2`] = `
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
-          "id": "my_queue-OnMessage-e645076f",
-          "path": "root/my_queue-OnMessage-e645076f",
+          "id": "my_queue-AddConsumer-e645076f",
+          "path": "root/my_queue-AddConsumer-e645076f",
         },
-        "my_queue-OnMessageHandler-e645076f": {
+        "my_queue-AddConsumerHandler-e645076f": {
           "attributes": {
             "wing:resource:connections": [],
             "wing:resource:stateful": false,
@@ -249,8 +328,11 @@ exports[`messages are requeued if the function fails 2`] = `
             "fqn": "constructs.Construct",
             "version": "10.1.245",
           },
-          "id": "my_queue-OnMessageHandler-e645076f",
-          "path": "root/my_queue-OnMessageHandler-e645076f",
+          "display": {
+            "hidden": true,
+          },
+          "id": "my_queue-AddConsumerHandler-e645076f",
+          "path": "root/my_queue-AddConsumerHandler-e645076f",
         },
       },
       "constructInfo": {
@@ -262,81 +344,12 @@ exports[`messages are requeued if the function fails 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_queue-onmessage-e645076f_c89a8f49/index.js": "var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-};
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === \\"object\\" || typeof from === \\"function\\") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toCommonJS = (mod) => __copyProps(__defProp({}, \\"__esModule\\", { value: true }), mod);
-
-var queue_onmessage_inflight_exports = {};
-__export(queue_onmessage_inflight_exports, {
-  QueueOnMessageHandlerClient: () => QueueOnMessageHandlerClient
-});
-var QueueOnMessageHandlerClient;
-var init_queue_onmessage_inflight = __esm({
-  \\"src/target-sim/queue.onmessage.inflight.ts\\"() {
-    \\"use strict\\";
-    QueueOnMessageHandlerClient = class {
-      constructor({ handler }) {
-        this.handler = handler;
-      }
-      async handle(event) {
-        let parsed = JSON.parse(event);
-        if (!parsed.messages)
-          throw new Error('No \\"messages\\" field in event.');
-        for (const $message of parsed.messages) {
-          await this.handler.handle($message);
-        }
-      }
-    };
-  }
-});
-
-var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (init_queue_onmessage_inflight(), __toCommonJS(queue_onmessage_inflight_exports)).QueueOnMessageHandlerClient({ handler: new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(message) {
-        if (message === \\"BAD MESSAGE\\") {
-          throw new Error(\\"ERROR\\");
-        }
-      }
-    };
-  }())({}) }).handle(event);
-};
-",
 }
 `;
 
 exports[`queue batch size of 2, purge the queue 1`] = `
 [
+  "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Queue created.",
   "Push (message=A).",
@@ -346,13 +359,22 @@ exports[`queue batch size of 2, purge the queue 1`] = `
   "ApproxSize ().",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Logger deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`queue batch size of 2, purge the queue 2`] = `
 {
-  "app.wsim/simulator.json": {
+  "simulator.json": {
     "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
       {
         "attrs": {},
         "path": "root/WingLogger",
@@ -372,7 +394,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "WingLogger": {
@@ -391,6 +413,23 @@ exports[`queue batch size of 2, purge the queue 2`] = `
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
+        },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
         },
         "my_queue": {
           "attributes": {
@@ -423,23 +462,60 @@ exports[`queue batch size of 2, purge the queue 2`] = `
 
 exports[`queue with one subscriber, batch size of 5 1`] = `
 [
+  "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
-  "Sending messages (messages=[\\"A\\",\\"B\\",\\"C\\",\\"D\\",\\"E\\"], subscriber=sim-1).",
-  "Sending messages (messages=[\\"F\\"], subscriber=sim-1).",
+  "Sending messages (messages=[\\"A\\",\\"B\\",\\"C\\",\\"D\\",\\"E\\"], subscriber=sim-2).",
+  "Sending messages (messages=[\\"F\\"], subscriber=sim-2).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"F\\\\\\"]}\\").",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"A\\\\\\",\\\\\\"B\\\\\\",\\\\\\"C\\\\\\",\\\\\\"D\\\\\\",\\\\\\"E\\\\\\"]}\\").",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`queue with one subscriber, batch size of 5 2`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_queue-addconsumer-e645076f_c817d361.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.log(...args);
+exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  
+async handle(message) {
+    if (message === \\"BAD MESSAGE\\") {
+        throw new Error(\\"ERROR\\");
+    }
+}
+};
+})())({
+
+}) })).handle(event);
+};",
+  "simulator.json": {
     "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
       {
         "attrs": {},
         "path": "root/WingLogger",
@@ -448,12 +524,12 @@ exports[`queue with one subscriber, batch size of 5 2`] = `
       },
       {
         "attrs": {},
-        "path": "root/my_queue-OnMessage-e645076f",
+        "path": "root/my_queue-AddConsumer-e645076f",
         "props": {
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_queue-onmessage-e645076f_c89a8f49/index.js",
+          "sourceCodeFile": ".wing/my_queue-addconsumer-e645076f_c817d361.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -474,7 +550,7 @@ exports[`queue with one subscriber, batch size of 5 2`] = `
           "subscribers": [
             {
               "batchSize": 5,
-              "functionHandle": "\${root/my_queue-OnMessage-e645076f#attrs.handle}",
+              "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -484,7 +560,7 @@ exports[`queue with one subscriber, batch size of 5 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -494,7 +570,7 @@ exports[`queue with one subscriber, batch size of 5 2`] = `
                 "direction": "inbound",
                 "implicit": false,
                 "relationship": "handle",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": false,
@@ -517,8 +593,8 @@ exports[`queue with one subscriber, batch size of 5 2`] = `
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "relationship": "log",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": true,
@@ -535,14 +611,31 @@ exports[`queue with one subscriber, batch size of 5 2`] = `
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
         "my_queue": {
           "attributes": {
             "wing:resource:connections": [
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "on_message",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "relationship": "add_consumer",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": true,
@@ -558,7 +651,7 @@ exports[`queue with one subscriber, batch size of 5 2`] = `
           "id": "my_queue",
           "path": "root/my_queue",
         },
-        "my_queue-OnMessage-e645076f": {
+        "my_queue-AddConsumer-e645076f": {
           "attributes": {
             "wing:resource:connections": [
               {
@@ -570,13 +663,13 @@ exports[`queue with one subscriber, batch size of 5 2`] = `
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "on_message",
+                "relationship": "add_consumer",
                 "resource": "root/my_queue",
               },
             ],
@@ -590,10 +683,10 @@ exports[`queue with one subscriber, batch size of 5 2`] = `
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
-          "id": "my_queue-OnMessage-e645076f",
-          "path": "root/my_queue-OnMessage-e645076f",
+          "id": "my_queue-AddConsumer-e645076f",
+          "path": "root/my_queue-AddConsumer-e645076f",
         },
-        "my_queue-OnMessageHandler-e645076f": {
+        "my_queue-AddConsumerHandler-e645076f": {
           "attributes": {
             "wing:resource:connections": [],
             "wing:resource:stateful": false,
@@ -602,8 +695,11 @@ exports[`queue with one subscriber, batch size of 5 2`] = `
             "fqn": "constructs.Construct",
             "version": "10.1.245",
           },
-          "id": "my_queue-OnMessageHandler-e645076f",
-          "path": "root/my_queue-OnMessageHandler-e645076f",
+          "display": {
+            "hidden": true,
+          },
+          "id": "my_queue-AddConsumerHandler-e645076f",
+          "path": "root/my_queue-AddConsumerHandler-e645076f",
         },
       },
       "constructInfo": {
@@ -615,100 +711,67 @@ exports[`queue with one subscriber, batch size of 5 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_queue-onmessage-e645076f_c89a8f49/index.js": "var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-};
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === \\"object\\" || typeof from === \\"function\\") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toCommonJS = (mod) => __copyProps(__defProp({}, \\"__esModule\\", { value: true }), mod);
-
-var queue_onmessage_inflight_exports = {};
-__export(queue_onmessage_inflight_exports, {
-  QueueOnMessageHandlerClient: () => QueueOnMessageHandlerClient
-});
-var QueueOnMessageHandlerClient;
-var init_queue_onmessage_inflight = __esm({
-  \\"src/target-sim/queue.onmessage.inflight.ts\\"() {
-    \\"use strict\\";
-    QueueOnMessageHandlerClient = class {
-      constructor({ handler }) {
-        this.handler = handler;
-      }
-      async handle(event) {
-        let parsed = JSON.parse(event);
-        if (!parsed.messages)
-          throw new Error('No \\"messages\\" field in event.');
-        for (const $message of parsed.messages) {
-          await this.handler.handle($message);
-        }
-      }
-    };
-  }
-});
-
-var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (init_queue_onmessage_inflight(), __toCommonJS(queue_onmessage_inflight_exports)).QueueOnMessageHandlerClient({ handler: new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(message) {
-        if (message === \\"BAD MESSAGE\\") {
-          throw new Error(\\"ERROR\\");
-        }
-      }
-    };
-  }())({}) }).handle(event);
-};
-",
 }
 `;
 
 exports[`queue with one subscriber, default batch size of 1 1`] = `
 [
+  "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
   "Push (message=A).",
   "Push (message=B).",
-  "Sending messages (messages=[\\"A\\"], subscriber=sim-1).",
-  "Sending messages (messages=[\\"B\\"], subscriber=sim-1).",
+  "Sending messages (messages=[\\"A\\"], subscriber=sim-2).",
+  "Sending messages (messages=[\\"B\\"], subscriber=sim-2).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"A\\\\\\"]}\\").",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"B\\\\\\"]}\\").",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`queue with one subscriber, default batch size of 1 2`] = `
 {
-  "app.wsim/simulator.json": {
+  ".wing/my_queue-addconsumer-e645076f_c817d361.js": "const $logger = (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.log(...args);
+exports.handler = async function(event) {
+  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  
+async handle(message) {
+    if (message === \\"BAD MESSAGE\\") {
+        throw new Error(\\"ERROR\\");
+    }
+}
+};
+})())({
+
+}) })).handle(event);
+};",
+  "simulator.json": {
     "resources": [
+      {
+        "attrs": {},
+        "path": "root/cloud.TestRunner",
+        "props": {
+          "tests": {},
+        },
+        "type": "wingsdk.cloud.TestRunner",
+      },
       {
         "attrs": {},
         "path": "root/WingLogger",
@@ -717,12 +780,12 @@ exports[`queue with one subscriber, default batch size of 1 2`] = `
       },
       {
         "attrs": {},
-        "path": "root/my_queue-OnMessage-e645076f",
+        "path": "root/my_queue-AddConsumer-e645076f",
         "props": {
           "environmentVariables": {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
-          "sourceCodeFile": "assets/my_queue-onmessage-e645076f_c89a8f49/index.js",
+          "sourceCodeFile": ".wing/my_queue-addconsumer-e645076f_c817d361.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -736,7 +799,7 @@ exports[`queue with one subscriber, default batch size of 1 2`] = `
           "subscribers": [
             {
               "batchSize": 1,
-              "functionHandle": "\${root/my_queue-OnMessage-e645076f#attrs.handle}",
+              "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -746,7 +809,7 @@ exports[`queue with one subscriber, default batch size of 1 2`] = `
     ],
     "sdkVersion": "0.0.0",
   },
-  "app.wsim/tree.json": {
+  "tree.json": {
     "tree": {
       "children": {
         "Handler": {
@@ -756,7 +819,7 @@ exports[`queue with one subscriber, default batch size of 1 2`] = `
                 "direction": "inbound",
                 "implicit": false,
                 "relationship": "handle",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": false,
@@ -779,8 +842,8 @@ exports[`queue with one subscriber, default batch size of 1 2`] = `
               {
                 "direction": "inbound",
                 "implicit": true,
-                "relationship": "print",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "relationship": "log",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": true,
@@ -797,14 +860,31 @@ exports[`queue with one subscriber, default batch size of 1 2`] = `
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
+        "cloud.TestRunner": {
+          "attributes": {
+            "wing:resource:connections": [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.245",
+          },
+          "display": {
+            "description": "A suite of APIs for running tests and collecting results.",
+            "hidden": true,
+            "title": "TestRunner",
+          },
+          "id": "cloud.TestRunner",
+          "path": "root/cloud.TestRunner",
+        },
         "my_queue": {
           "attributes": {
             "wing:resource:connections": [
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "on_message",
-                "resource": "root/my_queue-OnMessage-e645076f",
+                "relationship": "add_consumer",
+                "resource": "root/my_queue-AddConsumer-e645076f",
               },
             ],
             "wing:resource:stateful": true,
@@ -820,7 +900,7 @@ exports[`queue with one subscriber, default batch size of 1 2`] = `
           "id": "my_queue",
           "path": "root/my_queue",
         },
-        "my_queue-OnMessage-e645076f": {
+        "my_queue-AddConsumer-e645076f": {
           "attributes": {
             "wing:resource:connections": [
               {
@@ -832,13 +912,13 @@ exports[`queue with one subscriber, default batch size of 1 2`] = `
               {
                 "direction": "outbound",
                 "implicit": true,
-                "relationship": "print",
+                "relationship": "log",
                 "resource": "root/WingLogger",
               },
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "on_message",
+                "relationship": "add_consumer",
                 "resource": "root/my_queue",
               },
             ],
@@ -852,10 +932,10 @@ exports[`queue with one subscriber, default batch size of 1 2`] = `
             "description": "A cloud function (FaaS)",
             "title": "Function",
           },
-          "id": "my_queue-OnMessage-e645076f",
-          "path": "root/my_queue-OnMessage-e645076f",
+          "id": "my_queue-AddConsumer-e645076f",
+          "path": "root/my_queue-AddConsumer-e645076f",
         },
-        "my_queue-OnMessageHandler-e645076f": {
+        "my_queue-AddConsumerHandler-e645076f": {
           "attributes": {
             "wing:resource:connections": [],
             "wing:resource:stateful": false,
@@ -864,8 +944,11 @@ exports[`queue with one subscriber, default batch size of 1 2`] = `
             "fqn": "constructs.Construct",
             "version": "10.1.245",
           },
-          "id": "my_queue-OnMessageHandler-e645076f",
-          "path": "root/my_queue-OnMessageHandler-e645076f",
+          "display": {
+            "hidden": true,
+          },
+          "id": "my_queue-AddConsumerHandler-e645076f",
+          "path": "root/my_queue-AddConsumerHandler-e645076f",
         },
       },
       "constructInfo": {
@@ -877,75 +960,5 @@ exports[`queue with one subscriber, default batch size of 1 2`] = `
     },
     "version": "tree-0.1",
   },
-  "assets/my_queue-onmessage-e645076f_c89a8f49/index.js": "var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-};
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === \\"object\\" || typeof from === \\"function\\") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toCommonJS = (mod) => __copyProps(__defProp({}, \\"__esModule\\", { value: true }), mod);
-
-var queue_onmessage_inflight_exports = {};
-__export(queue_onmessage_inflight_exports, {
-  QueueOnMessageHandlerClient: () => QueueOnMessageHandlerClient
-});
-var QueueOnMessageHandlerClient;
-var init_queue_onmessage_inflight = __esm({
-  \\"src/target-sim/queue.onmessage.inflight.ts\\"() {
-    \\"use strict\\";
-    QueueOnMessageHandlerClient = class {
-      constructor({ handler }) {
-        this.handler = handler;
-      }
-      async handle(event) {
-        let parsed = JSON.parse(event);
-        if (!parsed.messages)
-          throw new Error('No \\"messages\\" field in event.');
-        for (const $message of parsed.messages) {
-          await this.handler.handle($message);
-        }
-      }
-    };
-  }
-});
-
-var $logger = function(env) {
-  let handle = process.env[env];
-  if (!handle) {
-    throw new Error(\\"Missing environment variable: \\" + env);
-  }
-  return $simulator.findInstance(handle);
-}(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.print(...args);
-exports.handler = async function(event) {
-  return await new (init_queue_onmessage_inflight(), __toCommonJS(queue_onmessage_inflight_exports)).QueueOnMessageHandlerClient({ handler: new (function() {
-    return class Handler {
-      constructor(clients) {
-        for (const [name, client] of Object.entries(clients)) {
-          this[name] = client;
-        }
-      }
-      async handle(message) {
-        if (message === \\"BAD MESSAGE\\") {
-          throw new Error(\\"ERROR\\");
-        }
-      }
-    };
-  }())({}) }).handle(event);
-};
-",
 }
 `;

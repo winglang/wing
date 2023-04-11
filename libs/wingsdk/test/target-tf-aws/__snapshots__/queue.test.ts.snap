@@ -2,6 +2,11 @@
 
 exports[`default queue behavior 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_sqs_queue\\": {
       \\"root_Queue_7193B145\\": {
@@ -71,6 +76,33 @@ exports[`default queue behavior 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -109,6 +141,11 @@ exports[`default queue behavior 2`] = `
 
 exports[`queue name valid 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_sqs_queue\\": {
       \\"root_TheIncredibleQueue01_032AFBF2\\": {
@@ -178,6 +215,33 @@ exports[`queue name valid 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -214,60 +278,69 @@ exports[`queue name valid 2`] = `
 }
 `;
 
-exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_68e3f3ae\\"])"`;
+exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_c6990e27\\"])"`;
 
 exports[`queue with a consumer function 2`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_iam_role\\": {
-      \\"root_QueueOnMessagec5395e41_IamRole_800EDB96\\": {
+      \\"root_QueueAddConsumerc5395e41_IamRole_11C209FD\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"root_QueueOnMessagec5395e41_IamRolePolicy_2E9AE0BB\\": {
+      \\"root_QueueAddConsumerc5395e41_IamRolePolicy_57AFC198\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:ReceiveMessage\\\\\\",\\\\\\"sqs:ChangeMessageVisibility\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\",\\\\\\"sqs:DeleteMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_QueueOnMessagec5395e41_IamRole_800EDB96.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_QueueAddConsumerc5395e41_IamRole_11C209FD.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"root_QueueOnMessagec5395e41_IamRolePolicyAttachment_90B64365\\": {
+      \\"root_QueueAddConsumerc5395e41_IamRolePolicyAttachment_85D0A13F\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_QueueOnMessagec5395e41_IamRole_800EDB96.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_QueueAddConsumerc5395e41_IamRole_11C209FD.name}\\"
       }
     },
     \\"aws_lambda_event_source_mapping\\": {
       \\"root_Queue_EventSourceMapping_A20C741D\\": {
         \\"batch_size\\": 1,
         \\"event_source_arn\\": \\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\",
-        \\"function_name\\": \\"\${aws_lambda_function.root_QueueOnMessagec5395e41_BFDF10CF.function_name}\\"
+        \\"function_name\\": \\"\${aws_lambda_function.root_QueueAddConsumerc5395e41_EFF73B8B.function_name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"root_QueueOnMessagec5395e41_BFDF10CF\\": {
+      \\"root_QueueAddConsumerc5395e41_EFF73B8B\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Queue-OnMessage-c5395e41-c87b8107\\"
+            \\"WING_FUNCTION_NAME\\": \\"Queue-AddConsumer-c5395e41-c8af1c1c\\"
           }
         },
-        \\"function_name\\": \\"Queue-OnMessage-c5395e41-c87b8107\\",
+        \\"function_name\\": \\"Queue-AddConsumer-c5395e41-c8af1c1c\\",
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.root_QueueOnMessagec5395e41_IamRole_800EDB96.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.root_QueueAddConsumerc5395e41_IamRole_11C209FD.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessagec5395e41_Code_F10D8CAB.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_QueueOnMessagec5395e41_S3Object_9BE0A142.key}\\",
-        \\"timeout\\": 30
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_QueueAddConsumerc5395e41_Code_4409437D.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_QueueAddConsumerc5395e41_S3Object_B837411C.key}\\",
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_QueueOnMessagec5395e41_Code_F10D8CAB\\": {
-        \\"bucket_prefix\\": \\"code-c82147c7-\\"
+      \\"root_QueueAddConsumerc5395e41_Code_4409437D\\": {
+        \\"bucket_prefix\\": \\"code-c8839c77-\\"
       }
     },
     \\"aws_s3_object\\": {
-      \\"root_QueueOnMessagec5395e41_S3Object_9BE0A142\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessagec5395e41_Code_F10D8CAB.bucket}\\",
+      \\"root_QueueAddConsumerc5395e41_S3Object_B837411C\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_QueueAddConsumerc5395e41_Code_4409437D.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -297,7 +370,7 @@ exports[`queue with a consumer function 3`] = `
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
-                      "resource": "root/Default/Queue-OnMessage-c5395e41",
+                      "resource": "root/Default/Queue-AddConsumer-c5395e41",
                     },
                   ],
                   "wing:resource:stateful": false,
@@ -320,8 +393,8 @@ exports[`queue with a consumer function 3`] = `
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "on_message",
-                      "resource": "root/Default/Queue-OnMessage-c5395e41",
+                      "relationship": "add_consumer",
+                      "resource": "root/Default/Queue-AddConsumer-c5395e41",
                     },
                   ],
                   "wing:resource:stateful": true,
@@ -355,7 +428,7 @@ exports[`queue with a consumer function 3`] = `
                 "id": "Queue",
                 "path": "root/Default/Queue",
               },
-              "Queue-OnMessage-c5395e41": {
+              "Queue-AddConsumer-c5395e41": {
                 "attributes": {
                   "wing:resource:connections": [
                     {
@@ -367,13 +440,13 @@ exports[`queue with a consumer function 3`] = `
                     {
                       "direction": "outbound",
                       "implicit": true,
-                      "relationship": "print",
+                      "relationship": "log",
                       "resource": "root/Default/WingLogger",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "on_message",
+                      "relationship": "add_consumer",
                       "resource": "root/Default/Queue",
                     },
                   ],
@@ -386,7 +459,7 @@ exports[`queue with a consumer function 3`] = `
                       "version": "0.15.2",
                     },
                     "id": "Asset",
-                    "path": "root/Default/Queue-OnMessage-c5395e41/Asset",
+                    "path": "root/Default/Queue-AddConsumer-c5395e41/Asset",
                   },
                   "Code": {
                     "constructInfo": {
@@ -394,7 +467,7 @@ exports[`queue with a consumer function 3`] = `
                       "version": "12.0.2",
                     },
                     "id": "Code",
-                    "path": "root/Default/Queue-OnMessage-c5395e41/Code",
+                    "path": "root/Default/Queue-AddConsumer-c5395e41/Code",
                   },
                   "Default": {
                     "constructInfo": {
@@ -402,7 +475,7 @@ exports[`queue with a consumer function 3`] = `
                       "version": "12.0.2",
                     },
                     "id": "Default",
-                    "path": "root/Default/Queue-OnMessage-c5395e41/Default",
+                    "path": "root/Default/Queue-AddConsumer-c5395e41/Default",
                   },
                   "IamRole": {
                     "constructInfo": {
@@ -410,7 +483,7 @@ exports[`queue with a consumer function 3`] = `
                       "version": "12.0.2",
                     },
                     "id": "IamRole",
-                    "path": "root/Default/Queue-OnMessage-c5395e41/IamRole",
+                    "path": "root/Default/Queue-AddConsumer-c5395e41/IamRole",
                   },
                   "IamRolePolicy": {
                     "constructInfo": {
@@ -418,7 +491,7 @@ exports[`queue with a consumer function 3`] = `
                       "version": "12.0.2",
                     },
                     "id": "IamRolePolicy",
-                    "path": "root/Default/Queue-OnMessage-c5395e41/IamRolePolicy",
+                    "path": "root/Default/Queue-AddConsumer-c5395e41/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
@@ -426,7 +499,7 @@ exports[`queue with a consumer function 3`] = `
                       "version": "12.0.2",
                     },
                     "id": "IamRolePolicyAttachment",
-                    "path": "root/Default/Queue-OnMessage-c5395e41/IamRolePolicyAttachment",
+                    "path": "root/Default/Queue-AddConsumer-c5395e41/IamRolePolicyAttachment",
                   },
                   "S3Object": {
                     "constructInfo": {
@@ -434,7 +507,7 @@ exports[`queue with a consumer function 3`] = `
                       "version": "12.0.2",
                     },
                     "id": "S3Object",
-                    "path": "root/Default/Queue-OnMessage-c5395e41/S3Object",
+                    "path": "root/Default/Queue-AddConsumer-c5395e41/S3Object",
                   },
                 },
                 "constructInfo": {
@@ -445,10 +518,10 @@ exports[`queue with a consumer function 3`] = `
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
                 },
-                "id": "Queue-OnMessage-c5395e41",
-                "path": "root/Default/Queue-OnMessage-c5395e41",
+                "id": "Queue-AddConsumer-c5395e41",
+                "path": "root/Default/Queue-AddConsumer-c5395e41",
               },
-              "Queue-OnMessageHandler-c5395e41": {
+              "Queue-AddConsumerHandler-c5395e41": {
                 "attributes": {
                   "wing:resource:connections": [],
                   "wing:resource:stateful": false,
@@ -457,8 +530,11 @@ exports[`queue with a consumer function 3`] = `
                   "fqn": "constructs.Construct",
                   "version": "10.1.245",
                 },
-                "id": "Queue-OnMessageHandler-c5395e41",
-                "path": "root/Default/Queue-OnMessageHandler-c5395e41",
+                "display": {
+                  "hidden": true,
+                },
+                "id": "Queue-AddConsumerHandler-c5395e41",
+                "path": "root/Default/Queue-AddConsumerHandler-c5395e41",
               },
               "WingLogger": {
                 "attributes": {
@@ -466,8 +542,8 @@ exports[`queue with a consumer function 3`] = `
                     {
                       "direction": "inbound",
                       "implicit": true,
-                      "relationship": "print",
-                      "resource": "root/Default/Queue-OnMessage-c5395e41",
+                      "relationship": "log",
+                      "resource": "root/Default/Queue-AddConsumer-c5395e41",
                     },
                   ],
                   "wing:resource:stateful": true,
@@ -491,6 +567,33 @@ exports[`queue with a consumer function 3`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {
@@ -530,6 +633,11 @@ exports[`queue with a consumer function 3`] = `
 
 exports[`queue with custom timeout 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_sqs_queue\\": {
       \\"root_Queue_7193B145\\": {
@@ -600,6 +708,33 @@ exports[`queue with custom timeout 2`] = `
                 "id": "aws",
                 "path": "root/Default/aws",
               },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
             },
             "constructInfo": {
               "fqn": "constructs.Construct",
@@ -638,6 +773,11 @@ exports[`queue with custom timeout 2`] = `
 
 exports[`replace invalid character from queue name 1`] = `
 "{
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
   \\"resource\\": {
     \\"aws_sqs_queue\\": {
       \\"root_TheIncredibleQueue_453F8E34\\": {
@@ -706,6 +846,33 @@ exports[`replace invalid character from queue name 2`] = `
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                  "wing:resource:stateful": false,
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.15.2",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.245",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
               },
             },
             "constructInfo": {

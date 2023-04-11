@@ -3,21 +3,25 @@ import * as fs from "fs-extra";
 import { expect } from "vitest";
 import { wingBin } from "./paths";
 
-export async function runWingCommand(
-  cwd: string,
-  wingFile: string,
-  args: string[],
-  shouldSucceed: boolean,
-  env?: Record<string, string>,
-) {
-  const out = await execa(wingBin, [...args, wingFile], {
-    cwd,
+export interface RunWingCommandOptions {
+  cwd: string;
+  wingFile: string;
+  args: string[];
+  shouldSucceed: boolean;
+  plugins?: string[];
+  env?: Record<string, string>;
+}
+
+export async function runWingCommand(options: RunWingCommandOptions) {
+  const plugins = options.plugins? ['--plugins', ...options.plugins] : [];
+  const out = await execa(wingBin, [...options.args, options.wingFile, ...plugins], {
+    cwd: options.cwd,
     reject: false,
     stdin: "ignore",
-    env: env,
+    env: options.env,
   });
-  if (shouldSucceed) {
-    if (out.exitCode !== 0) {
+  if (options.shouldSucceed) {
+    if (out.exitCode !== 0 || out.stderr !== "") {
       expect.fail(out.stderr);
     }
   } else {
@@ -28,8 +32,8 @@ export async function runWingCommand(
 }
 
 export function sanitize_json_paths(path: string) {
-  const assetKeyRegex = /"asset\..+"/g;
-  const assetSourceRegex = /"assets\/.+"/g;
+  const assetKeyRegex = /"asset\..+?"/g;
+  const assetSourceRegex = /"assets\/.+?"/g;
   const json = fs.readJsonSync(path);
 
   const jsonText = JSON.stringify(json);
@@ -41,4 +45,15 @@ export function sanitize_json_paths(path: string) {
   delete finalObj.terraform;
 
   return finalObj;
+}
+
+export function tfResourcesOf(templateStr: string): string[] {
+  return Object.keys(JSON.parse(templateStr).resource).sort();
+}
+
+export function tfResourcesOfCount(
+  templateStr: string,
+  resourceId: string
+): number {
+  return Object.values(JSON.parse(templateStr).resource[resourceId]).length;
 }

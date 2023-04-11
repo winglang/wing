@@ -61,9 +61,9 @@ module.exports = grammar({
       prec(
         PREC.MEMBER,
         seq(
-          field("object", 
+          field("object",
             choice(
-              $.expression, 
+              $.expression,
               // This is required because of ambiguity with using Json keyword for both instantiation of Json
               // and Identifier for static methods.
               $.json_container_type
@@ -108,9 +108,9 @@ module.exports = grammar({
       seq(
         "struct",
         field("name", $.identifier),
-        optional(seq("extends", commaSep($.identifier))),
+        optional(seq("extends", commaSep(field("extends", $.custom_type)))),
         "{",
-        repeat($.struct_field),
+        field("field", repeat($.struct_field)),
         "}"
       ),
     struct_field: ($) =>
@@ -210,7 +210,7 @@ module.exports = grammar({
       seq(
         "interface",
         field("name", $.identifier),
-        optional(seq("extends", field("implements", commaSep1($.custom_type)))),
+        optional(seq("extends", field("extends", commaSep1($.custom_type)))),
         field("implementation", $.interface_implementation)
       ),
     interface_implementation: ($) =>
@@ -226,12 +226,22 @@ module.exports = grammar({
         "}"
       ),
 
+    inclusive_range: ($) => "=",
+
+    loop_range: ($) =>
+      seq(
+        field("start", $.expression),
+        "..",
+        optional(field("inclusive", $.inclusive_range)),
+        field("end", $.expression)
+      ),
+
     for_in_loop: ($) =>
       seq(
         "for",
         field("iterator", $.reference),
         "in",
-        field("iterable", $.expression),
+        field("iterable", choice($.expression, $.loop_range)),
         field("block", $.block)
       ),
 
@@ -286,7 +296,7 @@ module.exports = grammar({
         $.structured_access_expression,
         $.json_literal,
         $.struct_literal,
-        $.optional_test,
+        $.optional_test
       ),
 
     // Primitives
@@ -413,16 +423,16 @@ module.exports = grammar({
         field("block", $.block)
       ),
 
-    extern_modifier : ($) => seq("extern", $.string),
+    extern_modifier: ($) => seq("extern", $.string),
+
+    _return_type: ($) => $._type_annotation,
 
     method_signature: ($) =>
       seq(
-        optional(field("access_modifier", $.access_modifier)),
-        optional(field("static", $.static)),
         optional(field("async", $.async_modifier)),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
-        optional(field("return_type", $._type_annotation)),
+        optional($._return_type),
         ";"
       ),
 
@@ -434,18 +444,16 @@ module.exports = grammar({
         optional(field("async", $.async_modifier)),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
-        optional(field("return_type", $._type_annotation)),
+        optional($._return_type),
         choice(field("block", $.block), ";")
       ),
 
     inflight_method_signature: ($) =>
       seq(
-        optional(field("access_modifier", $.access_modifier)),
-        optional(field("static", $.static)),
         field("phase_modifier", $._inflight_specifier),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
-        optional(field("return_type", $._type_annotation)),
+        optional($._return_type),
         ";"
       ),
 
@@ -457,7 +465,7 @@ module.exports = grammar({
         field("phase_modifier", $._inflight_specifier),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
-        optional(field("return_type", $._type_annotation)),
+        optional($._return_type),
         choice(field("block", $.block), ";")
       ),
 
@@ -557,7 +565,7 @@ module.exports = grammar({
     preflight_closure: ($) =>
       seq(
         field("parameter_list", $.parameter_list),
-        optional(field("return_type", $._type_annotation)),
+        optional($._return_type),
         "=>",
         field("block", $.block)
       ),
@@ -566,7 +574,7 @@ module.exports = grammar({
       seq(
         "inflight",
         field("parameter_list", $.parameter_list),
-        optional(field("return_type", $._type_annotation)),
+        optional($._return_type),
         "=>",
         field("block", $.block)
       ),

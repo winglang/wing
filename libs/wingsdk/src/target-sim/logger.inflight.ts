@@ -7,8 +7,8 @@ import {
 } from "./function";
 import { ISimulatorResourceInstance } from "./resource";
 import { LoggerAttributes, LoggerSchema } from "./schema-resources";
-import { ILoggerClient } from "../cloud";
-import { ISimulatorContext, TraceType } from "../testing";
+import { ILoggerClient, TraceType } from "../cloud";
+import { ISimulatorContext } from "../testing";
 
 export class Logger implements ILoggerClient, ISimulatorResourceInstance {
   private readonly logsDir: string;
@@ -30,7 +30,7 @@ export class Logger implements ILoggerClient, ISimulatorResourceInstance {
     return;
   }
 
-  public async print(message: string): Promise<void> {
+  public async log(message: string): Promise<void> {
     if (!fs.existsSync(this.logsDir)) {
       throw new Error(`Logs directory ${this.logsDir} does not exist.`);
     }

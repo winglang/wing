@@ -36,9 +36,11 @@ resource MyResource {
   set_of_str: Set<str>;
   another: Another;
   my_queue: cloud.Queue;
+  unused_resource: cloud.Counter;
 
   ext_bucket: cloud.Bucket;
   ext_num: num;
+
 
   // Needs to be var since we don't support inflight inits yet.
   inflight var inflight_field: num;
@@ -59,12 +61,13 @@ resource MyResource {
     this.my_queue = new cloud.Queue();
     this.ext_bucket = external_bucket;
     this.ext_num = external_num;
+    this.unused_resource = new cloud.Counter();
   }
 
   inflight test_no_capture() {
     let arr = [1,2,3];
     assert(arr.length == 3);
-    print("array.len=${arr.length}");
+    log("array.len=${arr.length}");
   }
 
   inflight test_capture_collections_of_data() {
@@ -96,13 +99,13 @@ resource MyResource {
 
   inflight test_nested_preflight_field() {
     assert(this.another.my_field == "hello!");
-    print("field=${this.another.my_field}");
+    log("field=${this.another.my_field}");
   }
 
   inflight test_nested_resource() {
     assert(this.another.first.my_resource.list().length == 0);
     this.another.first.my_resource.put("hello", this.my_str);
-    print("this.another.first.my_resource:${this.another.first.my_resource.get("hello")}");
+    log("this.another.first.my_resource:${this.another.first.my_resource.get("hello")}");
   }
 
   // expression within an expression

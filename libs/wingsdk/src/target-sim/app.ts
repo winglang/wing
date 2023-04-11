@@ -1,15 +1,17 @@
 import * as fs from "fs";
 import * as path from "path";
 import { Construct } from "constructs";
-import * as tar from "tar";
 import { Api } from "./api";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Function } from "./function";
 import { Logger } from "./logger";
 import { Queue } from "./queue";
+import { Redis } from "./redis";
 import { isSimulatorResource } from "./resource";
 import { WingSimulatorSchema } from "./schema";
+import { Table } from "./table";
+import { TestRunner } from "./test-runner";
 import { Topic } from "./topic";
 import {
   API_FQN,
@@ -18,40 +20,39 @@ import {
   FUNCTION_FQN,
   LOGGER_FQN,
   QUEUE_FQN,
+  TABLE_FQN,
+  TEST_RUNNER_FQN,
   TOPIC_FQN,
 } from "../cloud";
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
-import { mkdtemp, SIMULATOR_FILE_PATH } from "../util";
+import { REDIS_FQN } from "../redis";
+import { SIMULATOR_FILE_PATH } from "../util";
 
 /**
  * A construct that knows how to synthesize simulator resources into a
  * Wing simulator (.wsim) file.
  */
 export class App extends core.App {
-  /**
-   * Directory where artifacts are synthesized to.
-   */
-  public readonly workdir: string;
+  public readonly outdir: string;
+  public readonly isTestEnvironment: boolean;
 
   /**
-   * The output directory of this app.
+   * The test runner for this app.
    */
-  protected readonly outdir: string;
+  protected readonly testRunner: TestRunner;
 
-  private readonly name: string;
-  private readonly simfile: string;
   private synthed = false;
 
   constructor(props: core.AppProps) {
     super(undefined as any, "root");
-    this.name = props.name ?? "app";
     this.outdir = props.outdir ?? ".";
-    this.workdir = mkdtemp();
+    this.isTestEnvironment = props.isTestEnvironment ?? false;
+
+    this.testRunner = new TestRunner(this, "cloud.TestRunner");
 
     Logger.register(this);
-    this.simfile = path.join(this.outdir, `${this.name}.wsim`);
   }
 
   protected tryNew(
@@ -82,8 +83,17 @@ export class App extends core.App {
       case COUNTER_FQN:
         return new Counter(scope, id, args[0]);
 
+      case TABLE_FQN:
+        return new Table(scope, id, args[0]);
+
       case TOPIC_FQN:
         return new Topic(scope, id, args[0]);
+
+      case TEST_RUNNER_FQN:
+        return new TestRunner(scope, id, args[0]);
+
+      case REDIS_FQN:
+        return new Redis(scope, id);
     }
 
     return undefined;
@@ -91,36 +101,27 @@ export class App extends core.App {
 
   /**
    * Synthesize the app. This creates a tree.json file and a .wsim file in the
-   * app's outdir, and returns a path to the .wsim file.
+   * app's outdir, and returns a path to the .wsim directory.
    */
   public synth(): string {
     if (this.synthed) {
-      return this.simfile;
+      return this.outdir;
     }
+
+    fs.mkdirSync(this.outdir, { recursive: true });
 
     // call preSynthesize() on every construct in the tree
     preSynthesizeAllConstructs(this);
 
     // write simulator.json file into workdir
-    this.synthSimulatorFile(this.workdir);
+    this.synthSimulatorFile(this.outdir);
 
     // write tree.json file into workdir
-    core.synthesizeTree(this, this.workdir);
-
-    // tar + gzip the workdir, and write it as a .wsim file to the simfile
-    tar.create(
-      {
-        gzip: true,
-        cwd: this.workdir,
-        sync: true,
-        file: this.simfile,
-      },
-      ["./"]
-    );
+    core.synthesizeTree(this, this.outdir);
 
     this.synthed = true;
 
-    return this.simfile;
+    return this.outdir;
   }
 
   private synthSimulatorFile(outdir: string) {

@@ -14,93 +14,25 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.head.ref || github.ref }}
   cancel-in-progress: true
 
-env:
-  # Testing runs out of memory without this
-  NODE_OPTIONS: "--max-old-space-size=4096"
-  PROJEN_BUMP_VERSION: "0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}"
-  RUST_VERSION: "1.67.1"
-  CARGO_TERM_COLOR: always
-
 jobs:
-  prepare:
-    name: "Prepare"
-    runs-on: ubuntu-latest
-    outputs:
-      last-version: ${{ steps.tags.outputs.last-version || steps.pr_info.outputs.version }}
-      version: ${{ steps.info.outputs.version || steps.pr_info.outputs.version }}
-    steps:
-      - name: Checkout
-        if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
-        uses: actions/checkout@v3
-
-      - name: Get tags
-        id: tags
-        if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
-        run: |
-          git fetch --unshallow --tags
-          LAST_VERSION="$(git describe --tags `git rev-list --tags --max-count=1`)"
-          echo "last-version=${LAST_VERSION#?}" >> $GITHUB_OUTPUT
-
-      - name: Install Dependencies
-        if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
-        uses: bahmutov/npm-install@v1
-        with:
-          install-command: npm ci --ignore-scripts
-
-      - name: Get Version Info
-        if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
-        id: info
-        env:
-          # Needed for `auto` cli
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -e
-          echo "version=$(npx auto release -d | grep 'Would have created a release on GitHub for version: ' | sed 's/.*version: //')" >> $GITHUB_OUTPUT
-          npx auto changelog -d | tail -n +2 > CHANGELOG.md
-          cat CHANGELOG.md >> $GITHUB_STEP_SUMMARY
-
-      # newlines are easier to handle in single-line yaml
-      - run: "echo '\n' >> CHANGELOG.md"
-        if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
-
-      - name: PR Version Info
-        id: pr_info
-        if: github.event_name != 'push' || github.repository != 'winglang/wing'
-        run: |
-          echo "last-version=0.0.0" >> $GITHUB_OUTPUT
-          echo "version=0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}" >> $GITHUB_OUTPUT
-          echo "Pull Request" > CHANGELOG.md
-          cat CHANGELOG.md >> $GITHUB_STEP_SUMMARY
-
-      - name: Upload Changelog
-        uses: actions/upload-artifact@v3
-        with:
-          name: changelog
-          path: CHANGELOG.md
-
-      - name: Compress Docs
-        if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
-        run: tar -czvf docs.tgz docs/*
-
-      - name: Upload Docs
-        if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: docs
-          path: docs.tgz
-
   build:
     name: "Build"
     timeout-minutes: 25
     runs-on: ubuntu-latest
-    needs: prepare
     env:
-      PROJEN_BUMP_VERSION: ${{ needs.prepare.outputs.version }}
+      # Testing runs out of memory without this
+      NODE_OPTIONS: "--max-old-space-size=4096"
+      RUST_VERSION: "1.67.1"
+      CARGO_TERM_COLOR: always
     outputs:
-      labels: ${{ steps.pr-labels.outputs.labels }}
+      version: ${{ fromJson(steps.changelog.outputs.data).newVersion }}
+      last-version: ${{ fromJson(steps.changelog.outputs.data).lastVersion }}
+      changelog: ${{ fromJson(steps.changelog.outputs.data).changelog }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       # Reads versions from root package.json "volta" section
       - name: Setup Node/NPM with pinned Volta version
@@ -123,6 +55,12 @@ jobs:
 
       - name: Lint Nx Configuration
         run: npx nx workspace-lint
+
+      - name: Changelog Generation
+        id: changelog
+        env:
+          GENERATE_VERSION: ${{ github.event_name != 'push' || github.repository != 'winglang/wing' }}
+        run: npm run changelog
 
       - name: Build
         run: npm run build:ci
@@ -157,6 +95,15 @@ jobs:
           name: vscode-wing
           path: apps/vscode-wing/vscode-wing.vsix
 
+      - name: Compress Docs
+        run: tar -czvf docs.tgz docs/*
+
+      - name: Upload Docs
+        uses: actions/upload-artifact@v3
+        with:
+          name: docs
+          path: docs.tgz
+
       - name: Publish Playground
         if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
         uses: amondnet/vercel-action@v25.1.0
@@ -169,15 +116,10 @@ jobs:
           github-comment: false
           vercel-args: "--prod "
 
-      - name: Get PR labels
-        id: pr-labels
-        uses: joerick/pr-labels-action@v1.0.7
-
   e2e:
     name: "E2E / ${{ matrix.runner }} + Node${{ matrix.node }} [${{ matrix.shard }}]"
     needs:
       - build
-      - prepare
     strategy:
       fail-fast: true
       matrix:
@@ -188,7 +130,7 @@ jobs:
         shard: ["1/2", "2/2"]
         full_run:
           # Do a full run on push or when the PR is labeled "pr/e2e-full"
-          - ${{ github.event_name == 'push' || contains(needs.build.labels, 'pr/e2e-full') }}
+          - ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'pr/e2e-full') }}
         exclude:
           - runner: macos
             full_run: false
@@ -199,8 +141,8 @@ jobs:
             full_run: false
     runs-on: "${{ matrix.runner }}-latest"
     env:
-      HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.prepare.outputs.version }}.tgz"
-      HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.prepare.outputs.version }}.tgz"
+      HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.build.outputs.version }}.tgz"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -240,8 +182,8 @@ jobs:
     name: Publish
     if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
     needs:
-      - e2e
-      - prepare
+      - quality-gate
+      - build
     runs-on: ubuntu-latest
     steps:
       - name: Download Build Artifacts
@@ -249,17 +191,17 @@ jobs:
 
       - name: Tag commit
         uses: tvdias/github-tagger@v0.0.1
-        if: ${{ needs.prepare.outputs.last-version != needs.prepare.outputs.version }}
+        if: ${{ needs.build.outputs.last-version != needs.build.outputs.version }}
         with:
           repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
-          tag: "v${{ needs.prepare.outputs.version }}"
+          tag: "v${{ needs.build.outputs.version }}"
 
       - name: Check published VSCode Version
         id: vscode-version
         run: echo "version=$(npx -y vsce show Monada.vscode-wing --json | jq '.versions[0].version' -r)" >> $GITHUB_OUTPUT
 
       - name: Publish Extension to Visual Studio Marketplace
-        if: ${{ steps.vscode-version.outputs.version != needs.prepare.outputs.version }}
+        if: ${{ steps.vscode-version.outputs.version != needs.build.outputs.version }}
         uses: "HaaLeo/publish-vscode-extension@v1"
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
@@ -269,26 +211,33 @@ jobs:
       - name: Login to NPM registry
         run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
 
-      - name: Check published Wing version
-        id: wing-version
-        run: echo "version=$(npm view winglang version)" >> $GITHUB_OUTPUT
-
-      - name: Publish Wing
-        if: ${{ steps.wing-version.outputs.version != needs.prepare.outputs.version }}
-        working-directory: wing
-        run: npm publish *.tgz --access public
-
       - name: Check published WingSDK version
         id: wingsdk-version
         run: echo "version=$(npm view @winglang/sdk version)" >> $GITHUB_OUTPUT
 
       - name: Publish Wing SDK
-        if: ${{ steps.wingsdk-version.outputs.version != needs.prepare.outputs.version }}
+        if: ${{ steps.wingsdk-version.outputs.version != needs.build.outputs.version }}
         working-directory: wingsdk
         run: npm publish *.tgz --access public
 
+      - name: Check published Wing version
+        id: wing-version
+        run: echo "version=$(npm view winglang version)" >> $GITHUB_OUTPUT
+
+      - name: Publish Wing
+        if: ${{ steps.wing-version.outputs.version != needs.build.outputs.version }}
+        working-directory: wing
+        run: npm publish *.tgz --access public
+
       - name: Rename Docs
-        run: mv docs "docs-${{ needs.prepare.outputs.version }}.tgz"
+        run: mv docs "docs-${{ needs.build.outputs.version }}.tgz"
+
+      - name: Write Changelog
+        uses: DamianReeves/write-file-action@v1.2
+        with:
+          path: "CHANGELOG.md"
+          contents: ${{ needs.build.outputs.changelog }}
+          write-mode: overwrite
 
       - name: Compute Checksums
         run: |
@@ -298,8 +247,8 @@ jobs:
           mv ./*/*.wasm ./dist
           cd dist
 
-          cp ../changelog/CHANGELOG.md ../CHANGELOG.md
-          echo '## SHA-1 Checksums' >> ../CHANGELOG.md
+          echo '' >> ../CHANGELOG.md
+          echo '### SHA-1 Checksums' >> ../CHANGELOG.md
           echo '```' >> ../CHANGELOG.md
           sha1sum --binary * >> ../CHANGELOG.md
           echo '```' >> ../CHANGELOG.md
@@ -308,8 +257,8 @@ jobs:
       - name: Cut Development Release
         uses: softprops/action-gh-release@v1
         with:
-          name: "Wing ${{ needs.prepare.outputs.version }}"
-          tag_name: "v${{ needs.prepare.outputs.version }}"
+          name: "Wing ${{ needs.build.outputs.version }}"
+          tag_name: "v${{ needs.build.outputs.version }}"
           body_path: CHANGELOG.md
           files: dist/*
           token: ${{ secrets.PROJEN_GITHUB_TOKEN }}

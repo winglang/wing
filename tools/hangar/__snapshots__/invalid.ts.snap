@@ -129,10 +129,10 @@ error: Cannot reference 'a_cloned' of type 'MutArray<str>' from an inflight cont
 
 exports[`capture_reassignable.w > stderr 1`] = `
 "error: Cannot capture a reassignable variable \\"x\\"
-  --> ../../../examples/tests/invalid/capture_reassignable.w:6:17
+  --> ../../../examples/tests/invalid/capture_reassignable.w:6:15
   |
-6 |     print(\\"x: \${x}\\");
-  |                 ^ Cannot capture a reassignable variable \\"x\\"
+6 |     log(\\"x: \${x}\\");
+  |               ^ Cannot capture a reassignable variable \\"x\\"
 
 "
 `;
@@ -148,15 +148,15 @@ exports[`cloud_function_expects_inflight.w > stderr 1`] = `
   | \\\\-^ Expected type to be \\"IFunctionHandler (inflight (str): void)\\", but got \\"preflight (str): str\\" instead
 
 
-error: Expected type to be \\"IQueueOnMessageHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
-   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:9:14
+error: Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
+   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:9:16
    |  
- 9 |   q.on_message(inflight (x: num) => {
-   | /--------------^
+ 9 |   q.add_consumer(inflight (x: num) => {
+   | /----------------^
 10 | |                     // ^ \\"num\\" doesn't match the expected type \\"str\\"
 11 | |     return;
 12 | | });
-   | \\\\-^ Expected type to be \\"IQueueOnMessageHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
+   | \\\\-^ Expected type to be \\"IQueueAddConsumerHandler (inflight (str): void)\\", but got \\"inflight (num): void\\" instead
 
 "
 `;
@@ -297,11 +297,11 @@ exports[`enums.w > stderr 1`] = `
   |                     ^^^^ Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
 
 
-error: Expression must be a class or resource instance to access property \\"TWO\\", instead found type \\"SomeEnum\\"
+error: Property access unsupported on type \\"SomeEnum\\"
   --> ../../../examples/tests/invalid/enums.w:8:11
   |
 8 | let two = SomeEnum.TWO.TWO;
-  |           ^^^^^^^^^^^^ Expression must be a class or resource instance to access property \\"TWO\\", instead found type \\"SomeEnum\\"
+  |           ^^^^^^^^^^^^ Property access unsupported on type \\"SomeEnum\\"
 
 "
 `;
@@ -327,21 +327,42 @@ exports[`immutable_container_types.w > stderr 1`] = `
 `;
 
 exports[`impl_interface.w > stderr 1`] = `
-"error: Resource \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueOnMessageHandler\\"
+"error: Resource \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueAddConsumerHandler\\"
   --> ../../../examples/tests/invalid/impl_interface.w:3:10
   |
-3 | resource A impl cloud.IQueueOnMessageHandler {
-  |          ^ Resource \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueOnMessageHandler\\"
+3 | resource A impl cloud.IQueueAddConsumerHandler {
+  |          ^ Resource \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueAddConsumerHandler\\"
 
 
-error: Expected type to be \\"inflight (IQueueOnMessageHandler (inflight (str): void), str): void\\", but got \\"inflight (B, num): void\\" instead
+error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
   --> ../../../examples/tests/invalid/impl_interface.w:8:10
   |
-8 | resource B impl cloud.IQueueOnMessageHandler {
-  |          ^ Expected type to be \\"inflight (IQueueOnMessageHandler (inflight (str): void), str): void\\", but got \\"inflight (B, num): void\\" instead
+8 | resource B impl cloud.IQueueAddConsumerHandler {
+  |          ^ Expected type to be \\"inflight (str): void\\", but got \\"inflight (num): void\\" instead
 
 
-error: Class C (at ../../../examples/tests/invalid/impl_interface.w:16:10)'s implements \\"Bucket\\" is not an interface
+error: Expected an interface, instead found type \\"Bucket\\"
+
+
+error: Resource \\"r\\" does not implement method \\"method_1\\" of interface \\"I3\\"
+   --> ../../../examples/tests/invalid/impl_interface.w:33:10
+   |
+33 | resource r impl I3 {
+   |          ^ Resource \\"r\\" does not implement method \\"method_1\\" of interface \\"I3\\"
+
+
+error: Resource \\"r\\" does not implement method \\"method_2\\" of interface \\"I3\\"
+   --> ../../../examples/tests/invalid/impl_interface.w:33:10
+   |
+33 | resource r impl I3 {
+   |          ^ Resource \\"r\\" does not implement method \\"method_2\\" of interface \\"I3\\"
+
+
+error: Resource \\"r\\" does not implement method \\"method_3\\" of interface \\"I3\\"
+   --> ../../../examples/tests/invalid/impl_interface.w:33:10
+   |
+33 | resource r impl I3 {
+   |          ^ Resource \\"r\\" does not implement method \\"method_3\\" of interface \\"I3\\"
 
 "
 `;
@@ -396,6 +417,40 @@ exports[`inflight_ref_unknown_op.w > stderr 1`] = `
    |
 11 |     let x = this.b;
    |             ^^^^^^ Unable to qualify which operations are performed on 'this.b' of type 'Bucket'. This is not supported yet.
+
+"
+`;
+
+exports[`interface.w > stderr 1`] = `
+"error: Unknown symbol \\"IB\\"
+  --> ../../../examples/tests/invalid/interface.w:2:22
+  |
+2 | interface IA extends IB {
+  |                      ^^ Unknown symbol \\"IB\\"
+
+
+error: Unknown symbol \\"IDontExist\\"
+   --> ../../../examples/tests/invalid/interface.w:10:26
+   |
+10 | interface IExist extends IDontExist {
+   |                          ^^^^^^^^^^ Unknown symbol \\"IDontExist\\"
+
+
+error: Expected an interface, instead found type \\"ISomeClass\\"
+
+
+error: Symbol \\"foo\\" already defined in this scope
+   --> ../../../examples/tests/invalid/interface.w:25:5
+   |
+25 |     foo();
+   |     ^^^ Symbol \\"foo\\" already defined in this scope
+
+
+error: Symbol \\"foo\\" already defined in this scope
+   --> ../../../examples/tests/invalid/interface.w:27:5
+   |
+27 |     foo(): num;
+   |     ^^^ Symbol \\"foo\\" already defined in this scope
 
 "
 `;
@@ -480,18 +535,18 @@ exports[`missing_semicolon.w > stderr 1`] = `
 "error: Syntax error
    --> ../../../examples/tests/invalid/missing_semicolon.w:7:1
    |  
- 7 | / q1.on_message(inflight (m:str): str => {
+ 7 | / q1.add_consumer(inflight (m:str): str => {
  8 | |   b.put(\\"1.txt\\", \\"Hello, \${m}\\"); 
  9 | | })
 10 | | 
-11 | | q2.on_message(inflight (m:str): str => {
-   | \\\\-------------^ Syntax error
+11 | | q2.add_consumer(inflight (m:str): str => {
+   | \\\\---------------^ Syntax error
 
 
 error: Unexpected 'identifier'.
    --> ../../../examples/tests/invalid/missing_semicolon.w:11:1
    |
-11 | q2.on_message(inflight (m:str): str => {
+11 | q2.add_consumer(inflight (m:str): str => {
    | ^^ Unexpected 'identifier'.
 
 
@@ -676,10 +731,10 @@ exports[`preflight_from_inflight.w > stderr 1`] = `
 
 exports[`primitives.w > stderr 1`] = `
 "error: Unexpected expression \\"structured_access_expression\\"
-  --> ../../../examples/tests/invalid/primitives.w:5:7
+  --> ../../../examples/tests/invalid/primitives.w:5:5
   |
-5 | print(y[0]);
-  |       ^^^^ Unexpected expression \\"structured_access_expression\\"
+5 | log(y[0]);
+  |     ^^^^ Unexpected expression \\"structured_access_expression\\"
 
 
 error: Unknown symbol \\"blabla\\"
@@ -748,17 +803,17 @@ exports[`resource_access_field_as_method.w > stderr 1`] = `
 
 exports[`resource_captures.w > stderr 1`] = `
 "error: Cannot capture reassignable field 'reassignable'
-   --> ../../../examples/tests/invalid/resource_captures.w:17:14
+   --> ../../../examples/tests/invalid/resource_captures.w:17:12
    |
-17 |     print(\\"\${this.reassignable}\\");
-   |              ^^^^^^^^^^^^^^^^^ Cannot capture reassignable field 'reassignable'
+17 |     log(\\"\${this.reassignable}\\");
+   |            ^^^^^^^^^^^^^^^^^ Cannot capture reassignable field 'reassignable'
 
 
 error: Cannot capture field 'mut_array' with non-capturable type 'MutArray<str>'
-   --> ../../../examples/tests/invalid/resource_captures.w:19:11
+   --> ../../../examples/tests/invalid/resource_captures.w:19:9
    |
-19 |     print(this.mut_array.at(0));
-   |           ^^^^^^^^^^^^^^ Cannot capture field 'mut_array' with non-capturable type 'MutArray<str>'
+19 |     log(this.mut_array.at(0));
+   |         ^^^^^^^^^^^^^^ Cannot capture field 'mut_array' with non-capturable type 'MutArray<str>'
 
 
 error: Unable to qualify which operations are performed on 'this.bucket' of type 'Bucket'. This is not supported yet.
@@ -778,7 +833,7 @@ error: Capturing collection of resources is not supported yet (type is 'Array<Bu
 `;
 
 exports[`resource_inflight.w > stderr 1`] = `
-"error: Cannot create the resource \\"Bucket (at src/cloud/bucket.ts:27:1)\\" in inflight phase
+"error: Cannot create the resource \\"Bucket (at src/cloud/bucket.ts:29:1)\\" in inflight phase
 
 "
 `;
@@ -924,6 +979,18 @@ error: \\"status\\" is not initialized
    | \\\\-^ \\"status\\" is not initialized
 
 
+error: \\"not_a_field\\" is not a field of \\"ApiResponse\\"
+   --> ../../../examples/tests/invalid/struct_expansion.w:20:9
+   |  
+20 |   let y = cloud.ApiResponse {
+   | /---------^
+21 | |   status: 200,
+22 | |   not_a_field: 500,
+23 | | // ^^^^^^^^^^^ \\"not_a_field\\" is not a field of \\"ApiResponse\\"
+24 | | };
+   | \\\\-^ \\"not_a_field\\" is not a field of \\"ApiResponse\\"
+
+
 error: Expected 2 arguments but got 1
    --> ../../../examples/tests/invalid/struct_expansion.w:11:3
    |
@@ -933,12 +1000,50 @@ error: Expected 2 arguments but got 1
 "
 `;
 
+exports[`structs.w > stderr 1`] = `
+"error: Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" but has a conflicting member \\"x\\" (str != str)
+  --> ../../../examples/tests/invalid/structs.w:9:8
+  |
+9 | struct C extends B {
+  |        ^ Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" but has a conflicting member \\"x\\" (str != str)
+
+
+error: \\"x\\" is not initialized
+   --> ../../../examples/tests/invalid/structs.w:14:19
+   |
+14 | let some_struct = B { y: 5 };
+   |                   ^^^^^^^^^^ \\"x\\" is not initialized
+
+
+error: struct fields must be immutable got: MutArray<str>
+   --> ../../../examples/tests/invalid/structs.w:18:3
+   |
+18 |   f: MutArray<str>;
+   |   ^ struct fields must be immutable got: MutArray<str>
+
+
+error: struct fields must be immutable got: Map<Array<MutArray<str>>>
+   --> ../../../examples/tests/invalid/structs.w:23:3
+   |
+23 |   f: Map<Array<MutArray<str>>>;
+   |   ^ struct fields must be immutable got: Map<Array<MutArray<str>>>
+
+
+error: Unknown symbol \\"bad_field\\"
+   --> ../../../examples/tests/invalid/structs.w:30:7
+   |
+30 | log(a.bad_field);
+   |       ^^^^^^^^^ Unknown symbol \\"bad_field\\"
+
+"
+`;
+
 exports[`try_no_catch_or_finally.w > stderr 1`] = `
 "error: Missing \`catch\` or \`finally\` blocks for this try statement
   --> ../../../examples/tests/invalid/try_no_catch_or_finally.w:1:1
   |  
 1 | / try {
-2 | |   print(\\"Hello World\\");
+2 | |   log(\\"Hello World\\");
 3 | | }
   | \\\\-^ Missing \`catch\` or \`finally\` blocks for this try statement
 
@@ -1068,17 +1173,17 @@ error: Unknown symbol \\"method_which_is_not_part_of_bucket_api\\"
 
 exports[`use_before_defined.w > stderr 1`] = `
 "error: Unknown symbol \\"y\\"
-  --> ../../../examples/tests/invalid/use_before_defined.w:1:10
+  --> ../../../examples/tests/invalid/use_before_defined.w:1:8
   |
-1 | print(\\"\${y}\\"); // Access y before it's defined
-  |          ^ Unknown symbol \\"y\\"
+1 | log(\\"\${y}\\"); // Access y before it's defined
+  |        ^ Unknown symbol \\"y\\"
 
 
 error: Symbol \\"x\\" used before being defined
-  --> ../../../examples/tests/invalid/use_before_defined.w:5:12
+  --> ../../../examples/tests/invalid/use_before_defined.w:5:10
   |
-5 |   print(\\"\${x}\\"); // Access x before it's defined (even though it's defined in an outer scope)
-  |            ^ Symbol \\"x\\" used before being defined
+5 |   log(\\"\${x}\\"); // Access x before it's defined (even though it's defined in an outer scope)
+  |          ^ Symbol \\"x\\" used before being defined
 
 "
 `;
@@ -1094,18 +1199,18 @@ exports[`variable_scoping.w > stderr 1`] = `
 `;
 
 exports[`void_in_expression_position.w > stderr 1`] = `
-"error: Expression must be a class or resource instance to access property \\"get\\", instead found type \\"void\\"
+"error: Property access unsupported on type \\"void\\"
   --> ../../../examples/tests/invalid/void_in_expression_position.w:1:1
   |
-1 | print(\\"hey\\").get(\\"x\\");
-  | ^^^^^^^^^^^^ Expression must be a class or resource instance to access property \\"get\\", instead found type \\"void\\"
+1 | log(\\"hey\\").get(\\"x\\");
+  | ^^^^^^^^^^ Property access unsupported on type \\"void\\"
 
 
 error: Expected type to be \\"num\\", but got \\"void\\" instead
   --> ../../../examples/tests/invalid/void_in_expression_position.w:7:13
   |
-7 | let y = 5 + print(\\"hello\\");
-  |             ^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"void\\" instead
+7 | let y = 5 + log(\\"hello\\");
+  |             ^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"void\\" instead
 
 
 error: Cannot assign expression of type \\"void\\" to a variable

@@ -37,6 +37,10 @@
       "type": "build"
     },
     {
+      "name": "@types/uuid",
+      "type": "build"
+    },
+    {
       "name": "@typescript-eslint/eslint-plugin",
       "version": "^5",
       "type": "build"
@@ -173,6 +177,11 @@
       "type": "bundled"
     },
     {
+      "name": "@aws-sdk/client-elasticache",
+      "version": "3.256.0",
+      "type": "bundled"
+    },
+    {
       "name": "@aws-sdk/client-lambda",
       "version": "3.256.0",
       "type": "bundled"
@@ -195,6 +204,11 @@
     {
       "name": "@aws-sdk/types",
       "version": "3.254.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@aws-sdk/util-dynamodb",
+      "version": "3.256.0",
       "type": "bundled"
     },
     {
@@ -234,11 +248,19 @@
       "type": "bundled"
     },
     {
+      "name": "ioredis",
+      "type": "bundled"
+    },
+    {
       "name": "safe-stable-stringify",
       "type": "bundled"
     },
     {
       "name": "tar",
+      "type": "bundled"
+    },
+    {
+      "name": "uuid",
       "type": "bundled"
     },
     {
@@ -272,6 +294,11 @@
       "type": "peer"
     },
     {
+      "name": "aws-cdk-lib",
+      "version": "^2.64.0",
+      "type": "peer"
+    },
+    {
       "name": "cdktf",
       "version": "0.15.2",
       "type": "peer"
@@ -299,6 +326,11 @@
     {
       "name": "@cdktf/provider-random",
       "version": "^5.0.0",
+      "type": "runtime"
+    },
+    {
+      "name": "aws-cdk-lib",
+      "version": "^2.64.0",
       "type": "runtime"
     },
     {

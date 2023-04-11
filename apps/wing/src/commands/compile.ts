@@ -1,14 +1,14 @@
 import * as vm from "vm";
 
-import { mkdir, readFile } from "fs/promises";
+import { readFile, rmSync, mkdirp, move, mkdirpSync, copySync } from "fs-extra";
 import { basename, dirname, join, resolve } from "path";
+import * as os from "os";
 
 import * as chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
 import { normalPath } from "../util";
 import { CHARS_ASCII, emitDiagnostic, Severity, File, Label } from "codespan-wasm";
-import { readFileSync } from "fs";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -27,23 +27,29 @@ export enum Target {
   TF_AZURE = "tf-azure",
   TF_GCP = "tf-gcp",
   SIM = "sim",
+  AWSCDK = "awscdk",
 }
 
 const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
   [Target.TF_AWS]: "tfaws",
   [Target.TF_AZURE]: "tfazure",
   [Target.TF_GCP]: "tfgcp",
-  [Target.SIM]: undefined,
+  [Target.SIM]: "wsim",
+  [Target.AWSCDK]: "awscdk",
 };
 
 /**
  * Compile options for the `compile` command.
  * This is passed from Commander to the `compile` function.
  */
-export interface ICompileOptions {
-  readonly outDir: string;
+export interface CompileOptions {
   readonly target: Target;
   readonly plugins?: string[];
+  /**
+   * Whether to run the compiler in `wing test` mode. This may create multiple
+   * copies of the application resources in order to run tests in parallel.
+   */
+  readonly testing?: boolean;
 }
 
 /**
@@ -51,51 +57,65 @@ export interface ICompileOptions {
  * within the output directory where the SDK app will synthesize its artifacts
  * for the given target.
  */
-function resolveSynthDir(outDir: string, entrypoint: string, target: Target) {
+function resolveSynthDir(outDir: string, entrypoint: string, target: Target, testing: boolean = false, tmp: boolean = false) {
   const targetDirSuffix = DEFAULT_SYNTH_DIR_SUFFIX[target];
-  if (targetDirSuffix === undefined) {
-    // this target produces a single artifact, so we don't need a subdirectory
-    return outDir;
+  if (!targetDirSuffix) {
+    throw new Error(`unsupported target ${target}`);
   }
   const entrypointName = basename(entrypoint, ".w");
-  return join(outDir, `${entrypointName}.${targetDirSuffix}`);
+  const tmpSuffix = tmp ? `.${Date.now().toString().slice(-6)}.tmp` : "";
+  const lastPart = `${entrypointName}.${targetDirSuffix}${tmpSuffix}`
+  if (testing) {
+    return join(outDir, "test", lastPart);
+  } else {
+    return join(outDir, lastPart);
+  }
 }
 
 /**
  * Compiles a Wing program. Throws an error if compilation fails.
  * @param entrypoint The program .w entrypoint.
  * @param options Compile options.
+ * @returns the output directory
  */
-export async function compile(entrypoint: string, options: ICompileOptions) {
+export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
+  // create a unique temporary directory for the compilation
+  const targetdir = join(dirname(entrypoint), "target");
   const wingFile = entrypoint;
   log("wing file: %s", wingFile);
   const wingDir = dirname(wingFile);
   log("wing dir: %s", wingDir);
-  const synthDir = resolveSynthDir(options.outDir, wingFile, options.target);
+  const testing = options.testing ?? false;
+  log("testing: %s", testing);
+  const tmpSynthDir = resolveSynthDir(targetdir, wingFile, options.target, testing, true);
+  log("temp synth dir: %s", tmpSynthDir);
+  const synthDir = resolveSynthDir(targetdir, wingFile, options.target, testing);
   log("synth dir: %s", synthDir);
-  const workDir = resolve(synthDir, ".wing");
+  const workDir = resolve(tmpSynthDir, ".wing");
   log("work dir: %s", workDir);
 
-  process.env["WING_SYNTH_DIR"] = synthDir;
-  process.env["WING_NODE_MODULES"] = resolve(join(wingDir, "node_modules") );
+  process.env["WING_SYNTH_DIR"] = tmpSynthDir;
+  process.env["WING_PROJECT_DIR"] = resolve(wingDir);
+  process.env["WING_NODE_MODULES"] = resolve(join(wingDir, "node_modules"));
   process.env["WING_TARGET"] = options.target;
+  process.env["WING_IS_TEST"] = testing.toString();
 
   await Promise.all([
-    mkdir(workDir, { recursive: true }),
-    mkdir(synthDir, { recursive: true }),
+    mkdirp(workDir),
+    mkdirp(tmpSynthDir),
   ]);
 
   const wingc = await wingCompiler.load({
     env: {
       RUST_BACKTRACE: "full",
-      WING_SYNTH_DIR: normalPath(synthDir),
+      WING_SYNTH_DIR: normalPath(tmpSynthDir),
       WINGC_PREFLIGHT,
       CLICOLOR_FORCE: chalk.supportsColor ? "1" : "0",
     },
     preopens: {
       [wingDir]: wingDir, // for Rust's access to the source file
       [workDir]: workDir, // for Rust's access to the work directory
-      [synthDir]: synthDir, // for Rust's access to the synth directory
+      [tmpSynthDir]: tmpSynthDir, // for Rust's access to the synth directory
     },
   });
 
@@ -123,7 +143,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
 
       if (span !== null) {
         // `span` should only be null if source file couldn't be read etc.
-        const source = readFileSync(span.file_id, "utf8");
+        const source = await readFile(span.file_id, "utf8");
         const start = offsetFromLineAndColumn(source, span.start.line, span.start.col);
         const end = offsetFromLineAndColumn(source, span.end.line, span.end.col);
         files.push({
@@ -156,14 +176,13 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   const artifact = await readFile(artifactPath, "utf-8");
   log("artifact: %s", artifact);
 
-  const preflightRequire = (path: string) => {
-    // Try looking for dependencies not only in the current directory (wherever
-    // the wing CLI was installed to), but also in the source code directory.
-    // This is necessary because the Wing app may have installed dependencies in
-    // the project directory.
-    const requirePath = require.resolve(path, { paths: [__dirname, wingDir] });
-    return require(requirePath);
-  };
+  // Try looking for dependencies not only in the current directory (wherever
+  // the wing CLI was installed to), but also in the source code directory.
+  // This is necessary because the Wing app may have installed dependencies in
+  // the project directory.
+  const requireResolve = (path: string) => require.resolve(path, { paths: [workDir, __dirname, wingDir] });
+  const preflightRequire = (path: string) => require(requireResolve(path));
+  preflightRequire.resolve = requireResolve;
 
   // If you're wondering how the execution of the preflight works, despite it
   // being in a different directory: it works because at the top of the file
@@ -190,7 +209,6 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     Date,
     Function,
   });
-  log("evaluating artifact in context: %o", context);
 
   try {
     vm.runInContext(artifact, context);
@@ -206,9 +224,9 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
       console.log();
       console.log(
         "  " +
-          chalk.bold.white("note:") +
-          " " +
-          chalk.white(`intermediate javascript code (${artifactPath}):`)
+        chalk.bold.white("note:") +
+        " " +
+        chalk.white(`intermediate javascript code (${artifactPath}):`)
       );
       const lineNumber =
         Number.parseInt(
@@ -236,16 +254,31 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     } else {
       console.log(
         "  " +
-          chalk.bold.white("note:") +
-          " " +
-          chalk.white(
-            "run with `NODE_STACKTRACE=1` environment variable to display a stack trace"
-          )
+        chalk.bold.white("note:") +
+        " " +
+        chalk.white(
+          "run with `NODE_STACKTRACE=1` environment variable to display a stack trace"
+        )
       );
     }
 
-    process.exitCode = 1;
+    return process.exit(1);
   }
+
+  if(os.platform() === "win32") {
+    // Windows doesn't really support fully atomic moves.
+    // So we just copy the directory instead.
+    // Also only using sync methods to avoid possible async fs issues.
+    rmSync(synthDir, { recursive: true, force: true });
+    mkdirpSync(synthDir);
+    copySync(tmpSynthDir, synthDir);
+    rmSync(tmpSynthDir, { recursive: true, force: true });
+  } else {
+    // Move the temporary directory to the final target location in an atomic operation
+    await move(tmpSynthDir, synthDir, { overwrite: true } );
+  }
+
+  return synthDir;
 }
 
 /**

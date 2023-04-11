@@ -199,7 +199,7 @@ let response = http_get("/employees");
 let employees = Array<Employee>.from_json(response.items);
 
 for e in employees {
-  print("hello, ${e.name}, your employee id is ${e.id}");
+  log("hello, ${e.name}, your employee id is ${e.id}");
 }
 ```
 
@@ -240,7 +240,7 @@ let boom: Json = json_obj.boom;
 Trying to access a non-existent field will fail at runtime. For example:
 
 ```js
-print(json_obj.boom.dude.world);
+log(json_obj.boom.dude.world);
 // RUNTIME ERROR: Uncaught TypeError: Cannot read properties of undefined (reading 'world')
 ```
 
@@ -534,14 +534,14 @@ assert(Json.diff(j1, j2) = [
 
 The `Json.patch(j: Json, patch: JsonPatch): Json` static method applies a `JsonPatch` to a `Json` object (P2).
 
-##### 1.1.4.11 Printing
+##### 1.1.4.11 Logging
 
-A `Json` value can be printed using `print()`, in which case it will be pretty-formatted:
+A `Json` value can be logged using `log()`, in which case it will be pretty-formatted:
 
 ```js
-print("my object is: ${json_obj}");
+log("my object is: ${json_obj}");
 // is equivalent to
-print("my object is: ${Json.stringify(json_obj, indent: 2)}");
+log("my object is: ${Json.stringify(json_obj, indent: 2)}");
 ```
 
 This will output:
@@ -552,10 +552,10 @@ my object is: {
 }
 ```
 
-It is also legal to just print a json object:
+It is also legal to just log a json object:
 
 ```js
-print(json_mut_obj);
+log(json_mut_obj);
 ```
 
 [`▲ top`][top]
@@ -634,12 +634,12 @@ A few examples:
 
 ```js
 let now = Datetime.utc_now();
-print("It is now ${now.month}/${now.day}/${now.year} at ${now.hours}:${now.min}:${now.sec})");
+log("It is now ${now.month}/${now.day}/${now.year} at ${now.hours}:${now.min}:${now.sec})");
 assert(now.timezone == 0); // UTC
 
 let t1 = DateTime.from_iso("2023-02-09T06:20:17.573Z");
-print("Timezone is GMT${d.timezone() / 60}"); // output: Timezone is GMT-2
-print("UTC: ${t1.utc.to_iso())}");            // output: 2023-02-09T06:21:03.000Z
+log("Timezone is GMT${d.timezone() / 60}"); // output: Timezone is GMT-2
+log("UTC: ${t1.utc.to_iso())}");            // output: 2023-02-09T06:21:03.000Z
 ```
 
 [`▲ top`][top]
@@ -651,7 +651,7 @@ print("UTC: ${t1.utc.to_iso())}");            // output: 2023-02-09T06:21:03.000
 
 | Name     | Extra information                                        |
 | -------- | -------------------------------------------------------- |
-| `print`  | prints anything serializable.                            |
+| `log`    | logs anything serializable.                              |
 | `throw`  | creates and throws an instance of an exception           |
 | `panic`  | exits with a serializable, dumps the trace + a core dump |
 | `assert` | checks a condition and _panics_ if evaluated to false    |
@@ -667,7 +667,7 @@ last resort. Exceptions are non fatal and should be used instead for effectively
 communicating errors to the user.
 
 > ```TS
-> print(23, "Hello", true, { "a": 1, "b": 2 });
+> log(23, "Hello", true, { "a": 1, "b": 2 });
 > throw("a recoverable error occurred");
 > panic("a fatal error encountered", [1,2]);
 > assert(x > 0, x < 10);
@@ -733,7 +733,7 @@ The `inflight` modifier is allowed when defining a function closure:
 
 ```TS
 let handler = inflight () => {
-  print("hello, world");
+  log("hello, world");
 };
 ```
 
@@ -1218,9 +1218,9 @@ expected from a call and it is not being caught.
 >   let x? = 1;
 >   throw("hello exception");
 > } catch e {
->   print(e);
+>   log(e);
 > } finally {
->   print("done");
+>   log("done");
 > }
 > ```
 
@@ -1354,7 +1354,7 @@ while loops currently.
 >   if i > 5 {
 >     break;
 >   }
->   print(i);
+>   log(i);
 > }
 > ```
 
@@ -1385,7 +1385,7 @@ includes for and while loops currently.
 >   if i > 5 {
 >     continue;
 >   }
->   print(i);
+>   log(i);
 > }
 > ```
 
@@ -1494,11 +1494,11 @@ The `if` statement is optionally followed by `elif` and `else`.
 > let x = 1;
 > let y = "sample";
 > if x == 2 {
->   print("x is 2");
+>   log("x is 2");
 > } elif y != "sample" {
->   print("y is not sample");
+>   log("y is not sample");
 > } else {
->   print("x is 1 and y is sample");
+>   log("x is 1 and y is sample");
 > }
 > ```
 
@@ -1533,13 +1533,13 @@ The loop invariant in for loops is implicitly re-assignable (`var`).
 > let arr = [1, 2, 3];
 > let set = {1, 2, 3};
 > for item in arr {
->   print(item);
+>   log(item);
 > }
 > for item: num in set {
->   print(item);
+>   log(item);
 > }
 > for item in 0..100 {
->   print(item);
+>   log(item);
 > }
 > ```
 
@@ -1579,7 +1579,7 @@ while statement is used to execute a block of code while a condition is true.
 > ```TS
 > // Wing program:
 > while call_some_function() {
->   print("hello");
+>   log("hello");
 > }
 > ```
 
@@ -1727,18 +1727,18 @@ class Bar {
   y: num;
   z: Foo;
   init() {
-    // this.print() // is compile error here
+    // this.log() // is compile error here
     this.y = 1;
-    // this.print() // is also compile error here
+    // this.log() // is also compile error here
     this.z = new Foo();
-    this.print(); // OK to call here
+    this.log(); // OK to call here
   }
-  public print() {
-    print(this.y);
+  public log() {
+    log(this.y);
   }
 }
 let a = new Bar();
-a.print(); // prints 20.
+a.log(); // logs 20.
 ```
 
 Overloading methods is allowed. This means functions can be overloaded with many
@@ -1904,22 +1904,24 @@ separated with commas.
 All methods of an interface are implicitly public and cannot be of any other
 type of visibility (private, protected, etc.).
 
+Interface fields are not supported.
+
 > ```TS
 > // Wing program:
 > interface IMyInterface1 {
->   field1: num;
 >   method1(x: num): str;
 > };
 > interface IMyInterface2 {
->   inflight field2: str;
 >   inflight method2(): str;
 > };
 > resource MyResource impl IMyInterface1, IMyInterface2 {
->   inflight field2: str;
+>   field1: num;
+>   field2: str;
+>
 >   inflight init(x: num) {
 >     // inflight client initialization
->     this.field2 = "sample";
 >     this.field1 = x;
+>     this.field2 = "sample";
 >   }
 >   method1(x: num): str {
 >     return "sample: ${x}";
@@ -2007,14 +2009,14 @@ However, it is possible to create anonymous closures and assign to variables
 
 > ```TS
 > // preflight closure:
-> let f1 = (a: num, b: num) => { print(a + b); }
+> let f1 = (a: num, b: num) => { log(a + b); }
 > // inflight closure:
-> let f2 = inflight (a: num, b: num) => { print(a + b); }
+> let f2 = inflight (a: num, b: num) => { log(a + b); }
 > // OR:
 > // preflight closure:
-> let f4 = (a: num, b: num): void => { print(a + b); }
+> let f4 = (a: num, b: num): void => { log(a + b); }
 > // inflight closure:
-> let f5 = inflight (a: num, b: num): void => { print(a + b); }
+> let f5 = inflight (a: num, b: num): void => { log(a + b); }
 > ```
 
 [`▲ top`][top]
@@ -2066,7 +2068,7 @@ struct MyStruct {
   field2: num;
 };
 let f = (x: num, y: num, z: MyStruct) => {
-  print(x + y + z.field1 + z.field2);
+  log(x + y + z.field1 + z.field2);
 }
 // last arguments are expanded into their struct
 f(1, 2, field1: 3, field2: 4);
@@ -2086,7 +2088,7 @@ arguments is accessible with the `args` key like a normal array instance.
 
 ```TS
 let f = (x: num, ...args: Array<num>) => {
-  print(x + y + args.len);
+  log(x + y + args.len);
 }
 // last arguments are expanded into their struct
 f(1, 2, 3, 4, 5, 6, 34..100);
@@ -2328,7 +2330,7 @@ supported languages.
 
 ## 5.2 JavaScript
 
-The `extern "file.js"` modifier can be used on method declarations (in classes and resources) to indicate that a method is backed by an implementation imported from a JavaScript file.
+The `extern "<commonjs module path or name>"` modifier can be used on method declarations (in classes and resources) to indicate that a method is backed by an implementation imported from a JavaScript module. The module can either be a relative path or a name and will be loaded via [require()](https://nodejs.org/api/modules.html#requireid).
 
 In the following example, the static inflight method `make_id` is implemented
 in `helper.js`:
@@ -2339,15 +2341,18 @@ resource TaskList {
   // ...
 
   inflight add_task(title: str) {
-    let id = TaskList.uuid();
+    let id = TaskList.make_id(); // or TaskList.v6();
     this.bucket.put(id, title);
   }
 
   extern "./helpers.js" static inflight make_id(): str;
+
+  // Alternatively, you can use a module name
+  extern "uuid" static inflight v6(): str;
 } 
 
 // helpers.js
-const uuid = require('uuid');
+const uuid = require("uuid");
 
 exports.make_id = function() {
   return uuid.v6();
@@ -2689,9 +2694,9 @@ let filter_fn = inflight (event: cloud.QueueEvent) => {
   let version = event.data["version"];
   let reason = event.data["reason"];
   if deny_list.lookup(package_name, version) {
-    print("Package rejected: ${package_name}");
+    log("Package rejected: ${package_name}");
   } else {
-    print("Package accepted: ${package_name}");
+    log("Package accepted: ${package_name}");
   }
 };
 

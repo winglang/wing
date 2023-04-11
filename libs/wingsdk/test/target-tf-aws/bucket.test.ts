@@ -1,6 +1,8 @@
 import * as cdktf from "cdktf";
+import { Construct } from "constructs";
 import { test, expect } from "vitest";
-import { Bucket } from "../../src/cloud";
+import { Bucket, IBucketEventHandler } from "../../src/cloud";
+import { NodeJsCode, Inflight } from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp } from "../../src/util";
 import {
@@ -9,6 +11,16 @@ import {
   tfSanitize,
   treeJsonOf,
 } from "../util";
+
+class InflightBucketEventHandler
+  extends Inflight
+  implements IBucketEventHandler
+{
+  public stateful: boolean;
+  constructor(scope: Construct, id: string) {
+    super(scope, id, { code: NodeJsCode.fromInline("null") });
+  }
+}
 
 test("create a bucket", () => {
   // GIVEN
@@ -24,6 +36,19 @@ test("create a bucket", () => {
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("bucket has force_destroy if App is a test environment", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp(), isTestEnvironment: true });
+  Bucket._newBucket(app, "my_bucket");
+  const output = app.synth();
+
+  // THEN
+  expect(
+    JSON.parse(output).resource.aws_s3_bucket.root_mybucket_E5DAA363
+      .force_destroy
+  ).toBe(true);
 });
 
 test("bucket is public", () => {
@@ -112,4 +137,127 @@ test("bucket prefix can not begining with 'xn--'", () => {
   expect(() => Bucket._newBucket(app, "xn--The-Uncanny-Bucket")).toThrow(
     /AWS S3 bucket names cannot begin with 'xn--'/
   );
+});
+
+test("bucket with onCreate method", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
+  const inflightTest = new InflightBucketEventHandler(app, "inflight");
+  bucket.onCreate(inflightTest);
+  const output = app.synth();
+
+  // THEN
+  expect(tfResourcesOf(output)).toEqual([
+    "aws_iam_role",
+    "aws_iam_role_policy",
+    "aws_iam_role_policy_attachment",
+    "aws_lambda_function", // inflight subscriber
+    "aws_lambda_permission", // permission of the topic to invoke lambda
+    "aws_s3_bucket", // main bucket
+    "aws_s3_bucket_notification",
+    "aws_s3_bucket_policy", // resource policy to grant read access to anyone
+    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
+    "aws_s3_object",
+    "aws_sns_topic", // topic to subscribe to bucket events
+    "aws_sns_topic_policy", //permission of the bucket to publish events
+    "aws_sns_topic_subscription", // subscription to events
+  ]);
+
+  expect(tfResourcesOfCount(output, "aws_sns_topic")).toEqual(1);
+  expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(1);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("bucket with onDelete method", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
+  const inflightTest = new InflightBucketEventHandler(app, "inflight");
+  bucket.onDelete(inflightTest);
+  const output = app.synth();
+
+  // THEN
+  expect(tfResourcesOf(output)).toEqual([
+    "aws_iam_role",
+    "aws_iam_role_policy",
+    "aws_iam_role_policy_attachment",
+    "aws_lambda_function", // inflight subscriber
+    "aws_lambda_permission", // permission of the topic to invoke lambda
+    "aws_s3_bucket", // main bucket
+    "aws_s3_bucket_notification",
+    "aws_s3_bucket_policy", // resource policy to grant read access to anyone
+    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
+    "aws_s3_object",
+    "aws_sns_topic", // topic to subscribe to bucket events
+    "aws_sns_topic_policy", //permission of the bucket to publish events
+    "aws_sns_topic_subscription", // subscription to events
+  ]);
+
+  expect(tfResourcesOfCount(output, "aws_sns_topic")).toEqual(1);
+  expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(1);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("bucket with onUpdate method", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
+  const inflightTest = new InflightBucketEventHandler(app, "inflight");
+  bucket.onUpdate(inflightTest);
+  const output = app.synth();
+
+  // THEN
+  expect(tfResourcesOf(output)).toEqual([
+    "aws_iam_role",
+    "aws_iam_role_policy",
+    "aws_iam_role_policy_attachment",
+    "aws_lambda_function", // inflight subscriber
+    "aws_lambda_permission", // permission of the topic to invoke lambda
+    "aws_s3_bucket", // main bucket
+    "aws_s3_bucket_notification",
+    "aws_s3_bucket_policy", // resource policy to grant read access to anyone
+    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
+    "aws_s3_object",
+    "aws_sns_topic", // topic to subscribe to bucket events
+    "aws_sns_topic_policy", //permission of the bucket to publish events
+    "aws_sns_topic_subscription", // subscription to events
+  ]);
+
+  expect(tfResourcesOfCount(output, "aws_sns_topic")).toEqual(1);
+  expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(1);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("bucket with onEvent method", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
+  const inflightTest = new InflightBucketEventHandler(app, "inflight");
+  bucket.onEvent(inflightTest);
+  const output = app.synth();
+
+  // THEN
+  expect(tfResourcesOf(output)).toEqual([
+    "aws_iam_role",
+    "aws_iam_role_policy",
+    "aws_iam_role_policy_attachment",
+    "aws_lambda_function", // inflight subscriber
+    "aws_lambda_permission", // permission of the topic to invoke lambda
+    "aws_s3_bucket", // main bucket
+    "aws_s3_bucket_notification",
+    "aws_s3_bucket_policy", // resource policy to grant read access to anyone
+    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
+    "aws_s3_object",
+    "aws_sns_topic", // topic to subscribe to bucket events
+    "aws_sns_topic_policy", //permission of the bucket to publish events
+    "aws_sns_topic_subscription", // subscription to events
+  ]);
+  expect(tfResourcesOfCount(output, "aws_sns_topic")).toEqual(3); // 3 topics will be created- one per event
+  expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(3);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });

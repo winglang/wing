@@ -13,10 +13,11 @@ import {
   ApiResponse,
   IApiClient,
   IFunctionClient,
+  TraceType,
   parseHttpMethod,
   sanitizeParamLikeObject,
 } from "../cloud";
-import { ISimulatorContext, TraceType } from "../testing/simulator";
+import { ISimulatorContext } from "../testing/simulator";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 
@@ -96,7 +97,7 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
             for (const [key, value] of Object.entries(response.headers ?? {})) {
               res.set(key, value);
             }
-            res.send(response.body);
+            res.send(JSON.stringify(response.body));
             this.addTrace(
               `${route.method} ${route.route} - ${response.status}.`
             );

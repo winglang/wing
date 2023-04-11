@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
-import { SimApp, Testing, TraceType } from "../../src/testing";
+import { SimApp, Testing } from "../../src/testing";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -35,7 +35,7 @@ test("pushing messages through a queue", async () => {
           console.log("Received " + event);
         }`
       );
-      queue.onMessage(processor);
+      queue.addConsumer(processor);
     }
   }
 
@@ -52,7 +52,7 @@ test("pushing messages through a queue", async () => {
 
   // THEN
   await s.stop();
-  expect(s.listTraces().filter((t) => t.type === TraceType.LOG)).toEqual([
+  expect(s.listTraces().filter((t) => t.type === cloud.TraceType.LOG)).toEqual([
     {
       data: { message: "Hello, world!" },
       sourcePath: "root/HelloWorld/Function",
@@ -62,7 +62,7 @@ test("pushing messages through a queue", async () => {
     },
     {
       data: { message: "Received foo" },
-      sourcePath: "root/HelloWorld/Queue-OnMessage-13c4eaf1",
+      sourcePath: "root/HelloWorld/Queue-AddConsumer-13c4eaf1",
       sourceType: "wingsdk.cloud.Function",
       timestamp: expect.any(String),
       type: "log",

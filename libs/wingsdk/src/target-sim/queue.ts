@@ -4,15 +4,12 @@ import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { QueueSchema, QueueSubscriber, QUEUE_TYPE } from "./schema-resources";
-import {
-  bindSimulatorResource,
-  makeSimulatorJsClient,
-  simulatorHandleToken,
-} from "./util";
+import { simulatorHandleToken } from "./tokens";
+import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
 import * as std from "../std";
+import { convertBetweenHandlers } from "../utils/convert";
 
 /**
  * Simulator implementation of `cloud.Queue`.
@@ -31,20 +28,20 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     this.initialMessages.push(...(props.initialMessages ?? []));
   }
 
-  public onMessage(
-    inflight: cloud.IQueueOnMessageHandler,
-    props: cloud.QueueOnMessageProps = {}
+  public addConsumer(
+    inflight: cloud.IQueueAddConsumerHandler,
+    props: cloud.QueueAddConsumerProps = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
 
     /**
-     * The handle method the user provided (via the `inflight` parameter) needs
+     * The inflight function the user provided (via the `inflight` parameter) needs
      * to be wrapped in some extra logic to handle batching.
      * `convertBetweenHandlers` creates a dummy resource that provides the
      * wrapper code. In Wing psuedocode, this looks like:
      *
      * resource Handler impl cloud.IFunctionHandler {
-     *   init(handler: cloud.IQueueOnMessageHandler) {
+     *   init(handler: cloud.IQueueAddConsumerHandler) {
      *     this.handler = handler;
      *   }
      *   inflight handle(event: string) {
@@ -54,22 +51,22 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
      *   }
      * }
      *
-     * It's possible we could optimize this and create one less construct in the
+     * TODO: can we optimize this and create one less construct in the
      * user's tree by creating a single `Handler` resource that subclasses from
      * `cloud.Function` and overrides the `invoke` inflight method with the
-     * wrapper code directly.
+     * wrapper code directly?
      */
     const functionHandler = convertBetweenHandlers(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessageHandler-${hash}`,
+      `${this.node.id}-AddConsumerHandler-${hash}`,
       inflight,
-      join(__dirname, "queue.onmessage.inflight.js"),
-      "QueueOnMessageHandlerClient"
+      join(__dirname, "queue.addconsumer.inflight.js"),
+      "QueueAddConsumerHandlerClient"
     );
 
     const fn = Function._newFunction(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessage-${hash}`,
+      `${this.node.id}-AddConsumer-${hash}`,
       functionHandler,
       props
     );
@@ -86,7 +83,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     core.Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "on_message",
+      relationship: "add_consumer",
     });
 
     return fn;
@@ -108,13 +105,13 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
 
   /** @internal */
   public _bind(host: core.IInflightHost, ops: string[]): void {
-    bindSimulatorResource("queue", this, host);
+    bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }
 
   /** @internal */
   public _toInflight(): core.Code {
-    return makeSimulatorJsClient("queue", this);
+    return makeSimulatorJsClient(__filename, this);
   }
 }
 

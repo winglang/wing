@@ -14,12 +14,13 @@ environment:
 * [Node.js] v18 and npm v8
   * We recommend [volta] to manage node tools
 * [Rust]
+  * We recommend using [rustup] to manage your Rust installation
 * [AWS CLI]
   * Only needed for integration tests - make sure to do the setup part to create credentials
 * [Terraform CLI]
   * Only needed for integration tests
-* [Docker] or [emscripten]
-  * Only needed for to build the grammar as WASM for the web-based playground
+* [Docker]
+  * Needed to build the grammar as WASM for the web-based playground and to run unit tests
 
 Installation:
 
@@ -36,7 +37,6 @@ npm install
 npx nx <target> <project>
 # or
 npx nx <target> <project> -- <args>
-
 ```
 
 - `npx` can be omitted if [Nx] is installed globally
@@ -47,7 +47,8 @@ npx nx <target> <project> -- <args>
 
 [Nx]: https://nx.dev/
 [Node.js]: https://nodejs.org/en/
-[Rust]: https://www.rust-lang.org/tools/install
+[Rust]: https://www.rust-lang.org/
+[rustup]: https://rustup.rs/
 [AWS CLI]: https://aws.amazon.com/cli/
 [Terraform CLI]: https://learn.hashicorp.com/terraform/getting-started/install.html
 [volta]: https://volta.sh

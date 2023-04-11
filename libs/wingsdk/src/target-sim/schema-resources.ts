@@ -1,5 +1,5 @@
 import { BaseResourceAttributes, BaseResourceSchema } from "./schema";
-import { HttpMethod } from "../cloud";
+import { ColumnType, HttpMethod } from "../cloud";
 
 export const API_TYPE = "wingsdk.cloud.Api";
 export const QUEUE_TYPE = "wingsdk.cloud.Queue";
@@ -8,7 +8,10 @@ export const BUCKET_TYPE = "wingsdk.cloud.Bucket";
 export const TOPIC_TYPE = "wingsdk.cloud.Topic";
 export const COUNTER_TYPE = "wingsdk.cloud.Counter";
 export const SCHEDULE_TYPE = "wingsdk.cloud.Schedule";
+export const TABLE_TYPE = "wingsdk.cloud.Table";
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
+export const TEST_RUNNER_TYPE = "wingsdk.cloud.TestRunner";
+export const REDIS_TYPE = "wingsdk.redis.Redis";
 
 export type FunctionHandle = string;
 
@@ -96,6 +99,19 @@ export interface TopicSubscriber {
   readonly functionHandle: FunctionHandle;
 }
 
+/** Runtime attributes for cloud.Table */
+export interface TableAttributes {}
+
+/** Schema for cloud.Table */
+export interface TableSchema extends BaseResourceSchema {
+  readonly type: typeof TABLE_TYPE;
+  readonly props: {
+    readonly name: string;
+    readonly columns: { [key: string]: ColumnType };
+    readonly primaryKey: string;
+  };
+}
+
 /** Schema for cloud.Bucket */
 export interface BucketSchema extends BaseResourceSchema {
   readonly type: typeof BUCKET_TYPE;
@@ -104,6 +120,8 @@ export interface BucketSchema extends BaseResourceSchema {
     readonly public: boolean;
     /** The initial objects uploaded to the bucket. */
     readonly initialObjects: Record<string, string>;
+    /** Event notification topics- the record has BucketEventType as a key and a topic handle as a value  */
+    readonly topics: Record<string, string>;
   };
 }
 
@@ -130,3 +148,23 @@ export interface CounterSchema extends BaseResourceSchema {
 
 /** Runtime attributes for cloud.Counter */
 export interface CounterAttributes {}
+
+/** Schema for cloud.TestRunner */
+export interface TestRunnerSchema extends BaseResourceSchema {
+  readonly type: typeof TEST_RUNNER_TYPE;
+  readonly props: {
+    /** A map from test functions to their handles. */
+    readonly tests: Record<string, FunctionHandle>;
+  };
+}
+
+/** Runtime attributes for cloud.TestRunner */
+export interface TestRunnerAttributes {}
+
+/** Schema for redis.Redis */
+export interface RedisSchema extends BaseResourceSchema {
+  readonly type: typeof REDIS_TYPE;
+  readonly props: {};
+}
+
+export interface RedisAttributes {}

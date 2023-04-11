@@ -14,19 +14,19 @@ let handler = inflight (event: str): str => {
   bucket3.get("file3.txt");
 
   for stuff in bucket1.list() {
-    print(stuff);
+    log(stuff);
   }
 
-  print(bucket2.public_url("file.txt"));
+  log(bucket2.public_url("file.txt"));
 
   try {
     bucket1.public_url("file.txt");
   } catch error {
-    print(error);
+    log(error);
   }
 };
 
-queue.on_message(handler, batch_size: 5);
+queue.add_consumer(handler, batch_size: 5);
 
 new cloud.Function(
   handler, 

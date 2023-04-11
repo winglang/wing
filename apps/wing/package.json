@@ -7,6 +7,7 @@
     "bin/wing",
     "dist/"
   ],
+  "license": "MIT",
   "engines": {
     "node": ">=v18.0.0"
   },
@@ -34,8 +35,10 @@
     "commander": "^10.0.0",
     "compare-versions": "^5.0.3",
     "debug": "^4.3.4",
+    "fs-extra": "^11.1.1",
     "is-installed-globally": "^0.4.0",
     "open": "^8.4.0",
+    "ora": "^5.4.1",
     "update-notifier": "^6.0.2",
     "vscode-languageserver": "^8.0.2",
     "wasi-js": "^1.7.3"
@@ -45,6 +48,7 @@
   ],
   "devDependencies": {
     "@types/debug": "^4.1.7",
+    "@types/fs-extra": "^11.0.1",
     "@types/jest": "^29.2.6",
     "@types/node": "^18.11.18",
     "@types/node-persist": "^3.1.3",

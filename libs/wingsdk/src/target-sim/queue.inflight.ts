@@ -5,8 +5,8 @@ import {
   QueueSubscriber,
   QUEUE_TYPE,
 } from "./schema-resources";
-import { IFunctionClient, IQueueClient } from "../cloud";
-import { ISimulatorContext, TraceType } from "../testing/simulator";
+import { IFunctionClient, IQueueClient, TraceType } from "../cloud";
+import { ISimulatorContext } from "../testing/simulator";
 
 export class Queue implements IQueueClient, ISimulatorResourceInstance {
   private readonly messages = new Array<string>();
@@ -91,11 +91,11 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
           sourceType: QUEUE_TYPE,
           timestamp: new Date().toISOString(),
         });
-        void fnClient.invoke(JSON.stringify({ messages })).catch((_err) => {
+        void fnClient.invoke(JSON.stringify({ messages })).catch((err) => {
           // If the function returns an error, put the message back on the queue
           this.context.addTrace({
             data: {
-              message: `Subscriber error - returning ${messages.length} messages to queue.`,
+              message: `Subscriber error - returning ${messages.length} messages to queue: ${err.message}`,
             },
             sourcePath: this.context.resourcePath,
             sourceType: QUEUE_TYPE,

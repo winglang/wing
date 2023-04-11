@@ -1,22 +1,23 @@
 import { Construct } from "constructs";
 import { test, expect, describe } from "vitest";
-import { Bucket } from "../../src/cloud";
+import { Bucket, TestResult } from "../../src/cloud";
 import { Code, InflightBindings } from "../../src/core";
-import { Function } from "../../src/target-sim/function";
-import { SimApp, Testing, TestResult } from "../../src/testing";
+import { Function } from "../../src/target-sim";
+import { SimApp, Testing } from "../../src/testing";
 
 describe("run single test", () => {
   test("test not found", async () => {
     const app = new SimApp();
     const sim = await app.startSimulator();
     await expect(sim.runTest("test_not_found")).rejects.toThrowError(
-      'Resource "test_not_found" not found'
+      'No test found at path "test_not_found"'
     );
   });
 
   test("happy path", async () => {
     const app = new SimApp();
     new Test(app, "test", ["console.log('hi');"]);
+    app.synth();
     const sim = await app.startSimulator();
     const result = await sim.runTest("root/test");
     expect(sanitizeResult(result)).toMatchSnapshot();
@@ -40,7 +41,7 @@ describe("run single test", () => {
 
     const sim = await app.startSimulator();
     await expect(sim.runTest("root/test")).rejects.toThrowError(
-      'Resource "root/test" is not a cloud.Function (expecting "invoke()").'
+      'No test found at path "root/test"'
     );
   });
 });
@@ -167,8 +168,9 @@ function removePathsFromTraceLine(line?: string) {
     return undefined;
   }
 
-  if (line.startsWith("    at ")) {
-    return line.split("(")[0];
+  // replace any paths in the log line with "foo/bar.ts" instead of "/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/foo/bar.ts"
+  if (line.includes("/")) {
+    return "<sanitized>";
   }
 
   return line;
