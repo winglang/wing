@@ -1094,7 +1094,7 @@ impl<'a> JSifier<'a> {
 				return {STDLIB}.core.NodeJsCode.fromInline(`(
 					await (async () => {{ 
 						const tmp = new (require(\"${{self_client_path}}\")).{resource_name}({{{captured_fields}}}); 
-						if (tmp.{WING_INFLIGHT_INIT_NAME}) { await tmp.{WING_INFLIGHT_INIT_NAME}(); }
+						if (tmp.{WING_INFLIGHT_INIT_NAME}) {{ await tmp.{WING_INFLIGHT_INIT_NAME}(); }}
 						return tmp; 
 					}})()
 				)`);
