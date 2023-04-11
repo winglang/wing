@@ -1195,11 +1195,11 @@ impl<'s> Parser<'s> {
 					let field_value = self.build_expression(&field.named_child(1).unwrap());
 					// Add fields to our struct literal, if some are missing or aren't part of the type we'll fail on type checking
 					if let (Ok(k), Ok(v)) = (field_name, field_value) {
-						if fields.contains_key(&k.name) {
+						if fields.contains_key(&k) {
 							// TODO: ugly, we need to change add_error to not return anything and have a wrapper `raise_error` that returns a Result
 							_ = self.add_error::<()>(format!("Duplicate field {} in struct literal", k), expression_node);
 						} else {
-							fields.insert(k.name.clone(), (k, v));
+							fields.insert(k, v);
 						}
 					}
 				}
