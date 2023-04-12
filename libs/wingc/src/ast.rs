@@ -201,7 +201,7 @@ impl FunctionSignature {
 		TypeAnnotation::Function(FunctionTypeAnnotation {
 			param_types: self.parameters.iter().map(|p| p.type_annotation.clone()).collect(),
 			return_type: self.return_type.clone(),
-			phase: self.phase.clone(),
+			phase: self.phase,
 		})
 	}
 }

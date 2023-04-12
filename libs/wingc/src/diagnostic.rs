@@ -93,7 +93,7 @@ impl Into<Range> for &WingSpan {
 }
 
 impl WingSpan {
-	pub fn contains(self: &Self, position: &Position) -> bool {
+	pub fn contains(&self, position: &Position) -> bool {
 		let pos_line = position.line;
 		let pos_char = position.character;
 		let start = self.start;
@@ -252,8 +252,8 @@ mod tests {
 
 		assert!(span1 == like_span1);
 		assert!(span1 < later);
-		assert!(!(span1 > later));
+		assert!(span1 <= later);
 		assert!(span1 > sooner);
-		assert!(!(span1 < sooner));
+		assert!(span1 >= sooner);
 	}
 }
