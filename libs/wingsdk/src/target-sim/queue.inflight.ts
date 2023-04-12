@@ -1,3 +1,4 @@
+import { IEventProducer } from "./event-mapping";
 import {
   QueueAttributes,
   QueueSchema,
@@ -9,9 +10,10 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../testing/simulator";
-import { IEventProducer } from "./event-mapping";
 
-export class Queue implements IQueueClient, ISimulatorResourceInstance, IEventProducer {
+export class Queue
+  implements IQueueClient, ISimulatorResourceInstance, IEventProducer
+{
   private readonly messages = new Array<string>();
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly intervalId: NodeJS.Timeout;
@@ -170,4 +172,3 @@ class RandomArrayIterator<T = any> implements Iterable<T> {
     return this;
   }
 }
-
