@@ -104,3 +104,17 @@ jobs:
           author: monadabot <monabot@monada.co>
           committer: monadabot <monabot@monada.co>
           signoff: true
+
+      - name: Enable Pull Request Automerge
+        if: steps.create-pr.outputs.pull-request-operation == 'created'
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          pull-request-number: ${{ steps.create-pr.outputs.pull-request-number }}
+          merge-method: squash
+
+      - name: Auto approve
+        if: steps.create-pr.outputs.pull-request-operation == 'created'
+        run: gh pr review --approve "${{ steps.create-pr.outputs.pull-request-number }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
