@@ -398,7 +398,9 @@ function createMapNodeFromConstructTreeNode(
               !node.display?.hidden && (showTests || !isTest.test(node.path))
             );
           })
-          .map((node) => createMapNodeFromConstructTreeNode(node, simulator))
+          .map((node) =>
+            createMapNodeFromConstructTreeNode(node, simulator, showTests),
+          )
       : undefined,
   };
 }
