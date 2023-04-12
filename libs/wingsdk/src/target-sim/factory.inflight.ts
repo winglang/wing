@@ -15,6 +15,7 @@ import {
   TOPIC_TYPE,
   REDIS_TYPE,
   SECRET_TYPE,
+  QUEUE_EVENT_MAP_TYPE,
 } from "./schema-resources";
 import { Secret } from "./secret.inflight";
 import { Table } from "./table.inflight";
@@ -25,6 +26,7 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../testing/simulator";
+import { QueueEventMapping } from "./queue-event-mapping.inflight";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
   /**
@@ -60,6 +62,8 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return new Redis(props, context);
       case SECRET_TYPE:
         return new Secret(props, context);
+      case QUEUE_EVENT_MAP_TYPE:
+        return new QueueEventMapping(props, context);
       default:
         throw new Error(`Type ${type} not implemented by the simulator.`);
     }

@@ -6,6 +6,7 @@ import {
 
 export const API_TYPE = "wingsdk.cloud.Api";
 export const QUEUE_TYPE = "wingsdk.cloud.Queue";
+export const QUEUE_EVENT_MAP_TYPE = "wingsdk.sim.QueueEventMap";
 export const FUNCTION_TYPE = "wingsdk.cloud.Function";
 export const BUCKET_TYPE = "wingsdk.cloud.Bucket";
 export const TOPIC_TYPE = "wingsdk.cloud.Topic";
@@ -18,6 +19,7 @@ export const REDIS_TYPE = "wingsdk.redis.Redis";
 export const SECRET_TYPE = "wingsdk.cloud.Secret";
 
 export type FunctionHandle = string;
+export type ProducerHandle = string;
 
 /** Schema for cloud.Api */
 export interface ApiSchema extends BaseResourceSchema {
@@ -76,13 +78,43 @@ export interface QueueSchema extends BaseResourceSchema {
   };
 }
 
+export interface EventSubscriber {
+  /** Function that should be called */
+  readonly functionHandle: FunctionHandle;
+}
+
+export interface EventProducer {
+  readonly producerHandle: ProducerHandle;
+}
+
+/** Schema for cloud.EventMapping */
+export interface EventProps {
+  consumer: EventSubscriber;
+  producer: EventProducer;
+}
+
+/** Schema for cloud.EventMapping */
+export interface QueueEventProps extends EventProps {
+  consumer: {
+    functionHandle: FunctionHandle;
+    batchSize: number;
+  }
+}
+
+/** Schema for cloud.QueueEventMapping.props */
+export interface QueueEventMappingSchema extends BaseResourceSchema {
+  readonly type: typeof QUEUE_EVENT_MAP_TYPE;
+  readonly props: QueueEventProps;
+}
+
+/** Runtime attributes for cloud.QueueEventMapping */
+export interface QueueEventMappingAttributes {}
+
 /** Runtime attributes for cloud.Queue */
 export interface QueueAttributes {}
 
 /** Schema for cloud.Queue.props.subscribers */
-export interface QueueSubscriber {
-  /** Function that should be called. */
-  readonly functionHandle: FunctionHandle;
+export interface QueueSubscriber extends EventSubscriber {
   /** Maximum number of messages that will be batched together to the subscriber. */
   readonly batchSize: number;
 }
@@ -98,10 +130,7 @@ export interface TopicSchema extends BaseResourceSchema {
 /** Runtime attributes for cloud.Topic */
 export interface TopicAttributes {}
 
-export interface TopicSubscriber {
-  /** Function that should be called */
-  readonly functionHandle: FunctionHandle;
-}
+export interface TopicSubscriber extends EventSubscriber {}
 
 /** Runtime attributes for cloud.Table */
 export interface TableAttributes {}

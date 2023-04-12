@@ -3,13 +3,13 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema, QueueSubscriber, QUEUE_TYPE } from "./schema-resources";
-import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { Duration, IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 import { convertBetweenHandlers } from "../utils/convert";
+import { QueueEventMapping } from "./queue-event-map";
 
 /**
  * Simulator implementation of `cloud.Queue`.
@@ -71,13 +71,12 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       props
     );
 
-    // At the time the queue is created in the simulator, it needs to be able to
-    // call subscribed functions.
-    this.node.addDependency(fn);
-
-    this.subscribers.push({
-      functionHandle: simulatorHandleToken(fn),
-      batchSize: props.batchSize ?? 1,
+    new QueueEventMapping(this, `${this.node.id}-QueueEventMapping-${hash}`, {
+      consumer: {
+        batchSize: props.batchSize ?? 1,
+        resource: fn
+      },
+      producer: this
     });
 
     Resource.addConnection({
