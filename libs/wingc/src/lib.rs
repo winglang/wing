@@ -330,6 +330,21 @@ pub fn compile(
 		.unwrap_or(source_path.parent().unwrap())
 		.to_path_buf();
 
+	// Verify that the project dir is absolute
+	if !project_dir.starts_with("/") {
+		let dir_str = project_dir.to_str().expect("Project dir is valid UTF-8");
+		// Check if this is a Windows path instead by checking if the second char is a colon
+		// Note: Cannot use Path::is_absolute() because it doesn't work with Windows paths on WASI
+		if dir_str.len() < 2 || dir_str.chars().nth(1).expect("Project dir has second character") != ':' {
+			diagnostics.push(Diagnostic {
+				message: format!("Project directory must be absolute: {}", project_dir.display()),
+				span: None,
+				level: DiagnosticLevel::Error,
+			});
+			return Err(diagnostics);
+		}
+	}
+
 	let mut jsifier = JSifier::new(out_dir, app_name, project_dir.as_path(), true);
 
 	let intermediate_js = jsifier.jsify(&scope);
