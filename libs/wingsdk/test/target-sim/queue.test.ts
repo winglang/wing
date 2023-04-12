@@ -2,8 +2,8 @@ import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { Duration } from "../../src/std";
-import { SimApp, Testing } from "../../src/testing";
 import { QUEUE_TYPE } from "../../src/target-sim/schema-resources";
+import { SimApp, Testing } from "../../src/testing";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -116,7 +116,9 @@ test("messages are requeued if the function fails after timeout", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  const queue = cloud.Queue._newQueue(app, "my_queue", { timeout: Duration.fromSeconds(1) });
+  const queue = cloud.Queue._newQueue(app, "my_queue", {
+    timeout: Duration.fromSeconds(1),
+  });
   queue.addConsumer(handler);
   const s = await app.startSimulator();
 
@@ -132,16 +134,21 @@ test("messages are requeued if the function fails after timeout", async () => {
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 
-  expect(s.listTraces().filter(v => v.sourceType == QUEUE_TYPE).map((trace) => trace.data.message)).toContain(
-    "1 messages pushed back to queue after timeout.",
-  );
+  expect(
+    s
+      .listTraces()
+      .filter((v) => v.sourceType == QUEUE_TYPE)
+      .map((trace) => trace.data.message)
+  ).toContain("1 messages pushed back to queue after timeout.");
 });
 
 test("messages are not requeued if the function fails before timeout", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  const queue = cloud.Queue._newQueue(app, "my_queue", { timeout: Duration.fromSeconds(1) });
+  const queue = cloud.Queue._newQueue(app, "my_queue", {
+    timeout: Duration.fromSeconds(1),
+  });
   queue.addConsumer(handler);
   const s = await app.startSimulator();
 
@@ -157,10 +164,15 @@ test("messages are not requeued if the function fails before timeout", async () 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 
-  expect(s.listTraces().filter(v => v.sourceType == QUEUE_TYPE).map((trace) => trace.data.message)).toEqual([
+  expect(
+    s
+      .listTraces()
+      .filter((v) => v.sourceType == QUEUE_TYPE)
+      .map((trace) => trace.data.message)
+  ).toEqual([
     "wingsdk.cloud.Queue created.",
     "Push (message=BAD MESSAGE).",
-    "Sending messages (messages=[\"BAD MESSAGE\"], subscriber=sim-2).",
+    'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-2).',
     "Subscriber error - returning 1 messages to queue: ERROR",
     "wingsdk.cloud.Queue deleted.",
   ]);

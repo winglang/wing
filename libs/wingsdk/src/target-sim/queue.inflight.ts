@@ -104,14 +104,24 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
             type: TraceType.RESOURCE,
             timestamp: new Date().toISOString(),
           });
-          this.pushMessagesBackToQueue(messages);
+          void this.pushMessagesBackToQueue(messages).catch((requeueErr) => {
+            this.context.addTrace({
+              data: {
+                message: `Error pushing ${messages.length} messages back to queue: ${requeueErr.message}`,
+              },
+              sourcePath: this.context.resourcePath,
+              sourceType: QUEUE_TYPE,
+              type: TraceType.RESOURCE,
+              timestamp: new Date().toISOString(),
+            });
+          });
         });
         processedMessages = true;
       }
     } while (processedMessages);
   }
 
-  public async pushMessagesBackToQueue(messages: any): Promise<void> {
+  public async pushMessagesBackToQueue(messages: Array<string>): Promise<void> {
     setTimeout(() => {
       this.messages.push(...messages);
       this.context.addTrace({
