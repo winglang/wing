@@ -1,7 +1,6 @@
 class A  {
-constructor({ field }) {
-
-  this.field = field;
-}
+  constructor({ field }) {
+    this.field = field;
+  }
 }
 exports.A = A;

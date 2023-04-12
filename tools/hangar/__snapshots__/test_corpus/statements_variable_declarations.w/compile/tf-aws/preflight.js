@@ -28,7 +28,6 @@ class $Root extends $stdlib.core.Resource {
     const y = x;
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "statements_variable_declarations", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -44,5 +43,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

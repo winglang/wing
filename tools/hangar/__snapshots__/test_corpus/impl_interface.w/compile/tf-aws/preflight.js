@@ -26,73 +26,71 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     class A extends $stdlib.core.Resource {
-	constructor(scope, id, ) {
-	super(scope, id);
-{
-}
-}
-	
-	_toInflight() {
-	
-	const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
-	return $stdlib.core.NodeJsCode.fromInline(`(new (require("${self_client_path}")).A({}))`);
-}
-}
-A._annotateInflight("handle", {});
-A._annotateInflight("$init", {});
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      _toInflight() {
+        const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (new (require("${self_client_path}")).A({
+          }))
+        `);
+      }
+    }
+    A._annotateInflight("handle", {});
+    A._annotateInflight("$init", {});
     class r extends $stdlib.core.Resource {
-	constructor(scope, id, ) {
-	super(scope, id);
-{
-}
-}
-	 method_1(x)  {
-	{
-  return x;
-}
-}
- method_3(x)  {
-	{
-  return x;
-}
-}
-	_toInflight() {
-	
-	const self_client_path = "./clients/r.inflight.js".replace(/\\/g, "/");
-	return $stdlib.core.NodeJsCode.fromInline(`(new (require("${self_client_path}")).r({}))`);
-}
-}
-r._annotateInflight("method_2", {});
-r._annotateInflight("$init", {});
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+       method_1(x)  {
+        {
+          return x;
+        }
+      }
+       method_3(x)  {
+        {
+          return x;
+        }
+      }
+      _toInflight() {
+        const self_client_path = "./clients/r.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (new (require("${self_client_path}")).r({
+          }))
+        `);
+      }
+    }
+    r._annotateInflight("method_2", {});
+    r._annotateInflight("$init", {});
     class Dog extends $stdlib.core.Resource {
-	constructor(scope, id, ) {
-	super(scope, id);
-{
-}
-}
-	
-	_toInflight() {
-	
-	const self_client_path = "./clients/Dog.inflight.js".replace(/\\/g, "/");
-	return $stdlib.core.NodeJsCode.fromInline(`(new (require("${self_client_path}")).Dog({}))`);
-}
-}
-Dog._annotateInflight("eat", {});
-Dog._annotateInflight("$init", {});
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      _toInflight() {
+        const self_client_path = "./clients/Dog.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (new (require("${self_client_path}")).Dog({
+          }))
+        `);
+      }
+    }
+    Dog._annotateInflight("eat", {});
+    Dog._annotateInflight("$init", {});
     const x = new A(this,"A");
     const y = new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.a5455e5c5848cfc293fcb861d9393d32e29a39f8dc8ac79c19dd5289279762fe/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    x: {
-      obj: x,
-      ops: []
-    },
-  }
-});
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.4bb413397aac07073d75578d701a65d4cbd2b018b9ba7fd5fc1654fa9a3a8abe/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        x: {
+          obj: x,
+          ops: []
+        },
+      }
+    })
+    ;
     const z = new Dog(this,"Dog");
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "impl_interface", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -108,5 +106,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

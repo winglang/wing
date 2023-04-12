@@ -1,11 +1,11 @@
 class Foo  {
-constructor({ data }) {
-
-  this.data = data;
+  constructor({ data }) {
+    this.data = data;
+  }
+  async get_stuff()  {
+    {
+      return this.data.field0;
+    }
+  }
 }
-async get_stuff()  {
-	{
-  return this.data.field0;
-}
-}}
 exports.Foo = Foo;

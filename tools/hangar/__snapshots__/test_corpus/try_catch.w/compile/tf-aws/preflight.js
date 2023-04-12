@@ -26,156 +26,109 @@ class $Root extends $stdlib.core.Resource {
     super(scope, id);
     let x = "";
     try {
-	{
-  {((msg) => {throw new Error(msg)})("hello")};
-  x = "no way I got here";
-}
-} catch ($error_e) {
-	const e = $error_e.message;
-	{
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(e === "hello")'`)})((e === "hello"))};
-  x = "caught";
-}
-} finally {
-	{
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "caught")'`)})((x === "caught"))};
-  x = "finally";
-};
-}
+      {((msg) => {throw new Error(msg)})("hello")};
+      x = "no way I got here";
+    }
+    catch ($error_e) {
+      const e = $error_e.message;
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(e === "hello")'`)})((e === "hello"))};
+      x = "caught";
+    }
+    finally {
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "caught")'`)})((x === "caught"))};
+      x = "finally";
+    }
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "finally")'`)})((x === "finally"))};
     try {
-	{
-  x = "I got here";
-}
-} catch ($error_e) {
-	const e = $error_e.message;
-	{
-  x = "caught";
-}
-} finally {
-	{
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "I got here")'`)})((x === "I got here"))};
-  x = "finally";
-};
-}
+      x = "I got here";
+    }
+    catch ($error_e) {
+      const e = $error_e.message;
+      x = "caught";
+    }
+    finally {
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "I got here")'`)})((x === "I got here"))};
+      x = "finally";
+    }
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "finally")'`)})((x === "finally"))};
     try {
-	{
-  {((msg) => {throw new Error(msg)})("hello")};
-}
-} catch  {
-	
-	
-} finally {
-	{
-  x = "finally with no catch";
-};
-}
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "finally with no catch")'`)})((x === "finally with no catch"))};
+      try {
+        {((msg) => {throw new Error(msg)})("hello")};
+      }
+      finally {
+        x = "finally with no catch";
+      }
+      {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "finally with no catch")'`)})((x === "finally with no catch"))};
+    }
+    catch {
+    }
     try {
-	{
-}
-} catch  {
-	
-	
-} finally {
-	{
-  x = "finally with no catch and no exception";
-};
-}
+    }
+    finally {
+      x = "finally with no catch and no exception";
+    }
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "finally with no catch and no exception")'`)})((x === "finally with no catch and no exception"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((( () =>  {
-	{
-  try {
-  	{
-  }
-  } catch  {
-  	
-  	
-  } finally {
-  	{
-    return 1;
-  };
-  }
-}
-})()) === 1)'`)})(((( () =>  {
-	{
-  try {
-  	{
-  }
-  } catch  {
-  	
-  	
-  } finally {
-  	{
-    return 1;
-  };
-  }
-}
-})()) === 1))};
+      {
+        try {
+        }
+        finally {
+          return 1;
+        }
+      }
+    }
+    )()) === 1)'`)})(((( () =>  {
+      {
+        try {
+        }
+        finally {
+          return 1;
+        }
+      }
+    }
+    )()) === 1))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((( () =>  {
-	{
-  try {
-  	{
-    {((msg) => {throw new Error(msg)})("")};
-  }
-  } catch  {
-  	
-  	{
-    return 2;
-  }
-  } finally {
-  	
-  }
-}
-})()) === 2)'`)})(((( () =>  {
-	{
-  try {
-  	{
-    {((msg) => {throw new Error(msg)})("")};
-  }
-  } catch  {
-  	
-  	{
-    return 2;
-  }
-  } finally {
-  	
-  }
-}
-})()) === 2))};
+      {
+        try {
+          {((msg) => {throw new Error(msg)})("")};
+        }
+        catch {
+          return 2;
+        }
+      }
+    }
+    )()) === 2)'`)})(((( () =>  {
+      {
+        try {
+          {((msg) => {throw new Error(msg)})("")};
+        }
+        catch {
+          return 2;
+        }
+      }
+    }
+    )()) === 2))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((( () =>  {
-	{
-  try {
-  	{
-    return 3;
-  }
-  } catch  {
-  	
-  	
-  } finally {
-  	{
-  };
-  }
-}
-})()) === 3)'`)})(((( () =>  {
-	{
-  try {
-  	{
-    return 3;
-  }
-  } catch  {
-  	
-  	
-  } finally {
-  	{
-  };
+      {
+        try {
+          return 3;
+        }
+        finally {
+        }
+      }
+    }
+    )()) === 3)'`)})(((( () =>  {
+      {
+        try {
+          return 3;
+        }
+        finally {
+        }
+      }
+    }
+    )()) === 3))};
   }
 }
-})()) === 3))};
-  }
-}
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "try_catch", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -191,5 +144,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

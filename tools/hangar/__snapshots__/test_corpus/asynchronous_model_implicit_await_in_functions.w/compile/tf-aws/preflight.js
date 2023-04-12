@@ -27,22 +27,23 @@ class $Root extends $stdlib.core.Resource {
     super(scope, id);
     const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
     const str_to_str = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"str_to_str",new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js".replace(/\\/g, "/"))),
-  bindings: {
-  }
-}));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/index.js".replace(/\\/g, "/"))),
+      bindings: {
+      }
+    })
+    );
     const func = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"func",new $stdlib.core.Inflight(this, "$Inflight2", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.2241fd974faa47c8b8d27f5a3e172f473ca36c6b44cb328a58655fd2d0aac7d7/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    str_to_str: {
-      obj: str_to_str,
-      ops: ["invoke"]
-    },
-  }
-}));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.e60080e02327d620984af1e0f736391d5699cae59be5733b234340cc59c07e66/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        str_to_str: {
+          obj: str_to_str,
+          ops: ["invoke"]
+        },
+      }
+    })
+    );
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "asynchronous_model_implicit_await_in_functions", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -58,5 +59,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

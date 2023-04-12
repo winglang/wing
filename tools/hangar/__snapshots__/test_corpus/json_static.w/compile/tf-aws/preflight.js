@@ -51,7 +51,6 @@ class $Root extends $stdlib.core.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((args) => { if (typeof args !== "boolean") {throw new Error("unable to parse " + typeof args + " " + args + " as a boolean")}; return JSON.parse(JSON.stringify(args)) })((json_of_many)["c"])'`)})(((args) => { if (typeof args !== "boolean") {throw new Error("unable to parse " + typeof args + " " + args + " as a boolean")}; return JSON.parse(JSON.stringify(args)) })((json_of_many)["c"]))};
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "json_static", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -67,5 +66,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

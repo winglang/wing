@@ -25,18 +25,19 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     const x = new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js".replace(/\\/g, "/"))),
-  bindings: {
-  }
-});
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/index.js".replace(/\\/g, "/"))),
+      bindings: {
+      }
+    })
+    ;
     const y = new $stdlib.core.Inflight(this, "$Inflight2", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js".replace(/\\/g, "/"))),
-  bindings: {
-  }
-});
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/index.js".replace(/\\/g, "/"))),
+      bindings: {
+      }
+    })
+    ;
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "identical_inflights", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -52,5 +53,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

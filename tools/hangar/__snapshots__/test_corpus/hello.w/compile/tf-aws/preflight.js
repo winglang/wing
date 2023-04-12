@@ -28,17 +28,17 @@ class $Root extends $stdlib.core.Resource {
     const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
     (queue.addConsumer(new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.211d46e8ec3b5ce3e93872fcb29755356fb3566f5016eae5fcd6ec0f670ab580/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    bucket: {
-      obj: bucket,
-      ops: ["delete","get","get_json","list","public_url","put","put_json"]
-    },
-  }
-})));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.fdee27e4278018f0b82e92c0802d58032ccc3a21ab51caba9154598b79bbf7f6/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        bucket: {
+          obj: bucket,
+          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+        },
+      }
+    })
+    ));
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "hello", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -54,5 +54,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

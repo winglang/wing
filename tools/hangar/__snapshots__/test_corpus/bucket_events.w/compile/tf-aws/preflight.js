@@ -28,46 +28,51 @@ class $Root extends $stdlib.core.Resource {
     const other = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"other");
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"b");
     (b.onDelete(new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.e0895e35017839af19c4cdf5e5752ce00b8bee3a6425933fc1349d037cf9ed23/index.js".replace(/\\/g, "/"))),
-  bindings: {
-  }
-})));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.09dcc4ff0890e102805bbc51ef3934c08d91e5bf84395afde5497f34df87a7d8/index.js".replace(/\\/g, "/"))),
+      bindings: {
+      }
+    })
+    ));
     (b.onUpdate(new $stdlib.core.Inflight(this, "$Inflight2", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.4c20a426ba35d2bc9530ee9673d6111365502af4b9943b5993189fef4c9cbb24/index.js".replace(/\\/g, "/"))),
-  bindings: {
-  }
-})));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.cdae347b8886baf52a55404c418d32d00e90df41124134b320bfa397a5f74c25/index.js".replace(/\\/g, "/"))),
+      bindings: {
+      }
+    })
+    ));
     (b.onCreate(new $stdlib.core.Inflight(this, "$Inflight3", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.fea0ccbdf726c314d7bdccef2e9a3af2667b14bbf90b08535bc3b8531676a5f7/index.js".replace(/\\/g, "/"))),
-  bindings: {
-  }
-})));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.cf448bce60320955625b8e5174094d9799f236443e940587740acf6da94eed75/index.js".replace(/\\/g, "/"))),
+      bindings: {
+      }
+    })
+    ));
     (b.onEvent(new $stdlib.core.Inflight(this, "$Inflight4", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.dbe235d917909459004bd5b4ee5f5c116451dd314d6afb668f81aca7412c951c/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    other: {
-      obj: other,
-      ops: ["delete","get","get_json","list","public_url","put","put_json"]
-    },
-  }
-})));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.a726467156eb8c271f9225b3e17be8de6d6c17a49aaa65da842e2f7d6bdaf896/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        other: {
+          obj: other,
+          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+        },
+      }
+    })
+    ));
     (other.onEvent(new $stdlib.core.Inflight(this, "$Inflight5", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.1077abc4fd9d2c1dcaf67fa6bfcd127520e9da3f7cb638866ee99e8ac058bb04/index.js".replace(/\\/g, "/"))),
-  bindings: {
-  }
-})));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.fca059c479747295eb7f36bfd8dcd61c2e15d4b53e0aca4acb4cdea062e4b3a3/index.js".replace(/\\/g, "/"))),
+      bindings: {
+      }
+    })
+    ));
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight6", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.bd899ae09cdb75ce681c2be5132db5f8fbc54bd45d0a438077f48809708c05a6/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    b: {
-      obj: b,
-      ops: ["delete","get","get_json","list","public_url","put","put_json"]
-    },
-  }
-}));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.44ffe304e2ab76a8326d652a552eab6dfaadac1194df65fecf28d7c384a8cc13/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        b: {
+          obj: b,
+          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+        },
+      }
+    })
+    );
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "bucket_events", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -83,5 +88,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

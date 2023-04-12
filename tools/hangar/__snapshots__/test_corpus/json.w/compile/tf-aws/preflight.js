@@ -25,20 +25,21 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     class Foo extends $stdlib.core.Resource {
-	constructor(scope, id, ) {
-	super(scope, id);
-{
-  this._sum_str = "wow!";
-}
-}
-	
-	_toInflight() {
-	const _sum_str_client = this._lift(this._sum_str);
-	const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
-	return $stdlib.core.NodeJsCode.fromInline(`(new (require("${self_client_path}")).Foo({_sum_str: ${_sum_str_client}}))`);
-}
-}
-Foo._annotateInflight("$init", {"this._sum_str": { ops: [] }});
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._sum_str = "wow!";
+      }
+      _toInflight() {
+        const _sum_str_client = this._lift(this._sum_str);
+        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (new (require("${self_client_path}")).Foo({
+            _sum_str: ${_sum_str_client},
+          }))
+        `);
+      }
+    }
+    Foo._annotateInflight("$init", {"this._sum_str": { ops: [] }});
     const json_number = 123;
     const json_bool = true;
     const json_array = [1, 2, 3];
@@ -52,10 +53,11 @@ Foo._annotateInflight("$init", {"this._sum_str": { ops: [] }});
     const jj1 = Object.freeze({"foo":some_number});
     const jj2 = [some_number, {"bar":some_number}];
     const get_str =  () =>  {
-	{
-  return "hello";
-}
-};
+      {
+        return "hello";
+      }
+    }
+    ;
     const jj3 = (get_str());
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(jj3 === "hello")'`)})((jj3 === "hello"))};
     const f = new Foo(this,"Foo");
@@ -78,7 +80,6 @@ Foo._annotateInflight("$init", {"this._sum_str": { ops: [] }});
     Object.freeze({"a":[1, 2, "world"],"b":[1, 2, "world"]});
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "json", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -94,5 +95,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

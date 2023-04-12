@@ -26,32 +26,37 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     if (true) {
-  const x = 2;
-  const f = false;
-  if ((true && ((x + 2) === 4))) {
-    if ((true && ((x + 3) === 4))) {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
-    } else if ((true && ((x + 3) === 6))) {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
-    } else if ((false || ((x + 3) === 5))) {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'true'`)})(true)};
-    } else if ((!f)) {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(!(!f)))'`)})((!(!(!f))))};
-    } else {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+      const x = 2;
+      const f = false;
+      if ((true && ((x + 2) === 4))) {
+        if ((true && ((x + 3) === 4))) {
+          {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+        }
+        else if ((true && ((x + 3) === 6))) {
+          {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+        }
+        else if ((false || ((x + 3) === 5))) {
+          {((cond) => {if (!cond) throw new Error(`assertion failed: 'true'`)})(true)};
+        }
+        else if ((!f)) {
+          {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(!(!f)))'`)})((!(!(!f))))};
+        }
+        else {
+          {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+        }
+      }
+      else {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+      }
     }
-  } else {
-    {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
-  }
-}
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.09c5e24751d9ba1246f91518f2f7f5c5d1102a09d0b1acff479ae27ad134090f/index.js".replace(/\\/g, "/"))),
-  bindings: {
-  }
-}));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.ab279327be755396ddd6a86db98293e7b609ca1f861184371a84a7d4cd59487b/index.js".replace(/\\/g, "/"))),
+      bindings: {
+      }
+    })
+    );
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "statements_if", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -67,5 +72,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

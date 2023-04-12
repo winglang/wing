@@ -29,21 +29,21 @@ class $Root extends $stdlib.core.Resource {
     const r = this.node.root.newAbstract("@winglang/sdk.redis.Redis",this,"redis.Redis");
     const r2 = this.node.root.newAbstract("@winglang/sdk.redis.Redis",this,"r2");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.688f52a0df0aa6a192cac76b359ea0e230467a7e397877c650abb8c2aec4251a/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    r: {
-      obj: r,
-      ops: ["del","get","hget","hset","raw_client","sadd","set","smembers","url"]
-    },
-    r2: {
-      obj: r2,
-      ops: ["del","get","hget","hset","raw_client","sadd","set","smembers","url"]
-    },
-  }
-}));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.2f327831adfa10066eee3b4bc7cb9e6ec48481f9990eda0b0d999afbedefe536/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        r: {
+          obj: r,
+          ops: ["del","get","hget","hset","raw_client","sadd","set","smembers","url"]
+        },
+        r2: {
+          obj: r2,
+          ops: ["del","get","hget","hset","raw_client","sadd","set","smembers","url"]
+        },
+      }
+    })
+    );
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "redis", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -59,5 +59,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

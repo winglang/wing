@@ -1,11 +1,10 @@
 class Dog  {
-constructor({  }) {
-
-
+  constructor({  }) {
+  }
+  async eat()  {
+    {
+      return;
+    }
+  }
 }
-async eat()  {
-	{
-  return;
-}
-}}
 exports.Dog = Dog;

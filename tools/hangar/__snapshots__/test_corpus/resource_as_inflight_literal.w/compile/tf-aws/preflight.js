@@ -26,33 +26,32 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     class Foo extends $stdlib.core.Resource {
-	constructor(scope, id, ) {
-	super(scope, id);
-{
-}
-}
-	
-	_toInflight() {
-	
-	const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
-	return $stdlib.core.NodeJsCode.fromInline(`(new (require("${self_client_path}")).Foo({}))`);
-}
-}
-Foo._annotateInflight("handle", {});
-Foo._annotateInflight("$init", {});
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      _toInflight() {
+        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (new (require("${self_client_path}")).Foo({
+          }))
+        `);
+      }
+    }
+    Foo._annotateInflight("handle", {});
+    Foo._annotateInflight("$init", {});
     const fn = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new Foo(this,"Foo"));
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.917572587cf19c37eec89740530b1f8d71072e09ccaeb9cbd4a3121ba0794d2a/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    fn: {
-      obj: fn,
-      ops: ["invoke"]
-    },
-  }
-}));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.137cab8f078ac4d8dd242fc82417ae774fbaeaedf96937ad93f861344976bed7/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        fn: {
+          obj: fn,
+          ops: ["invoke"]
+        },
+      }
+    })
+    );
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "resource_as_inflight_literal", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -68,5 +67,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

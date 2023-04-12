@@ -28,18 +28,18 @@ class $Root extends $stdlib.core.Resource {
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
     const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.c83263b121750e827ffc19b09e3c0813a9accb33e17a19eae0dbc2680135a09e/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    counter: {
-      obj: counter,
-      ops: ["dec","inc","peek","reset"]
-    },
-  }
-});
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.4ea11c0c20cac55e9e28b889e8e770331d2ed4a5baf0d566c4402cfa2b200882/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        counter: {
+          obj: counter,
+          ops: ["dec","inc","peek","reset"]
+        },
+      }
+    })
+    ;
     (api.get("/hello/world",handler));
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "api", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -55,5 +55,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

@@ -27,18 +27,18 @@ class $Root extends $stdlib.core.Resource {
     const dur = $stdlib.std.Duration.fromSeconds(60);
     const dur2 = $stdlib.std.Duration.fromSeconds(600);
     const f =  (d) =>  {
-	{
-}
-};
+      {
+      }
+    }
+    ;
     const stringy = `${dur.minutes}:${dur.seconds}`;
     {console.log(stringy)};
     if ((stringy.includes("60") && (((stringy.split(":")).at(0)) === "60"))) {
-  {console.log(`${stringy.length}!`)};
-}
+      {console.log(`${stringy.length}!`)};
+    }
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })("123") === 123)'`)})((((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })("123") === 123))};
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "primitive_methods", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -54,5 +54,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

@@ -27,17 +27,17 @@ class $Root extends $stdlib.core.Resource {
     super(scope, id);
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.6228e26a5981501feaae450d2628c682bfebb15974f5cc021606bb6e273636e0/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    b: {
-      obj: b,
-      ops: ["delete","get","get_json","list","public_url","put","put_json"]
-    },
-  }
-}));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.e985a655d1d19405f1798377278c6205fc276c76ea8815eb157a120ca44fdbcc/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        b: {
+          obj: b,
+          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+        },
+      }
+    })
+    );
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "bucket_keys", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -53,5 +53,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

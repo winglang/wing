@@ -66,7 +66,6 @@ class $Root extends $stdlib.core.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((((nested_map)["a"])["b"])["c"] === "hello")'`)})(((((nested_map)["a"])["b"])["c"] === "hello"))};
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "std_containers", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -82,5 +81,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

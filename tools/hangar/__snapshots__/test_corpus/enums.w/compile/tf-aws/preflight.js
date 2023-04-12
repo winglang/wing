@@ -25,16 +25,15 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     const SomeEnum = Object.freeze((function (SomeEnum) {
-  SomeEnum[SomeEnum["ONE"] = 0] = "ONE";
-  SomeEnum[SomeEnum["TWO"] = 1] = "TWO";
-  SomeEnum[SomeEnum["THREE"] = 2] = "THREE";
-  return SomeEnum;
-})({}));
+      SomeEnum[SomeEnum["ONE"] = 0] = "ONE";
+      SomeEnum[SomeEnum["TWO"] = 1] = "TWO";
+      SomeEnum[SomeEnum["THREE"] = 2] = "THREE";
+      return SomeEnum;
+    })({}));
     const one = SomeEnum.ONE;
     const two = SomeEnum.TWO;
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "enums", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -50,5 +49,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

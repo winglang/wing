@@ -29,17 +29,17 @@ class $Root extends $stdlib.core.Resource {
     const hello = new jsii_code_samples.HelloWorld();
     const greeting = (hello.sayHello("wingnuts"));
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:say_hello",new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.5d209e0c3acca40c825662cab73c204803d9dd9f7903de90d0da6dc99ea7fa35/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    greeting: {
-      obj: greeting,
-      ops: []
-    },
-  }
-}));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.0971d6c6098fbbfe02ff3f99e46b6e89243dbbb93903848c1d100f29b265d40c/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        greeting: {
+          obj: greeting,
+          ops: []
+        },
+      }
+    })
+    );
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "bring_jsii_path", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -55,5 +55,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

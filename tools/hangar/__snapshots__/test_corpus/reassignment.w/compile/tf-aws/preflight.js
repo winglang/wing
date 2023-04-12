@@ -25,27 +25,29 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     class R extends $stdlib.core.Resource {
-	constructor(scope, id, ) {
-	super(scope, id);
-{
-  if (true) {
-    this.f = 1;
-    this.f1 = 0;
-  }
-}
-}
-	 inc()  {
-	{
-  this.f = (this.f + 1);
-}
-}
-	_toInflight() {
-	const f1_client = this._lift(this.f1);
-	const self_client_path = "./clients/R.inflight.js".replace(/\\/g, "/");
-	return $stdlib.core.NodeJsCode.fromInline(`(new (require("${self_client_path}")).R({f1: ${f1_client}}))`);
-}
-}
-R._annotateInflight("$init", {"this.f1": { ops: [] }});
+      constructor(scope, id, ) {
+        super(scope, id);
+        if (true) {
+          this.f = 1;
+          this.f1 = 0;
+        }
+      }
+       inc()  {
+        {
+          this.f = (this.f + 1);
+        }
+      }
+      _toInflight() {
+        const f1_client = this._lift(this.f1);
+        const self_client_path = "./clients/R.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (new (require("${self_client_path}")).R({
+            f1: ${f1_client},
+          }))
+        `);
+      }
+    }
+    R._annotateInflight("$init", {"this.f1": { ops: [] }});
     let x = 5;
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === 5)'`)})((x === 5))};
     x = (x + 1);
@@ -54,17 +56,17 @@ R._annotateInflight("$init", {"this.f1": { ops: [] }});
     (r.inc());
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(r.f === 2)'`)})((r.f === 2))};
     const f =  (arg) =>  {
-	{
-  arg = 0;
-  return arg;
-}
-};
+      {
+        arg = 0;
+        return arg;
+      }
+    }
+    ;
     const y = 1;
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((f(y)) === 0)'`)})(((f(y)) === 0))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(y === 1)'`)})((y === 1))};
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "reassignment", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -80,5 +82,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

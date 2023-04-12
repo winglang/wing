@@ -101,7 +101,6 @@ class $Root extends $stdlib.core.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(s7.has(1))'`)})((s7.has(1)))};
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "container_types", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -117,5 +116,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

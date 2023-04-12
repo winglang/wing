@@ -1,11 +1,10 @@
 class r  {
-constructor({  }) {
-
-
+  constructor({  }) {
+  }
+  async method_2(x)  {
+    {
+      return x;
+    }
+  }
 }
-async method_2(x)  {
-	{
-  return x;
-}
-}}
 exports.r = r;

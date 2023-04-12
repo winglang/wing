@@ -27,19 +27,20 @@ class $Root extends $stdlib.core.Resource {
     super(scope, id);
     const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
     const iterator = new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.82d0059fdbaebaab6d1be68f497052f9d5b8662f4333952a6e9ad55f564e0c97/index.js".replace(/\\/g, "/"))),
-  bindings: {
-  }
-});
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.8df6c52d279b5b0f60f3073722d4666c96d8faf3bae7f82cf289c11a372daa9a/index.js".replace(/\\/g, "/"))),
+      bindings: {
+      }
+    })
+    ;
     const handler = new $stdlib.core.Inflight(this, "$Inflight2", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.f259e8d1edc5d47946ec1a1f3aa23e59fe550255ec12b899cffb307ecf525df6/index.js".replace(/\\/g, "/"))),
-  bindings: {
-  }
-});
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.09104e27ddc37691caca765b1b7cb87ad5bcd5f01349ff19070fce915e60db2b/index.js".replace(/\\/g, "/"))),
+      bindings: {
+      }
+    })
+    ;
     (queue.addConsumer(handler));
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "while_loop_await", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -55,5 +56,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

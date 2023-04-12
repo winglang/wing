@@ -26,43 +26,43 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     class Foo extends $stdlib.core.Resource {
-	constructor(scope, id, ) {
-	super(scope, id);
-{
-}
-}
-	static get_greeting(name)  {
-	return (require(require.resolve("./external_js.js", {paths: [process.env.WING_PROJECT_DIR]}))["get_greeting"])(name)
-}
-static v4()  {
-	return (require(require.resolve("uuid", {paths: [process.env.WING_PROJECT_DIR]}))["v4"])()
-}
-	_toInflight() {
-	
-	const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
-	return $stdlib.core.NodeJsCode.fromInline(`(new (require("${self_client_path}")).Foo({}))`);
-}
-}
-Foo._annotateInflight("regex_inflight", {});
-Foo._annotateInflight("get_uuid", {});
-Foo._annotateInflight("get_data", {});
-Foo._annotateInflight("call", {});
-Foo._annotateInflight("$init", {});
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      static get_greeting(name)  {
+        return (require(require.resolve("./external_js.js", {paths: [process.env.WING_PROJECT_DIR]}))["get_greeting"])(name)
+      }
+      static v4()  {
+        return (require(require.resolve("uuid", {paths: [process.env.WING_PROJECT_DIR]}))["v4"])()
+      }
+      _toInflight() {
+        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (new (require("${self_client_path}")).Foo({
+          }))
+        `);
+      }
+    }
+    Foo._annotateInflight("regex_inflight", {});
+    Foo._annotateInflight("get_uuid", {});
+    Foo._annotateInflight("get_data", {});
+    Foo._annotateInflight("call", {});
+    Foo._annotateInflight("$init", {});
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.get_greeting("Wingding")) === "Hello, Wingding!")'`)})(((Foo.get_greeting("Wingding")) === "Hello, Wingding!"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.v4()).length === 36)'`)})(((Foo.v4()).length === 36))};
     const f = new Foo(this,"Foo");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:call",new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.07843d13880528eb093c8438f86267f529c160bc2f048435d6f2c77a50053a5c/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    f: {
-      obj: f,
-      ops: ["call","get_data","get_uuid","regex_inflight"]
-    },
-  }
-}));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.104793feca8a0c99ea8c2876b3c2124f464b0b5bffc723938b058ed94174607f/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        f: {
+          obj: f,
+          ops: ["call","get_data","get_uuid","regex_inflight"]
+        },
+      }
+    })
+    );
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "extern_implementation", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -78,5 +78,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

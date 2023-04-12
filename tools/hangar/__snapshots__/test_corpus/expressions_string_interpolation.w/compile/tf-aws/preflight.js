@@ -33,7 +33,6 @@ class $Root extends $stdlib.core.Resource {
     const ending_with_cool_strings = `cool -> ${regular_string} ${number}`;
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "expressions_string_interpolation", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -49,5 +48,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

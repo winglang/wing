@@ -29,42 +29,43 @@ class $Root extends $stdlib.core.Resource {
     const file_name = "file.json";
     const j = Object.freeze({"persons":[{"age":30,"name":"hasan","fears":["heights", "failure"]}]});
     const get_json = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.1dabd42192b8d28a57f44a84b644a18eb6fedb868257af123181c0ecec2c2a70/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    b: {
-      obj: b,
-      ops: ["delete","get","get_json","list","public_url","put","put_json"]
-    },
-    file_name: {
-      obj: file_name,
-      ops: []
-    },
-  }
-}));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.65da1a50b3f7d2621c34d29e0b410f0e504124beed71b58374c3bf728c7b80d9/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        b: {
+          obj: b,
+          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+        },
+        file_name: {
+          obj: file_name,
+          ops: []
+        },
+      }
+    })
+    );
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:put",new $stdlib.core.Inflight(this, "$Inflight2", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.742d4f24b17fb7f7f831acbd15487b30d36ad90d44229b79672a09f910cb6619/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    b: {
-      obj: b,
-      ops: ["delete","get","get_json","list","public_url","put","put_json"]
-    },
-    file_name: {
-      obj: file_name,
-      ops: []
-    },
-    get_json: {
-      obj: get_json,
-      ops: ["invoke"]
-    },
-    j: {
-      obj: j,
-      ops: []
-    },
-  }
-}));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.f9f9b40f387b4eb240575908f7968d76a559c71637db94a1aaf8124ca452f582/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        b: {
+          obj: b,
+          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+        },
+        file_name: {
+          obj: file_name,
+          ops: []
+        },
+        get_json: {
+          obj: get_json,
+          ops: ["invoke"]
+        },
+        j: {
+          obj: j,
+          ops: []
+        },
+      }
+    })
+    );
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "json_bucket", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -80,5 +81,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

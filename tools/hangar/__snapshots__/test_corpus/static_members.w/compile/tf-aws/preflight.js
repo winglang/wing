@@ -26,36 +26,38 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     class Foo extends $stdlib.core.Resource {
-	constructor(scope, id, ) {
-	super(scope, id);
-{
-  this.instance_field = 100;
-}
-}
-	static m()  {
-	{
-  return 99;
-}
-}
-	_toInflight() {
-	const instance_field_client = this._lift(this.instance_field);
-	const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
-	return $stdlib.core.NodeJsCode.fromInline(`(new (require("${self_client_path}")).Foo({instance_field: ${instance_field_client}}))`);
-}
-}
-Foo._annotateInflight("get_123", {});
-Foo._annotateInflight("$init", {"this.instance_field": { ops: [] }});
+      constructor(scope, id, ) {
+        super(scope, id);
+        this.instance_field = 100;
+      }
+      static m()  {
+        {
+          return 99;
+        }
+      }
+      _toInflight() {
+        const instance_field_client = this._lift(this.instance_field);
+        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (new (require("${self_client_path}")).Foo({
+            instance_field: ${instance_field_client},
+          }))
+        `);
+      }
+    }
+    Foo._annotateInflight("get_123", {});
+    Foo._annotateInflight("$init", {"this.instance_field": { ops: [] }});
     const foo = new Foo(this,"Foo");
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(foo.instance_field === 100)'`)})((foo.instance_field === 100))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.m()) === 99)'`)})(((Foo.m()) === 99))};
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.3e3ded5aab7ad84970aba71e51b0f5571a6ab4ed41f41ae3461d977097e72746/index.js".replace(/\\/g, "/"))),
-  bindings: {
-  }
-}));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.9bc2ebe720b1ce33f8961b4d75e64753d2833d1a50029354c9ccba5d429d01f2/index.js".replace(/\\/g, "/"))),
+      bindings: {
+      }
+    })
+    );
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "static_members", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -71,5 +73,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

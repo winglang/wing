@@ -27,34 +27,34 @@ class $Root extends $stdlib.core.Resource {
     super(scope, id);
     const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"PublicBucket",{
-"public": true,}
-);
+    "public": true,}
+    );
     const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"PrivateBucket",{ public: false });
     const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
     const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.7117cacac13b5aec2868af198145d060294a0f8c3a40444eeae5b1f6002f9e77/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    bucket1: {
-      obj: bucket1,
-      ops: ["delete","get","get_json","list","public_url","put","put_json"]
-    },
-    bucket2: {
-      obj: bucket2,
-      ops: ["delete","get","get_json","list","public_url","put","put_json"]
-    },
-    bucket3: {
-      obj: bucket3,
-      ops: ["delete","get","get_json","list","public_url","put","put_json"]
-    },
-  }
-});
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.e9aa0b50add93f5d8b788d4e38afe0098f95fe48ac16d3ef991aa253313c8daf/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        bucket1: {
+          obj: bucket1,
+          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+        },
+        bucket2: {
+          obj: bucket2,
+          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+        },
+        bucket3: {
+          obj: bucket3,
+          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+        },
+      }
+    })
+    ;
     (queue.addConsumer(handler,{ batchSize: 5 }));
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",handler,{ env: Object.freeze({}) });
     const empty_env = Object.freeze({});
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"AnotherFunction",handler,{ env: empty_env });
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "captures", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -70,5 +70,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

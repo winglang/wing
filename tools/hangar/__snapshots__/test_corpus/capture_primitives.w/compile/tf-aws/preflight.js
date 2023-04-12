@@ -31,34 +31,34 @@ class $Root extends $stdlib.core.Resource {
     const my_second_bool = false;
     const my_dur = $stdlib.std.Duration.fromSeconds(600);
     const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.275873c041545c7a2de55149fb73b77f5b75da61d16914ceadd71c3445173d97/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    my_bool: {
-      obj: my_bool,
-      ops: []
-    },
-    my_dur: {
-      obj: my_dur,
-      ops: []
-    },
-    my_num: {
-      obj: my_num,
-      ops: []
-    },
-    my_second_bool: {
-      obj: my_second_bool,
-      ops: []
-    },
-    my_str: {
-      obj: my_str,
-      ops: []
-    },
-  }
-});
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.34e5b7de651594942ccd90c9d76355813afc895aa395fbda2c204aa36f7c3a85/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        my_bool: {
+          obj: my_bool,
+          ops: []
+        },
+        my_dur: {
+          obj: my_dur,
+          ops: []
+        },
+        my_num: {
+          obj: my_num,
+          ops: []
+        },
+        my_second_bool: {
+          obj: my_second_bool,
+          ops: []
+        },
+        my_str: {
+          obj: my_str,
+          ops: []
+        },
+      }
+    })
+    ;
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",handler);
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "capture_primitives", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -74,5 +74,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

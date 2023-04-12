@@ -1,7 +1,5 @@
 class A  {
-constructor({  }) {
-
-
-}
+  constructor({  }) {
+  }
 }
 exports.A = A;

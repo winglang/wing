@@ -31,34 +31,34 @@ class $Root extends $stdlib.core.Resource {
     const arr_of_map = Object.freeze([Object.freeze({"bang":123})]);
     const j = Object.freeze({"a":"hello","b":"world"});
     const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.dc7e5dc23da309970778fe7db4c795e3a6ae63c0d0ddc5e1780d4e2daadf67e1/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    arr: {
-      obj: arr,
-      ops: []
-    },
-    arr_of_map: {
-      obj: arr_of_map,
-      ops: []
-    },
-    j: {
-      obj: j,
-      ops: []
-    },
-    my_map: {
-      obj: my_map,
-      ops: []
-    },
-    my_set: {
-      obj: my_set,
-      ops: []
-    },
-  }
-});
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.8737b7ddfddfd5b0f34d5d28d474901ed7c1f4bd7c3028e87d902df663b0f9ca/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        arr: {
+          obj: arr,
+          ops: []
+        },
+        arr_of_map: {
+          obj: arr_of_map,
+          ops: []
+        },
+        j: {
+          obj: j,
+          ops: []
+        },
+        my_map: {
+          obj: my_map,
+          ops: []
+        },
+        my_set: {
+          obj: my_set,
+          ops: []
+        },
+      }
+    })
+    ;
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",handler);
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "capture_containers", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -74,5 +74,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

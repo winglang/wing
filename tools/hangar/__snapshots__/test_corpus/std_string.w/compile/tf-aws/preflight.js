@@ -42,21 +42,21 @@ class $Root extends $stdlib.core.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(("   some string   ".trim()) === "some string")'`)})((("   some string   ".trim()) === "some string"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '("Some String".toLocaleUpperCase() === "SOME STRING")'`)})(("Some String".toLocaleUpperCase() === "SOME STRING"))};
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:string",new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.0fb01e81c63b003d77d6245e36ba84561e3e2d3268e69a7c975f81cfe7565fac/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    s1: {
-      obj: s1,
-      ops: []
-    },
-    s2: {
-      obj: s2,
-      ops: []
-    },
-  }
-}));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.9a4846d755bc1e93d1377b973079b3fb455a5196a4309ea68138302e1a6f3f65/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        s1: {
+          obj: s1,
+          ops: []
+        },
+        s2: {
+          obj: s2,
+          ops: []
+        },
+      }
+    })
+    );
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "std_string", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -72,5 +72,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

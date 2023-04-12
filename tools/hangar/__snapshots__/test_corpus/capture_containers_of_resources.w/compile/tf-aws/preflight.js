@@ -29,25 +29,25 @@ class $Root extends $stdlib.core.Resource {
     const map = Object.freeze({"my_queue":this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue")});
     const set = Object.freeze(new Set(["foo", "foo", "bar"]));
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.e204fa6fba10aa68396c0fe4d920796b1ec739609b648739fe4ae94d0621db6d/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    arr: {
-      obj: arr,
-      ops: []
-    },
-    map: {
-      obj: map,
-      ops: []
-    },
-    set: {
-      obj: set,
-      ops: []
-    },
-  }
-}));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.ea0323e98cac08dd11d819f738e933ff5bf537dbe04472f29a655f50c5d7a70b/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        arr: {
+          obj: arr,
+          ops: []
+        },
+        map: {
+          obj: map,
+          ops: []
+        },
+        set: {
+          obj: set,
+          ops: []
+        },
+      }
+    })
+    );
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "capture_containers_of_resources", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -63,5 +63,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

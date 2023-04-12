@@ -26,7 +26,6 @@ class $Root extends $stdlib.core.Resource {
     super(scope, id);
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "interface", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -42,5 +41,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

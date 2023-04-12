@@ -1,11 +1,10 @@
 class Foo  {
-constructor({  }) {
-
-
+  constructor({  }) {
+  }
+  async handle(message)  {
+    {
+      return "hello world!";
+    }
+  }
 }
-async handle(message)  {
-	{
-  return "hello world!";
-}
-}}
 exports.Foo = Foo;

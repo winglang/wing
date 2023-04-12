@@ -37,6 +37,7 @@
         "bucket_prefix": "hello",
         "versioning": {
           "enabled": true,
+          "mfa_delete": true,
         },
       },
     },

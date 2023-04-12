@@ -26,60 +26,64 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     class Foo extends $stdlib.core.Resource {
-	constructor(scope, id, ) {
-	super(scope, id);
-{
-  this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
-}
-}
-	
-	_toInflight() {
-	const c_client = this._lift(this.c);
-	const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
-	return $stdlib.core.NodeJsCode.fromInline(`(new (require("${self_client_path}")).Foo({c: ${c_client}}))`);
-}
-}
-Foo._annotateInflight("foo_inc", {"this.c": { ops: ["inc"] }});
-Foo._annotateInflight("foo_get", {"this.c": { ops: ["peek"] }});
-Foo._annotateInflight("$init", {"this.c": { ops: [] }});
+      constructor(scope, id, ) {
+        super(scope, id);
+        this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
+      }
+      _toInflight() {
+        const c_client = this._lift(this.c);
+        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (new (require("${self_client_path}")).Foo({
+            c: ${c_client},
+          }))
+        `);
+      }
+    }
+    Foo._annotateInflight("foo_inc", {"this.c": { ops: ["inc"] }});
+    Foo._annotateInflight("foo_get", {"this.c": { ops: ["peek"] }});
+    Foo._annotateInflight("$init", {"this.c": { ops: [] }});
     class Bar extends $stdlib.core.Resource {
-	constructor(scope, id, name, b) {
-	super(scope, id);
-{
-  this.name = name;
-  this.b = b;
-  this.foo = new Foo(this,"Foo");
-}
-}
-	
-	_toInflight() {
-	const b_client = this._lift(this.b);
-const foo_client = this._lift(this.foo);
-const name_client = this._lift(this.name);
-	const self_client_path = "./clients/Bar.inflight.js".replace(/\\/g, "/");
-	return $stdlib.core.NodeJsCode.fromInline(`(new (require("${self_client_path}")).Bar({b: ${b_client}, foo: ${foo_client}, name: ${name_client}}))`);
-}
-}
-Bar._annotateInflight("my_method", {"this.b": { ops: ["get","put"] },"this.foo": { ops: ["foo_get","foo_inc"] }});
-Bar._annotateInflight("$init", {"this.b": { ops: [] },"this.foo": { ops: [] },"this.name": { ops: [] }});
+      constructor(scope, id, name, b) {
+        super(scope, id);
+        this.name = name;
+        this.b = b;
+        this.foo = new Foo(this,"Foo");
+      }
+      _toInflight() {
+        const b_client = this._lift(this.b);
+        const foo_client = this._lift(this.foo);
+        const name_client = this._lift(this.name);
+        const self_client_path = "./clients/Bar.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (new (require("${self_client_path}")).Bar({
+            b: ${b_client},
+            foo: ${foo_client},
+            name: ${name_client},
+          }))
+        `);
+      }
+    }
+    Bar._annotateInflight("my_method", {"this.b": { ops: ["get","put"] },"this.foo": { ops: ["foo_get","foo_inc"] }});
+    Bar._annotateInflight("$init", {"this.b": { ops: [] },"this.foo": { ops: [] },"this.name": { ops: [] }});
     const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const res = new Bar(this,"Bar","Arr",bucket);
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.e50bc85b13df379286b4aa72aa88788422e26d9146adbc9bba989a8a59253a73/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    bucket: {
-      obj: bucket,
-      ops: ["delete","get","get_json","list","public_url","put","put_json"]
-    },
-    res: {
-      obj: res,
-      ops: ["my_method"]
-    },
-  }
-}));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.c2ebbdf06e2a1f4ff7d5b279cc90cfff8cb1ed8067171e583f1bcd844805f5e3/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        bucket: {
+          obj: bucket,
+          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+        },
+        res: {
+          obj: res,
+          ops: ["my_method"]
+        },
+      }
+    })
+    );
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "resource", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -95,5 +99,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

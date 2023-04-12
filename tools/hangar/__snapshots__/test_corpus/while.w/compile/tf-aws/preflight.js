@@ -25,37 +25,36 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     while (false) {
-  const x = 1;
-}
+      const x = 1;
+    }
     const y = 123;
     while ((y < 0)) {
-  const x = 1;
-}
+      const x = 1;
+    }
     let z = 0;
     while (true) {
-  z = (z + 1);
-  if ((z > 2)) {
-    break;
-  }
-}
+      z = (z + 1);
+      if ((z > 2)) {
+        break;
+      }
+    }
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(z === 3)'`)})((z === 3))};
     while (true) {
-  break;
-}
+      break;
+    }
     let v = 0;
     let i = 0;
     while ((i < 10)) {
-  i = (i + 1);
-  if (((i % 2) === 0)) {
-    continue;
-  }
-  v = (v + 1);
-}
+      i = (i + 1);
+      if (((i % 2) === 0)) {
+        continue;
+      }
+      v = (v + 1);
+    }
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(i === 10)'`)})((i === 10))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(v === 5)'`)})((v === 5))};
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "while", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -71,5 +70,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

@@ -25,37 +25,38 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     class R extends $stdlib.core.Resource {
-	constructor(scope, id, ) {
-	super(scope, id);
-{
-}
-}
-	 method2()  {
-	{
-  (this.method1());
-  {console.log(`${this.f}`)};
-  (this.method2());
-}
-}
- method1()  {
-	{
-}
-}
-	_toInflight() {
-	const f_client = this._lift(this.f);
-	const self_client_path = "./clients/R.inflight.js".replace(/\\/g, "/");
-	return $stdlib.core.NodeJsCode.fromInline(`(new (require("${self_client_path}")).R({f: ${f_client}}))`);
-}
-}
-R._annotateInflight("$init", {"this.f": { ops: [] }});
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+       method2()  {
+        {
+          (this.method1());
+          {console.log(`${this.f}`)};
+          (this.method2());
+        }
+      }
+       method1()  {
+        {
+        }
+      }
+      _toInflight() {
+        const f_client = this._lift(this.f);
+        const self_client_path = "./clients/R.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (new (require("${self_client_path}")).R({
+            f: ${f_client},
+          }))
+        `);
+      }
+    }
+    R._annotateInflight("$init", {"this.f": { ops: [] }});
     const x = "hi";
     if (true) {
-  {console.log(`${x}`)};
-  const y = new R(this,"R");
-}
+      {console.log(`${x}`)};
+      const y = new R(this,"R");
+    }
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "forward_decl", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -71,5 +72,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

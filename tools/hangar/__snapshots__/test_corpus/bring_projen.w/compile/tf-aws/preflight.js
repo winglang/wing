@@ -28,7 +28,6 @@ class $Root extends $stdlib.core.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(projen.LogLevel.OFF !== projen.LogLevel.VERBOSE)'`)})((projen.LogLevel.OFF !== projen.LogLevel.VERBOSE))};
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "bring_projen", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -44,5 +43,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

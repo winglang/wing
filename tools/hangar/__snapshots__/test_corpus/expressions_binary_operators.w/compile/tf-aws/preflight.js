@@ -43,7 +43,6 @@ class $Root extends $stdlib.core.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(xynfj === 5)'`)})((xynfj === 5))};
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "expressions_binary_operators", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -59,5 +58,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

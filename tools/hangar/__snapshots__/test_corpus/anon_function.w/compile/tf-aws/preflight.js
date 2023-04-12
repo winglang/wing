@@ -25,24 +25,25 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     const myfunc =  (x) =>  {
-	{
-  {console.log(`${x}`)};
-  x = (x + 1);
-  if ((x > 3.14)) {
-    return;
-  }
-  (myfunc(x));
-}
-};
+      {
+        {console.log(`${x}`)};
+        x = (x + 1);
+        if ((x > 3.14)) {
+          return;
+        }
+        (myfunc(x));
+      }
+    }
+    ;
     (myfunc(1));
     (( (x) =>  {
-	{
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === 1)'`)})((x === 1))};
-}
-})(1));
+      {
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === 1)'`)})((x === 1))};
+      }
+    }
+    )(1));
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "anon_function", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -58,5 +59,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();

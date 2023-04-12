@@ -29,22 +29,22 @@ class $Root extends $stdlib.core.Resource {
     const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter",{ initial: 100 });
     const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue",{ timeout: $stdlib.std.Duration.fromSeconds(10) });
     const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.1ece6a476239c44d64d8b687b9e4389715198c49564defb8766e8b85b0f54620/index.js".replace(/\\/g, "/"))),
-  bindings: {
-    bucket: {
-      obj: bucket,
-      ops: ["delete","get","get_json","list","public_url","put","put_json"]
-    },
-    counter: {
-      obj: counter,
-      ops: ["dec","inc","peek","reset"]
-    },
-  }
-});
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.27b9b1acdf307e212f4288f000f9c2838cb38972f5055cd4dac4fd96baef0ee4/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        bucket: {
+          obj: bucket,
+          ops: ["delete","get","get_json","list","public_url","put","put_json"]
+        },
+        counter: {
+          obj: counter,
+          ops: ["dec","inc","peek","reset"]
+        },
+      }
+    })
+    ;
     (queue.addConsumer(handler));
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: "file_counter", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -60,5 +60,4 @@ class $App extends $AppBase {
     }
   }
 }
-
 new $App().synth();
