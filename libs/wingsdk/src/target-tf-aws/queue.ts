@@ -70,15 +70,14 @@ export class Queue extends cloud.Queue {
     }
 
     fn.addPolicyStatements({
-      effect: "Allow",
-      action: [
+      actions: [
         "sqs:ReceiveMessage",
         "sqs:ChangeMessageVisibility",
         "sqs:GetQueueUrl",
         "sqs:DeleteMessage",
         "sqs:GetQueueAttributes",
       ],
-      resource: this.queue.arn,
+      resources: [this.queue.arn],
     });
 
     new LambdaEventSourceMapping(this, "EventSourceMapping", {

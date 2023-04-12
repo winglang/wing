@@ -8,3 +8,4 @@ export * as tfaws from "./target-tf-aws";
 export * as tfazure from "./target-tf-azure";
 export * as tfgcp from "./target-tf-gcp";
 export * as testing from "./testing";
+export * as aws from "./shared-aws";

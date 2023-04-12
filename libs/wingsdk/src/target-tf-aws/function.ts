@@ -11,7 +11,7 @@ import { Construct } from "constructs";
 import { BUCKET_PREFIX_OPTS } from "./bucket";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { PolicyStatement } from "../shared-aws/permissions";
+import { PolicyStatement } from "../shared-aws";
 import { Duration } from "../std/duration";
 import { createBundle } from "../utils/bundling";
 import { NameOptions, ResourceNames } from "../utils/resource-names";

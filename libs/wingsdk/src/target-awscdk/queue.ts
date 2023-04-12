@@ -6,7 +6,6 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { AwsTarget } from "../shared-aws/commons";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
 import { convertBetweenHandlers } from "../utils/convert";
 

@@ -10,7 +10,7 @@ import {
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { PolicyStatement } from "../shared-aws/permissions";
+import { PolicyStatement } from "../shared-aws";
 import { createBundle } from "../utils/bundling";
 
 /**
