@@ -48,11 +48,7 @@ export class Bucket extends cloud.Bucket {
     }
 
     host.addPolicyStatements(
-      ...calculateBucketPermissions(
-        this.bucket.bucketArn,
-        AwsTarget.AWSCDK,
-        ops
-      )
+      ...calculateBucketPermissions(this.bucket.bucketArn, ops)
     );
 
     // The bucket name needs to be passed through an environment variable since

@@ -32,7 +32,7 @@ export class Counter extends cloud.Counter {
     }
 
     host.addPolicyStatements(
-      ...calculateCounterPermissions(this.table.tableArn, AwsTarget.AWSCDK, ops)
+      ...calculateCounterPermissions(this.table.tableArn, ops)
     );
 
     host.addEnvironment(this.envName(), this.table.tableName);

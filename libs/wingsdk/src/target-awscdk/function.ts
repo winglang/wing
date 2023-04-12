@@ -1,10 +1,6 @@
 import { resolve } from "path";
 import { Duration } from "aws-cdk-lib";
-import {
-  Effect,
-  PolicyStatement,
-  PolicyStatementProps,
-} from "aws-cdk-lib/aws-iam";
+import { PolicyStatement as CdkPolicyStatement } from "aws-cdk-lib/aws-iam";
 import {
   Function as CdkFunction,
   Code,
@@ -14,6 +10,7 @@ import {
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { PolicyStatement } from "../shared-aws/permissions";
 import { createBundle } from "../utils/bundling";
 
 /**
@@ -77,16 +74,10 @@ export class Function extends cloud.Function {
   /**
    * Add a policy statement to the Lambda role.
    */
-  public addPolicyStatements(...statements: PolicyStatementProps[]) {
-    statements.map((s) => {
-      this.function.addToRolePolicy(
-        new PolicyStatement({
-          actions: s.actions,
-          resources: s.resources,
-          effect: s.effect ?? Effect.ALLOW,
-        })
-      );
-    });
+  public addPolicyStatements(...statements: PolicyStatement[]) {
+    for (const statement of statements) {
+      this.function.addToRolePolicy(new CdkPolicyStatement(statement));
+    }
   }
 
   /** @internal */
