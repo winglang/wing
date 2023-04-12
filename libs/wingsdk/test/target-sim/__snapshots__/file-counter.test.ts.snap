@@ -90,6 +90,20 @@ bucket: (function(env) {
         },
         "type": "wingsdk.cloud.Queue",
       },
+      {
+        "attrs": {},
+        "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-401ee792",
+        "props": {
+          "consumer": {
+            "batchSize": 1,
+            "functionHandle": "\${root/HelloWorld/Queue-AddConsumer-401ee792#attrs.handle}",
+          },
+          "producer": {
+            "producerHandle": "\${root/HelloWorld/Queue#attrs.handle}",
+          },
+        },
+        "type": "wingsdk.sim.QueueEventMap",
+      },
     ],
     "sdkVersion": "0.0.0",
   },
@@ -179,6 +193,20 @@ bucket: (function(env) {
                   },
                 ],
                 "wing:resource:stateful": true,
+              },
+              "children": {
+                "Queue-QueueEventMapping-401ee792": {
+                  "attributes": {
+                    "wing:resource:connections": [],
+                    "wing:resource:stateful": true,
+                  },
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.1.245",
+                  },
+                  "id": "Queue-QueueEventMapping-401ee792",
+                  "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-401ee792",
+                },
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",

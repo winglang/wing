@@ -1,14 +1,22 @@
-import { ISimulatorContext } from "../testing";
 import { Queue } from "./queue.inflight";
 import { ISimulatorResourceInstance } from "./resource";
-import { EventProducer, QueueEventMappingAttributes, QueueEventMappingSchema, QueueSubscriber } from "./schema-resources";
+import {
+  EventProducer,
+  QueueEventMappingAttributes,
+  QueueEventMappingSchema,
+  QueueSubscriber,
+} from "./schema-resources";
+import { ISimulatorContext } from "../testing";
 
 export class QueueEventMapping implements ISimulatorResourceInstance {
   private readonly consumer: QueueSubscriber;
   private readonly producer: EventProducer;
   private readonly context: ISimulatorContext;
 
-  constructor(props: QueueEventMappingSchema["props"], context: ISimulatorContext) {
+  constructor(
+    props: QueueEventMappingSchema["props"],
+    context: ISimulatorContext
+  ) {
     this.consumer = props.consumer;
     this.producer = props.producer;
     this.context = context;
@@ -22,6 +30,5 @@ export class QueueEventMapping implements ISimulatorResourceInstance {
     return {};
   }
 
-  public async cleanup(): Promise<void> {
-  }
+  public async cleanup(): Promise<void> {}
 }

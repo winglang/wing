@@ -39,7 +39,7 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
     clearInterval(this.intervalId);
   }
 
-  /** @internal */ 
+  /** @internal */
   public async addSubscriber(subscriber: QueueSubscriber): Promise<void> {
     this.subscribers.push(subscriber);
   }
