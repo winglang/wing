@@ -2,13 +2,13 @@ class Foo  {
   constructor({  }) {
   }
   static async regex_inflight(pattern, text)  {
-    return (require(require.resolve("./external_js.js", {paths: [process.env.WING_PROJECT_DIR]}))["regex_inflight"])(pattern, text)
+    return (require("<ABSOLUTE_PATH>/external_js.js")["regex_inflight"])(pattern, text)
   }
   static async get_uuid()  {
-    return (require(require.resolve("./external_js.js", {paths: [process.env.WING_PROJECT_DIR]}))["get_uuid"])()
+    return (require("<ABSOLUTE_PATH>/external_js.js")["get_uuid"])()
   }
   static async get_data()  {
-    return (require(require.resolve("./external_js.js", {paths: [process.env.WING_PROJECT_DIR]}))["get_data"])()
+    return (require("<ABSOLUTE_PATH>/external_js.js")["get_data"])()
   }
   async call()  {
     {

@@ -49,7 +49,7 @@ export async function compileTest(expect: Vi.ExpectStatic, wingFile: string) {
     // remove requires with absolute paths
     fileContents = fileContents.replace(
       /require\("(\/|\w:).*\/(.+)"\)/g,
-      'require("<ABSOLUTE_PATH>/$2"'
+      'require("<ABSOLUTE_PATH>/$2")'
     );
 
     await expect(fileContents).toMatchFileSnapshot(

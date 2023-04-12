@@ -30,10 +30,10 @@ class $Root extends $stdlib.core.Resource {
         super(scope, id);
       }
       static get_greeting(name)  {
-        return (require(require.resolve("./external_js.js", {paths: [process.env.WING_PROJECT_DIR]}))["get_greeting"])(name)
+        return (require("<ABSOLUTE_PATH>/external_js.js")["get_greeting"])(name)
       }
       static v4()  {
-        return (require(require.resolve("uuid", {paths: [process.env.WING_PROJECT_DIR]}))["v4"])()
+        return (require("<ABSOLUTE_PATH>/index.js")["v4"])()
       }
       _toInflight() {
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
