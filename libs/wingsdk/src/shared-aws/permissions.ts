@@ -1,5 +1,5 @@
-import * as cloud from "../cloud";
 import { PolicyStatement } from "./types";
+import * as cloud from "../cloud";
 
 export function calculateTopicPermissions(
   arn: string,
