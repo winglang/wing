@@ -6,7 +6,6 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { AwsTarget } from "../shared-aws/commons";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
 import { convertBetweenHandlers } from "../utils/convert";
 
@@ -85,7 +84,7 @@ export class Queue extends cloud.Queue {
     const env = this.envName();
 
     host.addPolicyStatements(
-      ...calculateQueuePermissions(this.queue.queueArn, AwsTarget.AWSCDK, ops)
+      ...calculateQueuePermissions(this.queue.queueArn, ops)
     );
 
     // The queue url needs to be passed through an environment variable since

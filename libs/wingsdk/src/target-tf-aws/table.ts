@@ -44,40 +44,35 @@ export class Table extends cloud.Table {
 
     if (ops.includes(cloud.TableInflightMethods.INSERT)) {
       host.addPolicyStatements({
-        effect: "Allow",
-        action: ["dynamodb:PutItem"],
-        resource: this.table.arn,
+        actions: ["dynamodb:PutItem"],
+        resources: [this.table.arn],
       });
     }
     if (ops.includes(cloud.TableInflightMethods.UPDATE)) {
       host.addPolicyStatements({
-        effect: "Allow",
-        action: ["dynamodb:UpdateItem"],
-        resource: this.table.arn,
+        actions: ["dynamodb:UpdateItem"],
+        resources: [this.table.arn],
       });
     }
 
     if (ops.includes(cloud.TableInflightMethods.DELETE)) {
       host.addPolicyStatements({
-        effect: "Allow",
-        action: ["dynamodb:DeleteItem"],
-        resource: this.table.arn,
+        actions: ["dynamodb:DeleteItem"],
+        resources: [this.table.arn],
       });
     }
 
     if (ops.includes(cloud.TableInflightMethods.GET)) {
       host.addPolicyStatements({
-        effect: "Allow",
-        action: ["dynamodb:GetItem"],
-        resource: this.table.arn,
+        actions: ["dynamodb:GetItem"],
+        resources: [this.table.arn],
       });
     }
 
     if (ops.includes(cloud.TableInflightMethods.LIST)) {
       host.addPolicyStatements({
-        effect: "Allow",
-        action: ["dynamodb:Scan"],
-        resource: this.table.arn,
+        actions: ["dynamodb:Scan"],
+        resources: [this.table.arn],
       });
     }
 

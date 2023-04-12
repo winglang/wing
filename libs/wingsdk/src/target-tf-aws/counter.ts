@@ -3,7 +3,7 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { AwsTarget, COUNTER_HASH_KEY } from "../shared-aws/commons";
+import { COUNTER_HASH_KEY } from "../shared-aws/commons";
 import { calculateCounterPermissions } from "../shared-aws/permissions";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
 
@@ -43,7 +43,7 @@ export class Counter extends cloud.Counter {
     }
 
     host.addPolicyStatements(
-      ...calculateCounterPermissions(this.table.arn, AwsTarget.TF_AWS, ops)
+      ...calculateCounterPermissions(this.table.arn, ops)
     );
 
     host.addEnvironment(this.envName(), this.table.name);

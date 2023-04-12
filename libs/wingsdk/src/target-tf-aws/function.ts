@@ -11,6 +11,7 @@ import { Construct } from "constructs";
 import { BUCKET_PREFIX_OPTS } from "./bucket";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { PolicyStatement } from "../shared-aws";
 import { Duration } from "../std/duration";
 import { createBundle } from "../utils/bundling";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
@@ -133,7 +134,7 @@ export class Function extends cloud.Function {
         produce: () => {
           // If there are subnets to attach then the role needs to be able to
           // create network interfaces
-          if ((this.subnets?.size ?? 0) > 0) {
+          if ((this.subnets?.size ?? 0) !== 0) {
             this.policyStatements?.push({
               Effect: "Allow",
               Action: [
@@ -146,24 +147,23 @@ export class Function extends cloud.Function {
               Resource: "*",
             });
           }
-          if ((this.policyStatements ?? []).length > 0) {
+          if ((this.policyStatements ?? []).length !== 0) {
             return JSON.stringify({
               Version: "2012-10-17",
               Statement: this.policyStatements,
             });
-          } else {
-            // policy must contain at least one statement, so include a no-op statement
-            return JSON.stringify({
-              Version: "2012-10-17",
-              Statement: [
-                {
-                  Effect: "Allow",
-                  Action: "none:null",
-                  Resource: "*",
-                },
-              ],
-            });
           }
+          // policy must contain at least one statement, so include a no-op statement
+          return JSON.stringify({
+            Version: "2012-10-17",
+            Statement: [
+              {
+                Effect: "Allow",
+                Action: "none:null",
+                Resource: "*",
+              },
+            ],
+          });
         },
       }),
     });
@@ -228,9 +228,8 @@ export class Function extends cloud.Function {
 
     if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
       host.addPolicyStatements({
-        effect: "Allow",
-        action: ["lambda:InvokeFunction"],
-        resource: [`${this.function.arn}`],
+        actions: ["lambda:InvokeFunction"],
+        resources: [`${this.function.arn}`],
       });
     }
 
@@ -274,13 +273,13 @@ export class Function extends cloud.Function {
       this.policyStatements = [];
     }
 
-    this.policyStatements.push(
-      ...statements.map((s) => ({
-        Action: s.action,
-        Resource: s.resource,
-        Effect: s.effect ?? "Allow",
-      }))
-    );
+    for (const statement of statements) {
+      this.policyStatements.push({
+        Action: statement.actions,
+        Resource: statement.resources,
+        Effect: statement.effect ?? "Allow",
+      });
+    }
   }
 
   /**
@@ -314,18 +313,6 @@ export class Function extends cloud.Function {
   private envName(): string {
     return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }
-}
-
-/**
- * AWS IAM Policy Statement.
- */
-export interface PolicyStatement {
-  /** Actions */
-  readonly action?: string[];
-  /** Resources */
-  readonly resource?: string[] | string;
-  /** Effect ("Allow" or "Deny") */
-  readonly effect?: string;
 }
 
 Function._annotateInflight(cloud.FunctionInflightMethods.INVOKE, {});
