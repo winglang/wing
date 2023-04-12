@@ -49,7 +49,6 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
             context: "sandbox", // require inside the sandbox (addresses #1871)
           },
           sandbox: {
-            fetch, // allow using fetch
             $simulator: this.context,
           },
           env: {
