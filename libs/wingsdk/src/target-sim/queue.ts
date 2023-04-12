@@ -1,6 +1,7 @@
 import { join } from "path";
 import { Construct } from "constructs";
 import { Function } from "./function";
+import { QueueEventMapping } from "./queue-event-map";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema, QueueSubscriber, QUEUE_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
@@ -9,7 +10,6 @@ import * as core from "../core";
 import { Duration, IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 import { convertBetweenHandlers } from "../utils/convert";
-import { QueueEventMapping } from "./queue-event-map";
 
 /**
  * Simulator implementation of `cloud.Queue`.
@@ -74,9 +74,9 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     new QueueEventMapping(this, `${this.node.id}-QueueEventMapping-${hash}`, {
       consumer: {
         batchSize: props.batchSize ?? 1,
-        resource: fn
+        resource: fn,
       },
-      producer: this
+      producer: this,
     });
 
     Resource.addConnection({

@@ -98,7 +98,7 @@ export interface QueueEventProps extends EventProps {
   consumer: {
     functionHandle: FunctionHandle;
     batchSize: number;
-  }
+  };
 }
 
 /** Schema for cloud.QueueEventMapping.props */

@@ -1,11 +1,14 @@
-import { ISimulatorResource } from "./resource";
 import { Construct } from "constructs";
-import * as core from "../core";
-import { BaseResourceSchema } from "./schema";
 import { EventMapping } from "./event-mapping";
-import { QUEUE_EVENT_MAP_TYPE, QueueEventMappingSchema } from "./schema-resources";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import { ISimulatorResource } from "./resource";
+import { BaseResourceSchema } from "./schema";
+import {
+  QUEUE_EVENT_MAP_TYPE,
+  QueueEventMappingSchema,
+} from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
+import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import * as core from "../core";
 
 export interface QueueEventMappingConsumer {
   resource: core.IResource;
@@ -14,10 +17,13 @@ export interface QueueEventMappingConsumer {
 
 export interface QueueEventMappingProps {
   consumer: QueueEventMappingConsumer;
-  producer: core.IResource; 
+  producer: core.IResource;
 }
 
-export class QueueEventMapping extends EventMapping implements ISimulatorResource {
+export class QueueEventMapping
+  extends EventMapping
+  implements ISimulatorResource
+{
   private consumer: QueueEventMappingConsumer;
   private producer: core.IResource;
 
@@ -37,14 +43,14 @@ export class QueueEventMapping extends EventMapping implements ISimulatorResourc
       props: {
         consumer: {
           batchSize: this.consumer.batchSize,
-          functionHandle: simulatorHandleToken(this.consumer.resource)
+          functionHandle: simulatorHandleToken(this.consumer.resource),
         },
         producer: {
           producerHandle: simulatorHandleToken(this.producer),
-        }
+        },
       },
-      attrs: {} as any
-    }
+      attrs: {} as any,
+    };
     return schema;
   }
 
@@ -52,9 +58,8 @@ export class QueueEventMapping extends EventMapping implements ISimulatorResourc
     bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }
- 
+
   public _toInflight(): core.Code {
     return makeSimulatorJsClient(__filename, this);
   }
-
 }
