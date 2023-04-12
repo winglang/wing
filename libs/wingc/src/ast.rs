@@ -380,7 +380,7 @@ pub enum StmtKind {
 	Struct {
 		name: Symbol,
 		extends: Vec<UserDefinedType>,
-		fields: Vec<ClassField>,
+		fields: Vec<StructField>,
 	},
 	Enum {
 		name: Symbol,
@@ -406,6 +406,12 @@ pub struct ClassField {
 	pub reassignable: bool,
 	pub phase: Phase,
 	pub is_static: bool,
+}
+
+#[derive(Debug)]
+pub struct StructField {
+	pub name: Symbol,
+	pub member_type: TypeAnnotation,
 }
 
 #[derive(Debug)]

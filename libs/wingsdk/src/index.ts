@@ -1,6 +1,7 @@
 export * as cloud from "./cloud";
 export * as core from "./core";
 export * as redis from "./redis";
+export * as aws from "./shared-aws";
 export * as std from "./std";
 export * as awscdk from "./target-awscdk";
 export * as sim from "./target-sim";
