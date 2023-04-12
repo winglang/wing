@@ -94,15 +94,14 @@ bucket: (function(env) {
         "attrs": {},
         "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-401ee792",
         "props": {
-          "consumer": {
+          "consumer": "\${root/HelloWorld/Queue#attrs.handle}",
+          "payload": {
             "batchSize": 1,
             "functionHandle": "\${root/HelloWorld/Queue-AddConsumer-401ee792#attrs.handle}",
           },
-          "producer": {
-            "producerHandle": "\${root/HelloWorld/Queue#attrs.handle}",
-          },
+          "producer": "\${root/HelloWorld/Queue#attrs.handle}",
         },
-        "type": "wingsdk.sim.QueueEventMap",
+        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",

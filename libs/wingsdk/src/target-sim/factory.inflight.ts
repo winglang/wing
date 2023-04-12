@@ -1,6 +1,7 @@
 import { Api } from "./api.inflight";
 import { Bucket } from "./bucket.inflight";
 import { Counter } from "./counter.inflight";
+import { EventMapping } from "./event-mapping.inflight";
 import { Function } from "./function.inflight";
 import { Queue } from "./queue.inflight";
 import { Redis } from "./redis.inflight";

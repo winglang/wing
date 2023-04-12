@@ -1,16 +1,16 @@
 import { join } from "path";
 import { Construct } from "constructs";
+import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema, QueueSubscriber, QUEUE_TYPE } from "./schema-resources";
+import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { Duration, IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 import { convertBetweenHandlers } from "../utils/convert";
-import { simulatorHandleToken } from "./tokens";
-import { EventMapping } from "./event-mapping";
 
 /**
  * Simulator implementation of `cloud.Queue`.
@@ -78,7 +78,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       payload: {
         functionHandle: simulatorHandleToken(fn),
         batchSize: props.batchSize ?? 1,
-      }
+      },
     });
 
     Resource.addConnection({

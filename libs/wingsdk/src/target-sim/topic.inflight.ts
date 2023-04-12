@@ -1,3 +1,4 @@
+import { IEventProducer } from "./event-mapping";
 import {
   TopicAttributes,
   TopicSchema,
@@ -9,9 +10,10 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../testing/simulator";
-import { IEventProducer } from "./event-mapping";
 
-export class Topic implements ITopicClient, ISimulatorResourceInstance, IEventProducer {
+export class Topic
+  implements ITopicClient, ISimulatorResourceInstance, IEventProducer
+{
   private readonly subscribers = new Array<TopicSubscriber>();
   private readonly context: ISimulatorContext;
 

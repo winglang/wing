@@ -1,12 +1,12 @@
 import { Construct } from "constructs";
-import { fqnForType } from "../constants";
-import { Resource, App } from "../core";
 import { ISimulatorResource } from "./resource";
-import * as core from "../core";
-import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { BaseResourceSchema } from "./schema";
 import { EVENT_MAPPING_TYPE, EventMappingSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
+import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
+import { fqnForType } from "../constants";
+import * as core from "../core";
+import { Resource, App } from "../core";
 
 export const EVENT_MAP_FQN = fqnForType("sim.EventMapping");
 
@@ -38,7 +38,10 @@ export interface EventMappingProps {
   payload: any; // TODO: payload is a terrible name and should not be any
 }
 
-export class EventMapping extends EventMappingBase implements ISimulatorResource {
+export class EventMapping
+  extends EventMappingBase
+  implements ISimulatorResource
+{
   private eventProps: EventMappingProps;
 
   constructor(scope: Construct, id: string, props: EventMappingProps) {
@@ -59,7 +62,7 @@ export class EventMapping extends EventMappingBase implements ISimulatorResource
         payload: this.eventProps.payload,
       },
       attrs: {} as any,
-    }
+    };
     return schema;
   }
 
