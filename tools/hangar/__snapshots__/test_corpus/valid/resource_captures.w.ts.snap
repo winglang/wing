@@ -581,8 +581,8 @@ exports[`wing compile -t tf-aws > proc.ec2c78b051aaf1991ae27a24d33eb54a2c0485ae7
 exports[`wing test -t sim > stdout 1`] = `
 "- Compiling to sim...
 ✔ Compiling to sim...
-array.len=3
-field=hello!
-this.another.first.my_resource:my_string
-pass ─ resource_captures.wsim » root/env0/test"
+pass ┌ resource_captures.wsim » root/env0/test
+     │ array.len=3
+     │ field=hello!
+     └ this.another.first.my_resource:my_string"
 `;
