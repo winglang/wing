@@ -121,7 +121,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
             "uniqueId": "root_cloudApi_cloudApiOnRequeste46e5cb7_IamRolePolicy_0281983F",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:GetItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:GetItem\\"],\\"Resource\\":[\\"\${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.root_cloudApi_cloudApiOnRequeste46e5cb7_IamRole_15046B29.name}",
       },
     },
@@ -239,18 +239,18 @@ class $Root extends $stdlib.core.Resource {
     const api = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Api\\",this,\\"cloud.Api\\");
     const counter = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Counter\\",this,\\"cloud.Counter\\");
     const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.c83263b121750e827ffc19b09e3c0813a9accb33e17a19eae0dbc2680135a09e/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-  bindings: {
-    counter: {
-      obj: counter,
-      ops: [\\"dec\\",\\"inc\\",\\"peek\\",\\"reset\\"]
-    },
-  }
-});
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.4ea11c0c20cac55e9e28b889e8e770331d2ed4a5baf0d566c4402cfa2b200882/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+      bindings: {
+        counter: {
+          obj: counter,
+          ops: [\\"dec\\",\\"inc\\",\\"peek\\",\\"reset\\"]
+        },
+      }
+    })
+    ;
     (api.get(\\"/hello/world\\",handler));
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: \\"api\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -266,12 +266,13 @@ class $App extends $AppBase {
     }
   }
 }
-
-new $App().synth();"
+new $App().synth();
+"
 `;
 
-exports[`wing compile -t tf-aws > proc.c83263b121750e827ffc19b09e3c0813a9accb33e17a19eae0dbc2680135a09e/index.js 1`] = `
-"async handle(request) { const { counter } = this; {
+exports[`wing compile -t tf-aws > proc.4ea11c0c20cac55e9e28b889e8e770331d2ed4a5baf0d566c4402cfa2b200882/index.js 1`] = `
+"async handle(request) {
+  const { counter } = this;
   const count = (await counter.inc());
   const bodyResponse = Object.freeze({\\"count\\":count});
   const resp = {
@@ -279,7 +280,8 @@ exports[`wing compile -t tf-aws > proc.c83263b121750e827ffc19b09e3c0813a9accb33e
   \\"status\\": 200,}
   ;
   return resp;
-} };"
+}
+"
 `;
 
 exports[`wing test -t sim > stdout 1`] = `

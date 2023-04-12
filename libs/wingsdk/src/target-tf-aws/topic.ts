@@ -6,7 +6,6 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { AwsTarget } from "../shared-aws/commons";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
 import { convertBetweenHandlers } from "../utils/convert";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
@@ -140,16 +139,7 @@ export class Topic extends cloud.Topic {
       throw new Error("topics can only be bound by tfaws.Function for now");
     }
 
-    host.addPolicyStatements(
-      ...calculateTopicPermissions(this.topic.arn, AwsTarget.TF_AWS, ops)
-    );
-    if (ops.includes(cloud.TopicInflightMethods.PUBLISH)) {
-      host.addPolicyStatements({
-        effect: "Allow",
-        action: ["sns:Publish"],
-        resource: this.topic.arn,
-      });
-    }
+    host.addPolicyStatements(...calculateTopicPermissions(this.topic.arn, ops));
 
     host.addEnvironment(this.envName(), this.topic.arn);
 
