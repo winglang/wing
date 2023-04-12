@@ -329,17 +329,6 @@ pub fn compile(
 	let project_dir = absolute_project_root
 		.unwrap_or(source_path.parent().unwrap())
 		.to_path_buf();
-	if project_dir.is_relative() {
-		diagnostics.push(Diagnostic {
-			message: format!(
-				"Wing project directory must be an absolute path, instead found \"{}\"",
-				project_dir.display()
-			),
-			span: None,
-			level: DiagnosticLevel::Error,
-		});
-		return Err(diagnostics);
-	}
 
 	let mut jsifier = JSifier::new(out_dir, app_name, project_dir.as_path(), true);
 
