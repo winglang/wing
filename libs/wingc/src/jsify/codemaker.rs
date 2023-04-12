@@ -1,5 +1,3 @@
-use indoc::indoc;
-
 /// A helper for generating code snippets with indentation.
 ///
 /// TODO: add `open_block` or `close_block` methods that automatically add
@@ -32,7 +30,6 @@ impl CodeMaker {
 	}
 
 	/// Emits multiple lines of code starting with the current indent.
-	#[allow(dead_code)]
 	pub fn add_code(&mut self, code: CodeMaker) {
 		assert_eq!(code.indent, 0, "Cannot add code with indent");
 		for (indent, line) in code.lines {
@@ -101,6 +98,7 @@ mod tests {
 			"#}
 		);
 	}
+
 	#[test]
 	fn codemaker_add_code() {
 		let mut code1 = CodeMaker::default();
@@ -120,21 +118,21 @@ mod tests {
 		"#}
 		);
 	}
-}
 
-#[test]
-fn codemaker_line_with_newlines() {
-	let mut code = CodeMaker::default();
-	code.open("<");
-	code.line("hello\nworld");
-	code.close(">");
-	assert_eq!(
-		code.to_string(),
-		indoc! {r#"
-			<
-			  hello
-			  world
-			>
-		"#}
-	);
+	#[test]
+	fn codemaker_line_with_newlines() {
+		let mut code = CodeMaker::default();
+		code.open("<");
+		code.line("hello\nworld");
+		code.close(">");
+		assert_eq!(
+			code.to_string(),
+			indoc! {r#"
+				<
+				  hello
+				  world
+				>
+			"#}
+		);
+	}
 }
