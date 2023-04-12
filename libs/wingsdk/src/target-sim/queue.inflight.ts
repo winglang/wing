@@ -1,4 +1,4 @@
-import { IEventProducer } from "./event-mapping";
+import { IEventPublisher } from "./event-mapping";
 import {
   QueueAttributes,
   QueueSchema,
@@ -12,7 +12,7 @@ import {
 } from "../testing/simulator";
 
 export class Queue
-  implements IQueueClient, ISimulatorResourceInstance, IEventProducer
+  implements IQueueClient, ISimulatorResourceInstance, IEventPublisher
 {
   private readonly messages = new Array<string>();
   private readonly subscribers = new Array<QueueSubscriber>();
@@ -42,8 +42,7 @@ export class Queue
     clearInterval(this.intervalId);
   }
 
-  /** @internal */
-  public async addEventConsumer(subscriber: QueueSubscriber): Promise<void> {
+  public async addEventSubscription(subscriber: QueueSubscriber): Promise<void> {
     this.subscribers.push(subscriber);
   }
 

@@ -80,24 +80,15 @@ export interface QueueSchema extends BaseResourceSchema {
 
 export interface EventSubscription {}
 
-export interface EventProducer {
-  readonly publisherHandle: PublisherHandle;
-}
-
-/** Schema for cloud.EventMapping */
-export interface EventProps {
-  subscriber: FunctionHandle;
-  publisher: PublisherHandle;
-  eventSubscription: EventSubscription;
-}
-
+/** Schema for sim.EventMapping */
 export interface EventMappingSchema extends BaseResourceSchema {
   readonly type: typeof EVENT_MAPPING_TYPE;
-  readonly props: EventProps;
+  readonly props: {
+    subscriber: FunctionHandle;
+    publisher: PublisherHandle;
+    eventSubscription: EventSubscription;
+  };
 }
-
-/** Runtime attributes for cloud.QueueEventMapping */
-export interface QueueEventMappingAttributes {}
 
 /** Runtime attributes for cloud.EventMapping */
 export interface EventMappingAttributes {}

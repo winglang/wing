@@ -1,4 +1,4 @@
-import { IEventProducer } from "./event-mapping";
+import { IEventPublisher } from "./event-mapping";
 import {
   TopicAttributes,
   TopicSchema,
@@ -12,7 +12,7 @@ import {
 } from "../testing/simulator";
 
 export class Topic
-  implements ITopicClient, ISimulatorResourceInstance, IEventProducer
+  implements ITopicClient, ISimulatorResourceInstance, IEventPublisher
 {
   private readonly subscribers = new Array<TopicSubscriber>();
   private readonly context: ISimulatorContext;
@@ -64,7 +64,7 @@ export class Topic
     }
   }
 
-  async addEventConsumer(subscriber: TopicSubscriber): Promise<void> {
+  async addEventSubscription(subscriber: TopicSubscriber): Promise<void> {
     this.subscribers.push(subscriber);
   }
 

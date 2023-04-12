@@ -1,15 +1,16 @@
-import { IEventProducer } from "./event-mapping";
+import { IEventPublisher } from "./event-mapping";
 import { ISimulatorResourceInstance } from "./resource";
 import {
   EventMappingAttributes,
   EventMappingSchema,
+  EventSubscription,
   FunctionHandle,
 } from "./schema-resources";
 import { ISimulatorContext } from "../testing";
 
 export class EventMapping implements ISimulatorResourceInstance {
   private readonly producer: FunctionHandle;
-  private readonly eventSubscription: any;
+  private readonly eventSubscription: EventSubscription;
   private readonly context: ISimulatorContext;
 
   constructor(props: EventMappingSchema["props"], context: ISimulatorContext) {
@@ -20,9 +21,9 @@ export class EventMapping implements ISimulatorResourceInstance {
   }
 
   public async init(): Promise<EventMappingAttributes> {
-    const client = this.context.findInstance(this.producer) as IEventProducer &
+    const client = this.context.findInstance(this.producer) as IEventPublisher &
       ISimulatorResourceInstance;
-    await client.addEventConsumer(this.eventSubscription);
+    await client.addEventSubscription(this.eventSubscription);
     return {};
   }
 

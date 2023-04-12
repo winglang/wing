@@ -12,8 +12,8 @@ export const EVENT_MAP_FQN = fqnForType("sim.EventMapping");
 
 export interface EventProps {}
 
-export interface IEventProducer {
-  addEventConsumer: (payload: any) => Promise<void>;
+export interface IEventPublisher {
+  addEventSubscription: (payload: any) => Promise<void>;
 }
 
 export abstract class EventMappingBase extends Resource {
@@ -42,12 +42,13 @@ export class EventMapping
   extends EventMappingBase
   implements ISimulatorResource
 {
-  private eventProps: EventMappingProps;
+  private readonly eventProps: EventMappingProps;
 
   constructor(scope: Construct, id: string, props: EventMappingProps) {
     super(scope, id);
     this.eventProps = props;
 
+    // Add dependencies to the publisher and subscriber
     this.node.addDependency(props.subscriber);
     this.node.addDependency(props.publisher);
   }
