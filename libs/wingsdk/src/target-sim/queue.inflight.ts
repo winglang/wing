@@ -9,8 +9,9 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../testing/simulator";
+import { IEventProducer } from "./event-mapping";
 
-export class Queue implements IQueueClient, ISimulatorResourceInstance {
+export class Queue implements IQueueClient, ISimulatorResourceInstance, IEventProducer {
   private readonly messages = new Array<string>();
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly intervalId: NodeJS.Timeout;
@@ -40,7 +41,7 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
   }
 
   /** @internal */
-  public async addSubscriber(subscriber: QueueSubscriber): Promise<void> {
+  public async addEventConsumer(subscriber: QueueSubscriber): Promise<void> {
     this.subscribers.push(subscriber);
   }
 
@@ -169,3 +170,4 @@ class RandomArrayIterator<T = any> implements Iterable<T> {
     return this;
   }
 }
+

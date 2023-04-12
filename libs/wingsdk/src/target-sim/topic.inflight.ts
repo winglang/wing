@@ -9,8 +9,9 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../testing/simulator";
+import { IEventProducer } from "./event-mapping";
 
-export class Topic implements ITopicClient, ISimulatorResourceInstance {
+export class Topic implements ITopicClient, ISimulatorResourceInstance, IEventProducer {
   private readonly subscribers = new Array<TopicSubscriber>();
   private readonly context: ISimulatorContext;
 
@@ -48,6 +49,7 @@ export class Topic implements ITopicClient, ISimulatorResourceInstance {
       });
 
       void (await fnClient.invoke(message).catch((err) => {
+        console.log("Subscriber error", err);
         this.context.addTrace({
           data: {
             message: `Subscriber error: ${err}`,
@@ -59,6 +61,10 @@ export class Topic implements ITopicClient, ISimulatorResourceInstance {
         });
       }));
     }
+  }
+
+  async addEventConsumer(subscriber: TopicSubscriber): Promise<void> {
+    this.subscribers.push(subscriber);
   }
 
   async publish(message: string): Promise<void> {
