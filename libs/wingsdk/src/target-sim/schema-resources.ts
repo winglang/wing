@@ -7,7 +7,6 @@ import {
 export const API_TYPE = "wingsdk.cloud.Api";
 export const QUEUE_TYPE = "wingsdk.cloud.Queue";
 export const EVENT_MAPPING_TYPE = "wingsdk.sim.EventMapping";
-export const QUEUE_EVENT_MAP_TYPE = "wingsdk.sim.QueueEventMap";
 export const FUNCTION_TYPE = "wingsdk.cloud.Function";
 export const BUCKET_TYPE = "wingsdk.cloud.Bucket";
 export const TOPIC_TYPE = "wingsdk.cloud.Topic";
@@ -20,7 +19,7 @@ export const REDIS_TYPE = "wingsdk.redis.Redis";
 export const SECRET_TYPE = "wingsdk.cloud.Secret";
 
 export type FunctionHandle = string;
-export type ProducerHandle = string;
+export type PublisherHandle = string;
 
 /** Schema for cloud.Api */
 export interface ApiSchema extends BaseResourceSchema {
@@ -79,15 +78,17 @@ export interface QueueSchema extends BaseResourceSchema {
   };
 }
 
+export interface EventSubscription {}
+
 export interface EventProducer {
-  readonly producerHandle: ProducerHandle;
+  readonly publisherHandle: PublisherHandle;
 }
 
 /** Schema for cloud.EventMapping */
 export interface EventProps {
-  consumer: FunctionHandle;
-  producer: ProducerHandle;
-  payload: any;
+  subscriber: FunctionHandle;
+  publisher: PublisherHandle;
+  eventSubscription: EventSubscription;
 }
 
 export interface EventMappingSchema extends BaseResourceSchema {
@@ -105,8 +106,8 @@ export interface EventMappingAttributes {}
 export interface QueueAttributes {}
 
 /** Schema for cloud.Queue.props.subscribers */
-export interface QueueSubscriber {
-  /** Function that should be called */
+export interface QueueSubscriber extends EventSubscription {
+  /** Function that should be called. */
   readonly functionHandle: FunctionHandle;
   /** Maximum number of messages that will be batched together to the subscriber. */
   readonly batchSize: number;
@@ -123,7 +124,7 @@ export interface TopicSchema extends BaseResourceSchema {
 /** Runtime attributes for cloud.Topic */
 export interface TopicAttributes {}
 
-export interface TopicSubscriber {
+export interface TopicSubscriber extends EventSubscription {
   /** Function that should be called */
   readonly functionHandle: FunctionHandle;
 }

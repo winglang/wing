@@ -46,9 +46,9 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     );
 
     new EventMapping(this, `${this.node.id}-TopicEventMapping-${hash}`, {
-      consumer: fn,
-      producer: this,
-      payload: {
+      subscriber: fn,
+      publisher: this,
+      eventSubscription: {
         functionHandle: simulatorHandleToken(fn),
       },
     });

@@ -73,9 +73,9 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     );
 
     new EventMapping(this, `${this.node.id}-QueueEventMapping-${hash}`, {
-      consumer: fn,
-      producer: this,
-      payload: {
+      subscriber: fn,
+      publisher: this,
+      eventSubscription: {
         functionHandle: simulatorHandleToken(fn),
         batchSize: props.batchSize ?? 1,
       },
