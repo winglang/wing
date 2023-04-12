@@ -153,7 +153,7 @@ class $Root extends $stdlib.core.Resource {
     const arr_of_map = Object.freeze([Object.freeze({\\"bang\\":123})]);
     const j = Object.freeze({\\"a\\":\\"hello\\",\\"b\\":\\"world\\"});
     const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.517641749e3cd3e3a9f11738f8bf0e3bfc5d6cae362e926ee33e7877e15905db/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.8737b7ddfddfd5b0f34d5d28d474901ed7c1f4bd7c3028e87d902df663b0f9ca/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
       bindings: {
         arr: {
           obj: arr,
@@ -200,21 +200,19 @@ new $App().synth();
 "
 `;
 
-exports[`wing compile -t tf-aws > proc.517641749e3cd3e3a9f11738f8bf0e3bfc5d6cae362e926ee33e7877e15905db/index.js 1`] = `
+exports[`wing compile -t tf-aws > proc.8737b7ddfddfd5b0f34d5d28d474901ed7c1f4bd7c3028e87d902df663b0f9ca/index.js 1`] = `
 "async handle(s) {
   const { arr, arr_of_map, j, my_map, my_set } = this;
-  {
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(0)) === \\"hello\\")'\`)})(((await arr.at(0)) === \\"hello\\"))};
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(1)) === \\"world\\")'\`)})(((await arr.at(1)) === \\"world\\"))};
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr.length === 2)'\`)})((arr.length === 2))};
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await my_set.has(\\"my\\"))'\`)})((await my_set.has(\\"my\\")))};
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(my_set.size === 2)'\`)})((my_set.size === 2))};
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"world\\" in (my_map))'\`)})((\\"world\\" in (my_map)))};
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(my_map).length === 2)'\`)})((Object.keys(my_map).length === 2))};
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"bang\\" in ((await arr_of_map.at(0))))'\`)})((\\"bang\\" in ((await arr_of_map.at(0)))))};
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '((j)[\\"b\\"] === \\"world\\")'\`)})(((j)[\\"b\\"] === \\"world\\"))};
-  }
-};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(0)) === \\"hello\\")'\`)})(((await arr.at(0)) === \\"hello\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(1)) === \\"world\\")'\`)})(((await arr.at(1)) === \\"world\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr.length === 2)'\`)})((arr.length === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await my_set.has(\\"my\\"))'\`)})((await my_set.has(\\"my\\")))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(my_set.size === 2)'\`)})((my_set.size === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"world\\" in (my_map))'\`)})((\\"world\\" in (my_map)))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(Object.keys(my_map).length === 2)'\`)})((Object.keys(my_map).length === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"bang\\" in ((await arr_of_map.at(0))))'\`)})((\\"bang\\" in ((await arr_of_map.at(0)))))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((j)[\\"b\\"] === \\"world\\")'\`)})(((j)[\\"b\\"] === \\"world\\"))};
+}
 "
 `;
 

@@ -153,7 +153,7 @@ class $Root extends $stdlib.core.Resource {
     const my_second_bool = false;
     const my_dur = $stdlib.std.Duration.fromSeconds(600);
     const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.6b136da2c25def8c9f56c1a5878eb2db480b7ff94a95bde4abe293a5abf7cf72/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.34e5b7de651594942ccd90c9d76355813afc895aa395fbda2c204aa36f7c3a85/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
       bindings: {
         my_bool: {
           obj: my_bool,
@@ -200,27 +200,25 @@ new $App().synth();
 "
 `;
 
-exports[`wing compile -t tf-aws > proc.6b136da2c25def8c9f56c1a5878eb2db480b7ff94a95bde4abe293a5abf7cf72/index.js 1`] = `
+exports[`wing compile -t tf-aws > proc.34e5b7de651594942ccd90c9d76355813afc895aa395fbda2c204aa36f7c3a85/index.js 1`] = `
 "async handle(s) {
   const { my_bool, my_dur, my_num, my_second_bool, my_str } = this;
-  {
-    {console.log(my_str)};
-    const n = my_num;
-    {console.log(\`\${n}\`)};
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(my_second_bool === false)'\`)})((my_second_bool === false))};
-    if (my_bool) {
-      {console.log(\\"bool=true\\")};
-    }
-    else {
-      {console.log(\\"bool=false\\")};
-    }
-    const min = my_dur.minutes;
-    const sec = my_dur.seconds;
-    const hr = my_dur.hours;
-    const split = (await \`min=\${min} sec=\${sec} hr=\${hr}\`.split(\\" \\"));
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(split.length === 3)'\`)})((split.length === 3))};
+  {console.log(my_str)};
+  const n = my_num;
+  {console.log(\`\${n}\`)};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(my_second_bool === false)'\`)})((my_second_bool === false))};
+  if (my_bool) {
+    {console.log(\\"bool=true\\")};
   }
-};
+  else {
+    {console.log(\\"bool=false\\")};
+  }
+  const min = my_dur.minutes;
+  const sec = my_dur.seconds;
+  const hr = my_dur.hours;
+  const split = (await \`min=\${min} sec=\${sec} hr=\${hr}\`.split(\\" \\"));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(split.length === 3)'\`)})((split.length === 3))};
+}
 "
 `;
 

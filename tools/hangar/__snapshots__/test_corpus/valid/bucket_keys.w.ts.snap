@@ -194,7 +194,7 @@ class $Root extends $stdlib.core.Resource {
     super(scope, id);
     const b = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
     this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.b57118b048bea26e55aac570fcc0ae1038d26e67690efaefaa6b76713025b3ff/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.e985a655d1d19405f1798377278c6205fc276c76ea8815eb157a120ca44fdbcc/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
       bindings: {
         b: {
           obj: b,
@@ -224,23 +224,21 @@ new $App().synth();
 "
 `;
 
-exports[`wing compile -t tf-aws > proc.b57118b048bea26e55aac570fcc0ae1038d26e67690efaefaa6b76713025b3ff/index.js 1`] = `
+exports[`wing compile -t tf-aws > proc.e985a655d1d19405f1798377278c6205fc276c76ea8815eb157a120ca44fdbcc/index.js 1`] = `
 "async handle() {
   const { b } = this;
-  {
-    (await b.put(\\"foo\\",\\"text\\"));
-    (await b.put(\\"foo/\\",\\"text\\"));
-    (await b.put(\\"foo/bar\\",\\"text\\"));
-    (await b.put(\\"foo/bar/\\",\\"text\\"));
-    (await b.put(\\"foo/bar/baz\\",\\"text\\"));
-    const objs = (await b.list());
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await objs.at(0)) === \\"foo\\")'\`)})(((await objs.at(0)) === \\"foo\\"))};
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await objs.at(1)) === \\"foo/\\")'\`)})(((await objs.at(1)) === \\"foo/\\"))};
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await objs.at(2)) === \\"foo/bar\\")'\`)})(((await objs.at(2)) === \\"foo/bar\\"))};
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await objs.at(3)) === \\"foo/bar/\\")'\`)})(((await objs.at(3)) === \\"foo/bar/\\"))};
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await objs.at(4)) === \\"foo/bar/baz\\")'\`)})(((await objs.at(4)) === \\"foo/bar/baz\\"))};
-  }
-};
+  (await b.put(\\"foo\\",\\"text\\"));
+  (await b.put(\\"foo/\\",\\"text\\"));
+  (await b.put(\\"foo/bar\\",\\"text\\"));
+  (await b.put(\\"foo/bar/\\",\\"text\\"));
+  (await b.put(\\"foo/bar/baz\\",\\"text\\"));
+  const objs = (await b.list());
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await objs.at(0)) === \\"foo\\")'\`)})(((await objs.at(0)) === \\"foo\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await objs.at(1)) === \\"foo/\\")'\`)})(((await objs.at(1)) === \\"foo/\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await objs.at(2)) === \\"foo/bar\\")'\`)})(((await objs.at(2)) === \\"foo/bar\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await objs.at(3)) === \\"foo/bar/\\")'\`)})(((await objs.at(3)) === \\"foo/bar/\\"))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await objs.at(4)) === \\"foo/bar/baz\\")'\`)})(((await objs.at(4)) === \\"foo/bar/baz\\"))};
+}
 "
 `;
 

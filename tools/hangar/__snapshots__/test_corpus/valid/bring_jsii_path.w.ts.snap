@@ -151,7 +151,7 @@ class $Root extends $stdlib.core.Resource {
     const hello = new jsii_code_samples.HelloWorld();
     const greeting = (hello.sayHello(\\"wingnuts\\"));
     this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:say_hello\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.f9fd45e979c44914dac14967e8ad3a3b4c5beb85154a204a119e273326d0f3c0/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.0971d6c6098fbbfe02ff3f99e46b6e89243dbbb93903848c1d100f29b265d40c/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
       bindings: {
         greeting: {
           obj: greeting,
@@ -181,13 +181,11 @@ new $App().synth();
 "
 `;
 
-exports[`wing compile -t tf-aws > proc.f9fd45e979c44914dac14967e8ad3a3b4c5beb85154a204a119e273326d0f3c0/index.js 1`] = `
+exports[`wing compile -t tf-aws > proc.0971d6c6098fbbfe02ff3f99e46b6e89243dbbb93903848c1d100f29b265d40c/index.js 1`] = `
 "async handle(m) {
   const { greeting } = this;
-  {
-    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(greeting === \\"Hello, wingnuts\\")'\`)})((greeting === \\"Hello, wingnuts\\"))};
-  }
-};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(greeting === \\"Hello, wingnuts\\")'\`)})((greeting === \\"Hello, wingnuts\\"))};
+}
 "
 `;
 

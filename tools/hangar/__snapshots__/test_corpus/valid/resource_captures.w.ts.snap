@@ -531,7 +531,7 @@ class $Root extends $stdlib.core.Resource {
     const b = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
     const r = new MyResource(this,\\"MyResource\\",b,12);
     this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.1c768d827b63c794c9b5f5796a8c77938cd1b026ff59a651cd87493ddfd49b22/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.ec2c78b051aaf1991ae27a24d33eb54a2c0485ae738faa96c461adbe5b703e28/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
       bindings: {
         r: {
           obj: r,
@@ -561,22 +561,20 @@ new $App().synth();
 "
 `;
 
-exports[`wing compile -t tf-aws > proc.1c768d827b63c794c9b5f5796a8c77938cd1b026ff59a651cd87493ddfd49b22/index.js 1`] = `
+exports[`wing compile -t tf-aws > proc.ec2c78b051aaf1991ae27a24d33eb54a2c0485ae738faa96c461adbe5b703e28/index.js 1`] = `
 "async handle() {
   const { r } = this;
-  {
-    (await r.test_no_capture());
-    (await r.test_capture_collections_of_data());
-    (await r.test_capture_primitives());
-    (await r.test_capture_resource());
-    (await r.test_nested_preflight_field());
-    (await r.test_nested_resource());
-    (await r.test_expression_recursive());
-    (await r.test_external());
-    (await r.test_user_defined_resource());
-    (await r.test_inflight_field());
-  }
-};
+  (await r.test_no_capture());
+  (await r.test_capture_collections_of_data());
+  (await r.test_capture_primitives());
+  (await r.test_capture_resource());
+  (await r.test_nested_preflight_field());
+  (await r.test_nested_resource());
+  (await r.test_expression_recursive());
+  (await r.test_external());
+  (await r.test_user_defined_resource());
+  (await r.test_inflight_field());
+}
 "
 `;
 

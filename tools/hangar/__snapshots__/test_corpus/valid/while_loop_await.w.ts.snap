@@ -173,13 +173,13 @@ class $Root extends $stdlib.core.Resource {
     super(scope, id);
     const queue = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Queue\\",this,\\"cloud.Queue\\");
     const iterator = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.35c7ca89b5814275c882c0b56c746a8b10e37edc9c842b3660134b471228b34c/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.8df6c52d279b5b0f60f3073722d4666c96d8faf3bae7f82cf289c11a372daa9a/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
       bindings: {
       }
     })
     ;
     const handler = new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.4183b57776a1d5b911b7a76115df35dd6b1a4c3dfbacc0e274e8ef25dcce441e/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.09104e27ddc37691caca765b1b7cb87ad5bcd5f01349ff19070fce915e60db2b/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
       bindings: {
       }
     })
@@ -206,26 +206,22 @@ new $App().synth();
 "
 `;
 
-exports[`wing compile -t tf-aws > proc.35c7ca89b5814275c882c0b56c746a8b10e37edc9c842b3660134b471228b34c/index.js 1`] = `
-"async handle(j) {
+exports[`wing compile -t tf-aws > proc.09104e27ddc37691caca765b1b7cb87ad5bcd5f01349ff19070fce915e60db2b/index.js 1`] = `
+"async handle(body) {
   const {  } = this;
-  {
-    return (j + 1);
+  const i = 0;
+  while (((await iterator(i)) < 3)) {
+    {console.log(\`\${i}\`)};
   }
-};
+}
 "
 `;
 
-exports[`wing compile -t tf-aws > proc.4183b57776a1d5b911b7a76115df35dd6b1a4c3dfbacc0e274e8ef25dcce441e/index.js 1`] = `
-"async handle(body) {
+exports[`wing compile -t tf-aws > proc.8df6c52d279b5b0f60f3073722d4666c96d8faf3bae7f82cf289c11a372daa9a/index.js 1`] = `
+"async handle(j) {
   const {  } = this;
-  {
-    const i = 0;
-    while (((await iterator(i)) < 3)) {
-      {console.log(\`\${i}\`)};
-    }
-  }
-};
+  return (j + 1);
+}
 "
 `;
 

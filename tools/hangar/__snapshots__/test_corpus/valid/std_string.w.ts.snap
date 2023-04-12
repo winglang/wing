@@ -164,7 +164,7 @@ class $Root extends $stdlib.core.Resource {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '((\\"   some string   \\".trim()) === \\"some string\\")'\`)})(((\\"   some string   \\".trim()) === \\"some string\\"))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(\\"Some String\\".toLocaleUpperCase() === \\"SOME STRING\\")'\`)})((\\"Some String\\".toLocaleUpperCase() === \\"SOME STRING\\"))};
     this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:string\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.8c40a38c834eef68537687d4004058847a9c893a956fab30a6c530f32e6b51f3/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.9a4846d755bc1e93d1377b973079b3fb455a5196a4309ea68138302e1a6f3f65/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
       bindings: {
         s1: {
           obj: s1,
@@ -198,15 +198,13 @@ new $App().synth();
 "
 `;
 
-exports[`wing compile -t tf-aws > proc.8c40a38c834eef68537687d4004058847a9c893a956fab30a6c530f32e6b51f3/index.js 1`] = `
+exports[`wing compile -t tf-aws > proc.9a4846d755bc1e93d1377b973079b3fb455a5196a4309ea68138302e1a6f3f65/index.js 1`] = `
 "async handle() {
   const { s1, s2 } = this;
-  {
-    {console.log(\`index of \\\\\\"s\\\\\\" in s1 is \${s1.indexOf(\\"s\\")}\`)};
-    {console.log((await (await s1.split(\\" \\")).at(1)))};
-    {console.log((await s1.concat(s2)))};
-  }
-};
+  {console.log(\`index of \\\\\\"s\\\\\\" in s1 is \${s1.indexOf(\\"s\\")}\`)};
+  {console.log((await (await s1.split(\\" \\")).at(1)))};
+  {console.log((await s1.concat(s2)))};
+}
 "
 `;
 

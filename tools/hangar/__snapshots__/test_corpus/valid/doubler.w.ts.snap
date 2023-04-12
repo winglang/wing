@@ -93,7 +93,7 @@ class $Root extends $stdlib.core.Resource {
     Doubler._annotateInflight(\\"invoke\\", {\\"this.func\\": { ops: [\\"handle\\"] }});
     Doubler._annotateInflight(\\"$init\\", {\\"this.func\\": { ops: [] }});
     const fn = new Doubler(this,\\"Doubler\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.8d339fd16770e6eb6e8415aab19c881ae0171224411980a076559984bbc94d93/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.1eb4781e85032ffc58e74255182bc1fdee5701b5098072dd29f4faf4f591d6aa/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
       bindings: {
       }
     })
@@ -119,13 +119,11 @@ new $App().synth();
 "
 `;
 
-exports[`wing compile -t tf-aws > proc.8d339fd16770e6eb6e8415aab19c881ae0171224411980a076559984bbc94d93/index.js 1`] = `
+exports[`wing compile -t tf-aws > proc.1eb4781e85032ffc58e74255182bc1fdee5701b5098072dd29f4faf4f591d6aa/index.js 1`] = `
 "async handle(m) {
   const {  } = this;
-  {
-    return \`Hello \${m}!\`;
-  }
-};
+  return \`Hello \${m}!\`;
+}
 "
 `;
 

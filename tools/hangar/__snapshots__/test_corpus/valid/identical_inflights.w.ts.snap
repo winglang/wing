@@ -59,13 +59,13 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     const x = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.d914176fd50bd7f565700006a31aa97b79d3ad17cee20c8e5ff2061d5cb74817/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
       bindings: {
       }
     })
     ;
     const y = new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.d914176fd50bd7f565700006a31aa97b79d3ad17cee20c8e5ff2061d5cb74817/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
       bindings: {
       }
     })
@@ -91,12 +91,10 @@ new $App().synth();
 "
 `;
 
-exports[`wing compile -t tf-aws > proc.d914176fd50bd7f565700006a31aa97b79d3ad17cee20c8e5ff2061d5cb74817/index.js 1`] = `
+exports[`wing compile -t tf-aws > proc.e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855/index.js 1`] = `
 "async handle() {
   const {  } = this;
-  {
-  }
-};
+}
 "
 `;
 

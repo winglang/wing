@@ -287,7 +287,7 @@ class $Root extends $stdlib.core.Resource {
       {console.log(\`\${x}\`)};
     }
     this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"cloud.Function\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.3a2547474bf9814787b8747cc48e611ed8f390e4209e4baecdf4e2e4923e8344/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.afc6fe59bb6cdbd81e9208755ab2c9288766e754ea8cfb86c9310de61739c683/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
       bindings: {
       }
     })
@@ -313,17 +313,15 @@ new $App().synth();
 "
 `;
 
-exports[`wing compile -t tf-aws > proc.3a2547474bf9814787b8747cc48e611ed8f390e4209e4baecdf4e2e4923e8344/index.js 1`] = `
+exports[`wing compile -t tf-aws > proc.afc6fe59bb6cdbd81e9208755ab2c9288766e754ea8cfb86c9310de61739c683/index.js 1`] = `
 "async handle(event) {
   const {  } = this;
-  {
-    for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,10,false)) {
-      {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x <= 0)'\`)})((x <= 0))};
-      {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x > 10)'\`)})((x > 10))};
-      {console.log(\`\${x}\`)};
-    }
+  for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,10,false)) {
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x <= 0)'\`)})((x <= 0))};
+    {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x > 10)'\`)})((x > 10))};
+    {console.log(\`\${x}\`)};
   }
-};
+}
 "
 `;
 
