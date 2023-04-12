@@ -179,7 +179,7 @@ impl<'a> JSifier<'a> {
 		output.to_string()
 	}
 
-	fn jsify_scope_statements(&mut self, scope: &Scope, context: &JSifyContext) -> CodeMaker {
+	fn jsify_scope_body(&mut self, scope: &Scope, context: &JSifyContext) -> CodeMaker {
 		let mut code = CodeMaker::default();
 
 		for statement in scope.statements.iter() {
@@ -627,14 +627,14 @@ impl<'a> JSifier<'a> {
 					self.jsify_symbol(iterator),
 					self.jsify_expression(iterable, context)
 				));
-				code.add_code(self.jsify_scope_statements(statements, context));
+				code.add_code(self.jsify_scope_body(statements, context));
 				code.close("}");
 				code
 			}
 			StmtKind::While { condition, statements } => {
 				let mut code = CodeMaker::default();
 				code.open(format!("while ({}) {{", self.jsify_expression(condition, context)));
-				code.add_code(self.jsify_scope_statements(statements, context));
+				code.add_code(self.jsify_scope_body(statements, context));
 				code.close("}");
 				code
 			}
@@ -649,7 +649,7 @@ impl<'a> JSifier<'a> {
 				let mut code = CodeMaker::default();
 
 				code.open(format!("if ({}) {{", self.jsify_expression(condition, context)));
-				code.add_code(self.jsify_scope_statements(statements, context));
+				code.add_code(self.jsify_scope_body(statements, context));
 				code.close("}");
 
 				for elif_block in elif_statements {
@@ -657,13 +657,13 @@ impl<'a> JSifier<'a> {
 					// TODO: this puts the "else if" in a separate line from the closing block but
 					// technically that shouldn't be a problem, its just ugly
 					code.open(format!("else if ({}) {{", condition));
-					code.add_code(self.jsify_scope_statements(&elif_block.statements, context));
+					code.add_code(self.jsify_scope_body(&elif_block.statements, context));
 					code.close("}");
 				}
 
 				if let Some(else_scope) = else_statements {
 					code.open("else {");
-					code.add_code(self.jsify_scope_statements(else_scope, context));
+					code.add_code(self.jsify_scope_body(else_scope, context));
 					code.close("}");
 				}
 
@@ -678,7 +678,7 @@ impl<'a> JSifier<'a> {
 			StmtKind::Scope(scope) => {
 				let mut code = CodeMaker::default();
 				code.open("{");
-				code.add_code(self.jsify_scope_statements(scope, context));
+				code.add_code(self.jsify_scope_body(scope, context));
 				code.close("}");
 				code
 			}
@@ -727,7 +727,7 @@ impl<'a> JSifier<'a> {
 				let mut code = CodeMaker::default();
 
 				code.open("try {");
-				code.add_code(self.jsify_scope_statements(try_statements, context));
+				code.add_code(self.jsify_scope_body(try_statements, context));
 				code.close("}");
 
 				if let Some(catch_block) = catch_block {
@@ -741,13 +741,13 @@ impl<'a> JSifier<'a> {
 						code.open("catch {");
 					}
 
-					code.add_code(self.jsify_scope_statements(&catch_block.statements, context));
+					code.add_code(self.jsify_scope_body(&catch_block.statements, context));
 					code.close("}");
 				}
 
 				if let Some(finally_statements) = finally_statements {
 					code.open("finally {");
-					code.add_code(self.jsify_scope_statements(finally_statements, context));
+					code.add_code(self.jsify_scope_body(finally_statements, context));
 					code.close("}");
 				}
 
@@ -764,26 +764,14 @@ impl<'a> JSifier<'a> {
 			.join(", ");
 
 		let block = match &func_def.body {
-			FunctionBody::Statements(scope) => {
-				let mut code = CodeMaker::default();
-				code.open("{");
-				code.add_code(self.jsify_scope_statements(
-					scope,
-					&JSifyContext {
-						in_json: context.in_json.clone(),
-						phase: Phase::Inflight,
-					},
-				));
-				code.close("}");
-				code
-			}
-			FunctionBody::External(_) => {
-				let mut code = CodeMaker::default();
-				code.open("{");
-				code.line("throw new Error(\"extern with closures is not supported\");");
-				code.close("}");
-				code
-			}
+			FunctionBody::Statements(scope) => self.jsify_scope_body(
+				scope,
+				&JSifyContext {
+					in_json: context.in_json.clone(),
+					phase: Phase::Inflight,
+				},
+			),
+			FunctionBody::External(_) => CodeMaker::one_line("throw new Error(\"extern with closures is not supported\");"),
 		};
 
 		let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block.to_string()).finalize());
@@ -808,7 +796,7 @@ impl<'a> JSifier<'a> {
 		proc_source.open(format!("async handle({parameters}) {{"));
 		proc_source.line(format!("const {{ {} }} = this;", capture_names.join(", ")));
 		proc_source.add_code(block);
-		proc_source.close("};");
+		proc_source.close("}");
 
 		let proc_dir = format!("{}/proc.{}", self.out_dir.to_string_lossy(), procid);
 		fs::create_dir_all(&proc_dir).expect("Creating inflight proc dir");
@@ -859,7 +847,7 @@ impl<'a> JSifier<'a> {
 
 		let mut code = CodeMaker::default();
 		code.open(format!("{name}({parameters}) {arrow} {{"));
-		code.add_code(self.jsify_scope_statements(&func_def.statements, context));
+		code.add_code(self.jsify_scope_body(&func_def.statements, context));
 		code.close("}");
 
 		code
@@ -883,7 +871,7 @@ impl<'a> JSifier<'a> {
 			FunctionBody::Statements(scope) => {
 				let mut code = CodeMaker::default();
 				code.open("{");
-				code.add_code(self.jsify_scope_statements(scope, context));
+				code.add_code(self.jsify_scope_body(scope, context));
 				code.close("}");
 				code
 			}
@@ -1061,7 +1049,7 @@ impl<'a> JSifier<'a> {
 			code.line("super(scope, id);");
 		}
 
-		code.add_code(self.jsify_scope_statements(
+		code.add_code(self.jsify_scope_body(
 			&constructor.statements,
 			&JSifyContext {
 				in_json: context.in_json.clone(),
