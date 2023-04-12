@@ -1,15 +1,10 @@
-import { ensureDirSync, mkdir, readFile } from "fs-extra";
+import { mkdir, readFile } from "fs-extra";
 import { snapshotDir, tmpDir, validTestDir, walkdir } from "./paths";
-import { basename, join, relative, dirname } from "path";
+import { basename, join, relative } from "path";
 import { runWingCommand, sanitize_json_paths } from "./utils";
 
 function getSnapshotPath(wingFile: string, testCase: string, target: string, path: string) {
-  const finalPath = join(snapshotDir, "test_corpus", wingFile, testCase, target, path);
-
-  // ensure directory exists
-  ensureDirSync(dirname(finalPath));
-
-  return finalPath;
+  return join(snapshotDir, "test_corpus", wingFile, testCase, target, path);
 }
 
 export async function compileTest(expect: Vi.ExpectStatic, wingFile: string) {
