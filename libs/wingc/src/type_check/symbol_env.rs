@@ -131,7 +131,7 @@ impl SymbolEnv {
 				}
 			}
 			LookupResult::Found((
-				kind.into(),
+				kind,
 				SymbolLookupInfo {
 					phase: self.phase,
 					init: self.is_init,
@@ -154,7 +154,7 @@ impl SymbolEnv {
 					}
 				}
 			}
-			LookupMutResult::Found((kind.into(), self.phase))
+			LookupMutResult::Found((kind, self.phase))
 		} else if let Some(ref mut parent_env) = self.parent {
 			parent_env.try_lookup_mut_ext(symbol_name, not_after_stmt_idx.map(|_| self.statement_idx))
 		} else {
@@ -239,7 +239,7 @@ impl SymbolEnv {
 				});
 			};
 
-			let lookup_result = ns.env.try_lookup(&(*next_symb).name, statement_idx);
+			let lookup_result = ns.env.try_lookup(&next_symb.name, statement_idx);
 
 			if let Some(type_ref) = lookup_result {
 				t = type_ref;
@@ -293,7 +293,7 @@ impl SymbolEnv {
 				});
 			};
 
-			let lookup_result = ns.env.try_lookup_mut(&(*next_symb).name, statement_idx);
+			let lookup_result = ns.env.try_lookup_mut(&next_symb.name, statement_idx);
 
 			if let Some(type_ref) = lookup_result {
 				t = type_ref;

@@ -98,7 +98,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 							types,
 							scope_visitor
 								.found_scope
-								.and_then(|s| Some(s.env.borrow().as_ref().expect("Scopes must have an environment").phase)),
+								.map(|s| s.env.borrow().as_ref().expect("Scopes must have an environment").phase),
 							true,
 						);
 					}
@@ -308,7 +308,7 @@ fn get_completions_from_class(
 
 			Some(CompletionItem {
 				insert_text,
-				label: symbol_data.0.clone(),
+				label: symbol_data.0,
 				detail: Some(variable.type_.to_string()),
 				kind,
 				insert_text_format: Some(InsertTextFormat::SNIPPET),
