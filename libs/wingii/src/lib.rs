@@ -15,7 +15,7 @@ pub mod fqn;
 // this is public temporarily until reflection API is finalized
 pub mod jsii;
 
-mod node_resolve;
+pub mod node_resolve;
 mod util;
 
 pub type Result<T> = std::result::Result<T, Box<dyn Error>>;
