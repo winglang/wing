@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
-import { EVENT_MAPPING_TYPE, EventMappingSchema } from "./schema-resources";
+import { EVENT_MAPPING_TYPE, EventMappingSchema, EventSubscription } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
@@ -33,9 +33,9 @@ export abstract class EventMappingBase extends Resource {
 }
 
 export interface EventMappingProps {
-  consumer: core.IResource;
-  producer: core.IResource;
-  payload: any; // TODO: payload is a terrible name and should not be any
+  subscriber: core.IResource;
+  publisher: core.IResource;
+  eventSubscription: EventSubscription;
 }
 
 export class EventMapping
@@ -48,8 +48,8 @@ export class EventMapping
     super(scope, id);
     this.eventProps = props;
 
-    this.node.addDependency(props.consumer);
-    this.node.addDependency(props.producer);
+    this.node.addDependency(props.subscriber);
+    this.node.addDependency(props.publisher);
   }
 
   public toSimulator(): BaseResourceSchema {
@@ -57,9 +57,9 @@ export class EventMapping
       type: EVENT_MAPPING_TYPE,
       path: this.node.path,
       props: {
-        consumer: simulatorHandleToken(this.eventProps.producer),
-        producer: simulatorHandleToken(this.eventProps.producer),
-        payload: this.eventProps.payload,
+        subscriber: simulatorHandleToken(this.eventProps.publisher),
+        publisher: simulatorHandleToken(this.eventProps.publisher),
+        eventSubscription: this.eventProps.eventSubscription,
       },
       attrs: {} as any,
     };

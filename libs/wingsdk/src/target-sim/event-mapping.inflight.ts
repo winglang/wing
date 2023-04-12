@@ -9,12 +9,12 @@ import { ISimulatorContext } from "../testing";
 
 export class EventMapping implements ISimulatorResourceInstance {
   private readonly producer: FunctionHandle;
-  private readonly payload: any;
+  private readonly eventSubscription: any;
   private readonly context: ISimulatorContext;
 
   constructor(props: EventMappingSchema["props"], context: ISimulatorContext) {
-    this.producer = props.producer;
-    this.payload = props.payload;
+    this.producer = props.publisher;
+    this.eventSubscription = props.eventSubscription;
 
     this.context = context;
   }
@@ -22,7 +22,7 @@ export class EventMapping implements ISimulatorResourceInstance {
   public async init(): Promise<EventMappingAttributes> {
     const client = this.context.findInstance(this.producer) as IEventProducer &
       ISimulatorResourceInstance;
-    await client.addEventConsumer(this.payload);
+    await client.addEventConsumer(this.eventSubscription);
     return {};
   }
 

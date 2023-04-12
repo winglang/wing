@@ -51,7 +51,6 @@ export class Topic
       });
 
       void (await fnClient.invoke(message).catch((err) => {
-        console.log("Subscriber error", err);
         this.context.addTrace({
           data: {
             message: `Subscriber error: ${err}`,
