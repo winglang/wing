@@ -53,7 +53,8 @@ jobs:
     needs: upgrade
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
+      pull-requests: write
     if: ${{ needs.upgrade.outputs.patch_created }}
     steps:
       - name: Checkout
@@ -79,7 +80,6 @@ jobs:
         id: create-pr
         uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           commit-message: |-
             chore(deps): upgrade dependencies
 
@@ -101,9 +101,6 @@ jobs:
             ------
 
             *Automatically created via the "upgrade" workflow.*
-          author: monadabot <monabot@monada.co>
-          committer: monadabot <monabot@monada.co>
-          signoff: true
 
       - name: Enable Pull Request Automerge
         if: steps.create-pr.outputs.pull-request-operation == 'created'
@@ -117,4 +114,4 @@ jobs:
         if: steps.create-pr.outputs.pull-request-operation == 'created'
         run: gh pr review --approve "${{ steps.create-pr.outputs.pull-request-number }}"
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
