@@ -23,6 +23,7 @@ use crate::{
 		FunctionDefinition, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
 		TypeAnnotation, UnaryOperator, UserDefinedType,
 	},
+	debug,
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
 	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, Type, TypeRef, VariableInfo},
 	utilities::snake_case_to_camel_case,
@@ -77,19 +78,21 @@ pub struct JSifyContext {
 pub struct JSifier<'a> {
 	pub diagnostics: Diagnostics,
 	pub out_dir: &'a Path,
+	absolute_project_root: &'a Path,
 	shim: bool,
 	app_name: String,
 	inflight_counter: RefCell<usize>,
 }
 
 impl<'a> JSifier<'a> {
-	pub fn new(out_dir: &'a Path, app_name: &str, shim: bool) -> Self {
+	pub fn new(out_dir: &'a Path, app_name: &str, absolute_project_root: &'a Path, shim: bool) -> Self {
 		Self {
 			diagnostics: Diagnostics::new(),
 			out_dir,
 			shim,
 			app_name: app_name.to_string(),
 			inflight_counter: RefCell::new(0),
+			absolute_project_root,
 		}
 	}
 
@@ -875,8 +878,31 @@ impl<'a> JSifier<'a> {
 				code.close("}");
 				code
 			}
-			FunctionBody::External(external_spec) =>
-				CodeMaker::one_line(format!("return (require(require.resolve(\"{external_spec}\", {{paths: [process.env.WING_PROJECT_DIR]}}))[\"{name}\"])({parameters})"))
+			FunctionBody::External(external_spec) => {
+				debug!(
+					"Resolving extern \"{}\" from \"{}\"",
+					external_spec,
+					self.absolute_project_root.display()
+				);
+				let resolved_path =
+					match wingii::node_resolve::resolve_from(&external_spec, Path::new(&self.absolute_project_root)) {
+						Ok(resolved_path) => resolved_path
+							.to_str()
+							.expect("Converting extern path to string")
+							.replace("\\", "/"),
+						Err(err) => {
+							self.diagnostics.push(Diagnostic {
+								message: format!("Failed to resolve extern \"{external_spec}\": {err}"),
+								span: Some(func_def.span.clone()),
+								level: DiagnosticLevel::Error,
+							});
+							format!("/* unresolved: \"{external_spec}\" */")
+						}
+					};
+				CodeMaker::one_line(format!(
+					"return (require(\"{resolved_path}\")[\"{name}\"])({parameters})"
+				))
+			}
 		};
 		let mut modifiers = vec![];
 		if func_def.is_static {

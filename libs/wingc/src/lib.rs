@@ -114,8 +114,9 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	let split = args.split(";").collect::<Vec<&str>>();
 	let source_file = Path::new(split[0]);
 	let output_dir = split.get(1).map(|s| Path::new(s));
+	let absolute_project_dir = split.get(2).map(|s| Path::new(s));
 
-	let results = compile(source_file, output_dir);
+	let results = compile(source_file, output_dir, absolute_project_dir);
 	if let Err(diagnostics) = results {
 		// Output diagnostics as a stringified JSON array
 		let json = serde_json::to_string(&diagnostics).unwrap();
@@ -250,7 +251,11 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.expect("Failed to add builtin");
 }
 
-pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOutput, Diagnostics> {
+pub fn compile(
+	source_path: &Path,
+	out_dir: Option<&Path>,
+	absolute_project_root: Option<&Path>,
+) -> Result<CompilerOutput, Diagnostics> {
 	if !source_path.exists() {
 		return Err(vec![Diagnostic {
 			message: format!("Source file cannot be found: {}", source_path.display()),
@@ -321,7 +326,26 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 	fs::create_dir_all(out_dir).expect("create output dir");
 
 	let app_name = source_path.file_stem().unwrap().to_str().unwrap();
-	let mut jsifier = JSifier::new(out_dir, app_name, true);
+	let project_dir = absolute_project_root
+		.unwrap_or(source_path.parent().unwrap())
+		.to_path_buf();
+
+	// Verify that the project dir is absolute
+	if !project_dir.starts_with("/") {
+		let dir_str = project_dir.to_str().expect("Project dir is valid UTF-8");
+		// Check if this is a Windows path instead by checking if the second char is a colon
+		// Note: Cannot use Path::is_absolute() because it doesn't work with Windows paths on WASI
+		if dir_str.len() < 2 || dir_str.chars().nth(1).expect("Project dir has second character") != ':' {
+			diagnostics.push(Diagnostic {
+				message: format!("Project directory must be absolute: {}", project_dir.display()),
+				span: None,
+				level: DiagnosticLevel::Error,
+			});
+			return Err(diagnostics);
+		}
+	}
+
+	let mut jsifier = JSifier::new(out_dir, app_name, project_dir.as_path(), true);
 
 	let intermediate_js = jsifier.jsify(&scope);
 	let intermediate_name = std::env::var("WINGC_PREFLIGHT").unwrap_or("preflight.js".to_string());
@@ -369,7 +393,11 @@ mod sanity {
 				fs::remove_dir_all(&out_dir).expect("remove out dir");
 			}
 
-			let result = compile(&test_file, Some(&out_dir));
+			let result = compile(
+				&test_file,
+				Some(&out_dir),
+				Some(test_file.canonicalize().unwrap().parent().unwrap()),
+			);
 
 			if result.is_err() {
 				assert!(
