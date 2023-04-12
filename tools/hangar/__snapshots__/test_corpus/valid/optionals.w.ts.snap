@@ -58,36 +58,22 @@ const $AppBase = __app(process.env.WING_TARGET);
 class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class Super
-{
-constructor()  {
-	{
-  this.name = \\"Super\\";
-}
-}
-name;
-
-}
-    class Sub extends Super
-{
-constructor()  {
-	{
-  this.name = \\"Sub\\";
-}
-}
-
-
-}
-    class Sub1 extends Super
-{
-constructor()  {
-	{
-  this.name = \\"Sub\\";
-}
-}
-
-
-}
+    class Super {
+      constructor()  {
+        this.name = \\"Super\\";
+      }
+      name;
+    }
+    class Sub extends Super {
+      constructor()  {
+        this.name = \\"Sub\\";
+      }
+    }
+    class Sub1 extends Super {
+      constructor()  {
+        this.name = \\"Sub\\";
+      }
+    }
     const x = 4;
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((x) != null) === true)'\`)})((((x) != null) === true))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '((!((x) != null)) === false)'\`)})(((!((x) != null)) === false))};
@@ -99,7 +85,6 @@ constructor()  {
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s.name === \\"Super\\")'\`)})((s.name === \\"Super\\"))};
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: \\"optionals\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -115,8 +100,8 @@ class $App extends $AppBase {
     }
   }
 }
-
-new $App().synth();"
+new $App().synth();
+"
 `;
 
 exports[`wing test -t sim > stdout 1`] = `
