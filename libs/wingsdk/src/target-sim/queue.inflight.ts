@@ -39,6 +39,11 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
     clearInterval(this.intervalId);
   }
 
+  /** @internal */ 
+  public async addSubscriber(subscriber: QueueSubscriber): Promise<void> {
+    this.subscribers.push(subscriber);
+  }
+
   public async push(message: string): Promise<void> {
     // TODO: enforce maximum queue message size?
     return this.context.withTrace({
