@@ -23,6 +23,7 @@ use crate::{
 		FunctionDefinition, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
 		TypeAnnotation, UnaryOperator, UserDefinedType,
 	},
+	debug,
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
 	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, Type, TypeRef, VariableInfo},
 	utilities::snake_case_to_camel_case,
@@ -77,19 +78,21 @@ pub struct JSifyContext {
 pub struct JSifier<'a> {
 	pub diagnostics: Diagnostics,
 	pub out_dir: &'a Path,
+	absolute_project_root: &'a Path,
 	shim: bool,
 	app_name: String,
 	inflight_counter: RefCell<usize>,
 }
 
 impl<'a> JSifier<'a> {
-	pub fn new(out_dir: &'a Path, app_name: &str, shim: bool) -> Self {
+	pub fn new(out_dir: &'a Path, app_name: &str, absolute_project_root: &'a Path, shim: bool) -> Self {
 		Self {
 			diagnostics: Diagnostics::new(),
 			out_dir,
 			shim,
 			app_name: app_name.to_string(),
 			inflight_counter: RefCell::new(0),
+			absolute_project_root,
 		}
 	}
 
@@ -142,7 +145,7 @@ impl<'a> JSifier<'a> {
 			let mut root_class = CodeMaker::default();
 			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
 			root_class.open("constructor(scope, id) {");
-			root_class.line(format!("super(scope, id);"));
+			root_class.line("super(scope, id);");
 			root_class.add_code(js);
 			root_class.close("}");
 			root_class.close("}");
@@ -156,8 +159,8 @@ impl<'a> JSifier<'a> {
 			));
 			app_wrapper.open(format!("if ({}) {{", ENV_WING_IS_TEST));
 			app_wrapper.line(format!("new {}(this, \"env0\");", ROOT_CLASS));
-			app_wrapper.line("const $test_runner = this.testRunner;".to_string());
-			app_wrapper.line("const $tests = $test_runner.findTests();".to_string());
+			app_wrapper.line("const $test_runner = this.testRunner;");
+			app_wrapper.line("const $tests = $test_runner.findTests();");
 			app_wrapper.open("for (let $i = 1; $i < $tests.length; $i++) {");
 			app_wrapper.line(format!("new {}(this, \"env\" + $i);", ROOT_CLASS));
 			app_wrapper.close("}");
@@ -208,13 +211,12 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_symbol_case_converted(&self, symbol: &Symbol) -> String {
-		let mut result = symbol.name.clone();
-		result = snake_case_to_camel_case(&result);
-		return format!("{}", result);
+		let result = symbol.name.clone();
+		return snake_case_to_camel_case(&result);
 	}
 
 	fn jsify_symbol(&self, symbol: &Symbol) -> String {
-		return format!("{}", symbol.name);
+		return symbol.name.to_string();
 	}
 
 	fn jsify_arg_list(
@@ -252,7 +254,7 @@ impl<'a> JSifier<'a> {
 				self.jsify_expression(
 					arg.1,
 					&JSifyContext {
-						in_json: context.in_json.clone(),
+						in_json: context.in_json,
 						phase: Phase::Independent,
 					}
 				)
@@ -364,13 +366,13 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			ExprKind::Literal(lit) => match lit {
-				Literal::String(s) => format!("{}", s),
+				Literal::String(s) => s.to_string(),
 				Literal::InterpolatedString(s) => format!(
 					"`{}`",
 					s.parts
 						.iter()
 						.map(|p| match p {
-							InterpolatedStringPart::Static(l) => format!("{}", l),
+							InterpolatedStringPart::Static(l) => l.to_string(),
 							InterpolatedStringPart::Expr(e) => {
 								match *e.evaluated_type.borrow().expect("Should have type") {
 									Type::Json | Type::MutJson => {
@@ -385,7 +387,7 @@ impl<'a> JSifier<'a> {
 				),
 				Literal::Number(n) => format!("{}", n),
 				Literal::Duration(sec) => format!("{}.std.Duration.fromSeconds({})", STDLIB, sec),
-				Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
+				Literal::Boolean(b) => (if *b { "true" } else { "false" }).to_string(),
 			},
 			ExprKind::Range { start, inclusive, end } => {
 				match context.phase {
@@ -438,7 +440,7 @@ impl<'a> JSifier<'a> {
 							// for "loose" macros, e.g. `print()`, $self$ is the global object
 							ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
 							ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
-								self.jsify_expression(object, context).clone()
+								self.jsify_expression(object, context)
 							}
 
 							_ => expr_string,
@@ -529,17 +531,17 @@ impl<'a> JSifier<'a> {
 			ExprKind::JsonLiteral { is_mut, element } => {
 				let json_context = &JSifyContext {
 					in_json: true,
-					phase: context.phase.clone(),
+					phase: context.phase,
 				};
 				let js_out = match &element.kind {
 					ExprKind::MapLiteral { .. } => {
 						if *is_mut {
-							format!("{}", self.jsify_expression(element, json_context))
+							self.jsify_expression(element, json_context)
 						} else {
 							format!("Object.freeze({})", self.jsify_expression(element, json_context))
 						}
 					}
-					_ => format!("{}", self.jsify_expression(element, json_context)),
+					_ => self.jsify_expression(element, json_context)
 				};
 				js_out
 			}
@@ -716,7 +718,7 @@ impl<'a> JSifier<'a> {
 
 				code.line(format!("return {};", name));
 
-				code.close(format!("}})({{}}));"));
+				code.close("})({}));".to_string());
 				code
 			}
 			StmtKind::TryCatch {
@@ -767,7 +769,7 @@ impl<'a> JSifier<'a> {
 			FunctionBody::Statements(scope) => self.jsify_scope_body(
 				scope,
 				&JSifyContext {
-					in_json: context.in_json.clone(),
+					in_json: context.in_json,
 					phase: Phase::Inflight,
 				},
 			),
@@ -875,8 +877,31 @@ impl<'a> JSifier<'a> {
 				code.close("}");
 				code
 			}
-			FunctionBody::External(external_spec) =>
-				CodeMaker::one_line(format!("return (require(require.resolve(\"{external_spec}\", {{paths: [process.env.WING_PROJECT_DIR]}}))[\"{name}\"])({parameters})"))
+			FunctionBody::External(external_spec) => {
+				debug!(
+					"Resolving extern \"{}\" from \"{}\"",
+					external_spec,
+					self.absolute_project_root.display()
+				);
+				let resolved_path =
+					match wingii::node_resolve::resolve_from(&external_spec, Path::new(&self.absolute_project_root)) {
+						Ok(resolved_path) => resolved_path
+							.to_str()
+							.expect("Converting extern path to string")
+							.replace("\\", "/"),
+						Err(err) => {
+							self.diagnostics.push(Diagnostic {
+								message: format!("Failed to resolve extern \"{external_spec}\": {err}"),
+								span: Some(func_def.span.clone()),
+								level: DiagnosticLevel::Error,
+							});
+							format!("/* unresolved: \"{external_spec}\" */")
+						}
+					};
+				CodeMaker::one_line(format!(
+					"return (require(\"{resolved_path}\")[\"{name}\"])({parameters})"
+				))
+			}
 		};
 		let mut modifiers = vec![];
 		if func_def.is_static {
@@ -1052,7 +1077,7 @@ impl<'a> JSifier<'a> {
 		code.add_code(self.jsify_scope_body(
 			&constructor.statements,
 			&JSifyContext {
-				in_json: context.in_json.clone(),
+				in_json: context.in_json,
 				phase: Phase::Preflight,
 			},
 		));
@@ -1159,7 +1184,7 @@ impl<'a> JSifier<'a> {
 				Some(&name.name),
 				&def,
 				&JSifyContext {
-					in_json: context.in_json.clone(),
+					in_json: context.in_json,
 					phase: def.signature.phase,
 				},
 			));
@@ -1290,7 +1315,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 
 impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 	fn visit_expr(&mut self, node: &'ast Expr) {
-		let parts = self.analyze_expr(node);
+		let parts = Self::analyze_expr(node);
 
 		let is_field_reference = match parts.first() {
 			Some(first) => first.text == "this" && parts.len() > 1,
@@ -1412,11 +1437,11 @@ impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
 			}
 		}
 
-		let fmt = |x: Iter<&Component>| x.map(|f| format!("{}", f.text)).collect_vec();
+		let fmt = |x: Iter<&Component>| x.map(|f| f.text.to_string()).collect_vec();
 		let key = format!("this.{}", fmt(capture.iter()).join("."));
 		let ops = fmt(qualification);
 
-		self.references.entry(key.to_string()).or_default().extend(ops);
+		self.references.entry(key).or_default().extend(ops);
 	}
 }
 
@@ -1435,7 +1460,7 @@ impl Display for Component<'_> {
 }
 
 impl<'a> FieldReferenceVisitor<'a> {
-	fn analyze_expr(&self, node: &'a Expr) -> Vec<Component> {
+	fn analyze_expr(node: &'a Expr) -> Vec<Component> {
 		match &node.kind {
 			ExprKind::Reference(Reference::Identifier(x)) => {
 				return vec![Component {
@@ -1483,7 +1508,7 @@ impl<'a> FieldReferenceVisitor<'a> {
 					text: property.name.to_string(),
 				}];
 
-				let obj = self.analyze_expr(&object);
+				let obj = Self::analyze_expr(&object);
 				return [obj, prop].concat();
 			}
 

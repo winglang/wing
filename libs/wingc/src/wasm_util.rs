@@ -14,5 +14,5 @@ pub unsafe fn string_to_combined_ptr(str: String) -> u64 {
 
 /// Uses bitshift to combine pointer and length into a single value
 pub fn combine_ptr_and_length(ptr: u32, len: u32) -> u64 {
-	return ((ptr as u64) << (32 as u64)) | (len as u64);
+	return ((ptr as u64) << 32_u64) | (len as u64);
 }
