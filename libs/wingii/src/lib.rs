@@ -1,5 +1,7 @@
 #![allow(clippy::all)]
 #![deny(clippy::correctness)]
+#![deny(clippy::suspicious)]
+#![deny(clippy::complexity)]
 
 use std::error::Error;
 

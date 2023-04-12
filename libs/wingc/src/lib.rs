@@ -1,5 +1,8 @@
 #![allow(clippy::all)]
 #![deny(clippy::correctness)]
+#![deny(clippy::suspicious)]
+#![deny(clippy::complexity)]
+#![allow(clippy::vec_box)]
 
 #[macro_use]
 extern crate lazy_static;
