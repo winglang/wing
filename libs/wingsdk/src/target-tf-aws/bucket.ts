@@ -13,7 +13,6 @@ import { Topic as AWSTopic } from "./topic";
 import * as cloud from "../cloud";
 import { BucketEventType, Topic } from "../cloud";
 import * as core from "../core";
-import { AwsTarget } from "../shared-aws/commons";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
 import {
   CaseConventions,
@@ -168,7 +167,7 @@ export class Bucket extends cloud.Bucket {
     }
 
     host.addPolicyStatements(
-      ...calculateBucketPermissions(this.bucket.arn, AwsTarget.TF_AWS, ops)
+      ...calculateBucketPermissions(this.bucket.arn, ops)
     );
 
     // The bucket name needs to be passed through an environment variable since

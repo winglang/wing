@@ -48,7 +48,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
             "uniqueId": "root_cloudQueueAddConsumerb3f3d188_IamRolePolicy_5C4AAB82",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":[\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.root_cloudQueueAddConsumerb3f3d188_IamRole_DE9F8DCD.name}",
       },
     },
