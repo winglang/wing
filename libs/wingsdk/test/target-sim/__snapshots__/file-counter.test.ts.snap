@@ -80,12 +80,7 @@ bucket: (function(env) {
         "path": "root/HelloWorld/Queue",
         "props": {
           "initialMessages": [],
-          "subscribers": [
-            {
-              "batchSize": 1,
-              "functionHandle": "\${root/HelloWorld/Queue-AddConsumer-401ee792#attrs.handle}",
-            },
-          ],
+          "subscribers": [],
           "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",

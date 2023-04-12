@@ -84,6 +84,7 @@ exports[`messages are not requeued if the function fails before timeout 1`] = `
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
   "Subscriber error - returning 1 messages to queue: ERROR",
+  "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.TestRunner deleted.",
@@ -137,15 +138,23 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
-          "subscribers": [
-            {
-              "batchSize": 1,
-              "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
-            },
-          ],
+          "subscribers": [],
           "timeout": 1,
         },
         "type": "wingsdk.cloud.Queue",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+        "props": {
+          "consumer": "\${root/my_queue#attrs.handle}",
+          "payload": {
+            "batchSize": 1,
+            "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+          },
+          "producer": "\${root/my_queue#attrs.handle}",
+        },
+        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -205,6 +214,20 @@ async handle(message) {
               },
             ],
             "wing:resource:stateful": true,
+          },
+          "children": {
+            "my_queue-QueueEventMapping-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "id": "my_queue-QueueEventMapping-e645076f",
+              "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
+            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -279,6 +302,7 @@ exports[`messages are requeued if the function fails after timeout 1`] = `
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
+  "wingsdk.sim.EventMapping created.",
   "Push (message=BAD MESSAGE).",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
@@ -287,6 +311,7 @@ exports[`messages are requeued if the function fails after timeout 1`] = `
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
   "Subscriber error - returning 1 messages to queue: ERROR",
+  "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.TestRunner deleted.",
@@ -340,12 +365,7 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
-          "subscribers": [
-            {
-              "batchSize": 1,
-              "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
-            },
-          ],
+          "subscribers": [],
           "timeout": 1,
         },
         "type": "wingsdk.cloud.Queue",
@@ -662,12 +682,7 @@ async handle(message) {
             "E",
             "F",
           ],
-          "subscribers": [
-            {
-              "batchSize": 5,
-              "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
-            },
-          ],
+          "subscribers": [],
           "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
@@ -892,12 +907,7 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
-          "subscribers": [
-            {
-              "batchSize": 1,
-              "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
-            },
-          ],
+          "subscribers": [],
           "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
