@@ -147,12 +147,12 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
         "props": {
-          "consumer": "\${root/my_queue#attrs.handle}",
-          "payload": {
+          "eventSubscription": {
             "batchSize": 1,
             "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
           },
-          "producer": "\${root/my_queue#attrs.handle}",
+          "publisher": "\${root/my_queue#attrs.handle}",
+          "subscriber": "\${root/my_queue#attrs.handle}",
         },
         "type": "wingsdk.sim.EventMapping",
       },
@@ -374,12 +374,12 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
         "props": {
-          "consumer": "\${root/my_queue#attrs.handle}",
-          "payload": {
+          "eventSubscription": {
             "batchSize": 1,
             "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
           },
-          "producer": "\${root/my_queue#attrs.handle}",
+          "publisher": "\${root/my_queue#attrs.handle}",
+          "subscriber": "\${root/my_queue#attrs.handle}",
         },
         "type": "wingsdk.sim.EventMapping",
       },
@@ -691,12 +691,12 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
         "props": {
-          "consumer": "\${root/my_queue#attrs.handle}",
-          "payload": {
+          "eventSubscription": {
             "batchSize": 5,
             "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
           },
-          "producer": "\${root/my_queue#attrs.handle}",
+          "publisher": "\${root/my_queue#attrs.handle}",
+          "subscriber": "\${root/my_queue#attrs.handle}",
         },
         "type": "wingsdk.sim.EventMapping",
       },
@@ -916,12 +916,12 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
         "props": {
-          "consumer": "\${root/my_queue#attrs.handle}",
-          "payload": {
+          "eventSubscription": {
             "batchSize": 1,
             "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
           },
-          "producer": "\${root/my_queue#attrs.handle}",
+          "publisher": "\${root/my_queue#attrs.handle}",
+          "subscriber": "\${root/my_queue#attrs.handle}",
         },
         "type": "wingsdk.sim.EventMapping",
       },

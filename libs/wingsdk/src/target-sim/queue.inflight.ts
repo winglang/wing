@@ -42,7 +42,9 @@ export class Queue
     clearInterval(this.intervalId);
   }
 
-  public async addEventSubscription(subscriber: QueueSubscriber): Promise<void> {
+  public async addEventSubscription(
+    subscriber: QueueSubscriber
+  ): Promise<void> {
     this.subscribers.push(subscriber);
   }
 

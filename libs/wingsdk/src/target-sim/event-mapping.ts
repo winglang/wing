@@ -1,7 +1,11 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
-import { EVENT_MAPPING_TYPE, EventMappingSchema, EventSubscription } from "./schema-resources";
+import {
+  EVENT_MAPPING_TYPE,
+  EventMappingSchema,
+  EventSubscription,
+} from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
@@ -12,12 +16,8 @@ export const EVENT_MAP_FQN = fqnForType("sim.EventMapping");
 
 export interface EventProps {}
 
-export interface IEventPublisher {
-  addEventSubscription: (payload: any) => Promise<void>;
-}
-
 export abstract class EventMappingBase extends Resource {
-  public static _newEvent(
+  public static _newEventMapping(
     scope: Construct,
     id: string,
     props: EventProps = {}
@@ -30,6 +30,10 @@ export abstract class EventMappingBase extends Resource {
     super(scope, id);
     props;
   }
+}
+
+export interface IEventPublisher {
+  addEventSubscription: (payload: any) => Promise<void>;
 }
 
 export interface EventMappingProps {
