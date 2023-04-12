@@ -97,22 +97,6 @@ impl<'a> JSifier<'a> {
 		format!("\"./{}\".replace(/\\\\/g, \"/\")", path_name)
 	}
 
-	// fn render_block(statements: impl IntoIterator<Item = impl core::fmt::Display>) -> String {
-	// 	let mut lines = vec![];
-	// 	lines.push("{".to_string());
-
-	// 	for statement in statements {
-	// 		let statement_str = format!("{}", statement);
-	// 		let result = statement_str.split("\n");
-	// 		for l in result {
-	// 			lines.push(format!("  {}", l));
-	// 		}
-	// 	}
-
-	// 	lines.push("}".to_string());
-	// 	lines.join("\n")
-	// }
-
 	pub fn jsify(&mut self, scope: &Scope) -> String {
 		let mut js = CodeMaker::default();
 		let mut imports = CodeMaker::default();
@@ -195,17 +179,13 @@ impl<'a> JSifier<'a> {
 		output.to_string()
 	}
 
-	fn jsify_scope_inner(&mut self, scope: &Scope, context: &JSifyContext) -> CodeMaker {
+	fn jsify_scope_statements(&mut self, scope: &Scope, context: &JSifyContext) -> CodeMaker {
 		let mut code = CodeMaker::default();
-
-		// code.open("{");
 
 		for statement in scope.statements.iter() {
 			let statement_code = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, context);
 			code.add_code(statement_code);
 		}
-
-		// code.close("}");
 
 		code
 	}
@@ -647,14 +627,14 @@ impl<'a> JSifier<'a> {
 					self.jsify_symbol(iterator),
 					self.jsify_expression(iterable, context)
 				));
-				code.add_code(self.jsify_scope_inner(statements, context));
+				code.add_code(self.jsify_scope_statements(statements, context));
 				code.close("}");
 				code
 			}
 			StmtKind::While { condition, statements } => {
 				let mut code = CodeMaker::default();
 				code.open(format!("while ({}) {{", self.jsify_expression(condition, context)));
-				code.add_code(self.jsify_scope_inner(statements, context));
+				code.add_code(self.jsify_scope_statements(statements, context));
 				code.close("}");
 				code
 			}
@@ -669,7 +649,7 @@ impl<'a> JSifier<'a> {
 				let mut code = CodeMaker::default();
 
 				code.open(format!("if ({}) {{", self.jsify_expression(condition, context)));
-				code.add_code(self.jsify_scope_inner(statements, context));
+				code.add_code(self.jsify_scope_statements(statements, context));
 				code.close("}");
 
 				for elif_block in elif_statements {
@@ -677,13 +657,13 @@ impl<'a> JSifier<'a> {
 					// TODO: this puts the "else if" in a separate line from the closing block but
 					// technically that shouldn't be a problem, its just ugly
 					code.open(format!("else if ({}) {{", condition));
-					code.add_code(self.jsify_scope_inner(&elif_block.statements, context));
+					code.add_code(self.jsify_scope_statements(&elif_block.statements, context));
 					code.close("}");
 				}
 
 				if let Some(else_scope) = else_statements {
 					code.open("else {");
-					code.add_code(self.jsify_scope_inner(else_scope, context));
+					code.add_code(self.jsify_scope_statements(else_scope, context));
 					code.close("}");
 				}
 
@@ -698,7 +678,7 @@ impl<'a> JSifier<'a> {
 			StmtKind::Scope(scope) => {
 				let mut code = CodeMaker::default();
 				code.open("{");
-				code.add_code(self.jsify_scope_inner(scope, context));
+				code.add_code(self.jsify_scope_statements(scope, context));
 				code.close("}");
 				code
 			}
@@ -747,7 +727,7 @@ impl<'a> JSifier<'a> {
 				let mut code = CodeMaker::default();
 
 				code.open("try {");
-				code.add_code(self.jsify_scope_inner(try_statements, context));
+				code.add_code(self.jsify_scope_statements(try_statements, context));
 				code.close("}");
 
 				if let Some(catch_block) = catch_block {
@@ -761,13 +741,13 @@ impl<'a> JSifier<'a> {
 						code.open("catch {");
 					}
 
-					code.add_code(self.jsify_scope_inner(&catch_block.statements, context));
+					code.add_code(self.jsify_scope_statements(&catch_block.statements, context));
 					code.close("}");
 				}
 
 				if let Some(finally_statements) = finally_statements {
 					code.open("finally {");
-					code.add_code(self.jsify_scope_inner(finally_statements, context));
+					code.add_code(self.jsify_scope_statements(finally_statements, context));
 					code.close("}");
 				}
 
@@ -787,7 +767,7 @@ impl<'a> JSifier<'a> {
 			FunctionBody::Statements(scope) => {
 				let mut code = CodeMaker::default();
 				code.open("{");
-				code.add_code(self.jsify_scope_inner(
+				code.add_code(self.jsify_scope_statements(
 					scope,
 					&JSifyContext {
 						in_json: context.in_json.clone(),
@@ -879,7 +859,7 @@ impl<'a> JSifier<'a> {
 
 		let mut code = CodeMaker::default();
 		code.open(format!("{name}({parameters}) {arrow} {{"));
-		code.add_code(self.jsify_scope_inner(&func_def.statements, context));
+		code.add_code(self.jsify_scope_statements(&func_def.statements, context));
 		code.close("}");
 
 		code
@@ -903,7 +883,7 @@ impl<'a> JSifier<'a> {
 			FunctionBody::Statements(scope) => {
 				let mut code = CodeMaker::default();
 				code.open("{");
-				code.add_code(self.jsify_scope_inner(scope, context));
+				code.add_code(self.jsify_scope_statements(scope, context));
 				code.close("}");
 				code
 			}
@@ -1081,7 +1061,7 @@ impl<'a> JSifier<'a> {
 			code.line("super(scope, id);");
 		}
 
-		code.add_code(self.jsify_scope_inner(
+		code.add_code(self.jsify_scope_statements(
 			&constructor.statements,
 			&JSifyContext {
 				in_json: context.in_json.clone(),
