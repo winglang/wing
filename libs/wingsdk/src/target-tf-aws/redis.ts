@@ -104,9 +104,8 @@ export class Redis extends redis.Redis {
     // The only thing that we need to use AWS API for is to get the cluster endpoint
     // from the cluster ID.
     host.addPolicyStatements({
-      effect: "Allow",
-      action: ["elasticache:Describe*"],
-      resource: this.clusterArn,
+      actions: ["elasticache:Describe*"],
+      resources: [this.clusterArn],
     });
 
     host.addEnvironment(env, this.clusterId);
