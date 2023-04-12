@@ -10,6 +10,7 @@ import * as core from "../core";
 import { IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 import { convertBetweenHandlers } from "../utils/convert";
+import { EventMapping } from "./event-mapping";
 
 /**
  * Simulator implementation of `cloud.Topic`
@@ -43,12 +44,14 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       functionHandler,
       props
     );
-
-    this.node.addDependency(fn);
-
-    this.subscribers.push({
-      functionHandle: simulatorHandleToken(fn),
-    });
+    
+    new EventMapping(this, `${this.node.id}-TopicEventMapping-${hash}`, {
+      consumer: fn,
+      producer: this,
+      payload: {
+        functionHandle: simulatorHandleToken(fn),  
+      }
+    })
 
     Resource.addConnection({
       from: this,

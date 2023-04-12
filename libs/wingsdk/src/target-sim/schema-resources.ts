@@ -6,6 +6,7 @@ import {
 
 export const API_TYPE = "wingsdk.cloud.Api";
 export const QUEUE_TYPE = "wingsdk.cloud.Queue";
+export const EVENT_MAPPING_TYPE = "wingsdk.sim.EventMapping";
 export const QUEUE_EVENT_MAP_TYPE = "wingsdk.sim.QueueEventMap";
 export const FUNCTION_TYPE = "wingsdk.cloud.Function";
 export const BUCKET_TYPE = "wingsdk.cloud.Bucket";
@@ -78,43 +79,35 @@ export interface QueueSchema extends BaseResourceSchema {
   };
 }
 
-export interface EventSubscriber {
-  /** Function that should be called */
-  readonly functionHandle: FunctionHandle;
-}
-
 export interface EventProducer {
   readonly producerHandle: ProducerHandle;
 }
 
 /** Schema for cloud.EventMapping */
 export interface EventProps {
-  consumer: EventSubscriber;
-  producer: EventProducer;
+  consumer: FunctionHandle;
+  producer: ProducerHandle;
+  payload: any;
 }
 
-/** Schema for cloud.EventMapping */
-export interface QueueEventProps extends EventProps {
-  consumer: {
-    functionHandle: FunctionHandle;
-    batchSize: number;
-  };
-}
-
-/** Schema for cloud.QueueEventMapping.props */
-export interface QueueEventMappingSchema extends BaseResourceSchema {
-  readonly type: typeof QUEUE_EVENT_MAP_TYPE;
-  readonly props: QueueEventProps;
+export interface EventMappingSchema extends BaseResourceSchema {
+  readonly type: typeof EVENT_MAPPING_TYPE;
+  readonly props: EventProps;
 }
 
 /** Runtime attributes for cloud.QueueEventMapping */
 export interface QueueEventMappingAttributes {}
 
+/** Runtime attributes for cloud.EventMapping */
+export interface EventMappingAttributes {}
+
 /** Runtime attributes for cloud.Queue */
 export interface QueueAttributes {}
 
 /** Schema for cloud.Queue.props.subscribers */
-export interface QueueSubscriber extends EventSubscriber {
+export interface QueueSubscriber {
+  /** Function that should be called */
+  readonly functionHandle: FunctionHandle;
   /** Maximum number of messages that will be batched together to the subscriber. */
   readonly batchSize: number;
 }
@@ -130,7 +123,10 @@ export interface TopicSchema extends BaseResourceSchema {
 /** Runtime attributes for cloud.Topic */
 export interface TopicAttributes {}
 
-export interface TopicSubscriber extends EventSubscriber {}
+export interface TopicSubscriber {
+  /** Function that should be called */
+  readonly functionHandle: FunctionHandle;
+}
 
 /** Runtime attributes for cloud.Table */
 export interface TableAttributes {}
