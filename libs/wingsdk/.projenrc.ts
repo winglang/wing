@@ -212,7 +212,6 @@ docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);
 docgen.exec(`cat API.md >> ${docsPath}`);
 
 // set up vitest related config
-project.annotateGenerated("*.snap");
 project.addGitIgnore("/coverage/");
 project.testTask.reset("vitest run --coverage --update --passWithNoTests");
 const testWatch = project.addTask("test:watch");
