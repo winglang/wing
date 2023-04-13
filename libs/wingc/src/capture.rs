@@ -383,11 +383,9 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 			}
 			StmtKind::Scope(s) => res.extend(scan_captures_in_inflight_scope(s, diagnostics)),
 			StmtKind::Class(Class {
-				methods,
-				initializer: constructor,
-				..
+				methods, initializer, ..
 			}) => {
-				res.extend(scan_captures_in_inflight_scope(&constructor.statements, diagnostics));
+				res.extend(scan_captures_in_inflight_scope(&initializer.statements, diagnostics));
 				for (_, m) in methods.iter() {
 					let FunctionBody::Statements(func_scope) = &m.body else {
 						continue;
