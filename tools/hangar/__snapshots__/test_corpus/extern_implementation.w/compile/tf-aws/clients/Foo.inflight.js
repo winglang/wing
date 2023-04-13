@@ -10,6 +10,9 @@ class Foo  {
   static async get_data()  {
     return (require("<ABSOLUTE_PATH>/external_js.js")["get_data"])()
   }
+  async print(msg)  {
+    return (require("<ABSOLUTE_PATH>/external_js.js")["print"])(msg)
+  }
   async call()  {
     {
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(await Foo.regex_inflight("[a-z]+-\\d+","abc-123"))'`)})((await Foo.regex_inflight("[a-z]+-\\d+","abc-123")))};

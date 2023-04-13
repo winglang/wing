@@ -32,67 +32,48 @@ class $Root extends $stdlib.core.Resource {
       }
     })
     ;
-    try {
-      (api.get("/test/{sup:er/:annoying//path}",handler));
+    const test_invalid_path =  (path) =>  {
+      {
+        let error = "";
+        const expected = `Invalid route ${path}. Url cannot contain \":\", params contains only alpha-numeric chars or \"_\".`;
+        try {
+          (api.get(path,handler));
+        }
+        catch ($error_e) {
+          const e = $error_e.message;
+          error = e;
+        }
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === expected)'`)})((error === expected))};
+      }
     }
-    catch ($error_error) {
-      const error = $error_error.message;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === "Invalid route /test/{sup:er/:annoying//path}. Routes and params should consist of alpha-numeric characters only.")'`)})((error === "Invalid route /test/{sup:er/:annoying//path}. Routes and params should consist of alpha-numeric characters only."))};
+    ;
+    const test_valid_path =  (path) =>  {
+      {
+        let error = "";
+        try {
+          (api.get(path,handler));
+        }
+        catch ($error_e) {
+          const e = $error_e.message;
+          error = e;
+        }
+        {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === "")'`)})((error === ""))};
+      }
     }
-    try {
-      (api.get("/test/{::another:annoying:path}",handler));
-    }
-    catch ($error_error) {
-      const error = $error_error.message;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === "Invalid route /test/{::another:annoying:path}. Routes and params should consist of alpha-numeric characters only.")'`)})((error === "Invalid route /test/{::another:annoying:path}. Routes and params should consist of alpha-numeric characters only."))};
-    }
-    try {
-      (api.get("/test/n0t_alphanumer1cPa:th",handler));
-    }
-    catch ($error_error) {
-      const error = $error_error.message;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === "Invalid route /test/n0t_alphanumer1cPa:th. Routes and params should consist of alpha-numeric characters only.")'`)})((error === "Invalid route /test/n0t_alphanumer1cPa:th. Routes and params should consist of alpha-numeric characters only."))};
-    }
-    try {
-      (api.get("/test/path/{with}/{two:invali4d#}/variables",handler));
-    }
-    catch ($error_error) {
-      const error = $error_error.message;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === "Invalid route /test/path/{with}/{two:invali4d#}/variables. Routes and params should consist of alpha-numeric characters only.")'`)})((error === "Invalid route /test/path/{with}/{two:invali4d#}/variables. Routes and params should consist of alpha-numeric characters only."))};
-    }
-    try {
-      (api.get("/test/path/{unclosed",handler));
-    }
-    catch ($error_error) {
-      const error = $error_error.message;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === "Invalid route /test/path/{unclosed. Routes and params should consist of alpha-numeric characters only.")'`)})((error === "Invalid route /test/path/{unclosed. Routes and params should consist of alpha-numeric characters only."))};
-    }
-    try {
-      (api.get("/test/m{issplaced}",handler));
-    }
-    catch ($error_error) {
-      const error = $error_error.message;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === "Invalid route /test/m{issplaced}. Routes and params should consist of alpha-numeric characters only.")'`)})((error === "Invalid route /test/m{issplaced}. Routes and params should consist of alpha-numeric characters only."))};
-    }
-    try {
-      (api.get("/test/{misspla}ced",handler));
-    }
-    catch ($error_error) {
-      const error = $error_error.message;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === "Invalid route /test/{misspla}ced. Routes and params should consist of alpha-numeric characters only.")'`)})((error === "Invalid route /test/{misspla}ced. Routes and params should consist of alpha-numeric characters only."))};
-    }
-    try {
-      (api.get("/test/{}/empty",handler));
-    }
-    catch ($error_error) {
-      const error = $error_error.message;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === "Invalid route /test/{}/empty. Routes and params should consist of alpha-numeric characters only.")'`)})((error === "Invalid route /test/{}/empty. Routes and params should consist of alpha-numeric characters only."))};
-    }
-    (api.get("/test",handler));
-    (api.get("/test/alphanumer1cPa_th",handler));
-    (api.get("/test/regular/path",handler));
-    (api.get("/test/path/{with}/two/{variable_s}/f?bla=5&b=6",handler));
-    (api.get("/test/param/is/{last}",handler));
+    ;
+    (test_invalid_path("/test/{sup:er/:annoying//path}"));
+    (test_invalid_path("/test/{::another:annoying:path}"));
+    (test_invalid_path("/test/n0t_alphanumer1cPa:th"));
+    (test_invalid_path("/test/path/{with}/{two:invali4d#}/variables"));
+    (test_invalid_path("/test/path/{unclosed"));
+    (test_invalid_path("/test/m{issplaced}"));
+    (test_invalid_path("/test/{misspla}ced"));
+    (test_invalid_path("/test/{}/empty"));
+    (test_valid_path("/test"));
+    (test_valid_path("/test/alphanumer1cPa_th"));
+    (test_valid_path("/test/regular/path"));
+    (test_valid_path("/test/pa-th/{with}/two/{variable_s}/f?bla=5&b=6"));
+    (test_valid_path("/test/param/is/{last}"));
   }
 }
 class $App extends $AppBase {

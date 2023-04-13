@@ -46,6 +46,7 @@ class $Root extends $stdlib.core.Resource {
     Foo._annotateInflight("regex_inflight", {});
     Foo._annotateInflight("get_uuid", {});
     Foo._annotateInflight("get_data", {});
+    Foo._annotateInflight("print", {});
     Foo._annotateInflight("call", {});
     Foo._annotateInflight("$init", {});
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.get_greeting("Wingding")) === "Hello, Wingding!")'`)})(((Foo.get_greeting("Wingding")) === "Hello, Wingding!"))};
@@ -56,7 +57,17 @@ class $Root extends $stdlib.core.Resource {
       bindings: {
         f: {
           obj: f,
-          ops: ["call","get_data","get_uuid","regex_inflight"]
+          ops: ["call","get_data","get_uuid","print","regex_inflight"]
+        },
+      }
+    })
+    );
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:console",new $stdlib.core.Inflight(this, "$Inflight2", {
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.39839ce4a470bf3d8e73b1b650e8bfd7f47f942f676ae2f4e206492f1a49d77c/index.js".replace(/\\/g, "/"))),
+      bindings: {
+        f: {
+          obj: f,
+          ops: ["call","get_data","get_uuid","print","regex_inflight"]
         },
       }
     })
