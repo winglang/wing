@@ -69,6 +69,7 @@ const project = new cdk.JsiiProject({
     "@types/uuid",
     "@vitest/coverage-c8",
   ],
+  jest: false,
   prettier: true,
   npmignoreEnabled: false,
   minNodeVersion: "16.16.0",
@@ -210,10 +211,11 @@ docgen.exec(`jsii-docgen -o API.md -l wing`);
 docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);
 docgen.exec(`cat API.md >> ${docsPath}`);
 
-// override default test timeout from 5s to 30s
+// set up vitest related config
+project.annotateGenerated("*.snap");
+project.addGitIgnore("/coverage/");
 project.testTask.reset("vitest run --coverage --update --passWithNoTests");
-const testWatch = project.tasks.tryFind("test:watch")!;
-testWatch.reset();
+const testWatch = project.addTask("test:watch");
 testWatch.exec("vitest"); // Watch is default mode for vitest
 testWatch.description = "Run vitest in watch mode";
 project.testTask.spawn(project.eslint?.eslintTask!);

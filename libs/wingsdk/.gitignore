@@ -29,9 +29,6 @@ jspm_packages/
 .yarn-integrity
 .cache
 !/.projenrc.js
-/test-reports/
-junit.xml
-/coverage/
 /dist/changelog.md
 /dist/version.txt
 !/.prettierignore
@@ -46,5 +43,6 @@ junit.xml
 tsconfig.json
 !/API.md
 !/tsconfig.nonjsii.json
+/coverage/
 src/**/*.js
 src/**/*.d.ts
