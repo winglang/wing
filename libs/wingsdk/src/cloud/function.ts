@@ -89,13 +89,7 @@ export abstract class Function extends Resource implements IInflightHost {
     logger._registerBind(this, ["log"]);
 
     const inflightClient = inflight._toInflight();
-    const loggerClientCode = logger._toInflight();
     const lines = new Array<string>();
-
-    // create a logger inflight client and attach it to `console.log`.
-    // TODO: attach console.error, console.warn, once our logger supports log levels.
-    lines.push(`const $logger = ${loggerClientCode.text};`);
-    lines.push(`console.log = (...args) => $logger.log(...args);`);
 
     lines.push("exports.handler = async function(event) {");
     lines.push(`  return await (${inflightClient.text}).handle(event);`);

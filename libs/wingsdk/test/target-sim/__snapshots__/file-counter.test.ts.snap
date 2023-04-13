@@ -2,15 +2,7 @@
 
 exports[`can create sequential files in a bucket 1`] = `
 {
-  ".wing/queue-addconsumer-401ee792_c8a718bb.js": "const $logger = (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.log(...args);
-exports.handler = async function(event) {
+  ".wing/queue-addconsumer-401ee792_c8a718bb.js": "exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
@@ -101,7 +93,7 @@ bucket: (function(env) {
               "functionHandle": "\${root/HelloWorld/Queue-AddConsumer-401ee792#attrs.handle}",
             },
           ],
-          "timeout": 30,
+          "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
       },
