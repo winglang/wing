@@ -1,16 +1,13 @@
 import * as path from "path";
+import * as util from "util";
 import { NodeVM } from "vm2";
-import {
-  ENV_WING_SIM_INFLIGHT_RESOURCE_PATH,
-  ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE,
-} from "./function";
 import { ISimulatorResourceInstance } from "./resource";
 import {
   FunctionAttributes,
   FunctionSchema,
   FUNCTION_TYPE,
 } from "./schema-resources";
-import { IFunctionClient } from "../cloud";
+import { IFunctionClient, TraceType } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
 
 export class Function implements IFunctionClient, ISimulatorResourceInstance {
@@ -42,7 +39,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       message: `Invoke (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
         const vm = new NodeVM({
-          console: "redirect", // we hijack `console.xxx` calls inside the vm
+          console: "redirect", // we hijack `console.xxx` in `cloud/function.ts`
           require: {
             external: true,
             builtin: ["*"], // allow using all node modules
@@ -53,12 +50,34 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
           },
           env: {
             ...process.env,
-            [ENV_WING_SIM_INFLIGHT_RESOURCE_PATH]: this.context.resourcePath,
-            [ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE]: FUNCTION_TYPE,
             ...this.env,
           },
           timeout: this.timeout,
         });
+
+        // see https://github.com/patriksimek/vm2/blob/master/lib/nodevm.js#L89
+        const levels = [
+          "debug",
+          "info",
+          "log",
+          "warn",
+          "error",
+          "dir",
+          "trace",
+        ];
+
+        for (const level of levels) {
+          vm.on(`console.${level}`, (...args) => {
+            const message = util.format(...args);
+            this.context.addTrace({
+              data: { message },
+              type: TraceType.LOG,
+              sourcePath: this.context.resourcePath,
+              sourceType: FUNCTION_TYPE,
+              timestamp: new Date().toISOString(),
+            });
+          });
+        }
 
         const index = vm.runFile(this.filename);
         return index.handler(payload);

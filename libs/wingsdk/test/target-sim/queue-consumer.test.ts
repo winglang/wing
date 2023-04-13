@@ -54,14 +54,14 @@ test("pushing messages through a queue", async () => {
   await s.stop();
   expect(s.listTraces().filter((t) => t.type === cloud.TraceType.LOG)).toEqual([
     {
-      data: { message: "Hello, world!" },
+      data: { message: "Hello, world!", level: "log" },
       sourcePath: "root/HelloWorld/Function",
       sourceType: "wingsdk.cloud.Function",
       timestamp: expect.any(String),
       type: "log",
     },
     {
-      data: { message: "Received foo" },
+      data: { message: "Received foo", level: "log" },
       sourcePath: "root/HelloWorld/Queue-AddConsumer-13c4eaf1",
       sourceType: "wingsdk.cloud.Function",
       timestamp: expect.any(String),
