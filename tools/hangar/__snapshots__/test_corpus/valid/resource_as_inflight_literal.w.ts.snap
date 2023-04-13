@@ -2,16 +2,16 @@
 
 exports[`wing compile -t tf-aws > clients/Foo.inflight.js 1`] = `
 "class Foo  {
-constructor({  }) {
-
-
+  constructor({  }) {
+  }
+  async handle(message)  {
+    {
+      return \\"hello world!\\";
+    }
+  }
 }
-async handle(message)  {
-	{
-  return \\"hello world!\\";
-}
-}}
-exports.Foo = Foo;"
+exports.Foo = Foo;
+"
 `;
 
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
@@ -237,39 +237,36 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     class Foo extends $stdlib.core.Resource {
-	constructor(scope, id, ) {
-	super(scope, id);
-{
-}
-}
-	
-	_toInflight() {
-	
-	const self_client_path = \\"./clients/Foo.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
-	return $stdlib.core.NodeJsCode.fromInline(\`(
-		await (async () => { 
-			const tmp = new (require(\\"\${self_client_path}\\")).Foo({}); 
-			if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-			return tmp; 
-		})()
-	)\`);
-}
-}
-Foo._annotateInflight(\\"$inflight_init\\", {});
-Foo._annotateInflight(\\"handle\\", {});
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      _toInflight() {
+        const self_client_path = \\"./clients/Foo.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
+        return $stdlib.core.NodeJsCode.fromInline(\`
+          (await (async () => {
+            const tmp = new (require(\\"\${self_client_path}\\")).Foo({
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })()
+        )\`);
+      }
+    }
+    Foo._annotateInflight(\\"$inflight_init\\", {});
+    Foo._annotateInflight(\\"handle\\", {});
     const fn = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"cloud.Function\\",new Foo(this,\\"Foo\\"));
     this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.917572587cf19c37eec89740530b1f8d71072e09ccaeb9cbd4a3121ba0794d2a/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-  bindings: {
-    fn: {
-      obj: fn,
-      ops: [\\"invoke\\"]
-    },
-  }
-}));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.137cab8f078ac4d8dd242fc82417ae774fbaeaedf96937ad93f861344976bed7/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+      bindings: {
+        fn: {
+          obj: fn,
+          ops: [\\"invoke\\"]
+        },
+      }
+    })
+    );
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: \\"resource_as_inflight_literal\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -285,14 +282,16 @@ class $App extends $AppBase {
     }
   }
 }
-
-new $App().synth();"
+new $App().synth();
+"
 `;
 
-exports[`wing compile -t tf-aws > proc.917572587cf19c37eec89740530b1f8d71072e09ccaeb9cbd4a3121ba0794d2a/index.js 1`] = `
-"async handle() { const { fn } = this; {
+exports[`wing compile -t tf-aws > proc.137cab8f078ac4d8dd242fc82417ae774fbaeaedf96937ad93f861344976bed7/index.js 1`] = `
+"async handle() {
+  const { fn } = this;
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await fn.invoke(\\"test\\")) === \\"hello world!\\")'\`)})(((await fn.invoke(\\"test\\")) === \\"hello world!\\"))};
-} };"
+}
+"
 `;
 
 exports[`wing test -t sim > stdout 1`] = `

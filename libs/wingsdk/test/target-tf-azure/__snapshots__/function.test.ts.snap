@@ -87,14 +87,7 @@ exports[`basic function 2`] = `
             "children": {
               "Function": {
                 "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
-                    },
-                  ],
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
                 "children": {
@@ -208,30 +201,6 @@ exports[`basic function 2`] = `
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
-              },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Function",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
               },
               "azure": {
                 "constructInfo": {
@@ -366,14 +335,7 @@ exports[`basic function with environment variables 2`] = `
             "children": {
               "Function": {
                 "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
-                    },
-                  ],
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
                 "children": {
@@ -487,30 +449,6 @@ exports[`basic function with environment variables 2`] = `
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
-              },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Function",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
               },
               "azure": {
                 "constructInfo": {
@@ -682,30 +620,6 @@ exports[`replace invalid character from function name 2`] = `
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/someFunction01",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "azure": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
@@ -716,14 +630,7 @@ exports[`replace invalid character from function name 2`] = `
               },
               "someFunction01": {
                 "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
-                    },
-                  ],
+                  "wing:resource:connections": [],
                   "wing:resource:stateful": false,
                 },
                 "children": {

@@ -77,12 +77,11 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     this.node.root.new(\\"@cdktf/provider-aws.s3Bucket.S3Bucket\\",aws.s3Bucket.S3Bucket,this,\\"Bucket\\",{ bucketPrefix: \\"hello\\", versioning: {
-\\"enabled\\": true,
-\\"mfaDelete\\": true,}
- });
+    \\"enabled\\": true,
+    \\"mfaDelete\\": true,}
+     });
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: \\"bring_cdktf\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -98,8 +97,8 @@ class $App extends $AppBase {
     }
   }
 }
-
-new $App().synth();"
+new $App().synth();
+"
 `;
 
 exports[`wing test -t sim > stdout 1`] = `

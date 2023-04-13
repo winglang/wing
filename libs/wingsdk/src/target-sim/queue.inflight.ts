@@ -13,6 +13,7 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly intervalId: NodeJS.Timeout;
   private readonly context: ISimulatorContext;
+  private readonly timeout: number;
 
   constructor(props: QueueSchema["props"], context: ISimulatorContext) {
     for (const sub of props.subscribers ?? []) {
@@ -23,6 +24,7 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
       this.messages.push(...props.initialMessages);
     }
 
+    this.timeout = props.timeout;
     this.intervalId = setInterval(() => this.processMessages(), 100); // every 0.1 seconds
     this.context = context;
   }
@@ -92,7 +94,7 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
           timestamp: new Date().toISOString(),
         });
         void fnClient.invoke(JSON.stringify({ messages })).catch((err) => {
-          // If the function returns an error, put the message back on the queue
+          // If the function returns an error, put the message back on the queue after timeout period
           this.context.addTrace({
             data: {
               message: `Subscriber error - returning ${messages.length} messages to queue: ${err.message}`,
@@ -102,11 +104,36 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
             type: TraceType.RESOURCE,
             timestamp: new Date().toISOString(),
           });
-          this.messages.push(...messages);
+          void this.pushMessagesBackToQueue(messages).catch((requeueErr) => {
+            this.context.addTrace({
+              data: {
+                message: `Error pushing ${messages.length} messages back to queue: ${requeueErr.message}`,
+              },
+              sourcePath: this.context.resourcePath,
+              sourceType: QUEUE_TYPE,
+              type: TraceType.RESOURCE,
+              timestamp: new Date().toISOString(),
+            });
+          });
         });
         processedMessages = true;
       }
     } while (processedMessages);
+  }
+
+  public async pushMessagesBackToQueue(messages: Array<string>): Promise<void> {
+    setTimeout(() => {
+      this.messages.push(...messages);
+      this.context.addTrace({
+        data: {
+          message: `${messages.length} messages pushed back to queue after timeout.`,
+        },
+        sourcePath: this.context.resourcePath,
+        sourceType: QUEUE_TYPE,
+        type: TraceType.RESOURCE,
+        timestamp: new Date().toISOString(),
+      });
+    }, this.timeout * 1000);
   }
 }
 

@@ -201,7 +201,7 @@ impl FunctionSignature {
 		TypeAnnotation::Function(FunctionTypeAnnotation {
 			param_types: self.parameters.iter().map(|p| p.type_annotation.clone()).collect(),
 			return_type: self.return_type.clone(),
-			phase: self.phase.clone(),
+			phase: self.phase,
 		})
 	}
 }
@@ -240,6 +240,7 @@ pub trait MethodLike<'a> {
 	fn parameters(&self) -> &Vec<FunctionParameter>;
 	fn signature(&self) -> &FunctionSignature;
 	fn is_static(&self) -> bool;
+	fn span(&self) -> WingSpan;
 }
 
 #[derive(Derivative)]
@@ -274,6 +275,10 @@ impl MethodLike<'_> for FunctionDefinition {
 	fn is_static(&self) -> bool {
 		self.is_static
 	}
+
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
 }
 
 #[derive(Debug)]
@@ -298,6 +303,10 @@ impl MethodLike<'_> for Initializer {
 
 	fn is_static(&self) -> bool {
 		true
+	}
+
+	fn span(&self) -> WingSpan {
+		self.span.clone()
 	}
 }
 
@@ -393,7 +402,7 @@ pub enum StmtKind {
 	Struct {
 		name: Symbol,
 		extends: Vec<UserDefinedType>,
-		fields: Vec<ClassField>,
+		fields: Vec<StructField>,
 	},
 	Enum {
 		name: Symbol,
@@ -419,6 +428,12 @@ pub struct ClassField {
 	pub reassignable: bool,
 	pub phase: Phase,
 	pub is_static: bool,
+}
+
+#[derive(Debug)]
+pub struct StructField {
+	pub name: Symbol,
+	pub member_type: TypeAnnotation,
 }
 
 #[derive(Debug)]

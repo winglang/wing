@@ -5,7 +5,6 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { AwsTarget } from "../shared-aws/commons";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
 import { convertBetweenHandlers } from "../utils/convert";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
@@ -71,15 +70,14 @@ export class Queue extends cloud.Queue {
     }
 
     fn.addPolicyStatements({
-      effect: "Allow",
-      action: [
+      actions: [
         "sqs:ReceiveMessage",
         "sqs:ChangeMessageVisibility",
         "sqs:GetQueueUrl",
         "sqs:DeleteMessage",
         "sqs:GetQueueAttributes",
       ],
-      resource: this.queue.arn,
+      resources: [this.queue.arn],
     });
 
     new LambdaEventSourceMapping(this, "EventSourceMapping", {
@@ -105,9 +103,7 @@ export class Queue extends cloud.Queue {
 
     const env = this.envName();
 
-    host.addPolicyStatements(
-      ...calculateQueuePermissions(this.queue.arn, AwsTarget.TF_AWS, ops)
-    );
+    host.addPolicyStatements(...calculateQueuePermissions(this.queue.arn, ops));
 
     // The queue url needs to be passed through an environment variable since
     // it may not be resolved until deployment time.

@@ -70,7 +70,7 @@ exports[`function with a table binding 2`] = `
     },
     \\"aws_iam_role_policy\\": {
       \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:PutItem\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_dynamodb_table.root_Table_C50359A8.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:PutItem\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_dynamodb_table.root_Table_C50359A8.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
       }
     },
@@ -136,12 +136,6 @@ exports[`function with a table binding 3`] = `
                       "implicit": false,
                       "relationship": "insert",
                       "resource": "root/Default/Table",
-                    },
-                    {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
                     },
                   ],
                   "wing:resource:stateful": false,
@@ -264,30 +258,6 @@ exports[`function with a table binding 3`] = `
                 },
                 "id": "Table",
                 "path": "root/Default/Table",
-              },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Function",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
               },
               "aws": {
                 "constructInfo": {

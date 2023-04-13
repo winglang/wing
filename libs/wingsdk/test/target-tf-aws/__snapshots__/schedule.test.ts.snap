@@ -166,12 +166,6 @@ exports[`schedule behavior with cron 2`] = `
                       "resource": "root/Default/Handler",
                     },
                     {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
-                    },
-                    {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "on_tick",
@@ -271,30 +265,6 @@ exports[`schedule behavior with cron 2`] = `
                 },
                 "id": "Schedule-OnTickHandler-c5395e41",
                 "path": "root/Default/Schedule-OnTickHandler-c5395e41",
-              },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Schedule-OnTick-c5395e41",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
               },
               "aws": {
                 "constructInfo": {
@@ -533,12 +503,6 @@ exports[`schedule behavior with rate 2`] = `
                       "resource": "root/Default/Handler",
                     },
                     {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
-                    },
-                    {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "on_tick",
@@ -638,30 +602,6 @@ exports[`schedule behavior with rate 2`] = `
                 },
                 "id": "Schedule-OnTickHandler-c5395e41",
                 "path": "root/Default/Schedule-OnTickHandler-c5395e41",
-              },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Schedule-OnTick-c5395e41",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
               },
               "aws": {
                 "constructInfo": {
@@ -987,12 +927,6 @@ exports[`schedule with two functions 2`] = `
                       "resource": "root/Default/Handler2",
                     },
                     {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
-                    },
-                    {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "on_tick",
@@ -1086,12 +1020,6 @@ exports[`schedule with two functions 2`] = `
                       "implicit": false,
                       "relationship": "handle",
                       "resource": "root/Default/Handler1",
-                    },
-                    {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
                     },
                     {
                       "direction": "inbound",
@@ -1208,36 +1136,6 @@ exports[`schedule with two functions 2`] = `
                 },
                 "id": "Schedule-OnTickHandler-7b33bcba",
                 "path": "root/Default/Schedule-OnTickHandler-7b33bcba",
-              },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Schedule-OnTick-7b33bcba",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Schedule-OnTick-0a615500",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
               },
               "aws": {
                 "constructInfo": {

@@ -203,7 +203,7 @@ pub unsafe extern "C" fn wingc_on_hover(ptr: u32, len: u32) -> u64 {
 		WASM_RETURN_ERROR
 	}
 }
-pub fn on_hover<'a>(params: lsp_types::HoverParams) -> Option<Hover> {
+pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
 	FILES.with(|files| {
 		let files = files.borrow();
 		let parse_result = files.get(&params.text_document_position_params.text_document.uri.clone());

@@ -119,7 +119,7 @@ exports[`dec() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "220453c1de69b723c210fdb2a2ceba3e3a09c37e339a4ef7b06bbebd2a4cb4a0.zip",
+          "S3Key": "82159b7548a6fdc12ae39cb8043a63cbed3dd87b531d77f4599b901b09011d9a.zip",
         },
         "Environment": {
           "Variables": {
@@ -347,7 +347,9 @@ exports[`function with a counter binding 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "5a7514c19e1449dd2bc825f4fc1af864abbe6bdbd7845a65431a1f182429ea70.zip",
+==== BASE ====
+          "S3Key": "8a2ab0121abc2fe4ac5244af0605905e390ca3a7cdeb557bcddaa999ada830ae.zip",
+==== BASE ====
         },
         "Environment": {
           "Variables": {
@@ -514,7 +516,9 @@ exports[`inc() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "5a7514c19e1449dd2bc825f4fc1af864abbe6bdbd7845a65431a1f182429ea70.zip",
+==== BASE ====
+          "S3Key": "8a2ab0121abc2fe4ac5244af0605905e390ca3a7cdeb557bcddaa999ada830ae.zip",
+==== BASE ====
         },
         "Environment": {
           "Variables": {
@@ -681,7 +685,9 @@ exports[`peek() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "6b03d90f9e5305aece2c0ad0fd42218592c9124316741cd884f9899813704d8d.zip",
+==== BASE ====
+          "S3Key": "c4d94aed40ee62e3fb722fee0fdf6caeea8f8cefdb76ebe5aab072a430d9180e.zip",
+==== BASE ====
         },
         "Environment": {
           "Variables": {
@@ -848,7 +854,9 @@ exports[`reset() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "b3d439e82851bf0f8bbc4d87999c65882e0a103864ace77dfe0c49c504ab3bc8.zip",
+==== BASE ====
+          "S3Key": "02838439d890bd2ef6db8ba60f21a65b5533b37192c097dc2df67048642d66c4.zip",
+==== BASE ====
         },
         "Environment": {
           "Variables": {

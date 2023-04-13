@@ -2,12 +2,12 @@
 
 exports[`wing compile -t tf-aws > clients/R.inflight.js 1`] = `
 "class R  {
-constructor({ f }) {
-
-  this.f = f;
+  constructor({ f }) {
+    this.f = f;
+  }
 }
-}
-exports.R = R;"
+exports.R = R;
+"
 `;
 
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
@@ -69,43 +69,42 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     class R extends $stdlib.core.Resource {
-	constructor(scope, id, ) {
-	super(scope, id);
-{
-}
-}
-	 method2()  {
-	{
-  (this.method1());
-  {console.log(\`\${this.f}\`)};
-  (this.method2());
-}
-}
- method1()  {
-	{
-}
-}
-	_toInflight() {
-	const f_client = this._lift(this.f);
-	const self_client_path = \\"./clients/R.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
-	return $stdlib.core.NodeJsCode.fromInline(\`(
-		await (async () => { 
-			const tmp = new (require(\\"\${self_client_path}\\")).R({f: \${f_client}}); 
-			if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-			return tmp; 
-		})()
-	)\`);
-}
-}
-R._annotateInflight(\\"$inflight_init\\", {\\"this.f\\": { ops: [] }});
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+       method2()  {
+        {
+          (this.method1());
+          {console.log(\`\${this.f}\`)};
+          (this.method2());
+        }
+      }
+       method1()  {
+        {
+        }
+      }
+      _toInflight() {
+        const f_client = this._lift(this.f);
+        const self_client_path = \\"./clients/R.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
+        return $stdlib.core.NodeJsCode.fromInline(\`
+          (await (async () => {
+            const tmp = new (require(\\"\${self_client_path}\\")).R({
+              f: \${f_client},
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })()
+        )\`);
+      }
+    }
+    R._annotateInflight(\\"$inflight_init\\", {\\"this.f\\": { ops: [] }});
     const x = \\"hi\\";
     if (true) {
-  {console.log(\`\${x}\`)};
-  const y = new R(this,\\"R\\");
-}
+      {console.log(\`\${x}\`)};
+      const y = new R(this,\\"R\\");
+    }
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: \\"forward_decl\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -121,8 +120,8 @@ class $App extends $AppBase {
     }
   }
 }
-
-new $App().synth();"
+new $App().synth();
+"
 `;
 
 exports[`wing test -t sim > stdout 1`] = `

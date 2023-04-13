@@ -51,23 +51,6 @@ exports[`default queue behavior 2`] = `
                 "id": "Queue",
                 "path": "root/Default/Queue",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -190,23 +173,6 @@ exports[`queue name valid 2`] = `
                 "id": "The-Incredible_Queue-01",
                 "path": "root/Default/The-Incredible_Queue-01",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -295,7 +261,7 @@ exports[`queue with a consumer function 2`] = `
     },
     \\"aws_iam_role_policy\\": {
       \\"root_QueueAddConsumerc5395e41_IamRolePolicy_57AFC198\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:ReceiveMessage\\\\\\",\\\\\\"sqs:ChangeMessageVisibility\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\",\\\\\\"sqs:DeleteMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:ReceiveMessage\\\\\\",\\\\\\"sqs:ChangeMessageVisibility\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\",\\\\\\"sqs:DeleteMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
         \\"role\\": \\"\${aws_iam_role.root_QueueAddConsumerc5395e41_IamRole_11C209FD.name}\\"
       }
     },
@@ -438,12 +404,6 @@ exports[`queue with a consumer function 3`] = `
                       "resource": "root/Default/Handler",
                     },
                     {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
-                    },
-                    {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "add_consumer",
@@ -535,30 +495,6 @@ exports[`queue with a consumer function 3`] = `
                 },
                 "id": "Queue-AddConsumerHandler-c5395e41",
                 "path": "root/Default/Queue-AddConsumerHandler-c5395e41",
-              },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Queue-AddConsumer-c5395e41",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
               },
               "aws": {
                 "constructInfo": {
@@ -683,23 +619,6 @@ exports[`queue with custom timeout 2`] = `
                 "id": "Queue",
                 "path": "root/Default/Queue",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -821,23 +740,6 @@ exports[`replace invalid character from queue name 2`] = `
                 },
                 "id": "The*Incredible$Queue",
                 "path": "root/Default/The*Incredible$Queue",
-              },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
               },
               "aws": {
                 "constructInfo": {

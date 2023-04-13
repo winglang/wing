@@ -2,44 +2,44 @@
 
 exports[`wing compile -t tf-aws > clients/A.inflight.js 1`] = `
 "class A  {
-constructor({  }) {
-
-
+  constructor({  }) {
+  }
+  async handle(msg)  {
+    {
+      return;
+    }
+  }
 }
-async handle(msg)  {
-	{
-  return;
-}
-}}
-exports.A = A;"
+exports.A = A;
+"
 `;
 
 exports[`wing compile -t tf-aws > clients/Dog.inflight.js 1`] = `
 "class Dog  {
-constructor({  }) {
-
-
+  constructor({  }) {
+  }
+  async eat()  {
+    {
+      return;
+    }
+  }
 }
-async eat()  {
-	{
-  return;
-}
-}}
-exports.Dog = Dog;"
+exports.Dog = Dog;
+"
 `;
 
 exports[`wing compile -t tf-aws > clients/r.inflight.js 1`] = `
 "class r  {
-constructor({  }) {
-
-
+  constructor({  }) {
+  }
+  async method_2(x)  {
+    {
+      return x;
+    }
+  }
 }
-async method_2(x)  {
-	{
-  return x;
-}
-}}
-exports.r = r;"
+exports.r = r;
+"
 `;
 
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
@@ -102,91 +102,83 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     class A extends $stdlib.core.Resource {
-	constructor(scope, id, ) {
-	super(scope, id);
-{
-}
-}
-	
-	_toInflight() {
-	
-	const self_client_path = \\"./clients/A.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
-	return $stdlib.core.NodeJsCode.fromInline(\`(
-		await (async () => { 
-			const tmp = new (require(\\"\${self_client_path}\\")).A({}); 
-			if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-			return tmp; 
-		})()
-	)\`);
-}
-}
-A._annotateInflight(\\"$inflight_init\\", {});
-A._annotateInflight(\\"handle\\", {});
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      _toInflight() {
+        const self_client_path = \\"./clients/A.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
+        return $stdlib.core.NodeJsCode.fromInline(\`
+          (await (async () => {
+            const tmp = new (require(\\"\${self_client_path}\\")).A({
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })()
+        )\`);
+      }
+    }
+    A._annotateInflight(\\"$inflight_init\\", {});
+    A._annotateInflight(\\"handle\\", {});
     class r extends $stdlib.core.Resource {
-	constructor(scope, id, ) {
-	super(scope, id);
-{
-}
-}
-	 method_1(x)  {
-	{
-  return x;
-}
-}
- method_3(x)  {
-	{
-  return x;
-}
-}
-	_toInflight() {
-	
-	const self_client_path = \\"./clients/r.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
-	return $stdlib.core.NodeJsCode.fromInline(\`(
-		await (async () => { 
-			const tmp = new (require(\\"\${self_client_path}\\")).r({}); 
-			if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-			return tmp; 
-		})()
-	)\`);
-}
-}
-r._annotateInflight(\\"$inflight_init\\", {});
-r._annotateInflight(\\"method_2\\", {});
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+       method_1(x)  {
+        {
+          return x;
+        }
+      }
+       method_3(x)  {
+        {
+          return x;
+        }
+      }
+      _toInflight() {
+        const self_client_path = \\"./clients/r.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
+        return $stdlib.core.NodeJsCode.fromInline(\`
+          (await (async () => {
+            const tmp = new (require(\\"\${self_client_path}\\")).r({
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })()
+        )\`);
+      }
+    }
+    r._annotateInflight(\\"$inflight_init\\", {});
+    r._annotateInflight(\\"method_2\\", {});
     class Dog extends $stdlib.core.Resource {
-	constructor(scope, id, ) {
-	super(scope, id);
-{
-}
-}
-	
-	_toInflight() {
-	
-	const self_client_path = \\"./clients/Dog.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
-	return $stdlib.core.NodeJsCode.fromInline(\`(
-		await (async () => { 
-			const tmp = new (require(\\"\${self_client_path}\\")).Dog({}); 
-			if (tmp.$inflight_init) { await tmp.$inflight_init(); }
-			return tmp; 
-		})()
-	)\`);
-}
-}
-Dog._annotateInflight(\\"$inflight_init\\", {});
-Dog._annotateInflight(\\"eat\\", {});
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      _toInflight() {
+        const self_client_path = \\"./clients/Dog.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
+        return $stdlib.core.NodeJsCode.fromInline(\`
+          (await (async () => {
+            const tmp = new (require(\\"\${self_client_path}\\")).Dog({
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })()
+        )\`);
+      }
+    }
+    Dog._annotateInflight(\\"$inflight_init\\", {});
+    Dog._annotateInflight(\\"eat\\", {});
     const x = new A(this,\\"A\\");
     const y = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.a5455e5c5848cfc293fcb861d9393d32e29a39f8dc8ac79c19dd5289279762fe/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-  bindings: {
-    x: {
-      obj: x,
-      ops: []
-    },
-  }
-});
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.4bb413397aac07073d75578d701a65d4cbd2b018b9ba7fd5fc1654fa9a3a8abe/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+      bindings: {
+        x: {
+          obj: x,
+          ops: []
+        },
+      }
+    })
+    ;
     const z = new Dog(this,\\"Dog\\");
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: \\"impl_interface\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -202,14 +194,16 @@ class $App extends $AppBase {
     }
   }
 }
-
-new $App().synth();"
+new $App().synth();
+"
 `;
 
-exports[`wing compile -t tf-aws > proc.a5455e5c5848cfc293fcb861d9393d32e29a39f8dc8ac79c19dd5289279762fe/index.js 1`] = `
-"async handle() { const { x } = this; {
+exports[`wing compile -t tf-aws > proc.4bb413397aac07073d75578d701a65d4cbd2b018b9ba7fd5fc1654fa9a3a8abe/index.js 1`] = `
+"async handle() {
+  const { x } = this;
   (await x.handle(\\"hello world!\\"));
-} };"
+}
+"
 `;
 
 exports[`wing test -t sim > stdout 1`] = `

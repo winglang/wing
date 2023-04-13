@@ -5,7 +5,6 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { AwsTarget } from "../shared-aws/commons";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
 import { convertBetweenHandlers } from "../utils/convert";
 
@@ -76,7 +75,7 @@ export class Topic extends cloud.Topic {
     }
 
     host.addPolicyStatements(
-      ...calculateTopicPermissions(this.topic.topicArn, AwsTarget.AWSCDK, ops)
+      ...calculateTopicPermissions(this.topic.topicArn, ops)
     );
 
     host.addEnvironment(this.envName(), this.topic.topicArn);

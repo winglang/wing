@@ -9,8 +9,8 @@ use tree_sitter_traversal::{traverse, Order};
 use crate::ast::{
 	ArgList, BinaryOperator, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
 	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Initializer, Interface, InterpolatedString,
-	InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator,
-	UserDefinedType,
+	InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
+	UnaryOperator, UserDefinedType,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 use crate::WINGSDK_STD_MODULE;
@@ -125,7 +125,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn node_symbol<'a>(&'a self, node: &Node) -> DiagnosticResult<Symbol> {
+	fn node_symbol(&self, node: &Node) -> DiagnosticResult<Symbol> {
 		let checked_node = self.check_error(*node, "symbol")?;
 		Ok(Symbol {
 			span: self.node_span(&checked_node),
@@ -146,7 +146,7 @@ impl<'s> Parser<'s> {
 			"hours" => Ok(Literal::Duration(
 				value_text.parse::<f64>().expect("Duration string") * 3600_f64,
 			)),
-			"ERROR" => self.add_error(format!("Expected duration type"), &node),
+			"ERROR" => self.add_error("Expected duration type".to_string(), &node),
 			other => self.report_unimplemented_grammar(other, "duration type", node),
 		}
 	}
@@ -161,7 +161,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_scope<'a>(&self, scope_node: &Node) -> Scope {
+	fn build_scope(&self, scope_node: &Node) -> Scope {
 		let mut cursor = scope_node.walk();
 
 		Scope {
@@ -197,7 +197,7 @@ impl<'s> Parser<'s> {
 			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"try_catch_statement" => self.build_try_catch_statement(statement_node)?,
 			"struct_definition" => self.build_struct_definition_statement(statement_node)?,
-			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
+			"ERROR" => return self.add_error("Expected statement".to_string(), statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
 
@@ -283,7 +283,7 @@ impl<'s> Parser<'s> {
 	fn build_break_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		if !*self.is_in_loop.borrow() {
 			return self.add_error::<StmtKind>(
-				format!("Expected break statement to be inside of a loop (while/for)"),
+				"Expected break statement to be inside of a loop (while/for)".to_string(),
 				statement_node,
 			);
 		}
@@ -293,7 +293,7 @@ impl<'s> Parser<'s> {
 	fn build_continue_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		if !*self.is_in_loop.borrow() {
 			return self.add_error::<StmtKind>(
-				format!("Expected continue statement to be inside of a loop (while/for)"),
+				"Expected continue statement to be inside of a loop (while/for)".to_string(),
 				statement_node,
 			);
 		}
@@ -342,12 +342,9 @@ impl<'s> Parser<'s> {
 		for field_node in statement_node.children_by_field_name("field", &mut cursor) {
 			let identifier = self.node_symbol(&self.get_child_field(&field_node, "name")?)?;
 			let type_ = &self.get_child_field(&field_node, "type")?;
-			let f = ClassField {
+			let f = StructField {
 				name: identifier,
 				member_type: self.build_type_annotation(&type_)?,
-				reassignable: false,
-				phase: Phase::Independent,
-				is_static: false,
 			};
 			members.push(f);
 		}
@@ -473,9 +470,8 @@ impl<'s> Parser<'s> {
 					if is_static {
 						self.diagnostics.borrow_mut().push(Diagnostic {
 							level: DiagnosticLevel::Error,
-							message: format!(
-								"Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668",
-							),
+							message: "Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668"
+								.to_string(),
 							span: Some(self.node_span(&class_element)),
 						});
 					}
@@ -489,7 +485,7 @@ impl<'s> Parser<'s> {
 							Some(n) => {
 								if !is_resource {
 									self
-										.add_error::<Node>(format!("Class cannot have inflight fields"), &n)
+										.add_error::<Node>("Class cannot have inflight fields".to_string(), &n)
 										.err();
 								}
 								Phase::Inflight
@@ -559,7 +555,7 @@ impl<'s> Parser<'s> {
 				}
 				("ERROR", _) => {
 					self
-						.add_error::<Node>(format!("Expected class element node"), &class_element)
+						.add_error::<Node>("Expected class element node".to_string(), &class_element)
 						.err();
 				}
 				(other, _) => {
@@ -671,7 +667,7 @@ impl<'s> Parser<'s> {
 				}
 				"ERROR" => {
 					self
-						.add_error::<Node>(format!("Expected interface element node"), &interface_element)
+						.add_error::<Node>("Expected interface element node".to_string(), &interface_element)
 						.err();
 				}
 				other => {
@@ -769,7 +765,7 @@ impl<'s> Parser<'s> {
 				"str" => Ok(TypeAnnotation::String),
 				"bool" => Ok(TypeAnnotation::Bool),
 				"duration" => Ok(TypeAnnotation::Duration),
-				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
+				"ERROR" => self.add_error("Expected builtin type".to_string(), type_node),
 				other => return self.report_unimplemented_grammar(other, "builtin", type_node),
 			},
 			"optional" => {
@@ -827,18 +823,18 @@ impl<'s> Parser<'s> {
 					"MutSet" => Ok(TypeAnnotation::MutSet(Box::new(
 						self.build_type_annotation(&element_type)?,
 					))),
-					"ERROR" => self.add_error(format!("Expected builtin container type"), type_node)?,
+					"ERROR" => self.add_error("Expected builtin container type".to_string(), type_node)?,
 					other => self.report_unimplemented_grammar(other, "builtin container type", type_node),
 				}
 			}
-			"ERROR" => self.add_error(format!("Expected type"), type_node),
+			"ERROR" => self.add_error("Expected type".to_string(), type_node),
 			other => self.report_unimplemented_grammar(other, "type", type_node),
 		}
 	}
 
 	fn build_nested_identifier(&self, nested_node: &Node) -> DiagnosticResult<Reference> {
 		if nested_node.has_error() {
-			return self.add_error(format!("Syntax error"), &nested_node);
+			return self.add_error("Syntax error".to_string(), &nested_node);
 		}
 		if let Some(property) = nested_node.child_by_field_name("property") {
 			let object_expr = self.get_child_field(nested_node, "object")?;
@@ -866,7 +862,7 @@ impl<'s> Parser<'s> {
 			})
 		} else {
 			self.add_error(
-				format!("Expected property"),
+				"Expected property".to_string(),
 				&nested_node
 					.child(nested_node.child_count() - 1)
 					.expect("Nested identifier should have at least one child"),
@@ -908,7 +904,10 @@ impl<'s> Parser<'s> {
 			match child.kind() {
 				"positional_argument" => {
 					if seen_keyword_args {
-						self.add_error(format!("Positional arguments must come before named arguments"), &child)?;
+						self.add_error(
+							"Positional arguments must come before named arguments".to_string(),
+							&child,
+						)?;
 					}
 					pos_args.push(self.build_expression(&child)?);
 				}
@@ -917,13 +916,13 @@ impl<'s> Parser<'s> {
 					let arg_name_node = &child.named_child(0).unwrap();
 					let arg_name = self.node_symbol(arg_name_node)?;
 					if named_args.contains_key(&arg_name) {
-						_ = self.add_error::<ArgList>(format!("Duplicate argument name"), arg_name_node);
+						_ = self.add_error::<ArgList>("Duplicate argument name".to_string(), arg_name_node);
 					} else {
 						named_args.insert(arg_name, self.build_expression(&child.named_child(1).unwrap())?);
 					}
 				}
 				"ERROR" => {
-					self.add_error::<ArgList>(format!("Invalid argument(s)"), &child)?;
+					self.add_error::<ArgList>("Invalid argument(s)".to_string(), &child)?;
 				}
 				other => panic!("Unexpected argument type {} || {:#?}", other, child),
 			}
@@ -985,7 +984,7 @@ impl<'s> Parser<'s> {
 						"\\" => BinaryOperator::FloorDiv,
 						"**" => BinaryOperator::Power,
 						"??" => BinaryOperator::UnwrapOr,
-						"ERROR" => self.add_error::<BinaryOperator>(format!("Expected binary operator"), expression_node)?,
+						"ERROR" => self.add_error::<BinaryOperator>("Expected binary operator".to_string(), expression_node)?,
 						other => return self.report_unimplemented_grammar(other, "binary operator", expression_node),
 					},
 				},
@@ -996,7 +995,7 @@ impl<'s> Parser<'s> {
 					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
 						"-" => UnaryOperator::Minus,
 						"!" => UnaryOperator::Not,
-						"ERROR" => self.add_error::<UnaryOperator>(format!("Expected unary operator"), expression_node)?,
+						"ERROR" => self.add_error::<UnaryOperator>("Expected unary operator".to_string(), expression_node)?,
 						other => return self.report_unimplemented_grammar(other, "unary operator", expression_node),
 					},
 					exp: Box::new(self.build_expression(&expression_node.child_by_field_name("arg").unwrap())?),
@@ -1098,7 +1097,7 @@ impl<'s> Parser<'s> {
 				ExprKind::Literal(Literal::Boolean(match self.node_text(&expression_node) {
 					"true" => true,
 					"false" => false,
-					"ERROR" => self.add_error::<bool>(format!("Expected boolean literal"), expression_node)?,
+					"ERROR" => self.add_error::<bool>("Expected boolean literal".to_string(), expression_node)?,
 					other => return self.report_unimplemented_grammar(other, "boolean literal", expression_node),
 				})),
 				expression_span,
@@ -1134,7 +1133,7 @@ impl<'s> Parser<'s> {
 				expression_span,
 			)),
 			"pure_closure" => self.add_error(
-				format!("Pure phased anonymous closures not implemented yet"),
+				"Pure phased anonymous closures not implemented yet".to_string(),
 				expression_node,
 			),
 			"array_literal" => {

@@ -24,12 +24,6 @@ async handle() {
   process.exit(1);
 }`;
 
-const INFLIGHT_TIMEOUT = `
-async handle() {
-  while (true) {
-  };
-}`;
-
 test("create a function", async () => {
   // GIVEN
   const app = new SimApp();
@@ -52,7 +46,6 @@ test("create a function", async () => {
       sourceCodeLanguage: "javascript",
       environmentVariables: {
         ENV_VAR1: "true",
-        LOGGER_HANDLE_76f7e65b: "${root/WingLogger#attrs.handle}",
       },
       timeout: 60000,
     },
@@ -134,7 +127,7 @@ test("invoke function fails", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[3].data.error).toMatchObject({
+  expect(s.listTraces()[2].data.error).toMatchObject({
     message: "Name must start with uppercase letter",
   });
   expect(app.snapshot()).toMatchSnapshot();
@@ -194,36 +187,13 @@ test("invoke function with process.exit(1)", async () => {
   // WHEN
   const PAYLOAD = {};
   await expect(client.invoke(JSON.stringify(PAYLOAD))).rejects.toThrow(
-    "process.exit() was called with exit code 1"
+    "process.exit is not a function"
   );
   // THEN
   await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[3].data.error).toMatchObject({
-    message: "process.exit() was called with exit code 1",
-  });
-  expect(app.snapshot()).toMatchSnapshot();
-});
-
-test("invoke function exceeds timeout", async () => {
-  // GIVEN
-  const app = new SimApp();
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_TIMEOUT);
-  cloud.Function._newFunction(app, "my_function", handler, {
-    timeout: Duration.fromSeconds(1),
-  });
-  const s = await app.startSimulator();
-  const client = s.getResource("/my_function") as cloud.IFunctionClient;
-  // WHEN
-  const PAYLOAD = {};
-  await expect(client.invoke(JSON.stringify(PAYLOAD))).rejects.toThrow(
-    "Script execution timed out after 1000ms"
-  );
-  // THEN
-  await s.stop();
-  expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[3].data.error).toMatchObject({
-    message: "Script execution timed out after 1000ms",
+  expect(s.listTraces()[2].data.error).toMatchObject({
+    message: "process.exit is not a function",
   });
   expect(app.snapshot()).toMatchSnapshot();
 });

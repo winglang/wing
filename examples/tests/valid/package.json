@@ -2,6 +2,7 @@
   "dependencies": {
     "@cdktf/provider-aws": "12.0.5",
     "jsii-code-samples": "1.7.0",
+    "node-fetch": "^2",
     "projen": "0.67.65",
     "uuid": "^9.0.0"
   },
