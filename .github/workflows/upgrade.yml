@@ -118,4 +118,4 @@ jobs:
         if: steps.create-pr.outputs.pull-request-operation == 'created'
         run: gh pr review --approve "${{ steps.create-pr.outputs.pull-request-number }}"
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.APPROVALS_GITHUB_TOKEN }}
