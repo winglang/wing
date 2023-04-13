@@ -2069,7 +2069,7 @@ impl<'a> TypeChecker<'a> {
 				methods,
 				parent,
 				implements,
-				initializer: constructor,
+				initializer,
 				is_resource,
 				inflight_initializer,
 			}) => {
@@ -2177,7 +2177,7 @@ impl<'a> TypeChecker<'a> {
 					name: CLASS_INIT_NAME.into(),
 					span: name.span.clone(), // TODO: change to init's span
 				};
-				self.add_method_to_class_env(&constructor.signature, env, None, &mut class_env, &init_symb);
+				self.add_method_to_class_env(&initializer.signature, env, None, &mut class_env, &init_symb);
 
 				// Add the inflight initializer to the class env
 				let inflight_init_symb = Symbol {
@@ -2199,7 +2199,7 @@ impl<'a> TypeChecker<'a> {
 				let class_env = &class_type.as_class_or_resource().unwrap().env;
 
 				// Type check constructor
-				self.type_check_method(class_env, &init_symb, env, stmt.idx, constructor, class_type);
+				self.type_check_method(class_env, &init_symb, env, stmt.idx, initializer, class_type);
 
 				// Type check the inflight initializer
 				if let Some(inflight_initializer) = inflight_initializer {
