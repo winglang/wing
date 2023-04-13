@@ -162,7 +162,7 @@ jobs:
             tools/hangar
             examples/tests/valid
             examples/tests/invalid
-          install-command: npm ci --ignore-scripts
+          install-command: npm ci
 
       - name: Run E2E Tests
         working-directory: tools/hangar
