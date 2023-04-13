@@ -1,5 +1,6 @@
 import { Combobox as HeadlessCombobox, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
+import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useRef } from "react";
 import { Fragment, useEffect, useState } from "react";
@@ -40,6 +41,8 @@ export const Combobox = ({
   showSelected = true,
   renderItem,
 }: ComboboxProps) => {
+  const theme = useTheme();
+
   const [filtered, setFiltered] = useState<Item[]>(items ?? []);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -81,7 +84,10 @@ export const Combobox = ({
               placeholder={placeholder}
               className={classNames(
                 inputClassName,
-                readonly && "opacity-70 select-text text-slate-600",
+                theme.bgInput,
+                theme.textInput,
+                theme.borderInput,
+                readonly && [theme.text1, "opacity-70 select-text"],
               )}
               onChange={(event) => onChange(event.target.value)}
               onFocus={() => {
@@ -106,7 +112,8 @@ export const Combobox = ({
           >
             <HeadlessCombobox.Options
               className={classNames(
-                "z-20 absolute mt-1 max-h-60 w-full left-0 overflow-auto rounded-md bg-white py-1",
+                theme.bgInput,
+                "z-20 absolute mt-1 max-h-60 w-full left-0 overflow-auto rounded-md py-1",
                 "text-xs shadow-lg ring-1 ring-black ring-opacity-5 outline-none",
                 !items?.length && "invisible",
                 !emptyLabel && filtered.length === 0 && "invisible",
@@ -115,7 +122,8 @@ export const Combobox = ({
               {emptyLabel && filtered.length === 0 ? (
                 <div
                   className={classNames(
-                    "relative cursor-default select-none py-2 text-gray-700",
+                    theme.text1,
+                    "relative cursor-default select-none py-2",
                     !renderItem && {
                       "pl-8": showSelected,
                       "pl-4": !showSelected,
@@ -131,7 +139,7 @@ export const Combobox = ({
                     className={({ active }) =>
                       classNames(
                         "relative cursor-default select-none py-2",
-                        active ? "bg-sky-50 text-sky-900" : "text-slate-900",
+                        active && theme.bgInputHover,
                         !renderItem && {
                           "pl-8": showSelected,
                           "pl-4": !showSelected,
@@ -145,7 +153,7 @@ export const Combobox = ({
                       <>
                         <span
                           className={classNames(
-                            "block truncate text-slate-600",
+                            "block truncate",
                             selected && showSelected
                               ? "font-medium"
                               : "font-normal",

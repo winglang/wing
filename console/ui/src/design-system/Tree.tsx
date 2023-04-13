@@ -1,3 +1,4 @@
+import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { uniq } from "lodash";
 import { useState, KeyboardEvent, useEffect } from "react";
@@ -146,6 +147,8 @@ export const Tree = ({
   onCurrentChange,
   className,
 }: TreeProps) => {
+  const theme = useTheme();
+
   const {
     selectTo,
     selectNext,
@@ -191,8 +194,12 @@ export const Tree = ({
     //  eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
       className={classNames(
-        "bg-white outline-none rounded border border-slate-300 text-slate-700",
-        "focus:ring-2 focus:ring-sky-500/50 transition ease-in-out focus:border-sky-500 group",
+        theme.bgInput,
+        theme.textInput,
+        theme.focusInput,
+        theme.borderInput,
+        "outline-none rounded border",
+        "transition ease-in-out group",
         "p-1",
         className,
       )}
@@ -214,15 +221,18 @@ export const Tree = ({
           <div
             key={entry.name}
             className={classNames(
-              "px-2 group text-slate-600 w-full truncate py-0.5",
+              "px-2 group w-full truncate py-0.5",
               selected && [
-                "bg-slate-200 text-slate-700",
+                "bg-slate-200 dark:bg-slate-750",
                 "group-focus:bg-sky-500 group-focus:text-white",
                 !(previous && selectedEntries.includes(previous.id)) &&
                   "rounded-t",
                 !(next && selectedEntries.includes(next.id)) && "rounded-b",
               ],
-              !selected && "odd:bg-slate-100 rounded",
+              !selected && [
+                "rounded",
+                index % 2 === 0 && "bg-slate-100 dark:bg-slate-850",
+              ],
             )}
             onClick={async (event) => {
               event.stopPropagation();

@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { PropsWithChildren, ReactNode, KeyboardEvent } from "react";
 
 import { TreeItem as HeadlessTreeItem } from "./headless/tree-item.js";
+import { useTheme } from "./theme-provider.js";
 
 export interface TreeItemProps {
   itemId: string;
@@ -21,6 +22,8 @@ export const TreeItem = ({
   children,
   ...props
 }: PropsWithChildren<TreeItemProps>) => {
+  const theme = useTheme();
+
   return (
     <HeadlessTreeItem
       {...props}
@@ -33,11 +36,9 @@ export const TreeItem = ({
             "select-none",
             "cursor-pointer",
             "border border-transparent",
-            {
-              "group-focus:border-sky-500": item.focused,
-              "bg-slate-200": item.selected,
-              "hover:bg-slate-100": !item.selected,
-            },
+            item.focused && "group-focus:border-sky-500",
+            item.selected && theme.bg2,
+            !item.selected && theme.bg2Hover,
           )}
           title={title}
         >
@@ -52,7 +53,8 @@ export const TreeItem = ({
           <div
             className={classNames(
               "shrink-0",
-              "cursor-pointer hover:bg-slate-200",
+              theme.bg2Hover,
+              "cursor-pointer",
               "-ml-2.5",
               "px-0.5 py-0.5",
               {
@@ -75,7 +77,7 @@ export const TreeItem = ({
           {icon && <div className="shrink-0">{icon}</div>}
 
           <div className="grow flex items-center gap-1 justify-around min-w-0">
-            <span className="grow text-slate-800 truncate">
+            <span className={classNames(theme.text1, "grow truncate")}>
               {typeof label === "function" ? label() : label}
             </span>
 

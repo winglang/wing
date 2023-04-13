@@ -38,7 +38,9 @@ export const EdgeItem = ({
     <g
       className={classNames(
         "stroke-1 fill-none",
-        highlighted ? "stroke-[1.5px] stroke-sky-500 z-10" : "stroke-slate-400",
+        highlighted
+          ? "stroke-[1.5px] stroke-sky-500 z-10"
+          : "stroke-slate-400 dark:stroke-slate-800",
         fade && "opacity-40",
         "transition-all",
       )}

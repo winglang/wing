@@ -1,3 +1,4 @@
+import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { PropsWithChildren } from "react";
 
@@ -9,10 +10,13 @@ export const Pill = ({
   children,
   textSize = "base",
 }: PropsWithChildren<PillProps>) => {
+  const theme = useTheme();
   return (
     <span
       className={classNames(
-        "inline-flex items-center rounded bg-slate-200 px-1.5 text-slate-500 shadow truncate",
+        "inline-flex items-center rounded px-1.5 truncate",
+        theme.bg2,
+        theme.text2,
         {
           "text-[0.6rem]": textSize === "xs",
           "text-xs": textSize === "base",

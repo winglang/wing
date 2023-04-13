@@ -12,7 +12,7 @@ export const FunctionValue = ({ resource }: FunctionResourceDetailsProps) => {
 
   return (
     <>
-      <dt className="truncate text-slate-500"></dt>
+      <dt className="truncate"></dt>
       <dd className="col-span-4 flex grow">
         <Button
           label="Invoke"

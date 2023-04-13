@@ -11,6 +11,7 @@ import {
   ToolbarButton,
   TreeView,
   TreeItem,
+  useTheme,
 } from "@wingconsole/design-system";
 import type { Router } from "@wingconsole/server";
 import classNames from "classnames";
@@ -38,6 +39,7 @@ export interface TestItem {
 type RouterOutput = inferRouterOutputs<Router>;
 
 export const TestsTree = () => {
+  const theme = useTheme();
   const [testTree, setTestTree] = useState<TestItem[]>([]);
 
   const testListQuery = trpc["test.list"].useQuery();
@@ -124,7 +126,7 @@ export const TestsTree = () => {
           title="Run All Tests"
           disabled={testTree.length === 0}
         >
-          <PlayAllIcon className="w-4 h-4 text-slate-600" />
+          <PlayAllIcon className="w-4 h-4" />
         </ToolbarButton>
       </Toolbar>
 
@@ -132,11 +134,20 @@ export const TestsTree = () => {
         <div className="absolute inset-0">
           <ScrollableArea
             overflowY
-            className="h-full w-full text-sm text-slate-800 bg-slate-50 flex flex-col gap-1"
+            className={classNames(
+              "h-full w-full text-sm flex flex-col gap-1",
+              theme.bg3,
+              theme.text2,
+            )}
           >
             <div className="flex flex-col">
               {testTree.length === 0 && (
-                <div className="text-slate-400 text-2xs px-3 py-2 font-mono">
+                <div
+                  className={classNames(
+                    theme.text2,
+                    "text-2xs px-3 py-2 font-mono",
+                  )}
+                >
                   No Tests
                 </div>
               )}
@@ -149,7 +160,7 @@ export const TestsTree = () => {
                       <div className="flex items-center gap-1">
                         <span className="truncate">{test.label}</span>
                         {test.time && (
-                          <span className="text-slate-400 text-xs">
+                          <span className={classNames(theme.text2, "text-xs")}>
                             {test.time}ms
                           </span>
                         )}
@@ -169,7 +180,7 @@ export const TestsTree = () => {
                             })
                           }
                         >
-                          <PlayIcon className="w-4 h-4 text-slate-500" />
+                          <PlayIcon className="w-4 h-4" />
                         </ToolbarButton>
                       </div>
                     }
@@ -183,10 +194,17 @@ export const TestsTree = () => {
                           <XCircleIcon className="w-4 h-4 text-red-500" />
                         )}
                         {test.status === "running" && (
-                          <ArrowPathIcon className="w-4 h-4 text-slate-500 animate-spin" />
+                          <ArrowPathIcon
+                            className={classNames(
+                              theme.text2,
+                              "w-4 h-4 animate-spin",
+                            )}
+                          />
                         )}
                         {test.status === "pending" && (
-                          <MinusCircleIcon className="w-4 h-4 text-slate-500" />
+                          <MinusCircleIcon
+                            className={classNames(theme.text2, "w-4 h-4")}
+                          />
                         )}
                       </>
                     }

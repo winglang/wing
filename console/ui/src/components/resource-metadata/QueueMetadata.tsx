@@ -1,4 +1,6 @@
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { useTheme } from "@wingconsole/design-system";
+import classNames from "classnames";
 
 import { Button } from "../../design-system/Button.js";
 import { useNotifications } from "../../design-system/Notification.js";
@@ -11,6 +13,8 @@ export interface QueueMetadataProps {
 }
 
 export const QueueMetadata = ({ node }: QueueMetadataProps) => {
+  const theme = useTheme();
+
   const { showNotification } = useNotifications();
 
   const approxSize = trpc["queue.approxSize"].useQuery({
@@ -23,7 +27,13 @@ export const QueueMetadata = ({ node }: QueueMetadataProps) => {
   });
 
   return (
-    <div className="px-2 pt-1.5 flex flex-col gap-y-1 gap-x-4 bg-slate-50">
+    <div
+      className={classNames(
+        "px-2 pt-1.5 flex flex-col gap-y-1 gap-x-4",
+        theme.bg3,
+        theme.text2,
+      )}
+    >
       <AttributeView name="Timeout" value={`${node.props?.timeout}s`} />
       <AttributeView name="Approx size">
         <div className="flex gap-2">

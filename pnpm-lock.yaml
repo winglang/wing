@@ -5364,6 +5364,12 @@ packages:
       '@storybook/global': 5.0.0
     dev: true
 
+  /@storybook/client-logger@7.0.4:
+    resolution: {integrity: sha512-3sEUIt6/ry+RdTpP+6Ic1QqoQh6Pn9ugCaP54Bc0z4wDI+NIJtJ5E2j4bcml/1/l9h9zNlmAAMgpZizm8KtIdA==}
+    dependencies:
+      '@storybook/global': 5.0.0
+    dev: true
+
   /@storybook/codemod@7.0.2:
     resolution: {integrity: sha512-D9PdByxJlFiaDJcLkM+RN1DHCj4VfQIlSZkADOcNtI4o9H064oiMloWDGZiR1i1FCYMSXuWmW6tMsuCVebA+Nw==}
     dependencies:
@@ -5733,7 +5739,7 @@ packages:
   /@storybook/testing-library@0.1.0:
     resolution: {integrity: sha512-g947f4LJZw3IluBhysMKLJXByAFiSxnGuooENqU+ZPt/GTrz1I9GDBlhmoTJahuFkVbwHvziAl/8riY2Re921g==}
     dependencies:
-      '@storybook/client-logger': 7.0.2
+      '@storybook/client-logger': 7.0.4
       '@storybook/instrumenter': 7.0.2
       '@testing-library/dom': 8.20.0
       '@testing-library/user-event': 13.5.0(@testing-library/dom@8.20.0)

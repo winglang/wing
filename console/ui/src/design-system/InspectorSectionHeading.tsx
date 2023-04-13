@@ -1,4 +1,5 @@
 import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
+import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 
 import { IconComponent } from "../utils/utils.js";
@@ -18,34 +19,32 @@ export const InspectorSectionHeading = ({
   text,
   icon: Icon,
   onClick,
-  subection = false,
+  subection: subsection = false,
   bold = true,
   className,
 }: InspectorSectionHeadingProps) => {
+  const theme = useTheme();
   const ChevronIcon = open ? ChevronDownIcon : ChevronRightIcon;
   return (
     <button
       className={classNames(
         "w-full py-1 flex items-center gap-1 group relative",
-        !subection && "border-t border-slate-300 hover:bg-white bg-slate-50",
+        theme.border3,
+        theme.bg3,
+        theme.bg3Hover,
         className,
         "focus:outline-sky-500/50",
+        {
+          "border-t": !subsection,
+          [theme.text1]: !subsection,
+          [theme.text2]: subsection,
+        },
       )}
       onClick={onClick}
     >
-      <ChevronIcon className="-ml-1 w-4 h-4 text-slate-600 group-hover:text-slate-600" />
-      {Icon && (
-        <Icon className="w-4 h-4 text-slate-600 group-hover:text-slate-600 mr-1" />
-      )}
-      <div
-        className={classNames(
-          bold && "font-medium",
-          !subection && "text-slate-600 group-hover:text-slate-600",
-          subection && "text-slate-500 group-hover:text-slate-600",
-        )}
-      >
-        {text}
-      </div>
+      <ChevronIcon className={classNames("-ml-1 w-4 h-4", theme.text2)} />
+      {Icon && <Icon className={classNames("w-4 h-4 mr-1", theme.text1)} />}
+      <div className={classNames(bold && "font-medium")}>{text}</div>
     </button>
   );
 };

@@ -1,11 +1,13 @@
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { ProgressBar } from "@wingconsole/design-system";
+import { ProgressBar, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
 
 import { trpc } from "../utils/trpc.js";
 
 export const AutoUpdater = () => {
+  const theme = useTheme();
+
   const enabled = trpc["updater.enabled"].useQuery();
   const { data: currentStatus } = trpc["updater.currentStatus"].useQuery(
     undefined,
@@ -57,12 +59,12 @@ export const AutoUpdater = () => {
   }
 
   return (
-    <div className="flex space-x-1 min-w-[3rem] text-slate-600">
+    <div className={classNames("flex space-x-1 min-w-[3rem]", theme.text2)}>
       <span
         className={classNames([
           currentStatus?.status?.status === "error"
             ? "text-red-500"
-            : "text-slate-600",
+            : theme.text2,
           "flex",
         ])}
       >
@@ -82,7 +84,7 @@ export const AutoUpdater = () => {
       </span>
       {currentStatus?.status?.progress &&
       currentStatus?.status?.status === "download-progress" ? (
-        <div className={classNames(["self-center text-slate-600 flex w-24"])}>
+        <div className={classNames(["self-center flex w-24", theme.text2])}>
           <ProgressBar
             progress={currentStatus?.status?.progress || 0}
             size="sm"

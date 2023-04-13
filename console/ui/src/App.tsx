@@ -1,3 +1,5 @@
+import { ThemeProvider } from "@wingconsole/design-system";
+
 import { VscodeLayout } from "./components/VscodeLayout.js";
 import { NotificationsProvider } from "./design-system/Notification.js";
 import { TestsContextProvider } from "./utils/tests-context.js";
@@ -24,13 +26,15 @@ export const App = ({}: AppProps) => {
   const appState = trpc["app.state"].useQuery();
 
   return (
-    <NotificationsProvider>
-      <TestsContextProvider>
-        <VscodeLayout
-          cloudAppState={appState.data ?? "compiling"}
-          wingVersion={appDetails.data?.wingVersion}
-        />
-      </TestsContextProvider>
-    </NotificationsProvider>
+    <ThemeProvider>
+      <NotificationsProvider>
+        <TestsContextProvider>
+          <VscodeLayout
+            cloudAppState={appState.data ?? "compiling"}
+            wingVersion={appDetails.data?.wingVersion}
+          />
+        </TestsContextProvider>
+      </NotificationsProvider>
+    </ThemeProvider>
   );
 };

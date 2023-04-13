@@ -3,8 +3,10 @@ import {
   ToolbarButton,
   TreeItem,
   TreeView,
+  useTheme,
 } from "@wingconsole/design-system";
 import { ExplorerItem } from "@wingconsole/server";
+import classNames from "classnames";
 
 import {
   Square2StackMinusIcon,
@@ -62,9 +64,10 @@ export interface ExplorerProps {
 }
 
 export const Explorer = (props: ExplorerProps) => {
+  const theme = useTheme();
   return (
     <div
-      className={"w-full h-full flex flex-col"}
+      className={classNames("w-full h-full flex flex-col", theme.bg3)}
       data-testid={props["data-testid"]}
     >
       <Toolbar title="Explorer">
@@ -73,7 +76,7 @@ export const Explorer = (props: ExplorerProps) => {
           title="Expand All"
           disabled={props.loading}
         >
-          <Square2StackPlusIcon className="w-4 h-4 text-slate-600 group-hover:text-slate-700 rotate-90" />
+          <Square2StackPlusIcon className="w-4 h-4 rotate-90" />
         </ToolbarButton>
 
         <ToolbarButton
@@ -81,7 +84,7 @@ export const Explorer = (props: ExplorerProps) => {
           title="Collapse All"
           disabled={props.loading}
         >
-          <Square2StackMinusIcon className="w-4 h-4 text-slate-600 group-hover:text-slate-700 rotate-90" />
+          <Square2StackMinusIcon className="w-4 h-4 rotate-90" />
         </ToolbarButton>
       </Toolbar>
 
@@ -89,7 +92,11 @@ export const Explorer = (props: ExplorerProps) => {
         <div className="absolute inset-0">
           <ScrollableArea
             overflowY
-            className="h-full w-full text-sm text-slate-800 bg-slate-50 flex flex-col gap-1"
+            className={classNames(
+              "h-full w-full text-sm flex flex-col gap-1",
+              theme.bg3,
+              theme.text2,
+            )}
           >
             <div className="flex flex-col">
               <TreeView

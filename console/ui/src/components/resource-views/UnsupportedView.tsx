@@ -1,4 +1,6 @@
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
+import { useTheme } from "@wingconsole/design-system";
+import classNames from "classnames";
 
 import { Button } from "../../design-system/Button.js";
 import { trpc } from "../../utils/trpc.js";
@@ -8,27 +10,31 @@ export interface UnsupportedViewProps {
   resourcePath: string;
 }
 export const UnsupportedView = ({ resourceType }: UnsupportedViewProps) => {
+  const theme = useTheme();
+
   const newIssueUrl = "https://github.com/winglang/wing/issues/new/choose";
 
   const openExternal = trpc["app.openExternal"].useMutation();
 
   return (
-    <div className="flex flex-col gap-y-1 gap-x-4 bg-slate-50">
+    <div className="flex flex-col gap-y-1 gap-x-4">
       <div className="h-full flex-1 flex flex-col text-sm space-y-2">
-        <p className="text-slate-500">
-          <span className="font-medium text-slate-600">{resourceType}</span>{" "}
+        <p className={classNames(theme.text2)}>
+          <span className={classNames(theme.text2, "font-medium")}>
+            {resourceType}
+          </span>{" "}
           resource is not supported by the Wing Console.
         </p>
 
         <div className="flex space-x-2">
           <div className="flex-shrink-0">
             <InformationCircleIcon
-              className="h-5 w-5 text-slate-400"
+              className={classNames(theme.text2, "h-5 w-5")}
               aria-hidden="true"
             />
           </div>
           <div className="text-left">
-            <h3 className="text-sm text-slate-600">
+            <h3 className={classNames(theme.text2, "text-sm")}>
               Do you want this resource to be supported?
             </h3>
             <div className="mt-2">

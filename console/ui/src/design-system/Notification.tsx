@@ -4,6 +4,8 @@ import {
   ExclamationCircleIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
+import { useTheme } from "@wingconsole/design-system";
+import classNames from "classnames";
 import { nanoid } from "nanoid";
 import {
   createContext,
@@ -58,6 +60,7 @@ export function useNotifications() {
 }
 
 function NotificationsContainer() {
+  const theme = useTheme();
   const { notifications, closeNotification, removeNotification } =
     usePrivateNotifications();
 
@@ -86,7 +89,13 @@ function NotificationsContainer() {
                 removeNotification(notification.id);
               }}
             >
-              <div className="max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden">
+              <div
+                className={classNames(
+                  theme.bgInput,
+                  "max-w-sm w-full shadow-lg rounded-lg",
+                  "pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden",
+                )}
+              >
                 <div className="p-3">
                   <div className="flex items-start">
                     <div className="flex-shrink-0">
@@ -103,11 +112,16 @@ function NotificationsContainer() {
                       )}
                     </div>
                     <div className="ml-3 w-0 flex-1 pt-0.5">
-                      <p className="text-sm font-medium text-slate-900">
+                      <p
+                        className={classNames(
+                          theme.textInput,
+                          "text-sm font-medium",
+                        )}
+                      >
                         {notification.title}
                       </p>
                       {notification.body && (
-                        <p className="mt-1 text-sm text-slate-500">
+                        <p className={classNames("mt-1 text-sm", theme.text2)}>
                           {notification.body}
                         </p>
                       )}
@@ -115,13 +129,21 @@ function NotificationsContainer() {
                     <div className="ml-4 flex-shrink-0 flex">
                       <button
                         type="button"
-                        className="bg-white rounded-md inline-flex text-slate-400 hover:text-slate-500 outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
+                        className={classNames(
+                          theme.text2,
+                          theme.text4Hover,
+                          theme.focusInput,
+                          "rounded-md inline-flex",
+                        )}
                         onClick={() => {
                           closeNotification(notification.id);
                         }}
                       >
                         <span className="sr-only">Close</span>
-                        <XCircleIcon className="h-5 w-5" aria-hidden="true" />
+                        <XCircleIcon
+                          className={classNames("h-5 w-5")}
+                          aria-hidden="true"
+                        />
                       </button>
                     </div>
                   </div>

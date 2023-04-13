@@ -1,3 +1,4 @@
+import { useTheme } from "@wingconsole/design-system";
 import { BaseResourceSchema } from "@wingconsole/server";
 import classNames from "classnames";
 import { PropsWithChildren } from "react";
@@ -9,28 +10,28 @@ const getResourceBorderColor = (
 ) => {
   switch (resourceType) {
     case "wingsdk.cloud.Bucket": {
-      return "border-t-[3px] border-t-orange-500 group-hover:border-t-orange-500 group-focus:border-t-orange-500";
+      return "border-t-[3px] border-t-orange-500 group-hover:border-t-orange-500 group-focus:border-t-orange-500 dark:border-t-orange-500 dark:group-hover:border-t-orange-500 dark:group-focus:border-t-orange-500";
     }
     case "wingsdk.cloud.Function": {
-      return "border-t-[3px] border-t-sky-500 group-hover:border-t-sky-500 group-focus:border-t-sky-500";
+      return "border-t-[3px] border-t-sky-500 group-hover:border-t-sky-500 group-focus:border-t-sky-500 dark:border-t-sky-500 dark:group-hover:border-t-sky-500 dark:group-focus:border-t-sky-500";
     }
     case "wingsdk.cloud.Queue": {
-      return "border-t-[3px] border-t-emerald-500 group-hover:border-t-emerald-500 group-focus:border-t-emerald-500";
+      return "border-t-[3px] border-t-emerald-500 group-hover:border-t-emerald-500 group-focus:border-t-emerald-500 dark:border-t-emerald-500 dark:group-hover:border-t-emerald-500 dark:group-focus:border-t-emerald-500";
     }
     case "wingsdk.cloud.Endpoint": {
-      return "border-t-[3px] border-t-sky-500 group-hover:border-t-sky-500 group-focus:border-t-sky-500";
+      return "border-t-[3px] border-t-sky-500 group-hover:border-t-sky-500 group-focus:border-t-sky-500 dark:border-t-sky-500 dark:group-hover:border-t-sky-500 dark:group-focus:border-t-sky-500";
     }
     case "wingsdk.cloud.Counter": {
-      return "border-t-[3px] border-t-lime-500 group-hover:border-t-lime-500 group-focus:border-t-lime-500";
+      return "border-t-[3px] border-t-lime-500 group-hover:border-t-lime-500 group-focus:border-t-lime-500 dark:border-t-lime-500 dark:group-hover:border-t-lime-500 dark:group-focus:border-t-lime-500";
     }
     case "wingsdk.cloud.Topic": {
-      return "border-t-[3px] border-t-pink-500 group-hover:border-t-pink-500 group-focus:border-t-pink-500";
+      return "border-t-[3px] border-t-pink-500 group-hover:border-t-pink-500 group-focus:border-t-pink-500 dark:border-t-pink-500 dark:group-hover:border-t-pink-500 dark:group-focus:border-t-pink-500";
     }
     case "wingsdk.cloud.Api": {
-      return "border-t-[3px] border-t-amber-500 group-hover:border-t-amber-500 group-focus:border-t-amber-500";
+      return "border-t-[3px] border-t-amber-500 group-hover:border-t-amber-500 group-focus:border-t-amber-500 dark:border-t-amber-500 dark:group-hover:border-t-amber-500 dark:group-focus:border-t-amber-500";
     }
     case "wingsdk.redis.Redis": {
-      return "border-t-[3px] border-t-[#C6302B] group-hover:border-t-[#C6302B] group-focus:border-t-[#C6302B]";
+      return "border-t-[3px] border-t-[#C6302B] group-hover:border-t-[#C6302B] group-focus:border-t-[#C6302B] dark:border-t-[#C6302B] dark:group-hover:border-t-[#C6302B] dark:group-focus:border-t-[#C6302B]";
     }
   }
 };
@@ -58,13 +59,14 @@ export const ContainerNode = ({
   depth,
   ...props
 }: PropsWithChildren<ContainerNodeProps>) => {
+  const theme = useTheme();
   return (
     // TODO: Fix a11y
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
       className={classNames(
         "flex flex-col group flex-1",
-        "outline outline-0 outline-sky-200/50",
+        "outline outline-0 outline-sky-200/50 dark:outline-sky-500/50",
         "transition-all",
         "rounded",
         !open && "shadow-sm",
@@ -83,13 +85,15 @@ export const ContainerNode = ({
           "rounded",
           "border",
           getResourceBorderColor(resourceType),
-          "group-hover:border-sky-300",
-          "group-focus:border-sky-300",
+          "group-hover:border-sky-300 dark:group-hover:border-sky-500",
+          "group-focus:border-sky-300 dark:group-focus:border-sky-500",
+          theme.bg3,
+          //selected ? "bg-sky-100 dark:bg-sky-300" : theme.bg3,
           {
             "rounded-b-none": open,
             "border-b-0": open,
-            "border-gray-300": !selected,
-            "border-sky-300": selected,
+            [theme.border3]: !selected,
+            "border-sky-300 dark:border-sky-500": selected,
           },
           "min-h-[32px]",
         )}
@@ -97,17 +101,18 @@ export const ContainerNode = ({
         {Icon && (
           <div
             className={classNames(
+              theme.bg4,
               "px-2 py-1",
-              "bg-white flex items-center",
+              "flex items-center",
               "transition-all",
-              "rounded-l",
+              "rounded-bl",
               open && "rounded-bl-none",
               "border-r",
-              "group-hover:border-sky-300",
-              "group-focus:border-sky-300",
+              "group-hover:border-sky-300 dark:group-hover:border-sky-500",
+              "group-focus:border-sky-300 dark:group-focus:border-sky-500",
               {
-                "border-slate-200": !selected,
-                "border-sky-300": selected,
+                [theme.border3]: !selected,
+                "border-sky-300 dark:border-sky-500": selected,
               },
             )}
           >
@@ -117,16 +122,16 @@ export const ContainerNode = ({
         <div
           className={classNames(
             "flex-1 flex items-center",
-            // " px-2 py-1",
             " px-2.5 py-2",
-            "rounded-r",
-            // "bg-white",
-            "group-focus:bg-sky-100 group-focus:border-sky-300",
-            "group-hover:border-sky-300",
+            "rounded-br",
+            //"group-focus:bg-sky-100 dark:group-focus:bg-sky-300",
+            "group-focus:border-sky-300 dark:group-focus:border-sky-500",
+            "group-hover:border-sky-300 dark:group-hover:border-sky-500",
             "transition-all",
+            theme.bg3,
+            //selected ? "bg-sky-100 dark:bg-sky-300" : theme.bg3,
             {
-              "bg-white": !selected,
-              "bg-sky-100 border-sky-300": selected,
+              "border-sky-300 dark:border-sky-500": selected,
               "rounded-br-none": open,
               "rounded-l": !Icon,
             },
@@ -137,13 +142,9 @@ export const ContainerNode = ({
               className={classNames(
                 "leading-tight",
                 "text-xs",
-                " group-focus:text-sky-700",
                 "truncate",
                 "transition-all",
-                {
-                  "text-slate-700": !selected,
-                  "text-sky-700": selected,
-                },
+                theme.text1,
               )}
             >
               {props.name}
@@ -155,11 +156,11 @@ export const ContainerNode = ({
       {open && (
         <div
           className={classNames(
-            "flex-1 flex items-stretch group-focus:border-sky-200",
+            "flex-1 flex items-stretch group-focus:border-sky-200 dark:group-focus:border-sky-400",
             "border-t",
             {
-              "border-slate-200": !selected,
-              "border-sky-200": selected,
+              [theme.border3]: !selected,
+              "border-sky-200 dark:border-sky-400": selected,
             },
           )}
         >
@@ -167,16 +168,14 @@ export const ContainerNode = ({
             className={classNames(
               "flex-1 rounded-b",
               "border-x border-b border-dashed",
-              "group-focus:border-sky-300",
-              "group-hover:border-sky-300",
+              "group-focus:border-sky-300 dark:group-focus:border-sky-500",
+              "group-hover:border-sky-300 dark:group-hover:border-sky-500",
               "transition-all",
               "shadow-inner",
-              depth % 2 === 0 ? "bg-slate-50" : "bg-white",
+              depth % 2 === 0 ? "bg-slate-50 dark:bg-slate-500" : theme.bg4,
               {
-                // "bg-slate-200/30 border-gray-300": !selected,
-                // "border-sky-300 bg-white": selected,
-                "border-gray-300": !selected,
-                "border-sky-300": selected,
+                [theme.border3]: !selected,
+                "border-sky-300 dark:border-sky-500": selected,
               },
             )}
           ></div>

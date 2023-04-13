@@ -1,6 +1,8 @@
 import classNames from "classnames";
 import { PropsWithChildren } from "react";
 
+import { useTheme } from "./theme-provider.js";
+
 export interface ToolbarProps {
   title: string;
 }
@@ -9,6 +11,7 @@ export const Toolbar = ({
   title,
   children,
 }: PropsWithChildren<ToolbarProps>) => {
+  const theme = useTheme();
   return (
     <div
       className={classNames(
@@ -16,7 +19,7 @@ export const Toolbar = ({
       )}
     >
       <div className="flex items-center min-w-0">
-        <span className="text-slate-600 text-sm truncate uppercase">
+        <span className={classNames("text-sm truncate uppercase", theme.text2)}>
           {title}
         </span>
       </div>

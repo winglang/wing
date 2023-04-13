@@ -1,3 +1,4 @@
+import { useTheme } from "@wingconsole/design-system";
 import { State } from "@wingconsole/server";
 import classNames from "classnames";
 
@@ -16,23 +17,31 @@ export const StatusBar = ({
   cloudAppState,
   isError = false,
 }: StatusBarProps) => {
+  const theme = useTheme();
   const loading =
     cloudAppState === "loadingSimulator" || cloudAppState === "compiling";
   return (
-    <footer className="bg-slate-50 py-1 px-4 flex text-2xs w-full text-slate-500 relative border-t border-slate-300">
+    <footer
+      className={classNames(
+        theme.bg3,
+        theme.text1,
+        theme.border3,
+        "py-1 px-4 flex text-2xs w-full relative border-t",
+      )}
+    >
       {/*left side*/}
       <div className="w-full flex space-x-6">
         <div title={wingVersion} className="truncate space-x-1 min-w-[7rem]">
           <span>Wing version:</span>
-          <span className="text-slate-600">{wingVersion}</span>
+          <span className={classNames(theme.text2)}>{wingVersion}</span>
         </div>
 
         <div className="flex space-x-1">
           <span>Status:</span>
-          <span className="text-slate-600">
+          <span className={classNames(theme.text2)}>
             <span
               className={classNames([
-                isError ? "text-red-500" : "text-slate-600",
+                isError ? "text-red-500" : theme.text2,
                 "flex",
               ])}
             >

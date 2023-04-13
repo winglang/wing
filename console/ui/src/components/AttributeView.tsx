@@ -1,3 +1,4 @@
+import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { PropsWithChildren, useId } from "react";
 
@@ -19,6 +20,7 @@ export const AttributeView = ({
   children,
   noLeftPadding = false,
 }: PropsWithChildren<AttributeViewProps>) => {
+  const theme = useTheme();
   const id = useId();
   return (
     <div
@@ -27,7 +29,7 @@ export const AttributeView = ({
         !noLeftPadding && "pl-4",
       )}
     >
-      <label htmlFor={id} className="text-slate-500 min-w-[100px]">
+      <label htmlFor={id} className={classNames(theme.text2, "min-w-[100px]")}>
         {name}
       </label>
       {value !== undefined && type === "url" && (
@@ -40,13 +42,25 @@ export const AttributeView = ({
       {value !== undefined && type !== "url" && (
         <input
           id={id}
-          className="w-full bg-white border border-slate-300 opacity-70 ease-in-out focus:border-sky-500 focus:ring-2 focus:ring-sky-500/50 items-center outline-none px-2 select-text text-slate-600 text-sm transition truncate rounded"
+          className={classNames(
+            theme.bgInput,
+            theme.textInput,
+            theme.focusInput,
+            theme.borderInput,
+            "w-full border opacity-70 ease-in-out",
+            "items-center px-2 select-text text-sm transition truncate rounded",
+          )}
           value={value}
           readOnly
         />
       )}
       {value === undefined && (
-        <div className="w-full bg-transparent items-center select-text text-slate-600 text-sm transition truncate">
+        <div
+          className={classNames(
+            theme.text2,
+            "w-full bg-transparent items-center select-text text-sm transition truncate",
+          )}
+        >
           {children}
         </div>
       )}

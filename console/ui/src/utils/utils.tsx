@@ -52,7 +52,7 @@ export const CustomResourceIcon = (props: IconProps) => {
 
       <div
         className={classNames(
-          "bg-slate-100 absolute inset-0 scale-[55%] origin-bottom-right",
+          "bg-slate-100 dark:bg-slate-700 absolute inset-0 scale-[55%] origin-bottom-right",
         )}
       >
         <Cog6ToothIcon className={props.className} />

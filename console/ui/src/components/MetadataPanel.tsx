@@ -7,6 +7,7 @@ import {
   CubeTransparentIcon,
   CursorArrowRaysIcon,
 } from "@heroicons/react/24/outline";
+import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useMemo, useState } from "react";
 
@@ -72,6 +73,7 @@ export const MetadataPanel = ({
   outbound,
   onConnectionNodeClick,
 }: MetadataProps) => {
+  const theme = useTheme();
   const [openInspectorSections, setOpenInspectorSections] = useState(() => [
     "interact",
     "interact-actions",
@@ -197,7 +199,10 @@ export const MetadataPanel = ({
   };
 
   return (
-    <ScrollableArea overflowY className="h-full text-sm bg-slate-50">
+    <ScrollableArea
+      overflowY
+      className={classNames("h-full text-sm", theme.bg3, theme.text1)}
+    >
       <div className="flex items-center gap-2 px-2 py-2">
         <div className="flex-shrink-0">
           <ResourceIcon
@@ -224,8 +229,14 @@ export const MetadataPanel = ({
             onClick={() => toggleInspectorSection("node")}
             headingClassName="pl-2"
           >
-            <div className="border-t">
-              <div className="px-2 py-1.5 flex flex-col gap-y-1 gap-x-4 bg-slate-50">
+            <div className={classNames("border-t", theme.border4)}>
+              <div
+                className={classNames(
+                  "px-2 py-1.5 flex flex-col gap-y-1 gap-x-4",
+                  theme.bg3,
+                  theme.text1,
+                )}
+              >
                 <AttributeView name="ID" value={node.id} />
                 <AttributeView name="Path" value={node.path} />
                 <AttributeView name="Type" value={node.type} />
@@ -241,22 +252,32 @@ export const MetadataPanel = ({
               onClick={() => toggleInspectorSection("relationships")}
               headingClassName="pl-2"
             >
-              <div className="border-t">
+              <div className={classNames("border-t", theme.border4)}>
                 {connectionsGroups.map((connectionGroup) => (
                   <div key={connectionGroup.groupName}>
-                    <div className="relative bg-slate-50">
+                    <div
+                      className={classNames("relative", theme.bg3, theme.text1)}
+                    >
                       {connectionGroup.connections.map((connection, index) => (
                         <button
                           key={`${connection.path}_${index}`}
                           className={classNames(
-                            "w-full flex-shrink-0 max-w-full truncate bg-slate-50 hover:bg-slate-200/50 shadow-sm text-sm pl-4 pr-2 py-1 flex items-center gap-1 min-w-0 text-slate-700",
+                            theme.bg3,
+                            theme.bg3Hover,
+                            theme.text1,
+                            "w-full flex-shrink-0 max-w-full truncate shadow-sm text-sm pl-4 pr-2 py-1 flex items-center gap-1 min-w-0",
                           )}
                           title={connection.path}
                           onClick={() =>
                             onConnectionNodeClick?.(connection.path)
                           }
                         >
-                          <div className="flex-0 flex-shrink-0 flex items-center gap-2 text-slate-500 min-w-[100px]">
+                          <div
+                            className={classNames(
+                              "flex-0 flex-shrink-0 flex items-center gap-2 min-w-[100px]",
+                              theme.text1,
+                            )}
+                          >
                             <div className="pl-2 flex-0 flex-shrink-0">
                               {connectionGroup.type === "inbound" ? (
                                 <ArrowLeftOnRectangleIcon
@@ -270,7 +291,12 @@ export const MetadataPanel = ({
                                 />
                               )}
                             </div>
-                            <span className="text-slate-500 uppercase text-xs">
+                            <span
+                              className={classNames(
+                                "uppercase text-xs",
+                                theme.text1,
+                              )}
+                            >
                               {connectionGroup.type === "inbound"
                                 ? "In"
                                 : "Out"}
@@ -302,7 +328,14 @@ export const MetadataPanel = ({
                 onClick={() => toggleInspectorSection("interact")}
                 headingClassName="pl-2"
               >
-                <div className="bg-slate-50 border-t border-slate-200">
+                <div
+                  className={classNames(
+                    "border-t",
+                    theme.border4,
+                    theme.bg3,
+                    theme.text1,
+                  )}
+                >
                   {resourceGroup?.groupName && (
                     <>
                       {node.type === "wingsdk.cloud.Function" && (
@@ -329,7 +362,7 @@ export const MetadataPanel = ({
                           subection
                           headingClassName="pl-2"
                         >
-                          <div className="pl-6 pr-2 pb-2 h-full">
+                          <div className="pl-6 pr-2 pb-2 h-full relative">
                             <ResourceView
                               key={node.path}
                               resourceType={node.type}
@@ -342,7 +375,7 @@ export const MetadataPanel = ({
                   )}
                   {(!resourceGroup?.groupName ||
                     !resourceGroup?.actionName) && (
-                    <div className="pl-6 pr-2 py-1">
+                    <div className="pl-6 pr-2 py-1 relative">
                       <ResourceView
                         key={node.path}
                         resourceType={node.type}
@@ -355,7 +388,7 @@ export const MetadataPanel = ({
             </>
           )}
 
-          <div className="border-t border-slate-300"></div>
+          <div className={classNames(theme.border3, "border-t")}></div>
         </>
       )}
     </ScrollableArea>

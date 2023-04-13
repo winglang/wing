@@ -1,5 +1,7 @@
 import { BeakerIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
+import { useTheme } from "@wingconsole/design-system";
 import { LogEntry, LogLevel, State } from "@wingconsole/server";
+import classNames from "classnames";
 import {
   useCallback,
   useContext,
@@ -40,6 +42,8 @@ export const VscodeLayout = ({
   cloudAppState,
   wingVersion,
 }: VscodeLayoutProps) => {
+  const theme = useTheme();
+
   const {
     items,
     selectedItems,
@@ -52,12 +56,7 @@ export const VscodeLayout = ({
   } = useExplorer();
 
   const errorMessage = trpc["app.error"].useQuery();
-  const [currentTabId, setCurrentTabId] = useState("logs");
   const { showTests } = useContext(TestsContext);
-
-  const openTab = useCallback((tabId: string) => {
-    setCurrentTabId(tabId);
-  }, []);
 
   const [selectedLogTypeFilters, setSelectedLogTypeFilters] = useState<
     LogLevel[]
@@ -140,11 +139,20 @@ export const VscodeLayout = ({
   return (
     <div
       data-testid="vscode-layout"
-      className="h-full flex flex-col bg-slate-50 select-none"
+      className={classNames(
+        "h-full flex flex-col select-none",
+        theme.bg3,
+        theme.text2,
+      )}
     >
       <div className="flex-1 flex relative">
         {loading && (
-          <div className="absolute bg-white bg-opacity-70 h-full w-full z-50">
+          <div
+            className={classNames(
+              "absolute bg-opacity-70 h-full w-full z-50",
+              theme.bg4,
+            )}
+          >
             <div className=" absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
               <SpinnerLoader />
             </div>
@@ -157,7 +165,12 @@ export const VscodeLayout = ({
           error={errorMessage.data ?? ""}
         />
 
-        <RightResizableWidget className="h-full flex flex-col w-80 min-w-[10rem] min-h-[15rem] border-r border-slate-300">
+        <RightResizableWidget
+          className={classNames(
+            theme.border3,
+            "h-full flex flex-col w-80 min-w-[10rem] min-h-[15rem] border-r",
+          )}
+        >
           <div className="flex grow">
             <Explorer
               loading={loading}
@@ -171,7 +184,9 @@ export const VscodeLayout = ({
               data-testid="explorer-tree-menu"
             />
           </div>
-          <TopResizableWidget className="h-1/3 border-t border-slate-300">
+          <TopResizableWidget
+            className={classNames(theme.border3, "h-1/3 border-t")}
+          >
             <TestsTree />
           </TopResizableWidget>
         </RightResizableWidget>
@@ -179,11 +194,22 @@ export const VscodeLayout = ({
         <div className="flex-1 flex flex-col">
           <div className="flex-1 flex">
             <div className="flex-1 flex flex-col">
-              <div className="flex-shrink-0 h-9 bg-gray-50">
+              <div
+                className={classNames(
+                  theme.bg3,
+                  theme.border3,
+                  "border-b",
+                  "flex-shrink-0 h-9",
+                )}
+              >
                 <MapToolbarMenu />
               </div>
               <div className="h-full relative">
-                <ScrollableArea overflowX overflowY className="bg-white">
+                <ScrollableArea
+                  overflowX
+                  overflowY
+                  className={classNames(theme.bg4, theme.text2)}
+                >
                   <div
                     data-testid="map-view"
                     className="min-h-full flex justify-around items-center"
@@ -227,7 +253,13 @@ export const VscodeLayout = ({
               </div>
             </div>
 
-            <LeftResizableWidget className="bg-white flex-shrink w-80 min-w-[10rem] border-l border-slate-300 z-10">
+            <LeftResizableWidget
+              className={classNames(
+                theme.border3,
+                "flex-shrink w-80 min-w-[10rem] border-l z-10",
+                theme.bg4,
+              )}
+            >
               {metadata.data && (
                 <MetadataPanel
                   node={metadata.data.node}
@@ -244,46 +276,44 @@ export const VscodeLayout = ({
         </div>
       </div>
       {cloudAppState !== "error" && (
-        <TopResizableWidget className="border-t border-slate-300 bg-slate-50 min-h-[5rem] h-[15rem]">
-          <Tabs
-            tabs={[
-              {
-                id: "logs",
-                name: "Logs",
-                icon: (
-                  <DocumentTextIcon className="w-4 h-4 text-slate-600 -ml-0.5" />
-                ),
-                panel: (
-                  <div className="relative h-full flex flex-col gap-2">
-                    {loading && (
-                      <div className="absolute bg-white bg-opacity-70 h-full w-full z-50" />
-                    )}
-                    <ConsoleFilters
-                      selectedLogTypeFilters={selectedLogTypeFilters}
-                      setSelectedLogTypeFilters={setSelectedLogTypeFilters}
-                      clearLogs={() => setLogsTimeFilter(Date.now())}
-                      isLoading={loading}
-                      onSearch={setSearchText}
-                    />
-                    <div className="relative h-full">
-                      <ScrollableArea
-                        ref={logsRef}
-                        overflowY
-                        className="pb-1.5"
-                      >
-                        <ConsoleLogs
-                          logs={logs.data ?? []}
-                          onResourceClick={onResourceClick}
-                        />
-                      </ScrollableArea>
-                    </div>
-                  </div>
-                ),
-              },
-            ]}
-            currentTabId={currentTabId}
-            onTabChange={openTab}
-          />
+        <TopResizableWidget
+          className={classNames(
+            theme.border3,
+            "border-t min-h-[5rem] h-[15rem]",
+            theme.bg3,
+            theme.text2,
+          )}
+        >
+          <div className="relative h-full flex flex-col gap-2">
+            {loading && (
+              <div
+                className={classNames(
+                  "absolute bg-opacity-70 h-full w-full z-50",
+                  theme.bg3,
+                  theme.text2,
+                )}
+              />
+            )}
+            <ConsoleFilters
+              selectedLogTypeFilters={selectedLogTypeFilters}
+              setSelectedLogTypeFilters={setSelectedLogTypeFilters}
+              clearLogs={() => setLogsTimeFilter(Date.now())}
+              isLoading={loading}
+              onSearch={setSearchText}
+            />
+            <div className="relative h-full">
+              <ScrollableArea
+                ref={logsRef}
+                overflowY
+                className={classNames("pb-1.5", theme.bg3, theme.text2)}
+              >
+                <ConsoleLogs
+                  logs={logs.data ?? []}
+                  onResourceClick={onResourceClick}
+                />
+              </ScrollableArea>
+            </div>
+          </div>
         </TopResizableWidget>
       )}
 

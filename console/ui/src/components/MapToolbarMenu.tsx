@@ -1,20 +1,21 @@
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import { ToolbarButton, useTheme } from "@wingconsole/design-system";
+import classNames from "classnames";
 import { useContext } from "react";
 
 import { Button } from "../design-system/Button.js";
 import { TestsContext } from "../utils/tests-context.js";
 
 export const MapToolbarMenu = () => {
+  const theme = useTheme();
   const { showTests, setShowTests } = useContext(TestsContext);
+  const Icon = showTests ? EyeSlashIcon : EyeIcon;
   return (
     <div className="flex grow justify-end items-center h-full px-2">
-      <Button
-        icon={showTests ? EyeSlashIcon : EyeIcon}
-        onClick={() => setShowTests(!showTests)}
-        label={showTests ? "Hide tests" : "Show tests"}
-        transparent
-        className="w-[90px] hover:bg-slate-100 font-normal"
-      />
+      <ToolbarButton onClick={() => setShowTests(!showTests)}>
+        <Icon className="w-4 h-4" />
+        {showTests ? "Hide tests" : "Show tests"}
+      </ToolbarButton>
     </div>
   );
 };

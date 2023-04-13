@@ -1,4 +1,5 @@
 import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
 
@@ -61,6 +62,8 @@ export const KeyValueList = ({
   disabled = false,
   readonly = false,
 }: KeyValueListProps) => {
+  const theme = useTheme();
+
   const [editItems, setEditItems] = useState<KeyValueItem[]>([]);
 
   useEffect(() => {
@@ -97,10 +100,13 @@ export const KeyValueList = ({
               });
             }}
             inputClassName={classNames(
+              theme.bgInput,
+              theme.textInput,
+              theme.focusInput,
+              theme.borderInput,
               "px-2.5 py-1.5 text-xs outline-none w-36",
-              "border border-slate-300 rounded bg-white text-slate-700",
-              "transition ease-in-out focus:ring-2 focus:ring-sky-500/50",
-              "hover:bg-slate-50 focus:border-sky-500",
+              "border rounded",
+              "transition ease-in-out",
             )}
             disabled={disabled}
             readonly={readonly}
@@ -122,10 +128,13 @@ export const KeyValueList = ({
             }}
             className="w-full"
             inputClassName={classNames(
+              theme.bgInput,
+              theme.textInput,
+              theme.focusInput,
+              theme.borderInput,
               "px-2.5 py-1.5 text-xs outline-none grow flex min-w-0 w-full",
-              "border border-slate-300 rounded bg-white text-slate-700",
-              "transition ease-in-out focus:ring-2 focus:ring-sky-500/50",
-              "hover:bg-slate-50 focus:border-sky-500",
+              "border rounded",
+              "transition ease-in-out",
             )}
             disabled={disabled}
             readonly={readonly}

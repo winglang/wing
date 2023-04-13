@@ -1,3 +1,4 @@
+import { Theme, useTheme } from "@wingconsole/design-system";
 import { useEffect, useState } from "react";
 
 export interface TextHighlightProps {
@@ -8,16 +9,15 @@ export interface TextHighlightProps {
 }
 
 const palette = {
-  key: "text-slate-500",
-  string: "text-orange-600",
-  number: "text-lime-600",
-  boolean: "text-sky-600",
-  null: "text-red-600",
+  string: "text-orange-600 dark:text-orange-400",
+  number: "text-lime-600 dark:text-lime-400",
+  boolean: "text-sky-600 dark:text-sky-400",
+  null: "text-red-600 dark:text-red-400",
 };
 
 const CHAR_LIMIT = 100_000;
 
-const highlightJson = (value: string) => {
+const highlightJson = (value: string, theme: Theme) => {
   let formatted;
   try {
     formatted = JSON.stringify(JSON.parse(value), undefined, 2);
@@ -32,7 +32,7 @@ const highlightJson = (value: string) => {
       (match) => {
         let className = palette.number;
         if (match.startsWith('"')) {
-          className = match.endsWith(":") ? palette.key : palette.string;
+          className = match.endsWith(":") ? theme.text1 : palette.string;
         } else if (/true|false/.test(match)) {
           className = palette.boolean;
         } else if (/null/.test(match)) {
@@ -49,6 +49,8 @@ export const TextHighlight = ({
   className = "",
   json = true,
 }: TextHighlightProps) => {
+  const theme = useTheme();
+
   const [highlightedText, setHighlightedText] = useState<string | undefined>(
     text,
   );
@@ -58,7 +60,7 @@ export const TextHighlight = ({
       setHighlightedText(undefined);
       return;
     }
-    setHighlightedText(highlightJson(text));
+    setHighlightedText(highlightJson(text, theme));
   }, [text, json]);
 
   return (

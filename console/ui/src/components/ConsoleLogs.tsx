@@ -3,6 +3,7 @@ import {
   ChevronRightIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
+import { useTheme } from "@wingconsole/design-system";
 import { LogEntry } from "@wingconsole/server";
 import classNames from "classnames";
 import throttle from "lodash.throttle";
@@ -45,6 +46,8 @@ const LogEntryRow = ({
   onRowClick,
   onResourceClick,
 }: LogEntryProps) => {
+  const theme = useTheme();
+
   const [expanded, setExpanded] = useState(false);
   const expandableRef = useRef<HTMLElement>(null);
   const [overflows, setOverflows] = useState(false);
@@ -93,18 +96,19 @@ const LogEntryRow = ({
           "group w-full flex",
           "flex min-w-0",
           "justify-between",
-          "border-t border-slate-200 text-2xs py-0.5 px-2",
+          theme.border4,
+          theme.bg2Hover,
+          "border-t text-2xs py-0.5 px-2",
           {
+            [theme.text1]: log.level === "info",
             "text-blue-500": log.level === "verbose",
             "hover:text-blue-600": log.level === "verbose" && canBeExpanded,
-            "text-slate-700": log.level === "info",
-            "hover:text-slate-800": log.level === "info" && canBeExpanded,
             "text-yellow-500": log.level === "warn",
             "hover:text-yellow-600": log.level === "warn" && canBeExpanded,
-            "text-red-500 bg-red-100": log.level === "error",
+            "text-red-500": log.level === "error",
             "hover:text-red-600": log.level === "error" && canBeExpanded,
           },
-          log.ctx?.messageType === "info" && "bg-slate-100",
+          log.ctx?.messageType === "info" && theme.bg4,
         )}
         onClick={() => onRowClick?.(log)}
       >
@@ -123,7 +127,7 @@ const LogEntryRow = ({
         )}
 
         {log.timestamp && !log.ctx?.hideTimestamp && (
-          <div className="flex text-slate-500">
+          <div className={classNames(theme.text2, "flex")}>
             {dateTimeFormat.format(log.timestamp)}
           </div>
         )}
@@ -145,20 +149,24 @@ const LogEntryRow = ({
               <ChevronIcon
                 className={classNames(
                   "w-3.5 h-3.5",
-                  "text-slate-500 mr-0.5 inline-block -mt-0.5",
-                  "hover:text-slate-600",
+                  "mr-0.5 inline-block -mt-0.5",
+                  theme.text1,
+                  theme.text1Hover,
                 )}
               />
             </button>
           )}
           <span
             className={classNames(
-              log.ctx?.messageType === "info" && "text-slate-400",
-              log.ctx?.messageType === "title" && "text-slate-500",
-              log.ctx?.messageType === "success" && "text-green-700",
+              log.ctx?.messageType === "info" && theme.text2,
+              log.ctx?.messageType === "title" && theme.text1,
+              log.ctx?.messageType === "success" &&
+                "text-green-700 dark:text-green-500",
               log.ctx?.messageType === "fail" && "text-red-500",
-              log.ctx?.messageType === "summary" &&
-                "font-medium text-slate-600",
+              log.ctx?.messageType === "summary" && [
+                "font-medium",
+                theme.text1,
+              ],
             )}
             ref={expandableRef}
           />
@@ -177,7 +185,8 @@ const LogEntryRow = ({
               onClick={() => onResourceClick(log)}
               className={classNames(
                 "flex cursor-pointer underline truncate",
-                "text-slate-500 hover:text-slate-600",
+                theme.text2,
+                theme.text3Hover,
               )}
             >
               {log.ctx?.label || log.ctx?.sourcePath}
@@ -202,6 +211,8 @@ export const ConsoleLogs = ({
   onResourceClick,
   showIcons = true,
 }: ConsoleLogsProps) => {
+  const theme = useTheme();
+
   return (
     <div className="w-full gap-x-2 text-2xs font-mono">
       {logs.map((log) => (
@@ -214,7 +225,7 @@ export const ConsoleLogs = ({
         />
       ))}
       {logs.length === 0 && (
-        <div className="text-slate-400 text-2xs px-2">No logs</div>
+        <div className={classNames(theme.text1, "text-2xs px-2")}>No logs</div>
       )}
     </div>
   );

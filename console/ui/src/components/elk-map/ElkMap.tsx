@@ -342,7 +342,7 @@ export const ElkMap = <T extends unknown = undefined>({
         >
           <defs>
             <marker
-              className="stroke-none fill-slate-500"
+              className="stroke-none fill-slate-500 dark:fill-slate-800"
               markerWidth="6"
               markerHeight="4"
               orient="auto"
@@ -366,7 +366,7 @@ export const ElkMap = <T extends unknown = undefined>({
             </marker>
 
             <marker
-              className="stroke-slate-500 fill-slate-500"
+              className="stroke-slate-500 dark:stroke-slate-800 fill-slate-500 dark:fill-slate-800"
               markerHeight="6"
               markerWidth="6"
               orient="auto"

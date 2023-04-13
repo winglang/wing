@@ -1,5 +1,6 @@
 import { Listbox as HeadlessListbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { Fragment, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
@@ -35,6 +36,8 @@ export const Listbox = ({
   onChange,
   disabled = false,
 }: ListboxProps) => {
+  const theme = useTheme();
+
   const [referenceElement, setReferenceElement] = useState<HTMLElement | null>(
     // eslint-disable-next-line unicorn/no-null
     null,
@@ -77,7 +80,7 @@ export const Listbox = ({
             {label && <span className="block truncate">{label}</span>}
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1.5">
               <ChevronUpDownIcon
-                className="h-4 w-4 text-slate-400"
+                className={classNames(theme.textInput, "h-4 w-4")}
                 aria-hidden="true"
               />
             </span>
@@ -97,13 +100,22 @@ export const Listbox = ({
               style={styles.popper}
               {...attributes.popper}
             >
-              <HeadlessListbox.Options className="z-10 m-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-xs shadow-lg ring-1 ring-black ring-opacity-5 outline-none">
+              <HeadlessListbox.Options
+                className={classNames(
+                  theme.bgInput,
+                  theme.textInput,
+                  "z-10 m-1 max-h-60 w-full overflow-auto rounded-md",
+                  "py-1 text-xs shadow-lg ring-1 ring-black ring-opacity-5 outline-none",
+                )}
+              >
                 {defaultSelection && (
                   <>
                     {/* TODO: Fix a11y */}
                     {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
                     <li
-                      className="relative cursor-default select-none py-2 pl-10 pr-4 text-slate-900 hover:bg-sky-50 hover:text-sky-900"
+                      className={classNames(
+                        "relative cursor-default select-none py-2 pl-10 pr-4",
+                      )}
                       onClick={() => onChange?.(defaultSelection)}
                     >
                       <span className={`block truncate font-normal`}>
@@ -116,7 +128,12 @@ export const Listbox = ({
                         className="absolute inset-0 flex items-center"
                         aria-hidden="true"
                       >
-                        <div className="w-full border-t border-slate-300"></div>
+                        <div
+                          className={classNames(
+                            theme.borderInput,
+                            "w-full border-t",
+                          )}
+                        ></div>
                       </div>
                     </div>
                   </>
@@ -126,9 +143,10 @@ export const Listbox = ({
                   <HeadlessListbox.Option
                     key={index}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                        active ? "bg-sky-50 text-sky-900" : "text-slate-900"
-                      }`
+                      classNames(
+                        "relative cursor-default select-none py-2 pl-10 pr-4",
+                        active && theme.bgInputHover,
+                      )
                     }
                     value={item.value}
                   >

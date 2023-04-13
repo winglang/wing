@@ -1,3 +1,4 @@
+import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 
@@ -94,6 +95,8 @@ export interface ApiRoute {
 }
 
 export const ApiView = ({ resourcePath }: ApiViewProps) => {
+  const theme = useTheme();
+
   const [url, setUrl] = useState<string>("");
 
   const [routes, setRoutes] = useState<ApiRoute[]>([]);
@@ -245,11 +248,14 @@ export const ApiView = ({ resourcePath }: ApiViewProps) => {
             <div className="group flex grow relative gap-x-1">
               <div
                 className={classNames(
+                  theme.bgInput,
+                  theme.textInput,
+                  theme.borderInput,
+                  theme.focusWithin,
                   "flex relative",
-                  "text-xs outline-none w-full",
-                  "border border-slate-300 rounded bg-white text-slate-700",
-                  "transition ease-in-out hover:bg-slate-50",
-                  "focus-within:ring-2 focus-within:ring-sky-500/50 focus-within:border-sky-500",
+                  "text-xs w-full",
+                  "border rounded",
+                  "transition ease-in-out",
                 )}
               >
                 <Select
@@ -261,9 +267,12 @@ export const ApiView = ({ resourcePath }: ApiViewProps) => {
                     setCurrentMethod(method);
                   }}
                   btnClassName={classNames(
+                    theme.bgInput,
+                    theme.bgInputHover,
+                    theme.borderInput,
                     "text-xs text-left outline-none w-[5.5rem] rounded-l",
                     "px-2.5 py-1.5",
-                    "border-r border-slate-300 bg-white hover:bg-slate-50",
+                    "border-r",
                   )}
                   showSelected={false}
                 />
@@ -287,7 +296,7 @@ export const ApiView = ({ resourcePath }: ApiViewProps) => {
                   }}
                   className="w-full"
                   inputClassName={classNames(
-                    "border-none text-xs outline-none w-full rounded-r",
+                    "border-none focus-none text-xs outline-none w-full rounded-r",
                     "px-2.5 py-1.5",
                     "focus:ring-0",
                   )}
@@ -374,7 +383,9 @@ export const ApiView = ({ resourcePath }: ApiViewProps) => {
             />
           </div>
           <div>
-            <span className="font-medium text-slate-500">Response</span>
+            <span className={classNames(theme.text2, "font-medium")}>
+              Response
+            </span>
             <div className="mt-1">
               <Tabs
                 small
@@ -385,7 +396,11 @@ export const ApiView = ({ resourcePath }: ApiViewProps) => {
                     panel: (
                       <div className="pt-2 relative">
                         {response && (
-                          <div className="gap-x-1 truncate items-center absolute -top-[12px] right-[2px] max-w-full bg-slate-50 z-10">
+                          <div
+                            className={classNames(
+                              "gap-x-1 truncate items-center absolute -top-[12px] right-[2px] max-w-full z-10",
+                            )}
+                          >
                             <span
                               className={classNames(
                                 getResponseColor(response.status),
@@ -395,7 +410,12 @@ export const ApiView = ({ resourcePath }: ApiViewProps) => {
                               {response.status} {response.statusText}
                             </span>
                             {response.duration >= 0 && (
-                              <span className="text-slate-500 text-xs ml-1 truncate">
+                              <span
+                                className={classNames(
+                                  theme.text2,
+                                  "text-xs ml-1 truncate",
+                                )}
+                              >
                                 {response.duration}ms
                               </span>
                             )}

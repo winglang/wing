@@ -11,7 +11,7 @@ export const BucketValue = ({ resource }: BucketResourceDetailsProps) => {
 
   return (
     <>
-      <dt className="truncate text-slate-500">Files</dt>
+      <dt className="truncate">Files</dt>
       <dd className="truncate col-span-4">
         {bucketList.data?.length}{" "}
         {bucketList.data?.length === 1 ? "file" : "files"}

@@ -1,3 +1,4 @@
+import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { PropsWithChildren, forwardRef } from "react";
 
@@ -38,6 +39,8 @@ export const Button = forwardRef<
     },
     ref,
   ) => {
+    const theme = useTheme();
+
     return (
       <button
         id={id}
@@ -45,16 +48,26 @@ export const Button = forwardRef<
         type={type}
         className={classNames(
           "inline-flex gap-2 items-center text-xs font-medium outline-none transition ease-in-out rounded",
+          theme.focusInput,
+          primary &&
+            !transparent && [
+              "text-white",
+              "bg-sky-600 hover:bg-sky-700 dark:bg-sky-700 dark:hover:bg-sky-600",
+            ],
+          !primary &&
+            !transparent && [
+              theme.bgInput,
+              theme.bgInputHover,
+              theme.textInput,
+            ],
+          transparent && [theme.bgInputHover, theme.textInput],
+          !transparent && "border shadow-sm",
           {
+            [theme.borderInput]: !primary,
+            "border-sky-700": primary,
             "px-2.5": label || children,
             "py-1.5": !small,
             "cursor-not-allowed opacity-50": disabled,
-            "border-transparent text-white bg-sky-600 hover:bg-sky-700 focus:ring-offset-2":
-              primary && !transparent,
-            "border-slate-300 bg-white text-slate-700 hover:bg-slate-50 focus:border-sky-500":
-              !primary && !transparent,
-            "border shadow-sm focus:ring-2 focus:ring-sky-500/50": !transparent,
-            "text-slate-700 hover:text-slate-900": transparent,
           },
           className,
         )}

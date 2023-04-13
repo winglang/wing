@@ -1,3 +1,4 @@
+import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { forwardRef } from "react";
 
@@ -17,21 +18,24 @@ export interface TextAreaProps {
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ className, containerClassName, ...props }, ref) => {
+    const theme = useTheme();
     return (
-      <div
-        className={classNames(
-          "relative rounded-md shadow-sm",
-          containerClassName,
-        )}
-      >
+      <div className={classNames("relative rounded-md", containerClassName)}>
         <textarea
           ref={ref}
           {...props}
           className={classNames(
-            "block w-full rounded-md border-slate-300 outline-none focus:ring-2 focus:ring-sky-500/50 focus:ring-sky-500 focus:border-sky-500 transition ease-in-out",
+            theme.borderInput,
+            "block w-full rounded-md outline-none transition ease-in-out",
             "px-2 text-xs",
+            "shadow-inner",
             className,
-            { "bg-slate-50": props.disabled },
+            props.disabled && [theme.bg3, theme.text2],
+            !props.disabled && [
+              theme.bgInput,
+              theme.textInput,
+              theme.focusInput,
+            ],
           )}
         />
       </div>

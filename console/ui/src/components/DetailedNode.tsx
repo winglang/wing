@@ -1,3 +1,4 @@
+import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { Fragment } from "react";
 
@@ -18,11 +19,14 @@ const RelationshipButton = ({
   justifyEnd?: boolean;
   onClick?: (path: string) => void;
 }) => {
+  const theme = useTheme();
   return (
     <div className="py-1 flex min-w-0 items-center">
       <button
         className={classNames(
-          "w-full px-2 py-1.5 flex items-center text-sm min-w-0 rounded bg-white shadow hover:shadow-md text-slate-600",
+          theme.bg4,
+          theme.text2,
+          "w-full px-2 py-1.5 flex items-center text-sm min-w-0 rounded shadow hover:shadow-md",
           { "justify-end": justifyEnd },
         )}
         title={node.path}
@@ -46,15 +50,25 @@ const ResourceButton = ({
   onClick?: (path: string) => void;
   children?: React.ReactNode;
 }) => {
+  const theme = useTheme();
   return (
     // TODO: Fix a11y
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
-      className="h-full w-full p-1 rounded bg-white shadow sm:rounded-lg hover:shadow-md group flex flex-col gap-2 cursor-pointer"
+      className={classNames(
+        theme.bg4,
+        theme.text2,
+        "h-full w-full p-1 rounded shadow sm:rounded-lg hover:shadow-md group flex flex-col gap-2 cursor-pointer",
+      )}
       title={node.path}
       onClick={() => onClick?.(node.path)}
     >
-      <div className="flex text-xs text-slate-900 space-x-2 pt-2 px-2 w-full">
+      <div
+        className={classNames(
+          theme.text1,
+          "flex text-xs space-x-2 pt-2 px-2 w-full",
+        )}
+      >
         <div className="flex items-center flex-shrink-0">
           <ResourceIcon
             resourceType={node.type}
@@ -66,10 +80,15 @@ const ResourceButton = ({
           {node.id}
         </div>
       </div>
-      <div className="rounded-md bg-slate-50 px-2 py-2 sm:flex sm:items-start sm:justify-between flex-1 w-full">
+      <div
+        className={classNames(
+          theme.bg3,
+          "rounded-md px-2 py-2 sm:flex sm:items-start sm:justify-between flex-1 w-full",
+        )}
+      >
         <dl className="mt-3 sm:mt-0 text-xs text-left w-full">
           <div className="grid grid-cols-5 gap-1 w-full">
-            <dt className="truncate text-slate-500">Type</dt>
+            <dt className={classNames("truncate", theme.text2)}>Type</dt>
             <dd className="truncate col-span-4" title={node.type}>
               {node.type}
             </dd>
@@ -109,10 +128,14 @@ export const DetailedNode = ({
   outbound,
   onClick,
 }: DetailedNodeProps) => {
+  const theme = useTheme();
+
   const inboundCount = inbound.length;
   const relationshipCount = inboundCount + outbound.length;
   return (
-    <div className="grid grid-cols-6 gap-y-1 text-slate-600 text-sm">
+    <div
+      className={classNames(theme.text2, "grid grid-cols-6 gap-y-1 text-sm")}
+    >
       <div
         style={{
           gridRow: `1 / span ${relationshipCount}`,
@@ -138,7 +161,7 @@ export const DetailedNode = ({
             className="flex items-center relative"
             style={{ gridColumnStart: "2", gridRowStart: `${1 + nodeIndex}` }}
           >
-            <div className="w-full flex text-slate-400 px-2">
+            <div className={classNames(theme.text2, "w-full flex px-2")}>
               <HorizontalLineIcon
                 className="w-full h-4"
                 preserveAspectRatio="none"
@@ -149,7 +172,10 @@ export const DetailedNode = ({
             {node.relationshipName && (
               <div className="absolute inset-0 flex items-center justify-around px-4">
                 <div
-                  className="text-xs bg-slate-50 inline-block px-1 truncate"
+                  className={classNames(
+                    theme.bg3,
+                    "text-xs inline-block px-1 truncate",
+                  )}
                   title={node.relationshipName}
                 >
                   {node.relationshipName}
@@ -169,7 +195,7 @@ export const DetailedNode = ({
               gridRowStart: `${inboundCount + 1 + nodeIndex}`,
             }}
           >
-            <div className="w-full flex text-slate-400 px-2">
+            <div className={classNames(theme.text2, "w-full flex px-2")}>
               <HorizontalLineIcon
                 className="w-full h-4"
                 preserveAspectRatio="none"
@@ -180,7 +206,10 @@ export const DetailedNode = ({
             {node.relationshipName && (
               <div className="absolute inset-0 flex items-center justify-around px-4">
                 <div
-                  className="text-xs bg-slate-50 inline-block px-1 truncate"
+                  className={classNames(
+                    theme.bg3,
+                    "text-xs inline-block px-1 truncate",
+                  )}
                   title={node.relationshipName}
                 >
                   {node.relationshipName}

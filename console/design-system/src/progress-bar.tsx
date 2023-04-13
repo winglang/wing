@@ -1,5 +1,7 @@
 import classNames from "classnames";
 
+import { useTheme } from "./theme-provider.js";
+
 export interface ProgressBarProps {
   /**
    * The progress percentage. Must be between 0 and 100.
@@ -20,6 +22,8 @@ export const ProgressBar = ({
   progress = 0,
   size = "md",
 }: ProgressBarProps) => {
+  const theme = useTheme();
+
   const height = {
     sm: "h-1",
     md: "h-2",
@@ -32,7 +36,8 @@ export const ProgressBar = ({
     <div
       role={"progressbar"}
       className={classNames(
-        "relative self-center w-full bg-slate-300 rounded-full min-w-[4rem]",
+        theme.bg1,
+        "relative self-center w-full rounded-full min-w-[4rem]",
         height[size],
       )}
     >

@@ -1,3 +1,4 @@
+import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { forwardRef } from "react";
 
@@ -15,12 +16,15 @@ export interface CheckboxProps {
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   ({ className, disabled, ...props }, ref) => {
+    const theme = useTheme();
+
     return (
       <input
         ref={ref}
         type="checkbox"
         className={classNames(
-          "h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500 transition ease-in-out",
+          theme.border3,
+          "h-4 w-4 rounded text-sky-600 focus:ring-sky-500 transition ease-in-out",
           disabled && "cursor-not-allowed opacity-50",
           className,
         )}

@@ -1,3 +1,5 @@
+import { useTheme } from "@wingconsole/design-system";
+import classNames from "classnames";
 import {
   FormEventHandler,
   useCallback,
@@ -30,6 +32,8 @@ const canBePreviewed = (fileName: string) => {
 };
 
 export const BucketView = ({ resourcePath }: BucketViewProps) => {
+  const theme = useTheme();
+
   const bucketList = trpc["bucket.list"].useQuery({ resourcePath });
   const putFile = trpc["bucket.put"].useMutation();
   const [currentFile, setCurrentFile] = useState<string>();
@@ -160,7 +164,15 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
       </div>
 
       {entries.length === 0 && (
-        <div className="bg-white outline-none rounded border border-slate-300 py-0.5 text-center text-slate-400 inline-block w-full">
+        <div
+          className={classNames(
+            theme.bgInput,
+            theme.text2,
+            theme.borderInput,
+            "px-2.5 py-1.5",
+            "outline-none rounded borderpy-0.5 text-center inline-block w-full text-xs",
+          )}
+        >
           No files
         </div>
       )}
@@ -176,7 +188,9 @@ export const BucketView = ({ resourcePath }: BucketViewProps) => {
 
       {currentFile && (
         <div className="space-y-1 mt-1">
-          <div className="text-sm text-slate-500 truncate">{currentFile}</div>
+          <div className={classNames(theme.text2, "text-sm truncate")}>
+            {currentFile}
+          </div>
           <JsonResponseInput
             value={
               (canBePreviewed(currentFile) && currentFileContents.data) || ""

@@ -1,4 +1,5 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { ReactNode, useEffect, useState } from "react";
 
@@ -23,6 +24,7 @@ export interface TabsProps {
 }
 
 export const Tabs = (props: TabsProps) => {
+  const theme = useTheme();
   const [currentTabId, setCurrentTabId] = useState(props.currentTabId);
 
   useEffect(() => {
@@ -42,7 +44,7 @@ export const Tabs = (props: TabsProps) => {
       <div
         className={classNames(
           "relative w-full text-sm select-none",
-          !props.transparent && "bg-slate-100",
+          !props.transparent && [theme.bg3, theme.text2],
           props.small ? "h-6" : "h-8",
         )}
       >
@@ -52,7 +54,7 @@ export const Tabs = (props: TabsProps) => {
           scrollbarSize="xs"
           className={classNames(
             "flex gap-px",
-            !props.transparent && "bg-slate-200",
+            !props.transparent && [theme.bg1, theme.text2],
             props.transparent && "gap-x-2",
           )}
         >
@@ -65,16 +67,19 @@ export const Tabs = (props: TabsProps) => {
                 key={tab.id}
                 className={classNames(
                   "relative flex items-center cursor-pointer group",
-                  props.transparent && {
-                    "text-slate-500 border-b border-slate-500": isCurrent,
-                    "hover:text-slate-500 text-slate-400 border-b border-transparent":
-                      !isCurrent,
-                  },
-                  !props.transparent && {
-                    "px-4": true,
-                    "bg-slate-50": isCurrent,
-                    "bg-slate-200 hover:bg-slate-100": !isCurrent,
-                  },
+                  props.transparent &&
+                    isCurrent && [theme.text2, "border-b-2", theme.border3],
+                  props.transparent &&
+                    !isCurrent && [
+                      theme.text2,
+                      theme.text3Hover,
+                      "border-b-2 border-transparent",
+                    ],
+
+                  !props.transparent && "px-4",
+                  !props.transparent && isCurrent && theme.bg3,
+                  !props.transparent &&
+                    !isCurrent && [theme.bg2, theme.bg2Hover],
                 )}
                 onClick={() => setCurrentTabId(tab.id)}
               >
@@ -89,8 +94,18 @@ export const Tabs = (props: TabsProps) => {
                 {props.tabsWithNotifications?.includes(tab.id) && (
                   <div className="ml-2">
                     <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-slate-400 opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-slate-400" />
+                      <span
+                        className={classNames(
+                          "animate-ping absolute inline-flex h-full w-full rounded-full opacity-75",
+                          theme.bg1,
+                        )}
+                      />
+                      <span
+                        className={classNames(
+                          "relative inline-flex rounded-full h-2 w-2",
+                          theme.bg1,
+                        )}
+                      />
                     </span>
                   </div>
                 )}

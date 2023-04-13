@@ -1,3 +1,5 @@
+import { useTheme } from "@wingconsole/design-system";
+import classNames from "classnames";
 import { useContext, useId, useState } from "react";
 
 import { AppContext } from "../../AppContext.js";
@@ -12,6 +14,8 @@ export interface FunctionViewProps {
 }
 
 export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
+  const theme = useTheme();
+
   const { appMode } = useContext(AppContext);
   const [response, setResponse] = useState("");
   const payloadId = useId();
@@ -28,9 +32,14 @@ export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
 
   return (
     <>
-      <div className="flex-col space-y-1 bg-slate-50">
+      <div className="flex-col space-y-1">
         <div className="flex flex-row">
-          <div className="text-slate-700 max-w-full min-w-0 grow space-x-2 items-end flex">
+          <div
+            className={classNames(
+              theme.text1,
+              "max-w-full min-w-0 grow space-x-2 items-end flex",
+            )}
+          >
             <Button
               label="Invoke"
               className="px-0.5"
@@ -46,7 +55,10 @@ export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
           </div>
         </div>
         <div>
-          <label htmlFor={responseId} className="text-sm text-gray-500">
+          <label
+            htmlFor={responseId}
+            className={classNames("text-sm", theme.text2)}
+          >
             Response
           </label>
           <JsonResponseInput
@@ -67,12 +79,17 @@ export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
           }}
         >
           <div className="mt-2 space-y-2">
-            <h3 className="text-base font-semibold leading-6 text-gray-900">
+            <h3
+              className={classNames(
+                "text-base font-semibold leading-6",
+                theme.text1,
+              )}
+            >
               Invoke {resourcePath.split("/").pop()}
             </h3>
 
             <label
-              className="block text-sm font-medium text-gray-700"
+              className={classNames("block text-sm font-medium", theme.text1)}
               htmlFor={payloadId}
             >
               Payload (JSON)
@@ -84,7 +101,7 @@ export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
               onInput={(event) => setMessage(event.currentTarget.value)}
               className="font-mono min-h-[40px] resize-none"
             />
-            <p className="text-sm text-gray-500">
+            <p className={classNames("text-sm", theme.text2)}>
               This payload will be sent to the function when you invoke it.
             </p>
           </div>

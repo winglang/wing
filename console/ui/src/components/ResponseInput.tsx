@@ -1,3 +1,4 @@
+import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { PropsWithChildren } from "react";
 
@@ -16,13 +17,17 @@ export const ResponseInput = ({
   placeholder = "No response",
   children,
 }: PropsWithChildren<ResponseInputProps>) => {
+  const theme = useTheme();
   return (
     <>
       {loading && (
         <div
           className={classNames(
-            "bg-slate-100 border border-slate-300 py-1 w-full justify-center flex",
-            "outline-none rounded  text-slate-600 text-sm",
+            theme.bgInput,
+            theme.textInput,
+            theme.borderInput,
+            "py-1 w-full justify-center flex",
+            "rounded text-sm border",
           )}
         >
           <SpinnerLoader className="h-5 w-5" />
@@ -31,8 +36,11 @@ export const ResponseInput = ({
       {!loading && empty && (
         <div
           className={classNames(
-            "flex-1 text-center text-slate-600 text-xs",
-            "px-2 py-1 border rounded border-slate-200 bg-slate-100",
+            theme.bgInput,
+            theme.text2,
+            theme.borderInput,
+            "flex-1 text-center text-xs",
+            "px-2.5 py-1.5 rounded border",
           )}
         >
           {placeholder}

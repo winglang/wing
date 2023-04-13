@@ -1,6 +1,8 @@
 import classNames from "classnames";
 import { PropsWithChildren } from "react";
 
+import { useTheme } from "./theme-provider.js";
+
 export interface ToolbarButtonProps {
   title?: string;
   disabled?: boolean;
@@ -13,11 +15,18 @@ export const ToolbarButton = ({
   onClick,
   children,
 }: PropsWithChildren<ToolbarButtonProps>) => {
+  const theme = useTheme();
   return (
     <button
-      className={classNames("p-0.5 hover:bg-slate-200 rounded group", {
-        "opacity-70 cursor-not-allowed": disabled,
-      })}
+      className={classNames(
+        theme.bg2Hover,
+        theme.text1,
+        "text-xs",
+        "p-0.5 rounded group flex items-center gap-1",
+        {
+          "opacity-70 cursor-not-allowed": disabled,
+        },
+      )}
       onClick={onClick}
       title={title}
       disabled={disabled}

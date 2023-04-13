@@ -3,6 +3,8 @@ import {
   MinusSmallIcon,
   PlusSmallIcon,
 } from "@heroicons/react/24/outline";
+import { useTheme } from "@wingconsole/design-system";
+import classNames from "classnames";
 import { useId } from "react";
 
 import { Button } from "../../design-system/Button.js";
@@ -13,6 +15,8 @@ export interface CounterViewProps {
 }
 
 export const CounterView = ({ resourcePath }: CounterViewProps) => {
+  const theme = useTheme();
+
   const incrementCounter = trpc["counter.inc"].useMutation();
   const decreaseCounter = trpc["counter.dec"].useMutation();
   const counterValue = trpc["counter.peek"].useQuery({ resourcePath });
@@ -22,13 +26,16 @@ export const CounterView = ({ resourcePath }: CounterViewProps) => {
   const resetValueId = useId();
 
   return (
-    <div className="flex flex-col gap-1 bg-slate-50">
+    <div className={classNames("flex flex-col gap-1", theme.bg3, theme.text2)}>
       <div className="flex flex-row items-center">
-        <label htmlFor={actualValueId} className="text-slate-500 min-w-[100px]">
+        <label
+          htmlFor={actualValueId}
+          className={classNames(" min-w-[100px]", theme.text2)}
+        >
           Actual value
         </label>
 
-        <div className="text-slate-600 w-full flex gap-1 min-w-0">
+        <div className={classNames("w-full flex gap-1 min-w-0")}>
           <Button
             small
             icon={MinusSmallIcon}
@@ -37,7 +44,13 @@ export const CounterView = ({ resourcePath }: CounterViewProps) => {
           />
           <input
             id={actualValueId}
-            className="w-full bg-white border border-slate-300 opacity-70 ease-in-out focus:border-sky-500 focus:ring-2 focus:ring-sky-500/50 items-center outline-none px-2 select-text text-slate-600 text-sm transition truncate rounded"
+            className={classNames(
+              "w-full border opacity-70 ease-in-out items-center px-2 select-text text-sm transition truncate rounded",
+              theme.bgInput,
+              theme.borderInput,
+              theme.textInput,
+              theme.focusInput,
+            )}
             value={counterValue.data}
             readOnly
           />
@@ -63,7 +76,7 @@ export const CounterView = ({ resourcePath }: CounterViewProps) => {
       <div className="flex flex-row items-center">
         <label
           htmlFor={resetValueId}
-          className="text-slate-500 min-w-[100px] invisible"
+          className={classNames("min-w-[100px] invisible", theme.text2)}
         >
           Reset value
         </label>

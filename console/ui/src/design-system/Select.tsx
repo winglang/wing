@@ -1,5 +1,6 @@
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { Fragment, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
@@ -31,6 +32,8 @@ export default function Select({
   btnClassName,
   showSelected = true,
 }: SelectProps) {
+  const theme = useTheme();
+
   const [referenceElement, setReferenceElement] = useState<HTMLElement | null>(
     // eslint-disable-next-line unicorn/no-null
     null,
@@ -63,14 +66,16 @@ export default function Select({
               className={classNames("relative", btnClassName)}
             >
               {placeholder && !value && (
-                <div className="truncate text-slate-400">{placeholder}</div>
+                <div className={classNames("truncate", theme.text2)}>
+                  {placeholder}
+                </div>
               )}
               <div className="truncate">
                 {items.find((item) => item.value === value)?.label ?? value}
               </div>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-1.5">
                 <ChevronUpDownIcon
-                  className="h-4 w-4 text-slate-400"
+                  className={classNames("h-4 w-4", theme.textInput)}
                   aria-hidden="true"
                 />
               </div>
@@ -92,8 +97,10 @@ export default function Select({
               >
                 <Listbox.Options
                   className={classNames(
+                    theme.bgInput,
+                    theme.textInput,
                     "z-10 m-1 max-h-60 w-full overflow-auto rounded-md",
-                    "bg-white py-1 text-xs shadow-lg ring-1 ring-black ring-opacity-5 outline-none",
+                    "py-1 text-xs shadow-lg ring-1 ring-black ring-opacity-5 outline-none",
                   )}
                 >
                   {placeholder && (
@@ -101,7 +108,7 @@ export default function Select({
                       className={({ active }) =>
                         classNames(
                           "relative cursor-default select-none py-2 px-4",
-                          active ? "bg-sky-50 text-sky-400" : "text-slate-400",
+                          active && theme.bgInputHover,
                           (showSelected && "pl-8") || "pl-4",
                         )
                       }
@@ -116,7 +123,7 @@ export default function Select({
                       className={({ active }) =>
                         classNames(
                           "relative cursor-default select-none py-2 px-4",
-                          active ? "bg-sky-50 text-sky-900" : "text-slate-900",
+                          active && theme.bgInputHover,
                           (showSelected && "pl-8") || "pl-4",
                         )
                       }
@@ -125,9 +132,10 @@ export default function Select({
                       {({ selected }) => (
                         <>
                           <span
-                            className={`block truncate text-slate-600 ${
-                              selected ? "font-medium" : "font-normal"
-                            }`}
+                            className={classNames(
+                              "block truncate",
+                              selected ? "font-medium" : "font-normal",
+                            )}
                           >
                             {item.label ?? item.value}
                           </span>

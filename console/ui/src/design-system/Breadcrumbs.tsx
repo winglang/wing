@@ -1,4 +1,5 @@
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
+import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 
 export interface Breadcrumb {
@@ -13,12 +14,19 @@ export interface BreadcrumbsProps {
 }
 
 export const Breadcrumbs = (props: BreadcrumbsProps) => {
+  const theme = useTheme();
+
   const { breadcrumbs, onBreadcrumbClicked } = props;
   const numberBreadcrumbs = breadcrumbs.length;
 
   return (
     <nav className="flex" aria-label="Breadcrumb">
-      <ol className="px-4 py-2 flex items-center text-xs text-slate-500">
+      <ol
+        className={classNames(
+          "px-4 py-2 flex items-center text-xs",
+          theme.text2,
+        )}
+      >
         {breadcrumbs.map((breadcrumb, index) => {
           const isLastBreadcrumb = index === numberBreadcrumbs - 1;
           return (
@@ -29,7 +37,9 @@ export const Breadcrumbs = (props: BreadcrumbsProps) => {
               <button
                 onClick={() => onBreadcrumbClicked?.(breadcrumb)}
                 className={classNames(
-                  "flex items-center gap-1 text-sm text-slate-500 whitespace-nowrap hover:text-slate-800",
+                  theme.text2,
+                  theme.text4Hover,
+                  "flex items-center gap-1 text-sm whitespace-nowrap",
                 )}
                 aria-current={isLastBreadcrumb ? "page" : undefined}
               >
@@ -37,7 +47,12 @@ export const Breadcrumbs = (props: BreadcrumbsProps) => {
                 {breadcrumb.name}
                 {!isLastBreadcrumb && (
                   <ChevronRightIcon
-                    className="-ml-0.5 h-5 w-5 flex-shrink-0 text-slate-500 group-hover:text-slate-600"
+                    className={classNames(
+                      theme.text2,
+                      theme.text4Hover,
+                      theme.text4GroupHover,
+                      "-ml-0.5 h-5 w-5 flex-shrink-0",
+                    )}
                     aria-hidden="true"
                   />
                 )}
