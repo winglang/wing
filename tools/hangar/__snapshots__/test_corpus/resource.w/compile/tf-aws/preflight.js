@@ -34,15 +34,19 @@ class $Root extends $stdlib.core.Resource {
         const c_client = this._lift(this.c);
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
-          (new (require("${self_client_path}")).Foo({
-            c: ${c_client},
-          }))
+          (await (async () => {
+            const tmp = new (require("${self_client_path}")).Foo({
+              c: ${c_client},
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })())
         `);
       }
     }
-    Foo._annotateInflight("foo_inc", {"this.c": { ops: ["inc"] }});
+    Foo._annotateInflight("$inflight_init", {"this.c": { ops: [] }});
     Foo._annotateInflight("foo_get", {"this.c": { ops: ["peek"] }});
-    Foo._annotateInflight("$init", {"this.c": { ops: [] }});
+    Foo._annotateInflight("foo_inc", {"this.c": { ops: ["inc"] }});
     class Bar extends $stdlib.core.Resource {
       constructor(scope, id, name, b) {
         super(scope, id);
@@ -56,20 +60,24 @@ class $Root extends $stdlib.core.Resource {
         const name_client = this._lift(this.name);
         const self_client_path = "./clients/Bar.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
-          (new (require("${self_client_path}")).Bar({
-            b: ${b_client},
-            foo: ${foo_client},
-            name: ${name_client},
-          }))
+          (await (async () => {
+            const tmp = new (require("${self_client_path}")).Bar({
+              b: ${b_client},
+              foo: ${foo_client},
+              name: ${name_client},
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })())
         `);
       }
     }
+    Bar._annotateInflight("$inflight_init", {"this.b": { ops: [] },"this.foo": { ops: [] },"this.name": { ops: [] }});
     Bar._annotateInflight("my_method", {"this.b": { ops: ["get","put"] },"this.foo": { ops: ["foo_get","foo_inc"] }});
-    Bar._annotateInflight("$init", {"this.b": { ops: [] },"this.foo": { ops: [] },"this.name": { ops: [] }});
     const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const res = new Bar(this,"Bar","Arr",bucket);
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.c2ebbdf06e2a1f4ff7d5b279cc90cfff8cb1ed8067171e583f1bcd844805f5e3/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.09db675f603249912771c7aaaae83de02fce6b9d53d66116afd98e7156363b46/index.js".replace(/\\/g, "/"))),
       bindings: {
         bucket: {
           obj: bucket,

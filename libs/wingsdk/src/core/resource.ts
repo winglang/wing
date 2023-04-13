@@ -50,6 +50,8 @@ export interface IResource extends IInspectable, IConstruct {
 
   /**
    * Return a code snippet that can be used to reference this resource inflight.
+   * Note this code snippet may by async code, so it's unsafe to run it in a
+   * constructor or other sync context.
    * @internal
    */
   _toInflight(): Code;
@@ -305,9 +307,9 @@ export abstract class Resource extends Construct implements IResource {
 
         // if the object is a resource (i.e. has a "_bind" method"), register a binding between it and the host.
         if (isResource(obj)) {
-          // Explicitly register the resource's `$init` op, which is a special op that can be used to makes sure
+          // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
           // the host can instantiate a client for this resource.
-          obj._registerBind(host, ["$init"]);
+          obj._registerBind(host, ["$inflight_init"]);
 
           obj._registerBind(host, ops);
 
@@ -395,7 +397,7 @@ export abstract class Resource extends Construct implements IResource {
 }
 
 // The `init` op is a placeholder for any annotations needed for an instance of a resource's client to be instantiated
-Resource._annotateInflight("$init", {});
+Resource._annotateInflight("$inflight_init", {});
 
 /**
  * The direction of a connection.

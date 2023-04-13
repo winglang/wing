@@ -34,13 +34,17 @@ class $Root extends $stdlib.core.Resource {
         const my_resource_client = this._lift(this.my_resource);
         const self_client_path = "./clients/First.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
-          (new (require("${self_client_path}")).First({
-            my_resource: ${my_resource_client},
-          }))
+          (await (async () => {
+            const tmp = new (require("${self_client_path}")).First({
+              my_resource: ${my_resource_client},
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })())
         `);
       }
     }
-    First._annotateInflight("$init", {"this.my_resource": { ops: [] }});
+    First._annotateInflight("$inflight_init", {"this.my_resource": { ops: [] }});
     class Another extends $stdlib.core.Resource {
       constructor(scope, id, ) {
         super(scope, id);
@@ -52,16 +56,20 @@ class $Root extends $stdlib.core.Resource {
         const my_field_client = this._lift(this.my_field);
         const self_client_path = "./clients/Another.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
-          (new (require("${self_client_path}")).Another({
-            first: ${first_client},
-            my_field: ${my_field_client},
-          }))
+          (await (async () => {
+            const tmp = new (require("${self_client_path}")).Another({
+              first: ${first_client},
+              my_field: ${my_field_client},
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })())
         `);
       }
     }
-    Another._annotateInflight("meaning_of_life", {});
+    Another._annotateInflight("$inflight_init", {"this.first": { ops: [] },"this.my_field": { ops: [] }});
     Another._annotateInflight("another_func", {});
-    Another._annotateInflight("$init", {"this.first": { ops: [] },"this.my_field": { ops: [] }});
+    Another._annotateInflight("meaning_of_life", {});
     class MyResource extends $stdlib.core.Resource {
       constructor(scope, id, external_bucket, external_num) {
         super(scope, id);
@@ -98,34 +106,38 @@ class $Root extends $stdlib.core.Resource {
         const unused_resource_client = this._lift(this.unused_resource);
         const self_client_path = "./clients/MyResource.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
-          (new (require("${self_client_path}")).MyResource({
-            another: ${another_client},
-            array_of_str: ${array_of_str_client},
-            ext_bucket: ${ext_bucket_client},
-            ext_num: ${ext_num_client},
-            map_of_num: ${map_of_num_client},
-            my_bool: ${my_bool_client},
-            my_num: ${my_num_client},
-            my_queue: ${my_queue_client},
-            my_resource: ${my_resource_client},
-            my_str: ${my_str_client},
-            set_of_str: ${set_of_str_client},
-            unused_resource: ${unused_resource_client},
-          }))
+          (await (async () => {
+            const tmp = new (require("${self_client_path}")).MyResource({
+              another: ${another_client},
+              array_of_str: ${array_of_str_client},
+              ext_bucket: ${ext_bucket_client},
+              ext_num: ${ext_num_client},
+              map_of_num: ${map_of_num_client},
+              my_bool: ${my_bool_client},
+              my_num: ${my_num_client},
+              my_queue: ${my_queue_client},
+              my_resource: ${my_resource_client},
+              my_str: ${my_str_client},
+              set_of_str: ${set_of_str_client},
+              unused_resource: ${unused_resource_client},
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })())
         `);
       }
     }
-    MyResource._annotateInflight("test_no_capture", {});
+    MyResource._annotateInflight("$inflight_init", {"this.another": { ops: [] },"this.array_of_str": { ops: [] },"this.ext_bucket": { ops: [] },"this.ext_num": { ops: [] },"this.map_of_num": { ops: [] },"this.my_bool": { ops: [] },"this.my_num": { ops: [] },"this.my_queue": { ops: [] },"this.my_resource": { ops: [] },"this.my_str": { ops: [] },"this.set_of_str": { ops: [] },"this.unused_resource": { ops: [] }});
     MyResource._annotateInflight("test_capture_collections_of_data", {"this.array_of_str": { ops: ["at","length"] },"this.map_of_num": { ops: ["get"] },"this.set_of_str": { ops: ["has"] }});
     MyResource._annotateInflight("test_capture_primitives", {"this.my_bool": { ops: [] },"this.my_num": { ops: [] },"this.my_str": { ops: [] }});
     MyResource._annotateInflight("test_capture_resource", {"this.my_resource": { ops: ["get","list","put"] }});
-    MyResource._annotateInflight("test_nested_preflight_field", {"this.another.my_field": { ops: [] }});
-    MyResource._annotateInflight("test_nested_resource", {"this.another.first.my_resource": { ops: ["get","list","put"] },"this.my_str": { ops: [] }});
     MyResource._annotateInflight("test_expression_recursive", {"this.my_queue": { ops: ["push"] },"this.my_str": { ops: [] }});
     MyResource._annotateInflight("test_external", {"this.ext_bucket": { ops: ["list"] },"this.ext_num": { ops: [] }});
-    MyResource._annotateInflight("test_user_defined_resource", {"this.another": { ops: ["another_func","meaning_of_life"] }});
     MyResource._annotateInflight("test_inflight_field", {});
-    MyResource._annotateInflight("$init", {"this.another": { ops: [] },"this.array_of_str": { ops: [] },"this.ext_bucket": { ops: [] },"this.ext_num": { ops: [] },"this.map_of_num": { ops: [] },"this.my_bool": { ops: [] },"this.my_num": { ops: [] },"this.my_queue": { ops: [] },"this.my_resource": { ops: [] },"this.my_str": { ops: [] },"this.set_of_str": { ops: [] },"this.unused_resource": { ops: [] }});
+    MyResource._annotateInflight("test_nested_preflight_field", {"this.another.my_field": { ops: [] }});
+    MyResource._annotateInflight("test_nested_resource", {"this.another.first.my_resource": { ops: ["get","list","put"] },"this.my_str": { ops: [] }});
+    MyResource._annotateInflight("test_no_capture", {});
+    MyResource._annotateInflight("test_user_defined_resource", {"this.another": { ops: ["another_func","meaning_of_life"] }});
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const r = new MyResource(this,"MyResource",b,12);
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {

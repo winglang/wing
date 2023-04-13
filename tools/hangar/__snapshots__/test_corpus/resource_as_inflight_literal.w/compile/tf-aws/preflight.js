@@ -32,13 +32,17 @@ class $Root extends $stdlib.core.Resource {
       _toInflight() {
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
-          (new (require("${self_client_path}")).Foo({
-          }))
+          (await (async () => {
+            const tmp = new (require("${self_client_path}")).Foo({
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })())
         `);
       }
     }
+    Foo._annotateInflight("$inflight_init", {});
     Foo._annotateInflight("handle", {});
-    Foo._annotateInflight("$init", {});
     const fn = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new Foo(this,"Foo"));
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.137cab8f078ac4d8dd242fc82417ae774fbaeaedf96937ad93f861344976bed7/index.js".replace(/\\/g, "/"))),
