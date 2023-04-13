@@ -8,8 +8,7 @@ import { SimApp } from "../../src/testing";
 
 class InflightBucketEventHandler
   extends Inflight
-  implements IBucketEventHandler
-{
+  implements IBucketEventHandler {
   public stateful: boolean;
   constructor(scope: Construct, id: string) {
     super(scope, id, { code: NodeJsCode.fromInline("null") });
@@ -284,7 +283,7 @@ test("get invalid object throws an error", async () => {
   await s.stop();
 
   expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[3].data.status).toEqual("failure");
+  expect(s.listTraces()[2].data.status).toEqual("failure");
   expect(app.snapshot()).toMatchSnapshot();
 });
 

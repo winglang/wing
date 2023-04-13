@@ -6,8 +6,7 @@ import { Construct } from "constructs";
 import { Bucket } from "./bucket";
 import { Function } from "./function";
 import { APP_AZURE_TF_SYMBOL } from "./internal";
-import { Logger } from "./logger";
-import { BUCKET_FQN, FUNCTION_FQN, LOGGER_FQN } from "../cloud";
+import { BUCKET_FQN, FUNCTION_FQN } from "../cloud";
 import { CdktfApp, AppProps } from "../core";
 import {
   CaseConventions,
@@ -143,9 +142,6 @@ export class App extends CdktfApp {
 
       case BUCKET_FQN:
         return new Bucket(scope, id, args[0]);
-
-      case LOGGER_FQN:
-        return new Logger(scope, id);
     }
 
     return undefined;

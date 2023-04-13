@@ -2,14 +2,14 @@
 
 exports[`wing compile -t tf-aws > clients/Fetch.inflight.js 1`] = `
 "class Fetch  {
-constructor({  }) {
-
-
+  constructor({  }) {
+  }
+  async get(url)  {
+    return (require(\\"<ABSOLUTE_PATH>/api_path_vars.js\\"[\\"get\\"])(url)
+  }
 }
-async get(url)  {
-	return (require(require.resolve(\\"./api_path_vars.js\\", {paths: [process.env.WING_PROJECT_DIR]}))[\\"get\\"])(url)
-}}
-exports.Fetch = Fetch;"
+exports.Fetch = Fetch;
+"
 `;
 
 exports[`wing compile -t tf-aws > main.tf.json 1`] = `
@@ -304,44 +304,44 @@ class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     class Fetch extends $stdlib.core.Resource {
-	constructor(scope, id, ) {
-	super(scope, id);
-{
-}
-}
-	
-	_toInflight() {
-	
-	const self_client_path = \\"./clients/Fetch.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
-	return $stdlib.core.NodeJsCode.fromInline(\`(new (require(\\"\${self_client_path}\\")).Fetch({}))\`);
-}
-}
-Fetch._annotateInflight(\\"get\\", {});
-Fetch._annotateInflight(\\"$init\\", {});
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      _toInflight() {
+        const self_client_path = \\"./clients/Fetch.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
+        return $stdlib.core.NodeJsCode.fromInline(\`
+          (new (require(\\"\${self_client_path}\\")).Fetch({
+          }))
+        \`);
+      }
+    }
+    Fetch._annotateInflight(\\"get\\", {});
+    Fetch._annotateInflight(\\"$init\\", {});
     const api = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Api\\",this,\\"cloud.Api\\");
     const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.24553e49be351ccfc21b02cbdc510b5414f2e99152812a3fbf62b07adee809ac/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-  bindings: {
-  }
-});
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.715acfaea3ff48e55a13ccb9337f2fa4389dd31fffa5b0f24a07bfa56038dcd8/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+      bindings: {
+      }
+    })
+    ;
     (api.get(\\"/users/{name}\\",handler));
     const f = new Fetch(this,\\"Fetch\\");
     this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
-  code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.b7876f5a9165e8dced15782127d61f0c4197fdd7cc9257c5966120a7d19e71a3/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
-  bindings: {
-    api: {
-      obj: api,
-      ops: []
-    },
-    f: {
-      obj: f,
-      ops: [\\"get\\"]
-    },
-  }
-}));
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.718eff3f4061776cb4ae50876841ab4ee2dad187ff545f5ac2ae1e6beeb7d65e/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+      bindings: {
+        api: {
+          obj: api,
+          ops: []
+        },
+        f: {
+          obj: f,
+          ops: [\\"get\\"]
+        },
+      }
+    })
+    );
   }
 }
-
 class $App extends $AppBase {
   constructor() {
     super({ outdir: $outdir, name: \\"api_path_vars\\", plugins: $plugins, isTestEnvironment: $wing_is_test });
@@ -357,27 +357,31 @@ class $App extends $AppBase {
     }
   }
 }
-
-new $App().synth();"
+new $App().synth();
+"
 `;
 
-exports[`wing compile -t tf-aws > proc.24553e49be351ccfc21b02cbdc510b5414f2e99152812a3fbf62b07adee809ac/index.js 1`] = `
-"async handle(req) { const {  } = this; {
+exports[`wing compile -t tf-aws > proc.715acfaea3ff48e55a13ccb9337f2fa4389dd31fffa5b0f24a07bfa56038dcd8/index.js 1`] = `
+"async handle(req) {
+  const {  } = this;
   const vars = (req.vars ?? Object.freeze({\\"name\\":\\"\\"}));
   return {
   \\"body\\": Object.freeze({\\"user\\":(vars)[\\"name\\"]}),
   \\"status\\": 200,}
   ;
-} };"
+}
+"
 `;
 
-exports[`wing compile -t tf-aws > proc.b7876f5a9165e8dced15782127d61f0c4197fdd7cc9257c5966120a7d19e71a3/index.js 1`] = `
-"async handle() { const { api, f } = this; {
+exports[`wing compile -t tf-aws > proc.718eff3f4061776cb4ae50876841ab4ee2dad187ff545f5ac2ae1e6beeb7d65e/index.js 1`] = `
+"async handle() {
+  const { api, f } = this;
   const username = \\"tsuf\\";
   const res = (await f.get(\`\${api.url}/users/\${username}\`));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((res)[\\"status\\"] === 200)'\`)})(((res)[\\"status\\"] === 200))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(((res)[\\"body\\"])[\\"user\\"] === username)'\`)})((((res)[\\"body\\"])[\\"user\\"] === username))};
-} };"
+}
+"
 `;
 
 exports[`wing test -t sim > stdout 1`] = `

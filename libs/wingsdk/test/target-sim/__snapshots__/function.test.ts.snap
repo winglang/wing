@@ -41,17 +41,10 @@ async handle(event) {
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_function",
         "props": {
           "environmentVariables": {
             "ENV_VAR1": "true",
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
           "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
@@ -82,30 +75,6 @@ async handle(event) {
           "id": "Handler",
           "path": "root/Handler",
         },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -125,14 +94,7 @@ async handle(event) {
         },
         "my_function": {
           "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/WingLogger",
-              },
-            ],
+            "wing:resource:connections": [],
             "wing:resource:stateful": false,
           },
           "constructInfo": {
@@ -162,11 +124,9 @@ async handle(event) {
 exports[`invoke function fails 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"alice\\\\\\"}\\").",
   "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
@@ -212,17 +172,9 @@ async handle(event) {
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_function",
         "props": {
-          "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
+          "environmentVariables": {},
           "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -252,30 +204,6 @@ async handle(event) {
           "id": "Handler",
           "path": "root/Handler",
         },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -295,14 +223,7 @@ async handle(event) {
         },
         "my_function": {
           "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/WingLogger",
-              },
-            ],
+            "wing:resource:connections": [],
             "wing:resource:stateful": false,
           },
           "constructInfo": {
@@ -332,11 +253,9 @@ async handle(event) {
 exports[`invoke function succeeds 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\").",
   "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
@@ -382,17 +301,9 @@ async handle(event) {
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_function",
         "props": {
-          "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
+          "environmentVariables": {},
           "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -422,30 +333,6 @@ async handle(event) {
           "id": "Handler",
           "path": "root/Handler",
         },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -465,14 +352,7 @@ async handle(event) {
         },
         "my_function": {
           "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/WingLogger",
-              },
-            ],
+            "wing:resource:connections": [],
             "wing:resource:stateful": false,
           },
           "constructInfo": {
@@ -502,11 +382,9 @@ async handle(event) {
 exports[`invoke function with environment variables 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "Invoke (payload=\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\").",
   "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
@@ -552,16 +430,9 @@ async handle(event) {
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_function",
         "props": {
           "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
             "PIG_LATIN": "true",
           },
           "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
@@ -593,30 +464,6 @@ async handle(event) {
           "id": "Handler",
           "path": "root/Handler",
         },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -636,14 +483,7 @@ async handle(event) {
         },
         "my_function": {
           "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/WingLogger",
-              },
-            ],
+            "wing:resource:connections": [],
             "wing:resource:stateful": false,
           },
           "constructInfo": {
@@ -673,11 +513,9 @@ async handle(event) {
 exports[`invoke function with process.exit(1) 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "Invoke (payload=\\"{}\\").",
   "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
@@ -713,17 +551,9 @@ async handle() {
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_function",
         "props": {
-          "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
+          "environmentVariables": {},
           "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -753,30 +583,6 @@ async handle() {
           "id": "Handler",
           "path": "root/Handler",
         },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -796,14 +602,7 @@ async handle() {
         },
         "my_function": {
           "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/WingLogger",
-              },
-            ],
+            "wing:resource:connections": [],
             "wing:resource:stateful": false,
           },
           "constructInfo": {

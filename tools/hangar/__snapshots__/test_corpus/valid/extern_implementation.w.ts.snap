@@ -14,7 +14,7 @@ exports[`wing compile -t tf-aws > clients/Foo.inflight.js 1`] = `
     return (require(\\"<ABSOLUTE_PATH>/external_js.js\\"[\\"get_data\\"])()
   }
   async print(msg)  {
-    return (require(require.resolve(\\"./external_js.js\\", {paths: [process.env.WING_PROJECT_DIR]}))[\\"print\\"])(msg)
+    return (require(\\"<ABSOLUTE_PATH>/external_js.js\\"[\\"print\\"])(msg)
   }
   async call()  {
     {
