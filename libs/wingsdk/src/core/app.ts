@@ -6,7 +6,6 @@ import stringify from "safe-stable-stringify";
 import { PluginManager } from "./plugin-manager";
 import { IResource } from "./resource";
 import { synthesizeTree } from "./tree";
-import { Logger } from "../cloud/logger";
 
 const TERRAFORM_STACK_NAME = "root";
 
@@ -221,9 +220,6 @@ export abstract class CdktfApp extends App {
     this.cdktfStack = cdktfStack;
     this.terraformManifestPath = join(this.outdir, "main.tf.json");
     this.synthed = false;
-
-    // register a logger for this app.
-    Logger.register(this);
   }
 
   /**

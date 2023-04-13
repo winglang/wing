@@ -14,12 +14,6 @@ exports[`create a Redis resource 1`] = `
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_redis",
         "props": {},
         "type": "wingsdk.redis.Redis",
@@ -30,23 +24,6 @@ exports[`create a Redis resource 1`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],

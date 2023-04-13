@@ -4,7 +4,7 @@ use crate::{
 	diagnostic::{WingLocation, WingSpan},
 	type_check::{
 		self, symbol_env::StatementIdx, Class, FunctionSignature, Interface, Struct, SymbolKind, Type, TypeRef, Types,
-		WING_CONSTRUCTOR_NAME,
+		CLASS_INIT_NAME,
 	},
 	utilities::camel_case_to_snake_case,
 	CONSTRUCT_BASE_CLASS, CONSTRUCT_BASE_INTERFACE, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT,
@@ -685,7 +685,7 @@ impl<'a> JsiiImporter<'a> {
 				js_override: None,
 			}));
 			if let Err(e) = class_env.define(
-				&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &initializer.location_in_module),
+				&Self::jsii_name_to_symbol(CLASS_INIT_NAME, &initializer.location_in_module),
 				SymbolKind::make_variable(method_sig, false, true, phase),
 				StatementIdx::Top,
 			) {

@@ -7,8 +7,8 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionBody,
-	FunctionDefinition, FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Interface, InterpolatedString,
+	ArgList, BinaryOperator, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
+	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Initializer, Interface, InterpolatedString,
 	InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
 	UnaryOperator, UserDefinedType,
 };
@@ -66,9 +66,9 @@ impl<'s> Parser<'s> {
 		scope
 	}
 
-	fn add_error<T>(&self, message: String, node: &Node) -> Result<T, ()> {
+	fn add_error<T>(&self, message: impl ToString, node: &Node) -> Result<T, ()> {
 		let diag = Diagnostic {
-			message,
+			message: message.to_string(),
 			span: Some(self.node_span(node)),
 			level: DiagnosticLevel::Error,
 		};
@@ -146,7 +146,7 @@ impl<'s> Parser<'s> {
 			"hours" => Ok(Literal::Duration(
 				value_text.parse::<f64>().expect("Duration string") * 3600_f64,
 			)),
-			"ERROR" => self.add_error("Expected duration type".to_string(), &node),
+			"ERROR" => self.add_error("Expected duration type", &node),
 			other => self.report_unimplemented_grammar(other, "duration type", node),
 		}
 	}
@@ -197,7 +197,7 @@ impl<'s> Parser<'s> {
 			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"try_catch_statement" => self.build_try_catch_statement(statement_node)?,
 			"struct_definition" => self.build_struct_definition_statement(statement_node)?,
-			"ERROR" => return self.add_error("Expected statement".to_string(), statement_node),
+			"ERROR" => return self.add_error("Expected statement", statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
 
@@ -283,7 +283,7 @@ impl<'s> Parser<'s> {
 	fn build_break_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		if !*self.is_in_loop.borrow() {
 			return self.add_error::<StmtKind>(
-				"Expected break statement to be inside of a loop (while/for)".to_string(),
+				"Expected break statement to be inside of a loop (while/for)",
 				statement_node,
 			);
 		}
@@ -293,7 +293,7 @@ impl<'s> Parser<'s> {
 	fn build_continue_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
 		if !*self.is_in_loop.borrow() {
 			return self.add_error::<StmtKind>(
-				"Expected continue statement to be inside of a loop (while/for)".to_string(),
+				"Expected continue statement to be inside of a loop (while/for)",
 				statement_node,
 			);
 		}
@@ -437,7 +437,8 @@ impl<'s> Parser<'s> {
 		let mut cursor = statement_node.walk();
 		let mut fields = vec![];
 		let mut methods = vec![];
-		let mut constructor = None;
+		let mut initializer = None;
+		let mut inflight_initializer = None;
 		let name = self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?;
 		for class_element in statement_node
 			.child_by_field_name("implementation")
@@ -483,9 +484,7 @@ impl<'s> Parser<'s> {
 						phase: match class_element.child_by_field_name("phase_modifier") {
 							Some(n) => {
 								if !is_resource {
-									self
-										.add_error::<Node>("Class cannot have inflight fields".to_string(), &n)
-										.err();
+									self.add_error::<Node>("Class cannot have inflight fields", &n).err();
 								}
 								Phase::Inflight
 							}
@@ -493,31 +492,65 @@ impl<'s> Parser<'s> {
 						},
 					})
 				}
-				("constructor", _) => {
-					if let Some(_) = constructor {
+				("initializer", _) => {
+					let is_inflight = class_element.child_by_field_name("inflight").is_some();
+					if initializer.is_some() && !is_inflight {
 						self
 							.add_error::<Node>(
-								format!("Multiple constructors defined in class {:?}", statement_node),
+								format!("Multiple initializers defined in class {}", name.name),
+								&class_element,
+							)
+							.err();
+					} else if inflight_initializer.is_some() && is_inflight {
+						self
+							.add_error::<Node>(
+								format!("Multiple inflight initializers defined in class {}", name.name),
 								&class_element,
 							)
 							.err();
 					}
-					let parameters = self.build_parameter_list(&class_element.child_by_field_name("parameter_list").unwrap())?;
-					constructor = Some(Constructor {
-						statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
-						signature: FunctionSignature {
-							parameters,
-							return_type: Some(Box::new(TypeAnnotation::UserDefined(UserDefinedType {
-								root: name.clone(),
-								fields: vec![],
-							}))),
-							phase: if is_resource { Phase::Preflight } else { Phase::Inflight },
-						},
-					})
+					if !is_resource && is_inflight {
+						self
+							.add_error::<Node>("Class cannot have an inflight initializers", &class_element)
+							.err();
+					}
+					let parameters_node = class_element.child_by_field_name("parameter_list").unwrap();
+					let parameters = self.build_parameter_list(&parameters_node)?;
+					if !parameters.is_empty() && is_inflight {
+						self
+							.add_error::<Node>("Inflight initializers cannot have parameters", &parameters_node)
+							.err();
+					}
+					if is_inflight {
+						inflight_initializer = Some(FunctionDefinition {
+							body: FunctionBody::Statements(self.build_scope(&class_element.child_by_field_name("block").unwrap())),
+							signature: FunctionSignature {
+								parameters: vec![], // Inflight initializers cannot have parameters
+								return_type: None,
+								phase: Phase::Inflight,
+							},
+							is_static: false,
+							span: self.node_span(&class_element),
+							captures: RefCell::new(None),
+						})
+					} else {
+						initializer = Some(Initializer {
+							statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
+							signature: FunctionSignature {
+								parameters,
+								return_type: Some(Box::new(TypeAnnotation::UserDefined(UserDefinedType {
+									root: name.clone(),
+									fields: vec![],
+								}))),
+								phase: if is_resource { Phase::Preflight } else { Phase::Inflight },
+							},
+							span: self.node_span(&class_element),
+						})
+					}
 				}
 				("ERROR", _) => {
 					self
-						.add_error::<Node>("Expected class element node".to_string(), &class_element)
+						.add_error::<Node>("Expected class element node", &class_element)
 						.err();
 				}
 				(other, _) => {
@@ -530,7 +563,7 @@ impl<'s> Parser<'s> {
 				}
 			}
 		}
-		if constructor.is_none() {
+		if initializer.is_none() {
 			self.add_error::<Node>(
 				format!(
 					"No constructor defined in {} {:?}",
@@ -590,8 +623,9 @@ impl<'s> Parser<'s> {
 			methods,
 			parent,
 			implements,
-			constructor: constructor.unwrap(),
+			initializer: initializer.unwrap(),
 			is_resource,
+			inflight_initializer,
 		}))
 	}
 
@@ -628,7 +662,7 @@ impl<'s> Parser<'s> {
 				}
 				"ERROR" => {
 					self
-						.add_error::<Node>("Expected interface element node".to_string(), &interface_element)
+						.add_error::<Node>("Expected interface element node", &interface_element)
 						.err();
 				}
 				other => {
@@ -726,7 +760,7 @@ impl<'s> Parser<'s> {
 				"str" => Ok(TypeAnnotation::String),
 				"bool" => Ok(TypeAnnotation::Bool),
 				"duration" => Ok(TypeAnnotation::Duration),
-				"ERROR" => self.add_error("Expected builtin type".to_string(), type_node),
+				"ERROR" => self.add_error("Expected builtin type", type_node),
 				other => return self.report_unimplemented_grammar(other, "builtin", type_node),
 			},
 			"optional" => {
@@ -784,18 +818,18 @@ impl<'s> Parser<'s> {
 					"MutSet" => Ok(TypeAnnotation::MutSet(Box::new(
 						self.build_type_annotation(&element_type)?,
 					))),
-					"ERROR" => self.add_error("Expected builtin container type".to_string(), type_node)?,
+					"ERROR" => self.add_error("Expected builtin container type", type_node)?,
 					other => self.report_unimplemented_grammar(other, "builtin container type", type_node),
 				}
 			}
-			"ERROR" => self.add_error("Expected type".to_string(), type_node),
+			"ERROR" => self.add_error("Expected type", type_node),
 			other => self.report_unimplemented_grammar(other, "type", type_node),
 		}
 	}
 
 	fn build_nested_identifier(&self, nested_node: &Node) -> DiagnosticResult<Reference> {
 		if nested_node.has_error() {
-			return self.add_error("Syntax error".to_string(), &nested_node);
+			return self.add_error("Syntax error", &nested_node);
 		}
 		if let Some(property) = nested_node.child_by_field_name("property") {
 			let object_expr = self.get_child_field(nested_node, "object")?;
@@ -823,7 +857,7 @@ impl<'s> Parser<'s> {
 			})
 		} else {
 			self.add_error(
-				"Expected property".to_string(),
+				"Expected property",
 				&nested_node
 					.child(nested_node.child_count() - 1)
 					.expect("Nested identifier should have at least one child"),
@@ -865,10 +899,7 @@ impl<'s> Parser<'s> {
 			match child.kind() {
 				"positional_argument" => {
 					if seen_keyword_args {
-						self.add_error(
-							"Positional arguments must come before named arguments".to_string(),
-							&child,
-						)?;
+						self.add_error("Positional arguments must come before named arguments", &child)?;
 					}
 					pos_args.push(self.build_expression(&child)?);
 				}
@@ -877,13 +908,13 @@ impl<'s> Parser<'s> {
 					let arg_name_node = &child.named_child(0).unwrap();
 					let arg_name = self.node_symbol(arg_name_node)?;
 					if named_args.contains_key(&arg_name) {
-						_ = self.add_error::<ArgList>("Duplicate argument name".to_string(), arg_name_node);
+						_ = self.add_error::<ArgList>("Duplicate argument name", arg_name_node);
 					} else {
 						named_args.insert(arg_name, self.build_expression(&child.named_child(1).unwrap())?);
 					}
 				}
 				"ERROR" => {
-					self.add_error::<ArgList>("Invalid argument(s)".to_string(), &child)?;
+					self.add_error::<ArgList>("Invalid argument(s)", &child)?;
 				}
 				other => panic!("Unexpected argument type {} || {:#?}", other, child),
 			}
@@ -945,7 +976,7 @@ impl<'s> Parser<'s> {
 						"\\" => BinaryOperator::FloorDiv,
 						"**" => BinaryOperator::Power,
 						"??" => BinaryOperator::UnwrapOr,
-						"ERROR" => self.add_error::<BinaryOperator>("Expected binary operator".to_string(), expression_node)?,
+						"ERROR" => self.add_error::<BinaryOperator>("Expected binary operator", expression_node)?,
 						other => return self.report_unimplemented_grammar(other, "binary operator", expression_node),
 					},
 				},
@@ -956,7 +987,7 @@ impl<'s> Parser<'s> {
 					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
 						"-" => UnaryOperator::Minus,
 						"!" => UnaryOperator::Not,
-						"ERROR" => self.add_error::<UnaryOperator>("Expected unary operator".to_string(), expression_node)?,
+						"ERROR" => self.add_error::<UnaryOperator>("Expected unary operator", expression_node)?,
 						other => return self.report_unimplemented_grammar(other, "unary operator", expression_node),
 					},
 					exp: Box::new(self.build_expression(&expression_node.child_by_field_name("arg").unwrap())?),
@@ -1058,7 +1089,7 @@ impl<'s> Parser<'s> {
 				ExprKind::Literal(Literal::Boolean(match self.node_text(&expression_node) {
 					"true" => true,
 					"false" => false,
-					"ERROR" => self.add_error::<bool>("Expected boolean literal".to_string(), expression_node)?,
+					"ERROR" => self.add_error::<bool>("Expected boolean literal", expression_node)?,
 					other => return self.report_unimplemented_grammar(other, "boolean literal", expression_node),
 				})),
 				expression_span,
@@ -1093,10 +1124,7 @@ impl<'s> Parser<'s> {
 				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, Phase::Inflight)?),
 				expression_span,
 			)),
-			"pure_closure" => self.add_error(
-				"Pure phased anonymous closures not implemented yet".to_string(),
-				expression_node,
-			),
+			"pure_closure" => self.add_error("Pure phased anonymous closures not implemented yet", expression_node),
 			"array_literal" => {
 				let array_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
 					Some(self.build_type_annotation(&type_node)?)

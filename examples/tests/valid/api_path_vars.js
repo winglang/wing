@@ -1,5 +1,6 @@
+const fetch = require("node-fetch");
+
 exports.get = async function (url) {
-  const {default: fetch} = await import("node-fetch");
   const res = await fetch(url.toString());
   return {
     status: res.status,

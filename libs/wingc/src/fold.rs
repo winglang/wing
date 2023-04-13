@@ -1,7 +1,8 @@
 use crate::ast::{
-	ArgList, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
-	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Interface, InterpolatedString, InterpolatedStringPart,
-	Literal, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, UserDefinedType,
+	ArgList, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
+	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Initializer, Interface, InterpolatedString,
+	InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
+	UserDefinedType,
 };
 
 /// Similar to the `visit` module in `wingc` except each method takes ownership of an
@@ -26,7 +27,7 @@ pub trait Fold {
 	fn fold_interface(&mut self, node: Interface) -> Interface {
 		fold_interface(self, node)
 	}
-	fn fold_constructor(&mut self, node: Constructor) -> Constructor {
+	fn fold_constructor(&mut self, node: Initializer) -> Initializer {
 		fold_constructor(self, node)
 	}
 	fn fold_expr(&mut self, node: Expr) -> Expr {
@@ -177,7 +178,7 @@ where
 			.into_iter()
 			.map(|(name, def)| (f.fold_symbol(name), f.fold_function_definition(def)))
 			.collect(),
-		constructor: f.fold_constructor(node.constructor),
+		initializer: f.fold_constructor(node.initializer),
 		parent: node.parent.map(|parent| f.fold_user_defined_type(parent)),
 		implements: node
 			.implements
@@ -185,6 +186,7 @@ where
 			.map(|interface| f.fold_user_defined_type(interface))
 			.collect(),
 		is_resource: node.is_resource,
+		inflight_initializer: node.inflight_initializer.map(|init| f.fold_function_definition(init)),
 	}
 }
 
@@ -230,13 +232,14 @@ where
 	}
 }
 
-pub fn fold_constructor<F>(f: &mut F, node: Constructor) -> Constructor
+pub fn fold_constructor<F>(f: &mut F, node: Initializer) -> Initializer
 where
 	F: Fold + ?Sized,
 {
-	Constructor {
+	Initializer {
 		signature: f.fold_function_signature(node.signature),
 		statements: f.fold_scope(node.statements),
+		span: node.span,
 	}
 }
 

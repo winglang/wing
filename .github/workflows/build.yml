@@ -130,7 +130,7 @@ jobs:
         shard: ["1/2", "2/2"]
         full_run:
           # Do a full run on push or when the PR is labeled "pr/e2e-full"
-          - ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'pr/e2e-full') }}
+          - ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full') }}
         exclude:
           - runner: macos
             full_run: false
@@ -162,7 +162,7 @@ jobs:
             tools/hangar
             examples/tests/valid
             examples/tests/invalid
-          install-command: npm ci --ignore-scripts
+          install-command: npm ci
 
       - name: Run E2E Tests
         working-directory: tools/hangar

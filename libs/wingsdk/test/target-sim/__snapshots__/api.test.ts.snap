@@ -3,7 +3,6 @@
 exports[`api handler can read the request params 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
@@ -13,22 +12,13 @@ exports[`api handler can read the request params 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api deleted.",
   "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`api handler can read the request params 2`] = `
 {
-  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "const $logger = (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.log(...args);
-exports.handler = async function(event) {
+  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -54,17 +44,9 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_api/my_api-OnRequestHandler-e645076f",
         "props": {
-          "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
+          "environmentVariables": {},
           "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -108,30 +90,6 @@ return class Handler {
           "id": "Handler",
           "path": "root/Handler",
         },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -165,12 +123,6 @@ return class Handler {
             "my_api-OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": true,
-                    "relationship": "log",
-                    "resource": "root/WingLogger",
-                  },
                   {
                     "direction": "inbound",
                     "implicit": false,
@@ -219,7 +171,6 @@ return class Handler {
 exports[`api handler can read the request path 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
@@ -229,22 +180,13 @@ exports[`api handler can read the request path 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api deleted.",
   "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`api handler can read the request path 2`] = `
 {
-  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "const $logger = (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.log(...args);
-exports.handler = async function(event) {
+  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -270,17 +212,9 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_api/my_api-OnRequestHandler-e645076f",
         "props": {
-          "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
+          "environmentVariables": {},
           "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -324,30 +258,6 @@ return class Handler {
           "id": "Handler",
           "path": "root/Handler",
         },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -381,12 +291,6 @@ return class Handler {
             "my_api-OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": true,
-                    "relationship": "log",
-                    "resource": "root/WingLogger",
-                  },
                   {
                     "direction": "inbound",
                     "implicit": false,
@@ -435,7 +339,6 @@ return class Handler {
 exports[`api handler can set response headers 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
@@ -445,22 +348,13 @@ exports[`api handler can set response headers 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api deleted.",
   "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`api handler can set response headers 2`] = `
 {
-  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "const $logger = (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.log(...args);
-exports.handler = async function(event) {
+  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -486,17 +380,9 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_api/my_api-OnRequestHandler-e645076f",
         "props": {
-          "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
+          "environmentVariables": {},
           "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -540,30 +426,6 @@ return class Handler {
           "id": "Handler",
           "path": "root/Handler",
         },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -597,12 +459,6 @@ return class Handler {
             "my_api-OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": true,
-                    "relationship": "log",
-                    "resource": "root/WingLogger",
-                  },
                   {
                     "direction": "inbound",
                     "implicit": false,
@@ -651,7 +507,6 @@ return class Handler {
 exports[`api supports every method type 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
@@ -679,22 +534,13 @@ exports[`api supports every method type 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api deleted.",
   "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`api supports every method type 2`] = `
 {
-  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "const $logger = (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.log(...args);
-exports.handler = async function(event) {
+  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -720,17 +566,9 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_api/my_api-OnRequestHandler-e645076f",
         "props": {
-          "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
+          "environmentVariables": {},
           "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -804,30 +642,6 @@ return class Handler {
           "id": "Handler",
           "path": "root/Handler",
         },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -897,12 +711,6 @@ return class Handler {
             "my_api-OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": true,
-                    "relationship": "log",
-                    "resource": "root/WingLogger",
-                  },
                   {
                     "direction": "inbound",
                     "implicit": false,
@@ -986,15 +794,7 @@ return class Handler {
 
 exports[`api with multiple GET routes and one lambda 1`] = `
 {
-  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "const $logger = (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.log(...args);
-exports.handler = async function(event) {
+  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1020,17 +820,9 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_api/my_api-OnRequestHandler-e645076f",
         "props": {
-          "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
+          "environmentVariables": {},
           "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -1079,30 +871,6 @@ return class Handler {
           "id": "Handler",
           "path": "root/Handler",
         },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -1136,12 +904,6 @@ return class Handler {
             "my_api-OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": true,
-                    "relationship": "log",
-                    "resource": "root/WingLogger",
-                  },
                   {
                     "direction": "inbound",
                     "implicit": false,
@@ -1190,7 +952,6 @@ return class Handler {
 exports[`api with multiple methods on same route 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
@@ -1205,22 +966,13 @@ exports[`api with multiple methods on same route 1`] = `
   "wingsdk.cloud.Api deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`api with multiple methods on same route 2`] = `
 {
-  ".wing/my_api-onrequesthandler-7c48a9f0_c88f14d5.js": "const $logger = (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.log(...args);
-exports.handler = async function(event) {
+  ".wing/my_api-onrequesthandler-7c48a9f0_c88f14d5.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1234,15 +986,7 @@ return class Handler {
 
 })).handle(event);
 };",
-  ".wing/my_api-onrequesthandler-f6d90a7f_c878cf95.js": "const $logger = (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.log(...args);
-exports.handler = async function(event) {
+  ".wing/my_api-onrequesthandler-f6d90a7f_c878cf95.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1268,17 +1012,9 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
         "props": {
-          "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
+          "environmentVariables": {},
           "sourceCodeFile": ".wing/my_api-onrequesthandler-7c48a9f0_c88f14d5.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -1289,9 +1025,7 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
         "props": {
-          "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
+          "environmentVariables": {},
           "sourceCodeFile": ".wing/my_api-onrequesthandler-f6d90a7f_c878cf95.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -1357,36 +1091,6 @@ return class Handler {
           "id": "Handler2",
           "path": "root/Handler2",
         },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
-              },
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -1427,12 +1131,6 @@ return class Handler {
               "attributes": {
                 "wing:resource:connections": [
                   {
-                    "direction": "outbound",
-                    "implicit": true,
-                    "relationship": "log",
-                    "resource": "root/WingLogger",
-                  },
-                  {
                     "direction": "inbound",
                     "implicit": false,
                     "relationship": "on_get_request",
@@ -1455,12 +1153,6 @@ return class Handler {
             "my_api-OnRequestHandler-f6d90a7f": {
               "attributes": {
                 "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": true,
-                    "relationship": "log",
-                    "resource": "root/WingLogger",
-                  },
                   {
                     "direction": "inbound",
                     "implicit": false,
@@ -1509,7 +1201,6 @@ return class Handler {
 exports[`api with multiple routes 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
@@ -1524,22 +1215,13 @@ exports[`api with multiple routes 1`] = `
   "wingsdk.cloud.Api deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`api with multiple routes 2`] = `
 {
-  ".wing/my_api-onrequesthandler-7c48a9f0_c88f14d5.js": "const $logger = (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.log(...args);
-exports.handler = async function(event) {
+  ".wing/my_api-onrequesthandler-7c48a9f0_c88f14d5.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1553,15 +1235,7 @@ return class Handler {
 
 })).handle(event);
 };",
-  ".wing/my_api-onrequesthandler-f6d90a7f_c878cf95.js": "const $logger = (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.log(...args);
-exports.handler = async function(event) {
+  ".wing/my_api-onrequesthandler-f6d90a7f_c878cf95.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1587,17 +1261,9 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
         "props": {
-          "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
+          "environmentVariables": {},
           "sourceCodeFile": ".wing/my_api-onrequesthandler-7c48a9f0_c88f14d5.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -1608,9 +1274,7 @@ return class Handler {
         "attrs": {},
         "path": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
         "props": {
-          "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
+          "environmentVariables": {},
           "sourceCodeFile": ".wing/my_api-onrequesthandler-f6d90a7f_c878cf95.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -1676,36 +1340,6 @@ return class Handler {
           "id": "Handler2",
           "path": "root/Handler2",
         },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_api/my_api-OnRequestHandler-7c48a9f0",
-              },
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -1746,12 +1380,6 @@ return class Handler {
               "attributes": {
                 "wing:resource:connections": [
                   {
-                    "direction": "outbound",
-                    "implicit": true,
-                    "relationship": "log",
-                    "resource": "root/WingLogger",
-                  },
-                  {
                     "direction": "inbound",
                     "implicit": false,
                     "relationship": "on_get_request",
@@ -1774,12 +1402,6 @@ return class Handler {
             "my_api-OnRequestHandler-f6d90a7f": {
               "attributes": {
                 "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": true,
-                    "relationship": "log",
-                    "resource": "root/WingLogger",
-                  },
                   {
                     "direction": "inbound",
                     "implicit": false,
@@ -1828,7 +1450,6 @@ return class Handler {
 exports[`api with one GET route 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
@@ -1838,22 +1459,13 @@ exports[`api with one GET route 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api deleted.",
   "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`api with one GET route 2`] = `
 {
-  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "const $logger = (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.log(...args);
-exports.handler = async function(event) {
+  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -1879,17 +1491,9 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_api/my_api-OnRequestHandler-e645076f",
         "props": {
-          "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
+          "environmentVariables": {},
           "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -1933,30 +1537,6 @@ return class Handler {
           "id": "Handler",
           "path": "root/Handler",
         },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -1990,12 +1570,6 @@ return class Handler {
             "my_api-OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": true,
-                    "relationship": "log",
-                    "resource": "root/WingLogger",
-                  },
                   {
                     "direction": "inbound",
                     "implicit": false,
@@ -2044,7 +1618,6 @@ return class Handler {
 exports[`api with one GET route with request params 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
@@ -2054,22 +1627,13 @@ exports[`api with one GET route with request params 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api deleted.",
   "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`api with one GET route with request params 2`] = `
 {
-  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "const $logger = (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.log(...args);
-exports.handler = async function(event) {
+  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2095,17 +1659,9 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_api/my_api-OnRequestHandler-e645076f",
         "props": {
-          "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
+          "environmentVariables": {},
           "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -2149,30 +1705,6 @@ return class Handler {
           "id": "Handler",
           "path": "root/Handler",
         },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -2206,12 +1738,6 @@ return class Handler {
             "my_api-OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": true,
-                    "relationship": "log",
-                    "resource": "root/WingLogger",
-                  },
                   {
                     "direction": "inbound",
                     "implicit": false,
@@ -2260,7 +1786,6 @@ return class Handler {
 exports[`api with one POST route, with body 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
@@ -2270,22 +1795,13 @@ exports[`api with one POST route, with body 1`] = `
   "Closing server on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api deleted.",
   "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.Logger deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
 `;
 
 exports[`api with one POST route, with body 2`] = `
 {
-  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "const $logger = (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.log(...args);
-exports.handler = async function(event) {
+  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {
@@ -2311,17 +1827,9 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_api/my_api-OnRequestHandler-e645076f",
         "props": {
-          "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
+          "environmentVariables": {},
           "sourceCodeFile": ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -2365,30 +1873,6 @@ return class Handler {
           "id": "Handler",
           "path": "root/Handler",
         },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_api/my_api-OnRequestHandler-e645076f",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -2422,12 +1906,6 @@ return class Handler {
             "my_api-OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": true,
-                    "relationship": "log",
-                    "resource": "root/WingLogger",
-                  },
                   {
                     "direction": "inbound",
                     "implicit": false,
@@ -2487,12 +1965,6 @@ exports[`create an api 1`] = `
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_api",
         "props": {
           "routes": [],
@@ -2505,23 +1977,6 @@ exports[`create an api 1`] = `
   "tree.json": {
     "tree": {
       "children": {
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],

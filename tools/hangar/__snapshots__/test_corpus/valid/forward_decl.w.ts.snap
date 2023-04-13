@@ -87,13 +87,17 @@ class $Root extends $stdlib.core.Resource {
         const f_client = this._lift(this.f);
         const self_client_path = \\"./clients/R.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
         return $stdlib.core.NodeJsCode.fromInline(\`
-          (new (require(\\"\${self_client_path}\\")).R({
-            f: \${f_client},
-          }))
+          (await (async () => {
+            const tmp = new (require(\\"\${self_client_path}\\")).R({
+              f: \${f_client},
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })())
         \`);
       }
     }
-    R._annotateInflight(\\"$init\\", {\\"this.f\\": { ops: [] }});
+    R._annotateInflight(\\"$inflight_init\\", {\\"this.f\\": { ops: [] }});
     const x = \\"hi\\";
     if (true) {
       {console.log(\`\${x}\`)};

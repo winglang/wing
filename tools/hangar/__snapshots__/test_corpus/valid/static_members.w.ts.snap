@@ -176,14 +176,18 @@ class $Root extends $stdlib.core.Resource {
         const instance_field_client = this._lift(this.instance_field);
         const self_client_path = \\"./clients/Foo.inflight.js\\".replace(/\\\\\\\\/g, \\"/\\");
         return $stdlib.core.NodeJsCode.fromInline(\`
-          (new (require(\\"\${self_client_path}\\")).Foo({
-            instance_field: \${instance_field_client},
-          }))
+          (await (async () => {
+            const tmp = new (require(\\"\${self_client_path}\\")).Foo({
+              instance_field: \${instance_field_client},
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })())
         \`);
       }
     }
+    Foo._annotateInflight(\\"$inflight_init\\", {\\"this.instance_field\\": { ops: [] }});
     Foo._annotateInflight(\\"get_123\\", {});
-    Foo._annotateInflight(\\"$init\\", {\\"this.instance_field\\": { ops: [] }});
     const foo = new Foo(this,\\"Foo\\");
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '(foo.instance_field === 100)'\`)})((foo.instance_field === 100))};
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '((Foo.m()) === 99)'\`)})(((Foo.m()) === 99))};
