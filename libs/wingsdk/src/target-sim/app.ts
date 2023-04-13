@@ -79,9 +79,6 @@ export class App extends core.App {
       case TABLE_FQN:
         return new Table(scope, id, args[0]);
 
-      case TOPIC_FQN:
-        return new Topic(scope, id, args[0]);
-
       case TEST_RUNNER_FQN:
         return new TestRunner(scope, id, args[0]);
 
