@@ -122,19 +122,9 @@ For a more in-depth look at Wing's features and benefits, check out our [documen
 
 Here are some questions we're commonly asked that are covered by our [FAQ](https://docs.winglang.io/faq):
 
-* [Why is Wing a language, not just another library or framework?](https://docs.winglang.io/faq/why-a-language)
 * [Who is behind this project?](https://docs.winglang.io/faq/who-is-behind-wing)
 * [Which clouds are supported by Wing?](https://docs.winglang.io/faq/supported-clouds)
 * [Which provisioning engines are supported by Wing?](https://docs.winglang.io/faq/supported-provisioning-engines)
-
-### Why is Wing a language, not just another library or framework? 🤔
-The answer is [here]((https://docs.winglang.io/faq/why-a-language)).
-
-### What makes Wing a good fit for cloud development? 🌟
-The answer is [here]((https://docs.winglang.io/faq/good-fit)).
-
-### Who is behind this project? 💼
-The answer is [here]((https://docs.winglang.io/faq/who-is-behind-wing)).
 
 ## Community 💬
 
