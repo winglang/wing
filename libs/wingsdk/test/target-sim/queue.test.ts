@@ -172,7 +172,7 @@ test("messages are not requeued if the function fails before timeout", async () 
   ).toEqual([
     "wingsdk.cloud.Queue created.",
     "Push (message=BAD MESSAGE).",
-    'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-2).',
+    'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-1).',
     "Subscriber error - returning 1 messages to queue: ERROR",
     "wingsdk.cloud.Queue deleted.",
   ]);

@@ -119,7 +119,7 @@ exports[`dec() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "5edd46c75061386277be30c1398950bbb94355e16cc6de87f1b498c57afa6780.zip",
+          "S3Key": "82159b7548a6fdc12ae39cb8043a63cbed3dd87b531d77f4599b901b09011d9a.zip",
         },
         "Environment": {
           "Variables": {
@@ -347,7 +347,7 @@ exports[`function with a counter binding 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "8a2ab0121abc2fe4ac5244af0605905e390ca3a7cdeb557bcddaa999ada830ae.zip",
+          "S3Key": "328c76cb48455f432c4c41a8d4f2d4f14b9b8c24792bb4e440cbef759e4800cc.zip",
         },
         "Environment": {
           "Variables": {
@@ -514,7 +514,7 @@ exports[`inc() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "8a2ab0121abc2fe4ac5244af0605905e390ca3a7cdeb557bcddaa999ada830ae.zip",
+          "S3Key": "328c76cb48455f432c4c41a8d4f2d4f14b9b8c24792bb4e440cbef759e4800cc.zip",
         },
         "Environment": {
           "Variables": {
@@ -681,7 +681,7 @@ exports[`peek() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "c4d94aed40ee62e3fb722fee0fdf6caeea8f8cefdb76ebe5aab072a430d9180e.zip",
+          "S3Key": "55242892753c761a8cee6d06ff5fc3db2c544c8ce6def718f99a00f5255e9508.zip",
         },
         "Environment": {
           "Variables": {
@@ -848,7 +848,7 @@ exports[`reset() policy statement 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "02838439d890bd2ef6db8ba60f21a65b5533b37192c097dc2df67048642d66c4.zip",
+          "S3Key": "4c7c924d3527831f4013847757aaa792ab871ab081cff3b77ba6a86a9249f486.zip",
         },
         "Environment": {
           "Variables": {

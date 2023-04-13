@@ -13,7 +13,6 @@ import { Api } from "./api";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Function } from "./function";
-import { Logger } from "./logger";
 import { Queue } from "./queue";
 import { Redis } from "./redis";
 import { Schedule } from "./schedule";
@@ -25,7 +24,6 @@ import {
   BUCKET_FQN,
   COUNTER_FQN,
   FUNCTION_FQN,
-  LOGGER_FQN,
   QUEUE_FQN,
   SCHEDULE_FQN,
   TABLE_FQN,
@@ -75,9 +73,6 @@ export class App extends CdktfApp {
 
       case BUCKET_FQN:
         return new Bucket(scope, id, args[0]);
-
-      case LOGGER_FQN:
-        return new Logger(scope, id);
 
       case QUEUE_FQN:
         return new Queue(scope, id, args[0]);

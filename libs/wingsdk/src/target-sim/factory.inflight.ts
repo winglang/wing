@@ -2,7 +2,6 @@ import { Api } from "./api.inflight";
 import { Bucket } from "./bucket.inflight";
 import { Counter } from "./counter.inflight";
 import { Function } from "./function.inflight";
-import { Logger } from "./logger.inflight";
 import { Queue } from "./queue.inflight";
 import { Redis } from "./redis.inflight";
 import { ISimulatorResourceInstance } from "./resource";
@@ -11,7 +10,6 @@ import {
   BUCKET_TYPE,
   COUNTER_TYPE,
   FUNCTION_TYPE,
-  LOGGER_TYPE,
   QUEUE_TYPE,
   TABLE_TYPE,
   TEST_RUNNER_TYPE,
@@ -45,8 +43,6 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return new Function(props, context);
       case QUEUE_TYPE:
         return new Queue(props, context);
-      case LOGGER_TYPE:
-        return new Logger(props, context);
       case COUNTER_TYPE:
         return new Counter(props, context);
       case TABLE_TYPE:

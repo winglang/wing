@@ -59,23 +59,6 @@ exports[`counter name valid 2`] = `
                 "id": "The.Amazing-Counter_01",
                 "path": "root/Default/The.Amazing-Counter_01",
               },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
-              },
               "aws": {
                 "constructInfo": {
                   "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -205,23 +188,6 @@ exports[`counter with initial value 2`] = `
                 },
                 "id": "Counter",
                 "path": "root/Default/Counter",
-              },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
               },
               "aws": {
                 "constructInfo": {
@@ -420,12 +386,6 @@ exports[`dec() policy statement 2`] = `
                       "relationship": "dec",
                       "resource": "root/Default/Counter",
                     },
-                    {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
-                    },
                   ],
                   "wing:resource:stateful": false,
                 },
@@ -514,30 +474,6 @@ exports[`dec() policy statement 2`] = `
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
-              },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Function",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
               },
               "aws": {
                 "constructInfo": {
@@ -779,12 +715,6 @@ exports[`function with a counter binding 3`] = `
                       "relationship": "inc",
                       "resource": "root/Default/Counter",
                     },
-                    {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
-                    },
                   ],
                   "wing:resource:stateful": false,
                 },
@@ -873,30 +803,6 @@ exports[`function with a counter binding 3`] = `
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
-              },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Function",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
               },
               "aws": {
                 "constructInfo": {
@@ -1095,12 +1001,6 @@ exports[`inc() policy statement 2`] = `
                       "relationship": "inc",
                       "resource": "root/Default/Counter",
                     },
-                    {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
-                    },
                   ],
                   "wing:resource:stateful": false,
                 },
@@ -1189,30 +1089,6 @@ exports[`inc() policy statement 2`] = `
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
-              },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Function",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
               },
               "aws": {
                 "constructInfo": {
@@ -1411,12 +1287,6 @@ exports[`peek() policy statement 2`] = `
                       "relationship": "peek",
                       "resource": "root/Default/Counter",
                     },
-                    {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
-                    },
                   ],
                   "wing:resource:stateful": false,
                 },
@@ -1505,30 +1375,6 @@ exports[`peek() policy statement 2`] = `
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
-              },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Function",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
               },
               "aws": {
                 "constructInfo": {
@@ -1659,23 +1505,6 @@ exports[`replace invalid character from counter name 2`] = `
                 },
                 "id": "The*Amazing%Counter@01",
                 "path": "root/Default/The*Amazing%Counter@01",
-              },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
               },
               "aws": {
                 "constructInfo": {
@@ -1874,12 +1703,6 @@ exports[`reset() policy statement 2`] = `
                       "relationship": "reset",
                       "resource": "root/Default/Counter",
                     },
-                    {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
-                    },
                   ],
                   "wing:resource:stateful": false,
                 },
@@ -1968,30 +1791,6 @@ exports[`reset() policy statement 2`] = `
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
-              },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Function",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
               },
               "aws": {
                 "constructInfo": {
