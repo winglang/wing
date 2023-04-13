@@ -94,6 +94,12 @@ To learn more about Wing concepts such as resources and inflights, jump over to 
 
 For a comprehensive reference of the language, check out the [Wing Language Specification](https://docs.winglang.io/reference/spec) and the [API Reference](https://docs.winglang.io/reference/sdk).
 
+## Why is Wing a language, not just another library or framework? 🤔
+We believe that the cloud is a new kind of computer that requires a [new programming paradigm](https://docs.winglang.io/#what-is-a-cloud-oriented-language) to fully utilize it.
+While it is possible to use this new paradigm with existing languages, we believe that a language that natively supports it will make using it much easier by streamlining common patterns, in a way that is impossible to accomplish with existing ones. Kind of like what C++ did for object orientation.
+
+You can find more details with concrete examples of things that cannot be done with existing languages [here](https://docs.winglang.io/faq/why-a-language).
+
 ## What makes Wing a good fit for cloud development? 🌟
 
 Wing was built from the ground up to make it an ideal choice for building applications on AWS or other cloud providers.
