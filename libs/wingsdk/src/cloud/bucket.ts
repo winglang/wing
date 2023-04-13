@@ -61,9 +61,9 @@ export abstract class Bucket extends Resource {
   public abstract addObject(key: string, body: string): void;
 
   /**
-   * creates a topic for subscribing to notification events
+   * Creates a topic for subscribing to notification events
    * @param actionType
-   * @returns the created topi
+   * @returns the created topic
    */
   protected createTopic(actionType: BucketEventType): Topic {
     const topic = Topic._newTopic(
