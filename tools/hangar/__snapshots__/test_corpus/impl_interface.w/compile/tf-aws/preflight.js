@@ -32,13 +32,17 @@ class $Root extends $stdlib.core.Resource {
       _toInflight() {
         const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
-          (new (require("${self_client_path}")).A({
-          }))
+          (await (async () => {
+            const tmp = new (require("${self_client_path}")).A({
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })())
         `);
       }
     }
+    A._annotateInflight("$inflight_init", {});
     A._annotateInflight("handle", {});
-    A._annotateInflight("$init", {});
     class r extends $stdlib.core.Resource {
       constructor(scope, id, ) {
         super(scope, id);
@@ -56,13 +60,17 @@ class $Root extends $stdlib.core.Resource {
       _toInflight() {
         const self_client_path = "./clients/r.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
-          (new (require("${self_client_path}")).r({
-          }))
+          (await (async () => {
+            const tmp = new (require("${self_client_path}")).r({
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })())
         `);
       }
     }
+    r._annotateInflight("$inflight_init", {});
     r._annotateInflight("method_2", {});
-    r._annotateInflight("$init", {});
     class Dog extends $stdlib.core.Resource {
       constructor(scope, id, ) {
         super(scope, id);
@@ -70,13 +78,17 @@ class $Root extends $stdlib.core.Resource {
       _toInflight() {
         const self_client_path = "./clients/Dog.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
-          (new (require("${self_client_path}")).Dog({
-          }))
+          (await (async () => {
+            const tmp = new (require("${self_client_path}")).Dog({
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })())
         `);
       }
     }
+    Dog._annotateInflight("$inflight_init", {});
     Dog._annotateInflight("eat", {});
-    Dog._annotateInflight("$init", {});
     const x = new A(this,"A");
     const y = new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.4bb413397aac07073d75578d701a65d4cbd2b018b9ba7fd5fc1654fa9a3a8abe/index.js".replace(/\\/g, "/"))),

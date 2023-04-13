@@ -38,17 +38,21 @@ class $Root extends $stdlib.core.Resource {
       _toInflight() {
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
-          (new (require("${self_client_path}")).Foo({
-          }))
+          (await (async () => {
+            const tmp = new (require("${self_client_path}")).Foo({
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })())
         `);
       }
     }
-    Foo._annotateInflight("regex_inflight", {});
-    Foo._annotateInflight("get_uuid", {});
-    Foo._annotateInflight("get_data", {});
-    Foo._annotateInflight("print", {});
+    Foo._annotateInflight("$inflight_init", {});
     Foo._annotateInflight("call", {});
-    Foo._annotateInflight("$init", {});
+    Foo._annotateInflight("get_data", {});
+    Foo._annotateInflight("get_uuid", {});
+    Foo._annotateInflight("print", {});
+    Foo._annotateInflight("regex_inflight", {});
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.get_greeting("Wingding")) === "Hello, Wingding!")'`)})(((Foo.get_greeting("Wingding")) === "Hello, Wingding!"))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.v4()).length === 36)'`)})(((Foo.v4()).length === 36))};
     const f = new Foo(this,"Foo");

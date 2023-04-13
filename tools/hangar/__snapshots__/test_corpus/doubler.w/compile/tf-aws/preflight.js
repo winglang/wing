@@ -34,14 +34,18 @@ class $Root extends $stdlib.core.Resource {
         const func_client = this._lift(this.func);
         const self_client_path = "./clients/Doubler.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
-          (new (require("${self_client_path}")).Doubler({
-            func: ${func_client},
-          }))
+          (await (async () => {
+            const tmp = new (require("${self_client_path}")).Doubler({
+              func: ${func_client},
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })())
         `);
       }
     }
+    Doubler._annotateInflight("$inflight_init", {"this.func": { ops: [] }});
     Doubler._annotateInflight("invoke", {"this.func": { ops: ["handle"] }});
-    Doubler._annotateInflight("$init", {"this.func": { ops: [] }});
     const fn = new Doubler(this,"Doubler",new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.1eb4781e85032ffc58e74255182bc1fdee5701b5098072dd29f4faf4f591d6aa/index.js".replace(/\\/g, "/"))),
       bindings: {
