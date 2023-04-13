@@ -39,7 +39,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       message: `Invoke (payload=${JSON.stringify(payload)}).`,
       activity: async () => {
         const vm = new NodeVM({
-          console: "redirect", // we hijack `console.xxx` in `cloud/function.ts`"
+          console: "redirect", // we hijack `console.xxx` in `cloud/function.ts`
           require: {
             external: true,
             builtin: ["*"], // allow using all node modules
