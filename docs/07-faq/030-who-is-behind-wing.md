@@ -1,6 +1,6 @@
 ---
 title: Who is behind this project? 💼
-id: who-is-behid-wing
+id: who-is-behind-wing
 keywords: [faq, who is behind wing, winglang, Wing programming language, Wing language, monetization, business model]
 ---
 

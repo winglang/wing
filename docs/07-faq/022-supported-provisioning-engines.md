@@ -5,9 +5,9 @@ keywords: [faq, supported provisioning engines, winglang, Wing programming langu
 ---
 
 Wing was built from the ground up to make it an ideal choice for building applications on any cloud, using a varaity of provisioning engines.
-Since wing is in early stages of developemnt, it officially only supports the Terraform provisioning engine at the moment. AWS CDK is supported by the community.
+Since Wing is in early stages of development, it officially only supports the Terraform provisioning engine. AWS CDK (based on CloudFormation) is also supported by the community.
 
-As wing matures, we will add official support for AWS CDK, as well as other provisioning engines, such as Kubernetes, ARM, and more.
+Have other provisioning engines you would like to use with Wing? Let us know by leaving a comment [here](link)!
 
 # How to check specific service support for each provisioning engine
 Check out our [different roadmaps](https://docs.winglang.io/status#roadmap) to see which services are supported now on which provisioning engines, and when they are expected to be supported if they aren't supported now.

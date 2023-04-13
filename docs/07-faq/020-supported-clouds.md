@@ -4,16 +4,19 @@ id: supported-clouds
 keywords: [faq, supported clouds, winglang, Wing programming language, Wing language, AWS, GCP, Azure]
 ---
 
-Wing was built from the ground up to make it an ideal choice for building applications on any cloud.
-Since wing is in early stages of developemnt it only supports the three biggest public clouds, with different levels of maturity:
+Winglang was built from the ground up to make it an ideal choice for building applications on any cloud. Every app has access to the Wing SDK, a set of batteries-included resources that represent cloud services that are common to most major cloud providers for common use cases.
+
+Since Wing is in early stages of development, the Wing SDK supports each cloud with different levels of maturity:
 * AWS - Fully supported. If you are able to compile your Wing code for the simulator, you shoud be able to compile it for AWS as well (with the Terraform provisioning engine).
 * GCP - Partial support. Not any Wing code that compiles for the simulator will compile for GCP. 
 * Azure - Partial support. Not any Wing code that compiles for the simulator will compile for GCP. 
 
-We are working hard on filling the support gap between the different clouds, and plan to add support for more clouds in the future.
+We are working hard on filling the support gap between the different clouds -- check out our [roadmap](https://docs.winglang.io/status#roadmap) for more details. If there are other clouds you would like supported, please let us know through our GitHub or Slack!
+
+Beyond the common set of cloud resources in the SDK, you can create resources for any other possible cloud by importing a [CDKTF](https://github.com/hashicorp/terraform-cdk) library corresponding to any given Terraform provider.
 
 # How to check specific service support for each cloud
-Check out our [different roadmaps](https://docs.winglang.io/status#roadmap) to see which services are supported now on which clouds, and when they are expected to be supported if they aren't supported now.
+Check out our [roadmap](https://docs.winglang.io/status#roadmap) to see which services are supported now on different clouds.
 
 # How to deploy on the different clouds
 Check out our [CLI reference](https://docs.winglang.io/reference/cli) for instructions on how to deploy your wing code on the different clouds.

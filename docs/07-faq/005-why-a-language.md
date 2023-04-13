@@ -17,5 +17,5 @@ As seen below, Wing has phase modifiers that are understood by the language serv
 [![Same object - different interfaces](./diff-interfaces.gif)](https://youtu.be/y7OGRC2f5gk)
 
 Creating a new language that is tailored to the cloud from the ground up also allows us to assemble a variety of features (some of which exist in other languages, of course) that, when put together, offer a delightful cloud development experience.
-You can read more about what these featires are [here](https://docs.winglang.io/faq/good-fit).
+You can read more about what these features are [here](https://docs.winglang.io/faq/good-fit).
 
