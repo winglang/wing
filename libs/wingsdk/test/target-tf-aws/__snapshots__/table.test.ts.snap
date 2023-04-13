@@ -137,12 +137,6 @@ exports[`function with a table binding 3`] = `
                       "relationship": "insert",
                       "resource": "root/Default/Table",
                     },
-                    {
-                      "direction": "outbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/WingLogger",
-                    },
                   ],
                   "wing:resource:stateful": false,
                 },
@@ -264,30 +258,6 @@ exports[`function with a table binding 3`] = `
                 },
                 "id": "Table",
                 "path": "root/Default/Table",
-              },
-              "WingLogger": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": true,
-                      "relationship": "log",
-                      "resource": "root/Default/Function",
-                    },
-                  ],
-                  "wing:resource:stateful": true,
-                },
-                "constructInfo": {
-                  "fqn": "constructs.Construct",
-                  "version": "10.1.245",
-                },
-                "display": {
-                  "description": "A cloud logging facility",
-                  "hidden": true,
-                  "title": "Logger",
-                },
-                "id": "WingLogger",
-                "path": "root/Default/WingLogger",
               },
               "aws": {
                 "constructInfo": {

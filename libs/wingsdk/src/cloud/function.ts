@@ -1,7 +1,6 @@
 import { mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
-import { Logger } from "./logger";
 import { fqnForType } from "../constants";
 import { App } from "../core/app";
 import { IInflightHost, IResource, Resource } from "../core/resource";
@@ -81,12 +80,9 @@ export abstract class Function extends Resource implements IInflightHost {
       this.addEnvironment(key, value);
     }
 
-    const logger = Logger.of(this);
-
     // indicates that we are calling "handle" on the handler resource
     // and that we are calling "log" on the logger.
     inflight._registerBind(this, ["handle"]);
-    logger._registerBind(this, ["log"]);
 
     const inflightClient = inflight._toInflight();
     const lines = new Array<string>();
@@ -94,14 +90,6 @@ export abstract class Function extends Resource implements IInflightHost {
     lines.push("exports.handler = async function(event) {");
     lines.push(`  return await (${inflightClient.text}).handle(event);`);
     lines.push("};");
-
-    // add an annotation that the Wing logger is implicitly used
-    Resource.addConnection({
-      from: this,
-      to: logger,
-      relationship: "log",
-      implicit: true,
-    });
 
     const assetName = ResourceNames.generateName(this, {
       // Avoid characters that may cause path issues

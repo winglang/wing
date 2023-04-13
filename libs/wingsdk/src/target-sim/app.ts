@@ -5,7 +5,6 @@ import { Api } from "./api";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Function } from "./function";
-import { Logger } from "./logger";
 import { Queue } from "./queue";
 import { Redis } from "./redis";
 import { isSimulatorResource } from "./resource";
@@ -18,7 +17,6 @@ import {
   BUCKET_FQN,
   COUNTER_FQN,
   FUNCTION_FQN,
-  LOGGER_FQN,
   QUEUE_FQN,
   TABLE_FQN,
   TEST_RUNNER_FQN,
@@ -51,8 +49,6 @@ export class App extends core.App {
     this.isTestEnvironment = props.isTestEnvironment ?? false;
 
     this.testRunner = new TestRunner(this, "cloud.TestRunner");
-
-    Logger.register(this);
   }
 
   protected tryNew(
@@ -71,9 +67,6 @@ export class App extends core.App {
       case BUCKET_FQN:
         return new Bucket(scope, id, args[0]);
 
-      case LOGGER_FQN:
-        return new Logger(scope, id);
-
       case QUEUE_FQN:
         return new Queue(scope, id, args[0]);
 
@@ -85,9 +78,6 @@ export class App extends core.App {
 
       case TABLE_FQN:
         return new Table(scope, id, args[0]);
-
-      case TOPIC_FQN:
-        return new Topic(scope, id, args[0]);
 
       case TEST_RUNNER_FQN:
         return new TestRunner(scope, id, args[0]);
