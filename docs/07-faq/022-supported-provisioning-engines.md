@@ -14,5 +14,5 @@ Check out our [different roadmaps](https://docs.winglang.io/status#roadmap) to s
 
 # How to compile to different provisioning engines
 Check out our [CLI reference](https://docs.winglang.io/reference/cli) for instructions on how to compile your wing code for the different provisioning engines.
-In the future, compiling for the different provisioning engines could be supported through the GUI of the Wing Console as well (you can track progress in this [issue](https://github.com/winglang/wing/issues/2051)).
+In the future, compiling for the different provisioning engines could be supported through the GUI of the Wing Console as well (you can track progress in this [issue](https://github.com/winglang/wing/issues/2066)).
 
