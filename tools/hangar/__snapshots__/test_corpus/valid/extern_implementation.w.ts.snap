@@ -13,6 +13,9 @@ exports[`wing compile -t tf-aws > clients/Foo.inflight.js 1`] = `
   static async get_data()  {
     return (require(\\"<ABSOLUTE_PATH>/external_js.js\\"[\\"get_data\\"])()
   }
+  async print(msg)  {
+    return (require(require.resolve(\\"./external_js.js\\", {paths: [process.env.WING_PROJECT_DIR]}))[\\"print\\"])(msg)
+  }
   async call()  {
     {
       {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await Foo.regex_inflight(\\"[a-z]+-\\\\\\\\d+\\",\\"abc-123\\"))'\`)})((await Foo.regex_inflight(\\"[a-z]+-\\\\\\\\d+\\",\\"abc-123\\")))};
@@ -46,7 +49,7 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\\"root/Default/Default/test:call\\",\\"\${aws_lambda_function.root_testcall_517ABBF6.arn}\\"]]",
+      "value": "[[\\"root/Default/Default/test:call\\",\\"\${aws_lambda_function.root_testcall_517ABBF6.arn}\\"],[\\"root/Default/Default/test:console\\",\\"\${aws_lambda_function.root_testconsole_65723C7E.arn}\\"]]",
     },
   },
   "provider": {
@@ -65,6 +68,15 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         },
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
+      "root_testconsole_IamRole_73B3A70E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:console/IamRole",
+            "uniqueId": "root_testconsole_IamRole_73B3A70E",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
     },
     "aws_iam_role_policy": {
       "root_testcall_IamRolePolicy_D0EC9ADF": {
@@ -77,6 +89,16 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
         "role": "\${aws_iam_role.root_testcall_IamRole_ACAC0DA1.name}",
       },
+      "root_testconsole_IamRolePolicy_2EC6F84C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:console/IamRolePolicy",
+            "uniqueId": "root_testconsole_IamRolePolicy_2EC6F84C",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_testconsole_IamRole_73B3A70E.name}",
+      },
     },
     "aws_iam_role_policy_attachment": {
       "root_testcall_IamRolePolicyAttachment_B0B58D7B": {
@@ -88,6 +110,16 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "\${aws_iam_role.root_testcall_IamRole_ACAC0DA1.name}",
+      },
+      "root_testconsole_IamRolePolicyAttachment_740041DD": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:console/IamRolePolicyAttachment",
+            "uniqueId": "root_testconsole_IamRolePolicyAttachment_740041DD",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_testconsole_IamRole_73B3A70E.name}",
       },
     },
     "aws_lambda_function": {
@@ -116,6 +148,31 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
           "subnet_ids": [],
         },
       },
+      "root_testconsole_65723C7E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:console/Default",
+            "uniqueId": "root_testconsole_65723C7E",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "test-console-c86d99aa",
+          },
+        },
+        "function_name": "test-console-c86d99aa",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.root_testconsole_IamRole_73B3A70E.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_testconsole_Code_68C2DD48.bucket}",
+        "s3_key": "\${aws_s3_object.root_testconsole_S3Object_DC38E410.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
     },
     "aws_s3_bucket": {
       "root_testcall_Code_A13B9FEB": {
@@ -127,6 +184,15 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
         },
         "bucket_prefix": "code-c8f81179-",
       },
+      "root_testconsole_Code_68C2DD48": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:console/Code",
+            "uniqueId": "root_testconsole_Code_68C2DD48",
+          },
+        },
+        "bucket_prefix": "code-c842d248-",
+      },
     },
     "aws_s3_object": {
       "root_testcall_S3Object_7FFD9CF8": {
@@ -137,6 +203,17 @@ exports[`wing compile -t tf-aws > main.tf.json 1`] = `
           },
         },
         "bucket": "\${aws_s3_bucket.root_testcall_Code_A13B9FEB.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>",
+      },
+      "root_testconsole_S3Object_DC38E410": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:console/S3Object",
+            "uniqueId": "root_testconsole_S3Object_DC38E410",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_testconsole_Code_68C2DD48.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>",
       },
@@ -194,6 +271,7 @@ class $Root extends $stdlib.core.Resource {
     Foo._annotateInflight(\\"regex_inflight\\", {});
     Foo._annotateInflight(\\"get_uuid\\", {});
     Foo._annotateInflight(\\"get_data\\", {});
+    Foo._annotateInflight(\\"print\\", {});
     Foo._annotateInflight(\\"call\\", {});
     Foo._annotateInflight(\\"$init\\", {});
     {((cond) => {if (!cond) throw new Error(\`assertion failed: '((Foo.get_greeting(\\"Wingding\\")) === \\"Hello, Wingding!\\")'\`)})(((Foo.get_greeting(\\"Wingding\\")) === \\"Hello, Wingding!\\"))};
@@ -204,7 +282,17 @@ class $Root extends $stdlib.core.Resource {
       bindings: {
         f: {
           obj: f,
-          ops: [\\"call\\",\\"get_data\\",\\"get_uuid\\",\\"regex_inflight\\"]
+          ops: [\\"call\\",\\"get_data\\",\\"get_uuid\\",\\"print\\",\\"regex_inflight\\"]
+        },
+      }
+    })
+    );
+    this.node.root.newAbstract(\\"@winglang/sdk.cloud.Function\\",this,\\"test:console\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve(\\"./proc.39839ce4a470bf3d8e73b1b650e8bfd7f47f942f676ae2f4e206492f1a49d77c/index.js\\".replace(/\\\\\\\\/g, \\"/\\"))),
+      bindings: {
+        f: {
+          obj: f,
+          ops: [\\"call\\",\\"get_data\\",\\"get_uuid\\",\\"print\\",\\"regex_inflight\\"]
         },
       }
     })
@@ -230,6 +318,14 @@ new $App().synth();
 "
 `;
 
+exports[`wing compile -t tf-aws > proc.39839ce4a470bf3d8e73b1b650e8bfd7f47f942f676ae2f4e206492f1a49d77c/index.js 1`] = `
+"async handle() {
+  const { f } = this;
+  (await f.print(\\"hey there\\"));
+}
+"
+`;
+
 exports[`wing compile -t tf-aws > proc.104793feca8a0c99ea8c2876b3c2124f464b0b5bffc723938b058ed94174607f/index.js 1`] = `
 "async handle() {
   const { f } = this;
@@ -241,5 +337,7 @@ exports[`wing compile -t tf-aws > proc.104793feca8a0c99ea8c2876b3c2124f464b0b5bf
 exports[`wing test -t sim > stdout 1`] = `
 "- Compiling to sim...
 ✔ Compiling to sim...
-pass ─ extern_implementation.wsim » root/env0/test:call"
+pass ─ extern_implementation.wsim » root/env0/test:call   
+pass ┌ extern_implementation.wsim » root/env1/test:console
+     └ printing hey there"
 `;
