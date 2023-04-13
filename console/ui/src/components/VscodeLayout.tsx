@@ -1,34 +1,22 @@
-import { BeakerIcon, DocumentTextIcon } from "@heroicons/react/24/outline";
 import { useTheme } from "@wingconsole/design-system";
 import { LogEntry, LogLevel, State } from "@wingconsole/server";
 import classNames from "classnames";
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 
 import { BlueScreenOfDeath } from "../design-system/BlueScreenOfDeath.js";
 import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
 import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
 import { SpinnerLoader } from "../design-system/SpinnerLoader.js";
-import { Tabs } from "../design-system/Tabs.js";
 import { TopResizableWidget } from "../design-system/TopResizableWidget.js";
 import { TestsContext } from "../utils/tests-context.js";
 import { trpc } from "../utils/trpc.js";
 import { useExplorer } from "../utils/use-explorer.js";
-import { ResourceIcon } from "../utils/utils.js";
 
 import { ConsoleFilters } from "./ConsoleFilters.js";
 import { ConsoleLogs } from "./ConsoleLogs.js";
-import { ElkMap } from "./elk-map/ElkMap.js";
-import { ContainerNode } from "./ElkMapNodes.js";
 import { Explorer } from "./explorer.js";
-import { MapToolbarMenu } from "./MapToolbarMenu.js";
+import { MapView } from "./map-view/map-view.js";
 import { MetadataPanel } from "./MetadataPanel.js";
 import { StatusBar } from "./StatusBar.js";
 import { TestsTree } from "./TestsTree.js";
@@ -116,26 +104,6 @@ export const VscodeLayout = ({
     return cloudAppState === "loadingSimulator" || items.length === 0;
   }, [cloudAppState, items.length]);
 
-  const map = trpc["app.map"].useQuery({
-    showTests,
-  });
-  const mapRefs = useRef<{ [key: string]: HTMLElement | undefined }>({});
-  useEffect(() => {
-    const [selectedItem] = selectedItems;
-    if (!selectedItem) {
-      return;
-    }
-
-    const element = mapRefs.current[selectedItem];
-    if (element) {
-      element.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-        inline: "center",
-      });
-    }
-  }, [selectedItems]);
-
   return (
     <div
       data-testid="vscode-layout"
@@ -193,64 +161,14 @@ export const VscodeLayout = ({
 
         <div className="flex-1 flex flex-col">
           <div className="flex-1 flex">
-            <div className="flex-1 flex flex-col">
-              <div
-                className={classNames(
-                  theme.bg3,
-                  theme.border3,
-                  "border-b",
-                  "flex-shrink-0 h-9",
-                )}
-              >
-                <MapToolbarMenu />
-              </div>
-              <div className="h-full relative">
-                <ScrollableArea
-                  overflowX
-                  overflowY
-                  className={classNames(theme.bg4, theme.text2)}
-                >
-                  <div
-                    data-testid="map-view"
-                    className="min-h-full flex justify-around items-center"
-                  >
-                    {map.data && (
-                      <ElkMap
-                        nodes={map.data.nodes}
-                        edges={map.data.edges}
-                        selectedNodeId={selectedItems[0]}
-                        onSelectedNodeIdChange={(nodeId) =>
-                          setSelectedItems([nodeId])
-                        }
-                        node={({ node, depth }) => (
-                          <div
-                            ref={(element) =>
-                              (mapRefs.current[node.id] = element || undefined)
-                            }
-                            className="h-full flex flex-col relative"
-                          >
-                            <ContainerNode
-                              name={node.data?.label}
-                              open={node.children && node.children?.length > 0}
-                              selected={node.id === selectedItems[0]}
-                              resourceType={node.data?.type}
-                              icon={(props) => (
-                                <ResourceIcon
-                                  resourceType={node.data?.type}
-                                  resourcePath={node.id}
-                                  solid
-                                  {...props}
-                                />
-                              )}
-                              depth={depth}
-                            />
-                          </div>
-                        )}
-                      />
-                    )}
-                  </div>
-                </ScrollableArea>
-              </div>
+            <div className="flex-1 flex flex-col" data-testid="map-view">
+              <MapView
+                showTests={showTests}
+                selectedNodeId={selectedItems[0]}
+                onSelectedNodeIdChange={(nodeId) =>
+                  setSelectedItems(nodeId ? [nodeId] : [])
+                }
+              />
             </div>
 
             <LeftResizableWidget

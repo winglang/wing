@@ -3,7 +3,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { ElkMap } from "./ElkMap.js";
 
 const meta = {
-  title: "UI/ElkMap",
+  title: "UI/MapView/ElkMap",
   component: ElkMap,
   tags: ["autodocs"],
 } satisfies Meta<typeof ElkMap>;

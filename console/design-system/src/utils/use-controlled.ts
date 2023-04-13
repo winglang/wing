@@ -15,6 +15,22 @@ export interface UseControlledProps<T = unknown> {
   onChange?: (newValue: T) => void;
 }
 
+/**
+ * A hook to manage a controlled/uncontrolled component properties.
+ *
+ * @example
+ * ```
+ * interface AgeViewProps { age: number; onAgeChange?: (age: number) => void; }
+ * const AgeView = (props: AgeViewProps) => {
+ *   const [age, setAge] = useControlled({
+ *     controlled: props.age,
+ *     default: 34,
+ *     onChange: props.onAgeChange,
+ *   });
+ *   // ...
+ * };
+ * ```
+ */
 export const useControlled = <T = unknown>({
   onChange,
   ...props

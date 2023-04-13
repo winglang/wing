@@ -1,4 +1,3 @@
-
 queue_rules:
   - name: default
     conditions:

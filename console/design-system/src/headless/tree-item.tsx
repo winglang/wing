@@ -132,11 +132,13 @@ export const TreeItem = ({
       aria-selected={selected}
       aria-expanded={canBeExpanded ? expanded : undefined}
       onClick={(event) => {
+        // Avoid triggering parent handlers.
         event.stopPropagation();
         setFocused();
         setSelected();
       }}
       onKeyDown={(event) => {
+        // Avoid triggering parent handlers.
         event.stopPropagation();
         onKeyDown(event);
         props.onKeyDown?.(event);

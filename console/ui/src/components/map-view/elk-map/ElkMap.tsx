@@ -3,6 +3,8 @@ import ELK, { ElkNode, LayoutOptions } from "elkjs/lib/elk.bundled.js";
 import { AnimatePresence, motion } from "framer-motion";
 import { FC, Fragment, useCallback, useEffect, useRef, useState } from "react";
 
+import { ZoomPane } from "../zoom-pane.js";
+
 import { Edge } from "./Edge.js";
 import { EdgeItem } from "./EdgeItem.js";
 import { Node } from "./Node.js";
@@ -288,141 +290,147 @@ export const ElkMap = <T extends unknown = undefined>({
   ]);
 
   return (
-    <div
-      className={classNames("relative transition-all", durationClass)}
-      style={{
-        width: graph?.width,
-        height: graph?.height,
-      }}
-    >
+    <>
       <InvisibleNodeSizeCalculator
         nodes={nodes}
         node={NodeItem}
         onSizesChange={setSizes}
       />
 
-      <AnimatePresence>
-        {nodeList.map((node) => (
-          <motion.div
-            key={node.id}
-            className={classNames(
-              "absolute origin-top transition-all",
-              durationClass,
-            )}
+      <ZoomPane className="w-full h-full">
+        {graph && (
+          <div
+            className={classNames("relative transition-all", durationClass)}
             style={{
-              translateX: node.offset.x,
-              translateY: node.offset.y,
-              width: `${node.width}px`,
-              height: `${node.height}px`,
+              width: graph.width,
+              height: graph.height,
             }}
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: node.isHighlighted || node.hasEdge ? 1 : 0.35,
-            }}
-            transition={{ ease: "easeInOut", duration: 0.2 }}
-            exit={{
-              opacity: 0,
-            }}
-            onClick={() => onSelectedNodeIdChange?.(node.id)}
-            onMouseEnter={() => setHighlighted(node.id)}
-            onMouseLeave={() => setHighlighted(undefined)}
           >
-            <NodeItem node={node.data} depth={node.depth} />
-          </motion.div>
-        ))}
-      </AnimatePresence>
+            <AnimatePresence>
+              {nodeList.map((node) => (
+                <motion.div
+                  key={node.id}
+                  className={classNames(
+                    "absolute origin-top transition-all",
+                    durationClass,
+                  )}
+                  style={{
+                    translateX: node.offset.x,
+                    translateY: node.offset.y,
+                    width: `${node.width}px`,
+                    height: `${node.height}px`,
+                  }}
+                  initial={{
+                    opacity: 0,
+                  }}
+                  animate={{
+                    opacity: node.isHighlighted || node.hasEdge ? 1 : 0.35,
+                  }}
+                  transition={{ ease: "easeInOut", duration: 0.2 }}
+                  exit={{
+                    opacity: 0,
+                  }}
+                  onClick={() => onSelectedNodeIdChange?.(node.id)}
+                  onMouseEnter={() => setHighlighted(node.id)}
+                  onMouseLeave={() => setHighlighted(undefined)}
+                >
+                  <NodeItem node={node.data} depth={node.depth} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
 
-      <AnimatePresence>
-        <svg
-          className="absolute inset-0 pointer-events-none"
-          width={graph?.width}
-          height={graph?.height}
-        >
-          <defs>
-            <marker
-              className="stroke-none fill-slate-500 dark:fill-slate-800"
-              markerWidth="6"
-              markerHeight="4"
-              orient="auto"
-              id="arrow-head"
-              refX="4"
-              refY="2"
-            >
-              <path d="M0 0 v4 l5 -2 z" />
-            </marker>
+            <AnimatePresence>
+              <svg
+                className="absolute inset-0 pointer-events-none"
+                width={graph?.width}
+                height={graph?.height}
+              >
+                <defs>
+                  <marker
+                    className="stroke-none fill-slate-500 dark:fill-slate-800"
+                    markerWidth="6"
+                    markerHeight="4"
+                    orient="auto"
+                    id="arrow-head"
+                    refX="4"
+                    refY="2"
+                  >
+                    <path d="M0 0 v4 l5 -2 z" />
+                  </marker>
 
-            <marker
-              className="stroke-none fill-sky-500"
-              markerHeight="6"
-              markerWidth="4"
-              orient="auto"
-              id="arrow-head-selected"
-              refX="4"
-              refY="2"
-            >
-              <path d="M0 0 v4 l5 -2 z" />
-            </marker>
+                  <marker
+                    className="stroke-none fill-sky-500"
+                    markerHeight="6"
+                    markerWidth="4"
+                    orient="auto"
+                    id="arrow-head-selected"
+                    refX="4"
+                    refY="2"
+                  >
+                    <path d="M0 0 v4 l5 -2 z" />
+                  </marker>
 
-            <marker
-              className="stroke-slate-500 dark:stroke-slate-800 fill-slate-500 dark:fill-slate-800"
-              markerHeight="6"
-              markerWidth="6"
-              orient="auto"
-              id="tee"
-              refX="5"
-              refY="3"
-            >
-              <path d="M5 0V6H6V0z" />
-            </marker>
+                  <marker
+                    className="stroke-slate-500 dark:stroke-slate-800 fill-slate-500 dark:fill-slate-800"
+                    markerHeight="6"
+                    markerWidth="6"
+                    orient="auto"
+                    id="tee"
+                    refX="5"
+                    refY="3"
+                  >
+                    <path d="M5 0V6H6V0z" />
+                  </marker>
 
-            <marker
-              className="stroke-sky-500 fill-sky-500"
-              markerHeight="6"
-              markerWidth="6"
-              orient="auto"
-              id="tee-selected"
-              refX="5"
-              refY="3"
-            >
-              <path d="M5 0V6H6V0z" />
-            </marker>
-          </defs>
+                  <marker
+                    className="stroke-sky-500 fill-sky-500"
+                    markerHeight="6"
+                    markerWidth="6"
+                    orient="auto"
+                    id="tee-selected"
+                    refX="5"
+                    refY="3"
+                  >
+                    <path d="M5 0V6H6V0z" />
+                  </marker>
+                </defs>
 
-          {graph?.edges?.map((edge) => {
-            const isEdgeHighlighted =
-              edge.sources[0] === highlighted ||
-              edge.targets[0] === highlighted;
-            const isNodeHighlighted =
-              isHighlighted(edge.sources[0]!) ||
-              isHighlighted(edge.targets[0]!);
-            const isSelected =
-              edge.sources[0] === selectedNodeId ||
-              edge.targets[0] === selectedNodeId;
-            const visible =
-              (highlighted && (isEdgeHighlighted || isNodeHighlighted)) ||
-              (!highlighted && isSelected);
-            return (
-              <EdgeItem
-                key={edge.id}
-                edge={edge}
-                offset={offsets?.get((edge as any).container)}
-                highlighted={isEdgeHighlighted || isSelected}
-                fade={!visible}
-                markerStart={
-                  isEdgeHighlighted || isSelected ? "tee-selected" : "tee"
-                }
-                markerEnd={
-                  isEdgeHighlighted || isSelected
-                    ? "arrow-head-selected"
-                    : "arrow-head"
-                }
-              />
-            );
-          })}
-        </svg>
-      </AnimatePresence>
-    </div>
+                {graph?.edges?.map((edge) => {
+                  const isEdgeHighlighted =
+                    edge.sources[0] === highlighted ||
+                    edge.targets[0] === highlighted;
+                  const isNodeHighlighted =
+                    isHighlighted(edge.sources[0]!) ||
+                    isHighlighted(edge.targets[0]!);
+                  const isSelected =
+                    edge.sources[0] === selectedNodeId ||
+                    edge.targets[0] === selectedNodeId;
+                  const visible =
+                    (highlighted && (isEdgeHighlighted || isNodeHighlighted)) ||
+                    (!highlighted && isSelected);
+                  return (
+                    <EdgeItem
+                      key={edge.id}
+                      edge={edge}
+                      offset={offsets?.get((edge as any).container)}
+                      highlighted={isEdgeHighlighted || isSelected}
+                      fade={!visible}
+                      markerStart={
+                        isEdgeHighlighted || isSelected ? "tee-selected" : "tee"
+                      }
+                      markerEnd={
+                        isEdgeHighlighted || isSelected
+                          ? "arrow-head-selected"
+                          : "arrow-head"
+                      }
+                    />
+                  );
+                })}
+              </svg>
+            </AnimatePresence>
+          </div>
+        )}
+      </ZoomPane>
+    </>
   );
 };

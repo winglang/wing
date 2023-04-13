@@ -22,7 +22,7 @@ export const ToolbarButton = ({
         theme.bg2Hover,
         theme.text1,
         "text-xs",
-        "p-0.5 rounded group flex items-center gap-1",
+        "py-0.5 px-1 rounded group flex items-center gap-1",
         {
           "opacity-70 cursor-not-allowed": disabled,
         },

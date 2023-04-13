@@ -4,7 +4,7 @@ import { PropsWithChildren } from "react";
 import { useTheme } from "./theme-provider.js";
 
 export interface ToolbarProps {
-  title: string;
+  title?: string;
 }
 
 export const Toolbar = ({
@@ -16,13 +16,18 @@ export const Toolbar = ({
     <div
       className={classNames(
         "flex-shrink-0 flex items-center justify-between gap-2 px-2",
+        theme.bg3,
       )}
     >
-      <div className="flex items-center min-w-0">
-        <span className={classNames("text-sm truncate uppercase", theme.text2)}>
-          {title}
-        </span>
-      </div>
+      {title && (
+        <div className="flex items-center min-w-0">
+          <span
+            className={classNames("text-sm truncate uppercase", theme.text2)}
+          >
+            {title}
+          </span>
+        </div>
+      )}
 
       <div className="flex items-center gap-1 h-9">{children}</div>
     </div>

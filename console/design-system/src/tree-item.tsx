@@ -62,6 +62,7 @@ export const TreeItem = ({
               },
             )}
             onClick={(event) => {
+              // Avoid triggering parent handlers.
               event.stopPropagation();
               item.toggleExpanded();
             }}
