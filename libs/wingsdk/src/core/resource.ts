@@ -12,7 +12,7 @@ import { log } from "../util";
 /**
  * A resource that can run inflight code.
  */
-export interface IInflightHost extends IResource {}
+export interface IInflightHost extends IResource { }
 
 /**
  * Abstract interface for `Resource`.
@@ -50,6 +50,8 @@ export interface IResource extends IInspectable, IConstruct {
 
   /**
    * Return a code snippet that can be used to reference this resource inflight.
+   * Note this code snippet may by async code, so it's unsafe to run it in a
+   * constructor or other sync context.
    * @internal
    */
   _toInflight(): Code;
@@ -191,8 +193,7 @@ export abstract class Resource extends Construct implements IResource {
    */
   public _registerBind(host: IInflightHost, ops: string[]) {
     log(
-      `Registering a binding for a resource (${this.node.path}) to a host (${
-        host.node.path
+      `Registering a binding for a resource (${this.node.path}) to a host (${host.node.path
       }) with ops: ${JSON.stringify(ops)}`
     );
 
