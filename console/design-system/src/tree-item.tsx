@@ -59,7 +59,10 @@ export const TreeItem = ({
                 invisible: !item.canBeExpanded,
               },
             )}
-            onClickCapture={item.toggleExpanded}
+            onClick={(event) => {
+              event.stopPropagation();
+              item.toggleExpanded();
+            }}
             title={`Toggle ${label} expanded`}
           >
             <ChevronRightIcon
