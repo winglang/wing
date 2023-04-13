@@ -159,8 +159,8 @@ pub enum Type {
 	Enum(Enum),
 }
 
-const WING_INIT_NAME: &'static str = "init";
-pub const WING_INFLIGHT_INIT_NAME: &'static str = "$inflight_init";
+const CLASS_INIT_NAME: &'static str = "init";
+pub const CLASS_INFLIGHT_INIT_NAME: &'static str = "$inflight_init";
 
 #[derive(Derivative)]
 #[derivative(Debug)]
@@ -1278,7 +1278,7 @@ impl<'a> TypeChecker<'a> {
 				// Type check args against constructor
 				let constructor_type = match class_env.lookup(
 					&Symbol {
-						name: WING_INIT_NAME.into(),
+						name: CLASS_INIT_NAME.into(),
 						span: class_symbol.span.clone(),
 					},
 					None,
@@ -2174,14 +2174,14 @@ impl<'a> TypeChecker<'a> {
 
 				// Add the constructor to the class env
 				let init_symb = Symbol {
-					name: WING_INIT_NAME.into(),
+					name: CLASS_INIT_NAME.into(),
 					span: name.span.clone(), // TODO: change to init's span
 				};
 				self.add_method_to_class_env(&constructor.signature, env, None, &mut class_env, &init_symb);
 
 				// Add the inflight initializer to the class env
 				let inflight_init_symb = Symbol {
-					name: WING_INFLIGHT_INIT_NAME.into(),
+					name: CLASS_INFLIGHT_INIT_NAME.into(),
 					span: name.span.clone(), // TODO: change to inflight init's span
 				};
 				if let Some(inflight_initializer) = inflight_initializer {
@@ -2475,7 +2475,7 @@ impl<'a> TypeChecker<'a> {
 			.expect("Expected method type to be a function signature");
 
 		// Create method environment and prime it with args
-		let is_init = method_name.name == WING_INIT_NAME || method_name.name == WING_INFLIGHT_INIT_NAME;
+		let is_init = method_name.name == CLASS_INIT_NAME || method_name.name == CLASS_INFLIGHT_INIT_NAME;
 		let mut method_env = SymbolEnv::new(
 			Some(env.get_ref()),
 			method_sig.return_type,

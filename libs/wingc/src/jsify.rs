@@ -26,7 +26,7 @@ use crate::{
 	},
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
 	type_check::{
-		resolve_user_defined_type, symbol_env::SymbolEnv, Type, TypeRef, VariableInfo, WING_INFLIGHT_INIT_NAME,
+		resolve_user_defined_type, symbol_env::SymbolEnv, Type, TypeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME,
 	},
 	utilities::snake_case_to_camel_case,
 	visit::{self, Visit},
@@ -965,7 +965,7 @@ impl<'a> JSifier<'a> {
 		// By default all captured fields are needed in the inflight init method
 		let init_refs = BTreeMap::from_iter(captured_fields.iter().map(|f| (format!("this.{f}"), BTreeSet::new())));
 		// Check what's actually used in the init method
-		let init_refs_entry = refs.entry(WING_INFLIGHT_INIT_NAME.to_string()).or_default();
+		let init_refs_entry = refs.entry(CLASS_INFLIGHT_INIT_NAME.to_string()).or_default();
 		// Add the init refs to the refs map
 		for (k, v) in init_refs {
 			if !init_refs_entry.contains_key(&k) {
@@ -1094,7 +1094,7 @@ impl<'a> JSifier<'a> {
 				return {STDLIB}.core.NodeJsCode.fromInline(`(
 					await (async () => {{ 
 						const tmp = new (require(\"${{self_client_path}}\")).{resource_name}({{{captured_fields}}}); 
-						if (tmp.{WING_INFLIGHT_INIT_NAME}) {{ await tmp.{WING_INFLIGHT_INIT_NAME}(); }}
+						if (tmp.{CLASS_INFLIGHT_INIT_NAME}) {{ await tmp.{CLASS_INFLIGHT_INIT_NAME}(); }}
 						return tmp; 
 					}})()
 				)`);
@@ -1153,7 +1153,7 @@ impl<'a> JSifier<'a> {
 		// add the inflight init method to the list of client methods
 		if let Some(inflight_init) = inflight_init {
 			let inflight_init = self.jsify_function(
-				Some(WING_INFLIGHT_INIT_NAME),
+				Some(CLASS_INFLIGHT_INIT_NAME),
 				inflight_init,
 				&JSifyContext {
 					in_json: context.in_json.clone(),
