@@ -44,12 +44,16 @@ class $Root extends $stdlib.core.Resource {
       _toInflight() {
         const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
-          (new (require("${self_client_path}")).A({
-          }))
+          (await (async () => {
+            const tmp = new (require("${self_client_path}")).A({
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })())
         `);
       }
     }
-    A._annotateInflight("$init", {});
+    A._annotateInflight("$inflight_init", {});
     const s = "top";
     if (true) {
       const s = "inner";

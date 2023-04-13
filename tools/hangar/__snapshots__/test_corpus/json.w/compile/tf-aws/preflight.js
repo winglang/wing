@@ -33,13 +33,17 @@ class $Root extends $stdlib.core.Resource {
         const _sum_str_client = this._lift(this._sum_str);
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
-          (new (require("${self_client_path}")).Foo({
-            _sum_str: ${_sum_str_client},
-          }))
+          (await (async () => {
+            const tmp = new (require("${self_client_path}")).Foo({
+              _sum_str: ${_sum_str_client},
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })())
         `);
       }
     }
-    Foo._annotateInflight("$init", {"this._sum_str": { ops: [] }});
+    Foo._annotateInflight("$inflight_init", {"this._sum_str": { ops: [] }});
     const json_number = 123;
     const json_bool = true;
     const json_array = [1, 2, 3];
