@@ -23,9 +23,9 @@ Wing programs can be executed locally (*yes, no internet required*) using a full
 
 Our mission is to bring back your creative flow and close the gap between imagination and creation. Wing elevates your cloud development experience to new heights (the puns are just inevitable so bear with us)! 🚀
 
-<p align="left">
-<img src="./logo/demo.gif" height="300px">
-</p>
+<a href="https://youtu.be/vHy1TM2JzUQ" target="_blank" align="left">
+    <img src="./logo/demo.gif" alt="Wing Demo" height="300px">
+</a>
 
 Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at [Monada](https://monada.co) and an amazing [community](https://t.winglang.io/slack) of contributors (also known as Wingnuts).
 
