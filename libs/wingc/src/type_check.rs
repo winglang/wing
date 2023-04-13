@@ -107,7 +107,7 @@ impl SymbolKind {
 
 	fn as_namespace_ref(&self) -> Option<NamespaceRef> {
 		match self {
-			SymbolKind::Namespace(ns) => Some(ns.clone()),
+			SymbolKind::Namespace(ns) => Some(*ns),
 			_ => None,
 		}
 	}
@@ -128,7 +128,7 @@ impl SymbolKind {
 
 	pub fn as_type(&self) -> Option<TypeRef> {
 		match &self {
-			SymbolKind::Type(t) => Some(t.clone()),
+			SymbolKind::Type(t) => Some(*t),
 			_ => None,
 		}
 	}
@@ -205,17 +205,13 @@ impl Interface {
 	fn is_resource(&self) -> bool {
 		// TODO: This should check that the interface extends `IResource` from
 		// the SDK, not just any interface with the name `IResource`
-		if self.name.name == "IResource"
+		self.name.name == "IResource"
 			|| self.extends.iter().any(|i| {
 				i.as_interface()
 					.expect("Interface extends a type that isn't an interface")
 					.name
 					.name == "IResource"
-			}) {
-			true
-		} else {
-			false
-		}
+			})
 	}
 }
 
@@ -234,29 +230,26 @@ impl Display for Interface {
 	}
 }
 
+type ClassLikeIterator<'a> =
+	FilterMap<SymbolEnvIter<'a>, fn(<SymbolEnvIter as Iterator>::Item) -> Option<(String, TypeRef)>>;
+
 pub trait ClassLike {
 	fn get_env(&self) -> &SymbolEnv;
 
-	fn methods(
-		&self,
-		with_ancestry: bool,
-	) -> FilterMap<SymbolEnvIter<'_>, fn(<SymbolEnvIter as Iterator>::Item) -> Option<(String, TypeRef)>> {
+	fn methods(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
 		self.get_env().iter(with_ancestry).filter_map(|(s, t, ..)| {
 			t.as_variable()
 				.unwrap()
 				.type_
 				.as_function_sig()
-				.map(|_| (s.clone(), t.as_variable().unwrap().type_.clone()))
+				.map(|_| (s.clone(), t.as_variable().unwrap().type_))
 		})
 	}
 
-	fn fields(
-		&self,
-		with_ancestry: bool,
-	) -> FilterMap<SymbolEnvIter<'_>, fn(<SymbolEnvIter as Iterator>::Item) -> Option<(String, TypeRef)>> {
+	fn fields(&self, with_ancestry: bool) -> ClassLikeIterator<'_> {
 		self.get_env().iter(with_ancestry).filter_map(|(s, t, ..)| {
 			if t.as_variable().unwrap().type_.as_function_sig().is_none() {
-				Some((s.clone(), t.as_variable().unwrap().type_.clone()))
+				Some((s, t.as_variable().unwrap().type_))
 			} else {
 				None
 			}
@@ -432,7 +425,7 @@ impl Subtype for Type {
 			(Self::Class(l0), Self::Class(_)) => {
 				// If we extend from `other` then I'm a subtype of it (inheritance)
 				if let Some(parent) = l0.parent.as_ref() {
-					let parent_type: &Type = &*parent;
+					let parent_type: &Type = parent;
 					return parent_type.is_subtype_of(other);
 				}
 				false
@@ -440,7 +433,7 @@ impl Subtype for Type {
 			(Self::Resource(l0), Self::Resource(_)) => {
 				// If we extend from `other` then I'm a subtype of it (inheritance)
 				if let Some(parent) = l0.parent.as_ref() {
-					let parent_type: &Type = &*parent;
+					let parent_type: &Type = parent;
 					return parent_type.is_subtype_of(other);
 				}
 				false
@@ -448,14 +441,14 @@ impl Subtype for Type {
 			(Self::Interface(l0), Self::Interface(_)) => {
 				// If we extend from `other` then I'm a subtype of it (inheritance)
 				l0.extends.iter().any(|parent| {
-					let parent_type: &Type = &*parent;
+					let parent_type: &Type = parent;
 					parent_type.is_subtype_of(other)
 				})
 			}
 			(Self::Resource(res), Self::Interface(_)) => {
 				// If a resource implements the interface then it's a subtype of it (nominal typing)
 				res.implements.iter().any(|parent| {
-					let parent_type: &Type = &*parent;
+					let parent_type: &Type = parent;
 					parent_type.is_subtype_of(other)
 				})
 			}
@@ -466,7 +459,7 @@ impl Subtype for Type {
 			(Self::Struct(l0), Self::Struct(_)) => {
 				// If we extend from `other` then I'm a subtype of it (inheritance)
 				for parent in l0.extends.iter() {
-					let parent_type: &Type = &*parent;
+					let parent_type: &Type = parent;
 					if parent_type.is_subtype_of(other) {
 						return true;
 					}
@@ -475,44 +468,44 @@ impl Subtype for Type {
 			}
 			(Self::Array(l0), Self::Array(r0)) => {
 				// An Array type is a subtype of another Array type if the value type is a subtype of the other value type
-				let l: &Type = &*l0;
-				let r: &Type = &*r0;
+				let l: &Type = l0;
+				let r: &Type = r0;
 				l.is_subtype_of(r)
 			}
 			(Self::MutArray(l0), Self::MutArray(r0)) => {
 				// An Array type is a subtype of another Array type if the value type is a subtype of the other value type
-				let l: &Type = &*l0;
-				let r: &Type = &*r0;
+				let l: &Type = l0;
+				let r: &Type = r0;
 				l.is_subtype_of(r)
 			}
 			(Self::MutArray(l0), Self::Array(r0)) => {
 				// A MutArray type is a subtype of an Array type if the value type is a subtype of the other value type
-				let l: &Type = &*l0;
-				let r: &Type = &*r0;
+				let l: &Type = l0;
+				let r: &Type = r0;
 				l.is_subtype_of(r)
 			}
 			(Self::Map(l0), Self::Map(r0)) => {
 				// A Map type is a subtype of another Map type if the value type is a subtype of the other value type
-				let l: &Type = &*l0;
-				let r: &Type = &*r0;
+				let l: &Type = l0;
+				let r: &Type = r0;
 				l.is_subtype_of(r)
 			}
 			(Self::MutMap(l0), Self::MutMap(r0)) => {
 				// A Map type is a subtype of another Map type if the value type is a subtype of the other value type
-				let l: &Type = &*l0;
-				let r: &Type = &*r0;
+				let l: &Type = l0;
+				let r: &Type = r0;
 				l.is_subtype_of(r)
 			}
 			(Self::Set(l0), Self::Set(r0)) => {
 				// A Set type is a subtype of another Set type if the value type is a subtype of the other value type
-				let l: &Type = &*l0;
-				let r: &Type = &*r0;
+				let l: &Type = l0;
+				let r: &Type = r0;
 				l.is_subtype_of(r)
 			}
 			(Self::MutSet(l0), Self::MutSet(r0)) => {
 				// A Set type is a subtype of another Set type if the value type is a subtype of the other value type
-				let l: &Type = &*l0;
-				let r: &Type = &*r0;
+				let l: &Type = l0;
+				let r: &Type = r0;
 				l.is_subtype_of(r)
 			}
 			(Self::Enum(e0), Self::Enum(e1)) => {
@@ -521,14 +514,14 @@ impl Subtype for Type {
 			}
 			(Self::Optional(l0), Self::Optional(r0)) => {
 				// An Optional type is a subtype of another Optional type if the value type is a subtype of the other value type
-				let l: &Type = &*l0;
-				let r: &Type = &*r0;
+				let l: &Type = l0;
+				let r: &Type = r0;
 				l.is_subtype_of(r)
 			}
 			(_, Self::Optional(r0)) => {
 				// A non-Optional type is a subtype of an Optional type if the non-optional's type is a subtype of the value type
 				// e.g. `String` is a subtype of `Optional<String>`
-				let r: &Type = &*r0;
+				let r: &Type = r0;
 				self.is_subtype_of(r)
 			}
 			// This allows us for assignment from native types without allowing assignment to native types
@@ -821,16 +814,16 @@ impl TypeRef {
 	}
 
 	// returns true if mutable type or if immutable container type contains a mutable type
-	pub fn is_deep_mutable(&self) -> bool {
+	pub fn is_mutable(&self) -> bool {
 		match &**self {
 			Type::MutArray(_) => true,
 			Type::MutMap(_) => true,
 			Type::MutSet(_) => true,
 			Type::MutJson => true,
-			Type::Array(v) => v.is_deep_mutable(),
-			Type::Map(v) => v.is_deep_mutable(),
-			Type::Set(v) => v.is_deep_mutable(),
-			Type::Optional(v) => v.is_deep_mutable(),
+			Type::Array(v) => v.is_mutable(),
+			Type::Map(v) => v.is_mutable(),
+			Type::Set(v) => v.is_mutable(),
+			Type::Optional(v) => v.is_mutable(),
 			_ => false,
 		}
 	}
@@ -856,8 +849,8 @@ impl Subtype for TypeRef {
 			true
 		} else {
 			// If the self and other aren't the the same, we need to use the specific types equality function
-			let t1: &Type = &**self;
-			let t2: &Type = &**other;
+			let t1: &Type = self;
+			let t2: &Type = other;
 			t1.is_subtype_of(t2)
 		}
 	}
@@ -1258,7 +1251,7 @@ impl<'a> TypeChecker<'a> {
 						} else {
 							return self.general_type_error(format!(
 								"Cannot create the resource \"{}\" in inflight phase",
-								class.name.to_string()
+								class.name
 							));
 						}
 					}
@@ -1268,7 +1261,7 @@ impl<'a> TypeChecker<'a> {
 						} else {
 							return self.general_type_error(format!(
 								"Cannot instantiate type \"{}\" because it is not a class or resource",
-								type_.to_string()
+								type_
 							));
 						}
 					}
@@ -1336,7 +1329,7 @@ impl<'a> TypeChecker<'a> {
 					} else {
 						// If this returns None, this means we're instantiating a resource object in the global scope, which is valid
 						env
-							.try_lookup("this".into(), Some(self.statement_idx))
+							.try_lookup("this", Some(self.statement_idx))
 							.map(|v| v.as_variable().expect("Expected \"this\" to be a variable").type_)
 					};
 
@@ -1372,7 +1365,7 @@ impl<'a> TypeChecker<'a> {
 				let func_sig = if let Some(func_sig) = func_type.as_function_sig() {
 					func_sig
 				} else {
-					return self.expr_error(&*function, format!("should be a function or method"));
+					return self.expr_error(function, "should be a function or method".to_string());
 				};
 
 				if !env.phase.can_call_to(&func_sig.phase) {
@@ -1495,7 +1488,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify that no unexpected fields are present
 				for (name, _t) in field_types.iter() {
-					if !st.env.lookup(&name, Some(self.statement_idx)).is_ok() {
+					if st.env.lookup(&name, Some(self.statement_idx)).is_err() {
 						self.expr_error(exp, format!("\"{}\" is not a field of \"{}\"", name.name, st.name.name));
 					}
 				}
@@ -1607,7 +1600,7 @@ impl<'a> TypeChecker<'a> {
 		let expected_struct = if let Some(expected_struct) = expected_type.as_struct() {
 			expected_struct
 		} else {
-			self.expr_error(value, format!("Named arguments provided for non-struct argument"));
+			self.expr_error(value, "Named arguments provided for non-struct argument".to_string());
 			return;
 		};
 
@@ -2050,7 +2043,7 @@ impl<'a> TypeChecker<'a> {
 					} else {
 						self.stmt_error(
 							stmt,
-							format!("Return statement outside of function cannot return a value."),
+							"Return statement outside of function cannot return a value.".to_string(),
 						);
 					}
 				} else {
@@ -2278,7 +2271,7 @@ impl<'a> TypeChecker<'a> {
 					let mut method_type = self.resolve_type_annotation(&sig.to_type_annotation(), env);
 					// use the interface type as the function's "this" type
 					if let Type::Function(ref mut f) = *method_type {
-						f.this_type = Some(interface_type.clone());
+						f.this_type = Some(interface_type);
 					} else {
 						panic!("Expected method type to be a function");
 					}
@@ -2314,7 +2307,7 @@ impl<'a> TypeChecker<'a> {
 				// Add fields to the struct env
 				for field in fields.iter() {
 					let field_type = self.resolve_type_annotation(&field.member_type, env);
-					if field_type.is_deep_mutable() {
+					if field_type.is_mutable() {
 						self.type_error(TypeError {
 							message: format!("struct fields must be immutable got: {}", field_type),
 							span: field.name.span.clone(),
@@ -2322,7 +2315,7 @@ impl<'a> TypeChecker<'a> {
 					}
 					match struct_env.define(
 						&field.name,
-						SymbolKind::make_variable(field_type, false, false, field.phase),
+						SymbolKind::make_variable(field_type, false, false, Phase::Independent),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -2664,7 +2657,7 @@ impl<'a> TypeChecker<'a> {
 			implements: original_type_class.implements.clone(),
 			should_case_convert_jsii: original_type_class.should_case_convert_jsii,
 			is_abstract: original_type_class.is_abstract,
-			type_parameters: Some(type_params.clone()),
+			type_parameters: Some(type_params),
 		});
 
 		// TODO: here we add a new type regardless whether we already "hydrated" `original_type` with these `type_params`. Cache!
@@ -3007,7 +3000,7 @@ impl<'a> TypeChecker<'a> {
 				if force_reassignable {
 					VariableInfo {
 						reassignable: true,
-						..res.clone()
+						..res
 					}
 				} else {
 					res
@@ -3153,7 +3146,7 @@ fn add_parent_members_to_struct_env(
 					return Err(TypeError {
 						span: name.span.clone(),
 						message: format!(
-							"Struct \"{}\" extends \"{}\" but has a conflicting member \"{}\" ({} != {})",
+							"Struct \"{}\" extends \"{}\" which introduces a conflicting member \"{}\" ({} != {})",
 							name, parent_type, parent_member_name, member_type, member_type
 						),
 					});

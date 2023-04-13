@@ -63,6 +63,8 @@ export class Api extends cloud.Api {
     if (props) {
       console.warn("Api.get does not support props yet");
     }
+    this.validateRoute(route);
+
     const fn = this.addHandler(inflight);
     const apiSpecEndpoint = this.api.addEndpoint(route, "GET", fn);
     this._addToSpec(route, "GET", apiSpecEndpoint);
@@ -88,6 +90,8 @@ export class Api extends cloud.Api {
     if (props) {
       console.warn("Api.post does not support props yet");
     }
+    this.validateRoute(route);
+
     const fn = this.addHandler(inflight);
     const apiSpecEndpoint = this.api.addEndpoint(route, "POST", fn);
     this._addToSpec(route, "POST", apiSpecEndpoint);
@@ -113,6 +117,8 @@ export class Api extends cloud.Api {
     if (props) {
       console.warn("Api.put does not support props yet");
     }
+    this.validateRoute(route);
+
     const fn = this.addHandler(inflight);
     const apiSpecEndpoint = this.api.addEndpoint(route, "PUT", fn);
     this._addToSpec(route, "PUT", apiSpecEndpoint);
@@ -138,6 +144,8 @@ export class Api extends cloud.Api {
     if (props) {
       console.warn("Api.delete does not support props yet");
     }
+    this.validateRoute(route);
+
     const fn = this.addHandler(inflight);
     const apiSpecEndpoint = this.api.addEndpoint(route, "DELETE", fn);
     this._addToSpec(route, "DELETE", apiSpecEndpoint);
@@ -163,6 +171,8 @@ export class Api extends cloud.Api {
     if (props) {
       console.warn("Api.patch does not support props yet");
     }
+    this.validateRoute(route);
+
     const fn = this.addHandler(inflight);
     const apiSpecEndpoint = this.api.addEndpoint(route, "PATCH", fn);
     this._addToSpec(route, "PATCH", apiSpecEndpoint);
@@ -188,6 +198,8 @@ export class Api extends cloud.Api {
     if (props) {
       console.warn("Api.options does not support props yet");
     }
+    this.validateRoute(route);
+
     const fn = this.addHandler(inflight);
     const apiSpecEndpoint = this.api.addEndpoint(route, "OPTIONS", fn);
     this._addToSpec(route, "OPTIONS", apiSpecEndpoint);
@@ -213,6 +225,8 @@ export class Api extends cloud.Api {
     if (props) {
       console.warn("Api.head does not support props yet");
     }
+    this.validateRoute(route);
+
     const fn = this.addHandler(inflight);
     const apiSpecEndpoint = this.api.addEndpoint(route, "HEAD", fn);
     this._addToSpec(route, "HEAD", apiSpecEndpoint);
@@ -238,6 +252,8 @@ export class Api extends cloud.Api {
     if (props) {
       console.warn("Api.connect does not support props yet");
     }
+    this.validateRoute(route);
+
     const fn = this.addHandler(inflight);
     const apiSpecEndpoint = this.api.addEndpoint(route, "CONNECT", fn);
     this._addToSpec(route, "CONNECT", apiSpecEndpoint);

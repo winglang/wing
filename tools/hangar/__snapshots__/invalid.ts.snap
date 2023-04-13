@@ -306,6 +306,23 @@ error: Property access unsupported on type \\"SomeEnum\\"
 "
 `;
 
+exports[`extern.w > stderr 1`] = `
+"error: Failed to resolve extern \\"./sad.js\\": Not Found
+  --> ../../../examples/tests/invalid/extern.w:2:3
+  |
+2 |   extern \\"./sad.js\\" static get_num(): num;
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Failed to resolve extern \\"./sad.js\\": Not Found
+
+
+error: Failed to resolve extern \\"not-installed\\": Not Found
+  --> ../../../examples/tests/invalid/extern.w:4:3
+  |
+4 |   extern \\"not-installed\\" static too_bad(): bool;
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Failed to resolve extern \\"not-installed\\": Not Found
+
+"
+`;
+
 exports[`for_loop.w > stderr 1`] = `
 "error: Unable to iterate over \\"Bucket\\"
   --> ../../../examples/tests/invalid/for_loop.w:5:13
@@ -1001,11 +1018,11 @@ error: Expected 2 arguments but got 1
 `;
 
 exports[`structs.w > stderr 1`] = `
-"error: Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" but has a conflicting member \\"x\\" (str != str)
+"error: Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
   --> ../../../examples/tests/invalid/structs.w:9:8
   |
 9 | struct C extends B {
-  |        ^ Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" but has a conflicting member \\"x\\" (str != str)
+  |        ^ Struct \\"C (at ../../../examples/tests/invalid/structs.w:9:8)\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
 
 
 error: \\"x\\" is not initialized
@@ -1034,6 +1051,13 @@ error: Unknown symbol \\"bad_field\\"
    |
 30 | log(a.bad_field);
    |       ^^^^^^^^^ Unknown symbol \\"bad_field\\"
+
+
+error: Struct \\"Showtime (at ../../../examples/tests/invalid/structs.w:42:8)\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
+   --> ../../../examples/tests/invalid/structs.w:42:8
+   |
+42 | struct Showtime extends Razzle, Dazzle {}
+   |        ^^^^^^^^ Struct \\"Showtime (at ../../../examples/tests/invalid/structs.w:42:8)\\" extends \\"Dazzle\\" which introduces a conflicting member \\"a\\" (num != num)
 
 "
 `;

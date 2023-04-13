@@ -12,8 +12,13 @@ pub fn main() {
 	}
 
 	let source_path = &args[1];
+	let source_path = Path::new(source_path);
 
-	let results = compile(Path::new(source_path), None);
+	let results = compile(
+		source_path,
+		None,
+		Some(source_path.canonicalize().unwrap().parent().unwrap()),
+	);
 	if let Err(mut err) = results {
 		// Sort error messages by line number (ascending)
 		err.sort();

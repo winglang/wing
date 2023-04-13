@@ -198,3 +198,20 @@ npx nx dev vscode-wing
 ```
 
 To modify the package.json, make sure to edit `.projenrc.ts` and rebuild.
+
+## 🧹 How do I lint my code?
+
+To lint Rust code, you can run the `lint` target on the `wingc` or `wingii` projects:
+
+```sh
+npx nx lint wingc
+```
+
+It's also possible to lint by running `cargo clippy` directly.
+
+Lastly you can show linting errors in your IDE by enabling the following setting in the rust-analyzer extension:
+
+```json
+// in your VS Code settings
+"rust-analyzer.check.command": "clippy",
+```

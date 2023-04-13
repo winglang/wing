@@ -104,14 +104,14 @@ fn partial_compile(source_file: &str, text: &[u8], jsii_imports: &mut Vec<JsiiIm
 	let mut parser = tree_sitter::Parser::new();
 	parser.set_language(language).unwrap();
 
-	let tree = match parser.parse(&text[..], None) {
+	let tree = match parser.parse(text, None) {
 		Some(tree) => tree,
 		None => {
 			panic!("Failed parsing source file: {}", source_file);
 		}
 	};
 
-	let wing_parser = Parser::new(&text[..], source_file.to_string());
+	let wing_parser = Parser::new(text, source_file.to_string());
 
 	// Note: The scope is intentionally boxed here to force heap allocation
 	// Otherwise, the scope will be moved and we'll be left with dangling references elsewhere
