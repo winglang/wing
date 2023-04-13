@@ -94,6 +94,19 @@ To learn more about Wing concepts such as resources and inflights, jump over to 
 
 For a comprehensive reference of the language, check out the [Wing Language Specification](https://docs.winglang.io/reference/spec) and the [API Reference](https://docs.winglang.io/reference/sdk).
 
+## What makes Wing a good fit for cloud development? 🌟
+
+Wing was built from the ground up to make it an ideal choice for building applications on AWS or other cloud providers.
+Some of these features include:
+
+* [Cloud services](https://docs.winglang.io/concepts/resources) as first-class citizens.
+* Higher level of cloud abstraction with a [standard library](https://docs.winglang.io/reference/wingsdk-spec).
+* [Distributed computing primitives](https://docs.winglang.io/concepts/inflights).
+* [Compiler plugins](https://docs.winglang.io/reference/compiler-plugins) for customization.
+* [JavaScript interoperability](https://docs.winglang.io/reference/spec#5-interoperability).
+* Automatic generation of IAM policies.
+* [Native JSON](https://docs.winglang.io/reference/spec#114-json-type) and schema validation support.
+
 ## FAQs ❓
 
 Have a question about Wing? head over to our [FAQ](https://docs.winglang.io/faq) to find the answer.
