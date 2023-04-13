@@ -3,7 +3,6 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { AwsTarget } from "../shared-aws/commons";
 import { calculateSecretPermissions } from "../shared-aws/permissions";
 
 /**
@@ -34,11 +33,7 @@ export class Secret extends cloud.Secret {
     }
 
     host.addPolicyStatements(
-      ...calculateSecretPermissions(
-        this.secret.secretArn,
-        AwsTarget.AWSCDK,
-        ops
-      )
+      ...calculateSecretPermissions(this.secret.secretArn, ops)
     );
 
     host.addEnvironment(this.envName(), this.secret.secretArn);
