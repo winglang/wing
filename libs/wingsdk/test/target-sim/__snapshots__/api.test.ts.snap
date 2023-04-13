@@ -1981,15 +1981,7 @@ exports[`api with one GET route with request params 1`] = `
 
 exports[`api with one GET route with request params 2`] = `
 {
-  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "const $logger = (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.log(...args);
-exports.handler = async function(event) {
+  ".wing/my_api-onrequesthandler-e645076f_c8b4bd6e.js": "exports.handler = async function(event) {
   return await (new ((function(){
 return class Handler {
   constructor(clients) {

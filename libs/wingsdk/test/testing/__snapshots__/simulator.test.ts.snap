@@ -106,7 +106,6 @@ exports[`run all tests > single test 1`] = `
     "traces": [
       {
         "data": {
-          "level": "log",
           "message": "hi",
         },
         "sourcePath": "root/test",
@@ -138,7 +137,6 @@ exports[`run single test > happy path 1`] = `
   "traces": [
     {
       "data": {
-        "level": "log",
         "message": "hi",
       },
       "sourcePath": "root/test",
@@ -179,7 +177,6 @@ exports[`run single test > test failure 1`] = `
   "traces": [
     {
       "data": {
-        "level": "log",
         "message": "I am about to fail",
       },
       "sourcePath": "root/test",

@@ -359,15 +359,7 @@ exports[`messages are requeued if the function fails after timeout 1`] = `
 
 exports[`messages are requeued if the function fails after timeout 2`] = `
 {
-  ".wing/my_queue-addconsumer-e645076f_c817d361.js": "const $logger = (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"LOGGER_HANDLE_76f7e65b\\");
-console.log = (...args) => $logger.log(...args);
-exports.handler = async function(event) {
+  ".wing/my_queue-addconsumer-e645076f_c817d361.js": "exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.addconsumer.inflight.js\\")).QueueAddConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
