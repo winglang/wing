@@ -553,6 +553,7 @@ impl<'s> Parser<'s> {
 								}))),
 								phase: if is_resource { Phase::Preflight } else { Phase::Inflight },
 							},
+							span: self.node_span(&class_element),
 						})
 					}
 				}

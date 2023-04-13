@@ -280,6 +280,7 @@ impl MethodLike<'_> for FunctionDefinition {
 pub struct Initializer {
 	pub signature: FunctionSignature,
 	pub statements: Scope,
+	pub span: WingSpan,
 }
 
 impl MethodLike<'_> for Initializer {

@@ -2175,16 +2175,15 @@ impl<'a> TypeChecker<'a> {
 				// Add the constructor to the class env
 				let init_symb = Symbol {
 					name: CLASS_INIT_NAME.into(),
-					span: name.span.clone(), // TODO: change to init's span
+					span: initializer.span.clone(),
 				};
 				self.add_method_to_class_env(&initializer.signature, env, None, &mut class_env, &init_symb);
 
+				let mut inflight_init_symb = Symbol::global(CLASS_INFLIGHT_INIT_NAME);
+
 				// Add the inflight initializer to the class env
-				let inflight_init_symb = Symbol {
-					name: CLASS_INFLIGHT_INIT_NAME.into(),
-					span: name.span.clone(), // TODO: change to inflight init's span
-				};
 				if let Some(inflight_initializer) = inflight_initializer {
+					inflight_init_symb.span = inflight_initializer.span.clone();
 					self.add_method_to_class_env(
 						&inflight_initializer.signature,
 						env,

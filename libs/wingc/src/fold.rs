@@ -225,6 +225,7 @@ where
 	Initializer {
 		signature: f.fold_function_signature(node.signature),
 		statements: f.fold_scope(node.statements),
+		span: node.span,
 	}
 }
 
