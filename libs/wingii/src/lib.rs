@@ -21,6 +21,10 @@ mod util;
 pub type Result<T> = std::result::Result<T, Box<dyn Error>>;
 
 pub mod spec {
+	use flate2::read::GzDecoder;
+	use std::fs::File;
+	use std::io::Read;
+
 	use crate::jsii::{Assembly, JsiiFile};
 	use crate::Result;
 	use std::fs;
@@ -44,19 +48,39 @@ pub mod spec {
 		}
 	}
 
-	pub fn load_assembly_from_file(path_to_file: &str) -> Result<Assembly> {
-		let path = Path::new(path_to_file);
-		let manifest = fs::read_to_string(path)?;
-		let manifest = serde_json::from_str(&manifest)?;
+	pub fn load_assembly_from_file(path_to_file: &str, compression: Option<&str>) -> Result<Assembly> {
+		let assembly_path = Path::new(path_to_file);
+
+		let manifest = if Some("gzip") == compression {
+			let assembly_path_gz = File::open(assembly_path)?;
+			let mut assembly_gz = GzDecoder::new(assembly_path_gz);
+			let mut data = Vec::new();
+			assembly_gz.read_to_end(&mut data)?;
+
+			serde_json::from_slice(&data)?
+		} else {
+			let manifest = fs::read_to_string(assembly_path)?;
+			serde_json::from_str(&manifest)?
+		};
 		match manifest {
 			JsiiFile::Assembly(asm) => Ok(asm),
-			JsiiFile::AssemblyRedirect(asm_redirect) => load_assembly_from_file(&asm_redirect.filename),
+			JsiiFile::AssemblyRedirect(asm_redirect) => {
+				// new path is relative to the folder of the original assembly
+				let path = assembly_path
+					.parent()
+					.expect("Assembly path has no parent")
+					.join(&asm_redirect.filename);
+				load_assembly_from_file(
+					path.to_str().expect("JSII redirect path invalid"),
+					Some(&asm_redirect.compression),
+				)
+			}
 		}
 	}
 
 	pub fn load_assembly_from_path(path: &str) -> Result<Assembly> {
 		let file = find_assembly_file(path)?;
-		load_assembly_from_file(&file)
+		load_assembly_from_file(&file, None)
 	}
 }
 
@@ -149,7 +173,7 @@ pub mod type_system {
 		}
 
 		fn load_assembly(&mut self, path: &str) -> Result<Assembly> {
-			spec::load_assembly_from_file(path)
+			spec::load_assembly_from_file(path, None)
 		}
 
 		fn add_root(&mut self, assembly: &Assembly) -> Result<()> {
