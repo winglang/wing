@@ -208,6 +208,10 @@ where
 
 	v.visit_constructor(&node.initializer);
 
+	if let Some(inflight_init) = &node.inflight_initializer {
+		v.visit_function_definition(inflight_init);
+	}
+
 	for field in &node.fields {
 		v.visit_symbol(&field.name);
 		v.visit_type_annotation(&field.member_type);
