@@ -113,8 +113,8 @@ class $Root extends $stdlib.core.Resource {
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
-          })()
-        )\`);
+          })())
+        \`);
       }
     }
     A._annotateInflight(\\"$inflight_init\\", {});
@@ -141,8 +141,8 @@ class $Root extends $stdlib.core.Resource {
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
-          })()
-        )\`);
+          })())
+        \`);
       }
     }
     r._annotateInflight(\\"$inflight_init\\", {});
@@ -159,8 +159,8 @@ class $Root extends $stdlib.core.Resource {
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
-          })()
-        )\`);
+          })())
+        \`);
       }
     }
     Dog._annotateInflight(\\"$inflight_init\\", {});

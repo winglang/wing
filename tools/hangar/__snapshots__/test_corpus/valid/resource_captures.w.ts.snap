@@ -442,8 +442,8 @@ class $Root extends $stdlib.core.Resource {
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
-          })()
-        )\`);
+          })())
+        \`);
       }
     }
     First._annotateInflight(\\"$inflight_init\\", {\\"this.my_resource\\": { ops: [] }});
@@ -465,8 +465,8 @@ class $Root extends $stdlib.core.Resource {
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
-          })()
-        )\`);
+          })())
+        \`);
       }
     }
     Another._annotateInflight(\\"$inflight_init\\", {\\"this.first\\": { ops: [] },\\"this.my_field\\": { ops: [] }});
@@ -525,8 +525,8 @@ class $Root extends $stdlib.core.Resource {
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
-          })()
-        )\`);
+          })())
+        \`);
       }
     }
     MyResource._annotateInflight(\\"$inflight_init\\", {\\"this.another\\": { ops: [] },\\"this.array_of_str\\": { ops: [] },\\"this.ext_bucket\\": { ops: [] },\\"this.ext_num\\": { ops: [] },\\"this.map_of_num\\": { ops: [] },\\"this.my_bool\\": { ops: [] },\\"this.my_num\\": { ops: [] },\\"this.my_queue\\": { ops: [] },\\"this.my_resource\\": { ops: [] },\\"this.my_str\\": { ops: [] },\\"this.set_of_str\\": { ops: [] },\\"this.unused_resource\\": { ops: [] }});

@@ -90,8 +90,8 @@ class $Root extends $stdlib.core.Resource {
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
-          })()
-        )\`);
+          })())
+        \`);
       }
     }
     Doubler._annotateInflight(\\"$inflight_init\\", {\\"this.func\\": { ops: [] }});

@@ -272,8 +272,8 @@ class $Root extends $stdlib.core.Resource {
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
-          })()
-        )\`);
+          })())
+        \`);
       }
     }
     Foo._annotateInflight(\\"$inflight_init\\", {\\"this.c\\": { ops: [] }});
@@ -300,8 +300,8 @@ class $Root extends $stdlib.core.Resource {
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
-          })()
-        )\`);
+          })())
+        \`);
       }
     }
     Bar._annotateInflight(\\"$inflight_init\\", {\\"this.b\\": { ops: [] },\\"this.foo\\": { ops: [] },\\"this.name\\": { ops: [] }});
