@@ -1012,15 +1012,7 @@ impl<'a> JSifier<'a> {
 			.iter()
 			.filter(|(_, m)| m.signature.phase == Phase::Inflight)
 			.collect::<Vec<_>>();
-		self.jsify_resource_client(
-			env,
-			&class.name,
-			&captured_fields,
-			&inflight_methods,
-			&class.inflight_initializer,
-			&class.parent,
-			context,
-		);
+		self.jsify_resource_client(env, &class, &captured_fields, &inflight_methods, context);
 
 		// Get all preflight methods to be jsified to the preflight class
 		let preflight_methods = class
@@ -1150,16 +1142,14 @@ impl<'a> JSifier<'a> {
 	fn jsify_resource_client(
 		&mut self,
 		env: &SymbolEnv,
-		name: &Symbol,
+		resource: &AstClass,
 		captured_fields: &[String],
 		inflight_methods: &[&(Symbol, FunctionDefinition)],
-		inflight_init: &Option<FunctionDefinition>,
-		parent: &Option<UserDefinedType>,
 		context: &JSifyContext,
 	) {
 		// Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
 		let mut parent_captures = vec![];
-		if let Some(parent) = parent {
+		if let Some(parent) = &resource.parent {
 			let parent_type = resolve_user_defined_type(parent, env, 0).unwrap();
 			parent_captures.extend(self.get_captures(parent_type));
 		}
@@ -1172,10 +1162,10 @@ impl<'a> JSifier<'a> {
 
 		let mut code = CodeMaker::default();
 
+		let name = &resource.name.name;
 		code.open(format!(
-			"class {} {} {{",
-			name.name,
-			if let Some(parent) = parent {
+			"class {} {name} {{",
+			if let Some(parent) = &resource.parent {
 				format!("extends {}", self.jsify_user_defined_type(parent))
 			} else {
 				"".to_string()
@@ -1191,7 +1181,7 @@ impl<'a> JSifier<'a> {
 				.join(", ")
 		));
 
-		if parent.is_some() {
+		if resource.parent.is_some() {
 			code.line(format!(
 				"super({});",
 				parent_captures.iter().map(|name| name.clone()).collect_vec().join(", ")
@@ -1204,7 +1194,7 @@ impl<'a> JSifier<'a> {
 
 		code.close("}");
 
-		if let Some(inflight_init) = inflight_init {
+		if let Some(inflight_init) = &resource.inflight_initializer {
 			code.add_code(self.jsify_function(
 				Some(CLASS_INFLIGHT_INIT_NAME),
 				inflight_init,
@@ -1229,11 +1219,11 @@ impl<'a> JSifier<'a> {
 		code.close("}");
 
 		// export all classes from this file
-		code.line(format!("exports.{} = {};", name.name, name.name));
+		code.line(format!("exports.{name} = {name};"));
 
 		let clients_dir = format!("{}/clients", self.out_dir.to_string_lossy());
 		fs::create_dir_all(&clients_dir).expect("Creating inflight clients");
-		let client_file_name = format!("{}.inflight.js", name.name);
+		let client_file_name = format!("{name}.inflight.js");
 		let relative_file_path = format!("{}/{}", clients_dir, client_file_name);
 		fs::write(&relative_file_path, code.to_string()).expect("Writing client inflight source");
 	}
