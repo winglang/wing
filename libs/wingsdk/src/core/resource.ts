@@ -478,6 +478,8 @@ export interface Connection {
  * "other".
  * @example
  * { "this.inner": { ops: ["put"] }, "other": { ops: ["get"] } }
+ *
+ * @internal
  */
 export interface OperationAnnotation {
   [resource: string]: {
