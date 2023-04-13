@@ -155,7 +155,7 @@ export interface IFunctionClient {
  *
  * @inflight `@winglang/sdk.cloud.IFunctionHandlerClient`
  */
-export interface IFunctionHandler extends IResource { }
+export interface IFunctionHandler extends IResource {}
 
 /**
  * Inflight client for `IFunctionHandler`.
