@@ -1,7 +1,7 @@
 use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
 
 use crate::ast::{
-	Class, Constructor, Expr, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
+	Class, Expr, FunctionBody, FunctionDefinition, Initializer, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
 };
 use crate::diagnostic::WingSpan;
 use crate::lsp::sync::FILES;
@@ -160,7 +160,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		});
 	}
 
-	fn visit_constructor(&mut self, node: &'a Constructor) {
+	fn visit_constructor(&mut self, node: &'a Initializer) {
 		if self.is_found() {
 			return;
 		}

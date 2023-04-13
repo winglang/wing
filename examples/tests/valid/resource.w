@@ -11,6 +11,8 @@ resource Foo {
 
   inflight init() {
     this.inflight_field = 123;
+    // Access a cloud resource from inflight init
+    this.c.inc(100); 
   }
 
   // Our resource has an inflight method
@@ -49,7 +51,7 @@ let bucket = new cloud.Bucket();
 let res = new Bar("Arr", bucket);
 new cloud.Function(inflight () => {
   let s = res.my_method();
-  assert(s == "counter is: 1");
+  assert(s == "counter is: 101");
   assert(bucket.list().length == 1);
   assert(res.foo.inflight_field == 123);
 }) as "test";

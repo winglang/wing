@@ -164,7 +164,7 @@ module.exports = grammar({
         "{",
         repeat(
           choice(
-            $.constructor,
+            $.initializer,
             $.method_definition,
             $.inflight_method_definition,
             $.class_field
@@ -197,8 +197,7 @@ module.exports = grammar({
         "{",
         repeat(
           choice(
-            $.inflight_initializer,
-            $.constructor,
+            $.initializer,
             $.method_definition,
             $.inflight_method_definition,
             $.class_field
@@ -417,21 +416,13 @@ module.exports = grammar({
     builtin_type: ($) =>
       choice("num", "bool", "any", "str", "void", "duration"),
 
-    constructor: ($) =>
+    initializer: ($) =>
       seq(
+        optional(field("inflight", $._inflight_specifier)),
         "init",
         field("parameter_list", $.parameter_list),
         field("block", $.block)
       ),
-
-    inflight_initializer: ($) =>
-      seq(
-        $._inflight_specifier,
-        "init",
-        "(", ")",
-        field("block", $.block)
-      ),
-
 
     extern_modifier: ($) => seq("extern", $.string),
 

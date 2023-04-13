@@ -20,9 +20,9 @@ use sha2::{Digest, Sha256};
 
 use crate::{
 	ast::{
-		ArgList, BinaryOperator, Class as AstClass, ClassField, Constructor, Expr, ExprKind, FunctionBody, FunctionBodyRef,
-		FunctionDefinition, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-		TypeAnnotation, UnaryOperator, UserDefinedType,
+		ArgList, BinaryOperator, Class as AstClass, ClassField, Expr, ExprKind, FunctionBody, FunctionBodyRef,
+		FunctionDefinition, Initializer, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt,
+		StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 	},
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
 	type_check::{
@@ -836,7 +836,7 @@ impl<'a> JSifier<'a> {
 		)
 	}
 
-	fn jsify_constructor(&mut self, name: Option<&str>, func_def: &Constructor, context: &JSifyContext) -> String {
+	fn jsify_constructor(&mut self, name: Option<&str>, func_def: &Initializer, context: &JSifyContext) -> String {
 		let mut parameter_list = vec![];
 
 		for p in func_def.parameters() {
@@ -1044,7 +1044,7 @@ impl<'a> JSifier<'a> {
 
 	fn jsify_resource_constructor(
 		&mut self,
-		constructor: &Constructor,
+		constructor: &Initializer,
 		no_parent: bool,
 		context: &JSifyContext,
 	) -> String {

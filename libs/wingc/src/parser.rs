@@ -7,8 +7,8 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionBody,
-	FunctionDefinition, FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Interface, InterpolatedString,
+	ArgList, BinaryOperator, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
+	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Initializer, Interface, InterpolatedString,
 	InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UnaryOperator,
 	UserDefinedType,
 };
@@ -440,7 +440,7 @@ impl<'s> Parser<'s> {
 		let mut cursor = statement_node.walk();
 		let mut fields = vec![];
 		let mut methods = vec![];
-		let mut constructor = None;
+		let mut initializer = None;
 		let mut inflight_initializer = None;
 		let name = self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?;
 		for class_element in statement_node
@@ -498,30 +498,16 @@ impl<'s> Parser<'s> {
 						},
 					})
 				}
-				("constructor", _) => {
-					if let Some(_) = constructor {
+				("initializer", _) => {
+					let is_inflight = class_element.child_by_field_name("inflight").is_some();
+					if initializer.is_some() && !is_inflight {
 						self
 							.add_error::<Node>(
 								format!("Multiple initializers defined in class {}", name.name),
 								&class_element,
 							)
 							.err();
-					}
-					let parameters = self.build_parameter_list(&class_element.child_by_field_name("parameter_list").unwrap())?;
-					constructor = Some(Constructor {
-						statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
-						signature: FunctionSignature {
-							parameters,
-							return_type: Some(Box::new(TypeAnnotation::UserDefined(UserDefinedType {
-								root: name.clone(),
-								fields: vec![],
-							}))),
-							phase: if is_resource { Phase::Preflight } else { Phase::Inflight },
-						},
-					})
-				}
-				("inflight_initializer", true) => {
-					if let Some(_) = inflight_initializer {
+					} else if inflight_initializer.is_some() && is_inflight {
 						self
 							.add_error::<Node>(
 								format!("Multiple inflight initializers defined in class {}", name.name),
@@ -529,17 +515,46 @@ impl<'s> Parser<'s> {
 							)
 							.err();
 					}
-					inflight_initializer = Some(FunctionDefinition {
-						body: FunctionBody::Statements(self.build_scope(&class_element.child_by_field_name("block").unwrap())),
-						signature: FunctionSignature {
-							parameters: vec![], // Inflight initializers cannot have parameters
-							return_type: None,
-							phase: Phase::Inflight,
-						},
-						is_static: false,
-						span: self.node_span(&class_element),
-						captures: RefCell::new(None),
-					})
+					if !is_resource && is_inflight {
+						self
+							.add_error::<Node>(format!("Class cannot have an inflight initializers"), &class_element)
+							.err();
+					}
+					let parameters_node = class_element.child_by_field_name("parameter_list").unwrap();
+					let parameters = self.build_parameter_list(&parameters_node)?;
+					if !parameters.is_empty() && is_inflight {
+						self
+							.add_error::<Node>(
+								format!("Inflight initializers cannot have parameters"),
+								&parameters_node,
+							)
+							.err();
+					}
+					if is_inflight {
+						inflight_initializer = Some(FunctionDefinition {
+							body: FunctionBody::Statements(self.build_scope(&class_element.child_by_field_name("block").unwrap())),
+							signature: FunctionSignature {
+								parameters: vec![], // Inflight initializers cannot have parameters
+								return_type: None,
+								phase: Phase::Inflight,
+							},
+							is_static: false,
+							span: self.node_span(&class_element),
+							captures: RefCell::new(None),
+						})
+					} else {
+						initializer = Some(Initializer {
+							statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
+							signature: FunctionSignature {
+								parameters,
+								return_type: Some(Box::new(TypeAnnotation::UserDefined(UserDefinedType {
+									root: name.clone(),
+									fields: vec![],
+								}))),
+								phase: if is_resource { Phase::Preflight } else { Phase::Inflight },
+							},
+						})
+					}
 				}
 				("ERROR", _) => {
 					self
@@ -556,7 +571,7 @@ impl<'s> Parser<'s> {
 				}
 			}
 		}
-		if constructor.is_none() {
+		if initializer.is_none() {
 			self.add_error::<Node>(
 				format!(
 					"No constructor defined in {} {:?}",
@@ -616,7 +631,7 @@ impl<'s> Parser<'s> {
 			methods,
 			parent,
 			implements,
-			initializer: constructor.unwrap(),
+			initializer: initializer.unwrap(),
 			is_resource,
 			inflight_initializer,
 		}))

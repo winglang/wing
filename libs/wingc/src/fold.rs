@@ -1,7 +1,7 @@
 use crate::ast::{
-	ArgList, CatchBlock, Class, ClassField, Constructor, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
-	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Interface, InterpolatedString, InterpolatedStringPart,
-	Literal, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UserDefinedType,
+	ArgList, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
+	FunctionParameter, FunctionSignature, FunctionTypeAnnotation, Initializer, Interface, InterpolatedString,
+	InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, UserDefinedType,
 };
 
 /// Similar to the `visit` module in `wingc` except each method takes ownership of an
@@ -23,7 +23,7 @@ pub trait Fold {
 	fn fold_interface(&mut self, node: Interface) -> Interface {
 		fold_interface(self, node)
 	}
-	fn fold_constructor(&mut self, node: Constructor) -> Constructor {
+	fn fold_constructor(&mut self, node: Initializer) -> Initializer {
 		fold_constructor(self, node)
 	}
 	fn fold_expr(&mut self, node: Expr) -> Expr {
@@ -218,11 +218,11 @@ where
 	}
 }
 
-pub fn fold_constructor<F>(f: &mut F, node: Constructor) -> Constructor
+pub fn fold_constructor<F>(f: &mut F, node: Initializer) -> Initializer
 where
 	F: Fold + ?Sized,
 {
-	Constructor {
+	Initializer {
 		signature: f.fold_function_signature(node.signature),
 		statements: f.fold_scope(node.statements),
 	}

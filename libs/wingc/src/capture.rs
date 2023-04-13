@@ -8,7 +8,7 @@
 
 use crate::{
 	ast::{
-		ArgList, Class, Constructor, Expr, ExprKind, FunctionBody, FunctionDefinition, InterpolatedStringPart, Literal,
+		ArgList, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Initializer, InterpolatedStringPart, Literal,
 		Phase, Reference, Scope, StmtKind, Symbol,
 	},
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
@@ -72,7 +72,7 @@ impl CaptureVisitor {
 impl Visit<'_> for CaptureVisitor {
 	// TODO: currently there's no special treatment for resources, see file's top comment
 
-	fn visit_constructor(&mut self, constructor: &Constructor) {
+	fn visit_constructor(&mut self, constructor: &Initializer) {
 		match constructor.signature.phase {
 			Phase::Inflight => {
 				// TODO: the result of this is not used, see file's top comment

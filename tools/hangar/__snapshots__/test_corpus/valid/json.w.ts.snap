@@ -82,7 +82,7 @@ class $Root extends $stdlib.core.Resource {
 	return $stdlib.core.NodeJsCode.fromInline(\`(
 		await (async () => { 
 			const tmp = new (require(\\"\${self_client_path}\\")).Foo({_sum_str: \${_sum_str_client}}); 
-			if (tmp.$inflight_init !== undefined) await tmp.$inflight_init(); 
+			if (tmp.$inflight_init) { await tmp.$inflight_init(); }
 			return tmp; 
 		})()
 	)\`);

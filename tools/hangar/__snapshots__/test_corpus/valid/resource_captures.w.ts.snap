@@ -439,7 +439,7 @@ class $Root extends $stdlib.core.Resource {
 	return $stdlib.core.NodeJsCode.fromInline(\`(
 		await (async () => { 
 			const tmp = new (require(\\"\${self_client_path}\\")).First({my_resource: \${my_resource_client}}); 
-			if (tmp.$inflight_init !== undefined) await tmp.$inflight_init(); 
+			if (tmp.$inflight_init) { await tmp.$inflight_init(); }
 			return tmp; 
 		})()
 	)\`);
@@ -462,7 +462,7 @@ const my_field_client = this._lift(this.my_field);
 	return $stdlib.core.NodeJsCode.fromInline(\`(
 		await (async () => { 
 			const tmp = new (require(\\"\${self_client_path}\\")).Another({first: \${first_client}, my_field: \${my_field_client}}); 
-			if (tmp.$inflight_init !== undefined) await tmp.$inflight_init(); 
+			if (tmp.$inflight_init) { await tmp.$inflight_init(); }
 			return tmp; 
 		})()
 	)\`);
@@ -511,7 +511,7 @@ const unused_resource_client = this._lift(this.unused_resource);
 	return $stdlib.core.NodeJsCode.fromInline(\`(
 		await (async () => { 
 			const tmp = new (require(\\"\${self_client_path}\\")).MyResource({another: \${another_client}, array_of_str: \${array_of_str_client}, ext_bucket: \${ext_bucket_client}, ext_num: \${ext_num_client}, map_of_num: \${map_of_num_client}, my_bool: \${my_bool_client}, my_num: \${my_num_client}, my_queue: \${my_queue_client}, my_resource: \${my_resource_client}, my_str: \${my_str_client}, set_of_str: \${set_of_str_client}, unused_resource: \${unused_resource_client}}); 
-			if (tmp.$inflight_init !== undefined) await tmp.$inflight_init(); 
+			if (tmp.$inflight_init) { await tmp.$inflight_init(); }
 			return tmp; 
 		})()
 	)\`);

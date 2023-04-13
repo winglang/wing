@@ -114,7 +114,7 @@ class $Root extends $stdlib.core.Resource {
 	return $stdlib.core.NodeJsCode.fromInline(\`(
 		await (async () => { 
 			const tmp = new (require(\\"\${self_client_path}\\")).A({}); 
-			if (tmp.$inflight_init !== undefined) await tmp.$inflight_init(); 
+			if (tmp.$inflight_init) { await tmp.$inflight_init(); }
 			return tmp; 
 		})()
 	)\`);
@@ -144,7 +144,7 @@ A._annotateInflight(\\"handle\\", {});
 	return $stdlib.core.NodeJsCode.fromInline(\`(
 		await (async () => { 
 			const tmp = new (require(\\"\${self_client_path}\\")).r({}); 
-			if (tmp.$inflight_init !== undefined) await tmp.$inflight_init(); 
+			if (tmp.$inflight_init) { await tmp.$inflight_init(); }
 			return tmp; 
 		})()
 	)\`);
@@ -165,7 +165,7 @@ r._annotateInflight(\\"method_2\\", {});
 	return $stdlib.core.NodeJsCode.fromInline(\`(
 		await (async () => { 
 			const tmp = new (require(\\"\${self_client_path}\\")).Dog({}); 
-			if (tmp.$inflight_init !== undefined) await tmp.$inflight_init(); 
+			if (tmp.$inflight_init) { await tmp.$inflight_init(); }
 			return tmp; 
 		})()
 	)\`);

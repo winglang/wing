@@ -853,25 +853,18 @@ error: Multiple inflight initializers defined in class R
   |   ^^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
 
 
-error: Unexpected 'ERROR'.
-  --> ../../../examples/tests/invalid/resource_init.w:9:12
+error: Multiple inflight initializers defined in class R
+  --> ../../../examples/tests/invalid/resource_init.w:9:3
   |
 9 |   inflight init(x: num) {}
-  |            ^^^^^ Unexpected 'ERROR'.
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^ Multiple inflight initializers defined in class R
 
 
-error: Unexpected 'identifier'.
-  --> ../../../examples/tests/invalid/resource_init.w:9:17
+error: Inflight initializers cannot have parameters
+  --> ../../../examples/tests/invalid/resource_init.w:9:16
   |
 9 |   inflight init(x: num) {}
-  |                 ^ Unexpected 'identifier'.
-
-
-error: Unexpected 'builtin_type'.
-  --> ../../../examples/tests/invalid/resource_init.w:9:20
-  |
-9 |   inflight init(x: num) {}
-  |                    ^^^ Unexpected 'builtin_type'.
+  |                ^^^^^^^^ Inflight initializers cannot have parameters
 
 "
 `;

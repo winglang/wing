@@ -277,12 +277,12 @@ impl MethodLike<'_> for FunctionDefinition {
 }
 
 #[derive(Debug)]
-pub struct Constructor {
+pub struct Initializer {
 	pub signature: FunctionSignature,
 	pub statements: Scope,
 }
 
-impl MethodLike<'_> for Constructor {
+impl MethodLike<'_> for Initializer {
 	fn body(&self) -> FunctionBodyRef {
 		FunctionBodyRef::Statements(&self.statements)
 	}
@@ -337,7 +337,7 @@ pub struct Class {
 	pub name: Symbol,
 	pub fields: Vec<ClassField>,
 	pub methods: Vec<(Symbol, FunctionDefinition)>,
-	pub initializer: Constructor,
+	pub initializer: Initializer,
 	pub inflight_initializer: Option<FunctionDefinition>,
 	pub parent: Option<UserDefinedType>,
 	pub implements: Vec<UserDefinedType>,
