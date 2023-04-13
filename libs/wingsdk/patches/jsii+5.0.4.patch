@@ -1,21 +1,22 @@
 diff --git a/node_modules/jsii/lib/assembler.js b/node_modules/jsii/lib/assembler.js
-index fe972cb..caa088f 100644
+index c1fa482..5032732 100644
 --- a/node_modules/jsii/lib/assembler.js
 +++ b/node_modules/jsii/lib/assembler.js
-@@ -1557,9 +1557,8 @@ class Assembler {
+@@ -1583,9 +1583,9 @@ class Assembler {
                  this._diagnostics.push(jsii_diagnostic_1.JsiiDiagnostic.JSII_1002_UNSPECIFIED_PROMISE.create(declaration));
                  return { type: spec.CANONICAL_ANY };
              }
 -            return {
 -                type: this._typeReference(typeRef.typeArguments[0], declaration, purpose),
 -            };
-+            // (very very hacky) allow optionals to be returned from async methods
++            // (hacky) allow optionals to be returned from async methods
++            // see https://github.com/aws/jsii/issues/4035
 +            return this._optionalValue(typeRef.typeArguments[0], declaration, purpose);
          }
-         return {
-             type: { fqn: this._getFQN(type, declaration, purpose, isThisType) },
+         const fqn = this._getFQN(type, declaration, purpose, isThisType);
+         if (fqn == null) {
 diff --git a/node_modules/jsii/lib/compiler.js b/node_modules/jsii/lib/compiler.js
-index 8b94573..65529ee 100644
+index cb5587e..867d4c5 100644
 --- a/node_modules/jsii/lib/compiler.js
 +++ b/node_modules/jsii/lib/compiler.js
 @@ -17,7 +17,8 @@ const BASE_COMPILER_OPTIONS = {
@@ -26,5 +27,5 @@ index 8b94573..65529ee 100644
 +    lib: ['lib.es2020.d.ts','lib.dom.d.ts'],
 +    esModuleInterop: true,
      module: ts.ModuleKind.CommonJS,
-     newLine: ts.NewLineKind.LineFeed,
      noEmitOnError: true,
+     noFallthroughCasesInSwitch: true,
