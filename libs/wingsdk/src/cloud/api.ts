@@ -160,15 +160,14 @@ export abstract class Api extends Resource {
   ): void;
   /**
    * validating route:
-   * checks if a string consists only from letters, digits, =, ?,
-   * or if has curly brackets- the part that inside the brackets is only letter or _, not empty and placed before and after "/"
+   * if has curly brackets pairs- the part that inside the brackets is only letter, digit or _, not empty and placed before and after "/"
    * @param route
    * @throws if the route is invalid
    */
   protected validateRoute(route: string) {
-    if (!/^([\w/1-9\?\=\&]|.+\/\{\w+\}(\/|$))*$/.test(route)) {
+    if (!/^([^\{\}\:\n]|.+\/\{\w+\}(\/|$))*$/g.test(route)) {
       throw new Error(
-        `Invalid route ${route}. Routes and params should consist of alpha-numeric characters only.`
+        `Invalid route ${route}. Url cannot contain ":", params contains only alpha-numeric chars or "_".`
       );
     }
   }
