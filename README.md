@@ -7,7 +7,7 @@
   ▪︎
   <a href="https://docs.winglang.io">Docs</a>
   ▪︎
-  <a href="https://docs.winglang.io/faq">FAQ</a>
+  <a href="https://docs.winglang.io/category/faq">FAQ</a>
   ▪︎
   <a href="https://docs.winglang.io/status#roadmap">Roadmap</a>
   ▪︎
