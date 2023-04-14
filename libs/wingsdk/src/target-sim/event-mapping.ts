@@ -1,6 +1,5 @@
 import { Construct } from "constructs";
-import { ISimulatorResource, ISimulatorResourceInstance } from "./resource";
-import { BaseResourceSchema } from "./schema";
+import { ISimulatorResource } from "./resource";
 import {
   EVENT_MAPPING_TYPE,
   EventMappingSchema,
@@ -11,6 +10,10 @@ import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
 import * as core from "../core";
 import { Resource, App } from "../core";
+import {
+  BaseResourceSchema,
+  ISimulatorResourceInstance,
+} from "../testing/simulator";
 
 export interface IEventPublisher extends ISimulatorResourceInstance {
   addEventSubscription: (subscription: EventSubscription) => Promise<void>;
