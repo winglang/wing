@@ -82,8 +82,11 @@ export interface EventSubscription {}
 export interface EventMappingSchema extends BaseResourceSchema {
   readonly type: typeof EVENT_MAPPING_TYPE;
   readonly props: {
+    /** Function handle to call for subscriber */
     subscriber: FunctionHandle;
+    /** Publisher handle of the event */
     publisher: PublisherHandle;
+    /** Additional properties of event subscription */
     subscriptionProps: EventSubscription;
   };
 }
