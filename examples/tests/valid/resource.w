@@ -98,5 +98,5 @@ let bigOlPublisher = new BigPublisher();
 new cloud.Function(inflight () => {
   bigOlPublisher.publish("foo");
   let count = bigOlPublisher.getObjectCount();
-  // assert(count == 2); TODO: This fails due to issue: (I still need to create the issue)
+  // assert(count == 2); TODO: This fails due to issue: https://github.com/winglang/wing/issues/2082
 }) as "test: dependency cycles";
