@@ -59,7 +59,7 @@ export class EventMapping extends Resource implements ISimulatorResource {
       props: {
         subscriber: simulatorHandleToken(this.eventProps.subscriber),
         publisher: simulatorHandleToken(this.eventProps.publisher),
-        eventSubscription: this.eventProps.subscriptionProps,
+        subscriptionProps: this.eventProps.subscriptionProps,
       },
       attrs: {} as any,
     };
