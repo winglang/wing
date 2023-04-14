@@ -83,7 +83,7 @@ export interface EventMappingSchema extends BaseResourceSchema {
   readonly props: {
     subscriber: FunctionHandle;
     publisher: PublisherHandle;
-    eventSubscription: EventSubscription;
+    subscriptionProps: EventSubscription;
   };
 }
 
