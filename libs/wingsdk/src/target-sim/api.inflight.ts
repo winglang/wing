@@ -39,6 +39,7 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
 
     // Parse request bodies as json.
     this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
 
     for (const route of this.routes) {
       const method = route.method.toLowerCase() as
