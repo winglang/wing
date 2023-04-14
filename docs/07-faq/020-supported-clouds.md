@@ -15,10 +15,10 @@ We are working hard on filling the support gap between the different clouds -- c
 
 Beyond the common set of cloud resources in the SDK, you can create resources for any other possible cloud by importing a [CDKTF](https://github.com/hashicorp/terraform-cdk) library corresponding to any given Terraform provider.
 
-# How to check specific service support for each cloud
+## How to check specific service support for each cloud
 Check out our [roadmap](https://docs.winglang.io/status#roadmap) to see which services are supported now on different clouds.
 
-# How to deploy on the different clouds
+## How to deploy on the different clouds
 Check out our [CLI reference](https://docs.winglang.io/reference/cli) for instructions on how to deploy your wing code on the different clouds.
 In the future, compiling for the different clouds could be supported through the GUI of the Wing Console as well (you can track progress in this [issue](https://github.com/winglang/wing/issues/2051)).
 
