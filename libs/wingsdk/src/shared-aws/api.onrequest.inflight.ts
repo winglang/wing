@@ -1,4 +1,3 @@
-import querystring from "querystring";
 import type { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import {
   ApiRequest,
@@ -52,10 +51,9 @@ function mapApigatewayEventToCloudApiRequest(
     ...request.multiValueQueryStringParameters,
   };
 
-  const body = parseBody(request);
   return {
     path: request.path,
-    body: body,
+    body: parseBody(request),
     headers: request.headers as Record<string, string>,
     method: parseHttpMethod(request.httpMethod),
     query: sanitizeParamLikeObject(query),
@@ -71,11 +69,11 @@ function mapApigatewayEventToCloudApiRequest(
 function parseBody(request: APIGatewayProxyEvent) {
   if (!request.body) return "";
 
-  const contentType = Object.entries(request.headers)
-    .filter(([key, _]) => key.toLowerCase() === "content-type")
-    .map(([_, value]) => value?.toLowerCase())[0];
+  const contentType = Object.entries(request.headers).find(
+    ([key, _]) => key.toLowerCase() === "content-type"
+  )?.[1];
   if (contentType === "application/x-www-form-urlencoded") {
-    return querystring.parse(request.body);
+    return Object.fromEntries(new URLSearchParams(request.body));
   }
   return JSON.parse(request.body);
 }
