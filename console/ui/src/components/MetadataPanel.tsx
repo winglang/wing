@@ -81,7 +81,7 @@ export const MetadataPanel = ({
   const { resourceGroup, connectionsGroups } = useMemo(() => {
     const connectionsGroupsArray: ConnectionsGroup[] = [];
     let resourceGroup: AttributeGroup | undefined;
-    if (node.type.startsWith("wingsdk.cloud") && node.props) {
+    if (node.props) {
       const icon = getResourceIconComponent(node.type, { resourceId: node.id });
       switch (node.type) {
         case "wingsdk.cloud.Function": {
@@ -137,7 +137,8 @@ export const MetadataPanel = ({
         }
         case "wingsdk.redis.Redis": {
           resourceGroup = {
-            groupName: "Connection",
+            groupName: "Redis",
+            icon: getResourceIconComponent(node.type),
           };
 
           break;

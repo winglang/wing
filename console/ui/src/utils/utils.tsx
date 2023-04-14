@@ -167,6 +167,14 @@ const getResourceIconColors = (options: {
         options.forceDarken && "text-amber-600 dark:text-amber-300",
       ];
     }
+    case "wingsdk.redis.Redis": {
+      return [
+        "text-red-700 dark:text-red-400",
+        options.darkenOnGroupHover &&
+          "group-hover:text-red-700 dark:group-hover:text-red-300",
+        options.forceDarken && "text-red-700 dark:text-red-300",
+      ];
+    }
     default: {
       return [
         "text-slate-500 dark:text-slate-400",

@@ -31,7 +31,7 @@ const getResourceBorderColor = (
       return "border-t-[3px] border-t-amber-500 group-hover:border-t-amber-500 group-focus:border-t-amber-500 dark:border-t-amber-500 dark:group-hover:border-t-amber-500 dark:group-focus:border-t-amber-500";
     }
     case "wingsdk.redis.Redis": {
-      return "border-t-[3px] border-t-[#C6302B] group-hover:border-t-[#C6302B] group-focus:border-t-[#C6302B] dark:border-t-[#C6302B] dark:group-hover:border-t-[#C6302B] dark:group-focus:border-t-[#C6302B]";
+      return "border-t-[3px] border-t-red-700 group-hover:border-t-red-700 group-focus:border-t-red-700 dark:border-t-red-700 dark:group-hover:border-t-red-700 dark:group-focus:border-t-red-700";
     }
   }
 };
