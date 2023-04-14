@@ -8,8 +8,8 @@ Winglang was built from the ground up to make it an ideal choice for building ap
 
 Since Wing is in early stages of development, the Wing SDK supports each cloud with different levels of maturity:
 * AWS - Fully supported. If you are able to compile your Wing code for the simulator, you should be able to compile it for AWS as well (with the Terraform provisioning engine).
-* GCP - Partial support. Not any Wing code that compiles for the simulator will compile for GCP. 
-* Azure - Partial support. Not any Wing code that compiles for the simulator will compile for Azure. 
+* GCP - Partial support. Not all Wing code that compiles for the simulator will compile for GCP. 
+* Azure - Partial support. Not all Wing code that compiles for the simulator will compile for Azure. 
 
 We are working hard on filling the support gap between the different clouds -- check out our [roadmap](https://docs.winglang.io/status#roadmap) for more details. If there are other clouds you would like supported, please let us know through our GitHub or Slack!
 
