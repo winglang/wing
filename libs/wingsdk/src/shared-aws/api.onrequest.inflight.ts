@@ -1,3 +1,4 @@
+import querystring from "querystring";
 import type { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import {
   ApiRequest,
@@ -50,12 +51,31 @@ function mapApigatewayEventToCloudApiRequest(
     ...request.queryStringParameters,
     ...request.multiValueQueryStringParameters,
   };
+
+  const body = parseBody(request);
   return {
     path: request.path,
-    body: request.body ? JSON.parse(request.body) : "",
+    body: body,
     headers: request.headers as Record<string, string>,
     method: parseHttpMethod(request.httpMethod),
     query: sanitizeParamLikeObject(query),
     vars: sanitizeParamLikeObject(request.pathParameters ?? {}),
   };
+}
+
+/**
+ * Parse body to JSON or empty string
+ * @param body body
+ * @returns JSON body
+ */
+function parseBody(request: APIGatewayProxyEvent) {
+  if (!request.body) return "";
+
+  const contentType = Object.entries(request.headers)
+    .filter(([key, _]) => key.toLowerCase() === "content-type")
+    .map(([_, value]) => value?.toLowerCase())[0];
+  if (contentType === "application/x-www-form-urlencoded") {
+    return querystring.parse(request.body);
+  }
+  return JSON.parse(request.body);
 }

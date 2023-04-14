@@ -266,6 +266,35 @@ test("api with one POST route, with body", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
+test("api with one POST route, with body urlencoded", async () => {
+  // GIVEN
+  const ROUTE = "/hello";
+  const REQUEST_BODY = { message: "hello world" };
+
+  const app = new SimApp();
+  const api = cloud.Api._newApi(app, "my_api");
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE_ECHO_BODY);
+  api.post(ROUTE, inflight);
+
+  // WHEN
+  const s = await app.startSimulator();
+  const apiUrl = getApiUrl(s, "/my_api");
+  const params = new URLSearchParams(REQUEST_BODY);
+  const response = await fetch(apiUrl + ROUTE, {
+    method: "POST",
+    body: params,
+  });
+
+  // THEN
+  await s.stop();
+
+  expect(await response.json()).toEqual(REQUEST_BODY);
+  expect(response.status).toEqual(200);
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
 test("api handler can read the request path", async () => {
   // GIVEN
   const ROUTE = "/hello";
