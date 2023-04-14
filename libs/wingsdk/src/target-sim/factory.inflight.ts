@@ -4,7 +4,6 @@ import { Counter } from "./counter.inflight";
 import { Function } from "./function.inflight";
 import { Queue } from "./queue.inflight";
 import { Redis } from "./redis.inflight";
-import { ISimulatorResourceInstance } from "./resource";
 import {
   API_TYPE,
   BUCKET_TYPE,
@@ -19,7 +18,11 @@ import {
 import { Table } from "./table.inflight";
 import { TestRunnerClient } from "./test-runner.inflight";
 import { Topic } from "./topic.inflight";
-import { ISimulatorFactory, ISimulatorContext } from "../testing/simulator";
+import {
+  ISimulatorFactory,
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+} from "../testing/simulator";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
   /**

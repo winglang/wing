@@ -1,4 +1,4 @@
-class A  {
+class  A {
   constructor({ field }) {
     this.field = field;
   }

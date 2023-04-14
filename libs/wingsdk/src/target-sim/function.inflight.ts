@@ -1,14 +1,16 @@
 import * as path from "path";
 import * as util from "util";
 import { NodeVM } from "vm2";
-import { ISimulatorResourceInstance } from "./resource";
 import {
   FunctionAttributes,
   FunctionSchema,
   FUNCTION_TYPE,
 } from "./schema-resources";
 import { IFunctionClient, TraceType } from "../cloud";
-import { ISimulatorContext } from "../testing/simulator";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+} from "../testing/simulator";
 
 export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly filename: string;

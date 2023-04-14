@@ -1,4 +1,4 @@
-class Foo  {
+class  Foo {
   constructor({ instance_field }) {
     this.instance_field = instance_field;
   }

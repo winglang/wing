@@ -1,4 +1,4 @@
-class First  {
+class  First {
   constructor({ my_resource }) {
     this.my_resource = my_resource;
   }

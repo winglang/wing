@@ -2,7 +2,7 @@ import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { ITableClient } from "../../src/cloud";
-import { SimApp } from "../../src/testing";
+import { SimApp } from "../sim-app";
 
 test("create a table", async () => {
   // GIVEN

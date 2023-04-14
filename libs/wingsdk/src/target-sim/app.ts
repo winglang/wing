@@ -8,7 +8,6 @@ import { Function } from "./function";
 import { Queue } from "./queue";
 import { Redis } from "./redis";
 import { isSimulatorResource } from "./resource";
-import { WingSimulatorSchema } from "./schema";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
 import { Topic } from "./topic";
@@ -26,6 +25,7 @@ import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
 import { REDIS_FQN } from "../redis";
+import { WingSimulatorSchema } from "../testing/simulator";
 import { SIMULATOR_FILE_PATH } from "../util";
 
 /**
