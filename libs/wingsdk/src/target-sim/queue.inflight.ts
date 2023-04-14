@@ -1,4 +1,3 @@
-import { ISimulatorResourceInstance } from "./resource";
 import {
   QueueAttributes,
   QueueSchema,
@@ -6,7 +5,10 @@ import {
   QUEUE_TYPE,
 } from "./schema-resources";
 import { IFunctionClient, IQueueClient, TraceType } from "../cloud";
-import { ISimulatorContext } from "../testing/simulator";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+} from "../testing/simulator";
 
 export class Queue implements IQueueClient, ISimulatorResourceInstance {
   private readonly messages = new Array<string>();

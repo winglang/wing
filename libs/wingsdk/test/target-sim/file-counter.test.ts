@@ -1,7 +1,8 @@
 import { Construct } from "constructs";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
-import { SimApp, Testing } from "../../src/testing";
+import { Testing } from "../../src/testing";
+import { SimApp } from "../sim-app";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 

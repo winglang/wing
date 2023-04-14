@@ -65,6 +65,20 @@ export abstract class App extends Construct {
   }
 
   /**
+   * Loads the `App` class for the given target.
+   * @param target one of the supported targets
+   * @returns an `App` class constructor
+   */
+  public static for(target: string): any {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      return require(`../target-${target}/app`).App;
+    } catch {
+      throw new Error(`Unknown compilation target: "${target}"`);
+    }
+  }
+
+  /**
    * The output directory.
    */
   public abstract readonly outdir: string;
