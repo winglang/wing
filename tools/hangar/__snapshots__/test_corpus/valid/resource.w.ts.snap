@@ -994,36 +994,6 @@ exports[`wing compile -t tf-aws > proc.c2ebbdf06e2a1f4ff7d5b279cc90cfff8cb1ed806
 exports[`wing test -t sim > stdout 1`] = `
 "- Compiling to sim...
 ✔ Compiling to sim...
-Subscriber error evalmachine.<anonymous>:20
-  const { this } = this;
-          ^^^^
-
-SyntaxError: Unexpected token 'this'
-    at new Script (node:vm:100:7)
-    at createScript (node:vm:265:10)
-    at Object.runInContext (node:vm:296:10)
-    at /Users/hasan/repos/monada/wing/libs/wingsdk/lib/target-sim/function.inflight.js:133:12
-    at new Promise (<anonymous>)
-    at runInSandbox (/Users/hasan/repos/monada/wing/libs/wingsdk/lib/target-sim/function.inflight.js:114:12)
-    at Object.activity (/Users/hasan/repos/monada/wing/libs/wingsdk/lib/target-sim/function.inflight.js:55:24)
-    at Object.withTrace (/Users/hasan/repos/monada/wing/libs/wingsdk/lib/testing/simulator.js:69:50)
-    at Function.invoke (/Users/hasan/repos/monada/wing/libs/wingsdk/lib/target-sim/function.inflight.js:52:29)
-    at Topic.publishMessage (/Users/hasan/repos/monada/wing/libs/wingsdk/lib/target-sim/topic.inflight.js:33:34)
-Subscriber error evalmachine.<anonymous>:20
-  const { this } = this;
-          ^^^^
-
-SyntaxError: Unexpected token 'this'
-    at new Script (node:vm:100:7)
-    at createScript (node:vm:265:10)
-    at Object.runInContext (node:vm:296:10)
-    at /Users/hasan/repos/monada/wing/libs/wingsdk/lib/target-sim/function.inflight.js:133:12
-    at new Promise (<anonymous>)
-    at runInSandbox (/Users/hasan/repos/monada/wing/libs/wingsdk/lib/target-sim/function.inflight.js:114:12)
-    at Object.activity (/Users/hasan/repos/monada/wing/libs/wingsdk/lib/target-sim/function.inflight.js:55:24)
-    at Object.withTrace (/Users/hasan/repos/monada/wing/libs/wingsdk/lib/testing/simulator.js:69:50)
-    at Function.invoke (/Users/hasan/repos/monada/wing/libs/wingsdk/lib/target-sim/function.inflight.js:52:29)
-    at Topic.publishMessage (/Users/hasan/repos/monada/wing/libs/wingsdk/lib/target-sim/topic.inflight.js:33:34)
 pass ─ resource.wsim » root/env0/test                   
 pass ─ resource.wsim » root/env1/test: dependency cycles"
 `;

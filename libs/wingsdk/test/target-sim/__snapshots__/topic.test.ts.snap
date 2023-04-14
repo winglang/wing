@@ -15,9 +15,7 @@ exports[`create a topic 1`] = `
       {
         "attrs": {},
         "path": "root/my_topic",
-        "props": {
-          "subscribers": [],
-        },
+        "props": {},
         "type": "wingsdk.cloud.Topic",
       },
     ],

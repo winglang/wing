@@ -4,6 +4,7 @@ import {
   QueueSchema,
   QueueSubscriber,
   QUEUE_TYPE,
+  EventSubscription,
 } from "./schema-resources";
 import { IFunctionClient, IQueueClient, TraceType } from "../cloud";
 import {
@@ -21,10 +22,6 @@ export class Queue
   private readonly timeout: number;
 
   constructor(props: QueueSchema["props"], context: ISimulatorContext) {
-    for (const sub of props.subscribers ?? []) {
-      this.subscribers.push({ ...sub });
-    }
-
     if (props.initialMessages) {
       this.messages.push(...props.initialMessages);
     }
@@ -43,9 +40,9 @@ export class Queue
   }
 
   public async addEventSubscription(
-    subscriber: QueueSubscriber
+    subscriber: EventSubscription
   ): Promise<void> {
-    this.subscribers.push(subscriber);
+    this.subscribers.push(subscriber as QueueSubscriber);
   }
 
   public async push(message: string): Promise<void> {
