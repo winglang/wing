@@ -1,5 +1,4 @@
 import { IEventPublisher } from "./event-mapping";
-import { ISimulatorResourceInstance } from "./resource";
 import {
   EventMappingAttributes,
   EventMappingSchema,
@@ -7,6 +6,7 @@ import {
   FunctionHandle,
 } from "./schema-resources";
 import { ISimulatorContext } from "../testing";
+import { ISimulatorResourceInstance } from "../testing/simulator";
 
 export class EventMapping implements ISimulatorResourceInstance {
   private readonly publisher: FunctionHandle;

@@ -27,7 +27,6 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../testing/simulator";
-import { EventMapping } from "./event-mapping.inflight";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
   /**

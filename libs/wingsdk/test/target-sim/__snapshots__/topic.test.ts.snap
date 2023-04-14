@@ -103,7 +103,7 @@ exports[`topic publishes messages to multiple subscribers 1`] = `
   "Sending message (message=Alpha, subscriber=sim-1).",
   "Received Alpha",
   "Invoke (payload=\\"Alpha\\").",
-  "Sending message (message=Alpha, subscriber=sim-2).",
+  "Sending message (message=Alpha, subscriber=sim-4).",
   "Also received Alpha",
   "Invoke (payload=\\"Alpha\\").",
   "wingsdk.sim.EventMapping deleted.",
