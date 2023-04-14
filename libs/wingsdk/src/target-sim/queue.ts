@@ -2,13 +2,13 @@ import { join } from "path";
 import { Construct } from "constructs";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { BaseResourceSchema } from "./schema";
 import { QueueSchema, QueueSubscriber, QUEUE_TYPE } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import * as std from "../std";
+import { BaseResourceSchema } from "../testing/simulator";
 import { convertBetweenHandlers } from "../utils/convert";
 
 /**

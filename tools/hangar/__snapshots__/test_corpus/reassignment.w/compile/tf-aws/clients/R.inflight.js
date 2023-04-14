@@ -1,4 +1,4 @@
-class R  {
+class  R {
   constructor({ f1 }) {
     this.f1 = f1;
   }

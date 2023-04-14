@@ -1,10 +1,10 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { BaseResourceSchema } from "./schema";
 import { RedisSchema, REDIS_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as core from "../core";
 import * as redis from "../redis";
+import { BaseResourceSchema } from "../testing/simulator";
 
 /**
  * Simulator implementation of `redis.Redis`.

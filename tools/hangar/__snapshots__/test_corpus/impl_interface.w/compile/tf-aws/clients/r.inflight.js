@@ -1,4 +1,4 @@
-class r  {
+class  r {
   constructor({  }) {
   }
   async method_2(x)  {

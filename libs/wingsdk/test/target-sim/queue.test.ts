@@ -3,7 +3,8 @@ import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { Duration } from "../../src/std";
 import { QUEUE_TYPE } from "../../src/target-sim/schema-resources";
-import { SimApp, Testing } from "../../src/testing";
+import { Testing } from "../../src/testing";
+import { SimApp } from "../sim-app";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 

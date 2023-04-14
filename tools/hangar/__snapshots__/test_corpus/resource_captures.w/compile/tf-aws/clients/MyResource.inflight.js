@@ -1,4 +1,4 @@
-class MyResource  {
+class  MyResource {
   constructor({ another, array_of_str, ext_bucket, ext_num, map_of_num, my_bool, my_num, my_queue, my_resource, my_str, set_of_str, unused_resource }) {
     this.another = another;
     this.array_of_str = array_of_str;

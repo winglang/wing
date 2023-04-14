@@ -41,26 +41,7 @@ const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 
 const INFLIGHT_CLIENTS_DIR: &str = "clients";
 
-const TARGET_CODE: &str = r#"
-function __app(target) {
-	switch (target) {
-		case "sim":
-			return $stdlib.sim.App;
-		case "tfaws":
-		case "tf-aws":
-			return $stdlib.tfaws.App;
-		case "tf-gcp":
-			return $stdlib.tfgcp.App;
-		case "tf-azure":
-			return $stdlib.tfazure.App;
-		case "awscdk":
-			return $stdlib.awscdk.App;
-		default:
-			throw new Error(`Unknown WING_TARGET value: "${process.env.WING_TARGET ?? ""}"`);
-	}
-}
-const $AppBase = __app(process.env.WING_TARGET);
-"#;
+const TARGET_CODE: &str = "const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);";
 
 const ENV_WING_IS_TEST: &str = "$wing_is_test";
 const OUTDIR_VAR: &str = "$outdir";
