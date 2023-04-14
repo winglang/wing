@@ -1,11 +1,11 @@
 import { Construct } from "constructs";
 import { test, expect, describe } from "vitest";
 import { App } from "../../src/core/app";
+import { App as AwsCdkApp } from "../../src/target-awscdk/app";
 import { App as SimApp } from "../../src/target-sim/app";
 import { App as TfAwsApp } from "../../src/target-tf-aws/app";
 import { App as TfAzureApp } from "../../src/target-tf-azure/app";
 import { App as TfGcpApp } from "../../src/target-tf-gcp/app";
-import { App as AwsCdkApp } from "../../src/target-awscdk/app";
 
 const FOO_FQN = "@lib/foo.Foo";
 const BAR_FQN = "@lib/foo.Bar";
@@ -89,6 +89,6 @@ class MyFoo extends Foo {
   }
 }
 
-abstract class BarBase extends Construct { }
+abstract class BarBase extends Construct {}
 
-class Bar extends BarBase { }
+class Bar extends BarBase {}

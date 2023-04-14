@@ -1,4 +1,4 @@
-class Fetch  {
+class  Fetch {
   constructor({  }) {
   }
   async get(url)  {
