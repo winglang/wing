@@ -145,11 +145,11 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
         "props": {
-          "eventSubscription": {
-            "batchSize": 1,
-          },
           "publisher": "\${root/my_queue#attrs.handle}",
           "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "batchSize": 1,
+          },
         },
         "type": "wingsdk.sim.EventMapping",
       },
@@ -373,11 +373,11 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
         "props": {
-          "eventSubscription": {
-            "batchSize": 1,
-          },
           "publisher": "\${root/my_queue#attrs.handle}",
           "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "batchSize": 1,
+          },
         },
         "type": "wingsdk.sim.EventMapping",
       },
@@ -691,11 +691,11 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
         "props": {
-          "eventSubscription": {
-            "batchSize": 5,
-          },
           "publisher": "\${root/my_queue#attrs.handle}",
           "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "batchSize": 5,
+          },
         },
         "type": "wingsdk.sim.EventMapping",
       },
@@ -917,11 +917,11 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
         "props": {
-          "eventSubscription": {
-            "batchSize": 1,
-          },
           "publisher": "\${root/my_queue#attrs.handle}",
           "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "batchSize": 1,
+          },
         },
         "type": "wingsdk.sim.EventMapping",
       },
