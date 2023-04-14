@@ -71,8 +71,6 @@ export interface QueueSchema extends BaseResourceSchema {
   readonly props: {
     /** How long a queue's consumers have to process a message, in seconds */
     readonly timeout: number;
-    /** Function that should process queue messages. */
-    readonly subscribers: QueueSubscriber[];
     /** Initial messages to be pushed to the queue. */
     readonly initialMessages: string[];
   };
@@ -107,9 +105,7 @@ export interface QueueSubscriber extends EventSubscription {
 /** Schema for cloud.Topic */
 export interface TopicSchema extends BaseResourceSchema {
   readonly type: typeof TOPIC_TYPE;
-  readonly props: {
-    readonly subscribers: TopicSubscriber[];
-  };
+  readonly props: {};
 }
 
 /** Runtime attributes for cloud.Topic */

@@ -3,7 +3,7 @@ import { Construct } from "constructs";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { QueueSchema, QueueSubscriber, QUEUE_TYPE } from "./schema-resources";
+import { QueueSchema, QUEUE_TYPE } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
@@ -19,13 +19,11 @@ import { convertBetweenHandlers } from "../utils/convert";
  */
 export class Queue extends cloud.Queue implements ISimulatorResource {
   private readonly timeout: Duration;
-  private readonly subscribers: QueueSubscriber[];
   private readonly initialMessages: string[] = [];
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
     this.timeout = props.timeout ?? Duration.fromSeconds(10);
-    this.subscribers = [];
     this.initialMessages.push(...(props.initialMessages ?? []));
   }
 
@@ -96,7 +94,6 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       path: this.node.path,
       props: {
         timeout: this.timeout.seconds,
-        subscribers: this.subscribers,
         initialMessages: this.initialMessages,
       },
       attrs: {} as any,

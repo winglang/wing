@@ -4,6 +4,7 @@ import {
   TopicSchema,
   TopicSubscriber,
   TOPIC_TYPE,
+  EventSubscription,
 } from "./schema-resources";
 import { IFunctionClient, ITopicClient, TraceType } from "../cloud";
 import {
@@ -18,10 +19,8 @@ export class Topic
   private readonly context: ISimulatorContext;
 
   constructor(props: TopicSchema["props"], context: ISimulatorContext) {
-    for (const sub of props.subscribers ?? []) {
-      this.subscribers.push({ ...sub });
-    }
     this.context = context;
+    props;
   }
 
   public async init(): Promise<TopicAttributes> {
@@ -64,8 +63,8 @@ export class Topic
     }
   }
 
-  async addEventSubscription(subscriber: TopicSubscriber): Promise<void> {
-    this.subscribers.push(subscriber);
+  async addEventSubscription(subscriber: EventSubscription): Promise<void> {
+    this.subscribers.push(subscriber as TopicSubscriber);
   }
 
   async publish(message: string): Promise<void> {

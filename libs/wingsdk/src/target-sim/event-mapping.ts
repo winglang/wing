@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { ISimulatorResource } from "./resource";
+import { ISimulatorResource, ISimulatorResourceInstance } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import {
   EVENT_MAPPING_TYPE,
@@ -12,29 +12,11 @@ import { fqnForType } from "../constants";
 import * as core from "../core";
 import { Resource, App } from "../core";
 
+export interface IEventPublisher extends ISimulatorResourceInstance {
+  addEventSubscription: (subscription: EventSubscription) => Promise<void>;
+}
+
 export const EVENT_MAP_FQN = fqnForType("sim.EventMapping");
-
-export interface EventProps {}
-
-export abstract class EventMappingBase extends Resource {
-  public static _newEventMapping(
-    scope: Construct,
-    id: string,
-    props: EventProps = {}
-  ): Event {
-    return App.of(scope).newAbstract(EVENT_MAP_FQN, scope, id, props);
-  }
-  public readonly stateful = true;
-
-  constructor(scope: Construct, id: string, props: EventProps = {}) {
-    super(scope, id);
-    props;
-  }
-}
-
-export interface IEventPublisher {
-  addEventSubscription: (payload: any) => Promise<void>;
-}
 
 export interface EventMappingProps {
   subscriber: core.IResource;
@@ -42,15 +24,21 @@ export interface EventMappingProps {
   eventSubscription: EventSubscription;
 }
 
-export class EventMapping
-  extends EventMappingBase
-  implements ISimulatorResource
-{
+export class EventMapping extends Resource implements ISimulatorResource {
+  public static _newEventMapping(
+    scope: Construct,
+    id: string,
+    props: EventMappingProps
+  ): Event {
+    return App.of(scope).newAbstract(EVENT_MAP_FQN, scope, id, props);
+  }
+  public readonly stateful = true;
   private readonly eventProps: EventMappingProps;
 
   constructor(scope: Construct, id: string, props: EventMappingProps) {
     super(scope, id);
     this.eventProps = props;
+    this.display.hidden = true;
 
     // Add dependencies to the publisher and subscriber
     this.node.addDependency(props.subscriber);
@@ -62,7 +50,7 @@ export class EventMapping
       type: EVENT_MAPPING_TYPE,
       path: this.node.path,
       props: {
-        subscriber: simulatorHandleToken(this.eventProps.publisher),
+        subscriber: simulatorHandleToken(this.eventProps.subscriber),
         publisher: simulatorHandleToken(this.eventProps.publisher),
         eventSubscription: this.eventProps.eventSubscription,
       },

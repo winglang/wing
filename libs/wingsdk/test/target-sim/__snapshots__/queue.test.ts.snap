@@ -17,7 +17,6 @@ exports[`create a queue 1`] = `
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
-          "subscribers": [],
           "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
@@ -138,7 +137,6 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
-          "subscribers": [],
           "timeout": 1,
         },
         "type": "wingsdk.cloud.Queue",
@@ -152,7 +150,7 @@ async handle(message) {
             "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
           },
           "publisher": "\${root/my_queue#attrs.handle}",
-          "subscriber": "\${root/my_queue#attrs.handle}",
+          "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
         },
         "type": "wingsdk.sim.EventMapping",
       },
@@ -224,6 +222,9 @@ async handle(message) {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
               },
               "id": "my_queue-QueueEventMapping-e645076f",
               "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
@@ -365,7 +366,6 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
-          "subscribers": [],
           "timeout": 1,
         },
         "type": "wingsdk.cloud.Queue",
@@ -379,7 +379,7 @@ async handle(message) {
             "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
           },
           "publisher": "\${root/my_queue#attrs.handle}",
-          "subscriber": "\${root/my_queue#attrs.handle}",
+          "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
         },
         "type": "wingsdk.sim.EventMapping",
       },
@@ -451,6 +451,9 @@ async handle(message) {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
               },
               "id": "my_queue-QueueEventMapping-e645076f",
               "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
@@ -555,7 +558,6 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
-          "subscribers": [],
           "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
@@ -682,7 +684,6 @@ async handle(message) {
             "E",
             "F",
           ],
-          "subscribers": [],
           "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
@@ -696,7 +697,7 @@ async handle(message) {
             "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
           },
           "publisher": "\${root/my_queue#attrs.handle}",
-          "subscriber": "\${root/my_queue#attrs.handle}",
+          "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
         },
         "type": "wingsdk.sim.EventMapping",
       },
@@ -768,6 +769,9 @@ async handle(message) {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
               },
               "id": "my_queue-QueueEventMapping-e645076f",
               "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
@@ -907,7 +911,6 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
-          "subscribers": [],
           "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
@@ -921,7 +924,7 @@ async handle(message) {
             "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
           },
           "publisher": "\${root/my_queue#attrs.handle}",
-          "subscriber": "\${root/my_queue#attrs.handle}",
+          "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
         },
         "type": "wingsdk.sim.EventMapping",
       },
@@ -993,6 +996,9 @@ async handle(message) {
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
               },
               "id": "my_queue-QueueEventMapping-e645076f",
               "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",

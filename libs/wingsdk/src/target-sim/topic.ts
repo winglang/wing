@@ -3,7 +3,7 @@ import { Construct } from "constructs";
 import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { TopicSchema, TopicSubscriber, TOPIC_TYPE } from "./schema-resources";
+import { TopicSchema, TOPIC_TYPE } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
@@ -18,11 +18,8 @@ import { convertBetweenHandlers } from "../utils/convert";
  * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
 export class Topic extends cloud.Topic implements ISimulatorResource {
-  private readonly subscribers: TopicSubscriber[];
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
     super(scope, id, props);
-
-    this.subscribers = [];
   }
 
   public onMessage(
@@ -77,9 +74,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     const schema: TopicSchema = {
       type: TOPIC_TYPE,
       path: this.node.path,
-      props: {
-        subscribers: this.subscribers,
-      },
+      props: {},
       attrs: {} as any,
     };
     return schema;
