@@ -21,9 +21,7 @@ export class EventMapping implements ISimulatorResourceInstance {
   }
 
   public async init(): Promise<EventMappingAttributes> {
-    const client = this.context.findInstance(
-      this.publisher
-    ) as IEventPublisher & ISimulatorResourceInstance;
+    const client = this.context.findInstance(this.publisher) as IEventPublisher;
     await client.addEventSubscription(this.eventSubscription);
     return {};
   }
