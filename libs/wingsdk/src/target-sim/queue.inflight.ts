@@ -5,6 +5,7 @@ import {
   QueueSubscriber,
   QUEUE_TYPE,
   EventSubscription,
+  FunctionHandle,
 } from "./schema-resources";
 import { IFunctionClient, IQueueClient, TraceType } from "../cloud";
 import {
@@ -40,9 +41,14 @@ export class Queue
   }
 
   public async addEventSubscription(
-    subscriber: EventSubscription
+    subscriber: FunctionHandle,
+    subscriptionProps: EventSubscription
   ): Promise<void> {
-    this.subscribers.push(subscriber as QueueSubscriber);
+    const s = {
+      functionHandle: subscriber,
+      ...subscriptionProps,
+    } as QueueSubscriber;
+    this.subscribers.push(s);
   }
 
   public async push(message: string): Promise<void> {

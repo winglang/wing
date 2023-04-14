@@ -4,6 +4,7 @@ import {
   EVENT_MAPPING_TYPE,
   EventMappingSchema,
   EventSubscription,
+  FunctionHandle,
 } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
@@ -16,7 +17,10 @@ import {
 } from "../testing/simulator";
 
 export interface IEventPublisher extends ISimulatorResourceInstance {
-  addEventSubscription: (subscription: EventSubscription) => Promise<void>;
+  addEventSubscription: (
+    subscriber: FunctionHandle,
+    subscriptionProps: EventSubscription
+  ) => Promise<void>;
 }
 
 export const EVENT_MAP_FQN = fqnForType("sim.EventMapping");
@@ -24,7 +28,7 @@ export const EVENT_MAP_FQN = fqnForType("sim.EventMapping");
 export interface EventMappingProps {
   subscriber: core.IResource;
   publisher: core.IResource;
-  eventSubscription: EventSubscription;
+  subscriptionProps: EventSubscription;
 }
 
 export class EventMapping extends Resource implements ISimulatorResource {
@@ -55,7 +59,7 @@ export class EventMapping extends Resource implements ISimulatorResource {
       props: {
         subscriber: simulatorHandleToken(this.eventProps.subscriber),
         publisher: simulatorHandleToken(this.eventProps.publisher),
-        eventSubscription: this.eventProps.eventSubscription,
+        eventSubscription: this.eventProps.subscriptionProps,
       },
       attrs: {} as any,
     };

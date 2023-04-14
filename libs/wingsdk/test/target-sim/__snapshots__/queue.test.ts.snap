@@ -147,7 +147,6 @@ async handle(message) {
         "props": {
           "eventSubscription": {
             "batchSize": 1,
-            "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
           },
           "publisher": "\${root/my_queue#attrs.handle}",
           "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
@@ -376,7 +375,6 @@ async handle(message) {
         "props": {
           "eventSubscription": {
             "batchSize": 1,
-            "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
           },
           "publisher": "\${root/my_queue#attrs.handle}",
           "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
@@ -695,7 +693,6 @@ async handle(message) {
         "props": {
           "eventSubscription": {
             "batchSize": 5,
-            "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
           },
           "publisher": "\${root/my_queue#attrs.handle}",
           "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
@@ -922,7 +919,6 @@ async handle(message) {
         "props": {
           "eventSubscription": {
             "batchSize": 1,
-            "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
           },
           "publisher": "\${root/my_queue#attrs.handle}",
           "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",

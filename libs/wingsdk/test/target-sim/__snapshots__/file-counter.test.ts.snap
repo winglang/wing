@@ -90,7 +90,6 @@ bucket: (function(env) {
         "props": {
           "eventSubscription": {
             "batchSize": 1,
-            "functionHandle": "\${root/HelloWorld/Queue-AddConsumer-401ee792#attrs.handle}",
           },
           "publisher": "\${root/HelloWorld/Queue#attrs.handle}",
           "subscriber": "\${root/HelloWorld/Queue-AddConsumer-401ee792#attrs.handle}",

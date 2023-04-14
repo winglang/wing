@@ -4,7 +4,6 @@ import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema, QUEUE_TYPE } from "./schema-resources";
-import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
@@ -73,8 +72,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     new EventMapping(this, `${this.node.id}-QueueEventMapping-${hash}`, {
       subscriber: fn,
       publisher: this,
-      eventSubscription: {
-        functionHandle: simulatorHandleToken(fn),
+      subscriptionProps: {
         batchSize: props.batchSize ?? 1,
       },
     });
