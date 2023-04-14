@@ -5,6 +5,7 @@ import {
   TopicSubscriber,
   TOPIC_TYPE,
   EventSubscription,
+  FunctionHandle,
 } from "./schema-resources";
 import { IFunctionClient, ITopicClient, TraceType } from "../cloud";
 import {
@@ -63,8 +64,15 @@ export class Topic
     }
   }
 
-  async addEventSubscription(subscriber: EventSubscription): Promise<void> {
-    this.subscribers.push(subscriber as TopicSubscriber);
+  async addEventSubscription(
+    subscriber: FunctionHandle,
+    subscriptionProps: EventSubscription
+  ): Promise<void> {
+    let s = {
+      functionHandle: subscriber,
+      ...subscriptionProps,
+    } as TopicSubscriber;
+    this.subscribers.push(s);
   }
 
   async publish(message: string): Promise<void> {
