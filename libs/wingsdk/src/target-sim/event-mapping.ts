@@ -10,13 +10,21 @@ import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
 import * as core from "../core";
-import { Resource, App } from "../core";
+import { Resource } from "../core";
 import {
   BaseResourceSchema,
   ISimulatorResourceInstance,
 } from "../testing/simulator";
 
+/**
+ * Interface shared by all event publishing simulator resources.
+ */
 export interface IEventPublisher extends ISimulatorResourceInstance {
+  /**
+   * Adds event subscription to publisher client.
+   * @param subscriber the subscriber function
+   * @param subscriptionProps additional subscription properties
+   */
   addEventSubscription: (
     subscriber: FunctionHandle,
     subscriptionProps: EventSubscription
@@ -31,14 +39,12 @@ export interface EventMappingProps {
   subscriptionProps: EventSubscription;
 }
 
+/**
+ * Implementation of `sim.EventMapping`.
+ *
+ * @inflight `@winglang/sdk.sim.EventMapping`
+ */
 export class EventMapping extends Resource implements ISimulatorResource {
-  public static _newEventMapping(
-    scope: Construct,
-    id: string,
-    props: EventMappingProps
-  ): Event {
-    return App.of(scope).newAbstract(EVENT_MAP_FQN, scope, id, props);
-  }
   public readonly stateful = true;
   private readonly eventProps: EventMappingProps;
 
