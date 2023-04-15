@@ -112,7 +112,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       CLICOLOR_FORCE: chalk.supportsColor ? "1" : "0",
     },
     preopens: {
-      [wingDir]: wingDir, // for Rust's access to the source dir
+      [wingDir]: wingDir, // for Rust's access to the source file
       [workDir]: workDir, // for Rust's access to the work directory
       [tmpSynthDir]: tmpSynthDir, // for Rust's access to the synth directory
     },
