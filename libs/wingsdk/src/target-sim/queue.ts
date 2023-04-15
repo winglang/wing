@@ -1,9 +1,9 @@
 import { join } from "path";
 import { Construct } from "constructs";
-import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { QueueSchema, QUEUE_TYPE } from "./schema-resources";
+import { QueueSchema, QueueSubscriber, QUEUE_TYPE } from "./schema-resources";
+import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
@@ -18,11 +18,13 @@ import { convertBetweenHandlers } from "../utils/convert";
  */
 export class Queue extends cloud.Queue implements ISimulatorResource {
   private readonly timeout: std.Duration;
+  private readonly subscribers: QueueSubscriber[];
   private readonly initialMessages: string[] = [];
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
     this.timeout = props.timeout ?? std.Duration.fromSeconds(10);
+    this.subscribers = [];
     this.initialMessages.push(...(props.initialMessages ?? []));
   }
 
@@ -69,12 +71,13 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       props
     );
 
-    new EventMapping(this, `${this.node.id}-QueueEventMapping-${hash}`, {
-      subscriber: fn,
-      publisher: this,
-      subscriptionProps: {
-        batchSize: props.batchSize ?? 1,
-      },
+    // At the time the queue is created in the simulator, it needs to be able to
+    // call subscribed functions.
+    this.node.addDependency(fn);
+
+    this.subscribers.push({
+      functionHandle: simulatorHandleToken(fn),
+      batchSize: props.batchSize ?? 1,
     });
 
     core.Resource.addConnection({
@@ -92,6 +95,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       path: this.node.path,
       props: {
         timeout: this.timeout.seconds,
+        subscribers: this.subscribers,
         initialMessages: this.initialMessages,
       },
       attrs: {} as any,
