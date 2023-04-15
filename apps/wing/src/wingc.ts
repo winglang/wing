@@ -95,6 +95,11 @@ export async function load(options: WingCompilerLoadOptions) {
     }
   }
 
+  // for each provided preopen, add resolved paths in case any absolute paths are used
+  for (const [key, value] of Object.entries(preopens)) {
+    preopens[normalPath(resolve(key))] = value;
+  }
+
   // check if running in browser
   const bindings = {
     ...wasiBindings,
