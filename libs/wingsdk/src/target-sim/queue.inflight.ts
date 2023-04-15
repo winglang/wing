@@ -1,11 +1,8 @@
-import { IEventPublisher } from "./event-mapping";
 import {
   QueueAttributes,
   QueueSchema,
   QueueSubscriber,
   QUEUE_TYPE,
-  EventSubscription,
-  FunctionHandle,
 } from "./schema-resources";
 import { IFunctionClient, IQueueClient, TraceType } from "../cloud";
 import {
@@ -13,9 +10,7 @@ import {
   ISimulatorResourceInstance,
 } from "../testing/simulator";
 
-export class Queue
-  implements IQueueClient, ISimulatorResourceInstance, IEventPublisher
-{
+export class Queue implements IQueueClient, ISimulatorResourceInstance {
   private readonly messages = new Array<string>();
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly intervalId: NodeJS.Timeout;
@@ -23,6 +18,10 @@ export class Queue
   private readonly timeout: number;
 
   constructor(props: QueueSchema["props"], context: ISimulatorContext) {
+    for (const sub of props.subscribers ?? []) {
+      this.subscribers.push({ ...sub });
+    }
+
     if (props.initialMessages) {
       this.messages.push(...props.initialMessages);
     }
@@ -38,17 +37,6 @@ export class Queue
 
   public async cleanup(): Promise<void> {
     clearInterval(this.intervalId);
-  }
-
-  public async addEventSubscription(
-    subscriber: FunctionHandle,
-    subscriptionProps: EventSubscription
-  ): Promise<void> {
-    const s = {
-      functionHandle: subscriber,
-      ...subscriptionProps,
-    } as QueueSubscriber;
-    this.subscribers.push(s);
   }
 
   public async push(message: string): Promise<void> {

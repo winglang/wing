@@ -1,9 +1,9 @@
 import { join } from "path";
 import { Construct } from "constructs";
-import { EventMapping } from "./event-mapping";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { TopicSchema, TOPIC_TYPE } from "./schema-resources";
+import { TopicSchema, TopicSubscriber, TOPIC_TYPE } from "./schema-resources";
+import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
@@ -16,8 +16,11 @@ import { convertBetweenHandlers } from "../utils/convert";
  * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
 export class Topic extends cloud.Topic implements ISimulatorResource {
+  private readonly subscribers: TopicSubscriber[];
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
     super(scope, id, props);
+
+    this.subscribers = [];
   }
 
   public onMessage(
@@ -40,10 +43,10 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       props
     );
 
-    new EventMapping(this, `${this.node.id}-TopicEventMapping-${hash}`, {
-      subscriber: fn,
-      publisher: this,
-      subscriptionProps: {},
+    this.node.addDependency(fn);
+
+    this.subscribers.push({
+      functionHandle: simulatorHandleToken(fn),
     });
 
     core.Resource.addConnection({
@@ -70,7 +73,9 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     const schema: TopicSchema = {
       type: TOPIC_TYPE,
       path: this.node.path,
-      props: {},
+      props: {
+        subscribers: this.subscribers,
+      },
       attrs: {} as any,
     };
     return schema;
