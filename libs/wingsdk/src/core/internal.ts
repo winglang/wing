@@ -1,7 +1,7 @@
 import { IConstruct } from "constructs";
 import { InflightBindings, NodeJsCode } from "./inflight";
-import { DisplayProps, IResource, Resource } from "./resource";
 import { Duration } from "../std";
+import { DisplayProps, IResource, Resource } from "../std/resource";
 
 export function makeHandler(
   scope: IConstruct,
@@ -46,8 +46,8 @@ return class Handler {
 };
 })())({
 ${Object.entries(clients)
-  .map(([name, client]) => `${name}: ${client}`)
-  .join(",\n")}
+          .map(([name, client]) => `${name}: ${client}`)
+          .join(",\n")}
 })`
       );
     }
