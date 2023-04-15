@@ -175,5 +175,5 @@ export class InflightClient {
       )}")).${clientClass}(${args.join(", ")})`
     );
   }
-  private constructor() { }
+  private constructor() {}
 }
