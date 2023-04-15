@@ -17,6 +17,7 @@ exports[`create a queue 1`] = `
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
+          "subscribers": [],
           "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
@@ -78,12 +79,10 @@ exports[`messages are not requeued if the function fails before timeout 1`] = `
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
-  "wingsdk.sim.EventMapping created.",
   "Push (message=BAD MESSAGE).",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
   "Subscriber error - returning 1 messages to queue: ERROR",
-  "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.TestRunner deleted.",
@@ -137,21 +136,15 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
+          "subscribers": [
+            {
+              "batchSize": 1,
+              "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+            },
+          ],
           "timeout": 1,
         },
         "type": "wingsdk.cloud.Queue",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
-        "props": {
-          "publisher": "\${root/my_queue#attrs.handle}",
-          "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
-          "subscriptionProps": {
-            "batchSize": 1,
-          },
-        },
-        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -211,23 +204,6 @@ async handle(message) {
               },
             ],
             "wing:resource:stateful": true,
-          },
-          "children": {
-            "my_queue-QueueEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-                "wing:resource:stateful": true,
-              },
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "display": {
-                "hidden": true,
-              },
-              "id": "my_queue-QueueEventMapping-e645076f",
-              "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -302,7 +278,6 @@ exports[`messages are requeued if the function fails after timeout 1`] = `
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
-  "wingsdk.sim.EventMapping created.",
   "Push (message=BAD MESSAGE).",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
@@ -311,7 +286,6 @@ exports[`messages are requeued if the function fails after timeout 1`] = `
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
   "Subscriber error - returning 1 messages to queue: ERROR",
-  "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.TestRunner deleted.",
@@ -365,21 +339,15 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
+          "subscribers": [
+            {
+              "batchSize": 1,
+              "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+            },
+          ],
           "timeout": 1,
         },
         "type": "wingsdk.cloud.Queue",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
-        "props": {
-          "publisher": "\${root/my_queue#attrs.handle}",
-          "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
-          "subscriptionProps": {
-            "batchSize": 1,
-          },
-        },
-        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -439,23 +407,6 @@ async handle(message) {
               },
             ],
             "wing:resource:stateful": true,
-          },
-          "children": {
-            "my_queue-QueueEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-                "wing:resource:stateful": true,
-              },
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "display": {
-                "hidden": true,
-              },
-              "id": "my_queue-QueueEventMapping-e645076f",
-              "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -556,6 +507,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
+          "subscribers": [],
           "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
@@ -617,12 +569,10 @@ exports[`queue with one subscriber, batch size of 5 1`] = `
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
-  "wingsdk.sim.EventMapping created.",
   "Sending messages (messages=[\\"A\\",\\"B\\",\\"C\\",\\"D\\",\\"E\\"], subscriber=sim-1).",
   "Sending messages (messages=[\\"F\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"F\\\\\\"]}\\").",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"A\\\\\\",\\\\\\"B\\\\\\",\\\\\\"C\\\\\\",\\\\\\"D\\\\\\",\\\\\\"E\\\\\\"]}\\").",
-  "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.TestRunner deleted.",
@@ -683,21 +633,15 @@ async handle(message) {
             "E",
             "F",
           ],
+          "subscribers": [
+            {
+              "batchSize": 5,
+              "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+            },
+          ],
           "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
-        "props": {
-          "publisher": "\${root/my_queue#attrs.handle}",
-          "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
-          "subscriptionProps": {
-            "batchSize": 5,
-          },
-        },
-        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -757,23 +701,6 @@ async handle(message) {
               },
             ],
             "wing:resource:stateful": true,
-          },
-          "children": {
-            "my_queue-QueueEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-                "wing:resource:stateful": true,
-              },
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "display": {
-                "hidden": true,
-              },
-              "id": "my_queue-QueueEventMapping-e645076f",
-              "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -848,14 +775,12 @@ exports[`queue with one subscriber, default batch size of 1 1`] = `
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
-  "wingsdk.sim.EventMapping created.",
   "Push (message=A).",
   "Push (message=B).",
   "Sending messages (messages=[\\"A\\"], subscriber=sim-1).",
   "Sending messages (messages=[\\"B\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"A\\\\\\"]}\\").",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"B\\\\\\"]}\\").",
-  "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.TestRunner deleted.",
@@ -909,21 +834,15 @@ async handle(message) {
         "path": "root/my_queue",
         "props": {
           "initialMessages": [],
+          "subscribers": [
+            {
+              "batchSize": 1,
+              "functionHandle": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
+            },
+          ],
           "timeout": 10,
         },
         "type": "wingsdk.cloud.Queue",
-      },
-      {
-        "attrs": {},
-        "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
-        "props": {
-          "publisher": "\${root/my_queue#attrs.handle}",
-          "subscriber": "\${root/my_queue-AddConsumer-e645076f#attrs.handle}",
-          "subscriptionProps": {
-            "batchSize": 1,
-          },
-        },
-        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -983,23 +902,6 @@ async handle(message) {
               },
             ],
             "wing:resource:stateful": true,
-          },
-          "children": {
-            "my_queue-QueueEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-                "wing:resource:stateful": true,
-              },
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.245",
-              },
-              "display": {
-                "hidden": true,
-              },
-              "id": "my_queue-QueueEventMapping-e645076f",
-              "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
-            },
           },
           "constructInfo": {
             "fqn": "constructs.Construct",

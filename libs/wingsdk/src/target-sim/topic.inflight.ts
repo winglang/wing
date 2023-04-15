@@ -1,11 +1,8 @@
-import { IEventPublisher } from "./event-mapping";
 import {
   TopicAttributes,
   TopicSchema,
   TopicSubscriber,
   TOPIC_TYPE,
-  EventSubscription,
-  FunctionHandle,
 } from "./schema-resources";
 import { IFunctionClient, ITopicClient, TraceType } from "../cloud";
 import {
@@ -13,15 +10,15 @@ import {
   ISimulatorResourceInstance,
 } from "../testing/simulator";
 
-export class Topic
-  implements ITopicClient, ISimulatorResourceInstance, IEventPublisher
-{
+export class Topic implements ITopicClient, ISimulatorResourceInstance {
   private readonly subscribers = new Array<TopicSubscriber>();
   private readonly context: ISimulatorContext;
 
   constructor(props: TopicSchema["props"], context: ISimulatorContext) {
+    for (const sub of props.subscribers ?? []) {
+      this.subscribers.push({ ...sub });
+    }
     this.context = context;
-    props;
   }
 
   public async init(): Promise<TopicAttributes> {
@@ -62,17 +59,6 @@ export class Topic
         });
       }));
     }
-  }
-
-  async addEventSubscription(
-    subscriber: FunctionHandle,
-    subscriptionProps: EventSubscription
-  ): Promise<void> {
-    let s = {
-      functionHandle: subscriber,
-      ...subscriptionProps,
-    } as TopicSubscriber;
-    this.subscribers.push(s);
   }
 
   async publish(message: string): Promise<void> {
