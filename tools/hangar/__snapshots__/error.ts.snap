@@ -8,4 +8,4 @@ exports[`number_from_json.w > stderr 1`] = `"preflight error: unable to parse st
 
 exports[`string_from_json.w > stderr 1`] = `"preflight error: unable to parse number 123 as a string"`;
 
-exports[`utilities.w > stderr 1`] = `"preflight error: assertion failed: 'false'"`;
+exports[`utilities.w > stderr 1`] = `"preflight error: assertion failed: \\"false\\""`;

@@ -19,7 +19,7 @@ class $Root extends $stdlib.core.Resource {
     (myfunc(1));
     (( (x) =>  {
       {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === 1)'`)})((x === 1))};
+        {((cond) => {if (!cond) throw new Error('assertion failed: "(x === 1)"')})((x === 1))};
       }
     }
     )(1));

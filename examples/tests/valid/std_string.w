@@ -23,3 +23,10 @@ new cloud.Function(inflight () => {
   log(s1.split(" ").at(1));
   log(s1.concat(s2));
 }) as "test:string";
+
+// interpolated string asserts
+let wing = "winglang";
+assert (wing == wing);
+assert ("${wing}" == "winglang");
+assert ("${wing}" == "${wing}");
+assert ("${wing}s" != "${wing}");

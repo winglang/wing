@@ -33,10 +33,10 @@ class $Root extends $stdlib.core.Resource {
     Foo._annotateInflight("$inflight_init", {"this.instance_field": { ops: [] }});
     Foo._annotateInflight("get_123", {});
     const foo = new Foo(this,"Foo");
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(foo.instance_field === 100)'`)})((foo.instance_field === 100))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.m()) === 99)'`)})(((Foo.m()) === 99))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(foo.instance_field === 100)"')})((foo.instance_field === 100))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "((Foo.m()) === 99)"')})(((Foo.m()) === 99))};
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.9bc2ebe720b1ce33f8961b4d75e64753d2833d1a50029354c9ccba5d429d01f2/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.8bfaafadc99eda18bf9b4b2ea5d3b63f69244206be2cb93fc46d9fde2122047d/index.js".replace(/\\/g, "/"))),
       bindings: {
       }
     })

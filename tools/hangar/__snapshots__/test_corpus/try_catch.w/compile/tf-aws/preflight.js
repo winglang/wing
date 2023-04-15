@@ -12,14 +12,14 @@ class $Root extends $stdlib.core.Resource {
     }
     catch ($error_e) {
       const e = $error_e.message;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(e === "hello")'`)})((e === "hello"))};
+      {((cond) => {if (!cond) throw new Error('assertion failed: "(e === "hello")"')})((e === "hello"))};
       x = "caught";
     }
     finally {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "caught")'`)})((x === "caught"))};
+      {((cond) => {if (!cond) throw new Error('assertion failed: "(x === "caught")"')})((x === "caught"))};
       x = "finally";
     }
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "finally")'`)})((x === "finally"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(x === "finally")"')})((x === "finally"))};
     try {
       x = "I got here";
     }
@@ -28,10 +28,10 @@ class $Root extends $stdlib.core.Resource {
       x = "caught";
     }
     finally {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "I got here")'`)})((x === "I got here"))};
+      {((cond) => {if (!cond) throw new Error('assertion failed: "(x === "I got here")"')})((x === "I got here"))};
       x = "finally";
     }
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "finally")'`)})((x === "finally"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(x === "finally")"')})((x === "finally"))};
     try {
       try {
         {((msg) => {throw new Error(msg)})("hello")};
@@ -39,7 +39,7 @@ class $Root extends $stdlib.core.Resource {
       finally {
         x = "finally with no catch";
       }
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "finally with no catch")'`)})((x === "finally with no catch"))};
+      {((cond) => {if (!cond) throw new Error('assertion failed: "(x === "finally with no catch")"')})((x === "finally with no catch"))};
     }
     catch {
     }
@@ -48,8 +48,8 @@ class $Root extends $stdlib.core.Resource {
     finally {
       x = "finally with no catch and no exception";
     }
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "finally with no catch and no exception")'`)})((x === "finally with no catch and no exception"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((( () =>  {
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(x === "finally with no catch and no exception")"')})((x === "finally with no catch and no exception"))};
+    const return_from_finally = (( () =>  {
       {
         try {
         }
@@ -58,17 +58,9 @@ class $Root extends $stdlib.core.Resource {
         }
       }
     }
-    )()) === 1)'`)})(((( () =>  {
-      {
-        try {
-        }
-        finally {
-          return 1;
-        }
-      }
-    }
-    )()) === 1))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((( () =>  {
+    )());
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(return_from_finally === 1)"')})((return_from_finally === 1))};
+    const return_from_catch = (( () =>  {
       {
         try {
           {((msg) => {throw new Error(msg)})("")};
@@ -78,18 +70,9 @@ class $Root extends $stdlib.core.Resource {
         }
       }
     }
-    )()) === 2)'`)})(((( () =>  {
-      {
-        try {
-          {((msg) => {throw new Error(msg)})("")};
-        }
-        catch {
-          return 2;
-        }
-      }
-    }
-    )()) === 2))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((( () =>  {
+    )());
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(return_from_catch === 2)"')})((return_from_catch === 2))};
+    const return_from_try = (( () =>  {
       {
         try {
           return 3;
@@ -98,16 +81,8 @@ class $Root extends $stdlib.core.Resource {
         }
       }
     }
-    )()) === 3)'`)})(((( () =>  {
-      {
-        try {
-          return 3;
-        }
-        finally {
-        }
-      }
-    }
-    )()) === 3))};
+    )());
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(return_from_try === 3)"')})((return_from_try === 3))};
   }
 }
 class $App extends $AppBase {

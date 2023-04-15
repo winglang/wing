@@ -32,7 +32,7 @@ class $Root extends $stdlib.core.Resource {
     const json_mut_obj = {"hello":123,"world":[1, "cat", 3],"boom boom":{"hello":1233}};
     const message = "Coolness";
     ((obj, args) => { obj[args[0]] = args[1]; })(json_mut_obj, ["hello",message]);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((json_mut_obj)["hello"] === message)'`)})(((json_mut_obj)["hello"] === message))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "((json_mut_obj)["hello"] === message)"')})(((json_mut_obj)["hello"] === message))};
     const some_number = 999;
     const jj = some_number;
     const jj1 = Object.freeze({"foo":some_number});
@@ -44,24 +44,24 @@ class $Root extends $stdlib.core.Resource {
     }
     ;
     const jj3 = (get_str());
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(jj3 === "hello")'`)})((jj3 === "hello"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(jj3 === "hello")"')})((jj3 === "hello"))};
     const f = new Foo(this,"Foo");
     const jj4 = f._sum_str;
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(jj4 === "wow!")'`)})((jj4 === "wow!"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(jj4 === "wow!")"')})((jj4 === "wow!"))};
     const some_json = {"x":some_number};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((some_json)["x"] === some_number)'`)})(((some_json)["x"] === some_number))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "((some_json)["x"] === some_number)"')})(((some_json)["x"] === some_number))};
     ((obj, args) => { obj[args[0]] = args[1]; })(some_json, ["x",111]);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((some_json)["x"] === 111)'`)})(((some_json)["x"] === 111))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "((some_json)["x"] === 111)"')})(((some_json)["x"] === 111))};
     const x = Object.freeze({"cool":"beans"});
     const nested_json = {"a":"hello","b":{"c":"world","d":{"foo":"foo","bar":123}}};
     ((obj, args) => { obj[args[0]] = args[1]; })(((nested_json)["b"])["d"], ["foo","tastic"]);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((((nested_json)["b"])["d"])["foo"] === "tastic")'`)})(((((nested_json)["b"])["d"])["foo"] === "tastic"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((((nested_json)["b"])["d"])["bar"] === 123)'`)})(((((nested_json)["b"])["d"])["bar"] === 123))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "((((nested_json)["b"])["d"])["foo"] === "tastic")"')})(((((nested_json)["b"])["d"])["foo"] === "tastic"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "((((nested_json)["b"])["d"])["bar"] === 123)"')})(((((nested_json)["b"])["d"])["bar"] === 123))};
     const b = "buckle";
     const arr = [1, 2, b, "my", "shoe", 3, 4, ["shut", "the", "door"]];
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((arr)[0] === 1)'`)})(((arr)[0] === 1))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((arr)[2] === b)'`)})(((arr)[2] === b))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(((arr)[7])[0] === "shut")'`)})((((arr)[7])[0] === "shut"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "((arr)[0] === 1)"')})(((arr)[0] === 1))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "((arr)[2] === b)"')})(((arr)[2] === b))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(((arr)[7])[0] === "shut")"')})((((arr)[7])[0] === "shut"))};
     Object.freeze({"a":[1, 2, "world"],"b":[1, 2, "world"]});
   }
 }

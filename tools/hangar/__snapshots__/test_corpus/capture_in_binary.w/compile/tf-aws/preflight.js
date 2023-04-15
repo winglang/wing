@@ -9,7 +9,7 @@ class $Root extends $stdlib.core.Resource {
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const x = 12;
     const handler2 = new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.e77b2aeb97c35bb5ecb6ba6b78fbfcd563e286c79149651961f500a8042998c8/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.0286a6addd57f6a6a638c73df4beacb297a251b2e9689e2ab0cd2c7d6b572189/index.js".replace(/\\/g, "/"))),
       bindings: {
         b: {
           obj: b,

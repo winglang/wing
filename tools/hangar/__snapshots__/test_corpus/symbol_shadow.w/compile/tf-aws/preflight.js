@@ -10,9 +10,9 @@ class $Root extends $stdlib.core.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         const s = "in_resource";
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "in_resource")'`)})((s === "in_resource"))};
+        {((cond) => {if (!cond) throw new Error('assertion failed: "(s === "in_resource")"')})((s === "in_resource"))};
         this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:inflight in resource should capture the right scoped var",new $stdlib.core.Inflight(this, "$Inflight1", {
-          code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.e28eb0e2c84db9ebf39c60f781e33eb71437de9aea3c9e56527b5592b0d7f259/index.js".replace(/\\/g, "/"))),
+          code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.89de35415639cef15c6383620cab16dd210885cedcd0fb5fd9f657180b27284a/index.js".replace(/\\/g, "/"))),
           bindings: {
             s: {
               obj: s,
@@ -38,9 +38,9 @@ class $Root extends $stdlib.core.Resource {
     const s = "top";
     if (true) {
       const s = "inner";
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inner")'`)})((s === "inner"))};
+      {((cond) => {if (!cond) throw new Error('assertion failed: "(s === "inner")"')})((s === "inner"))};
       this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:inflight nested should not capture the shadowed var",new $stdlib.core.Inflight(this, "$Inflight2", {
-        code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.df438ca6138f58185d9c29cf9a58e1569a2c82980ef45ec3e718c6491e53bbbd/index.js".replace(/\\/g, "/"))),
+        code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.3b6d55f53eed9cb7738e3539b7174e499f22e23bbb54ff16b8a13cbe4d6329b8/index.js".replace(/\\/g, "/"))),
         bindings: {
           s: {
             obj: s,
@@ -50,10 +50,10 @@ class $Root extends $stdlib.core.Resource {
       })
       );
     }
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "top")'`)})((s === "top"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(s === "top")"')})((s === "top"))};
     new A(this,"A");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:inflight on top should capture top",new $stdlib.core.Inflight(this, "$Inflight3", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.5ebfc1356186fe498d7c77085bf74da82ee2b4cc0d3396d5e240d89a689f5a70/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.bff6e0433030e48081910677e34c8845adc25b4d6a3ddfa0ef669b3b255304e8/index.js".replace(/\\/g, "/"))),
       bindings: {
         s: {
           obj: s,
@@ -63,7 +63,7 @@ class $Root extends $stdlib.core.Resource {
     })
     );
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:inside_inflight should capture the right scope",new $stdlib.core.Inflight(this, "$Inflight4", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.b1aa79217b40a2b129132f76b7120cde0cb1ecc3a4b68bf48ee31594fa38cc4b/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.a1f90fe76a63b8f761a1f5e13768fe897ae52f8af10748a95b1680567c29a055/index.js".replace(/\\/g, "/"))),
       bindings: {
       }
     })

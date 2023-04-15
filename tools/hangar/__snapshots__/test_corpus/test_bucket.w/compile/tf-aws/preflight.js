@@ -8,7 +8,7 @@ class $Root extends $stdlib.core.Resource {
     super(scope, id);
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:put",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.412efe1236e70dc0c84a7db92a612d4405b678740d6d9a86f75c2c059a93e1b3/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.55cd154eeee3703de30f657316a5d98a6942a3b0b3304e7d40ad947e171b5c1d/index.js".replace(/\\/g, "/"))),
       bindings: {
         b: {
           obj: b,
@@ -18,7 +18,7 @@ class $Root extends $stdlib.core.Resource {
     })
     );
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:get",new $stdlib.core.Inflight(this, "$Inflight2", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.ac9708184e710f892c66bb4336569769a09d726ccc04b8ee83036b184d5bb763/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.876dc424a78a4cebf1033eeb1675bff8f0d5d773ded589290ecc4b4e9c7ce10f/index.js".replace(/\\/g, "/"))),
       bindings: {
         b: {
           obj: b,

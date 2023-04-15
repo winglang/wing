@@ -12,7 +12,7 @@ class $Root extends $stdlib.core.Resource {
     const my_second_bool = false;
     const my_dur = $stdlib.std.Duration.fromSeconds(600);
     const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.34e5b7de651594942ccd90c9d76355813afc895aa395fbda2c204aa36f7c3a85/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.1988d7dfa0bdd0a6c86202feeb85c956c94a48c713c4d6f6b87c95b625618ec8/index.js".replace(/\\/g, "/"))),
       bindings: {
         my_bool: {
           obj: my_bool,

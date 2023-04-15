@@ -200,7 +200,9 @@ pub fn type_check(
 			parameters: vec![types.bool()],
 			return_type: types.void(),
 			phase: Phase::Independent,
-			js_override: Some("{((cond) => {if (!cond) throw new Error(`assertion failed: '$args$'`)})($args$)}".to_string()),
+			js_override: Some(
+				"{((cond) => {if (!cond) throw new Error('assertion failed: \"$args$\"')})($args$)}".to_string()
+			),
 		}),
 		scope,
 		types,

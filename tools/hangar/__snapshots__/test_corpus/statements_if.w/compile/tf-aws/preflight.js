@@ -11,27 +11,27 @@ class $Root extends $stdlib.core.Resource {
       const f = false;
       if ((true && ((x + 2) === 4))) {
         if ((true && ((x + 3) === 4))) {
-          {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+          {((cond) => {if (!cond) throw new Error('assertion failed: "false"')})(false)};
         }
         else if ((true && ((x + 3) === 6))) {
-          {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+          {((cond) => {if (!cond) throw new Error('assertion failed: "false"')})(false)};
         }
         else if ((false || ((x + 3) === 5))) {
-          {((cond) => {if (!cond) throw new Error(`assertion failed: 'true'`)})(true)};
+          {((cond) => {if (!cond) throw new Error('assertion failed: "true"')})(true)};
         }
         else if ((!f)) {
-          {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(!(!f)))'`)})((!(!(!f))))};
+          {((cond) => {if (!cond) throw new Error('assertion failed: "(!(!(!f)))"')})((!(!(!f))))};
         }
         else {
-          {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+          {((cond) => {if (!cond) throw new Error('assertion failed: "false"')})(false)};
         }
       }
       else {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+        {((cond) => {if (!cond) throw new Error('assertion failed: "false"')})(false)};
       }
     }
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.ab279327be755396ddd6a86db98293e7b609ca1f861184371a84a7d4cd59487b/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.f1b91a3ce70029dc50216f5ab0226b6f021542e11759612030f048352d208ec0/index.js".replace(/\\/g, "/"))),
       bindings: {
       }
     })

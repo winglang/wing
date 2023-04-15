@@ -8,7 +8,7 @@ class $Root extends $stdlib.core.Resource {
     super(scope, id);
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.e985a655d1d19405f1798377278c6205fc276c76ea8815eb157a120ca44fdbcc/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.4c02832919cabea8806ea558fe1d98706e865a6be2aeb0a6c15b5164cbf859fe/index.js".replace(/\\/g, "/"))),
       bindings: {
         b: {
           obj: b,

@@ -10,7 +10,7 @@ class $Root extends $stdlib.core.Resource {
     const file_name = "file.json";
     const j = Object.freeze({"persons":[{"age":30,"name":"hasan","fears":["heights", "failure"]}]});
     const get_json = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.65da1a50b3f7d2621c34d29e0b410f0e504124beed71b58374c3bf728c7b80d9/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.14173d32d1b87bfae8dc5c2b9bda81bf415803603d6d54f4cadc400d08e30e74/index.js".replace(/\\/g, "/"))),
       bindings: {
         b: {
           obj: b,

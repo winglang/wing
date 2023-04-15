@@ -34,8 +34,8 @@ class $Root extends $stdlib.core.Resource {
     Foo._annotateInflight("get_uuid", {});
     Foo._annotateInflight("print", {});
     Foo._annotateInflight("regex_inflight", {});
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.get_greeting("Wingding")) === "Hello, Wingding!")'`)})(((Foo.get_greeting("Wingding")) === "Hello, Wingding!"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.v4()).length === 36)'`)})(((Foo.v4()).length === 36))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "((Foo.get_greeting("Wingding")) === "Hello, Wingding!")"')})(((Foo.get_greeting("Wingding")) === "Hello, Wingding!"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "((Foo.v4()).length === 36)"')})(((Foo.v4()).length === 36))};
     const f = new Foo(this,"Foo");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:call",new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.104793feca8a0c99ea8c2876b3c2124f464b0b5bffc723938b058ed94174607f/index.js".replace(/\\/g, "/"))),

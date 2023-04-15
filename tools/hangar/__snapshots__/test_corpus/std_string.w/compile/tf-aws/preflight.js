@@ -8,20 +8,20 @@ class $Root extends $stdlib.core.Resource {
     super(scope, id);
     const s1 = "some string";
     const s2 = "s are immutable";
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(s1.length === 11)'`)})((s1.length === 11))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((s1.at(7)) === "r")'`)})(((s1.at(7)) === "r"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((s1.concat(s2)) === "some strings are immutable")'`)})(((s1.concat(s2)) === "some strings are immutable"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: 's1.includes("some")'`)})(s1.includes("some"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(!"some".includes(s1))'`)})((!"some".includes(s1)))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: 's1.endsWith("string")'`)})(s1.endsWith("string"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(s1.indexOf("s") === 0)'`)})((s1.indexOf("s") === 0))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '("Some String".toLocaleLowerCase() === "some string")'`)})(("Some String".toLocaleLowerCase() === "some string"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(((s1.split(" ")).at(0)) === "some")'`)})((((s1.split(" ")).at(0)) === "some"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: 's1.startsWith("some")'`)})(s1.startsWith("some"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((s1.substring(5)) === "string")'`)})(((s1.substring(5)) === "string"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((s1.substring(5,7)) === "st")'`)})(((s1.substring(5,7)) === "st"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(("   some string   ".trim()) === "some string")'`)})((("   some string   ".trim()) === "some string"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '("Some String".toLocaleUpperCase() === "SOME STRING")'`)})(("Some String".toLocaleUpperCase() === "SOME STRING"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(s1.length === 11)"')})((s1.length === 11))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "((s1.at(7)) === "r")"')})(((s1.at(7)) === "r"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "((s1.concat(s2)) === "some strings are immutable")"')})(((s1.concat(s2)) === "some strings are immutable"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "s1.includes("some")"')})(s1.includes("some"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(!"some".includes(s1))"')})((!"some".includes(s1)))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "s1.endsWith("string")"')})(s1.endsWith("string"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(s1.indexOf("s") === 0)"')})((s1.indexOf("s") === 0))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "("Some String".toLocaleLowerCase() === "some string")"')})(("Some String".toLocaleLowerCase() === "some string"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(((s1.split(" ")).at(0)) === "some")"')})((((s1.split(" ")).at(0)) === "some"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "s1.startsWith("some")"')})(s1.startsWith("some"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "((s1.substring(5)) === "string")"')})(((s1.substring(5)) === "string"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "((s1.substring(5,7)) === "st")"')})(((s1.substring(5,7)) === "st"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(("   some string   ".trim()) === "some string")"')})((("   some string   ".trim()) === "some string"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "("Some String".toLocaleUpperCase() === "SOME STRING")"')})(("Some String".toLocaleUpperCase() === "SOME STRING"))};
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:string",new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.9a4846d755bc1e93d1377b973079b3fb455a5196a4309ea68138302e1a6f3f65/index.js".replace(/\\/g, "/"))),
       bindings: {
@@ -36,6 +36,11 @@ class $Root extends $stdlib.core.Resource {
       }
     })
     );
+    const wing = "winglang";
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(wing === wing)"')})((wing === wing))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(`${wing}` === "winglang")"')})((`${wing}` === "winglang"))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(`${wing}` === `${wing}`)"')})((`${wing}` === `${wing}`))};
+    {((cond) => {if (!cond) throw new Error('assertion failed: "(`${wing}s` !== `${wing}`)"')})((`${wing}s` !== `${wing}`))};
   }
 }
 class $App extends $AppBase {

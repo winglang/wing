@@ -15,10 +15,10 @@ class  Foo {
   }
   async call()  {
     {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await Foo.regex_inflight("[a-z]+-\\d+","abc-123"))'`)})((await Foo.regex_inflight("[a-z]+-\\d+","abc-123")))};
+      {((cond) => {if (!cond) throw new Error('assertion failed: "(await Foo.regex_inflight("[a-z]+-\\d+","abc-123"))"')})((await Foo.regex_inflight("[a-z]+-\\d+","abc-123")))};
       const uuid = (await Foo.get_uuid());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(uuid.length === 36)'`)})((uuid.length === 36))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.get_data()) === "Cool data!")'`)})(((await Foo.get_data()) === "Cool data!"))};
+      {((cond) => {if (!cond) throw new Error('assertion failed: "(uuid.length === 36)"')})((uuid.length === 36))};
+      {((cond) => {if (!cond) throw new Error('assertion failed: "((await Foo.get_data()) === "Cool data!")"')})(((await Foo.get_data()) === "Cool data!"))};
     }
   }
 }

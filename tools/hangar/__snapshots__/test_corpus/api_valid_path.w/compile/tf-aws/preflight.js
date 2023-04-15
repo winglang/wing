@@ -24,7 +24,7 @@ class $Root extends $stdlib.core.Resource {
           const e = $error_e.message;
           error = e;
         }
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === expected)'`)})((error === expected))};
+        {((cond) => {if (!cond) throw new Error('assertion failed: "(error === expected)"')})((error === expected))};
       }
     }
     ;
@@ -38,7 +38,7 @@ class $Root extends $stdlib.core.Resource {
           const e = $error_e.message;
           error = e;
         }
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === "")'`)})((error === ""))};
+        {((cond) => {if (!cond) throw new Error('assertion failed: "(error === "")"')})((error === ""))};
       }
     }
     ;

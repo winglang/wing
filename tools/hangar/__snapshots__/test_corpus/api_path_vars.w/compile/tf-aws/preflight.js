@@ -34,7 +34,7 @@ class $Root extends $stdlib.core.Resource {
     (api.get("/users/{name}",handler));
     const f = new Fetch(this,"Fetch");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight2", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.718eff3f4061776cb4ae50876841ab4ee2dad187ff545f5ac2ae1e6beeb7d65e/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.bca014eac156b2117a9cfe8b0357f4cdeeb2d7fb59a96d04a6ddeaaa1ea0b81c/index.js".replace(/\\/g, "/"))),
       bindings: {
         api: {
           obj: api,

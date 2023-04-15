@@ -10,7 +10,7 @@ class $Root extends $stdlib.core.Resource {
     const hello = new stuff.HelloWorld();
     const greeting = (hello.sayHello("wingnuts"));
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:say_hello",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.0971d6c6098fbbfe02ff3f99e46b6e89243dbbb93903848c1d100f29b265d40c/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.1372506e446d613df98f26f19320b8c00830bc74a7bc9a52b8365c0c5c4d315b/index.js".replace(/\\/g, "/"))),
       bindings: {
         greeting: {
           obj: greeting,
