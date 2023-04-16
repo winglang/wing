@@ -89,7 +89,6 @@ pub mod type_system {
 	use crate::util::package_json;
 	use crate::Result;
 	use std::collections::HashMap;
-	use std::time::Instant;
 
 	pub struct TypeSystem {
 		assemblies: HashMap<String, Assembly>,
@@ -145,14 +144,7 @@ pub mod type_system {
 		}
 
 		fn load_assembly(&self, path: &str) -> Result<Assembly> {
-			// start a timer
-			let start = Instant::now();
-			let result = spec::load_assembly_from_file(path, None);
-			let delta = Instant::now().duration_since(start);
-
-			println!("{} {:?}", result.as_ref().unwrap().name, delta);
-
-			result
+			spec::load_assembly_from_file(path, None)
 		}
 
 		fn add_assembly(&mut self, assembly: Assembly) -> Result<AssemblyName> {
