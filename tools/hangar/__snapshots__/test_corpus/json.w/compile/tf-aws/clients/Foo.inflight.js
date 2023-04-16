@@ -1,4 +1,4 @@
-class Foo  {
+class  Foo {
   constructor({ _sum_str }) {
     this._sum_str = _sum_str;
   }

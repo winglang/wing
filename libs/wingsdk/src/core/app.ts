@@ -4,8 +4,8 @@ import * as cdktf from "cdktf";
 import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
 import { PluginManager } from "./plugin-manager";
-import { IResource } from "./resource";
 import { synthesizeTree } from "./tree";
+import { IResource } from "../std/resource";
 
 const TERRAFORM_STACK_NAME = "root";
 
@@ -62,6 +62,20 @@ export abstract class App extends Construct {
     }
 
     return App.of(scope.node.scope);
+  }
+
+  /**
+   * Loads the `App` class for the given target.
+   * @param target one of the supported targets
+   * @returns an `App` class constructor
+   */
+  public static for(target: string): any {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      return require(`../target-${target}/app`).App;
+    } catch {
+      throw new Error(`Unknown compilation target: "${target}"`);
+    }
   }
 
   /**

@@ -1,12 +1,12 @@
 import { Construct, IConstruct } from "constructs";
+import { Duration } from ".";
 import {
   WING_ATTRIBUTE_RESOURCE_CONNECTIONS,
   WING_ATTRIBUTE_RESOURCE_STATEFUL,
-} from "./attributes";
-import { Code } from "./inflight";
-import { serializeImmutableData } from "./internal";
-import { IInspectable, TreeInspector } from "./tree";
-import { Duration } from "../std";
+} from "../core/attributes";
+import { Code } from "../core/inflight";
+import { serializeImmutableData } from "../core/internal";
+import { IInspectable, TreeInspector } from "../core/tree";
 import { log } from "../util";
 
 /**

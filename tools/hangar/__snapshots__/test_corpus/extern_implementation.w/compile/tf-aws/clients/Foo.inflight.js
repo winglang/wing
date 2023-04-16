@@ -1,4 +1,4 @@
-class Foo  {
+class  Foo {
   constructor({  }) {
   }
   static async regex_inflight(pattern, text)  {

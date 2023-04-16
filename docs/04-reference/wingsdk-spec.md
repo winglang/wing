@@ -196,34 +196,34 @@ struct ThresholdReachedEvent {
 
 ## Planned resources
 
-- Bucket (P1) - object storage, similar to AWS S3, Azure Blob Storage, GCP Storage
-- Queue (P1) - a message queue, similar to AWS SQS, Azure Storage Queues
-- Function (P1) - a serverless function, similar to AWS Lambda, Azure Functions, GCP Cloud Functions
-- Topic (P1) - a pub/sub topic, similar to AWS SNS, Azure Event Grid, GCP Pub/Sub
-- Counter (P1) - an atomic counter
-- Schedule (P1) - a cron job / scheduled task trigger
-- Api (P1) - a REST API
-- Service (P1) - a long-running service, similar to AWS ECS, Azure Container Instances, GCP Cloud Run
-- SqlDatabase (P1) - a relational database that lets you execute arbitrary SQL queries, similar to AWS RDS, Azure SQL Database, GCP Cloud SQL
-- Website (P2) - a CDN-backed static website
-- Metric (P2) - a metric for monitoring system performance
-- Alarm (P2) - an alarm that triggers when a metric crosses a threshold
-- Table (P2) - a NoSQL database table
-- Key-value store (P2) - a lightweight key-value store, similar to Redis or Memcached
-- Job (P2) - a long-running compute workload that can be run on demand
-- Workflow (P2) - a task orchestration engine, similar to AWS Step Functions, Azure Logic Apps, GCP Workflows
-- Secret (P2) - a secret value, similar to AWS Secrets Manager, Azure Key Vault, GCP Secret Manager
-- Stream (P2) - a stream of events, similar to AWS Kinesis, Azure Event Hubs, GCP Pub/Sub and Dataflow
-- OnDeploy (P2) - a variation of Function that runs every time the app is deployed
-- GraphQLApi (P2) - a GraphQL API, similar to AWS AppSync
+- Bucket (P1) [[issue](https://github.com/winglang/wing/issues/600)] - object storage, similar to AWS S3, Azure Blob Storage, GCP Storage
+- Queue (P1) [[issue](https://github.com/winglang/wing/issues/604)] - a message queue, similar to AWS SQS, Azure Storage Queues
+- Function (P1) [[issue](https://github.com/winglang/wing/issues/602)] - a serverless function, similar to AWS Lambda, Azure Functions, GCP Cloud Functions
+- Topic (P1) [[issue](https://github.com/winglang/wing/issues/592)] - a pub/sub topic, similar to AWS SNS, Azure Event Grid, GCP Pub/Sub
+- Counter (P1) [[issue](https://github.com/winglang/wing/issues/609)] - an atomic counter
+- Schedule (P1) [[issue](https://github.com/winglang/wing/issues/1289)] - a cron job / scheduled task trigger
+- Api (P1) [[issue](https://github.com/winglang/wing/issues/623)] - a REST API
+- Service (P1) [[issue](https://github.com/winglang/wing/issues/1305)] - a long-running service, similar to AWS ECS, Azure Container Instances, GCP Cloud Run
+- SqlDatabase (P1) [[issue](https://github.com/winglang/wing/issues/1309)] - a relational database that lets you execute arbitrary SQL queries, similar to AWS RDS, Azure SQL Database, GCP Cloud SQL
+- Website (P2) [[issue](https://github.com/winglang/wing/issues/1293)] - a CDN-backed static website
+- Metric (P2) [[issue](https://github.com/winglang/wing/issues/1297)] - a metric for monitoring system performance
+- Alarm (P2) [[issue](https://github.com/winglang/wing/issues/1301)] - an alarm that triggers when a metric crosses a threshold
+- Table (P2) [[issue](https://github.com/winglang/wing/issues/1314)] - a NoSQL database table
+- Key-value store (P2) [[issue](https://github.com/winglang/wing/issues/1317)] - a lightweight key-value store, similar to Redis or Memcached
+- Job (P2) [[issue](https://github.com/winglang/wing/issues/1321)] - a long-running compute workload that can be run on demand
+- Workflow (P2) [[issue](https://github.com/winglang/wing/issues/1325)] - a task orchestration engine, similar to AWS Step Functions, Azure Logic Apps, GCP Workflows
+- Secret (P2) [[issue](https://github.com/winglang/wing/issues/1329)] - a secret value, similar to AWS Secrets Manager, Azure Key Vault, GCP Secret Manager
+- Stream (P2) [[issue](https://github.com/winglang/wing/issues/1333)] - a stream of events, similar to AWS Kinesis, Azure Event Hubs, GCP Pub/Sub and Dataflow
+- OnDeploy (P2) [[issue](https://github.com/winglang/wing/issues/1337)] - a variation of Function that runs every time the app is deployed
+- GraphQLApi (P2) [[issue](https://github.com/winglang/wing/issues/1341)] - a GraphQL API, similar to AWS AppSync
 
 ### Resources planned as third party libraries
 
-- Redis (P1)
-- DynamoDBTable
-- MongoDB
-- GithubRepo
-- Authorization/authentication related resources
+- Redis (P1) [[issue](https://github.com/winglang/wing/issues/611)]
+- DynamoDBTable [[issue](https://github.com/winglang/wing/issues/1345)]
+- MongoDB [[issue](https://github.com/winglang/wing/issues/1349)]
+- GithubRepo [[issue](https://github.com/winglang/wing/issues/1353)]
+- Authorization/authentication related resources [[issue](https://github.com/winglang/wing/issues/1216)]
 
 ## Bucket
 

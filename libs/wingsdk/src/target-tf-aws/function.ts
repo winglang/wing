@@ -12,6 +12,7 @@ import { BUCKET_PREFIX_OPTS } from "./bucket";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { PolicyStatement } from "../shared-aws";
+import { IInflightHost, Resource } from "../std";
 import { Duration } from "../std/duration";
 import { createBundle } from "../utils/bundling";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
@@ -221,7 +222,7 @@ export class Function extends cloud.Function {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by tfaws.Function for now");
     }
@@ -287,7 +288,7 @@ export class Function extends cloud.Function {
    * @param principal The AWS principal to grant invoke permissions to (e.g. "s3.amazonaws.com", "events.amazonaws.com", "sns.amazonaws.com")
    */
   public addPermissionToInvoke(
-    source: core.Resource,
+    source: Resource,
     principal: string,
     sourceArn: string,
     options: FunctionPermissionsOptions = { qualifier: this.function.version }

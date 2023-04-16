@@ -1,31 +1,12 @@
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-
-function __app(target) {
-	switch (target) {
-		case "sim":
-			return $stdlib.sim.App;
-		case "tfaws":
-		case "tf-aws":
-			return $stdlib.tfaws.App;
-		case "tf-gcp":
-			return $stdlib.tfgcp.App;
-		case "tf-azure":
-			return $stdlib.tfazure.App;
-		case "awscdk":
-			return $stdlib.awscdk.App;
-		default:
-			throw new Error(`Unknown WING_TARGET value: "${process.env.WING_TARGET ?? ""}"`);
-	}
-}
-const $AppBase = __app(process.env.WING_TARGET);
-
+const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
-class $Root extends $stdlib.core.Resource {
+class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class First extends $stdlib.core.Resource {
+    class First extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.my_resource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
@@ -45,7 +26,7 @@ class $Root extends $stdlib.core.Resource {
       }
     }
     First._annotateInflight("$inflight_init", {"this.my_resource": { ops: [] }});
-    class Another extends $stdlib.core.Resource {
+    class Another extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.my_field = "hello!";
@@ -70,7 +51,7 @@ class $Root extends $stdlib.core.Resource {
     Another._annotateInflight("$inflight_init", {"this.first": { ops: [] },"this.my_field": { ops: [] }});
     Another._annotateInflight("another_func", {});
     Another._annotateInflight("meaning_of_life", {});
-    class MyResource extends $stdlib.core.Resource {
+    class MyResource extends $stdlib.std.Resource {
       constructor(scope, id, external_bucket, external_num) {
         super(scope, id);
         this.my_resource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");

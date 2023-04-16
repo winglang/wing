@@ -1,28 +1,9 @@
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-
-function __app(target) {
-	switch (target) {
-		case "sim":
-			return $stdlib.sim.App;
-		case "tfaws":
-		case "tf-aws":
-			return $stdlib.tfaws.App;
-		case "tf-gcp":
-			return $stdlib.tfgcp.App;
-		case "tf-azure":
-			return $stdlib.tfazure.App;
-		case "awscdk":
-			return $stdlib.awscdk.App;
-		default:
-			throw new Error(`Unknown WING_TARGET value: "${process.env.WING_TARGET ?? ""}"`);
-	}
-}
-const $AppBase = __app(process.env.WING_TARGET);
-
+const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
-class $Root extends $stdlib.core.Resource {
+class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const arr = Object.freeze([this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"b1"), this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"b2")]);

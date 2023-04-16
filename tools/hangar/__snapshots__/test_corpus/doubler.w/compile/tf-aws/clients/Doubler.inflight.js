@@ -1,4 +1,4 @@
-class Doubler  {
+class  Doubler {
   constructor({ func }) {
     this.func = func;
   }

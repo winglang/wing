@@ -50,12 +50,30 @@ function mapApigatewayEventToCloudApiRequest(
     ...request.queryStringParameters,
     ...request.multiValueQueryStringParameters,
   };
+
   return {
     path: request.path,
-    body: request.body ? JSON.parse(request.body) : "",
+    body: parseBody(request),
     headers: request.headers as Record<string, string>,
     method: parseHttpMethod(request.httpMethod),
     query: sanitizeParamLikeObject(query),
     vars: sanitizeParamLikeObject(request.pathParameters ?? {}),
   };
+}
+
+/**
+ * Parse body to JSON or empty string
+ * @param body body
+ * @returns JSON body
+ */
+function parseBody(request: APIGatewayProxyEvent) {
+  if (!request.body) return "";
+
+  const contentType = Object.entries(request.headers).find(
+    ([key, _]) => key.toLowerCase() === "content-type"
+  )?.[1];
+  if (contentType === "application/x-www-form-urlencoded") {
+    return Object.fromEntries(new URLSearchParams(request.body));
+  }
+  return JSON.parse(request.body);
 }

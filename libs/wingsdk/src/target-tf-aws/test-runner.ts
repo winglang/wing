@@ -4,6 +4,7 @@ import { Construct } from "constructs";
 import { Function as AwsFunction } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { IInflightHost } from "../std";
 
 const OUTPUT_TEST_RUNNER_FUNCTION_ARNS = "WING_TEST_RUNNER_FUNCTION_ARNS";
 
@@ -30,7 +31,7 @@ export class TestRunner extends cloud.TestRunner {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof AwsFunction)) {
       throw new Error("TestRunner can only be bound by tfaws.Function for now");
     }

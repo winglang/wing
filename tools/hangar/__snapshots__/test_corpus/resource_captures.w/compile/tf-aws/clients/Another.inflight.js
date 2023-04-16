@@ -1,4 +1,4 @@
-class Another  {
+class  Another {
   constructor({ first, my_field }) {
     this.first = first;
     this.my_field = my_field;

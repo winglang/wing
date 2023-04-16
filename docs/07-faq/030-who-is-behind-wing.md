@@ -6,7 +6,7 @@ keywords: [faq, who is behind wing, winglang, Wing programming language, Wing la
 
 Wing is built by the folks at [Monada](https://monada.co) and an amazing community of contributors from around the world.
 
-Monada was founded by [Elad Ben-Israel](https://github.com/eladb) and [Shai Bar](https://github.com/ShaiBer) with the mission to democratize the cloud by building tools and services that unleash its full potential.
+Monada was founded by [Elad Ben-Israel](https://github.com/eladb) and [Shai Ber](https://github.com/ShaiBer) with the mission to democratize the cloud by building tools and services that unleash its full potential.
 
 The language specification, toolchain and local simulator are released under the MIT license and will always be free to use. We see ourselves as the shepherds of the project through its incubation and hope to donate it to an open-source foundation so it will be eventually be community governed.
 

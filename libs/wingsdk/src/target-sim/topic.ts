@@ -2,12 +2,13 @@ import { join } from "path";
 import { Construct } from "constructs";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { BaseResourceSchema } from "./schema";
 import { TopicSchema, TopicSubscriber, TOPIC_TYPE } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { IInflightHost, Resource } from "../std";
+import { BaseResourceSchema } from "../testing/simulator";
 import { convertBetweenHandlers } from "../utils/convert";
 
 /**
@@ -49,7 +50,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       functionHandle: simulatorHandleToken(fn),
     });
 
-    core.Resource.addConnection({
+    Resource.addConnection({
       from: this,
       to: fn,
       relationship: "on_message",
@@ -59,7 +60,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }

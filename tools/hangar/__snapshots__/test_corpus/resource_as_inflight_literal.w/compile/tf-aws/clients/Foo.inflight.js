@@ -1,4 +1,4 @@
-class Foo  {
+class  Foo {
   constructor({  }) {
   }
   async handle(message)  {
