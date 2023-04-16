@@ -38,7 +38,7 @@ We'll start by hardcoding it to be "index.html", and can add it later to the web
 
 The last thing will be a registration to the chosen domain (if exists).
 
-The website resource contains preflight code only.
+The website resource supports preflight code only.
 
 #### resources:
 
