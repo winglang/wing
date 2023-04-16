@@ -2611,7 +2611,7 @@ impl<'a> TypeChecker<'a> {
 
 		// if we're importing the `std` module from the wing sdk, eagerly import all the types within it
 		// because they aren't typically resolved through the same process as other types
-		if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME && alias.name == WINGSDK_STD_MODULE {
+		if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME && jsii.alias.name == WINGSDK_STD_MODULE {
 			importer.deep_import_submodule_to_env(WINGSDK_STD_MODULE);
 		}
 
