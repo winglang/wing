@@ -59,7 +59,7 @@ app.listen(
 );
 ```
 
-Since the website is served on the local machine, we cannot specify a domain while deploying to the simulator.
+Since the website is served on the local machine, we cannot specify a domain, nor can we add a CDN while deploying to the simulator.
 
 ### point for thought:
 
