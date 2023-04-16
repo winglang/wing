@@ -2585,7 +2585,6 @@ impl<'a> TypeChecker<'a> {
 							),
 							span: stmt.map(|s| s.span.clone()).unwrap_or_default(),
 						});
-						// debug!("{:?}", type_error);
 						return;
 					}
 				};
