@@ -1,4 +1,4 @@
-import { IResource } from "../std";
+import { IResource } from "../core";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**

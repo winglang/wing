@@ -3,10 +3,10 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class Doubler extends $stdlib.std.Resource {
+    class Doubler extends $stdlib.core.Resource {
       constructor(scope, id, func) {
         super(scope, id);
         this.func = func;

@@ -1,7 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
-import { Resource } from "../std";
+import { App, Resource } from "../core";
 
 /**
  * Global identifier for `Counter`.

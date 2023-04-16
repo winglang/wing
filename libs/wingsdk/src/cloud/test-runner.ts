@@ -2,7 +2,7 @@ import { Construct, IConstruct } from "constructs";
 import { Function } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core/app";
-import { Resource } from "../std";
+import { Resource } from "../core/resource";
 
 /**
  * Global identifier for `TestRunner`.

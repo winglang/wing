@@ -7,7 +7,6 @@ import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
-import { IInflightHost, Resource } from "../std";
 import { convertBetweenHandlers } from "../utils/convert";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
 
@@ -88,7 +87,7 @@ export class Topic extends cloud.Topic {
 
     fn.addPermissionToInvoke(this, "sns.amazonaws.com", this.topic.arn, {});
 
-    Resource.addConnection({
+    core.Resource.addConnection({
       from: this,
       to: fn,
       relationship: "on_message",
@@ -104,7 +103,7 @@ export class Topic extends cloud.Topic {
    * @param sourceArn source arn
    */
   public addPermissionToPublish(
-    source: Resource,
+    source: core.Resource,
     principal: string,
     sourceArn: string
   ): void {
@@ -135,7 +134,7 @@ export class Topic extends cloud.Topic {
   }
 
   /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public _bind(host: core.IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("topics can only be bound by tfaws.Function for now");
     }

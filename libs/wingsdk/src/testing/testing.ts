@@ -1,6 +1,5 @@
 import { IConstruct } from "constructs";
-import { Inflight, InflightBindings, NodeJsCode } from "../core";
-import { IResource } from "../std";
+import { Inflight, InflightBindings, IResource, NodeJsCode } from "../core";
 
 /**
  * Test utilities.

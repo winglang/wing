@@ -11,7 +11,7 @@ import { App } from "./app";
 import { Bucket, StorageAccountPermissions } from "./bucket";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { IResource } from "../std";
+import { IResource } from "../core";
 import { createBundle } from "../utils/bundling";
 import {
   CaseConventions,

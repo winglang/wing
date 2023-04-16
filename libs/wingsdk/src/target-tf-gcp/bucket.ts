@@ -6,7 +6,6 @@ import { Construct } from "constructs";
 import { App } from "./app";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { IInflightHost } from "../std";
 import {
   CaseConventions,
   NameOptions,
@@ -83,7 +82,7 @@ export class Bucket extends cloud.Bucket {
   }
 
   /** @internal */
-  public _bind(_inflightHost: IInflightHost, _ops: string[]): void {
+  public _bind(_inflightHost: core.IInflightHost, _ops: string[]): void {
     // TODO: support functions once tfgcp functions are implemented
     throw new Error("Method not implemented.");
   }
