@@ -61,7 +61,7 @@ mod tests {
 	#[test]
 	fn can_load_assembly_from_file() {
 		let assembly_path = create_temp_assembly();
-		let assembly = spec::load_assembly_from_file(assembly_path.parent().unwrap().to_str().unwrap(), None).unwrap();
+		let assembly = spec::load_assembly_from_file(&assembly_path.to_str().unwrap(), None).unwrap();
 		assert_eq!(assembly.name, "jsii-test-dep"); // TODO: write a better test
 		remove_temp_assembly(assembly_path);
 	}
