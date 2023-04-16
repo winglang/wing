@@ -150,7 +150,6 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	pub fn import_type(&mut self, type_fqn: &FQN) -> bool {
-		println!("import_type {}", type_fqn.as_str());
 		self.setup_namespaces_for(&type_fqn);
 
 		let type_str = type_fqn.as_str();
@@ -753,7 +752,6 @@ impl<'a> JsiiImporter<'a> {
 
 	/// Imports submodules of the assembly, preparing each as an available namespace
 	pub fn import_submodules_to_env(&mut self, env: &mut SymbolEnv) {
-		println!("Importing submodules... for {} (alias {})", self.jsii_spec.assembly_name, self.jsii_spec.alias);
 		let assembly = self
 			.jsii_types
 			.find_assembly(&self.jsii_spec.assembly_name)

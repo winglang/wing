@@ -2100,10 +2100,16 @@ impl<'a> TypeChecker<'a> {
 					}
 				} else if *is_resource {
 					let resource_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE);
-					let t = self.types.libraries.lookup_nested_str(&resource_fqn, None).unwrap().as_type().unwrap();
+					let t = self
+						.types
+						.libraries
+						.lookup_nested_str(&resource_fqn, None)
+						.unwrap()
+						.as_type()
+						.unwrap();
 					let env = t.as_resource().unwrap().env.get_ref();
 					(Some(t), Some(env))
-				}  else {
+				} else {
 					(None, None)
 				};
 
