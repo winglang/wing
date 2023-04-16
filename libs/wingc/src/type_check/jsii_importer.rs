@@ -774,22 +774,25 @@ impl<'a> JsiiImporter<'a> {
 				self.setup_namespaces_for(&type_fqn);
 			}
 		} else {
-			// println!("defining root namespace for {}", assembly.name);
+			// No submodules, so lets manually setup a root namespace for the module
 
-			// // No submodules, so lets manually setup a root namespace for the module
-			// let ns = self.wing_types.add_namespace(Namespace {
-			// 	name: assembly.name.clone(),
-			// 	env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
-			// });
-			// self
-			// 	.wing_types
-			// 	.libraries
-			// 	.define(
-			// 		&Symbol::global(assembly.name.clone()),
-			// 		SymbolKind::Namespace(ns),
-			// 		StatementIdx::Top,
-			// 	)
-			// 	.expect("Failed to define jsii root namespace");
+			// if the "libraries" environment already contains a namespace for this assembly
+			// we can skip this step
+			if self.wing_types.libraries.try_lookup(&assembly.name, None).is_none() {
+				let ns = self.wing_types.add_namespace(Namespace {
+					name: assembly.name.clone(),
+					env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
+				});
+				self
+					.wing_types
+					.libraries
+					.define(
+						&Symbol::global(assembly.name.clone()),
+						SymbolKind::Namespace(ns),
+						StatementIdx::Top,
+					)
+					.expect("Failed to define jsii root namespace");
+			}
 		}
 
 		// Create a symbol in the environment for the imported module
@@ -808,6 +811,7 @@ impl<'a> JsiiImporter<'a> {
 			.unwrap()
 			.as_namespace_ref()
 			.unwrap();
+
 		env
 			.define(
 				&self.jsii_spec.alias,
