@@ -1,6 +1,6 @@
 import { basename } from "path";
 import { compile, CompileOptions } from "./compile";
-import * as chalk from "chalk";
+import chalk from "chalk";
 import * as sdk from "@winglang/sdk";
 import { ITestRunnerClient } from "@winglang/sdk/lib/cloud";
 import { TestRunnerClient as TfawsTestRunnerClient } from "@winglang/sdk/lib/target-tf-aws/test-runner.inflight";

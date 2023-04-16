@@ -4,7 +4,7 @@ import { readFile, rmSync, mkdirp, move, mkdirpSync, copySync } from "fs-extra";
 import { basename, dirname, join, resolve } from "path";
 import * as os from "os";
 
-import * as chalk from "chalk";
+import chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
 import { normalPath } from "../util";
