@@ -6,7 +6,6 @@ import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
-import { IInflightHost, Resource } from "../std";
 import { convertBetweenHandlers } from "../utils/convert";
 
 /**
@@ -60,7 +59,7 @@ export class Topic extends cloud.Topic {
     const subscription = new LambdaSubscription(fn._function);
     this.topic.addSubscription(subscription);
 
-    Resource.addConnection({
+    core.Resource.addConnection({
       from: this,
       to: fn,
       relationship: "on_message",
@@ -70,7 +69,7 @@ export class Topic extends cloud.Topic {
   }
 
   /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public _bind(host: core.IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("topics can only be bound by awscdk.Function for now");
     }

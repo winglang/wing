@@ -5,7 +5,6 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Resource } from "../std";
 import { convertBetweenHandlers } from "../utils/convert";
 
 /**
@@ -93,7 +92,7 @@ export class Schedule extends cloud.Schedule {
       rule: this.rule.name,
     });
 
-    Resource.addConnection({
+    core.Resource.addConnection({
       from: this,
       to: fn,
       relationship: "on_tick",

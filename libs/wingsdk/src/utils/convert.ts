@@ -1,6 +1,5 @@
 import { Construct } from "constructs";
-import { NodeJsCode } from "../core";
-import { IResource, Resource } from "../std";
+import { IResource, NodeJsCode, Resource } from "../core";
 import { normalPath } from "../util";
 
 /**
