@@ -4069,6 +4069,21 @@ new std.Number()
 
 ---
 
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Number.toStr">to_str</a></code> | Converts the number into a string. |
+
+---
+
+##### `to_str` <a name="to_str" id="@winglang/sdk.std.Number.toStr"></a>
+
+```wing
+to_str(): str
+```
+
+Converts the number into a string.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
