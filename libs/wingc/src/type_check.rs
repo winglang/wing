@@ -878,6 +878,8 @@ pub struct Types {
 	void_idx: usize,
 	json_idx: usize,
 	mut_json_idx: usize,
+
+	resource_base_type: Option<TypeRef>,
 }
 
 impl Types {
@@ -917,6 +919,7 @@ impl Types {
 			void_idx,
 			json_idx,
 			mut_json_idx,
+			resource_base_type: None,
 		}
 	}
 
@@ -982,6 +985,23 @@ impl Types {
 	fn get_namespaceref(&self, idx: usize) -> NamespaceRef {
 		let t = &self.namespaces[idx];
 		UnsafeRef::<Namespace>(&**t as *const Namespace)
+	}
+
+	fn resource_base_type(&mut self) -> TypeRef {
+		// cache the resource base type ref
+		if self.resource_base_type.is_none() {
+			let resource_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE);
+			self.resource_base_type = Some(
+				self
+					.libraries
+					.lookup_nested_str(&resource_fqn, None)
+					.unwrap()
+					.as_type()
+					.unwrap(),
+			);
+		}
+
+		self.resource_base_type.unwrap()
 	}
 }
 
@@ -2094,14 +2114,8 @@ impl<'a> TypeChecker<'a> {
 						}
 					}
 				} else if *is_resource {
-					let resource_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE);
-					let t = self
-						.types
-						.libraries
-						.lookup_nested_str(&resource_fqn, None)
-						.unwrap()
-						.as_type()
-						.unwrap();
+					// if this is a resource and we don't have a parent, then we implicitly set it to `std.Resource`
+					let t = self.types.resource_base_type();
 					let env = t.as_resource().unwrap().env.get_ref();
 					(Some(t), Some(env))
 				} else {
