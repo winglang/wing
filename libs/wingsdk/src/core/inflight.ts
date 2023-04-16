@@ -3,8 +3,8 @@ import { readFileSync } from "fs";
 import { basename } from "path";
 import { Construct } from "constructs";
 import { makeHandler } from "./internal";
-import { Connection, Display, IInflightHost, IResource } from "./resource";
 import { TreeInspector } from "./tree";
+import { Connection, Display, IInflightHost, IResource } from "../std/resource";
 import { normalPath } from "../util";
 
 /**

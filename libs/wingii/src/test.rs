@@ -59,9 +59,9 @@ mod tests {
 	}
 
 	#[test]
-	fn can_load_assembly_from_path() {
+	fn can_load_assembly_from_file() {
 		let assembly_path = create_temp_assembly();
-		let assembly = spec::load_assembly_from_path(assembly_path.parent().unwrap().to_str().unwrap()).unwrap();
+		let assembly = spec::load_assembly_from_file(&assembly_path.to_str().unwrap(), None).unwrap();
 		assert_eq!(assembly.name, "jsii-test-dep"); // TODO: write a better test
 		remove_temp_assembly(assembly_path);
 	}
@@ -73,7 +73,7 @@ mod tests {
 			.join("src")
 			.join("fixtures")
 			.join("constructs");
-		let name = type_system.load(fixture_path.to_str().unwrap(), None).unwrap();
+		let name = type_system.load_module(fixture_path.to_str().unwrap()).unwrap();
 		assert_eq!(name, "constructs");
 		let assembly = type_system.find_assembly(&name).unwrap();
 		assert_eq!(assembly.name, "constructs");
@@ -86,7 +86,7 @@ mod tests {
 			.join("src")
 			.join("fixtures")
 			.join("constructs");
-		let name = type_system.load(fixture_path.to_str().unwrap(), None).unwrap();
+		let name = type_system.load_module(fixture_path.to_str().unwrap()).unwrap();
 		assert_eq!(name, "constructs");
 		// find class with fqn "constructs.Construct"
 		let construct = type_system.find_class(&FQN::from("constructs.Construct")).unwrap();
