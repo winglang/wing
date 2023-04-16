@@ -66,7 +66,6 @@ const WINGSDK_RESOURCE: &'static str = "std.Resource";
 const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
-// const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
 
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
