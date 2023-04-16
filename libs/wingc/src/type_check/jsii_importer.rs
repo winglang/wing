@@ -820,7 +820,7 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	fn register_jsii_type(&mut self, fqn: &FQN, symbol: &Symbol, type_ref: TypeRef) {
-		// skip if this type is already registered
+		// make this function idempotent
 		if self.wing_types.libraries.lookup_nested_str(fqn.as_str(), None).is_ok() {
 			return;
 		}
