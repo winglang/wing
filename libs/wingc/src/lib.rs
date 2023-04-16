@@ -59,6 +59,7 @@ const WINGSDK_MUT_ARRAY: &'static str = "std.MutableArray";
 const WINGSDK_SET: &'static str = "std.ImmutableSet";
 const WINGSDK_MUT_SET: &'static str = "std.MutableSet";
 const WINGSDK_STRING: &'static str = "std.String";
+const WINGSDK_NUMBER: &'static str = "std.Number";
 const WINGSDK_JSON: &'static str = "std.Json";
 const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
 const WINGSDK_RESOURCE: &'static str = "core.Resource";

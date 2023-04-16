@@ -475,6 +475,7 @@ impl<'a> JSifier<'a> {
 						// this is inline with how wing jsifies optionals
 						"??"
 					}
+					BinaryOperator::Concat => "+",
 				};
 				format!("({} {} {})", js_left, js_op, js_right)
 			}

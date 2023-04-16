@@ -7,6 +7,7 @@ const PREC = {
   EQUAL: 60,
   RELATIONAL: 70,
   UNWRAP_OR: 80,
+  CONCAT: 85,
   SHIFT: 90,
   ADD: 100,
   MULTIPLY: 110,
@@ -547,6 +548,7 @@ module.exports = grammar({
         //['>>', PREC.SHIFT],
         //['>>>', PREC.SHIFT],
         ["??", PREC.UNWRAP_OR],
+        ["++", PREC.CONCAT],
       ];
 
       return choice(

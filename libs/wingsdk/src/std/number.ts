@@ -29,4 +29,15 @@ export class Number {
     str;
     throw new Error("Macro");
   }
+
+  /**
+   * Converts the number into a string.
+   *
+   * @macro $self$.toString()
+   *
+   * @returns a string.
+   */
+  public toStr(): string {
+    throw new Error("Abstract");
+  }
 }

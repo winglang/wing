@@ -587,6 +587,7 @@ pub enum BinaryOperator {
 	LogicalAnd,
 	LogicalOr,
 	UnwrapOr,
+	Concat,
 }
 
 #[derive(Debug)]

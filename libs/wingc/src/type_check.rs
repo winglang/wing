@@ -9,8 +9,8 @@ use crate::ast::{
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{
 	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_JSON,
-	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE,
-	WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING,
+	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_NUMBER,
+	WINGSDK_REDIS_MODULE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING,
 };
 use derivative::Derivative;
 use indexmap::{IndexMap, IndexSet};
@@ -1201,6 +1201,11 @@ impl<'a> TypeChecker<'a> {
 							self.validate_type(rtype, inner_type, right);
 							inner_type
 						}
+					}
+					BinaryOperator::Concat => {
+						self.validate_type(ltype, self.types.string(), left);
+						self.validate_type(rtype, self.types.string(), right);
+						self.types.string()
 					}
 				}
 			}
@@ -2995,6 +3000,16 @@ impl<'a> TypeChecker<'a> {
 					Type::String => self.get_property_from_class_like(
 						env
 							.lookup_nested_str(WINGSDK_STRING, None)
+							.unwrap()
+							.as_type()
+							.unwrap()
+							.as_class()
+							.unwrap(),
+						property,
+					),
+					Type::Number => self.get_property_from_class_like(
+						env
+							.lookup_nested_str(WINGSDK_NUMBER, None)
 							.unwrap()
 							.as_type()
 							.unwrap()

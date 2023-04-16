@@ -2540,15 +2540,30 @@ Ternary or conditional operators are not supported.
 
 ---
 
-#### 6.3.4 Operator Precedence
+#### 6.3.4 Other Operators
+
+| Operator | Description       | Example  |
+| -------- | ----------------- | -------- |
+| `?`      | Optional test     | `a?`     |
+| `??`     | Unwrap-or-default | `a ?? b` |
+| `++`     | Concatenate       | `a ++ b` |
+
+[`▲ top`][top]
+
+---
+
+#### 6.3.5 Operator Precedence
 
 | Operator             | Notes                                             |
 | -------------------- | ------------------------------------------------- |
 | ()                   | Parentheses                                       |
-| **                   | Power                                    |
+| **                   | Power                                             |
+| ?                    | Optional test                                     |
 | -x                   | Unary minus                                       |
 | \*, /, \\, %         | Multiplication, Division, Floor division, Modulus |
 | +, -                 | Addition, Subtraction                             |
+| ++                   | Concatenate                                       |
+| ??                   | Unwrap-or-default                                 |
 | ==, !=, >, >=, <, <= | Comparisons, Identity, operators                  |
 | !                    | Logical NOT                                       |
 | &&                   | Logical AND                                       |
@@ -2564,7 +2579,7 @@ determined by associativity.
 
 ---
 
-#### 6.3.5 Short Circuiting
+#### 6.3.6 Short Circuiting
 
 For the built-in logical NOT operators, the result is `true` if the operand is
 `false`. Otherwise, the result is `false`.
@@ -2604,7 +2619,7 @@ if x != nil {
 
 ---
 
-#### 6.3.6 Equality
+#### 6.3.7 Equality
 
 Of the operators supported, the following can be used with non-numeric operands:
 
