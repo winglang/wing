@@ -1,7 +1,7 @@
 import { IConstruct } from "constructs";
 import { InflightBindings, NodeJsCode } from "./inflight";
-import { DisplayProps, IResource, Resource } from "./resource";
 import { Duration } from "../std";
+import { DisplayProps, IResource, Resource } from "../std/resource";
 
 export function makeHandler(
   scope: IConstruct,

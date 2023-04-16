@@ -1,8 +1,8 @@
 import { Construct } from "constructs";
 import { Topic } from "./topic";
 import { fqnForType } from "../constants";
-import { App, IResource, Resource } from "../core";
-import { Json } from "../std";
+import { App } from "../core";
+import { Json, IResource, Resource } from "../std";
 import { convertBetweenHandlers } from "../utils/convert";
 
 /**

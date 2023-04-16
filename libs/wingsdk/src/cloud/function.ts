@@ -3,8 +3,7 @@ import { join } from "path";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core/app";
-import { IInflightHost, IResource, Resource } from "../core/resource";
-import { Duration } from "../std";
+import { Duration, IInflightHost, IResource, Resource } from "../std";
 import { CaseConventions, ResourceNames } from "../utils/resource-names";
 
 /**
