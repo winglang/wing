@@ -7,7 +7,7 @@ description: How to implement the website resource
 
 - **Author(s):**: @tsuf239
 - **Submission Date**: 2023-04-16
-- **Stage**: draf
+- **Stage**: draft
 - **Stage Date**: 2023-04-16
 
 <!---
