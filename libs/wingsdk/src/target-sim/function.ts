@@ -6,6 +6,7 @@ import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { App } from "../core";
+import { IInflightHost } from "../std";
 import { Duration } from "../std/duration";
 import { BaseResourceSchema } from "../testing/simulator";
 
@@ -50,7 +51,7 @@ export class Function extends cloud.Function implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }
