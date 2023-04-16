@@ -13,7 +13,6 @@ import { core } from "..";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
 import { Code } from "../core/inflight";
-import { IInflightHost, Resource } from "../std";
 import { convertBetweenHandlers } from "../utils/convert";
 import {
   CaseConventions,
@@ -70,7 +69,7 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(route, "GET", fn);
     this._addToSpec(route, "GET", apiSpecEndpoint);
 
-    Resource.addConnection({
+    core.Resource.addConnection({
       from: this,
       to: fn,
       relationship: "on_get_request",
@@ -97,7 +96,7 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(route, "POST", fn);
     this._addToSpec(route, "POST", apiSpecEndpoint);
 
-    Resource.addConnection({
+    core.Resource.addConnection({
       from: this,
       to: fn,
       relationship: "on_post_request",
@@ -124,7 +123,7 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(route, "PUT", fn);
     this._addToSpec(route, "PUT", apiSpecEndpoint);
 
-    Resource.addConnection({
+    core.Resource.addConnection({
       from: this,
       to: fn,
       relationship: "on_put_request",
@@ -151,7 +150,7 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(route, "DELETE", fn);
     this._addToSpec(route, "DELETE", apiSpecEndpoint);
 
-    Resource.addConnection({
+    core.Resource.addConnection({
       from: this,
       to: fn,
       relationship: "on_delete_request",
@@ -178,7 +177,7 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(route, "PATCH", fn);
     this._addToSpec(route, "PATCH", apiSpecEndpoint);
 
-    Resource.addConnection({
+    core.Resource.addConnection({
       from: this,
       to: fn,
       relationship: "on_patch_request",
@@ -205,7 +204,7 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(route, "OPTIONS", fn);
     this._addToSpec(route, "OPTIONS", apiSpecEndpoint);
 
-    Resource.addConnection({
+    core.Resource.addConnection({
       from: this,
       to: fn,
       relationship: "on_options_request",
@@ -232,7 +231,7 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(route, "HEAD", fn);
     this._addToSpec(route, "HEAD", apiSpecEndpoint);
 
-    Resource.addConnection({
+    core.Resource.addConnection({
       from: this,
       to: fn,
       relationship: "on_head_request",
@@ -259,7 +258,7 @@ export class Api extends cloud.Api {
     const apiSpecEndpoint = this.api.addEndpoint(route, "CONNECT", fn);
     this._addToSpec(route, "CONNECT", apiSpecEndpoint);
 
-    Resource.addConnection({
+    core.Resource.addConnection({
       from: this,
       to: fn,
       relationship: "on_connect_request",
@@ -334,7 +333,7 @@ export class Api extends cloud.Api {
   }
 
   /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public _bind(host: core.IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("topics can only be bound by tfaws.Function for now");
     }

@@ -1,4 +1,4 @@
-import { IResource } from "../std";
+import { IResource } from "../core";
 
 /**
  * Produce a token that will be replaced with the handle of a resource

@@ -4,7 +4,7 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 const jsii_code_samples = require("./node_modules/jsii-code-samples");
-class $Root extends $stdlib.std.Resource {
+class $Root extends $stdlib.core.Resource {
   constructor(scope, id) {
     super(scope, id);
     const hello = new jsii_code_samples.HelloWorld();

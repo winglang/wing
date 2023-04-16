@@ -3,7 +3,6 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { IInflightHost } from "../std";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
@@ -38,7 +37,7 @@ export class Table extends cloud.Table {
   }
 
   /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public _bind(host: core.IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("tables can only be bound by tfaws.Function for now");
     }
