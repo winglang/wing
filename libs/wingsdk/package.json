@@ -71,12 +71,6 @@
     "vitest": "^0.29.2"
   },
   "peerDependencies": {
-    "@cdktf/provider-aws": "^12.0.1",
-    "@cdktf/provider-azurerm": "^5.0.1",
-    "@cdktf/provider-google": "^5.0.2",
-    "@cdktf/provider-random": "^5.0.0",
-    "aws-cdk-lib": "^2.64.0",
-    "cdktf": "0.15.2",
     "constructs": "~10.1.228"
   },
   "dependencies": {
@@ -93,7 +87,7 @@
     "@aws-sdk/util-utf8-node": "3.208.0",
     "@azure/core-paging": "^1.4.0",
     "@azure/identity": "3.1.3",
-    "@azure/storage-blob": "12.12.0",
+    "@azure/storage-blob": "12.14.0",
     "@cdktf/provider-aws": "^12.0.1",
     "@cdktf/provider-azurerm": "^5.0.1",
     "@cdktf/provider-google": "^5.0.2",
@@ -125,6 +119,12 @@
     "@azure/core-paging",
     "@azure/identity",
     "@azure/storage-blob",
+    "@cdktf/provider-aws",
+    "@cdktf/provider-azurerm",
+    "@cdktf/provider-google",
+    "@cdktf/provider-random",
+    "aws-cdk-lib",
+    "cdktf",
     "debug",
     "esbuild-wasm",
     "express",

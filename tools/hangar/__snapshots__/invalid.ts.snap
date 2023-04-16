@@ -80,11 +80,11 @@ exports[`bring_jsii.w > stderr 1`] = `
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^ bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
 
 
-error: Cannot find module \\"foobar\\" in source directory
+error: Cannot find module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"
   --> ../../../examples/tests/invalid/bring_jsii.w:4:1
   |
 4 | bring \\"foobar\\" as baz;
-  | ^^^^^^^^^^^^^^^^^^^^^^ Cannot find module \\"foobar\\" in source directory
+  | ^^^^^^^^^^^^^^^^^^^^^^ Cannot find module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"
 
 "
 `;

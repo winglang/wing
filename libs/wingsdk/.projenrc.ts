@@ -1,15 +1,7 @@
 import { JsonFile, cdk, javascript } from "projen";
 import rootPackageJson from "../../package.json";
 
-const JSII_DEPS = [
-  "constructs@~10.1.228",
-  "cdktf@0.15.2",
-  "@cdktf/provider-random@^5.0.0",
-  "@cdktf/provider-aws@^12.0.1",
-  "@cdktf/provider-azurerm@^5.0.1",
-  "@cdktf/provider-google@^5.0.2",
-  "aws-cdk-lib@^2.64.0",
-];
+const JSII_DEPS = ["constructs@~10.1.228"];
 
 const project = new cdk.JsiiProject({
   name: "@winglang/sdk",
@@ -24,6 +16,12 @@ const project = new cdk.JsiiProject({
   peerDeps: [...JSII_DEPS],
   deps: [...JSII_DEPS],
   bundledDeps: [
+    "cdktf@0.15.2",
+    "@cdktf/provider-random@^5.0.0",
+    "@cdktf/provider-aws@^12.0.1",
+    "@cdktf/provider-azurerm@^5.0.1",
+    "@cdktf/provider-google@^5.0.2",
+    "aws-cdk-lib@^2.64.0",
     // preflight dependencies
     "debug",
     "esbuild-wasm",
@@ -43,7 +41,7 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/util-stream-node@3.254.0",
     "@aws-sdk/util-utf8-node@3.208.0",
     // azure client dependencies
-    "@azure/storage-blob@12.12.0",
+    "@azure/storage-blob@12.14.0",
     "@azure/identity@3.1.3",
     "@azure/core-paging",
     // simulator dependencies
