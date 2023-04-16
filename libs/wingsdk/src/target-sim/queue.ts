@@ -18,12 +18,14 @@ import { convertBetweenHandlers } from "../utils/convert";
  */
 export class Queue extends cloud.Queue implements ISimulatorResource {
   private readonly timeout: std.Duration;
+  private readonly retentionPeriod: std.Duration;
   private readonly subscribers: QueueSubscriber[];
   private readonly initialMessages: string[] = [];
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
     this.timeout = props.timeout ?? std.Duration.fromSeconds(10);
+    this.retentionPeriod = props.retentionPeriod ?? std.Duration.fromHours(1);
     this.subscribers = [];
     this.initialMessages.push(...(props.initialMessages ?? []));
   }
@@ -95,6 +97,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       path: this.node.path,
       props: {
         timeout: this.timeout.seconds,
+        retentionPeriod: this.retentionPeriod.seconds,
         subscribers: this.subscribers,
         initialMessages: this.initialMessages,
       },

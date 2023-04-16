@@ -20,6 +20,12 @@ export interface QueueProps {
   readonly timeout?: Duration;
 
   /**
+   * How long a queue retains a message.
+   * @default Duration.fromHours(1)
+   */
+  readonly retentionPeriod?: Duration;
+
+  /**
    * Initialize the queue with a set of messages.
    * @default []
    */

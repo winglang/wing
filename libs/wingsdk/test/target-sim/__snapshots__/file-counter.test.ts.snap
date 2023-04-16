@@ -80,6 +80,7 @@ bucket: (function(env) {
         "path": "root/HelloWorld/Queue",
         "props": {
           "initialMessages": [],
+          "retentionPeriod": 3600,
           "subscribers": [
             {
               "batchSize": 1,
