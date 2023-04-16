@@ -40,7 +40,7 @@ The last thing will be a registration to the chosen domain (if exists).
 
 The website resource supports preflight code only.
 
-#### resources:
+#### References:
 
 [Tutorial: Configuring a static website on Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html)
 [Use your domain for a static website in an Amazon S3 bucket](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/getting-started-s3.html)
