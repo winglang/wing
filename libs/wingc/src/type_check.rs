@@ -2544,67 +2544,79 @@ impl<'a> TypeChecker<'a> {
 		// the statement that initiated the bring, if any
 		stmt: Option<&Stmt>,
 	) {
-		// Loading the SDK is handled different from loading any other jsii modules because with the SDK we provide an exact
-		// location to locate the SDK, whereas for the other modules we need to search for them from the source directory.
-		let assembly_name = if library_name == WINGSDK_ASSEMBLY_NAME {
-			// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
-			let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
-			let assembly_name = match self.jsii_types.load_module(manifest_root.as_str()) {
-				Ok(name) => name,
-				Err(type_error) => {
-					self.type_error(TypeError {
-						message: format!(
-							"Cannot locate Wing standard library from \"{}\": {}",
-							manifest_root, type_error
-						),
-						span: stmt.map(|s| s.span.clone()).unwrap_or_default(),
-					});
-					return;
-				}
-			};
-
-			assembly_name
+		let jsii = if let Some(jsii) = self
+			.jsii_imports
+			.iter()
+			.find(|j| j.assembly_name == library_name && j.alias.name == alias.name)
+		{
+			// This spec has already been pre-supplied to the typechecker, so we'll still use this to populate the symbol environment
+			jsii
 		} else {
-			let source_dir = self.source_path.parent().unwrap().to_str().unwrap();
-			let assembly_name = match self.jsii_types.load_dep(library_name.as_str(), source_dir) {
-				Ok(name) => name,
-				Err(type_error) => {
-					self.type_error(TypeError {
-						message: format!(
-							"Cannot find module \"{}\" in source directory: {}",
-							library_name,
-							type_error.to_string()
-						),
-						span: stmt.map(|s| s.span.clone()).unwrap_or_default(),
-					});
-					// debug!("{:?}", type_error);
-					return;
-				}
+			// Loading the SDK is handled different from loading any other jsii modules because with the SDK we provide an exact
+			// location to locate the SDK, whereas for the other modules we need to search for them from the source directory.
+			let assembly_name = if library_name == WINGSDK_ASSEMBLY_NAME {
+				// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
+				let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
+				let assembly_name = match self.jsii_types.load_module(manifest_root.as_str()) {
+					Ok(name) => name,
+					Err(type_error) => {
+						self.type_error(TypeError {
+							message: format!(
+								"Cannot locate Wing standard library from \"{}\": {}",
+								manifest_root, type_error
+							),
+							span: stmt.map(|s| s.span.clone()).unwrap_or_default(),
+						});
+						return;
+					}
+				};
+
+				assembly_name
+			} else {
+				let source_dir = self.source_path.parent().unwrap().to_str().unwrap();
+				let assembly_name = match self.jsii_types.load_dep(library_name.as_str(), source_dir) {
+					Ok(name) => name,
+					Err(type_error) => {
+						self.type_error(TypeError {
+							message: format!(
+								"Cannot find module \"{}\" in source directory: {}",
+								library_name,
+								type_error.to_string()
+							),
+							span: stmt.map(|s| s.span.clone()).unwrap_or_default(),
+						});
+						// debug!("{:?}", type_error);
+						return;
+					}
+				};
+				assembly_name
 			};
-			assembly_name
-		};
 
-		debug!("Loaded JSII assembly {}", assembly_name);
+			debug!("Loaded JSII assembly {}", assembly_name);
 
-		let jsii = JsiiImportSpec {
-			assembly_name: assembly_name.to_string(),
-			namespace_filter,
-			alias: alias.clone(),
-			import_statement_idx: stmt.map(|s| s.idx).unwrap_or(0),
+			self.jsii_imports.push(JsiiImportSpec {
+				assembly_name: assembly_name.to_string(),
+				namespace_filter,
+				alias: alias.clone(),
+				import_statement_idx: stmt.map(|s| s.idx).unwrap_or(0),
+			});
+
+			self
+				.jsii_imports
+				.iter()
+				.find(|j| j.assembly_name == assembly_name && j.alias.name == alias.name)
+				.expect("Expected to find the just-added jsii import spec")
 		};
 
 		let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
 
 		// if we're importing the `std` module from the wing sdk, eagerly import all the types within it
 		// because they aren't typically resolved through the same process as other types
-		if assembly_name == WINGSDK_ASSEMBLY_NAME && alias.name == WINGSDK_STD_MODULE {
+		if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME && alias.name == WINGSDK_STD_MODULE {
 			importer.deep_import_submodule_to_env(WINGSDK_STD_MODULE);
 		}
 
 		importer.import_submodules_to_env(env);
-
-		// add to list of imports so we can look up types later
-		self.jsii_imports.push(jsii);
 	}
 
 	/// Add function arguments to the function's environment
