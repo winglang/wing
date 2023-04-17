@@ -71,7 +71,6 @@ export class Function extends cloud.Function {
     const functionNodeVersion = "16";
 
     // Create Bucket to store function code
-    // TODO: can we share a bucket for all functions?  https://github.com/winglang/wing/issues/178
     const functionCodeBucket = new Bucket(this, "FunctionBucket");
 
     const bundle = createBundle(this.entrypoint);
