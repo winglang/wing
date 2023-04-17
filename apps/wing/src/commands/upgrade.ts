@@ -24,8 +24,10 @@ export async function upgrade(options: IUpdateOptions) {
     pkg: PJSON,
   });
 
-  log("forcing update info...");
-  await notifier.fetchInfo();
+  if (force) {
+    log("forcing update info...");
+    await notifier.fetchInfo();
+  }
 
   const message = [
     "Update available for Wing {currentVersion} >> {latestVersion}",
@@ -42,7 +44,7 @@ export async function upgrade(options: IUpdateOptions) {
       ["install", ...[isInstalledGlobally ? "-g" : ""], PJSON.name],
       {
         stdio: "inherit",
-        timeout: 1000 * 60, // 1 minute execution timeout
+        timeout: 5000 * 60, // 5 minute execution timeout
       }
     );
     log("update result: %o", result);
