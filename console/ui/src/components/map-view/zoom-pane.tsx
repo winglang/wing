@@ -2,6 +2,7 @@ import classNames from "classnames";
 import * as d3Selection from "d3-selection";
 import * as d3Zoom from "d3-zoom";
 import throttle from "lodash.throttle";
+import { useEffect } from "react";
 import {
   DetailedHTMLProps,
   HTMLAttributes,
@@ -75,6 +76,7 @@ export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = (
     d3Zoom
       .zoom<HTMLDivElement, unknown>()
       .scaleExtent([Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY])
+      .clickDistance(30)
       .on("zoom", (event) => {
         const { transform } = event;
         if (targetRef.current) {
@@ -155,6 +157,7 @@ export const ZoomPane: FunctionComponent<
   DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 > = (props) => {
   const context = useContext(ZoomPanePrivateContext);
+
   if (!context) {
     return <>{props.children}</>;
   }
