@@ -108,7 +108,7 @@
         "publish": true,
         "role": "${aws_iam_role.root_testcall_IamRole_ACAC0DA1.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "${aws_s3_bucket.root_testcall_Code_A13B9FEB.bucket}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_testcall_S3Object_7FFD9CF8.key}",
         "timeout": 30,
         "vpc_config": {
@@ -133,7 +133,7 @@
         "publish": true,
         "role": "${aws_iam_role.root_testconsole_IamRole_73B3A70E.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "${aws_s3_bucket.root_testconsole_Code_68C2DD48.bucket}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_testconsole_S3Object_DC38E410.key}",
         "timeout": 30,
         "vpc_config": {
@@ -143,23 +143,14 @@
       },
     },
     "aws_s3_bucket": {
-      "root_testcall_Code_A13B9FEB": {
+      "root_Code_02F3C603": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:call/Code",
-            "uniqueId": "root_testcall_Code_A13B9FEB",
+            "path": "root/Default/Code",
+            "uniqueId": "root_Code_02F3C603",
           },
         },
-        "bucket_prefix": "code-c8f81179-",
-      },
-      "root_testconsole_Code_68C2DD48": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:console/Code",
-            "uniqueId": "root_testconsole_Code_68C2DD48",
-          },
-        },
-        "bucket_prefix": "code-c842d248-",
+        "bucket_prefix": "code-c84a50b1-",
       },
     },
     "aws_s3_object": {
@@ -170,7 +161,7 @@
             "uniqueId": "root_testcall_S3Object_7FFD9CF8",
           },
         },
-        "bucket": "${aws_s3_bucket.root_testcall_Code_A13B9FEB.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>",
       },
@@ -181,7 +172,7 @@
             "uniqueId": "root_testconsole_S3Object_DC38E410",
           },
         },
-        "bucket": "${aws_s3_bucket.root_testconsole_Code_68C2DD48.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>",
       },
