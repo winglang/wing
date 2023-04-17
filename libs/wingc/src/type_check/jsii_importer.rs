@@ -83,7 +83,7 @@ impl<'a> JsiiImporter<'a> {
 				PrimitiveType::Boolean => self.wing_types.bool(),
 				PrimitiveType::Any => self.wing_types.anything(),
 				PrimitiveType::Json => self.wing_types.json(),
-				PrimitiveType::Date => todo!(),
+				PrimitiveType::Date => todo!("see https://github.com/winglang/wing/issues/2102"),
 			},
 			TypeReference::NamedTypeReference(named_ref) => {
 				let type_fqn = &named_ref.fqn;
