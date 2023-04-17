@@ -84,7 +84,7 @@ test("topic with multiple subscribers", () => {
   );
   expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(2);
   expect(tfResourcesOfCount(output, "aws_lambda_permission")).toEqual(2);
-  expect(tfResourcesOfCount(output, "aws_s3_bucket")).toEqual(2);
+  expect(tfResourcesOfCount(output, "aws_s3_bucket")).toEqual(1);
   expect(tfResourcesOfCount(output, "aws_s3_object")).toEqual(2);
   expect(tfResourcesOfCount(output, "aws_sns_topic_subscription")).toEqual(2);
 });

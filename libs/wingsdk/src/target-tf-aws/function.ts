@@ -7,13 +7,13 @@ import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
 import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
+import { App } from "./app";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { PolicyStatement } from "../shared-aws";
 import { Duration } from "../std/duration";
 import { createBundle } from "../utils/bundling";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
-import { App } from "./app";
 
 /**
  * Function names are limited to 64 characters.

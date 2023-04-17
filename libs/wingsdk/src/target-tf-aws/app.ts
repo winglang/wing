@@ -6,6 +6,7 @@ import { NatGateway } from "@cdktf/provider-aws/lib/nat-gateway";
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { RouteTable } from "@cdktf/provider-aws/lib/route-table";
 import { RouteTableAssociation } from "@cdktf/provider-aws/lib/route-table-association";
+import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { Subnet } from "@cdktf/provider-aws/lib/subnet";
 import { Vpc } from "@cdktf/provider-aws/lib/vpc";
 import { Construct } from "constructs";
@@ -33,7 +34,6 @@ import {
 import { CdktfApp, AppProps } from "../core";
 import { REDIS_FQN } from "../redis";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
-import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 
 /**
  * An app that knows how to synthesize constructs into a Terraform configuration
@@ -126,7 +126,7 @@ export class App extends CdktfApp {
   }
 
   public get codeBucket(): S3Bucket {
-    if(this._codeBucket) {
+    if (this._codeBucket) {
       return this._codeBucket;
     }
     const bucket = new S3Bucket(this, "Code");
