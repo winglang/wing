@@ -27,13 +27,20 @@ export const createApiRouter = () => {
           headers: z
             .array(z.object({ key: z.string(), value: z.string() }))
             .optional(),
+          variables: z
+            .array(z.object({ key: z.string(), value: z.string() }))
+            .optional(),
           body: z.string().optional(),
         }),
       )
       .mutation(async ({ input, ctx }) => {
         const startTime = Date.now();
+        let route = input.route;
+        for (const { key, value } of input.variables ?? []) {
+          route = route.replace(`{${key}}`, value);
+        }
         try {
-          const url = new URL(`${input.url}${input.route}`);
+          const url = new URL(`${input.url}${route}`);
           const response = await fetch(url.toString(), {
             method: input.method,
             headers: input.headers?.reduce(

@@ -55,7 +55,7 @@ export const Tabs = (props: TabsProps) => {
           className={classNames(
             "flex gap-px",
             !props.transparent && [theme.bg1, theme.text2],
-            props.transparent && "gap-x-2",
+            props.transparent && "gap-x-3",
           )}
         >
           {props.tabs.map((tab) => {

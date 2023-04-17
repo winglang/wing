@@ -1,7 +1,7 @@
 import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "./Button.js";
 import { Combobox } from "./Combobox.js";
@@ -14,23 +14,31 @@ export interface KeyValueItem {
 export const useKeyValueList = () => {
   const [items, setItems] = useState<KeyValueItem[]>([]);
 
+  const addItem = useCallback((item: KeyValueItem) => {
+    setItems((items) => [...items, item]);
+  }, []);
+
+  const removeItem = useCallback((index: number) => {
+    setItems((items) => items.filter((_, index_) => index_ !== index));
+  }, []);
+
+  const editItem = useCallback((index: number, item: KeyValueItem) => {
+    setItems((items) =>
+      items.map((item_, index_) => (index_ === index ? item : item_)),
+    );
+  }, []);
+
+  const removeAll = useCallback(() => {
+    setItems([]);
+  }, []);
+
   return {
     items,
-    addItem: (item: KeyValueItem) => {
-      setItems([...items, item]);
-    },
-    removeItem: (index: number) => {
-      setItems(items.filter((_, index_) => index_ !== index));
-    },
-    onEditItem: (index: number, item: KeyValueItem) => {
-      setItems(items.map((item_, index_) => (index_ === index ? item : item_)));
-    },
-    removeAll: () => {
-      setItems([]);
-    },
-    setItems: (items: KeyValueItem[]) => {
-      setItems(items);
-    },
+    addItem,
+    removeItem,
+    editItem,
+    removeAll,
+    setItems,
   };
 };
 
@@ -45,8 +53,11 @@ export interface KeyValueListProps {
   valuePlaceholder?: string;
   valuesList?: string[];
   disabled?: boolean;
+  keyDisabled?: boolean;
+  valueDisabled?: boolean;
   readonly?: boolean;
   className?: string;
+  placeholder?: string;
 }
 export const KeyValueList = ({
   items,
@@ -60,14 +71,17 @@ export const KeyValueList = ({
   valuesList,
   className,
   disabled = false,
+  keyDisabled = false,
+  valueDisabled = false,
   readonly = false,
+  placeholder = "No items",
 }: KeyValueListProps) => {
   const theme = useTheme();
 
   const [editItems, setEditItems] = useState<KeyValueItem[]>([]);
 
   useEffect(() => {
-    if (readonly) {
+    if (readonly || !onAddItem) {
       setEditItems(items);
       return;
     }
@@ -109,7 +123,7 @@ export const KeyValueList = ({
               "transition ease-in-out",
             )}
             disabled={disabled}
-            readonly={readonly}
+            readonly={readonly || keyDisabled}
             filter={false}
             showSelected={false}
           />
@@ -137,7 +151,7 @@ export const KeyValueList = ({
               "transition ease-in-out",
             )}
             disabled={disabled}
-            readonly={readonly}
+            readonly={readonly || valueDisabled}
             filter={false}
             showSelected={false}
           />
@@ -145,16 +159,29 @@ export const KeyValueList = ({
           {!readonly && index === items.length && (
             <Button className="px-2 grow-0" icon={PlusIcon} disabled />
           )}
-          {!readonly && index !== items.length && (
+          {!readonly && index !== items.length && onRemoveItem && (
             <Button
               className="px-2"
-              onClick={() => onRemoveItem?.(index)}
+              onClick={() => onRemoveItem(index)}
               icon={TrashIcon}
               disabled={disabled}
             />
           )}
         </div>
       ))}
+      {editItems.length === 0 && (
+        <div
+          className={classNames(
+            theme.bgInput,
+            theme.text2,
+            theme.borderInput,
+            "flex-1 text-center text-xs",
+            "px-2.5 py-1.5 rounded border",
+          )}
+        >
+          {placeholder}
+        </div>
+      )}
     </div>
   );
 };

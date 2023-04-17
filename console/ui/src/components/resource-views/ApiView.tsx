@@ -126,15 +126,21 @@ export const ApiView = ({ resourcePath }: ApiViewProps) => {
     items: headers,
     addItem: addHeader,
     removeItem: removeHeader,
-    onEditItem: editHeader,
+    editItem: editHeader,
   } = useKeyValueList();
 
   const {
-    items: parameters,
-    addItem: addParameter,
-    removeItem: removeParameter,
-    onEditItem: editParameter,
-    setItems: setParameters,
+    items: queryParameters,
+    addItem: addQueryParameter,
+    removeItem: removeQueryParameter,
+    editItem: editQueryParameter,
+    setItems: setQueryParameters,
+  } = useKeyValueList();
+
+  const {
+    items: pathVariables,
+    editItem: editPathVariable,
+    setItems: setPathVariables,
   } = useKeyValueList();
 
   const apiFetch = trpc["api.fetch"].useMutation();
@@ -147,6 +153,7 @@ export const ApiView = ({ resourcePath }: ApiViewProps) => {
     await apiFetch.mutateAsync({
       url,
       route: currentRoute,
+      variables: pathVariables,
       method: currentMethod,
       headers,
       body,
@@ -171,57 +178,65 @@ export const ApiView = ({ resourcePath }: ApiViewProps) => {
   const handleRouteChange = (value: string) => {
     const newRoute = value && !value.startsWith("/") ? `/${value}` : value;
     setCurrentRoute(newRoute);
-    try {
-      const currentUrlObject = new URL(`${url}${newRoute}`);
-      const urlParameters = new URLSearchParams(currentUrlObject.search);
+    const search = newRoute.split(/\?(.*)/s)[1];
+    const urlParameters = new URLSearchParams(search || "");
 
+    setQueryParameters(() => {
       const newUrlParameters: {
         key: string;
         value: string;
       }[] = [];
       for (const [key, value] of urlParameters.entries()) {
         newUrlParameters.push({
-          key: decodeURIComponent(key),
-          value: decodeURIComponent(value),
+          key,
+          value,
         });
       }
+      return newUrlParameters;
+    });
 
-      setParameters(newUrlParameters);
-    } catch {}
+    setPathVariables(() => {
+      const newPathVariables: {
+        key: string;
+        value: string;
+      }[] = [];
+
+      const matches = newRoute.matchAll(/{(\w+)}/g) || [];
+      for (const match of matches) {
+        if (!match[1]) {
+          continue;
+        }
+        newPathVariables.push({
+          key: match[1],
+          value: "",
+        });
+      }
+      return newPathVariables;
+    });
   };
 
   useEffect(() => {
-    if (!url || !currentRoute) {
+    if (!currentRoute) {
       return;
     }
-    try {
-      const currentUrlObject = new URL(`${url}${currentRoute}`);
-      const newUrlObject = new URL(`${url}${currentUrlObject.pathname}`);
-      const urlParameters = new URLSearchParams();
-
-      for (const item of parameters) {
-        urlParameters.append(
-          encodeURIComponent(item.key),
-          encodeURIComponent(item.value),
-        );
-      }
-      newUrlObject.search = urlParameters.toString();
-      setCurrentRoute(newUrlObject.toString().replace(url, ""));
-    } catch {}
-  }, [parameters, url, currentRoute]);
-
-  useEffect(() => {
-    if (!schema.data) {
-      return;
+    const urlParameters = new URLSearchParams();
+    for (const item of queryParameters) {
+      urlParameters.append(item.key, item.value);
     }
-    setRoutes(schema.data.props.routes);
-  }, [schema.data]);
+    let newRoute = currentRoute.split("?")[0] || "";
+    if (urlParameters.toString()) {
+      newRoute = `${newRoute}?${urlParameters.toString()}`;
+    }
+    setCurrentRoute(newRoute);
+  }, [currentRoute, queryParameters]);
 
   useEffect(() => {
     if (!schema.data) {
       return;
     }
     setUrl(schema.data.attrs.url);
+    setRoutes(schema.data.props.routes);
+
     const methods = schema.data.props.routes
       .filter((item) => {
         return item.route === currentRoute;
@@ -347,19 +362,40 @@ export const ApiView = ({ resourcePath }: ApiViewProps) => {
                 {
                   id: "params",
                   name: "Params",
-                  count: parameters.length,
+                  count: queryParameters.length + pathVariables.length,
                   panel: (
-                    <div className="pt-2">
-                      <KeyValueList
-                        items={parameters}
-                        onAddItem={addParameter}
-                        onRemoveItem={removeParameter}
-                        onEditItem={editParameter}
-                        disabled={apiFetch.isLoading}
-                      />
+                    <div className="pt-2 space-y-2">
+                      <div className="space-y-1">
+                        {pathVariables.length > 0 && (
+                          <div className={classNames("text-sm", theme.text2)}>
+                            Query params
+                          </div>
+                        )}
+                        <KeyValueList
+                          items={queryParameters}
+                          onAddItem={addQueryParameter}
+                          onRemoveItem={removeQueryParameter}
+                          onEditItem={editQueryParameter}
+                          disabled={apiFetch.isLoading}
+                        />
+                      </div>
+                      {pathVariables.length > 0 && (
+                        <div className="space-y-1">
+                          <div className={classNames("text-sm", theme.text2)}>
+                            Path variables
+                          </div>
+                          <KeyValueList
+                            items={pathVariables}
+                            onEditItem={editPathVariable}
+                            disabled={apiFetch.isLoading}
+                            keyDisabled={true}
+                          />
+                        </div>
+                      )}
                     </div>
                   ),
                 },
+
                 {
                   id: "body",
                   name: `Body`,
