@@ -64,6 +64,9 @@ const selectionTransition = (selection: Selection, duration?: number) => {
   return newSelection as Selection;
 };
 
+const MIN_ZOOM_LEVEL = 0.5;
+const MAX_ZOOM_LEVEL = 4;
+
 export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = (
   props,
 ) => {
@@ -75,7 +78,7 @@ export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = (
   const [zoom] = useState(() =>
     d3Zoom
       .zoom<HTMLDivElement, unknown>()
-      .scaleExtent([Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY])
+      .scaleExtent([MIN_ZOOM_LEVEL, MAX_ZOOM_LEVEL])
       .clickDistance(30)
       .on("zoom", (event) => {
         const { transform } = event;
