@@ -233,7 +233,7 @@
         "publish": true,
         "role": "${aws_iam_role.root_BigPublisher_b2_b2oncreateOnMessagea754ef69_IamRole_3DE070D7.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "${aws_s3_bucket.root_BigPublisher_b2_b2oncreateOnMessagea754ef69_Code_88A95CA4.bucket}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_BigPublisher_b2_b2oncreateOnMessagea754ef69_S3Object_06566844.key}",
         "timeout": 30,
         "vpc_config": {
@@ -264,7 +264,7 @@
         "publish": true,
         "role": "${aws_iam_role.root_BigPublisher_cloudQueueAddConsumerc351460f_IamRole_74516E60.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "${aws_s3_bucket.root_BigPublisher_cloudQueueAddConsumerc351460f_Code_B27AA403.bucket}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_BigPublisher_cloudQueueAddConsumerc351460f_S3Object_626A0CF8.key}",
         "timeout": 30,
         "vpc_config": {
@@ -295,7 +295,7 @@
         "publish": true,
         "role": "${aws_iam_role.root_BigPublisher_cloudTopicOnMessagecb235724_IamRole_E95E92A5.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "${aws_s3_bucket.root_BigPublisher_cloudTopicOnMessagecb235724_Code_57E16B6D.bucket}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_BigPublisher_cloudTopicOnMessagecb235724_S3Object_100A1F10.key}",
         "timeout": 30,
         "vpc_config": {
@@ -354,7 +354,7 @@
         "publish": true,
         "role": "${aws_iam_role.root_testdependencycycles_IamRole_35624E89.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "${aws_s3_bucket.root_testdependencycycles_Code_F5F118E8.bucket}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_testdependencycycles_S3Object_8DA21812.key}",
         "timeout": 30,
         "vpc_config": {
@@ -390,6 +390,26 @@
       },
     },
     "aws_s3_bucket": {
+      "root_BigPublisher_b2_48CEFEE6": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BigPublisher/b2/Default",
+            "uniqueId": "root_BigPublisher_b2_48CEFEE6",
+          },
+        },
+        "bucket_prefix": "b2-c851683a-",
+        "force_destroy": false,
+      },
+      "root_BigPublisher_cloudBucket_7AC8CA7E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BigPublisher/cloud.Bucket/Default",
+            "uniqueId": "root_BigPublisher_cloudBucket_7AC8CA7E",
+          },
+        },
+        "bucket_prefix": "cloud-bucket-c82f13dc-",
+        "force_destroy": false,
+      },
       "root_Code_02F3C603": {
         "//": {
           "metadata": {
@@ -408,6 +428,28 @@
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false,
+      },
+    },
+    "aws_s3_bucket_notification": {
+      "root_BigPublisher_b2_S3Objectoncreatenotifier_C4BA755A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/BigPublisher/b2/S3Object_on_create_notifier",
+            "uniqueId": "root_BigPublisher_b2_S3Objectoncreatenotifier_C4BA755A",
+          },
+        },
+        "bucket": "${aws_s3_bucket.root_BigPublisher_b2_48CEFEE6.id}",
+        "depends_on": [
+          "aws_sns_topic_policy.root_BigPublisher_b2_b2oncreate_PublishPermissionc851683a81379a8ef8351c83fe31924055584271ad_88D6EEA4",
+        ],
+        "topic": [
+          {
+            "events": [
+              "s3:ObjectCreated:Post",
+            ],
+            "topic_arn": "${aws_sns_topic.root_BigPublisher_b2_b2oncreate_DFA80519.arn}",
+          },
+        ],
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -509,7 +551,7 @@
             "uniqueId": "root_BigPublisher_b2_b2oncreateOnMessagea754ef69_S3Object_06566844",
           },
         },
-        "bucket": "${aws_s3_bucket.root_BigPublisher_b2_b2oncreateOnMessagea754ef69_Code_88A95CA4.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>",
       },
@@ -520,7 +562,7 @@
             "uniqueId": "root_BigPublisher_cloudQueueAddConsumerc351460f_S3Object_626A0CF8",
           },
         },
-        "bucket": "${aws_s3_bucket.root_BigPublisher_cloudQueueAddConsumerc351460f_Code_B27AA403.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>",
       },
@@ -531,7 +573,7 @@
             "uniqueId": "root_BigPublisher_cloudTopicOnMessagecb235724_S3Object_100A1F10",
           },
         },
-        "bucket": "${aws_s3_bucket.root_BigPublisher_cloudTopicOnMessagecb235724_Code_57E16B6D.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>",
       },
@@ -553,7 +595,7 @@
             "uniqueId": "root_testdependencycycles_S3Object_8DA21812",
           },
         },
-        "bucket": "${aws_s3_bucket.root_testdependencycycles_Code_F5F118E8.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>",
       },
