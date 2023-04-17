@@ -19,6 +19,7 @@ import { Schedule } from "./schedule";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
 import { Topic } from "./topic";
+import { Website } from "./website";
 import {
   API_FQN,
   BUCKET_FQN,
@@ -29,6 +30,7 @@ import {
   TABLE_FQN,
   TEST_RUNNER_FQN,
   TOPIC_FQN,
+  WEBSITE_FQN,
 } from "../cloud";
 import { CdktfApp, AppProps } from "../core";
 import { REDIS_FQN } from "../redis";
@@ -97,6 +99,9 @@ export class App extends CdktfApp {
 
       case REDIS_FQN:
         return new Redis(scope, id);
+
+      case WEBSITE_FQN:
+        return new Website(scope, id, args[0]);
     }
 
     return undefined;

@@ -1,3 +1,4 @@
+import { cloud } from "..";
 import { ColumnType, HttpMethod } from "../cloud";
 import {
   BaseResourceAttributes,
@@ -15,6 +16,7 @@ export const TABLE_TYPE = "wingsdk.cloud.Table";
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 export const TEST_RUNNER_TYPE = "wingsdk.cloud.TestRunner";
 export const REDIS_TYPE = "wingsdk.redis.Redis";
+export const WEBSITE_TYPE = "wingsdk.cloud.Website";
 
 export type FunctionHandle = string;
 
@@ -168,6 +170,12 @@ export interface TestRunnerAttributes {}
 export interface RedisSchema extends BaseResourceSchema {
   readonly type: typeof REDIS_TYPE;
   readonly props: {};
+}
+
+/** Schema for cloud.Website */
+export interface WebsiteSchema extends BaseResourceSchema {
+  readonly type: typeof WEBSITE_TYPE;
+  readonly props: cloud.WebsiteProps;
 }
 
 export interface RedisAttributes {}

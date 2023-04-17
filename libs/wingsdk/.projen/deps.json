@@ -17,6 +17,10 @@
       "type": "build"
     },
     {
+      "name": "@types/mime-types",
+      "type": "build"
+    },
+    {
       "name": "@types/node",
       "version": "^16",
       "type": "build"
@@ -220,6 +224,10 @@
     },
     {
       "name": "ioredis",
+      "type": "bundled"
+    },
+    {
+      "name": "mime-types",
       "type": "bundled"
     },
     {

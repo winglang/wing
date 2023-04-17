@@ -14,6 +14,7 @@ import {
   TEST_RUNNER_TYPE,
   TOPIC_TYPE,
   REDIS_TYPE,
+  WEBSITE_TYPE,
 } from "./schema-resources";
 import { Table } from "./table.inflight";
 import { TestRunnerClient } from "./test-runner.inflight";
@@ -23,6 +24,7 @@ import {
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../testing/simulator";
+import { Website } from "./website.inflight";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
   /**
@@ -56,6 +58,9 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return new TestRunnerClient(props, context);
       case REDIS_TYPE:
         return new Redis(props, context);
+      case WEBSITE_TYPE:
+        return new Website(props, context);
+
       default:
         throw new Error(`Type ${type} not implemented by the simulator.`);
     }
