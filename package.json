@@ -13,7 +13,7 @@
   "devDependencies": {
     "@wingconsole/conventional-release": "workspace:^",
     "eslint": "^8.38.0",
-    "turbo": "^1.8.8",
+    "turbo": "^1.9.1",
     "typescript": "^5.0.4"
   }
 }
