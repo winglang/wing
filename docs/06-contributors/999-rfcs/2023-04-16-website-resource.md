@@ -22,7 +22,7 @@ Stage Date: Fill in with date of last stage change
 > Implementing the website resource following the [SDK spec](../../04-reference/wingsdk-spec.md#website).
 
 <!--
-This RFCs have 3 sections: Requirements -> Design -> Implementation. We intentionally start with *Design* since it
+This RFC has 3 sections: Requirements -> Design -> Implementation. We intentionally start with *Design* since it
 is a great way to introduice the feature to readers.
 -->
 
