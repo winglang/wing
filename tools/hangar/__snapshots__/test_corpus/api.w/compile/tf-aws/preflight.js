@@ -26,7 +26,7 @@ class $Root extends $stdlib.core.Resource {
       }
     }
     Foo._annotateInflight("$inflight_init", {"this.api": { ops: [] }});
-    Foo._annotateInflight("foo", {"this.api.url": { ops: [] }});
+    Foo._annotateInflight("handle", {"this.api.url": { ops: [] }});
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
     const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
@@ -40,6 +40,7 @@ class $Root extends $stdlib.core.Resource {
     })
     ;
     (api.get("/hello/world",handler));
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new Foo(this,"Foo",api));
   }
 }
 class $App extends $AppBase {

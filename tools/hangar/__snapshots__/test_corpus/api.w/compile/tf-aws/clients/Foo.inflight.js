@@ -2,9 +2,10 @@ class  Foo {
   constructor({ api }) {
     this.api = api;
   }
-  async foo()  {
+  async handle(message)  {
     {
-      {console.log(this.api.url)};
+      const url = this.api.url;
+      {((cond) => {if (!cond) throw new Error(`assertion failed: 'url.startsWith("http://")'`)})(url.startsWith("http://"))};
     }
   }
 }
