@@ -43,7 +43,7 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/util-stream-node@3.254.0",
     "@aws-sdk/util-utf8-node@3.208.0",
     // azure client dependencies
-    "@azure/storage-blob@12.12.0",
+    "@azure/storage-blob@12.14.0",
     "@azure/identity@3.1.3",
     "@azure/core-paging",
     // simulator dependencies
