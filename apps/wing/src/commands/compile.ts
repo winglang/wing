@@ -4,7 +4,7 @@ import { readFile, rmSync, mkdirp, move, mkdirpSync, copySync } from "fs-extra";
 import { basename, dirname, join, resolve } from "path";
 import * as os from "os";
 
-import * as chalk from "chalk";
+import chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
 import { normalPath } from "../util";
@@ -112,7 +112,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       CLICOLOR_FORCE: chalk.supportsColor ? "1" : "0",
     },
     preopens: {
-      [wingDir]: wingDir, // for Rust's access to the source file
+      [wingDir]: wingDir, // for Rust's access to the source dir
       [workDir]: workDir, // for Rust's access to the work directory
       [tmpSynthDir]: tmpSynthDir, // for Rust's access to the synth directory
     },
