@@ -206,6 +206,7 @@ impl Interface {
 	fn is_resource(&self) -> bool {
 		// TODO: This should check that the interface extends `IResource` from
 		// the SDK, not just any interface with the name `IResource`
+		// https://github.com/winglang/wing/issues/2098
 		self.name.name == "IResource"
 			|| self.extends.iter().any(|i| {
 				i.as_interface()
