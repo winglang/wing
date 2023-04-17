@@ -86,6 +86,37 @@ export const createConsoleServer = async ({
     invalidateQuery("app.state");
     invalidateQuery("app.error");
   });
+  simulator.on("trace", (trace) => {
+    // TODO: Refactor the whole logs and events so we support all of the fields that the simulator uses.
+    const message = `${
+      trace.data.message ?? JSON.stringify(trace.data, undefined, 2)
+    }`;
+    if (trace.type === "log") {
+      consoleLogger.log(message, "simulator", {
+        sourceType: trace.sourceType,
+        sourcePath: trace.sourcePath,
+      });
+    } else {
+      consoleLogger.verbose(message, "simulator", {
+        sourceType: trace.sourceType,
+        sourcePath: trace.sourcePath,
+      });
+    }
+    if (trace.data.status === "failure") {
+      consoleLogger.error(trace.data.error.message, "user", {
+        sourceType: trace.sourceType,
+        sourcePath: trace.sourcePath,
+      });
+    }
+
+    if (
+      trace.sourceType === "wingsdk.cloud.Queue" &&
+      // TODO: Change implementation after https://github.com/winglang/wing/issues/1713 is done
+      trace.data.message?.includes("Sending messages")
+    ) {
+      invalidateQuery("queue.approxSize");
+    }
+  });
 
   // Create the express server and router for the simulator. Start
   // listening but don't wait for it, yet.
@@ -106,42 +137,6 @@ export const createConsoleServer = async ({
     appState() {
       return appState;
     },
-  });
-
-  simulator.instance().then(async (simulatorInstance) => {
-    simulatorInstance.onTrace({
-      callback(event) {
-        // TODO: Refactor the whole logs and events so we support all of the fields that the simulator uses.
-        const message = `${
-          event.data.message ?? JSON.stringify(event.data, undefined, 2)
-        }`;
-        if (event.type === "log") {
-          consoleLogger.log(message, "simulator", {
-            sourceType: event.sourceType,
-            sourcePath: event.sourcePath,
-          });
-        } else {
-          consoleLogger.verbose(message, "simulator", {
-            sourceType: event.sourceType,
-            sourcePath: event.sourcePath,
-          });
-        }
-        if (event.data.status === "failure") {
-          consoleLogger.error(event.data.error.message, "user", {
-            sourceType: event.sourceType,
-            sourcePath: event.sourcePath,
-          });
-        }
-
-        if (
-          event.sourceType === "wingsdk.cloud.Queue" &&
-          // TODO: Change implementation after https://github.com/winglang/wing/issues/1713 is done
-          event.data.message?.includes("Sending messages")
-        ) {
-          invalidateQuery("queue.approxSize");
-        }
-      },
-    });
   });
 
   const close = async () => {

@@ -38,6 +38,12 @@ export const createSimulator = (): Simulator => {
       }
 
       instance = new testing.Simulator({ simfile });
+      instance.onTrace({
+        callback(trace) {
+          events.emit("trace", trace);
+        },
+      });
+
       await events.emit("starting", { instance });
 
       await instance.start();
