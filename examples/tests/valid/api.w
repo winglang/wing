@@ -20,3 +20,15 @@ let handler = inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
 };
 
 api.get("/hello/world", handler);
+
+resource Foo {
+
+  api: cloud.Api;
+  init(api: cloud.Api) {
+    this.api = api;
+  }
+
+  inflight foo() {
+    log(this.api.url);
+  }
+}
