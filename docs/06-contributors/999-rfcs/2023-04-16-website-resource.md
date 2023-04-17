@@ -33,7 +33,7 @@ is a great way to introduice the feature to readers.
 Following a few AWS guides on the internet (brought in the end of the section), it seems that the common way to serve a static website is by using a bucket.
 
 After creating a public bucket, we'll upload the folder from the relative path.
-AWS requires a index document name (to serve on the "/" path).
+AWS requires an index document name (to serve on the "/" path).
 We'll start by hardcoding it to be "index.html", and can add it later to the website props upon request.
 
 The last thing will be a registration to the chosen domain (if exists).
