@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import * as d3Selection from "d3-selection";
 import * as d3Zoom from "d3-zoom";
+import throttle from "lodash.throttle";
 import {
   DetailedHTMLProps,
   HTMLAttributes,
@@ -26,33 +27,60 @@ export type Selection = d3Selection.Selection<
 export type ZoomBehavior = d3Zoom.ZoomBehavior<HTMLDivElement, unknown>;
 
 export interface ZoomPaneContextValue {
+  transform: d3Zoom.ZoomTransform;
+  zoomToFit(): void;
+  zoomOut(): void;
+  zoomIn(): void;
+}
+
+const ZoomPaneContext = createContext<ZoomPaneContextValue>({
+  transform: d3Zoom.zoomIdentity,
+  zoomIn() {},
+  zoomOut() {},
+  zoomToFit() {},
+});
+
+interface ZoomPanePrivateContextValue {
   zoom: ZoomBehavior;
   selection: Selection | undefined;
   select(node: HTMLDivElement): void;
-  transform: d3Zoom.ZoomTransform;
   targetRef: RefObject<HTMLDivElement>;
 }
 
-const ZoomPaneContext = createContext<ZoomPaneContextValue | undefined>(
-  undefined,
-);
+const ZoomPanePrivateContext = createContext<
+  ZoomPanePrivateContextValue | undefined
+>(undefined);
 
 export interface ZoomPaneProviderProps {
   children: ReactNode;
 }
 
+const selectionTransition = (selection: Selection, duration?: number) => {
+  const newSelection = (selection as any).transition();
+  if (duration) {
+    return newSelection.duration(duration) as Selection;
+  }
+  return newSelection as Selection;
+};
+
 export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = (
   props,
 ) => {
-  const [transform, setTransform] = useState<d3Zoom.ZoomTransform>(
-    () => d3Zoom.zoomIdentity,
-  );
+  const [transform, setTransform] = useState(() => d3Zoom.zoomIdentity);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const setTransformThrottled = useCallback(throttle(setTransform, 200), []);
+
+  const targetRef = useRef<HTMLDivElement>(null);
   const [zoom] = useState(() =>
     d3Zoom
       .zoom<HTMLDivElement, unknown>()
       .scaleExtent([Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY])
       .on("zoom", (event) => {
-        setTransform(event.transform);
+        const { transform } = event;
+        if (targetRef.current) {
+          targetRef.current.style.transform = `translate(${transform.x}px, ${transform.y}px) scale(${transform.k})`;
+        }
+        setTransformThrottled(transform);
       }),
   );
   const [selection, setSelection] = useState<Selection | undefined>();
@@ -64,33 +92,74 @@ export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = (
     },
     [zoom],
   );
-  const targetRef = useRef<HTMLDivElement>(null);
+
+  const zoomToFit = useCallback(() => {
+    const node = selection?.node();
+    if (!selection || !node) {
+      return;
+    }
+
+    if (!targetRef.current) {
+      return;
+    }
+
+    const width = node.clientWidth;
+    const height = node.clientHeight;
+    const x0 = 0;
+    const y0 = 0;
+    const x1 = targetRef.current.clientWidth;
+    const y1 = targetRef.current.clientHeight;
+    selectionTransition(selection, 800).call(
+      zoom.transform,
+      d3Zoom.zoomIdentity
+        .translate(width / 2, height / 2)
+        .scale(
+          Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)),
+        )
+        .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
+    );
+  }, [selection, zoom, targetRef]);
+
+  const zoomOut = useCallback(() => {
+    if (!selection) {
+      return;
+    }
+    selectionTransition(selection).call(zoom.scaleBy, 0.9);
+  }, [selection, zoom]);
+
+  const zoomIn = useCallback(() => {
+    if (!selection) {
+      return;
+    }
+    selectionTransition(selection).call(zoom.scaleBy, 1.1);
+  }, [selection, zoom]);
+
   return (
-    <ZoomPaneContext.Provider
-      value={{ zoom, selection, select, transform, targetRef }}
+    <ZoomPanePrivateContext.Provider
+      value={{ zoom, selection, select, targetRef }}
     >
-      {props.children}
-    </ZoomPaneContext.Provider>
+      <ZoomPaneContext.Provider
+        value={{ transform, zoomIn, zoomOut, zoomToFit }}
+      >
+        {props.children}
+      </ZoomPaneContext.Provider>
+    </ZoomPanePrivateContext.Provider>
   );
 };
 
 export const useZoomPaneContext = () => {
-  const context = useContext(ZoomPaneContext);
-  if (!context) {
-    throw new Error("useZoomPaneContext must be used within ZoomPaneProvider");
-  }
-  return context;
+  return useContext(ZoomPaneContext);
 };
 
 export const ZoomPane: FunctionComponent<
   DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 > = (props) => {
-  const context = useContext(ZoomPaneContext);
+  const context = useContext(ZoomPanePrivateContext);
   if (!context) {
     return <>{props.children}</>;
   }
 
-  const { select, transform, targetRef } = context;
+  const { select, targetRef } = context;
 
   return (
     <div
@@ -98,13 +167,7 @@ export const ZoomPane: FunctionComponent<
       {...props}
       className={classNames(props.className, "overflow-hidden")}
     >
-      <div
-        ref={targetRef}
-        className="inline-block origin-top-left"
-        style={{
-          transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.k})`,
-        }}
-      >
+      <div ref={targetRef} className="inline-block origin-top-left">
         {props.children}
       </div>
     </div>
