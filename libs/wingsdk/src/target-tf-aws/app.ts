@@ -10,7 +10,7 @@ import { Subnet } from "@cdktf/provider-aws/lib/subnet";
 import { Vpc } from "@cdktf/provider-aws/lib/vpc";
 import { Construct } from "constructs";
 import { Api } from "./api";
-import { Bucket } from "./bucket";
+import { BUCKET_PREFIX_OPTS, Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Function } from "./function";
 import { Queue } from "./queue";
@@ -33,6 +33,7 @@ import {
 import { CdktfApp, AppProps } from "../core";
 import { REDIS_FQN } from "../redis";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
+import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 
 /**
  * An app that knows how to synthesize constructs into a Terraform configuration
@@ -47,6 +48,8 @@ export class App extends CdktfApp {
   private awsRegionProvider?: DataAwsRegion;
   private awsAccountIdProvider?: DataAwsCallerIdentity;
   private _vpc?: Vpc;
+  private _codeBucket?: S3Bucket;
+
   /** Subnets shared across app */
   public subnets: { [key: string]: Subnet };
 
@@ -120,6 +123,17 @@ export class App extends CdktfApp {
       this.awsRegionProvider = new DataAwsRegion(this, "Region");
     }
     return this.awsRegionProvider.name;
+  }
+
+  public get codeBucket(): S3Bucket {
+    if(this._codeBucket) {
+      return this._codeBucket;
+    }
+    const bucket = new S3Bucket(this, "Code");
+    const bucketPrefix = ResourceNames.generateName(bucket, BUCKET_PREFIX_OPTS);
+    bucket.bucketPrefix = bucketPrefix;
+    this._codeBucket = bucket;
+    return this._codeBucket;
   }
 
   /**
