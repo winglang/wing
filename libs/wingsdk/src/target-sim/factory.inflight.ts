@@ -19,12 +19,12 @@ import {
 import { Table } from "./table.inflight";
 import { TestRunnerClient } from "./test-runner.inflight";
 import { Topic } from "./topic.inflight";
+import { Website } from "./website.inflight";
 import {
   ISimulatorFactory,
   ISimulatorContext,
   ISimulatorResourceInstance,
 } from "../testing/simulator";
-import { Website } from "./website.inflight";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
   /**

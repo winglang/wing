@@ -25,13 +25,12 @@ export abstract class Website extends Resource {
     return App.of(scope).newAbstract(WEBSITE_FQN, scope, id, props);
   }
 
-  //   private url?: string;
   public readonly stateful = false;
   private readonly _path: string;
   /**@internal */
   protected _url!: string;
-  protected domain?: string;
   /** @internal */
+  protected _domain?: string;
 
   constructor(scope: Construct, id: string, props: WebsiteProps) {
     super(scope, id);
@@ -40,7 +39,7 @@ export abstract class Website extends Resource {
     this.display.description = "A static website";
 
     this._path = props.path;
-    this.domain = props.domain;
+    this._domain = props.domain;
   }
 
   /**

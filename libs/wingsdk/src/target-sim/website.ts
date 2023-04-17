@@ -1,11 +1,11 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { WebsiteSchema, WEBSITE_TYPE } from "./schema-resources";
+import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { BaseResourceSchema } from "../testing/simulator";
-import { simulatorAttrToken } from "./tokens";
 
 export class Website extends cloud.Website implements ISimulatorResource {
   constructor(scope: Construct, id: string, props: cloud.WebsiteProps) {

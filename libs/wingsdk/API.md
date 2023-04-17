@@ -1336,7 +1336,7 @@ with a fresh copy without any consequences.
 
 ### Website <a name="Website" id="@winglang/sdk.cloud.Website"></a>
 
-**Inflight client:** [@winglang/sdk.cloud.IBucketClient](#@winglang/sdk.cloud.IBucketClient)
+**Inflight client:** [@winglang/sdk.cloud.IWebsiteClient](#@winglang/sdk.cloud.IWebsiteClient)
 
 Represents a cloud object store.
 
@@ -1370,6 +1370,7 @@ new cloud.Website(props: WebsiteProps)
 | <code><a href="#@winglang/sdk.cloud.Website.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Website.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 | <code><a href="#@winglang/sdk.cloud.Website.property.path">path</a></code> | <code>str</code> | Local path to the website's static files, relative to the Wing source file. |
+| <code><a href="#@winglang/sdk.cloud.Website.property.url">url</a></code> | <code>str</code> | The website's url. |
 
 ---
 
@@ -1431,6 +1432,18 @@ Local path to the website's static files, relative to the Wing source file.
 "./dist"
 ```
 
+
+##### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.cloud.Website.property.url"></a>
+
+```wing
+url: str;
+```
+
+- *Type:* str
+
+The website's url.
+
+---
 
 
 ## Structs <a name="Structs" id="Structs"></a>

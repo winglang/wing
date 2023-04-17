@@ -1,8 +1,15 @@
+import { readdirSync } from "fs";
+import path from "path";
+import { CloudfrontDistribution } from "@cdktf/provider-aws/lib/cloudfront-distribution";
 import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 // import { S3BucketPolicy } from "@cdktf/provider-aws/lib/s3-bucket-policy";
 // import { S3BucketPublicAccessBlock } from "@cdktf/provider-aws/lib/s3-bucket-public-access-block";
+import { S3BucketPolicy } from "@cdktf/provider-aws/lib/s3-bucket-policy";
 import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/lib/s3-bucket-server-side-encryption-configuration";
+import { S3BucketWebsiteConfiguration } from "@cdktf/provider-aws/lib/s3-bucket-website-configuration";
+import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { Construct } from "constructs";
+import mime from "mime-types";
 import { App } from "./app";
 import { core } from "..";
 import * as cloud from "../cloud";
@@ -11,13 +18,6 @@ import {
   NameOptions,
   ResourceNames,
 } from "../utils/resource-names";
-import { S3BucketPolicy } from "@cdktf/provider-aws/lib/s3-bucket-policy";
-import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
-import path from "path";
-import { readdirSync } from "fs";
-import mime from "mime-types";
-import { S3BucketWebsiteConfiguration } from "@cdktf/provider-aws/lib/s3-bucket-website-configuration";
-import { CloudfrontDistribution } from "@cdktf/provider-aws/lib/cloudfront-distribution";
 
 /**
  * Bucket prefix provided to Terraform must be between 3 and 37 characters.
@@ -111,7 +111,7 @@ export class Website extends cloud.Website {
     // create a cloudFront distribution
     const distribution = new CloudfrontDistribution(this, "distribution", {
       enabled: true,
-      ...(this.domain && { aliases: [this.domain] }),
+      ...(this._domain && { aliases: [this._domain] }),
       origin: [
         {
           domainName: this.bucket.bucketRegionalDomainName,
