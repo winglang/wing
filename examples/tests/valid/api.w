@@ -21,14 +21,15 @@ let handler = inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
 
 api.get("/hello/world", handler);
 
-resource Foo {
-
+resource Foo impl cloud.IFunctionHandler {
   api: cloud.Api;
   init(api: cloud.Api) {
     this.api = api;
   }
-
-  inflight foo() {
-    log(this.api.url);
+  inflight handle(message: str) {
+    let url = this.api.url;
+    assert(url.starts_with("http://"));
   }
 }
+
+new cloud.Function(new Foo(api)) as "test";
