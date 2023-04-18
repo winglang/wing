@@ -3,10 +3,10 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
-class $Root extends $stdlib.core.Resource {
+class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class First extends $stdlib.core.Resource {
+    class First extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.my_resource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
@@ -26,7 +26,7 @@ class $Root extends $stdlib.core.Resource {
       }
     }
     First._annotateInflight("$inflight_init", {"this.my_resource": { ops: [] }});
-    class Another extends $stdlib.core.Resource {
+    class Another extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.my_field = "hello!";
@@ -51,7 +51,7 @@ class $Root extends $stdlib.core.Resource {
     Another._annotateInflight("$inflight_init", {"this.first": { ops: [] },"this.my_field": { ops: [] }});
     Another._annotateInflight("another_func", {});
     Another._annotateInflight("meaning_of_life", {});
-    class MyResource extends $stdlib.core.Resource {
+    class MyResource extends $stdlib.std.Resource {
       constructor(scope, id, external_bucket, external_num) {
         super(scope, id);
         this.my_resource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
@@ -122,7 +122,7 @@ class $Root extends $stdlib.core.Resource {
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const r = new MyResource(this,"MyResource",b,12);
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.ec2c78b051aaf1991ae27a24d33eb54a2c0485ae738faa96c461adbe5b703e28/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
         r: {
           obj: r,

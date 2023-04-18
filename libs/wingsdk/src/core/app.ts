@@ -4,8 +4,8 @@ import * as cdktf from "cdktf";
 import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
 import { PluginManager } from "./plugin-manager";
-import { IResource } from "./resource";
 import { synthesizeTree } from "./tree";
+import { IResource } from "../std/resource";
 
 const TERRAFORM_STACK_NAME = "root";
 

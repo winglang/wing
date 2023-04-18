@@ -6,7 +6,6 @@ edition = "2021"
 [dependencies]
 tree-sitter = "0.20.9"
 tree-sitter-traversal = "0.1.2"
-sha2 = "0.10.6"
 base16ct = { version = "0.2.0", features = ["alloc"] }
 derivative = "2.2.0"
 tree-sitter-wing = { path = "../tree-sitter-wing" }
