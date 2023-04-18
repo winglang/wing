@@ -1,6 +1,7 @@
 class  Doubler {
-  constructor({ func }) {
+  constructor({ func, stateful }) {
     this.func = func;
+    this.stateful = stateful;
   }
   async invoke(message)  {
     {

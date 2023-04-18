@@ -3,10 +3,10 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
-class $Root extends $stdlib.core.Resource {
+class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class Foo extends $stdlib.core.Resource {
+    class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
@@ -28,7 +28,7 @@ class $Root extends $stdlib.core.Resource {
     Foo._annotateInflight("$inflight_init", {"this.c": { ops: [] }});
     Foo._annotateInflight("foo_get", {"this.c": { ops: ["peek"] }});
     Foo._annotateInflight("foo_inc", {"this.c": { ops: ["inc"] }});
-    class Bar extends $stdlib.core.Resource {
+    class Bar extends $stdlib.std.Resource {
       constructor(scope, id, name, b) {
         super(scope, id);
         this.name = name;
