@@ -1,16 +1,15 @@
 import { defineConfig } from "vitest/config";
 import { join, relative } from "path";
-import { VitestMarkdownReporter } from "vitest-markdown-reporter";
 
 export default defineConfig({
   test: {
-    reporters: ["default", "json", new VitestMarkdownReporter()],
+    reporters: ["default", "json"],
     outputFile: {
       json: join(__dirname, "results", "report.json"),
       markdown: join(__dirname, "results", "report.md"),
     },
     benchmark: {
-      reporters: ["default", "json", new VitestMarkdownReporter()],
+      reporters: ["default", "json"],
       outputFile: {
         json: join(__dirname, "results", "benchmark.json"),
         markdown: join(__dirname, "results", "benchmark.md"),
