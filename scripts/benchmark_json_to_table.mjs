@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // This file takes the benchmark results from hangar and converts 
 // them to a markdown table
 
