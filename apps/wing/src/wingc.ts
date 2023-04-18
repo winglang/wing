@@ -1,5 +1,5 @@
 import debug from "debug";
-import { readFileSync } from "fs";
+import { access, constants, readFile } from "fs/promises";
 import { normalPath } from "./util";
 import WASI from "wasi-js";
 import { resolve } from "path";
@@ -31,8 +31,8 @@ export interface WingCompilerLoadOptions {
    * The also represent mappings from the WASI instance's filesystem to the host filesystem. (map key -> value)
    *
    * The following directories are always preopened:
-   * - `/`
-   * - `@winglang/sdk` module directory
+   * - The `@winglang/sdk` module directory
+   * - All local and global node_modules directories (module.paths)
    *
    * @default - No additional preopens are added other than the above
    */
@@ -81,11 +81,18 @@ export async function load(options: WingCompilerLoadOptions) {
     resolve(require.resolve.call(null, "@winglang/sdk"), "../..");
 
   const preopens = {
-    "/": "/",
     // .jsii access
     [WINGSDK_MANIFEST_ROOT]: WINGSDK_MANIFEST_ROOT,
     ...(options.preopens ?? {}),
   } as Record<string, string>;
+
+  // preopen all existing global node_modules
+  for (const m of module.paths) {
+    try {
+      await access(m, constants.R_OK);
+      preopens[m] = m;
+    } catch { }
+  }
 
   if (process.platform === "win32") {
     preopens["C:\\"] = "C:\\";
@@ -121,7 +128,7 @@ export async function load(options: WingCompilerLoadOptions) {
     wasi_snapshot_preview1: wasi.wasiImport,
     env: {
       // This function is used only by the lsp
-      send_notification: () => {},
+      send_notification: () => { },
     },
     ...(options.imports ?? {}),
   } as any;
@@ -129,7 +136,7 @@ export async function load(options: WingCompilerLoadOptions) {
   log("compiling wingc WASM module");
   const binary =
     options.wingcWASMData ??
-    new Uint8Array(readFileSync(resolve(__dirname, "../wingc.wasm")));
+    new Uint8Array(await readFile(resolve(__dirname, "../wingc.wasm")));
   const mod = new WebAssembly.Module(binary);
 
   log("instantiating wingc WASM module with importObject: %o", importObject);
