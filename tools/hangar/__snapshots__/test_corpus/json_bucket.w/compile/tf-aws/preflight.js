@@ -10,7 +10,7 @@ class $Root extends $stdlib.std.Resource {
     const file_name = "file.json";
     const j = Object.freeze({"persons":[{"age":30,"name":"hasan","fears":["heights", "failure"]}]});
     const get_json = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.65da1a50b3f7d2621c34d29e0b410f0e504124beed71b58374c3bf728c7b80d9/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
         b: {
           obj: b,
@@ -24,7 +24,7 @@ class $Root extends $stdlib.std.Resource {
     })
     );
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:put",new $stdlib.core.Inflight(this, "$Inflight2", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.f9f9b40f387b4eb240575908f7968d76a559c71637db94a1aaf8124ca452f582/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc2/index.js".replace(/\\/g, "/"))),
       bindings: {
         b: {
           obj: b,

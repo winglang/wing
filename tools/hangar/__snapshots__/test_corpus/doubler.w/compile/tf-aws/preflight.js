@@ -30,7 +30,7 @@ class $Root extends $stdlib.std.Resource {
     Doubler._annotateInflight("$inflight_init", {"this.func": { ops: [] },"this.stateful": { ops: [] }});
     Doubler._annotateInflight("invoke", {"this.func": { ops: ["handle"] }});
     const fn = new Doubler(this,"Doubler",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.1eb4781e85032ffc58e74255182bc1fdee5701b5098072dd29f4faf4f591d6aa/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
       }
     })

@@ -8,7 +8,7 @@ class $Root extends $stdlib.std.Resource {
     super(scope, id);
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.85cd22e95db4b8ae13939c7cb02f67a11a2af3c66bd3ccb217b2336de0f22399/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
       }
     })
