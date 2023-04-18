@@ -3,12 +3,20 @@ import { bench, describe } from "vitest";
 import { runWingCommand } from "./utils";
 import { benchmarksTestDir, walkdir } from "./paths";
 
-describe("compile benchmarks", async () => {
-  const targets = ["sim", "tf-aws"];
-  for await (const wingFile of walkdir(benchmarksTestDir)) {
-    if (wingFile.endsWith(".w")) {
-      for (const target of targets) {
-        bench(`${basename(wingFile)} - ${target}`, async () => {
+const targets = ["sim", "tf-aws"];
+const files: string[] = [];
+for await (const wingFile of walkdir(benchmarksTestDir)) {
+  if (wingFile.endsWith(".w")) {
+    files.push(wingFile);
+  }
+}
+
+describe("compile", async () => {
+  for (const wingFile of files) {
+    for (const target of targets) {
+      bench(
+        `${basename(wingFile)} - ${target}`,
+        async () => {
           await runWingCommand({
             cwd: benchmarksTestDir,
             wingFile: wingFile,
@@ -18,9 +26,9 @@ describe("compile benchmarks", async () => {
         },
         {
           warmupIterations: 1,
-          iterations: 5,
-        });
-      }
+          iterations: 3,
+        }
+      );
     }
   }
 });
