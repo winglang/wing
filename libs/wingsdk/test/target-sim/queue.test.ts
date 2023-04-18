@@ -3,7 +3,8 @@ import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { Duration } from "../../src/std";
 import { QUEUE_TYPE } from "../../src/target-sim/schema-resources";
-import { SimApp, Testing } from "../../src/testing";
+import { Testing } from "../../src/testing";
+import { SimApp } from "../sim-app";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -172,7 +173,7 @@ test("messages are not requeued if the function fails before timeout", async () 
   ).toEqual([
     "wingsdk.cloud.Queue created.",
     "Push (message=BAD MESSAGE).",
-    'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-2).',
+    'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-1).',
     "Subscriber error - returning 1 messages to queue: ERROR",
     "wingsdk.cloud.Queue deleted.",
   ]);

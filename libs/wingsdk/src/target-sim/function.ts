@@ -1,13 +1,13 @@
 import { relative } from "path";
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { BaseResourceSchema } from "./schema";
 import { FunctionSchema, FUNCTION_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { App } from "../core";
 import { Duration } from "../std/duration";
+import { BaseResourceSchema } from "../testing/simulator";
 
 export const ENV_WING_SIM_INFLIGHT_RESOURCE_PATH =
   "WING_SIM_INFLIGHT_RESOURCE_PATH";

@@ -19,13 +19,15 @@ use sha2::{Digest, Sha256};
 
 use crate::{
 	ast::{
-		ArgList, BinaryOperator, Class as AstClass, ClassField, Constructor, Expr, ExprKind, FunctionBody,
-		FunctionDefinition, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-		TypeAnnotation, UnaryOperator, UserDefinedType,
+		ArgList, BinaryOperator, Class as AstClass, ClassField, Expr, ExprKind, FunctionBody, FunctionBodyRef,
+		FunctionDefinition, Initializer, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt,
+		StmtKind, Symbol, TypeAnnotation, UnaryOperator, UserDefinedType,
 	},
 	debug,
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
-	type_check::{resolve_user_defined_type, symbol_env::SymbolEnv, Type, TypeRef, VariableInfo},
+	type_check::{
+		resolve_user_defined_type, symbol_env::SymbolEnv, Type, TypeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME,
+	},
 	utilities::snake_case_to_camel_case,
 	visit::{self, Visit},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
@@ -39,26 +41,7 @@ const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 
 const INFLIGHT_CLIENTS_DIR: &str = "clients";
 
-const TARGET_CODE: &str = r#"
-function __app(target) {
-	switch (target) {
-		case "sim":
-			return $stdlib.sim.App;
-		case "tfaws":
-		case "tf-aws":
-			return $stdlib.tfaws.App;
-		case "tf-gcp":
-			return $stdlib.tfgcp.App;
-		case "tf-azure":
-			return $stdlib.tfazure.App;
-		case "awscdk":
-			return $stdlib.awscdk.App;
-		default:
-			throw new Error(`Unknown WING_TARGET value: "${process.env.WING_TARGET ?? ""}"`);
-	}
-}
-const $AppBase = __app(process.env.WING_TARGET);
-"#;
+const TARGET_CODE: &str = "const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);";
 
 const ENV_WING_IS_TEST: &str = "$wing_is_test";
 const OUTDIR_VAR: &str = "$outdir";
@@ -833,7 +816,7 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_constructor(&mut self, name: Option<&str>, func_def: &Constructor, context: &JSifyContext) -> CodeMaker {
+	fn jsify_constructor(&mut self, name: Option<&str>, func_def: &Initializer, context: &JSifyContext) -> CodeMaker {
 		let mut parameter_list = vec![];
 
 		for p in func_def.parameters() {
@@ -855,7 +838,12 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_function(&mut self, name: Option<&str>, func_def: &FunctionDefinition, context: &JSifyContext) -> CodeMaker {
+	fn jsify_function(
+		&mut self,
+		name: Option<&str>,
+		func_def: &impl MethodLike<'a>,
+		context: &JSifyContext,
+	) -> CodeMaker {
 		let mut parameter_list = vec![];
 
 		for p in func_def.parameters() {
@@ -869,15 +857,15 @@ impl<'a> JSifier<'a> {
 
 		let parameters = parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ");
 
-		let body = match &func_def.body {
-			FunctionBody::Statements(scope) => {
+		let body = match &func_def.body() {
+			FunctionBodyRef::Statements(scope) => {
 				let mut code = CodeMaker::default();
 				code.open("{");
 				code.add_code(self.jsify_scope_body(scope, context));
 				code.close("}");
 				code
 			}
-			FunctionBody::External(external_spec) => {
+			FunctionBodyRef::External(external_spec) => {
 				debug!(
 					"Resolving extern \"{}\" from \"{}\"",
 					external_spec,
@@ -892,7 +880,7 @@ impl<'a> JSifier<'a> {
 						Err(err) => {
 							self.diagnostics.push(Diagnostic {
 								message: format!("Failed to resolve extern \"{external_spec}\": {err}"),
-								span: Some(func_def.span.clone()),
+								span: Some(func_def.span()),
 								level: DiagnosticLevel::Error,
 							});
 							format!("/* unresolved: \"{external_spec}\" */")
@@ -904,10 +892,10 @@ impl<'a> JSifier<'a> {
 			}
 		};
 		let mut modifiers = vec![];
-		if func_def.is_static {
+		if func_def.is_static() {
 			modifiers.push("static")
 		}
-		if matches!(func_def.signature.phase, Phase::Inflight) {
+		if matches!(func_def.signature().phase, Phase::Inflight) {
 			modifiers.push("async")
 		}
 		let modifiers = modifiers.join(" ");
@@ -987,9 +975,17 @@ impl<'a> JSifier<'a> {
 		// Get fields to be captured by resource's client
 		let captured_fields = self.get_captures(resource_type);
 
-		// Add init's refs
+		// Add inflight init's refs
+		// By default all captured fields are needed in the inflight init method
 		let init_refs = BTreeMap::from_iter(captured_fields.iter().map(|f| (format!("this.{f}"), BTreeSet::new())));
-		refs.push(("$init".to_string(), init_refs));
+		// Check what's actually used in the init method
+		let init_refs_entry = refs.entry(CLASS_INFLIGHT_INIT_NAME.to_string()).or_default();
+		// Add the init refs to the refs map
+		for (k, v) in init_refs {
+			if !init_refs_entry.contains_key(&k) {
+				init_refs_entry.insert(k, v);
+			}
+		}
 
 		// Jsify inflight client
 		let inflight_methods = class
@@ -997,14 +993,7 @@ impl<'a> JSifier<'a> {
 			.iter()
 			.filter(|(_, m)| m.signature.phase == Phase::Inflight)
 			.collect::<Vec<_>>();
-		self.jsify_resource_client(
-			env,
-			&class.name,
-			&captured_fields,
-			&inflight_methods,
-			&class.parent,
-			context,
-		);
+		self.jsify_resource_client(env, &class, &captured_fields, &inflight_methods, context);
 
 		// Get all preflight methods to be jsified to the preflight class
 		let preflight_methods = class
@@ -1022,10 +1011,10 @@ impl<'a> JSifier<'a> {
 		};
 
 		code.open(format!("class {}{} {{", self.jsify_symbol(&class.name), extends));
-		code.add_code(self.jsify_resource_constructor(&class.constructor, class.parent.is_none(), context));
+		code.add_code(self.jsify_resource_constructor(&class.initializer, class.parent.is_none(), context));
 
 		for (n, m) in preflight_methods {
-			code.add_code(self.jsify_function(Some(&n.name), &m, context));
+			code.add_code(self.jsify_function(Some(&n.name), m, context));
 		}
 
 		code.add_code(self.jsify_toinflight_method(&class.name, &captured_fields));
@@ -1055,7 +1044,7 @@ impl<'a> JSifier<'a> {
 
 	fn jsify_resource_constructor(
 		&mut self,
-		constructor: &Constructor,
+		constructor: &Initializer,
 		no_parent: bool,
 		context: &JSifyContext,
 	) -> CodeMaker {
@@ -1104,8 +1093,10 @@ impl<'a> JSifier<'a> {
 
 		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
 
+		code.open("(await (async () => {");
+
 		code.open(format!(
-			"(new (require(\"${{self_client_path}}\")).{}({{",
+			"const tmp = new (require(\"${{self_client_path}}\")).{}({{",
 			resource_name.name
 		));
 
@@ -1113,7 +1104,14 @@ impl<'a> JSifier<'a> {
 			code.line(format!("{}: ${{{}_client}},", inner_member_name, inner_member_name));
 		}
 
-		code.close("}))");
+		code.close("});");
+
+		code.line(format!(
+			"if (tmp.{CLASS_INFLIGHT_INIT_NAME}) {{ await tmp.{CLASS_INFLIGHT_INIT_NAME}(); }}"
+		));
+		code.line("return tmp;");
+
+		code.close("})())");
 
 		code.close("`);");
 
@@ -1121,19 +1119,18 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	// Write a client class for a file for the given resource
+	// Write a client class to a file for the given resource
 	fn jsify_resource_client(
 		&mut self,
 		env: &SymbolEnv,
-		name: &Symbol,
+		resource: &AstClass,
 		captured_fields: &[String],
 		inflight_methods: &[&(Symbol, FunctionDefinition)],
-		parent: &Option<UserDefinedType>,
 		context: &JSifyContext,
 	) {
 		// Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
 		let mut parent_captures = vec![];
-		if let Some(parent) = parent {
+		if let Some(parent) = &resource.parent {
 			let parent_type = resolve_user_defined_type(parent, env, 0).unwrap();
 			parent_captures.extend(self.get_captures(parent_type));
 		}
@@ -1144,13 +1141,12 @@ impl<'a> JSifier<'a> {
 			.filter(|name| !parent_captures.iter().any(|n| n == *name))
 			.collect_vec();
 
-		// TODO jsify inflight fields: https://github.com/winglang/wing/issues/864
 		let mut code = CodeMaker::default();
 
+		let name = &resource.name.name;
 		code.open(format!(
-			"class {} {} {{",
-			name.name,
-			if let Some(parent) = parent {
+			"class {} {name} {{",
+			if let Some(parent) = &resource.parent {
 				format!("extends {}", self.jsify_user_defined_type(parent))
 			} else {
 				"".to_string()
@@ -1166,7 +1162,7 @@ impl<'a> JSifier<'a> {
 				.join(", ")
 		));
 
-		if parent.is_some() {
+		if resource.parent.is_some() {
 			code.line(format!(
 				"super({});",
 				parent_captures.iter().map(|name| name.clone()).collect_vec().join(", ")
@@ -1179,10 +1175,21 @@ impl<'a> JSifier<'a> {
 
 		code.close("}");
 
+		if let Some(inflight_init) = &resource.inflight_initializer {
+			code.add_code(self.jsify_function(
+				Some(CLASS_INFLIGHT_INIT_NAME),
+				inflight_init,
+				&JSifyContext {
+					in_json: context.in_json,
+					phase: inflight_init.signature.phase,
+				},
+			));
+		}
+
 		for (name, def) in inflight_methods {
 			code.add_code(self.jsify_function(
 				Some(&name.name),
-				&def,
+				def,
 				&JSifyContext {
 					in_json: context.in_json,
 					phase: def.signature.phase,
@@ -1193,11 +1200,11 @@ impl<'a> JSifier<'a> {
 		code.close("}");
 
 		// export all classes from this file
-		code.line(format!("exports.{} = {};", name.name, name.name));
+		code.line(format!("exports.{name} = {name};"));
 
 		let clients_dir = format!("{}/clients", self.out_dir.to_string_lossy());
 		fs::create_dir_all(&clients_dir).expect("Creating inflight clients");
-		let client_file_name = format!("{}.inflight.js", name.name);
+		let client_file_name = format!("{name}.inflight.js");
 		let relative_file_path = format!("{}/{}", clients_dir, client_file_name);
 		fs::write(&relative_file_path, code.to_string()).expect("Writing client inflight source");
 	}
@@ -1218,14 +1225,14 @@ impl<'a> JSifier<'a> {
 			},
 		));
 
-		code.add_code(self.jsify_constructor(Some("constructor"), &class.constructor, context));
+		code.add_code(self.jsify_constructor(Some("constructor"), &class.initializer, context));
 
 		for m in class.fields.iter() {
 			code.add_code(self.jsify_class_member(&m));
 		}
 
 		for (n, m) in class.methods.iter() {
-			code.add_code(self.jsify_function(Some(&n.name), &m, context));
+			code.add_code(self.jsify_function(Some(&n.name), m, context));
 		}
 
 		code.close("}");
@@ -1237,13 +1244,13 @@ impl<'a> JSifier<'a> {
 	fn find_inflight_references(
 		&mut self,
 		resource_class: &AstClass,
-	) -> Vec<(String, BTreeMap<String, BTreeSet<String>>)> {
+	) -> BTreeMap<String, BTreeMap<String, BTreeSet<String>>> {
 		let inflight_methods = resource_class
 			.methods
 			.iter()
 			.filter(|(_, m)| m.signature.phase == Phase::Inflight);
 
-		let mut result = vec![];
+		let mut result = BTreeMap::new();
 
 		for (method_name, function_def) in inflight_methods {
 			// visit statements of method and find all references to fields ("this.xxx")
@@ -1253,7 +1260,7 @@ impl<'a> JSifier<'a> {
 			self.diagnostics.extend(find_diags);
 
 			// add the references to the result
-			result.push((method_name.name.clone(), refs));
+			result.insert(method_name.name.clone(), refs);
 		}
 
 		return result;

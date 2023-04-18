@@ -87,7 +87,6 @@ export class BucketClient implements IBucketClient {
    * List all keys in the bucket
    *
    * @param prefix Limits the response to keys that begin with the specified prefix
-   * TODO - add pagination support
    */
   public async list(prefix?: string): Promise<string[]> {
     const list: string[] = [];

@@ -1,11 +1,11 @@
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { BaseResourceSchema } from "./schema";
 import { ApiSchema, API_TYPE } from "./schema-resources";
 import { simulatorAttrToken, simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { BaseResourceSchema } from "../testing/simulator";
 
 /**
  * Simulator implementation of `cloud.Api`.

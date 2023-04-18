@@ -38,17 +38,9 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/WingLogger",
-        "props": {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      {
-        "attrs": {},
         "path": "root/my_function",
         "props": {
-          "environmentVariables": {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-          },
+          "environmentVariables": {},
           "sourceCodeFile": ".wing/my_function_c85c4e0e.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
@@ -77,30 +69,6 @@ return class Handler {
           },
           "id": "Handler",
           "path": "root/Handler",
-        },
-        "WingLogger": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/my_function",
-              },
-            ],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": {
-            "fqn": "constructs.Construct",
-            "version": "10.1.245",
-          },
-          "display": {
-            "description": "A cloud logging facility",
-            "hidden": true,
-            "title": "Logger",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
         },
         "cloud.TestRunner": {
           "attributes": {
@@ -145,12 +113,6 @@ return class Handler {
         "my_function": {
           "attributes": {
             "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": true,
-                "relationship": "log",
-                "resource": "root/WingLogger",
-              },
               {
                 "direction": "inbound",
                 "implicit": false,

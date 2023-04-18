@@ -7,6 +7,8 @@
   ▪︎
   <a href="https://docs.winglang.io">Docs</a>
   ▪︎
+  <a href="https://docs.winglang.io/category/faq">FAQ</a>
+  ▪︎
   <a href="https://docs.winglang.io/status#roadmap">Roadmap</a>
   ▪︎
   <a href="https://github.com/winglang/wing/issues">Issues</a>
@@ -21,9 +23,9 @@ Wing programs can be executed locally (*yes, no internet required*) using a full
 
 Our mission is to bring back your creative flow and close the gap between imagination and creation. Wing elevates your cloud development experience to new heights (the puns are just inevitable so bear with us)! 🚀
 
-<p align="left">
-<img src="./logo/demo.gif" height="300px">
-</p>
+<a href="https://youtu.be/vHy1TM2JzUQ" target="_blank" align="left">
+    <img src="./logo/demo.gif" alt="Wing Demo" height="300px">
+</a>
 
 Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at [Monada](https://monada.co) and an amazing [community](https://t.winglang.io/slack) of contributors (also known as Wingnuts).
 
@@ -92,37 +94,37 @@ To learn more about Wing concepts such as resources and inflights, jump over to 
 
 For a comprehensive reference of the language, check out the [Wing Language Specification](https://docs.winglang.io/reference/spec) and the [API Reference](https://docs.winglang.io/reference/sdk).
 
-## FAQs ❓
+## Why is Wing a language, not just another library or framework? 🤔
 
-### What makes Wing a good fit for cloud development? 🌟
+We believe that the cloud is a new kind of computer that requires a [new programming paradigm](https://docs.winglang.io/#what-is-a-cloud-oriented-language) to fully utilize it.
+While it is possible to use this new paradigm with existing languages, we believe that a language that natively supports it will make using it much easier by streamlining common patterns, in a way that is impossible to accomplish with existing ones. Kind of like what C++ did for object orientation.
 
-Wing was built from the ground up to make it an ideal choice for building applications on AWS or other cloud providers.
-Some of these features include:
+You can find more details with concrete examples of things that cannot be done with existing languages [here](https://docs.winglang.io/faq/why-a-language).
 
-* [Cloud services](https://docs.winglang.io/concepts/resources) as first-class citizens.
+## What makes Wing a good fit for cloud development? 🌟
+
+Wing was built from the ground up to make it an ideal choice for building applications on any cloud.
+It includes an assembly of different features that serve that purpose:
+
+* [Cloud services](https://docs.winglang.io/concepts/resources) as first-class citizens, with [phase modifiers](https://docs.winglang.io/reference/spec#13-phase-modifiers) for config or runtime (`preflight` and `inflight`).
 * Higher level of cloud abstraction with a [standard library](https://docs.winglang.io/reference/wingsdk-spec).
 * [Distributed computing primitives](https://docs.winglang.io/concepts/inflights).
-* [Compiler plugins](https://docs.winglang.io/reference/compiler-plugins) for customization.
+* [Compiler plugins](https://docs.winglang.io/reference/compiler-plugins) that can be used to customize the compilation output, such as infrastructure definitions.
 * [JavaScript interoperability](https://docs.winglang.io/reference/spec#5-interoperability).
-* Automatic generation of IAM policies.
+* Automatic generation of IAM policies and other cloud mechanics based on intent.
 * [Native JSON](https://docs.winglang.io/reference/spec#114-json-type) and schema validation support.
+* [Default immutability](https://docs.winglang.io/blog/2023/02/02/good-cognitive-friction#immutable-by-default).
+* [Implicit async](https://docs.winglang.io/reference/spec#113-asynchronous-model), explicit defer.
 
 For a more in-depth look at Wing's features and benefits, check out our [documentation](https://docs.winglang.io/).
 
-### Why is Wing a language, not just another library or framework? 🤔
+## FAQs ❓
 
-We believe that the cloud is a new kind of computer requiring a [new programming paradigm](https://docs.winglang.io/#what-is-a-cloud-oriented-language).
-While it's possible to use this new paradigm with existing languages, we're convinced that a language natively supporting it, like Wing, will take it to new heights!
+Here are some questions we're commonly asked that are covered by our [FAQ](https://docs.winglang.io/faq):
 
-### Who is behind this project? 💼
-
-Wing is built by the folks at [Monada](https://monada.co) and an amazing community of contributors from around the world.
-
-Monada was founded by [Elad Ben-Israel](https://github.com/eladb) and [Shai Bar](https://github.com/ShaiBer) with the mission to democratize the cloud by building tools and services that unleash its full potential.
-
-The language specification, toolchain and local simulator are released under the MIT license and will always be free to use. We see ourselves as the shepherds of the project through its incubation and hope to donate it to an open-source foundation so it will be eventually be community governed.
-
-The **Wing Console** is Monada's first product. It is designed to be an amazing companion for building Wing applications. We don't have plans to charge for local development, but have some ideas for adding production capabilities to the Wing Console that we plan to charge for.
+* [Who is behind this project?](https://docs.winglang.io/faq/who-is-behind-wing)
+* [Which clouds are supported by Wing?](https://docs.winglang.io/faq/supported-clouds)
+* [Which provisioning engines are supported by Wing?](https://docs.winglang.io/faq/supported-provisioning-engines)
 
 ## Community 💬
 

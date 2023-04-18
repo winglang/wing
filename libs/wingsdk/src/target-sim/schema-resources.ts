@@ -1,5 +1,8 @@
-import { BaseResourceAttributes, BaseResourceSchema } from "./schema";
 import { ColumnType, HttpMethod } from "../cloud";
+import {
+  BaseResourceAttributes,
+  BaseResourceSchema,
+} from "../testing/simulator";
 
 export const API_TYPE = "wingsdk.cloud.Api";
 export const QUEUE_TYPE = "wingsdk.cloud.Queue";

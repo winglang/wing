@@ -52,7 +52,7 @@ export interface GetSecretValueOptions {
    *
    * @default true
    */
-  cache?: boolean;
+  readonly cache?: boolean;
 }
 
 /**

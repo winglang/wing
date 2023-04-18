@@ -8,10 +8,15 @@ use std::path::PathBuf;
 
 #[cfg(test)]
 mod tests {
+	use flate2::{write::GzEncoder, Compression};
+
 	use crate::{fqn::FQN, jsii::JsiiFile, type_system::TypeSystem};
 
 	use super::*;
-	use std::fs;
+	use std::{
+		fs,
+		io::{Read, Write},
+	};
 
 	#[test]
 	fn does_not_blow_up() {
@@ -30,7 +35,25 @@ mod tests {
 	#[test]
 	fn can_load_assembly_from_single_file() {
 		let assembly_path = create_temp_assembly();
-		let assembly = spec::load_assembly_from_file(assembly_path.to_str().unwrap()).unwrap();
+		let assembly = spec::load_assembly_from_file(assembly_path.to_str().unwrap(), None).unwrap();
+		assert_eq!(assembly.name, "jsii-test-dep"); // TODO: write a better test
+		remove_temp_assembly(assembly_path);
+	}
+
+	#[test]
+	fn can_load_assembly_from_single_file_compressed() {
+		let assembly_path_pre = create_temp_assembly();
+		let assembly_path = assembly_path_pre.with_extension("jsii.gz");
+
+		// gzip the file
+		let mut gz = GzEncoder::new(File::create(&assembly_path).unwrap(), Compression::default());
+		let mut file = File::open(&assembly_path_pre).unwrap();
+		let mut buffer = Vec::new();
+		file.read_to_end(&mut buffer).unwrap();
+		gz.write_all(&buffer).unwrap();
+		gz.finish().unwrap();
+
+		let assembly = spec::load_assembly_from_file(assembly_path.to_str().unwrap(), Some("gzip")).unwrap();
 		assert_eq!(assembly.name, "jsii-test-dep"); // TODO: write a better test
 		remove_temp_assembly(assembly_path);
 	}

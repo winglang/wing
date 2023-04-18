@@ -5,11 +5,9 @@ import { Api } from "./api";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Function } from "./function";
-import { Logger } from "./logger";
 import { Queue } from "./queue";
 import { Redis } from "./redis";
 import { isSimulatorResource } from "./resource";
-import { WingSimulatorSchema } from "./schema";
 import { Secret } from "./secret";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
@@ -19,7 +17,6 @@ import {
   BUCKET_FQN,
   COUNTER_FQN,
   FUNCTION_FQN,
-  LOGGER_FQN,
   QUEUE_FQN,
   SECRET_FQN,
   TABLE_FQN,
@@ -30,6 +27,7 @@ import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
 import { REDIS_FQN } from "../redis";
+import { WingSimulatorSchema } from "../testing/simulator";
 import { SIMULATOR_FILE_PATH } from "../util";
 
 /**
@@ -53,8 +51,6 @@ export class App extends core.App {
     this.isTestEnvironment = props.isTestEnvironment ?? false;
 
     this.testRunner = new TestRunner(this, "cloud.TestRunner");
-
-    Logger.register(this);
   }
 
   protected tryNew(
@@ -73,9 +69,6 @@ export class App extends core.App {
       case BUCKET_FQN:
         return new Bucket(scope, id, args[0]);
 
-      case LOGGER_FQN:
-        return new Logger(scope, id);
-
       case QUEUE_FQN:
         return new Queue(scope, id, args[0]);
 
@@ -87,9 +80,6 @@ export class App extends core.App {
 
       case TABLE_FQN:
         return new Table(scope, id, args[0]);
-
-      case TOPIC_FQN:
-        return new Topic(scope, id, args[0]);
 
       case TEST_RUNNER_FQN:
         return new TestRunner(scope, id, args[0]);

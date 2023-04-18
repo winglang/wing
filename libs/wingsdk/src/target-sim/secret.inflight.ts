@@ -1,4 +1,3 @@
-import { ISimulatorResourceInstance } from "./resource";
 import {
   SECRET_TYPE,
   SecretAttributes,
@@ -6,7 +5,10 @@ import {
 } from "./schema-resources";
 import { ISecretClient, TraceType } from "../cloud";
 import { Json } from "../std";
-import { ISimulatorContext } from "../testing";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+} from "../testing/simulator";
 
 export class Secret implements ISecretClient, ISimulatorResourceInstance {
   private readonly secretValue: string;

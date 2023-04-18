@@ -1,7 +1,6 @@
 import { Server } from "http";
 import { AddressInfo } from "net";
 import express from "express";
-import { ISimulatorResourceInstance } from "./resource";
 import {
   ApiAttributes,
   ApiRoute,
@@ -17,7 +16,10 @@ import {
   parseHttpMethod,
   sanitizeParamLikeObject,
 } from "../cloud";
-import { ISimulatorContext } from "../testing/simulator";
+import {
+  ISimulatorContext,
+  ISimulatorResourceInstance,
+} from "../testing/simulator";
 
 const LOCALHOST_ADDRESS = "127.0.0.1";
 
@@ -37,6 +39,7 @@ export class Api implements IApiClient, ISimulatorResourceInstance {
 
     // Parse request bodies as json.
     this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
 
     for (const route of this.routes) {
       const method = route.method.toLowerCase() as

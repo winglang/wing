@@ -4,30 +4,6 @@ exports[`provides raw tree data 1`] = `
 {
   "tree": {
     "children": {
-      "WingLogger": {
-        "attributes": {
-          "wing:resource:connections": [
-            {
-              "direction": "inbound",
-              "implicit": true,
-              "relationship": "log",
-              "resource": "root/test",
-            },
-          ],
-          "wing:resource:stateful": true,
-        },
-        "constructInfo": {
-          "fqn": "constructs.Construct",
-          "version": "10.1.245",
-        },
-        "display": {
-          "description": "A cloud logging facility",
-          "hidden": true,
-          "title": "Logger",
-        },
-        "id": "WingLogger",
-        "path": "root/WingLogger",
-      },
       "cloud.TestRunner": {
         "attributes": {
           "wing:resource:connections": [],
@@ -47,14 +23,7 @@ exports[`provides raw tree data 1`] = `
       },
       "test": {
         "attributes": {
-          "wing:resource:connections": [
-            {
-              "direction": "outbound",
-              "implicit": true,
-              "relationship": "log",
-              "resource": "root/WingLogger",
-            },
-          ],
+          "wing:resource:connections": [],
           "wing:resource:stateful": false,
         },
         "constructInfo": {

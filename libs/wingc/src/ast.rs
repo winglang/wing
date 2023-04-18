@@ -221,11 +221,26 @@ pub enum FunctionBody {
 	External(String),
 }
 
-pub trait MethodLike {
-	fn statements(&self) -> Option<&Scope>;
+impl FunctionBody {
+	pub fn as_ref(&self) -> FunctionBodyRef {
+		match self {
+			FunctionBody::Statements(statements) => FunctionBodyRef::Statements(statements),
+			FunctionBody::External(external) => FunctionBodyRef::External(external),
+		}
+	}
+}
+
+pub enum FunctionBodyRef<'a> {
+	Statements(&'a Scope),
+	External(&'a String),
+}
+
+pub trait MethodLike<'a> {
+	fn body(&self) -> FunctionBodyRef;
 	fn parameters(&self) -> &Vec<FunctionParameter>;
 	fn signature(&self) -> &FunctionSignature;
 	fn is_static(&self) -> bool;
+	fn span(&self) -> WingSpan;
 }
 
 #[derive(Derivative)]
@@ -244,12 +259,9 @@ pub struct FunctionDefinition {
 	pub captures: RefCell<Option<Captures>>,
 }
 
-impl MethodLike for FunctionDefinition {
-	fn statements(&self) -> Option<&Scope> {
-		match &self.body {
-			FunctionBody::Statements(statements) => Some(statements),
-			FunctionBody::External(_) => None,
-		}
+impl MethodLike<'_> for FunctionDefinition {
+	fn body(&self) -> FunctionBodyRef {
+		self.body.as_ref()
 	}
 
 	fn parameters(&self) -> &Vec<FunctionParameter> {
@@ -263,17 +275,22 @@ impl MethodLike for FunctionDefinition {
 	fn is_static(&self) -> bool {
 		self.is_static
 	}
+
+	fn span(&self) -> WingSpan {
+		self.span.clone()
+	}
 }
 
 #[derive(Debug)]
-pub struct Constructor {
+pub struct Initializer {
 	pub signature: FunctionSignature,
 	pub statements: Scope,
+	pub span: WingSpan,
 }
 
-impl MethodLike for Constructor {
-	fn statements(&self) -> Option<&Scope> {
-		Some(&self.statements)
+impl MethodLike<'_> for Initializer {
+	fn body(&self) -> FunctionBodyRef {
+		FunctionBodyRef::Statements(&self.statements)
 	}
 
 	fn parameters(&self) -> &Vec<FunctionParameter> {
@@ -286,6 +303,10 @@ impl MethodLike for Constructor {
 
 	fn is_static(&self) -> bool {
 		true
+	}
+
+	fn span(&self) -> WingSpan {
+		self.span.clone()
 	}
 }
 
@@ -326,7 +347,8 @@ pub struct Class {
 	pub name: Symbol,
 	pub fields: Vec<ClassField>,
 	pub methods: Vec<(Symbol, FunctionDefinition)>,
-	pub constructor: Constructor,
+	pub initializer: Initializer,
+	pub inflight_initializer: Option<FunctionDefinition>,
 	pub parent: Option<UserDefinedType>,
 	pub implements: Vec<UserDefinedType>,
 	pub is_resource: bool,

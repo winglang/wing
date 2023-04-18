@@ -1,6 +1,6 @@
 pub(crate) mod jsii_importer;
 pub mod symbol_env;
-use crate::ast;
+use crate::ast::{self, FunctionBodyRef};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter,
 	Interface as AstInterface, InterpolatedStringPart, Literal, MethodLike, Phase, Reference, Scope, Stmt, StmtKind,
@@ -159,7 +159,8 @@ pub enum Type {
 	Enum(Enum),
 }
 
-const WING_CONSTRUCTOR_NAME: &'static str = "init";
+const CLASS_INIT_NAME: &'static str = "init";
+pub const CLASS_INFLIGHT_INIT_NAME: &'static str = "$inflight_init";
 
 #[derive(Derivative)]
 #[derivative(Debug)]
@@ -205,6 +206,7 @@ impl Interface {
 	fn is_resource(&self) -> bool {
 		// TODO: This should check that the interface extends `IResource` from
 		// the SDK, not just any interface with the name `IResource`
+		// https://github.com/winglang/wing/issues/2098
 		self.name.name == "IResource"
 			|| self.extends.iter().any(|i| {
 				i.as_interface()
@@ -454,6 +456,7 @@ impl Subtype for Type {
 			}
 			(_, Self::Interface(_)) => {
 				// TODO - for now only resources can implement interfaces
+				// https://github.com/winglang/wing/issues/2111
 				false
 			}
 			(Self::Struct(l0), Self::Struct(_)) => {
@@ -573,6 +576,7 @@ impl FunctionSignature {
 	/// Returns the maximum number of parameters that can be passed to this function.
 	///
 	/// TODO: how to represent unlimited parameters in the case of variadics?
+	/// https://github.com/winglang/wing/issues/125
 	fn max_parameters(&self) -> usize {
 		self.parameters.len()
 	}
@@ -1270,7 +1274,7 @@ impl<'a> TypeChecker<'a> {
 				// Type check args against constructor
 				let constructor_type = match class_env.lookup(
 					&Symbol {
-						name: WING_CONSTRUCTOR_NAME.into(),
+						name: CLASS_INIT_NAME.into(),
 						span: class_symbol.span.clone(),
 					},
 					None,
@@ -1563,6 +1567,7 @@ impl<'a> TypeChecker<'a> {
 
 	fn type_check_closure(&mut self, func_def: &ast::FunctionDefinition, env: &SymbolEnv) -> UnsafeRef<Type> {
 		// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
+		// https://github.com/winglang/wing/issues/457
 		// Create a type_checker function signature from the AST function definition
 		let function_type = self.resolve_type_annotation(&func_def.signature.to_type_annotation(), env);
 		let sig = function_type.as_function_sig().unwrap();
@@ -2061,8 +2066,9 @@ impl<'a> TypeChecker<'a> {
 				methods,
 				parent,
 				implements,
-				constructor,
+				initializer,
 				is_resource,
+				inflight_initializer,
 			}) => {
 				// Resources cannot be defined inflight
 				assert!(!*is_resource || env.phase == Phase::Preflight);
@@ -2165,19 +2171,46 @@ impl<'a> TypeChecker<'a> {
 
 				// Add the constructor to the class env
 				let init_symb = Symbol {
-					name: WING_CONSTRUCTOR_NAME.into(),
-					span: name.span.clone(),
+					name: CLASS_INIT_NAME.into(),
+					span: initializer.span.clone(),
 				};
-				self.add_method_to_class_env(&constructor.signature, env, None, &mut class_env, &init_symb);
+				self.add_method_to_class_env(&initializer.signature, env, None, &mut class_env, &init_symb);
+
+				let mut inflight_init_symb = Symbol::global(CLASS_INFLIGHT_INIT_NAME);
+
+				// Add the inflight initializer to the class env
+				if let Some(inflight_initializer) = inflight_initializer {
+					inflight_init_symb.span = inflight_initializer.span.clone();
+					self.add_method_to_class_env(
+						&inflight_initializer.signature,
+						env,
+						Some(class_type),
+						&mut class_env,
+						&inflight_init_symb,
+					);
+				}
 
 				// Replace the dummy class environment with the real one before type checking the methods
 				class_type.as_mut_class_or_resource().unwrap().env = class_env;
 				let class_env = &class_type.as_class_or_resource().unwrap().env;
 
 				// Type check constructor
-				self.type_check_method(class_env, &init_symb, env, stmt.idx, constructor, class_type);
+				self.type_check_method(class_env, &init_symb, env, stmt.idx, initializer, class_type);
+
+				// Type check the inflight initializer
+				if let Some(inflight_initializer) = inflight_initializer {
+					self.type_check_method(
+						class_env,
+						&inflight_init_symb,
+						env,
+						stmt.idx,
+						inflight_initializer,
+						class_type,
+					);
+				}
 
 				// TODO: handle member/method overrides in our env based on whatever rules we define in our spec
+				// https://github.com/winglang/wing/issues/1124
 
 				// Type check methods
 				for (method_name, method_def) in methods.iter() {
@@ -2423,9 +2456,10 @@ impl<'a> TypeChecker<'a> {
 		method_def: &T,
 		class_type: UnsafeRef<Type>,
 	) where
-		T: MethodLike,
+		T: MethodLike<'a>,
 	{
 		// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
+		// https://github.com/winglang/wing/issues/457
 		// Lookup the method in the class_env
 		let method_type = class_env
 			.lookup(method_name, None)
@@ -2439,7 +2473,7 @@ impl<'a> TypeChecker<'a> {
 			.expect("Expected method type to be a function signature");
 
 		// Create method environment and prime it with args
-		let is_init = method_name.name == WING_CONSTRUCTOR_NAME;
+		let is_init = method_name.name == CLASS_INIT_NAME || method_name.name == CLASS_INFLIGHT_INIT_NAME;
 		let mut method_env = SymbolEnv::new(
 			Some(env.get_ref()),
 			method_sig.return_type,
@@ -2462,7 +2496,7 @@ impl<'a> TypeChecker<'a> {
 		}
 		self.add_arguments_to_env(&method_def.parameters(), method_sig, &mut method_env);
 
-		if let Some(scope) = method_def.statements() {
+		if let FunctionBodyRef::Statements(scope) = method_def.body() {
 			scope.set_env(method_env);
 			self.inner_scopes.push(scope);
 		}
@@ -2803,6 +2837,7 @@ impl<'a> TypeChecker<'a> {
 	/// This function checks if the expression is a reference to a user define type and if it is it returns it. If not it returns `None`.
 	fn expr_maybe_type(&mut self, expr: &Expr, env: &SymbolEnv) -> Option<UserDefinedType> {
 		// TODO: we currently don't handle parenthesized expressions correctly so something like `(MyEnum).A` or `std.(namespace.submodule).A` will return true, is this a problem?
+		// https://github.com/winglang/wing/issues/1006
 		let mut path = vec![];
 		let mut curr_expr = expr;
 		loop {

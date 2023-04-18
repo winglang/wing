@@ -1,10 +1,10 @@
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
-import * as testing from "../../src/testing";
+import { SimApp } from "../sim-app";
 
 test("create a secret", async () => {
   // GIVEN
-  const app = new testing.SimApp();
+  const app = new SimApp();
   cloud.Secret._newSecret(app, "my_secret");
   const s = await app.startSimulator();
 
