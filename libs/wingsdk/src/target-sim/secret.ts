@@ -1,10 +1,10 @@
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
-import { BaseResourceSchema } from "./schema";
 import { SECRET_TYPE, SecretSchema } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { BaseResourceSchema } from "../testing/simulator";
 
 /**
  * Simulator implementation of `cloud.Secret`
