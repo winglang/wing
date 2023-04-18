@@ -1,0 +1,40 @@
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.2",
+    },
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS",
+          },
+        },
+      },
+    },
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_sqs_queue": {
+      "root_awssqsQueueSqsQueue_47BDCAE4": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/aws.sqsQueue.SqsQueue",
+            "uniqueId": "root_awssqsQueueSqsQueue_47BDCAE4",
+          },
+        },
+      },
+    },
+  },
+}

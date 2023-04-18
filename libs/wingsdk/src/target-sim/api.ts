@@ -5,6 +5,7 @@ import { simulatorAttrToken, simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**
@@ -59,7 +60,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
       functionHandle,
     });
 
-    core.Resource.addConnection({
+    Resource.addConnection({
       from: this,
       to: fn,
       relationship: `on_${method.toLowerCase()}_request`,
@@ -191,7 +192,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }
