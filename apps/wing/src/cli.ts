@@ -1,11 +1,10 @@
 // for WebAssembly typings:
 /// <reference lib="dom" />
 
-import { compile, docs, test, upgrade, run } from "./commands";
+import { compile, docs, test, checkForUpdates, run } from "./commands";
 import { satisfies } from "compare-versions";
 
 import { Command, Option } from "commander";
-import debug from "debug";
 import { run_server } from "./commands/lsp";
 
 const PACKAGE_VERSION = require("../package.json").version as string;
@@ -14,7 +13,6 @@ const SUPPORTED_NODE_VERSION = require("../package.json").engines
 if (!SUPPORTED_NODE_VERSION) {
   throw new Error("couldn't parse engines.node version from package.json");
 }
-const log = debug("wing:cli");
 
 function actionErrorHandler(fn: (...args: any[]) => Promise<any>) {
   return (...args: any[]) =>
@@ -29,10 +27,17 @@ async function main() {
 
   const program = new Command();
 
-  program.name("wing");
-  program.version(PACKAGE_VERSION);
+  program.name("wing").version(PACKAGE_VERSION);
 
-  await upgrade({ force: false }).catch(log);
+  program
+    .option("--no-update-check", "Skip checking for toolchain updates")
+    .hook("preAction", async (cmd) => {
+      const updateCheck = cmd.opts().updateCheck;
+      if (updateCheck) {
+        // most of the update check is network bound, so we don't want to block the rest of the CLI
+        void checkForUpdates();
+      }
+    });
 
   program
     .command("run")
