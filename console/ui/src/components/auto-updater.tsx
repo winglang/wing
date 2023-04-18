@@ -1,5 +1,9 @@
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { ProgressBar, useTheme } from "@wingconsole/design-system";
+import {
+  ProgressBar,
+  ToolbarButton,
+  useTheme,
+} from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useEffect, useState } from "react";
 
@@ -44,9 +48,6 @@ export const AutoUpdater = () => {
       case "error": {
         return "Failed to update Wing Console";
       }
-      case "update-downloaded": {
-        return "V" + nextVersion + " is available";
-      }
       default: {
         return "";
       }
@@ -70,16 +71,14 @@ export const AutoUpdater = () => {
       >
         {getText()}
         {currentStatus?.status?.status === "update-downloaded" && (
-          <button
-            className={
-              "text-sky-500 background-transparent text-xs outline-none focus:outline-none hover:text-sky-700 ml-1"
-            }
+          <ToolbarButton
             onClick={() => {
               quitAndInstall.mutate();
             }}
           >
+            <span>Restart to update</span>
             <ArrowPathIcon className="w-4 h-4" />
-          </button>
+          </ToolbarButton>
         )}
       </span>
       {currentStatus?.status?.progress &&

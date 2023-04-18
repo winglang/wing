@@ -326,7 +326,7 @@ export const ElkMap = <T extends unknown = undefined>({
                   animate={{
                     opacity: node.isHighlighted || node.hasEdge ? 1 : 0.35,
                   }}
-                  transition={{ ease: "easeInOut", duration: 0.2 }}
+                  transition={{ ease: "easeOut", duration: 0.15 }}
                   exit={{
                     opacity: 0,
                   }}
@@ -396,32 +396,23 @@ export const ElkMap = <T extends unknown = undefined>({
                 </defs>
 
                 {graph?.edges?.map((edge) => {
-                  const isEdgeHighlighted =
-                    edge.sources[0] === highlighted ||
-                    edge.targets[0] === highlighted;
                   const isNodeHighlighted =
                     isHighlighted(edge.sources[0]!) ||
                     isHighlighted(edge.targets[0]!);
                   const isSelected =
                     edge.sources[0] === selectedNodeId ||
                     edge.targets[0] === selectedNodeId;
-                  const visible =
-                    (highlighted && (isEdgeHighlighted || isNodeHighlighted)) ||
-                    (!highlighted && isSelected);
+                  const visible = !highlighted || isNodeHighlighted;
                   return (
                     <EdgeItem
                       key={edge.id}
                       edge={edge}
                       offset={offsets?.get((edge as any).container)}
-                      highlighted={isEdgeHighlighted || isSelected}
+                      highlighted={isSelected}
                       fade={!visible}
-                      markerStart={
-                        isEdgeHighlighted || isSelected ? "tee-selected" : "tee"
-                      }
+                      markerStart={isSelected ? "tee-selected" : "tee"}
                       markerEnd={
-                        isEdgeHighlighted || isSelected
-                          ? "arrow-head-selected"
-                          : "arrow-head"
+                        isSelected ? "arrow-head-selected" : "arrow-head"
                       }
                     />
                   );

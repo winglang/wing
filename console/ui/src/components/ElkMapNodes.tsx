@@ -71,7 +71,6 @@ export const ContainerNode = ({
         "rounded",
         !open && "shadow-sm",
         {
-          "hover:outline-4": !selected,
           "outline-4": selected,
         },
       )}
@@ -85,10 +84,8 @@ export const ContainerNode = ({
           "rounded",
           "border",
           getResourceBorderColor(resourceType),
-          "group-hover:border-sky-300 dark:group-hover:border-sky-500",
           "group-focus:border-sky-300 dark:group-focus:border-sky-500",
           theme.bg3,
-          //selected ? "bg-sky-100 dark:bg-sky-300" : theme.bg3,
           {
             "rounded-b-none": open,
             "border-b-0": open,
@@ -108,8 +105,6 @@ export const ContainerNode = ({
               "rounded-bl",
               open && "rounded-bl-none",
               "border-r",
-              "group-hover:border-sky-300 dark:group-hover:border-sky-500",
-              "group-focus:border-sky-300 dark:group-focus:border-sky-500",
               {
                 [theme.border3]: !selected,
                 "border-sky-300 dark:border-sky-500": selected,
@@ -124,12 +119,9 @@ export const ContainerNode = ({
             "flex-1 flex items-center",
             " px-2.5 py-2",
             "rounded-br",
-            //"group-focus:bg-sky-100 dark:group-focus:bg-sky-300",
             "group-focus:border-sky-300 dark:group-focus:border-sky-500",
-            "group-hover:border-sky-300 dark:group-hover:border-sky-500",
             "transition-all",
             theme.bg3,
-            //selected ? "bg-sky-100 dark:bg-sky-300" : theme.bg3,
             {
               "border-sky-300 dark:border-sky-500": selected,
               "rounded-br-none": open,
@@ -156,8 +148,9 @@ export const ContainerNode = ({
       {open && (
         <div
           className={classNames(
-            "flex-1 flex items-stretch group-focus:border-sky-200 dark:group-focus:border-sky-400",
+            "flex-1 flex items-stretch",
             "border-t",
+            "group-focus:border-sky-200 dark:group-focus:border-sky-400",
             {
               [theme.border3]: !selected,
               "border-sky-200 dark:border-sky-400": selected,
@@ -169,7 +162,6 @@ export const ContainerNode = ({
               "flex-1 rounded-b",
               "border-x border-b border-dashed",
               "group-focus:border-sky-300 dark:group-focus:border-sky-500",
-              "group-hover:border-sky-300 dark:group-hover:border-sky-500",
               "transition-all",
               "shadow-inner",
               depth % 2 === 0 ? "bg-slate-50 dark:bg-slate-500" : theme.bg4,
