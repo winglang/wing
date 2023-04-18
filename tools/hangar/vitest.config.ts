@@ -6,13 +6,11 @@ export default defineConfig({
     reporters: ["default", "json"],
     outputFile: {
       json: join(__dirname, "results", "report.json"),
-      markdown: join(__dirname, "results", "report.md"),
     },
     benchmark: {
       reporters: ["default", "json"],
       outputFile: {
-        json: join(__dirname, "results", "benchmark.json"),
-        markdown: join(__dirname, "results", "benchmark.md"),
+        json: join(__dirname, "results", "report.json"),
       },
     },
     testTimeout: 200_000,

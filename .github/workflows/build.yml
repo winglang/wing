@@ -152,7 +152,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: benchmarks
-          path: tools/hangar/results/benchmark.json
+          path: tools/hangar/results/report.json
 
       - name: Create Markdown report
         run: node scripts/benchmark_json_to_table.mjs
@@ -287,6 +287,7 @@ jobs:
           mv ./*/*.vsix ./dist
           mv ./*/*.tgz ./dist
           mv ./*/*.wasm ./dist
+          mv ./benchmarks/* ./dist
           cd dist
 
           echo '' >> ../CHANGELOG.md
