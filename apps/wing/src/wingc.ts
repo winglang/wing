@@ -87,7 +87,7 @@ export async function load(options: WingCompilerLoadOptions) {
   } as Record<string, string>;
 
   // preopen all existing global node_modules
-  for (const m of module.paths) {
+  for (const m of module.paths ?? []) {
     if (existsSync(m)) {
       preopens[m] = m;
     }
