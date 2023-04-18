@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-// This file takes the benchmark results from hangar and converts 
-// them to a markdown table
+// This file takes the benchmark results from
+// hangar and converts them to a markdown table
 
-// The JSON -> Markdown table converter is adapted to modern js from 
+// The JSON -> Markdown table converter is adapted to modern js from
 // https://github.com/tsuz/json-to-markdown-table/blob/master/app.js
 
 import { appendFileSync } from "fs";
@@ -86,7 +86,7 @@ let resultString = "# Benchmark Results\n\n";
 Object.keys(testResults).forEach((key) => {
   resultString += `## ${key}\n`;
   resultString += Convert(testResults[key], columns);
-  resultString += "\n\n"
+  resultString += "\n\n";
 });
 
 console.log(resultString);
@@ -95,7 +95,9 @@ if (process.env.GITHUB_ACTIONS === "true") {
   // we are running in a github action and we should output some useful stuff
   const githubStepSummaryFile = process.env.GITHUB_STEP_SUMMARY;
   if (!githubStepSummaryFile) {
-    throw new Error("Missing github action environment variable GITHUB_STEP_SUMMARY");
+    throw new Error(
+      "Missing github action environment variable GITHUB_STEP_SUMMARY"
+    );
   }
 
   appendFileSync(githubStepSummaryFile, resultString);

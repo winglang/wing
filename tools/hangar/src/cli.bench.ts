@@ -15,7 +15,7 @@ describe("compile", async () => {
   for (const wingFile of files) {
     for (const target of targets) {
       bench(
-        `${basename(wingFile)} - ${target}`,
+        `${basename(wingFile)} | ${target}`,
         async () => {
           await runWingCommand({
             cwd: benchmarksTestDir,
@@ -26,7 +26,7 @@ describe("compile", async () => {
         },
         {
           warmupIterations: 1,
-          iterations: 3,
+          iterations: 2,
         }
       );
     }
