@@ -26,7 +26,7 @@ class $Root extends $stdlib.core.Resource {
     Foo._annotateInflight("handle", {});
     const fn = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new Foo(this,"Foo"));
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.137cab8f078ac4d8dd242fc82417ae774fbaeaedf96937ad93f861344976bed7/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
         fn: {
           obj: fn,

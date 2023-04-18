@@ -28,7 +28,7 @@ class $Root extends $stdlib.core.Resource {
     A._annotateInflight("$inflight_init", {"this.field": { ops: [] }});
     const a = new A(this,"A");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.81f22ed577c606e2abb5d01ab149b86464b35ffade7551b81842daccdbf2fb3e/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
         a: {
           obj: a,
