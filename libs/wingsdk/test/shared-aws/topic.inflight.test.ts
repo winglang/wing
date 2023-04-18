@@ -18,10 +18,12 @@ test("publish - happy path", async () => {
 
   // WHEN
   const client = new TopicClient(TOPIC_ARN);
-  const publishSpy = vi.spyOn(client, "publish");
   await client.publish(MESSAGE);
 
   // THEN
-  expect(publishSpy).toBeCalledTimes(1);
-  expect(publishSpy).toBeCalledWith(MESSAGE);
+  expect(snsMock).toHaveReceivedCommandTimes(PublishCommand, 1);
+  expect(snsMock).toHaveReceivedCommandWith(PublishCommand, {
+    Message: MESSAGE,
+    TopicArn: TOPIC_ARN,
+  });
 });
