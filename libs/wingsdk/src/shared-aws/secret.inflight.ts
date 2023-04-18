@@ -2,16 +2,22 @@ import {
   SecretsManagerClient,
   GetSecretValueCommand,
 } from "@aws-sdk/client-secrets-manager";
-import { ISecretClient } from "../cloud";
+import { GetSecretValueOptions, ISecretClient } from "../cloud";
 import { Json } from "../std";
 
 export class SecretClient implements ISecretClient {
+  private secretValue?: string;
+
   constructor(
     private readonly secretArn: string,
     private readonly client: SecretsManagerClient = new SecretsManagerClient({})
   ) {}
 
-  public async value(): Promise<string> {
+  public async value(options: GetSecretValueOptions = {}): Promise<string> {
+    if ((options.cache ?? true) && this.secretValue) {
+      return this.secretValue;
+    }
+
     const command = new GetSecretValueCommand({
       SecretId: this.secretArn,
     });
@@ -19,10 +25,13 @@ export class SecretClient implements ISecretClient {
     if (!getSecretValue.SecretString) {
       throw new Error("Secret has no secret string");
     }
-    return getSecretValue.SecretString;
+
+    this.secretValue = getSecretValue.SecretString;
+
+    return this.secretValue;
   }
 
-  public async valueJson(): Promise<Json> {
-    return JSON.parse(await this.value());
+  public async valueJson(options: GetSecretValueOptions = {}): Promise<Json> {
+    return JSON.parse(await this.value(options));
   }
 }

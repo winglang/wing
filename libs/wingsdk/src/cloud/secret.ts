@@ -44,6 +44,18 @@ export abstract class Secret extends Resource {
 }
 
 /**
+ * Options when getting a secret value
+ */
+export interface GetSecretValueOptions {
+  /**
+   * Whether to cache the value
+   *
+   * @default true
+   */
+  cache?: boolean;
+}
+
+/**
  * Inflight interface for `Secret`.
  */
 export interface ISecretClient {
@@ -53,7 +65,7 @@ export interface ISecretClient {
    * @Returns the secret value as string.
    * @inflight
    */
-  value(): Promise<string>;
+  value(options?: GetSecretValueOptions): Promise<string>;
 
   /**
    * Retrieve the Json value of the secret.
@@ -61,7 +73,7 @@ export interface ISecretClient {
    * @Returns the secret value parsed as Json.
    * @inflight
    */
-  valueJson(): Promise<Json>;
+  valueJson(options?: GetSecretValueOptions): Promise<Json>;
 }
 
 /**
