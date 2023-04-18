@@ -17,6 +17,7 @@ import { Logger } from "./logger";
 import { Queue } from "./queue";
 import { Redis } from "./redis";
 import { Schedule } from "./schedule";
+import { Secret } from "./secret";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
 import { Topic } from "./topic";
@@ -28,6 +29,7 @@ import {
   LOGGER_FQN,
   QUEUE_FQN,
   SCHEDULE_FQN,
+  SECRET_FQN,
   TABLE_FQN,
   TEST_RUNNER_FQN,
   TOPIC_FQN,
@@ -102,6 +104,9 @@ export class App extends CdktfApp {
 
       case REDIS_FQN:
         return new Redis(scope, id);
+
+      case SECRET_FQN:
+        return new Secret(scope, id, args[0]);
     }
 
     return undefined;
