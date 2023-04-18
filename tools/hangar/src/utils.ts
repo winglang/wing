@@ -18,7 +18,11 @@ export async function runWingCommand(options: RunWingCommandOptions) {
     cwd: options.cwd,
     reject: false,
     stdin: "ignore",
-    env: options.env,
+    env: {
+      ...process.env,
+      NO_UPDATE_NOTIFIER: "true",
+      ...(options.env ?? {})
+    },
   });
   if (options.shouldSucceed) {
     if (out.exitCode !== 0 || out.stderr !== "") {

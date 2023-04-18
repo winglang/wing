@@ -6,6 +6,7 @@ export const testDir = path.join(repoRoot, "examples/tests");
 export const pluginsDir = path.join(repoRoot, "examples/plugins");
 export const validTestDir = path.join(testDir, "valid");
 export const invalidTestDir = path.join(testDir, "invalid");
+export const benchmarksTestDir = path.join(validTestDir, "benchmarks");
 export const errorTestDir = path.join(testDir, "error");
 export const hangarDir = path.join(repoRoot, "tools/hangar");
 export const tmpDir = path.join(hangarDir, "tmp");
