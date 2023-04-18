@@ -1,5 +1,5 @@
 import debug from "debug";
-import { access, constants, readFile } from "fs/promises";
+import { readFileSync, existsSync } from "fs";
 import { normalPath } from "./util";
 import WASI from "wasi-js";
 import { resolve } from "path";
@@ -88,10 +88,9 @@ export async function load(options: WingCompilerLoadOptions) {
 
   // preopen all existing global node_modules
   for (const m of module.paths) {
-    try {
-      await access(m, constants.R_OK);
+    if (existsSync(m)) {
       preopens[m] = m;
-    } catch { }
+    }
   }
 
   if (process.platform === "win32") {
@@ -136,7 +135,7 @@ export async function load(options: WingCompilerLoadOptions) {
   log("compiling wingc WASM module");
   const binary =
     options.wingcWASMData ??
-    new Uint8Array(await readFile(resolve(__dirname, "../wingc.wasm")));
+    new Uint8Array(readFileSync(resolve(__dirname, "../wingc.wasm")));
   const mod = new WebAssembly.Module(binary);
 
   log("instantiating wingc WASM module with importObject: %o", importObject);
