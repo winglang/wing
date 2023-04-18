@@ -117,7 +117,8 @@
     "ioredis": "^5.3.1",
     "safe-stable-stringify": "*",
     "tar": "^6.1.13",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "vm2": "^3.9.16"
   },
   "bundledDependencies": [
     "@aws-sdk/client-cloudwatch-logs",
@@ -141,7 +142,8 @@
     "ioredis",
     "safe-stable-stringify",
     "tar",
-    "uuid"
+    "uuid",
+    "vm2"
   ],
   "engines": {
     "node": ">= 16.16.0"

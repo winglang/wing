@@ -54,6 +54,7 @@ const project = new cdk.JsiiProject({
     "uuid",
     // shared client dependencies
     "ioredis",
+    "vm2",
   ],
   devDeps: [
     "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
