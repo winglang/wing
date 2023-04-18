@@ -12,11 +12,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const data_client = this._lift(this.data);
+        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const tmp = new (require("${self_client_path}")).Foo({
               data: ${data_client},
+              stateful: ${stateful_client},
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
@@ -24,7 +26,7 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    Foo._annotateInflight("$inflight_init", {"this.data": { ops: [] }});
+    Foo._annotateInflight("$inflight_init", {"this.data": { ops: [] },"this.stateful": { ops: [] }});
     Foo._annotateInflight("get_stuff", {"this.data.field0": { ops: [] }});
     const x = {
     "field0": "Sup",}

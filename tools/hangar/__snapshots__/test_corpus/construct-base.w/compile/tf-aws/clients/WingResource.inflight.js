@@ -1,5 +1,6 @@
 class  WingResource {
-  constructor({  }) {
+  constructor({ stateful }) {
+    this.stateful = stateful;
   }
 }
 exports.WingResource = WingResource;

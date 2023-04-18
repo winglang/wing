@@ -12,11 +12,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const _sum_str_client = this._lift(this._sum_str);
+        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const tmp = new (require("${self_client_path}")).Foo({
               _sum_str: ${_sum_str_client},
+              stateful: ${stateful_client},
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
@@ -24,7 +26,7 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    Foo._annotateInflight("$inflight_init", {"this._sum_str": { ops: [] }});
+    Foo._annotateInflight("$inflight_init", {"this._sum_str": { ops: [] },"this.stateful": { ops: [] }});
     const json_number = 123;
     const json_bool = true;
     const json_array = [1, 2, 3];
