@@ -93,6 +93,21 @@ export async function load(options: WingCompilerLoadOptions) {
     }
   }
 
+  // preopen all relative paths
+  let iDots = 1;
+  while(iDots < 100) {
+    const dots = "../".repeat(iDots).slice(0, -1);
+    const resolved = resolve(dots);
+    iDots += 1;
+    if (existsSync(resolved)) {
+      preopens[dots] = resolved;
+    }
+    
+    if (resolved === "/" || resolved.match(/^[A-Z]:\\$/i)) {
+      break;
+    }
+  }
+
   if (process.platform === "win32") {
     preopens["C:\\"] = "C:\\";
     for (const [key, value] of Object.entries(preopens)) {
@@ -111,6 +126,8 @@ export async function load(options: WingCompilerLoadOptions) {
     ...wasiBindings,
     fs: options.fs ?? require("fs"),
   };
+
+  console.log(preopens);
 
   const wasi = new WASI({
     bindings,
