@@ -53,7 +53,7 @@ describe("compile", async () => {
 
               if (meanTime > foundThreshold) {
                 throw new Error(
-                  `Mean time ${meanTime}ms is greater than threshold ${foundThreshold}ms`
+                  `${wingFile} | ${target}: Mean time ${meanTime}ms is greater than threshold ${foundThreshold}ms`
                 );
               }
             });

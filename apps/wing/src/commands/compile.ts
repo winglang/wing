@@ -101,8 +101,6 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     wingNodeModules = dirname(dirname(wingNodeModules));
 
     if (wingNodeModules === "/" || wingNodeModules.match(/^[A-Z]:\\/)) {
-      // just use the default node_modules
-      wingNodeModules = resolve(wingDir, "node_modules");
       break;
     }
 
