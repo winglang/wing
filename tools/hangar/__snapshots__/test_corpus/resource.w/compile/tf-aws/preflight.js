@@ -13,11 +13,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const c_client = this._lift(this.c);
+        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const tmp = new (require("${self_client_path}")).Foo({
               c: ${c_client},
+              stateful: ${stateful_client},
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
@@ -25,7 +27,7 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    Foo._annotateInflight("$inflight_init", {"this.c": { ops: [] }});
+    Foo._annotateInflight("$inflight_init", {"this.c": { ops: ["dec","inc"] },"this.stateful": { ops: [] }});
     Foo._annotateInflight("foo_get", {"this.c": { ops: ["peek"] }});
     Foo._annotateInflight("foo_inc", {"this.c": { ops: ["inc"] }});
     class Bar extends $stdlib.std.Resource {
@@ -39,6 +41,7 @@ class $Root extends $stdlib.std.Resource {
         const b_client = this._lift(this.b);
         const foo_client = this._lift(this.foo);
         const name_client = this._lift(this.name);
+        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Bar.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
@@ -46,6 +49,7 @@ class $Root extends $stdlib.std.Resource {
               b: ${b_client},
               foo: ${foo_client},
               name: ${name_client},
+              stateful: ${stateful_client},
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
@@ -53,7 +57,7 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    Bar._annotateInflight("$inflight_init", {"this.b": { ops: [] },"this.foo": { ops: [] },"this.name": { ops: [] }});
+    Bar._annotateInflight("$inflight_init", {"this.b": { ops: [] },"this.foo": { ops: [] },"this.name": { ops: [] },"this.stateful": { ops: [] }});
     Bar._annotateInflight("my_method", {"this.b": { ops: ["get","put"] },"this.foo": { ops: ["foo_get","foo_inc"] }});
     const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const res = new Bar(this,"Bar","Arr",bucket);
