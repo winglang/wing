@@ -13,7 +13,7 @@ export const SECRET_FQN = fqnForType("cloud.Secret");
  */
 export interface SecretProps {
   /**
-   * The secrets's name.
+   * The secret's name.
    * @default - a generated name
    */
   readonly name?: string;
