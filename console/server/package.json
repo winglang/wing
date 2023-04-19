@@ -20,7 +20,7 @@
     "@wingconsole/error-message": "workspace:^",
     "@wingconsole/eslint-plugin": "workspace:^",
     "@wingconsole/tsconfig": "workspace:^",
-    "@winglang/sdk": "^0.13.6",
+    "@winglang/sdk": "^0.13.7",
     "chokidar": "^3.5.3",
     "constructs": "^10.2.1",
     "cors": "^2.8.5",
