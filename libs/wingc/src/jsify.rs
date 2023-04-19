@@ -1264,6 +1264,16 @@ impl<'a> JSifier<'a> {
 			result.insert(method_name.name.clone(), refs);
 		}
 
+		// Also add field rerferences from the inflight initializer
+		if let Some(inflight_init) = &resource_class.inflight_initializer {
+			let visitor = FieldReferenceVisitor::new(inflight_init);
+			let (refs, find_diags) = visitor.find_refs();
+
+			self.diagnostics.extend(find_diags);
+
+			result.insert(CLASS_INFLIGHT_INIT_NAME.to_string(), refs);
+		}
+
 		return result;
 	}
 

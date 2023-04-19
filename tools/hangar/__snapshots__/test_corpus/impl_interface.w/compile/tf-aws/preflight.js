@@ -11,10 +11,12 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
       }
       _toInflight() {
+        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const tmp = new (require("${self_client_path}")).A({
+              stateful: ${stateful_client},
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
@@ -22,7 +24,7 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    A._annotateInflight("$inflight_init", {});
+    A._annotateInflight("$inflight_init", {"this.stateful": { ops: [] }});
     A._annotateInflight("handle", {});
     class r extends $stdlib.std.Resource {
       constructor(scope, id, ) {
@@ -39,10 +41,12 @@ class $Root extends $stdlib.std.Resource {
         }
       }
       _toInflight() {
+        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/r.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const tmp = new (require("${self_client_path}")).r({
+              stateful: ${stateful_client},
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
@@ -50,17 +54,19 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    r._annotateInflight("$inflight_init", {});
+    r._annotateInflight("$inflight_init", {"this.stateful": { ops: [] }});
     r._annotateInflight("method_2", {});
     class Dog extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
       }
       _toInflight() {
+        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Dog.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const tmp = new (require("${self_client_path}")).Dog({
+              stateful: ${stateful_client},
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
@@ -68,7 +74,7 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    Dog._annotateInflight("$inflight_init", {});
+    Dog._annotateInflight("$inflight_init", {"this.stateful": { ops: [] }});
     Dog._annotateInflight("eat", {});
     const x = new A(this,"A");
     const y = new $stdlib.core.Inflight(this, "$Inflight1", {

@@ -6,18 +6,20 @@ const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class Foo extends $stdlib.core.Resource {
+    class Foo extends $stdlib.std.Resource {
       constructor(scope, id, api) {
         super(scope, id);
         this.api = api;
       }
       _toInflight() {
         const api_client = this._lift(this.api);
+        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const tmp = new (require("${self_client_path}")).Foo({
               api: ${api_client},
+              stateful: ${stateful_client},
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
@@ -25,7 +27,7 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    Foo._annotateInflight("$inflight_init", {"this.api": { ops: [] }});
+    Foo._annotateInflight("$inflight_init", {"this.api": { ops: [] },"this.stateful": { ops: [] }});
     Foo._annotateInflight("handle", {"this.api.url": { ops: [] }});
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");

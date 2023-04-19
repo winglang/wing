@@ -1,5 +1,6 @@
 class  Dog {
-  constructor({  }) {
+  constructor({ stateful }) {
+    this.stateful = stateful;
   }
   async eat()  {
     {

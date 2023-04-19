@@ -1,8 +1,9 @@
 class  Bar {
-  constructor({ b, foo, name }) {
+  constructor({ b, foo, name, stateful }) {
     this.b = b;
     this.foo = foo;
     this.name = name;
+    this.stateful = stateful;
   }
   async my_method()  {
     {

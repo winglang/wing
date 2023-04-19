@@ -1,7 +1,8 @@
 class  Another {
-  constructor({ first, my_field }) {
+  constructor({ first, my_field, stateful }) {
     this.first = first;
     this.my_field = my_field;
+    this.stateful = stateful;
   }
   async meaning_of_life()  {
     {

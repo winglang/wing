@@ -12,7 +12,9 @@ resource Foo {
   inflight init() {
     this.inflight_field = 123;
     // Access a cloud resource from inflight init
-    this.c.inc(100); 
+    this.c.inc(110);
+    // Access a some method in the cloud resource's init that's not used anywhere else (to see reference binding works for init)
+    this.c.dec(10);
   }
 
   // Our resource has an inflight method

@@ -1,5 +1,6 @@
 class  r {
-  constructor({  }) {
+  constructor({ stateful }) {
+    this.stateful = stateful;
   }
   async method_2(x)  {
     {

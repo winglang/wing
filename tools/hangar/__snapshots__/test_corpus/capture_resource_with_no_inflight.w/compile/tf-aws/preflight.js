@@ -13,11 +13,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const field_client = this._lift(this.field);
+        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const tmp = new (require("${self_client_path}")).A({
               field: ${field_client},
+              stateful: ${stateful_client},
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
@@ -25,7 +27,7 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    A._annotateInflight("$inflight_init", {"this.field": { ops: [] }});
+    A._annotateInflight("$inflight_init", {"this.field": { ops: [] },"this.stateful": { ops: [] }});
     const a = new A(this,"A");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
       code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
