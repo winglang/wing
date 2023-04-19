@@ -27,7 +27,7 @@ Our mission is to bring back your creative flow and close the gap between imagin
     <img src="./logo/demo.gif" alt="Wing Demo" height="300px">
 </a>
 
-Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at [Monada](https://monada.co) and an amazing [community](https://t.winglang.io/slack) of contributors (also known as Wingnuts).
+Wing is built by [Elad Ben-Israel](https://github.com/eladb), the dude behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at [Monada](https://monada.co) and an amazing [community](https://t.winglang.io/slack) of contributors (also known as Wingnuts).
 
 ## What's so special about Wing? 🤔
 
