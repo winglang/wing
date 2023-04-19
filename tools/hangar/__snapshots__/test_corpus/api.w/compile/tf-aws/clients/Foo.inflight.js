@@ -1,6 +1,7 @@
 class  Foo {
-  constructor({ api }) {
+  constructor({ api, stateful }) {
     this.api = api;
+    this.stateful = stateful;
   }
   async handle(message)  {
     {

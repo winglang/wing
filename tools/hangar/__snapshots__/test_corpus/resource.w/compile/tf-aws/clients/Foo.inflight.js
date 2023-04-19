@@ -1,6 +1,7 @@
 class  Foo {
-  constructor({ c }) {
+  constructor({ c, stateful }) {
     this.c = c;
+    this.stateful = stateful;
   }
   async $inflight_init()  {
     {

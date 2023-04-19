@@ -1,5 +1,6 @@
 class  Foo {
-  constructor({  }) {
+  constructor({ stateful }) {
+    this.stateful = stateful;
   }
   async handle(message)  {
     {
