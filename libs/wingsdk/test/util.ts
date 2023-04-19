@@ -18,6 +18,26 @@ export function tfResourcesOfCount(
   return Object.values(JSON.parse(templateStr).resource[resourceId]).length;
 }
 
+export function tfResourcesOfWithProperty(
+  templateStr: string,
+  resourceId: string,
+  properties: Record<string, string>
+) {
+  return (
+    Object.values(JSON.parse(templateStr).resource[resourceId]) as Record<
+      string,
+      string
+    >[]
+  ).find((resource: Record<string, string>) => {
+    for (let key in properties) {
+      if (resource[key] !== properties[key]) {
+        return false;
+      }
+    }
+    return true;
+  });
+}
+
 export function getTfResource(
   templateStr: string,
   resourceId: string,

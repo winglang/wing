@@ -2,8 +2,7 @@ import { readdirSync } from "fs";
 import path from "path";
 import { CloudfrontDistribution } from "@cdktf/provider-aws/lib/cloudfront-distribution";
 import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
-// import { S3BucketPolicy } from "@cdktf/provider-aws/lib/s3-bucket-policy";
-// import { S3BucketPublicAccessBlock } from "@cdktf/provider-aws/lib/s3-bucket-public-access-block";
+
 import { S3BucketPolicy } from "@cdktf/provider-aws/lib/s3-bucket-policy";
 import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/lib/s3-bucket-server-side-encryption-configuration";
 import { S3BucketWebsiteConfiguration } from "@cdktf/provider-aws/lib/s3-bucket-website-configuration";
@@ -13,6 +12,7 @@ import mime from "mime-types";
 import { App } from "./app";
 import { core } from "..";
 import * as cloud from "../cloud";
+import { Json } from "../std";
 import {
   CaseConventions,
   NameOptions,
@@ -143,8 +143,24 @@ export class Website extends cloud.Website {
       viewerCertificate: { cloudfrontDefaultCertificate: true },
     });
 
-    //TODO: this is currently a cdk token. we need to see if we can resolve those tokens somehow
+    // //TODO: this is currently a cdk token. we need to see if we can resolve those tokens somehow
     this._url = distribution.domainName;
+  }
+
+  public addJson(path: string, obj: Json): string {
+    if (!path.endsWith(".json")) {
+      throw new Error(`key must have a .json suffix: ${path.split(".").pop()}`);
+    }
+
+    new S3Object(this, `aws_s3_bucket_object_${path}`, {
+      dependsOn: [this.bucket],
+      content: JSON.stringify(obj),
+      bucket: this.bucket.bucket,
+      contentType: "application/json",
+      key: path,
+    });
+
+    return `${this.url}/${path}`;
   }
 
   private uploadFile(filePath: string) {
@@ -153,7 +169,6 @@ export class Website extends cloud.Website {
       key: filePath.replace(this.path, ""),
       bucket: this.bucket.bucket,
       source: path.resolve(filePath),
-      etag: `${Date.now()}`,
       contentType: mime.contentType(path.extname(filePath)) || undefined,
     });
   }

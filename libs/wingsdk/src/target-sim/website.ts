@@ -5,9 +5,11 @@ import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { IInflightHost, Json } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 export class Website extends cloud.Website implements ISimulatorResource {
+  private jsonRoutes: Record<string, Json> = {};
   constructor(scope: Construct, id: string, props: cloud.WebsiteProps) {
     super(scope, id, props);
   }
@@ -16,18 +18,27 @@ export class Website extends cloud.Website implements ISimulatorResource {
     return simulatorAttrToken(this, "url");
   }
 
+  public addJson(path: string, obj: Json): string {
+    if (!path.endsWith(".json")) {
+      throw new Error(`key must have a .json suffix: ${path.split(".").pop()}`);
+    }
+    this.jsonRoutes[path] = obj;
+
+    return `${this.url}/${path}`;
+  }
+
   public toSimulator(): BaseResourceSchema {
     const schema: WebsiteSchema = {
       type: WEBSITE_TYPE,
       path: this.node.path,
-      props: { path: this.path },
+      props: { path: this.path, jsonRoutes: this.jsonRoutes },
       attrs: {} as any,
     };
     return schema;
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }

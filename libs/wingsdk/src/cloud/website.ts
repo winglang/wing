@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App, Resource } from "../core";
+import { App } from "../core";
+import { Json, Resource } from "../std";
 
 /**
  * Global identifier for `Website`.
@@ -56,6 +57,13 @@ export abstract class Website extends Resource {
   get url(): string {
     return this._url;
   }
+
+  /**
+   * used for adding dynamic content to the website after deployment
+   * @param key the bucket key to add
+   * @param obj the object to write to the key
+   */
+  abstract addJson(key: string, obj: Json): string;
 }
 /**
  * website props

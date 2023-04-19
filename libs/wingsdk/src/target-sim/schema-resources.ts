@@ -1,5 +1,5 @@
-import { cloud } from "..";
 import { ColumnType, HttpMethod } from "../cloud";
+import { Json } from "../std";
 import {
   BaseResourceAttributes,
   BaseResourceSchema,
@@ -176,7 +176,7 @@ export interface RedisSchema extends BaseResourceSchema {
 /** Schema for cloud.Website */
 export interface WebsiteSchema extends BaseResourceSchema {
   readonly type: typeof WEBSITE_TYPE;
-  readonly props: cloud.WebsiteProps;
+  readonly props: { path: string; jsonRoutes: Record<string, Json> };
 }
 
 export interface RedisAttributes {}

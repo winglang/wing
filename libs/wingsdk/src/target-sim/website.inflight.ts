@@ -3,6 +3,7 @@ import { AddressInfo } from "net";
 import express from "express";
 import { ApiAttributes, API_TYPE, WebsiteSchema } from "./schema-resources";
 import { TraceType, IWebsiteClient } from "../cloud";
+import { Json } from "../std";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
@@ -24,6 +25,15 @@ export class Website implements IWebsiteClient, ISimulatorResourceInstance {
 
     // Use static directory
     this.app.use(express.static(props.path));
+    this.initiateJsonRoutes(props.jsonRoutes);
+  }
+
+  private initiateJsonRoutes(routes: Record<string, Json>) {
+    for (const path in routes) {
+      this.app.get(`/${path}`, (_, res) => {
+        res.json(routes[path]);
+      });
+    }
   }
 
   public async init(): Promise<ApiAttributes> {

@@ -1439,6 +1439,37 @@ new cloud.Website(props: WebsiteProps)
 
 ---
 
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Website.addJsonObject">add_json_object</a></code> | used for adding dynamic content to the website after deployment. |
+
+---
+
+##### `add_json_object` <a name="add_json_object" id="@winglang/sdk.cloud.Website.addJsonObject"></a>
+
+```wing
+add_json_object(key: str, obj: Json): str
+```
+
+used for adding dynamic content to the website after deployment.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.Website.addJsonObject.parameter.key"></a>
+
+- *Type:* str
+
+the bucket key to add.
+
+---
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.cloud.Website.addJsonObject.parameter.obj"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+the object to write to the key.
+
+---
 
 
 #### Properties <a name="Properties" id="Properties"></a>
