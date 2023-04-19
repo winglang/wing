@@ -2,7 +2,7 @@ import debug from "debug";
 import { readFileSync, existsSync } from "fs";
 import { normalPath } from "./util";
 import WASI from "wasi-js";
-import { resolve } from "path";
+import { isAbsolute, relative, resolve } from "path";
 import wasiBindings from "wasi-js/dist/bindings/node";
 
 const log = debug("wing:compile");
@@ -106,18 +106,12 @@ export async function load(options: WingCompilerLoadOptions) {
     preopens[normalPath(resolve(key))] = value;
   }
 
-  // preopen all relative paths up to the root
-  let iDots = 1;
-  while (iDots < 100) {
-    const dots = "../".repeat(iDots).slice(0, -1);
-    const resolved = resolve(dots);
-    iDots += 1;
-    if (existsSync(resolved)) {
-      preopens[dots] = resolved;
-    }
-
-    if (resolved === "/" || resolved.match(/^[A-Z]:\\$/i)) {
-      break;
+  // for each provided preopens, add relative paths in case any relative paths are used
+  for (const [key, value] of Object.entries(preopens)) {
+    if (isAbsolute(key)) {
+      const cwd = process.cwd();
+      const relativePath = normalPath(relative(cwd, key));
+      preopens[relativePath] = value;
     }
   }
 

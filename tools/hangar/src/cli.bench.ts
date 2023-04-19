@@ -26,10 +26,10 @@ describe("compile", async () => {
         },
         {
           warmupIterations: 1,
-          iterations: 2,
-          setup: async (_task, type) => {
+          iterations: 3,
+          setup: (_task, type) => {
             if (type !== "warmup") return;
-            _task.addEventListener("complete", async (e) => {
+            _task.addEventListener("complete", (e) => {
               const task = e.task;
               const meanTime = task.result?.mean;
               if (!meanTime) {
@@ -41,7 +41,7 @@ describe("compile", async () => {
                 // no comment found
                 return;
               }
-              
+
               const foundThreshold = metaComment.cases?.find(
                 (c) => c.target === target
               )?.maxMeanTime;
