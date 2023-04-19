@@ -1,5 +1,6 @@
 class  Foo {
-  constructor({  }) {
+  constructor({ stateful }) {
+    this.stateful = stateful;
   }
   static async regex_inflight(pattern, text)  {
     return (require("<ABSOLUTE_PATH>/external_js.js")["regex_inflight"])(pattern, text)
