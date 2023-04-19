@@ -147,6 +147,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Setup Docker on macOS
+        if: ${{ matrix.runner == 'macos' }}
+        uses: douglascamata/setup-docker-macos-action@v1-alpha
+
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
 
