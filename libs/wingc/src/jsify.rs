@@ -2,7 +2,7 @@ mod codemaker;
 
 use aho_corasick::AhoCorasick;
 use const_format::formatcp;
-use indexmap::{indexset, IndexSet};
+use indexmap::{indexmap, IndexMap, IndexSet};
 use itertools::Itertools;
 
 use std::{
@@ -686,27 +686,7 @@ impl<'a> JSifier<'a> {
 				// This is a no-op in JS
 				CodeMaker::default()
 			}
-			StmtKind::Enum { name, values } => {
-				let mut code = CodeMaker::default();
-				let name = self.jsify_symbol(name);
-				let mut value_index = 0;
-
-				code.open(format!("const {} = Object.freeze((function ({}) {{", name, name));
-
-				for value in values {
-					code.line(format!(
-						"{name}[{name}[\"{}\"] = {}] = \"{}\";",
-						value.name, value_index, value.name
-					));
-
-					value_index = value_index + 1;
-				}
-
-				code.line(format!("return {};", name));
-
-				code.close("})({}));".to_string());
-				code
-			}
+			StmtKind::Enum { name, values } => self.jsify_enum(name, values),
 			StmtKind::TryCatch {
 				try_statements,
 				catch_block,
@@ -742,6 +722,28 @@ impl<'a> JSifier<'a> {
 				code
 			}
 		}
+	}
+
+	fn jsify_enum(&mut self, name: &Symbol, values: &IndexSet<Symbol>) -> CodeMaker {
+		let mut code = CodeMaker::default();
+		let name = self.jsify_symbol(name);
+		let mut value_index = 0;
+
+		code.open(format!("const {name} = Object.freeze((function ({name}) {{"));
+
+		for value in values {
+			code.line(format!(
+				"{name}[{name}[\"{}\"] = {}] = \"{}\";",
+				value.name, value_index, value.name
+			));
+
+			value_index = value_index + 1;
+		}
+
+		code.line(format!("return {name};"));
+
+		code.close("})({}));".to_string());
+		code
 	}
 
 	fn jsify_inflight_function(&mut self, func_def: &FunctionDefinition, context: &JSifyContext) -> CodeMaker {
@@ -1145,8 +1147,8 @@ impl<'a> JSifier<'a> {
 			.filter(|name| !parent_captures.iter().any(|n| n == *name))
 			.collect_vec();
 
-		let mut referenced_preflight_types = indexset![];
-		for (n, m) in inflight_methods {
+		let mut referenced_preflight_types = indexmap![];
+		for (_, m) in inflight_methods {
 			if let FunctionBody::Statements(scope) = &m.body {
 				let preflight_ref_visitor = PreflightTypeRefVisitor::new(scope);
 				let refs = preflight_ref_visitor.find_preflight_type_refs();
@@ -1159,11 +1161,16 @@ impl<'a> JSifier<'a> {
 		let mut code = CodeMaker::default();
 
 		// Import all referenced types to this client
-		for referenced_type in referenced_preflight_types {
-			let client_path = format!("\"./{referenced_type}.inflight.js\"");
-			code.line(format!(
-				"const {referenced_type} =  require({client_path}).{referenced_type};"
-			));
+		for (type_name, t) in referenced_preflight_types {
+			match &*t {
+				Type::Resource(_) => {
+					let client_path = format!("\"./{type_name}.inflight.js\"");
+					code.line(format!("const {type_name} = require({client_path}).{type_name};"));
+				}
+				Type::Struct(_) => todo!(),
+				Type::Enum(e) => code.add_code(self.jsify_enum(&e.name, &e.values)),
+				_ => panic!("Unexpected type: \"{t}\" referenced inflight"),
+			}
 		}
 
 		let name = &resource.name.name;
@@ -1557,9 +1564,11 @@ impl<'a> FieldReferenceVisitor<'a> {
 	}
 }
 
+/// Visitor that finds all the types defined in preflight that
+/// are referenced inside a scope (used on inflight methods)
 struct PreflightTypeRefVisitor<'a> {
 	/// Set of user types referenced inside the method
-	references: IndexSet<String>,
+	references: IndexMap<String, TypeRef>,
 
 	/// The root scope of the function we're analyzing
 	function_scope: &'a Scope,
@@ -1571,13 +1580,13 @@ struct PreflightTypeRefVisitor<'a> {
 impl<'a> PreflightTypeRefVisitor<'a> {
 	pub fn new(function_scope: &'a Scope) -> Self {
 		Self {
-			references: IndexSet::new(),
+			references: IndexMap::new(),
 			function_scope,
 			env: function_scope.env.borrow().as_ref().unwrap().get_ref(),
 		}
 	}
 
-	pub fn find_preflight_type_refs(mut self) -> IndexSet<String> {
+	pub fn find_preflight_type_refs(mut self) -> IndexMap<String, TypeRef> {
 		self.visit_scope(self.function_scope);
 		self.references
 	}
@@ -1595,10 +1604,13 @@ impl<'ast> Visit<'ast> for PreflightTypeRefVisitor<'ast> {
 			// Lookup the type in the current env and see where it was defined
 			if let LookupResult::Found((kind, info)) = (*self.env).try_lookup_nested_str(&type_name, None) {
 				// This must be a type reference
-				assert!(matches!(kind, SymbolKind::Type(_)));
-				// If this user type was defined preflight then store it
-				if info.phase == Phase::Preflight {
-					self.references.insert(type_name);
+				if let SymbolKind::Type(t) = kind {
+					// If this user type was defined preflight then store it
+					if info.phase == Phase::Preflight {
+						self.references.insert(type_name, *t);
+					}
+				} else {
+					panic!("Expected {type_name} to be a type");
 				}
 			} else {
 				panic!("Unknown symbol: {type_name}");
