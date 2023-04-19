@@ -68,8 +68,8 @@ importers:
         specifier: workspace:^
         version: link:../ui
       '@winglang/sdk':
-        specifier: ^0.13.4
-        version: 0.13.4(constructs@10.2.1)
+        specifier: ^0.13.5
+        version: 0.13.5(constructs@10.2.1)
       analytics-node:
         specifier: ^6.2.0
         version: 6.2.0
@@ -212,8 +212,8 @@ importers:
         specifier: ^8.38.0
         version: 8.38.0
       happy-dom:
-        specifier: ^9.8.2
-        version: 9.8.2
+        specifier: ^9.8.3
+        version: 9.8.3
       nanoid:
         specifier: ^4.0.2
         version: 4.0.2
@@ -240,7 +240,7 @@ importers:
         version: 4.2.2(@types/node@18.15.11)(sass@1.62.0)
       vitest:
         specifier: ^0.30.1
-        version: 0.30.1(happy-dom@9.8.2)
+        version: 0.30.1(happy-dom@9.8.3)
       webpack:
         specifier: ^5.79.0
         version: 5.79.0(esbuild@0.17.17)
@@ -275,8 +275,8 @@ importers:
         specifier: workspace:^
         version: link:../../tools/tsconfig
       '@winglang/sdk':
-        specifier: ^0.13.4
-        version: 0.13.4(constructs@10.2.1)
+        specifier: ^0.13.5
+        version: 0.13.5(constructs@10.2.1)
       chokidar:
         specifier: ^3.5.3
         version: 3.5.3
@@ -5299,8 +5299,8 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
-  /@winglang/sdk@0.13.4(constructs@10.2.1):
-    resolution: {integrity: sha512-q4a+Sy5z1Cy5tyyP4rjDnHTs8PRaGRQr8ULTTCx+qQ4DEL+vVteL6f+xEs6wvjfqvALqD1sYexwaqAY3N1nI+A==}
+  /@winglang/sdk@0.13.5(constructs@10.2.1):
+    resolution: {integrity: sha512-cpx5QpzcTNCb+bAiyPMPCmN0+LTju7J5ZvsQ8Hi7eaPgHFz96Rchs/snGxQ8/2vZTj1lG9TlLYD754keAmCKlA==}
     engines: {node: '>= 16.16.0'}
     peerDependencies:
       constructs: ~10.1.228
@@ -8636,8 +8636,8 @@ packages:
     optionalDependencies:
       uglify-js: 3.17.4
 
-  /happy-dom@9.8.2:
-    resolution: {integrity: sha512-zfotLwDIJt332EDSLLMaQ2hbRSrDshZKb78jBdim8wWpoJ40r3xtA1eNRf5o8O19qZYIV151emgAPCq96GzpEg==}
+  /happy-dom@9.8.3:
+    resolution: {integrity: sha512-kDgVUmgdr6ZnxN4aZE1yoY3h8sGkmNOOjXFZ4nbREQmGFVOdWbPFJl1p2AY0EF4zVm+c19ysqr0l6CUgnk2xmw==}
     dependencies:
       css.escape: 1.5.1
       he: 1.2.0
@@ -12578,7 +12578,7 @@ packages:
       fsevents: 2.3.2
     dev: true
 
-  /vitest@0.30.1(happy-dom@9.8.2):
+  /vitest@0.30.1(happy-dom@9.8.3):
     resolution: {integrity: sha512-y35WTrSTlTxfMLttgQk4rHcaDkbHQwDP++SNwPb+7H8yb13Q3cu2EixrtHzF27iZ8v0XCciSsLg00RkPAzB/aA==}
     engines: {node: '>=v14.18.0'}
     hasBin: true
@@ -12623,7 +12623,7 @@ packages:
       chai: 4.3.7
       concordance: 5.0.4
       debug: 4.3.4
-      happy-dom: 9.8.2
+      happy-dom: 9.8.3
       local-pkg: 0.4.3
       magic-string: 0.30.0
       pathe: 1.1.0
