@@ -6,6 +6,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
+import { ResourceNames } from "../utils/resource-names";
 
 /**
  * Simulator implementation of `cloud.Secret`
@@ -13,10 +14,13 @@ import { BaseResourceSchema } from "../testing/simulator";
  * @inflight `@winglang/sdk.cloud.ISecretClient`
  */
 export class Secret extends cloud.Secret implements ISimulatorResource {
-  private readonly secretValue = '{"secret":"value"}';
-
+  private readonly name: string;
   constructor(scope: Construct, id: string, props: cloud.SecretProps = {}) {
     super(scope, id, props);
+
+    this.name =
+      props.name ??
+      ResourceNames.generateName(this, { disallowedRegex: /[^\w]/g });
   }
 
   /** @internal */
@@ -35,7 +39,7 @@ export class Secret extends cloud.Secret implements ISimulatorResource {
       type: SECRET_TYPE,
       path: this.node.path,
       props: {
-        secretValue: this.secretValue,
+        name: this.name,
       },
       attrs: {} as any,
     };
