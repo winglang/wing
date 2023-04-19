@@ -42,7 +42,7 @@ describe("compile", async () => {
                 return;
               }
               
-              const foundThreshold = metaComment.cases.find(
+              const foundThreshold = metaComment.cases?.find(
                 (c) => c.target === target
               )?.maxMeanTime;
 

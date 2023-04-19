@@ -16,10 +16,8 @@ for (const fileInfo of readdirSync(validTestDir, { withFileTypes: true })) {
   const metaComment = parseMetaCommentFromPath(filename);
 
   let skipText = "";
-  if (metaComment?.skip) {
-    if (metaComment.skip.includes(process.platform)) {
-      skipText = ".skip";
-    }
+  if (metaComment?.skipPlatforms?.includes(process.platform)) {
+    skipText = ".skip";
   }
 
   const fileContents = `\

@@ -11,7 +11,6 @@ export interface MetaTestCase {
    */
   maxMeanTime: number;
 }
-export type SkipCase = typeof process.platform;
 
 export interface MetaComment {
   /**
@@ -22,11 +21,11 @@ export interface MetaComment {
   cases?: MetaTestCase[];
 
   /**
-   * If any of these platforms are detected, the test will be skipped
+   * If any of these platforms are detected, the test will be skipped in CI
    *
    * @default - Will not be skipped
    */
-  skip?: SkipCase[];
+  skipPlatforms?: typeof process.platform[];
 }
 
 export function parseMetaCommentFromPath(testPath: string) {
