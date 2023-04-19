@@ -6,9 +6,11 @@ exports[`api handler can read the request params 1`] = `
   "wingsdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
+  "wingsdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" (body={}, params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{\\"foo\\":\\"bar\\",\\"bar\\":\\"baz\\"},\\"vars\\":{}}).",
   "GET /hello - 200.",
+  "wingsdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api deleted.",
   "wingsdk.cloud.Function deleted.",
@@ -56,16 +58,25 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {
-          "routes": [
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
-              "method": "GET",
-              "route": "/hello",
-            },
-          ],
-        },
+        "props": {},
         "type": "wingsdk.cloud.Api",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+        "props": {
+          "publisher": "\${root/my_api#attrs.handle}",
+          "subscriber": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "routes": [
+              {
+                "method": "GET",
+                "path": "/hello",
+              },
+            ],
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -120,6 +131,21 @@ return class Handler {
             "wing:resource:stateful": true,
           },
           "children": {
+            "my_api-ApiEventMapping-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_api-ApiEventMapping-e645076f",
+              "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+            },
             "my_api-OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
@@ -174,9 +200,11 @@ exports[`api handler can read the request path 1`] = `
   "wingsdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
+  "wingsdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" (body={}, params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
+  "wingsdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api deleted.",
   "wingsdk.cloud.Function deleted.",
@@ -224,16 +252,25 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {
-          "routes": [
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
-              "method": "GET",
-              "route": "/hello",
-            },
-          ],
-        },
+        "props": {},
         "type": "wingsdk.cloud.Api",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+        "props": {
+          "publisher": "\${root/my_api#attrs.handle}",
+          "subscriber": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "routes": [
+              {
+                "method": "GET",
+                "path": "/hello",
+              },
+            ],
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -288,6 +325,21 @@ return class Handler {
             "wing:resource:stateful": true,
           },
           "children": {
+            "my_api-ApiEventMapping-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_api-ApiEventMapping-e645076f",
+              "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+            },
             "my_api-OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
@@ -342,9 +394,11 @@ exports[`api handler can set response headers 1`] = `
   "wingsdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
+  "wingsdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" (body={}, params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"foo\\":\\"bar\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
+  "wingsdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api deleted.",
   "wingsdk.cloud.Function deleted.",
@@ -392,16 +446,25 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {
-          "routes": [
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
-              "method": "GET",
-              "route": "/hello",
-            },
-          ],
-        },
+        "props": {},
         "type": "wingsdk.cloud.Api",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+        "props": {
+          "publisher": "\${root/my_api#attrs.handle}",
+          "subscriber": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "routes": [
+              {
+                "method": "GET",
+                "path": "/hello",
+              },
+            ],
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -456,6 +519,21 @@ return class Handler {
             "wing:resource:stateful": true,
           },
           "children": {
+            "my_api-ApiEventMapping-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_api-ApiEventMapping-e645076f",
+              "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+            },
             "my_api-OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
@@ -510,6 +588,7 @@ exports[`api supports every method type 1`] = `
   "wingsdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
+  "wingsdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" (body={}, params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
@@ -531,6 +610,7 @@ exports[`api supports every method type 1`] = `
   "Processing \\"PATCH /hello\\" (body={}, params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":{},\\"method\\":\\"PATCH\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "PATCH /hello - 200.",
+  "wingsdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api deleted.",
   "wingsdk.cloud.Function deleted.",
@@ -578,46 +658,49 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {
-          "routes": [
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
-              "method": "GET",
-              "route": "/hello",
-            },
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
-              "method": "POST",
-              "route": "/hello",
-            },
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
-              "method": "PUT",
-              "route": "/hello",
-            },
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
-              "method": "DELETE",
-              "route": "/hello",
-            },
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
-              "method": "HEAD",
-              "route": "/hello",
-            },
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
-              "method": "OPTIONS",
-              "route": "/hello",
-            },
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
-              "method": "PATCH",
-              "route": "/hello",
-            },
-          ],
-        },
+        "props": {},
         "type": "wingsdk.cloud.Api",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+        "props": {
+          "publisher": "\${root/my_api#attrs.handle}",
+          "subscriber": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "routes": [
+              {
+                "method": "GET",
+                "path": "/hello",
+              },
+              {
+                "method": "POST",
+                "path": "/hello",
+              },
+              {
+                "method": "PUT",
+                "path": "/hello",
+              },
+              {
+                "method": "DELETE",
+                "path": "/hello",
+              },
+              {
+                "method": "HEAD",
+                "path": "/hello",
+              },
+              {
+                "method": "OPTIONS",
+                "path": "/hello",
+              },
+              {
+                "method": "PATCH",
+                "path": "/hello",
+              },
+            ],
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -708,6 +791,21 @@ return class Handler {
             "wing:resource:stateful": true,
           },
           "children": {
+            "my_api-ApiEventMapping-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_api-ApiEventMapping-e645076f",
+              "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+            },
             "my_api-OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
@@ -832,21 +930,29 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {
-          "routes": [
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
-              "method": "GET",
-              "route": "/hello/foo",
-            },
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
-              "method": "GET",
-              "route": "/hello/bat",
-            },
-          ],
-        },
+        "props": {},
         "type": "wingsdk.cloud.Api",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+        "props": {
+          "publisher": "\${root/my_api#attrs.handle}",
+          "subscriber": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "routes": [
+              {
+                "method": "GET",
+                "path": "/hello/foo",
+              },
+              {
+                "method": "GET",
+                "path": "/hello/bat",
+              },
+            ],
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -901,6 +1007,21 @@ return class Handler {
             "wing:resource:stateful": true,
           },
           "children": {
+            "my_api-ApiEventMapping-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_api-ApiEventMapping-e645076f",
+              "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+            },
             "my_api-OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
@@ -953,18 +1074,22 @@ exports[`api with multiple methods on same route 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Function created.",
-  "wingsdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
+  "wingsdk.sim.EventMapping created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" (body={}, params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "Processing \\"POST /hello\\" (body={}, params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":{},\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "POST /hello - 200.",
+  "wingsdk.sim.EventMapping deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api deleted.",
-  "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
@@ -1023,6 +1148,29 @@ return class Handler {
       },
       {
         "attrs": {},
+        "path": "root/my_api",
+        "props": {},
+        "type": "wingsdk.cloud.Api",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/my_api-ApiEventMapping-7c48a9f0",
+        "props": {
+          "publisher": "\${root/my_api#attrs.handle}",
+          "subscriber": "\${root/my_api/my_api-OnRequestHandler-7c48a9f0#attrs.handle}",
+          "subscriptionProps": {
+            "routes": [
+              {
+                "method": "GET",
+                "path": "/hello",
+              },
+            ],
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
+      },
+      {
+        "attrs": {},
         "path": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
         "props": {
           "environmentVariables": {},
@@ -1034,22 +1182,20 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api",
+        "path": "root/my_api/my_api-ApiEventMapping-f6d90a7f",
         "props": {
-          "routes": [
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-7c48a9f0#attrs.handle}",
-              "method": "GET",
-              "route": "/hello",
-            },
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-f6d90a7f#attrs.handle}",
-              "method": "POST",
-              "route": "/hello",
-            },
-          ],
+          "publisher": "\${root/my_api#attrs.handle}",
+          "subscriber": "\${root/my_api/my_api-OnRequestHandler-f6d90a7f#attrs.handle}",
+          "subscriptionProps": {
+            "routes": [
+              {
+                "method": "POST",
+                "path": "/hello",
+              },
+            ],
+          },
         },
-        "type": "wingsdk.cloud.Api",
+        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -1127,6 +1273,36 @@ return class Handler {
             "wing:resource:stateful": true,
           },
           "children": {
+            "my_api-ApiEventMapping-7c48a9f0": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_api-ApiEventMapping-7c48a9f0",
+              "path": "root/my_api/my_api-ApiEventMapping-7c48a9f0",
+            },
+            "my_api-ApiEventMapping-f6d90a7f": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_api-ApiEventMapping-f6d90a7f",
+              "path": "root/my_api/my_api-ApiEventMapping-f6d90a7f",
+            },
             "my_api-OnRequestHandler-7c48a9f0": {
               "attributes": {
                 "wing:resource:connections": [
@@ -1202,18 +1378,22 @@ exports[`api with multiple routes 1`] = `
 [
   "wingsdk.cloud.TestRunner created.",
   "wingsdk.cloud.Function created.",
-  "wingsdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
+  "wingsdk.sim.EventMapping created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.sim.EventMapping created.",
   "Processing \\"GET /hello/world\\" (body={}, params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello/world\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello/world - 200.",
   "Processing \\"GET /hello/wingnuts\\" (body={}, params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello/wingnuts\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello/wingnuts - 200.",
+  "wingsdk.sim.EventMapping deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api deleted.",
-  "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.TestRunner deleted.",
 ]
@@ -1272,6 +1452,29 @@ return class Handler {
       },
       {
         "attrs": {},
+        "path": "root/my_api",
+        "props": {},
+        "type": "wingsdk.cloud.Api",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/my_api-ApiEventMapping-7c48a9f0",
+        "props": {
+          "publisher": "\${root/my_api#attrs.handle}",
+          "subscriber": "\${root/my_api/my_api-OnRequestHandler-7c48a9f0#attrs.handle}",
+          "subscriptionProps": {
+            "routes": [
+              {
+                "method": "GET",
+                "path": "/hello/world",
+              },
+            ],
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
+      },
+      {
+        "attrs": {},
         "path": "root/my_api/my_api-OnRequestHandler-f6d90a7f",
         "props": {
           "environmentVariables": {},
@@ -1283,22 +1486,20 @@ return class Handler {
       },
       {
         "attrs": {},
-        "path": "root/my_api",
+        "path": "root/my_api/my_api-ApiEventMapping-f6d90a7f",
         "props": {
-          "routes": [
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-7c48a9f0#attrs.handle}",
-              "method": "GET",
-              "route": "/hello/world",
-            },
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-f6d90a7f#attrs.handle}",
-              "method": "GET",
-              "route": "/hello/wingnuts",
-            },
-          ],
+          "publisher": "\${root/my_api#attrs.handle}",
+          "subscriber": "\${root/my_api/my_api-OnRequestHandler-f6d90a7f#attrs.handle}",
+          "subscriptionProps": {
+            "routes": [
+              {
+                "method": "GET",
+                "path": "/hello/wingnuts",
+              },
+            ],
+          },
         },
-        "type": "wingsdk.cloud.Api",
+        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -1376,6 +1577,36 @@ return class Handler {
             "wing:resource:stateful": true,
           },
           "children": {
+            "my_api-ApiEventMapping-7c48a9f0": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_api-ApiEventMapping-7c48a9f0",
+              "path": "root/my_api/my_api-ApiEventMapping-7c48a9f0",
+            },
+            "my_api-ApiEventMapping-f6d90a7f": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_api-ApiEventMapping-f6d90a7f",
+              "path": "root/my_api/my_api-ApiEventMapping-f6d90a7f",
+            },
             "my_api-OnRequestHandler-7c48a9f0": {
               "attributes": {
                 "wing:resource:connections": [
@@ -1453,9 +1684,11 @@ exports[`api with one GET route 1`] = `
   "wingsdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
+  "wingsdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" (body={}, params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
+  "wingsdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api deleted.",
   "wingsdk.cloud.Function deleted.",
@@ -1503,16 +1736,25 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {
-          "routes": [
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
-              "method": "GET",
-              "route": "/hello",
-            },
-          ],
-        },
+        "props": {},
         "type": "wingsdk.cloud.Api",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+        "props": {
+          "publisher": "\${root/my_api#attrs.handle}",
+          "subscriber": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "routes": [
+              {
+                "method": "GET",
+                "path": "/hello",
+              },
+            ],
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -1567,6 +1809,21 @@ return class Handler {
             "wing:resource:stateful": true,
           },
           "children": {
+            "my_api-ApiEventMapping-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_api-ApiEventMapping-e645076f",
+              "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+            },
             "my_api-OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
@@ -1621,9 +1878,11 @@ exports[`api with one GET route with request params 1`] = `
   "wingsdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
+  "wingsdk.sim.EventMapping created.",
   "Processing \\"GET /users/{name}\\" (body={}, params={\\"name\\":\\"tsuf\\"}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/users/tsuf\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"tsuf\\"}}).",
   "GET /users/{name} - 200.",
+  "wingsdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api deleted.",
   "wingsdk.cloud.Function deleted.",
@@ -1671,16 +1930,25 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {
-          "routes": [
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
-              "method": "GET",
-              "route": "/users/{name}",
-            },
-          ],
-        },
+        "props": {},
         "type": "wingsdk.cloud.Api",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+        "props": {
+          "publisher": "\${root/my_api#attrs.handle}",
+          "subscriber": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "routes": [
+              {
+                "method": "GET",
+                "path": "/users/{name}",
+              },
+            ],
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -1735,6 +2003,21 @@ return class Handler {
             "wing:resource:stateful": true,
           },
           "children": {
+            "my_api-ApiEventMapping-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_api-ApiEventMapping-e645076f",
+              "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+            },
             "my_api-OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
@@ -1789,9 +2072,11 @@ exports[`api with one POST route, with body 1`] = `
   "wingsdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
+  "wingsdk.sim.EventMapping created.",
   "Processing \\"POST /hello\\" (body={\\"message\\":\\"hello world\\"}, params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"content-type\\":\\"application/json\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"25\\"},\\"body\\":{\\"message\\":\\"hello world\\"},\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "POST /hello - 200.",
+  "wingsdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api deleted.",
   "wingsdk.cloud.Function deleted.",
@@ -1839,16 +2124,25 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {
-          "routes": [
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
-              "method": "POST",
-              "route": "/hello",
-            },
-          ],
-        },
+        "props": {},
         "type": "wingsdk.cloud.Api",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+        "props": {
+          "publisher": "\${root/my_api#attrs.handle}",
+          "subscriber": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "routes": [
+              {
+                "method": "POST",
+                "path": "/hello",
+              },
+            ],
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -1903,6 +2197,21 @@ return class Handler {
             "wing:resource:stateful": true,
           },
           "children": {
+            "my_api-ApiEventMapping-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_api-ApiEventMapping-e645076f",
+              "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+            },
             "my_api-OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
@@ -1957,9 +2266,11 @@ exports[`api with one POST route, with body urlencoded 1`] = `
   "wingsdk.cloud.Function created.",
   "Server listening on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api created.",
+  "wingsdk.sim.EventMapping created.",
   "Processing \\"POST /hello\\" (body={\\"message\\":\\"hello world\\"}, params={}).",
   "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"content-type\\":\\"application/x-www-form-urlencoded;charset=UTF-8\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"19\\"},\\"body\\":{\\"message\\":\\"hello world\\"},\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "POST /hello - 200.",
+  "wingsdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
   "wingsdk.cloud.Api deleted.",
   "wingsdk.cloud.Function deleted.",
@@ -2007,16 +2318,25 @@ return class Handler {
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {
-          "routes": [
-            {
-              "functionHandle": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
-              "method": "POST",
-              "route": "/hello",
-            },
-          ],
-        },
+        "props": {},
         "type": "wingsdk.cloud.Api",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+        "props": {
+          "publisher": "\${root/my_api#attrs.handle}",
+          "subscriber": "\${root/my_api/my_api-OnRequestHandler-e645076f#attrs.handle}",
+          "subscriptionProps": {
+            "routes": [
+              {
+                "method": "POST",
+                "path": "/hello",
+              },
+            ],
+          },
+        },
+        "type": "wingsdk.sim.EventMapping",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -2071,6 +2391,21 @@ return class Handler {
             "wing:resource:stateful": true,
           },
           "children": {
+            "my_api-ApiEventMapping-e645076f": {
+              "attributes": {
+                "wing:resource:connections": [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.245",
+              },
+              "display": {
+                "hidden": true,
+              },
+              "id": "my_api-ApiEventMapping-e645076f",
+              "path": "root/my_api/my_api-ApiEventMapping-e645076f",
+            },
             "my_api-OnRequestHandler-e645076f": {
               "attributes": {
                 "wing:resource:connections": [
@@ -2134,9 +2469,7 @@ exports[`create an api 1`] = `
       {
         "attrs": {},
         "path": "root/my_api",
-        "props": {
-          "routes": [],
-        },
+        "props": {},
         "type": "wingsdk.cloud.Api",
       },
     ],

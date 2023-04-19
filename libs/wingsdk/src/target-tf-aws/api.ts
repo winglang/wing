@@ -51,13 +51,13 @@ export class Api extends cloud.Api {
   }
 
   /**
-   * Add a inflight to handle GET requests to a route.
-   * @param route Route to add
+   * Add a inflight to handle GET requests to a path.
+   * @param path path to add
    * @param inflight Inflight to handle request
    * @param props Additional props
    */
   public get(
-    route: string,
+    path: string,
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiGetProps
   ): void {
@@ -67,8 +67,8 @@ export class Api extends cloud.Api {
     this._validateRoute(route);
 
     const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(route, "GET", fn);
-    this._addToSpec(route, "GET", apiSpecEndpoint);
+    const apiSpecEndpoint = this.api.addEndpoint(path, "GET", fn);
+    this._addToSpec(path, "GET", apiSpecEndpoint);
 
     Resource.addConnection({
       from: this,
@@ -78,13 +78,13 @@ export class Api extends cloud.Api {
   }
 
   /**
-   * Add a inflight to handle POST requests to a route.
-   * @param route Route to add
+   * Add a inflight to handle POST requests to a path.
+   * @param path path to add
    * @param inflight Inflight to handle request
    * @param props Additional props
    */
   public post(
-    route: string,
+    path: string,
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiPostProps
   ): void {
@@ -94,8 +94,8 @@ export class Api extends cloud.Api {
     this._validateRoute(route);
 
     const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(route, "POST", fn);
-    this._addToSpec(route, "POST", apiSpecEndpoint);
+    const apiSpecEndpoint = this.api.addEndpoint(path, "POST", fn);
+    this._addToSpec(path, "POST", apiSpecEndpoint);
 
     Resource.addConnection({
       from: this,
@@ -105,13 +105,13 @@ export class Api extends cloud.Api {
   }
 
   /**
-   * Add a inflight to handle PUT requests to a route.
-   * @param route Route to add
+   * Add a inflight to handle PUT requests to a path.
+   * @param path path to add
    * @param inflight Inflight to handle request
    * @param props Additional props
    */
   public put(
-    route: string,
+    path: string,
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiPutProps
   ): void {
@@ -121,8 +121,8 @@ export class Api extends cloud.Api {
     this._validateRoute(route);
 
     const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(route, "PUT", fn);
-    this._addToSpec(route, "PUT", apiSpecEndpoint);
+    const apiSpecEndpoint = this.api.addEndpoint(path, "PUT", fn);
+    this._addToSpec(path, "PUT", apiSpecEndpoint);
 
     Resource.addConnection({
       from: this,
@@ -132,13 +132,13 @@ export class Api extends cloud.Api {
   }
 
   /**
-   * Add a inflight to handle DELETE requests to a route.
-   * @param route Route to add
+   * Add a inflight to handle DELETE requests to a path.
+   * @param path path to add
    * @param inflight Inflight to handle request
    * @param props Additional props
    */
   public delete(
-    route: string,
+    path: string,
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiDeleteProps
   ): void {
@@ -148,8 +148,8 @@ export class Api extends cloud.Api {
     this._validateRoute(route);
 
     const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(route, "DELETE", fn);
-    this._addToSpec(route, "DELETE", apiSpecEndpoint);
+    const apiSpecEndpoint = this.api.addEndpoint(path, "DELETE", fn);
+    this._addToSpec(path, "DELETE", apiSpecEndpoint);
 
     Resource.addConnection({
       from: this,
@@ -159,13 +159,13 @@ export class Api extends cloud.Api {
   }
 
   /**
-   * Add a inflight to handle PATCH requests to a route.
-   * @param route Route to add
+   * Add a inflight to handle PATCH requests to a path.
+   * @param path path to add
    * @param inflight Inflight to handle request
    * @param props Additional props
    */
   public patch(
-    route: string,
+    path: string,
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiPatchProps
   ): void {
@@ -175,8 +175,8 @@ export class Api extends cloud.Api {
     this._validateRoute(route);
 
     const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(route, "PATCH", fn);
-    this._addToSpec(route, "PATCH", apiSpecEndpoint);
+    const apiSpecEndpoint = this.api.addEndpoint(path, "PATCH", fn);
+    this._addToSpec(path, "PATCH", apiSpecEndpoint);
 
     Resource.addConnection({
       from: this,
@@ -186,13 +186,13 @@ export class Api extends cloud.Api {
   }
 
   /**
-   * Add a inflight to handle OPTIONS requests to a route.
-   * @param route Route to add
+   * Add a inflight to handle OPTIONS requests to a path.
+   * @param path path to add
    * @param inflight Inflight to handle request
    * @param props Additional props
    */
   public options(
-    route: string,
+    path: string,
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiOptionsProps
   ): void {
@@ -202,8 +202,8 @@ export class Api extends cloud.Api {
     this._validateRoute(route);
 
     const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(route, "OPTIONS", fn);
-    this._addToSpec(route, "OPTIONS", apiSpecEndpoint);
+    const apiSpecEndpoint = this.api.addEndpoint(path, "OPTIONS", fn);
+    this._addToSpec(path, "OPTIONS", apiSpecEndpoint);
 
     Resource.addConnection({
       from: this,
@@ -213,13 +213,13 @@ export class Api extends cloud.Api {
   }
 
   /**
-   * Add a inflight to handle HEAD requests to a route.
-   * @param route Route to add
+   * Add a inflight to handle HEAD requests to a path.
+   * @param path path to add
    * @param inflight Inflight to handle request
    * @param props Additional props
    */
   public head(
-    route: string,
+    path: string,
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiHeadProps
   ): void {
@@ -229,8 +229,8 @@ export class Api extends cloud.Api {
     this._validateRoute(route);
 
     const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(route, "HEAD", fn);
-    this._addToSpec(route, "HEAD", apiSpecEndpoint);
+    const apiSpecEndpoint = this.api.addEndpoint(path, "HEAD", fn);
+    this._addToSpec(path, "HEAD", apiSpecEndpoint);
 
     Resource.addConnection({
       from: this,
@@ -240,13 +240,13 @@ export class Api extends cloud.Api {
   }
 
   /**
-   * Add a inflight to handle CONNECT requests to a route.
-   * @param route Route to add
+   * Add a inflight to handle CONNECT requests to a path.
+   * @param path path to add
    * @param inflight Inflight to handle request
    * @param props Additional props
    */
   public connect(
-    route: string,
+    path: string,
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiConnectProps
   ): void {
@@ -256,8 +256,8 @@ export class Api extends cloud.Api {
     this._validateRoute(route);
 
     const fn = this.addHandler(inflight);
-    const apiSpecEndpoint = this.api.addEndpoint(route, "CONNECT", fn);
-    this._addToSpec(route, "CONNECT", apiSpecEndpoint);
+    const apiSpecEndpoint = this.api.addEndpoint(path, "CONNECT", fn);
+    this._addToSpec(path, "CONNECT", apiSpecEndpoint);
 
     Resource.addConnection({
       from: this,

@@ -24,11 +24,13 @@ export type PublisherHandle = string;
 /** Schema for cloud.Api */
 export interface ApiSchema extends BaseResourceSchema {
   readonly type: typeof API_TYPE;
-  readonly props: {
-    /** The routes that the API should handle. */
-    readonly routes: ApiRoute[];
-  };
+  readonly props: { };
   readonly attrs: ApiAttributes & BaseResourceAttributes;
+}
+
+export interface ApiEventSubscription extends EventSubscription {
+  /** Subscribed routes */
+  readonly routes: ApiRoute[];
 }
 
 /** Runtime attributes for cloud.Api */
@@ -39,12 +41,10 @@ export interface ApiAttributes {
 
 /** Schema for cloud.Api.props.routes */
 export interface ApiRoute {
-  /** The route to handle. */
-  readonly route: string;
+  /** The path to handle. */
+  readonly path: string;
   /** The HTTP method to handle. */
   readonly method: HttpMethod;
-  /** The function that should be called when the route is hit. */
-  readonly functionHandle: FunctionHandle;
 }
 
 /** Schema for cloud.Function */

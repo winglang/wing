@@ -1,12 +1,13 @@
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
-import { ApiSchema, API_TYPE } from "./schema-resources";
-import { simulatorAttrToken, simulatorHandleToken } from "./tokens";
+import { ApiSchema, API_TYPE, ApiRoute } from "./schema-resources";
+import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
+import { EventMapping } from "./event-mapping";
 
 /**
  * Simulator implementation of `cloud.Api`.
@@ -14,7 +15,7 @@ import { BaseResourceSchema } from "../testing/simulator";
  * @inflight `@winglang/sdk.cloud.IApiClient`
  */
 export class Api extends cloud.Api implements ISimulatorResource {
-  private _routes: ApiSchema["props"]["routes"] = [];
+  private eventMappings: {[key: string]: EventMapping} = {};
 
   public get url(): string {
     return simulatorAttrToken(this, "url");
@@ -22,44 +23,60 @@ export class Api extends cloud.Api implements ISimulatorResource {
 
   private createOrGetFunction(
     inflight: cloud.IApiEndpointHandler,
-    props: cloud.FunctionProps
+    props: cloud.FunctionProps,
+    path: string,
+    method: cloud.HttpMethod
   ): Function {
     const hash = inflight.node.addr.slice(-8);
     const fnPath = `${this.node.id}-OnRequestHandler-${hash}`;
+    const eventId = `${this.node.id}-ApiEventMapping-${hash}`;
 
-    let existingFn = this.node.tryFindChild(fnPath);
+    let existingFn = this.node.tryFindChild(fnPath) as Function;
+
     if (existingFn) {
-      return existingFn as Function;
+      const event = this.eventMappings[eventId];
+      const routes = (event.eventProps.subscriptionProps as any).routes as ApiRoute[];
+      routes.push({
+        path,
+        method
+      });
+
+      this.eventMappings[eventId] = event;
+      return existingFn;
     }
 
     const fn = Function._newFunction(this, fnPath, inflight, props) as Function;
 
     // Api needs to be deployed after functions in the simulator so that the
     // function handles will be available.
-    this.node.addDependency(fn);
+    const eventMapping = new EventMapping(this, eventId, {
+      publisher: this,
+      subscriber: fn,
+      subscriptionProps: {
+        routes: [
+          {
+            path,
+            method,
+          }
+        ]
+      }
+    });
+    this.eventMappings[eventId] = eventMapping;
 
     return fn;
   }
 
   private addEndpoint(
-    route: string,
+    path: string,
     method: cloud.HttpMethod,
     inflight: cloud.IApiEndpointHandler,
     props: any
   ): void {
-    this._validateRoute(route);
+    this._validatePath(route);
 
-    this._addToSpec(route, method, undefined);
+    this._addToSpec(path, method, undefined);
 
-    const fn = this.createOrGetFunction(inflight, props);
-
-    const functionHandle = simulatorHandleToken(fn);
-    this._routes.push({
-      route,
-      method,
-      functionHandle,
-    });
-
+    const fn = this.createOrGetFunction(inflight, props, path, method);
     Resource.addConnection({
       from: this,
       to: fn,
@@ -68,124 +85,122 @@ export class Api extends cloud.Api implements ISimulatorResource {
   }
 
   /**
-   * Add a inflight to handle GET requests to a route.
-   * @param route Route to add
+   * Add a inflight to handle GET requests to a path.
+   * @param path path to add
    * @param inflight Inflight to handle request
    * @param props Additional props
    */
   public get(
-    route: string,
+    path: string,
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiGetProps | undefined
   ): void {
-    this.addEndpoint(route, cloud.HttpMethod.GET, inflight, props);
+    this.addEndpoint(path, cloud.HttpMethod.GET, inflight, props);
   }
 
   /**
-   * Add a inflight to handle POST requests to a route.
-   * @param route Route to add
+   * Add a inflight to handle POST requests to a path.
+   * @param path path to add
    * @param inflight Inflight to handle request
    * @param props Additional props
    */
   public post(
-    route: string,
+    path: string,
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiPostProps | undefined
   ): void {
-    this.addEndpoint(route, cloud.HttpMethod.POST, inflight, props);
+    this.addEndpoint(path, cloud.HttpMethod.POST, inflight, props);
   }
 
   /**
-   * Add a inflight to handle PUT requests to a route.
-   * @param route Route to add
+   * Add a inflight to handle PUT requests to a path.
+   * @param path path to add
    * @param inflight Inflight to handle request
    * @param props Additional props
    */
   public put(
-    route: string,
+    path: string,
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiPutProps | undefined
   ): void {
-    this.addEndpoint(route, cloud.HttpMethod.PUT, inflight, props);
+    this.addEndpoint(path, cloud.HttpMethod.PUT, inflight, props);
   }
 
   /**
-   * Add a inflight to handle DELETE requests to a route.
-   * @param route Route to add
+   * Add a inflight to handle DELETE requests to a path.
+   * @param path path to add
    * @param inflight Inflight to handle request
    * @param props Additional props
    */
   public delete(
-    route: string,
+    path: string,
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiDeleteProps | undefined
   ): void {
-    this.addEndpoint(route, cloud.HttpMethod.DELETE, inflight, props);
+    this.addEndpoint(path, cloud.HttpMethod.DELETE, inflight, props);
   }
 
   /**
-   * Add a inflight to handle PATCH requests to a route.
-   * @param route Route to add
+   * Add a inflight to handle PATCH requests to a path.
+   * @param path path to add
    * @param inflight Inflight to handle request
    * @param props Additional props
    */
   public patch(
-    route: string,
+    path: string,
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiPatchProps | undefined
   ): void {
-    this.addEndpoint(route, cloud.HttpMethod.PATCH, inflight, props);
+    this.addEndpoint(path, cloud.HttpMethod.PATCH, inflight, props);
   }
 
   /**
-   * Add a inflight to handle OPTIONS requests to a route.
-   * @param route Route to add
+   * Add a inflight to handle OPTIONS requests to a path.
+   * @param path path to add
    * @param inflight Inflight to handle request
    * @param props Additional props
    */
   public options(
-    route: string,
+    path: string,
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiOptionsProps | undefined
   ): void {
-    this.addEndpoint(route, cloud.HttpMethod.OPTIONS, inflight, props);
+    this.addEndpoint(path, cloud.HttpMethod.OPTIONS, inflight, props);
   }
 
   /**
-   * Add a inflight to handle HEAD requests to a route.
-   * @param route Route to add
+   * Add a inflight to handle HEAD requests to a path.
+   * @param path path to add
    * @param inflight Inflight to handle request
    * @param props Additional props
    */
   public head(
-    route: string,
+    path: string,
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiHeadProps | undefined
   ): void {
-    this.addEndpoint(route, cloud.HttpMethod.HEAD, inflight, props);
+    this.addEndpoint(path, cloud.HttpMethod.HEAD, inflight, props);
   }
 
   /**
-   * Add a inflight to handle CONNECT requests to a route.
-   * @param route Route to add
+   * Add a inflight to handle CONNECT requests to a path.
+   * @param path path to add
    * @param inflight Inflight to handle request
    * @param props Additional props
    */
   public connect(
-    route: string,
+    path: string,
     inflight: cloud.IApiEndpointHandler,
     props?: cloud.ApiConnectProps | undefined
   ): void {
-    this.addEndpoint(route, cloud.HttpMethod.CONNECT, inflight, props);
+    this.addEndpoint(path, cloud.HttpMethod.CONNECT, inflight, props);
   }
 
   public toSimulator(): BaseResourceSchema {
     const schema: ApiSchema = {
       type: API_TYPE,
       path: this.node.path,
-      props: {
-        routes: this._routes,
-      },
+      props: { },
       attrs: {} as any,
     };
     return schema;

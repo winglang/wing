@@ -34,9 +34,7 @@ test("create an api", async () => {
       url: expect.any(String),
     },
     path: "root/my_api",
-    props: {
-      routes: [],
-    },
+    props: { },
     type: "wingsdk.cloud.Api",
   });
   await s.stop();
