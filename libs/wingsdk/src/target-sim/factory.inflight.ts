@@ -14,7 +14,9 @@ import {
   TEST_RUNNER_TYPE,
   TOPIC_TYPE,
   REDIS_TYPE,
+  SECRET_TYPE,
 } from "./schema-resources";
+import { Secret } from "./secret.inflight";
 import { Table } from "./table.inflight";
 import { TestRunnerClient } from "./test-runner.inflight";
 import { Topic } from "./topic.inflight";
@@ -56,6 +58,8 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return new TestRunnerClient(props, context);
       case REDIS_TYPE:
         return new Redis(props, context);
+      case SECRET_TYPE:
+        return new Secret(props, context);
       default:
         throw new Error(`Type ${type} not implemented by the simulator.`);
     }
