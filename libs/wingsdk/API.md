@@ -1515,19 +1515,19 @@ new cloud.Website(props: WebsiteProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Website.addJsonObject">add_json_object</a></code> | used for adding dynamic content to the website after deployment. |
+| <code><a href="#@winglang/sdk.cloud.Website.addJson">add_json</a></code> | used for adding dynamic content to the website after deployment. |
 
 ---
 
-##### `add_json_object` <a name="add_json_object" id="@winglang/sdk.cloud.Website.addJsonObject"></a>
+##### `add_json` <a name="add_json" id="@winglang/sdk.cloud.Website.addJson"></a>
 
 ```wing
-add_json_object(key: str, obj: Json): str
+add_json(file_path: str, obj: Json): str
 ```
 
 used for adding dynamic content to the website after deployment.
 
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.Website.addJsonObject.parameter.key"></a>
+###### `file_path`<sup>Required</sup> <a name="file_path" id="@winglang/sdk.cloud.Website.addJson.parameter.filePath"></a>
 
 - *Type:* str
 
@@ -1535,7 +1535,7 @@ the bucket key to add.
 
 ---
 
-###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.cloud.Website.addJsonObject.parameter.obj"></a>
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/sdk.cloud.Website.addJson.parameter.obj"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
@@ -1549,7 +1549,7 @@ the object to write to the key.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Website.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Website.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Website.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Website.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 | <code><a href="#@winglang/sdk.cloud.Website.property.path">path</a></code> | <code>str</code> | Local path to the website's static files, relative to the Wing source file. |
 | <code><a href="#@winglang/sdk.cloud.Website.property.url">url</a></code> | <code>str</code> | The website's url. |
@@ -1574,7 +1574,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.core.Display">Display</a>
+- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
 
 Information on how to display a resource in the UI.
 
@@ -5433,7 +5433,7 @@ Payload to send to the queue.
 
 - *Extends:* <a href="#@winglang/sdk.core.IInspectable">IInspectable</a>, constructs.IConstruct
 
-- *Implemented By:* <a href="#@winglang/sdk.cloud.Api">Api</a>, <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>, <a href="#@winglang/sdk.cloud.Counter">Counter</a>, <a href="#@winglang/sdk.cloud.Function">Function</a>, <a href="#@winglang/sdk.cloud.Queue">Queue</a>, <a href="#@winglang/sdk.cloud.Schedule">Schedule</a>, <a href="#@winglang/sdk.cloud.Secret">Secret</a>, <a href="#@winglang/sdk.cloud.Table">Table</a>, <a href="#@winglang/sdk.cloud.TestRunner">TestRunner</a>, <a href="#@winglang/sdk.cloud.Topic">Topic</a>, <a href="#@winglang/sdk.core.Inflight">Inflight</a>, <a href="#@winglang/sdk.redis.Redis">Redis</a>, <a href="#@winglang/sdk.std.Resource">Resource</a>, <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>, <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>, <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>, <a href="#@winglang/sdk.cloud.IQueueAddConsumerHandler">IQueueAddConsumerHandler</a>, <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>, <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>, <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>, <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Implemented By:* <a href="#@winglang/sdk.cloud.Api">Api</a>, <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>, <a href="#@winglang/sdk.cloud.Counter">Counter</a>, <a href="#@winglang/sdk.cloud.Function">Function</a>, <a href="#@winglang/sdk.cloud.Queue">Queue</a>, <a href="#@winglang/sdk.cloud.Schedule">Schedule</a>, <a href="#@winglang/sdk.cloud.Secret">Secret</a>, <a href="#@winglang/sdk.cloud.Table">Table</a>, <a href="#@winglang/sdk.cloud.TestRunner">TestRunner</a>, <a href="#@winglang/sdk.cloud.Topic">Topic</a>, <a href="#@winglang/sdk.cloud.Website">Website</a>, <a href="#@winglang/sdk.core.Inflight">Inflight</a>, <a href="#@winglang/sdk.redis.Redis">Redis</a>, <a href="#@winglang/sdk.std.Resource">Resource</a>, <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>, <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>, <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>, <a href="#@winglang/sdk.cloud.IQueueAddConsumerHandler">IQueueAddConsumerHandler</a>, <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>, <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>, <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>, <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 Abstract interface for `Resource`.
 
