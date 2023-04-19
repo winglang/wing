@@ -28,6 +28,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     Foo._annotateInflight("$inflight_init", {"this.c": { ops: [] },"this.stateful": { ops: [] }});
+    Foo._annotateInflight("$inflight_init", {"this.c": { ops: ["dec","inc"] },"this.stateful": { ops: [] }});
     Foo._annotateInflight("foo_get", {"this.c": { ops: ["peek"] }});
     Foo._annotateInflight("foo_inc", {"this.c": { ops: ["inc"] }});
     class Bar extends $stdlib.std.Resource {

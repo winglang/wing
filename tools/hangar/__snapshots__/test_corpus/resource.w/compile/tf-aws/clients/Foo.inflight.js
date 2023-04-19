@@ -6,7 +6,8 @@ class  Foo {
   async $inflight_init()  {
     {
       this.inflight_field = 123;
-      (await this.c.inc(100));
+      (await this.c.inc(110));
+      (await this.c.dec(10));
     }
   }
   async foo_inc()  {
