@@ -1,5 +1,5 @@
 /*\
-skip:
+skipPlatforms:
   - win32
   - darwin
 \*/
