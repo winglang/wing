@@ -2,15 +2,31 @@ import { readFileSync } from "fs-extra";
 import YAML from "yaml";
 
 export interface MetaTestCase {
+  /**
+   * The compile target
+   */
   target: string;
+  /**
+   * (benchmark only) The maximum time in milliseconds for this test case, averaged over all iterations
+   */
   maxMeanTime: number;
 }
-
-export type SkipCase = "platform=windows" | "platform=macos" | "platform=linux" | "env";
+export type SkipCase = typeof process.platform;
 
 export interface MetaComment {
-  cases: MetaTestCase[];
-  skip: SkipCase[];
+  /**
+   * The different cases to test this file in
+   *
+   * @default - All available cases will be tested
+   */
+  cases?: MetaTestCase[];
+
+  /**
+   * If any of these platforms are detected, the test will be skipped
+   *
+   * @default - Will not be skipped
+   */
+  skip?: SkipCase[];
 }
 
 export function parseMetaCommentFromPath(testPath: string) {
