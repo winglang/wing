@@ -5,16 +5,14 @@ import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import { SimApp } from "../sim-app";
 
-const secretsFile = path.join(os.homedir(), ".wing", "secrets.json");
+const SECRETS_FILE = path.join(os.homedir(), ".wing", "secrets.json");
 
 test("create a secret", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Secret._newSecret(app, "my_secret", {
-    name: "wing-sim-test-my-secret",
-  });
+  cloud.Secret._newSecret(app, "my_secret");
 
-  await fs.ensureFile(secretsFile);
+  await fs.ensureFile(SECRETS_FILE);
 
   const s = await app.startSimulator();
 
@@ -25,7 +23,7 @@ test("create a secret", async () => {
     },
     path: "root/my_secret",
     props: {
-      name: "my-secret",
+      name: "my_secret-c84793b7",
     },
     type: "wingsdk.cloud.Secret",
   });
@@ -41,15 +39,12 @@ test("can get the secret value", async () => {
     name: "wing-sim-test-my-secret",
   });
 
-  await fs.ensureFile(path.join(os.homedir(), ".wing", "secrets.json"));
-  const secretsContent = await fs.readFile(
-    path.join(os.homedir(), ".wing", "secrets.json"),
-    "utf-8"
-  );
+  await fs.ensureFile(SECRETS_FILE);
+  const secretsContent = await fs.readFile(SECRETS_FILE, "utf-8");
 
   const secrets = tryParse(secretsContent) ?? {};
   await fs.writeFile(
-    secretsFile,
+    SECRETS_FILE,
     JSON.stringify({
       ...secrets,
       "wing-sim-test-my-secret": "secret-value",

@@ -177,7 +177,8 @@ export interface RedisAttributes {}
 export interface SecretSchema extends BaseResourceSchema {
   readonly type: typeof SECRET_TYPE;
   readonly props: {
-    name?: string;
+    /** The name of the secret */
+    readonly name: string;
   };
 }
 

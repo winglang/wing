@@ -16,7 +16,7 @@ test("default secret behavior", () => {
 
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(template.toJSON().Resources).toMatchSnapshot();
 });
 
 test("secret with a name", () => {
@@ -29,5 +29,5 @@ test("secret with a name", () => {
 
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(template.toJSON().Resources).toMatchSnapshot();
 });
