@@ -84,5 +84,5 @@ export enum SecretInflightMethods {
   /** `Secret.value` */
   VALUE = "value",
   /** `Secret.valueJson` */
-  VALUE_JSON = "valueJson",
+  VALUE_JSON = "value_json",
 }
