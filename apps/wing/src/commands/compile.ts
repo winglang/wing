@@ -1,6 +1,6 @@
 import * as vm from "vm";
 
-import { readFile, rmSync, mkdirp, move, mkdirpSync, copySync } from "fs-extra";
+import { readFile, rmSync, mkdirp, mkdirpSync, copySync } from "fs-extra";
 import { basename, dirname, join, resolve } from "path";
 import * as os from "os";
 
@@ -274,7 +274,8 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     rmSync(tmpSynthDir, { recursive: true, force: true });
   } else {
     // Move the temporary directory to the final target location in an atomic operation
-    await move(tmpSynthDir, synthDir, { overwrite: true } );
+    copySync(tmpSynthDir, synthDir, { overwrite: true } );
+    rmSync(tmpSynthDir, { recursive: true, force: true });
   }
 
   return synthDir;

@@ -1,0 +1,16 @@
+name: Trigger Console Update
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  update-console:
+    name: Dispatch console update workflow event
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl -X POST -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/winglang/console/actions/workflows/53970490/dispatches -d '{"ref":"main"}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
