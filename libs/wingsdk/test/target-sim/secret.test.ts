@@ -25,7 +25,7 @@ test("create a secret", async () => {
     },
     path: "root/my_secret",
     props: {
-      name: "my-secret",
+      name: "wing-sim-test-my-secret",
     },
     type: "wingsdk.cloud.Secret",
   });
