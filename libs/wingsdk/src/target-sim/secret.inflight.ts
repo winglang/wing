@@ -19,10 +19,6 @@ export class Secret implements ISecretClient, ISimulatorResourceInstance {
   private readonly name: string;
 
   constructor(props: SecretSchema["props"], context: ISimulatorContext) {
-    if (!props.name) {
-      throw new Error("Secrets must have a name when used in sim");
-    }
-
     this.context = context;
 
     this.secretsFile = path.join(os.homedir(), ".wing", "secrets.json");
