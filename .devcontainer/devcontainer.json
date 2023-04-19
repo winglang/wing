@@ -1,0 +1,14 @@
+{
+  "name": "Wing Development",
+	"image": "mcr.microsoft.com/devcontainers/base:jammy",
+  "features": {
+    "ghcr.io/devcontainers/features/aws-cli:1": {},
+    "ghcr.io/devcontainers/features/terraform:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": 18
+    },
+    "ghcr.io/devcontainers/features/rust:1": {},
+    "devwasm.azurecr.io/dev-wasm/dev-wasm-feature/rust-wasi:0": {}
+  }
+}
