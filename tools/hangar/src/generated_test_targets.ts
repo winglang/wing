@@ -1,18 +1,14 @@
 import { mkdir, readFile } from "fs-extra";
-import { snapshotDir, tmpDir, validTestDir, walkdir } from "./paths";
+import { tmpDir, validTestDir, walkdir } from "./paths";
 import { basename, join, relative } from "path";
-import { runWingCommand, sanitize_json_paths } from "./utils";
+import {
+  createMarkdownSnapshot,
+  runWingCommand,
+  sanitize_json_paths,
+} from "./utils";
 
-function getSnapshotPath(
-  wingFile: string,
-  testCase: string,
-  target: string,
-  path: string
-) {
-  return join(snapshotDir, "test_corpus", wingFile, testCase, target, path);
-}
-
-export async function compileTest(expect: Vi.ExpectStatic, wingFile: string) {
+export async function compileTest(wingFile: string) {
+  const fileMap: Record<string, string> = {};
   const wingBasename = basename(wingFile);
   const args = ["compile", "--target", "tf-aws"];
   const targetDir = join(
@@ -31,9 +27,7 @@ export async function compileTest(expect: Vi.ExpectStatic, wingFile: string) {
 
   const npx_tfJson = sanitize_json_paths(tf_json);
 
-  await expect(npx_tfJson).toMatchFileSnapshot(
-    getSnapshotPath(wingFile, "compile", "tf-aws", "main.tf.json")
-  );
+  fileMap["main.tf.json"] = JSON.stringify(npx_tfJson, null, 2);
 
   // which files to include from the .wing directory
   const dotWing = join(targetDir, ".wing");
@@ -52,13 +46,13 @@ export async function compileTest(expect: Vi.ExpectStatic, wingFile: string) {
       'require("<ABSOLUTE_PATH>/$2")'
     );
 
-    await expect(fileContents).toMatchFileSnapshot(
-      getSnapshotPath(wingFile, "compile", "tf-aws", subpath)
-    );
+    fileMap[subpath] = fileContents;
   }
+
+  await createMarkdownSnapshot(fileMap, wingFile, "compile", "tf-aws");
 }
 
-export async function testTest(expect: Vi.ExpectStatic, wingFile: string) {
+export async function testTest(wingFile: string) {
   const args = ["test", "-t", "sim"];
   const testDir = join(tmpDir, `${wingFile}_sim`);
   await mkdir(testDir, { recursive: true });
@@ -70,7 +64,8 @@ export async function testTest(expect: Vi.ExpectStatic, wingFile: string) {
     shouldSucceed: true,
   });
 
-  await expect(out.stdout).toMatchFileSnapshot(
-    getSnapshotPath(wingFile, "test", "sim", "stdout.log")
-  );
+  const fileMap: Record<string, string> = {};
+  fileMap["stdout.log"] = out.stdout;
+
+  await createMarkdownSnapshot(fileMap, wingFile, "test", "sim");
 }

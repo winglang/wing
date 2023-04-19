@@ -14,13 +14,17 @@ export interface RunWingCommandOptions {
 }
 
 export async function runWingCommand(options: RunWingCommandOptions) {
-  const plugins = options.plugins? ['--plugins', ...options.plugins] : [];
-  const out = await execa(wingBin, [...options.args, options.wingFile, ...plugins], {
-    cwd: options.cwd,
-    reject: false,
-    stdin: "ignore",
-    env: options.env,
-  });
+  const plugins = options.plugins ? ["--plugins", ...options.plugins] : [];
+  const out = await execa(
+    wingBin,
+    [...options.args, options.wingFile, ...plugins],
+    {
+      cwd: options.cwd,
+      reject: false,
+      stdin: "ignore",
+      env: options.env,
+    }
+  );
   if (options.shouldSucceed) {
     if (out.exitCode !== 0 || out.stderr !== "") {
       expect.fail(out.stderr);
@@ -68,15 +72,24 @@ export function getSnapshotPath(
   return join(snapshotDir, "test_corpus", wingFile, testCase, target, path);
 }
 
-export function createMarkdownSnapshot(fileMap: Record<string, string>, wingFile: string, testCase: string, target: string) {
-  const snapPath = join(snapshotDir, "test_corpus", wingFile, testCase, target, "README.md");
+export async function createMarkdownSnapshot(
+  fileMap: Record<string, string>,
+  wingFile: string,
+  testCase: string,
+  target: string
+) {
+  const snapPath = join(
+    snapshotDir,
+    "test_corpus",
+    `${wingFile}_${testCase}_${target}.md`
+  );
 
-  let md = `# ${wingFile} | ${testCase} | ${target}\n\n`;
+  let md = `# [${wingFile}](../../../../examples/tests/valid/${wingFile}) | ${testCase} | ${target}\n\n`;
 
   for (const [path, content] of Object.entries(fileMap)) {
-    const extension = extname(path);
+    const extension = extname(path).replace(".", "");
     md += `## ${path}\n\`\`\`${extension}\n${content}\n\`\`\`\n\n`;
   }
-  
-  expect(md).toMatchFileSnapshot(snapPath);
+
+  await expect(md).toMatchFileSnapshot(snapPath);
 }
