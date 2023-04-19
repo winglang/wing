@@ -1092,7 +1092,7 @@ new cloud.Secret(props?: SecretProps)
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Secret.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Secret.property.display">display</a></code> | <code><a href="#@winglang/sdk.core.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Secret.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/sdk.cloud.Secret.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -1115,7 +1115,7 @@ The tree node.
 display: Display;
 ```
 
-- *Type:* <a href="#@winglang/sdk.core.Display">Display</a>
+- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
 
 Information on how to display a resource in the UI.
 
@@ -5230,7 +5230,7 @@ Payload to send to the queue.
 
 - *Extends:* <a href="#@winglang/sdk.core.IInspectable">IInspectable</a>, constructs.IConstruct
 
-- *Implemented By:* <a href="#@winglang/sdk.cloud.Api">Api</a>, <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>, <a href="#@winglang/sdk.cloud.Counter">Counter</a>, <a href="#@winglang/sdk.cloud.Function">Function</a>, <a href="#@winglang/sdk.cloud.Queue">Queue</a>, <a href="#@winglang/sdk.cloud.Schedule">Schedule</a>, <a href="#@winglang/sdk.cloud.Table">Table</a>, <a href="#@winglang/sdk.cloud.TestRunner">TestRunner</a>, <a href="#@winglang/sdk.cloud.Topic">Topic</a>, <a href="#@winglang/sdk.core.Inflight">Inflight</a>, <a href="#@winglang/sdk.redis.Redis">Redis</a>, <a href="#@winglang/sdk.std.Resource">Resource</a>, <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>, <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>, <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>, <a href="#@winglang/sdk.cloud.IQueueAddConsumerHandler">IQueueAddConsumerHandler</a>, <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>, <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>, <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>, <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Implemented By:* <a href="#@winglang/sdk.cloud.Api">Api</a>, <a href="#@winglang/sdk.cloud.Bucket">Bucket</a>, <a href="#@winglang/sdk.cloud.Counter">Counter</a>, <a href="#@winglang/sdk.cloud.Function">Function</a>, <a href="#@winglang/sdk.cloud.Queue">Queue</a>, <a href="#@winglang/sdk.cloud.Schedule">Schedule</a>, <a href="#@winglang/sdk.cloud.Secret">Secret</a>, <a href="#@winglang/sdk.cloud.Table">Table</a>, <a href="#@winglang/sdk.cloud.TestRunner">TestRunner</a>, <a href="#@winglang/sdk.cloud.Topic">Topic</a>, <a href="#@winglang/sdk.core.Inflight">Inflight</a>, <a href="#@winglang/sdk.redis.Redis">Redis</a>, <a href="#@winglang/sdk.std.Resource">Resource</a>, <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>, <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>, <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>, <a href="#@winglang/sdk.cloud.IQueueAddConsumerHandler">IQueueAddConsumerHandler</a>, <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>, <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>, <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>, <a href="#@winglang/sdk.std.IResource">IResource</a>
 
 Abstract interface for `Resource`.
 
