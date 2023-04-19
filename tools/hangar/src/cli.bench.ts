@@ -5,15 +5,14 @@ import { benchmarksTestDir, walkdir } from "./paths";
 import { readFile } from "fs-extra";
 import YAML from "yaml";
 
-const targets = ["sim", "tf-aws"];
-const files: string[] = [];
-for await (const wingFile of walkdir(benchmarksTestDir)) {
-  if (wingFile.endsWith(".w")) {
-    files.push(wingFile);
-  }
-}
-
 describe("compile", async () => {
+  const targets = ["sim", "tf-aws"];
+  const files: string[] = [];
+  for await (const wingFile of walkdir(benchmarksTestDir)) {
+    if (wingFile.endsWith(".w")) {
+      files.push(wingFile);
+    }
+  }
   for (const wingFile of files) {
     for (const target of targets) {
       bench(
