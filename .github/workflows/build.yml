@@ -166,7 +166,9 @@ jobs:
 
       - name: Run E2E Tests
         working-directory: tools/hangar
-        run: npm run test -- --shard=${{ matrix.shard }}
+        run:
+          npm run test:generate
+          npm run test --shard=${{ matrix.shard }}
 
   quality-gate:
     name: Quality Gate
