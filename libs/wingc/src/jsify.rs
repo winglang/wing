@@ -2,6 +2,7 @@ mod codemaker;
 
 use aho_corasick::AhoCorasick;
 use const_format::formatcp;
+use indexmap::{indexset, IndexSet};
 use itertools::Itertools;
 
 use std::{
@@ -24,7 +25,9 @@ use crate::{
 	debug,
 	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
 	type_check::{
-		resolve_user_defined_type, symbol_env::SymbolEnv, Type, TypeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME,
+		resolve_user_defined_type,
+		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef},
+		SymbolKind, Type, TypeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME,
 	},
 	utilities::snake_case_to_camel_case,
 	visit::{self, Visit},
@@ -692,8 +695,8 @@ impl<'a> JSifier<'a> {
 
 				for value in values {
 					code.line(format!(
-						"{}[{}[\"{}\"] = {}] = \"{}\";",
-						name, name, value.name, value_index, value.name
+						"{name}[{name}[\"{}\"] = {}] = \"{}\";",
+						value.name, value_index, value.name
 					));
 
 					value_index = value_index + 1;
@@ -1142,7 +1145,26 @@ impl<'a> JSifier<'a> {
 			.filter(|name| !parent_captures.iter().any(|n| n == *name))
 			.collect_vec();
 
+		let mut referenced_preflight_types = indexset![];
+		for (n, m) in inflight_methods {
+			if let FunctionBody::Statements(scope) = &m.body {
+				let preflight_ref_visitor = PreflightTypeRefVisitor::new(scope);
+				let refs = preflight_ref_visitor.find_preflight_type_refs();
+				referenced_preflight_types.extend(refs);
+			}
+		}
+		// Remove myself from the list of referenced preflight types because I don't need to import myself
+		referenced_preflight_types.remove(&resource.name.name);
+
 		let mut code = CodeMaker::default();
+
+		// Import all referenced types to this client
+		for referenced_type in referenced_preflight_types {
+			let client_path = format!("\"./{referenced_type}.inflight.js\"");
+			code.line(format!(
+				"const {referenced_type} =  require({client_path}).{referenced_type};"
+			));
+		}
 
 		let name = &resource.name.name;
 		code.open(format!(
@@ -1521,6 +1543,56 @@ impl<'a> FieldReferenceVisitor<'a> {
 			}
 
 			_ => vec![],
+		}
+	}
+}
+
+struct PreflightTypeRefVisitor<'a> {
+	/// Set of user types referenced inside the method
+	references: IndexSet<String>,
+
+	/// The root scope of the function we're analyzing
+	function_scope: &'a Scope,
+
+	/// The current env, used to lookup the type
+	env: SymbolEnvRef,
+}
+
+impl<'a> PreflightTypeRefVisitor<'a> {
+	pub fn new(function_scope: &'a Scope) -> Self {
+		Self {
+			references: IndexSet::new(),
+			function_scope,
+			env: function_scope.env.borrow().as_ref().unwrap().get_ref(),
+		}
+	}
+
+	pub fn find_preflight_type_refs(mut self) -> IndexSet<String> {
+		self.visit_scope(self.function_scope);
+		self.references
+	}
+}
+
+impl<'ast> Visit<'ast> for PreflightTypeRefVisitor<'ast> {
+	fn visit_scope(&mut self, node: &'ast Scope) {
+		self.env = node.env.borrow().as_ref().unwrap().get_ref();
+		visit::visit_scope(self, node);
+	}
+
+	fn visit_reference(&mut self, node: &'ast Reference) {
+		if let Reference::TypeMember { type_, .. } = node {
+			let type_name = type_.to_string();
+			// Lookup the type in the current env and see where it was defined
+			if let LookupResult::Found((kind, info)) = (*self.env).try_lookup_nested_str(&type_name, None) {
+				// This must be a type reference
+				assert!(matches!(kind, SymbolKind::Type(_)));
+				// If this user type was defined preflight then store it
+				if info.phase == Phase::Preflight {
+					self.references.insert(type_name);
+				}
+			} else {
+				panic!("Unknown symbol: {type_name}");
+			}
 		}
 	}
 }

@@ -35,7 +35,7 @@ pub enum StatementIdx {
 }
 
 /// Possible results for a symbol lookup in the environment
-enum LookupResult<'a> {
+pub enum LookupResult<'a> {
 	/// The kind of symbol and usefull metadata associated with its lookup
 	Found((&'a SymbolKind, SymbolLookupInfo)),
 	/// The symbol was not found in the environment
@@ -205,6 +205,54 @@ impl SymbolEnv {
 			.map(|s| Symbol::global(s))
 			.collect::<Vec<Symbol>>();
 		self.lookup_nested_mut(&nested_vec.iter().collect::<Vec<&Symbol>>(), statement_idx)
+	}
+
+	// TODO: merge all these try/nested/ext variants into one function!
+	pub fn try_lookup_nested(&self, nested_vec: &[&Symbol], statement_idx: Option<usize>) -> LookupResult {
+		let mut it = nested_vec.iter();
+
+		let symb = *it.next().unwrap();
+		let mut res = match self.try_lookup_ext(&symb.name, statement_idx) {
+			LookupResult::Found(res) => res,
+			LookupResult::NotFound => return LookupResult::NotFound,
+			LookupResult::DefinedLater => return LookupResult::DefinedLater,
+		};
+
+		while let Some(next_symb) = it.next() {
+			// Hack: if we reach an anything symbol we just return it and don't bother if there are more nested symbols.
+			// This is because we currently allow unknown stuff to be referenced under an anything which will
+			// be resolved only in runtime.
+			// TODO: do we still need this? Why?
+			if let SymbolKind::Variable(VariableInfo { type_: t, .. }) = *res.0 {
+				if matches!(*t, Type::Anything) {
+					break;
+				}
+			}
+			let ns = if let Some(ns) = res.0.as_namespace() {
+				ns
+			} else {
+				return LookupResult::NotFound;
+			};
+
+			let lookup_result = ns.env.try_lookup_ext(&next_symb.name, statement_idx);
+
+			match lookup_result {
+				LookupResult::Found(next_res) => {
+					res = next_res;
+				}
+				LookupResult::NotFound => return LookupResult::NotFound,
+				LookupResult::DefinedLater => return LookupResult::DefinedLater,
+			}
+		}
+		LookupResult::Found(res)
+	}
+
+	pub fn try_lookup_nested_str(&self, nested_str: &str, statement_idx: Option<usize>) -> LookupResult {
+		let nested_vec = nested_str
+			.split('.')
+			.map(|s| Symbol::global(s))
+			.collect::<Vec<Symbol>>();
+		self.try_lookup_nested(&nested_vec.iter().collect::<Vec<&Symbol>>(), statement_idx)
 	}
 
 	pub fn lookup_nested(&self, nested_vec: &[&Symbol], statement_idx: Option<usize>) -> Result<&SymbolKind, TypeError> {
