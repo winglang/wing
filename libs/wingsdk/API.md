@@ -2517,7 +2517,7 @@ let secret_props = cloud.SecretProps{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.SecretProps.property.name">name</a></code> | <code>str</code> | The secrets's name. |
+| <code><a href="#@winglang/sdk.cloud.SecretProps.property.name">name</a></code> | <code>str</code> | The secret's name. |
 
 ---
 
@@ -2530,7 +2530,7 @@ name: str;
 - *Type:* str
 - *Default:* a generated name
 
-The secrets's name.
+The secret's name.
 
 ---
 
