@@ -166,7 +166,7 @@ jobs:
 
       - name: Run E2E Tests
         working-directory: tools/hangar
-        run:
+        run: |
           npm run test:generate
           npm run test --shard=${{ matrix.shard }}
 
