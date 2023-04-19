@@ -61,6 +61,10 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '((m7)["b"] === 2)'`)})(((m7)["b"] === 2))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '("b" in (m7))'`)})(("b" in (m7)))};
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(("boom" in (m4)) === false)'`)})((("boom" in (m4)) === false))};
+    const m8 = Object.freeze({"a":"a1","b":"b1","c":"c1"});
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Object.keys(m8).at(0)) === "a")'`)})(((Object.keys(m8).at(0)) === "a"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Object.keys(m8).at(1)) === "b")'`)})(((Object.keys(m8).at(1)) === "b"))};
+    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Object.keys(m8).at(2)) === "c")'`)})(((Object.keys(m8).at(2)) === "c"))};
     const empty_set = Object.freeze(new Set([]));
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(empty_set.size === 0)'`)})((empty_set.size === 0))};
     const empty_set2 = new Set([]);
