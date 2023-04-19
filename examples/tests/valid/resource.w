@@ -57,3 +57,46 @@ new cloud.Function(inflight () => {
   assert(bucket.list().length == 1);
   assert(res.foo.inflight_field == 123);
 }) as "test";
+
+resource BigPublisher {
+  b: cloud.Bucket;
+  b2: cloud.Bucket;
+  q: cloud.Queue;
+  t: cloud.Topic;
+
+  init() {
+    this.b = new cloud.Bucket();
+    this.b2 = new cloud.Bucket() as "b2";
+    this.q = new cloud.Queue();
+    this.t = new cloud.Topic();
+
+    this.t.on_message(inflight () => {
+      this.b.put("foo1.txt", "bar");
+    });
+
+    this.q.add_consumer(inflight () => {
+      this.b.put("foo2.txt", "bar");
+    });
+
+    this.b2.on_create(inflight () => {
+      this.q.push("foo");
+    });
+  }
+
+  inflight publish(s: str) {
+    this.t.publish(s);
+    this.q.push(s);
+    this.b2.put("foo", s);
+  }
+
+  inflight getObjectCount(): num {
+    return this.b.list().length;
+  }
+}
+
+let bigOlPublisher = new BigPublisher();
+new cloud.Function(inflight () => {
+  bigOlPublisher.publish("foo");
+  let count = bigOlPublisher.getObjectCount();
+  // assert(count == 2); TODO: This fails due to issue: https://github.com/winglang/wing/issues/2082
+}) as "test: dependency cycles";
