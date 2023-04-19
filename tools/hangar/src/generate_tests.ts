@@ -13,7 +13,7 @@ for (const fileInfo of readdirSync(validTestDir, { withFileTypes: true })) {
 
   const filename = fileInfo.name;
 
-  const metaComment = parseMetaCommentFromPath(filename);
+  const metaComment = parseMetaCommentFromPath(join(validTestDir, filename));
 
   let skipText = "";
   if (metaComment?.skipPlatforms?.includes(process.platform)) {

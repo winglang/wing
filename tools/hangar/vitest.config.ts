@@ -3,10 +3,7 @@ import { join, relative } from "path";
 
 export default defineConfig({
   test: {
-    reporters: ["default", "json"],
-    outputFile: {
-      json: join(__dirname, "results", "report.json"),
-    },
+    reporters: ["verbose"],
     benchmark: {
       reporters: ["default", "json"],
       outputFile: {
