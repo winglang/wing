@@ -26,7 +26,7 @@ export class Secret extends cloud.Secret {
     super(scope, id, props);
 
     this.secret = new SecretsmanagerSecret(this, "Default", {
-      name: ResourceNames.generateName(this, NAME_OPTS),
+      name: props.name ?? ResourceNames.generateName(this, NAME_OPTS),
     });
   }
 

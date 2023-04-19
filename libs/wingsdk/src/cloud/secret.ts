@@ -11,7 +11,13 @@ export const SECRET_FQN = fqnForType("cloud.Secret");
 /**
  * Properties for `Secret`.
  */
-export interface SecretProps {}
+export interface SecretProps {
+  /**
+   * The secrets's name.
+   * @default - a generated name
+   */
+  readonly name?: string;
+}
 
 /**
  * Represents a cloud secret.

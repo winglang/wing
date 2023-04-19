@@ -5,7 +5,9 @@ import { SimApp } from "../sim-app";
 test("create a secret", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Secret._newSecret(app, "my_secret");
+  cloud.Secret._newSecret(app, "my_secret", {
+    name: "my-secret",
+  });
   const s = await app.startSimulator();
 
   // THEN
@@ -15,7 +17,7 @@ test("create a secret", async () => {
     },
     path: "root/my_secret",
     props: {
-      secretValue: '{"secret":"value"}',
+      name: "my-secret",
     },
     type: "wingsdk.cloud.Secret",
   });

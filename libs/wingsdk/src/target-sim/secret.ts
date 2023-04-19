@@ -13,10 +13,11 @@ import { BaseResourceSchema } from "../testing/simulator";
  * @inflight `@winglang/sdk.cloud.ISecretClient`
  */
 export class Secret extends cloud.Secret implements ISimulatorResource {
-  private readonly secretValue = '{"secret":"value"}';
-
+  private readonly name?: string;
   constructor(scope: Construct, id: string, props: cloud.SecretProps = {}) {
     super(scope, id, props);
+
+    this.name = props.name;
   }
 
   /** @internal */
@@ -35,7 +36,7 @@ export class Secret extends cloud.Secret implements ISimulatorResource {
       type: SECRET_TYPE,
       path: this.node.path,
       props: {
-        secretValue: this.secretValue,
+        name: this.name,
       },
       attrs: {} as any,
     };
