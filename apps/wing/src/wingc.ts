@@ -93,21 +93,6 @@ export async function load(options: WingCompilerLoadOptions) {
     }
   }
 
-  // preopen all relative paths
-  let iDots = 1;
-  while(iDots < 100) {
-    const dots = "../".repeat(iDots).slice(0, -1);
-    const resolved = resolve(dots);
-    iDots += 1;
-    if (existsSync(resolved)) {
-      preopens[dots] = resolved;
-    }
-    
-    if (resolved === "/" || resolved.match(/^[A-Z]:\\$/i)) {
-      break;
-    }
-  }
-
   if (process.platform === "win32") {
     preopens["C:\\"] = "C:\\";
     for (const [key, value] of Object.entries(preopens)) {
@@ -116,9 +101,24 @@ export async function load(options: WingCompilerLoadOptions) {
     }
   }
 
-  // for each provided preopen, add resolved paths in case any absolute paths are used
+  // for each provided preopens, add resolved paths in case any absolute paths are used
   for (const [key, value] of Object.entries(preopens)) {
     preopens[normalPath(resolve(key))] = value;
+  }
+
+  // preopen all relative paths up to the root
+  let iDots = 1;
+  while (iDots < 100) {
+    const dots = "../".repeat(iDots).slice(0, -1);
+    const resolved = resolve(dots);
+    iDots += 1;
+    if (existsSync(resolved)) {
+      preopens[dots] = resolved;
+    }
+
+    if (resolved === "/" || resolved.match(/^[A-Z]:\\$/i)) {
+      break;
+    }
   }
 
   // check if running in browser
@@ -126,8 +126,6 @@ export async function load(options: WingCompilerLoadOptions) {
     ...wasiBindings,
     fs: options.fs ?? require("fs"),
   };
-
-  console.log(preopens);
 
   const wasi = new WASI({
     bindings,
@@ -144,7 +142,7 @@ export async function load(options: WingCompilerLoadOptions) {
     wasi_snapshot_preview1: wasi.wasiImport,
     env: {
       // This function is used only by the lsp
-      send_notification: () => { },
+      send_notification: () => {},
     },
     ...(options.imports ?? {}),
   } as any;
