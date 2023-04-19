@@ -1,16 +1,16 @@
+import { readFileSync } from "fs";
+import { resolve } from "path";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
+import { ApiAttributes } from "../../src/target-sim/schema-resources";
 import { Simulator } from "../../src/testing";
 import { SimApp } from "../sim-app";
-import path from "path";
-import { ApiAttributes } from "../../src/target-sim/schema-resources";
-import { readFileSync } from "fs";
 
 test("website is serving static pages", async () => {
   // GIVEN
   const app = new SimApp();
   const website = cloud.Website._newWebsite(app, "website", {
-    path: path.resolve(__dirname, "website"),
+    path: resolve(__dirname, "website"),
   });
 
   // WHEN
@@ -24,17 +24,17 @@ test("website is serving static pages", async () => {
   // THEN
   await s.stop();
   expect(await indexPage.text()).toEqual(
-    readFileSync(path.resolve(__dirname, "website/index.html"), {
+    readFileSync(resolve(__dirname, "website/index.html"), {
       encoding: "utf-8",
     })
   );
   expect(await aPage.text()).toEqual(
-    readFileSync(path.resolve(__dirname, "website/b.html"), {
+    readFileSync(resolve(__dirname, "website/b.html"), {
       encoding: "utf-8",
     })
   );
   expect(await bPage.text()).toEqual(
-    readFileSync(path.resolve(__dirname, "website/inner-folder/a.html"), {
+    readFileSync(resolve(__dirname, "website/inner-folder/a.html"), {
       encoding: "utf-8",
     })
   );
@@ -51,7 +51,7 @@ test("website is serving dynamic json content", async () => {
   const jsonPath = "config.json";
   const app = new SimApp();
   const website = cloud.Website._newWebsite(app, "website", {
-    path: path.resolve(__dirname, "website"),
+    path: resolve(__dirname, "website"),
   });
   website.addJson(jsonPath, Object(jsonConfig));
 
@@ -72,7 +72,7 @@ test("addJson throws an error for no json path", async () => {
     const jsonPath = "not a json Path.csv";
     const app = new SimApp();
     const website = cloud.Website._newWebsite(app, "website", {
-      path: path.resolve(__dirname, "website"),
+      path: resolve(__dirname, "website"),
     });
     website.addJson(jsonPath, Object(jsonConfig));
   }).toThrowError("key must have a .json suffix: csv");

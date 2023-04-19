@@ -60,10 +60,10 @@ export abstract class Website extends Resource {
 
   /**
    * used for adding dynamic content to the website after deployment
-   * @param key the bucket key to add
+   * @param filePath the bucket key to add
    * @param obj the object to write to the key
    */
-  abstract addJson(key: string, obj: Json): string;
+  abstract addJson(filePath: string, obj: Json): string;
 }
 /**
  * website props

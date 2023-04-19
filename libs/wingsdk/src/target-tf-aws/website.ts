@@ -147,20 +147,22 @@ export class Website extends cloud.Website {
     this._url = distribution.domainName;
   }
 
-  public addJson(path: string, obj: Json): string {
-    if (!path.endsWith(".json")) {
-      throw new Error(`key must have a .json suffix: ${path.split(".").pop()}`);
+  public addJson(filePath: string, obj: Json): string {
+    if (!filePath.endsWith(".json")) {
+      throw new Error(
+        `key must have a .json suffix: ${filePath.split(".").pop()}`
+      );
     }
 
-    new S3Object(this, `aws_s3_bucket_object_${path}`, {
+    new S3Object(this, `aws_s3_bucket_object_${filePath}`, {
       dependsOn: [this.bucket],
       content: JSON.stringify(obj),
       bucket: this.bucket.bucket,
       contentType: "application/json",
-      key: path,
+      key: filePath,
     });
 
-    return `${this.url}/${path}`;
+    return `${this.url}/${filePath}`;
   }
 
   private uploadFile(filePath: string) {

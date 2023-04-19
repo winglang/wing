@@ -18,13 +18,15 @@ export class Website extends cloud.Website implements ISimulatorResource {
     return simulatorAttrToken(this, "url");
   }
 
-  public addJson(path: string, obj: Json): string {
-    if (!path.endsWith(".json")) {
-      throw new Error(`key must have a .json suffix: ${path.split(".").pop()}`);
+  public addJson(filePath: string, obj: Json): string {
+    if (!filePath.endsWith(".json")) {
+      throw new Error(
+        `key must have a .json suffix: ${filePath.split(".").pop()}`
+      );
     }
-    this.jsonRoutes[path] = obj;
+    this.jsonRoutes[filePath] = obj;
 
-    return `${this.url}/${path}`;
+    return `${this.url}/${filePath}`;
   }
 
   public toSimulator(): BaseResourceSchema {
