@@ -9,8 +9,8 @@ import {
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
-import * as core from "../core";
-import { Resource } from "../core";
+import { Code } from "../core";
+import { Resource, IInflightHost, IResource } from "../std";
 import {
   BaseResourceSchema,
   ISimulatorResourceInstance,
@@ -34,8 +34,8 @@ export interface IEventPublisher extends ISimulatorResourceInstance {
 export const EVENT_MAP_FQN = fqnForType("sim.EventMapping");
 
 export interface EventMappingProps {
-  subscriber: core.IResource;
-  publisher: core.IResource;
+  subscriber: IResource;
+  publisher: IResource;
   subscriptionProps: EventSubscription;
 }
 
@@ -72,12 +72,12 @@ export class EventMapping extends Resource implements ISimulatorResource {
     return schema;
   }
 
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }
 
-  public _toInflight(): core.Code {
+  public _toInflight(): Code {
     return makeSimulatorJsClient(__filename, this);
   }
 }

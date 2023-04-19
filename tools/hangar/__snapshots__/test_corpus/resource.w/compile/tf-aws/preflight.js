@@ -59,7 +59,7 @@ class $Root extends $stdlib.std.Resource {
     }
     Bar._annotateInflight("$inflight_init", {"this.b": { ops: [] },"this.foo": { ops: [] },"this.name": { ops: [] },"this.stateful": { ops: [] }});
     Bar._annotateInflight("my_method", {"this.b": { ops: ["get","put"] },"this.foo": { ops: ["foo_get","foo_inc"] }});
-    class BigPublisher extends $stdlib.core.Resource {
+    class BigPublisher extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
@@ -67,7 +67,7 @@ class $Root extends $stdlib.std.Resource {
         this.q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
         this.t = this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic");
         (this.t.onMessage(new $stdlib.core.Inflight(this, "$Inflight1", {
-          code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.13d8b2a5ce461a9e7382cd5a95aec89c08ee0f0c7dcb7628b30ee3838fa2228f/index.js".replace(/\\/g, "/"))),
+          code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
           bindings: {
             this: {
               obj: this,
@@ -77,7 +77,7 @@ class $Root extends $stdlib.std.Resource {
         })
         ));
         (this.q.addConsumer(new $stdlib.core.Inflight(this, "$Inflight2", {
-          code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.32c5c58f30ba98ba91ef415cf6c59c026183401eda32ef30ef1208e21ebabad9/index.js".replace(/\\/g, "/"))),
+          code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc2/index.js".replace(/\\/g, "/"))),
           bindings: {
             this: {
               obj: this,
@@ -87,7 +87,7 @@ class $Root extends $stdlib.std.Resource {
         })
         ));
         (this.b2.onCreate(new $stdlib.core.Inflight(this, "$Inflight3", {
-          code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.230a3fd36e2fbd17d98094f5c2ff251a21af5bfe61030c7e45862b0805cbca0b/index.js".replace(/\\/g, "/"))),
+          code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc3/index.js".replace(/\\/g, "/"))),
           bindings: {
             this: {
               obj: this,
@@ -102,6 +102,7 @@ class $Root extends $stdlib.std.Resource {
         const b2_client = this._lift(this.b2);
         const q_client = this._lift(this.q);
         const t_client = this._lift(this.t);
+        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/BigPublisher.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
@@ -110,6 +111,7 @@ class $Root extends $stdlib.std.Resource {
               b2: ${b2_client},
               q: ${q_client},
               t: ${t_client},
+              stateful: ${stateful_client},
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
@@ -117,13 +119,13 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    BigPublisher._annotateInflight("$inflight_init", {"this.b": { ops: [] },"this.b2": { ops: [] },"this.q": { ops: [] },"this.t": { ops: [] }});
+    BigPublisher._annotateInflight("$inflight_init", {"this.b": { ops: [] },"this.b2": { ops: [] },"this.q": { ops: [] },"this.stateful": { ops: [] },"this.t": { ops: [] }});
     BigPublisher._annotateInflight("getObjectCount", {"this.b": { ops: ["list"] }});
     BigPublisher._annotateInflight("publish", {"this.b2": { ops: ["put"] },"this.q": { ops: ["push"] },"this.t": { ops: ["publish"] }});
     const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const res = new Bar(this,"Bar","Arr",bucket);
-    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight4", {
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc4/index.js".replace(/\\/g, "/"))),
       bindings: {
         bucket: {
           obj: bucket,
@@ -138,7 +140,7 @@ class $Root extends $stdlib.std.Resource {
     );
     const bigOlPublisher = new BigPublisher(this,"BigPublisher");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test: dependency cycles",new $stdlib.core.Inflight(this, "$Inflight5", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.7614ed49e1885b2f4ed8046900b82cad803ab9f6007319e3774bb8ea397197e5/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc5/index.js".replace(/\\/g, "/"))),
       bindings: {
         bigOlPublisher: {
           obj: bigOlPublisher,
