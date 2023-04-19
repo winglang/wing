@@ -2513,6 +2513,26 @@ bring cloud;
 let secret_props = cloud.SecretProps{ ... }
 ```
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.SecretProps.property.name">name</a></code> | <code>str</code> | The secrets's name. |
+
+---
+
+##### `name`<sup>Optional</sup> <a name="name" id="@winglang/sdk.cloud.SecretProps.property.name"></a>
+
+```wing
+name: str;
+```
+
+- *Type:* str
+- *Default:* a generated name
+
+The secrets's name.
+
+---
 
 ### TableProps <a name="TableProps" id="@winglang/sdk.cloud.TableProps"></a>
 
