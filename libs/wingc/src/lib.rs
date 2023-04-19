@@ -11,12 +11,12 @@ use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use capture::CaptureVisitor;
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
 use jsify::JSifier;
-use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
 use visit::Visit;
 use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
+use wingii::type_system::TypeSystem;
 
 use crate::parser::Parser;
 use std::alloc::{alloc, dealloc, Layout};
@@ -61,11 +61,10 @@ const WINGSDK_MUT_SET: &'static str = "std.MutableSet";
 const WINGSDK_STRING: &'static str = "std.String";
 const WINGSDK_JSON: &'static str = "std.Json";
 const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
-const WINGSDK_RESOURCE: &'static str = "core.Resource";
+const WINGSDK_RESOURCE: &'static str = "std.Resource";
 const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
-const CONSTRUCT_BASE_INTERFACE: &'static str = "constructs.IConstruct";
 
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
@@ -174,7 +173,7 @@ pub fn type_check(
 	scope: &mut Scope,
 	types: &mut Types,
 	source_path: &Path,
-	jsii_imports: &mut Vec<JsiiImportSpec>,
+	jsii_types: &mut TypeSystem,
 ) -> Diagnostics {
 	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
 	scope.set_env(env);
@@ -230,7 +229,7 @@ pub fn type_check(
 		types,
 	);
 
-	let mut tc = TypeChecker::new(types, source_path, jsii_imports);
+	let mut tc = TypeChecker::new(types, source_path, jsii_types);
 	tc.add_globals(scope);
 
 	tc.type_check_scope(scope);
@@ -286,11 +285,11 @@ pub fn compile(
 	let mut types = Types::new();
 	// Build our AST
 	let (mut scope, parse_diagnostics) = parse(&source_path);
-	let mut jsii_imports = Vec::new();
+	let mut jsii_types = TypeSystem::new();
 
 	// Type check everything and build typed symbol environment
 	let type_check_diagnostics = if scope.statements.len() > 0 {
-		type_check(&mut scope, &mut types, &source_path, &mut jsii_imports)
+		type_check(&mut scope, &mut types, &source_path, &mut jsii_types)
 	} else {
 		// empty scope, no type checking needed
 		Diagnostics::new()

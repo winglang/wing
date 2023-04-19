@@ -8,6 +8,7 @@ import { Function } from "./function";
 import { Code } from "../core";
 import * as core from "../core";
 import * as redis from "../redis";
+import { IInflightHost } from "../std";
 import {
   CaseConventions,
   NameOptions,
@@ -94,7 +95,7 @@ export class Redis extends redis.Redis {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("redis can only be bound by tfaws.Function for now");
     }

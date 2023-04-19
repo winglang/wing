@@ -3,7 +3,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
-class $Root extends $stdlib.core.Resource {
+class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const arr = Object.freeze(["hello", "world"]);
@@ -12,7 +12,7 @@ class $Root extends $stdlib.core.Resource {
     const arr_of_map = Object.freeze([Object.freeze({"bang":123})]);
     const j = Object.freeze({"a":"hello","b":"world"});
     const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.8737b7ddfddfd5b0f34d5d28d474901ed7c1f4bd7c3028e87d902df663b0f9ca/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
         arr: {
           obj: arr,

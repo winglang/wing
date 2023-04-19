@@ -1,7 +1,8 @@
 import { Construct } from "constructs";
 import { Function } from "./function";
 import { fqnForType } from "../constants";
-import { IResource, Resource, App } from "../core";
+import { App } from "../core";
+import { IResource, Resource } from "../std";
 
 export const TOPIC_FQN = fqnForType("cloud.Topic");
 
