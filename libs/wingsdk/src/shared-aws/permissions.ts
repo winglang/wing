@@ -115,3 +115,22 @@ export function calculateBucketPermissions(
 
   return policies;
 }
+
+export function calculateSecretPermissions(
+  arn: string,
+  ops: string[]
+): PolicyStatement[] {
+  const policies: PolicyStatement[] = [];
+
+  if (
+    ops.includes(cloud.SecretInflightMethods.VALUE) ||
+    ops.includes(cloud.SecretInflightMethods.VALUE_JSON)
+  ) {
+    policies.push({
+      actions: ["secretsmanager:GetSecretValue"],
+      resources: [arn],
+    });
+  }
+
+  return policies;
+}

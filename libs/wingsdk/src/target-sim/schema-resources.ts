@@ -15,6 +15,7 @@ export const TABLE_TYPE = "wingsdk.cloud.Table";
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 export const TEST_RUNNER_TYPE = "wingsdk.cloud.TestRunner";
 export const REDIS_TYPE = "wingsdk.redis.Redis";
+export const SECRET_TYPE = "wingsdk.cloud.Secret";
 
 export type FunctionHandle = string;
 
@@ -171,3 +172,14 @@ export interface RedisSchema extends BaseResourceSchema {
 }
 
 export interface RedisAttributes {}
+
+/** Schema for cloud.Secret */
+export interface SecretSchema extends BaseResourceSchema {
+  readonly type: typeof SECRET_TYPE;
+  readonly props: {
+    readonly secretValue: string;
+  };
+}
+
+/** Runtime attributes for cloud.Secret */
+export interface SecretAttributes {}
