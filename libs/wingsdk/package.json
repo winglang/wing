@@ -72,12 +72,6 @@
     "vitest": "^0.29.2"
   },
   "peerDependencies": {
-    "@cdktf/provider-aws": "^12.0.1",
-    "@cdktf/provider-azurerm": "^5.0.1",
-    "@cdktf/provider-google": "^5.0.2",
-    "@cdktf/provider-random": "^5.0.0",
-    "aws-cdk-lib": "^2.64.0",
-    "cdktf": "0.15.2",
     "constructs": "~10.1.228"
   },
   "dependencies": {
@@ -86,6 +80,7 @@
     "@aws-sdk/client-elasticache": "3.256.0",
     "@aws-sdk/client-lambda": "3.256.0",
     "@aws-sdk/client-s3": "3.256.0",
+    "@aws-sdk/client-secrets-manager": "3.256.0",
     "@aws-sdk/client-sns": "3.256.0",
     "@aws-sdk/client-sqs": "3.256.0",
     "@aws-sdk/types": "3.254.0",
@@ -118,6 +113,7 @@
     "@aws-sdk/client-elasticache",
     "@aws-sdk/client-lambda",
     "@aws-sdk/client-s3",
+    "@aws-sdk/client-secrets-manager",
     "@aws-sdk/client-sns",
     "@aws-sdk/client-sqs",
     "@aws-sdk/types",
@@ -127,6 +123,12 @@
     "@azure/core-paging",
     "@azure/identity",
     "@azure/storage-blob",
+    "@cdktf/provider-aws",
+    "@cdktf/provider-azurerm",
+    "@cdktf/provider-google",
+    "@cdktf/provider-random",
+    "aws-cdk-lib",
+    "cdktf",
     "debug",
     "esbuild-wasm",
     "express",

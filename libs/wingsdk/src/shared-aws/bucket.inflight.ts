@@ -105,6 +105,7 @@ export class BucketClient implements IBucketClient {
    * List all keys in the bucket.
    * @param prefix Limits the response to keys that begin with the specified prefix
    * TODO - add pagination support, currently returns all existing keys in the bucket
+   * https://github.com/winglang/wing/issues/315
    */
   public async list(prefix?: string): Promise<string[]> {
     const list: string[] = [];

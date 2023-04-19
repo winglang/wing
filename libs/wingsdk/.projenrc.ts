@@ -1,15 +1,7 @@
 import { JsonFile, cdk, javascript } from "projen";
 import rootPackageJson from "../../package.json";
 
-const JSII_DEPS = [
-  "constructs@~10.1.228",
-  "cdktf@0.15.2",
-  "@cdktf/provider-random@^5.0.0",
-  "@cdktf/provider-aws@^12.0.1",
-  "@cdktf/provider-azurerm@^5.0.1",
-  "@cdktf/provider-google@^5.0.2",
-  "aws-cdk-lib@^2.64.0",
-];
+const JSII_DEPS = ["constructs@~10.1.228"];
 
 const project = new cdk.JsiiProject({
   name: "@winglang/sdk",
@@ -24,6 +16,12 @@ const project = new cdk.JsiiProject({
   peerDeps: [...JSII_DEPS],
   deps: [...JSII_DEPS],
   bundledDeps: [
+    "cdktf@0.15.2",
+    "@cdktf/provider-random@^5.0.0",
+    "@cdktf/provider-aws@^12.0.1",
+    "@cdktf/provider-azurerm@^5.0.1",
+    "@cdktf/provider-google@^5.0.2",
+    "aws-cdk-lib@^2.64.0",
     // preflight dependencies
     "debug",
     "esbuild-wasm",
@@ -37,6 +35,7 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/util-dynamodb@3.256.0",
     "@aws-sdk/client-lambda@3.256.0",
     "@aws-sdk/client-s3@3.256.0",
+    "@aws-sdk/client-secrets-manager@3.256.0",
     "@aws-sdk/client-sqs@3.256.0",
     "@aws-sdk/client-sns@3.256.0",
     "@aws-sdk/types@3.254.0",

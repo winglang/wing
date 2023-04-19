@@ -167,6 +167,11 @@
       "type": "bundled"
     },
     {
+      "name": "@aws-sdk/client-secrets-manager",
+      "version": "3.256.0",
+      "type": "bundled"
+    },
+    {
       "name": "@aws-sdk/client-sns",
       "version": "3.256.0",
       "type": "bundled"
@@ -211,6 +216,36 @@
       "type": "bundled"
     },
     {
+      "name": "@cdktf/provider-aws",
+      "version": "^12.0.1",
+      "type": "bundled"
+    },
+    {
+      "name": "@cdktf/provider-azurerm",
+      "version": "^5.0.1",
+      "type": "bundled"
+    },
+    {
+      "name": "@cdktf/provider-google",
+      "version": "^5.0.2",
+      "type": "bundled"
+    },
+    {
+      "name": "@cdktf/provider-random",
+      "version": "^5.0.0",
+      "type": "bundled"
+    },
+    {
+      "name": "aws-cdk-lib",
+      "version": "^2.64.0",
+      "type": "bundled"
+    },
+    {
+      "name": "cdktf",
+      "version": "0.15.2",
+      "type": "bundled"
+    },
+    {
       "name": "debug",
       "type": "bundled"
     },
@@ -247,69 +282,9 @@
       "type": "bundled"
     },
     {
-      "name": "@cdktf/provider-aws",
-      "version": "^12.0.1",
-      "type": "peer"
-    },
-    {
-      "name": "@cdktf/provider-azurerm",
-      "version": "^5.0.1",
-      "type": "peer"
-    },
-    {
-      "name": "@cdktf/provider-google",
-      "version": "^5.0.2",
-      "type": "peer"
-    },
-    {
-      "name": "@cdktf/provider-random",
-      "version": "^5.0.0",
-      "type": "peer"
-    },
-    {
-      "name": "aws-cdk-lib",
-      "version": "^2.64.0",
-      "type": "peer"
-    },
-    {
-      "name": "cdktf",
-      "version": "0.15.2",
-      "type": "peer"
-    },
-    {
       "name": "constructs",
       "version": "~10.1.228",
       "type": "peer"
-    },
-    {
-      "name": "@cdktf/provider-aws",
-      "version": "^12.0.1",
-      "type": "runtime"
-    },
-    {
-      "name": "@cdktf/provider-azurerm",
-      "version": "^5.0.1",
-      "type": "runtime"
-    },
-    {
-      "name": "@cdktf/provider-google",
-      "version": "^5.0.2",
-      "type": "runtime"
-    },
-    {
-      "name": "@cdktf/provider-random",
-      "version": "^5.0.0",
-      "type": "runtime"
-    },
-    {
-      "name": "aws-cdk-lib",
-      "version": "^2.64.0",
-      "type": "runtime"
-    },
-    {
-      "name": "cdktf",
-      "version": "0.15.2",
-      "type": "runtime"
     },
     {
       "name": "constructs",

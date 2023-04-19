@@ -3,7 +3,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
-class $Root extends $stdlib.core.Resource {
+class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const my_str = "hello, string";
@@ -12,7 +12,7 @@ class $Root extends $stdlib.core.Resource {
     const my_second_bool = false;
     const my_dur = $stdlib.std.Duration.fromSeconds(600);
     const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.34e5b7de651594942ccd90c9d76355813afc895aa395fbda2c204aa36f7c3a85/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
         my_bool: {
           obj: my_bool,

@@ -1,8 +1,8 @@
 import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { IResource, Resource, App } from "../core";
-import { Duration } from "../std";
+import { App } from "../core";
+import { Duration, IResource, Resource } from "../std";
 
 /**
  * Global identifier for `Queue`.

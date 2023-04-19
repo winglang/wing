@@ -7,6 +7,7 @@ import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
+import { IInflightHost, Resource } from "../std";
 import { convertBetweenHandlers } from "../utils/convert";
 
 /**
@@ -66,7 +67,7 @@ export class Queue extends cloud.Queue {
     });
     fn._addEventSource(eventSource);
 
-    core.Resource.addConnection({
+    Resource.addConnection({
       from: this,
       to: fn,
       relationship: "add_consumer",
@@ -76,7 +77,7 @@ export class Queue extends cloud.Queue {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("queues can only be bound by tfaws.Function for now");
     }

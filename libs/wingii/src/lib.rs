@@ -77,11 +77,6 @@ pub mod spec {
 			}
 		}
 	}
-
-	pub fn load_assembly_from_path(path: &str) -> Result<Assembly> {
-		let file = find_assembly_file(path)?;
-		load_assembly_from_file(&file, None)
-	}
 }
 
 pub mod type_system {
@@ -94,19 +89,9 @@ pub mod type_system {
 	use crate::util::package_json;
 	use crate::Result;
 	use std::collections::HashMap;
-	use std::path::Path;
 
 	pub struct TypeSystem {
 		assemblies: HashMap<String, Assembly>,
-		roots: Vec<String>,
-	}
-
-	/// Options to pass to the assembly loader
-	pub struct AssemblyLoadOptions {
-		/// Is this a root assembly? If unsure, pass `true`.
-		pub root: bool,
-		/// Should we load dependencies recursively? If unsure, pass `true`.
-		pub deps: bool,
 	}
 
 	pub trait QueryableType {}
@@ -118,15 +103,11 @@ pub mod type_system {
 		pub fn new() -> TypeSystem {
 			TypeSystem {
 				assemblies: HashMap::new(),
-				roots: Vec::new(),
 			}
 		}
 
 		pub fn includes_assembly(&self, name: &str) -> bool {
 			self.assemblies.contains_key(name)
-		}
-		pub fn is_root(&self, name: &str) -> bool {
-			self.roots.contains(&name.to_string())
 		}
 		pub fn find_assembly(&self, name: &str) -> Option<&Assembly> {
 			self.assemblies.get(name)
@@ -162,59 +143,26 @@ pub mod type_system {
 			}
 		}
 
-		pub fn load(&mut self, file_or_directory: &str, opts: Option<AssemblyLoadOptions>) -> Result<AssemblyName> {
-			let opts = opts.unwrap_or(AssemblyLoadOptions { deps: true, root: true });
-			if Path::new(file_or_directory).is_dir() {
-				self.load_module(file_or_directory, &opts)
-			} else {
-				// load_file always loads a single manifest and never recurses into dependencies
-				self.load_file(file_or_directory, Some(true))
-			}
-		}
-
-		fn load_assembly(&mut self, path: &str) -> Result<Assembly> {
+		fn load_assembly(&self, path: &str) -> Result<Assembly> {
 			spec::load_assembly_from_file(path, None)
 		}
 
-		fn add_root(&mut self, assembly: &Assembly) -> Result<()> {
-			if !(self.roots.iter().any(|a| a == &assembly.name)) {
-				self.roots.push(assembly.name.clone());
-			}
-			Ok(())
-		}
-
-		fn add_assembly(&mut self, assembly: Assembly, is_root: bool) -> Result<AssemblyName> {
+		fn add_assembly(&mut self, assembly: Assembly) -> Result<AssemblyName> {
 			if !self.assemblies.contains_key(&assembly.name) {
 				self.assemblies.insert(assembly.name.clone(), assembly.clone());
-			}
-			if is_root {
-				self.add_root(&assembly)?;
 			}
 			Ok(assembly.name)
 		}
 
-		fn load_file(&mut self, file: &str, is_root: Option<bool>) -> Result<AssemblyName> {
-			let assembly = spec::load_assembly_from_path(file)?;
-			self.add_assembly(assembly, is_root.unwrap_or(false))
-		}
-
-		pub fn load_dep(&mut self, dep: &str, search_start: &str, opts: &AssemblyLoadOptions) -> Result<AssemblyName> {
-			let is_root = opts.root;
+		pub fn load_dep(&mut self, dep: &str, search_start: &str) -> Result<AssemblyName> {
 			let module_dir = package_json::find_dependency_directory(dep, search_start).ok_or(format!(
 				"Unable to load \"{}\": Module not found in \"{}\"",
 				dep, search_start
 			))?;
-			self.load_module(
-				&module_dir,
-				&AssemblyLoadOptions {
-					root: is_root,
-					deps: opts.deps,
-				},
-			)
+			self.load_module(&module_dir)
 		}
 
-		fn load_module(&mut self, module_directory: &str, opts: &AssemblyLoadOptions) -> Result<AssemblyName> {
-			let is_root = opts.root;
+		pub fn load_module(&mut self, module_directory: &str) -> Result<AssemblyName> {
 			let file_path = std::path::Path::new(module_directory).join("package.json");
 			let package_json = std::fs::read_to_string(file_path)?;
 			let package: serde_json::Value = serde_json::from_str(&package_json)?;
@@ -222,35 +170,26 @@ pub mod type_system {
 				.get("jsii")
 				.ok_or(format!("not a jsii module: {}", module_directory))?;
 			let assembly_file = spec::find_assembly_file(module_directory)?;
-			let asm = self.load_assembly(&assembly_file)?;
-			if self.assemblies.contains_key(&asm.name) {
-				let existing = self.assemblies.get(&asm.name).unwrap();
-				if existing.version != asm.version {
-					return Err(
-						format!(
-							"Assembly {} already exists with version {}. Got {}",
-							asm.name, existing.version, asm.version
-						)
-						.into(),
-					);
-				}
-				if is_root {
-					self.add_root(&asm)?;
-				}
-				return Ok(asm.name);
+			// in JSII, the assembly name is the NPM package name, so we don't need to load the assembly
+			// in order to check if we've already loaded it. Also, JSII doesn't support multiple version
+			// of the same assembly in the closure, so it is safe to assume that there are no version
+			// conflicts (otherwise we are going to get into semantic versioning checks and stuff).
+			let name = package.get("name").unwrap().as_str().unwrap();
+			if self.assemblies.contains_key(name) {
+				return Ok(name.to_string());
 			}
-			let root = self.add_assembly(asm, is_root)?;
+
+			let asm = self.load_assembly(&assembly_file)?;
+			let root = self.add_assembly(asm)?;
 			let bundled = package_json::bundled_dependencies_of(&package);
 			let deps = package_json::dependencies_of(&package);
-			if opts.deps {
-				for dep in deps {
-					if !bundled.contains(&dep) {
-						let dep_dir = package_json::find_dependency_directory(&dep, &module_directory).ok_or(format!(
-							"Unable to load \"{}\": Module not found from \"{}\"",
-							dep, module_directory
-						))?;
-						self.load_module(&dep_dir, opts)?;
-					}
+			for dep in deps {
+				if !bundled.contains(&dep) {
+					let dep_dir = package_json::find_dependency_directory(&dep, &module_directory).ok_or(format!(
+						"Unable to load \"{}\": Module not found from \"{}\"",
+						dep, module_directory
+					))?;
+					self.load_module(&dep_dir).expect("unable to load assembly");
 				}
 			}
 			Ok(root)

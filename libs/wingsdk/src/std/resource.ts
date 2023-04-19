@@ -1,12 +1,12 @@
 import { Construct, IConstruct } from "constructs";
+import { Duration } from ".";
 import {
   WING_ATTRIBUTE_RESOURCE_CONNECTIONS,
   WING_ATTRIBUTE_RESOURCE_STATEFUL,
-} from "./attributes";
-import { Code } from "./inflight";
-import { serializeImmutableData } from "./internal";
-import { IInspectable, TreeInspector } from "./tree";
-import { Duration } from "../std";
+} from "../core/attributes";
+import { Code } from "../core/inflight";
+import { serializeImmutableData } from "../core/internal";
+import { IInspectable, TreeInspector } from "../core/tree";
 import { log } from "../util";
 
 /**
@@ -166,7 +166,7 @@ export abstract class Resource extends Construct implements IResource {
    * transactions or events, and can typically be replaced by a cloud provider
    * with a fresh copy without any consequences.
    */
-  public abstract readonly stateful: boolean;
+  public readonly stateful: boolean = false;
 
   /**
    * Binds the resource to the host so that it can be used by inflight code.

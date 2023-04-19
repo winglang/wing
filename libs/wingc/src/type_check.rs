@@ -10,7 +10,7 @@ use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{
 	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_JSON,
 	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE,
-	WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING,
+	WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING,
 };
 use derivative::Derivative;
 use indexmap::{IndexMap, IndexSet};
@@ -23,6 +23,7 @@ use std::iter::FilterMap;
 use std::path::Path;
 use symbol_env::{StatementIdx, SymbolEnv};
 use wingii::fqn::FQN;
+use wingii::type_system::TypeSystem;
 
 use self::jsii_importer::JsiiImportSpec;
 use self::symbol_env::SymbolEnvIter;
@@ -206,6 +207,7 @@ impl Interface {
 	fn is_resource(&self) -> bool {
 		// TODO: This should check that the interface extends `IResource` from
 		// the SDK, not just any interface with the name `IResource`
+		// https://github.com/winglang/wing/issues/2098
 		self.name.name == "IResource"
 			|| self.extends.iter().any(|i| {
 				i.as_interface()
@@ -455,6 +457,7 @@ impl Subtype for Type {
 			}
 			(_, Self::Interface(_)) => {
 				// TODO - for now only resources can implement interfaces
+				// https://github.com/winglang/wing/issues/2111
 				false
 			}
 			(Self::Struct(l0), Self::Struct(_)) => {
@@ -574,6 +577,7 @@ impl FunctionSignature {
 	/// Returns the maximum number of parameters that can be passed to this function.
 	///
 	/// TODO: how to represent unlimited parameters in the case of variadics?
+	/// https://github.com/winglang/wing/issues/125
 	fn max_parameters(&self) -> usize {
 		self.parameters.len()
 	}
@@ -877,6 +881,8 @@ pub struct Types {
 	void_idx: usize,
 	json_idx: usize,
 	mut_json_idx: usize,
+
+	resource_base_type: Option<TypeRef>,
 }
 
 impl Types {
@@ -916,6 +922,7 @@ impl Types {
 			void_idx,
 			json_idx,
 			mut_json_idx,
+			resource_base_type: None,
 		}
 	}
 
@@ -982,6 +989,23 @@ impl Types {
 		let t = &self.namespaces[idx];
 		UnsafeRef::<Namespace>(&**t as *const Namespace)
 	}
+
+	fn resource_base_type(&mut self) -> TypeRef {
+		// cache the resource base type ref
+		if self.resource_base_type.is_none() {
+			let resource_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE);
+			self.resource_base_type = Some(
+				self
+					.libraries
+					.lookup_nested_str(&resource_fqn, None)
+					.unwrap()
+					.as_type()
+					.unwrap(),
+			);
+		}
+
+		self.resource_base_type.unwrap()
+	}
 }
 
 pub struct TypeChecker<'a> {
@@ -1002,7 +1026,10 @@ pub struct TypeChecker<'a> {
 
 	/// JSII Manifest descriptions to be imported.
 	/// May be reused between compilations
-	jsii_imports: &'a mut Vec<JsiiImportSpec>,
+	jsii_imports: Vec<JsiiImportSpec>,
+
+	/// The JSII type system
+	jsii_types: &'a mut TypeSystem,
 
 	pub diagnostics: RefCell<Diagnostics>,
 
@@ -1014,13 +1041,14 @@ pub struct TypeChecker<'a> {
 }
 
 impl<'a> TypeChecker<'a> {
-	pub fn new(types: &'a mut Types, source_path: &'a Path, jsii_imports: &'a mut Vec<JsiiImportSpec>) -> Self {
+	pub fn new(types: &'a mut Types, source_path: &'a Path, jsii_types: &'a mut TypeSystem) -> Self {
 		Self {
 			types,
 			inner_scopes: vec![],
+			jsii_types,
 			source_path,
 			diagnostics: RefCell::new(Diagnostics::new()),
-			jsii_imports,
+			jsii_imports: vec![],
 			in_json: 0,
 			statement_idx: 0,
 		}
@@ -1564,6 +1592,7 @@ impl<'a> TypeChecker<'a> {
 
 	fn type_check_closure(&mut self, func_def: &ast::FunctionDefinition, env: &SymbolEnv) -> UnsafeRef<Type> {
 		// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
+		// https://github.com/winglang/wing/issues/457
 		// Create a type_checker function signature from the AST function definition
 		let function_type = self.resolve_type_annotation(&func_def.signature.to_type_annotation(), env);
 		let sig = function_type.as_function_sig().unwrap();
@@ -2069,10 +2098,6 @@ impl<'a> TypeChecker<'a> {
 				// Resources cannot be defined inflight
 				assert!(!*is_resource || env.phase == Phase::Preflight);
 
-				if *is_resource {
-					// TODO
-				}
-
 				// Verify parent is actually a known Class/Resource and get their env
 				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {
 					let t = self
@@ -2092,6 +2117,11 @@ impl<'a> TypeChecker<'a> {
 							(None, None)
 						}
 					}
+				} else if *is_resource {
+					// if this is a resource and we don't have a parent, then we implicitly set it to `std.Resource`
+					let t = self.types.resource_base_type();
+					let env = t.as_resource().unwrap().env.get_ref();
+					(Some(t), Some(env))
 				} else {
 					(None, None)
 				};
@@ -2206,6 +2236,7 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// TODO: handle member/method overrides in our env based on whatever rules we define in our spec
+				// https://github.com/winglang/wing/issues/1124
 
 				// Type check methods
 				for (method_name, method_def) in methods.iter() {
@@ -2454,6 +2485,7 @@ impl<'a> TypeChecker<'a> {
 		T: MethodLike<'a>,
 	{
 		// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
+		// https://github.com/winglang/wing/issues/457
 		// Lookup the method in the class_env
 		let method_type = class_env
 			.lookup(method_name, None)
@@ -2540,41 +2572,39 @@ impl<'a> TypeChecker<'a> {
 			// This spec has already been pre-supplied to the typechecker, so we'll still use this to populate the symbol environment
 			jsii
 		} else {
-			let mut wingii_types = wingii::type_system::TypeSystem::new();
-
 			// Loading the SDK is handled different from loading any other jsii modules because with the SDK we provide an exact
 			// location to locate the SDK, whereas for the other modules we need to search for them from the source directory.
 			let assembly_name = if library_name == WINGSDK_ASSEMBLY_NAME {
 				// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
 				let manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
-				let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
-					root: true,
-					deps: false,
-				};
-				let assembly_name = match wingii_types.load(manifest_root.as_str(), Some(wingii_loader_options)) {
+				let assembly_name = match self.jsii_types.load_module(manifest_root.as_str()) {
 					Ok(name) => name,
 					Err(type_error) => {
 						self.type_error(TypeError {
-							message: format!("Cannot locate Wing standard library (checking \"{}\"", manifest_root),
+							message: format!(
+								"Cannot locate Wing standard library from \"{}\": {}",
+								manifest_root, type_error
+							),
 							span: stmt.map(|s| s.span.clone()).unwrap_or_default(),
 						});
-						debug!("{:?}", type_error);
 						return;
 					}
 				};
 
 				assembly_name
 			} else {
-				let wingii_loader_options = wingii::type_system::AssemblyLoadOptions { root: true, deps: true };
 				let source_dir = self.source_path.parent().unwrap().to_str().unwrap();
-				let assembly_name = match wingii_types.load_dep(library_name.as_str(), source_dir, &wingii_loader_options) {
+				let assembly_name = match self.jsii_types.load_dep(library_name.as_str(), source_dir) {
 					Ok(name) => name,
 					Err(type_error) => {
 						self.type_error(TypeError {
-							message: format!("Cannot find module \"{}\" in source directory", library_name),
+							message: format!(
+								"Cannot find module \"{}\" in source directory: {}",
+								library_name,
+								type_error.to_string()
+							),
 							span: stmt.map(|s| s.span.clone()).unwrap_or_default(),
 						});
-						debug!("{:?}", type_error);
 						return;
 					}
 				};
@@ -2584,7 +2614,6 @@ impl<'a> TypeChecker<'a> {
 			debug!("Loaded JSII assembly {}", assembly_name);
 
 			self.jsii_imports.push(JsiiImportSpec {
-				type_system: wingii_types,
 				assembly_name: assembly_name.to_string(),
 				namespace_filter,
 				alias: alias.clone(),
@@ -2598,13 +2627,14 @@ impl<'a> TypeChecker<'a> {
 				.expect("Expected to find the just-added jsii import spec")
 		};
 
-		let mut importer = JsiiImporter::new(jsii, self.types);
+		let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
 
-		// if we're importing the standard module from the wing sdk, we want to eagerly import all the types within it
+		// if we're importing the `std` module from the wing sdk, eagerly import all the types within it
 		// because they aren't typically resolved through the same process as other types
 		if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME && jsii.alias.name == WINGSDK_STD_MODULE {
 			importer.deep_import_submodule_to_env(WINGSDK_STD_MODULE);
 		}
+
 		importer.import_submodules_to_env(env);
 	}
 
@@ -2831,6 +2861,7 @@ impl<'a> TypeChecker<'a> {
 	/// This function checks if the expression is a reference to a user define type and if it is it returns it. If not it returns `None`.
 	fn expr_maybe_type(&mut self, expr: &Expr, env: &SymbolEnv) -> Option<UserDefinedType> {
 		// TODO: we currently don't handle parenthesized expressions correctly so something like `(MyEnum).A` or `std.(namespace.submodule).A` will return true, is this a problem?
+		// https://github.com/winglang/wing/issues/1006
 		let mut path = vec![];
 		let mut curr_expr = expr;
 		loop {
@@ -3117,7 +3148,7 @@ impl<'a> TypeChecker<'a> {
 		// If the type is not found, attempt to import it from a jsii library
 		for jsii in &*self.jsii_imports {
 			if jsii.alias.name == user_defined_type.root.name {
-				let mut importer = JsiiImporter::new(&jsii, self.types);
+				let mut importer = JsiiImporter::new(&jsii, self.types, self.jsii_types);
 
 				let mut udt_string = if jsii.assembly_name == WINGSDK_ASSEMBLY_NAME {
 					// when importing from the std lib, the "alias" is the submodule

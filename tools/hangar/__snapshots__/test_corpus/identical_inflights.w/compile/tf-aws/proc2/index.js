@@ -1,0 +1,3 @@
+async handle() {
+  const {  } = this;
+}

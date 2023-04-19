@@ -1,6 +1,7 @@
 class  Foo {
-  constructor({ data }) {
+  constructor({ data, stateful }) {
     this.data = data;
+    this.stateful = stateful;
   }
   async get_stuff()  {
     {

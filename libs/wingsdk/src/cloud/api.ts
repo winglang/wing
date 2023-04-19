@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App, IResource, Resource } from "../core";
+import { App } from "../core";
+import { IResource, Resource } from "../std/resource";
 
 /**
  * Global identifier for `Api`.

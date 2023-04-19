@@ -3,7 +3,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
-class $Root extends $stdlib.core.Resource {
+class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
@@ -13,7 +13,7 @@ class $Root extends $stdlib.core.Resource {
     const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"PrivateBucket",{ public: false });
     const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
     const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.e9aa0b50add93f5d8b788d4e38afe0098f95fe48ac16d3ef991aa253313c8daf/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
         bucket1: {
           obj: bucket1,

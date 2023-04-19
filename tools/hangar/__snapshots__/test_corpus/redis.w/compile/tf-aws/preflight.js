@@ -4,13 +4,13 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 const redis = require('@winglang/sdk').redis;
-class $Root extends $stdlib.core.Resource {
+class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const r = this.node.root.newAbstract("@winglang/sdk.redis.Redis",this,"redis.Redis");
     const r2 = this.node.root.newAbstract("@winglang/sdk.redis.Redis",this,"r2");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.2f327831adfa10066eee3b4bc7cb9e6ec48481f9990eda0b0d999afbedefe536/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
         r: {
           obj: r,

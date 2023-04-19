@@ -3,10 +3,10 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
-class $Root extends $stdlib.core.Resource {
+class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class A extends $stdlib.core.Resource {
+    class A extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
       }
@@ -24,7 +24,7 @@ class $Root extends $stdlib.core.Resource {
     }
     A._annotateInflight("$inflight_init", {});
     A._annotateInflight("handle", {});
-    class r extends $stdlib.core.Resource {
+    class r extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
       }
@@ -52,7 +52,7 @@ class $Root extends $stdlib.core.Resource {
     }
     r._annotateInflight("$inflight_init", {});
     r._annotateInflight("method_2", {});
-    class Dog extends $stdlib.core.Resource {
+    class Dog extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
       }
@@ -72,7 +72,7 @@ class $Root extends $stdlib.core.Resource {
     Dog._annotateInflight("eat", {});
     const x = new A(this,"A");
     const y = new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.4bb413397aac07073d75578d701a65d4cbd2b018b9ba7fd5fc1654fa9a3a8abe/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
         x: {
           obj: x,

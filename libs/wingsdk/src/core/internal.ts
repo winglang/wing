@@ -1,7 +1,7 @@
 import { IConstruct } from "constructs";
 import { InflightBindings, NodeJsCode } from "./inflight";
-import { DisplayProps, IResource, Resource } from "./resource";
 import { Duration } from "../std";
+import { DisplayProps, IResource, Resource } from "../std/resource";
 
 export function makeHandler(
   scope: IConstruct,
@@ -66,6 +66,9 @@ ${Object.entries(clients)
 
 export function serializeImmutableData(obj: any): string {
   switch (typeof obj) {
+    case "undefined":
+      return "undefined";
+
     case "string":
     case "boolean":
     case "number":

@@ -7,7 +7,7 @@ import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import * as std from "../std";
+import { Duration, IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 import { convertBetweenHandlers } from "../utils/convert";
 
@@ -17,13 +17,13 @@ import { convertBetweenHandlers } from "../utils/convert";
  * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
 export class Queue extends cloud.Queue implements ISimulatorResource {
-  private readonly timeout: std.Duration;
+  private readonly timeout: Duration;
   private readonly subscribers: QueueSubscriber[];
   private readonly initialMessages: string[] = [];
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
-    this.timeout = props.timeout ?? std.Duration.fromSeconds(10);
+    this.timeout = props.timeout ?? Duration.fromSeconds(10);
     this.subscribers = [];
     this.initialMessages.push(...(props.initialMessages ?? []));
   }
@@ -80,7 +80,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       batchSize: props.batchSize ?? 1,
     });
 
-    core.Resource.addConnection({
+    Resource.addConnection({
       from: this,
       to: fn,
       relationship: "add_consumer",
@@ -104,7 +104,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: core.IInflightHost, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
     super._bind(host, ops);
   }

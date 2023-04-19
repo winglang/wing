@@ -3,10 +3,10 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
-class $Root extends $stdlib.core.Resource {
+class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class Fetch extends $stdlib.core.Resource {
+    class Fetch extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
       }
@@ -26,7 +26,7 @@ class $Root extends $stdlib.core.Resource {
     Fetch._annotateInflight("get", {});
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const handler = new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.715acfaea3ff48e55a13ccb9337f2fa4389dd31fffa5b0f24a07bfa56038dcd8/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
       }
     })
@@ -34,7 +34,7 @@ class $Root extends $stdlib.core.Resource {
     (api.get("/users/{name}",handler));
     const f = new Fetch(this,"Fetch");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight2", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.718eff3f4061776cb4ae50876841ab4ee2dad187ff545f5ac2ae1e6beeb7d65e/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc2/index.js".replace(/\\/g, "/"))),
       bindings: {
         api: {
           obj: api,

@@ -1,0 +1,67 @@
+const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
+const cloud = require('@winglang/sdk').cloud;
+const cx = require("constructs");
+const aws = require("@cdktf/provider-aws");
+class $Root extends $stdlib.std.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    class WingResource extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        {console.log(`my id is ${this.node.id}`)};
+      }
+      _toInflight() {
+        const stateful_client = this._lift(this.stateful);
+        const self_client_path = "./clients/WingResource.inflight.js".replace(/\\/g, "/");
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const tmp = new (require("${self_client_path}")).WingResource({
+              stateful: ${stateful_client},
+            });
+            if (tmp.$inflight_init) { await tmp.$inflight_init(); }
+            return tmp;
+          })())
+        `);
+      }
+    }
+    WingResource._annotateInflight("$inflight_init", {"this.stateful": { ops: [] }});
+    const get_path =  (c) =>  {
+      {
+        return c.node.path;
+      }
+    }
+    ;
+    const get_display_name =  (r) =>  {
+      {
+        return r.display.title;
+      }
+    }
+    ;
+    const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue",aws.sqsQueue.SqsQueue,this,"aws.sqsQueue.SqsQueue");
+    const wr = new WingResource(this,"WingResource");
+    const another_resource = wr;
+    {console.log(`path of sqs.queue: ${(get_path(q))}`)};
+    {console.log(`path of wing resource: ${(get_path(wr))}`)};
+    const title = ((get_display_name(wr)) ?? "no display name");
+    {console.log(`display name of wing resource: ${title}`)};
+  }
+}
+class $App extends $AppBase {
+  constructor() {
+    super({ outdir: $outdir, name: "construct-base", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    if ($wing_is_test) {
+      new $Root(this, "env0");
+      const $test_runner = this.testRunner;
+      const $tests = $test_runner.findTests();
+      for (let $i = 1; $i < $tests.length; $i++) {
+        new $Root(this, "env" + $i);
+      }
+    } else {
+      new $Root(this, "Default");
+    }
+  }
+}
+new $App().synth();

@@ -2,10 +2,10 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-class $Root extends $stdlib.core.Resource {
+class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class R extends $stdlib.core.Resource {
+    class R extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         if (true) {
@@ -20,11 +20,13 @@ class $Root extends $stdlib.core.Resource {
       }
       _toInflight() {
         const f1_client = this._lift(this.f1);
+        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/R.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const tmp = new (require("${self_client_path}")).R({
               f1: ${f1_client},
+              stateful: ${stateful_client},
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
@@ -32,7 +34,7 @@ class $Root extends $stdlib.core.Resource {
         `);
       }
     }
-    R._annotateInflight("$inflight_init", {"this.f1": { ops: [] }});
+    R._annotateInflight("$inflight_init", {"this.f1": { ops: [] },"this.stateful": { ops: [] }});
     let x = 5;
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === 5)'`)})((x === 5))};
     x = (x + 1);

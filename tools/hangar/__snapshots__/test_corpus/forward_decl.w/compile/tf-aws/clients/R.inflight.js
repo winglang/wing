@@ -1,6 +1,7 @@
 class  R {
-  constructor({ f }) {
+  constructor({ f, stateful }) {
     this.f = f;
+    this.stateful = stateful;
   }
 }
 exports.R = R;
