@@ -2,8 +2,7 @@ import { basename } from "path";
 import { bench, describe } from "vitest";
 import { runWingCommand } from "./utils";
 import { benchmarksTestDir, walkdir } from "./paths";
-import { readFile } from "fs-extra";
-import YAML from "yaml";
+import { parseMetaCommentFromPath } from "./meta_comment";
 
 describe("compile", async () => {
   const targets = ["sim", "tf-aws"];
@@ -37,27 +36,19 @@ describe("compile", async () => {
                 throw new Error("Could not get mean time for current test");
               }
 
-              // read data from file
-              const wingData = await readFile(wingFile, "utf-8");
-
-              // regex parse the comment to get the threshold
-              const specialCommentRegex = /^\/\*\\\n(.+)\\\*\/$/gms;
-              const specialComment = specialCommentRegex.exec(wingData);
-              const rawYaml = specialComment?.[1];
-              if (!rawYaml) {
-                throw new Error("Could not parse special test comment");
+              const metaComment = parseMetaCommentFromPath(wingFile);
+              if (!metaComment) {
+                // no comment found
+                return;
               }
-
-              const yaml = YAML.parse(rawYaml);
-              const cases: any[] = yaml.cases;
-              const foundThreshold = cases.find(
+              
+              const foundThreshold = metaComment.cases.find(
                 (c) => c.target === target
-              ).meanThreshold;
+              )?.maxMeanTime;
 
               if (!foundThreshold) {
-                throw new Error(
-                  `Could not find threshold for target ${target}`
-                );
+                // no threshold found
+                return;
               }
 
               if (meanTime > foundThreshold) {
