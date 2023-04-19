@@ -2222,6 +2222,39 @@ The maximum amount of time the function can run.
 
 ---
 
+### GetSecretValueOptions <a name="GetSecretValueOptions" id="@winglang/sdk.cloud.GetSecretValueOptions"></a>
+
+Options when getting a secret value.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.GetSecretValueOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let get_secret_value_options = cloud.GetSecretValueOptions{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.GetSecretValueOptions.property.cache">cache</a></code> | <code>bool</code> | Whether to cache the value. |
+
+---
+
+##### `cache`<sup>Optional</sup> <a name="cache" id="@winglang/sdk.cloud.GetSecretValueOptions.property.cache"></a>
+
+```wing
+cache: bool;
+```
+
+- *Type:* bool
+- *Default:* true
+
+Whether to cache the value.
+
+---
+
 ### QueueAddConsumerProps <a name="QueueAddConsumerProps" id="@winglang/sdk.cloud.QueueAddConsumerProps"></a>
 
 Options for Queue.addConsumer.
@@ -5322,22 +5355,34 @@ Inflight interface for `Secret`.
 ##### `value` <a name="value" id="@winglang/sdk.cloud.ISecretClient.value"></a>
 
 ```wing
-value(): str
+value(options?: GetSecretValueOptions): str
 ```
 
 **Inflight client:** [true](#true)
 
 Retrieve the value of the secret.
 
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.ISecretClient.value.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.GetSecretValueOptions">GetSecretValueOptions</a>
+
+---
+
 ##### `value_json` <a name="value_json" id="@winglang/sdk.cloud.ISecretClient.valueJson"></a>
 
 ```wing
-value_json(): Json
+value_json(options?: GetSecretValueOptions): Json
 ```
 
 **Inflight client:** [true](#true)
 
 Retrieve the Json value of the secret.
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.ISecretClient.valueJson.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.GetSecretValueOptions">GetSecretValueOptions</a>
+
+---
 
 
 ### ITableClient <a name="ITableClient" id="@winglang/sdk.cloud.ITableClient"></a>
