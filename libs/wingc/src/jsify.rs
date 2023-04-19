@@ -1167,7 +1167,6 @@ impl<'a> JSifier<'a> {
 					let client_path = format!("\"./{type_name}.inflight.js\"");
 					code.line(format!("const {type_name} = require({client_path}).{type_name};"));
 				}
-				Type::Struct(_) => todo!(),
 				Type::Enum(e) => code.add_code(self.jsify_enum(&e.name, &e.values)),
 				_ => panic!("Unexpected type: \"{t}\" referenced inflight"),
 			}
