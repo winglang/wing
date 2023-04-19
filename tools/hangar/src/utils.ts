@@ -1,7 +1,8 @@
 import { execa } from "execa";
 import * as fs from "fs-extra";
 import { expect } from "vitest";
-import { wingBin } from "./paths";
+import { snapshotDir, wingBin } from "./paths";
+import { join, extname } from "path";
 
 export interface RunWingCommandOptions {
   cwd: string;
@@ -56,4 +57,26 @@ export function tfResourcesOfCount(
   resourceId: string
 ): number {
   return Object.values(JSON.parse(templateStr).resource[resourceId]).length;
+}
+
+export function getSnapshotPath(
+  wingFile: string,
+  testCase: string,
+  target: string,
+  path: string
+) {
+  return join(snapshotDir, "test_corpus", wingFile, testCase, target, path);
+}
+
+export function createMarkdownSnapshot(fileMap: Record<string, string>, wingFile: string, testCase: string, target: string) {
+  const snapPath = join(snapshotDir, "test_corpus", wingFile, testCase, target, "README.md");
+
+  let md = `# ${wingFile} | ${testCase} | ${target}\n\n`;
+
+  for (const [path, content] of Object.entries(fileMap)) {
+    const extension = extname(path);
+    md += `## ${path}\n\`\`\`${extension}\n${content}\n\`\`\`\n\n`;
+  }
+  
+  expect(md).toMatchFileSnapshot(snapPath);
 }
