@@ -92,7 +92,7 @@ exports[`default website behavior 1`] = `
           \\"aws_s3_bucket.root_Website_3C57D90B\\"
         ],
         \\"key\\": \\"/inner-folder/a.html\\",
-        \\"source\\": \\"/Users/tsuf/Documents/wing/libs/wingsdk/test/target-tf-aws/website/inner-folder/a.html\\"
+        \\"source\\": \\"/home/runner/work/wing/wing/libs/wingsdk/test/target-tf-aws/website/inner-folder/a.html\\"
       },
       \\"root_Website_awss3bucketobjectbhtml_6B166508\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_Website_3C57D90B.bucket}\\",
@@ -101,7 +101,7 @@ exports[`default website behavior 1`] = `
           \\"aws_s3_bucket.root_Website_3C57D90B\\"
         ],
         \\"key\\": \\"/b.html\\",
-        \\"source\\": \\"/Users/tsuf/Documents/wing/libs/wingsdk/test/target-tf-aws/website/b.html\\"
+        \\"source\\": \\"/home/runner/work/wing/wing/libs/wingsdk/test/target-tf-aws/website/b.html\\"
       }
     }
   }
@@ -353,7 +353,7 @@ exports[`website with add_json 1`] = `
           \\"aws_s3_bucket.root_Website_3C57D90B\\"
         ],
         \\"key\\": \\"/inner-folder/a.html\\",
-        \\"source\\": \\"/Users/tsuf/Documents/wing/libs/wingsdk/test/target-tf-aws/website/inner-folder/a.html\\"
+        \\"source\\": \\"/home/runner/work/wing/wing/libs/wingsdk/test/target-tf-aws/website/inner-folder/a.html\\"
       },
       \\"root_Website_awss3bucketobjectbhtml_6B166508\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_Website_3C57D90B.bucket}\\",
@@ -362,7 +362,7 @@ exports[`website with add_json 1`] = `
           \\"aws_s3_bucket.root_Website_3C57D90B\\"
         ],
         \\"key\\": \\"/b.html\\",
-        \\"source\\": \\"/Users/tsuf/Documents/wing/libs/wingsdk/test/target-tf-aws/website/b.html\\"
+        \\"source\\": \\"/home/runner/work/wing/wing/libs/wingsdk/test/target-tf-aws/website/b.html\\"
       },
       \\"root_Website_awss3bucketobjectconfigjson_56517E14\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.root_Website_3C57D90B.bucket}\\",
