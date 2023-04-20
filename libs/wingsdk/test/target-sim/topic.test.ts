@@ -17,9 +17,7 @@ test("create a topic", async () => {
       handle: expect.any(String),
     },
     path: "root/my_topic",
-    props: {
-      subscribers: [],
-    },
+    props: {},
     type: "wingsdk.cloud.Topic",
   });
   await s.stop();

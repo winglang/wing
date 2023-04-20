@@ -63,6 +63,7 @@ const project = new cdk.JsiiProject({
     "aws-sdk-client-mock",
     "aws-sdk-client-mock-jest",
     "eslint-plugin-sort-exports",
+    "fs-extra",
     "patch-package",
     "vitest",
     "@types/uuid",
