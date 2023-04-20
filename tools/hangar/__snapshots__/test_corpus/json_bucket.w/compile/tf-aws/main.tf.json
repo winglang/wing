@@ -110,7 +110,7 @@
         "publish": true,
         "role": "${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_cloudFunction_S3Object_C8435368.key}",
         "timeout": 30,
         "vpc_config": {
@@ -138,7 +138,7 @@
         "publish": true,
         "role": "${aws_iam_role.root_testput_IamRole_1BBF32A6.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "${aws_s3_bucket.root_testput_Code_DE7653AD.bucket}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_testput_S3Object_30BF1DDD.key}",
         "timeout": 30,
         "vpc_config": {
@@ -148,6 +148,15 @@
       },
     },
     "aws_s3_bucket": {
+      "root_Code_02F3C603": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Code",
+            "uniqueId": "root_Code_02F3C603",
+          },
+        },
+        "bucket_prefix": "code-c84a50b1-",
+      },
       "root_cloudBucket_4F3C4F53": {
         "//": {
           "metadata": {
@@ -157,24 +166,6 @@
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false,
-      },
-      "root_cloudFunction_Code_2F6A7948": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Function/Code",
-            "uniqueId": "root_cloudFunction_Code_2F6A7948",
-          },
-        },
-        "bucket_prefix": "code-c8d4206f-",
-      },
-      "root_testput_Code_DE7653AD": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:put/Code",
-            "uniqueId": "root_testput_Code_DE7653AD",
-          },
-        },
-        "bucket_prefix": "code-c8ab7128-",
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -218,7 +209,7 @@
             "uniqueId": "root_cloudFunction_S3Object_C8435368",
           },
         },
-        "bucket": "${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>",
       },
@@ -229,7 +220,7 @@
             "uniqueId": "root_testput_S3Object_30BF1DDD",
           },
         },
-        "bucket": "${aws_s3_bucket.root_testput_Code_DE7653AD.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>",
       },

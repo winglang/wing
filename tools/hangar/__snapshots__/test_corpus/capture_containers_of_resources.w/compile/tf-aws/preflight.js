@@ -10,7 +10,7 @@ class $Root extends $stdlib.std.Resource {
     const map = Object.freeze({"my_queue":this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue")});
     const set = Object.freeze(new Set(["foo", "foo", "bar"]));
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.ea0323e98cac08dd11d819f738e933ff5bf537dbe04472f29a655f50c5d7a70b/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
         arr: {
           obj: arr,

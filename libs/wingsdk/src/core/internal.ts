@@ -66,6 +66,9 @@ ${Object.entries(clients)
 
 export function serializeImmutableData(obj: any): string {
   switch (typeof obj) {
+    case "undefined":
+      return "undefined";
+
     case "string":
     case "boolean":
     case "number":

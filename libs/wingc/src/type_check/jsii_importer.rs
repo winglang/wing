@@ -489,7 +489,7 @@ impl<'a> JsiiImporter<'a> {
 				class_env
 					.define(
 						&Self::jsii_name_to_symbol(&camel_case_to_snake_case(&p.name), &p.location_in_module),
-						SymbolKind::make_variable(wing_type, matches!(p.immutable, Some(true)), is_static, phase),
+						SymbolKind::make_variable(wing_type, !matches!(p.immutable, Some(true)), is_static, phase),
 						StatementIdx::Top,
 					)
 					.expect(&format!(

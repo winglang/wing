@@ -166,7 +166,7 @@
         "publish": true,
         "role": "${aws_iam_role.root_A_testinflightinresourceshouldcapturetherightscopedvar_IamRole_5FB68186.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "${aws_s3_bucket.root_A_testinflightinresourceshouldcapturetherightscopedvar_Code_470A0E83.bucket}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_A_testinflightinresourceshouldcapturetherightscopedvar_S3Object_4C07FA3E.key}",
         "timeout": 30,
         "vpc_config": {
@@ -191,7 +191,7 @@
         "publish": true,
         "role": "${aws_iam_role.root_testinflightnestedshouldnotcapturetheshadowedvar_IamRole_5890FA19.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "${aws_s3_bucket.root_testinflightnestedshouldnotcapturetheshadowedvar_Code_56F93BD5.bucket}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_testinflightnestedshouldnotcapturetheshadowedvar_S3Object_C99A3326.key}",
         "timeout": 30,
         "vpc_config": {
@@ -216,7 +216,7 @@
         "publish": true,
         "role": "${aws_iam_role.root_testinflightontopshouldcapturetop_IamRole_E3EDF4E3.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "${aws_s3_bucket.root_testinflightontopshouldcapturetop_Code_F50B9894.bucket}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_testinflightontopshouldcapturetop_S3Object_75B26800.key}",
         "timeout": 30,
         "vpc_config": {
@@ -241,7 +241,7 @@
         "publish": true,
         "role": "${aws_iam_role.root_testinsideinflightshouldcapturetherightscope_IamRole_AC6104A8.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "${aws_s3_bucket.root_testinsideinflightshouldcapturetherightscope_Code_0FC24998.bucket}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_testinsideinflightshouldcapturetherightscope_S3Object_33BC24EC.key}",
         "timeout": 30,
         "vpc_config": {
@@ -251,41 +251,14 @@
       },
     },
     "aws_s3_bucket": {
-      "root_A_testinflightinresourceshouldcapturetherightscopedvar_Code_470A0E83": {
+      "root_Code_02F3C603": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/A/test:inflight in resource should capture the right scoped var/Code",
-            "uniqueId": "root_A_testinflightinresourceshouldcapturetherightscopedvar_Code_470A0E83",
+            "path": "root/Default/Code",
+            "uniqueId": "root_Code_02F3C603",
           },
         },
-        "bucket_prefix": "code-c8acbe1c-",
-      },
-      "root_testinflightnestedshouldnotcapturetheshadowedvar_Code_56F93BD5": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight nested should not capture the shadowed var/Code",
-            "uniqueId": "root_testinflightnestedshouldnotcapturetheshadowedvar_Code_56F93BD5",
-          },
-        },
-        "bucket_prefix": "code-c8907873-",
-      },
-      "root_testinflightontopshouldcapturetop_Code_F50B9894": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inflight on top should capture top/Code",
-            "uniqueId": "root_testinflightontopshouldcapturetop_Code_F50B9894",
-          },
-        },
-        "bucket_prefix": "code-c8f3b71f-",
-      },
-      "root_testinsideinflightshouldcapturetherightscope_Code_0FC24998": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:inside_inflight should capture the right scope/Code",
-            "uniqueId": "root_testinsideinflightshouldcapturetherightscope_Code_0FC24998",
-          },
-        },
-        "bucket_prefix": "code-c847b2c0-",
+        "bucket_prefix": "code-c84a50b1-",
       },
     },
     "aws_s3_object": {
@@ -296,7 +269,7 @@
             "uniqueId": "root_A_testinflightinresourceshouldcapturetherightscopedvar_S3Object_4C07FA3E",
           },
         },
-        "bucket": "${aws_s3_bucket.root_A_testinflightinresourceshouldcapturetherightscopedvar_Code_470A0E83.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>",
       },
@@ -307,7 +280,7 @@
             "uniqueId": "root_testinflightnestedshouldnotcapturetheshadowedvar_S3Object_C99A3326",
           },
         },
-        "bucket": "${aws_s3_bucket.root_testinflightnestedshouldnotcapturetheshadowedvar_Code_56F93BD5.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>",
       },
@@ -318,7 +291,7 @@
             "uniqueId": "root_testinflightontopshouldcapturetop_S3Object_75B26800",
           },
         },
-        "bucket": "${aws_s3_bucket.root_testinflightontopshouldcapturetop_Code_F50B9894.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>",
       },
@@ -329,7 +302,7 @@
             "uniqueId": "root_testinsideinflightshouldcapturetherightscope_S3Object_33BC24EC",
           },
         },
-        "bucket": "${aws_s3_bucket.root_testinsideinflightshouldcapturetherightscope_Code_0FC24998.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>",
       },

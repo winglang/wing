@@ -4,11 +4,10 @@ import { IamRolePolicy } from "@cdktf/provider-aws/lib/iam-role-policy";
 import { IamRolePolicyAttachment } from "@cdktf/provider-aws/lib/iam-role-policy-attachment";
 import { LambdaFunction } from "@cdktf/provider-aws/lib/lambda-function";
 import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
-import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
-import { BUCKET_PREFIX_OPTS } from "./bucket";
+import { App } from "./app";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { PolicyStatement } from "../shared-aws";
@@ -93,10 +92,8 @@ export class Function extends cloud.Function {
     });
 
     // Create unique S3 bucket for hosting Lambda code
-    // TODO: share all code in a single bucket https://github.com/winglang/wing/issues/178
-    const bucket = new S3Bucket(this, "Code");
-    const bucketPrefix = ResourceNames.generateName(bucket, BUCKET_PREFIX_OPTS);
-    bucket.bucketPrefix = bucketPrefix;
+    const app = App.of(this) as App;
+    const bucket = app.codeBucket;
 
     // Choose an object name so that:
     // - whenever code changes, the object name changes

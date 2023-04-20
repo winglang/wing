@@ -166,7 +166,7 @@ export abstract class Resource extends Construct implements IResource {
    * transactions or events, and can typically be replaced by a cloud provider
    * with a fresh copy without any consequences.
    */
-  public abstract readonly stateful: boolean;
+  public readonly stateful: boolean = false;
 
   /**
    * Binds the resource to the host so that it can be used by inflight code.

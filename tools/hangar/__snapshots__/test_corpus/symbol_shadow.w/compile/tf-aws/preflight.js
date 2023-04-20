@@ -12,7 +12,7 @@ class $Root extends $stdlib.std.Resource {
         const s = "in_resource";
         {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "in_resource")'`)})((s === "in_resource"))};
         this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:inflight in resource should capture the right scoped var",new $stdlib.core.Inflight(this, "$Inflight1", {
-          code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.e28eb0e2c84db9ebf39c60f781e33eb71437de9aea3c9e56527b5592b0d7f259/index.js".replace(/\\/g, "/"))),
+          code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
           bindings: {
             s: {
               obj: s,
@@ -23,10 +23,12 @@ class $Root extends $stdlib.std.Resource {
         );
       }
       _toInflight() {
+        const stateful_client = this._lift(this.stateful);
         const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const tmp = new (require("${self_client_path}")).A({
+              stateful: ${stateful_client},
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
             return tmp;
@@ -34,13 +36,13 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    A._annotateInflight("$inflight_init", {});
+    A._annotateInflight("$inflight_init", {"this.stateful": { ops: [] }});
     const s = "top";
     if (true) {
       const s = "inner";
       {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "inner")'`)})((s === "inner"))};
       this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:inflight nested should not capture the shadowed var",new $stdlib.core.Inflight(this, "$Inflight2", {
-        code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.df438ca6138f58185d9c29cf9a58e1569a2c82980ef45ec3e718c6491e53bbbd/index.js".replace(/\\/g, "/"))),
+        code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc2/index.js".replace(/\\/g, "/"))),
         bindings: {
           s: {
             obj: s,
@@ -53,7 +55,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "top")'`)})((s === "top"))};
     new A(this,"A");
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:inflight on top should capture top",new $stdlib.core.Inflight(this, "$Inflight3", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.5ebfc1356186fe498d7c77085bf74da82ee2b4cc0d3396d5e240d89a689f5a70/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc3/index.js".replace(/\\/g, "/"))),
       bindings: {
         s: {
           obj: s,
@@ -63,7 +65,7 @@ class $Root extends $stdlib.std.Resource {
     })
     );
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"test:inside_inflight should capture the right scope",new $stdlib.core.Inflight(this, "$Inflight4", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.b1aa79217b40a2b129132f76b7120cde0cb1ecc3a4b68bf48ee31594fa38cc4b/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc4/index.js".replace(/\\/g, "/"))),
       bindings: {
       }
     })

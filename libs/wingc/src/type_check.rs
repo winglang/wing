@@ -207,6 +207,7 @@ impl Interface {
 	fn is_resource(&self) -> bool {
 		// TODO: This should check that the interface extends `IResource` from
 		// the SDK, not just any interface with the name `IResource`
+		// https://github.com/winglang/wing/issues/2098
 		self.name.name == "IResource"
 			|| self.extends.iter().any(|i| {
 				i.as_interface()
@@ -456,6 +457,7 @@ impl Subtype for Type {
 			}
 			(_, Self::Interface(_)) => {
 				// TODO - for now only resources can implement interfaces
+				// https://github.com/winglang/wing/issues/2111
 				false
 			}
 			(Self::Struct(l0), Self::Struct(_)) => {
@@ -575,6 +577,7 @@ impl FunctionSignature {
 	/// Returns the maximum number of parameters that can be passed to this function.
 	///
 	/// TODO: how to represent unlimited parameters in the case of variadics?
+	/// https://github.com/winglang/wing/issues/125
 	fn max_parameters(&self) -> usize {
 		self.parameters.len()
 	}
@@ -1589,6 +1592,7 @@ impl<'a> TypeChecker<'a> {
 
 	fn type_check_closure(&mut self, func_def: &ast::FunctionDefinition, env: &SymbolEnv) -> UnsafeRef<Type> {
 		// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
+		// https://github.com/winglang/wing/issues/457
 		// Create a type_checker function signature from the AST function definition
 		let function_type = self.resolve_type_annotation(&func_def.signature.to_type_annotation(), env);
 		let sig = function_type.as_function_sig().unwrap();
@@ -2232,6 +2236,7 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// TODO: handle member/method overrides in our env based on whatever rules we define in our spec
+				// https://github.com/winglang/wing/issues/1124
 
 				// Type check methods
 				for (method_name, method_def) in methods.iter() {
@@ -2480,6 +2485,7 @@ impl<'a> TypeChecker<'a> {
 		T: MethodLike<'a>,
 	{
 		// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
+		// https://github.com/winglang/wing/issues/457
 		// Lookup the method in the class_env
 		let method_type = class_env
 			.lookup(method_name, None)
@@ -2855,6 +2861,7 @@ impl<'a> TypeChecker<'a> {
 	/// This function checks if the expression is a reference to a user define type and if it is it returns it. If not it returns `None`.
 	fn expr_maybe_type(&mut self, expr: &Expr, env: &SymbolEnv) -> Option<UserDefinedType> {
 		// TODO: we currently don't handle parenthesized expressions correctly so something like `(MyEnum).A` or `std.(namespace.submodule).A` will return true, is this a problem?
+		// https://github.com/winglang/wing/issues/1006
 		let mut path = vec![];
 		let mut curr_expr = expr;
 		loop {

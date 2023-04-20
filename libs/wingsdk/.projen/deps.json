@@ -91,6 +91,10 @@
       "type": "build"
     },
     {
+      "name": "fs-extra",
+      "type": "build"
+    },
+    {
       "name": "jsii-diff",
       "type": "build"
     },
@@ -159,6 +163,11 @@
     },
     {
       "name": "@aws-sdk/client-s3",
+      "version": "3.256.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@aws-sdk/client-secrets-manager",
       "version": "3.256.0",
       "type": "bundled"
     },

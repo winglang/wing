@@ -15,8 +15,6 @@ use std::{
 	vec,
 };
 
-use sha2::{Digest, Sha256};
-
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, ClassField, Expr, ExprKind, FunctionBody, FunctionBodyRef,
@@ -65,6 +63,7 @@ pub struct JSifier<'a> {
 	shim: bool,
 	app_name: String,
 	inflight_counter: RefCell<usize>,
+	proc_counter: RefCell<usize>,
 }
 
 impl<'a> JSifier<'a> {
@@ -75,6 +74,7 @@ impl<'a> JSifier<'a> {
 			shim,
 			app_name: app_name.to_string(),
 			inflight_counter: RefCell::new(0),
+			proc_counter: RefCell::new(0),
 			absolute_project_root,
 		}
 	}
@@ -759,7 +759,6 @@ impl<'a> JSifier<'a> {
 			FunctionBody::External(_) => CodeMaker::one_line("throw new Error(\"extern with closures is not supported\");"),
 		};
 
-		let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block.to_string()).finalize());
 		let mut bindings = vec![];
 		let mut capture_names = vec![];
 
@@ -783,10 +782,12 @@ impl<'a> JSifier<'a> {
 		proc_source.add_code(block);
 		proc_source.close("}");
 
-		let proc_dir = format!("{}/proc.{}", self.out_dir.to_string_lossy(), procid);
+		let mut proc_counter = self.proc_counter.borrow_mut();
+		*proc_counter += 1;
+		let proc_dir = format!("{}/proc{}", self.out_dir.to_string_lossy(), proc_counter);
 		fs::create_dir_all(&proc_dir).expect("Creating inflight proc dir");
 		let file_path = format!("{}/index.js", proc_dir);
-		let relative_file_path = format!("proc.{}/index.js", procid);
+		let relative_file_path = format!("proc{}/index.js", proc_counter);
 		fs::write(&file_path, proc_source.to_string()).expect("Writing inflight proc source");
 
 		let mut props_block = CodeMaker::default();
@@ -1261,6 +1262,16 @@ impl<'a> JSifier<'a> {
 
 			// add the references to the result
 			result.insert(method_name.name.clone(), refs);
+		}
+
+		// Also add field rerferences from the inflight initializer
+		if let Some(inflight_init) = &resource_class.inflight_initializer {
+			let visitor = FieldReferenceVisitor::new(inflight_init);
+			let (refs, find_diags) = visitor.find_refs();
+
+			self.diagnostics.extend(find_diags);
+
+			result.insert(CLASS_INFLIGHT_INIT_NAME.to_string(), refs);
 		}
 
 		return result;

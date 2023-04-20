@@ -79,7 +79,7 @@
         "publish": true,
         "role": "${aws_iam_role.root_teststring_IamRole_A23B11BC.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "${aws_s3_bucket.root_teststring_Code_042172E8.bucket}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_teststring_S3Object_9049C921.key}",
         "timeout": 30,
         "vpc_config": {
@@ -89,14 +89,14 @@
       },
     },
     "aws_s3_bucket": {
-      "root_teststring_Code_042172E8": {
+      "root_Code_02F3C603": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:string/Code",
-            "uniqueId": "root_teststring_Code_042172E8",
+            "path": "root/Default/Code",
+            "uniqueId": "root_Code_02F3C603",
           },
         },
-        "bucket_prefix": "code-c8c4d274-",
+        "bucket_prefix": "code-c84a50b1-",
       },
     },
     "aws_s3_object": {
@@ -107,7 +107,7 @@
             "uniqueId": "root_teststring_S3Object_9049C921",
           },
         },
-        "bucket": "${aws_s3_bucket.root_teststring_Code_042172E8.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>",
       },

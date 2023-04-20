@@ -146,7 +146,7 @@ class $Root extends $stdlib.std.Resource {
       {console.log(`${x}`)};
     }
     this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $stdlib.core.Inflight(this, "$Inflight1", {
-      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc.afc6fe59bb6cdbd81e9208755ab2c9288766e754ea8cfb86c9310de61739c683/index.js".replace(/\\/g, "/"))),
+      code: $stdlib.core.NodeJsCode.fromFile(require.resolve("./proc1/index.js".replace(/\\/g, "/"))),
       bindings: {
       }
     })

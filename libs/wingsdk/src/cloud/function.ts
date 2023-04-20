@@ -79,9 +79,9 @@ export abstract class Function extends Resource implements IInflightHost {
       this.addEnvironment(key, value);
     }
 
-    // indicates that we are calling "handle" on the handler resource
-    // and that we are calling "log" on the logger.
-    inflight._registerBind(this, ["handle"]);
+    // indicates that we are calling the inflight constructor and the
+    // inflight "handle" method on the handler resource.
+    inflight._registerBind(this, ["handle", "$inflight_init"]);
 
     const inflightClient = inflight._toInflight();
     const lines = new Array<string>();
