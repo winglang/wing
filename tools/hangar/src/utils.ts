@@ -1,7 +1,8 @@
 import { execa } from "execa";
 import * as fs from "fs-extra";
 import { expect } from "vitest";
-import { wingBin } from "./paths";
+import { snapshotDir, wingBin } from "./paths";
+import { join, extname } from "path";
 
 export interface RunWingCommandOptions {
   cwd: string;
@@ -13,16 +14,17 @@ export interface RunWingCommandOptions {
 }
 
 export async function runWingCommand(options: RunWingCommandOptions) {
-  const plugins = options.plugins? ['--plugins', ...options.plugins] : [];
-  const out = await execa(wingBin, ["--no-update-check", ...options.args, options.wingFile, ...plugins], {
-    cwd: options.cwd,
-    reject: false,
-    stdin: "ignore",
-    env: {
-      ...process.env,
-      ...(options.env ?? {})
-    },
-  });
+  const plugins = options.plugins ? ["--plugins", ...options.plugins] : [];
+  const out = await execa(
+    wingBin,
+    ["--no-update-check", ...options.args, options.wingFile, ...plugins],
+    {
+      cwd: options.cwd,
+      reject: false,
+      stdin: "ignore",
+      env: options.env,
+    }
+  );
   if (options.shouldSucceed) {
     if (out.exitCode !== 0 || out.stderr !== "") {
       expect.fail(out.stderr);
@@ -59,4 +61,29 @@ export function tfResourcesOfCount(
   resourceId: string
 ): number {
   return Object.values(JSON.parse(templateStr).resource[resourceId]).length;
+}
+
+export async function createMarkdownSnapshot(
+  fileMap: Record<string, string>,
+  wingFile: string,
+  testCase: string,
+  target: string
+) {
+  const snapPath = join(
+    snapshotDir,
+    "test_corpus",
+    `${wingFile}_${testCase}_${target}.md`
+  );
+
+  let md = `# [${wingFile}](../../../../examples/tests/valid/${wingFile}) | ${testCase} | ${target}\n\n`;
+
+  const files = Object.keys(fileMap);
+  files.sort();
+
+  for (const file of files) {
+    const extension = extname(file).replace(".", "");
+    md += `## ${file}\n\`\`\`${extension}\n${fileMap[file]}\n\`\`\`\n\n`;
+  }
+
+  await expect(md).toMatchFileSnapshot(snapPath);
 }

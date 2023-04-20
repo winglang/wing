@@ -26,12 +26,12 @@ for (const fileInfo of readdirSync(validTestDir, { withFileTypes: true })) {
 import { test } from "vitest";
 import { compileTest, testTest } from "../../generated_test_targets";
 
-test${skipText}("wing compile -t tf-aws", async ({ expect }) => {
-  await compileTest(expect, "${filename}");
+test${skipText}("wing compile -t tf-aws", async () => {
+  await compileTest("${filename}");
 });
 
-test${skipText}("wing test -t sim", async ({ expect }) => {
-  await testTest(expect, "${filename}");
+test${skipText}("wing test -t sim", async () => {
+  await testTest("${filename}");
 });`;
 
   writeFileSync(join(generatedTestDir, `${filename}.test.ts`), fileContents);
