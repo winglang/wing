@@ -2,7 +2,7 @@ import debug from "debug";
 import { readFileSync, existsSync } from "fs";
 import { normalPath } from "./util";
 import WASI from "wasi-js";
-import { resolve } from "path";
+import { isAbsolute, relative, resolve } from "path";
 import wasiBindings from "wasi-js/dist/bindings/node";
 
 const log = debug("wing:compile");
@@ -101,9 +101,18 @@ export async function load(options: WingCompilerLoadOptions) {
     }
   }
 
-  // for each provided preopen, add resolved paths in case any absolute paths are used
+  // for each provided preopens, add resolved paths in case any absolute paths are used
   for (const [key, value] of Object.entries(preopens)) {
     preopens[normalPath(resolve(key))] = value;
+  }
+
+  // for each provided preopens, add relative paths in case any relative paths are used
+  for (const [key, value] of Object.entries(preopens)) {
+    if (isAbsolute(key)) {
+      const cwd = process.cwd();
+      const relativePath = normalPath(relative(cwd, key));
+      preopens[relativePath] = value;
+    }
   }
 
   // check if running in browser
@@ -127,7 +136,7 @@ export async function load(options: WingCompilerLoadOptions) {
     wasi_snapshot_preview1: wasi.wasiImport,
     env: {
       // This function is used only by the lsp
-      send_notification: () => { },
+      send_notification: () => {},
     },
     ...(options.imports ?? {}),
   } as any;

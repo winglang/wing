@@ -17,7 +17,7 @@ export async function runWingCommand(options: RunWingCommandOptions) {
   const plugins = options.plugins ? ["--plugins", ...options.plugins] : [];
   const out = await execa(
     wingBin,
-    [...options.args, options.wingFile, ...plugins],
+    ["--no-update-check", ...options.args, options.wingFile, ...plugins],
     {
       cwd: options.cwd,
       reject: false,
