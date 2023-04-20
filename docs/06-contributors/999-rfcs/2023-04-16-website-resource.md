@@ -26,19 +26,29 @@ This RFC has 3 sections: Requirements -> Design -> Implementation. We intentiona
 is a great way to introduice the feature to readers.
 -->
 
-## Implementation
+## Requirements
+
+## Design
+
+The user will be able to point at a local directory, and create a static website holding those files in a single line of code. The website will accept dynamic content too, that will be added in the following lines of preflight code. The website will be served using a CDN and could be placed under a certain domain.
+
+## Implementation - static content:
 
 ### Implementation for aws
 
-Following a few AWS guides on the internet (brought in the end of the section), it seems that the common way to serve a static website is by using a bucket.
+Following a few AWS guides on the internet (brought in the end of the section), it seems that the common way to serve a static website is by using a bucket paired with cloudFront distribution.
 
 After creating a public bucket, we'll upload the folder from the relative path.
 AWS requires an index document name (to serve on the "/" path).
 We'll start by hardcoding it to be "index.html", and can add it later to the website props upon request.
 
-The last thing will be a registration to the chosen domain (if exists).
+Then the bucket will be connected to a cloud front distribution. Cache related properties, geo-restrictions and price class are hardcoded for now could be added to the props upon request.
 
-The website resource supports preflight code only.
+If a domain was specified it will be added to the CDN's url aliases. The domain should be bought in advance.
+In the future we could separate the domain to be a standalone resource (that can later be attached to other resources, and be shared between them if needed).
+
+The website resource supports preflight code only for now.
+We can use an HTTP call in order to access the website pages and assets inflight.
 
 #### References:
 
@@ -60,6 +70,20 @@ app.listen(
 ```
 
 Since the website is served on the local machine, we cannot specify a domain, nor can we add a CDN while deploying to the simulator.
+
+## Implementation - dynamic content:
+
+Dynamic content is added by the developer in separation of the static content directory, and can be added during the preflight phase only. This content can include the url of other resource used by the website, for example, or any other data that is known only while running the application.
+
+This can be achieved using the `cloud.Website.add_json` method.
+
+### Implementation for aws
+
+The method will upload a json object to the bucket, making it accessible withing the static directory.
+
+### Implementation for the simulator
+
+A new express GET route will be added, returning a Json object containing the dynamic data. The route will be accessible withing the static directory.
 
 ### point for thought:
 
