@@ -1,5 +1,5 @@
-import { Construct } from "constructs";
 import { isAbsolute, resolve } from "path";
+import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { Json, Resource } from "../std";

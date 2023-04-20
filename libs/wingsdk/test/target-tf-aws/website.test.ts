@@ -46,10 +46,12 @@ test("website with invalid path should throw error", () => {
   expect(() => {
     const app = new tfaws.App({ outdir: mkdtemp() });
     cloud.Website._newWebsite(app, "Website", {
-      path: "non-existent",
+      path: "/absolute/non-existent",
     });
     app.synth();
-  }).toThrowError("ENOENT: no such file or directory, scandir 'non-existent'");
+  }).toThrowError(
+    "ENOENT: no such file or directory, scandir '/absolute/non-existent'"
+  );
 
   // THEN
 });

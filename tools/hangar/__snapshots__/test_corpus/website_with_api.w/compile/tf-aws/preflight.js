@@ -7,7 +7,7 @@ class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
-    const website = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "/Users/tsuf/Documents/wing/examples/tests/valid/website_with_api" });
+    const website = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website_with_api" });
     const users_table = this.node.root.newAbstract("@winglang/sdk.cloud.Table",this,"cloud.Table",{
     "name": "users-table",
     "primaryKey": "id",

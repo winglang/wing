@@ -7,7 +7,7 @@ class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const w = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{
-    "path": "/Users/tsuf/Documents/wing/examples/tests/valid/website",}
+    "path": "./website",}
     );
     {console.log(`website is up and running on ${w.url}!`)};
   }
