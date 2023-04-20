@@ -95,6 +95,10 @@
       "type": "build"
     },
     {
+      "name": "fs-extra",
+      "type": "build"
+    },
+    {
       "name": "jsii-diff",
       "type": "build"
     },

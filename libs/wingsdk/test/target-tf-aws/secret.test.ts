@@ -15,3 +15,15 @@ test("default secret behavior", () => {
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
+
+test("secret with a name", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  cloud.Secret._newSecret(app, "Secret", {
+    name: "my-secret",
+  });
+  const output = app.synth();
+
+  // THEN
+  expect(tfSanitize(output)).toMatchSnapshot();
+});
