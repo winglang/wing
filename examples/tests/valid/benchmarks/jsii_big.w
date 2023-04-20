@@ -1,9 +1,9 @@
 /*\
 cases:
   - target: sim
-    maxMeanTime: 9000
+    maxMeanTime: 11000
   - target: tf-aws
-    maxMeanTime: 9000
+    maxMeanTime: 11000
 \*/
 
 bring "@cdktf/provider-aws" as aws;

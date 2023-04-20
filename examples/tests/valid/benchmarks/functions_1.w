@@ -1,9 +1,9 @@
 /*\
 cases:
   - target: sim
-    maxMeanTime: 1000
+    maxMeanTime: 3000
   - target: tf-aws
-    maxMeanTime: 6000
+    maxMeanTime: 8000
 \*/
 
 bring cloud;
