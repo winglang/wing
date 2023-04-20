@@ -1,14 +1,20 @@
 import * as vm from "vm";
 
-import { readFile, rmSync, mkdirp, mkdirpSync, copySync } from "fs-extra";
-import { basename, dirname, join, resolve } from "path";
+import {readFile, rmSync, mkdirp, mkdirpSync, copySync} from "fs-extra";
+import {basename, dirname, join, resolve} from "path";
 import * as os from "os";
 
 import chalk from "chalk";
 import debug from "debug";
 import * as wingCompiler from "../wingc";
-import { normalPath } from "../util";
-import { CHARS_ASCII, emitDiagnostic, Severity, File, Label } from "codespan-wasm";
+import {normalPath} from "../util";
+import {
+  CHARS_ASCII,
+  emitDiagnostic,
+  Severity,
+  File,
+  Label,
+} from "codespan-wasm";
 
 // increase the stack trace limit to 50, useful for debugging Rust panics
 // (not setting the limit too high in case of infinite recursion)
@@ -57,14 +63,20 @@ export interface CompileOptions {
  * within the output directory where the SDK app will synthesize its artifacts
  * for the given target.
  */
-function resolveSynthDir(outDir: string, entrypoint: string, target: Target, testing: boolean = false, tmp: boolean = false) {
+function resolveSynthDir(
+  outDir: string,
+  entrypoint: string,
+  target: Target,
+  testing: boolean = false,
+  tmp: boolean = false
+) {
   const targetDirSuffix = DEFAULT_SYNTH_DIR_SUFFIX[target];
   if (!targetDirSuffix) {
     throw new Error(`unsupported target ${target}`);
   }
   const entrypointName = basename(entrypoint, ".w");
   const tmpSuffix = tmp ? `.${Date.now().toString().slice(-6)}.tmp` : "";
-  const lastPart = `${entrypointName}.${targetDirSuffix}${tmpSuffix}`
+  const lastPart = `${entrypointName}.${targetDirSuffix}${tmpSuffix}`;
   if (testing) {
     return join(outDir, "test", lastPart);
   } else {
@@ -78,7 +90,10 @@ function resolveSynthDir(outDir: string, entrypoint: string, target: Target, tes
  * @param options Compile options.
  * @returns the output directory
  */
-export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
+export async function compile(
+  entrypoint: string,
+  options: CompileOptions
+): Promise<string> {
   // create a unique temporary directory for the compilation
   const targetdir = join(dirname(entrypoint), "target");
   const wingFile = entrypoint;
@@ -87,22 +102,31 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   log("wing dir: %s", wingDir);
   const testing = options.testing ?? false;
   log("testing: %s", testing);
-  const tmpSynthDir = resolveSynthDir(targetdir, wingFile, options.target, testing, true);
+  const tmpSynthDir = resolveSynthDir(
+    targetdir,
+    wingFile,
+    options.target,
+    testing,
+    true
+  );
   log("temp synth dir: %s", tmpSynthDir);
-  const synthDir = resolveSynthDir(targetdir, wingFile, options.target, testing);
+  const synthDir = resolveSynthDir(
+    targetdir,
+    wingFile,
+    options.target,
+    testing
+  );
   log("synth dir: %s", synthDir);
   const workDir = resolve(tmpSynthDir, ".wing");
   log("work dir: %s", workDir);
 
+  process.env["WING_SOURCE_DIR"] = resolve(wingDir);
   process.env["WING_SYNTH_DIR"] = tmpSynthDir;
   process.env["WING_NODE_MODULES"] = resolve(join(wingDir, "node_modules"));
   process.env["WING_TARGET"] = options.target;
   process.env["WING_IS_TEST"] = testing.toString();
 
-  await Promise.all([
-    mkdirp(workDir),
-    mkdirp(tmpSynthDir),
-  ]);
+  await Promise.all([mkdirp(workDir), mkdirp(tmpSynthDir)]);
 
   const wingc = await wingCompiler.load({
     env: {
@@ -118,7 +142,9 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     },
   });
 
-  const arg = `${normalPath(wingFile)};${normalPath(workDir)};${normalPath(resolve(wingDir))}`;
+  const arg = `${normalPath(wingFile)};${normalPath(workDir)};${normalPath(
+    resolve(wingDir)
+  )}`;
   log(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
   let compileResult;
   try {
@@ -126,25 +152,39 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   } catch (e) {
     // This is a bug in Wing, not the user's code.
     console.error(e);
-    console.log("\n\n" + chalk.bold.red("Internal error:") + " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace.");
+    console.log(
+      "\n\n" +
+        chalk.bold.red("Internal error:") +
+        " An internal compiler error occurred. Please report this bug by creating an issue on GitHub (github.com/winglang/wing/issues) with your code and this trace."
+    );
     process.exit(1);
   }
   if (compileResult !== 0) {
     // This is a bug in the user's code. Print the compiler diagnostics.
-    const errors: wingCompiler.WingDiagnostic[] = JSON.parse(compileResult.toString());
+    const errors: wingCompiler.WingDiagnostic[] = JSON.parse(
+      compileResult.toString()
+    );
     const result = [];
     const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
 
     for (const error of errors) {
-      const { message, span, level } = error;
+      const {message, span, level} = error;
       let files: File[] = [];
       let labels: Label[] = [];
 
       if (span !== null) {
         // `span` should only be null if source file couldn't be read etc.
         const source = await readFile(span.file_id, "utf8");
-        const start = offsetFromLineAndColumn(source, span.start.line, span.start.col);
-        const end = offsetFromLineAndColumn(source, span.end.line, span.end.col);
+        const start = offsetFromLineAndColumn(
+          source,
+          span.start.line,
+          span.start.col
+        );
+        const end = offsetFromLineAndColumn(
+          source,
+          span.end.line,
+          span.end.col
+        );
         files.push({
           name: span.file_id,
           source,
@@ -154,17 +194,22 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
           rangeStart: start,
           rangeEnd: end,
           message,
-          style: "primary"
+          style: "primary",
         });
       }
 
-      const diagnosticText = await emitDiagnostic(files, {
-        message,
-        severity: level.toLowerCase() as Severity,
-        labels,
-      }, {
-        chars: CHARS_ASCII
-      }, coloring);
+      const diagnosticText = await emitDiagnostic(
+        files,
+        {
+          message,
+          severity: level.toLowerCase() as Severity,
+          labels,
+        },
+        {
+          chars: CHARS_ASCII,
+        },
+        coloring
+      );
       result.push(diagnosticText);
     }
     throw new Error(result.join("\n"));
@@ -179,7 +224,8 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   // the wing CLI was installed to), but also in the source code directory.
   // This is necessary because the Wing app may have installed dependencies in
   // the project directory.
-  const requireResolve = (path: string) => require.resolve(path, { paths: [workDir, __dirname, wingDir] });
+  const requireResolve = (path: string) =>
+    require.resolve(path, {paths: [workDir, __dirname, wingDir]});
   const preflightRequire = (path: string) => require(requireResolve(path));
   preflightRequire.resolve = requireResolve;
 
@@ -223,9 +269,9 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       console.log();
       console.log(
         "  " +
-        chalk.bold.white("note:") +
-        " " +
-        chalk.white(`intermediate javascript code (${artifactPath}):`)
+          chalk.bold.white("note:") +
+          " " +
+          chalk.white(`intermediate javascript code (${artifactPath}):`)
       );
       const lineNumber =
         Number.parseInt(
@@ -253,29 +299,29 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     } else {
       console.log(
         "  " +
-        chalk.bold.white("note:") +
-        " " +
-        chalk.white(
-          "run with `NODE_STACKTRACE=1` environment variable to display a stack trace"
-        )
+          chalk.bold.white("note:") +
+          " " +
+          chalk.white(
+            "run with `NODE_STACKTRACE=1` environment variable to display a stack trace"
+          )
       );
     }
 
     return process.exit(1);
   }
 
-  if(os.platform() === "win32") {
+  if (os.platform() === "win32") {
     // Windows doesn't really support fully atomic moves.
     // So we just copy the directory instead.
     // Also only using sync methods to avoid possible async fs issues.
-    rmSync(synthDir, { recursive: true, force: true });
+    rmSync(synthDir, {recursive: true, force: true});
     mkdirpSync(synthDir);
     copySync(tmpSynthDir, synthDir);
-    rmSync(tmpSynthDir, { recursive: true, force: true });
+    rmSync(tmpSynthDir, {recursive: true, force: true});
   } else {
     // Move the temporary directory to the final target location in an atomic operation
-    copySync(tmpSynthDir, synthDir, { overwrite: true } );
-    rmSync(tmpSynthDir, { recursive: true, force: true });
+    copySync(tmpSynthDir, synthDir, {overwrite: true});
+    rmSync(tmpSynthDir, {recursive: true, force: true});
   }
 
   return synthDir;

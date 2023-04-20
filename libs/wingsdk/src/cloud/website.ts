@@ -1,4 +1,5 @@
 import { Construct } from "constructs";
+import { isAbsolute, resolve } from "path";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { Json, Resource } from "../std";
@@ -39,7 +40,9 @@ export abstract class Website extends Resource {
     this.display.title = "Website";
     this.display.description = "A static website";
 
-    this._path = props.path;
+    this._path = isAbsolute(props.path)
+      ? props.path
+      : resolve(process.env.WING_SOURCE_DIR ?? "", props.path);
     this._domain = props.domain;
   }
 
