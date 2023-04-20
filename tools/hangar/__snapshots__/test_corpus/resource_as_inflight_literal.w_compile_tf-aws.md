@@ -1,21 +1,5 @@
 # [resource_as_inflight_literal.w](../../../../examples/tests/valid/resource_as_inflight_literal.w) | compile | tf-aws
 
-## clients/Foo.inflight.js
-```js
-class  Foo {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-  async handle(message)  {
-    {
-      return "hello world!";
-    }
-  }
-}
-exports.Foo = Foo;
-
-```
-
 ## main.tf.json
 ```json
 {
@@ -218,10 +202,19 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const stateful_client = this._lift(this.stateful);
-        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Foo({
+            class  Foo {
+              constructor({ stateful }) {
+                this.stateful = stateful;
+              }
+              async handle(message)  {
+                {
+                  return "hello world!";
+                }
+              }
+            }
+            const tmp = new Foo({
               stateful: ${stateful_client},
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }

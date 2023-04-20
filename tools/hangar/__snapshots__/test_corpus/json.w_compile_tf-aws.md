@@ -1,17 +1,5 @@
 # [json.w](../../../../examples/tests/valid/json.w) | compile | tf-aws
 
-## clients/Foo.inflight.js
-```js
-class  Foo {
-  constructor({ _sum_str, stateful }) {
-    this._sum_str = _sum_str;
-    this.stateful = stateful;
-  }
-}
-exports.Foo = Foo;
-
-```
-
 ## main.tf.json
 ```json
 {
@@ -61,10 +49,15 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         const _sum_str_client = this._lift(this._sum_str);
         const stateful_client = this._lift(this.stateful);
-        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Foo({
+            class  Foo {
+              constructor({ _sum_str, stateful }) {
+                this._sum_str = _sum_str;
+                this.stateful = stateful;
+              }
+            }
+            const tmp = new Foo({
               _sum_str: ${_sum_str_client},
               stateful: ${stateful_client},
             });

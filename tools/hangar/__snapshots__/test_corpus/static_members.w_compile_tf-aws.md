@@ -1,22 +1,5 @@
 # [static_members.w](../../../../examples/tests/valid/static_members.w) | compile | tf-aws
 
-## clients/Foo.inflight.js
-```js
-class  Foo {
-  constructor({ instance_field, stateful }) {
-    this.instance_field = instance_field;
-    this.stateful = stateful;
-  }
-  static async get_123()  {
-    {
-      return 123;
-    }
-  }
-}
-exports.Foo = Foo;
-
-```
-
 ## main.tf.json
 ```json
 {
@@ -160,10 +143,20 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         const instance_field_client = this._lift(this.instance_field);
         const stateful_client = this._lift(this.stateful);
-        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Foo({
+            class  Foo {
+              constructor({ instance_field, stateful }) {
+                this.instance_field = instance_field;
+                this.stateful = stateful;
+              }
+              static async get_123()  {
+                {
+                  return 123;
+                }
+              }
+            }
+            const tmp = new Foo({
               instance_field: ${instance_field_client},
               stateful: ${stateful_client},
             });

@@ -1,132 +1,5 @@
 # [resource_captures.w](../../../../examples/tests/valid/resource_captures.w) | compile | tf-aws
 
-## clients/Another.inflight.js
-```js
-class  Another {
-  constructor({ first, my_field, stateful }) {
-    this.first = first;
-    this.my_field = my_field;
-    this.stateful = stateful;
-  }
-  async meaning_of_life()  {
-    {
-      return 42;
-    }
-  }
-  async another_func()  {
-    {
-      return "42";
-    }
-  }
-}
-exports.Another = Another;
-
-```
-
-## clients/First.inflight.js
-```js
-class  First {
-  constructor({ my_resource, stateful }) {
-    this.my_resource = my_resource;
-    this.stateful = stateful;
-  }
-}
-exports.First = First;
-
-```
-
-## clients/MyResource.inflight.js
-```js
-class  MyResource {
-  constructor({ another, array_of_str, ext_bucket, ext_num, map_of_num, my_bool, my_num, my_queue, my_resource, my_str, set_of_str, unused_resource, stateful }) {
-    this.another = another;
-    this.array_of_str = array_of_str;
-    this.ext_bucket = ext_bucket;
-    this.ext_num = ext_num;
-    this.map_of_num = map_of_num;
-    this.my_bool = my_bool;
-    this.my_num = my_num;
-    this.my_queue = my_queue;
-    this.my_resource = my_resource;
-    this.my_str = my_str;
-    this.set_of_str = set_of_str;
-    this.unused_resource = unused_resource;
-    this.stateful = stateful;
-  }
-  async test_no_capture()  {
-    {
-      const arr = Object.freeze([1, 2, 3]);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(arr.length === 3)'`)})((arr.length === 3))};
-      {console.log(`array.len=${arr.length}`)};
-    }
-  }
-  async test_capture_collections_of_data()  {
-    {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.array_of_str.length === 2)'`)})((this.array_of_str.length === 2))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.array_of_str.at(0)) === "s1")'`)})(((await this.array_of_str.at(0)) === "s1"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.array_of_str.at(1)) === "s2")'`)})(((await this.array_of_str.at(1)) === "s2"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((this.map_of_num)["k1"] === 11)'`)})(((this.map_of_num)["k1"] === 11))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((this.map_of_num)["k2"] === 22)'`)})(((this.map_of_num)["k2"] === 22))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.set_of_str.has("s1"))'`)})((await this.set_of_str.has("s1")))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await this.set_of_str.has("s2"))'`)})((await this.set_of_str.has("s2")))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(await this.set_of_str.has("s3")))'`)})((!(await this.set_of_str.has("s3"))))};
-    }
-  }
-  async test_capture_primitives()  {
-    {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.my_str === "my_string")'`)})((this.my_str === "my_string"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.my_num === 42)'`)})((this.my_num === 42))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.my_bool === true)'`)})((this.my_bool === true))};
-    }
-  }
-  async test_capture_resource()  {
-    {
-      (await this.my_resource.put("f1.txt","f1"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.my_resource.get("f1.txt")) === "f1")'`)})(((await this.my_resource.get("f1.txt")) === "f1"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.my_resource.list()).length === 1)'`)})(((await this.my_resource.list()).length === 1))};
-    }
-  }
-  async test_nested_preflight_field()  {
-    {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.another.my_field === "hello!")'`)})((this.another.my_field === "hello!"))};
-      {console.log(`field=${this.another.my_field}`)};
-    }
-  }
-  async test_nested_resource()  {
-    {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.another.first.my_resource.list()).length === 0)'`)})(((await this.another.first.my_resource.list()).length === 0))};
-      (await this.another.first.my_resource.put("hello",this.my_str));
-      {console.log(`this.another.first.my_resource:${(await this.another.first.my_resource.get("hello"))}`)};
-    }
-  }
-  async test_expression_recursive()  {
-    {
-      (await this.my_queue.push(this.my_str));
-    }
-  }
-  async test_external()  {
-    {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.ext_bucket.list()).length === 0)'`)})(((await this.ext_bucket.list()).length === 0))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.ext_num === 12)'`)})((this.ext_num === 12))};
-    }
-  }
-  async test_user_defined_resource()  {
-    {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.another.meaning_of_life()) === 42)'`)})(((await this.another.meaning_of_life()) === 42))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await this.another.another_func()) === "42")'`)})(((await this.another.another_func()) === "42"))};
-    }
-  }
-  async test_inflight_field()  {
-    {
-      this.inflight_field = 123;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.inflight_field === 123)'`)})((this.inflight_field === 123))};
-    }
-  }
-}
-exports.MyResource = MyResource;
-
-```
-
 ## main.tf.json
 ```json
 {
@@ -424,10 +297,15 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         const my_resource_client = this._lift(this.my_resource);
         const stateful_client = this._lift(this.stateful);
-        const self_client_path = "./clients/First.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).First({
+            class  First {
+              constructor({ my_resource, stateful }) {
+                this.my_resource = my_resource;
+                this.stateful = stateful;
+              }
+            }
+            const tmp = new First({
               my_resource: ${my_resource_client},
               stateful: ${stateful_client},
             });
@@ -448,10 +326,26 @@ class $Root extends $stdlib.std.Resource {
         const first_client = this._lift(this.first);
         const my_field_client = this._lift(this.my_field);
         const stateful_client = this._lift(this.stateful);
-        const self_client_path = "./clients/Another.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Another({
+            class  Another {
+              constructor({ first, my_field, stateful }) {
+                this.first = first;
+                this.my_field = my_field;
+                this.stateful = stateful;
+              }
+              async meaning_of_life()  {
+                {
+                  return 42;
+                }
+              }
+              async another_func()  {
+                {
+                  return "42";
+                }
+              }
+            }
+            const tmp = new Another({
               first: ${first_client},
               my_field: ${my_field_client},
               stateful: ${stateful_client},
@@ -500,10 +394,95 @@ class $Root extends $stdlib.std.Resource {
         const set_of_str_client = this._lift(this.set_of_str);
         const unused_resource_client = this._lift(this.unused_resource);
         const stateful_client = this._lift(this.stateful);
-        const self_client_path = "./clients/MyResource.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).MyResource({
+            class  MyResource {
+              constructor({ another, array_of_str, ext_bucket, ext_num, map_of_num, my_bool, my_num, my_queue, my_resource, my_str, set_of_str, unused_resource, stateful }) {
+                this.another = another;
+                this.array_of_str = array_of_str;
+                this.ext_bucket = ext_bucket;
+                this.ext_num = ext_num;
+                this.map_of_num = map_of_num;
+                this.my_bool = my_bool;
+                this.my_num = my_num;
+                this.my_queue = my_queue;
+                this.my_resource = my_resource;
+                this.my_str = my_str;
+                this.set_of_str = set_of_str;
+                this.unused_resource = unused_resource;
+                this.stateful = stateful;
+              }
+              async test_no_capture()  {
+                {
+                  const arr = Object.freeze([1, 2, 3]);
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'(arr.length === 3)\'\`)})((arr.length === 3))};
+                  {console.log(\`array.len=\${arr.length}\`)};
+                }
+              }
+              async test_capture_collections_of_data()  {
+                {
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'(this.array_of_str.length === 2)\'\`)})((this.array_of_str.length === 2))};
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'((await this.array_of_str.at(0)) === "s1")\'\`)})(((await this.array_of_str.at(0)) === "s1"))};
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'((await this.array_of_str.at(1)) === "s2")\'\`)})(((await this.array_of_str.at(1)) === "s2"))};
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'((this.map_of_num)["k1"] === 11)\'\`)})(((this.map_of_num)["k1"] === 11))};
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'((this.map_of_num)["k2"] === 22)\'\`)})(((this.map_of_num)["k2"] === 22))};
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'(await this.set_of_str.has("s1"))\'\`)})((await this.set_of_str.has("s1")))};
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'(await this.set_of_str.has("s2"))\'\`)})((await this.set_of_str.has("s2")))};
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'(!(await this.set_of_str.has("s3")))\'\`)})((!(await this.set_of_str.has("s3"))))};
+                }
+              }
+              async test_capture_primitives()  {
+                {
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'(this.my_str === "my_string")\'\`)})((this.my_str === "my_string"))};
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'(this.my_num === 42)\'\`)})((this.my_num === 42))};
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'(this.my_bool === true)\'\`)})((this.my_bool === true))};
+                }
+              }
+              async test_capture_resource()  {
+                {
+                  (await this.my_resource.put("f1.txt","f1"));
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'((await this.my_resource.get("f1.txt")) === "f1")\'\`)})(((await this.my_resource.get("f1.txt")) === "f1"))};
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'((await this.my_resource.list()).length === 1)\'\`)})(((await this.my_resource.list()).length === 1))};
+                }
+              }
+              async test_nested_preflight_field()  {
+                {
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'(this.another.my_field === "hello!")\'\`)})((this.another.my_field === "hello!"))};
+                  {console.log(\`field=\${this.another.my_field}\`)};
+                }
+              }
+              async test_nested_resource()  {
+                {
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'((await this.another.first.my_resource.list()).length === 0)\'\`)})(((await this.another.first.my_resource.list()).length === 0))};
+                  (await this.another.first.my_resource.put("hello",this.my_str));
+                  {console.log(\`this.another.first.my_resource:\${(await this.another.first.my_resource.get("hello"))}\`)};
+                }
+              }
+              async test_expression_recursive()  {
+                {
+                  (await this.my_queue.push(this.my_str));
+                }
+              }
+              async test_external()  {
+                {
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'((await this.ext_bucket.list()).length === 0)\'\`)})(((await this.ext_bucket.list()).length === 0))};
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'(this.ext_num === 12)\'\`)})((this.ext_num === 12))};
+                }
+              }
+              async test_user_defined_resource()  {
+                {
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'((await this.another.meaning_of_life()) === 42)\'\`)})(((await this.another.meaning_of_life()) === 42))};
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'((await this.another.another_func()) === "42")\'\`)})(((await this.another.another_func()) === "42"))};
+                }
+              }
+              async test_inflight_field()  {
+                {
+                  this.inflight_field = 123;
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'(this.inflight_field === 123)\'\`)})((this.inflight_field === 123))};
+                }
+              }
+            }
+            const tmp = new MyResource({
               another: ${another_client},
               array_of_str: ${array_of_str_client},
               ext_bucket: ${ext_bucket_client},

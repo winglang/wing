@@ -1,22 +1,5 @@
 # [structs.w](../../../../examples/tests/valid/structs.w) | compile | tf-aws
 
-## clients/Foo.inflight.js
-```js
-class  Foo {
-  constructor({ data, stateful }) {
-    this.data = data;
-    this.stateful = stateful;
-  }
-  async get_stuff()  {
-    {
-      return this.data.field0;
-    }
-  }
-}
-exports.Foo = Foo;
-
-```
-
 ## main.tf.json
 ```json
 {
@@ -66,10 +49,20 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         const data_client = this._lift(this.data);
         const stateful_client = this._lift(this.stateful);
-        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Foo({
+            class  Foo {
+              constructor({ data, stateful }) {
+                this.data = data;
+                this.stateful = stateful;
+              }
+              async get_stuff()  {
+                {
+                  return this.data.field0;
+                }
+              }
+            }
+            const tmp = new Foo({
               data: ${data_client},
               stateful: ${stateful_client},
             });

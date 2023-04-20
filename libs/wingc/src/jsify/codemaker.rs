@@ -37,6 +37,15 @@ impl CodeMaker {
 		}
 	}
 
+	/// Emits multiple lines of code starting with the current indent,
+	/// escaping the code for use in JavaScript.
+	pub fn add_code_escaped(&mut self, code: CodeMaker) {
+		assert_eq!(code.indent, 0, "Cannot add code with indent");
+		for (indent, line) in code.lines {
+			self.lines.push((indent + self.indent, line.to_string_escaped()));
+		}
+	}
+
 	/// Decreases the current indent by one.
 	#[allow(dead_code)]
 	pub fn unindent(&mut self) {
@@ -52,6 +61,29 @@ impl CodeMaker {
 		let mut code = CodeMaker::default();
 		code.line(s);
 		code
+	}
+}
+
+trait ToStringEscaped {
+	fn to_string_escaped(&self) -> String;
+}
+
+impl ToStringEscaped for String {
+	fn to_string_escaped(&self) -> String {
+		let mut escaped = String::new();
+		for c in self.chars() {
+			match c {
+				'\'' => escaped.push_str("\\'"),
+				'\n' => escaped.push_str("\\n"),
+				'\r' => escaped.push_str("\\r"),
+				'\t' => escaped.push_str("\\t"),
+				'\\' => escaped.push_str("\\\\"),
+				'`' => escaped.push_str("\\`"),
+				'$' => escaped.push_str("\\$"),
+				_ => escaped.push(c),
+			}
+		}
+		escaped
 	}
 }
 

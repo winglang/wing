@@ -1,23 +1,5 @@
 # [api.w](../../../../examples/tests/valid/api.w) | compile | tf-aws
 
-## clients/Foo.inflight.js
-```js
-class  Foo {
-  constructor({ api, stateful }) {
-    this.api = api;
-    this.stateful = stateful;
-  }
-  async handle(message)  {
-    {
-      const url = this.api.url;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'url.startsWith("http://")'`)})(url.startsWith("http://"))};
-    }
-  }
-}
-exports.Foo = Foo;
-
-```
-
 ## main.tf.json
 ```json
 {
@@ -311,10 +293,21 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         const api_client = this._lift(this.api);
         const stateful_client = this._lift(this.stateful);
-        const self_client_path = "./clients/Foo.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Foo({
+            class  Foo {
+              constructor({ api, stateful }) {
+                this.api = api;
+                this.stateful = stateful;
+              }
+              async handle(message)  {
+                {
+                  const url = this.api.url;
+                  {((cond) => {if (!cond) throw new Error(\`assertion failed: \'url.startsWith("http://")\'\`)})(url.startsWith("http://"))};
+                }
+              }
+            }
+            const tmp = new Foo({
               api: ${api_client},
               stateful: ${stateful_client},
             });

@@ -1,53 +1,5 @@
 # [impl_interface.w](../../../../examples/tests/valid/impl_interface.w) | compile | tf-aws
 
-## clients/A.inflight.js
-```js
-class  A {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-  async handle(msg)  {
-    {
-      return;
-    }
-  }
-}
-exports.A = A;
-
-```
-
-## clients/Dog.inflight.js
-```js
-class  Dog {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-  async eat()  {
-    {
-      return;
-    }
-  }
-}
-exports.Dog = Dog;
-
-```
-
-## clients/r.inflight.js
-```js
-class  r {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-  async method_2(x)  {
-    {
-      return x;
-    }
-  }
-}
-exports.r = r;
-
-```
-
 ## main.tf.json
 ```json
 {
@@ -96,10 +48,19 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const stateful_client = this._lift(this.stateful);
-        const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).A({
+            class  A {
+              constructor({ stateful }) {
+                this.stateful = stateful;
+              }
+              async handle(msg)  {
+                {
+                  return;
+                }
+              }
+            }
+            const tmp = new A({
               stateful: ${stateful_client},
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
@@ -126,10 +87,19 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const stateful_client = this._lift(this.stateful);
-        const self_client_path = "./clients/r.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).r({
+            class  r {
+              constructor({ stateful }) {
+                this.stateful = stateful;
+              }
+              async method_2(x)  {
+                {
+                  return x;
+                }
+              }
+            }
+            const tmp = new r({
               stateful: ${stateful_client},
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }
@@ -146,10 +116,19 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const stateful_client = this._lift(this.stateful);
-        const self_client_path = "./clients/Dog.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Dog({
+            class  Dog {
+              constructor({ stateful }) {
+                this.stateful = stateful;
+              }
+              async eat()  {
+                {
+                  return;
+                }
+              }
+            }
+            const tmp = new Dog({
               stateful: ${stateful_client},
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }

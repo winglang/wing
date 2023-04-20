@@ -1,16 +1,5 @@
 # [symbol_shadow.w](../../../../examples/tests/valid/symbol_shadow.w) | compile | tf-aws
 
-## clients/A.inflight.js
-```js
-class  A {
-  constructor({ stateful }) {
-    this.stateful = stateful;
-  }
-}
-exports.A = A;
-
-```
-
 ## main.tf.json
 ```json
 {
@@ -354,10 +343,14 @@ class $Root extends $stdlib.std.Resource {
       }
       _toInflight() {
         const stateful_client = this._lift(this.stateful);
-        const self_client_path = "./clients/A.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).A({
+            class  A {
+              constructor({ stateful }) {
+                this.stateful = stateful;
+              }
+            }
+            const tmp = new A({
               stateful: ${stateful_client},
             });
             if (tmp.$inflight_init) { await tmp.$inflight_init(); }

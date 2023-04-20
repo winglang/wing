@@ -1,17 +1,5 @@
 # [forward_decl.w](../../../../examples/tests/valid/forward_decl.w) | compile | tf-aws
 
-## clients/R.inflight.js
-```js
-class  R {
-  constructor({ f, stateful }) {
-    this.f = f;
-    this.stateful = stateful;
-  }
-}
-exports.R = R;
-
-```
-
 ## main.tf.json
 ```json
 {
@@ -71,10 +59,15 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         const f_client = this._lift(this.f);
         const stateful_client = this._lift(this.stateful);
-        const self_client_path = "./clients/R.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).R({
+            class  R {
+              constructor({ f, stateful }) {
+                this.f = f;
+                this.stateful = stateful;
+              }
+            }
+            const tmp = new R({
               f: ${f_client},
               stateful: ${stateful_client},
             });

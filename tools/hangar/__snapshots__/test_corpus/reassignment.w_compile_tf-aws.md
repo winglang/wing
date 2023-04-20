@@ -1,17 +1,5 @@
 # [reassignment.w](../../../../examples/tests/valid/reassignment.w) | compile | tf-aws
 
-## clients/R.inflight.js
-```js
-class  R {
-  constructor({ f1, stateful }) {
-    this.f1 = f1;
-    this.stateful = stateful;
-  }
-}
-exports.R = R;
-
-```
-
 ## main.tf.json
 ```json
 {
@@ -69,10 +57,15 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         const f1_client = this._lift(this.f1);
         const stateful_client = this._lift(this.stateful);
-        const self_client_path = "./clients/R.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).R({
+            class  R {
+              constructor({ f1, stateful }) {
+                this.f1 = f1;
+                this.stateful = stateful;
+              }
+            }
+            const tmp = new R({
               f1: ${f1_client},
               stateful: ${stateful_client},
             });

@@ -37,8 +37,6 @@ const STDLIB: &str = "$stdlib";
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
 const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 
-const INFLIGHT_CLIENTS_DIR: &str = "clients";
-
 const TARGET_CODE: &str = "const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);";
 
 const ENV_WING_IS_TEST: &str = "$wing_is_test";
@@ -993,15 +991,14 @@ impl<'a> JSifier<'a> {
 			.methods
 			.iter()
 			.filter(|(_, m)| m.signature.phase == Phase::Inflight)
-			.collect::<Vec<_>>();
-		self.jsify_resource_client(env, &class, &captured_fields, &inflight_methods, context);
+			.collect_vec();
 
 		// Get all preflight methods to be jsified to the preflight class
 		let preflight_methods = class
 			.methods
 			.iter()
 			.filter(|(_, m)| m.signature.phase != Phase::Inflight)
-			.collect::<Vec<_>>();
+			.collect_vec();
 
 		let mut code = CodeMaker::default();
 
@@ -1018,7 +1015,9 @@ impl<'a> JSifier<'a> {
 			code.add_code(self.jsify_function(Some(&n.name), m, context));
 		}
 
-		code.add_code(self.jsify_toinflight_method(&class.name, &captured_fields));
+		let inflight_client = self.jsify_resource_client(env, &class, &captured_fields, &inflight_methods, context);
+		let toinflight_method = self.jsify_toinflight_method(&class.name, &captured_fields, inflight_client);
+		code.add_code(toinflight_method);
 
 		code.close("}");
 
@@ -1076,9 +1075,12 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_toinflight_method(&mut self, resource_name: &Symbol, captured_fields: &[String]) -> CodeMaker {
-		let client_path = Self::js_resolve_path(&format!("{}/{}.inflight.js", INFLIGHT_CLIENTS_DIR, resource_name.name));
-
+	fn jsify_toinflight_method(
+		&mut self,
+		resource_name: &Symbol,
+		captured_fields: &[String],
+		inflight_client: CodeMaker,
+	) -> CodeMaker {
 		let mut code = CodeMaker::default();
 
 		code.open("_toInflight() {");
@@ -1090,32 +1092,25 @@ impl<'a> JSifier<'a> {
 			));
 		}
 
-		code.line(format!("const self_client_path = {client_path};"));
-
 		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
 
-		code.open("(await (async () => {");
-
-		code.open(format!(
-			"const tmp = new (require(\"${{self_client_path}}\")).{}({{",
-			resource_name.name
-		));
-
+		let mut inflight_code = CodeMaker::default();
+		inflight_code.open("(await (async () => {");
+		inflight_code.add_code_escaped(inflight_client);
+		inflight_code.open(format!("const tmp = new {}({{", resource_name.name));
 		for inner_member_name in captured_fields {
-			code.line(format!("{}: ${{{}_client}},", inner_member_name, inner_member_name));
+			inflight_code.line(format!("{}: ${{{}_client}},", inner_member_name, inner_member_name));
 		}
-
-		code.close("});");
-
-		code.line(format!(
+		inflight_code.close("});");
+		inflight_code.line(format!(
 			"if (tmp.{CLASS_INFLIGHT_INIT_NAME}) {{ await tmp.{CLASS_INFLIGHT_INIT_NAME}(); }}"
 		));
-		code.line("return tmp;");
+		inflight_code.line("return tmp;");
+		inflight_code.close("})())");
 
-		code.close("})())");
+		code.add_code(inflight_code);
 
 		code.close("`);");
-
 		code.close("}");
 		code
 	}
@@ -1128,7 +1123,7 @@ impl<'a> JSifier<'a> {
 		captured_fields: &[String],
 		inflight_methods: &[&(Symbol, FunctionDefinition)],
 		context: &JSifyContext,
-	) {
+	) -> CodeMaker {
 		// Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
 		let mut parent_captures = vec![];
 		if let Some(parent) = &resource.parent {
@@ -1200,14 +1195,7 @@ impl<'a> JSifier<'a> {
 
 		code.close("}");
 
-		// export all classes from this file
-		code.line(format!("exports.{name} = {name};"));
-
-		let clients_dir = format!("{}/clients", self.out_dir.to_string_lossy());
-		fs::create_dir_all(&clients_dir).expect("Creating inflight clients");
-		let client_file_name = format!("{name}.inflight.js");
-		let relative_file_path = format!("{}/{}", clients_dir, client_file_name);
-		fs::write(&relative_file_path, code.to_string()).expect("Writing client inflight source");
+		code
 	}
 
 	fn jsify_class(&mut self, env: &SymbolEnv, class: &AstClass, context: &JSifyContext) -> CodeMaker {

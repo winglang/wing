@@ -1,23 +1,5 @@
 # [doubler.w](../../../../examples/tests/valid/doubler.w) | compile | tf-aws
 
-## clients/Doubler.inflight.js
-```js
-class  Doubler {
-  constructor({ func, stateful }) {
-    this.func = func;
-    this.stateful = stateful;
-  }
-  async invoke(message)  {
-    {
-      (await this.func.handle(message));
-      (await this.func.handle(message));
-    }
-  }
-}
-exports.Doubler = Doubler;
-
-```
-
 ## main.tf.json
 ```json
 {
@@ -68,10 +50,21 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         const func_client = this._lift(this.func);
         const stateful_client = this._lift(this.stateful);
-        const self_client_path = "./clients/Doubler.inflight.js".replace(/\\/g, "/");
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const tmp = new (require("${self_client_path}")).Doubler({
+            class  Doubler {
+              constructor({ func, stateful }) {
+                this.func = func;
+                this.stateful = stateful;
+              }
+              async invoke(message)  {
+                {
+                  (await this.func.handle(message));
+                  (await this.func.handle(message));
+                }
+              }
+            }
+            const tmp = new Doubler({
               func: ${func_client},
               stateful: ${stateful_client},
             });
