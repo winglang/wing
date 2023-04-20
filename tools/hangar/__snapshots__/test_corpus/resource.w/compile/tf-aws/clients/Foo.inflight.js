@@ -20,5 +20,10 @@ class  Foo {
       return (await this.c.peek());
     }
   }
+  static async foo_static()  {
+    {
+      return "foo static";
+    }
+  }
 }
 exports.Foo = Foo;
